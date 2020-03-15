@@ -1,0 +1,42 @@
+@charset "utf-8";
+@import "../node_modules/bulma/bulma.sass";
+
+.table-parent {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
+
+.table {
+  flex: 0.5;
+  .help {
+    padding-left: 0.5rem;
+  }
+}
+
+.table-right {
+  flex: 0.5;
+  width: 100%;
+  height: 10rem;
+}
+
+.level-parent {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 5rem;
+  padding-right: 5rem;
+  margin-bottom: 1.5rem;
+}
+
+abbr {
+  text-decoration: none;
+}
+
+@media (max-width: 769px) {
+  .level-parent {
+    justify-content: center;
+  }
+}
