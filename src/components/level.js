@@ -9,7 +9,7 @@ function Level(props) {
   useEffect(()=>{
     setData(props.data);
     parseData();
-  }, [props.data]);
+  });
 
   const parseData = () => {
     let cases = 0;

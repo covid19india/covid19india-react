@@ -14,7 +14,7 @@ function App() {
     if (fetched===false) {
       getStates();
     }
-  });
+  }, [fetched]);
 
   const getStates = () => {
     axios.get('http://localhost:3000/states')

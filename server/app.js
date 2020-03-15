@@ -6,12 +6,18 @@ const bodyParser = require('body-parser');
 const logger = require('morgan');
 const cors = require('cors');
 const assert = require('assert');
-require('dotenv').config();
+const redis = require('redis');
+const responseTime = require('response-time');
 const MongoClient = require('mongodb').MongoClient;
+require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const statesRouter = require('./routes/states');
 
+client = redis.createClient();
+client.on('error', (err) => {
+  console.log('Error ' + err);
+});
 
 MongoDB = null;
 const uri = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASSWORD}@${process.env.DB_NAME}-h6o7s.gcp.mongodb.net/test?retryWrites=true&w=majority&replicaSet=rs`;
@@ -25,6 +31,7 @@ MongoClient.connect(uri, {
 
 const app = express();
 app.use(cors({credentials: true, origin: 'http://localhost:3001'}));
+app.use(responseTime());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
