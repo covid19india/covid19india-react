@@ -7106,7 +7106,8 @@ label.panel-block {
   flex-direction: row;
   justify-content: space-around;
   padding-left: 5rem;
-  padding-right: 5rem; }
+  padding-right: 5rem;
+  flex-wrap: wrap; }
 
 .table {
   flex: 0.5; }
@@ -7116,7 +7117,8 @@ label.panel-block {
 .table-right {
   flex: 0.5;
   width: 100%;
-  height: 10rem; }
+  height: 100%;
+  margin-top: -3rem; }
 
 .level-parent {
   display: flex;

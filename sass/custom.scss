@@ -7,6 +7,7 @@
   justify-content: space-around;
   padding-left: 5rem;
   padding-right: 5rem;
+  flex-wrap: wrap;
 }
 
 .table {
@@ -19,7 +20,8 @@
 .table-right {
   flex: 0.5;
   width: 100%;
-  height: 10rem;
+  height: 100%;
+  margin-top: -3rem;
 }
 
 .level-parent {

@@ -5,6 +5,7 @@ import './App.css';
 
 import Table from './components/table';
 import Level from './components/level';
+import ChoroplethMap from './components/choropleth';
 
 function App() {
   const [states, setStates] = useState([]);
@@ -52,6 +53,7 @@ function App() {
         <Table states={states}/>
 
         <div className="table-right">
+          <ChoroplethMap states={states}/>
         </div>
 
       </div>

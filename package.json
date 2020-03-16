@@ -9,10 +9,12 @@
     "axios": "^0.19.2",
     "bulma": "^0.8.0",
     "d3": "^5.15.0",
+    "d3-geo": "^1.11.9",
     "node-sass": "^4.13.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "react-scripts": "3.4.0"
+    "react-scripts": "3.4.0",
+    "topojson": "^3.0.2"
   },
   "scripts": {
     "start": "PORT=3001 react-scripts start css-watch",
