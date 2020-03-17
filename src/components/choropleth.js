@@ -45,7 +45,7 @@ function ChoroplethMap(props) {
     const unemployment = d3.map();
 
     const projection = d3.geoMercator()
-        .center([78.9629, 22])
+        .center([81.9629, 22])
         .scale(window.innerWidth<=769 ? 600 : 900)
         .translate([width/2, height/2]);
 
@@ -57,7 +57,7 @@ function ChoroplethMap(props) {
 
     const xViz = d3.scaleLinear()
         .domain([1, 10])
-        .range([window.innerWidth<=769 ? 30*1.5 : 30*1.5, window.innerWidth<=769 ? (total+30)*1.5 : (total+30)*1.5]);
+        .range([window.innerWidth<=769 ? 10*1.5 : 10*1.5, window.innerWidth<=769 ? (total+10)*1.5 : (total+10)*1.5]);
 
     const color = d3.scaleThreshold()
         .domain(d3.range(2, 10))
@@ -88,7 +88,7 @@ function ChoroplethMap(props) {
 
     g.append('text')
         .attr('class', 'caption')
-        .attr('x', xViz.range()[0]+50)
+        .attr('x', xViz.range()[0]+10)
         .attr('y', -6)
         .attr('fill', '#000')
         .attr('text-anchor', 'start')
@@ -105,7 +105,7 @@ function ChoroplethMap(props) {
         .remove();
 
     const promises = [
-      d3.json('/india_topo.json'),
+      d3.json('/india_latest_topo.json'),
     ];
 
     Promise.all(promises).then(ready);
@@ -120,10 +120,10 @@ function ChoroplethMap(props) {
       svg.append('g')
           .attr('class', 'states')
           .selectAll('path')
-          .data(topojson.feature(us, us.objects.india).features)
+          .data(topojson.feature(us, us.objects.india_district).features)
           .enter().append('path')
           .attr('fill', function(d) {
-            return d3.interpolateReds(d.confirmed = (unemployment.get(d.properties.NAME_1)/total));
+            return d3.interpolateReds(d.confirmed = (unemployment.get(d.properties.NAME_1.toLowerCase())/total));
           })
           .attr('d', path)
           .attr('pointer-events', 'all')
@@ -140,7 +140,7 @@ function ChoroplethMap(props) {
           .attr('stroke', '#fee0d2')
           .attr('fill', 'none')
           .attr('stroke-width', 1)
-          .attr('d', path(topojson.mesh(us, us.objects.india)));
+          .attr('d', path(topojson.mesh(us, us.objects.india_district)));
     };
   };
 
@@ -154,7 +154,7 @@ function ChoroplethMap(props) {
 
   return (
     <div className="map">
-      <svg className="fadeInUp" style={{animationDelay: '1.2s'}} width={window.innerWidth <= 769 ? window.innerWidth : 700} height="500" preserveAspectRatio="none" ref={choroplethMap}></svg>
+      <svg className="fadeInUp" style={{animationDelay: '1.2s'}} width={window.innerWidth <= 769 ? window.innerWidth-10 : 700} height="500" preserveAspectRatio="none" ref={choroplethMap}></svg>
 
       <div className="map-stats fadeInUp" style={{animationDelay: '1.5s'}}>
 
@@ -175,7 +175,7 @@ function ChoroplethMap(props) {
           </div>
           <div className="level-item">
             <div>
-              <p className="heading">Recoveries</p>
+              <p className="heading">Recovered</p>
               <p className="title">{state.Recovered}</p>
             </div>
           </div>

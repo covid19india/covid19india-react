@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+import * as Icon from 'react-feather';
 
 import './App.css';
 
 import Table from './components/table';
 import Level from './components/level';
 import ChoroplethMap from './components/choropleth';
+import TimeSeries from './components/timeseries';
 
 function App() {
   const [states, setStates] = useState([]);
@@ -31,28 +33,29 @@ function App() {
   return (
     <div className="App">
 
-      <div className="app-left">
-
-        <div className="header">
-          <h1 className="title fadeInUp" style={{animationDelay: '0.1s'}}>COVID-19 🇮🇳</h1>
-          <h2 className="subtitle fadeInUp" style={{animationDelay: '0.2s'}}>Coronavirus cases in India</h2>
-        </div>
-
-        <div className="level-parent fadeInUp" style={{animationDelay: '0.3s'}}>
-          <Level data={states}/>
-          <div></div>
-        </div>
-
-
-        <div className="table-parent">
-          <Table states={states}/>
-        </div>
+      <div className="notification is-info fadeInUp" style={{animationDelay: '0s'}}>
+        <p><Icon.Database />View our <strong><a href="">live patient database</a></strong></p>
+        <p><Icon.Send />If you'd like to collaborate, join the <strong><a href="">Telegram Group</a></strong></p>
       </div>
 
-      <div className="app-right">
+      <div className="header">
+        {/* <div className="clipboard"><Icon.Link /></div>*/}
+        <h1 className="title fadeInUp" style={{animationDelay: '0.1s'}}>COVID-19 🇮🇳</h1>
+        <h2 className="subtitle fadeInUp" style={{animationDelay: '0.2s'}}>Coronavirus cases in India</h2>
+        <p className="help fadeInUp" style={{animationDelay: '1.5s'}}>Last updated on {states[1] ? states[0]['17/03/2020 13:05:05'] : ''} IST</p>
+      </div>
+
+      <div className="level-parent fadeInUp" style={{animationDelay: '0.3s'}}>
+        <Level data={states}/>
         <div></div>
-        <ChoroplethMap states={states}/>
       </div>
+
+
+      <Table states={states}/>
+
+      <ChoroplethMap states={states}/>
+
+      <TimeSeries states={states}/>
 
     </div>
   );

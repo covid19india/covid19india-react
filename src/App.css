@@ -7103,51 +7103,63 @@ label.panel-block {
 
 .App {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap; }
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1rem; }
 
-.app-left {
+.notification {
+  max-width: 30rem;
+  align-self: center;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  flex: 0.5; }
-  .app-left .header {
-    padding-left: 5rem;
-    margin-top: 2.5rem;
-    margin-bottom: 2.5rem; }
+  justify-content: space-between; }
+  .notification svg {
+    width: 1rem;
+    vertical-align: bottom;
+    margin-right: 1rem; }
 
-.app-right {
-  flex: 0.5;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-left: 1rem; }
+.header {
+  margin-top: 2rem;
+  width: 20rem;
+  align-self: center;
+  position: relative; }
+  .header svg {
+    position: absolute;
+    left: -2rem;
+    top: 0.35rem;
+    width: 26px; }
+  .header h2 {
+    margin-bottom: 0 !important; }
 
-.table-parent {
-  padding-left: 5rem; }
+.clipboard {
+  cursor: pointer; }
 
 .table {
   flex: 0.5;
-  min-height: 35rem; }
+  max-width: 35rem;
+  min-height: 35rem;
+  margin-left: auto;
+  margin-right: auto; }
   .table .help {
     padding-left: 0.5rem; }
+  .table th.state-heading {
+    width: 268px; }
 
-.level-parent .level-item {
-  min-width: 4rem; }
-
-.table-right {
-  flex: 0.5;
-  width: 100%;
-  height: 100%; }
+.level-parent {
+  margin-top: 2rem;
+  width: 20rem;
+  align-self: center; }
+  .level-parent .level-item {
+    min-width: 4rem; }
 
 .level-parent {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding-left: 5rem;
-  padding-right: 5rem;
   margin-bottom: 1.5rem; }
+  .level-parent p span {
+    font-size: 1rem; }
 
 abbr {
   text-decoration: none; }
@@ -7155,7 +7167,9 @@ abbr {
 .map {
   flex: 0.5;
   position: relative;
-  margin-top: 2.5rem; }
+  margin-top: 2.5rem;
+  width: 40rem;
+  align-self: center; }
 
 .map-stats {
   background: #cb181d20;
@@ -7171,7 +7185,7 @@ abbr {
   .map-stats nav {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start !important;
+    justify-content: flex-start;
     flex-wrap: wrap; }
     .map-stats nav .title {
       font-size: 1.5rem;
@@ -7184,43 +7198,69 @@ abbr {
   .map-stats .state-heading {
     color: #cb181d; }
 
+.table-helper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  margin-top: -2rem;
+  margin-bottom: 1rem;
+  background: #6c757d10;
+  padding: 0.5rem;
+  border-radius: 5px; }
+
 @media (max-width: 769px) {
-  .app-left .header {
-    padding-left: 1rem; }
-  .level-parent {
+  .app-left {
+    flex: 1;
+    width: 100%; }
+    .app-left .header {
+      padding-left: 1rem; }
+  .level {
     display: flex;
     flex-direction: row;
     justify-content: center;
     padding-left: 0;
     padding-right: 0; }
-  .table-parent {
-    padding: 0; }
+  .notification {
+    margin-left: 1rem;
+    margin-right: 1rem; }
   .map {
     display: flex;
-    flex-direction: column-reverse !important; }
+    flex-direction: column-reverse !important;
+    width: 100%; }
+    .map svg {
+      align-self: center; }
   .app-right {
+    flex: 1;
     margin-left: 0; }
+  .table {
+    overflow-x: scroll;
+    width: 100%;
+    margin: 0;
+    table-layout: fixed; }
+    .table th {
+      word-wrap: break-word; }
   .map-stats {
     position: initial;
     display: flex;
-    flex-direction: row;
-    width: 100%;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
+    width: auto;
     margin-top: 3rem;
     margin-bottom: 2rem;
     border-radius: 0; }
     .map-stats .state-heading {
-      width: 5rem;
       word-wrap: break-word;
-      align-self: center;
-      margin-left: 0.5rem; }
+      align-self: center; }
     .map-stats nav {
-      flex-direction: row; }
+      flex-direction: row;
+      justify-content: center; }
       .map-stats nav .level-item {
         margin-top: 0.25rem;
         margin-left: 0.5rem;
         margin-right: 0.5rem;
-        align-self: center; }
+        text-align: center; }
         .map-stats nav .level-item:last-child {
           margin-bottom: 0.75rem;
           margin-right: 1.5rem; } }

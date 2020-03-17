@@ -36,25 +36,25 @@ function Level(props) {
       <div className="level-item has-text-centered">
         <div>
           <p className="heading">Confirmed</p>
-          <p className="title">{confirmed}</p>
+          <p className="title has-text-danger">{confirmed} <span>{data.length>0 ? '+'+data[0].Confirmed_Delta_Yesterday : ''}</span></p>
         </div>
       </div>
       <div className="level-item has-text-centered">
         <div>
           <p className="heading">Active</p>
-          <p className="title">{active}</p>
+          <p className="title has-text-info">{active} </p>
         </div>
       </div>
       <div className="level-item has-text-centered">
         <div>
           <p className="heading">Recoveries</p>
-          <p className="title">{recoveries}</p>
+          <p className="title has-text-success">{recoveries} <span>{data.length>0 ? '+'+data[0].Recovered_Delta : ''}</span></p>
         </div>
       </div>
       <div className="level-item has-text-centered">
         <div>
           <p className="heading">Deaths</p>
-          <p className="title">{deaths}</p>
+          <p className="title has-text-grey">{deaths} <span>{data.length>0 ? '+'+data[0].Deceased_Delta : ''}</span></p>
         </div>
       </div>
     </nav>
