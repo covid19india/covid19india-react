@@ -7110,15 +7110,19 @@ label.panel-block {
   flex-wrap: wrap; }
 
 .table {
-  flex: 0.5; }
+  flex: 0.5;
+  min-height: 35rem; }
   .table .help {
     padding-left: 0.5rem; }
 
+.level-parent .level-item {
+  min-width: 4rem; }
+
 .table-right {
+  position: relative;
   flex: 0.5;
   width: 100%;
-  height: 100%;
-  margin-top: -3rem; }
+  height: 100%; }
 
 .level-parent {
   display: flex;
@@ -7131,6 +7135,74 @@ label.panel-block {
 abbr {
   text-decoration: none; }
 
+.map-stats {
+  background: #cb181d20;
+  padding: 0.5rem;
+  border-radius: 5px;
+  position: absolute;
+  width: 9rem;
+  min-height: 5rem;
+  max-height: 15rem;
+  bottom: 0;
+  right: -2rem;
+  pointer-events: none; }
+  .map-stats nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start !important;
+    flex-wrap: wrap; }
+    .map-stats nav .title {
+      font-size: 1.5rem;
+      color: #cb181d;
+      margin-top: -0.25rem; }
+    .map-stats nav .level-item {
+      align-self: flex-start; }
+    .map-stats nav .heading {
+      color: #cb181d99; }
+  .map-stats .state-heading {
+    color: #cb181d; }
+
 @media (max-width: 769px) {
   .level-parent {
-    justify-content: center; } }
+    justify-content: center; }
+  .table-parent {
+    padding: 0; }
+  .map {
+    display: flex;
+    flex-direction: column-reverse !important; }
+  .map-stats {
+    position: initial;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 2rem; }
+    .map-stats .state-heading {
+      width: 5rem;
+      word-wrap: break-word;
+      align-self: center;
+      margin-left: 2rem; }
+    .map-stats nav {
+      flex-direction: row; }
+      .map-stats nav .level-item {
+        margin-top: 0.25rem;
+        margin-left: 0.75rem;
+        margin-right: 0.75rem;
+        align-self: center; }
+        .map-stats nav .level-item:last-child {
+          margin-bottom: 0.75rem;
+          margin-right: 1.5rem; } }
+
+/* Animation Support */
+.fadeInUp {
+  animation-name: fadeInUp;
+  animation-duration: 0.450s;
+  animation-fill-mode: both; }
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px); }
+  100% {
+    opacity: 1;
+    transform: translateY(0px); } }

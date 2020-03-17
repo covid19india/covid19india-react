@@ -8,13 +8,12 @@ function Row(props) {
   }, [props.state]);
 
   return (
-    <tr>
-      <td>{state.name}</td>
-      <td>{state.total_cases}</td>
-      <td style={{color: parseInt(state.indians)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.indians)===0 ? '-' : state.indians}</td>
-      <td style={{color: parseInt(state.foreigners)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.foreigners)===0 ? '-' : state.foreigners}</td>
-      <td style={{color: parseInt(state.recovered)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.recovered)===0 ? '-' : state.recovered}</td>
-      <td style={{color: parseInt(state.deaths)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.deaths)===0 ? '-' : state.deaths}</td>
+    <tr className="fadeInUp">
+      <td>{state.State}</td>
+      <td>{state.Confirmed}</td>
+      <td style={{color: parseInt(state.Active)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.Active)===0 ? '-' : state.Active}</td>
+      <td style={{color: parseInt(state.Recovered)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.Recovered)===0 ? '-' : state.Recovered}</td>
+      <td style={{color: parseInt(state.Deaths)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.Deaths)===0 ? '-' : state.Deaths}</td>
     </tr>
   );
 }

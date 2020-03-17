@@ -1,6 +1,16 @@
 @charset "utf-8";
 @import "../node_modules/bulma/bulma.sass";
 
+$gray-light: #6c757d10;
+$gray-hover: #6c757d20;
+$gray-mid: #6c757d99;
+$gray-dark: #343a40;
+$cherry: #cb181d;
+$cherry-mid: #cb181d99;
+$cherry-light: #cb181d20;
+$cherry-hover: #cb181d30;
+$cherry-light-opaque: #ffe0e6;
+
 .table-parent {
   display: flex;
   flex-direction: row;
@@ -12,16 +22,23 @@
 
 .table {
   flex: 0.5;
+  min-height: 35rem;
   .help {
     padding-left: 0.5rem;
   }
 }
 
+.level-parent {
+  .level-item {
+    min-width: 4rem;
+  }
+}
+
 .table-right {
+  position: relative;
   flex: 0.5;
   width: 100%;
   height: 100%;
-  margin-top: -3rem;
 }
 
 .level-parent {
@@ -37,8 +54,93 @@ abbr {
   text-decoration: none;
 }
 
+.map-stats {
+  background: $cherry-light;
+  padding: 0.5rem;
+  border-radius: 5px;
+  position: absolute;
+  width: 9rem;
+  min-height: 5rem;
+  max-height: 15rem;
+  bottom: 0;
+  right: -2rem;
+  pointer-events: none;
+  nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start !important;
+    flex-wrap: wrap;
+    .title {
+      font-size: 1.5rem;
+      color: $cherry;
+      margin-top: -0.25rem;
+    }
+    .level-item {
+      align-self: flex-start;
+    }
+    .heading {
+      color: $cherry-mid;
+    }
+  }
+  .state-heading {
+    color: $cherry;
+  }
+}
+
 @media (max-width: 769px) {
   .level-parent {
     justify-content: center;
+  }
+  .table-parent {
+    padding: 0;
+  }
+  .map {
+    display: flex;
+    flex-direction: column-reverse !important;
+  }
+  .map-stats {
+    position: initial;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    .state-heading {
+      width: 5rem;
+      word-wrap: break-word;
+      align-self: center;
+      margin-left: 2rem;
+    }
+    nav {
+      flex-direction: row;
+      .level-item {
+        margin-top: 0.25rem;
+        margin-left: 0.75rem;
+        margin-right: 0.75rem;
+        align-self: center;
+        &:last-child {
+          margin-bottom: 0.75rem;
+          margin-right: 1.5rem;
+        }
+      }
+    }
+  }
+}
+
+/* Animation Support */
+.fadeInUp {
+  animation-name: fadeInUp;
+  animation-duration: 0.450s;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
   }
 }

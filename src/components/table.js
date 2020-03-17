@@ -8,15 +8,15 @@ function Table(props) {
   useEffect(()=>{
     setStates(props.states);
   }, [props.states]);
+
   return (
-    <table className="table table is-hoverable is-narrow is-striped">
+    <table className="table table is-hoverable is-narrow is-striped fadeInUp" style={{animationDelay: '0.5s'}}>
 
       <thead>
         <tr>
-          <th>State/UT</th>
-          <th><abbr title="Cases">Cases</abbr></th>
-          <th><abbr title="Indians">Indians</abbr></th>
-          <th><abbr title="Foreigners">Foreigners</abbr></th>
+          <th className="state-heading">State/UT</th>
+          <th><abbr title="Cases">Confirmed</abbr></th>
+          <th><abbr title="Active">Active</abbr></th>
           <th><abbr title="Recovered">Recovered</abbr></th>
           <th><abbr title="Deaths">Deaths</abbr></th>
         </tr>
@@ -25,7 +25,7 @@ function Table(props) {
       <tbody>
         {
           states.map((state, index) => {
-            if (parseInt(state.total_cases)>0) {
+            if (parseInt(state.Confirmed)>0 && index!==0) {
               return (
                 <Row key={index} state={state}/>
               );
@@ -34,7 +34,7 @@ function Table(props) {
         }
       </tbody>
 
-      <p className="help">Last updated on March 15th, 3:53PM IST</p>
+      <p className="help">Last updated on {states[1] ? states[0]['15/03/2020 19:17:18'] : ''} IST</p>
 
     </table>
   );

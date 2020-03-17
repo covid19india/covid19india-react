@@ -2,7 +2,8 @@ import React, {useState, useEffect} from 'react';
 
 function Level(props) {
   const [data, setData] = useState(props.data);
-  const [cases, setCases] = useState(0);
+  const [confirmed, setConfirmed] = useState(0);
+  const [active, setActive] = useState(0);
   const [recoveries, setRecoveries] = useState(0);
   const [deaths, setDeaths] = useState(0);
 
@@ -12,15 +13,20 @@ function Level(props) {
   });
 
   const parseData = () => {
-    let cases = 0;
+    let confirmed = 0;
+    let active = 0;
     let recoveries = 0;
     let deaths = 0;
     data.map((state, index) => {
-      cases += parseInt(state.total_cases);
-      recoveries += parseInt(state.recovered);
-      deaths += parseInt(state.deaths);
+      if (index !== 0) {
+        confirmed += parseInt(state.Confirmed);
+        active += parseInt(state.Active);
+        recoveries += parseInt(state.Recovered);
+        deaths += parseInt(state.Deaths);
+      }
     });
-    setCases(cases);
+    setConfirmed(confirmed);
+    setActive(active);
     setRecoveries(recoveries);
     setDeaths(deaths);
   };
@@ -29,8 +35,14 @@ function Level(props) {
     <nav className="level is-mobile">
       <div className="level-item has-text-centered">
         <div>
-          <p className="heading">Total Cases</p>
-          <p className="title">{cases}</p>
+          <p className="heading">Confirmed</p>
+          <p className="title">{confirmed}</p>
+        </div>
+      </div>
+      <div className="level-item has-text-centered">
+        <div>
+          <p className="heading">Active</p>
+          <p className="title">{active}</p>
         </div>
       </div>
       <div className="level-item has-text-centered">
