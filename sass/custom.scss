@@ -11,13 +11,35 @@ $cherry-light: #cb181d20;
 $cherry-hover: #cb181d30;
 $cherry-light-opaque: #ffe0e6;
 
-.table-parent {
+.App {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  padding-left: 5rem;
-  padding-right: 5rem;
+  justify-content: center;
   flex-wrap: wrap;
+}
+
+.app-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex: 0.5;
+  .header {
+    padding-left: 5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+}
+
+.app-right {
+  flex: 0.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 1rem;
+}
+
+.table-parent {
+  padding-left: 5rem;
 }
 
 .table {
@@ -35,7 +57,6 @@ $cherry-light-opaque: #ffe0e6;
 }
 
 .table-right {
-  position: relative;
   flex: 0.5;
   width: 100%;
   height: 100%;
@@ -54,6 +75,12 @@ abbr {
   text-decoration: none;
 }
 
+.map {
+  flex: 0.5;
+  position: relative;
+  margin-top: 2.5rem;
+}
+
 .map-stats {
   background: $cherry-light;
   padding: 0.5rem;
@@ -62,8 +89,8 @@ abbr {
   width: 9rem;
   min-height: 5rem;
   max-height: 15rem;
-  bottom: 0;
-  right: -2rem;
+  bottom: 1.5rem;
+  left: 1rem;
   pointer-events: none;
   nav {
     display: flex;
@@ -88,8 +115,17 @@ abbr {
 }
 
 @media (max-width: 769px) {
+  .app-left {
+    .header {
+      padding-left: 1rem;
+    }
+  }
   .level-parent {
+    display: flex;
+    flex-direction: row;
     justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
   }
   .table-parent {
     padding: 0;
@@ -98,25 +134,30 @@ abbr {
     display: flex;
     flex-direction: column-reverse !important;
   }
+  .app-right {
+    margin-left: 0;
+  }
   .map-stats {
     position: initial;
     display: flex;
     flex-direction: row;
     width: 100%;
     justify-content: space-between;
+    margin-top: 3rem;
     margin-bottom: 2rem;
+    border-radius: 0;
     .state-heading {
       width: 5rem;
       word-wrap: break-word;
       align-self: center;
-      margin-left: 2rem;
+      margin-left: 0.5rem;
     }
     nav {
       flex-direction: row;
       .level-item {
         margin-top: 0.25rem;
-        margin-left: 0.75rem;
-        margin-right: 0.75rem;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
         align-self: center;
         &:last-child {
           margin-bottom: 0.75rem;

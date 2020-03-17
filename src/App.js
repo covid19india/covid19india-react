@@ -31,33 +31,27 @@ function App() {
   return (
     <div className="App">
 
-      <section className="hero">
-        <div className="hero-body">
-          <div className="container">
-            <h1 className="title fadeInUp" style={{animationDelay: '0.1s'}}>
-              COVID-19 🇮🇳
-            </h1>
-            <h2 className="subtitle fadeInUp" style={{animationDelay: '0.2s'}}>
-              Coronavirus cases in India
-            </h2>
-          </div>
-        </div>
-      </section>
+      <div className="app-left">
 
-      <div className="level-parent fadeInUp" style={{animationDelay: '0.3s'}}>
-        <Level data={states}/>
-        <div></div>
+        <div className="header">
+          <h1 className="title fadeInUp" style={{animationDelay: '0.1s'}}>COVID-19 🇮🇳</h1>
+          <h2 className="subtitle fadeInUp" style={{animationDelay: '0.2s'}}>Coronavirus cases in India</h2>
+        </div>
+
+        <div className="level-parent fadeInUp" style={{animationDelay: '0.3s'}}>
+          <Level data={states}/>
+          <div></div>
+        </div>
+
+
+        <div className="table-parent">
+          <Table states={states}/>
+        </div>
       </div>
 
-      <div className="table-parent">
-        <Table states={states}/>
-
-        <div className="table-right">
-
-          <ChoroplethMap states={states}/>
-
-        </div>
-
+      <div className="app-right">
+        <div></div>
+        <ChoroplethMap states={states}/>
       </div>
 
     </div>

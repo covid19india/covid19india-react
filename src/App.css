@@ -7101,13 +7101,31 @@ label.panel-block {
   background-color: #fafafa;
   padding: 3rem 1.5rem 6rem; }
 
-.table-parent {
+.App {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  padding-left: 5rem;
-  padding-right: 5rem;
+  justify-content: center;
   flex-wrap: wrap; }
+
+.app-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex: 0.5; }
+  .app-left .header {
+    padding-left: 5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem; }
+
+.app-right {
+  flex: 0.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 1rem; }
+
+.table-parent {
+  padding-left: 5rem; }
 
 .table {
   flex: 0.5;
@@ -7119,7 +7137,6 @@ label.panel-block {
   min-width: 4rem; }
 
 .table-right {
-  position: relative;
   flex: 0.5;
   width: 100%;
   height: 100%; }
@@ -7135,6 +7152,11 @@ label.panel-block {
 abbr {
   text-decoration: none; }
 
+.map {
+  flex: 0.5;
+  position: relative;
+  margin-top: 2.5rem; }
+
 .map-stats {
   background: #cb181d20;
   padding: 0.5rem;
@@ -7143,8 +7165,8 @@ abbr {
   width: 9rem;
   min-height: 5rem;
   max-height: 15rem;
-  bottom: 0;
-  right: -2rem;
+  bottom: 1.5rem;
+  left: 1rem;
   pointer-events: none; }
   .map-stats nav {
     display: flex;
@@ -7163,31 +7185,41 @@ abbr {
     color: #cb181d; }
 
 @media (max-width: 769px) {
+  .app-left .header {
+    padding-left: 1rem; }
   .level-parent {
-    justify-content: center; }
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0; }
   .table-parent {
     padding: 0; }
   .map {
     display: flex;
     flex-direction: column-reverse !important; }
+  .app-right {
+    margin-left: 0; }
   .map-stats {
     position: initial;
     display: flex;
     flex-direction: row;
     width: 100%;
     justify-content: space-between;
-    margin-bottom: 2rem; }
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    border-radius: 0; }
     .map-stats .state-heading {
       width: 5rem;
       word-wrap: break-word;
       align-self: center;
-      margin-left: 2rem; }
+      margin-left: 0.5rem; }
     .map-stats nav {
       flex-direction: row; }
       .map-stats nav .level-item {
         margin-top: 0.25rem;
-        margin-left: 0.75rem;
-        margin-right: 0.75rem;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
         align-self: center; }
         .map-stats nav .level-item:last-child {
           margin-bottom: 0.75rem;

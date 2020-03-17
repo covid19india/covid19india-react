@@ -57,7 +57,7 @@ function ChoroplethMap(props) {
 
     const xViz = d3.scaleLinear()
         .domain([1, 10])
-        .range([window.innerWidth<=769 ? 50*1.5 : 50*1.5, window.innerWidth<=769 ? (total+50)*1.5 : (total+50)*1.5]);
+        .range([window.innerWidth<=769 ? 30*1.5 : 30*1.5, window.innerWidth<=769 ? (total+30)*1.5 : (total+30)*1.5]);
 
     const color = d3.scaleThreshold()
         .domain(d3.range(2, 10))
@@ -137,7 +137,7 @@ function ChoroplethMap(props) {
           });
 
       svg.append('path')
-          .attr('stroke', 'white')
+          .attr('stroke', '#fee0d2')
           .attr('fill', 'none')
           .attr('stroke-width', 1)
           .attr('d', path(topojson.mesh(us, us.objects.india)));
