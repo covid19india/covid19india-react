@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import {Charts, ChartContainer, ChartRow, YAxis, LineChart} from 'react-timeseries-charts';
 import axios from 'axios';
 
 function TimeSeries(props) {
