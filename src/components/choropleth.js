@@ -45,19 +45,19 @@ function ChoroplethMap(props) {
     const unemployment = d3.map();
 
     const projection = d3.geoMercator()
-        .center([81.9629, 22])
-        .scale(window.innerWidth<=769 ? 600 : 900)
+        .center([78.9629, 22])
+        .scale(1000)
         .translate([width/2, height/2]);
 
     const path = d3.geoPath(projection);
 
     const x = d3.scaleLinear()
         .domain([1, 10])
-        .range([window.innerWidth<=769 ? 1 : 1, window.innerWidth<=769 ? total : total]);
+        .range(1, total);
 
     const xViz = d3.scaleLinear()
         .domain([1, 10])
-        .range([window.innerWidth<=769 ? 10*1.5 : 10*1.5, window.innerWidth<=769 ? (total+10)*1.5 : (total+10)*1.5]);
+        .range([10*1.5, (total+10)*1.5]);
 
     const color = d3.scaleThreshold()
         .domain(d3.range(2, 10))
@@ -67,7 +67,7 @@ function ChoroplethMap(props) {
         .attr('class', 'key')
         .attr('transform', 'translate(0,40)');
 
-    g.selectAll('rect')
+    /* g.selectAll('rect')
         .data(color.range().map(function(d) {
           d = color.invertExtent(d);
           if (d[0] == null) d[0] = xViz.domain()[0];
@@ -102,7 +102,7 @@ function ChoroplethMap(props) {
         })
         .tickValues(color.domain()))
         .select('.domain')
-        .remove();
+        .remove();*/
 
     const promises = [
       d3.json('/india_latest_topo.json'),
@@ -123,7 +123,7 @@ function ChoroplethMap(props) {
           .data(topojson.feature(us, us.objects.india_district).features)
           .enter().append('path')
           .attr('fill', function(d) {
-            return d3.interpolateReds(d.confirmed = (unemployment.get(d.properties.NAME_1.toLowerCase())/total));
+            return d3.interpolateRainbow(d.confirmed = (unemployment.get(d.properties.NAME_1.toLowerCase())/total));
           })
           .attr('d', path)
           .attr('pointer-events', 'all')
@@ -137,7 +137,7 @@ function ChoroplethMap(props) {
           });
 
       svg.append('path')
-          .attr('stroke', '#fee0d2')
+          .attr('stroke', '#FFF')
           .attr('fill', 'none')
           .attr('stroke-width', 1)
           .attr('d', path(topojson.mesh(us, us.objects.india_district)));
@@ -153,42 +153,49 @@ function ChoroplethMap(props) {
   };
 
   return (
-    <div className="map">
-      <svg className="fadeInUp" style={{animationDelay: '1.2s'}} width={window.innerWidth <= 769 ? window.innerWidth-10 : 700} height="500" preserveAspectRatio="none" ref={choroplethMap}></svg>
+    <div className="ChoroplethMap">
 
-      <div className="map-stats fadeInUp" style={{animationDelay: '1.5s'}}>
+      <div className="svg-parent">
+        <svg id="chart" width="960" height="300" viewBox="0 0 960 300" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
+      </div>
 
-        <div className="heading state-heading"><b>{state.State}</b></div>
+      <div className="map-stats">
+        <h4>{state.State}</h4>
 
-        <nav className="level">
-          <div className="level-item">
-            <div>
-              <p className="heading">Confirmed</p>
-              <p className="title">{state.Confirmed}</p>
-            </div>
+        <div className="stats">
+          <h5>Confirmed</h5>
+          <div className="stats-bottom">
+            <h1>{state.Confirmed}</h1>
+            <h6>+2%</h6>
           </div>
-          <div className="level-item">
-            <div>
-              <p className="heading">Active</p>
-              <p className="title">{state.Active}</p>
-            </div>
-          </div>
-          <div className="level-item">
-            <div>
-              <p className="heading">Recovered</p>
-              <p className="title">{state.Recovered}</p>
-            </div>
-          </div>
-          <div className="level-item">
-            <div>
-              <p className="heading">Deaths</p>
-              <p className="title">{state.Deaths}</p>
-            </div>
-          </div>
-        </nav>
+        </div>
 
+        <div className="stats is-blue">
+          <h5>Active</h5>
+          <div className="stats-bottom">
+            <h1>{state.Active}</h1>
+            <h6>+2%</h6>
+          </div>
+        </div>
+
+        <div className="stats is-green">
+          <h5>Recovered</h5>
+          <div className="stats-bottom">
+            <h1>{state.Recovered}</h1>
+            <h6>+2%</h6>
+          </div>
+        </div>
+
+        <div className="stats is-gray">
+          <h5>Deceased</h5>
+          <div className="stats-bottom">
+            <h1>{state.Deaths}</h1>
+            <h6>+2%</h6>
+          </div>
+        </div>
 
       </div>
+
     </div>
   );
 }

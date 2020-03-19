@@ -8,8 +8,8 @@ function Row(props) {
   }, [props.state]);
 
   return (
-    <tr className="fadeInUp">
-      <td>{state.State}</td>
+    <tr>
+      <td style={{fontWeight: 600}}>{state.State}</td>
       <td>{state.Confirmed}</td>
       <td style={{color: parseInt(state.Active)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.Active)===0 ? '-' : state.Active}</td>
       <td style={{color: parseInt(state.Recovered)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.Recovered)===0 ? '-' : state.Recovered}</td>

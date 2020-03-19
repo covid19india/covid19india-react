@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 
-import './App.css';
+import './App.scss';
 import Home from './components/home';
 import Navbar from './components/navbar';
 
@@ -13,7 +13,7 @@ function App() {
 
       <Router history={history}>
         <Route render={({location}) => (
-          <div className="Router">
+          <div className="Almighty-Router">
             <Navbar />
             <Route exact path="/" render={() => <Redirect to="/" />} />
             <Switch location={location}>

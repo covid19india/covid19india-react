@@ -10,7 +10,7 @@ function Table(props) {
   }, [props.states]);
 
   return (
-    <table className="table is-hoverable is-narrow is-striped fadeInUp" style={{animationDelay: '0.5s'}}>
+    <table className="table">
 
       <thead>
         <tr>
@@ -22,7 +22,7 @@ function Table(props) {
         </tr>
       </thead>
 
-      <tbody className="fadeInUp" style={{animationDelay: '0.5s'}}>
+      <tbody>
         {
           states.map((state, index) => {
             if (parseInt(state.Confirmed)>0 && index!==0) {

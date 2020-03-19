@@ -30,23 +30,25 @@ function Home(props) {
 
   return (
     <div className="Home">
-      <div className="notification is-info fadeInUp" style={{animationDelay: '0s'}}>
-        <p><Icon.Database />View our <strong><a href="">live patient database</a></strong></p>
-        <p><Icon.Send />If you'd like to collaborate, join the <strong><a href="">Telegram Group</a></strong></p>
-      </div>
 
       <div className="header">
-        {/* <div className="clipboard"><Icon.Link /></div>*/}
-        <h1 className="title fadeInUp" style={{animationDelay: '0.1s'}}>COVID-19 🇮🇳</h1>
-        <h2 className="subtitle fadeInUp" style={{animationDelay: '0.2s'}}>Coronavirus cases in India</h2>
-        <p className="help fadeInUp" style={{animationDelay: '1.5s'}}>Last updated on {states[1] ? states[0]['17/03/2020 13:05:05'] : ''} IST</p>
+        <h1>India COVID-19 Tracker</h1>
+        <div className="header-mid">
+          <button><Icon.Database /><span>Live Patient Database</span></button>
+          <div className="last-update">
+            <h6>Last Update</h6>
+            <h3>3 hours ago</h3>
+          </div>
+        </div>
+
+        <button className="is-purple telegram">
+          <Icon.MessageCircle />
+          <span>Join Telegram to Collaborate!</span>
+        </button>
+
       </div>
 
-      <div className="level-parent fadeInUp" style={{animationDelay: '0.3s'}}>
-        <Level data={states}/>
-        <div></div>
-      </div>
-
+      <Level data={states}/>
 
       <Table states={states}/>
 

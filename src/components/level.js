@@ -32,32 +32,32 @@ function Level(props) {
   };
 
   return (
-    <nav className="level is-mobile">
-      <div className="level-item has-text-centered">
-        <div>
-          <p className="heading">Confirmed</p>
-          <p className="title has-text-danger">{confirmed} <span>{data.length>0 ? '+'+data[0].Confirmed_Delta_Yesterday : ''}</span></p>
-        </div>
+    <div className="Level">
+
+      <div className="level-item is-cherry">
+        <h5>Confirmed</h5>
+        <h1>{confirmed} </h1>
+        <h4>[{data.length>0 ? '+'+data[0].Confirmed_Delta_Yesterday : ''}]</h4>
       </div>
-      <div className="level-item has-text-centered">
-        <div>
-          <p className="heading">Active</p>
-          <p className="title has-text-info">{active} </p>
-        </div>
+
+      <div className="level-item is-blue">
+        <h5 className="heading">Active</h5>
+        <h1 className="title has-text-info">{active}</h1>
       </div>
-      <div className="level-item has-text-centered">
-        <div>
-          <p className="heading">Recoveries</p>
-          <p className="title has-text-success">{recoveries} <span>{data.length>0 ? '+'+data[0].Recovered_Delta : ''}</span></p>
-        </div>
+
+      <div className="level-item is-green">
+        <h5 className="heading">Recovered</h5>
+        <h1 className="title has-text-success">{recoveries} </h1>
+        <h4>[{data.length>0 ? '+'+data[0].Recovered_Delta : ''}]</h4>
       </div>
-      <div className="level-item has-text-centered">
-        <div>
-          <p className="heading">Deaths</p>
-          <p className="title has-text-grey">{deaths} <span>{data.length>0 ? '+'+data[0].Deceased_Delta : ''}</span></p>
-        </div>
+
+      <div className="level-item is-gray">
+        <h5 className="heading">Deceased</h5>
+        <h1 className="title has-text-grey">{deaths}</h1>
+        <h4>[{data.length>0 ? '+'+data[0].Deceased_Delta : ''}]</h4>
       </div>
-    </nav>
+
+    </div>
   );
 }
 
