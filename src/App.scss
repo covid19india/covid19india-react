@@ -509,7 +509,7 @@ table {
   margin-top: 1rem;
 }
 
-.timeseries {
+.timeseries, .Minigraph {
   display: flex;
   flex-direction: column;
   margin-top: 1rem;
@@ -549,6 +549,10 @@ table {
     &.is-gray {
       h5 {color: $gray-mid;}
       h2, h6 {color: $gray;}
+    }
+    &.is-blue {
+      h5 {color: $blue-mid;}
+      h2, h6 {color: $blue;}
     }
   }
   .svg-parent {
@@ -594,6 +598,20 @@ table {
       }
     }
   }
+}
+
+.Minigraph {
+  width: 30rem;
+  align-self: center;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  .svg-parent {
+    width: 5rem;
+    background: transparent !important;
+  }
+  margin-bottom: -3rem;
 }
 
 .Links {
@@ -644,7 +662,7 @@ footer {
 }
 
 @media (max-width: 769px) {
-  .ChoroplethMap, .TimeSeries, table, .header, .Level, .timeseries-header, .TimeSeries-Parent, .Links {
+  .ChoroplethMap, .TimeSeries, table, .header, .Level, .timeseries-header, .TimeSeries-Parent, .Links, .Minigraph {
     width: calc(100% - 2rem);
   }
   .link {

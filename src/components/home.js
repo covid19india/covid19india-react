@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import * as Icon from 'react-feather';
 import axios from 'axios';
+import {formatDistance} from 'date-fns';
 
 import Table from './table';
 import Level from './level';
 import ChoroplethMap from './choropleth';
 import TimeSeries from './timeseries';
+import Minigraph from './minigraph';
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -40,7 +42,7 @@ function Home(props) {
           }}><Icon.Database /><span>Live Patient Database</span></button>
           <div className="last-update">
             <h6>Last Update</h6>
-            <h3>3 hours ago</h3>
+            <h3>{states[0] ? formatDistance(new Date(states[0]['Last Updated Time'].slice(0, 14) + states[0]['Last Updated Time'].slice(17)), new Date())+' Ago' : ''}</h3>
           </div>
         </div>
 
@@ -53,6 +55,7 @@ function Home(props) {
 
       </div>
 
+      <Minigraph />
       <Level data={states}/>
 
       <Table states={states}/>

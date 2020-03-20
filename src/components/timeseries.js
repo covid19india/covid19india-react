@@ -215,7 +215,6 @@ function TimeSeries(props) {
           .attr('cursor', 'pointer')
           .attr('d', d3.line()
               .x(function(d) {
-                console.log(d);
                 return x(new Date(d['Date']+'2020'));
               })
               .y(function(d) {
