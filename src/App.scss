@@ -104,6 +104,7 @@ $gray-light: #6c757d10;
 $gray-hover: #6c757d20;
 $gray-mid: #6c757d99;
 $gray-dark: #343a40;
+$gray-opaque: #343a4020;
 $primary: #007bff;
 $secondary: #6c757d;
 $success: #28a745;
@@ -195,7 +196,6 @@ h6 {
 .Home {
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .Navbar {
@@ -224,6 +224,14 @@ h6 {
   }
   .focused {
     color: $gray;
+  }
+  img {
+    width: 3rem;
+    height: 3rem;
+    align-self: center;
+    margin-left: 5rem;
+    filter: contrast(0.5);
+    cursor: pointer;
   }
 }
 
@@ -351,10 +359,23 @@ button {
 
 abbr {
   text-decoration: none;
+  &.is-cherry {
+    color: $cherry;
+  }
+  &.is-blue {
+    color: $blue;
+  }
+  &.is-green {
+    color: $green;
+  }
+  &.is-gray {
+    color: $gray;
+  }
 }
 
 table {
   width: 30rem;
+  min-height: 30rem;
   align-self: center;
   font-family: 'archia';
   text-transform: uppercase;
@@ -391,7 +412,7 @@ table {
   position: relative;
   align-self: center;
   margin-top: 1rem;
-  width: 30rem;
+  width: 50rem;
   .svg-parent {
     display: flex;
     flex: 0.9;
@@ -449,9 +470,151 @@ table {
   }
 }
 
-.TimeSeries {
+.tabs {
+  display: flex;
+  flex-direction: row;
+  .tab {
+    min-width: 5rem;
+    background: $gray-light;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    color: $gray-mid;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    margin-right: 0.25rem;
+    transition: all 0.3s ease-in-out;
+    &.focused {
+      color: $gray;
+      background: $gray-opaque;
+    }
+  }
+}
+
+.TimeSeries-Parent {
+  display: flex;
+  flex-direction: column;
   width: 30rem;
   align-self: center;
+}
+
+.timeseries-header {
+  h1 {
+    color: $gray-dark;
+    margin: 0;
+    margin-bottom: 0.5rem;
+  }
+  width: 30rem;
+  align-self: center;
+  margin-top: 1rem;
+}
+
+.timeseries {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  width: 100%;
+  margin-bottom: 10rem;
+  .stats {
+    padding: 0.25rem;
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    width: 5rem;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    h2, h5, h6 {
+      margin: 0;
+      color: $cherry-mid;
+    }
+    h2, h6 {
+      color: $cherry;
+    }
+    .stats-bottom {
+      display: flex;
+      flex-direction: row;
+      h6 {
+        margin-bottom: 0.1rem;
+        margin-left: 0.25rem;
+      }
+      & > * {
+        margin-top: auto;
+      }
+    }
+    &.is-green {
+      h5 {color: $green-mid;}
+      h2, h6 {color: $green;}
+    }
+    &.is-gray {
+      h5 {color: $gray-mid;}
+      h2, h6 {color: $gray;}
+    }
+  }
+  .svg-parent {
+    position: relative;
+    display: flex;
+    width: 100%;
+    background: $cherry-light;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    svg {
+      .domain, .tick, line {
+        stroke: $cherry;
+        stroke-width: 2;
+      }
+      text {  
+        font-family: 'archia';
+        text-transform: uppercase;
+        color: $cherry-mid;
+        stroke: transparent;
+        font-size: 12px;
+      }
+    }
+    &.is-green {
+      background: $green-light;
+      svg{
+        .domain, .tick, line {
+          stroke: $green;
+        }
+        text {
+          color: $green-mid;
+          stroke: transparent;
+        }
+      }
+    }
+    &.is-gray {
+      background: $gray-light;
+      .domain, .tick, line {
+        stroke: $gray;
+      }
+      text {
+        color: $gray-mid;
+        stroke: transparent;
+      }
+    }
+  }
+}
+
+@media (max-width: 769px) {
+  .ChoroplethMap, .TimeSeries, table, .header, .Level, .timeseries-header {
+    width: calc(100% - 2rem);
+  }
+  .Navbar {
+    a {
+      font-size: 0.75rem !important;
+      margin-right: 0.75rem !important;
+    }
+    img {
+      width: 2rem;
+      height: 2rem;
+      margin-left: 1rem;
+      margin-right: -1rem;
+      filter: contrast(0.5);
+      cursor: pointer;
+    }
+  }
 }
 
 /* Animation Support */

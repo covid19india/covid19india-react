@@ -38,14 +38,14 @@ function ChoroplethMap(props) {
   };
 
   const mapData = (selector) => {
-    const svg = d3.select(choroplethMap.current);
+    const svg = d3.select(selector);
     const width = +svg.attr('width');
     const height = +svg.attr('height');
 
     const unemployment = d3.map();
 
     const projection = d3.geoMercator()
-        .center([78.9629, 22])
+        .center([78.9629, 18])
         .scale(1000)
         .translate([width/2, height/2]);
 
@@ -105,12 +105,12 @@ function ChoroplethMap(props) {
         .remove();*/
 
     const promises = [
-      d3.json('/india_latest_topo.json'),
+      d3.json('/india.json'),
     ];
 
     Promise.all(promises).then(ready);
 
-    function ready([us]) {
+    function ready([india]) {
       states.map((state, index) => {
         if (index!==0) {
           unemployment.set(state.State.toLowerCase(), parseInt(state.Confirmed));
@@ -120,27 +120,31 @@ function ChoroplethMap(props) {
       svg.append('g')
           .attr('class', 'states')
           .selectAll('path')
-          .data(topojson.feature(us, us.objects.india_district).features)
+          .data(topojson.feature(india, india.objects.india).features)
           .enter().append('path')
           .attr('fill', function(d) {
-            return d3.interpolateRainbow(d.confirmed = (unemployment.get(d.properties.NAME_1.toLowerCase())/total));
+            return d3.interpolateReds(d.confirmed = (unemployment.get(d.properties.ST_NM.toLowerCase())/total));
           })
           .attr('d', path)
           .attr('pointer-events', 'all')
           .on('mouseover', (d) => {
-            handleMouseover(d.properties.NAME_1);
+            handleMouseover(d.properties.ST_NM);
+            d3.select(d3.event.target).attr('fill', '#fd7e1490');
+          })
+          .on('mouseout', (d) => {
+            d3.select(d3.event.target).attr('fill', d3.interpolateReds(d.confirmed = (unemployment.get(d.properties.ST_NM.toLowerCase())/total)));
           })
           .style('cursor', 'pointer')
           .append('title')
           .text(function(d) {
-            return (d.confirmed*100).toFixed(2) + '% from ' + toTitleCase(d.properties.NAME_1);
+            return (d.confirmed*100).toFixed(2) + '% from ' + toTitleCase(d.properties.ST_NM);
           });
 
       svg.append('path')
-          .attr('stroke', '#FFF')
+          .attr('stroke', '#fd7e1420')
           .attr('fill', 'none')
           .attr('stroke-width', 1)
-          .attr('d', path(topojson.mesh(us, us.objects.india_district)));
+          .attr('d', path(topojson.mesh(india, india.objects.india)));
     };
   };
 
@@ -156,7 +160,7 @@ function ChoroplethMap(props) {
     <div className="ChoroplethMap">
 
       <div className="svg-parent">
-        <svg id="chart" width="960" height="300" viewBox="0 0 960 300" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
+        <svg id="chart" width="960" height="500" viewBox="0 0 960 300" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
       </div>
 
       <div className="map-stats">

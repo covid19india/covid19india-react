@@ -15,10 +15,10 @@ function Table(props) {
       <thead>
         <tr>
           <th className="state-heading">State/UT</th>
-          <th><abbr className="has-text-danger" title="Confirmed">{window.innerWidth <=769 ? 'C' : 'Confirmed'}</abbr></th>
-          <th><abbr className="has-text-info" title="Active">{window.innerWidth <=769 ? 'A' : 'Active'}</abbr></th>
-          <th><abbr className="has-text-success" title="Recovered">{window.innerWidth <=769 ? 'R' : 'Recovered'}</abbr></th>
-          <th><abbr className="has-text-grey" title="Deaths">{window.innerWidth <=769 ? 'D' : 'Deaths'}</abbr></th>
+          <th><abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? 'C' : 'Confirmed'}</abbr></th>
+          <th><abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? 'A' : 'Active'}</abbr></th>
+          <th><abbr className={`${window.innerWidth <=769 ? 'is-green' : ''}`} title="Recovered">{window.innerWidth <=769 ? 'R' : 'Recovered'}</abbr></th>
+          <th><abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? 'D' : 'Deaths'}</abbr></th>
         </tr>
       </thead>
 

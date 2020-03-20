@@ -10,6 +10,7 @@ import TimeSeries from './timeseries';
 function Home(props) {
   const [states, setStates] = useState([]);
   const [fetched, setFetched] = useState(false);
+  const [graphOption, setGraphOption] = useState(1);
 
   useEffect(()=> {
     if (fetched===false) {
@@ -54,7 +55,24 @@ function Home(props) {
 
       <ChoroplethMap states={states}/>
 
-      <TimeSeries states={states}/>
+
+      <div className="timeseries-header">
+        <h1>Time Series Graphs</h1>
+        <div className="tabs">
+          <div className={`tab ${graphOption===1 ? 'focused' : ''}`} onClick={()=>{
+            setGraphOption(1);
+          }}>
+            <h4>Cumulative</h4>
+          </div>
+          <div className={`tab ${graphOption===2 ? 'focused' : ''}`} onClick={()=>{
+            setGraphOption(2);
+          }}>
+            <h4>Daily</h4>
+          </div>
+        </div>
+      </div>
+
+      <TimeSeries states={states} type={graphOption}/>
     </div>
   );
 }
