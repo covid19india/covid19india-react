@@ -78,9 +78,11 @@ function Minigraph(props) {
               })
               .y(function(d, i) {
                 if (i===0) {
+                  console.log(data[data.length-9]['Daily Confirmed']-data[data.length-10]['Daily Confirmed']);
                   return y1(data[data.length-9]['Daily Confirmed']-data[data.length-10]['Daily Confirmed']);
                 } else {
-                  return y1(data[data.length-i]['Daily Confirmed']-data[data.length-1-i]['Daily Confirmed']);
+                  console.log(data[data.length-9+i]['Daily Confirmed']-data[data.length-10+i]['Daily Confirmed']);
+                  return y1(data[data.length-9+i]['Daily Confirmed']-data[data.length-10+i]['Daily Confirmed']);
                 }
               })
               .curve(d3.curveCardinal),
@@ -105,7 +107,7 @@ function Minigraph(props) {
             return x(new Date(d['Date']+'2020'));
           })
           .attr('cy', function(d) {
-            return y1(data[data.length-1]['Daily Confirmed']-data[data.length-2]['Daily Confirmed'])-2;
+            return y1(data[data.length-1]['Daily Confirmed']-data[data.length-2]['Daily Confirmed']);
           })
           .on('mouseover', (d) => {
             d3.select(d3.event.target).attr('r', '5');
@@ -138,8 +140,8 @@ function Minigraph(props) {
                   const yesterday = data[data.length-10]['Daily Confirmed']-data[data.length-10]['Daily Recovered']-data[data.length-10]['Daily Deceased'];
                   return y1(today - yesterday);
                 } else {
-                  const today = data[data.length-i]['Daily Confirmed']-data[data.length-i]['Daily Recovered']-data[data.length-9]['Daily Deceased'];
-                  const yesterday = data[data.length-1-i]['Daily Confirmed']-data[data.length-1-i]['Daily Recovered']-data[data.length-1-i]['Daily Deceased'];
+                  const today = data[data.length-9+i]['Daily Confirmed']-data[data.length-9+i]['Daily Recovered']-data[data.length-9+i]['Daily Deceased'];
+                  const yesterday = data[data.length-10+i]['Daily Confirmed']-data[data.length-10+i]['Daily Recovered']-data[data.length-10+i]['Daily Deceased'];
                   return y1(today-yesterday);
                 }
               })
@@ -167,7 +169,7 @@ function Minigraph(props) {
           .attr('cy', function(d) {
             const today = data[data.length-1]['Daily Confirmed']-data[data.length-1]['Daily Recovered']-data[data.length-1]['Daily Deceased'];
             const yesterday = data[data.length-2]['Daily Confirmed']-data[data.length-2]['Daily Recovered']-data[data.length-2]['Daily Deceased'];
-            return y1(today-yesterday)-11;
+            return y1(today-yesterday);
           })
           .on('mouseover', (d) => {
             d3.select(d3.event.target).attr('r', '5');
@@ -196,7 +198,7 @@ function Minigraph(props) {
                 if (i===0) {
                   return y1(data[data.length-9]['Daily Recovered']-data[data.length-10]['Daily Recovered']);
                 } else {
-                  return y1(data[data.length-i]['Daily Recovered']-data[data.length-1-i]['Daily Recovered']);
+                  return y1(data[data.length-9+i]['Daily Recovered']-data[data.length-10+i]['Daily Recovered']);
                 }
               })
               .curve(d3.curveCardinal),
@@ -221,7 +223,7 @@ function Minigraph(props) {
             return x(new Date(d['Date']+'2020'));
           })
           .attr('cy', function(d) {
-            return y1(data[data.length-1]['Daily Recovered']-data[data.length-2]['Daily Recovered'])+6;
+            return y1(data[data.length-1]['Daily Recovered']-data[data.length-2]['Daily Recovered']);
           })
           .on('mouseover', (d) => {
             d3.select(d3.event.target).attr('r', '5');
@@ -252,7 +254,7 @@ function Minigraph(props) {
                 if (i===0) {
                   return y1(data[data.length-9]['Daily Deceased']-data[data.length-10]['Daily Deceased']);
                 } else {
-                  return y1(data[data.length-i]['Daily Deceased']-data[data.length-1-i]['Daily Deceased']);
+                  return y1(data[data.length-9+i]['Daily Deceased']-data[data.length-10+i]['Daily Deceased']);
                 }
               })
               .curve(d3.curveCardinal),

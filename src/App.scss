@@ -654,8 +654,9 @@ footer {
     align-self: center;
     text-align: center;
   }
-  h5 {margin: 0; margin-top: 1rem; margin-bottom: -0.75rem; color: $gray;}
+  h5 {margin: 0; margin-top: 1rem; margin-bottom: 0.5rem; color: $gray;}
   img {
+    filter: contrast(0.5);
     width: 2rem;
     height: 2rem;
   }

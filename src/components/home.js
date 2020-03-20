@@ -55,7 +55,7 @@ function Home(props) {
 
       </div>
 
-      <Minigraph />
+      <Minigraph states={states}/>
       <Level data={states}/>
 
       <Table states={states}/>
@@ -82,9 +82,9 @@ function Home(props) {
 
       <footer>
         <img src="/virus.png" alt="virus by Shocho from the Noun Project"/>
-        <h5>Inspired by</h5>
+        <h5>We stand with everyone fighting on the frontlines</h5>
         <div className="link">
-          <a href="https://covid19japan.com">covid19japan.com</a>
+          <a href="https://github.com/covid19india">covid19india</a>
         </div>
       </footer>
     </div>
