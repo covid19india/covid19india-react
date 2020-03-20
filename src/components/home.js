@@ -42,7 +42,7 @@ function Home(props) {
           }}><Icon.Database /><span>Live Patient Database</span></button>
           <div className="last-update">
             <h6>Last Update</h6>
-            <h3>{states[0] ? formatDistance(new Date(states[0]['Last Updated Time'].slice(0, 14) + states[0]['Last Updated Time'].slice(17)), new Date())+' Ago' : ''}</h3>
+            <h3>{states[0] ? formatDistance(new Date(states[0]['Last_Updated_Time'].slice(0, 14) + states[0]['Last_Updated_Time'].slice(17)), new Date())+' Ago' : ''}</h3>
           </div>
         </div>
 
