@@ -7,7 +7,7 @@ function Navbar(props) {
   return (
     <div className="Navbar" style={{animationDelay: '0.5s'}}>
 
-      <img src="/virus.png" alt="virus by Shocho from the Noun Project" />
+      <img className="fadeInUp" src="/virus.png" alt="virus by Shocho from the Noun Project" style={{animationDelay: '0s'}}/>
 
       <div className="navbar-left">
         <Link to="/" onClick={()=>{

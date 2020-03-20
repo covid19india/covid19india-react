@@ -157,7 +157,7 @@ function ChoroplethMap(props) {
   };
 
   return (
-    <div className="ChoroplethMap">
+    <div className="ChoroplethMap fadeInUp" style={{animationDelay: '2s'}}>
 
       <div className="svg-parent">
         <svg id="chart" width="960" height="500" viewBox="0 0 960 300" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>

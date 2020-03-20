@@ -32,17 +32,21 @@ function Home(props) {
   return (
     <div className="Home">
 
-      <div className="header">
+      <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
         <h1>India COVID-19 Tracker</h1>
         <div className="header-mid">
-          <button><Icon.Database /><span>Live Patient Database</span></button>
+          <button onClick={()=>{
+            window.location.replace('https://docs.google.com/spreadsheets/d/1nzXUdaIWC84QipdVGUKTiCSc5xntBbpMpzLm6Si33zk/edit#gid=1896310216');
+          }}><Icon.Database /><span>Live Patient Database</span></button>
           <div className="last-update">
             <h6>Last Update</h6>
             <h3>3 hours ago</h3>
           </div>
         </div>
 
-        <button className="is-purple telegram">
+        <button onClick={()=>{
+          window.location.replace('https://t.me/covid19indiaops');
+        }}className="is-purple telegram">
           <Icon.MessageCircle />
           <span>Join Telegram to Collaborate!</span>
         </button>
@@ -54,7 +58,6 @@ function Home(props) {
       <Table states={states}/>
 
       <ChoroplethMap states={states}/>
-
 
       <div className="timeseries-header">
         <h1>Time Series Graphs</h1>
@@ -73,6 +76,14 @@ function Home(props) {
       </div>
 
       <TimeSeries states={states} type={graphOption}/>
+
+      <footer>
+        <img src="/virus.png" alt="virus by Shocho from the Noun Project"/>
+        <h5>Inspired by</h5>
+        <div className="link">
+          <a href="https://covid19japan.com">covid19japan.com</a>
+        </div>
+      </footer>
     </div>
   );
 }

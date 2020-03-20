@@ -10,8 +10,7 @@ function Table(props) {
   }, [props.states]);
 
   return (
-    <table className="table">
-
+    <table className="table fadeInUp" style={{animationDelay: '1s'}}>
       <thead>
         <tr>
           <th className="state-heading">State/UT</th>

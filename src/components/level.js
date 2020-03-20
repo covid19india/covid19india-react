@@ -32,7 +32,7 @@ function Level(props) {
   };
 
   return (
-    <div className="Level">
+    <div className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
 
       <div className="level-item is-cherry">
         <h5>Confirmed</h5>
