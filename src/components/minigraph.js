@@ -66,7 +66,7 @@ function Minigraph(props) {
           })])
           .range([height, 0]);
 
-      svg1.append('path')
+      const path1 = svg1.append('path')
           .datum(data.slice(data.length-10, data.length-1))
           .attr('fill', 'none')
           .attr('stroke', '#ff073a99')
@@ -85,6 +85,13 @@ function Minigraph(props) {
               })
               .curve(d3.curveCardinal),
           );
+
+      const totalLength1 = path1.node().getTotalLength();
+      path1.attr('stroke-dasharray', totalLength1 + ' ' + totalLength1)
+          .attr('stroke-dashoffset', totalLength1)
+          .transition()
+          .duration(2000)
+          .attr('stroke-dashoffset', 0);
 
       svg1.selectAll('.dot')
           .data(data.slice(data.length-2, data.length-1))
@@ -107,9 +114,13 @@ function Minigraph(props) {
           .on('mouseout', (d) => {
             d3.select(d3.event.target).attr('r', '2');
             setDatapoint(d);
-          });
+          })
+          .style('opacity', 0)
+          .transition()
+          .duration(3000)
+          .style('opacity', 1);
 
-      svg2.append('path')
+      const path2 = svg2.append('path')
           .datum(data.slice(data.length-10, data.length-1))
           .attr('fill', 'none')
           .attr('cursor', 'pointer')
@@ -135,6 +146,13 @@ function Minigraph(props) {
               .curve(d3.curveCardinal),
           );
 
+      const totalLength2 = path2.node().getTotalLength();
+      path2.attr('stroke-dasharray', totalLength2 + ' ' + totalLength2)
+          .attr('stroke-dashoffset', totalLength2)
+          .transition()
+          .duration(2000)
+          .attr('stroke-dashoffset', 0);
+
       svg2.selectAll('.dot')
           .data(data.slice(data.length-2, data.length-1))
           .enter()
@@ -158,9 +176,13 @@ function Minigraph(props) {
           .on('mouseout', (d) => {
             d3.select(d3.event.target).attr('r', '2');
             setDatapoint(d);
-          });
+          })
+          .style('opacity', 0)
+          .transition()
+          .duration(3000)
+          .style('opacity', 1);
 
-      svg3.append('path')
+      const path3 = svg3.append('path')
           .datum(data.slice(data.length-10, data.length-1))
           .attr('fill', 'none')
           .attr('stroke', '#28a74599')
@@ -179,6 +201,13 @@ function Minigraph(props) {
               })
               .curve(d3.curveCardinal),
           );
+
+      const totalLength3 = path1.node().getTotalLength();
+      path3.attr('stroke-dasharray', totalLength3 + ' ' + totalLength3)
+          .attr('stroke-dashoffset', totalLength3)
+          .transition()
+          .duration(2000)
+          .attr('stroke-dashoffset', 0);
 
       svg3.selectAll('.dot')
           .data(data.slice(data.length-2, data.length-1))
@@ -201,9 +230,13 @@ function Minigraph(props) {
           .on('mouseout', (d) => {
             d3.select(d3.event.target).attr('r', '2');
             setDatapoint(d);
-          });
+          })
+          .style('opacity', 0)
+          .transition()
+          .duration(3000)
+          .style('opacity', 1);
 
-      svg4.append('path')
+      const path4 = svg4.append('path')
           .datum(data.slice(data.length-10, data.length-1))
           .attr('fill', 'none')
           .attr('cursor', 'pointer')
@@ -224,6 +257,13 @@ function Minigraph(props) {
               })
               .curve(d3.curveCardinal),
           );
+
+      const totalLength4 = path4.node().getTotalLength();
+      path4.attr('stroke-dasharray', totalLength4 + ' ' + totalLength4)
+          .attr('stroke-dashoffset', totalLength4)
+          .transition()
+          .duration(2000)
+          .attr('stroke-dashoffset', 0);
 
       svg4.selectAll('.dot')
           .data(data.slice(data.length-2, data.length-1))
@@ -246,7 +286,11 @@ function Minigraph(props) {
           .on('mouseout', (d) => {
             d3.select(d3.event.target).attr('r', '2');
             setDatapoint(d);
-          });
+          })
+          .style('opacity', 0)
+          .transition()
+          .duration(3000)
+          .style('opacity', 1);
     };
   };
 
