@@ -42,7 +42,7 @@ function Home(props) {
         <h1>India COVID-19 Tracker</h1>
         <div className="header-mid">
           <button onClick={()=>{
-            window.location.replace('https://docs.google.com/spreadsheets/d/1nzXUdaIWC84QipdVGUKTiCSc5xntBbpMpzLm6Si33zk/edit#gid=1896310216');
+            window.location.replace('https://bit.ly/covid19indiapatientdb_echo');
           }}><Icon.Database /><span>Live Patient Database</span></button>
           <div className="last-update">
             <h6>Last Reported Case</h6>
@@ -59,8 +59,8 @@ function Home(props) {
 
       </div>
 
-      <Minigraph states={states} animate={true}/>
       <Level data={states} deltas={deltas}/>
+      <Minigraph states={states} animate={true}/>
 
       <Table states={states}/>
 

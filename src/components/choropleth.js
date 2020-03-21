@@ -141,9 +141,9 @@ function ChoroplethMap(props) {
           });
 
       svg.append('path')
-          .attr('stroke', '')
+          .attr('stroke', '#ff073a10')
           .attr('fill', 'none')
-          .attr('stroke-width', 1)
+          .attr('stroke-width', 2)
           .attr('d', path(topojson.mesh(india, india.objects.india)));
     };
   };
@@ -160,7 +160,7 @@ function ChoroplethMap(props) {
     <div className="ChoroplethMap fadeInUp" style={{animationDelay: '2s'}}>
 
       <div className="svg-parent">
-        <svg id="chart" width="960" height="500" viewBox="0 0 960 300" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
+        <svg id="chart" width="650" height="750" viewBox="0 0 650 750" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
       </div>
 
       <div className="map-stats">
