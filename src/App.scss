@@ -409,12 +409,25 @@ table {
     font-size: 0.75rem;
     th {
       padding: 0.5rem;
+      cursor: pointer;
       border-radius: 5px;
+      .heading-content {
+        display: flex;
+        justify-content: flex-start;
+        .sort-black {
+          display: block;
+          background-image: url('/sort-black.png');
+          background-repeat: no-repeat;
+          background-size: 13px;
+          width: 16px;
+          height: 16px;
+          margin-left: 6px;
+        }
+      }
     }
   }
   tbody {
     color: $gray;
-    cursor: pointer;
     tr {
       transition: background 0.1s ease-in-out;
       &:hover {
