@@ -20,7 +20,7 @@ function ChoroplethMap(props) {
   useEffect(()=>{
     let total = 0;
     for (let i=1; i<states.length; i++) {
-      total+=parseInt(states[i].Confirmed);
+      total+=parseInt(states[i].confirmed);
     }
     setTotal(total);
   }, [states]);
@@ -31,7 +31,7 @@ function ChoroplethMap(props) {
 
   const handleMouseover = (name) => {
     states.map((state, index) => {
-      if (state.State.toLowerCase()===name.toLowerCase()) {
+      if (state.state.toLowerCase()===name.toLowerCase()) {
         setState(state);
       }
     });
@@ -112,9 +112,7 @@ function ChoroplethMap(props) {
 
     function ready([india]) {
       states.map((state, index) => {
-        if (index!==0) {
-          unemployment.set(state.State.toLowerCase(), parseInt(state.Confirmed));
-        }
+        unemployment.set(state.state.toLowerCase(), state.confirmed);
       });
 
       svg.append('g')
@@ -123,16 +121,16 @@ function ChoroplethMap(props) {
           .data(topojson.feature(india, india.objects.india).features)
           .enter().append('path')
           .attr('fill', function(d) {
-            return d3.interpolateReds(d.confirmed = (unemployment.get(d.properties.ST_NM.toLowerCase())/total));
+            return d3.interpolatePurples(d.confirmed = (unemployment.get(d.properties.ST_NM.toLowerCase())/total));
           })
           .attr('d', path)
           .attr('pointer-events', 'all')
           .on('mouseover', (d) => {
             handleMouseover(d.properties.ST_NM);
-            d3.select(d3.event.target).attr('fill', '#fd7e1490');
+            d3.select(d3.event.target).attr('fill', '#fff');
           })
           .on('mouseout', (d) => {
-            d3.select(d3.event.target).attr('fill', d3.interpolateReds(d.confirmed = (unemployment.get(d.properties.ST_NM.toLowerCase())/total)));
+            d3.select(d3.event.target).attr('fill', d3.interpolatePurples(d.confirmed = (unemployment.get(d.properties.ST_NM.toLowerCase())/total)));
           })
           .style('cursor', 'pointer')
           .append('title')
@@ -141,7 +139,7 @@ function ChoroplethMap(props) {
           });
 
       svg.append('path')
-          .attr('stroke', '#fd7e1420')
+          .attr('stroke', '#fff')
           .attr('fill', 'none')
           .attr('stroke-width', 1)
           .attr('d', path(topojson.mesh(india, india.objects.india)));
@@ -169,7 +167,7 @@ function ChoroplethMap(props) {
         <div className="stats">
           <h5>Confirmed</h5>
           <div className="stats-bottom">
-            <h1>{state.Confirmed}</h1>
+            <h1>{state.confirmed}</h1>
             <h6>+2%</h6>
           </div>
         </div>
@@ -177,7 +175,7 @@ function ChoroplethMap(props) {
         <div className="stats is-blue">
           <h5>Active</h5>
           <div className="stats-bottom">
-            <h1>{state.Active}</h1>
+            <h1>{state.active}</h1>
             <h6>+2%</h6>
           </div>
         </div>
@@ -185,7 +183,7 @@ function ChoroplethMap(props) {
         <div className="stats is-green">
           <h5>Recovered</h5>
           <div className="stats-bottom">
-            <h1>{state.Recovered}</h1>
+            <h1>{state.recovered}</h1>
             <h6>+2%</h6>
           </div>
         </div>
@@ -193,7 +191,7 @@ function ChoroplethMap(props) {
         <div className="stats is-gray">
           <h5>Deceased</h5>
           <div className="stats-bottom">
-            <h1>{state.Deaths}</h1>
+            <h1>{state.deaths}</h1>
             <h6>+2%</h6>
           </div>
         </div>

@@ -92,7 +92,7 @@ function Minigraph(props) {
       path1.attr('stroke-dasharray', totalLength1 + ' ' + totalLength1)
           .attr('stroke-dashoffset', totalLength1)
           .transition()
-          .duration(2000)
+          .duration(props.animate ? 2000 : 0)
           .attr('stroke-dashoffset', 0);
 
       svg1.selectAll('.dot')
@@ -119,7 +119,7 @@ function Minigraph(props) {
           })
           .style('opacity', 0)
           .transition()
-          .duration(3000)
+          .duration(props.animate ? 3000 : 0)
           .style('opacity', 1);
 
       const path2 = svg2.append('path')
@@ -152,7 +152,7 @@ function Minigraph(props) {
       path2.attr('stroke-dasharray', totalLength2 + ' ' + totalLength2)
           .attr('stroke-dashoffset', totalLength2)
           .transition()
-          .duration(2000)
+          .duration(props.animate ? 2000 : 0)
           .attr('stroke-dashoffset', 0);
 
       svg2.selectAll('.dot')
@@ -181,7 +181,7 @@ function Minigraph(props) {
           })
           .style('opacity', 0)
           .transition()
-          .duration(3000)
+          .duration(props.animate ? 3000 : 0)
           .style('opacity', 1);
 
       const path3 = svg3.append('path')
@@ -208,7 +208,7 @@ function Minigraph(props) {
       path3.attr('stroke-dasharray', totalLength3 + ' ' + totalLength3)
           .attr('stroke-dashoffset', totalLength3)
           .transition()
-          .duration(2000)
+          .duration(props.animate ? 2000 : 0)
           .attr('stroke-dashoffset', 0);
 
       svg3.selectAll('.dot')
@@ -235,7 +235,7 @@ function Minigraph(props) {
           })
           .style('opacity', 0)
           .transition()
-          .duration(3000)
+          .duration(props.animate ? 3000 : 0)
           .style('opacity', 1);
 
       const path4 = svg4.append('path')
@@ -264,7 +264,7 @@ function Minigraph(props) {
       path4.attr('stroke-dasharray', totalLength4 + ' ' + totalLength4)
           .attr('stroke-dashoffset', totalLength4)
           .transition()
-          .duration(2000)
+          .duration(props.animate ? 2000 : 0)
           .attr('stroke-dashoffset', 0);
 
       svg4.selectAll('.dot')
@@ -291,7 +291,7 @@ function Minigraph(props) {
           })
           .style('opacity', 0)
           .transition()
-          .duration(3000)
+          .duration(props.animate ? 3000 : 0)
           .style('opacity', 1);
     };
   };

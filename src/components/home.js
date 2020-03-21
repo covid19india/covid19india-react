@@ -13,6 +13,7 @@ function Home(props) {
   const [states, setStates] = useState([]);
   const [fetched, setFetched] = useState(false);
   const [graphOption, setGraphOption] = useState(1);
+  const [lastUpdated, setLastUpdated] = useState('');
 
   useEffect(()=> {
     if (fetched===false) {
@@ -21,9 +22,11 @@ function Home(props) {
   }, [fetched]);
 
   const getStates = () => {
-    axios.get('https://api.steinhq.com/v1/storages/5e6fd8b1b88d3d04ae081598/statewise')
+    axios.get('https://api.rootnet.in/covid19-in/unofficial/covid19india.org/statewise')
         .then((response)=>{
-          setStates(response.data);
+          console.log(response.data.data.statewise);
+          setStates(response.data.data.statewise);
+          setLastUpdated(response.data.data.lastRefreshed);
           setFetched(true);
         })
         .catch((err)=>{
@@ -42,7 +45,7 @@ function Home(props) {
           }}><Icon.Database /><span>Live Patient Database</span></button>
           <div className="last-update">
             <h6>Last Update</h6>
-            <h3>{states[0] ? formatDistance(new Date(states[0]['Last_Updated_Time'].slice(0, 14) + states[0]['Last_Updated_Time'].slice(17)), new Date())+' Ago' : ''}</h3>
+            <h3>{lastUpdated.length===0 ? '' : formatDistance(new Date(lastUpdated), new Date())+' Ago'}</h3>
           </div>
         </div>
 
@@ -79,14 +82,6 @@ function Home(props) {
       </div>
 
       <TimeSeries states={states} type={graphOption}/>
-
-      <footer>
-        <img src="/virus.png" alt="virus by Shocho from the Noun Project"/>
-        <h5>We stand with everyone fighting on the frontlines</h5>
-        <div className="link">
-          <a href="https://github.com/covid19india">covid19india</a>
-        </div>
-      </footer>
     </div>
   );
 }

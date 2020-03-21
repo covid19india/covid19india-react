@@ -24,7 +24,7 @@ function Table(props) {
       <tbody>
         {
           states.map((state, index) => {
-            if (parseInt(state.Confirmed)>0 && index!==0) {
+            if (state.confirmed>0) {
               return (
                 <Row key={index} state={state}/>
               );

@@ -19,10 +19,10 @@ function Level(props) {
     let deaths = 0;
     data.map((state, index) => {
       if (index !== 0) {
-        confirmed += parseInt(state.Confirmed);
-        active += parseInt(state.Active);
-        recoveries += parseInt(state.Recovered);
-        deaths += parseInt(state.Deaths);
+        confirmed += parseInt(state.confirmed);
+        active += parseInt(state.active);
+        recoveries += parseInt(state.recovered);
+        deaths += parseInt(state.deaths);
       }
     });
     setConfirmed(confirmed);

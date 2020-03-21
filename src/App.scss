@@ -230,7 +230,6 @@ h6 {
     height: 3rem;
     align-self: center;
     margin-left: 5rem;
-    filter: contrast(0.5);
     cursor: pointer;
   }
 }
@@ -650,20 +649,80 @@ footer {
   flex-direction: column;
   margin-bottom: 5rem;
   justify-content: center;
+  margin-top: 5rem;
   & > * {
     align-self: center;
     text-align: center;
   }
   h5 {margin: 0; margin-top: 1rem; margin-bottom: 0.5rem; color: $gray;}
   img {
-    filter: contrast(0.5);
     width: 2rem;
     height: 2rem;
   }
 }
 
+.Summary {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  height: 600px;
+  position: relative;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  img {
+    width: 2rem;
+    height: 2rem;
+  }
+  .link {
+    margin: 0;
+  }
+  .header {
+    h1 {
+      margin-top: -1rem;
+    }
+  }
+  h5 {
+    margin: 0;
+    color: $gray;
+  }
+  .Minigraph {
+    align-self: center;
+    margin-bottom: -3.25rem
+  }
+  .summary-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-self: center;
+    width: calc(100% - 0rem);
+    .link {
+      width: 12rem;
+      margin-right: -0.75rem;
+    }
+    & > * {
+      align-self: center;
+    }
+    img {
+      margin-bottom: 0.25rem;
+      margin-right: 0.25rem;
+      margin-left: 1rem;
+    }
+    h5 {
+      width: 15rem;
+    }
+  }
+  .summary-bottom-left {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    & > * {
+      align-self: center;
+    }
+  }
+}
+
 @media (max-width: 769px) {
-  .ChoroplethMap, .TimeSeries, table, .header, .Level, .timeseries-header, .TimeSeries-Parent, .Links, .Minigraph {
+  .ChoroplethMap, .TimeSeries, table, .header, .Level, .timeseries-header, .TimeSeries-Parent, .Links, .Minigraph, .Summary {
     width: calc(100% - 2rem);
   }
   .link {
@@ -679,7 +738,6 @@ footer {
       height: 2rem;
       margin-left: 1rem;
       margin-right: -1rem;
-      filter: contrast(0.5);
       cursor: pointer;
     }
   }
