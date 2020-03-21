@@ -78,11 +78,11 @@ function Minigraph(props) {
               })
               .y(function(d, i) {
                 if (i===0) {
-                  {/* console.log(data[data.length-9]['dailyconfirmed']-data[data.length-10]['dailyconfirmed']);*/}
-                  return y1(data[data.length-9]['dailyconfirmed']-data[data.length-10]['dailyconfirmed']);
+                  console.log(data[data.length-9]['dailyconfirmed']-data[data.length-10]['dailyconfirmed']);
+                  return y1(d['dailyconfirmed']);
                 } else {
-                  {/* console.log(data[data.length-9+i]['dailyconfirmed']-data[data.length-10+i]['dailyconfirmed']);*/}
-                  return y1(data[data.length-9+i]['dailyconfirmed']-data[data.length-10+i]['dailyconfirmed']);
+                  console.log(data[data.length-9+i]['dailyconfirmed']-data[data.length-10+i]['dailyconfirmed']);
+                  return y1(d['dailyconfirmed']);
                 }
               })
               .curve(d3.curveCardinal),
@@ -107,7 +107,7 @@ function Minigraph(props) {
             return x(new Date(d['date']+'2020'));
           })
           .attr('cy', function(d) {
-            return y1(data[data.length-1]['dailyconfirmed']-data[data.length-2]['dailyconfirmed']);
+            return y1(d['dailyconfirmed']);
           })
           .on('mouseover', (d) => {
             d3.select(d3.event.target).attr('r', '5');
@@ -138,11 +138,11 @@ function Minigraph(props) {
                 if (i===0) {
                   const today = data[data.length-9]['dailyconfirmed']-data[data.length-9]['dailyrecovered']-data[data.length-9]['dailydeceased'];
                   const yesterday = data[data.length-10]['dailyconfirmed']-data[data.length-10]['dailyrecovered']-data[data.length-10]['dailydeceased'];
-                  return y1(today - yesterday);
+                  return y1(d['dailyconfirmed']-d['dailyrecovered']-d['dailydeceased']);
                 } else {
                   const today = data[data.length-9+i]['dailyconfirmed']-data[data.length-9+i]['dailyrecovered']-data[data.length-9+i]['dailydeceased'];
                   const yesterday = data[data.length-10+i]['dailyconfirmed']-data[data.length-10+i]['dailyrecovered']-data[data.length-10+i]['dailydeceased'];
-                  return y1(today-yesterday);
+                  return y1(d['dailyconfirmed']-d['dailyrecovered']-d['dailydeceased']);
                 }
               })
               .curve(d3.curveCardinal),
@@ -169,7 +169,7 @@ function Minigraph(props) {
           .attr('cy', function(d) {
             const today = data[data.length-1]['dailyconfirmed']-data[data.length-1]['dailyrecovered']-data[data.length-1]['dailydeceased'];
             const yesterday = data[data.length-2]['dailyconfirmed']-data[data.length-2]['dailyrecovered']-data[data.length-2]['dailydeceased'];
-            return y1(today-yesterday);
+            return y1(d['dailyconfirmed']-d['dailyrecovered']-d['dailydeceased']);
           })
           .on('mouseover', (d) => {
             d3.select(d3.event.target).attr('r', '5');
@@ -196,9 +196,9 @@ function Minigraph(props) {
               })
               .y(function(d, i) {
                 if (i===0) {
-                  return y1(data[data.length-9]['dailyrecovered']-data[data.length-10]['dailyrecovered']);
+                  return y1(d['dailyrecovered']);
                 } else {
-                  return y1(data[data.length-9+i]['dailyrecovered']-data[data.length-10+i]['dailyrecovered']);
+                  return y1(d['dailyrecovered']);
                 }
               })
               .curve(d3.curveCardinal),
@@ -223,7 +223,7 @@ function Minigraph(props) {
             return x(new Date(d['date']+'2020'));
           })
           .attr('cy', function(d) {
-            return y1(data[data.length-1]['dailyrecovered']-data[data.length-2]['dailyrecovered']);
+            return y1(d['dailyrecovered']);
           })
           .on('mouseover', (d) => {
             d3.select(d3.event.target).attr('r', '5');
@@ -252,9 +252,9 @@ function Minigraph(props) {
               })
               .y(function(d, i) {
                 if (i===0) {
-                  return y1(data[data.length-9]['dailydeceased']-data[data.length-10]['dailydeceased']);
+                  return y1(d['dailydeceased']);
                 } else {
-                  return y1(data[data.length-9+i]['dailydeceased']-data[data.length-10+i]['dailydeceased']);
+                  return y1(d['dailydeceased']);
                 }
               })
               .curve(d3.curveCardinal),
@@ -279,7 +279,7 @@ function Minigraph(props) {
             return x(new Date(d['date']+'2020'));
           })
           .attr('cy', function(d) {
-            return y1(data[data.length-1]['dailydeceased']-data[data.length-2]['dailydeceased']);
+            return y1(d['dailydeceased']);
           })
           .on('mouseover', (d) => {
             d3.select(d3.event.target).attr('r', '5');
