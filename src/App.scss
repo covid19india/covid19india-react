@@ -498,6 +498,8 @@ table {
 }
 
 .tabs {
+  position: relative;
+  z-index: 99;
   display: flex;
   flex-direction: row;
   .tab {

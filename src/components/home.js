@@ -67,7 +67,7 @@ function Home(props) {
       <ChoroplethMap states={states}/>
 
       <div className="timeseries-header">
-        <h1>Time Series Graphs</h1>
+        <h1>Spread Trends</h1>
         <div className="tabs">
           <div className={`tab ${graphOption===1 ? 'focused' : ''}`} onClick={()=>{
             setGraphOption(1);

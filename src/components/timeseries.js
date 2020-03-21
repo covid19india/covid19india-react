@@ -339,7 +339,7 @@ function TimeSeries(props) {
 
         <div className="svg-parent">
           <div className="stats">
-            <h5>{datapoint['date']}</h5>
+            <h5>Confirmed {datapoint['date']}</h5>
             <div className="stats-bottom">
               <h2>{datapoint['totalconfirmed']}</h2>
               <h6>{data.length>0 ? data[index]['totalconfirmed'] - data[index-1]['totalconfirmed']>=0 ? '+'+(data[index]['totalconfirmed'] - data[index-1]['totalconfirmed']) : (data[index]['totalconfirmed'] - data[index-1]['totalconfirmed']) : ''}</h6>
@@ -350,7 +350,7 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>{datapoint['date']}</h5>
+            <h5>Recovered {datapoint['date']}</h5>
             <div className="stats-bottom">
               <h2>{datapoint['totalrecovered']}</h2>
               <h6>{data.length>0 ? data[index]['totalrecovered'] - data[index-1]['totalrecovered']>=0 ? '+'+(data[index]['totalrecovered'] - data[index-1]['totalrecovered']) : (data[index]['totalrecovered'] - data[index-1]['totalrecovered']) : ''}</h6>
@@ -361,7 +361,7 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
-            <h5>{datapoint['date']}</h5>
+            <h5>Deceased {datapoint['date']}</h5>
             <div className="stats-bottom">
               <h2>{datapoint['totaldeceased']}</h2>
               <h6>{data.length>0 ? data[index]['totaldeceased'] - data[index-1]['totaldeceased']>=0 ? '+'+(data[index]['totaldeceased'] - data[index-1]['totaldeceased']) : (data[index]['totaldeceased'] - data[index-1]['totaldeceased']) : ''}</h6>
@@ -376,7 +376,7 @@ function TimeSeries(props) {
 
         <div className="svg-parent">
           <div className="stats">
-            <h5>{datapoint['date']}</h5>
+            <h5>Confirmed {datapoint['date']}</h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailyconfirmed']}</h2>
               <h6>{data.length>0 ? data[index]['dailyconfirmed'] - data[index-1]['dailyconfirmed']>=0 ? '+'+(data[index]['dailyconfirmed'] - data[index-1]['dailyconfirmed']) : (data[index]['dailyconfirmed'] - data[index-1]['dailyconfirmed']) : ''}</h6>
@@ -387,7 +387,7 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>{datapoint['date']}</h5>
+            <h5>Recovered {datapoint['date']}</h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailyrecovered']}</h2>
               <h6>{data.length>0 ? data[index]['dailyrecovered'] - data[index-1]['dailyrecovered']>=0 ? '+'+(data[index]['dailyrecovered'] - data[index-1]['dailyrecovered']) : (data[index]['dailyrecovered'] - data[index-1]['dailyrecovered']) : ''}</h6>
@@ -398,7 +398,7 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
-            <h5>{datapoint['date']}</h5>
+            <h5>Deceased {datapoint['date']}</h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailydeceased']}</h2>
               <h6>{data.length>0 ? data[index]['dailydeceased'] - data[index-1]['dailydeceased']>=0 ? '+'+(data[index]['dailydeceased'] - data[index-1]['dailydeceased']) : (data[index]['dailydeceased'] - data[index-1]['dailydeceased']) : ''}</h6>
