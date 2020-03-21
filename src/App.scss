@@ -265,6 +265,8 @@ h6 {
   flex-direction: column;
   align-self: center;
   text-align: right;
+  margin-bottom: auto;
+  margin-top: 0.25rem;
   h6 {
     color: $green-mid;
     font-weight: 900;
@@ -307,6 +309,13 @@ button {
       background: $purple-hover;
     }
   }
+    &.is-green {
+    color: $green-mid;
+    background: $green-light;
+    &:hover {
+      background: $green-hover;
+    }
+  }
   &:hover {
   background: $blue-hover;
   }
@@ -317,6 +326,16 @@ button {
 
 .telegram {
   width: 15.5rem;
+  background: $gray-light !important;
+  color: #0088cc !important;
+}
+
+.excel {
+  color: #33A667;
+  background: #33A66730;
+  &:hover {
+    background: #33A66750;
+  }
 }
 
 .Level {
@@ -338,6 +357,9 @@ button {
   }
   h1 {
     font-weight: 600;
+  }
+  h4 {
+    margin-bottom: -0.5rem;
   }
   .is-cherry {
     h1 {color: $cherry;}
@@ -379,7 +401,7 @@ table {
   font-family: 'archia';
   text-transform: uppercase;
   margin-bottom: 1rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
   thead {
     background: $gray-light;
     color: $gray-dark;
@@ -412,12 +434,17 @@ table {
   position: relative;
   align-self: center;
   margin-top: 1rem;
+  margin-bottom: -10rem;
   width: 50rem;
   .svg-parent {
     display: flex;
     flex: 0.9;
     flex-direction: row;
+    justify-content: center;
     width: 100%;
+    svg {
+      align-self: center ;
+    }
   }
   .map-stats {
     flex: 0.1;
@@ -741,6 +768,9 @@ footer {
       margin-right: -1rem;
       cursor: pointer;
     }
+  }
+  .ChoroplethMap {
+    height: calc(100% - 35rem);
   }
 }
 
