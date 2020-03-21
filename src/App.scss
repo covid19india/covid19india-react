@@ -328,6 +328,9 @@ button {
   width: 15.5rem;
   background: $gray-light !important;
   color: #0088cc !important;
+  &:hover {
+    background: $gray-hover !important;
+  }
 }
 
 .excel {
@@ -396,6 +399,7 @@ abbr {
 }
 
 table {
+  position: relative;
   width: 30rem;
   align-self: center;
   font-family: 'archia';
@@ -426,6 +430,13 @@ table {
       font-size: 0.9rem;
       border-radius: 5px;
     }
+  }
+  .affected-count {
+    position: absolute;
+    margin: 0;
+    top: -1rem;
+    color: $gray-mid;
+    right: 0;
   }
 }
 

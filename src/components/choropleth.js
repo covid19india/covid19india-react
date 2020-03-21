@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {geoPath, geoMercator} from 'd3-geo';
 import * as d3 from 'd3';
 import * as topojson from 'topojson';
 
@@ -13,7 +12,7 @@ function ChoroplethMap(props) {
 
   useEffect(()=>{
     if (props.states.length>1 && choroplethMap.current) {
-      const theMap = mapData(choroplethMap.current);
+      mapData(choroplethMap.current);
       setState(states[1]);
     }
   }, [total]);
@@ -53,7 +52,7 @@ function ChoroplethMap(props) {
 
     const path = d3.geoPath(projection);
 
-    const x = d3.scaleLinear()
+    /* const x = d3.scaleLinear()
         .domain([1, 10])
         .range(1, total);
 
@@ -65,11 +64,11 @@ function ChoroplethMap(props) {
         .domain(d3.range(2, 10))
         .range(d3.schemeReds[9]);
 
-    const g = svg.append('g')
+    svg.append('g')
         .attr('class', 'key')
         .attr('transform', 'translate(0,40)');
 
-    /* g.selectAll('rect')
+     g.selectAll('rect')
         .data(color.range().map(function(d) {
           d = color.invertExtent(d);
           if (d[0] == null) d[0] = xViz.domain()[0];

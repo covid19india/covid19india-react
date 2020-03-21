@@ -78,10 +78,10 @@ function Minigraph(props) {
               })
               .y(function(d, i) {
                 if (i===0) {
-                  console.log(data[data.length-9]['dailyconfirmed']-data[data.length-10]['dailyconfirmed']);
+                  {/* console.log(data[data.length-9]['dailyconfirmed']-data[data.length-10]['dailyconfirmed']);*/}
                   return y1(d['dailyconfirmed']);
                 } else {
-                  console.log(data[data.length-9+i]['dailyconfirmed']-data[data.length-10+i]['dailyconfirmed']);
+                  {/* console.log(data[data.length-9+i]['dailyconfirmed']-data[data.length-10+i]['dailyconfirmed']);*/}
                   return y1(d['dailyconfirmed']);
                 }
               })
