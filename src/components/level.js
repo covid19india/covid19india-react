@@ -19,10 +19,10 @@ function Level(props) {
     let deaths = 0;
     data.map((state, index) => {
       if (index !== 0) {
-        confirmed += parseInt(state.Confirmed);
-        active += parseInt(state.Active);
-        recoveries += parseInt(state.Recovered);
-        deaths += parseInt(state.Deaths);
+        confirmed += parseInt(state.confirmed);
+        active += parseInt(state.active);
+        recoveries += parseInt(state.recovered);
+        deaths += parseInt(state.deaths);
       }
     });
     setConfirmed(confirmed);
@@ -37,24 +37,25 @@ function Level(props) {
       <div className="level-item is-cherry">
         <h5>Confirmed</h5>
         <h1>{confirmed} </h1>
-        <h4>[{data.length>0 ? '+'+data[0].Confirmed_Delta_Yesterday : ''}]</h4>
+        <h4>[{props.deltas ? props.deltas.confirmeddelta>=0 ? '+'+props.deltas.confirmeddelta : props.deltas.confirmeddelta : ''}]</h4>
       </div>
 
       <div className="level-item is-blue">
         <h5 className="heading">Active</h5>
         <h1 className="title has-text-info">{active}</h1>
+        <h4>[{props.deltas ? props.deltas.recovereddelta>=0 ? '+'+props.deltas.recovereddelta : props.deltas.recovereddelta : ''}]</h4>
       </div>
 
       <div className="level-item is-green">
         <h5 className="heading">Recovered</h5>
         <h1 className="title has-text-success">{recoveries} </h1>
-        <h4>[{data.length>0 ? '+'+data[0].Recovered_Delta : ''}]</h4>
+        <h4>[{props.deltas ? props.deltas.recovereddelta>=0 ? '+'+props.deltas.recovereddelta : props.deltas.recovereddelta : ''}]</h4>
       </div>
 
       <div className="level-item is-gray">
         <h5 className="heading">Deceased</h5>
         <h1 className="title has-text-grey">{deaths}</h1>
-        <h4>[{data.length>0 ? '+'+data[0].Deceased_Delta : ''}]</h4>
+        <h4>[{props.deltas ? props.deltas.deceaseddelta>=0 ? '+'+props.deltas.deceaseddelta : props.deltas.deceaseddelta : ''}]</h4>
       </div>
 
     </div>

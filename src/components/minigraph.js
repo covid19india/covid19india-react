@@ -25,44 +25,44 @@ function Minigraph(props) {
     const svg4 = d3.select(graphElement4.current);
 
     const promises = [
-      d3.json('https://api.steinhq.com/v1/storages/5e6fd170b88d3d04ae081593/cases_time_series'),
+      d3.json('https://api.covid19india.org/data.json'),
     ];
 
     Promise.all(promises).then(ready);
 
     function ready(response) {
-      response[0].pop();
-      const data = response[0];
+      response[0]['cases_time_series'].pop();
+      const data = response[0]['cases_time_series'];
       setDatapoint(data[data.length-1]);
 
       const x = d3.scaleTime()
           .domain(d3.extent(data.slice(data.length-10, data.length-1), function(d) {
-            return new Date(d['Date']+'2020');
+            return new Date(d['date']+'2020');
           }))
           .range([0, width]);
 
       const y1 = d3.scaleLinear()
           .domain([0, d3.max(data, function(d) {
-            return +d['Daily Confirmed'];
+            return +d['dailyconfirmed'];
           })])
           .range([height, 0]);
 
       const y2 = d3.scaleLinear()
           .domain([0, d3.max(data, function(d) {
-            return +d['Daily Confirmed'];
+            return +d['dailyconfirmed'];
           })])
           .range([height, 0]);
 
       const y3 = d3.scaleLinear()
           .domain([0, d3.max(data, function(d) {
-            return +d['Daily Recovered'];
+            return +d['dailyrecovered'];
           })])
           .range([height, 0]);
 
 
       const y4 = d3.scaleLinear()
           .domain([0, d3.max(data, function(d) {
-            return +d['Daily Deceased'];
+            return +d['dailydeceased'];
           })])
           .range([height, 0]);
 
@@ -74,15 +74,15 @@ function Minigraph(props) {
           .attr('cursor', 'pointer')
           .attr('d', d3.line()
               .x(function(d) {
-                return x(new Date(d['Date']+'2020'));
+                return x(new Date(d['date']+'2020'));
               })
               .y(function(d, i) {
                 if (i===0) {
-                  console.log(data[data.length-9]['Daily Confirmed']-data[data.length-10]['Daily Confirmed']);
-                  return y1(data[data.length-9]['Daily Confirmed']-data[data.length-10]['Daily Confirmed']);
+                  {/* console.log(data[data.length-9]['dailyconfirmed']-data[data.length-10]['dailyconfirmed']);*/}
+                  return y1(data[data.length-9]['dailyconfirmed']-data[data.length-10]['dailyconfirmed']);
                 } else {
-                  console.log(data[data.length-9+i]['Daily Confirmed']-data[data.length-10+i]['Daily Confirmed']);
-                  return y1(data[data.length-9+i]['Daily Confirmed']-data[data.length-10+i]['Daily Confirmed']);
+                  {/* console.log(data[data.length-9+i]['dailyconfirmed']-data[data.length-10+i]['dailyconfirmed']);*/}
+                  return y1(data[data.length-9+i]['dailyconfirmed']-data[data.length-10+i]['dailyconfirmed']);
                 }
               })
               .curve(d3.curveCardinal),
@@ -92,7 +92,7 @@ function Minigraph(props) {
       path1.attr('stroke-dasharray', totalLength1 + ' ' + totalLength1)
           .attr('stroke-dashoffset', totalLength1)
           .transition()
-          .duration(2000)
+          .duration(props.animate ? 2000 : 0)
           .attr('stroke-dashoffset', 0);
 
       svg1.selectAll('.dot')
@@ -104,10 +104,10 @@ function Minigraph(props) {
           .attr('r', 2)
           .attr('cursor', 'pointer')
           .attr('cx', function(d) {
-            return x(new Date(d['Date']+'2020'));
+            return x(new Date(d['date']+'2020'));
           })
           .attr('cy', function(d) {
-            return y1(data[data.length-1]['Daily Confirmed']-data[data.length-2]['Daily Confirmed']);
+            return y1(data[data.length-1]['dailyconfirmed']-data[data.length-2]['dailyconfirmed']);
           })
           .on('mouseover', (d) => {
             d3.select(d3.event.target).attr('r', '5');
@@ -119,7 +119,7 @@ function Minigraph(props) {
           })
           .style('opacity', 0)
           .transition()
-          .duration(3000)
+          .duration(props.animate ? 3000 : 0)
           .style('opacity', 1);
 
       const path2 = svg2.append('path')
@@ -132,16 +132,16 @@ function Minigraph(props) {
           .attr('cursor', 'pointer')
           .attr('d', d3.line()
               .x(function(d) {
-                return x(new Date(d['Date']+'2020'));
+                return x(new Date(d['date']+'2020'));
               })
               .y(function(d, i) {
                 if (i===0) {
-                  const today = data[data.length-9]['Daily Confirmed']-data[data.length-9]['Daily Recovered']-data[data.length-9]['Daily Deceased'];
-                  const yesterday = data[data.length-10]['Daily Confirmed']-data[data.length-10]['Daily Recovered']-data[data.length-10]['Daily Deceased'];
+                  const today = data[data.length-9]['dailyconfirmed']-data[data.length-9]['dailyrecovered']-data[data.length-9]['dailydeceased'];
+                  const yesterday = data[data.length-10]['dailyconfirmed']-data[data.length-10]['dailyrecovered']-data[data.length-10]['dailydeceased'];
                   return y1(today - yesterday);
                 } else {
-                  const today = data[data.length-9+i]['Daily Confirmed']-data[data.length-9+i]['Daily Recovered']-data[data.length-9+i]['Daily Deceased'];
-                  const yesterday = data[data.length-10+i]['Daily Confirmed']-data[data.length-10+i]['Daily Recovered']-data[data.length-10+i]['Daily Deceased'];
+                  const today = data[data.length-9+i]['dailyconfirmed']-data[data.length-9+i]['dailyrecovered']-data[data.length-9+i]['dailydeceased'];
+                  const yesterday = data[data.length-10+i]['dailyconfirmed']-data[data.length-10+i]['dailyrecovered']-data[data.length-10+i]['dailydeceased'];
                   return y1(today-yesterday);
                 }
               })
@@ -152,7 +152,7 @@ function Minigraph(props) {
       path2.attr('stroke-dasharray', totalLength2 + ' ' + totalLength2)
           .attr('stroke-dashoffset', totalLength2)
           .transition()
-          .duration(2000)
+          .duration(props.animate ? 2000 : 0)
           .attr('stroke-dashoffset', 0);
 
       svg2.selectAll('.dot')
@@ -164,11 +164,11 @@ function Minigraph(props) {
           .attr('r', 2)
           .attr('cursor', 'pointer')
           .attr('cx', function(d) {
-            return x(new Date(d['Date']+'2020'));
+            return x(new Date(d['date']+'2020'));
           })
           .attr('cy', function(d) {
-            const today = data[data.length-1]['Daily Confirmed']-data[data.length-1]['Daily Recovered']-data[data.length-1]['Daily Deceased'];
-            const yesterday = data[data.length-2]['Daily Confirmed']-data[data.length-2]['Daily Recovered']-data[data.length-2]['Daily Deceased'];
+            const today = data[data.length-1]['dailyconfirmed']-data[data.length-1]['dailyrecovered']-data[data.length-1]['dailydeceased'];
+            const yesterday = data[data.length-2]['dailyconfirmed']-data[data.length-2]['dailyrecovered']-data[data.length-2]['dailydeceased'];
             return y1(today-yesterday);
           })
           .on('mouseover', (d) => {
@@ -181,7 +181,7 @@ function Minigraph(props) {
           })
           .style('opacity', 0)
           .transition()
-          .duration(3000)
+          .duration(props.animate ? 3000 : 0)
           .style('opacity', 1);
 
       const path3 = svg3.append('path')
@@ -192,13 +192,13 @@ function Minigraph(props) {
           .attr('cursor', 'pointer')
           .attr('d', d3.line()
               .x(function(d) {
-                return x(new Date(d['Date']+'2020'));
+                return x(new Date(d['date']+'2020'));
               })
               .y(function(d, i) {
                 if (i===0) {
-                  return y1(data[data.length-9]['Daily Recovered']-data[data.length-10]['Daily Recovered']);
+                  return y1(data[data.length-9]['dailyrecovered']-data[data.length-10]['dailyrecovered']);
                 } else {
-                  return y1(data[data.length-9+i]['Daily Recovered']-data[data.length-10+i]['Daily Recovered']);
+                  return y1(data[data.length-9+i]['dailyrecovered']-data[data.length-10+i]['dailyrecovered']);
                 }
               })
               .curve(d3.curveCardinal),
@@ -208,7 +208,7 @@ function Minigraph(props) {
       path3.attr('stroke-dasharray', totalLength3 + ' ' + totalLength3)
           .attr('stroke-dashoffset', totalLength3)
           .transition()
-          .duration(2000)
+          .duration(props.animate ? 2000 : 0)
           .attr('stroke-dashoffset', 0);
 
       svg3.selectAll('.dot')
@@ -220,10 +220,10 @@ function Minigraph(props) {
           .attr('r', 2)
           .attr('cursor', 'pointer')
           .attr('cx', function(d) {
-            return x(new Date(d['Date']+'2020'));
+            return x(new Date(d['date']+'2020'));
           })
           .attr('cy', function(d) {
-            return y1(data[data.length-1]['Daily Recovered']-data[data.length-2]['Daily Recovered']);
+            return y1(data[data.length-1]['dailyrecovered']-data[data.length-2]['dailyrecovered']);
           })
           .on('mouseover', (d) => {
             d3.select(d3.event.target).attr('r', '5');
@@ -235,7 +235,7 @@ function Minigraph(props) {
           })
           .style('opacity', 0)
           .transition()
-          .duration(3000)
+          .duration(props.animate ? 3000 : 0)
           .style('opacity', 1);
 
       const path4 = svg4.append('path')
@@ -248,13 +248,13 @@ function Minigraph(props) {
           .attr('cursor', 'pointer')
           .attr('d', d3.line()
               .x(function(d) {
-                return x(new Date(d['Date']+'2020'));
+                return x(new Date(d['date']+'2020'));
               })
               .y(function(d, i) {
                 if (i===0) {
-                  return y1(data[data.length-9]['Daily Deceased']-data[data.length-10]['Daily Deceased']);
+                  return y1(data[data.length-9]['dailydeceased']-data[data.length-10]['dailydeceased']);
                 } else {
-                  return y1(data[data.length-9+i]['Daily Deceased']-data[data.length-10+i]['Daily Deceased']);
+                  return y1(data[data.length-9+i]['dailydeceased']-data[data.length-10+i]['dailydeceased']);
                 }
               })
               .curve(d3.curveCardinal),
@@ -264,7 +264,7 @@ function Minigraph(props) {
       path4.attr('stroke-dasharray', totalLength4 + ' ' + totalLength4)
           .attr('stroke-dashoffset', totalLength4)
           .transition()
-          .duration(2000)
+          .duration(props.animate ? 2000 : 0)
           .attr('stroke-dashoffset', 0);
 
       svg4.selectAll('.dot')
@@ -276,10 +276,10 @@ function Minigraph(props) {
           .attr('r', 2)
           .attr('cursor', 'pointer')
           .attr('cx', function(d) {
-            return x(new Date(d['Date']+'2020'));
+            return x(new Date(d['date']+'2020'));
           })
           .attr('cy', function(d) {
-            return y1(data[data.length-1]['Daily Deceased']-data[data.length-2]['Daily Deceased']);
+            return y1(data[data.length-1]['dailydeceased']-data[data.length-2]['dailydeceased']);
           })
           .on('mouseover', (d) => {
             d3.select(d3.event.target).attr('r', '5');
@@ -291,7 +291,7 @@ function Minigraph(props) {
           })
           .style('opacity', 0)
           .transition()
-          .duration(3000)
+          .duration(props.animate ? 3000 : 0)
           .style('opacity', 1);
     };
   };

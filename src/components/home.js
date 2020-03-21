@@ -13,6 +13,8 @@ function Home(props) {
   const [states, setStates] = useState([]);
   const [fetched, setFetched] = useState(false);
   const [graphOption, setGraphOption] = useState(1);
+  const [lastUpdated, setLastUpdated] = useState('');
+  const [deltas, setDeltas] = useState([]);
 
   useEffect(()=> {
     if (fetched===false) {
@@ -21,9 +23,11 @@ function Home(props) {
   }, [fetched]);
 
   const getStates = () => {
-    axios.get('https://api.steinhq.com/v1/storages/5e6fd8b1b88d3d04ae081598/statewise')
+    axios.get('https://api.covid19india.org/data.json')
         .then((response)=>{
-          setStates(response.data);
+          setStates(response.data.statewise);
+          setLastUpdated(response.data.statewise[0].lastupdatedtime.slice(0, 15)+response.data.statewise[0].lastupdatedtime.slice(18));
+          setDeltas(response.data.key_values[0]);
           setFetched(true);
         })
         .catch((err)=>{
@@ -41,8 +45,8 @@ function Home(props) {
             window.location.replace('https://docs.google.com/spreadsheets/d/1nzXUdaIWC84QipdVGUKTiCSc5xntBbpMpzLm6Si33zk/edit#gid=1896310216');
           }}><Icon.Database /><span>Live Patient Database</span></button>
           <div className="last-update">
-            <h6>Last Update</h6>
-            <h3>{states[0] ? formatDistance(new Date(states[0]['Last_Updated_Time'].slice(0, 14) + states[0]['Last_Updated_Time'].slice(17)), new Date())+' Ago' : ''}</h3>
+            <h6>Last Reported Case</h6>
+            <h3>{lastUpdated.length===0 ? '' : formatDistance(new Date(lastUpdated), new Date())+' Ago'}</h3>
           </div>
         </div>
 
@@ -55,8 +59,8 @@ function Home(props) {
 
       </div>
 
-      <Minigraph states={states}/>
-      <Level data={states}/>
+      <Minigraph states={states} animate={true}/>
+      <Level data={states} deltas={deltas}/>
 
       <Table states={states}/>
 
@@ -79,14 +83,6 @@ function Home(props) {
       </div>
 
       <TimeSeries states={states} type={graphOption}/>
-
-      <footer>
-        <img src="/virus.png" alt="virus by Shocho from the Noun Project"/>
-        <h5>We stand with everyone fighting on the frontlines</h5>
-        <div className="link">
-          <a href="https://github.com/covid19india">covid19india</a>
-        </div>
-      </footer>
     </div>
   );
 }

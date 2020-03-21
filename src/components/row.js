@@ -9,11 +9,11 @@ function Row(props) {
 
   return (
     <tr>
-      <td style={{fontWeight: 600}}>{state.State}</td>
-      <td>{state.Confirmed}</td>
-      <td style={{color: parseInt(state.Active)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.Active)===0 ? '-' : state.Active}</td>
-      <td style={{color: parseInt(state.Recovered)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.Recovered)===0 ? '-' : state.Recovered}</td>
-      <td style={{color: parseInt(state.Deaths)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.Deaths)===0 ? '-' : state.Deaths}</td>
+      <td style={{fontWeight: 600}}>{state.state}</td>
+      <td>{state.confirmed}</td>
+      <td style={{color: parseInt(state.active)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.active)===0 ? '-' : state.active}</td>
+      <td style={{color: parseInt(state.recovered)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.recovered)===0 ? '-' : state.recovered}</td>
+      <td style={{color: parseInt(state.deaths)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.deaths)===0 ? '-' : state.deaths}</td>
     </tr>
   );
 }

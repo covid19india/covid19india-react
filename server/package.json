@@ -21,6 +21,7 @@
     "mongodb": "^3.5.5",
     "morgan": "^1.9.1",
     "nodemon": "^2.0.2",
+    "puppeteer": "^2.1.1",
     "redis": "^3.0.2",
     "response-time": "^2.3.2"
   }

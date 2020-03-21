@@ -20,7 +20,7 @@ function Links(props) {
       </div>
 
       <div className="link fadeInUp" style={{animationDelay: '0.5s'}}>
-        <h3>WHO : COVID-19 Home Page</h3>
+        <h3>CDC</h3>
         <a href="https://www.cdc.gov/coronavirus/2019-ncov/faq.html">https://www.cdc.gov/coronavirus/2019-ncov/faq.html</a>
       </div>
 
