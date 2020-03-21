@@ -8,6 +8,7 @@ function ChoroplethMap(props) {
   const [states, setStates] = useState(props.states);
   const [state, setState] = useState({});
   const [total, setTotal] = useState(0);
+  const [index, setIndex] = useState(1);
   const choroplethMap = useRef(null);
 
   useEffect(()=>{
@@ -33,6 +34,7 @@ function ChoroplethMap(props) {
     states.map((state, index) => {
       if (state.state.toLowerCase()===name.toLowerCase()) {
         setState(state);
+        setIndex(index);
       }
     });
   };
@@ -121,16 +123,16 @@ function ChoroplethMap(props) {
           .data(topojson.feature(india, india.objects.india).features)
           .enter().append('path')
           .attr('fill', function(d) {
-            return d3.interpolatePurples(d.confirmed = (unemployment.get(d.properties.ST_NM.toLowerCase())/total));
+            return d3.interpolateReds(d.confirmed = (unemployment.get(d.properties.ST_NM.toLowerCase())/30));
           })
           .attr('d', path)
           .attr('pointer-events', 'all')
           .on('mouseover', (d) => {
             handleMouseover(d.properties.ST_NM);
-            d3.select(d3.event.target).attr('fill', '#fff');
+            d3.select(d3.event.target).attr('fill', '#000');
           })
           .on('mouseout', (d) => {
-            d3.select(d3.event.target).attr('fill', d3.interpolatePurples(d.confirmed = (unemployment.get(d.properties.ST_NM.toLowerCase())/total)));
+            d3.select(d3.event.target).attr('fill', d3.interpolateReds(d.confirmed = (unemployment.get(d.properties.ST_NM.toLowerCase())/30)));
           })
           .style('cursor', 'pointer')
           .append('title')
@@ -139,7 +141,7 @@ function ChoroplethMap(props) {
           });
 
       svg.append('path')
-          .attr('stroke', '#fff')
+          .attr('stroke', '')
           .attr('fill', 'none')
           .attr('stroke-width', 1)
           .attr('d', path(topojson.mesh(india, india.objects.india)));
@@ -162,13 +164,13 @@ function ChoroplethMap(props) {
       </div>
 
       <div className="map-stats">
-        <h4>{state.State}</h4>
+        <h4>{state.state}</h4>
 
         <div className="stats">
           <h5>Confirmed</h5>
           <div className="stats-bottom">
             <h1>{state.confirmed}</h1>
-            <h6>+2%</h6>
+            <h6>{}</h6>
           </div>
         </div>
 
@@ -176,7 +178,7 @@ function ChoroplethMap(props) {
           <h5>Active</h5>
           <div className="stats-bottom">
             <h1>{state.active}</h1>
-            <h6>+2%</h6>
+            <h6>{}</h6>
           </div>
         </div>
 
@@ -184,7 +186,7 @@ function ChoroplethMap(props) {
           <h5>Recovered</h5>
           <div className="stats-bottom">
             <h1>{state.recovered}</h1>
-            <h6>+2%</h6>
+            <h6>{}</h6>
           </div>
         </div>
 
@@ -192,7 +194,7 @@ function ChoroplethMap(props) {
           <h5>Deceased</h5>
           <div className="stats-bottom">
             <h1>{state.deaths}</h1>
-            <h6>+2%</h6>
+            <h6>{}</h6>
           </div>
         </div>
 

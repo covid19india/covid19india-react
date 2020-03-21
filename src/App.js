@@ -6,6 +6,7 @@ import Home from './components/home';
 import Navbar from './components/navbar';
 import Links from './components/links';
 import Summary from './components/summary';
+import Cluster from './components/cluster';
 
 const history = require('history').createBrowserHistory;
 
@@ -22,6 +23,7 @@ function App() {
               <Route exact path="/" render={(props) => <Home {...props}/>} />
               <Route exact path="/links" render={(props) => <Links {...props}/>} />
               <Route exact path="/summary" render={(props) => <Summary {...props}/>} />
+              <Route exact path="/networkmap" render={(props) => <Cluster {...props}/>} />
             </Switch>
           </div>
         )}

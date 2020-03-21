@@ -14,17 +14,17 @@ function Table(props) {
       <thead>
         <tr>
           <th className="state-heading">State/UT</th>
-          <th><abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? 'C' : 'Confirmed'}</abbr></th>
-          <th><abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? 'A' : 'Active'}</abbr></th>
-          <th><abbr className={`${window.innerWidth <=769 ? 'is-green' : ''}`} title="Recovered">{window.innerWidth <=769 ? 'R' : 'Recovered'}</abbr></th>
-          <th><abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? 'D' : 'Deaths'}</abbr></th>
+          <th><abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? 'Confirmed' : 'Confirmed'}</abbr></th>
+          <th><abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? 'Active' : 'Active'}</abbr></th>
+          <th><abbr className={`${window.innerWidth <=769 ? 'is-green' : ''}`} title="Recovered">{window.innerWidth <=769 ? 'Recovered' : 'Recovered'}</abbr></th>
+          <th><abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deceased">{window.innerWidth <=769 ? 'Deaths' : 'Deaths'}</abbr></th>
         </tr>
       </thead>
 
       <tbody>
         {
           states.map((state, index) => {
-            if (state.confirmed>0) {
+            if (index!==0 && state.confirmed>0) {
               return (
                 <Row key={index} state={state}/>
               );

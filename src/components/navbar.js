@@ -17,11 +17,11 @@ function Navbar(props) {
             <span className={`fadeInUp ${view==='Home' ? 'focused' : ''}`} style={{animationDelay: '0.1s'}}>Home</span>
           </Link>
 
-          <Link to="/updates" onClick={()=>{
+          {/* <Link to="/updates" onClick={()=>{
             setView('Updates');
           }}>
             <span className={`fadeInUp ${view==='Updates' ? 'focused' : ''}`} style={{animationDelay: '0.2s'}}>Updates</span>
-          </Link>
+          </Link>*/}
 
           <Link to="/networkmap" onClick={()=>{
             setView('Network Map');

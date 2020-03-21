@@ -9,6 +9,7 @@ import Table from './table';
 
 function Summary(props) {
   const [states, setStates] = useState([]);
+  const [deltas, setDeltas] = useState([]);
   const [fetched, setFetched] = useState(false);
 
   useEffect(()=> {
@@ -18,10 +19,10 @@ function Summary(props) {
   }, [fetched]);
 
   const getStates = () => {
-    axios.get('https://api.rootnet.in/covid19-in/unofficial/covid19india.org/statewise')
+    axios.get('https://api.covid19india.org/data.json')
         .then((response)=>{
-          console.log(response.data.data.statewise);
-          setStates(response.data.data.statewise);
+          setStates(response.data.statewise);
+          setDeltas(response.data.key_values[0]);
           setFetched(true);
         })
         .catch((err)=>{
@@ -36,7 +37,7 @@ function Summary(props) {
       </div>
 
       <Minigraph states={states} animate={false}/>
-      <Level data={states}/>
+      <Level data={states} deltas={deltas}/>
       <Table states={states.slice(0, 9)}/>
 
       <div className="summary-bottom">

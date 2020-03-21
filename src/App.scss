@@ -242,6 +242,7 @@ h6 {
   align-self: center;
   justify-content: space-between;
   padding-top: 2.5rem;
+  margin-bottom: 1rem;
   h1, h6 {
     margin: 0;
   }
@@ -378,6 +379,7 @@ table {
   font-family: 'archia';
   text-transform: uppercase;
   margin-bottom: 1rem;
+  margin-top: 1rem;
   thead {
     background: $gray-light;
     color: $gray-dark;
@@ -426,7 +428,7 @@ table {
       margin: 0;
     }
     h4 {
-      color: $gray;
+      color: #e23028;
       width: 5rem;
     }
     h1 {
@@ -513,7 +515,6 @@ table {
   flex-direction: column;
   margin-top: 1rem;
   width: 100%;
-  margin-bottom: 10rem;
   .stats {
     padding: 0.25rem;
     position: absolute;

@@ -14,6 +14,7 @@ function Home(props) {
   const [fetched, setFetched] = useState(false);
   const [graphOption, setGraphOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
+  const [deltas, setDeltas] = useState([]);
 
   useEffect(()=> {
     if (fetched===false) {
@@ -22,11 +23,11 @@ function Home(props) {
   }, [fetched]);
 
   const getStates = () => {
-    axios.get('https://api.rootnet.in/covid19-in/unofficial/covid19india.org/statewise')
+    axios.get('https://api.covid19india.org/data.json')
         .then((response)=>{
-          console.log(response.data.data.statewise);
-          setStates(response.data.data.statewise);
-          setLastUpdated(response.data.data.lastRefreshed);
+          setStates(response.data.statewise);
+          setLastUpdated(response.data.statewise[0].lastupdatedtime.slice(0, 15)+response.data.statewise[0].lastupdatedtime.slice(18));
+          setDeltas(response.data.key_values[0]);
           setFetched(true);
         })
         .catch((err)=>{
@@ -44,7 +45,7 @@ function Home(props) {
             window.location.replace('https://docs.google.com/spreadsheets/d/1nzXUdaIWC84QipdVGUKTiCSc5xntBbpMpzLm6Si33zk/edit#gid=1896310216');
           }}><Icon.Database /><span>Live Patient Database</span></button>
           <div className="last-update">
-            <h6>Last Update</h6>
+            <h6>Last Reported Case</h6>
             <h3>{lastUpdated.length===0 ? '' : formatDistance(new Date(lastUpdated), new Date())+' Ago'}</h3>
           </div>
         </div>
@@ -58,8 +59,8 @@ function Home(props) {
 
       </div>
 
-      <Minigraph states={states}/>
-      <Level data={states}/>
+      <Minigraph states={states} animate={true}/>
+      <Level data={states} deltas={deltas}/>
 
       <Table states={states}/>
 
