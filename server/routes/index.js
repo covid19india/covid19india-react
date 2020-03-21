@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const puppeteer = require('puppeteer');
+const path = require('path');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -21,8 +22,8 @@ router.get('/update_screenshot', (req, res, next) => {
     await page.screenshot({path: '../public/thumbnail.png'});
 
     await browser.close();
+    res.sendFile('thumbnail.png', {root: path.join(__dirname, '../../public')});
   })();
-  res.sendStatus(200);
 });
 
 module.exports = router;
