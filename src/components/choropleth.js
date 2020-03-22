@@ -128,7 +128,7 @@ function ChoroplethMap(props) {
           .attr('pointer-events', 'all')
           .on('mouseover', (d) => {
             handleMouseover(d.properties.ST_NM);
-            d3.select(d3.event.target).attr('fill', '#000');
+            d3.select(d3.event.target).attr('fill', '#424242');
           })
           .on('mouseout', (d) => {
             d3.select(d3.event.target).attr('fill', d3.interpolateReds(d.confirmed = (unemployment.get(d.properties.ST_NM.toLowerCase())/30)));
@@ -157,7 +157,7 @@ function ChoroplethMap(props) {
 
   return (
     <div className="ChoroplethMap fadeInUp" style={{animationDelay: '2s'}}>
-
+      <h1 className="header">Map</h1>
       <div className="svg-parent">
         <svg id="chart" width="650" height="750" viewBox="0 0 650 750" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
       </div>
