@@ -479,6 +479,11 @@ table {
     top: -5rem;
     color: $gray-dark;
   }
+  h6.header {
+    margin-top: 3rem;
+    color: $gray;
+    margin-left: 1px;
+  }
   .svg-parent {
     display: flex;
     flex: 0.9;
@@ -492,7 +497,7 @@ table {
   .map-stats {
     flex: 0.1;
     position: absolute;
-    top: 0;
+    top: 1rem;
     left: 0;
     h1, h5, h6 {
       margin: 0;
