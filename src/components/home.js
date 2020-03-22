@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import * as Icon from 'react-feather';
 import axios from 'axios';
+import {format, zonedTimeToUtc} from 'date-fns-tz';
 import {formatDistance} from 'date-fns';
 
 import Table from './table';
@@ -46,7 +47,7 @@ function Home(props) {
           }}><Icon.Database /><span>Crowdsourced Patient Database&nbsp;</span></button>
           <div className="last-update">
             <h6>Last Reported Case</h6>
-            <h3>{lastUpdated.length===0 ? '' : formatDistance(new Date(lastUpdated), new Date())+' Ago'}</h3>
+            <h3>{lastUpdated.length===0 ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
           </div>
         </div>
 

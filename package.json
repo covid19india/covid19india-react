@@ -2,6 +2,7 @@
   "name": "covid",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://jeremyphilemon.github.io/covid19-india",
   "dependencies": {
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^10.0.1",
@@ -32,6 +33,7 @@
     "d3": "^5.15.0",
     "d3-geo": "^1.11.9",
     "date-fns": "^2.11.0",
+    "date-fns-tz": "^1.0.10",
     "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
