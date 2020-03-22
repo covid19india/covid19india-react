@@ -42,21 +42,22 @@ function Home(props) {
       <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
         <h1>India COVID-19 Tracker</h1>
         <div className="header-mid">
-          <button onClick={()=>{
-            window.location.replace('https://bit.ly/patientdb');
-          }}><Icon.Database /><span>Crowdsourced Patient Database&nbsp;</span></button>
+          <a className="button" onClick={()=>{
+            document.location.href('https://bit.ly/patientdb');
+          }}><Icon.Database /><span>Crowdsourced Patient Database&nbsp;</span>
+          </a>
           <div className="last-update">
             <h6>Last Reported Case</h6>
             <h3>{lastUpdated.length===0 ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
           </div>
         </div>
 
-        <button onClick={()=>{
-          window.location.replace('https://t.me/covid19indiaops');
-        }}className="is-purple telegram">
+        <a className="button telegram" onClick={()=>{
+          document.location.href('https://t.me/covid19indiaops');
+        }}>
           <Icon.MessageCircle />
           <span>Join Telegram to Collaborate!</span>
-        </button>
+        </a>
       </div>
 
       <Level data={states} deltas={deltas}/>

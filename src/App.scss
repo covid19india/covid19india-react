@@ -280,7 +280,7 @@ h6 {
   }
 }
 
-button {
+a.button {
   display: flex;
   flex-direction: row;
   padding: 0.5rem;
@@ -296,6 +296,7 @@ button {
   margin-bottom: 0.5rem;
   margin-top: 0.25rem;
   outline: none;
+  font-size: 0.75rem;
   svg {
     margin-right: 0.5rem;
     width: 20px;
@@ -483,6 +484,7 @@ table {
     margin-top: 3rem;
     color: $gray;
     margin-left: 1px;
+    width: 10rem;
   }
   .svg-parent {
     display: flex;
@@ -497,8 +499,8 @@ table {
   .map-stats {
     flex: 0.1;
     position: absolute;
-    top: 1rem;
-    left: 0;
+    top: 1.25rem;
+    left: 1px;
     h1, h5, h6 {
       margin: 0;
     }
@@ -826,6 +828,15 @@ footer {
   }
   .ChoroplethMap {
     height: calc(100% - 35rem);
+  }
+  .last-update {
+    width: 10rem;
+  }
+  a.button {
+    width: 10rem;
+    svg {
+      width: 38px;
+    }
   }
 }
 
