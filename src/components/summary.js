@@ -36,7 +36,7 @@ function Summary(props) {
 
       <Minigraph states={states} animate={false}/>
       <Level data={states} deltas={deltas}/>
-      <Table states={states.slice(0, 9)}/>
+      <Table states={states} summary={true}/>
 
       <div className="summary-bottom">
         <div className="summary-bottom-left">

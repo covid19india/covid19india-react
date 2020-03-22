@@ -413,12 +413,30 @@ table {
     font-size: 0.75rem;
     th {
       padding: 0.5rem;
+      cursor: pointer;
       border-radius: 5px;
+      .heading-content {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        flex-direction: row;
+        height: 0.9rem;
+        svg {
+          width: 10px;
+          margin: 0;
+          right: 0;
+          transform: rotate(135deg);
+          stroke-width: 4px;
+          align-self: center;
+          margin-top: -0.35rem;
+          margin-left: 0.25rem;
+          color: $gray-mid;
+        }
+      }
     }
   }
   tbody {
     color: $gray;
-    cursor: pointer;
     tr {
       transition: background 0.1s ease-in-out;
       &:hover {
@@ -444,9 +462,14 @@ table {
   display: flex;
   position: relative;
   align-self: center;
-  margin-top: 1rem;
+  margin-top: 2rem;
   margin-bottom: -10rem;
-  width: 50rem;
+  width: 30rem;
+  .header {
+    position: absolute;
+    top: -5rem;
+    color: $gray-dark;
+  }
   .svg-parent {
     display: flex;
     flex: 0.9;
@@ -475,7 +498,7 @@ table {
     .stats {
       background: $cherry-light;
       color: $cherry;
-      padding: 0.25rem;
+      padding: 0.5rem;
       border-radius: 5px;
       display: flex;
       flex-direction: column;
@@ -504,6 +527,11 @@ table {
         h5, h6 {color: $gray-mid;}
         h1 {color: $gray;}
       }
+    }
+  }
+  .states {
+    path {
+      transition: fill 0.1s ease-in-out;
     }
   }
 }
