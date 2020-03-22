@@ -250,6 +250,11 @@ h6 {
     color: $gray-dark;
     margin-bottom: 1rem;
   }
+  .header-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
   .header-mid {
     display: flex;
     flex-direction: row;
@@ -257,6 +262,11 @@ h6 {
     & > * {
       align-self: center;
     }
+  }
+  .header-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 }
 
@@ -297,6 +307,7 @@ a.button {
   margin-top: 0.25rem;
   outline: none;
   font-size: 0.75rem;
+  text-decoration: none;
   svg {
     margin-right: 0.5rem;
     width: 20px;
@@ -315,6 +326,11 @@ a.button {
     &:hover {
       background: $green-hover;
     }
+  }
+  &.social {
+    display: flex;
+    flex-direction: row;
+    height: 1.5rem;
   }
   &:hover {
   background: $blue-hover;
@@ -836,6 +852,12 @@ footer {
     width: 10rem;
     svg {
       width: 38px;
+    }
+    &.social {
+      width: 5.25rem;
+      svg {
+        width: 32px;
+      }
     }
   }
 }
