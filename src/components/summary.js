@@ -1,10 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import * as Icon from 'react-feather';
 
 import Level from './level';
 import Minigraph from './minigraph';
-import ChoroplethMap from './choropleth';
 import Table from './table';
 
 function Summary(props) {
@@ -38,11 +36,11 @@ function Summary(props) {
 
       <Minigraph states={states} animate={false}/>
       <Level data={states} deltas={deltas}/>
-      <Table states={states.slice(0, 9)}/>
+      <Table states={states} summary={true}/>
 
       <div className="summary-bottom">
         <div className="summary-bottom-left">
-          <img src="icon.png" />
+          <img src="icon.png" alt="logo"/>
           <h5>We stand with everyone fighting on the frontlines</h5>
         </div>
         <div className="link">

@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {geoPath, geoMercator} from 'd3-geo';
 import * as d3 from 'd3';
 import * as topojson from 'topojson';
 
@@ -13,7 +12,7 @@ function ChoroplethMap(props) {
 
   useEffect(()=>{
     if (props.states.length>1 && choroplethMap.current) {
-      const theMap = mapData(choroplethMap.current);
+      mapData(choroplethMap.current);
       setState(states[1]);
     }
   }, [total]);
@@ -53,7 +52,7 @@ function ChoroplethMap(props) {
 
     const path = d3.geoPath(projection);
 
-    const x = d3.scaleLinear()
+    /* const x = d3.scaleLinear()
         .domain([1, 10])
         .range(1, total);
 
@@ -65,11 +64,11 @@ function ChoroplethMap(props) {
         .domain(d3.range(2, 10))
         .range(d3.schemeReds[9]);
 
-    const g = svg.append('g')
+    svg.append('g')
         .attr('class', 'key')
         .attr('transform', 'translate(0,40)');
 
-    /* g.selectAll('rect')
+     g.selectAll('rect')
         .data(color.range().map(function(d) {
           d = color.invertExtent(d);
           if (d[0] == null) d[0] = xViz.domain()[0];
@@ -129,7 +128,7 @@ function ChoroplethMap(props) {
           .attr('pointer-events', 'all')
           .on('mouseover', (d) => {
             handleMouseover(d.properties.ST_NM);
-            d3.select(d3.event.target).attr('fill', '#000');
+            d3.select(d3.event.target).attr('fill', '#424242');
           })
           .on('mouseout', (d) => {
             d3.select(d3.event.target).attr('fill', d3.interpolateReds(d.confirmed = (unemployment.get(d.properties.ST_NM.toLowerCase())/30)));
@@ -158,7 +157,7 @@ function ChoroplethMap(props) {
 
   return (
     <div className="ChoroplethMap fadeInUp" style={{animationDelay: '2s'}}>
-
+      <h1 className="header">Map</h1>
       <div className="svg-parent">
         <svg id="chart" width="650" height="750" viewBox="0 0 650 750" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
       </div>

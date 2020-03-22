@@ -62,7 +62,7 @@ function Home(props) {
       <Level data={states} deltas={deltas}/>
       <Minigraph states={states} animate={true}/>
 
-      <Table states={states}/>
+      <Table states={states} summary={false}/>
 
       <ChoroplethMap states={states}/>
 
