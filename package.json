@@ -2,7 +2,6 @@
   "name": "covid",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://jeremyphilemon.github.io/covid19-india",
   "dependencies": {
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^10.0.1",
