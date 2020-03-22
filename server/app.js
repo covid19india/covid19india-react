@@ -14,10 +14,10 @@ require('dotenv').config();
 const indexRouter = require('./routes/index');
 const statesRouter = require('./routes/states');
 
-client = redis.createClient();
+/* client = redis.createClient();
 client.on('error', (err) => {
   console.log('Error ' + err);
-});
+});*/
 
 MongoDB = null;
 const uri = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASSWORD}@${process.env.DB_NAME}-h6o7s.gcp.mongodb.net/test?retryWrites=true&w=majority&replicaSet=rs`;

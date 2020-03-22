@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
   res.render('index', {title: 'Express'});
 });
 
-router.get('/update_screenshot', (req, res, next) => {
+router.get('/summarize', (req, res, next) => {
   (async () => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
