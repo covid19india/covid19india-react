@@ -327,6 +327,7 @@ button {
   width: 15.5rem;
   background: $gray-light !important;
   color: #0088cc !important;
+  padding-left: 0.65rem;
   &:hover {
     background: $gray-hover !important;
   }
@@ -344,14 +345,19 @@ button {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-left: auto;
-  margin-right: auto;
+  align-self: center;
   width: 30rem;
   .level-item {
     display: flex;
     flex-direction: column;
     & > * {
       align-self: center;
+    }
+    &:first-child {
+      margin-left: 0.5rem;
+    } 
+    &:last-child {
+      margin-right: 0.5rem;
     }
   }
   h1, h5 {
@@ -414,6 +420,10 @@ table {
       padding: 0.5rem;
       cursor: pointer;
       border-radius: 5px;
+      transition: all 0.1s ease-in-out;
+      &:hover {
+        background: $gray-hover;
+      }
       .heading-content {
         display: flex;
         justify-content: space-between;

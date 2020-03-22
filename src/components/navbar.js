@@ -8,13 +8,13 @@ function Navbar(props) {
     return (
       <div className="Navbar" style={{animationDelay: '0.5s'}}>
 
-        <img className="fadeInUp" src="/icon.png" style={{animationDelay: '0s'}}/>
+        <img className="fadeInUp" src="/icon.png" style={{animationDelay: '0.0s'}}/>
 
         <div className="navbar-left">
           <Link to="/" onClick={()=>{
             setView('Home');
           }}>
-            <span className={`fadeInUp ${view==='Home' ? 'focused' : ''}`} style={{animationDelay: '0.1s'}}>Home</span>
+            <span className={`fadeInUp ${view==='Home' ? 'focused' : ''}`} style={{animationDelay: '0.2s'}}>Home</span>
           </Link>
 
           {/* <Link to="/updates" onClick={()=>{

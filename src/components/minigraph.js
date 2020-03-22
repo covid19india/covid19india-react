@@ -17,7 +17,7 @@ function Minigraph(props) {
   const graphData = () => {
     const svg1 = d3.select(graphElement1.current);
     const margin = {top: 30, right: 5, bottom: 30, left: 0};
-    const width = 75 - margin.left - margin.right;
+    const width = 100 - margin.left - margin.right;
     const height = 100 - margin.top - margin.bottom;
 
     const svg2 = d3.select(graphElement2.current);
@@ -300,19 +300,19 @@ function Minigraph(props) {
     <div className="Minigraph">
 
       <div className="svg-parent fadeInUp" style={{animationDelay: '0.6s'}}>
-        <svg ref={graphElement1} width="75" height="100" viewBox="0 0 75 100" preserveAspectRatio="xMidYMid meet"/>
+        <svg ref={graphElement1} width="100" height="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"/>
       </div>
 
       <div className="svg-parent is-blue fadeInUp" style={{animationDelay: '0.7s'}}>
-        <svg ref={graphElement2} width="75" height="100" viewBox="0 0 75 100" preserveAspectRatio="xMidYMid meet"/>
+        <svg ref={graphElement2} width="100" height="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"/>
       </div>
 
       <div className="svg-parent is-green fadeInUp" style={{animationDelay: '0.8s'}}>
-        <svg ref={graphElement3} width="75" height="100" viewBox="0 0 75 100" preserveAspectRatio="xMidYMid meet"/>
+        <svg ref={graphElement3} width="100" height="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"/>
       </div>
 
       <div className="svg-parent is-gray fadeInUp" style={{animationDelay: '0.9s'}}>
-        <svg ref={graphElement4} width="75" height="100" viewBox="0 0 75 100" preserveAspectRatio="xMidYMid meet"/>
+        <svg ref={graphElement4} width="100" height="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"/>
       </div>
 
     </div>

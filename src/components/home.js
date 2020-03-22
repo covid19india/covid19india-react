@@ -56,7 +56,6 @@ function Home(props) {
           <Icon.MessageCircle />
           <span>Join Telegram to Collaborate!</span>
         </button>
-
       </div>
 
       <Level data={states} deltas={deltas}/>
