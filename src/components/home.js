@@ -15,6 +15,7 @@ function Home(props) {
   const [fetched, setFetched] = useState(false);
   const [graphOption, setGraphOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
+  const [timeseries, setTimeseries] = useState([]);
   const [deltas, setDeltas] = useState([]);
 
   useEffect(()=> {
@@ -27,6 +28,7 @@ function Home(props) {
     axios.get('https://api.covid19india.org/data.json')
         .then((response)=>{
           setStates(response.data.statewise);
+          setTimeseries(response.data.cases_time_series);
           setLastUpdated(response.data.statewise[0].lastupdatedtime.slice(0, 15)+response.data.statewise[0].lastupdatedtime.slice(18));
           setDeltas(response.data.key_values[0]);
           setFetched(true);
@@ -61,7 +63,7 @@ function Home(props) {
       </div>
 
       <Level data={states} deltas={deltas}/>
-      <Minigraph states={states} animate={true}/>
+      <Minigraph timeseries={timeseries} animate={true}/>
 
       <Table states={states} summary={false}/>
 
@@ -83,7 +85,7 @@ function Home(props) {
         </div>
       </div>
 
-      <TimeSeries states={states} type={graphOption}/>
+      <TimeSeries timeseries={timeseries} type={graphOption}/>
     </div>
   );
 }
