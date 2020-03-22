@@ -43,7 +43,7 @@ function Home(props) {
         <h1>India COVID-19 Tracker</h1>
         <div className="header-mid">
           <button onClick={()=>{
-            window.location.replace('https://bit.ly/covid19indiapatientdb_echo');
+            window.location.replace('https://bit.ly/patientdb');
           }}><Icon.Database /><span>Crowdsourced Patient Database&nbsp;</span></button>
           <div className="last-update">
             <h6>Last Reported Case</h6>
