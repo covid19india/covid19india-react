@@ -43,7 +43,7 @@ function Home(props) {
         <div className="header-mid">
           <button onClick={()=>{
             window.location.replace('https://bit.ly/covid19indiapatientdb_echo');
-          }}><Icon.Database /><span>Live Patient Database</span></button>
+          }}><Icon.Database /><span>Crowdsourced Patient Database&nbsp;</span></button>
           <div className="last-update">
             <h6>Last Reported Case</h6>
             <h3>{lastUpdated.length===0 ? '' : formatDistance(new Date(lastUpdated), new Date())+' Ago'}</h3>
