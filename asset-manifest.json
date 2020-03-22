@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/covid19india-react/static/css/main.b5d626f6.chunk.css",
+    "main.css": "/covid19india-react/static/css/main.b3eee313.chunk.css",
     "main.js": "/covid19india-react/static/js/main.1eb274c2.chunk.js",
     "main.js.map": "/covid19india-react/static/js/main.1eb274c2.chunk.js.map",
     "runtime-main.js": "/covid19india-react/static/js/runtime-main.5b93c5aa.js",
@@ -8,16 +8,16 @@
     "static/js/2.f6aa50aa.chunk.js": "/covid19india-react/static/js/2.f6aa50aa.chunk.js",
     "static/js/2.f6aa50aa.chunk.js.map": "/covid19india-react/static/js/2.f6aa50aa.chunk.js.map",
     "index.html": "/covid19india-react/index.html",
-    "precache-manifest.7becb1d70d0464db74a49da8d1e3e365.js": "/covid19india-react/precache-manifest.7becb1d70d0464db74a49da8d1e3e365.js",
+    "precache-manifest.52e89bc7a734165d5f7837715bf8d6e0.js": "/covid19india-react/precache-manifest.52e89bc7a734165d5f7837715bf8d6e0.js",
     "service-worker.js": "/covid19india-react/service-worker.js",
-    "static/css/main.b5d626f6.chunk.css.map": "/covid19india-react/static/css/main.b5d626f6.chunk.css.map",
+    "static/css/main.b3eee313.chunk.css.map": "/covid19india-react/static/css/main.b3eee313.chunk.css.map",
     "static/js/2.f6aa50aa.chunk.js.LICENSE.txt": "/covid19india-react/static/js/2.f6aa50aa.chunk.js.LICENSE.txt",
     "static/media/App.scss": "/covid19india-react/static/media/archia-thin-webfont.e88f1cf3.woff2"
   },
   "entrypoints": [
     "static/js/runtime-main.5b93c5aa.js",
     "static/js/2.f6aa50aa.chunk.js",
-    "static/css/main.b5d626f6.chunk.css",
+    "static/css/main.b3eee313.chunk.css",
     "static/js/main.1eb274c2.chunk.js"
   ]
 }
