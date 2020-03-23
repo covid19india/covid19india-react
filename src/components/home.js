@@ -44,7 +44,7 @@ function Home(props) {
       <div className="home-left">
 
         <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
-          <h1>India COVID-19 Tracker Test</h1>
+          <h1>India COVID-19 Tracker</h1>
           <div className="header-mid">
             <a className="button" onClick={()=>{
               document.location.href('https://bit.ly/patientdb');
