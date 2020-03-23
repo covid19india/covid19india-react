@@ -22,6 +22,8 @@ module.exports = {
     'react',
   ],
   'rules': {
+    "eslint linebreak-style": [0, "error", "windows"],
+    "linebreak-style": 0,
     "require-jsdoc" : 0
   },
   'settings': {
