@@ -77,9 +77,9 @@ function Home(props) {
     <div className="Home">
 
       <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
-          <h1>India COVID-19 Tracker</h1>
+        <h1>India COVID-19 Tracker</h1>
         <div className="header-mid">
-        <a className="button" onClick={()=>{
+          <a className="button" onClick={()=>{
             document.location.href('https://bit.ly/patientdb');
           }}><Icon.Database /><span>Crowdsourced Patient Database&nbsp;</span>
           </a>
@@ -88,10 +88,10 @@ function Home(props) {
             <h3>{lastUpdated.length===0 ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
           </div>
         </div>
-
-        <a className="button telegram" onClick={()=>{
-          document.location.href('https://t.me/covid19indiaops');
-        }}>
+        <div className="header-mid">
+          <a className="button telegram" onClick={()=>{
+            document.location.href('https://t.me/covid19indiaops');
+          }}>
             <Icon.MessageCircle />
             <span>Join Telegram to Collaborate!</span>
           </a>
@@ -101,10 +101,10 @@ function Home(props) {
             data-size="large"
             data-url="https://www.covid19india.org/"
             data-text={summaryString}>
-            <Icon.Twitter/><span>Tweet</span>
+            <span>Tweet</span>
           </a>
+        </div>
       </div>
-
       <Level data={states} deltas={deltas}/>
       <Minigraph timeseries={timeseries} animate={true}/>
 
@@ -128,7 +128,7 @@ function Home(props) {
         </div>
       </div>
 
-<TimeSeries timeseries={timeseries} type={graphOption}/>
+      <TimeSeries timeseries={timeseries} type={graphOption}/>
     </div>
   );
 }
