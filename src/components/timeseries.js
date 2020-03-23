@@ -38,7 +38,7 @@ function TimeSeries(props) {
   const svg6 = d3.select(graphElement6.current);
 
   const graphData = (timeseries) => {
-    const data = timeseries.slice(0, timeseries.length-1);
+    const data = timeseries.slice(0, timeseries.length-2);
     setDatapoint(timeseries[timeseries.length-1]);
     setIndex(timeseries.length-1);
 

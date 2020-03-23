@@ -32,7 +32,7 @@ function Minigraph(props) {
   const svg4 = d3.select(graphElement4.current);
 
   function graphData(timeseries) {
-    const data = timeseries.slice(0, timeseries.length-1);
+    const data = timeseries.slice(0, timeseries.length-2);
     setDatapoint(data[data.length-1]);
 
     const x = d3.scaleTime()
