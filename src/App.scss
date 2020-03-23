@@ -205,12 +205,6 @@ h6 {
     flex-direction: column;
     width: 30rem;
   }
-  .home-left {
-    margin-right: 5rem;
-  }
-  .home-rightt {
-    margin-left: 5rem;
-  }
 }
 
 .Navbar {
@@ -509,7 +503,7 @@ table {
     justify-content: center;
     width: 100%;
     svg {
-      align-self: center;
+      align-self: center ;
     }
   }
   .map-stats {
@@ -836,7 +830,6 @@ footer {
       width: 100%;
       display: flex;
       flex-direction: column;
-      margin: 0;
     }
   }
   .link {
