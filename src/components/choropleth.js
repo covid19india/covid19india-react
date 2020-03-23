@@ -6,7 +6,7 @@ function ChoroplethMap(props) {
   const [rendered, setRendered] = useState(false);
   const [states, setStates] = useState(props.states);
   const [state, setState] = useState({});
-  const [total, setTotal] = useState(0);
+  const [statistic, setStatistic] = useState({});
   const [index, setIndex] = useState(1);
   const choroplethMap = useRef(null);
 
@@ -15,15 +15,25 @@ function ChoroplethMap(props) {
       mapData(choroplethMap.current);
       setState(states[1]);
     }
-  }, [total]);
+  }, [statistic]);
 
   useEffect(()=>{
-    let total = 0;
-    for (let i=1; i<states.length; i++) {
-      total+=parseInt(states[i].confirmed);
+    if (states.length > 1) {
+      let total = 0;
+      let maxConfirmed = parseInt(states[1].confirmed);
+      let minConfirmed = parseInt(states[1].confirmed);
+      for (let i=1; i<states.length; i++) {
+        total+=parseInt(states[i].confirmed);
+        if (parseInt(states[i].confirmed) > parseInt(maxConfirmed)) maxConfirmed = parseInt(states[i].confirmed);
+        if (parseInt(states[i].confirmed) < parseInt(minConfirmed)) minConfirmed = parseInt(states[i].confirmed);
+      }
+      setStatistic({
+        total: total,
+        maxConfirmed: maxConfirmed,
+        minConfirmed: minConfirmed,
+      });
     }
-    setTotal(total);
-  }, [states]);
+  }, [states.length]);
 
   useEffect(()=>{
     setStates(props.states);
@@ -123,7 +133,7 @@ function ChoroplethMap(props) {
           .enter().append('path')
           .attr('fill', function(d) {
             const n = unemployment.get(d.properties.ST_NM.toLowerCase());
-            return d3.interpolateReds(d.confirmed = (n/50));
+            return d3.interpolateReds(d.confirmed = (n>0)*0.05 + n/statistic.maxConfirmed*0.8);
           })
           .attr('d', path)
           .attr('pointer-events', 'all')
@@ -133,16 +143,16 @@ function ChoroplethMap(props) {
           })
           .on('mouseout', (d) => {
             const n = unemployment.get(d.properties.ST_NM.toLowerCase());
-            d3.select(d3.event.target).attr('fill', d3.interpolateReds(d.confirmed = (n/50)));
+            d3.select(d3.event.target).attr('fill', d3.interpolateReds(d.confirmed = (n>0)*0.05 + n/statistic.maxConfirmed*0.8));
           })
           .style('cursor', 'pointer')
           .append('title')
           .text(function(d) {
-            return 100*(unemployment.get(d.properties.ST_NM.toLowerCase())/total).toFixed(2) + '% from ' + toTitleCase(d.properties.ST_NM);
+            return 100*(unemployment.get(d.properties.ST_NM.toLowerCase())/statistic.total).toFixed(2) + '% from ' + toTitleCase(d.properties.ST_NM);
           });
 
       svg.append('path')
-          .attr('stroke', '#ff073a10')
+          .attr('stroke', '#ff073a20')
           .attr('fill', 'none')
           .attr('stroke-width', 2)
           .attr('d', path(topojson.mesh(india, india.objects.india)));
