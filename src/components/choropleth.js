@@ -125,11 +125,13 @@ function ChoroplethMap(props) {
           .attr('pointer-events', 'all')
           .on('mouseover', (d) => {
             handleMouseover(d.properties.ST_NM);
-            d3.select(d3.event.target).attr('fill', '#424242');
+            const target = d3.event.target;
+            d3.select(target.parentNode.appendChild(target)).attr('stroke', '#424242').attr('stroke-width', 2)
           })
           .on('mouseout', (d) => {
             const n = unemployment.get(d.properties.ST_NM.toLowerCase());
-            d3.select(d3.event.target).attr('fill', d3.interpolateReds(d.confirmed = (n>0)*0.05 + n/statistic.maxConfirmed*0.8));
+            const target = d3.event.target;
+            d3.select(target).attr('fill', d3.interpolateReds(d.confirmed = (n>0)*0.05 + n/statistic.maxConfirmed*0.8)).attr('stroke', 'None');
           })
           .style('cursor', 'pointer')
           .append('title')
