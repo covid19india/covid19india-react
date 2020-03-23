@@ -652,7 +652,8 @@ table {
   .svg-parent {
     position: relative;
     display: flex;
-    width: 100%;
+    width: 30rem;
+    align-self: center;
     background: $cherry-light;
     border-radius: 5px;
     margin-bottom: 1rem;
