@@ -8,6 +8,7 @@ import Table from './table';
 function Summary(props) {
   const [states, setStates] = useState([]);
   const [deltas, setDeltas] = useState([]);
+  const [timeseries, setTimeseries] = useState([]);
   const [fetched, setFetched] = useState(false);
 
   useEffect(()=> {
@@ -21,6 +22,7 @@ function Summary(props) {
         .then((response)=>{
           setStates(response.data.statewise);
           setDeltas(response.data.key_values[0]);
+          setTimeseries(response.data.cases_time_series);
           setFetched(true);
         })
         .catch((err)=>{
@@ -34,7 +36,7 @@ function Summary(props) {
         <h1>India COVID-19 Tracker</h1>
       </div>
 
-      <Minigraph states={states} animate={false}/>
+      <Minigraph timeseries={timeseries} animate={false}/>
       <Level data={states} deltas={deltas}/>
       <Table states={states} summary={true}/>
 
