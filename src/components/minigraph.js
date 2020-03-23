@@ -12,7 +12,7 @@ function Minigraph(props) {
 
   useEffect(()=>{
     if (props.timeseries.length>1) {
-      setTimeseries(props.timeseries);
+      setTimeseries(props.timeseries.slice(0, props.timeseries.length-1));
     }
   }, [props.timeseries.length]);
 
@@ -32,7 +32,7 @@ function Minigraph(props) {
   const svg4 = d3.select(graphElement4.current);
 
   function graphData(timeseries) {
-    const data = timeseries.slice(0, timeseries.length-2);
+    const data = timeseries;
     setDatapoint(data[data.length-1]);
 
     const x = d3.scaleTime()

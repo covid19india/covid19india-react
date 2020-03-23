@@ -16,7 +16,7 @@ function TimeSeries(props) {
 
   useEffect(()=>{
     if (props.timeseries.length>1) {
-      setTimeseries(props.timeseries.slice(0, props.timeseries.length-2));
+      setTimeseries(props.timeseries.slice(0, props.timeseries.length-1));
     }
   }, [props.timeseries.length]);
 
