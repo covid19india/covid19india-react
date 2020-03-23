@@ -122,7 +122,8 @@ function ChoroplethMap(props) {
           .data(topojson.feature(india, india.objects.india).features)
           .enter().append('path')
           .attr('fill', function(d) {
-            return d3.interpolateReds(d.confirmed = (unemployment.get(d.properties.ST_NM.toLowerCase())/50));
+            const n = unemployment.get(d.properties.ST_NM.toLowerCase());
+            return d3.interpolateReds(d.confirmed = (n/50));
           })
           .attr('d', path)
           .attr('pointer-events', 'all')
@@ -131,12 +132,13 @@ function ChoroplethMap(props) {
             d3.select(d3.event.target).attr('fill', '#424242');
           })
           .on('mouseout', (d) => {
-            d3.select(d3.event.target).attr('fill', d3.interpolateReds(d.confirmed = (unemployment.get(d.properties.ST_NM.toLowerCase())/50)));
+            const n = unemployment.get(d.properties.ST_NM.toLowerCase());
+            d3.select(d3.event.target).attr('fill', d3.interpolateReds(d.confirmed = (n/50)));
           })
           .style('cursor', 'pointer')
           .append('title')
           .text(function(d) {
-            return (d.confirmed*100).toFixed(2) + '% from ' + toTitleCase(d.properties.ST_NM);
+            return 100*(unemployment.get(d.properties.ST_NM.toLowerCase())/total).toFixed(2) + '% from ' + toTitleCase(d.properties.ST_NM);
           });
 
       svg.append('path')
