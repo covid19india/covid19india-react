@@ -17,6 +17,7 @@ function Home(props) {
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState([]);
   const [deltas, setDeltas] = useState([]);
+  const [timeseriesMode, setTimeseriesMode] = useState(true);
 
   useEffect(()=> {
     if (fetched===false) {
@@ -86,9 +87,17 @@ function Home(props) {
               <h4>Daily</h4>
             </div>
           </div>
+
+          <div className="timeseries-mode">
+            <label htmlFor="timeseries-mode">Scale Uniformly</label>
+            <input type="checkbox" checked={timeseriesMode} onChange={(event)=>{
+              setTimeseriesMode(!timeseriesMode);
+            }}/>
+          </div>
+
         </div>
 
-        <TimeSeries timeseries={timeseries} type={graphOption}/>
+        <TimeSeries timeseries={timeseries} type={graphOption} mode={timeseriesMode}/>
 
       </div>
     </div>

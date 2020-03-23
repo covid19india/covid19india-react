@@ -579,6 +579,9 @@ table {
     text-align: center;
     margin-right: 0.25rem;
     transition: all 0.3s ease-in-out;
+    &:hover {
+      background: $gray-hover;
+    }
     &.focused {
       color: $gray;
       background: $gray-opaque;
@@ -602,6 +605,24 @@ table {
   width: 30rem;
   align-self: center;
   margin-top: 1rem;
+  .timeseries-mode {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    top: 5rem;
+    right: 0;
+    z-index: 99;
+    input {margin: 0;}
+    label {
+      font-family: 'archia';
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 900;
+      margin-right: 0.5rem;
+      color: $gray;
+      z-index: 99;
+    }
+  }
 }
 
 .timeseries, .Minigraph {
@@ -849,6 +870,11 @@ footer {
       cursor: pointer;
     }
   }
+  .timeseries {
+    .svg-parent {
+      width: 100%;
+    }
+  }
   .ChoroplethMap {
     height: calc(100% - 35rem);
   }
@@ -859,6 +885,20 @@ footer {
     width: 10rem;
     svg {
       width: 38px;
+    }
+  }
+}
+
+/* For the iPhone X folks OMG WHY ARE YOUR SCREENS SO NARROW T_T*/ 
+@media (max-width: 375px) {
+  .timeseries-mode {
+    display: block !important;
+    width: 4.25rem;
+    top: 2rem !important;
+    text-align: right;
+    input {
+      margin: 0;
+      margin-top: 0.25rem !important;
     }
   }
 }
