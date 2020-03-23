@@ -1,12 +1,8 @@
 import React, {useEffect} from 'react';
 
 function Cluster(props) {
-  useEffect(()=>{
-    window.location.replace('https://cluster.covid19india.org');
-  });
-
   return (
-    <div></div>
+    <div className="iframe-container" referrerPolicy="no-referrer" width="100%"><iframe src="https://cluster.covid19india.org"></iframe></div>
   );
 }
 

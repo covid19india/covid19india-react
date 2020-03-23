@@ -156,6 +156,8 @@ h1, {
   font-size: 24px !important;
   font-weight: 900;
   text-transform: uppercase;
+  max-width: 100vw;
+
 }
 
 h2 {
@@ -228,6 +230,9 @@ h6 {
       color: $gray-mid;
       span {
         display: inline-block;
+        &:hover {
+          color: $gray;
+        }
       }
     }
   }
@@ -878,5 +883,14 @@ footer {
   100% {
     opacity: 1;
     transform: translateY(0px);
+  }
+}
+
+.iframe-container{
+  width: 100%;
+  min-height : 100vh;
+  iframe {
+    width: 100vw;
+    height: 100vh;
   }
 }
