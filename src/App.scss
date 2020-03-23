@@ -509,7 +509,7 @@ table {
     justify-content: center;
     width: 100%;
     svg {
-      align-self: center ;
+      align-self: center;
     }
   }
   .map-stats {
@@ -836,6 +836,7 @@ footer {
       width: 100%;
       display: flex;
       flex-direction: column;
+      margin: 0;
     }
   }
   .link {
