@@ -46,9 +46,8 @@ function Home(props) {
         <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
           <h1>India COVID-19 Tracker</h1>
           <div className="header-mid">
-            <a className="button" onClick={()=>{
-              document.location.href('https://bit.ly/patientdb');
-            }}><Icon.Database /><span>Crowdsourced Patient Database&nbsp;</span>
+            <a className="button" href="https://bit.ly/patientdb" target="_noblank">
+              <Icon.Database /><span>Crowdsourced Patient Database&nbsp;</span>
             </a>
             <div className="last-update">
               <h6>Last Reported Case</h6>
@@ -56,9 +55,7 @@ function Home(props) {
             </div>
           </div>
 
-          <a className="button telegram" onClick={()=>{
-            document.location.href('https://t.me/covid19indiaops');
-          }}>
+          <a href="https://t.me/covid19indiaops" className="button telegram" target="_noblank">
             <Icon.MessageCircle />
             <span>Join Telegram to Collaborate!</span>
           </a>
