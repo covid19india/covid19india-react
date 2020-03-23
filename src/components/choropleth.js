@@ -156,7 +156,7 @@ function ChoroplethMap(props) {
   };
 
   return (
-    <div className="ChoroplethMap fadeInUp" style={{animationDelay: '2s'}}>
+    <div className="ChoroplethMap fadeInUp" style={{animationDelay: '1.2s'}}>
       <h1 className="header">Map</h1>
       <h6 className="header">Hover over a state for more details</h6>
       <div className="svg-parent">
