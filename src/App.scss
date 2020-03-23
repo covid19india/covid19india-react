@@ -195,7 +195,16 @@ h6 {
 
 .Home {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-left: 10rem;
+  margin-right: 10rem;
+  .home-left, .home-right  {
+    display: flex;
+    flex-direction: column;
+    width: 30rem;
+  }
 }
 
 .Navbar {
@@ -472,7 +481,7 @@ table {
   display: flex;
   position: relative;
   align-self: center;
-  margin-top: 2rem;
+  margin-top: 4rem;
   margin-bottom: -10rem;
   width: 30rem;
   .header {
@@ -807,8 +816,20 @@ footer {
 }
 
 @media (max-width: 769px) {
-  .ChoroplethMap, .TimeSeries, table, .header, .Level, .timeseries-header, .TimeSeries-Parent, .Links, .Minigraph, .Summary {
+  .ChoroplethMap, .TimeSeries, table, .header, .Level, .timeseries-header, .TimeSeries-Parent, .Links, .Minigraph, .Summary, {
     width: calc(100% - 2rem);
+  }
+  .Home {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-left: 0rem;
+    margin-right: 0rem;
+    .home-left, .home-right {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
   }
   .link {
     width: calc(100% - 2rem);

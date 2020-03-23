@@ -333,7 +333,7 @@ function TimeSeries(props) {
   };
 
   return (
-    <div className="TimeSeries-Parent">
+    <div className="TimeSeries-Parent fadeInUp" style={{animationDelay: '1.7s'}}>
       <div className="timeseries" style={{display: props.type===1 ? 'flex' : 'none'}}>
 
         <div className="svg-parent">
