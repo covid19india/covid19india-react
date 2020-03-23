@@ -46,7 +46,7 @@ function Home(props) {
         <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
           <h1>India COVID-19 Tracker</h1>
           <div className="header-mid">
-            <a className="button" href="https://bit.ly/patientdb" target="_noblank">
+            <a className="button" href="http://portal.covid19india.org" target="_noblank">
               <Icon.Database /><span>Crowdsourced Patient Database&nbsp;</span>
             </a>
             <div className="last-update">
