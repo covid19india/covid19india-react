@@ -22,6 +22,9 @@ module.exports = {
     'react',
   ],
   'rules': {
+    "eslint linebreak-style": [0, "error", "windows"],
+    "max-len": ["error", { "code": 180 }],
+    "linebreak-style": 0,
     "require-jsdoc" : 0
   },
   'settings': {
