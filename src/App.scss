@@ -151,7 +151,7 @@ body {
   -webkit-touch-callout: none;
 }
 
-h1, {
+h1 {
   font-family: 'archia';
   font-size: 24px !important;
   font-weight: 900;
@@ -317,7 +317,7 @@ h6 {
   }
 }
 
-a.button {
+.button {
   display: flex;
   flex-direction: row;
   padding: 0.5rem;
@@ -594,6 +594,14 @@ table {
   }
 }
 
+#chart {
+  z-index: 10;
+}
+
+.mapButton {
+  z-index: 11;
+}
+
 .ChoroplethMap {
   display: flex;
   position: relative;
@@ -611,6 +619,18 @@ table {
     color: $gray;
     margin-left: 1px;
     width: 10rem;
+  }
+  div.header {
+    margin-top: 3rem;
+    color: $gray;
+    margin-left: 1px;
+    width: 30rem;
+    @media (max-width: 769px) {
+      width: 100%;
+    }
+  }
+  .horizontal {
+    flex-direction: row;
   }
   .svg-parent {
     display: flex;
@@ -632,17 +652,29 @@ table {
   .map-stats {
     flex: 0.1;
     position: absolute;
-    top: 4rem;
+    top: 2rem;
     left: 1px;
+    width: 5rem;
     h1, h5, h6 {
       margin: 0;
     }
     h4 {
       color: #e23028;
-      width: 5rem;
+      width: 10rem;
     }
     h1 {
       font-weight: 600;
+    }
+    .key-info {
+      display: flex;
+      flex-direction: row;
+      width: 12rem;
+      position: absolute;
+      left: 10rem;
+      top: 0.5rem;
+      .stats {
+        width: 12rem;
+      }
     }
     .stats {
       background: $cherry-light;
@@ -652,6 +684,7 @@ table {
       display: flex;
       flex-direction: column;
       margin-bottom: 0.5rem;
+      width: 5rem;
       .stats-bottom {
         display: flex;
         flex-direction: row;
@@ -675,6 +708,11 @@ table {
         background: $gray-light;
         h5, h6 {color: $gray-mid;}
         h1 {color: $gray;}
+      }
+      &.is-yellow {
+        background: $warning;
+        h5, h6 {color: $white;}
+        h1 {color: $white;}
       }
     }
   }
