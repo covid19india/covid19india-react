@@ -55,9 +55,9 @@ function TimeSeries(props) {
     setIndex(timeseries.length-1);
 
     const svg1 = d3.select(graphElement1.current);
-    const margin = {top: 0, right: 20, bottom: 10, left: 20};
+    const margin = {top: 0, right: 20, bottom: 50, left: 20};
     const width = 650 - margin.left - margin.right;
-    const height = 100 - margin.top - margin.bottom;
+    const height = 200 - margin.top - margin.bottom;
 
     const svg2 = d3.select(graphElement2.current);
     const svg3 = d3.select(graphElement3.current);
@@ -144,48 +144,28 @@ function TimeSeries(props) {
     svg1.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisLeft(y1).tickFormat((tick) => {
-          if (tick%100 === 0) {
-            return;
-          }
-          return tick;
-        }))
+        .call(d3.axisLeft(y1))
         .selectAll('.tick text')
         .attr('transform', 'translate(40,0)');
 
     svg2.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisLeft(mode ? y1 : y2).tickFormat((tick) => {
-          if (tick%4 === 0) {
-            return;
-          }
-          return tick;
-        }))
+        .call(d3.axisLeft(mode ? y1 : y2))
         .selectAll('.tick text')
         .attr('transform', 'translate(40,0)');
 
     svg3.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisLeft(mode ? y1 : y3).tickFormat((tick) => {
-          if (tick%100 === 0) {
-            return;
-          }
-          return tick;
-        }))
+        .call(d3.axisLeft(mode ? y1 : y3))
         .selectAll('.tick text')
         .attr('transform', 'translate(40,0)');
 
     svg4.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisLeft(mode ? y1 : y4).tickFormat((tick) => {
-          if (tick%100 === 0) {
-            return;
-          }
-          return tick;
-        }))
+        .call(d3.axisLeft(mode ? y1 : y4))
         .selectAll('.tick text')
         .attr('transform', 'translate(40,0)');
 
@@ -193,7 +173,7 @@ function TimeSeries(props) {
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
         .call(d3.axisLeft(mode ? y1 : y5).tickFormat((tick) => {
-          if (tick%2 !== 0 || tick%100 === 0) {
+          if (Math.floor(tick) !== tick) {
             return;
           }
           return tick;
@@ -205,7 +185,7 @@ function TimeSeries(props) {
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
         .call(d3.axisLeft(mode ? y1 : y6).tickFormat((tick) => {
-          if (Math.floor(tick) !== tick || tick%100 === 0) {
+          if (Math.floor(tick) !== tick) {
             return;
           }
           return tick;
@@ -308,7 +288,7 @@ function TimeSeries(props) {
               return x(new Date(d['date']+'2020'));
             })
             .y(function(d) {
-              if (mode) return y1(d['totaldeceased']);
+              if (mode) return y1(d['totaldeceased'])-5;
               return y3(d['totaldeceased'])-5;
             })
             .curve(d3.curveCardinal),
@@ -480,7 +460,7 @@ function TimeSeries(props) {
               <h6>{timeseries.length>0 && index!==0 ? timeseries[index]['totalconfirmed'] - timeseries[index-1]['totalconfirmed']>=0 ? '+'+(timeseries[index]['totalconfirmed'] - timeseries[index-1]['totalconfirmed']) : (timeseries[index]['totalconfirmed'] - timeseries[index-1]['totalconfirmed']) : ''}</h6>
             </div>
           </div>
-          <svg ref={graphElement1} width="650" height="100" viewBox="0 0 650 100" preserveAspectRatio="xMidYMid meet"/>
+          <svg ref={graphElement1} width="650" height="200" viewBox="0 0 650 200" preserveAspectRatio="xMidYMid meet"/>
         </div>
 
         <div className="svg-parent is-green">
@@ -491,7 +471,7 @@ function TimeSeries(props) {
               <h6>{timeseries.length>0 && index!==0 ? timeseries[index]['totalrecovered'] - timeseries[index-1]['totalrecovered']>=0 ? '+'+(timeseries[index]['totalrecovered'] - timeseries[index-1]['totalrecovered']) : (timeseries[index]['totalrecovered'] - timeseries[index-1]['totalrecovered']) : ''}</h6>
             </div>
           </div>
-          <svg ref={graphElement2} width="650" height="100" viewBox="0 0 650 100" preserveAspectRatio="xMidYMid meet"/>
+          <svg ref={graphElement2} width="650" height="200" viewBox="0 0 650 200" preserveAspectRatio="xMidYMid meet"/>
         </div>
 
         <div className="svg-parent is-gray">
@@ -502,7 +482,7 @@ function TimeSeries(props) {
               <h6>{timeseries.length>0 && index!==0 ? timeseries[index]['totaldeceased'] - timeseries[index-1]['totaldeceased']>=0 ? '+'+(timeseries[index]['totaldeceased'] - timeseries[index-1]['totaldeceased']) : (timeseries[index]['totaldeceased'] - timeseries[index-1]['totaldeceased']) : ''}</h6>
             </div>
           </div>
-          <svg ref={graphElement3} width="650" height="100" viewBox="0 0 650 100" preserveAspectRatio="xMidYMid meet"/>
+          <svg ref={graphElement3} width="650" height="200" viewBox="0 0 650 200" preserveAspectRatio="xMidYMid meet"/>
         </div>
 
       </div>
@@ -517,7 +497,7 @@ function TimeSeries(props) {
               <h6>{timeseries.length>0 && index!==0 ? timeseries[index]['dailyconfirmed'] - timeseries[index-1]['dailyconfirmed']>=0 ? '+'+(timeseries[index]['dailyconfirmed'] - timeseries[index-1]['dailyconfirmed']) : (timeseries[index]['dailyconfirmed'] - timeseries[index-1]['dailyconfirmed']) : ''}</h6>
             </div>
           </div>
-          <svg ref={graphElement4} width="650" height="100" viewBox="0 0 650 100" preserveAspectRatio="xMidYMid meet"/>
+          <svg ref={graphElement4} width="650" height="200" viewBox="0 0 650 200" preserveAspectRatio="xMidYMid meet"/>
         </div>
 
         <div className="svg-parent is-green">
@@ -528,7 +508,7 @@ function TimeSeries(props) {
               <h6>{timeseries.length>0 && index!==0 ? timeseries[index]['dailyrecovered'] - timeseries[index-1]['dailyrecovered']>=0 ? '+'+(timeseries[index]['dailyrecovered'] - timeseries[index-1]['dailyrecovered']) : (timeseries[index]['dailyrecovered'] - timeseries[index-1]['dailyrecovered']) : ''}</h6>
             </div>
           </div>
-          <svg ref={graphElement5} width="650" height="100" viewBox="0 0 650 100" preserveAspectRatio="xMidYMid meet"/>
+          <svg ref={graphElement5} width="650" height="200" viewBox="0 0 650 200" preserveAspectRatio="xMidYMid meet"/>
         </div>
 
         <div className="svg-parent is-gray">
@@ -539,7 +519,7 @@ function TimeSeries(props) {
               <h6>{timeseries.length>0 && index!==0 ? timeseries[index]['dailydeceased'] - timeseries[index-1]['dailydeceased']>=0 ? '+'+(timeseries[index]['dailydeceased'] - timeseries[index-1]['dailydeceased']) : (timeseries[index]['dailydeceased'] - timeseries[index-1]['dailydeceased']) : ''}</h6>
             </div>
           </div>
-          <svg ref={graphElement6} width="650" height="100" viewBox="0 0 650 100" preserveAspectRatio="xMidYMid meet"/>
+          <svg ref={graphElement6} width="650" height="200" viewBox="0 0 650 200" preserveAspectRatio="xMidYMid meet"/>
         </div>
 
       </div>
