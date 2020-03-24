@@ -108,7 +108,7 @@ function Table(props) {
           states.map((state, index) => {
             if (index!==0 && state.confirmed>0) {
               return (
-                <Row key={index} state={state}/>
+                <Row key={index} state={state} total={false}/>
               );
             }
           })

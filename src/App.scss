@@ -476,6 +476,11 @@ table {
     color: $gray-mid;
     right: 0;
   }
+  .is-total {
+    td {
+      background: $gray-hover;
+    }
+  }
 }
 
 .ChoroplethMap {
@@ -562,11 +567,6 @@ table {
       }
     }
   }
-  .states {
-    path {
-      transition: fill 0.1s ease-in-out;
-    }
-  }
 }
 
 .tabs {
@@ -619,7 +619,7 @@ table {
     top: 4.5rem;
     right: 0;
     z-index: 99;
-    input {margin: 0;}
+    input {margin: 0; cursor: pointer;}
     label {
       font-family: 'archia';
       text-transform: uppercase;
