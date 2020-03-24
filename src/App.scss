@@ -504,6 +504,14 @@ table {
     width: 100%;
     svg {
       align-self: center ;
+      text {
+        text-transform: uppercase;
+        text-align: right;
+        font-family: 'archia';
+        font-weight: 600;
+        fill: $gray;
+        font-size: 14px;
+      }
     }
   }
   .map-stats {
@@ -609,7 +617,7 @@ table {
     position: absolute;
     display: flex;
     flex-direction: row;
-    top: 5rem;
+    top: 4.5rem;
     right: 0;
     z-index: 99;
     input {margin: 0;}
@@ -624,6 +632,7 @@ table {
     }
   }
 }
+
 
 .timeseries, .Minigraph {
   display: flex;

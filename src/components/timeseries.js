@@ -144,7 +144,12 @@ function TimeSeries(props) {
     svg1.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisLeft(y1))
+        .call(d3.axisLeft(y1).tickFormat((tick) => {
+          if (tick%100 === 0) {
+            return;
+          }
+          return tick;
+        }))
         .selectAll('.tick text')
         .attr('transform', 'translate(40,0)');
 
@@ -164,7 +169,7 @@ function TimeSeries(props) {
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
         .call(d3.axisLeft(mode ? y1 : y3).tickFormat((tick) => {
-          if (Math.floor(tick) != tick) {
+          if (tick%100 === 0) {
             return;
           }
           return tick;
@@ -175,7 +180,12 @@ function TimeSeries(props) {
     svg4.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisLeft(mode ? y1 : y4))
+        .call(d3.axisLeft(mode ? y1 : y4).tickFormat((tick) => {
+          if (tick%100 === 0) {
+            return;
+          }
+          return tick;
+        }))
         .selectAll('.tick text')
         .attr('transform', 'translate(40,0)');
 
@@ -183,7 +193,7 @@ function TimeSeries(props) {
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
         .call(d3.axisLeft(mode ? y1 : y5).tickFormat((tick) => {
-          if (tick%2 !== 0) {
+          if (tick%2 !== 0 || tick%100 === 0) {
             return;
           }
           return tick;
@@ -195,7 +205,7 @@ function TimeSeries(props) {
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
         .call(d3.axisLeft(mode ? y1 : y6).tickFormat((tick) => {
-          if (Math.floor(tick) != tick) {
+          if (Math.floor(tick) !== tick || tick%100 === 0) {
             return;
           }
           return tick;
