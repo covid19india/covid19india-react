@@ -11,7 +11,7 @@ function FAQ(props) {
   const getFAQs = () => {
     axios.get('https://api.covid19india.org/faq.json')
         .then((response) => {
-          setFaq = setFaq(response.data.faq);
+          setFaq(response.data.faq);
         })
         .catch((error) => {
           console.log(error);
@@ -23,7 +23,7 @@ function FAQ(props) {
 
       {faq.map((faq, index) => {
         return (
-          <div className="faq fadeInUp" style={{animationDelay: `${0.5+(index*0.1)}s`}}>
+          <div key={index} className="faq fadeInUp" style={{animationDelay: `${0.5+(index*0.1)}s`}}>
             <h2 className="question">{faq.question}</h2>
             <h2 className="answer">{faq.answer}</h2>
           </div>
