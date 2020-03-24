@@ -63,36 +63,37 @@ function ChoroplethMap(props) {
 
     const path = d3.geoPath(projection);
 
-    /* Scaling Function (n>0)*0.05 + n/statistic.maxConfirmed*0.8 */
+    // Colorbar
     function label({i, genLength, generatedLabels, labelDelimiter}) {
-      if (i === 0) {
-        const n = generatedLabels[i];
-        return `Less than ${n}`;
-      } else if (i === genLength - 1) {
-        const values = generatedLabels[i];
-        const n = values[1];
-        return `${20} or more`;
+      if (i === genLength - 1) {
+        const n = Math.floor(generatedLabels[i]);
+        return `${n}+`;
       } else {
-        const n1 = generatedLabels[i];
-        const n2 = generatedLabels[i+1];
+        const n1 = Math.floor(generatedLabels[i]);
+        const n2 = Math.floor(generatedLabels[i+1]);
         return `${n1} - ${n2}`;
       }
     }
 
-    const color = d3.scaleLinear()
-        .domain([0, 20])
-        .range(['rgb(255, 245, 240)', 'rgb(171, 16, 23)']);
+    const color = d3.scaleSequential(d3.interpolateReds)
+        .domain([0, statistic.maxConfirmed]);
+    console.log(color)
 
     svg.append('g')
         .attr('class', 'legendLinear')
         .attr('transform', 'translate(1, 375)');
 
+    const numCells = 6
+    const delta = Math.floor(statistic.maxConfirmed / (numCells - 1));
+    const cells = Array.from(Array(numCells).keys()).map(i => i * delta);
+    console.log(cells)
+
     const legendLinear = legendColor()
         .shapeWidth(50)
-        .cells(6)
+        .cells(cells)
         .titleWidth(3)
         .labels(label)
-        .title('Percentage Distribution of Total Confirmed Cases')
+        .title('Total Confirmed Cases')
         .orient('vertical')
         .scale(color);
 
