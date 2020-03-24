@@ -560,7 +560,8 @@ table {
     }
     h4 {
       color: #e23028;
-      width: 5rem;
+      width: 8rem;
+      height: 2em;
     }
     h1 {
       font-weight: 600;
@@ -572,6 +573,7 @@ table {
       border-radius: 5px;
       display: flex;
       flex-direction: column;
+      width: 4.5rem;
       margin-bottom: 0.5rem;
       .stats-bottom {
         display: flex;
