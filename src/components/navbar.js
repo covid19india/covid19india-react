@@ -24,7 +24,7 @@ function Navbar(props) {
           </Link>*/}
 
           <Link to="/networkmap" onClick={()=>{
-            setView('Network Map');
+            setView('Cluster Map');
           }}>
             <span className={`fadeInUp ${view==='Network Map' ? 'focused' : ''}`} style={{animationDelay: '0.3s'}}>Network Map</span>
           </Link>

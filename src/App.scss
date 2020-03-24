@@ -479,6 +479,11 @@ table {
     color: $gray-mid;
     right: 0;
   }
+  .is-total {
+    td {
+      background: $gray-hover;
+    }
+  }
 }
 
 .ChoroplethMap {
@@ -501,12 +506,19 @@ table {
   }
   .svg-parent {
     display: flex;
-    flex: 0.9;
     flex-direction: row;
     justify-content: center;
     width: 100%;
     svg {
       align-self: center ;
+      text {
+        text-transform: uppercase;
+        text-align: right;
+        font-family: 'archia';
+        font-weight: 600;
+        fill: $gray;
+        font-size: 14px;
+      }
     }
   }
   .map-stats {
@@ -558,11 +570,6 @@ table {
       }
     }
   }
-  .states {
-    path {
-      transition: fill 0.1s ease-in-out;
-    }
-  }
 }
 
 .tabs {
@@ -582,6 +589,9 @@ table {
     text-align: center;
     margin-right: 0.25rem;
     transition: all 0.3s ease-in-out;
+    &:hover {
+      background: $gray-hover;
+    }
     &.focused {
       color: $gray;
       background: $gray-opaque;
@@ -605,7 +615,26 @@ table {
   width: 30rem;
   align-self: center;
   margin-top: 1rem;
+  .timeseries-mode {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    top: 4.5rem;
+    right: 0;
+    z-index: 99;
+    input {margin: 0; cursor: pointer;}
+    label {
+      font-family: 'archia';
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 900;
+      margin-right: 0.5rem;
+      color: $gray;
+      z-index: 99;
+    }
+  }
 }
+
 
 .timeseries, .Minigraph {
   display: flex;
@@ -655,7 +684,8 @@ table {
   .svg-parent {
     position: relative;
     display: flex;
-    width: 100%;
+    width: 30rem;
+    align-self: center;
     background: $cherry-light;
     border-radius: 5px;
     margin-bottom: 1rem;
@@ -709,6 +739,11 @@ table {
     background: transparent !important;
   }
   margin-bottom: -3rem;
+  .tooltip {
+    position: fixed;
+    top: 0;
+    right: 0;
+  }
 }
 
 .Links {
@@ -851,8 +886,10 @@ footer {
       cursor: pointer;
     }
   }
-  .ChoroplethMap {
-    height: calc(100% - 35rem);
+  .timeseries {
+    .svg-parent {
+      width: 100%;
+    }
   }
   .last-update {
     width: 10rem;
@@ -861,6 +898,20 @@ footer {
     width: 10rem;
     svg {
       width: 38px;
+    }
+  }
+}
+
+/* For the iPhone X folks OMG WHY ARE YOUR SCREENS SO NARROW T_T*/ 
+@media (max-width: 375px) {
+  .timeseries-mode {
+    display: block !important;
+    width: 4.25rem;
+    top: 2rem !important;
+    text-align: right;
+    input {
+      margin: 0;
+      margin-top: 0.25rem !important;
     }
   }
 }
