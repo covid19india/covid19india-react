@@ -8,7 +8,7 @@ function Row(props) {
   }, [props.state]);
 
   return (
-    <tr>
+    <tr className={props.total ? 'is-total' : ''}>
       <td style={{fontWeight: 600}}>{state.state}</td>
       <td>{state.confirmed}</td>
       <td style={{color: parseInt(state.active)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.active)===0 ? '-' : state.active}</td>

@@ -84,9 +84,9 @@ function ChoroplethMap(props) {
         .attr('class', 'legendLinear')
         .attr('transform', 'translate(1, 375)');
 
-    const numCells = 6
+    const numCells = 6;
     const delta = Math.floor(statistic.maxConfirmed / (numCells - 1));
-    const cells = Array.from(Array(numCells).keys()).map(i => i * delta);
+    const cells = Array.from(Array(numCells).keys()).map((i) => i * delta);
 
     const legendLinear = legendColor()
         .shapeWidth(50)
@@ -123,12 +123,12 @@ function ChoroplethMap(props) {
           })
           .attr('d', path)
           .attr('pointer-events', 'all')
-          .on('mouseover', (d) => {
+          .on('mouseenter', (d) => {
             handleMouseover(d.properties.ST_NM);
             const target = d3.event.target;
-            d3.select(target.parentNode.appendChild(target)).attr('stroke', '#424242').attr('stroke-width', 2)
+            d3.select(target.parentNode.appendChild(target)).attr('stroke', '#ff073a').attr('stroke-width', 2);
           })
-          .on('mouseout', (d) => {
+          .on('mouseleave', (d) => {
             const n = unemployment.get(d.properties.ST_NM.toLowerCase());
             const target = d3.event.target;
             d3.select(target).attr('fill', d3.interpolateReds(d.confirmed = (n>0)*0.05 + n/statistic.maxConfirmed*maxInterpolation)).attr('stroke', 'None');
