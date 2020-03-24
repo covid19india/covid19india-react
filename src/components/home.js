@@ -56,7 +56,7 @@ function Home(props) {
             </div>
           </div>
 
-          <a href="https://t.me/covid19indiaops" className="button telegram" target="_noblank">
+          <a href="https://bit.ly/covid19crowd" className="button telegram" target="_noblank">
             <Icon.MessageCircle />
             <span>Join Telegram to Collaborate!</span>
           </a>
