@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import * as d3 from 'd3';
+import {legendColor} from 'd3-svg-legend';
 import * as topojson from 'topojson';
 
 function ChoroplethMap(props) {
@@ -56,64 +57,49 @@ function ChoroplethMap(props) {
     const unemployment = d3.map();
 
     const projection = d3.geoMercator()
-        .center([78.9629, 19])
+        .center([78.9, 19])
         .scale(1000)
         .translate([width/2, height/2]);
 
     const path = d3.geoPath(projection);
 
-    /* const x = d3.scaleLinear()
-        .domain([1, 10])
-        .range(1, total);
+    /* Scaling Function (n>0)*0.05 + n/statistic.maxConfirmed*0.8 */
+    function label({i, genLength, generatedLabels, labelDelimiter}) {
+      console.log(generatedLabels);
+      if (i === 0) {
+        const n = generatedLabels[i];
+        return `Less than ${n}`;
+      } else if (i === genLength - 1) {
+        const values = generatedLabels[i];
+        const n = values[1];
+        return `${20} or more`;
+      } else {
+        const n1 = generatedLabels[i];
+        const n2 = generatedLabels[i+1];
+        return `${n1} - ${n2}`;
+      }
+    }
 
-    const xViz = d3.scaleLinear()
-        .domain([1, 10])
-        .range([10*1.5, (total+10)*1.5]);
-
-    const color = d3.scaleThreshold()
-        .domain(d3.range(2, 10))
-        .range(d3.schemeReds[9]);
+    const color = d3.scaleLinear()
+        .domain([0, 20])
+        .range(['rgb(255, 245, 240)', 'rgb(171, 16, 23)']);
 
     svg.append('g')
-        .attr('class', 'key')
-        .attr('transform', 'translate(0,40)');
+        .attr('class', 'legendLinear')
+        .attr('transform', 'translate(1, 375)');
 
-     g.selectAll('rect')
-        .data(color.range().map(function(d) {
-          d = color.invertExtent(d);
-          if (d[0] == null) d[0] = xViz.domain()[0];
-          if (d[1] == null) d[1] = xViz.domain()[1];
-          return d;
-        }))
-        .enter().append('rect')
-        .attr('height', 8)
-        .attr('x', function(d) {
-          return (xViz(d[0]));
-        })
-        .attr('width', function(d) {
-          return xViz(d[1]) - xViz(d[0]);
-        })
-        .attr('fill', function(d) {
-          return color(d[0]);
-        });
+    const legendLinear = legendColor()
+        .shapeWidth(50)
+        .cells(6)
+        .titleWidth(3)
+        .labels(label)
+        .title('Percentage Distribution of Total Confirmed Cases')
+        .orient('vertical')
+        .scale(color);
 
-    g.append('text')
-        .attr('class', 'caption')
-        .attr('x', xViz.range()[0]+10)
-        .attr('y', -6)
-        .attr('fill', '#000')
-        .attr('text-anchor', 'start')
-        .attr('font-weight', 'bold')
-        .text('Distribution by State');
+    svg.select('.legendLinear')
+        .call(legendLinear);
 
-    g.call(d3.axisBottom(xViz)
-        .tickSize(13)
-        .tickFormat(function(x, i) {
-          return i ? x*10 : x*10 + '%';
-        })
-        .tickValues(color.domain()))
-        .select('.domain')
-        .remove();*/
 
     const promises = [
       d3.json('/india.json'),
@@ -172,7 +158,7 @@ function ChoroplethMap(props) {
       <h1 className="header">Map</h1>
       <h6 className="header">Hover over a state for more details</h6>
       <div className="svg-parent">
-        <svg id="chart" width="650" height="750" viewBox="0 0 650 750" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
+        <svg id="chart" width="650" height={window.innerWidth <= 479 ? 650: 750} viewBox={`0 0 650 ${window.innerWidth <= 479 ? 650: 750}`} preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
       </div>
 
       <div className="map-stats">
