@@ -470,6 +470,10 @@ table {
       padding: 0.25rem;
       font-size: 0.9rem;
       border-radius: 5px;
+      text-align: right;
+    }
+    td:first-child {
+      text-align: left;
     }
   }
   .affected-count {
@@ -689,6 +693,7 @@ table {
     background: $cherry-light;
     border-radius: 5px;
     margin-bottom: 1rem;
+    height: 10rem;
     svg {
       .domain, .tick, line {
         stroke: $cherry;
@@ -737,6 +742,7 @@ table {
   .svg-parent {
     width: 5rem;
     background: transparent !important;
+    height: 7rem;
   }
   margin-bottom: -3rem;
   .tooltip {
@@ -854,8 +860,35 @@ footer {
   }
 }
 
+.FAQ {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 30rem;
+  & > * {
+    align-self: center;
+    width: 30rem;
+    margin-bottom: 1.5rem;
+  }
+  & > *:first-child {
+    margin-top: 2rem;
+  }
+  h2 {
+    margin: 0;
+    font-weight: 600;
+    text-transform: none;
+  }
+  .question {
+    margin-bottom: 0.5rem;
+    color: $gray-dark;
+  }
+  .answer {
+    color: $blue;
+  }
+}
+
 @media (max-width: 769px) {
-  .ChoroplethMap, .TimeSeries, table, .header, .Level, .timeseries-header, .TimeSeries-Parent, .Links, .Minigraph, .Summary, {
+  .ChoroplethMap, .TimeSeries, table, .header, .Level, .timeseries-header, .TimeSeries-Parent, .Links, .Minigraph, .Summary, .FAQ {
     width: calc(100% - 2rem);
   }
   .Home {
@@ -870,7 +903,7 @@ footer {
       flex-direction: column;
     }
   }
-  .link {
+  .link, .faq {
     width: calc(100% - 2rem);
   }
   .Navbar {
