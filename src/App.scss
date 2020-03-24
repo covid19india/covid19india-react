@@ -498,7 +498,6 @@ table {
   }
   .svg-parent {
     display: flex;
-    flex: 0.9;
     flex-direction: row;
     justify-content: center;
     width: 100%;
@@ -737,6 +736,11 @@ table {
     background: transparent !important;
   }
   margin-bottom: -3rem;
+  .tooltip {
+    position: fixed;
+    top: 0;
+    right: 0;
+  }
 }
 
 .Links {
@@ -883,9 +887,6 @@ footer {
     .svg-parent {
       width: 100%;
     }
-  }
-  .ChoroplethMap {
-    height: calc(100% - 35rem);
   }
   .last-update {
     width: 10rem;
