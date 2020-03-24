@@ -53,8 +53,6 @@ function Home(props) {
               <h3>{lastUpdated.length===0 ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
             </div>
           </div>
-
-
         </div>
 
         <Level data={states} deltas={deltas}/>
