@@ -65,7 +65,6 @@ function ChoroplethMap(props) {
 
     /* Scaling Function (n>0)*0.05 + n/statistic.maxConfirmed*0.8 */
     function label({i, genLength, generatedLabels, labelDelimiter}) {
-      console.log(generatedLabels);
       if (i === 0) {
         const n = generatedLabels[i];
         return `Less than ${n}`;
