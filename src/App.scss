@@ -944,3 +944,10 @@ footer {
     border: none;
   }
 }
+
+#footerButtons {
+  display: flex;
+  > * + * {
+    margin-left: 8px;
+  }
+}
