@@ -71,7 +71,7 @@ function ChoroplethMap(props) {
         const n = Math.floor(generatedLabels[i]);
         return `${n}+`;
       } else {
-        const n1 = Math.floor(generatedLabels[i]);
+        const n1 = 1 + Math.floor(generatedLabels[i]);
         const n2 = Math.floor(generatedLabels[i+1]);
         return `${n1} - ${n2}`;
       }
