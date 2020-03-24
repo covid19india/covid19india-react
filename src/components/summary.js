@@ -46,7 +46,7 @@ function Summary(props) {
           <h5>We stand with everyone fighting on the frontlines</h5>
         </div>
         <div className="link">
-          <a href="https://github.com/covid19india">covid19india.org</a>
+          <a href="https://github.com/covid19india-react ">covid19india.org</a>
         </div>
       </div>
 
