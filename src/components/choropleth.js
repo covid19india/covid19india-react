@@ -134,7 +134,7 @@ function ChoroplethMap(props) {
           .style('cursor', 'pointer')
           .append('title')
           .text(function(d) {
-            return 100*(unemployment.get(d.properties.ST_NM.toLowerCase())/statistic.total).toFixed(2) + '% from ' + toTitleCase(d.properties.ST_NM);
+            return parseFloat(100*(unemployment.get(d.properties.ST_NM.toLowerCase())/statistic.total)).toFixed(2) + '% from ' + toTitleCase(d.properties.ST_NM);
           });
 
       svg.append('path')
