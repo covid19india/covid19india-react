@@ -64,6 +64,8 @@ function ChoroplethMap(props) {
     const path = d3.geoPath(projection);
 
     // Colorbar
+    const maxInterpolation = 0.8;
+
     function label({i, genLength, generatedLabels, labelDelimiter}) {
       if (i === genLength - 1) {
         const n = Math.floor(generatedLabels[i]);
@@ -76,8 +78,7 @@ function ChoroplethMap(props) {
     }
 
     const color = d3.scaleSequential(d3.interpolateReds)
-        .domain([0, statistic.maxConfirmed]);
-    console.log(color)
+        .domain([0, statistic.maxConfirmed / maxInterpolation]);
 
     svg.append('g')
         .attr('class', 'legendLinear')
@@ -86,14 +87,13 @@ function ChoroplethMap(props) {
     const numCells = 6
     const delta = Math.floor(statistic.maxConfirmed / (numCells - 1));
     const cells = Array.from(Array(numCells).keys()).map(i => i * delta);
-    console.log(cells)
 
     const legendLinear = legendColor()
         .shapeWidth(50)
         .cells(cells)
         .titleWidth(3)
         .labels(label)
-        .title('Total Confirmed Cases')
+        .title('Confirmed Cases')
         .orient('vertical')
         .scale(color);
 
@@ -119,7 +119,7 @@ function ChoroplethMap(props) {
           .enter().append('path')
           .attr('fill', function(d) {
             const n = unemployment.get(d.properties.ST_NM.toLowerCase());
-            return d3.interpolateReds(d.confirmed = (n>0)*0.05 + n/statistic.maxConfirmed*0.8);
+            return d3.interpolateReds(d.confirmed = (n>0)*0.05 + n/statistic.maxConfirmed*maxInterpolation);
           })
           .attr('d', path)
           .attr('pointer-events', 'all')
@@ -131,7 +131,7 @@ function ChoroplethMap(props) {
           .on('mouseout', (d) => {
             const n = unemployment.get(d.properties.ST_NM.toLowerCase());
             const target = d3.event.target;
-            d3.select(target).attr('fill', d3.interpolateReds(d.confirmed = (n>0)*0.05 + n/statistic.maxConfirmed*0.8)).attr('stroke', 'None');
+            d3.select(target).attr('fill', d3.interpolateReds(d.confirmed = (n>0)*0.05 + n/statistic.maxConfirmed*maxInterpolation)).attr('stroke', 'None');
           })
           .style('cursor', 'pointer')
           .append('title')
