@@ -103,115 +103,79 @@ function TimeSeries(props) {
         .attr('class', 'axis')
         .call(d3.axisBottom(x));
 
+    const totalConfirmed = data[timeseries.length-1]['totalconfirmed'];
+    const totalRecovered = data[timeseries.length-1]['totalrecovered'];
+    const totalDeceased = data[timeseries.length-1]['totaldeceased'];
+
     const y1 = d3.scaleLinear()
-        .domain([0, d3.max(data, function(d) {
-          return +d['totalconfirmed'];
-        })])
+        .domain([0, totalConfirmed])
         .range([height, margin.top]);
 
     const y2 = d3.scaleLinear()
-
-        .domain([0, d3.max(data, function(d) {
-          return +d['totalrecovered'];
-        })])
+        .domain([0, totalRecovered])
         .range([height, margin.top]);
 
     const y3 = d3.scaleLinear()
-        .domain([0, d3.max(data, function(d) {
-          return +d['totaldeceased'];
-        })])
+        .domain([0, totalDeceased])
         .range([height, margin.top]);
 
+    const maxDailyConfirmed = d3.max(data, function(d) { return +d['dailyconfirmed']; })
+    const maxDailyRecovered = d3.max(data, function(d) { return +d['dailyrecovered']; })
+    const maxDailyDeceased = d3.max(data, function(d) { return +d['dailydeceased']; })
 
     const y4 = d3.scaleLinear()
-        .domain([0, d3.max(data, function(d) {
-          return +d['dailyconfirmed'];
-        })])
+        .domain([0, maxDailyConfirmed])
         .range([height, margin.top]);
 
     const y5 = d3.scaleLinear()
-        .domain([0, d3.max(data, function(d) {
-          return +d['dailyrecovered'];
-        })])
+        .domain([0, maxDailyRecovered])
         .range([height, margin.top]);
 
     const y6 = d3.scaleLinear()
-        .domain([0, d3.max(data, function(d) {
-          return +d['dailydeceased'];
-        })])
+        .domain([0, maxDailyDeceased])
         .range([height, margin.top]);
 
     /* Y-Axis */
-
+    const maxTicksY = 5;
     svg1.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(y1).tickFormat((tick) => {
-          if (tick%100 === 0) {
-            return;
-          }
-          return tick;
-        }))
+        .call(d3.axisRight(y1).ticks(5))
         .selectAll('.tick text')
         .attr('transform', 'translate(4,0)');
 
     svg2.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(mode ? y1 : y2).tickFormat((tick) => {
-          if (tick%4 === 0) {
-            return;
-          }
-          return tick;
-        }))
+        .call(d3.axisRight(mode ? y1 : y2).ticks(5))
         .selectAll('.tick text')
         .attr('transform', 'translate(4,0)');
 
     svg3.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(mode ? y1 : y3).tickFormat((tick) => {
-          if (tick%100 === 0) {
-            return;
-          }
-          return tick;
-        }))
+        .call(d3.axisRight(mode ? y1 : y3).ticks(5))
         .selectAll('.tick text')
         .attr('transform', 'translate(4,0)');
 
     svg4.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(mode ? y1 : y4).tickFormat((tick) => {
-          if (tick%100 === 0) {
-            return;
-          }
-          return tick;
-        }))
+        .call(d3.axisRight(mode ? y1 : y4).ticks(5))
         .selectAll('.tick text')
         .attr('transform', 'translate(4,0)');
 
     svg5.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(mode ? y1 : y5).tickFormat((tick) => {
-          if (tick%2 !== 0 || tick%100 === 0) {
-            return;
-          }
-          return tick;
-        }))
+        .call(d3.axisRight(mode ? y1 : y5).ticks(5))
         .selectAll('.tick text')
         .attr('transform', 'translate(4,0)');
 
     svg6.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(mode ? y1 : y6).tickFormat((tick) => {
-          if (Math.floor(tick) !== tick || tick%100 === 0) {
-            return;
-          }
-          return tick;
-        }))
+        .call(d3.axisRight(mode ? y1 : y6).ticks(5))
         .selectAll('.tick text')
         .attr('transform', 'translate(4,0)');
 
