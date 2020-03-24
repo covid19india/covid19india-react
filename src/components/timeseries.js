@@ -108,15 +108,15 @@ function TimeSeries(props) {
     const totalDeceased = data[timeseries.length-1]['totaldeceased'];
 
     const y1 = d3.scaleLinear()
-        .domain([0, totalConfirmed])
+        .domain([-totalConfirmed/10, totalConfirmed])
         .range([height, margin.top]);
 
     const y2 = d3.scaleLinear()
-        .domain([0, totalRecovered])
+        .domain([-totalRecovered/10, totalRecovered])
         .range([height, margin.top]);
 
     const y3 = d3.scaleLinear()
-        .domain([0, totalDeceased])
+        .domain([-totalDeceased/10, totalDeceased])
         .range([height, margin.top]);
 
     const maxDailyConfirmed = d3.max(data, function(d) { return +d['dailyconfirmed']; })
@@ -124,61 +124,55 @@ function TimeSeries(props) {
     const maxDailyDeceased = d3.max(data, function(d) { return +d['dailydeceased']; })
 
     const y4 = d3.scaleLinear()
-        .domain([0, maxDailyConfirmed])
+        .domain([-maxDailyConfirmed/10, maxDailyConfirmed])
         .range([height, margin.top]);
 
     const y5 = d3.scaleLinear()
-        .domain([0, maxDailyRecovered])
+        .domain([-maxDailyRecovered/10, maxDailyRecovered])
         .range([height, margin.top]);
 
     const y6 = d3.scaleLinear()
-        .domain([0, maxDailyDeceased])
+        .domain([-maxDailyDeceased/10, maxDailyDeceased])
         .range([height, margin.top]);
 
     /* Y-Axis */
-    const maxTicksY = 5;
     svg1.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(y1).ticks(5))
-        .selectAll('.tick text')
-        .attr('transform', 'translate(4,0)');
+        .call(d3.axisRight(y1).ticks(5).tickPadding(5))
+        .selectAll('.tick text');
 
     svg2.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(mode ? y1 : y2).ticks(5))
-        .selectAll('.tick text')
-        .attr('transform', 'translate(4,0)');
+        .call(d3.axisRight(mode ? y1 : y2).ticks(5).tickPadding(5))
+        .selectAll('.tick text');
 
     svg3.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(mode ? y1 : y3).ticks(5))
-        .selectAll('.tick text')
-        .attr('transform', 'translate(4,0)');
+        .call(d3.axisRight(mode ? y1 : y3).ticks(5).tickPadding(5))
+        .selectAll('.tick text');
 
     svg4.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(mode ? y1 : y4).ticks(5))
-        .selectAll('.tick text')
-        .attr('transform', 'translate(4,0)');
+        .call(d3.axisRight(mode ? y1 : y4).ticks(5).tickPadding(5))
+        .selectAll('.tick text');
 
     svg5.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(mode ? y1 : y5).ticks(5))
-        .selectAll('.tick text')
-        .attr('transform', 'translate(4,0)');
+        .call(d3.axisRight(mode ? y1 : y5).ticks(5).tickPadding(5))
+        .selectAll('.tick text');
 
     svg6.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(mode ? y1 : y6).ticks(5))
-        .selectAll('.tick text')
-        .attr('transform', 'translate(4,0)');
+        .call(d3.axisRight(mode ? y1 : y6).ticks(5).tickPadding(5))
+        .selectAll('.tick text');
 
+    /* Paths */
     svg1.append('path')
         .datum(data)
         .attr('fill', 'none')
@@ -190,7 +184,7 @@ function TimeSeries(props) {
               return x(new Date(d['date']+'2020'));
             })
             .y(function(d) {
-              return y1(d['totalconfirmed'])-5;
+              return y1(d['totalconfirmed']);
             })
             .curve(d3.curveCardinal),
         );
@@ -207,7 +201,7 @@ function TimeSeries(props) {
           return x(new Date(d['date']+'2020'));
         })
         .attr('cy', function(d) {
-          return y1(d['totalconfirmed'])-5;
+          return y1(d['totalconfirmed']);
         })
         .on('mouseover', (d, i) => {
           d3.select(d3.event.target).attr('r', '5');
@@ -230,8 +224,8 @@ function TimeSeries(props) {
               return x(new Date(d['date']+'2020'));
             })
             .y(function(d) {
-              if (mode) return y1(d['totalrecovered'])-5;
-              else return y2(d['totalrecovered'])-5;
+              if (mode) return y1(d['totalrecovered']);
+              else return y2(d['totalrecovered']);
             })
             .curve(d3.curveCardinal),
         );
@@ -248,8 +242,8 @@ function TimeSeries(props) {
           return x(new Date(d['date']+'2020'));
         })
         .attr('cy', function(d) {
-          if (mode) return y1(d['totalrecovered'])-5;
-          return y2(d['totalrecovered'])-5;
+          if (mode) return y1(d['totalrecovered']);
+          return y2(d['totalrecovered']);
         })
         .on('mouseover', (d, i) => {
           d3.select(d3.event.target).attr('r', '5');
@@ -275,7 +269,7 @@ function TimeSeries(props) {
             })
             .y(function(d) {
               if (mode) return y1(d['totaldeceased']);
-              return y3(d['totaldeceased'])-5;
+              return y3(d['totaldeceased']);
             })
             .curve(d3.curveCardinal),
         );
@@ -292,8 +286,8 @@ function TimeSeries(props) {
           return x(new Date(d['date']+'2020'));
         })
         .attr('cy', function(d) {
-          if (mode) return y1(d['totaldeceased'])-5;
-          return y3(d['totaldeceased'])-5;
+          if (mode) return y1(d['totaldeceased']);
+          return y3(d['totaldeceased']);
         })
         .on('mouseover', (d, i) => {
           d3.select(d3.event.target).attr('r', '5');
@@ -317,8 +311,8 @@ function TimeSeries(props) {
               return x(new Date(d['date']+'2020'));
             })
             .y(function(d) {
-              if (mode) return y1(d['dailyconfirmed'])-5;
-              return y4(d['dailyconfirmed'])-5;
+              if (mode) return y1(d['dailyconfirmed']);
+              return y4(d['dailyconfirmed']);
             })
             .curve(d3.curveCardinal),
         );
@@ -335,8 +329,8 @@ function TimeSeries(props) {
           return x(new Date(d['date']+'2020'));
         })
         .attr('cy', function(d) {
-          if (mode) return y1(d['dailyconfirmed'])-5;
-          return y4(d['dailyconfirmed'])-5;
+          if (mode) return y1(d['dailyconfirmed']);
+          return y4(d['dailyconfirmed']);
         })
         .on('mouseover', (d, i) => {
           d3.select(d3.event.target).attr('r', '5');
@@ -359,8 +353,8 @@ function TimeSeries(props) {
               return x(new Date(d['date']+'2020'));
             })
             .y(function(d) {
-              if (mode) return y1(d['dailyrecovered'])-5;
-              return y5(d['dailyrecovered'])-5;
+              if (mode) return y1(d['dailyrecovered']);
+              return y5(d['dailyrecovered']);
             })
             .curve(d3.curveCardinal),
         );
@@ -377,8 +371,8 @@ function TimeSeries(props) {
           return x(new Date(d['date']+'2020'));
         })
         .attr('cy', function(d) {
-          if (mode) return y1(d['dailyrecovered'])-5;
-          return y5(d['dailyrecovered'])-5;
+          if (mode) return y1(d['dailyrecovered']);
+          return y5(d['dailyrecovered']);
         })
         .on('mouseover', (d, i) => {
           d3.select(d3.event.target).attr('r', '5');
@@ -403,8 +397,8 @@ function TimeSeries(props) {
               return x(new Date(d['date']+'2020'));
             })
             .y(function(d) {
-              if (mode) return y1(d['dailydeceased'])-5;
-              return y6(d['dailydeceased'])-5;
+              if (mode) return y1(d['dailydeceased']);
+              return y6(d['dailydeceased']);
             })
             .curve(d3.curveCardinal),
         );
@@ -421,8 +415,8 @@ function TimeSeries(props) {
           return x(new Date(d['date']+'2020'));
         })
         .attr('cy', function(d) {
-          if (mode) return y1(d['dailydeceased'])-5;
-          return y6(d['dailydeceased'])-5;
+          if (mode) return y1(d['dailydeceased']);
+          return y6(d['dailydeceased']);
         })
         .on('mouseover', (d, i) => {
           d3.select(d3.event.target).attr('r', '5');
