@@ -139,43 +139,43 @@ function TimeSeries(props) {
     svg1.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(y1).tickPadding(5));
+        .call(d3.axisRight(y1).ticks(5).tickPadding(5));
 
     svg2.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(mode ? y1 : y2).tickPadding(5));
+        .call(d3.axisRight(mode ? y1 : y2).ticks(5).tickPadding(5));
 
     svg3.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(mode ? y1 : y3).tickPadding(5));
+        .call(d3.axisRight(mode ? y1 : y3).ticks(5).tickPadding(5));
 
     svg4.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisRight(mode ? y1 : y4).tickPadding(5));
+        .call(d3.axisRight(mode ? y1 : y4).ticks(5).tickPadding(5));
 
     svg5.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisLeft(mode ? y1 : y5).tickFormat((tick) => {
+        .call(d3.axisRight(mode ? y1 : y5).ticks(5).tickFormat((tick) => {
           if (Math.floor(tick) !== tick) {
             return;
           }
           return tick;
-        }))
+        })
         .tickPadding(5));
 
     svg6.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisLeft(mode ? y1 : y6).tickFormat((tick) => {
+        .call(d3.axisRight(mode ? y1 : y6).ticks(5).tickFormat((tick) => {
           if (Math.floor(tick) !== tick) {
             return;
           }
           return tick;
-        }))
+        })
         .tickPadding(5));
 
     /* Paths */
