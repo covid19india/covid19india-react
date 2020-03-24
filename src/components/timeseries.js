@@ -65,10 +65,12 @@ function TimeSeries(props) {
     const svg5 = d3.select(graphElement5.current);
     const svg6 = d3.select(graphElement6.current);
 
+    const dateMin = new Date(data[0]['date'] + '2020');
+    var dateMax = new Date(data[timeseries.length-1]['date'] + '2020');
+    dateMax.setDate(dateMax.getDate() + 1);
+
     const x = d3.scaleTime()
-        .domain(d3.extent(data, function(d) {
-          return new Date(d['date']+'2020');
-        }))
+        .domain([dateMin, dateMax])
         .range([margin.left, width]);
 
     svg1.append('g')
@@ -144,74 +146,74 @@ function TimeSeries(props) {
     svg1.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisLeft(y1).tickFormat((tick) => {
+        .call(d3.axisRight(y1).tickFormat((tick) => {
           if (tick%100 === 0) {
             return;
           }
           return tick;
         }))
         .selectAll('.tick text')
-        .attr('transform', 'translate(40,0)');
+        .attr('transform', 'translate(4,0)');
 
     svg2.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisLeft(mode ? y1 : y2).tickFormat((tick) => {
+        .call(d3.axisRight(mode ? y1 : y2).tickFormat((tick) => {
           if (tick%4 === 0) {
             return;
           }
           return tick;
         }))
         .selectAll('.tick text')
-        .attr('transform', 'translate(40,0)');
+        .attr('transform', 'translate(4,0)');
 
     svg3.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisLeft(mode ? y1 : y3).tickFormat((tick) => {
+        .call(d3.axisRight(mode ? y1 : y3).tickFormat((tick) => {
           if (tick%100 === 0) {
             return;
           }
           return tick;
         }))
         .selectAll('.tick text')
-        .attr('transform', 'translate(40,0)');
+        .attr('transform', 'translate(4,0)');
 
     svg4.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisLeft(mode ? y1 : y4).tickFormat((tick) => {
+        .call(d3.axisRight(mode ? y1 : y4).tickFormat((tick) => {
           if (tick%100 === 0) {
             return;
           }
           return tick;
         }))
         .selectAll('.tick text')
-        .attr('transform', 'translate(40,0)');
+        .attr('transform', 'translate(4,0)');
 
     svg5.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisLeft(mode ? y1 : y5).tickFormat((tick) => {
+        .call(d3.axisRight(mode ? y1 : y5).tickFormat((tick) => {
           if (tick%2 !== 0 || tick%100 === 0) {
             return;
           }
           return tick;
         }))
         .selectAll('.tick text')
-        .attr('transform', 'translate(40,0)');
+        .attr('transform', 'translate(4,0)');
 
     svg6.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
-        .call(d3.axisLeft(mode ? y1 : y6).tickFormat((tick) => {
+        .call(d3.axisRight(mode ? y1 : y6).tickFormat((tick) => {
           if (Math.floor(tick) !== tick || tick%100 === 0) {
             return;
           }
           return tick;
         }))
         .selectAll('.tick text')
-        .attr('transform', 'translate(40,0)');
+        .attr('transform', 'translate(4,0)');
 
     svg1.append('path')
         .datum(data)
