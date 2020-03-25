@@ -47,7 +47,7 @@ function Home(props) {
           <div className="header-mid">
             <div className="titles">
               <h1>India COVID-19 Tracker</h1>
-              <h5>A Crowdsourced Initiative</h5>
+              <h6>A Crowdsourced Initiative</h6>
             </div>
             <div className="last-update">
               <h6>Last Reported Case</h6>

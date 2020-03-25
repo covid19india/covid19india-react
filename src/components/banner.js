@@ -42,7 +42,7 @@ function Banner(props) {
   };
 
   return (
-    <div className="Banner fadeInUp" style={{animationDelay: '0.5s'}}>
+    <div className="Banner fadeInUp" style={{animationDelay: '0.2s'}}>
       <div className="snippet">
         {snippet ? snippet.banner : ''} &nbsp;
       </div>
