@@ -9,6 +9,7 @@ import ChoroplethMap from './choropleth';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
 import Banner from './banner';
+import {useTranslation} from 'react-i18next';
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -18,6 +19,7 @@ function Home(props) {
   const [timeseries, setTimeseries] = useState([]);
   const [deltas, setDeltas] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
+  const {t} = useTranslation()
 
   useEffect(()=> {
     if (fetched===false) {
@@ -42,16 +44,15 @@ function Home(props) {
   return (
     <div className="Home">
       <div className="home-left">
-
         <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
           <div className="header-mid">
             <div className="titles">
-              <h1>India COVID-19 Tracker</h1>
-              <h6>A Crowdsourced Initiative</h6>
+              <h1>{t("India COVID-19 Tracker")}</h1>
+              <h6>{t("A Crowdsourced Initiative")}</h6>
             </div>
             <div className="last-update">
-              <h6>Last Reported Case</h6>
-              <h3>{lastUpdated.length===0 ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
+              <h6>{t("Last Reported Case")}</h6>
+              <h3>{lastUpdated.length===0 ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+` ${t("Ago")}`}</h3>
             </div>
           </div>
         </div>
@@ -68,22 +69,22 @@ function Home(props) {
         <ChoroplethMap states={states}/>
 
         <div className="timeseries-header fadeInUp" style={{animationDelay: '1.5s'}}>
-          <h1>Spread Trends</h1>
+          <h1>{t("Spread Trends")}</h1>
           <div className="tabs">
             <div className={`tab ${graphOption===1 ? 'focused' : ''}`} onClick={()=>{
               setGraphOption(1);
             }}>
-              <h4>Cumulative</h4>
+              <h4>{t("Cumulative")}</h4>
             </div>
             <div className={`tab ${graphOption===2 ? 'focused' : ''}`} onClick={()=>{
               setGraphOption(2);
             }}>
-              <h4>Daily</h4>
+              <h4>{t("Daily")}</h4>
             </div>
           </div>
 
           <div className="timeseries-mode">
-            <label htmlFor="timeseries-mode">Scale Uniformly</label>
+            <label htmlFor="timeseries-mode">{t("Scale Uniformly")}</label>
             <input type="checkbox" checked={timeseriesMode} onChange={(event)=>{
               setTimeseriesMode(!timeseriesMode);
             }}/>

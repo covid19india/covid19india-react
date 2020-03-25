@@ -2,10 +2,12 @@ import React, {useState, useEffect} from 'react';
 import * as Icon from 'react-feather';
 
 import Row from './row';
+import { useTranslation } from 'react-i18next';
 
 function Table(props) {
   const [states, setStates] = useState(props.states);
   const [count, setCount] = useState(0);
+  const {t} = useTranslation();
   const [sortData, setSortData] = useState({
     sortColumn: 'confirmed',
     isAscending: false,
@@ -64,39 +66,39 @@ function Table(props) {
 
   return (
     <table className="table fadeInUp" style={{animationDelay: '1s'}}>
-      <h5 className="affected-count">{count} States/UTS Affected</h5>
+      <h5 className="affected-count">{count} {t("States/UTS Affected")}</h5>
       <thead>
         <tr>
           <th className="state-heading" onClick={(e) => handleSort(e, props)} >
             <div className='heading-content'>
               <abbr title="State">
-                  State/UT
+                  {t("State/UT")}
               </abbr>
               <div style={{display: sortData.sortColumn === 'state' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
           <th onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfrmd' : 'Confirmed'}</abbr>
+              <abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfrmd' : t('Confirmed')}</abbr>
               <div style={{display: sortData.sortColumn === 'confirmed' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
           <th onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'A' : 'Actv' : 'Active'}</abbr>
+              <abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'A' : 'Actv' : t('Active')}</abbr>
               <div style={{display: sortData.sortColumn === 'active' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
           <th onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-green' : ''}`} title="Recovered">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'R' : 'Rcvrd' : 'Recovered'}</abbr>
+              <abbr className={`${window.innerWidth <=769 ? 'is-green' : ''}`} title="Recovered">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'R' : 'Rcvrd' : t('Recovered')}</abbr>
               <div className={ sortData.sortColumn === 'recovered'? 'sort-black' : ''}></div>
               <div style={{display: sortData.sortColumn === 'recovered' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
           <th onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'DCSD' : 'Deaths'}</abbr>
+              <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'DCSD' : t('Deaths')}</abbr>
               <div style={{display: sortData.sortColumn === 'deaths' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>

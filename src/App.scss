@@ -151,7 +151,7 @@ body {
   -webkit-touch-callout: none;
 }
 
-h1, {
+h1 {
   font-family: 'archia';
   font-size: 24px !important;
   font-weight: 900;
@@ -191,6 +191,37 @@ h6 {
   font-size: 11px !important;
   font-weight: 600;
   text-transform: uppercase; 
+}
+
+.select-dropdown {
+  position: relative;
+  background-color: $gray-hover;
+  width: auto;
+  max-width: 100%;
+  border-radius: 0.25rem;
+  select {
+    font-size: 1rem;
+    font-weight: 200;
+    max-width: 100%;
+    padding: 8px 24px 8px 10px;
+    border: none;
+    background-color: transparent;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+  }
+  &:after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    margin-top: -2px;
+    right: 8px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid $gray-mid;
+  }
 }
 
 .Home {
@@ -253,6 +284,10 @@ h6 {
         }
       }
     }
+  }
+  .navbar-right {
+    margin-right: 5rem;
+    align-self: center;
   }
   .focused {
     color: $gray;
@@ -942,6 +977,9 @@ footer {
       margin-left: 1rem;
       margin-right: -1rem;
       cursor: pointer;
+    }
+    .navbar-right{
+      margin-right: 1rem;
     }
   }
   .timeseries {

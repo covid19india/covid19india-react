@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import * as d3 from 'd3';
 import {legendColor} from 'd3-svg-legend';
 import * as topojson from 'topojson';
+import { useTranslation } from 'react-i18next';
 
 function ChoroplethMap(props) {
   const [rendered, setRendered] = useState(false);
@@ -10,6 +11,7 @@ function ChoroplethMap(props) {
   const [statistic, setStatistic] = useState({});
   const [index, setIndex] = useState(1);
   const choroplethMap = useRef(null);
+  const {t} = useTranslation();
 
   useEffect(()=>{
     if (props.states.length>1 && choroplethMap.current) {
@@ -48,6 +50,8 @@ function ChoroplethMap(props) {
       }
     });
   };
+
+  const getTranslatedState = (stateName) => t(`states.${stateName}`)
 
   const mapData = (selector) => {
     const svg = d3.select(selector);
@@ -93,7 +97,7 @@ function ChoroplethMap(props) {
         .cells(cells)
         .titleWidth(3)
         .labels(label)
-        .title('Confirmed Cases')
+        .title(t('Confirmed Cases'))
         .orient('vertical')
         .scale(color);
 
@@ -138,7 +142,7 @@ function ChoroplethMap(props) {
           .style('cursor', 'pointer')
           .append('title')
           .text(function(d) {
-            return parseFloat(100*(unemployment.get(d.properties.ST_NM.toLowerCase())/statistic.total)).toFixed(2) + '% from ' + toTitleCase(d.properties.ST_NM);
+            return parseFloat(100*(unemployment.get(d.properties.ST_NM.toLowerCase())/statistic.total)).toFixed(2) + `% ${t('from')} ` + toTitleCase(getTranslatedState(d.properties.ST_NM));
           });
 
       svg.append('path')
@@ -158,43 +162,43 @@ function ChoroplethMap(props) {
   };
 
   return (
-    <div className="ChoroplethMap fadeInUp" style={{animationDelay: '1.2s'}}>
-      <h1 className="header">Statistics by State</h1>
-      <h6 className="header">{window.innerWidth <=769 ? 'Tap' : 'Hover'} over a state for more details</h6>
-      <div className="svg-parent">
-        <svg id="chart" width="650" height={window.innerWidth <= 479 ? 650: 750} viewBox={`0 0 650 ${window.innerWidth <= 479 ? 650: 750}`} preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
+    <div className='ChoroplethMap fadeInUp' style={{animationDelay: '1.2s'}}>
+      <h1 className='header'>{t('Statistics by State')}</h1>
+      <h6 className='header'>{t(`${window.innerWidth <=769 ? 'Tap' : 'Hover'} over a state for more details`)}</h6>
+      <div className='svg-parent'>
+        <svg id='chart' width='650' height={window.innerWidth <= 479 ? 650: 750} viewBox={`0 0 650 ${window.innerWidth <= 479 ? 650: 750}`} preserveAspectRatio='xMidYMid meet' ref={choroplethMap}></svg>
       </div>
 
-      <div className="map-stats">
-        <h4>{state.state}</h4>
+      <div className='map-stats'>
+        <h4>{getTranslatedState(state.state)}</h4>
 
-        <div className="stats">
-          <h5>Confirmed</h5>
-          <div className="stats-bottom">
+        <div className='stats'>
+          <h5>{t('Confirmed')}</h5>
+          <div className='stats-bottom'>
             <h1>{state.confirmed}</h1>
             <h6>{}</h6>
           </div>
         </div>
 
-        <div className="stats is-blue">
-          <h5>Active</h5>
-          <div className="stats-bottom">
+        <div className='stats is-blue'>
+          <h5>{t('Active')}</h5>
+          <div className='stats-bottom'>
             <h1>{state.active}</h1>
             <h6>{}</h6>
           </div>
         </div>
 
-        <div className="stats is-green">
-          <h5>Recovered</h5>
-          <div className="stats-bottom">
+        <div className='stats is-green'>
+          <h5>{t('Recovered')}</h5>
+          <div className='stats-bottom'>
             <h1>{state.recovered}</h1>
             <h6>{}</h6>
           </div>
         </div>
 
-        <div className="stats is-gray">
-          <h5>Deceased</h5>
-          <div className="stats-bottom">
+        <div className='stats is-gray'>
+          <h5>{t('Deceased')}</h5>
+          <div className='stats-bottom'>
             <h1>{state.deaths}</h1>
             <h6>{}</h6>
           </div>

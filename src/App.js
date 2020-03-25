@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 import * as Icon from 'react-feather';
 
@@ -10,10 +10,13 @@ import Summary from './components/summary';
 import Cluster from './components/cluster';
 import FAQ from './components/faq';
 import Banner from './components/banner';
+import { useTranslation } from 'react-i18next';
 
 const history = require('history').createBrowserHistory;
 
 function App() {
+  const {t} = useTranslation();
+
   return (
     <div className="App">
 
@@ -36,18 +39,17 @@ function App() {
       </Router>
       <footer className="fadeInUp" style={{animationDelay: '2s'}}>
         <img src="/icon.png" alt="logo"/>
-        <h5>We stand with everyone fighting on the frontlines</h5>
+        <h5>{t("We stand with everyone fighting on the frontlines")}</h5>
         <div className="link">
           <a href="https://github.com/covid19india">covid19india</a>
-
         </div>
         <div id='footerButtons'>
           <a className="button" href="https://bit.ly/patientdb" target="_noblank">
-            <Icon.Database /><span>Crowdsourced Patient Database&nbsp;</span>
+            <Icon.Database /><span>{t("Crowdsourced Patient Database")}&nbsp;</span>
           </a>
           <a href="https://bit.ly/covid19crowd" className="button telegram" target="_noblank">
             <Icon.MessageCircle />
-            <span>Join Telegram to Collaborate!</span>
+            <span>{t("Join Telegram to Collaborate")}!</span>
           </a>
         </div>
       </footer>
