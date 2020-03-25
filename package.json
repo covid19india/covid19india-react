@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "http://covid19india.github.io/",
   "dependencies": {
+    "@reach/router": "^1.3.3",
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^10.0.1",
     "@testing-library/user-event": "^10.0.0",
@@ -39,14 +40,13 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-feather": "^2.0.3",
-    "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "topojson": "^3.0.2",
     "vx": "0.0.1"
   },
   "scripts": {
     "start": "PORT=3001 react-scripts start css-watch",
-    "build": "react-scripts build && cp build/index.html build/404.html",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "css-build": "node-sass --omit-source-map-url sass/custom.scss src/App.css",
