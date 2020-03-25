@@ -404,6 +404,9 @@ a.button {
   }
   h1 {
     font-weight: 600;
+    @media screen and (max-width: 767px) {
+        font-size: 0.8rem !important;
+    }
   }
   h4 {
     margin-bottom: -0.5rem;
