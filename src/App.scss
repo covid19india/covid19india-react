@@ -217,6 +217,7 @@ h6 {
   font-size: 0.8rem;
   font-weight: 600;
   color: $purple;
+  border-radius: 5px;
   .snippet {
     align-self: center;
     width: calc(100%-10rem);
@@ -273,19 +274,22 @@ h6 {
   width: 30rem;
   align-self: center;
   justify-content: space-between;
-  padding-top: 3rem;
+  padding-top: 2rem;
   margin-bottom: 1rem;
   h1, h6 {
     margin: 0;
   }
   h1 {
     color: $gray-dark;
-    margin-bottom: 1rem;
   }
   .header-mid {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    h5 {
+      margin: 0;
+      color: $gray;
+    }
     & > * {
       align-self: center;
     }
@@ -952,6 +956,9 @@ footer {
     svg {
       width: 38px;
     }
+  }
+  .Banner {
+    margin: 1rem;
   }
 }
 
