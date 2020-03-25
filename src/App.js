@@ -31,7 +31,7 @@ function App() {
               <Route exact path="/links" render={(props) => <Links {...props}/>} />
               <Route exact path="/summary" render={(props) => <Summary {...props}/>} />
               <Route exact path="/clusters" render={(props) => <Cluster {...props}/>} />
-              <Route exact path="/faqs" render={(props) => <FAQ {...props}/>} />
+              <Route exact path="/faq" render={(props) => <FAQ {...props}/>} />
             </Switch>
           </div>
         )}

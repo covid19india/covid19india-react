@@ -79,7 +79,7 @@ function Table(props) {
           </th>
           <th onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfrmd' : t('Confirmed')}</abbr>
+              <abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfmd' : t('Confirmed')}</abbr>
               <div style={{display: sortData.sortColumn === 'confirmed' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
@@ -98,7 +98,7 @@ function Table(props) {
           </th>
           <th onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'DCSD' : t('Deaths')}</abbr>
+              <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'Dcsd' : t('Deaths')}</abbr>
               <div style={{display: sortData.sortColumn === 'deaths' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
