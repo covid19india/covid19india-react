@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-thin-webfont.eot');
-  src: url('fonts/Archia/archia-thin-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-thin-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-thin-webfont.woff') format('woff'),       
+  src: url('fonts/Archia/archia-thin-webfont.eot?#iefix') format('embedded-opentype'),
+  url('fonts/Archia/archia-thin-webfont.woff2') format('woff2'),
+  url('fonts/Archia/archia-thin-webfont.woff') format('woff'),
   url('fonts/Archia/archia-thin-webfont.ttf') format('truetype');
   font-weight: 100;
   font-style: normal;
@@ -12,9 +12,9 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-light-webfont.eot');
-  src: url('fonts/Archia/archia-light-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-light-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-light-webfont.woff') format('woff'),       
+  src: url('fonts/Archia/archia-light-webfont.eot?#iefix') format('embedded-opentype'),
+  url('fonts/Archia/archia-light-webfont.woff2') format('woff2'),
+  url('fonts/Archia/archia-light-webfont.woff') format('woff'),
   url('fonts/Archia/archia-light-webfont.ttf') format('truetype');
   font-weight: 200;
   font-style: normal;
@@ -23,9 +23,9 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-regular-webfont.eot');
-  src: url('fonts/Archia/archia-regular-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-regular-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-regular-webfont.woff') format('woff'),       
+  src: url('fonts/Archia/archia-regular-webfont.eot?#iefix') format('embedded-opentype'),
+  url('fonts/Archia/archia-regular-webfont.woff2') format('woff2'),
+  url('fonts/Archia/archia-regular-webfont.woff') format('woff'),
   url('fonts/Archia/archia-regular-webfont.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
@@ -34,9 +34,9 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-medium-webfont.eot');
-  src: url('fonts/Archia/archia-medium-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-medium-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-medium-webfont.woff') format('woff'),       
+  src: url('fonts/Archia/archia-medium-webfont.eot?#iefix') format('embedded-opentype'),
+  url('fonts/Archia/archia-medium-webfont.woff2') format('woff2'),
+  url('fonts/Archia/archia-medium-webfont.woff') format('woff'),
   url('fonts/Archia/archia-medium-webfont.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
@@ -45,9 +45,9 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-semibold-webfont.eot');
-  src: url('fonts/Archia/archia-semibold-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-semibold-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-semibold-webfont.woff') format('woff'),       
+  src: url('fonts/Archia/archia-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+  url('fonts/Archia/archia-semibold-webfont.woff2') format('woff2'),
+  url('fonts/Archia/archia-semibold-webfont.woff') format('woff'),
   url('fonts/Archia/archia-semibold-webfont.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
@@ -56,9 +56,9 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-bold-webfont.eot');
-  src: url('fonts/Archia/archia-bold-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-bold-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-bold-webfont.woff') format('woff'),       
+  src: url('fonts/Archia/archia-bold-webfont.eot?#iefix') format('embedded-opentype'),
+  url('fonts/Archia/archia-bold-webfont.woff2') format('woff2'),
+  url('fonts/Archia/archia-bold-webfont.woff') format('woff'),
   url('fonts/Archia/archia-bold-webfont.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
@@ -169,28 +169,28 @@ h3 {
   font-family: 'archia';
   font-size: 14px !important;
   font-weight: 400;
-  text-transform: uppercase; 
+  text-transform: uppercase;
 }
 
 h4 {
   font-family: 'archia';
   font-size: 13px !important;
   font-weight: 900;
-  text-transform: uppercase; 
+  text-transform: uppercase;
 }
 
 h5 {
   font-family: 'archia';
   font-size: 12px !important;
   font-weight: 900;
-  text-transform: uppercase; 
+  text-transform: uppercase;
 }
 
 h6 {
   font-family: 'archia';
   font-size: 11px !important;
   font-weight: 600;
-  text-transform: uppercase; 
+  text-transform: uppercase;
 }
 
 .Home {
@@ -328,7 +328,7 @@ a.button {
   color: $blue-mid;
   cursor: pointer;
   font-weight: 900;
-  border-radius: 5px; 
+  border-radius: 5px;
   transition: background 0.2s ease-in-out;
   margin-bottom: 0.5rem;
   margin-top: 0.25rem;
@@ -394,7 +394,7 @@ a.button {
     }
     &:first-child {
       margin-left: 0.5rem;
-    } 
+    }
     &:last-child {
       margin-right: 0.5rem;
     }
@@ -491,11 +491,27 @@ table {
         background: $gray-hover;
       }
     }
+    tr:nth-child(odd){
+      background-color: $light;
+      &:hover {
+        background: $gray-hover;
+      }
+    }
     td {
       padding: 0.25rem;
       font-size: 0.9rem;
       border-radius: 5px;
-      text-align: right;
+      text-align: left;
+      .deltas {
+        margin-left: 0.25rem;
+        font-size: 11px !important;
+        svg {
+          width: 9px;
+          height: 9px;
+          stroke-width: 3;
+          vertical-align: -0.25px;
+        }
+      }
     }
     td:first-child {
       text-align: left;
@@ -724,7 +740,7 @@ table {
         stroke: $cherry;
         stroke-width: 2;
       }
-      text {  
+      text {
         font-family: 'archia';
         text-transform: uppercase;
         color: $cherry-mid;
@@ -966,9 +982,14 @@ footer {
       margin-right: 1rem;
     }
   }
+  table {
+    td {
+      max-width: 6.75rem;
+    }
+  }
 }
 
-/* For the iPhone X folks OMG WHY ARE YOUR SCREENS SO NARROW T_T*/ 
+/* For the iPhone X folks OMG WHY ARE YOUR SCREENS SO NARROW T_T*/
 @media (max-width: 375px) {
   .timeseries-mode {
     display: block !important;
