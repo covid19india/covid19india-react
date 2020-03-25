@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import Ticker, {NewsTicker} from 'nice-react-ticker';
 import axios from 'axios';
 
 function Banner(props) {
@@ -20,13 +21,13 @@ function Banner(props) {
 
   return (
     <div className="Banner fadeInUp" style={{animationDelay: '0.5s'}}>
-      <marquee>
+      <Ticker isNewsTicker={true}>
         {snippets.map((snippet, index)=>{
           return (
-            <span>{snippet.banner}</span>
+            <NewsTicker key={index} id={index} title={snippet.banner} />
           );
         })}
-      </marquee>
+      </Ticker>
     </div>
   );
 }

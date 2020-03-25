@@ -208,18 +208,13 @@ h6 {
 }
 
 .Banner {
-  top: 4.5rem;
-  left: 0;
-  width: 100%;
-  marquee {
-    background: $purple-light;
-    color: $purple;
-    font-family: 'Archia';
-    font-size: 0.8rem;
-    padding: 1rem;
-    & > span {
-      margin-right: 5rem;
-    }
+  background: black;
+  width: 100vw;
+  color: $purple;
+  font-family: 'Archia';
+  padding: 0.5rem;
+  [class^='styles_newsticker'], [class*='styles_newsticker'] {
+    min-width: auto !important;
   }
 }
 
