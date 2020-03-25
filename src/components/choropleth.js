@@ -168,35 +168,37 @@ function ChoroplethMap(props) {
       <div className="map-stats">
         <h4>{state.state}</h4>
 
-        <div className="stats">
-          <h5>Confirmed</h5>
-          <div className="stats-bottom">
-            <h1>{state.confirmed}</h1>
-            <h6>{}</h6>
+        <div className="stats-container" >
+          <div className="stats">
+            <h5>Confirmed</h5>
+            <div className="stats-bottom">
+              <h1>{state.confirmed}</h1>
+              <h6>{}</h6>
+            </div>
           </div>
-        </div>
 
-        <div className="stats is-blue">
-          <h5>Active</h5>
-          <div className="stats-bottom">
-            <h1>{state.active}</h1>
-            <h6>{}</h6>
+          <div className="stats is-blue">
+            <h5>Active</h5>
+            <div className="stats-bottom">
+              <h1>{state.active}</h1>
+              <h6>{}</h6>
+            </div>
           </div>
-        </div>
 
-        <div className="stats is-green">
-          <h5>Recovered</h5>
-          <div className="stats-bottom">
-            <h1>{state.recovered}</h1>
-            <h6>{}</h6>
+          <div className="stats is-green">
+            <h5>Recovered</h5>
+            <div className="stats-bottom">
+              <h1>{state.recovered}</h1>
+              <h6>{}</h6>
+            </div>
           </div>
-        </div>
 
-        <div className="stats is-gray">
-          <h5>Deceased</h5>
-          <div className="stats-bottom">
-            <h1>{state.deaths}</h1>
-            <h6>{}</h6>
+          <div className="stats is-gray">
+            <h5>Deceased</h5>
+            <div className="stats-bottom">
+              <h1>{state.deaths}</h1>
+              <h6>{}</h6>
+            </div>
           </div>
         </div>
 

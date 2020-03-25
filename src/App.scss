@@ -574,6 +574,24 @@ table {
       }
     }
   }
+  @media (max-width: 480px) {
+    .svg-parent{
+      padding-top: 80px;
+    }
+      .map-stats{
+        right: 0px;
+      }
+      h4 {
+          margin: 1.3em auto;
+        }
+      .stats-container {
+        display: flex;
+        .stats {
+          flex: 1;
+          margin: 0px 5px;
+        }
+      }
+    }
 }
 
 .tabs {
