@@ -12,7 +12,11 @@ $themes: (
     table-header: $gray-dark,
     table-body: $gray,
     tab-focused: $gray,
-    timeseries-header-h1: $gray-dark
+    timeseries-header-h1: $gray-dark,
+    banner-bg: $purple-light,
+    banner-text-color: $purple,
+    faq-question-color: $gray-dark,
+    link-h3-color: $gray-dark
   ),
   dark: (
     app-bg-color: $black,
@@ -21,6 +25,10 @@ $themes: (
     table-header: $blue-light-opaque,
     table-body: $gray-light-opaque,
     tab-focused: $gray-light-opaque,
-    timeseries-header-h1: $light
+    timeseries-header-h1: $light,
+    banner-bg: $gray-mid,
+    banner-text-color: $purple-light-opaque,
+    faq-question-color: $gray-light-opaque,
+    link-h3-color: $gray-light-opaque
   )
 );
