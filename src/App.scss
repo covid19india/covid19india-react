@@ -496,6 +496,23 @@ table {
       font-size: 0.9rem;
       border-radius: 5px;
       text-align: right;
+
+      .is-cherry {
+        color: $cherry;
+      }
+      .is-blue {
+        color: $blue;
+      }
+      .is-green {
+        color: $green;
+      }
+      .is-gray {
+        color: $gray;
+      }
+
+      .left {
+        float: left;
+      }
     }
     td:first-child {
       text-align: left;
