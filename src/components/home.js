@@ -8,6 +8,7 @@ import Level from './level';
 import ChoroplethMap from './choropleth';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
+import Banner from './banner';
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -40,12 +41,14 @@ function Home(props) {
 
   return (
     <div className="Home">
-
       <div className="home-left">
 
         <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
           <div className="header-mid">
-            <h1>India COVID-19 Tracker</h1>
+            <div className="titles">
+              <h1>India COVID-19 Tracker</h1>
+              <h6>A Crowdsourced Initiative</h6>
+            </div>
             <div className="last-update">
               <h6>Last Reported Case</h6>
               <h3>{lastUpdated.length===0 ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>

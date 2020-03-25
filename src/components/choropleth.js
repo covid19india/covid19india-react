@@ -82,7 +82,7 @@ function ChoroplethMap(props) {
 
     svg.append('g')
         .attr('class', 'legendLinear')
-        .attr('transform', 'translate(1, 375)');
+        .attr('transform', 'translate(1, 450)');
 
     const numCells = 6;
     const delta = Math.floor(statistic.maxConfirmed / (numCells - 1));
@@ -120,7 +120,7 @@ function ChoroplethMap(props) {
           .attr('fill', function(d) {
             const n = unemployment.get(d.properties.ST_NM.toLowerCase());
             const color = (n == 0) ? '#ffffff' : d3.interpolateReds(maxInterpolation * n/statistic.maxConfirmed);
-            return color
+            return color;
           })
           .attr('d', path)
           .attr('pointer-events', 'all')

@@ -171,6 +171,27 @@ h6 {
   }
 }
 
+.Banner {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  line-height: 20px;
+  font-family: 'Archia';
+  font-size: 0.8rem;
+  font-weight: 600;
+  @include themify($themes) {
+    color: themed('banner-text-color');
+    background: themed('banner-bg');
+  }
+  .snippet {
+    align-self: center;
+    width: calc(100%-10rem);
+    word-wrap: break-word;
+    padding: 1.5rem;
+    text-align: center;
+  }
+}
+
 .Navbar {
   display: flex;
   flex-direction: row;
@@ -223,7 +244,7 @@ h6 {
   width: 30rem;
   align-self: center;
   justify-content: space-between;
-  padding-top: 2.5rem;
+  padding-top: 2rem;
   margin-bottom: 1rem;
   h1,
   h6 {
@@ -233,12 +254,17 @@ h6 {
     @include themify($themes) {
       color: themed('header-h1');
     }
-    margin-bottom: 1rem;
   }
   .header-mid {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    .titles {
+      h6 {
+        margin-top: 0.25rem;
+        color: $gray;
+      }
+    }
     & > * {
       align-self: center;
     }
@@ -531,7 +557,7 @@ table {
   .map-stats {
     flex: 0.1;
     position: absolute;
-    top: 1.25rem;
+    top: 4rem;
     left: 1px;
     h1,
     h5,
@@ -829,7 +855,9 @@ table {
   }
   h3 {
     margin-bottom: 0;
-    color: $gray-dark;
+    @include themify($themes) {
+      color: themed('link-h3-color');
+    }
     font-weight: 900;
   }
 }
@@ -936,7 +964,9 @@ footer {
   }
   .question {
     margin-bottom: 0.5rem;
-    color: $gray-dark;
+    @include themify($themes) {
+      color: themed('faq-question-color');
+    }
   }
   .answer {
     color: $blue;
@@ -999,6 +1029,14 @@ footer {
     width: 10rem;
     svg {
       width: 38px;
+    }
+  }
+  .Banner {
+    height: 7rem;
+    .snippet {
+      width: 100%;
+      margin-left: 1rem;
+      margin-right: 1rem;
     }
   }
 }
