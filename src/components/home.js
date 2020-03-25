@@ -8,6 +8,7 @@ import Level from './level';
 import MapExplorer from './mapexplorer';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
+import Charts from './charts';
 import Banner from './banner';
 
 function Home(props) {
@@ -109,8 +110,8 @@ function Home(props) {
                 </div>
               </div>
 
-              <div className="timeseries-mode">
-                <label htmlFor="timeseries-mode">Scale Uniformly</label>
+              {graphOption == 1 && <div className="timeseries-mode">
+                <label htmlFor="timeseries-mode">Logarithmic</label>
                 <input
                   type="checkbox"
                   checked={timeseriesMode}
@@ -118,14 +119,11 @@ function Home(props) {
                     setTimeseriesMode(!timeseriesMode);
                   }}
                 />
-              </div>
+              </div>}
             </div>
 
-            <TimeSeries
-              timeseries={timeseries}
-              type={graphOption}
-              mode={timeseriesMode}
-            />
+            <Charts graphOption={graphOption} mode={timeseriesMode} timeseries={timeseries} />
+
           </React.Fragment>
         )}
       </div>
