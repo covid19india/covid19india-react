@@ -60,10 +60,11 @@ function TimeSeries(props) {
     setDatapoint(timeseries[timeseries.length-1]);
     setIndex(timeseries.length-1);
 
-    var el = document.getElementById("123");
+    var el = document.getElementById("svg1");
     resizeObserver.observe(el);
+
     const svg1 = d3.select(graphElement1.current);
-    const margin = {top: 20, right: 20, bottom: 10, left: 20};
+    const margin = {top: 20, right: 20, bottom: 10, left: 30};
     const pwidth = svg1.node().getBoundingClientRect().width;
     const pheight = svg1.node().getBoundingClientRect().height;
     const width = pwidth - margin.left - margin.right;
@@ -86,27 +87,27 @@ function TimeSeries(props) {
     svg1.append('g')
         .attr('transform', 'translate(0,' + height + ')')
         .attr('class', 'axis')
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x).ticks(width < 500 ? 3 : 5));
 
     svg2.append('g')
         .attr('transform', 'translate(0,' + height + ')')
         .attr('class', 'axis')
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x).ticks(width < 500 ? 3 : 5));
 
     svg3.append('g')
         .attr('transform', 'translate(0,' + height + ')')
         .attr('class', 'axis')
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x).ticks(width < 500 ? 3 : 5));
 
     svg4.append('g')
         .attr('transform', 'translate(0,' + height + ')')
         .attr('class', 'axis')
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x).ticks(width < 500 ? 3 : 5));
 
     svg5.append('g')
         .attr('transform', 'translate(0,' + height + ')')
         .attr('class', 'axis')
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x).ticks(width < 500 ? 3 : 5));
 
     svg6.append('g')
         .attr('transform', 'translate(0,' + height + ')')
@@ -448,7 +449,7 @@ function TimeSeries(props) {
     <div className="TimeSeries-Parent fadeInUp" style={{animationDelay: '1.7s'}}>
       <div className="timeseries" style={{display: props.type===1 ? 'flex' : 'none'}}>
 
-        <div className="svg-parent" id="123">
+        <div className="svg-parent" id="svg1">
           <div className="stats">
             <h5>Confirmed {datapoint['date']}</h5>
             <div className="stats-bottom">
