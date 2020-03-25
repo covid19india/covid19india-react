@@ -200,7 +200,6 @@ h6 {
   flex-wrap: wrap;
   margin-left: 10rem;
   margin-right: 10rem;
-  margin-top: 2rem;
   .home-left, .home-right  {
     display: flex;
     flex-direction: column;
@@ -213,15 +212,11 @@ h6 {
   left: 0;
   width: 100%;
   marquee {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     background: $purple-light;
-    height: 3rem;
     color: $purple;
     font-family: 'Archia';
-    font-size: 0.75rem;
-    line-height: 0px;
+    font-size: 0.8rem;
+    padding: 1rem;
     & > span {
       margin-right: 5rem;
     }
@@ -274,7 +269,7 @@ h6 {
   width: 30rem;
   align-self: center;
   justify-content: space-between;
-  padding-top: 4rem;
+  padding-top: 3rem;
   margin-bottom: 1rem;
   h1, h6 {
     margin: 0;
