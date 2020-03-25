@@ -1,0 +1,26 @@
+@import './colors';
+
+@function themed($key) {
+  @return map-get($theme-map, $key);
+}
+
+$themes: (
+  light: (
+    app-bg-color: $white,
+    header-h1: $gray-dark,
+    navbar-focused: $gray,
+    table-header: $gray-dark,
+    table-body: $gray,
+    tab-focused: $gray,
+    timeseries-header-h1: $gray-dark
+  ),
+  dark: (
+    app-bg-color: $black,
+    header-h1: $light,
+    navbar-focused: $blue-light-opaque,
+    table-header: $blue-light-opaque,
+    table-body: $gray-light-opaque,
+    tab-focused: $gray-light-opaque,
+    timeseries-header-h1: $light
+  )
+);

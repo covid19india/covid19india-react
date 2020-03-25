@@ -1,10 +1,14 @@
+@import './styles/colors';
+@import './styles/themes';
+@import './styles/themify';
+
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-thin-webfont.eot');
-  src: url('fonts/Archia/archia-thin-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-thin-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-thin-webfont.woff') format('woff'),       
-  url('fonts/Archia/archia-thin-webfont.ttf') format('truetype');
+  src: url('fonts/Archia/archia-thin-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Archia/archia-thin-webfont.woff2') format('woff2'),
+    url('fonts/Archia/archia-thin-webfont.woff') format('woff'),
+    url('fonts/Archia/archia-thin-webfont.ttf') format('truetype');
   font-weight: 100;
   font-style: normal;
 }
@@ -12,10 +16,10 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-light-webfont.eot');
-  src: url('fonts/Archia/archia-light-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-light-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-light-webfont.woff') format('woff'),       
-  url('fonts/Archia/archia-light-webfont.ttf') format('truetype');
+  src: url('fonts/Archia/archia-light-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Archia/archia-light-webfont.woff2') format('woff2'),
+    url('fonts/Archia/archia-light-webfont.woff') format('woff'),
+    url('fonts/Archia/archia-light-webfont.ttf') format('truetype');
   font-weight: 200;
   font-style: normal;
 }
@@ -23,10 +27,10 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-regular-webfont.eot');
-  src: url('fonts/Archia/archia-regular-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-regular-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-regular-webfont.woff') format('woff'),       
-  url('fonts/Archia/archia-regular-webfont.ttf') format('truetype');
+  src: url('fonts/Archia/archia-regular-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Archia/archia-regular-webfont.woff2') format('woff2'),
+    url('fonts/Archia/archia-regular-webfont.woff') format('woff'),
+    url('fonts/Archia/archia-regular-webfont.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
 }
@@ -34,10 +38,10 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-medium-webfont.eot');
-  src: url('fonts/Archia/archia-medium-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-medium-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-medium-webfont.woff') format('woff'),       
-  url('fonts/Archia/archia-medium-webfont.ttf') format('truetype');
+  src: url('fonts/Archia/archia-medium-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Archia/archia-medium-webfont.woff2') format('woff2'),
+    url('fonts/Archia/archia-medium-webfont.woff') format('woff'),
+    url('fonts/Archia/archia-medium-webfont.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
@@ -45,10 +49,10 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-semibold-webfont.eot');
-  src: url('fonts/Archia/archia-semibold-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-semibold-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-semibold-webfont.woff') format('woff'),       
-  url('fonts/Archia/archia-semibold-webfont.ttf') format('truetype');
+  src: url('fonts/Archia/archia-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Archia/archia-semibold-webfont.woff2') format('woff2'),
+    url('fonts/Archia/archia-semibold-webfont.woff') format('woff'),
+    url('fonts/Archia/archia-semibold-webfont.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
 }
@@ -56,74 +60,21 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-bold-webfont.eot');
-  src: url('fonts/Archia/archia-bold-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-bold-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-bold-webfont.woff') format('woff'),       
-  url('fonts/Archia/archia-bold-webfont.ttf') format('truetype');
+  src: url('fonts/Archia/archia-bold-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Archia/archia-bold-webfont.woff2') format('woff2'),
+    url('fonts/Archia/archia-bold-webfont.woff') format('woff'),
+    url('fonts/Archia/archia-bold-webfont.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
 }
 
 /* -- */
 
-$blue: #007bff;
-$blue-light: #007bff10;
-$blue-hover: #007bff30;
-$blue-light-opaque: #eff7ff;
-$blue-mid: #007bff99;
-$indigo: #6610f2;
-$purple: #6f42c1;
-$pink: #e83e8c;
-$cherry: #ff073a;
-$cherry-mid: #ff073a99;
-$cherry-light: #ff073a20;
-$cherry-hover: #ff073a30;
-$cherry-light-opaque: #ffe0e6;
-$red: #dc3545;
-$red-light: #dc354520;
-$red-mid: #dc354599;
-$orange: #fd7e14;
-$orange-mid: #fd7e1499;
-$orange-light: #fd7e1420;
-$orange-hover: #fd7e1430;
-$orange-light-opaque: #ffefe2;
-$yellow: #ffc107;
-$yellow-light: #ffc10720;
-$yellow-hover: #ffc10730;
-$yellow-mid: #ffc10799;
-$yellow-light-opaque: #fff7e0;
-$green: #28a745;
-$green-light: #28a74520;
-$green-hover: #28a74530;
-$green-mid: #28a74599;
-$teal: #20c997;
-$cyan: #17a2b8;
-$white: #fff;
-$gray: #6c757d;
-$gray-light: #6c757d10;
-$gray-hover: #6c757d20;
-$gray-mid: #6c757d99;
-$gray-dark: #343a40;
-$gray-opaque: #343a4020;
-$primary: #007bff;
-$secondary: #6c757d;
-$success: #28a745;
-$info: #17a2b8;
-$warning: #ffc107;
-$danger: #dc3545;
-$light: #f8f9fa;
-$dark: #343a40;
-$purple: #201aa2dd;
-$purple-light: #201aa220;
-$purple-hover: #201aa230;
-$purple-mid: #201aa299;
-$purple-light-opaque: #e3e2f3;
-
 @mixin navbarReveal($color) {
   $animation-name: unique-id() !global;
 
   animation-name: $animation-name;
-  animation-duration: 0.750s;
+  animation-duration: 0.75s;
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 
@@ -132,15 +83,20 @@ $purple-light-opaque: #e3e2f3;
       background: transparent;
     }
     100% {
-      background: $color;;
+      background: $color;
     }
   }
 }
 
 @mixin levelColor($color) {
   .is-#{$color} {
-    h1 {color: $color;}
-    h4, h5 {color: #{$color}-mid;}
+    h1 {
+      color: $color;
+    }
+    h4,
+    h5 {
+      color: #{$color}-mid;
+    }
   }
 }
 
@@ -151,7 +107,7 @@ body {
   -webkit-touch-callout: none;
 }
 
-h1, {
+h1 {
   font-family: 'archia';
   font-size: 24px !important;
   font-weight: 900;
@@ -169,28 +125,35 @@ h3 {
   font-family: 'archia';
   font-size: 14px !important;
   font-weight: 400;
-  text-transform: uppercase; 
+  text-transform: uppercase;
 }
 
 h4 {
   font-family: 'archia';
   font-size: 13px !important;
   font-weight: 900;
-  text-transform: uppercase; 
+  text-transform: uppercase;
 }
 
 h5 {
   font-family: 'archia';
   font-size: 12px !important;
   font-weight: 900;
-  text-transform: uppercase; 
+  text-transform: uppercase;
 }
 
 h6 {
   font-family: 'archia';
   font-size: 11px !important;
   font-weight: 600;
-  text-transform: uppercase; 
+  text-transform: uppercase;
+}
+
+#root {
+  @include themify($themes) {
+    background-color: themed('app-bg-color');
+    transition: background-color 0.3s ease;
+  }
 }
 
 .Home {
@@ -200,7 +163,8 @@ h6 {
   flex-wrap: wrap;
   margin-left: 10rem;
   margin-right: 10rem;
-  .home-left, .home-right  {
+  .home-left,
+  .home-right {
     display: flex;
     flex-direction: column;
     width: 30rem;
@@ -234,8 +198,14 @@ h6 {
       }
     }
   }
+  .navbar-right {
+    align-self: center;
+    margin-right: 1rem;
+  }
   .focused {
-    color: $gray;
+    @include themify($themes) {
+      color: themed('navbar-focused');
+    }
   }
   img {
     width: 3rem;
@@ -255,11 +225,14 @@ h6 {
   justify-content: space-between;
   padding-top: 2.5rem;
   margin-bottom: 1rem;
-  h1, h6 {
+  h1,
+  h6 {
     margin: 0;
   }
   h1 {
-    color: $gray-dark;
+    @include themify($themes) {
+      color: themed('header-h1');
+    }
     margin-bottom: 1rem;
   }
   .header-mid {
@@ -287,7 +260,8 @@ h6 {
     color: $green;
     font-weight: 600;
   }
-  h3, h6 {
+  h3,
+  h6 {
     margin: 0;
   }
 }
@@ -303,7 +277,7 @@ a.button {
   color: $blue-mid;
   cursor: pointer;
   font-weight: 900;
-  border-radius: 5px; 
+  border-radius: 5px;
   transition: background 0.2s ease-in-out;
   margin-bottom: 0.5rem;
   margin-top: 0.25rem;
@@ -322,7 +296,7 @@ a.button {
       background: $purple-hover;
     }
   }
-    &.is-green {
+  &.is-green {
     color: $green-mid;
     background: $green-light;
     &:hover {
@@ -330,7 +304,7 @@ a.button {
     }
   }
   &:hover {
-  background: $blue-hover;
+    background: $blue-hover;
   }
   & > * {
     align-self: center;
@@ -348,10 +322,11 @@ a.button {
 }
 
 .excel {
-  color: #33A667;
-  background: #33A66730;
+  color: #33a667;
+  background: #33a66730;
+
   &:hover {
-    background: #33A66750;
+    background: #33a66750;
   }
 }
 
@@ -369,12 +344,13 @@ a.button {
     }
     &:first-child {
       margin-left: 0.5rem;
-    } 
+    }
     &:last-child {
       margin-right: 0.5rem;
     }
   }
-  h1, h5 {
+  h1,
+  h5 {
     margin-bottom: 0;
   }
   h1 {
@@ -384,20 +360,40 @@ a.button {
     margin-bottom: -0.5rem;
   }
   .is-cherry {
-    h1 {color: $cherry;}
-    h4, h5 {color: $cherry-mid;}
+    h1 {
+      color: $cherry;
+    }
+    h4,
+    h5 {
+      color: $cherry-mid;
+    }
   }
   .is-blue {
-    h1 {color: $blue;}
-    h4, h5 {color: $blue-mid;}
+    h1 {
+      color: $blue;
+    }
+    h4,
+    h5 {
+      color: $blue-mid;
+    }
   }
   .is-green {
-    h1 {color: $green;}
-    h4, h5 {color: $green-mid;}
+    h1 {
+      color: $green;
+    }
+    h4,
+    h5 {
+      color: $green-mid;
+    }
   }
   .is-gray {
-    h1 {color: $gray;}
-    h4, h5 {color: $gray-mid;}
+    h1 {
+      color: $gray;
+    }
+    h4,
+    h5 {
+      color: $gray-mid;
+    }
   }
 }
 
@@ -427,7 +423,10 @@ table {
   margin-top: 2rem;
   thead {
     background: $gray-light;
-    color: $gray-dark;
+    @include themify($themes) {
+      color: themed('table-header');
+    }
+    // color: $gray-dark;
     text-align: left;
     font-size: 0.75rem;
     th {
@@ -459,7 +458,9 @@ table {
     }
   }
   tbody {
-    color: $gray;
+    @include themify($themes) {
+      color: themed('table-body');
+    }
     tr {
       transition: background 0.1s ease-in-out;
       &:hover {
@@ -500,7 +501,9 @@ table {
   .header {
     position: absolute;
     top: -5rem;
-    color: $gray-dark;
+    @include themify($themes) {
+      color: themed('header-h1');
+    }
   }
   h6.header {
     margin-top: 3rem;
@@ -514,7 +517,7 @@ table {
     justify-content: center;
     width: 100%;
     svg {
-      align-self: center ;
+      align-self: center;
       text {
         text-transform: uppercase;
         text-align: right;
@@ -530,7 +533,9 @@ table {
     position: absolute;
     top: 1.25rem;
     left: 1px;
-    h1, h5, h6 {
+    h1,
+    h5,
+    h6 {
       margin: 0;
     }
     h4 {
@@ -559,18 +564,33 @@ table {
       }
       &.is-green {
         background: $green-light;
-        h5, h6 {color: $green-mid;}
-        h1 {color: $green;}
+        h5,
+        h6 {
+          color: $green-mid;
+        }
+        h1 {
+          color: $green;
+        }
       }
       &.is-blue {
         background: $blue-light;
-        h5, h6 {color: $blue-mid;}
-        h1 {color: $blue;}
+        h5,
+        h6 {
+          color: $blue-mid;
+        }
+        h1 {
+          color: $blue;
+        }
       }
       &.is-gray {
         background: $gray-light;
-        h5, h6 {color: $gray-mid;}
-        h1 {color: $gray;}
+        h5,
+        h6 {
+          color: $gray-mid;
+        }
+        h1 {
+          color: $gray;
+        }
       }
     }
   }
@@ -597,7 +617,9 @@ table {
       background: $gray-hover;
     }
     &.focused {
-      color: $gray;
+      @include themify($themes) {
+        color: themed('tab-focused');
+      }
       background: $gray-opaque;
     }
   }
@@ -612,7 +634,9 @@ table {
 
 .timeseries-header {
   h1 {
-    color: $gray-dark;
+    @include themify($themes) {
+      color: themed('timeseries-header-h1');
+    }
     margin: 0;
     margin-bottom: 0.5rem;
   }
@@ -626,7 +650,10 @@ table {
     top: 4.5rem;
     right: 0;
     z-index: 99;
-    input {margin: 0; cursor: pointer;}
+    input {
+      margin: 0;
+      cursor: pointer;
+    }
     label {
       font-family: 'archia';
       text-transform: uppercase;
@@ -639,8 +666,8 @@ table {
   }
 }
 
-
-.timeseries, .Minigraph {
+.timeseries,
+.Minigraph {
   display: flex;
   flex-direction: column;
   margin-top: 1rem;
@@ -654,11 +681,14 @@ table {
     border-radius: 3px;
     display: flex;
     flex-direction: column;
-    h2, h5, h6 {
+    h2,
+    h5,
+    h6 {
       margin: 0;
       color: $cherry-mid;
     }
-    h2, h6 {
+    h2,
+    h6 {
       color: $cherry;
     }
     .stats-bottom {
@@ -673,16 +703,31 @@ table {
       }
     }
     &.is-green {
-      h5 {color: $green-mid;}
-      h2, h6 {color: $green;}
+      h5 {
+        color: $green-mid;
+      }
+      h2,
+      h6 {
+        color: $green;
+      }
     }
     &.is-gray {
-      h5 {color: $gray-mid;}
-      h2, h6 {color: $gray;}
+      h5 {
+        color: $gray-mid;
+      }
+      h2,
+      h6 {
+        color: $gray;
+      }
     }
     &.is-blue {
-      h5 {color: $blue-mid;}
-      h2, h6 {color: $blue;}
+      h5 {
+        color: $blue-mid;
+      }
+      h2,
+      h6 {
+        color: $blue;
+      }
     }
   }
   .svg-parent {
@@ -695,11 +740,13 @@ table {
     margin-bottom: 1rem;
     height: 10rem;
     svg {
-      .domain, .tick, line {
+      .domain,
+      .tick,
+      line {
         stroke: $cherry;
         stroke-width: 2;
       }
-      text {  
+      text {
         font-family: 'archia';
         text-transform: uppercase;
         color: $cherry-mid;
@@ -709,8 +756,10 @@ table {
     }
     &.is-green {
       background: $green-light;
-      svg{
-        .domain, .tick, line {
+      svg {
+        .domain,
+        .tick,
+        line {
           stroke: $green;
         }
         text {
@@ -721,7 +770,9 @@ table {
     }
     &.is-gray {
       background: $gray-light;
-      .domain, .tick, line {
+      .domain,
+      .tick,
+      line {
         stroke: $gray;
       }
       text {
@@ -786,14 +837,19 @@ table {
 footer {
   display: flex;
   flex-direction: column;
-  margin-bottom: 5rem;
+  padding-bottom: 5rem;
   justify-content: center;
   margin-top: 5rem;
   & > * {
     align-self: center;
     text-align: center;
   }
-  h5 {margin: 0; margin-top: 1rem; margin-bottom: 0.5rem; color: $gray;}
+  h5 {
+    margin: 0;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: $gray;
+  }
   img {
     width: 2rem;
     height: 2rem;
@@ -826,7 +882,7 @@ footer {
   }
   .Minigraph {
     align-self: center;
-    margin-bottom: -3.25rem
+    margin-bottom: -3.25rem;
   }
   .summary-bottom {
     display: flex;
@@ -888,7 +944,17 @@ footer {
 }
 
 @media (max-width: 769px) {
-  .ChoroplethMap, .TimeSeries, table, .header, .Level, .timeseries-header, .TimeSeries-Parent, .Links, .Minigraph, .Summary, .FAQ {
+  .ChoroplethMap,
+  .TimeSeries,
+  table,
+  .header,
+  .Level,
+  .timeseries-header,
+  .TimeSeries-Parent,
+  .Links,
+  .Minigraph,
+  .Summary,
+  .FAQ {
     width: calc(100% - 2rem);
   }
   .Home {
@@ -897,13 +963,15 @@ footer {
     width: 100%;
     margin-left: 0rem;
     margin-right: 0rem;
-    .home-left, .home-right {
+    .home-left,
+    .home-right {
       width: 100%;
       display: flex;
       flex-direction: column;
     }
   }
-  .link, .faq {
+  .link,
+  .faq {
     width: calc(100% - 2rem);
   }
   .Navbar {
@@ -935,7 +1003,7 @@ footer {
   }
 }
 
-/* For the iPhone X folks OMG WHY ARE YOUR SCREENS SO NARROW T_T*/ 
+/* For the iPhone X folks OMG WHY ARE YOUR SCREENS SO NARROW T_T*/
 @media (max-width: 375px) {
   .timeseries-mode {
     display: block !important;
@@ -953,7 +1021,7 @@ footer {
 
 .fadeInUp {
   animation-name: fadeInUp;
-  animation-duration: 0.450s;
+  animation-duration: 0.45s;
   animation-fill-mode: both;
 }
 
@@ -968,9 +1036,10 @@ footer {
   }
 }
 
-.iframe-container{
+.iframe-container {
   width: 100%;
-  min-height : 100vh;
+  min-height: 100vh;
+  background-color: $white;
   iframe {
     width: 100vw;
     height: 100vh;
@@ -982,5 +1051,101 @@ footer {
   display: flex;
   > * + * {
     margin-left: 8px;
+  }
+}
+.toggle-box {
+  transform: scale(0.75);
+  .toggle-box-label-left {
+    position: relative;
+    cursor: pointer !important;
+    &::before,
+    &::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-transition: 0.25s ease-in-out;
+      -moz-transition: 0.25s ease-in-out;
+      -o-transition: 0.25s ease-in-out;
+      transition: 0.25s ease-in-out;
+      outline: none;
+    }
+
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      z-index: 1;
+      line-height: 34px;
+      text-indent: 40px;
+      height: 16px;
+      width: 16px;
+      margin: 4px;
+      -webkit-border-radius: 100%;
+      -moz-border-radius: 100%;
+      border-radius: 100%;
+      right: 26px;
+      background: #ffb200;
+      transform: rotate(-45deg);
+      box-shadow: 0 0 10px #ddd;
+    }
+
+    &::after {
+      content: '';
+      display: inline-block;
+      width: 40px;
+      height: 24px;
+      -webkit-border-radius: 16px;
+      -moz-border-radius: 16px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.15);
+      vertical-align: middle;
+      margin: 0 10px;
+      border: 2px solid #ffb200;
+    }
+  }
+  input[type='checkbox'] {
+    cursor: pointer;
+    &,
+    &:active {
+      position: absolute;
+      top: -5000px;
+      height: 0;
+      width: 0;
+      opacity: 0;
+      border: none;
+      outline: none;
+    }
+    &:focus + label {
+      border: 1px solid var(--primary-color);
+    }
+    &:checked {
+      & + .toggle-box-label-left:before {
+        right: 17px;
+        box-shadow: 5px 5px 0 0 #eee;
+        background: transparent;
+      }
+      & + .toggle-box-label-left:after {
+        background: rgba(0, 0, 0, 0.15);
+        border: 2px solid #ddd;
+      }
+      & + .toggle-box-label-left {
+        color: rgba(149, 149, 149, 0.51);
+        & + .toggle-box-label {
+          color: rgba(250, 250, 250, 0.51);
+        }
+      }
+    }
+    & + .toggle-box-label-left {
+      color: rgba(149, 149, 149, 0.51);
+    }
+    label {
+      display: inline-block;
+      position: relative;
+      padding: 0;
+      font-size: 14px;
+      line-height: 16px;
+      cursor: pointer;
+      color: rgba(149, 149, 149, 0.51);
+    }
   }
 }
