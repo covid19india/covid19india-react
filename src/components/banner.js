@@ -1,16 +1,18 @@
 import React, {useState, useEffect} from 'react';
 import differenceInMilliseconds from 'date-fns/differenceInMilliseconds';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 function Banner(props) {
   const [snippets, setSnippets] = useState([]);
   const [snippet, setSnippet] = useState();
   const [start, setStart] = useState(props.start ? new Date(props.date) : localStorage.getItem('start')==='null' ? new Date() : new Date(localStorage.getItem('start')));
   const [difference, setDifference] = useState(new Date(differenceInMilliseconds(new Date(), start)).toISOString().slice(11, 19));
+  const {i18n} = useTranslation()
 
   useEffect(()=>{
     getSnippets();
-  }, [1]);
+  }, [i18n.language]);
 
   useEffect(()=>{
     if (snippets.length>1) {
@@ -32,7 +34,7 @@ function Banner(props) {
   };
 
   const getSnippets = () => {
-    axios.get('https://api.covid19india.org/website_data.json')
+    axios.get(`https://api.covid19india.org/website_data.json?lang=${i18n.language}`)
         .then((response)=>{
           setSnippets(response.data.factoids);
         })

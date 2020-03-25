@@ -1,15 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 function FAQ(props) {
   const [faq, setFaq] = useState([]);
+  const {i18n} = useTranslation();
 
   useEffect(()=>{
     getFAQs();
-  }, [1]);
+  }, [i18n.language]);
 
   const getFAQs = () => {
-    axios.get('https://api.covid19india.org/faq.json')
+    axios.get(`https://api.covid19india.org/faq.json?lang=${i18n.language}`)
         .then((response) => {
           setFaq(response.data.faq);
         })
