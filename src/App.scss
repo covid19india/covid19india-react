@@ -203,7 +203,7 @@ h6 {
   .home-left, .home-right  {
     display: flex;
     flex-direction: column;
-    width: 30rem;
+    width: 33rem;
   }
 }
 
@@ -270,7 +270,7 @@ h6 {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 30rem;
+  width: 33rem;
   align-self: center;
   justify-content: space-between;
   padding-top: 2rem;
@@ -385,7 +385,7 @@ a.button {
   flex-direction: row;
   justify-content: space-between;
   align-self: center;
-  width: 30rem;
+  width: 33rem;
   .level-item {
     display: flex;
     flex-direction: column;
@@ -444,7 +444,7 @@ abbr {
 
 table {
   position: relative;
-  width: 30rem;
+  width: 33rem;
   align-self: center;
   font-family: 'archia';
   text-transform: uppercase;
@@ -521,7 +521,7 @@ table {
   align-self: center;
   margin-top: 4rem;
   margin-bottom: -10rem;
-  width: 30rem;
+  width: 33rem;
   .header {
     position: absolute;
     top: -5rem;
@@ -631,7 +631,7 @@ table {
 .TimeSeries-Parent {
   display: flex;
   flex-direction: column;
-  width: 30rem;
+  width: 33rem;
   align-self: center;
 }
 
@@ -641,7 +641,7 @@ table {
     margin: 0;
     margin-bottom: 0.5rem;
   }
-  width: 30rem;
+  width: 33rem;
   align-self: center;
   margin-top: 1rem;
   .timeseries-mode {
@@ -713,7 +713,7 @@ table {
   .svg-parent {
     position: relative;
     display: flex;
-    width: 30rem;
+    width: 33rem;
     align-self: center;
     background: $cherry-light;
     border-radius: 5px;
@@ -758,7 +758,7 @@ table {
 }
 
 .Minigraph {
-  width: 30rem;
+  width: 33rem;
   align-self: center;
   margin: 0;
   display: flex;
@@ -784,7 +784,7 @@ table {
 }
 
 .link {
-  width: 30rem;
+  width: 33rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
   align-self: center;
@@ -889,10 +889,10 @@ footer {
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: 30rem;
+  min-height: 33rem;
   & > * {
     align-self: center;
-    width: 30rem;
+    width: 33rem;
     margin-bottom: 1.5rem;
   }
   & > *:first-child {
