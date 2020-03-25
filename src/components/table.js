@@ -64,7 +64,7 @@ function Table(props) {
 
   return (
     <table className="table fadeInUp" style={{animationDelay: '1s'}}>
-      <h5 className="affected-count">{count} States/UTS Affected</h5>
+      <h5 className="affected-count">{count} States/UT Affected</h5>
       <thead>
         <tr>
           <th className="state-heading" onClick={(e) => handleSort(e, props)} >

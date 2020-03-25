@@ -36,7 +36,7 @@ function App() {
         <img src="/icon.png" alt="logo"/>
         <h5>We stand with everyone fighting on the frontlines</h5>
         <div className="link">
-          <a href="https://github.com/covid19india">covid19india</a>
+          <a href="https://github.com/covid19india">Covid19India</a>
 
         </div>
         <div id='footerButtons'>

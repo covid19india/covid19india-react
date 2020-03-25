@@ -48,7 +48,8 @@ function Home(props) {
             <h1>India COVID-19 Tracker</h1>
             <div className="last-update">
               <h6>Last Reported Case</h6>
-              <h3>{lastUpdated.length===0 ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
+              {/* <h3>{lastUpdated.length===0 ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3> */}
+            <h3>{lastUpdated}</h3>
             </div>
           </div>
         </div>

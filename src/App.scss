@@ -155,42 +155,42 @@ h1, {
   font-family: 'archia';
   font-size: 24px !important;
   font-weight: 900;
-  text-transform: uppercase;
+  // text-transform: uppercase;
 }
 
 h2 {
   font-family: 'archia';
   font-size: 18px !important;
   font-weight: 400;
-  text-transform: uppercase;
+  // text-transform: uppercase;
 }
 
 h3 {
   font-family: 'archia';
   font-size: 14px !important;
   font-weight: 400;
-  text-transform: uppercase; 
+  // text-transform: uppercase; 
 }
 
 h4 {
   font-family: 'archia';
   font-size: 13px !important;
   font-weight: 900;
-  text-transform: uppercase; 
+  // text-transform: uppercase; 
 }
 
 h5 {
   font-family: 'archia';
   font-size: 12px !important;
   font-weight: 900;
-  text-transform: uppercase; 
+  // text-transform: uppercase; 
 }
 
 h6 {
   font-family: 'archia';
   font-size: 11px !important;
   font-weight: 600;
-  text-transform: uppercase; 
+  // text-transform: uppercase; 
 }
 
 .Home {
@@ -212,7 +212,7 @@ h6 {
   flex-direction: row;
   height: 4.5rem;
   justify-content: space-around;
-  text-transform: uppercase;
+  // text-transform: uppercase;
   font-weight: 900;
   @include navbarReveal($gray-light);
   .navbar-left {
@@ -298,7 +298,7 @@ a.button {
   padding: 0.5rem;
   border: none;
   font-family: 'archia';
-  text-transform: uppercase;
+  // text-transform: uppercase;
   background: $blue-light;
   color: $blue-mid;
   cursor: pointer;
@@ -422,7 +422,7 @@ table {
   width: 30rem;
   align-self: center;
   font-family: 'archia';
-  text-transform: uppercase;
+  // text-transform: uppercase;
   margin-bottom: 1rem;
   margin-top: 2rem;
   thead {
@@ -516,7 +516,7 @@ table {
     svg {
       align-self: center ;
       text {
-        text-transform: uppercase;
+        // text-transform: uppercase;
         text-align: right;
         font-family: 'archia';
         font-weight: 600;
@@ -629,7 +629,7 @@ table {
     input {margin: 0; cursor: pointer;}
     label {
       font-family: 'archia';
-      text-transform: uppercase;
+      // text-transform: uppercase;
       font-size: 12px;
       font-weight: 900;
       margin-right: 0.5rem;
@@ -701,7 +701,7 @@ table {
       }
       text {  
         font-family: 'archia';
-        text-transform: uppercase;
+        // text-transform: uppercase;
         color: $cherry-mid;
         stroke: transparent;
         font-size: 12px;
@@ -765,7 +765,7 @@ table {
   align-self: center;
   a {
     font-family: 'archia';
-    text-transform: uppercase;
+    // text-transform: uppercase;
     word-wrap: break-word;
     font-weight: 900;
     text-decoration: none;
