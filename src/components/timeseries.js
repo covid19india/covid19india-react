@@ -227,7 +227,8 @@ function TimeSeries(props) {
     };
 
     svgArray.forEach(function (s) {
-        s.on("mouseout", mouseout).on("mousemove", mousemove);
+        s.on("mousemove", mousemove).on("touchmove", mousemove)
+         .on("mouseout", mouseout).on("touchend", mouseout);
     });
 
 
