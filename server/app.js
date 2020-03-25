@@ -21,16 +21,20 @@ client.on('error', (err) => {
 
 MongoDB = null;
 const uri = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASSWORD}@${process.env.DB_NAME}-h6o7s.gcp.mongodb.net/test?retryWrites=true&w=majority&replicaSet=rs`;
-MongoClient.connect(uri, {
-  poolSize: 10,
-  useUnifiedTopology: true,
-}, (err, db) => {
-  assert.equal(null, err);
-  MongoDB = db;
-});
+MongoClient.connect(
+  uri,
+  {
+    poolSize: 10,
+    useUnifiedTopology: true,
+  },
+  (err, db) => {
+    assert.equal(null, err);
+    MongoDB = db;
+  },
+);
 
 const app = express();
-app.use(cors({credentials: true, origin: 'http://localhost:3001'}));
+app.use(cors({ credentials: true, origin: 'http://localhost:3001' }));
 app.use(responseTime());
 
 // view engine setup
@@ -39,10 +43,10 @@ app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);

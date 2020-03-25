@@ -5,7 +5,7 @@ const path = require('path');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', {title: 'Express'});
+  res.render('index', { title: 'Express' });
 });
 
 router.get('/summarize', (req, res, next) => {
@@ -18,11 +18,11 @@ router.get('/summarize', (req, res, next) => {
       deviceScaleFactor: 1,
       isMobile: true,
     });
-    await page.goto('http://localhost:3001/summary', {'waitUntil': 'networkidle0'});
-    await page.screenshot({path: '../public/thumbnail.png'});
+    await page.goto('http://localhost:3001/summary', { waitUntil: 'networkidle0' });
+    await page.screenshot({ path: '../public/thumbnail.png' });
 
     await browser.close();
-    res.sendFile('thumbnail.png', {root: path.join(__dirname, '../../public')});
+    res.sendFile('thumbnail.png', { root: path.join(__dirname, '../../public') });
   })();
 });
 

@@ -55,6 +55,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "css-build": "node-sass --omit-source-map-url sass/custom.scss src/App.css",
+    "pretty": "prettier --write \"./**/*.{js,jsx,json}\"",
     "css-watch": "npm run css-build -- --watch",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
@@ -77,6 +78,7 @@
   "devDependencies": {
     "eslint": "^6.8.0",
     "eslint-config-google": "^0.14.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
     "gh-pages": "^2.2.0"
   }

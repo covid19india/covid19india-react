@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-
 router.get('/', function(req, res, next) {
   return client.get('states', (err, result) => {
     if (result) {

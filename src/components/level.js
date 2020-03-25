@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 function Level(props) {
   const [data, setData] = useState(props.data);
@@ -7,7 +7,7 @@ function Level(props) {
   const [recoveries, setRecoveries] = useState(0);
   const [deaths, setDeaths] = useState(0);
 
-  useEffect(()=>{
+  useEffect(() => {
     setData(props.data);
     parseData();
   });
@@ -32,32 +32,63 @@ function Level(props) {
   };
 
   return (
-    <div className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
-
+    <div className="Level fadeInUp" style={{ animationDelay: '0.8s' }}>
       <div className="level-item is-cherry">
         <h5>Confirmed</h5>
-        <h4>[{props.deltas ? props.deltas.confirmeddelta>=0 ? '+'+props.deltas.confirmeddelta : props.deltas.confirmeddelta : ''}]</h4>
+        <h4>
+          [
+          {props.deltas
+            ? props.deltas.confirmeddelta >= 0
+              ? '+' + props.deltas.confirmeddelta
+              : props.deltas.confirmeddelta
+            : ''}
+          ]
+        </h4>
         <h1>{confirmed} </h1>
       </div>
 
       <div className="level-item is-blue">
         <h5 className="heading">Active</h5>
-        <h4>[{props.deltas ? props.deltas.confirmeddelta-props.deltas.recovereddelta-props.deltas.deceaseddelta >=0 ? '+'+(props.deltas.confirmeddelta-props.deltas.recovereddelta-props.deltas.deceaseddelta).toString() : props.deltas.confirmeddelta-props.deltas.recovereddelta-props.deltas.deceaseddelta : ''}]</h4>
+        <h4>
+          [
+          {props.deltas
+            ? props.deltas.confirmeddelta - props.deltas.recovereddelta - props.deltas.deceaseddelta >= 0
+              ? '+' +
+                (props.deltas.confirmeddelta - props.deltas.recovereddelta - props.deltas.deceaseddelta).toString()
+              : props.deltas.confirmeddelta - props.deltas.recovereddelta - props.deltas.deceaseddelta
+            : ''}
+          ]
+        </h4>
         <h1 className="title has-text-info">{active}</h1>
       </div>
 
       <div className="level-item is-green">
         <h5 className="heading">Recovered</h5>
-        <h4>[{props.deltas ? props.deltas.recovereddelta>=0 ? '+'+props.deltas.recovereddelta : props.deltas.recovereddelta : ''}]</h4>
+        <h4>
+          [
+          {props.deltas
+            ? props.deltas.recovereddelta >= 0
+              ? '+' + props.deltas.recovereddelta
+              : props.deltas.recovereddelta
+            : ''}
+          ]
+        </h4>
         <h1 className="title has-text-success">{recoveries} </h1>
       </div>
 
       <div className="level-item is-gray">
         <h5 className="heading">Deceased</h5>
-        <h4>[{props.deltas ? props.deltas.deceaseddelta>=0 ? '+'+props.deltas.deceaseddelta : props.deltas.deceaseddelta : ''}]</h4>
+        <h4>
+          [
+          {props.deltas
+            ? props.deltas.deceaseddelta >= 0
+              ? '+' + props.deltas.deceaseddelta
+              : props.deltas.deceaseddelta
+            : ''}
+          ]
+        </h4>
         <h1 className="title has-text-grey">{deaths}</h1>
       </div>
-
     </div>
   );
 }
