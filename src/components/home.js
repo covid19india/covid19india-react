@@ -26,17 +26,21 @@ function Home(props) {
   }, [fetched]);
 
   const getStates = () => {
-    axios.get('https://api.covid19india.org/data.json')
-        .then((response)=>{
-          setStates(response.data.statewise);
-          setTimeseries(response.data.cases_time_series);
-          setLastUpdated(response.data.statewise[0].lastupdatedtime.slice(0, 15)+response.data.statewise[0].lastupdatedtime.slice(18));
-          setDeltas(response.data.key_values[0]);
-          setFetched(true);
-        })
-        .catch((err)=>{
-          console.log(err);
-        });
+    try {
+      axios.get('https://api.covid19india.org/data.json')
+          .then((response) => {
+            setStates(response.data.statewise);
+            setTimeseries(response.data.cases_time_series);
+            setLastUpdated(response.data.statewise[0].lastupdatedtime.slice(0, 15) + response.data.statewise[0].lastupdatedtime.slice(18));
+            setDeltas(response.data.key_values[0]);
+            setFetched(true);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
