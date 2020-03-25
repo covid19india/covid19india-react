@@ -14,16 +14,20 @@ function Navbar(props) {
           transition: "all 0.3s ease-in-out"
         }}
       >
-        <img
-          className="fadeInUp"
-          src="/icon.png"
-          style={{
-            animationDelay: "0.0s",
-            width: view === "Clusters" ? "1.5rem" : "",
-            height: view === "Clusters" ? "1.5rem" : "",
-            transition: "all 0.3s ease-in-out"
-          }}
-        />
+        <Link to="/" onClick={()=>{
+            setView('Home');
+          }}>
+          <img
+            className="fadeInUp"
+            src="/icon.png"
+            style={{
+              animationDelay: "0.0s",
+              width: view === "Clusters" ? "1.5rem" : "",
+              height: view === "Clusters" ? "1.5rem" : "",
+              transition: "all 0.3s ease-in-out"
+            }}
+          />
+        </Link>
 
         <div className="navbar-left">
           <Link
