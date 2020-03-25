@@ -35,10 +35,10 @@ function Navbar(props) {
             <span className={`fadeInUp ${view==='Helpful Links' ? 'focused' : ''}`} style={{animationDelay: '0.4s'}}>Helpful Links</span>
           </Link>
 
-          <Link to="/faqs" onClick={()=>{
-            setView('FAQs');
+          <Link to="/faq" onClick={()=>{
+            setView('FAQ');
           }}>
-            <span className={`fadeInUp ${view==='FAQs' ? 'focused' : ''}`} style={{animationDelay: '0.4s'}}>FAQs</span>
+            <span className={`fadeInUp ${view==='FAQ' ? 'focused' : ''}`} style={{animationDelay: '0.4s'}}>FAQ</span>
           </Link>
         </div>
 

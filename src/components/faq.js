@@ -5,10 +5,10 @@ function FAQ(props) {
   const [faq, setFaq] = useState([]);
 
   useEffect(()=>{
-    getFAQs();
+    getFAQ();
   }, [1]);
 
-  const getFAQs = () => {
+  const getFAQ = () => {
     axios.get('https://api.covid19india.org/faq.json')
         .then((response) => {
           setFaq(response.data.faq);
