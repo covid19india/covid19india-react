@@ -491,11 +491,27 @@ table {
         background: $gray-hover;
       }
     }
+    tr:nth-child(odd){
+      background-color: $light;
+      &:hover {
+        background: $gray-hover;
+      }
+    }
     td {
       padding: 0.25rem;
       font-size: 0.9rem;
       border-radius: 5px;
       text-align: left;
+      .deltas {
+        margin-left: 0.25rem;
+        font-size: 11px !important;
+        svg {
+          width: 9px;
+          height: 9px;
+          stroke-width: 3;
+          vertical-align: -0.25px;
+        }
+      }
     }
     td:first-child {
       text-align: left;
@@ -964,6 +980,11 @@ footer {
       width: 100%;
       margin-left: 1rem;
       margin-right: 1rem;
+    }
+  }
+  table {
+    td {
+      max-width: 6.75rem;
     }
   }
 }
