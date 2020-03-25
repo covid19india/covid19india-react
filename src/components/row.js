@@ -10,10 +10,10 @@ function Row(props) {
   return (
     <tr className={props.total ? 'is-total' : ''}>
       <td style={{fontWeight: 600}}>{state.state}</td>
-      <td>{state.confirmed}</td>
-      <td style={{color: parseInt(state.active)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.active)===0 ? '-' : state.active}</td>
-      <td style={{color: parseInt(state.recovered)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.recovered)===0 ? '-' : state.recovered}</td>
-      <td style={{color: parseInt(state.deaths)===0 ? '#B5B5B5' : 'inherit'}}>{parseInt(state.deaths)===0 ? '-' : state.deaths}</td>
+      <td style={{color: '#000000', background: "#ff073a"}}>{state.confirmed}</td>
+      <td style={{color: '#000000', background: "#007bff99"}}>{parseInt(state.active)===0 ? '-' : state.active}</td>
+      <td style={{color: '#000000', background: "#28a74599"}}>{parseInt(state.recovered)===0 ? '-' : state.recovered}</td>
+      <td style={{color: '#000000', background: "#6c757d"}}>{parseInt(state.deaths)===0 ? '-' : state.deaths}</td>
     </tr>
   );
 }
