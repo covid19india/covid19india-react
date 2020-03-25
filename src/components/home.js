@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import * as Icon from 'react-feather';
 import axios from 'axios';
 import {format, zonedTimeToUtc} from 'date-fns-tz';
 import {formatDistance} from 'date-fns';
@@ -9,6 +8,7 @@ import Level from './level';
 import ChoroplethMap from './choropleth';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
+import Banner from './banner';
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -41,25 +41,19 @@ function Home(props) {
 
   return (
     <div className="Home">
-
       <div className="home-left">
 
         <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
-          <h1>India COVID-19 Tracker</h1>
           <div className="header-mid">
-            <a className="button" href="https://bit.ly/patientdb" target="_noblank">
-              <Icon.Database /><span>Crowdsourced Patient Database&nbsp;</span>
-            </a>
+            <div className="titles">
+              <h1>India COVID-19 Tracker</h1>
+              <h6>A Crowdsourced Initiative</h6>
+            </div>
             <div className="last-update">
               <h6>Last Reported Case</h6>
               <h3>{lastUpdated.length===0 ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
             </div>
           </div>
-
-          <a href="https://bit.ly/covid19crowd" className="button telegram" target="_noblank">
-            <Icon.MessageCircle />
-            <span>Join Telegram to Collaborate!</span>
-          </a>
         </div>
 
         <Level data={states} deltas={deltas}/>

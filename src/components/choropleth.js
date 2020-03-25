@@ -71,7 +71,7 @@ function ChoroplethMap(props) {
         const n = Math.floor(generatedLabels[i]);
         return `${n}+`;
       } else {
-        const n1 = Math.floor(generatedLabels[i]);
+        const n1 = 1 + Math.floor(generatedLabels[i]);
         const n2 = Math.floor(generatedLabels[i+1]);
         return `${n1} - ${n2}`;
       }
@@ -82,7 +82,7 @@ function ChoroplethMap(props) {
 
     svg.append('g')
         .attr('class', 'legendLinear')
-        .attr('transform', 'translate(1, 375)');
+        .attr('transform', 'translate(1, 450)');
 
     const numCells = 6;
     const delta = Math.floor(statistic.maxConfirmed / (numCells - 1));
@@ -119,7 +119,8 @@ function ChoroplethMap(props) {
           .enter().append('path')
           .attr('fill', function(d) {
             const n = unemployment.get(d.properties.ST_NM.toLowerCase());
-            return d3.interpolateReds(d.confirmed = (n>0)*0.05 + n/statistic.maxConfirmed*maxInterpolation);
+            const color = (n == 0) ? '#ffffff' : d3.interpolateReds(maxInterpolation * n/statistic.maxConfirmed);
+            return color;
           })
           .attr('d', path)
           .attr('pointer-events', 'all')
@@ -131,7 +132,8 @@ function ChoroplethMap(props) {
           .on('mouseleave', (d) => {
             const n = unemployment.get(d.properties.ST_NM.toLowerCase());
             const target = d3.event.target;
-            d3.select(target).attr('fill', d3.interpolateReds(d.confirmed = (n>0)*0.05 + n/statistic.maxConfirmed*maxInterpolation)).attr('stroke', 'None');
+            const color = (n == 0) ? '#ffffff' : d3.interpolateReds(maxInterpolation * n/statistic.maxConfirmed);
+            d3.select(target).attr('fill', color).attr('stroke', 'None');
           })
           .style('cursor', 'pointer')
           .append('title')
