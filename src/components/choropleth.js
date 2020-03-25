@@ -49,6 +49,11 @@ function ChoroplethMap(props) {
     });
   };
 
+  const handleMouseLeave = (name) => {
+    setState(states[1]);
+    setIndex(0);
+  };
+
   const mapData = (selector) => {
     const svg = d3.select(selector);
     const width = +svg.attr('width');
@@ -129,6 +134,7 @@ function ChoroplethMap(props) {
             d3.select(target.parentNode.appendChild(target)).attr('stroke', '#ff073a').attr('stroke-width', 2);
           })
           .on('mouseleave', (d) => {
+            handleMouseLeave();
             const n = unemployment.get(d.properties.ST_NM.toLowerCase());
             const target = d3.event.target;
             d3.select(target).attr('fill', d3.interpolateReds(d.confirmed = (n>0)*0.05 + n/statistic.maxConfirmed*maxInterpolation)).attr('stroke', 'None');
