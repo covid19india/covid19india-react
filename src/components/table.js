@@ -43,9 +43,9 @@ function Table(props) {
       }
 
       if (sortData.isAscending) {
-        return value1 > value2? 1 : -1;
+        return value1 > value2 ? 1 : (value1 == value2) && StateData1['state'] > StateData2['state'] ? 1 : -1;
       } else {
-        return value1 > value2? -1 : 1;
+        return value1 < value2 ? 1 : (value1 == value2) && StateData1['state'] > StateData2['state'] ? 1 : -1;
       }
     });
     {/* console.log(states);*/}
