@@ -208,15 +208,24 @@ h6 {
 }
 
 .Banner {
-  background: black;
-  width: 100vw;
-  color: $purple;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  line-height: 20px;
+  background: $purple-light;
   font-family: 'Archia';
-  padding: 0.5rem;
-  [class^='styles_newsticker'], [class*='styles_newsticker'] {
-    min-width: auto !important;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $purple;
+  .snippet {
+    align-self: center;
+    width: calc(100%-10rem);
+    word-wrap: break-word;
+    padding: 1.5rem;
+    text-align: center;
   }
 }
+
 
 .Navbar {
   display: flex;
