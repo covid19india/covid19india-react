@@ -274,6 +274,7 @@ h6 {
   align-self: center;
   justify-content: space-between;
   padding-top: 2rem;
+  margin-bottom: 1rem;
   h1, h6 {
     margin: 0;
   }
@@ -959,6 +960,11 @@ footer {
   }
   .Banner {
     height: 7rem;
+    .snippet {
+      width: 100%;
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
   }
 }
 
