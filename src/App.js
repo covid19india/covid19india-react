@@ -40,10 +40,10 @@ function App() {
 
         </div>
         <div id='footerButtons'>
-          <a className="button" href="http://portal.covid19india.org" target="_noblank">
+          <a className="button" href="https://bit.ly/patientdb" target="_noblank">
             <Icon.Database /><span>Crowdsourced Patient Database&nbsp;</span>
           </a>
-          <a href="https://t.me/covid19indiaops" className="button telegram" target="_noblank">
+          <a href="https://bit.ly/covid19crowd" className="button telegram" target="_noblank">
             <Icon.MessageCircle />
             <span>Join Telegram to Collaborate!</span>
           </a>
