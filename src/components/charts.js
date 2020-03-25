@@ -167,8 +167,8 @@ function Charts(props) {
 
 
   return (
-    <div className="charts-header" >
-      <Line data = {dataset} options={ options } />
+    <div className="charts-header fadeInUp" style={{animationDelay: '1.2s'}} >
+      <Line data = { dataset } options={ options } />
     </div>
   );
 }
