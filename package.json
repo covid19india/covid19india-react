@@ -46,7 +46,7 @@
   },
   "scripts": {
     "start": "PORT=3001 react-scripts start css-watch",
-    "build": "react-scripts build",
+    "build": "react-scripts build && cp build/index.html build/404.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "css-build": "node-sass --omit-source-map-url sass/custom.scss src/App.css",
