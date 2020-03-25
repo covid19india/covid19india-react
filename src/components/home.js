@@ -8,6 +8,7 @@ import Level from './level';
 import ChoroplethMap from './choropleth';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
+import Banner from './banner';
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -40,7 +41,6 @@ function Home(props) {
 
   return (
     <div className="Home">
-
       <div className="home-left">
 
         <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
