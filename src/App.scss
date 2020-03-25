@@ -729,6 +729,16 @@ table {
         stroke: transparent;
       }
     }
+    &.is-blue {
+      background: $blue-light;
+      .domain, .tick, line {
+        stroke: $blue;
+      }
+      text {
+        color: $blue-mid;
+        stroke: transparent;
+      }
+    }
   }
 }
 

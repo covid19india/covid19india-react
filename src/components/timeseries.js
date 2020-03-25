@@ -15,6 +15,8 @@ function TimeSeries(props) {
   const graphElement4 = useRef(null);
   const graphElement5 = useRef(null);
   const graphElement6 = useRef(null);
+  const graphElement7 = useRef(null);
+  const graphElement8 = useRef(null);
 
   useEffect(()=>{
     if (props.timeseries.length>1) {
@@ -40,7 +42,7 @@ function TimeSeries(props) {
   }, [update]);
 
   const refreshGraphs = () => {
-    const graphs = [graphElement1, graphElement2, graphElement3, graphElement4, graphElement5, graphElement6];
+    const graphs = [graphElement1, graphElement2, graphElement3, graphElement4, graphElement5, graphElement6, graphElement7, graphElement8];
     for (let i=0; i<=graphs.length; i++) {
       if (i===graphs.length) {
         graphData(timeseries);
@@ -64,6 +66,8 @@ function TimeSeries(props) {
     const svg4 = d3.select(graphElement4.current);
     const svg5 = d3.select(graphElement5.current);
     const svg6 = d3.select(graphElement6.current);
+    const svg7 = d3.select(graphElement7.current);
+    const svg8 = d3.select(graphElement8.current);
 
     const dateMin = new Date(data[0]['date'] + '2020');
     var dateMax = new Date(data[timeseries.length-1]['date'] + '2020');
@@ -103,9 +107,20 @@ function TimeSeries(props) {
         .attr('class', 'axis')
         .call(d3.axisBottom(x));
 
+    svg7.append('g')
+        .attr('transform', 'translate(0,' + height + ')')
+        .attr('class', 'axis')
+        .call(d3.axisBottom(x));
+
+    svg8.append('g')
+        .attr('transform', 'translate(0,' + height + ')')
+        .attr('class', 'axis')
+        .call(d3.axisBottom(x));
+
     const totalConfirmed = data[timeseries.length-1]['totalconfirmed'];
     const totalRecovered = data[timeseries.length-1]['totalrecovered'];
     const totalDeceased = data[timeseries.length-1]['totaldeceased'];
+    const totalActive = totalConfirmed - totalRecovered - totalDeceased;
 
     const y1 = d3.scaleLinear()
         .domain([-totalConfirmed/10, totalConfirmed])
@@ -119,9 +134,14 @@ function TimeSeries(props) {
         .domain([-totalDeceased/10, totalDeceased])
         .range([height, margin.top]);
 
+    const y7 = d3.scaleLinear()
+        .domain([-totalActive/10, totalActive])
+        .range([height, margin.top]);
+
     const maxDailyConfirmed = d3.max(data, function(d) { return +d['dailyconfirmed']; })
     const maxDailyRecovered = d3.max(data, function(d) { return +d['dailyrecovered']; })
     const maxDailyDeceased = d3.max(data, function(d) { return +d['dailydeceased']; })
+    const maxDailyActive = maxDailyConfirmed - maxDailyRecovered - maxDailyDeceased
 
     const y4 = d3.scaleLinear()
         .domain([-maxDailyConfirmed/10, maxDailyConfirmed])
@@ -133,6 +153,10 @@ function TimeSeries(props) {
 
     const y6 = d3.scaleLinear()
         .domain([-maxDailyDeceased/10, maxDailyDeceased])
+        .range([height, margin.top]);
+
+    const y8 = d3.scaleLinear()
+        .domain([-maxDailyActive/10, maxDailyActive])
         .range([height, margin.top]);
 
     /* Y-Axis */
@@ -171,6 +195,22 @@ function TimeSeries(props) {
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
         .call(d3.axisRight(mode ? y1 : y6).ticks(5).tickFormat((tick) => {
+          if (Math.floor(tick) !== tick) {
+            return;
+          }
+          return tick;
+        })
+        .tickPadding(5));
+
+    svg7.append('g')
+        .attr('transform', `translate(${width}, ${0})`)
+        .attr('class', 'axis')
+        .call(d3.axisRight(mode ? y1 : y7).ticks(5).tickPadding(5));
+
+    svg8.append('g')
+        .attr('transform', `translate(${width}, ${0})`)
+        .attr('class', 'axis')
+        .call(d3.axisRight(mode ? y1 : y8).ticks(5).tickFormat((tick) => {
           if (Math.floor(tick) !== tick) {
             return;
           }
@@ -304,6 +344,49 @@ function TimeSeries(props) {
           d3.select(d3.event.target).attr('r', '3');
         });
 
+    svg7.append('path')
+        .datum(data)
+        .attr('fill', 'none')
+        .attr('stroke', '#007bff99')
+        .attr('stroke-width', 5)
+        .attr('cursor', 'pointer')
+        .attr('d', d3.line()
+            .x(function(d) {
+              return x(new Date(d['date']+'2020'));
+            })
+            .y(function(d) {
+              if (mode) return y1(d['totalconfirmed'] -d['totalrecovered'] -d['totaldeceased']);
+              else return y7(d['totalconfirmed'] -d['totalrecovered'] -d['totaldeceased']);
+            })
+            .curve(d3.curveCardinal),
+        );
+
+    svg7.selectAll('.dot')
+        .data(data)
+        .enter()
+        .append('circle')
+        .attr('fill', '#007bff')
+        .attr('stroke', '#007bff')
+        .attr('r', 3)
+        .attr('cursor', 'pointer')
+        .attr('cx', function(d) {
+          return x(new Date(d['date']+'2020'));
+        })
+        .attr('cy', function(d) {
+          if (mode) return y1(d['totalconfirmed'] -d['totalrecovered'] -d['totaldeceased']);
+          return y7(d['totalconfirmed'] -d['totalrecovered'] -d['totaldeceased']);
+        })
+        .on('mouseover', (d, i) => {
+          d3.select(d3.event.target).attr('r', '5');
+          setDatapoint(d);
+          setIndex(i);
+        })
+        .on('mouseout', (d) => {
+          d3.select(d3.event.target).attr('r', '3');
+        });
+
+
+
     /* Daily */
 
     svg4.append('path')
@@ -432,6 +515,50 @@ function TimeSeries(props) {
         .on('mouseout', (d) => {
           d3.select(d3.event.target).attr('r', '3');
         });
+
+    svg8.append('path')
+        .datum(data)
+        .attr('fill', 'none')
+        .attr('stroke', '#007bff99')
+        .attr('stroke-width', 5)
+        .attr('cursor', 'pointer')
+        .attr('d', d3.line()
+            .x(function(d) {
+              return x(new Date(d['date']+'2020'));
+            })
+            .y(function(d) {
+              if (mode) return y1(d['dailyconfirmed'] -d['dailyrecovered'] -d['dailydeceased']);
+              return y8(d['dailyconfirmed'] -d['dailyrecovered'] -d['dailydeceased']);
+            })
+            .curve(d3.curveCardinal),
+        );
+
+    svg8.selectAll('.dot')
+        .data(data)
+        .enter()
+        .append('circle')
+        .attr('fill', '#007bff')
+        .attr('stroke', '#007bff')
+        .attr('r', 3)
+        .attr('cursor', 'pointer')
+        .attr('cx', function(d) {
+          return x(new Date(d['date']+'2020'));
+        })
+        .attr('cy', function(d) {
+          if (mode) return y1(d['dailyconfirmed'] -d['dailyrecovered'] -d['dailydeceased']);
+          return y8(d['dailyconfirmed'] -d['dailyrecovered'] -d['dailydeceased']);
+        })
+        .on('mouseover', (d, i) => {
+          d3.select(d3.event.target).attr('r', '5');
+          setDatapoint(d);
+          setIndex(i);
+        })
+        .on('mouseout', (d) => {
+          d3.select(d3.event.target).attr('r', '3');
+        });
+
+
+
   };
 
   return (
@@ -440,7 +567,7 @@ function TimeSeries(props) {
 
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed {datapoint['date']}</h5>
+            <h5>Confirmed</h5><h5>{datapoint['date']}</h5>
             <div className="stats-bottom">
               <h2>{datapoint['totalconfirmed']}</h2>
               <h6>{timeseries.length>0 && index!==0 ? timeseries[index]['totalconfirmed'] - timeseries[index-1]['totalconfirmed']>=0 ? '+'+(timeseries[index]['totalconfirmed'] - timeseries[index-1]['totalconfirmed']) : (timeseries[index]['totalconfirmed'] - timeseries[index-1]['totalconfirmed']) : ''}</h6>
@@ -449,9 +576,20 @@ function TimeSeries(props) {
           <svg ref={graphElement1} width="650" height="200" viewBox="0 0 650 200" preserveAspectRatio="xMidYMid meet"/>
         </div>
 
+        <div className="svg-parent is-blue">
+          <div className="stats is-blue">
+            <h5>Active</h5><h5>{datapoint['date']}</h5>
+            <div className="stats-bottom">
+              <h2>{datapoint['totalconfirmed'] -datapoint['totalrecovered'] -datapoint['totaldeceased']}</h2>
+              <h6>{timeseries.length>0 && index!==0 ? (timeseries[index]['totalconfirmed'] - timeseries[index]['totalrecovered'] - timeseries[index]['totaldeceased']) - (timeseries[index-1]['totalconfirmed'] - timeseries[index-1]['totalrecovered'] - timeseries[index-1]['totaldeceased'])>=0 ? '+'+((timeseries[index]['totalconfirmed'] - timeseries[index]['totalrecovered'] - timeseries[index]['totaldeceased']) - (timeseries[index-1]['totalconfirmed'] - timeseries[index-1]['totalrecovered'] - timeseries[index-1]['totaldeceased'])) : ((timeseries[index]['totalconfirmed'] - timeseries[index]['totalrecovered'] - timeseries[index]['totaldeceased']) - (timeseries[index-1]['totalconfirmed'] - timeseries[index-1]['totalrecovered'] - timeseries[index-1]['totaldeceased'])) : ''}</h6>
+            </div>
+          </div>
+          <svg ref={graphElement7} width="650" height="200" viewBox="0 0 650 200" preserveAspectRatio="xMidYMid meet"/>
+        </div>
+
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>Recovered {datapoint['date']}</h5>
+            <h5>Recovered</h5><h5>{datapoint['date']}</h5>
             <div className="stats-bottom">
               <h2>{datapoint['totalrecovered']}</h2>
               <h6>{timeseries.length>0 && index!==0 ? timeseries[index]['totalrecovered'] - timeseries[index-1]['totalrecovered']>=0 ? '+'+(timeseries[index]['totalrecovered'] - timeseries[index-1]['totalrecovered']) : (timeseries[index]['totalrecovered'] - timeseries[index-1]['totalrecovered']) : ''}</h6>
@@ -462,7 +600,7 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
-            <h5>Deceased <br/>{datapoint['date']}</h5>
+            <h5>Deceased</h5><h5>{datapoint['date']}</h5>
             <div className="stats-bottom">
               <h2>{datapoint['totaldeceased']}</h2>
               <h6>{timeseries.length>0 && index!==0 ? timeseries[index]['totaldeceased'] - timeseries[index-1]['totaldeceased']>=0 ? '+'+(timeseries[index]['totaldeceased'] - timeseries[index-1]['totaldeceased']) : (timeseries[index]['totaldeceased'] - timeseries[index-1]['totaldeceased']) : ''}</h6>
@@ -477,7 +615,7 @@ function TimeSeries(props) {
 
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed {datapoint['date']}</h5>
+            <h5>Confirmed</h5><h5>{datapoint['date']}</h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailyconfirmed']}</h2>
               <h6>{timeseries.length>0 && index!==0 ? timeseries[index]['dailyconfirmed'] - timeseries[index-1]['dailyconfirmed']>=0 ? '+'+(timeseries[index]['dailyconfirmed'] - timeseries[index-1]['dailyconfirmed']) : (timeseries[index]['dailyconfirmed'] - timeseries[index-1]['dailyconfirmed']) : ''}</h6>
@@ -486,9 +624,20 @@ function TimeSeries(props) {
           <svg ref={graphElement4} width="650" height="200" viewBox="0 0 650 200" preserveAspectRatio="xMidYMid meet"/>
         </div>
 
+        <div className="svg-parent is-blue">
+          <div className="stats is-blue">
+            <h5>Active</h5><h5>{datapoint['date']}</h5>
+            <div className="stats-bottom">
+              <h2>{datapoint['dailyconfirmed'] - datapoint['dailyrecovered'] - datapoint['dailydeceased']}</h2>
+              <h6>{timeseries.length>0 && index!==0 ? (timeseries[index]['dailyconfirmed'] - timeseries[index]['dailyrecovered'] - timeseries[index]['dailydeceased']) - (timeseries[index-1]['dailyconfirmed'] - timeseries[index-1]['dailyrecovered'] - timeseries[index-1]['dailydeceased'])>=0 ? '+'+((timeseries[index]['dailyconfirmed'] - timeseries[index]['dailyrecovered'] - timeseries[index]['dailydeceased']) - (timeseries[index-1]['dailyconfirmed'] - timeseries[index-1]['dailyrecovered'] - timeseries[index-1]['dailydeceased'])) : ((timeseries[index]['dailyconfirmed'] - timeseries[index]['dailyrecovered'] - timeseries[index]['dailydeceased']) - (timeseries[index-1]['dailyconfirmed'] - timeseries[index-1]['dailyrecovered'] - timeseries[index-1]['dailydeceased'])) : ''}</h6>
+            </div>
+          </div>
+          <svg ref={graphElement8} width="650" height="200" viewBox="0 0 650 200" preserveAspectRatio="xMidYMid meet"/>
+        </div>
+
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>Recovered {datapoint['date']}</h5>
+            <h5>Recovered</h5><h5>{datapoint['date']}</h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailyrecovered']}</h2>
               <h6>{timeseries.length>0 && index!==0 ? timeseries[index]['dailyrecovered'] - timeseries[index-1]['dailyrecovered']>=0 ? '+'+(timeseries[index]['dailyrecovered'] - timeseries[index-1]['dailyrecovered']) : (timeseries[index]['dailyrecovered'] - timeseries[index-1]['dailyrecovered']) : ''}</h6>
@@ -499,7 +648,7 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
-            <h5>Deceased <br/>{datapoint['date']}</h5>
+            <h5>Deceased</h5><h5>{datapoint['date']}</h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailydeceased']}</h2>
               <h6>{timeseries.length>0 && index!==0 ? timeseries[index]['dailydeceased'] - timeseries[index-1]['dailydeceased']>=0 ? '+'+(timeseries[index]['dailydeceased'] - timeseries[index-1]['dailydeceased']) : (timeseries[index]['dailydeceased'] - timeseries[index-1]['dailydeceased']) : ''}</h6>
