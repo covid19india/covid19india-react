@@ -488,6 +488,7 @@ table {
           margin: 0;
           right: 0;
           stroke-width: 4px;
+          margin-top: 0.15rem;
           margin-left: 0.25rem;
           color: $gray-mid;
         }
@@ -511,7 +512,7 @@ table {
       }
       &.spacer {
         height: 0.5rem;
-        background: transparent !important;
+        background: white !important;
       }
     }
     & > tr:nth-child(odd) {
@@ -560,11 +561,34 @@ table {
         padding: 0.45rem;
         color: $gray-dark;
         background: $gray-light;
+        .heading-content {
+          display: flex;
+          justify-content: space-between;
+          position: relative;
+          flex-direction: row;
+          height: 0.9rem;
+          align-items: center;
+          abbr {
+            text-align: right;
+          }
+          svg {
+            width: 10px;
+            margin: 0;
+            right: 0;
+            stroke-width: 4px;
+            margin-left: 0.25rem;
+            margin-top: 0.15rem;
+            color: $gray-mid;
+          }
+        }
       }
     }
     max-width: 10rem;
     .district {
       transform: translateX(1rem);
+      .unknown {
+        font-style: italic;
+      }
     }
   }
   .affected-count {

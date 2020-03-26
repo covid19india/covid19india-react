@@ -10,8 +10,8 @@ function Table(props) {
   const [districts, setDistricts] = useState({});
   const [count, setCount] = useState(0);
   const [sortData, setSortData] = useState({
-    sortColumn: 'confirmed',
-    isAscending: false,
+    sortColumn: localStorage.getItem('state.sortColumn')? localStorage.getItem('state.sortColumn') : 'confirmed',
+    isAscending: localStorage.getItem('state.isAscending')? localStorage.getItem('state.isAscending') == 'true' : false,
   });
 
   useEffect(()=>{
@@ -23,7 +23,7 @@ function Table(props) {
   }, [props.states]);
 
   useEffect(() => {
-    if(props.states[0]) {
+    if (props.states[0]) {
       setRevealedStates(props.states.reduce((a, state) => {
         return ({...a, [state.state]: false});
       }, {}));
@@ -33,7 +33,7 @@ function Table(props) {
   useEffect(()=>{
     if (states.length>0) {
       let length = 0;
-      
+
       props.states.map((state, i) => {
         if (i!==0 && state.confirmed>0) length+=1;
         if (i===props.states.length-1) setCount(length);
@@ -83,10 +83,13 @@ function Table(props) {
 
   const handleSort = (e, props) => {
     const currentsortColumn = e.currentTarget.querySelector('abbr').getAttribute('title').toLowerCase();
+    const isAscending = sortData.sortColumn == currentsortColumn? !sortData.isAscending : sortData.sortColumn === 'state';
     setSortData({
       sortColumn: currentsortColumn,
-      isAscending: sortData.sortColumn == currentsortColumn? !sortData.isAscending : sortData.sortColumn === 'state',
+      isAscending: isAscending,
     });
+    localStorage.setItem('state.sortColumn', currentsortColumn);
+    localStorage.setItem('state.isAscending', isAscending);
   };
 
   const handleReveal = (state) => {
@@ -107,10 +110,10 @@ function Table(props) {
             <th className="sticky state-heading" onClick={(e) => handleSort(e, props)} >
               <div className='heading-content'>
                 <abbr title="State">
-                    State/UT
+                  State/UT
                 </abbr>
                 <div style={{display: sortData.sortColumn === 'state' ? 'initial': 'none'}}>
-                  {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+                  {sortData.isAscending ? <Icon.ArrowUp/> : <Icon.ArrowDown/>}
                 </div>
               </div>
             </th>
@@ -118,7 +121,7 @@ function Table(props) {
               <div className='heading-content'>
                 <abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfmd' : 'Confirmed'}</abbr>
                 <div style={{display: sortData.sortColumn === 'confirmed' ? 'initial': 'none'}}>
-                  {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+                  {sortData.isAscending ? <Icon.ArrowUp/> : <Icon.ArrowDown/>}
                 </div>
               </div>
             </th>
@@ -126,16 +129,16 @@ function Table(props) {
               <div className='heading-content'>
                 <abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'A' : 'Actv' : 'Active'}</abbr>
                 <div style={{display: sortData.sortColumn === 'active' ? 'initial': 'none'}}>
-                  {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+                  {sortData.isAscending ? <Icon.ArrowUp/> : <Icon.ArrowDown/>}
                 </div>
               </div>
             </th>
-            <th  className="sticky" onClick={(e) => handleSort(e, props)}>
+            <th className="sticky" onClick={(e) => handleSort(e, props)}>
               <div className='heading-content'>
                 <abbr className={`${window.innerWidth <=769 ? 'is-green' : ''}`} title="Recovered">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'R' : 'Rcvrd' : 'Recovered'}</abbr>
                 <div className={ sortData.sortColumn === 'recovered'? 'sort-black' : ''}></div>
                 <div style={{display: sortData.sortColumn === 'recovered' ? 'initial': 'none'}}>
-                  {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+                  {sortData.isAscending ? <Icon.ArrowUp/> : <Icon.ArrowDown/>}
                 </div>
               </div>
             </th>
@@ -143,7 +146,7 @@ function Table(props) {
               <div className='heading-content'>
                 <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'Dcsd' : 'Deceased'}</abbr>
                 <div style={{display: sortData.sortColumn === 'deaths' ? 'initial': 'none'}}>
-                  {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+                  {sortData.isAscending ? <Icon.ArrowUp/> : <Icon.ArrowDown/>}
                 </div>
               </div>
             </th>
