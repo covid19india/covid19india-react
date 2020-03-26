@@ -61,6 +61,20 @@ function Navbar(props) {
           </Link>
 
           <Link
+            to="/deepdive"
+            onClick={() => {
+              setView("DeepDive");
+            }}
+          >
+            <span
+              className={`fadeInUp ${view === "Network Map" ? "focused" : ""}`}
+              style={{ animationDelay: "0.3s" }}
+            >
+              Deep dive
+            </span>
+          </Link>
+
+          <Link
             to="/links"
             onClick={() => {
               setView("Helpful Links");

@@ -8,6 +8,7 @@ import Navbar from './components/navbar';
 import Links from './components/links';
 import Summary from './components/summary';
 import Cluster from './components/cluster';
+import DeepDive from './components/deepdive';
 import FAQ from './components/faq';
 import Banner from './components/banner';
 
@@ -28,6 +29,7 @@ function App() {
               <Route exact path="/links" render={(props) => <Links {...props}/>} />
               <Route exact path="/summary" render={(props) => <Summary {...props}/>} />
               <Route exact path="/clusters" render={(props) => <Cluster {...props}/>} />
+              <Route exact path="/deepdive" render={(props) => <DeepDive {...props}/>} />
               <Route exact path="/faq" render={(props) => <FAQ {...props}/>} />
             </Switch>
           </div>
