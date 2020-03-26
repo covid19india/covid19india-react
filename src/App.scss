@@ -991,6 +991,7 @@ footer {
       width: 100%;
       display: flex;
       flex-direction: column;
+      border-bottom: 2px solid $gray-hover;
     }
   }
   .link, .faq {
@@ -1008,6 +1009,10 @@ footer {
       margin-right: -1rem;
       cursor: pointer;
     }
+  }
+  .timeseries-header {
+    padding-top: 30px;
+    border-top: 2px solid $gray-hover;
   }
   .timeseries {
     .svg-parent {
