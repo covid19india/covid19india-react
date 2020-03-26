@@ -297,29 +297,29 @@ function Minigraph(props) {
 
   return (
     <div className="Minigraph">
-      <div className="graph-content is-cherry">
-        <div className="svg-parent fadeInUp" style={{animationDelay: '0.6s'}}>
+      <div className="graph-content is-cherry fadeInUp" style={{animationDelay: '0.6s'}}>
+        <div className="svg-parent">
           <svg ref={graphElement1} width="100" height="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"/>
         </div>
         <h4 className='delta'>[{props.deltas ? props.deltas.confirmeddelta>=0 ? '+'+props.deltas.confirmeddelta : props.deltas.confirmeddelta : ''} Today]</h4>
       </div>
 
-      <div className="graph-content is-blue">
-        <div className="svg-parent is-blue fadeInUp" style={{animationDelay: '0.7s'}}>
+      <div className="graph-content is-blue fadeInUp" style={{animationDelay: '0.7s'}}>
+        <div className="svg-parent is-blue">
           <svg ref={graphElement2} width="100" height="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"/>
         </div>
         <h4 className='delta'>[{props.deltas ? props.deltas.confirmeddelta-props.deltas.recovereddelta-props.deltas.deceaseddelta >=0 ? '+'+(props.deltas.confirmeddelta-props.deltas.recovereddelta-props.deltas.deceaseddelta).toString() : props.deltas.confirmeddelta-props.deltas.recovereddelta-props.deltas.deceaseddelta : ''} Today]</h4>
       </div>
 
-      <div className="graph-content is-green">
-        <div className="svg-parent is-green fadeInUp" style={{animationDelay: '0.8s'}}>
+      <div className="graph-content is-green fadeInUp" style={{animationDelay: '0.8s'}}>
+        <div className="svg-parent is-green">
           <svg ref={graphElement3} width="100" height="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"/>
         </div>
         <h4 className='delta'>[{props.deltas ? props.deltas.recovereddelta>=0 ? '+'+props.deltas.recovereddelta : props.deltas.recovereddelta : ''} Today]</h4>
       </div>
 
-      <div className="graph-content is-gray">
-        <div className="svg-parent is-gray fadeInUp" style={{animationDelay: '0.9s'}}>
+      <div className="graph-content is-gray fadeInUp" style={{animationDelay: '0.9s'}}>
+        <div className="svg-parent is-gray">
           <svg ref={graphElement4} width="100" height="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"/>
         </div>
         <h4 className='delta'>[{props.deltas ? props.deltas.deceaseddelta>=0 ? '+'+props.deltas.deceaseddelta : '+0' : ''} Today]</h4>
