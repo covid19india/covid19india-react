@@ -12,14 +12,14 @@ function Row(props) {
     <tr className={props.total ? 'is-total' : ''}>
       <td style={{fontWeight: 600}}>{state.state}</td>
       <td>
-        {parseInt(state.confirmed)===0 ? '-' : state.active}
+        {parseInt(state.confirmed)===0 ? '-' : state.confirmed}
         <span className="deltas" style={{color: '#ff073a'}}>
           {!state.delta.confirmed==0 && <Icon.ArrowUp/>}
           {state.delta.confirmed > 0 ? `${state.delta.confirmed}` : ''}
         </span>
       </td>
       <td style={{color: parseInt(state.active)===0 ? '#B5B5B5' : 'inherit'}}>
-        {parseInt(state.active)===0 ? '-' : state.active}
+        {parseInt(state.active)==0 ? '-' : state.active}
         <span className="deltas" style={{color: '#007bff'}}>
           {!state.delta.active==0 && <Icon.ArrowUp/>}
           {state.delta.active>0 ? `${state.delta.active}` : ''}
