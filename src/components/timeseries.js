@@ -55,17 +55,20 @@ function TimeSeries(props) {
     setIndex(timeseries.length-1);
 
     const svg1 = d3.select(graphElement1.current);
-    const margin = {top: 20, right: 40, bottom: 25, left: 15};
-    const pwidth = svg1.node().getBoundingClientRect().width;
-    const pheight = svg1.node().getBoundingClientRect().height;
-    const width = pwidth - margin.right;
-    const height = pheight - margin.bottom;
-
     const svg2 = d3.select(graphElement2.current);
     const svg3 = d3.select(graphElement3.current);
     const svg4 = d3.select(graphElement4.current);
     const svg5 = d3.select(graphElement5.current);
     const svg6 = d3.select(graphElement6.current);
+
+    // Margins
+    const margin = {top: 20, right: 40, bottom: 25, left: 15};
+    // Required width
+    let referenceSvg = (props.type === 1) ? svg1 : svg4;
+    const pwidth = referenceSvg.node().getBoundingClientRect().width;
+    const pheight = referenceSvg.node().getBoundingClientRect().height;
+    const width = pwidth - margin.right;
+    const height = pheight - margin.bottom;
 
     var dateMin = new Date(data[0]['date'] + '2020');
     dateMin.setDate(dateMin.getDate() - 1);
