@@ -11,7 +11,12 @@
 
 ## Setup
 ```
+For Linux/unix systems-
+
 npm i && npm start
+
+For windows systems-
+npm i && npm run start-win
 ```
 
 ## Maintainers
