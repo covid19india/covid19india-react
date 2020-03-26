@@ -83,50 +83,21 @@ function TimeSeries(props) {
         .domain([0, timeseries.length])
         .range([margin.left, width]);
 
+    // Arrays of objects
     const svgArray = [svg1, svg2, svg3, svg4, svg5, svg6];
-
     const dataTypes = ['totalconfirmed', 'totalrecovered', 'totaldeceased',
                        'dailyconfirmed', 'dailyrecovered', 'dailydeceased'];
-
+    const colors = ['#ff073a', '#28a745', '#6c757d', '#ff073a', '#28a745', '#6c757d'];
     const maxDataTypes = Array.from({ length: svgArray.length }, (_, i) => {
       return d3.max(data, (d) => { return +d[dataTypes[i]]; })
     })
-
     const yScales = maxDataTypes.map((d) => {
       return d3.scaleLinear()
               .domain([0, d])
               .range([height, margin.top]);
     });
 
-    /* X axis */
-    svgArray.forEach((s) => {
-      s.append('g')
-        .attr('transform', 'translate(0,' + height + ')')
-        .attr('class', 'axis')
-        .call(d3.axisBottom(x)
-          .ticks(width < 400 ? 3 : 5))
-        .call(g => g.selectAll(".tick text")
-          .style("font-size", '10px'));
-    });
-
-    /* Y axis */
-    svgArray.forEach((s, i) => {
-      s.append('g')
-        .attr('transform', `translate(${width}, ${0})`)
-        .attr('class', 'axis')
-        .call(d3.axisRight(mode ? yScales[0] : yScales[i])
-          .ticks(4)
-          .tickPadding(5)
-          .tickFormat((tick) => {
-            if (Math.floor(tick) === tick) { return tick; }
-          }))
-        .call(g => g.selectAll(".tick text")
-          .style("font-size", '10px'));
-      });
-
     /* Focus dots */
-    const colors = ['#ff073a', '#28a745', '#6c757d', '#ff073a', '#28a745', '#6c757d'];
-
     var focus = svgArray.map((d, i) => {
       const y = mode ? yScales[0] : yScales[i];
       return d.append('g')
@@ -163,14 +134,35 @@ function TimeSeries(props) {
       }
     };
 
-    svgArray.forEach(function (s) {
-        s.on("mousemove", mousemove).on("touchmove", mousemove)
-         .on("mouseout", mouseout).on("touchend", mouseout);
-    });
-
-
-    /* Paths */
+    /* Begin drawing chart */
     svgArray.forEach((s, i) => {
+      /* X axis */
+      s.append('g')
+        .attr('transform', 'translate(0,' + height + ')')
+        .attr('class', 'axis')
+        .call(d3.axisBottom(x)
+          .ticks(width < 400 ? 3 : 5))
+        .call(g => g.selectAll(".tick text")
+          .style("font-size", '10px'));
+
+      /* Y axis */
+      s.append('g')
+        .attr('transform', `translate(${width}, ${0})`)
+        .attr('class', 'axis')
+        .call(d3.axisRight(mode ? yScales[0] : yScales[i])
+          .ticks(4)
+          .tickPadding(5)
+          .tickFormat((tick) => {
+            if (Math.floor(tick) === tick) { return tick; }
+          }))
+        .call(g => g.selectAll(".tick text")
+          .style("font-size", '10px'));
+
+      /* Focus dots */
+      s.on("mousemove", mousemove).on("touchmove", mousemove)
+        .on("mouseout", mouseout).on("touchend", mouseout);
+
+      /* Paths */
       s.selectAll('stem-line')
         .data(data)
         .enter()
@@ -183,10 +175,8 @@ function TimeSeries(props) {
         .attr('y1', height)
         .attr('x2', (d) => { return x(new Date(d['date']+'2020'));})
         .attr('y2', (d) => { return mode ? yScales[0](d[dataTypes[i]]) : yScales[i](d[dataTypes[i]]);});
-    });
 
-    /* Path Dots */
-    svgArray.forEach((s, i) => {
+      /* Path Dots */
       s.selectAll('.dot')
         .data(data)
         .enter()
