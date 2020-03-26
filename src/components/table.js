@@ -104,16 +104,16 @@ function Table(props) {
           </tr>
         </thead>
 
-        <tbody>
-          {
-            states.map((state, index) => {
-              if (index!==0 && state.confirmed>0) {
-                return (
-                  <Row key={index} state={state} total={false}/>
-                );
-              }
-            })
-          }
+      <tbody>
+        {
+          states.map((state, index) => {
+            if (index!==0 && state.confirmed>0) {
+              return (
+                <Row key={index} index={index} state={state} total={false} onHighlightState={props.onHighlightState} />
+              );
+            }
+          })
+        }
 
           {states.length > 1 && props.summary===false && <Row key={0} state={states[0]} total={true}/>}
         </tbody>

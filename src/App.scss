@@ -486,6 +486,7 @@ table {
     color: $gray;
     tr {
       transition: background 0.1s ease-in-out;
+      cursor: pointer;
       &:hover {
         background: $gray-hover;
       }

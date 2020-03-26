@@ -9,7 +9,9 @@ function Row(props) {
   }, [props.state]);
 
   return (
-    <tr className={props.total ? 'is-total' : ''}>
+    <tr className={props.total ? 'is-total' : ''}
+        onMouseEnter={() => props.onHighlightState?.(state, props.index)}
+        touchstart={() => props.onHighlightState?.(state, props.index)}>
       <td style={{fontWeight: 600}}>{state.state}</td>
       <td>
         <span className="deltas" style={{color: '#ff073a'}}>
