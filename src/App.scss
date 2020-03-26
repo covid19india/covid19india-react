@@ -504,6 +504,9 @@ table {
         position: relative;
         flex-direction: row;
         height: 0.9rem;
+        abbr {
+          text-align: right;
+        }
         svg {
           width: 10px;
           margin: 0;
@@ -518,6 +521,9 @@ table {
       }
     }
   }
+  &:nth-child(odd){
+    background-color: $light;
+  }
   tbody {
     color: $gray;
     tr {
@@ -526,12 +532,20 @@ table {
       &:hover {
         background: $gray-hover;
       }
-    }
-    tr:nth-child(odd){
-      background-color: $light;
-      &:hover {
-        background: $gray-hover;
+      &.divider {
+        height: 0.5rem;
+        background: #6c757d10 !important;
       }
+      &.spacer {
+        height: 2rem;
+        background: transparent !important;
+      }
+    }
+    & > tr:nth-child(odd) {
+        background-color: $light;
+        &:hover{
+          background: $gray-hover;
+        }
     }
     td {
       padding: 0.25rem;
@@ -540,6 +554,7 @@ table {
       text-align: right;
       .deltas {
         margin-right: 0.25rem;
+        margin-left: 0.25rem;
         font-size: 11px !important;
         svg {
           width: 9px;
@@ -551,6 +566,18 @@ table {
     }
     td:first-child {
       text-align: left;
+      max-width: 7.5rem;
+      word-wrap: break-word;
+    }
+    .district-heading {
+      background: $gray-light;
+      td {
+        font-size: 0.75rem;
+        font-weight: 900;
+        padding: 0.45rem;
+        color: $gray-dark;
+        background: $gray-light;
+      }
     }
   }
   .affected-count {
@@ -563,6 +590,27 @@ table {
   .is-total {
     td {
       background: $gray-hover;
+    }
+  }
+  .dropdown {
+    position: absolute;
+    left: -0.75rem;
+    background: $gray-light;
+    border-radius: 50%;
+    width: 13px;
+    height: 13px;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    &:hover {
+      background: $gray-hover;
+    }
+    svg {
+      position: absolute;
+      top: -0.35rem;
+      left: 1px;
+      width: 11px;
+      stroke-width: 3;
     }
   }
 }
@@ -1058,6 +1106,30 @@ footer {
   100% {
     opacity: 1;
     transform: translateY(0px);
+  }
+}
+
+.rotateDownRight {
+  animation-name: rotateDownRight;
+  animation-duration: 0.250s;
+  animation-fill-mode: both;
+}
+
+@keyframes rotateDownRight {
+  100% {
+    transform: rotate(-90deg);
+  }
+}
+
+.rotateRightDown {
+  animation-name: rotateRightDown;
+  animation-duration: 0.250s;
+  animation-fill-mode: both;
+}
+
+@keyframes rotateRightDown {
+  0% {
+    transform: rotate(-90deg);
   }
 }
 

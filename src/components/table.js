@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import * as Icon from 'react-feather';
+import axios from 'axios';
 
 import Row from './row';
 import { useTranslation } from 'react-i18next';
 
 function Table(props) {
   const [states, setStates] = useState(props.states);
+  const [districts, setDistricts] = useState({});
   const [count, setCount] = useState(0);
   const {t} = useTranslation();
   const [sortData, setSortData] = useState({
@@ -30,6 +32,20 @@ function Table(props) {
       });
     }
   }, [states.length]);
+
+  useEffect(()=>{
+    getDistricts();
+  }, [1]);
+
+  const getDistricts = () => {
+    axios.get('https://api.covid19india.org/state_district_wise.json')
+        .then((response)=>{
+          setDistricts(response.data);
+        })
+        .catch((err)=>{
+          console.log(err);
+        });
+  };
 
   const doSort = (e, props) => {
     const totalRow = states.splice(0, 1);
@@ -98,24 +114,26 @@ function Table(props) {
           </th>
           <th onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'Dcsd' : t('Deaths')}</abbr>
+              <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'Dcsd' : t('Deceased')}</abbr>
               <div style={{display: sortData.sortColumn === 'deaths' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
         </tr>
       </thead>
 
-      <tbody>
-        {
-          states.map((state, index) => {
-            if (index!==0 && state.confirmed>0) {
-              return (
-                <Row key={index} index={index} state={state} total={false} onHighlightState={props.onHighlightState} />
-              );
-            }
-          })
-        }
+      {
+        states.map((state, index) => {
+          if (index!==0 && state.confirmed>0) {
+            return (
+              <tbody>
+                <Row key={index} index={index} state={state} total={false} districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []} onHighlightState={props.onHighlightState} />
+              </tbody>
+            );
+          }
+        })
+      }
 
+      <tbody>
         {states.length > 1 && props.summary===false && <Row key={0} state={states[0]} total={true}/>}
       </tbody>
 
