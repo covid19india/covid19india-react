@@ -40,7 +40,7 @@ function Home(props) {
           console.log(err);
         });
   };
-
+  //  Initiate ajax polling to refresh the data every 5 secs
   useInterval(() => {
     getStates();
   }, 5000);
