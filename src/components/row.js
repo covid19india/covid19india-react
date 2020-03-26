@@ -35,7 +35,10 @@ function Row(props) {
       </span>
       <tr className={props.total ? 'state is-total' : 'state'} className={props.total ? 'is-total' : ''}
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
-        touchstart={() => props.onHighlightState?.(state, props.index)}>
+        touchstart={() => props.onHighlightState?.(state, props.index)}
+        onClick={()=>{
+          handleReveal();
+        }}>
         <td style={{fontWeight: 600}}>{state.state}</td>
         <td>
           <span className="deltas" style={{color: '#ff073a'}}>
