@@ -738,6 +738,35 @@ table {
   flex-direction: column;
   margin-top: 1rem;
   width: 100%;
+  .confirmed {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .delta {
+    position: relative;
+    left: 0.2rem;
+    top: 4px;;
+  }
+
+  .is-cherry {
+    h1 {color: $cherry;}
+    h4, h5 {color: $cherry-mid;}
+  }
+  .is-blue {
+    h1 {color: $blue;}
+    h4, h5 {color: $blue-mid;}
+  }
+  .is-green {
+    h1 {color: $green;}
+    h4, h5 {color: $green-mid;}
+  }
+  .is-gray {
+    h1 {color: $gray;}
+    h4, h5 {color: $gray-mid;}
+  }
+
   .stats {
     padding: 0.25rem;
     position: absolute;
@@ -832,10 +861,12 @@ table {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding-bottom: 5rem;
   .svg-parent {
     width: 5rem;
+    margin-top: 5px;
     background: transparent !important;
-    height: 7rem;
+    height: 2rem;
   }
   margin-bottom: -3rem;
   .tooltip {

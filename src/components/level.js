@@ -37,25 +37,21 @@ function Level(props) {
       <div className="level-item is-cherry">
         <h5 className='heading'>Confirmed</h5>
         <h1>{confirmed} </h1>
-        <h4 className='delta'>[{props.deltas ? props.deltas.confirmeddelta>=0 ? '+'+props.deltas.confirmeddelta : props.deltas.confirmeddelta : ''} Today]</h4>
       </div>
 
       <div className="level-item is-blue">
         <h5 className="heading">Active</h5>
         <h1 className="title has-text-info">{active}</h1>
-        <h4 className='delta'>[{props.deltas ? props.deltas.confirmeddelta-props.deltas.recovereddelta-props.deltas.deceaseddelta >=0 ? '+'+(props.deltas.confirmeddelta-props.deltas.recovereddelta-props.deltas.deceaseddelta).toString() : props.deltas.confirmeddelta-props.deltas.recovereddelta-props.deltas.deceaseddelta : ''} Today]</h4>
       </div>
 
       <div className="level-item is-green">
         <h5 className="heading">Recovered</h5>
         <h1 className="title has-text-success">{recoveries} </h1>
-        <h4 className='delta'>[{props.deltas ? props.deltas.recovereddelta>=0 ? '+'+props.deltas.recovereddelta : props.deltas.recovereddelta : ''} Today]</h4>
       </div>
 
       <div className="level-item is-gray">
         <h5 className="heading">Deceased</h5>
         <h1 className="title has-text-grey">{deaths}</h1>
-        <h4 className='delta'>[{props.deltas ? props.deltas.deceaseddelta>=0 ? '+'+props.deltas.deceaseddelta : '+0' : ''} Today]</h4>
       </div>
 
     </div>
