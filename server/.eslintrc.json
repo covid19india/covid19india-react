@@ -4,5 +4,6 @@
     "plugin:node/recommended",
     "google",
     "eslint-config-prettier"
-  ]
+  ],
+  "ignorePatterns": ["/coverage/", "/node_modules/"]
 }
