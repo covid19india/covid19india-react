@@ -10,14 +10,25 @@ import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
 import Banner from './banner';
 
+const getFromLocalStorage = (key, defaultValue) => {
+  const result = localStorage.getItem(key);
+  return result !== null ? result : defaultValue;
+}
+
 function Home(props) {
   const [states, setStates] = useState([]);
   const [fetched, setFetched] = useState(false);
-  const [graphOption, setGraphOption] = useState(1);
+  const [graphOption, setGraphOption] 
+    = useState(
+      parseInt(getFromLocalStorage('graphOption', '1'), 10)
+    );
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState([]);
   const [deltas, setDeltas] = useState([]);
-  const [timeseriesMode, setTimeseriesMode] = useState(true);
+  const [timeseriesMode, setTimeseriesMode] 
+    = useState(
+      getFromLocalStorage('timeseriesMode', 'true') === 'true'
+    );
 
   useEffect(()=> {
     if (fetched===false) {
@@ -71,11 +82,13 @@ function Home(props) {
           <h1>Spread Trends</h1>
           <div className="tabs">
             <div className={`tab ${graphOption===1 ? 'focused' : ''}`} onClick={()=>{
+              localStorage.setItem('graphOption', 1)  
               setGraphOption(1);
             }}>
               <h4>Cumulative</h4>
             </div>
             <div className={`tab ${graphOption===2 ? 'focused' : ''}`} onClick={()=>{
+              localStorage.setItem('graphOption', 2)
               setGraphOption(2);
             }}>
               <h4>Daily</h4>
@@ -85,6 +98,7 @@ function Home(props) {
           <div className="timeseries-mode">
             <label htmlFor="timeseries-mode">Scale Uniformly</label>
             <input type="checkbox" checked={timeseriesMode} onChange={(event)=>{
+              localStorage.setItem('timeseriesMode', !timeseriesMode)
               setTimeseriesMode(!timeseriesMode);
             }}/>
           </div>
