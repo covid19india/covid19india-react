@@ -469,6 +469,9 @@ table {
         position: relative;
         flex-direction: row;
         height: 0.9rem;
+        abbr {
+          text-align: right;
+        }
         svg {
           width: 10px;
           margin: 0;
@@ -516,6 +519,7 @@ table {
       text-align: right;
       .deltas {
         margin-right: 0.25rem;
+        margin-left: 0.25rem;
         font-size: 11px !important;
         svg {
           width: 9px;
@@ -555,7 +559,7 @@ table {
   }
   .dropdown {
     position: absolute;
-    left: -1rem;
+    left: -0.75rem;
     background: $gray-light;
     border-radius: 50%;
     width: 13px;
@@ -1069,7 +1073,7 @@ footer {
 
 .rotateDownRight {
   animation-name: rotateDownRight;
-  animation-duration: 0.450s;
+  animation-duration: 0.250s;
   animation-fill-mode: both;
 }
 
@@ -1081,7 +1085,7 @@ footer {
 
 .rotateRightDown {
   animation-name: rotateRightDown;
-  animation-duration: 0.450s;
+  animation-duration: 0.250s;
   animation-fill-mode: both;
 }
 

@@ -77,10 +77,10 @@ function Row(props) {
 
       <tr className="district-heading" style={{display: reveal && !props.total ? '' : 'none'}}>
         <td>District</td>
-        <td>Confirmed</td>
-        <td>Active</td>
-        <td>Recovered</td>
-        <td>Deceased</td>
+        <td><abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfmd' : 'Confirmed'}</abbr></td>
+        <td><abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'A' : 'Actv' : 'Active'}</abbr></td>
+        <td><abbr className={`${window.innerWidth <=769 ? 'is-green' : ''}`} title="Recovered">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'R' : 'Rcvrd' : 'Recovered'}</abbr></td>
+        <td><abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'Dcsd' : 'Deceased'}</abbr></td>
       </tr>
 
       {districts?.Unknown &&
@@ -125,7 +125,6 @@ function Row(props) {
         <td></td>
       </tr>
     </React.Fragment>
->>>>>>> 963aabc... Added support for districts in table.
   );
 }
 
