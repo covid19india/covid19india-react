@@ -827,9 +827,10 @@ table {
 footer {
   display: flex;
   flex-direction: column;
-  margin-bottom: 5rem;
+  padding-bottom: 5rem;
   justify-content: center;
-  margin-top: 5rem;
+  padding-top: 5rem;
+  background-color: $purple-light;
   & > * {
     align-self: center;
     text-align: center;
