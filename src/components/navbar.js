@@ -53,7 +53,7 @@ function Navbar(props) {
             }}
           >
             <span
-              className={`fadeInUp ${view === "Network Map" ? "focused" : ""}`}
+              className={`fadeInUp ${view === "Clusters" ? "focused" : ""}`}
               style={{ animationDelay: "0.3s" }}
             >
               Clusters
