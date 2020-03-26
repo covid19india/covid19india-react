@@ -58,6 +58,7 @@
     "css-watch": "npm run css-build -- --watch",
     "lint": "eslint .",
     "check-format": "prettier --check '**/*.{js,json}'",
+    "validate": "npm run lint && npm run check-format",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
@@ -73,6 +74,20 @@
       "last 1 safari version"
     ]
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.json": [
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
     "eslint": "^6.8.0",
     "eslint-config-google": "^0.14.0",
@@ -80,6 +95,8 @@
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-react": "^7.19.0",
     "gh-pages": "^2.2.0",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.9",
     "prettier": "^2.0.2"
   }
 }
