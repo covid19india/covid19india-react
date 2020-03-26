@@ -29,7 +29,8 @@ function Home(props) {
     = useState(
       getFromLocalStorage('timeseriesMode', 'true') === 'true'
     );
-
+  const [stateHighlighted, setStateHighlighted] = useState(undefined);
+  
   useEffect(()=> {
     if (fetched===false) {
       getStates();
@@ -41,13 +42,27 @@ function Home(props) {
         .then((response)=>{
           setStates(response.data.statewise);
           setTimeseries(response.data.cases_time_series);
-          setLastUpdated(response.data.statewise[0].lastupdatedtime.replace('at', ''));
+          setLastUpdated(formatDate(response.data.statewise[0].lastupdatedtime));
           setDeltas(response.data.key_values[0]);
           setFetched(true);
         })
         .catch((err)=>{
           console.log(err);
         });
+  };
+
+  const formatDate = (unformattedDate) => {
+    const day = unformattedDate.slice(0, 2);
+    const month = unformattedDate.slice(3, 5);
+    const year = unformattedDate.slice(6, 10);
+    const time = unformattedDate.slice(11);
+    console.log(`${month} ${day} ${year} ${time}`);
+    return `${month} ${day} ${year} ${time}`;
+  };
+
+  const onHighlightState = (state, index) => {
+    if (!state && !index) setStateHighlighted(null);
+    else setStateHighlighted({state, index});
   };
 
   return (
@@ -61,7 +76,7 @@ function Home(props) {
               <h6>A Crowdsourced Initiative</h6>
             </div>
             <div className="last-update">
-              <h6>Last Reported Case</h6>
+              <h6>Last Updated</h6>
               <h3>{isNaN(Date.parse(lastUpdated)) ? '6 hours ago' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
             </div>
           </div>
@@ -70,13 +85,13 @@ function Home(props) {
         <Level data={states} deltas={deltas}/>
         <Minigraph timeseries={timeseries} animate={true}/>
 
-        <Table states={states} summary={false}/>
+        <Table states={states} summary={false} onHighlightState={onHighlightState} />
 
       </div>
 
       <div className="home-right">
 
-        <ChoroplethMap states={states}/>
+        <ChoroplethMap states={states} stateHighlighted={stateHighlighted} />
 
         <div className="timeseries-header fadeInUp" style={{animationDelay: '1.5s'}}>
           <h1>Spread Trends</h1>
