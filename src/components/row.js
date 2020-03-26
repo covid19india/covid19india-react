@@ -67,7 +67,7 @@ function Row(props) {
         </td>
       </tr>
 
-      <tr className="spacer" style={{display: reveal && !props.total ? '' : 'none'}}>
+      <tr className={`spacer ${reveal && !props.total ? 'rollDown' : 'rollUp'}`}>
         <td></td>
         <td></td>
         <td></td>
@@ -75,7 +75,7 @@ function Row(props) {
         <td></td>
       </tr>
 
-      <tr className="district-heading" style={{display: reveal && !props.total ? '' : 'none'}}>
+      <tr className={`district-heading ${reveal && !props.total ? 'rollDown' : 'rollUp'}`}>
         <td>District</td>
         <td><abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfmd' : 'Confirmed'}</abbr></td>
         <td><abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'A' : 'Actv' : 'Active'}</abbr></td>
@@ -84,7 +84,7 @@ function Row(props) {
       </tr>
 
       {districts?.Unknown &&
-      <tr className={`district`} style={{display: reveal && !props.total ? '' : 'none'}}>
+      <tr className={`district ${reveal && !props.total ? 'rollDown' : 'rollUp'}`}>
         <td style={{fontWeight: 600}}>Unknown</td>
         <td>{districts['Unknown'].confirmed}</td>
         <td>{districts['Unknown'].active}</td>
@@ -97,7 +97,7 @@ function Row(props) {
         Object.keys(districts ? districts : {}).map((district, index) => {
           if (district.toLowerCase()!=='unknown') {
             return (
-              <tr key={index} className={`district`} style={{display: reveal && !props.total ? '' : 'none'}}>
+              <tr key={index} className={`district ${reveal && !props.total ? 'rollDown' : 'rollUp'}`}>
                 <td style={{fontWeight: 600}}>{district}</td>
                 <td>{districts[district].confirmed}</td>
                 <td>{districts[district].active}</td>
@@ -109,7 +109,7 @@ function Row(props) {
         })
       }
 
-      <tr className="divider" style={{display: reveal && !props.total ? '' : 'none'}}>
+      <tr className={`spacer ${reveal && !props.total ? 'rollDown' : 'rollUp'}`}>
         <td></td>
         <td></td>
         <td></td>
@@ -117,7 +117,7 @@ function Row(props) {
         <td></td>
       </tr>
 
-      <tr className="spacer" style={{display: reveal && !props.total ? '' : 'none'}}>
+      <tr className={`spacer ${reveal && !props.total ? 'rollDown' : 'rollUp'}`}>
         <td></td>
         <td></td>
         <td></td>

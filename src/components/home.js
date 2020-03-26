@@ -66,7 +66,7 @@ function Home(props) {
             </div>
             <div className="last-update">
               <h6>Last Updated</h6>
-              <h3>{isNaN(Date.parse(lastUpdated)) ? '6 hours ago' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
+              <h3>{isNaN(Date.parse(lastUpdated)) ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
             </div>
           </div>
         </div>
