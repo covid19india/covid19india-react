@@ -1,4 +1,4 @@
-@import './colors';
+@import "./colors";
 
 @function themed($key) {
   @return map-get($theme-map, $key);
@@ -6,6 +6,7 @@
 
 $themes: (
   light: (
+    icon-filter: none,
     app-bg-color: $white,
     header-h1: $gray-dark,
     navbar-focused: $gray,
@@ -20,6 +21,7 @@ $themes: (
     choropleth-map-filter: none
   ),
   dark: (
+    icon-filter: invert(100),
     app-bg-color: $black,
     header-h1: $light,
     navbar-focused: $blue-light-opaque,
