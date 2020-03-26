@@ -43,9 +43,9 @@ function Table(props) {
       }
 
       if (sortData.isAscending) {
-        return value1 > value2? 1 : -1;
+        return value1 > value2 ? 1 : (value1 == value2) && StateData1['state'] > StateData2['state'] ? 1 : -1;
       } else {
-        return value1 > value2? -1 : 1;
+        return value1 < value2 ? 1 : (value1 == value2) && StateData1['state'] > StateData2['state'] ? 1 : -1;
       }
     });
     {/* console.log(states);*/}
@@ -77,7 +77,7 @@ function Table(props) {
           </th>
           <th onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfrmd' : 'Confirmed'}</abbr>
+              <abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfmd' : 'Confirmed'}</abbr>
               <div style={{display: sortData.sortColumn === 'confirmed' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
@@ -96,7 +96,7 @@ function Table(props) {
           </th>
           <th onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'DCSD' : 'Deaths'}</abbr>
+              <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'Dcsd' : 'Deaths'}</abbr>
               <div style={{display: sortData.sortColumn === 'deaths' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
@@ -108,7 +108,7 @@ function Table(props) {
           states.map((state, index) => {
             if (index!==0 && state.confirmed>0) {
               return (
-                <Row key={index} state={state} total={false}/>
+                <Row key={index} index={index} state={state} total={false} onHighlightState={props.onHighlightState} />
               );
             }
           })

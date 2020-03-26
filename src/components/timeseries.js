@@ -73,6 +73,10 @@ function TimeSeries(props) {
         .domain([dateMin, dateMax])
         .range([margin.left, width]);
 
+    const indexScale = d3.scaleLinear()
+        .domain([0, timeseries.length])
+        .range([margin.left,width]);
+
     svg1.append('g')
         .attr('transform', 'translate(0,' + height + ')')
         .attr('class', 'axis')
@@ -178,6 +182,56 @@ function TimeSeries(props) {
         })
         .tickPadding(5));
 
+    /* Focus Circle */
+    // TODO: Vectorize rest of file as well
+    const svgArray = [svg1, svg2, svg3, svg4, svg5, svg6];
+    const dataTypes = ['totalconfirmed', 'totalrecovered', 'totaldeceased',
+                       'dailyconfirmed', 'dailyrecovered', 'dailydeceased'];
+    const colors = ['#ff073a', '#28a745', '#6c757d', '#ff073a', '#28a745', '#6c757d'];
+    const yScales = [y1, y2, y3, y4, y5, y6];
+
+    var focus = svgArray.map(function(d, i) {
+                  const y = mode ? y1 : yScales[i];
+                  return d.append('g')
+                    .append('circle')
+                    .attr('fill', colors[i])
+                    .attr('stroke', colors[i])
+                    .attr('r', 5)
+                    .attr('cx', x(new Date(data[timeseries.length-1]['date'] + '2020')))
+                    .attr('cy', y(data[timeseries.length-1][dataTypes[i]]));
+                  });
+
+    function mouseout() {
+      setDatapoint(data[timeseries.length - 1]);
+      setIndex(timeseries.length - 1);
+      focus.forEach(function (d, i) {
+        const y = mode ? y1 : yScales[i];
+        d.attr('cx', x(new Date(data[timeseries.length-1]['date'] + '2020')))
+         .attr('cy', y(data[timeseries.length-1][dataTypes[i]]));
+      });
+    };
+
+    function mousemove() {
+      const xm = d3.mouse(this)[0];
+      const i = Math.round(indexScale.invert(xm));
+      if (0 <= i && i < timeseries.length) {
+        const d = data[i];
+        setDatapoint(d);
+        setIndex(i);
+        focus.forEach(function (f, j) {
+          const y = mode ? y1 : yScales[j];
+          f.attr('cx', x(new Date(d['date'] + '2020')))
+           .attr('cy', y(d[dataTypes[j]]));
+        });
+      }
+    };
+
+    svgArray.forEach(function (s) {
+        s.on("mousemove", mousemove).on("touchmove", mousemove)
+         .on("mouseout", mouseout).on("touchend", mouseout);
+    });
+
+
     /* Paths */
     svg1.append('path')
         .datum(data)
@@ -208,14 +262,6 @@ function TimeSeries(props) {
         })
         .attr('cy', function(d) {
           return y1(d['totalconfirmed']);
-        })
-        .on('mouseover', (d, i) => {
-          d3.select(d3.event.target).attr('r', '5');
-          setDatapoint(d);
-          setIndex(i);
-        })
-        .on('mouseout', (d) => {
-          d3.select(d3.event.target).attr('r', '3');
         });
 
 
@@ -250,14 +296,6 @@ function TimeSeries(props) {
         .attr('cy', function(d) {
           if (mode) return y1(d['totalrecovered']);
           return y2(d['totalrecovered']);
-        })
-        .on('mouseover', (d, i) => {
-          d3.select(d3.event.target).attr('r', '5');
-          setDatapoint(d);
-          setIndex(i);
-        })
-        .on('mouseout', (d) => {
-          d3.select(d3.event.target).attr('r', '3');
         });
 
 
@@ -294,18 +332,10 @@ function TimeSeries(props) {
         .attr('cy', function(d) {
           if (mode) return y1(d['totaldeceased']);
           return y3(d['totaldeceased']);
-        })
-        .on('mouseover', (d, i) => {
-          d3.select(d3.event.target).attr('r', '5');
-          setDatapoint(d);
-          setIndex(i);
-        })
-        .on('mouseout', (d) => {
-          d3.select(d3.event.target).attr('r', '3');
         });
 
-    /* Daily */
 
+    /* Daily */
     svg4.append('path')
         .datum(data)
         .attr('fill', 'none')
@@ -337,14 +367,6 @@ function TimeSeries(props) {
         .attr('cy', function(d) {
           if (mode) return y1(d['dailyconfirmed']);
           return y4(d['dailyconfirmed']);
-        })
-        .on('mouseover', (d, i) => {
-          d3.select(d3.event.target).attr('r', '5');
-          setDatapoint(d);
-          setIndex(i);
-        })
-        .on('mouseout', (d) => {
-          d3.select(d3.event.target).attr('r', '3');
         });
 
 
@@ -379,14 +401,6 @@ function TimeSeries(props) {
         .attr('cy', function(d) {
           if (mode) return y1(d['dailyrecovered']);
           return y5(d['dailyrecovered']);
-        })
-        .on('mouseover', (d, i) => {
-          d3.select(d3.event.target).attr('r', '5');
-          setDatapoint(d);
-          setIndex(i);
-        })
-        .on('mouseout', (d) => {
-          d3.select(d3.event.target).attr('r', '3');
         });
 
 
@@ -423,14 +437,6 @@ function TimeSeries(props) {
         .attr('cy', function(d) {
           if (mode) return y1(d['dailydeceased']);
           return y6(d['dailydeceased']);
-        })
-        .on('mouseover', (d, i) => {
-          d3.select(d3.event.target).attr('r', '5');
-          setDatapoint(d);
-          setIndex(i);
-        })
-        .on('mouseout', (d) => {
-          d3.select(d3.event.target).attr('r', '3');
         });
   };
 
