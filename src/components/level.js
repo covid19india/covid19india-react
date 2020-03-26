@@ -42,7 +42,7 @@ function Level(props) {
 
       <div className="level-item is-blue">
         <h5 className="heading">Active</h5>
-        <h4>[{props.deltas ? props.deltas.confirmeddelta-props.deltas.recovereddelta-props.deltas.deceaseddelta >=0 ? '+'+(props.deltas.confirmeddelta-props.deltas.recovereddelta-props.deltas.deceaseddelta).toString() : props.deltas.confirmeddelta-props.deltas.recovereddelta-props.deltas.deceaseddelta : ''}]</h4>
+        <h4>[{props.data ? props.data[0] ? '+'+ props.data[0].delta.active : '' : ''}]</h4>
         <h1 className="title has-text-info">{active}</h1>
       </div>
 
