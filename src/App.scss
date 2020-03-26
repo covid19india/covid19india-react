@@ -305,11 +305,11 @@ h6 {
   margin-bottom: auto;
   margin-top: 0.25rem;
   h6 {
-    color: $green-mid;
+    color: $gray-mid;
     font-weight: 900;
   }
   h3 {
-    color: $green;
+    color: $gray;
     font-weight: 600;
   }
   h3, h6 {
@@ -397,6 +397,10 @@ a.button {
     }
     &:last-child {
       margin-right: 0.5rem;
+    }
+    .delta {
+      margin-top: 0.1rem;
+      margin-bottom: 0.5rem;
     }
   }
   h1, h5 {
