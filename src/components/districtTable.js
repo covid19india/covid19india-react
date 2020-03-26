@@ -1,71 +1,104 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import * as Icon from "react-feather";
 
-import Row from "./row";
+import DistrictRow from "./districtRow";
 
-import DistrictTable from "./districtTable";
-
-function Table(props) {
-  const [states, setStates] = useState(props.states);
+function DistrictTable(props) {
+  const [districts, setDistricts] = useState([]);
+  const [districtData, setDistrictData] = useState([]);
+  const [fetched, setFetched] = useState(false);
+  const [currentState, setCurrentState] = useState([]);
   const [count, setCount] = useState(0);
   const [sortData, setSortData] = useState({
     sortColumn: "confirmed",
     isAscending: false
   });
 
-  const [selectedState, setselectedState] = useState("select");
+  useEffect(() => {
+    if (fetched === false) {
+      getDistricts();
+    }
+  }, [fetched, props.selectedState]);
 
   useEffect(() => {
-    if (props.summary === true) {
-      setStates(props.states.slice(0, 9));
-    } else {
-      setStates(props.states);
-    }
-  }, [props.states]);
-
-  useEffect(() => {
-    if (states.length > 0) {
-      let length = 0;
-      props.states.map((state, i) => {
-        if (i !== 0 && state.confirmed > 0) length += 1;
-        if (i === props.states.length - 1) setCount(length);
-      });
-    }
-  }, [states.length]);
-
-  const doSort = (e, props) => {
-    const totalRow = states.splice(0, 1);
-    {
-      /* console.log(totalRow);*/
-    }
-    states.sort((StateData1, StateData2) => {
-      const sortColumn = sortData.sortColumn;
-      let value1 = StateData1[sortColumn];
-      let value2 = StateData2[sortColumn];
-
-      if (sortColumn != "state") {
-        value1 = parseInt(StateData1[sortColumn]);
-        value2 = parseInt(StateData2[sortColumn]);
-      }
-
-      if (sortData.isAscending) {
-        return value1 > value2
-          ? 1
-          : value1 == value2 && StateData1["state"] > StateData2["state"]
-          ? 1
-          : -1;
-      } else {
-        return value1 < value2
-          ? 1
-          : value1 == value2 && StateData1["state"] > StateData2["state"]
-          ? 1
-          : -1;
+    setDistrictData({});
+    Object.keys(districts).map(state => {
+      if (state === props.selectedState) {
+        setDistrictData(districts[state]["districtData"]);
       }
     });
-    {
-      /* console.log(states);*/
-    }
-    states.unshift(totalRow[0]);
+  }, [districts, props.selectedState]);
+
+  useEffect(() => {
+    setCount(Object.keys(districtData).length);
+    props.states.map(i => {
+      if (i.state === props.selectedState) {
+        setCurrentState(i);
+      }
+    });
+  }, [districtData, props.selectedState]);
+
+  const getDistricts = () => {
+    axios
+      .get("https://api.covid19india.org/state_district_wise.json")
+      .then(response => {
+        setDistricts(response.data);
+        setFetched(true);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const asceSort = obj => {
+    const ordered = {};
+    Object.keys(obj)
+      .sort()
+      .forEach(key => {
+        ordered[key] = obj[key];
+      });
+    return ordered;
+  };
+
+  const descSort = obj => {
+    const ordered = {};
+    Object.keys(obj)
+      .sort()
+      .reverse()
+      .forEach(key => {
+        ordered[key] = obj[key];
+      });
+    return ordered;
+  };
+
+  const asceValueSort = (obj, col) => {
+    const ordered = {};
+    Object.keys(obj)
+      .sort((a, b) => {
+        let value1 = parseInt(obj[a][col]);
+        let value2 = parseInt(obj[b][col]);
+        return value1 > value2 ? 1 : -1;
+      })
+      .forEach(key => {
+        ordered[key] = obj[key];
+      });
+    console.log(ordered);
+    return ordered;
+  };
+
+  const descValueSort = (obj, col) => {
+    const ordered = {};
+    Object.keys(obj)
+      .sort((a, b) => {
+        let value1 = parseInt(obj[a][col]);
+        let value2 = parseInt(obj[b][col]);
+        return value1 > value2 ? -1 : 1;
+      })
+      .forEach(key => {
+        ordered[key] = obj[key];
+      });
+    return ordered;
   };
 
   const handleSort = (e, props) => {
@@ -80,42 +113,29 @@ function Table(props) {
           ? !sortData.isAscending
           : sortData.sortColumn === "state"
     });
-  };
 
-  const handleSelectedState = e => {
-    setselectedState(e.target.value);
-  };
+    if (currentsortColumn !== "state") {
+      sortData.isAscending
+        ? setDistrictData(asceValueSort(districtData, sortData.sortColumn))
+        : setDistrictData(descValueSort(districtData, sortData.sortColumn));
+    }
 
-  doSort();
+    if (currentsortColumn === "state") {
+      sortData.isAscending
+        ? setDistrictData(asceSort(districtData))
+        : setDistrictData(descSort(districtData));
+    }
+  };
 
   return (
-    <div style={{ animationDelay: "1s" }}>
-      <h5 className="affected-count">Get Districtwise data</h5>
-      <select className="state-dropdown" onChange={handleSelectedState}>
-        {states.map((state, index) => {
-          return index !== 0 ? (
-            <option key={index} value={state.state}>
-              {state.state}
-            </option>
-          ) : (
-            <option key={index} value="select">
-              Select
-            </option>
-          );
-        })}
-      </select>
-      {selectedState !== "select" ? (
-        <DistrictTable states={props.states} selectedState={selectedState} />
-      ) : (
-        <div />
-      )}
+    <div>
       <table className="table fadeInUp" style={{ animationDelay: "1s" }}>
-        <h5 className="affected-count">{count} States/UTS Affected</h5>
+        <h5 className="affected-count">{count} Districts Affected</h5>
         <thead>
           <tr>
             <th className="state-heading" onClick={e => handleSort(e, props)}>
               <div className="heading-content">
-                <abbr title="State">State/UT</abbr>
+                <abbr title="State">Districts</abbr>
                 <div
                   style={{
                     display:
@@ -135,7 +155,7 @@ function Table(props) {
                   {window.innerWidth <= 769
                     ? window.innerWidth <= 375
                       ? "C"
-                      : "Cnfmd"
+                      : "Cnfrmd"
                     : "Confirmed"}
                 </abbr>
                 <div
@@ -206,7 +226,7 @@ function Table(props) {
                   {window.innerWidth <= 769
                     ? window.innerWidth <= 375
                       ? "D"
-                      : "Dcsd"
+                      : "DCSD"
                     : "Deaths"}
                 </abbr>
                 <div
@@ -223,19 +243,21 @@ function Table(props) {
         </thead>
 
         <tbody>
-          {states.map((state, index) => {
-            if (index !== 0 && state.confirmed > 0) {
-              return <Row key={index} state={state} total={false} />;
-            }
+          {Object.keys(districtData).map(district => {
+            districtData[district] = {
+              ...districtData[district],
+              state: district
+            };
+            return (
+              <DistrictRow key={district} state={districtData[district]} />
+            );
           })}
 
-          {states.length > 1 && props.summary === false && (
-            <Row key={0} state={states[0]} total={true} />
-          )}
+          {<DistrictRow key={0} state={currentState} total={true} />}
         </tbody>
       </table>
     </div>
   );
 }
 
-export default Table;
+export default DistrictTable;
