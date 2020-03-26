@@ -12,10 +12,7 @@
 ## Setup
 On Windows
 ```
-npm install -D
-npm run build
-npm install -g serve
-serve -s build
+npm i && npm run start-win
 ```
 On Linux
 ```
