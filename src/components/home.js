@@ -84,7 +84,7 @@ function Home(props) {
 
           <div className="timeseries-mode">
             <label htmlFor="timeseries-mode">Scale Uniformly</label>
-            <input type="checkbox" checked={timeseriesMode} onChange={(event)=>{
+            <input type="checkbox" aria-label="Checked by default to scale uniformly." checked={timeseriesMode} onChange={(event)=>{
               setTimeseriesMode(!timeseriesMode);
             }}/>
           </div>

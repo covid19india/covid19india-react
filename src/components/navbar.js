@@ -17,6 +17,7 @@ function Navbar(props) {
         <img
           className="fadeInUp"
           src="/icon.png"
+          alt="COVID-19 India Icon"
           style={{
             animationDelay: "0.0s",
             width: view === "Clusters" ? "1.5rem" : "",
