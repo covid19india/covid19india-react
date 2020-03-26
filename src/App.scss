@@ -786,7 +786,32 @@ table {
     top: 4.5rem;
     right: 0;
     z-index: 99;
-    input {margin: 0; cursor: pointer;}
+    input.switch {
+      position: relative;
+      appearance: none; outline: none;
+      margin: 0; cursor: pointer;
+      width: 22px; height: 12px;
+      background-color: #ffffff; border: 1px solid #D9DADC;
+      border-radius: 10px; box-shadow: inset -10px 0 0 0 #ffffff;
+      transition-duration: 200ms;
+    }
+    input.switch:after {
+      content: "";
+      position: absolute;
+      top: 1px; left: 1px;
+      width: 9px; height: 9px;
+      background-color: transparent;
+      border-radius: 50%; box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+    }
+    input.switch:checked {
+      border-color: $gray-mid;
+      box-shadow: inset 10px 0 0 0 $gray-mid;
+    }
+    input.switch:checked:after {
+      left: 10px;
+      box-shadow: -2px 4px 3px rgba(0,0,0,0.05);
+    }
+    //input {margin: 0; cursor: pointer;}
     label {
       font-family: 'archia';
       text-transform: uppercase;

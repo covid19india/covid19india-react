@@ -112,15 +112,12 @@ function Home(props) {
               </div>
 
               <div className="timeseries-mode">
-                <label htmlFor="timeseries-mode">Scale Uniformly</label>
-                <input
-                  type="checkbox"
-                  checked={timeseriesMode}
-                  onChange={(event) => {
-                    setTimeseriesMode(!timeseriesMode);
-                  }}
-                />
+                <label htmlFor="timeseries-mode">Equal Axis</label>
+                <input className="switch" type="checkbox" checked={timeseriesMode} onChange={(event)=>{
+                  setTimeseriesMode(!timeseriesMode);
+                }}/>
               </div>
+
             </div>
 
             <TimeSeries
