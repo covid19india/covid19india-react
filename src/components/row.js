@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import * as Icon from 'react-feather';
 
-function Row(props) {
+const Row = props => {
   const [state, setState] = useState(props.state);
 
   useEffect(()=>{
@@ -12,7 +12,7 @@ function Row(props) {
     <tr className={props.total ? 'is-total' : ''}>
       <td style={{fontWeight: 600}}>{state.state}</td>
       <td>
-        {parseInt(state.confirmed)===0 ? '-' : state.active}
+        {parseInt(state.confirmed)===0 ? '-' : state.confirmed}
         <span className="deltas" style={{color: '#ff073a'}}>
           {!state.delta.confirmed==0 && <Icon.ArrowUp/>}
           {state.delta.confirmed > 0 ? `${state.delta.confirmed}` : ''}
@@ -41,6 +41,6 @@ function Row(props) {
       </td>
     </tr>
   );
-}
+};
 
 export default Row;
