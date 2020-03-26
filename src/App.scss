@@ -507,10 +507,20 @@ table {
       }
     }
     & > tr:nth-child(odd) {
-        background-color: $light;
-        &:hover{
-          background: $gray-hover;
-        }
+      background: $light;
+      &:hover{
+        background: $gray-hover;
+      }
+      &:nth-child(odd) {
+        background: $white !important;
+      }
+    }
+
+    &:nth-child(odd){
+      background-color: $light;
+      &.spacer {
+        background: transparent !important;
+      }
     }
     td {
       padding: 0.25rem;
@@ -534,6 +544,7 @@ table {
       word-wrap: break-word;
     }
     .district-heading {
+      transform: translateX(1rem);
       background: $gray-light;
       td {
         font-size: 0.75rem;
@@ -542,6 +553,10 @@ table {
         color: $gray-dark;
         background: $gray-light;
       }
+    }
+    max-width: 10rem;
+    .district {
+      transform: translateX(1rem);
     }
   }
   .affected-count {
@@ -1094,7 +1109,7 @@ footer {
   }
 }
 
-.rollDown {
+/*.rollDown {
   animation-name: rollDown;
   animation-duration: 0.250s;
   animation-fill-mode: both;
@@ -1130,7 +1145,7 @@ footer {
     position: absolute;
     pointer-events: none;
   }
-}
+}*/
 
 .iframe-container{
   width: 100%;
