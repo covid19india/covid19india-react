@@ -9,6 +9,7 @@ import ChoroplethMap from './choropleth';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
 import Banner from './banner';
+import { useInterval} from '../hooks/useInterval';
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -25,7 +26,7 @@ function Home(props) {
       getStates();
     }
   }, [fetched]);
-
+  
   const getStates = () => {
     axios.get('https://api.covid19india.org/data.json')
         .then((response)=>{
@@ -39,6 +40,11 @@ function Home(props) {
           console.log(err);
         });
   };
+
+  useInterval(() => {
+    getStates();
+  }, 5000);
+
 
   const formatDate = (unformattedDate) => {
     const day = unformattedDate.slice(0, 2);
