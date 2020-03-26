@@ -14,7 +14,7 @@ function Charts(props) {
   }
 
   props.timeseries.forEach((data, index) => {
-    dates.push(moment(data.date.trim()));
+    dates.push(moment(data.date.trim(), 'DD MMM'));
 
     if (props.graphOption == 1) {
       confirmed.push(data.totalconfirmed);
@@ -77,7 +77,6 @@ function Charts(props) {
   defaults.global.hover.intersect = false;
 
 
-  defaults.global.elements.line.fill = false;
   defaults.global.tooltips.intersect = false;
   defaults.global.tooltips.mode = 'nearest';
   defaults.global.tooltips.position = 'nearest';
