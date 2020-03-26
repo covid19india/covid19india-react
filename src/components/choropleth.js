@@ -57,6 +57,7 @@ function ChoroplethMap(props) {
       if (state.state.toLowerCase()===name.toLowerCase()) {
         setState(state);
         setIndex(index);
+        props.onHighlightState(state,index);
       }
     });
   };
@@ -213,7 +214,6 @@ function ChoroplethMap(props) {
         </div>
 
       </div>
-
     </div>
   );
 }

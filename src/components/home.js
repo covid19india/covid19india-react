@@ -9,6 +9,7 @@ import ChoroplethMap from './choropleth';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
 import Banner from './banner';
+import DistrictWiseTable from './districtwisetable';
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -20,11 +21,13 @@ function Home(props) {
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [rawData, setRawData] = useState([]);
   const [stateHighlighted, setStateHighlighted] = useState(undefined);
+  const [districtData, setDistrictData] = useState([]);
 
   useEffect(()=> {
     if (fetched===false) {
       getStates();
       getRawData();
+      getDistrictWiseData();
     }
   }, [fetched]);
 
@@ -51,6 +54,17 @@ function Home(props) {
         console.log(err);
       });
   };
+
+  const getDistrictWiseData = () => {
+    axios.get('https://api.covid19india.org/state_district_wise.json')
+      .then((response) => {
+        console.log(response.data);
+        setDistrictData(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   const getConfirmedCases = () => {
     let confirmed = 0;
@@ -114,8 +128,11 @@ function Home(props) {
 
       <div className="home-right">
 
-        <ChoroplethMap states={states} stateHighlighted={stateHighlighted} />
+        <ChoroplethMap states={states} stateHighlighted={stateHighlighted} onHighlightState={onHighlightState} />
 
+        <div className="timeseries-header fadeInUp" style={{ animationDelay: '1.5s' }}>
+          <DistrictWiseTable states={states} district={districtData} stateHighlighted={stateHighlighted !== undefined ? stateHighlighted.state : stateHighlighted} />
+        </div>
         <div className="timeseries-header fadeInUp" style={{animationDelay: '1.5s'}}>
           <h1>Spread Trends</h1>
           <div className="tabs">
