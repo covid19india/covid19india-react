@@ -144,7 +144,7 @@ function Charts(props) {
 
 
   console.log(props.mode, props.graphOption);
-  if (!props.mode) {
+  if (props.mode) {
     options.scales.yAxes = [{
       type: 'logarithmic',
       ticks: {
