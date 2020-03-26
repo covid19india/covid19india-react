@@ -459,7 +459,11 @@ table {
       padding: 0.5rem;
       cursor: pointer;
       border-radius: 5px;
-      transition: all 0.1s ease-in-out;
+	  transition: all 0.1s ease-in-out;
+	  &.sticky {
+		top: 4px;
+		background: rgb(241, 241, 241);
+	  }
       &:hover {
         background: $gray-hover;
       }
@@ -1110,4 +1114,8 @@ footer {
   > * + * {
     margin-left: 8px;
   }
+}
+
+.sticky{
+	position: sticky;
 }
