@@ -473,6 +473,7 @@ table {
         position: relative;
         flex-direction: row;
         height: 0.9rem;
+        align-items: center;
         abbr {
           text-align: right;
         }
@@ -480,10 +481,7 @@ table {
           width: 10px;
           margin: 0;
           right: 0;
-          transform: rotate(135deg);
           stroke-width: 4px;
-          align-self: center;
-          margin-top: -0.35rem;
           margin-left: 0.25rem;
           color: $gray-mid;
         }
