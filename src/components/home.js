@@ -66,8 +66,8 @@ function Home(props) {
               <h6>{t("A Crowdsourced Initiative")}</h6>
             </div>
             <div className="last-update">
-              <h6>{t("Last Reported Case")}|Last Updated</h6>
-              <h3>{isNaN(Date.parse(lastUpdated)) ? '6 hours ago' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+` ${t("Ago")}`}</h3>
+              <h6>{t("Last Updated")}</h6>
+              <h3>{isNaN(Date.parse(lastUpdated)) ? t("6 hours ago") : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+` ${t("Ago")}`}</h3>
             </div>
           </div>
         </div>
