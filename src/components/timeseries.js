@@ -39,9 +39,9 @@ function TimeSeries(props) {
     }
   }, [update]);
 
-  let resizeObserver = new ResizeObserver(() => {
+  window.addEventListener('resize', () => {
     if (timeseries.length>1) {
-      refreshGraphs(graphData);
+      refreshGraphs();
     }
   });
 
@@ -59,9 +59,6 @@ function TimeSeries(props) {
     const data = timeseries;
     setDatapoint(timeseries[timeseries.length-1]);
     setIndex(timeseries.length-1);
-
-    var el = document.getElementById("svg1");
-    resizeObserver.observe(el);
 
     const svg1 = d3.select(graphElement1.current);
     const margin = {top: 20, right: 40, bottom: 25, left: 15};
