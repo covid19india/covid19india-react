@@ -1,32 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function Navbar(props) {
-  const [view, setView] = useState('Home');
-  const [theme, setTheme] = useState('theme-light');
+  const [view, setView] = useState("Home");
+  const [theme, setTheme] = useState("theme-light");
 
   useEffect(() => {
-    document.body.classList.remove(theme === 'theme-light' ? 'theme-dark' : 'theme-light');
+    document.body.classList.remove(theme === "theme-light" ? "theme-dark" : "theme-light");
     document.body.classList.add(theme);
   });
 
-  if (window.location.pathname !== '/summary') {
+  if (window.location.pathname !== "/summary") {
     return (
       <div
         className="Navbar"
         style={{
-          animationDelay: '0.5s',
-          height: view === 'Clusters' ? '2.5rem' : '',
-          transition: 'all 0.3s ease-in-out'
+          animationDelay: "0.5s",
+          height: view === "Clusters" ? "2.5rem" : "",
+          transition: "all 0.3s ease-in-out"
         }}>
         <img
           className="fadeInUp"
           src="/icon.png"
           style={{
-            animationDelay: '0.0s',
-            width: view === 'Clusters' ? '1.5rem' : '',
-            height: view === 'Clusters' ? '1.5rem' : '',
-            transition: 'all 0.3s ease-in-out'
+            animationDelay: "0.0s",
+            width: view === "Clusters" ? "1.5rem" : "",
+            height: view === "Clusters" ? "1.5rem" : "",
+            transition: "all 0.3s ease-in-out"
           }}
         />
 
@@ -34,9 +34,9 @@ function Navbar(props) {
           <Link
             to="/"
             onClick={() => {
-              setView('Home');
+              setView("Home");
             }}>
-            <span className={`fadeInUp ${view === 'Home' ? 'focused' : ''}`} style={{ animationDelay: '0.2s' }}>
+            <span className={`fadeInUp ${view === "Home" ? "focused" : ""}`} style={{ animationDelay: "0.2s" }}>
               Home
             </span>
           </Link>
@@ -50,9 +50,9 @@ function Navbar(props) {
           <Link
             to="/clusters"
             onClick={() => {
-              setView('Clusters');
+              setView("Clusters");
             }}>
-            <span className={`fadeInUp ${view === 'Clusters' ? 'focused' : ''}`} style={{ animationDelay: '0.3s' }}>
+            <span className={`fadeInUp ${view === "Network Map" ? "focused" : ""}`} style={{ animationDelay: "0.3s" }}>
               Clusters
             </span>
           </Link>
@@ -60,22 +60,22 @@ function Navbar(props) {
           <Link
             to="/links"
             onClick={() => {
-              setView('Helpful Links');
+              setView("Helpful Links");
             }}>
             <span
-              className={`fadeInUp ${view === 'Helpful Links' ? 'focused' : ''}`}
-              style={{ animationDelay: '0.4s' }}>
+              className={`fadeInUp ${view === "Helpful Links" ? "focused" : ""}`}
+              style={{ animationDelay: "0.4s" }}>
               Helpful Links
             </span>
           </Link>
 
           <Link
-            to="/faqs"
+            to="/faq"
             onClick={() => {
-              setView('FAQs');
+              setView("FAQs");
             }}>
-            <span className={`fadeInUp ${view === 'FAQs' ? 'focused' : ''}`} style={{ animationDelay: '0.4s' }}>
-              FAQs
+            <span className={`fadeInUp ${view === "FAQs" ? "focused" : ""}`} style={{ animationDelay: "0.4s" }}>
+              FAQ
             </span>
           </Link>
         </div>
@@ -87,7 +87,7 @@ function Navbar(props) {
               name="checkbox1"
               id="toggle-box-checkbox"
               onClick={() => {
-                setTheme(theme === 'theme-dark' ? 'theme-light' : 'theme-dark');
+                setTheme(theme === "theme-dark" ? "theme-light" : "theme-dark");
               }}
             />
             <label for="toggle-box-checkbox" className="toggle-box-label-left"></label>
