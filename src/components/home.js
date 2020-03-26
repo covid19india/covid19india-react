@@ -18,6 +18,7 @@ function Home(props) {
   const [timeseries, setTimeseries] = useState([]);
   const [deltas, setDeltas] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
+  const [stateHighlighted, setStateHighlighted] = useState(undefined);
 
   useEffect(()=> {
     if (fetched===false) {
@@ -28,19 +29,33 @@ function Home(props) {
   const getStates = () => {
     try {
       axios.get('https://api.covid19india.org/data.json')
-          .then((response) => {
-            setStates(response.data.statewise);
-            setTimeseries(response.data.cases_time_series);
-            setLastUpdated(response.data.statewise[0].lastupdatedtime.slice(0, 15) + response.data.statewise[0].lastupdatedtime.slice(18));
-            setDeltas(response.data.key_values[0]);
-            setFetched(true);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        .then((response) => {
+          setStates(response.data.statewise);
+          setTimeseries(response.data.cases_time_series);
+          setLastUpdated(formatDate(response.data.statewise[0].lastupdatedtime));
+          setDeltas(response.data.key_values[0]);
+          setFetched(true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const formatDate = (unformattedDate) => {
+    const day = unformattedDate.slice(0, 2);
+    const month = unformattedDate.slice(3, 5);
+    const year = unformattedDate.slice(6, 10);
+    const time = unformattedDate.slice(11);
+    console.log(`${month} ${day} ${year} ${time}`);
+    return `${month} ${day} ${year} ${time}`;
+  };
+
+  const onHighlightState = (state, index) => {
+    if (!state && !index) setStateHighlighted(null);
+    else setStateHighlighted({state, index});
   };
 
   return (
@@ -54,8 +69,8 @@ function Home(props) {
               <h6>A Crowdsourced Initiative</h6>
             </div>
             <div className="last-update">
-              <h6>Last Reported Case</h6>
-              <h3>{lastUpdated.length===0 ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
+              <h6>Last Updated</h6>
+              <h3>{isNaN(Date.parse(lastUpdated)) ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
             </div>
           </div>
         </div>
@@ -63,13 +78,13 @@ function Home(props) {
         <Level data={states} deltas={deltas}/>
         <Minigraph timeseries={timeseries} animate={true}/>
 
-        <Table states={states} summary={false}/>
+        <Table states={states} summary={false} onHighlightState={onHighlightState} />
 
       </div>
 
       <div className="home-right">
 
-        <ChoroplethMap states={states}/>
+        <ChoroplethMap states={states} stateHighlighted={stateHighlighted} />
 
         <div className="timeseries-header fadeInUp" style={{animationDelay: '1.5s'}}>
           <h1>Spread Trends</h1>
