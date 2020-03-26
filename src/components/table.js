@@ -35,6 +35,7 @@ function Table(props) {
     getDistricts();
   }, [1]);
 
+
   const getDistricts = () => {
     axios.get('https://api.covid19india.org/state_district_wise.json')
         .then((response)=>{
@@ -44,6 +45,8 @@ function Table(props) {
           console.log(err);
         });
   };
+  // make a axios call every 10minutes
+  setInterval(getDistricts, 600000);
 
   const doSort = (e, props) => {
     const totalRow = states.splice(0, 1);
