@@ -67,7 +67,7 @@ function Navbar(props) {
             }}
           >
             <span
-              className={`fadeInUp ${view === "Network Map" ? "focused" : ""}`}
+              className={`fadeInUp ${view === "DeepDive" ? "focused" : ""}`}
               style={{ animationDelay: "0.3s" }}
             >
               Deep dive
