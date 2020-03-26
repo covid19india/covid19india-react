@@ -18,6 +18,7 @@ function Home(props) {
   const [timeseries, setTimeseries] = useState([]);
   const [deltas, setDeltas] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
+  const [stateHighlighted, setStateHighlighted] = useState(undefined);
 
   useEffect(()=> {
     if (fetched===false) {
@@ -39,6 +40,11 @@ function Home(props) {
         });
   };
 
+  const onHighlightState = (state, index) => {
+    if (!state && !index) setStateHighlighted(null)
+    else setStateHighlighted({state, index})
+  }
+
   return (
     <div className="Home">
       <div className="home-left">
@@ -59,13 +65,13 @@ function Home(props) {
         <Level data={states} deltas={deltas}/>
         <Minigraph timeseries={timeseries} animate={true}/>
 
-        <Table states={states} summary={false}/>
+        <Table states={states} summary={false} onHighlightState={onHighlightState} />
 
       </div>
 
       <div className="home-right">
 
-        <ChoroplethMap states={states}/>
+        <ChoroplethMap states={states} stateHighlighted={stateHighlighted} />
 
         <div className="timeseries-header fadeInUp" style={{animationDelay: '1.5s'}}>
           <h1>Spread Trends</h1>
