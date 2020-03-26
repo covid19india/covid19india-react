@@ -12,7 +12,7 @@ function Row(props) {
     <tr className={props.total ? 'is-total' : ''}>
       <td style={{fontWeight: 600}}>{state.state}</td>
       <td>
-        {parseInt(state.confirmed)===0 ? '-' : state.active}
+        {parseInt(state.confirmed)===0 ? '-' : state.confirmed}
         <span className="deltas" style={{color: '#ff073a'}}>
           {!state.delta.confirmed==0 && <Icon.ArrowUp/>}
           {state.delta.confirmed > 0 ? `${state.delta.confirmed}` : ''}
