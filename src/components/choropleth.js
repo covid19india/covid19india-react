@@ -21,7 +21,7 @@ function ChoroplethMap(props) {
         setIndex(props.stateHighlighted.index);
       }
     }
-  }, [props.stateHighlighted])
+  }, [props.stateHighlighted]);
 
   useEffect(()=>{
     if (props.states.length>1 && choroplethMap.current) {
@@ -171,8 +171,8 @@ function ChoroplethMap(props) {
 
   return (
     <div className="ChoroplethMap fadeInUp" style={{animationDelay: '1.2s'}}>
-      <h1 className="header">Statistics by State</h1>
-      <h6 className="header">{window.innerWidth <=769 ? 'Tap' : 'Hover'} over a state for more details</h6>
+      <h1 className="header">Statistics by State/UT</h1>
+      <h6 className="header">{window.innerWidth <=769 ? 'Tap' : 'Hover'} over a state/UT for more details</h6>
       <div className="svg-parent">
         <svg id="chart" width="650" height={window.innerWidth <= 479 ? 650: 750} viewBox={`0 0 650 ${window.innerWidth <= 479 ? 650: 750}`} preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
       </div>
