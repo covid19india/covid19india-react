@@ -30,7 +30,7 @@ function Home(props) {
         .then((response)=>{
           setStates(response.data.statewise);
           setTimeseries(response.data.cases_time_series);
-          setLastUpdated(response.data.statewise[0].lastupdatedtime.replace("at", ""));
+          setLastUpdated(response.data.statewise[0].lastupdatedtime.replace('at', ''));
           setDeltas(response.data.key_values[0]);
           setFetched(true);
         })
@@ -51,7 +51,7 @@ function Home(props) {
             </div>
             <div className="last-update">
               <h6>Last Reported Case</h6>
-              <h3>{isNaN(Date.parse(lastUpdated)) ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
+              <h3>{isNaN(Date.parse(lastUpdated)) ? '6 hours ago' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
             </div>
           </div>
         </div>
