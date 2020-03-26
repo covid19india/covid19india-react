@@ -3,6 +3,7 @@ import * as Icon from 'react-feather';
 import axios from 'axios';
 
 import Row from './row';
+import { useInterval} from '../hooks/useInterval';
 
 function Table(props) {
   const [states, setStates] = useState(props.states);
@@ -45,8 +46,10 @@ function Table(props) {
           console.log(err);
         });
   };
-  // make a axios call every 10minutes
-  setInterval(getDistricts, 600000);
+  // make a axios call every 5 secs
+  useInterval(() => {
+    getDistricts();
+  }, 5000);
 
   const doSort = (e, props) => {
     const totalRow = states.splice(0, 1);
