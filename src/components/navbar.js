@@ -10,7 +10,7 @@ function Navbar(props) {
         className="Navbar"
         style={{
           animationDelay: "0.5s",
-          height: view === "Clusters" ? "2.5rem" : "",
+          height: (view === "Clusters" || view === "DeepDive") ? "2.5rem" : "4.5rem",
           transition: "all 0.3s ease-in-out"
         }}
       >
@@ -19,8 +19,8 @@ function Navbar(props) {
           src="/icon.png"
           style={{
             animationDelay: "0.0s",
-            width: view === "Clusters" ? "1.5rem" : "",
-            height: view === "Clusters" ? "1.5rem" : "",
+            width: (view === "Clusters" || view === "DeepDive") ? "1.5rem" : "",
+            height: (view === "Clusters" || view === "DeepDive") ? "1.5rem" : "",
             transition: "all 0.3s ease-in-out"
           }}
         />
