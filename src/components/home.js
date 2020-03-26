@@ -19,7 +19,7 @@ function Home(props) {
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState([]);
   const [deltas, setDeltas] = useState([]);
-  const [timeseriesMode, setTimeseriesMode] = useState(true);
+  const [timeseriesMode, setTimeseriesMode] = useState(false);
   const [stateHighlighted, setStateHighlighted] = useState(undefined);
 
   useEffect(()=> {
