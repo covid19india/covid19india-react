@@ -544,6 +544,9 @@ table {
     width: 100%;
     svg {
       align-self: center;
+      @include themify($themes) {
+        filter: themed('choropleth-map-filter');
+      }
       text {
         text-transform: uppercase;
         text-align: right;

@@ -16,7 +16,8 @@ $themes: (
     banner-bg: $purple-light,
     banner-text-color: $purple,
     faq-question-color: $gray-dark,
-    link-h3-color: $gray-dark
+    link-h3-color: $gray-dark,
+    choropleth-map-filter: none
   ),
   dark: (
     app-bg-color: $black,
@@ -29,6 +30,7 @@ $themes: (
     banner-bg: $gray-mid,
     banner-text-color: $purple-light-opaque,
     faq-question-color: $gray-light-opaque,
-    link-h3-color: $gray-light-opaque
+    link-h3-color: $gray-light-opaque,
+    choropleth-map-filter: invert(100%) hue-rotate(180deg) contrast(90%)
   )
 );
