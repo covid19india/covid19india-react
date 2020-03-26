@@ -3,7 +3,12 @@ module.exports = {
     browser: true,
     es6: true,
   },
-  extends: ['plugin:react/recommended', 'google', 'eslint-config-prettier'],
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'google',
+    'eslint-config-prettier',
+  ],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
