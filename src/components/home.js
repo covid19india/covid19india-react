@@ -53,7 +53,16 @@ function Home(props) {
     if (!state && !index) setStateHighlighted(null);
     else setStateHighlighted({state, index});
   };
-
+  let prestconfirmed=0;
+  let prevconfirmed=0;
+  setSpreadData(timeseries,states);
+  function setSpreadData(timeseries){
+    if(timeseries.length>0){
+    prevconfirmed = timeseries[timeseries.length-2].totalconfirmed;
+    prestconfirmed = states[0].confirmed;
+    //console.log(prevconfirmed,prestconfirmed);
+    }
+  }
   return (
     <div className="Home">
       <div className="home-left">
@@ -68,6 +77,10 @@ function Home(props) {
               <h6>Last Updated</h6>
               <h3>{isNaN(Date.parse(lastUpdated)) ? '6 hours ago' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
             </div>
+          </div>
+          <div className="header">
+            <h3>Spread Rate:</h3>
+            <h2>{(((prestconfirmed-prevconfirmed)/prevconfirmed)*100).toFixed(2)}%</h2>
           </div>
         </div>
 
