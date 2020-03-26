@@ -104,7 +104,7 @@ function TimeSeries(props) {
         .append('circle')
         .attr('fill', colors[i])
         .attr('stroke', colors[i])
-        .attr('r', 4)
+        .attr('r', 3)
         .attr('cx', x(new Date(data[timeseries.length-1]['date'] + '2020')))
         .attr('cy', y(data[timeseries.length-1][dataTypes[i]]));
     });
@@ -183,7 +183,7 @@ function TimeSeries(props) {
         .append('circle')
         .attr('fill', colors[i])
         .attr('stroke', colors[i])
-        .attr('r', 2)
+        .attr('r', 1)
         .attr('cursor', 'pointer')
         .attr('cx', function(d) {
           return x(new Date(d['date']+'2020'));
