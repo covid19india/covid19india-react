@@ -64,11 +64,11 @@ function TimeSeries(props) {
     resizeObserver.observe(el);
 
     const svg1 = d3.select(graphElement1.current);
-    const margin = {top: 20, right: 15, bottom: 10, left: 25};
+    const margin = {top: 20, right: 40, bottom: 25, left: 15};
     const pwidth = svg1.node().getBoundingClientRect().width;
     const pheight = svg1.node().getBoundingClientRect().height;
-    const width = pwidth - margin.left - margin.right;
-    const height = pheight - margin.top - margin.bottom;
+    const width = pwidth - margin.right;
+    const height = pheight - margin.bottom;
 
     const svg2 = d3.select(graphElement2.current);
     const svg3 = d3.select(graphElement3.current);
@@ -87,18 +87,9 @@ function TimeSeries(props) {
 
     const indexScale = d3.scaleLinear()
         .domain([0, timeseries.length])
-        .range([margin.left,width]);
+        .range([margin.left, width]);
 
     const svgArray = [svg1, svg2, svg3, svg4, svg5, svg6];
-
-    /* X axis */
-    svgArray.forEach((s) => {
-      s.append('g')
-        .attr('transform', 'translate(0,' + height + ')')
-        .attr('class', 'axis')
-        .call(d3.axisBottom(x)
-          .ticks(width < 500 ? 3 : 5));
-    });
 
     const dataTypes = ['totalconfirmed', 'totalrecovered', 'totaldeceased',
                        'dailyconfirmed', 'dailyrecovered', 'dailydeceased'];
@@ -113,19 +104,31 @@ function TimeSeries(props) {
               .range([height, margin.top]);
     });
 
+    /* X axis */
+    svgArray.forEach((s) => {
+      s.append('g')
+        .attr('transform', 'translate(0,' + height + ')')
+        .attr('class', 'axis')
+        .call(d3.axisBottom(x)
+          .ticks(width < 400 ? 3 : 5))
+        .call(g => g.selectAll(".tick text")
+          .style("font-size", '10px'));
+    });
+
     /* Y axis */
     svgArray.forEach((s, i) => {
       s.append('g')
         .attr('transform', `translate(${width}, ${0})`)
         .attr('class', 'axis')
         .call(d3.axisRight(mode ? yScales[0] : yScales[i])
-          .ticks(5)
+          .ticks(4)
           .tickPadding(5)
           .tickFormat((tick) => {
             if (Math.floor(tick) === tick) { return tick; }
-          })
-        );
-    });
+          }))
+        .call(g => g.selectAll(".tick text")
+          .style("font-size", '10px'));
+      });
 
     /* Focus dots */
     const colors = ['#ff073a', '#28a745', '#6c757d', '#ff073a', '#28a745', '#6c757d'];
