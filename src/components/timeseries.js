@@ -39,12 +39,6 @@ function TimeSeries(props) {
     }
   }, [update]);
 
-  window.addEventListener('resize', () => {
-    if (timeseries.length>1) {
-      refreshGraphs();
-    }
-  });
-
   const refreshGraphs = () => {
     const graphs = [graphElement1, graphElement2, graphElement3, graphElement4, graphElement5, graphElement6];
     for (let i=0; i<=graphs.length; i++) {
