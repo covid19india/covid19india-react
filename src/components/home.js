@@ -18,10 +18,12 @@ function Home(props) {
   const [timeseries, setTimeseries] = useState([]);
   const [deltas, setDeltas] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
+  const [rawData, setRawData] = useState([]);
 
   useEffect(()=> {
     if (fetched===false) {
       getStates();
+      getRawData();
     }
   }, [fetched]);
 
@@ -38,6 +40,33 @@ function Home(props) {
           console.log(err);
         });
   };
+
+  const getRawData = () => {
+    axios.get('https://api.covid19india.org/raw_data.json')
+      .then((response) => {
+        setRawData(response.data.raw_data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getConfirmedCases = () => {
+    let confirmed = 0;
+    states.map((state, index) => {
+      if (index !== 0) {
+        confirmed += parseInt(state.confirmed);
+      }
+    });
+    return confirmed;
+  }
+
+  const getIndianPrecentage = () => {
+    const confirmed = getConfirmedCases();
+    const indianCount = rawData.filter(d => d.nationality === "India").length;
+    const indiaPercent = indianCount / confirmed * 100;
+    return Math.round(indiaPercent);
+  }
 
   return (
     <div className="Home">
@@ -58,7 +87,13 @@ function Home(props) {
 
         <Level data={states} deltas={deltas}/>
         <Minigraph timeseries={timeseries} animate={true}/>
-
+        <div className="header fadeInUp" style={{ animationDelay: '0.5s' }}>
+          <div className="header-mid">
+            <div className="titles">
+              <h6>Of the {getConfirmedCases()} confirmed cases , {getIndianPrecentage()} % are Indian National, rest {100 - getIndianPrecentage()} % is being verified.</h6>
+            </div>
+          </div>
+        </div>
         <Table states={states} summary={false}/>
 
       </div>
