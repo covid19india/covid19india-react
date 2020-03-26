@@ -10,14 +10,14 @@
 
 
 ## Setup
-For Windows
+On Windows
 ```
 npm install -D
 npm run build
 npm install -g serve
 serve -s build
 ```
-For Linux
+On Linux
 ```
 npm i && npm start
 ```
