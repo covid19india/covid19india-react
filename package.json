@@ -56,6 +56,7 @@
     "eject": "react-scripts eject",
     "css-build": "node-sass --omit-source-map-url sass/custom.scss src/App.css",
     "css-watch": "npm run css-build -- --watch",
+    "check-format": "prettier --check '**/*.{js,json}'",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },

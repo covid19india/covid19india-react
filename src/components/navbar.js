@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 function Navbar(props) {
-  const [view, setView] = useState("Home");
+  const [view, setView] = useState('Home')
 
-  if (window.location.pathname !== "/summary") {
+  if (window.location.pathname !== '/summary') {
     return (
       <div
         className="Navbar"
         style={{
-          animationDelay: "0.5s",
-          height: view === "Clusters" ? "2.5rem" : "",
-          transition: "all 0.3s ease-in-out"
+          animationDelay: '0.5s',
+          height: view === 'Clusters' ? '2.5rem' : '',
+          transition: 'all 0.3s ease-in-out',
         }}
       >
         <img
           className="fadeInUp"
           src="/icon.png"
           style={{
-            animationDelay: "0.0s",
-            width: view === "Clusters" ? "1.5rem" : "",
-            height: view === "Clusters" ? "1.5rem" : "",
-            transition: "all 0.3s ease-in-out"
+            animationDelay: '0.0s',
+            width: view === 'Clusters' ? '1.5rem' : '',
+            height: view === 'Clusters' ? '1.5rem' : '',
+            transition: 'all 0.3s ease-in-out',
           }}
         />
 
@@ -29,12 +29,12 @@ function Navbar(props) {
           <Link
             to="/"
             onClick={() => {
-              setView("Home");
+              setView('Home')
             }}
           >
             <span
-              className={`fadeInUp ${view === "Home" ? "focused" : ""}`}
-              style={{ animationDelay: "0.2s" }}
+              className={`fadeInUp ${view === 'Home' ? 'focused' : ''}`}
+              style={{ animationDelay: '0.2s' }}
             >
               Home
             </span>
@@ -49,12 +49,12 @@ function Navbar(props) {
           <Link
             to="/clusters"
             onClick={() => {
-              setView("Clusters");
+              setView('Clusters')
             }}
           >
             <span
-              className={`fadeInUp ${view === "Network Map" ? "focused" : ""}`}
-              style={{ animationDelay: "0.3s" }}
+              className={`fadeInUp ${view === 'Network Map' ? 'focused' : ''}`}
+              style={{ animationDelay: '0.3s' }}
             >
               Clusters
             </span>
@@ -63,14 +63,14 @@ function Navbar(props) {
           <Link
             to="/links"
             onClick={() => {
-              setView("Helpful Links");
+              setView('Helpful Links')
             }}
           >
             <span
               className={`fadeInUp ${
-                view === "Helpful Links" ? "focused" : ""
+                view === 'Helpful Links' ? 'focused' : ''
               }`}
-              style={{ animationDelay: "0.4s" }}
+              style={{ animationDelay: '0.4s' }}
             >
               Helpful Links
             </span>
@@ -79,12 +79,12 @@ function Navbar(props) {
           <Link
             to="/faq"
             onClick={() => {
-              setView("FAQs");
+              setView('FAQs')
             }}
           >
             <span
-              className={`fadeInUp ${view === "FAQs" ? "focused" : ""}`}
-              style={{ animationDelay: "0.4s" }}
+              className={`fadeInUp ${view === 'FAQs' ? 'focused' : ''}`}
+              style={{ animationDelay: '0.4s' }}
             >
               FAQ
             </span>
@@ -93,10 +93,10 @@ function Navbar(props) {
 
         <div className="navbar-right"></div>
       </div>
-    );
+    )
   } else {
-    return <div></div>;
+    return <div></div>
   }
 }
 
-export default Navbar;
+export default Navbar
