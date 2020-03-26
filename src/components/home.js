@@ -76,7 +76,7 @@ function Home(props) {
         </div>
 
         <Level data={states} deltas={deltas} />
-        <Minigraph timeseries={timeseries} animate={true} />
+        <Minigraph deltas={deltas} timeseries={timeseries} animate={true} />
 
         <Table
           states={states}

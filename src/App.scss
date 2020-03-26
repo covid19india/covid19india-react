@@ -346,12 +346,12 @@ h6 {
   margin-top: 0.25rem;
 
   h6 {
-    color: $green-mid;
+    color: $gray-mid;
     font-weight: 900;
   }
 
   h3 {
-    color: $green;
+    color: $gray;
     font-weight: 600;
   }
 
@@ -1050,6 +1050,37 @@ table {
   flex-direction: column;
   margin-top: 1rem;
   width: 100%;
+  .confirmed {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .graph-content {
+    display: flex;
+    flex-direction: column;
+    .delta {
+      align-self: center;
+      margin-top: 5px;
+    }
+  }
+
+  .is-cherry {
+    h1 {color: $cherry;}
+    h4, h5 {color: $cherry-mid;}
+  }
+  .is-blue {
+    h1 {color: $blue;}
+    h4, h5 {color: $blue-mid;}
+  }
+  .is-green {
+    h1 {color: $green;}
+    h4, h5 {color: $green-mid;}
+  }
+  .is-gray {
+    h1 {color: $gray;}
+    h4, h5 {color: $gray-mid;}
+  }
 
   .stats {
     padding: 0.25rem;
@@ -1177,11 +1208,12 @@ table {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
+  padding-bottom: 5rem;
   .svg-parent {
     width: 5rem;
+    margin-top: 5px;
     background: transparent !important;
-    height: 7rem;
+    height: 2rem;
   }
 
   margin-bottom: -3rem;
@@ -1436,6 +1468,10 @@ footer {
     td {
       max-width: 6.75rem;
     }
+  }
+
+  .affected-count {
+    margin: 1rem 1rem 0 0;
   }
 }
 

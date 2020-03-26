@@ -301,53 +301,110 @@ function Minigraph(props) {
 
   return (
     <div className="Minigraph">
-      <div className="svg-parent fadeInUp" style={{animationDelay: '0.6s'}}>
-        <svg
-          ref={graphElement1}
-          width="100"
-          height="100"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="xMidYMid meet"
-        />
+      <div
+        className="graph-content is-cherry fadeInUp"
+        style={{animationDelay: '0.6s'}}
+      >
+        <div className="svg-parent fadeInUp">
+          <svg
+            ref={graphElement1}
+            width="100"
+            height="100"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
+        <h4 className="delta">
+          [
+          {props.deltas
+            ? props.deltas.confirmeddelta >= 0
+              ? '+' + props.deltas.confirmeddelta
+              : props.deltas.confirmeddelta
+            : ''}
+          {window.innerWidth <= 375 ? '' : ' Today'}]
+        </h4>
       </div>
 
       <div
-        className="svg-parent is-blue fadeInUp"
+        className="graph-content is-blue fadeInUp"
         style={{animationDelay: '0.7s'}}
       >
-        <svg
-          ref={graphElement2}
-          width="100"
-          height="100"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="xMidYMid meet"
-        />
+        <div className="svg-parent is-blue" style={{animationDelay: '0.7s'}}>
+          <svg
+            ref={graphElement2}
+            width="100"
+            height="100"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
+        <h4 className="delta">
+          [
+          {props.deltas
+            ? props.deltas.confirmeddelta -
+                props.deltas.recovereddelta -
+                props.deltas.deceaseddelta >=
+              0
+              ? '+' +
+                (
+                  props.deltas.confirmeddelta -
+                  props.deltas.recovereddelta -
+                  props.deltas.deceaseddelta
+                ).toString()
+              : props.deltas.confirmeddelta -
+                props.deltas.recovereddelta -
+                props.deltas.deceaseddelta
+            : ''}
+          {window.innerWidth <= 375 ? '' : ' Today'}]
+        </h4>
       </div>
 
       <div
-        className="svg-parent is-green fadeInUp"
+        className="graph-content is-green fadeInUp"
         style={{animationDelay: '0.8s'}}
       >
-        <svg
-          ref={graphElement3}
-          width="100"
-          height="100"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="xMidYMid meet"
-        />
+        <div className="svg-parent is-green">
+          <svg
+            ref={graphElement3}
+            width="100"
+            height="100"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
+        <h4 className="delta">
+          [
+          {props.deltas
+            ? props.deltas.recovereddelta >= 0
+              ? '+' + props.deltas.recovereddelta
+              : props.deltas.recovereddelta
+            : ''}
+          {window.innerWidth <= 375 ? '' : ' Today'}]
+        </h4>
       </div>
 
       <div
-        className="svg-parent is-gray fadeInUp"
+        className="graph-content is-gray fadeInUp"
         style={{animationDelay: '0.9s'}}
       >
-        <svg
-          ref={graphElement4}
-          width="100"
-          height="100"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="xMidYMid meet"
-        />
+        <div className="svg-parent is-gray">
+          <svg
+            ref={graphElement4}
+            width="100"
+            height="100"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
+        <h4 className="delta">
+          [
+          {props.deltas
+            ? props.deltas.deceaseddelta >= 0
+              ? '+' + props.deltas.deceaseddelta
+              : '+0'
+            : ''}
+          {window.innerWidth <= 375 ? '' : ' Today'}]
+        </h4>
       </div>
     </div>
   );
