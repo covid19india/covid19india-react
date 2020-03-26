@@ -103,7 +103,7 @@ function Table(props) {
       <h5 className="affected-count">{count} States/UTS Affected</h5>
       <thead>
         <tr>
-          <th className="state-heading" onClick={(e) => handleSort(e, props)} >
+          <th className="sticky state-heading" onClick={(e) => handleSort(e, props)} >
             <div className='heading-content'>
               <abbr title="State">
                   State/UT
@@ -111,26 +111,26 @@ function Table(props) {
               <div style={{display: sortData.sortColumn === 'state' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
-          <th onClick={(e) => handleSort(e, props)}>
+          <th className="sticky" onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
               <abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfmd' : 'Confirmed'}</abbr>
               <div style={{display: sortData.sortColumn === 'confirmed' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
-          <th onClick={(e) => handleSort(e, props)}>
+          <th className="sticky" onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
               <abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'A' : 'Actv' : 'Active'}</abbr>
               <div style={{display: sortData.sortColumn === 'active' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
-          <th onClick={(e) => handleSort(e, props)}>
+          <th  className="sticky" onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
               <abbr className={`${window.innerWidth <=769 ? 'is-green' : ''}`} title="Recovered">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'R' : 'Rcvrd' : 'Recovered'}</abbr>
               <div className={ sortData.sortColumn === 'recovered'? 'sort-black' : ''}></div>
               <div style={{display: sortData.sortColumn === 'recovered' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
-          <th onClick={(e) => handleSort(e, props)}>
+          <th className="sticky" onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
               <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'Dcsd' : 'Deceased'}</abbr>
               <div style={{display: sortData.sortColumn === 'deaths' ? 'initial': 'none'}}><Icon.Maximize2/></div>
