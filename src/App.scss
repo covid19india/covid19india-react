@@ -463,6 +463,9 @@ table {
       &:hover {
         background: $gray-hover;
       }
+      position: sticky;
+      top: 0px;
+      background-color: white;
       .heading-content {
         display: flex;
         justify-content: space-between;
@@ -528,13 +531,6 @@ table {
     td {
       background: $gray-hover;
     }
-  }
-}
-.stickyTable {
-  thead {
-    position: sticky;
-    top: 0;
-    background-color: white;
   }
 }
 .ChoroplethMap {
