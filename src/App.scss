@@ -449,7 +449,6 @@ table {
   font-family: 'archia';
   text-transform: uppercase;
   margin-bottom: 1rem;
-  margin-top: 2rem;
   thead {
     background: $gray-light;
     color: $gray-dark;
@@ -517,18 +516,17 @@ table {
       text-align: left;
     }
   }
-  .affected-count {
-    position: absolute;
-    margin: 0;
-    top: -1rem;
-    color: $gray-mid;
-    right: 0;
-  }
   .is-total {
     td {
       background: $gray-hover;
     }
   }
+}
+
+.affected-count {
+  text-align: right;
+  margin: 1rem 0 0 0;
+  color: $gray-mid;
 }
 
 .ChoroplethMap {

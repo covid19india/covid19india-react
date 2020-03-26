@@ -63,61 +63,63 @@ function Table(props) {
   doSort();
 
   return (
-    <table className="table fadeInUp" style={{animationDelay: '1s'}}>
-      <h5 className="affected-count">{count} States/UTS Affected</h5>
-      <thead>
-        <tr>
-          <th className="state-heading" onClick={(e) => handleSort(e, props)} >
-            <div className='heading-content'>
-              <abbr title="State">
-                  State/UT
-              </abbr>
-              <div style={{display: sortData.sortColumn === 'state' ? 'initial': 'none'}}><Icon.Maximize2/></div>
-            </div>
-          </th>
-          <th onClick={(e) => handleSort(e, props)}>
-            <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfmd' : 'Confirmed'}</abbr>
-              <div style={{display: sortData.sortColumn === 'confirmed' ? 'initial': 'none'}}><Icon.Maximize2/></div>
-            </div>
-          </th>
-          <th onClick={(e) => handleSort(e, props)}>
-            <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'A' : 'Actv' : 'Active'}</abbr>
-              <div style={{display: sortData.sortColumn === 'active' ? 'initial': 'none'}}><Icon.Maximize2/></div>
-            </div>
-          </th>
-          <th onClick={(e) => handleSort(e, props)}>
-            <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-green' : ''}`} title="Recovered">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'R' : 'Rcvrd' : 'Recovered'}</abbr>
-              <div className={ sortData.sortColumn === 'recovered'? 'sort-black' : ''}></div>
-              <div style={{display: sortData.sortColumn === 'recovered' ? 'initial': 'none'}}><Icon.Maximize2/></div>
-            </div>
-          </th>
-          <th onClick={(e) => handleSort(e, props)}>
-            <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'Dcsd' : 'Deaths'}</abbr>
-              <div style={{display: sortData.sortColumn === 'deaths' ? 'initial': 'none'}}><Icon.Maximize2/></div>
-            </div>
-          </th>
-        </tr>
-      </thead>
+    <>
+      <h5 className="affected-count fadeInUp" style={{animationDelay: '1s'}}>{count} States/UTS Affected</h5>
+      <table className="table fadeInUp" style={{animationDelay: '1s'}}>
+        <thead>
+          <tr>
+            <th className="state-heading" onClick={(e) => handleSort(e, props)} >
+              <div className='heading-content'>
+                <abbr title="State">
+                    State/UT
+                </abbr>
+                <div style={{display: sortData.sortColumn === 'state' ? 'initial': 'none'}}><Icon.Maximize2/></div>
+              </div>
+            </th>
+            <th onClick={(e) => handleSort(e, props)}>
+              <div className='heading-content'>
+                <abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfmd' : 'Confirmed'}</abbr>
+                <div style={{display: sortData.sortColumn === 'confirmed' ? 'initial': 'none'}}><Icon.Maximize2/></div>
+              </div>
+            </th>
+            <th onClick={(e) => handleSort(e, props)}>
+              <div className='heading-content'>
+                <abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'A' : 'Actv' : 'Active'}</abbr>
+                <div style={{display: sortData.sortColumn === 'active' ? 'initial': 'none'}}><Icon.Maximize2/></div>
+              </div>
+            </th>
+            <th onClick={(e) => handleSort(e, props)}>
+              <div className='heading-content'>
+                <abbr className={`${window.innerWidth <=769 ? 'is-green' : ''}`} title="Recovered">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'R' : 'Rcvrd' : 'Recovered'}</abbr>
+                <div className={ sortData.sortColumn === 'recovered'? 'sort-black' : ''}></div>
+                <div style={{display: sortData.sortColumn === 'recovered' ? 'initial': 'none'}}><Icon.Maximize2/></div>
+              </div>
+            </th>
+            <th onClick={(e) => handleSort(e, props)}>
+              <div className='heading-content'>
+                <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'Dcsd' : 'Deaths'}</abbr>
+                <div style={{display: sortData.sortColumn === 'deaths' ? 'initial': 'none'}}><Icon.Maximize2/></div>
+              </div>
+            </th>
+          </tr>
+        </thead>
 
-      <tbody>
-        {
-          states.map((state, index) => {
-            if (index!==0 && state.confirmed>0) {
-              return (
-                <Row key={index} state={state} total={false}/>
-              );
-            }
-          })
-        }
+        <tbody>
+          {
+            states.map((state, index) => {
+              if (index!==0 && state.confirmed>0) {
+                return (
+                  <Row key={index} state={state} total={false}/>
+                );
+              }
+            })
+          }
 
-        {states.length > 1 && props.summary===false && <Row key={0} state={states[0]} total={true}/>}
-      </tbody>
+          {states.length > 1 && props.summary===false && <Row key={0} state={states[0]} total={true}/>}
+        </tbody>
 
-    </table>
+      </table>
+    </>
   );
 }
 
