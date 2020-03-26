@@ -11,35 +11,37 @@ function Row(props) {
   }, [props.state]);
 
   return (
-    <tr className={props.total ? 'is-total' : ''}>
+    <tr className={props.total ? 'is-total' : ''}
+        onMouseEnter={() => props.onHighlightState?.(state, props.index)}
+        touchstart={() => props.onHighlightState?.(state, props.index)}>
       <td style={{fontWeight: 600}}>{t(`states.${state.state}`)}</td>
       <td>
-        {parseInt(state.confirmed)===0 ? '-' : state.active}
         <span className="deltas" style={{color: '#ff073a'}}>
           {!state.delta.confirmed==0 && <Icon.ArrowUp/>}
           {state.delta.confirmed > 0 ? `${state.delta.confirmed}` : ''}
         </span>
+        {parseInt(state.confirmed)===0 ? '-' : state.confirmed}
       </td>
       <td style={{color: parseInt(state.active)===0 ? '#B5B5B5' : 'inherit'}}>
-        {parseInt(state.active)===0 ? '-' : state.active}
         <span className="deltas" style={{color: '#007bff'}}>
           {!state.delta.active==0 && <Icon.ArrowUp/>}
           {state.delta.active>0 ? `${state.delta.active}` : ''}
         </span>
+        {parseInt(state.active)==0 ? '-' : state.active}
       </td>
       <td style={{color: parseInt(state.recovered)===0 ? '#B5B5B5' : 'inherit'}}>
-        {parseInt(state.recovered)===0 ? '-' : state.recovered}
         <span className="deltas" style={{color: '#28a745'}}>
           {!state.delta.recovered==0 && <Icon.ArrowUp/>}
           {state.delta.recovered > 0 ? `${state.delta.recovered}` : ''}
         </span>
+        {parseInt(state.recovered)===0 ? '-' : state.recovered}
       </td>
       <td style={{color: parseInt(state.deaths)===0 ? '#B5B5B5' : 'inherit'}}>
-        {parseInt(state.deaths)===0 ? '-' : state.deaths}
         <span className="deltas" style={{color: '#6c757d'}}>
           {!state.delta.deaths==0 && <Icon.ArrowUp/>}
           {state.delta.deaths>0 ? `${state.delta.deaths}` : ''}
         </span>
+        {parseInt(state.deaths)===0 ? '-' : state.deaths}
       </td>
     </tr>
   );

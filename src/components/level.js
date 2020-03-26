@@ -56,7 +56,7 @@ function Level(props) {
 
       <div className="level-item is-gray">
         <h5 className="heading">{t("Deceased")}</h5>
-        <h4>[{props.deltas ? props.deltas.deceaseddelta>=0 ? '+'+props.deltas.deceaseddelta : props.deltas.deceaseddelta : ''}]</h4>
+        <h4>[{props.deltas ? props.deltas.deceaseddelta>=0 ? '+'+props.deltas.deceaseddelta : '+0' : ''}]</h4>
         <h1 className="title has-text-grey">{deaths}</h1>
       </div>
 

@@ -14,6 +14,18 @@ function ChoroplethMap(props) {
   const {t} = useTranslation();
 
   useEffect(()=>{
+    if (props.stateHighlighted === null) {
+      setState(states[1]);
+      setIndex(1);
+    } else {
+      if (props.stateHighlighted !== undefined) {
+        setState(props.stateHighlighted.state);
+        setIndex(props.stateHighlighted.index);
+      }
+    }
+  }, [props.stateHighlighted])
+
+  useEffect(()=>{
     if (props.states.length>1 && choroplethMap.current) {
       mapData(choroplethMap.current);
       setState(states[1]);
