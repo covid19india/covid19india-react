@@ -76,7 +76,8 @@ function TimeSeries(props) {
     const svg5 = d3.select(graphElement5.current);
     const svg6 = d3.select(graphElement6.current);
 
-    const dateMin = new Date(data[0]['date'] + '2020');
+    var dateMin = new Date(data[0]['date'] + '2020');
+    dateMin.setDate(dateMin.getDate() - 1);
     var dateMax = new Date(data[timeseries.length-1]['date'] + '2020');
     dateMax.setDate(dateMax.getDate() + 1);
 
@@ -95,7 +96,8 @@ function TimeSeries(props) {
       s.append('g')
         .attr('transform', 'translate(0,' + height + ')')
         .attr('class', 'axis')
-        .call(d3.axisBottom(x).ticks(width < 500 ? 3 : 5));
+        .call(d3.axisBottom(x)
+          .ticks(width < 500 ? 3 : 5));
     });
 
     const dataTypes = ['totalconfirmed', 'totalrecovered', 'totaldeceased',
@@ -105,10 +107,9 @@ function TimeSeries(props) {
       return d3.max(data, (d) => { return +d[dataTypes[i]]; })
     })
 
-    console.log(maxDataTypes);
     const yScales = maxDataTypes.map((d) => {
       return d3.scaleLinear()
-              .domain([-d/10, d])
+              .domain([0, d])
               .range([height, margin.top]);
     });
 
@@ -173,22 +174,18 @@ function TimeSeries(props) {
 
     /* Paths */
     svgArray.forEach((s, i) => {
-      s.append('path')
-        .datum(data)
+      s.selectAll('stem-line')
+        .data(data)
+        .enter()
+        .append('line')
         .attr('fill', 'none')
         .attr('stroke', colors[i] + '99')
         .attr('stroke-width', 3)
         .attr('cursor', 'pointer')
-        .attr('d', d3.line()
-            .x(function(d) {
-              return x(new Date(d['date']+'2020'));
-            })
-            .y(function(d) {
-              if (mode) return yScales[0](d[dataTypes[i]]);
-              else return yScales[i](d[dataTypes[i]]);
-            })
-            .curve(d3.curveCardinal),
-        );
+        .attr('x1', (d) => { return x(new Date(d['date']+'2020'));})
+        .attr('y1', height)
+        .attr('x2', (d) => { return x(new Date(d['date']+'2020'));})
+        .attr('y2', (d) => { return mode ? yScales[0](d[dataTypes[i]]) : yScales[i](d[dataTypes[i]]);});
     });
 
     /* Path Dots */
