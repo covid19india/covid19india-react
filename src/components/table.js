@@ -63,7 +63,7 @@ function Table(props) {
   doSort();
 
   return (
-    <table className="table fadeInUp" style={{animationDelay: '1s'}}>
+    <table className="table fadeInUp stickyTable" style={{animationDelay: '1s'}}>
       <h5 className="affected-count">{count} States/UTS Affected</h5>
       <thead>
         <tr>

@@ -530,7 +530,13 @@ table {
     }
   }
 }
-
+.stickyTable {
+  thead {
+    position: sticky;
+    top: 0;
+    background-color: white;
+  }
+}
 .ChoroplethMap {
   display: flex;
   position: relative;
