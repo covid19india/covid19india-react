@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: 'Status: Review Needed, Type: Bug'
+labels: 'Type: Bug'
 assignees: jeremyphilemon, JunaidBabu, sudevschiz
 
 ---
