@@ -6,7 +6,6 @@ const bodyParser = require('body-parser')
 const logger = require('morgan')
 const cors = require('cors')
 const assert = require('assert')
-const redis = require('redis')
 const responseTime = require('response-time')
 const MongoClient = require('mongodb').MongoClient
 require('dotenv').config()
@@ -19,7 +18,6 @@ client.on('error', (err) => {
   console.log('Error ' + err);
 });*/
 
-MongoDB = null
 const uri = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASSWORD}@${process.env.DB_NAME}-h6o7s.gcp.mongodb.net/test?retryWrites=true&w=majority&replicaSet=rs`
 MongoClient.connect(
   uri,
@@ -29,7 +27,6 @@ MongoClient.connect(
   },
   (err, db) => {
     assert.equal(null, err)
-    MongoDB = db
   },
 )
 

@@ -1,5 +1,5 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from 'react'
-import axios from 'axios'
 import * as d3 from 'd3'
 
 function TimeSeries(props) {
@@ -73,7 +73,7 @@ function TimeSeries(props) {
     const svg6 = d3.select(graphElement6.current)
 
     const dateMin = new Date(data[0]['date'] + '2020')
-    var dateMax = new Date(data[timeseries.length - 1]['date'] + '2020')
+    const dateMax = new Date(data[timeseries.length - 1]['date'] + '2020')
     dateMax.setDate(dateMax.getDate() + 1)
 
     const x = d3
@@ -261,7 +261,7 @@ function TimeSeries(props) {
     ]
     const yScales = [y1, y2, y3, y4, y5, y6]
 
-    var focus = svgArray.map(function (d, i) {
+    const focus = svgArray.map(function (d, i) {
       const y = mode ? y1 : yScales[i]
       return d
         .append('g')
@@ -286,6 +286,7 @@ function TimeSeries(props) {
     }
 
     function mousemove() {
+      // eslint-disable-next-line no-invalid-this
       const xm = d3.mouse(this)[0]
       const i = Math.round(indexScale.invert(xm))
       if (0 <= i && i < timeseries.length) {

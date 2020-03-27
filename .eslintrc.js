@@ -9,6 +9,19 @@ module.exports = {
     'google',
     'eslint-config-prettier',
   ],
+  overrides: [
+    {
+      files: ['*.test.js'],
+      extends: ['plugin:jest/recommended'],
+    },
+    {
+      files: ['serviceWorker.js'],
+      env: {
+        browser: true,
+        node: true,
+      },
+    },
+  ],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',

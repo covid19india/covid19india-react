@@ -1,10 +1,9 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from 'react'
-import axios from 'axios'
 import * as d3 from 'd3'
 
 function Minigraph(props) {
   const [timeseries, setTimeseries] = useState([])
-  const [datapoint, setDatapoint] = useState({})
   const graphElement1 = useRef(null)
   const graphElement2 = useRef(null)
   const graphElement3 = useRef(null)
@@ -33,7 +32,6 @@ function Minigraph(props) {
 
   function graphData(timeseries) {
     const data = timeseries
-    setDatapoint(data[data.length - 1])
 
     const x = d3
       .scaleTime()
@@ -54,35 +52,38 @@ function Minigraph(props) {
       ])
       .range([height, 0])
 
-    const y2 = d3
-      .scaleLinear()
-      .domain([
-        0,
-        d3.max(data, function (d) {
-          return +d['dailyconfirmed']
-        }),
-      ])
-      .range([height, 0])
+    // below vars y2, y3, y4 are assigned but never used. commenting this code instead of deleting,
+    // since it may be used as reference by developers.
 
-    const y3 = d3
-      .scaleLinear()
-      .domain([
-        0,
-        d3.max(data, function (d) {
-          return +d['dailyrecovered']
-        }),
-      ])
-      .range([height, 0])
+    // const y2 = d3
+    //   .scaleLinear()
+    //   .domain([
+    //     0,
+    //     d3.max(data, function (d) {
+    //       return +d['dailyconfirmed']
+    //     }),
+    //   ])
+    //   .range([height, 0])
 
-    const y4 = d3
-      .scaleLinear()
-      .domain([
-        0,
-        d3.max(data, function (d) {
-          return +d['dailydeceased']
-        }),
-      ])
-      .range([height, 0])
+    // const y3 = d3
+    //   .scaleLinear()
+    //   .domain([
+    //     0,
+    //     d3.max(data, function (d) {
+    //       return +d['dailyrecovered']
+    //     }),
+    //   ])
+    //   .range([height, 0])
+
+    // const y4 = d3
+    //   .scaleLinear()
+    //   .domain([
+    //     0,
+    //     d3.max(data, function (d) {
+    //       return +d['dailydeceased']
+    //     }),
+    //   ])
+    //   .range([height, 0])
 
     const path1 = svg1
       .append('path')
@@ -139,11 +140,9 @@ function Minigraph(props) {
       })
       .on('mouseover', (d) => {
         d3.select(d3.event.target).attr('r', '5')
-        setDatapoint(d)
       })
       .on('mouseout', (d) => {
         d3.select(d3.event.target).attr('r', '2')
-        setDatapoint(d)
       })
       .style('opacity', 0)
       .transition()
@@ -168,26 +167,10 @@ function Minigraph(props) {
           })
           .y(function (d, i) {
             if (i === 0) {
-              const today =
-                data[data.length - 9]['dailyconfirmed'] -
-                data[data.length - 9]['dailyrecovered'] -
-                data[data.length - 9]['dailydeceased']
-              const yesterday =
-                data[data.length - 10]['dailyconfirmed'] -
-                data[data.length - 10]['dailyrecovered'] -
-                data[data.length - 10]['dailydeceased']
               return y1(
                 d['dailyconfirmed'] - d['dailyrecovered'] - d['dailydeceased'],
               )
             } else {
-              const today =
-                data[data.length - 9 + i]['dailyconfirmed'] -
-                data[data.length - 9 + i]['dailyrecovered'] -
-                data[data.length - 9 + i]['dailydeceased']
-              const yesterday =
-                data[data.length - 10 + i]['dailyconfirmed'] -
-                data[data.length - 10 + i]['dailyrecovered'] -
-                data[data.length - 10 + i]['dailydeceased']
               return y1(
                 d['dailyconfirmed'] - d['dailyrecovered'] - d['dailydeceased'],
               )
@@ -217,25 +200,15 @@ function Minigraph(props) {
         return x(new Date(d['date'] + '2020'))
       })
       .attr('cy', function (d) {
-        const today =
-          data[data.length - 1]['dailyconfirmed'] -
-          data[data.length - 1]['dailyrecovered'] -
-          data[data.length - 1]['dailydeceased']
-        const yesterday =
-          data[data.length - 2]['dailyconfirmed'] -
-          data[data.length - 2]['dailyrecovered'] -
-          data[data.length - 2]['dailydeceased']
         return y1(
           d['dailyconfirmed'] - d['dailyrecovered'] - d['dailydeceased'],
         )
       })
       .on('mouseover', (d) => {
         d3.select(d3.event.target).attr('r', '5')
-        setDatapoint(d)
       })
       .on('mouseout', (d) => {
         d3.select(d3.event.target).attr('r', '2')
-        setDatapoint(d)
       })
       .style('opacity', 0)
       .transition()
@@ -291,11 +264,9 @@ function Minigraph(props) {
       })
       .on('mouseover', (d) => {
         d3.select(d3.event.target).attr('r', '5')
-        setDatapoint(d)
       })
       .on('mouseout', (d) => {
         d3.select(d3.event.target).attr('r', '2')
-        setDatapoint(d)
       })
       .style('opacity', 0)
       .transition()
@@ -353,11 +324,9 @@ function Minigraph(props) {
       })
       .on('mouseover', (d) => {
         d3.select(d3.event.target).attr('r', '5')
-        setDatapoint(d)
       })
       .on('mouseout', (d) => {
         d3.select(d3.event.target).attr('r', '2')
-        setDatapoint(d)
       })
       .style('opacity', 0)
       .transition()

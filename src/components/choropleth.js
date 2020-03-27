@@ -1,24 +1,21 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from 'react'
 import * as d3 from 'd3'
 import { legendColor } from 'd3-svg-legend'
 import * as topojson from 'topojson'
 
 function ChoroplethMap(props) {
-  const [rendered, setRendered] = useState(false)
   const [states, setStates] = useState(props.states)
   const [state, setState] = useState({})
   const [statistic, setStatistic] = useState({})
-  const [index, setIndex] = useState(1)
   const choroplethMap = useRef(null)
 
   useEffect(() => {
     if (props.stateHighlighted === null) {
       setState(states[1])
-      setIndex(1)
     } else {
       if (props.stateHighlighted !== undefined) {
         setState(props.stateHighlighted.state)
-        setIndex(props.stateHighlighted.index)
       }
     }
   }, [props.stateHighlighted])
@@ -58,7 +55,6 @@ function ChoroplethMap(props) {
     states.map((state, index) => {
       if (state.state.toLowerCase() === name.toLowerCase()) {
         setState(state)
-        setIndex(index)
       }
     })
   }

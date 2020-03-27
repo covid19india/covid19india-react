@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import {
   BrowserRouter as Router,
   Switch,
@@ -16,6 +16,7 @@ import Cluster from './components/cluster'
 import FAQ from './components/faq'
 import Banner from './components/banner'
 
+// eslint-disable-next-line no-undef
 const history = require('history').createBrowserHistory
 
 function App() {

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
 import differenceInMilliseconds from 'date-fns/differenceInMilliseconds'
 import axios from 'axios'
@@ -5,7 +6,7 @@ import axios from 'axios'
 function Banner(props) {
   const [snippets, setSnippets] = useState([])
   const [snippet, setSnippet] = useState()
-  const [start, setStart] = useState(
+  const [start] = useState(
     props.start
       ? new Date(props.date)
       : localStorage.getItem('start') === 'null'
