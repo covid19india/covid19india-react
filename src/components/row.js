@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import * as Icon from 'react-feather';
+let populationByState = require('./populationByState');
 
 function Row(props) {
   const [state, setState] = useState(props.state);
   const [districts, setDistricts] = useState(props.districts);
   const [reveal, setReveal] = useState(false);
-
+  const [population] = useState(populationByState)
   useEffect(()=>{
     setState(props.state);
   }, [props.state]);
@@ -68,6 +69,9 @@ function Row(props) {
           </span>*/}
           {parseInt(state.deaths)===0 ? '-' : state.deaths}
         </td>
+		<td >
+			{(population[state.state]) ? population[state.state] : "" }
+		</td>
       </tr>
 
       <tr className={`spacer`} style={{display: reveal && !props.total ? '' : 'none'}}>

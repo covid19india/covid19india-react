@@ -119,6 +119,11 @@ function Table(props) {
               <div style={{display: sortData.sortColumn === 'deaths' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
+				<th>
+            <div className='heading-content'>
+              <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Population">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'Ppln' : 'Population'}</abbr>
+            </div>
+          </th>
         </tr>
       </thead>
 
