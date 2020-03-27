@@ -29,6 +29,11 @@ function Links(props) {
         <a href="https://coronavirus.thebaselab.com/">https://coronavirus.thebaselab.com/</a>
       </div>
 
+      <div className="link fadeInUp" style={{animationDelay: '0.7s'}}>
+        <h3>Worldometer Coronavirus Updates</h3>
+        <a href="https://www.worldometers.info/coronavirus/">https://www.worldometers.info/coronavirus/</a>
+      </div>
+
     </div>
   );
 }
