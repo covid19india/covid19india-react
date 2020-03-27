@@ -11,9 +11,14 @@ function Minigraph(props) {
 
   useEffect(() => {
     if (props.timeseries.length > 1) {
-      setTimeseries(props.timeseries.slice(0, props.timeseries.length - 2))
+      setTimeseries(
+        props.timeseries.slice(
+          props.timeseries.length - 10,
+          props.timeseries.length - 1,
+        ),
+      )
     }
-  }, [props.timeseries.length])
+  }, [props.timeseries])
 
   useEffect(() => {
     if (timeseries.length > 1) {
@@ -32,11 +37,12 @@ function Minigraph(props) {
 
   function graphData(timeseries) {
     const data = timeseries
+    console.log(data)
 
     const x = d3
       .scaleTime()
       .domain(
-        d3.extent(data.slice(data.length - 10, data.length - 1), function (d) {
+        d3.extent(data, function (d) {
           return new Date(d['date'] + '2020')
         }),
       )
@@ -52,42 +58,9 @@ function Minigraph(props) {
       ])
       .range([height, 0])
 
-    // below vars y2, y3, y4 are assigned but never used. commenting this code instead of deleting,
-    // since it may be used as reference by developers.
-
-    // const y2 = d3
-    //   .scaleLinear()
-    //   .domain([
-    //     0,
-    //     d3.max(data, function (d) {
-    //       return +d['dailyconfirmed']
-    //     }),
-    //   ])
-    //   .range([height, 0])
-
-    // const y3 = d3
-    //   .scaleLinear()
-    //   .domain([
-    //     0,
-    //     d3.max(data, function (d) {
-    //       return +d['dailyrecovered']
-    //     }),
-    //   ])
-    //   .range([height, 0])
-
-    // const y4 = d3
-    //   .scaleLinear()
-    //   .domain([
-    //     0,
-    //     d3.max(data, function (d) {
-    //       return +d['dailydeceased']
-    //     }),
-    //   ])
-    //   .range([height, 0])
-
     const path1 = svg1
       .append('path')
-      .datum(data.slice(data.length - 10, data.length - 1))
+      .datum(data)
       .attr('fill', 'none')
       .attr('stroke', '#ff073a99')
       .attr('stroke-width', 3)
@@ -125,7 +98,7 @@ function Minigraph(props) {
 
     svg1
       .selectAll('.dot')
-      .data(data.slice(data.length - 2, data.length - 1))
+      .data(data.slice(data.length - 1))
       .enter()
       .append('circle')
       .attr('fill', '#ff073a')
@@ -151,7 +124,7 @@ function Minigraph(props) {
 
     const path2 = svg2
       .append('path')
-      .datum(data.slice(data.length - 10, data.length - 1))
+      .datum(data)
       .attr('fill', 'none')
       .attr('cursor', 'pointer')
       .attr('stroke', '#007bff99')
@@ -189,7 +162,7 @@ function Minigraph(props) {
 
     svg2
       .selectAll('.dot')
-      .data(data.slice(data.length - 2, data.length - 1))
+      .data(data.slice(data.length - 1))
       .enter()
       .append('circle')
       .attr('fill', '#007bff')
@@ -217,7 +190,7 @@ function Minigraph(props) {
 
     const path3 = svg3
       .append('path')
-      .datum(data.slice(data.length - 10, data.length - 1))
+      .datum(data)
       .attr('fill', 'none')
       .attr('stroke', '#28a74599')
       .attr('stroke-width', 3)
@@ -249,7 +222,7 @@ function Minigraph(props) {
 
     svg3
       .selectAll('.dot')
-      .data(data.slice(data.length - 2, data.length - 1))
+      .data(data.slice(data.length - 1))
       .enter()
       .append('circle')
       .attr('fill', '#28a745')
@@ -275,7 +248,7 @@ function Minigraph(props) {
 
     const path4 = svg4
       .append('path')
-      .datum(data.slice(data.length - 10, data.length - 1))
+      .datum(data)
       .attr('fill', 'none')
       .attr('cursor', 'pointer')
       .attr('stroke', '#6c757d99')
@@ -309,7 +282,7 @@ function Minigraph(props) {
 
     svg4
       .selectAll('.dot')
-      .data(data.slice(data.length - 2, data.length - 1))
+      .data(data.slice(data.length - 1))
       .enter()
       .append('circle')
       .attr('fill', '#6c757d')
