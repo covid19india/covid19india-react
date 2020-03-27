@@ -46,7 +46,7 @@ function Home(props) {
     const year = unformattedDate.slice(6, 10);
     const time = unformattedDate.slice(11);
     console.log(`${month} ${day} ${year} ${time}`);
-    return `${year}-${month}-${day}T${time}Z`;
+    return `${year}-${month}-${day}T${time}`;
   };
 
   const onHighlightState = (state, index) => {
