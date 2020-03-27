@@ -200,6 +200,9 @@ function Charts(props) {
       {props.graphOption == 2 && <Bar data={barDataSet} options={{
         responsive: true,
         maintainAspectRatio: false,
+        legend: {
+          display: false,
+        },
         scales: {
           xAxes: [{
             stacked: true,
