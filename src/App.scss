@@ -251,6 +251,16 @@ h6 {
         &:hover {
           color: $gray;
         }
+
+        &.highlightedLink {
+          color: $blue-mid;
+          &:hover {
+            color: $blue;
+          }
+          &.focused {
+            color: $blue;
+          }
+        }
       }
     }
   }

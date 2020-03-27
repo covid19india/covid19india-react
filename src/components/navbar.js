@@ -89,6 +89,20 @@ function Navbar(props) {
               FAQ
             </span>
           </Link>
+          <Link
+            to="/symptomtests"
+            onClick={() => {
+              setView("Take online symptom test");
+            }}
+          >
+            <span
+              className={`highlightedLink fadeInUp ${view === "Take online symptom test" ? "focused" : ""}`}
+              style={{ animationDelay: "0.4s" }}
+            >
+              Take online symptom test
+            </span>
+          </Link>
+
         </div>
 
         <div className="navbar-right"></div>

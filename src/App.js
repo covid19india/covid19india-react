@@ -10,6 +10,7 @@ import Summary from './components/summary';
 import Cluster from './components/cluster';
 import FAQ from './components/faq';
 import Banner from './components/banner';
+import SymptomTests from './components/symptomtest';
 
 const history = require('history').createBrowserHistory;
 
@@ -29,6 +30,7 @@ function App() {
               <Route exact path="/summary" render={(props) => <Summary {...props}/>} />
               <Route exact path="/clusters" render={(props) => <Cluster {...props}/>} />
               <Route exact path="/faq" render={(props) => <FAQ {...props}/>} />
+              <Route exact path="/symptomtests" render={(props) => <SymptomTests {...props}/>} />
             </Switch>
           </div>
         )}
