@@ -25,8 +25,17 @@ const mapMeta = {
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'arunachalpradesh_district',
     center: [94, 27],
-    scale: 4500,
+    scale: 1000,
   },
+  'Andhra Pradesh': {
+    name: 'Andhra Pradesh',
+    geoDataFile: '/andhrapradesh.json',
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'AndhraPradesh',
+    center: [80, 16],
+    scale: 3200,
+  },
+  
   'Assam': {
     name: 'Assam',
     geoDataFile: `${MAPS_DIR}/assam.json`,
@@ -203,6 +212,14 @@ const mapMeta = {
     center: [83, 18],
     scale: 1500,
   },
+  'Telangana': {
+    name: 'Telangana',
+    geoDataFile: '/telugana.json',
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'telugana',
+    center: [80, 17],
+    scale: 5000,
+  },
   'Tripura': {
     name: 'Tripura',
     geoDataFile: `${MAPS_DIR}/tripura.json`,
@@ -227,6 +244,7 @@ const mapMeta = {
     center: [80, 27],
     scale: 3500,
   },
+
   'West Bengal': {
     name: 'West Bengal',
     geoDataFile: `${MAPS_DIR}/westbengal.json`,
