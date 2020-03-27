@@ -227,7 +227,6 @@ const mapMeta = {
     center: [80, 27],
     scale: 3500,
   },
-
   'West Bengal': {
     name: 'West Bengal',
     geoDataFile: '/westbengal.json',
