@@ -6,6 +6,7 @@ import Row from './row';
 
 function Table(props) {
   const [states, setStates] = useState(props.states);
+  const [revealedStates, setRevealedStates] = useState({});
   const [districts, setDistricts] = useState({});
   const [count, setCount] = useState(0);
   const [sortData, setSortData] = useState({
@@ -21,9 +22,18 @@ function Table(props) {
     }
   }, [props.states]);
 
+  useEffect(() => {
+    if(props.states[0]) {
+      setRevealedStates(props.states.reduce((a, state) => {
+        return ({...a, [state.state]: false});
+      }, {}));
+    }
+  }, [props.states]);
+
   useEffect(()=>{
     if (states.length>0) {
       let length = 0;
+      
       props.states.map((state, i) => {
         if (i!==0 && state.confirmed>0) length+=1;
         if (i===props.states.length-1) setCount(length);
@@ -79,6 +89,13 @@ function Table(props) {
     });
   };
 
+  const handleReveal = (state) => {
+    setRevealedStates({
+      ...revealedStates,
+      [state]: !revealedStates[state],
+    });
+  };
+
   doSort();
 
   return (
@@ -127,7 +144,7 @@ function Table(props) {
           if (index!==0 && state.confirmed>0) {
             return (
               <tbody>
-                <Row key={index} index={index} state={state} total={false} districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []} onHighlightState={props.onHighlightState} />
+                <Row key={index} index={index} state={state} total={false} reveal={revealedStates[state.state]} districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []} onHighlightState={props.onHighlightState} handleReveal={handleReveal} />
               </tbody>
             );
           }
