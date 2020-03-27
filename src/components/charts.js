@@ -203,6 +203,14 @@ function Charts(props) {
         legend: {
           display: false,
         },
+        layout: {
+          padding: {
+            left: 0,
+            right: 20,
+            top: 0,
+            bottom: 0,
+          },
+        },
         scales: {
           xAxes: [{
             stacked: true,
