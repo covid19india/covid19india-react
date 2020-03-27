@@ -45,8 +45,8 @@ function Home(props) {
     const month = unformattedDate.slice(3, 5);
     const year = unformattedDate.slice(6, 10);
     const time = unformattedDate.slice(11);
-    console.log(`${month} ${day} ${year} ${time}`);
-    return `${year}-${month}-${day}T${time}`;
+    console.log(`${month} ${day} ${year} ${time} GMT+0530`);
+    return `${year}-${month}-${day}T${time}+0530`;
   };
 
   const onHighlightState = (state, index) => {
@@ -66,7 +66,7 @@ function Home(props) {
             </div>
             <div className="last-update">
               <h6>Last Updated</h6>
-              <h3>{isNaN(Date.parse(lastUpdated)) ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
+              <h3>{isNaN(Date.parse(lastUpdated)) ? '' : formatDistance(new Date(lastUpdated), new Date())+' Ago'}</h3>
             </div>
           </div>
         </div>
