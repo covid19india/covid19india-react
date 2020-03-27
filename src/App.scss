@@ -472,6 +472,9 @@ table {
         position: relative;
         flex-direction: row;
         height: 0.9rem;
+        abbr {
+          text-align: right;
+        }
         svg {
           width: 10px;
           margin: 0;
@@ -486,6 +489,9 @@ table {
       }
     }
   }
+  &:nth-child(odd){
+    background-color: $light;
+  }
   tbody {
     color: $gray;
     tr {
@@ -494,11 +500,29 @@ table {
       &:hover {
         background: $gray-hover;
       }
+      &.divider {
+        height: 0.5rem;
+        background: #6c757d10 !important;
+      }
+      &.spacer {
+        height: 0.5rem;
+        background: transparent !important;
+      }
     }
-    tr:nth-child(odd){
-      background-color: $light;
-      &:hover {
+    & > tr:nth-child(odd) {
+      background: $light;
+      &:hover{
         background: $gray-hover;
+      }
+      &:nth-child(odd) {
+        background: $white !important;
+      }
+    }
+
+    &:nth-child(odd){
+      background-color: $light;
+      &.spacer {
+        background: transparent !important;
       }
     }
     td {
@@ -519,6 +543,23 @@ table {
     }
     td:first-child {
       text-align: left;
+      max-width: 7.5rem;
+      word-wrap: break-word;
+    }
+    .district-heading {
+      transform: translateX(1rem);
+      background: $gray-light;
+      td {
+        font-size: 0.75rem;
+        font-weight: 900;
+        padding: 0.45rem;
+        color: $gray-dark;
+        background: $gray-light;
+      }
+    }
+    max-width: 10rem;
+    .district {
+      transform: translateX(1rem);
     }
   }
   .affected-count {
@@ -531,6 +572,27 @@ table {
   .is-total {
     td {
       background: $gray-hover;
+    }
+  }
+  .dropdown {
+    position: absolute;
+    left: -0.75rem;
+    background: $gray-light;
+    border-radius: 50%;
+    width: 13px;
+    height: 13px;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    &:hover {
+      background: $gray-hover;
+    }
+    svg {
+      position: absolute;
+      top: -0.35rem;
+      left: 1px;
+      width: 11px;
+      stroke-width: 3;
     }
   }
 }
@@ -1025,6 +1087,68 @@ footer {
     transform: translateY(0px);
   }
 }
+
+.rotateDownRight {
+  animation-name: rotateDownRight;
+  animation-duration: 0.250s;
+  animation-fill-mode: both;
+}
+
+@keyframes rotateDownRight {
+  100% {
+    transform: rotate(-90deg);
+  }
+}
+
+.rotateRightDown {
+  animation-name: rotateRightDown;
+  animation-duration: 0.250s;
+  animation-fill-mode: both;
+}
+
+@keyframes rotateRightDown {
+  0% {
+    transform: rotate(-90deg);
+  }
+}
+
+/*.rollDown {
+  animation-name: rollDown;
+  animation-duration: 0.250s;
+  animation-fill-mode: both;
+}
+
+@keyframes rollDown {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.rollUp {
+  animation-name: rollUp;
+  animation-duration: 0.250s;
+  animation-fill-mode: both;
+}
+
+@keyframes rollUp {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+    color: transparent;
+    visibility: none;
+  }
+  100% {
+    opacity: 0;
+    visibility: none;
+    position: absolute;
+    pointer-events: none;
+  }
+}*/
 
 .iframe-container{
   width: 100%;

@@ -12,9 +12,9 @@ function Minigraph(props) {
 
   useEffect(()=>{
     if (props.timeseries.length>1) {
-      setTimeseries(props.timeseries.slice(0, props.timeseries.length-2));
+      setTimeseries(props.timeseries.slice(props.timeseries.length-10, props.timeseries.length-1));
     }
-  }, [props.timeseries.length]);
+  }, [props.timeseries]);
 
   useEffect(()=>{
     if (timeseries.length>1) {
@@ -33,10 +33,11 @@ function Minigraph(props) {
 
   function graphData(timeseries) {
     const data = timeseries;
+    console.log(data);
     setDatapoint(data[data.length-1]);
 
     const x = d3.scaleTime()
-        .domain(d3.extent(data.slice(data.length-10, data.length-1), function(d) {
+        .domain(d3.extent(data, function(d) {
           return new Date(d['date']+'2020');
         }))
         .range([0, width]);
@@ -67,7 +68,7 @@ function Minigraph(props) {
         .range([height, 0]);
 
     const path1 = svg1.append('path')
-        .datum(data.slice(data.length-10, data.length-1))
+        .datum(data)
         .attr('fill', 'none')
         .attr('stroke', '#ff073a99')
         .attr('stroke-width', 3)
@@ -96,7 +97,7 @@ function Minigraph(props) {
         .attr('stroke-dashoffset', 0);
 
     svg1.selectAll('.dot')
-        .data(data.slice(data.length-2, data.length-1))
+        .data(data.slice(data.length-1))
         .enter()
         .append('circle')
         .attr('fill', '#ff073a')
@@ -123,7 +124,7 @@ function Minigraph(props) {
         .style('opacity', 1);
 
     const path2 = svg2.append('path')
-        .datum(data.slice(data.length-10, data.length-1))
+        .datum(data)
         .attr('fill', 'none')
         .attr('cursor', 'pointer')
         .attr('stroke', '#007bff99')
@@ -136,12 +137,8 @@ function Minigraph(props) {
             })
             .y(function(d, i) {
               if (i===0) {
-                const today = data[data.length-9]['dailyconfirmed']-data[data.length-9]['dailyrecovered']-data[data.length-9]['dailydeceased'];
-                const yesterday = data[data.length-10]['dailyconfirmed']-data[data.length-10]['dailyrecovered']-data[data.length-10]['dailydeceased'];
                 return y1(d['dailyconfirmed']-d['dailyrecovered']-d['dailydeceased']);
               } else {
-                const today = data[data.length-9+i]['dailyconfirmed']-data[data.length-9+i]['dailyrecovered']-data[data.length-9+i]['dailydeceased'];
-                const yesterday = data[data.length-10+i]['dailyconfirmed']-data[data.length-10+i]['dailyrecovered']-data[data.length-10+i]['dailydeceased'];
                 return y1(d['dailyconfirmed']-d['dailyrecovered']-d['dailydeceased']);
               }
             })
@@ -156,7 +153,7 @@ function Minigraph(props) {
         .attr('stroke-dashoffset', 0);
 
     svg2.selectAll('.dot')
-        .data(data.slice(data.length-2, data.length-1))
+        .data(data.slice(data.length-1))
         .enter()
         .append('circle')
         .attr('fill', '#007bff')
@@ -185,7 +182,7 @@ function Minigraph(props) {
         .style('opacity', 1);
 
     const path3 = svg3.append('path')
-        .datum(data.slice(data.length-10, data.length-1))
+        .datum(data)
         .attr('fill', 'none')
         .attr('stroke', '#28a74599')
         .attr('stroke-width', 3)
@@ -212,7 +209,7 @@ function Minigraph(props) {
         .attr('stroke-dashoffset', 0);
 
     svg3.selectAll('.dot')
-        .data(data.slice(data.length-2, data.length-1))
+        .data(data.slice(data.length-1))
         .enter()
         .append('circle')
         .attr('fill', '#28a745')
@@ -239,7 +236,7 @@ function Minigraph(props) {
         .style('opacity', 1);
 
     const path4 = svg4.append('path')
-        .datum(data.slice(data.length-10, data.length-1))
+        .datum(data)
         .attr('fill', 'none')
         .attr('cursor', 'pointer')
         .attr('stroke', '#6c757d99')
@@ -268,7 +265,7 @@ function Minigraph(props) {
         .attr('stroke-dashoffset', 0);
 
     svg4.selectAll('.dot')
-        .data(data.slice(data.length-2, data.length-1))
+        .data(data.slice(data.length-1))
         .enter()
         .append('circle')
         .attr('fill', '#6c757d')
