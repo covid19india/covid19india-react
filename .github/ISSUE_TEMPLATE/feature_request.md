@@ -2,7 +2,7 @@
 name: Feature request
 about: Suggest an idea for this project
 title: ''
-labels: 'enhancement, Status: Review Needed'
+labels: 'Status: Review Needed, Type: Enhancement'
 assignees: JunaidBabu, sudevschiz
 
 ---
