@@ -2,36 +2,36 @@ import React, {useState, useEffect, useRef} from 'react';
 import * as d3 from 'd3';
 import {legendColor} from 'd3-svg-legend';
 import * as topojson from 'topojson';
-import { MAP_TYPES } from '../constants';
+import {MAP_TYPES} from '../constants';
 
 const propertyFieldMap = {
   country: 'ST_NM',
   state: 'district',
-}
+};
 
 function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap}) {
   const [rendered, setRendered] = useState(false);
-  //const [states, setStates] = useState(props.states);
-  //const [state, setState] = useState({});
+  // const [states, setStates] = useState(props.states);
+  // const [state, setState] = useState({});
   const [index, setIndex] = useState(1);
   const choroplethMap = useRef(null);
 
   useEffect(()=>{
     (async () => {
-    d3.selectAll("svg#chart > *").remove();
-    const data = await d3.json(mapMeta.geoDataFile)
-    if (statistic && choroplethMap.current) {
-      ready(data);
-      renderData();
-      //setState(states[1]);
-    }
-  })();
+      d3.selectAll('svg#chart > *').remove();
+      const data = await d3.json(mapMeta.geoDataFile);
+      if (statistic && choroplethMap.current) {
+        ready(data);
+        renderData();
+      // setState(states[1]);
+      }
+    })();
   }, [mapMeta.geoDataFile]);
 
   const handleMouseover = (name) => {
-    try{
+    try {
       setHoveredRegion(name, mapMeta.mapType);
-    }catch(err) {
+    } catch (err) {
       console.log('err', err);
     }
   };
@@ -50,7 +50,7 @@ function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap
         .translate([width/2, height/2]);
 
     const path = d3.geoPath(projection);
-    
+
     svg.append('g')
         .attr('class', 'states')
         .selectAll('path')
@@ -66,7 +66,7 @@ function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap
         .on('mouseover', (d) => {
           handleMouseover(d.properties[propertyField]);
           const target = d3.event.target;
-          d3.select(target.parentNode.appendChild(target)).attr('stroke', '#ff073a').attr('stroke-width', 2)
+          d3.select(target.parentNode.appendChild(target)).attr('stroke', '#ff073a').attr('stroke-width', 2);
         })
         .on('mouseleave', (d) => {
           const n = mapData[d.properties[propertyField]] || 0;
@@ -108,13 +108,13 @@ function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap
     // Colorbar
     const maxInterpolation = 0.8;
     const color = d3
-      .scaleSequential(d3.interpolateReds)
-      .domain([0, (statistic.maxConfirmed / maxInterpolation) || 10]);
+        .scaleSequential(d3.interpolateReds)
+        .domain([0, (statistic.maxConfirmed / maxInterpolation) || 10]);
 
     let cells = null;
     let label = null;
 
-    label = ({ i, genLength, generatedLabels, labelDelimiter }) => {
+    label = ({i, genLength, generatedLabels, labelDelimiter}) => {
       if (i === genLength - 1) {
         const n = Math.floor(generatedLabels[i]);
         return `${n}+`;
@@ -127,30 +127,30 @@ function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap
 
     const numCells = 6;
     const delta = Math.floor((statistic.maxConfirmed < numCells ? numCells : statistic.maxConfirmed) / (numCells - 1));
-    
-    cells = Array.from(Array(numCells).keys()).map(i => i * delta);
 
-    svg
-      .append("g")
-      .attr("class", "legendLinear")
-      .attr("transform", "translate(1, 450)");
+    cells = Array.from(Array(numCells).keys()).map((i) => i * delta);
+
+    svg.append('g')
+        .attr('class', 'legendLinear')
+        .attr('transform', 'translate(1, 375)');
+
     const legendLinear = legendColor()
-      .shapeWidth(50)
-      .cells(cells)
-      .titleWidth(3)
-      .labels(label)
-      .title("Confirmed Cases")
-      .orient("vertical")
-      .scale(color);
+        .shapeWidth(50)
+        .cells(cells)
+        .titleWidth(3)
+        .labels(label)
+        .title('Confirmed Cases')
+        .orient('vertical')
+        .scale(color);
 
     svg.select('.legendLinear')
         .call(legendLinear);
-  }
+  };
 
   return (
-      <div className="svg-parent">
-        <svg id="chart" width="650" height={window.innerWidth <= 479 ? 650: 750} viewBox={`0 0 650 ${window.innerWidth <= 479 ? 650: 750}`} preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
-      </div>
+    <div className="svg-parent">
+      <svg id="chart" width="650" height="450" viewBox="0 0 650 450" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
+    </div>
   );
 }
 

@@ -32,11 +32,11 @@ function Home(props) {
       const [response, stateDistrictWiseResponse] = await Promise.all([axios.get('https://api.covid19india.org/data.json'), axios.get('https://api.covid19india.org/state_district_wise.json')]);
       setStates(response.data.statewise);
       setTimeseries(response.data.cases_time_series);
-      setLastUpdated(formatDate(response.data.statewise[0].lastupdatedtime));
+      setLastUpdated(response.data.statewise[0].lastupdatedtime);
       setDeltas(response.data.key_values[0]);
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
       setFetched(true);
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
   };
@@ -46,7 +46,6 @@ function Home(props) {
     const month = unformattedDate.slice(3, 5);
     const year = unformattedDate.slice(6, 10);
     const time = unformattedDate.slice(11);
-    console.log(`${month} ${day} ${year} ${time}`);
     return `${year}-${month}-${day}T${time}`;
   };
 
@@ -58,7 +57,7 @@ function Home(props) {
   return (
     <div className="Home">
       <div className="home-left">
-        <div className="header fadeInUp" style={{ animationDelay: "0.5s" }}>
+        <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
           <div className="header-mid">
             <div className="titles">
               <h1>India COVID-19 Tracker</h1>
@@ -66,7 +65,7 @@ function Home(props) {
             </div>
             <div className="last-update">
               <h6>Last Updated</h6>
-              <h3>{isNaN(Date.parse(lastUpdated)) ? '' : formatDistance(zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
+              <h3>{isNaN(Date.parse(formatDate(lastUpdated))) ? '' : formatDistance(zonedTimeToUtc(new Date(formatDate(lastUpdated)), 'Asia/Calcutta'), zonedTimeToUtc(new Date()))+' Ago'}</h3>
             </div>
           </div>
         </div>
@@ -80,7 +79,7 @@ function Home(props) {
 
       <div className="home-right">
         {fetched && (
-          <>
+          <React.Fragment>
             <MapExplorer
               states={states}
               stateDistrictWiseData={stateDistrictWiseData}
@@ -88,12 +87,12 @@ function Home(props) {
             />
             <div
               className="timeseries-header fadeInUp"
-              style={{ animationDelay: "1.5s" }}
+              style={{animationDelay: '1.5s'}}
             >
               <h1>Spread Trends</h1>
               <div className="tabs">
                 <div
-                  className={`tab ${graphOption === 1 ? "focused" : ""}`}
+                  className={`tab ${graphOption === 1 ? 'focused' : ''}`}
                   onClick={() => {
                     setGraphOption(1);
                   }}
@@ -101,7 +100,7 @@ function Home(props) {
                   <h4>Cumulative</h4>
                 </div>
                 <div
-                  className={`tab ${graphOption === 2 ? "focused" : ""}`}
+                  className={`tab ${graphOption === 2 ? 'focused' : ''}`}
                   onClick={() => {
                     setGraphOption(2);
                   }}
@@ -115,7 +114,7 @@ function Home(props) {
                 <input
                   type="checkbox"
                   checked={timeseriesMode}
-                  onChange={event => {
+                  onChange={(event) => {
                     setTimeseriesMode(!timeseriesMode);
                   }}
                 />
@@ -127,7 +126,7 @@ function Home(props) {
               type={graphOption}
               mode={timeseriesMode}
             />
-          </>
+          </React.Fragment>
         )}
       </div>
     </div>
