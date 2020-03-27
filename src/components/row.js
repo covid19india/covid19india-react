@@ -41,14 +41,14 @@ function Row(props) {
         }}>
         <td style={{fontWeight: 600}}>{state.state}</td>
         <td>
-          <span className="deltas" style={{color: '#ff073a'}}>
+          <span className="deltas" style={{color: '#007bff'}}>
             {!state.delta.confirmed==0 && <Icon.ArrowUp/>}
             {state.delta.confirmed > 0 ? `${state.delta.confirmed}` : ''}
           </span>
           {parseInt(state.confirmed)===0 ? '-' : state.confirmed}
         </td>
         <td style={{color: parseInt(state.active)===0 ? '#B5B5B5' : 'inherit'}}>
-          {/*<span className="deltas" style={{color: '#007bff'}}>
+          {/*<span className="deltas" style={{color: '#ff073a'}}>
             {!state.delta.active==0 && <Icon.ArrowUp/>}
             {state.delta.active>0 ? `${state.delta.active}` : ''}
           </span>*/}
@@ -78,8 +78,8 @@ function Row(props) {
 
       <tr className={`district-heading`} style={{display: reveal && !props.total ? '' : 'none'}}>
         <td>District</td>
-        <td><abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'Confirmed' : 'Confirmed' : 'Confirmed'}</abbr></td>
-         {/*<td><abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'A' : 'Actv' : 'Active'}</abbr></td>
+        <td><abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'Confirmed' : 'Confirmed' : 'Confirmed'}</abbr></td>
+         {/*<td><abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Active">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'A' : 'Actv' : 'Active'}</abbr></td>
         <td><abbr className={`${window.innerWidth <=769 ? 'is-green' : ''}`} title="Recovered">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'R' : 'Rcvrd' : 'Recovered'}</abbr></td>
         <td><abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'Dcsd' : 'Deceased'}</abbr></td>*/}
       </tr>
