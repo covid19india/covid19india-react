@@ -34,13 +34,13 @@ function Level(props) {
   return (
     <div className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
 
-      <div className="level-item is-cherry">
+      <div className="level-item is-blue">
         <h5>Confirmed</h5>
         <h4>[{props.deltas ? props.deltas.confirmeddelta>=0 ? '+'+props.deltas.confirmeddelta : props.deltas.confirmeddelta : ''}]</h4>
         <h1>{confirmed} </h1>
       </div>
 
-      <div className="level-item is-blue">
+      <div className="level-item is-cherry">
         <h5 className="heading">Active</h5>
         <h4>[{props.deltas ? props.deltas.confirmeddelta-props.deltas.recovereddelta-props.deltas.deceaseddelta >=0 ? '+'+(props.deltas.confirmeddelta-props.deltas.recovereddelta-props.deltas.deceaseddelta).toString() : props.deltas.confirmeddelta-props.deltas.recovereddelta-props.deltas.deceaseddelta : ''}]</h4>
         <h1 className="title has-text-info">{active}</h1>

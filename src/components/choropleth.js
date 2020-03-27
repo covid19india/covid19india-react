@@ -180,7 +180,7 @@ function ChoroplethMap(props) {
       <div className="map-stats">
         <h4>{state.state}</h4>
 
-        <div className="stats">
+        <div className="stats is-blue">
           <h5>Confirmed</h5>
           <div className="stats-bottom">
             <h1>{state.confirmed}</h1>
@@ -188,7 +188,7 @@ function ChoroplethMap(props) {
           </div>
         </div>
 
-        <div className="stats is-blue">
+        <div className="stats">
           <h5>Active</h5>
           <div className="stats-bottom">
             <h1>{state.active}</h1>

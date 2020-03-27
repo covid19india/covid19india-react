@@ -96,13 +96,13 @@ function Table(props) {
           </th>
           <th onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfmd' : 'Confirmed'}</abbr>
+              <abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfmd' : 'Confirmed'}</abbr>
               <div style={{display: sortData.sortColumn === 'confirmed' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
           <th onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'A' : 'Actv' : 'Active'}</abbr>
+              <abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Active">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'A' : 'Actv' : 'Active'}</abbr>
               <div style={{display: sortData.sortColumn === 'active' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
