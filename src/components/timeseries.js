@@ -187,7 +187,7 @@ function TimeSeries(props) {
     const svgArray = [svg1, svg2, svg3, svg4, svg5, svg6];
     const dataTypes = ['totalconfirmed', 'totalrecovered', 'totaldeceased',
                        'dailyconfirmed', 'dailyrecovered', 'dailydeceased'];
-    const colors = ['#ff073a', '#28a745', '#6c757d', '#ff073a', '#28a745', '#6c757d'];
+    const colors = ['#007bff', '#28a745', '#6c757d', '#007bff', '#28a745', '#6c757d'];
     const yScales = [y1, y2, y3, y4, y5, y6];
 
     var focus = svgArray.map(function(d, i) {
@@ -236,7 +236,7 @@ function TimeSeries(props) {
     svg1.append('path')
         .datum(data)
         .attr('fill', 'none')
-        .attr('stroke', '#ff073a99')
+        .attr('stroke', '#007bff99')
         .attr('stroke-width', 5)
         .attr('cursor', 'pointer')
         .attr('d', d3.line()
@@ -253,8 +253,8 @@ function TimeSeries(props) {
         .data(data)
         .enter()
         .append('circle')
-        .attr('fill', '#ff073a')
-        .attr('stroke', '#ff073a')
+        .attr('fill', '#007bff')
+        .attr('stroke', '#007bff')
         .attr('r', 3)
         .attr('cursor', 'pointer')
         .attr('cx', function(d) {
@@ -339,7 +339,7 @@ function TimeSeries(props) {
     svg4.append('path')
         .datum(data)
         .attr('fill', 'none')
-        .attr('stroke', '#ff073a99')
+        .attr('stroke', '#007bff99')
         .attr('stroke-width', 5)
         .attr('cursor', 'pointer')
         .attr('d', d3.line()
@@ -357,8 +357,8 @@ function TimeSeries(props) {
         .data(data)
         .enter()
         .append('circle')
-        .attr('fill', '#ff073a')
-        .attr('stroke', '#ff073a')
+        .attr('fill', '#007bff')
+        .attr('stroke', '#007bff')
         .attr('r', 3)
         .attr('cursor', 'pointer')
         .attr('cx', function(d) {

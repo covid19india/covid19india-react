@@ -645,8 +645,8 @@ table {
       font-weight: 600;
     }
     .stats {
-      background: $cherry-light;
-      color: $cherry;
+      background: $blue-light;
+      color: $blue;
       padding: 0.5rem;
       border-radius: 5px;
       display: flex;
@@ -666,10 +666,10 @@ table {
         h5, h6 {color: $green-mid;}
         h1 {color: $green;}
       }
-      &.is-blue {
-        background: $blue-light;
-        h5, h6 {color: $blue-mid;}
-        h1 {color: $blue;}
+      &.is-cherry {
+        background: $cherry-light;
+        h5, h6 {color: $cherry-mid;}
+        h1 {color: $cherry;}
       }
       &.is-gray {
         background: $gray-light;
@@ -760,10 +760,10 @@ table {
     flex-direction: column;
     h2, h5, h6 {
       margin: 0;
-      color: $cherry-mid;
+      color: $blue-mid;
     }
     h2, h6 {
-      color: $cherry;
+      color: $blue;
     }
     .stats-bottom {
       display: flex;
@@ -794,19 +794,19 @@ table {
     display: flex;
     width: 30rem;
     align-self: center;
-    background: $cherry-light;
+    background: $blue-light;
     border-radius: 5px;
     margin-bottom: 1rem;
     height: 10rem;
     svg {
       .domain, .tick, line {
-        stroke: $cherry;
+        stroke: $blue;
         stroke-width: 2;
       }
       text {
         font-family: 'archia';
         text-transform: uppercase;
-        color: $cherry-mid;
+        color: $blue-mid;
         stroke: transparent;
         font-size: 12px;
       }
