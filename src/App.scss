@@ -502,15 +502,25 @@ table {
         background: #6c757d10 !important;
       }
       &.spacer {
-        height: 2rem;
+        height: 0.5rem;
         background: transparent !important;
       }
     }
     & > tr:nth-child(odd) {
-        background-color: $light;
-        &:hover{
-          background: $gray-hover;
-        }
+      background: $light;
+      &:hover{
+        background: $gray-hover;
+      }
+      &:nth-child(odd) {
+        background: $white !important;
+      }
+    }
+
+    &:nth-child(odd){
+      background-color: $light;
+      &.spacer {
+        background: transparent !important;
+      }
     }
     td {
       padding: 0.25rem;
@@ -519,7 +529,6 @@ table {
       text-align: right;
       .deltas {
         margin-right: 0.25rem;
-        margin-left: 0.25rem;
         font-size: 11px !important;
         svg {
           width: 9px;
@@ -535,6 +544,7 @@ table {
       word-wrap: break-word;
     }
     .district-heading {
+      transform: translateX(1rem);
       background: $gray-light;
       td {
         font-size: 0.75rem;
@@ -543,6 +553,10 @@ table {
         color: $gray-dark;
         background: $gray-light;
       }
+    }
+    max-width: 10rem;
+    .district {
+      transform: translateX(1rem);
     }
   }
   .affected-count {
@@ -1094,6 +1108,44 @@ footer {
     transform: rotate(-90deg);
   }
 }
+
+/*.rollDown {
+  animation-name: rollDown;
+  animation-duration: 0.250s;
+  animation-fill-mode: both;
+}
+
+@keyframes rollDown {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.rollUp {
+  animation-name: rollUp;
+  animation-duration: 0.250s;
+  animation-fill-mode: both;
+}
+
+@keyframes rollUp {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+    color: transparent;
+    visibility: none;
+  }
+  100% {
+    opacity: 0;
+    visibility: none;
+    position: absolute;
+    pointer-events: none;
+  }
+}*/
 
 .iframe-container{
   width: 100%;

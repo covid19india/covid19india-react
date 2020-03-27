@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { format, zonedTimeToUtc } from 'date-fns-tz'
+import { zonedTimeToUtc } from 'date-fns-tz'
 import { formatDistance } from 'date-fns'
 
 import Table from './table'
@@ -8,7 +8,6 @@ import Level from './level'
 import ChoroplethMap from './choropleth'
 import TimeSeries from './timeseries'
 import Minigraph from './minigraph'
-import Banner from './banner'
 
 function Home(props) {
   const [states, setStates] = useState([])
@@ -47,7 +46,7 @@ function Home(props) {
     const year = unformattedDate.slice(6, 10)
     const time = unformattedDate.slice(11)
     console.log(`${month} ${day} ${year} ${time}`)
-    return `${month} ${day} ${year} ${time}`
+    return `${year}-${month}-${day}T${time}Z`
   }
 
   const onHighlightState = (state, index) => {
@@ -68,7 +67,7 @@ function Home(props) {
               <h6>Last Updated</h6>
               <h3>
                 {isNaN(Date.parse(lastUpdated))
-                  ? '6 hours ago'
+                  ? ''
                   : formatDistance(
                       zonedTimeToUtc(new Date(lastUpdated), 'Asia/Calcutta'),
                       zonedTimeToUtc(new Date()),

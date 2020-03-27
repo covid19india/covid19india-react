@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
 import * as Icon from 'react-feather'
 import axios from 'axios'
@@ -45,6 +46,8 @@ function Table(props) {
         console.log(err)
       })
   }
+  // make a axios call every 10minutes
+  setInterval(getDistricts, 600000)
 
   const doSort = (e, props) => {
     const totalRow = states.splice(0, 1)
