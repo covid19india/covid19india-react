@@ -317,7 +317,7 @@ h6 {
   }
 }
 
-a.button {
+.button {
   display: flex;
   flex-direction: row;
   padding: 0.5rem;
@@ -597,31 +597,32 @@ table {
   }
 }
 
-.ChoroplethMap {
+#chart {
+  z-index: 10;
+}
+
+.back-button {
+  z-index: 11;
+}
+
+.MapExplorer {
   display: flex;
-  position: relative;
+  flex-direction: column;
   align-self: center;
-  margin-top: 4rem;
-  margin-bottom: -10rem;
   width: 33rem;
   .header {
-    position: absolute;
-    top: -5rem;
+    display: flex;
+    flex-direction: column;
     color: $gray-dark;
-  }
-  h6.header {
-    margin-top: 3rem;
-    color: $gray;
-    margin-left: 1px;
-    width: 10rem;
+    margin-bottom: 2.5rem;
   }
   .svg-parent {
     display: flex;
     flex-direction: row;
-    justify-content: center;
     width: 100%;
+    margin-top: 1rem;
     svg {
-      align-self: center ;
+      align-self: center;
       text {
         text-transform: uppercase;
         text-align: right;
@@ -632,20 +633,41 @@ table {
       }
     }
   }
-  .map-stats {
-    flex: 0.1;
+  .back-button {
     position: absolute;
-    top: 4rem;
-    left: 1px;
-    h1, h5, h6 {
+    right: -1.75rem;
+    top: 12rem;
+  }
+  .map-stats {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 5rem;
+    position: relative;
+    h1, h5, h6, h3 {
       margin: 0;
     }
     h4 {
+      margin: 0;
       color: #e23028;
-      width: 5rem;
+      word-wrap: break-word;
     }
     h1 {
       font-weight: 600;
+    }
+    h3 {
+      color: $gray-mid;
+      font-weight: 900;
+    }
+    .meta {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      .unknown {
+        position: absolute;
+        bottom: -4.5rem;
+        width: 5rem;
+      }
     }
     .stats {
       background: $cherry-light;
@@ -654,11 +676,12 @@ table {
       border-radius: 5px;
       display: flex;
       flex-direction: column;
+      margin-left: 0.5rem;
       margin-bottom: 0.5rem;
+      width: 5rem;
       .stats-bottom {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
         h6 {
           margin-top: auto;
           margin-bottom: 0.25rem;
@@ -678,6 +701,11 @@ table {
         background: $gray-light;
         h5, h6 {color: $gray-mid;}
         h1 {color: $gray;}
+      }
+      &.is-yellow {
+        background: $warning;
+        h5, h6 {color: $white;}
+        h1 {color: $white;}
       }
     }
   }
@@ -995,7 +1023,7 @@ footer {
 }
 
 @media (max-width: 769px) {
-  .ChoroplethMap, .TimeSeries, table, .header, .Level, .timeseries-header, .TimeSeries-Parent, .Links, .Minigraph, .Summary, .FAQ {
+  .TimeSeries, table, .header, .Level, .timeseries-header, .TimeSeries-Parent, .Links, .Minigraph, .Summary, .FAQ, .MapExplorer {
     width: calc(100% - 2rem);
   }
   .Home {

@@ -12,7 +12,7 @@ function Minigraph(props) {
 
   useEffect(()=>{
     if (props.timeseries.length>1) {
-      setTimeseries(props.timeseries.slice(props.timeseries.length-10, props.timeseries.length-1));
+      setTimeseries(props.timeseries.slice(props.timeseries.length-10));
     }
   }, [props.timeseries]);
 
