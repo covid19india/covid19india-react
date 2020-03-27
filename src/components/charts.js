@@ -43,7 +43,7 @@ function Charts(props) {
         recovered.push(data.totalrecovered);
         deceased.push(data.totaldeceased);
       } else {
-        confirmed.push(data.dailyconfirmed);
+        confirmed.push(data.dailyconfirmed - data.dailyrecovered - data.dailydeceased);
         recovered.push(data.dailyrecovered);
         deceased.push(data.dailydeceased);
       }
@@ -97,7 +97,7 @@ function Charts(props) {
       },
       {
         data: confirmed,
-        label: 'Confirmed',
+        label: 'Active',
         backgroundColor: '#ff073a',
       },
     ],
