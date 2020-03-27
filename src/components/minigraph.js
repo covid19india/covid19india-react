@@ -12,9 +12,9 @@ function Minigraph(props) {
 
   useEffect(()=>{
     if (props.timeseries.length>1) {
-      setTimeseries(props.timeseries.slice(0, props.timeseries.length-2));
+      setTimeseries(props.timeseries.slice(props.timeseries.length-10));
     }
-  }, [props.timeseries.length]);
+  }, [props.timeseries]);
 
   useEffect(()=>{
     if (timeseries.length>1) {
@@ -36,7 +36,7 @@ function Minigraph(props) {
     setDatapoint(data[data.length-1]);
 
     const x = d3.scaleTime()
-        .domain(d3.extent(data.slice(data.length-10, data.length-1), function(d) {
+        .domain(d3.extent(data, function(d) {
           return new Date(d['date']+'2020');
         }))
         .range([0, width]);
