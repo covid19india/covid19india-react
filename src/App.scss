@@ -602,6 +602,15 @@ table {
   z-index: 11;
 }
 
+.map-default {
+  stroke: None;
+}
+
+.map-hover {
+  stroke: #ff073a;
+  stroke-width: 2;
+}
+
 .MapExplorer {
   display: flex;
   flex-direction: column;

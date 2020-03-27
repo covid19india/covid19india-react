@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useMemo} from 'react';
-import ChoroplethMap from './choropleth';
+import ChoroplethMap, {highlightRegionInMap} from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 
 const mapMeta = {
@@ -35,7 +35,7 @@ const mapMeta = {
     center: [80, 16],
     scale: 3200,
   },
-  
+
   'Assam': {
     name: 'Assam',
     geoDataFile: `${MAPS_DIR}/assam.json`,
@@ -276,10 +276,12 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
     }
 
     if (stateHighlighted === null) {
-      setCurrentHoveredRegion(getRegionFromState(states[1]));
+      highlightRegionInMap(null, currentMap.mapType);
     } else {
       if (stateHighlighted !== undefined) {
-        setCurrentHoveredRegion(getRegionFromState(stateHighlighted.state));
+        let regionHighlighted = getRegionFromState(stateHighlighted.state);
+        setCurrentHoveredRegion(regionHighlighted);
+        highlightRegionInMap(regionHighlighted.name, currentMap.mapType);
       }
     }
   }, [stateHighlighted]);
