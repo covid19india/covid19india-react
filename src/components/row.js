@@ -68,6 +68,9 @@ function Row(props) {
           </span>*/}
           {parseInt(state.deaths)===0 ? '-' : state.deaths}
         </td>
+        <td style={{color: parseInt(state.cases)===0 ? '#B5B5B5' : 'inherit'}}>
+          {parseFloat(state.cases) === 0.0 ? '-' : state.cases}
+        </td>
       </tr>
 
       <tr className={`spacer`} style={{display: reveal && !props.total ? '' : 'none'}}>

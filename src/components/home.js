@@ -9,6 +9,8 @@ import ChoroplethMap from './choropleth';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
 import Banner from './banner';
+import population from '../static/population.json';
+
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -29,6 +31,13 @@ function Home(props) {
   const getStates = () => {
     axios.get('https://api.covid19india.org/data.json')
         .then((response)=>{
+          for (var key in response.data.statewise) {
+            let statePopulation = population[response.data.statewise[key].state] * 100000;
+            let confirmedCases = response.data.statewise[key].confirmed;
+
+            response.data.statewise[key].cases = ((confirmedCases/statePopulation) * 1000000).toFixed(2);
+          }
+
           setStates(response.data.statewise);
           setTimeseries(response.data.cases_time_series);
           setLastUpdated(formatDate(response.data.statewise[0].lastupdatedtime));

@@ -119,6 +119,12 @@ function Table(props) {
               <div style={{display: sortData.sortColumn === 'deaths' ? 'initial': 'none'}}><Icon.Maximize2/></div>
             </div>
           </th>
+          <th onClick={(e) => handleSort(e, props)}>
+            <div className='heading-content'>
+              <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="cases">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C/1M' : 'C/1M' : 'Cases/1M'}</abbr>
+              <div style={{display: sortData.sortColumn === 'cases' ? 'initial': 'none'}}><Icon.Maximize2/></div>
+            </div>
+          </th>
         </tr>
       </thead>
 
