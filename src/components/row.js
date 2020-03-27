@@ -34,6 +34,7 @@ function Row(props) {
       </span>
       <tr className={props.total ? 'state is-total' : 'state'} className={props.total ? 'is-total' : ''}
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
+        onMouseLeave={() => props.onHighlightState?.()}
         touchstart={() => props.onHighlightState?.(state, props.index)}
         onClick={()=>{
           handleReveal();

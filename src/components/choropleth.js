@@ -3,12 +3,23 @@ import * as d3 from 'd3';
 import {legendColor} from 'd3-svg-legend';
 import * as topojson from 'topojson';
 import {MAP_TYPES} from '../constants';
-import anime from 'animejs';
 
 const propertyFieldMap = {
   country: 'ST_NM',
   state: 'district',
 };
+
+export const highlightRegionInMap = (name, mapType) => {
+  const propertyField = propertyFieldMap[mapType];
+  let paths = d3.selectAll('.path-region');
+  paths.classed('map-hover', (d, i, nodes) => {
+    if (name == d.properties[propertyField]) {
+      nodes[i].parentNode.appendChild(nodes[i]);
+      return true;
+    }
+    return false;
+  });
+}
 
 function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap}) {
   const [rendered, setRendered] = useState(false);
@@ -57,6 +68,7 @@ function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap
         .selectAll('path')
         .data(topojson.feature(geoData, geoData.objects[mapMeta.graphObjectName]).features)
         .enter().append('path')
+        .attr('class', 'path-region')
         .attr('fill', function(d) {
           const n = mapData[d.properties[propertyField]] || 0;
           const color = (n == 0) ? '#ffffff' : d3.interpolateReds(maxInterpolation * n/(statistic.maxConfirmed || 0.001));
@@ -67,13 +79,12 @@ function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap
         .on('mouseover', (d) => {
           handleMouseover(d.properties[propertyField]);
           const target = d3.event.target;
-          d3.select(target.parentNode.appendChild(target)).attr('stroke', '#ff073a').attr('stroke-width', 2);
+          d3.select(target.parentNode.appendChild(target)).attr('class', 'map-hover');
         })
         .on('mouseleave', (d) => {
           const n = mapData[d.properties[propertyField]] || 0;
           const target = d3.event.target;
-          const color = (n == 0) ? '#ffffff' : d3.interpolateReds(maxInterpolation * n/(statistic.maxConfirmed || 0.0001));
-          d3.select(target).attr('fill', color).attr('stroke', 'None');
+          d3.select(target).attr('class', 'path-region map-default');
         })
         .on('click', (d) => {
           if (mapMeta.mapType === MAP_TYPES.STATE) {
