@@ -9,6 +9,7 @@ import Links from './components/links';
 import Summary from './components/summary';
 import Cluster from './components/cluster';
 import FAQ from './components/faq';
+import Banner from './components/banner';
 
 const history = require('history').createBrowserHistory;
 
@@ -20,13 +21,14 @@ function App() {
         <Route render={({location}) => (
           <div className="Almighty-Router">
             <Navbar />
+            <Banner />
             <Route exact path="/" render={() => <Redirect to="/" />} />
             <Switch location={location}>
               <Route exact path="/" render={(props) => <Home {...props}/>} />
               <Route exact path="/links" render={(props) => <Links {...props}/>} />
               <Route exact path="/summary" render={(props) => <Summary {...props}/>} />
               <Route exact path="/clusters" render={(props) => <Cluster {...props}/>} />
-              <Route exact path="/faqs" render={(props) => <FAQ {...props}/>} />
+              <Route exact path="/faq" render={(props) => <FAQ {...props}/>} />
             </Switch>
           </div>
         )}
