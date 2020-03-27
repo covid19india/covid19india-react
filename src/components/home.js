@@ -18,7 +18,7 @@ function Home(props) {
   const [timeseries, setTimeseries] = useState([]);
   const [deltas, setDeltas] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
-  const [stateHighlighted, setStateHighlighted] = useState(undefined);
+  const [stateHighlighted, setStateHighlighted] = useState(null);
 
   useEffect(()=> {
     if (fetched===false) {
@@ -50,8 +50,7 @@ function Home(props) {
   };
 
   const onHighlightState = (state, index) => {
-    if (!state && !index) setStateHighlighted(null);
-    else setStateHighlighted({state, index});
+    if (state && index) setStateHighlighted({state, index});
   };
 
   return (

@@ -12,16 +12,16 @@ function ChoroplethMap(props) {
   const choroplethMap = useRef(null);
 
   useEffect(()=>{
-    if (props.stateHighlighted === null) {
+    if (props.stateHighlighted === null && states.length) {
       setState(states[1]);
       setIndex(1);
     } else {
-      if (props.stateHighlighted !== undefined) {
+      if (props.stateHighlighted) {
         setState(props.stateHighlighted.state);
         setIndex(props.stateHighlighted.index);
       }
     }
-  }, [props.stateHighlighted])
+  }, [props.stateHighlighted]);
 
   useEffect(()=>{
     if (props.states.length>1 && choroplethMap.current) {
