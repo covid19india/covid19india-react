@@ -195,7 +195,7 @@ function Charts(props) {
   }
 
   return (
-    <div className="charts-header fadeInUp" style={{animationDelay: '1.2s'}}>
+    <div className="charts-header fadeInUp" style={{animationDelay: '1.5s'}}>
       {props.graphOption == 1 && <Line data={dataset} options={options} />}
       {props.graphOption == 2 && <Bar data={barDataSet} options={{
         responsive: true,
