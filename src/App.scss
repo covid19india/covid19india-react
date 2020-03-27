@@ -629,6 +629,14 @@ table {
       }
     }
   }
+  .stats-name {
+    position: absolute;
+    top: 1rem;
+    left: 0.3rem;
+    h4 {
+      color: #e23028;
+    }
+  }
   .map-stats {
     flex: 0.1;
     position: absolute;

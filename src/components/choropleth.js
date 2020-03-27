@@ -177,8 +177,11 @@ function ChoroplethMap(props) {
         <svg id="chart" width="650" height={window.innerWidth <= 479 ? 650: 750} viewBox={`0 0 650 ${window.innerWidth <= 479 ? 650: 750}`} preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
       </div>
 
-      <div className="map-stats">
+      <div className="stats-name">
         <h4>{state.state}</h4>
+      </div>
+
+      <div className="map-stats">
 
         <div className="stats">
           <h5>Confirmed</h5>
