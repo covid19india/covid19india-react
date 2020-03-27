@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import {legendColor} from 'd3-svg-legend';
 import * as topojson from 'topojson';
 import {MAP_TYPES} from '../constants';
+import anime from 'animejs';
 
 const propertyFieldMap = {
   country: 'ST_NM',

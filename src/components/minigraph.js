@@ -33,7 +33,6 @@ function Minigraph(props) {
 
   function graphData(timeseries) {
     const data = timeseries;
-    console.log(data);
     setDatapoint(data[data.length-1]);
 
     const x = d3.scaleTime()

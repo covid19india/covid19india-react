@@ -18,7 +18,7 @@ function TimeSeries(props) {
 
   useEffect(()=>{
     if (props.timeseries.length>1) {
-      setTimeseries(props.timeseries.slice(0, props.timeseries.length-1));
+      setTimeseries(props.timeseries);
     }
   }, [props.timeseries.length]);
 
@@ -66,7 +66,7 @@ function TimeSeries(props) {
     const svg6 = d3.select(graphElement6.current);
 
     const dateMin = new Date(data[0]['date'] + '2020');
-    var dateMax = new Date(data[timeseries.length-1]['date'] + '2020');
+    const dateMax = new Date(data[timeseries.length-1]['date'] + '2020');
     dateMax.setDate(dateMax.getDate() + 1);
 
     const x = d3.scaleTime()
@@ -75,7 +75,7 @@ function TimeSeries(props) {
 
     const indexScale = d3.scaleLinear()
         .domain([0, timeseries.length])
-        .range([margin.left,width]);
+        .range([margin.left, width]);
 
     svg1.append('g')
         .attr('transform', 'translate(0,' + height + ')')
@@ -123,9 +123,15 @@ function TimeSeries(props) {
         .domain([-totalDeceased/10, totalDeceased])
         .range([height, margin.top]);
 
-    const maxDailyConfirmed = d3.max(data, function(d) { return +d['dailyconfirmed']; })
-    const maxDailyRecovered = d3.max(data, function(d) { return +d['dailyrecovered']; })
-    const maxDailyDeceased = d3.max(data, function(d) { return +d['dailydeceased']; })
+    const maxDailyConfirmed = d3.max(data, function(d) {
+      return +d['dailyconfirmed'];
+    });
+    const maxDailyRecovered = d3.max(data, function(d) {
+      return +d['dailyrecovered'];
+    });
+    const maxDailyDeceased = d3.max(data, function(d) {
+      return +d['dailydeceased'];
+    });
 
     const y4 = d3.scaleLinear()
         .domain([-maxDailyConfirmed/10, maxDailyConfirmed])
@@ -169,7 +175,7 @@ function TimeSeries(props) {
           }
           return tick;
         })
-        .tickPadding(5));
+            .tickPadding(5));
 
     svg6.append('g')
         .attr('transform', `translate(${width}, ${0})`)
@@ -180,34 +186,34 @@ function TimeSeries(props) {
           }
           return tick;
         })
-        .tickPadding(5));
+            .tickPadding(5));
 
     /* Focus Circle */
     // TODO: Vectorize rest of file as well
     const svgArray = [svg1, svg2, svg3, svg4, svg5, svg6];
     const dataTypes = ['totalconfirmed', 'totalrecovered', 'totaldeceased',
-                       'dailyconfirmed', 'dailyrecovered', 'dailydeceased'];
+      'dailyconfirmed', 'dailyrecovered', 'dailydeceased'];
     const colors = ['#ff073a', '#28a745', '#6c757d', '#ff073a', '#28a745', '#6c757d'];
     const yScales = [y1, y2, y3, y4, y5, y6];
 
-    var focus = svgArray.map(function(d, i) {
-                  const y = mode ? y1 : yScales[i];
-                  return d.append('g')
-                    .append('circle')
-                    .attr('fill', colors[i])
-                    .attr('stroke', colors[i])
-                    .attr('r', 5)
-                    .attr('cx', x(new Date(data[timeseries.length-1]['date'] + '2020')))
-                    .attr('cy', y(data[timeseries.length-1][dataTypes[i]]));
-                  });
+    const focus = svgArray.map(function(d, i) {
+      const y = mode ? y1 : yScales[i];
+      return d.append('g')
+          .append('circle')
+          .attr('fill', colors[i])
+          .attr('stroke', colors[i])
+          .attr('r', 5)
+          .attr('cx', x(new Date(data[timeseries.length-1]['date'] + '2020')))
+          .attr('cy', y(data[timeseries.length-1][dataTypes[i]]));
+    });
 
     function mouseout() {
       setDatapoint(data[timeseries.length - 1]);
       setIndex(timeseries.length - 1);
-      focus.forEach(function (d, i) {
+      focus.forEach(function(d, i) {
         const y = mode ? y1 : yScales[i];
         d.attr('cx', x(new Date(data[timeseries.length-1]['date'] + '2020')))
-         .attr('cy', y(data[timeseries.length-1][dataTypes[i]]));
+            .attr('cy', y(data[timeseries.length-1][dataTypes[i]]));
       });
     };
 
@@ -218,17 +224,17 @@ function TimeSeries(props) {
         const d = data[i];
         setDatapoint(d);
         setIndex(i);
-        focus.forEach(function (f, j) {
+        focus.forEach(function(f, j) {
           const y = mode ? y1 : yScales[j];
           f.attr('cx', x(new Date(d['date'] + '2020')))
-           .attr('cy', y(d[dataTypes[j]]));
+              .attr('cy', y(d[dataTypes[j]]));
         });
       }
     };
 
-    svgArray.forEach(function (s) {
-        s.on("mousemove", mousemove).on("touchmove", mousemove)
-         .on("mouseout", mouseout).on("touchend", mouseout);
+    svgArray.forEach(function(s) {
+      s.on('mousemove', mousemove).on('touchmove', mousemove)
+          .on('mouseout', mouseout).on('touchend', mouseout);
     });
 
 

@@ -78,6 +78,7 @@ function Home(props) {
       </div>
 
       <div className="home-right">
+
         {fetched && (
           <React.Fragment>
             <MapExplorer
@@ -85,6 +86,7 @@ function Home(props) {
               stateDistrictWiseData={stateDistrictWiseData}
               stateHighlighted={stateHighlighted}
             />
+
             <div
               className="timeseries-header fadeInUp"
               style={{animationDelay: '1.5s'}}

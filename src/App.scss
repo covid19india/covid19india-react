@@ -612,6 +612,7 @@ table {
     flex-direction: column;
     color: $gray-dark;
     margin-bottom: 2.5rem;
+    align-self: flex-start;
   }
   .svg-parent {
     display: flex;
@@ -632,8 +633,30 @@ table {
   }
   .back-button {
     position: absolute;
-    right: -1.75rem;
-    top: 12rem;
+    right: 0;
+  }
+  .meta {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 1rem;
+    h2 {
+      margin: 0;
+      color: #e23028;
+      word-wrap: break-word;
+      font-weight: 900;
+    }
+    h4 {
+      margin: 0;
+      color: $gray-mid;
+      word-wrap: break-word;
+    }
+    .unknown {
+      position: absolute;
+      bottom: -4.5rem;
+      width: 5rem;
+    }
   }
   .map-stats {
     display: flex;
@@ -644,27 +667,9 @@ table {
     h1, h5, h6, h3 {
       margin: 0;
     }
-    h4 {
-      margin: 0;
-      color: #e23028;
-      word-wrap: break-word;
-    }
-    h1 {
-      font-weight: 600;
-    }
     h3 {
       color: $gray-mid;
       font-weight: 900;
-    }
-    .meta {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      .unknown {
-        position: absolute;
-        bottom: -4.5rem;
-        width: 5rem;
-      }
     }
     .stats {
       background: $cherry-light;
@@ -673,9 +678,10 @@ table {
       border-radius: 5px;
       display: flex;
       flex-direction: column;
-      margin-left: 0.5rem;
+      margin-left: 0.25rem;
+      margin-right: 0.25rem;
       margin-bottom: 0.5rem;
-      width: 5rem;
+      width: 100%;
       .stats-bottom {
         display: flex;
         flex-direction: row;
@@ -683,6 +689,9 @@ table {
           margin-top: auto;
           margin-bottom: 0.25rem;
         }
+      }
+      h1 {
+        font-weight: 600;
       }
       &.is-green {
         background: $green-light;
@@ -703,6 +712,12 @@ table {
         background: $warning;
         h5, h6 {color: $white;}
         h1 {color: $white;}
+      }
+      &:first-child {
+        margin-left: 0;
+      }
+      &:last-child {
+        margin-right: 0;
       }
     }
   }
@@ -1136,44 +1151,6 @@ footer {
     transform: rotate(-90deg);
   }
 }
-
-/*.rollDown {
-  animation-name: rollDown;
-  animation-duration: 0.250s;
-  animation-fill-mode: both;
-}
-
-@keyframes rollDown {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.rollUp {
-  animation-name: rollUp;
-  animation-duration: 0.250s;
-  animation-fill-mode: both;
-}
-
-@keyframes rollUp {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-    color: transparent;
-    visibility: none;
-  }
-  100% {
-    opacity: 0;
-    visibility: none;
-    position: absolute;
-    pointer-events: none;
-  }
-}*/
 
 .iframe-container{
   width: 100%;
