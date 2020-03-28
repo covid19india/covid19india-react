@@ -2336,6 +2336,44 @@ select {
     }
   }
 }
+.cards-container {
+  padding: 4rem;
+  .cards {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .card {
+      margin-bottom: 2em;
+      flex: 0 1 calc(33% - 1em);
+      box-shadow: rgba(#000, 0.2) 0 0 8px 0;
+      &:hover {
+        box-shadow: rgba(#000, 0.3) 0 0 8px 0;
+      }
+      height: 30rem;
+        .charts-header {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          .chart-title {
+            font-family: 'archia';
+            font-size: 1.5rem !important;
+            color: #6c757d;
+            font-weight: 900;
+            text-transform: uppercase;
+            padding: 20px 0 20px 0;
+          }
+
+          .chart-content {
+            height: 100%;
+            width: 100%;
+          }
+        }
+    }
+  }
+}
+  
 
 @media (max-width: 769px) {
   .TimeSeries,
@@ -2436,6 +2474,16 @@ select {
       max-width: 6.75rem;
     }
   }
+
+  .cards-container {
+    padding: 1rem;
+    .cards {
+      .card {
+        flex: 0 1 calc(100%);
+      }
+    }
+  }
+
 
   .PatientsDB {
     width: 100%;
