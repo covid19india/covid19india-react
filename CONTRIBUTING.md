@@ -5,7 +5,7 @@ First off, thanks for taking the time to contribute! :+1:
 These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
 
-Regarding PRs to the project https://github.com/covid19india/covid19india-react, always submit a PR against an "issue". If an issue doesn't exist, please raise one first.
+Regarding PRs to this project, always submit a PR against an "issue". If an issue doesn't exist, please raise one first.
 
 
 Two kinds of issues can be raised in this project:
