@@ -61,14 +61,14 @@ function Table(props) {
   }, []);
 
   const sortByKey = (arr, key, isAscending) => {
-    return arr.concat().sort(({[key]: v1}, {[key]: v2}) => {
-      const isNumber = !isNaN(v1);
-      if (isNumber ? parseInt(v1) < parseInt(v2) : v1 < v2) {
-        return isAscending ? -1 : 1;
-      } else if (isNumber ? parseInt(v1) > parseInt(v2) : v1 > v2) {
-        return isAscending ? 1 : -1;
+    return arr.concat().sort((s1, s2) => {
+      const v1 = key !== 'state' ? parseInt(s1[key]) : s1[key];
+      const v2 = key !== 'state' ? parseInt(s2[key]) : s2[key];
+      if (isAscending) {
+        return v1 > v2 ? 1 : (v1 == v1) && s1['state'] > s2['state'] ? 1 : -1;
+      } else {
+        return v1 < v2 ? 1 : (v1 == v2) && s1['state'] > s2['state'] ? 1 : -1;
       }
-      return 0;
     });
   };
 
