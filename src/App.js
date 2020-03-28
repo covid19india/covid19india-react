@@ -35,7 +35,7 @@ function App() {
         />
       </Router>
       <footer className="fadeInUp" style={{animationDelay: '2s'}}>
-        <img src="/icon.png" alt="logo"/>
+        <img src="/icon.png" alt="https://www.covid19india.org | Coronavirus cases live dashboard"/>
         <h5>We stand with everyone fighting on the frontlines</h5>
         <div className="link">
           <a href="https://github.com/covid19india">covid19india</a>
