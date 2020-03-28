@@ -29,9 +29,9 @@ const mapMeta = {
   },
   'Andhra Pradesh': {
     name: 'Andhra Pradesh',
-    geoDataFile: '/andhrapradesh.json',
+    geoDataFile: `${MAPS_DIR}/andhrapradesh.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectName: 'AndhraPradesh',
+    graphObjectName: 'andhrapradesh_district',
     center: [80, 16],
     scale: 3200,
   },
