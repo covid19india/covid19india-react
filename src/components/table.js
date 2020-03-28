@@ -71,13 +71,10 @@ function Table(props) {
         value2 = parseInt(StateData2[sortColumn]);
       }
 
-      //console.log("Value 1 : " + value1 + " Value 2 : " + value2)
-      //console.log(StateData1)
-       //console.log(StateData2)
       if (sortData.isAscending) {
-                   return value1 > value2 ? 1 : ((value1 == value2) && (StateData1.delta.confirmed  > StateData2.delta.confirmed) ? 1 : (value1 == value2) && (StateData1.delta.confirmed  == StateData2.delta.confirmed) && (StateData1['state']  > StateData2['state']) ? 1 : -1 ) ;
+                   return value1 > value2 ? 1 : ((value1 == value2) && (StateData1.delta[sortColumn]  > StateData2.delta[sortColumn]) ? 1 : (value1 == value2) && (StateData1.delta[sortColumn]  == StateData2.delta[sortColumn]) && (StateData1['state']  > StateData2['state']) ? 1 : -1 ) ;
                  } else {
-                   return value1 < value2 ? 1 : ((value1 == value2) && (StateData1.delta.confirmed  > StateData2.delta.confirmed) ? 1 : (value1 == value2) && (StateData1.delta.confirmed  == StateData2.delta.confirmed) && (StateData1['state']  > StateData2['state']) ? 1 : -1 ) ;
+                   return value1 < value2 ? 1 : ((value1 == value2) && (StateData1.delta[sortColumn]  > StateData2.delta[sortColumn]) ? 1 : (value1 == value2) && (StateData1.delta[sortColumn]  == StateData2.delta[sortColumn]) && (StateData1['state']  > StateData2['state']) ? 1 : -1 ) ;
                  }
     });
     {console.log(states);}
