@@ -289,6 +289,8 @@ export default function({states, stateDistrictWiseData, regionHighlighted}) {
   useEffect(() => {
     if (regionHighlighted?.districtName && currentMap.mapType !== MAP_TYPES.STATE)
       return
+    if (regionHighlighted?.state && currentMap.mapType !== MAP_TYPES.COUNTRY)
+      return
 
     if (regionHighlighted === null) {
       highlightRegionInMap(null, currentMap.mapType);
