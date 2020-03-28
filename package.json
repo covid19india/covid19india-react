@@ -28,6 +28,7 @@
     "@vx/text": "0.0.195",
     "@vx/tooltip": "0.0.195",
     "@vx/voronoi": "0.0.195",
+    "animejs": "^3.1.0",
     "axios": "^0.19.2",
     "bulma": "^0.8.0",
     "d3": "^5.15.0",
@@ -51,6 +52,7 @@
   },
   "scripts": {
     "start": "PORT=3001 react-scripts start css-watch",
+    "start-win": "react-scripts start css-watch",
     "build": "react-scripts build && cp build/index.html build/404.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

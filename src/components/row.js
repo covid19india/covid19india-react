@@ -5,7 +5,6 @@ import * as Icon from 'react-feather'
 function Row(props) {
   const [state, setState] = useState(props.state)
   const [districts, setDistricts] = useState(props.districts)
-  const [reveal, setReveal] = useState(false)
 
   useEffect(() => {
     setState(props.state)
@@ -20,7 +19,7 @@ function Row(props) {
   }, [districts])
 
   const handleReveal = () => {
-    setReveal(!reveal)
+    props.handleReveal(props.state.state)
   }
 
   const sort = (aDistricts) => {
@@ -30,7 +29,9 @@ function Row(props) {
   return (
     <React.Fragment>
       <span
-        className={`dropdown ${reveal ? 'rotateRightDown' : 'rotateDownRight'}`}
+        className={`dropdown ${
+          props.reveal ? 'rotateRightDown' : 'rotateDownRight'
+        }`}
         style={{ display: !props.total ? '' : 'none' }}
         onClick={() => {
           handleReveal()
@@ -41,6 +42,7 @@ function Row(props) {
       <tr
         className={props.total ? 'is-total' : ''}
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
+        onMouseLeave={() => props.onHighlightState?.()}
         touchstart={() => props.onHighlightState?.(state, props.index)}
         onClick={() => {
           handleReveal()
@@ -91,7 +93,7 @@ function Row(props) {
 
       <tr
         className={`spacer`}
-        style={{ display: reveal && !props.total ? '' : 'none' }}
+        style={{ display: props.reveal && !props.total ? '' : 'none' }}
       >
         <td></td>
         <td></td>
@@ -100,7 +102,7 @@ function Row(props) {
 
       <tr
         className={`district-heading`}
-        style={{ display: reveal && !props.total ? '' : 'none' }}
+        style={{ display: props.reveal && !props.total ? '' : 'none' }}
       >
         <td>District</td>
         <td>
@@ -123,7 +125,7 @@ function Row(props) {
       {districts?.Unknown && (
         <tr
           className={`district`}
-          style={{ display: reveal && !props.total ? '' : 'none' }}
+          style={{ display: props.reveal && !props.total ? '' : 'none' }}
         >
           <td style={{ fontWeight: 600 }}>Unknown</td>
           <td>{districts['Unknown'].confirmed}</td>
@@ -139,7 +141,7 @@ function Row(props) {
             <tr
               key={index}
               className={`district`}
-              style={{ display: reveal && !props.total ? '' : 'none' }}
+              style={{ display: props.reveal && !props.total ? '' : 'none' }}
             >
               <td style={{ fontWeight: 600 }}>{district}</td>
               <td>{districts[district].confirmed}</td>
@@ -153,7 +155,7 @@ function Row(props) {
 
       <tr
         className={`spacer`}
-        style={{ display: reveal && !props.total ? '' : 'none' }}
+        style={{ display: props.reveal && !props.total ? '' : 'none' }}
       >
         <td></td>
         <td></td>

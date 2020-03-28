@@ -10,6 +10,11 @@
 
 
 ## Setup
+On Windows
+```
+npm i && npm run start-win
+```
+On Linux
 ```
 npm i && npm start
 ```
