@@ -426,6 +426,7 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
           </div>
         </div>
 
+        { currentMap.mapType === MAP_TYPES.COUNTRY &&
         <div className="stats is-blue">
           <h5>Active</h5>
           <div className="stats-bottom">
@@ -433,7 +434,9 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
             <h6>{}</h6>
           </div>
         </div>
-
+  }
+        
+        { currentMap.mapType === MAP_TYPES.COUNTRY &&
         <div className="stats is-green">
           <h5>Recovered</h5>
           <div className="stats-bottom">
@@ -441,7 +444,8 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
             <h6>{}</h6>
           </div>
         </div>
-
+}
+{ currentMap.mapType === MAP_TYPES.COUNTRY &&
         <div className="stats is-gray">
           <h5>Deceased</h5>
           <div className="stats-bottom">
@@ -449,6 +453,9 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
             <h6>{}</h6>
           </div>
         </div>
+
+}
+
       </div>
 
       <div className="meta">
