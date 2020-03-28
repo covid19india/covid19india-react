@@ -99,73 +99,75 @@ function Table(props) {
   doSort();
 
   return (
-    <table className="table fadeInUp" style={{animationDelay: '1s'}}>
-      <h5 className="affected-count">{count} States/UTS Affected</h5>
-      <thead>
-        <tr>
-          <th className="sticky state-heading" onClick={(e) => handleSort(e, props)} >
-            <div className='heading-content'>
-              <abbr title="State">
-                  State/UT
-              </abbr>
-              <div style={{display: sortData.sortColumn === 'state' ? 'initial': 'none'}}>
-                {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+    <>
+      <h5 className="affected-count fadeInUp" style={{animationDelay: '1s'}}>{count} States/UTS Affected</h5>
+      <table className="table fadeInUp" style={{animationDelay: '1s'}}>
+        <thead>
+          <tr>
+            <th className="sticky state-heading" onClick={(e) => handleSort(e, props)} >
+              <div className='heading-content'>
+                <abbr title="State">
+                    State/UT
+                </abbr>
+                <div style={{display: sortData.sortColumn === 'state' ? 'initial': 'none'}}>
+                  {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+                </div>
               </div>
-            </div>
-          </th>
-          <th className="sticky" onClick={(e) => handleSort(e, props)}>
-            <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfmd' : 'Confirmed'}</abbr>
-              <div style={{display: sortData.sortColumn === 'confirmed' ? 'initial': 'none'}}>
-                {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+            </th>
+            <th className="sticky" onClick={(e) => handleSort(e, props)}>
+              <div className='heading-content'>
+                <abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfmd' : 'Confirmed'}</abbr>
+                <div style={{display: sortData.sortColumn === 'confirmed' ? 'initial': 'none'}}>
+                  {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+                </div>
               </div>
-            </div>
-          </th>
-          <th className="sticky" onClick={(e) => handleSort(e, props)}>
-            <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'A' : 'Actv' : 'Active'}</abbr>
-              <div style={{display: sortData.sortColumn === 'active' ? 'initial': 'none'}}>
-                {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+            </th>
+            <th className="sticky" onClick={(e) => handleSort(e, props)}>
+              <div className='heading-content'>
+                <abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'A' : 'Actv' : 'Active'}</abbr>
+                <div style={{display: sortData.sortColumn === 'active' ? 'initial': 'none'}}>
+                  {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+                </div>
               </div>
-            </div>
-          </th>
-          <th  className="sticky" onClick={(e) => handleSort(e, props)}>
-            <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-green' : ''}`} title="Recovered">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'R' : 'Rcvrd' : 'Recovered'}</abbr>
-              <div className={ sortData.sortColumn === 'recovered'? 'sort-black' : ''}></div>
-              <div style={{display: sortData.sortColumn === 'recovered' ? 'initial': 'none'}}>
-                {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+            </th>
+            <th  className="sticky" onClick={(e) => handleSort(e, props)}>
+              <div className='heading-content'>
+                <abbr className={`${window.innerWidth <=769 ? 'is-green' : ''}`} title="Recovered">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'R' : 'Rcvrd' : 'Recovered'}</abbr>
+                <div className={ sortData.sortColumn === 'recovered'? 'sort-black' : ''}></div>
+                <div style={{display: sortData.sortColumn === 'recovered' ? 'initial': 'none'}}>
+                  {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+                </div>
               </div>
-            </div>
-          </th>
-          <th className="sticky" onClick={(e) => handleSort(e, props)}>
-            <div className='heading-content'>
-              <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'Dcsd' : 'Deceased'}</abbr>
-              <div style={{display: sortData.sortColumn === 'deaths' ? 'initial': 'none'}}>
-                {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+            </th>
+            <th className="sticky" onClick={(e) => handleSort(e, props)}>
+              <div className='heading-content'>
+                <abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'Dcsd' : 'Deceased'}</abbr>
+                <div style={{display: sortData.sortColumn === 'deaths' ? 'initial': 'none'}}>
+                  {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+                </div>
               </div>
-            </div>
-          </th>
-        </tr>
-      </thead>
+            </th>
+          </tr>
+        </thead>
 
-      {
-        states.map((state, index) => {
-          if (index!==0 && state.confirmed>0) {
-            return (
-              <tbody>
-                <Row key={index} index={index} state={state} total={false} reveal={revealedStates[state.state]} districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []} onHighlightState={props.onHighlightState} handleReveal={handleReveal} />
-              </tbody>
-            );
-          }
-        })
-      }
+        {
+          states.map((state, index) => {
+            if (index!==0 && state.confirmed>0) {
+              return (
+                <tbody>
+                  <Row key={index} index={index} state={state} total={false} reveal={revealedStates[state.state]} districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []} onHighlightState={props.onHighlightState} handleReveal={handleReveal} />
+                </tbody>
+              );
+            }
+          })
+        }
 
-      <tbody>
-        {states.length > 1 && props.summary===false && <Row key={0} state={states[0]} total={true}/>}
-      </tbody>
+        <tbody>
+          {states.length > 1 && props.summary===false && <Row key={0} state={states[0]} total={true}/>}
+        </tbody>
 
-    </table>
+      </table>
+    </>
   );
 }
 
