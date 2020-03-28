@@ -287,35 +287,41 @@ export default function({states, stateDistrictWiseData, regionHighlighted}) {
   }, [states]);
 
   useEffect(() => {
-    if (regionHighlighted?.districtName && currentMap.mapType !== MAP_TYPES.STATE)
-      return
-    if (regionHighlighted?.state && currentMap.mapType !== MAP_TYPES.COUNTRY)
-      return
-
     if (regionHighlighted === null) {
       highlightRegionInMap(null, currentMap.mapType);
-    } else {
-      if (regionHighlighted !== undefined) {
-        let targetRegion;
-        if (regionHighlighted.state)
-          targetRegion = getRegionFromState(regionHighlighted.state);
-        else {
-          const name = regionHighlighted.districtName.trim();
-          let districtData = (stateDistrictWiseData[currentMap.name] || {
-            districtData: {},
-          }).districtData[name];
-          if (!districtData)
-            districtData = {
-              confirmed: 0,
-              active: 0,
-              deaths: 0,
-              recovered: 0,
-            };
-          targetRegion = getRegionFromDistrict({districtData, name});
-        }
-        setCurrentHoveredRegion(targetRegion);
-        highlightRegionInMap(targetRegion.name, currentMap.mapType);
+    } else if (regionHighlighted !== undefined) {
+      let targetRegion;
+      if (regionHighlighted.districtName) {
+        console.log(regionHighlighted)
+        console.log(currentMap)
+        if (currentMap.mapType !== MAP_TYPES.STATE)
+          // only highlight district in state mode
+          return;
+        if (regionHighlighted.state && currentMap.name !== regionHighlighted.state)
+          // only highlight district belonging to current state
+          return
+        const name = regionHighlighted.districtName.trim();
+        console.log(name)
+        let districtData = (stateDistrictWiseData[currentMap.name] || {
+          districtData: {},
+        }).districtData[name];
+        if (!districtData)
+          districtData = {
+            confirmed: 0,
+            active: 0,
+            deaths: 0,
+            recovered: 0,
+          };
+        targetRegion = getRegionFromDistrict({districtData, name});
       }
+      else if (regionHighlighted.state) {
+        if (currentMap.mapType !== MAP_TYPES.COUNTRY)
+          // only highlight state in country mode
+          return;
+        targetRegion = getRegionFromState(regionHighlighted.state);
+      }
+      setCurrentHoveredRegion(targetRegion);
+      highlightRegionInMap(targetRegion.name, currentMap.mapType);
     }
   }, [regionHighlighted]);
 

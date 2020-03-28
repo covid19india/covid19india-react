@@ -57,10 +57,10 @@ function Home(props) {
     else setMapRegionHighlighted({state, index});
   };
 
-  const onHighlightDistrict = (districtName, index) => {
+  const onHighlightDistrict = (districtName, state, index) => {
     if (!districtName && !index) setMapRegionHighlighted(null);
     else {
-      setMapRegionHighlighted({districtName, index});
+      setMapRegionHighlighted({districtName, state, index});
     }
   };
 
