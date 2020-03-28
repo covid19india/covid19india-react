@@ -114,6 +114,7 @@ function Home(props) {
                 <label htmlFor="timeseries-mode">Scale Uniformly</label>
                 <input
                   type="checkbox"
+                  aria-label="Checked by default to scale uniformly."
                   checked={timeseriesMode}
                   onChange={(event) => {
                     setTimeseriesMode(!timeseriesMode);

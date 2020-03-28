@@ -98,56 +98,58 @@ function Table(props) {
   };
 
   return (
-    <table className="table fadeInUp" style={{animationDelay: '1s'}}>
-      <h5 className="affected-count">{count} States/UTS Affected</h5>
-      <thead>
-        <tr>
-          { tableRows.map(({
-            key,
-            title,
-            desktopStyle,
-            mobileStyle,
-            titleSmall,
-            titleShort,
-          }, index) =>
-            <th key={index} className="sticky state-heading" onClick={() => handleSort(key)} >
-              <div className='heading-content'>
-                <abbr className={`${window.innerWidth <=769 ? mobileStyle : desktopStyle}`} title={title}>
-                  {window.innerWidth <=769 ? window.innerWidth <=375 ? titleSmall : titleShort : title}
-                </abbr>
-                <div style={{display: sortData.sortColumn === key ? 'initial': 'none'}}>
-                  {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+    <>
+      <h5 className="affected-count fadeInUp" style={{animationDelay: '1s'}}>{count} States/UTS Affected</h5>
+      <table className="table fadeInUp" style={{animationDelay: '1s'}}>
+        <thead>
+          <tr>
+            { tableRows.map(({
+              key,
+              title,
+              desktopStyle,
+              mobileStyle,
+              titleSmall,
+              titleShort,
+            }, index) =>
+              <th key={index} className="sticky" onClick={() => handleSort(key)} >
+                <div className='heading-content'>
+                  <abbr className={`${window.innerWidth <=769 ? mobileStyle : desktopStyle}`} title={title}>
+                    {window.innerWidth <=769 ? window.innerWidth <=375 ? titleSmall : titleShort : title}
+                  </abbr>
+                  <div style={{display: sortData.sortColumn === key ? 'initial': 'none'}}>
+                    {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+                  </div>
                 </div>
-              </div>
-            </th>)}
-        </tr>
-      </thead>
+              </th>)}
+          </tr>
+        </thead>
 
-      {
-        sortedStates.map((state, index) => {
-          if (index!==0 && state.confirmed>0) {
-            return (
-              <tbody>
-                <Row
-                  key={index}
-                  index={index}
-                  state={state}
-                  total={false}
-                  reveal={revealedStates[state.state]}
-                  handleReveal={handleReveal}
-                  districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []}
-                  onHighlightState={props.onHighlightState} />
-              </tbody>
-            );
-          }
-        })
-      }
+        {
+          sortedStates.map((state, index) => {
+            if (index!==0 && state.confirmed>0) {
+              return (
+                <tbody>
+                  <Row
+                    key={index}
+                    index={index}
+                    state={state}
+                    total={false}
+                    reveal={revealedStates[state.state]}
+                    handleReveal={handleReveal}
+                    districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []}
+                    onHighlightState={props.onHighlightState} />
+                </tbody>
+              );
+            }
+          })
+        }
 
-      <tbody>
-        {sortedStates.length > 1 && props.summary===false && <Row key={0} state={sortedStates[0]} total={true}/>}
-      </tbody>
+        <tbody>
+          {sortedStates.length > 1 && props.summary===false && <Row key={0} state={sortedStates[0]} total={true}/>}
+        </tbody>
 
-    </table>
+      </table>
+    </>
   );
 }
 
