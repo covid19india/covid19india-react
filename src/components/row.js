@@ -110,6 +110,13 @@ function Row(props) {
         })
       }
 
+{
+      <tr className={`district`} style={{display: reveal && !props.total ? '' : 'none'}}>
+        <td style={{fontWeight: 600}}>Total</td>
+        <td>{state.confirmed}</td>
+      </tr>
+}
+
       <tr className={`spacer`} style={{display: props.reveal && !props.total ? '' : 'none'}}>
         <td></td>
         <td></td>
