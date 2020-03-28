@@ -19,17 +19,20 @@ function Home(props) {
   const [timeseries, setTimeseries] = useState([]);
   const [deltas, setDeltas] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
-  const [stateHighlighted, setStateHighlighted] = useState(undefined);
+  const [mapRegionHighlighted, setMapRegionHighlighted] = useState(undefined);
 
-  useEffect(()=> {
-    if (fetched===false) {
+  useEffect(() => {
+    if (fetched === false) {
       getStates();
     }
   }, [fetched]);
 
   const getStates = async () => {
     try {
-      const [response, stateDistrictWiseResponse] = await Promise.all([axios.get('https://api.covid19india.org/data.json'), axios.get('https://api.covid19india.org/state_district_wise.json')]);
+      const [response, stateDistrictWiseResponse] = await Promise.all([
+        axios.get('https://api.covid19india.org/data.json'),
+        axios.get('https://api.covid19india.org/state_district_wise.json'),
+      ]);
       setStates(response.data.statewise);
       setTimeseries(response.data.cases_time_series);
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
@@ -50,8 +53,24 @@ function Home(props) {
   };
 
   const onHighlightState = (state, index) => {
-    if (!state && !index) setStateHighlighted(null);
-    else setStateHighlighted({state, index});
+    if (!state && !index) setMapRegionHighlighted(null);
+    else setMapRegionHighlighted({state, index});
+  };
+
+  const onHighlightDistrict = (districtName, index) => {
+    if (!districtName && !index) setMapRegionHighlighted(null);
+    else {
+      const district = {
+        districtData: {
+          confirmed: 0,
+          active: 0,
+          deaths: 0,
+          recovered: 0,
+        },
+        name: districtName,
+      };
+      setMapRegionHighlighted({district, index});
+    }
   };
 
   return (
@@ -70,21 +89,24 @@ function Home(props) {
           </div>
         </div>
 
-        <Level data={states} deltas={deltas}/>
-        <Minigraph timeseries={timeseries} animate={true}/>
+        <Level data={states} deltas={deltas} />
+        <Minigraph timeseries={timeseries} animate={true} />
 
-        <Table states={states} summary={false} onHighlightState={onHighlightState} />
-
+        <Table
+          states={states}
+          summary={false}
+          onHighlightState={onHighlightState}
+          onHighlightDistrict={onHighlightDistrict}
+        />
       </div>
 
       <div className="home-right">
-
         {fetched && (
           <React.Fragment>
             <MapExplorer
               states={states}
               stateDistrictWiseData={stateDistrictWiseData}
-              stateHighlighted={stateHighlighted}
+              regionHighlighted={mapRegionHighlighted}
             />
 
             <div

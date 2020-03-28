@@ -14,8 +14,8 @@ function Table(props) {
     isAscending: localStorage.getItem('state.isAscending')? localStorage.getItem('state.isAscending') == 'true' : false,
   });
 
-  useEffect(()=>{
-    if (props.summary===true) {
+  useEffect(() => {
+    if (props.summary === true) {
       setStates(props.states.slice(0, 9));
     } else {
       setStates(props.states);
@@ -30,28 +30,28 @@ function Table(props) {
     }
   }, [props.states]);
 
-  useEffect(()=>{
-    if (states.length>0) {
+  useEffect(() => {
+    if (states.length > 0) {
       let length = 0;
 
       props.states.map((state, i) => {
-        if (i!==0 && state.confirmed>0) length+=1;
-        if (i===props.states.length-1) setCount(length);
+        if (i !== 0 && state.confirmed > 0) length += 1;
+        if (i === props.states.length - 1) setCount(length);
       });
     }
   }, [states.length]);
 
-  useEffect(()=>{
+  useEffect(() => {
     getDistricts();
   }, [1]);
 
-
   const getDistricts = () => {
-    axios.get('https://api.covid19india.org/state_district_wise.json')
-        .then((response)=>{
+    axios
+        .get('https://api.covid19india.org/state_district_wise.json')
+        .then((response) => {
           setDistricts(response.data);
         })
-        .catch((err)=>{
+        .catch((err) => {
           console.log(err);
         });
   };
@@ -60,7 +60,9 @@ function Table(props) {
 
   const doSort = (e, props) => {
     const totalRow = states.splice(0, 1);
-    {/* console.log(totalRow);*/}
+    {
+      /* console.log(totalRow);*/
+    }
     states.sort((StateData1, StateData2) => {
       const sortColumn = sortData.sortColumn;
       let value1 = StateData1[sortColumn];
@@ -72,12 +74,22 @@ function Table(props) {
       }
 
       if (sortData.isAscending) {
-        return value1 > value2 ? 1 : (value1 == value2) && StateData1['state'] > StateData2['state'] ? 1 : -1;
+        return value1 > value2 ?
+          1 :
+          value1 == value2 && StateData1['state'] > StateData2['state'] ?
+          1 :
+          -1;
       } else {
-        return value1 < value2 ? 1 : (value1 == value2) && StateData1['state'] > StateData2['state'] ? 1 : -1;
+        return value1 < value2 ?
+          1 :
+          value1 == value2 && StateData1['state'] > StateData2['state'] ?
+          1 :
+          -1;
       }
     });
-    {/* console.log(states);*/}
+    {
+      /* console.log(states);*/
+    }
     states.unshift(totalRow[0]);
   };
 
@@ -158,7 +170,7 @@ function Table(props) {
             if (index!==0 && state.confirmed>0) {
               return (
                 <tbody>
-                  <Row key={index} index={index} state={state} total={false} reveal={revealedStates[state.state]} districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []} onHighlightState={props.onHighlightState} handleReveal={handleReveal} />
+                  <Row key={index} index={index} state={state} total={false} reveal={revealedStates[state.state]} districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []} onHighlightState={props.onHighlightState} onHighlightDistrict={props.onHighlightDistrict} handleReveal={handleReveal} />
                 </tbody>
               );
             }

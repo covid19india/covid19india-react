@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import * as Icon from 'react-feather';
 
 function Row(props) {
@@ -11,15 +11,15 @@ function Row(props) {
 
   let sortedDistricts = {};
 
-  useEffect(()=>{
+  useEffect(() => {
     setState(props.state);
   }, [props.state]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setDistricts(props.districts);
   }, [props.districts]);
 
-  useEffect(()=>{
+  useEffect(() => {
     sort(districts);
   }, [districts]);
 
@@ -56,50 +56,74 @@ function Row(props) {
 
   return (
     <React.Fragment>
-      <span className={`dropdown ${props.reveal ? 'rotateRightDown' : 'rotateDownRight' }`} style={{display: !props.total ? '' : 'none'}} onClick={()=>{
-        handleReveal();
-      }}>
-        <Icon.ChevronDown/>
+      <span
+        className={`dropdown ${
+          props.reveal ? 'rotateRightDown' : 'rotateDownRight'
+        }`}
+        style={{ display: !props.total ? '' : 'none' }}
+        onClick={() => {
+          handleReveal();
+        }}
+      >
+        <Icon.ChevronDown />
       </span>
-      <tr className={props.total ? 'state is-total' : 'state'} className={props.total ? 'is-total' : ''}
+      <tr
+        className={props.total ? 'state is-total' : 'state'}
+        className={props.total ? 'is-total' : ''}
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
         touchstart={() => props.onHighlightState?.(state, props.index)}
-        onClick={()=>{
+        onClick={() => {
           handleReveal();
-        }}>
-        <td style={{fontWeight: 600}}>{state.state}</td>
+        }}
+      >
+        <td style={{ fontWeight: 600 }}>{state.state}</td>
         <td>
-          <span className="deltas" style={{color: '#ff073a'}}>
-            {!state.delta.confirmed==0 && <Icon.ArrowUp/>}
+          <span className="deltas" style={{ color: '#ff073a' }}>
+            {!state.delta.confirmed == 0 && <Icon.ArrowUp />}
             {state.delta.confirmed > 0 ? `${state.delta.confirmed}` : ''}
           </span>
-          {parseInt(state.confirmed)===0 ? '-' : state.confirmed}
+          {parseInt(state.confirmed) === 0 ? '-' : state.confirmed}
         </td>
-        <td style={{color: parseInt(state.active)===0 ? '#B5B5B5' : 'inherit'}}>
+        <td
+          style={{
+            color: parseInt(state.active) === 0 ? '#B5B5B5' : 'inherit'
+          }}
+        >
           {/*<span className="deltas" style={{color: '#007bff'}}>
             {!state.delta.active==0 && <Icon.ArrowUp/>}
             {state.delta.active>0 ? `${state.delta.active}` : ''}
           </span>*/}
-          {parseInt(state.active)===0 ? '-' : state.active}
+          {parseInt(state.active) === 0 ? '-' : state.active}
         </td>
-        <td style={{color: parseInt(state.recovered)===0 ? '#B5B5B5' : 'inherit'}}>
+        <td
+          style={{
+            color: parseInt(state.recovered) === 0 ? '#B5B5B5' : 'inherit'
+          }}
+        >
           {/*<span className="deltas" style={{color: '#28a745'}}>
             {!state.delta.recovered==0 && <Icon.ArrowUp/>}
             {state.delta.recovered > 0 ? `${state.delta.recovered}` : ''}
           </span>*/}
-          {parseInt(state.recovered)===0 ? '-' : state.recovered}
+          {parseInt(state.recovered) === 0 ? '-' : state.recovered}
         </td>
-        <td style={{color: parseInt(state.deaths)===0 ? '#B5B5B5' : 'inherit'}}>
+        <td
+          style={{
+            color: parseInt(state.deaths) === 0 ? '#B5B5B5' : 'inherit'
+          }}
+        >
           {/*<span className="deltas" style={{color: '#6c757d'}}>
             {!state.delta.deaths==0 && <Icon.ArrowUp/>}
             {state.delta.deaths>0 ? `${state.delta.deaths}` : ''}
           </span>*/}
-          {parseInt(state.deaths)===0 ? '-' : state.deaths}
+          {parseInt(state.deaths) === 0 ? '-' : state.deaths}
         </td>
       </tr>
 
-      <tr className={`spacer`} style={{display: props.reveal && !props.total ? '' : 'none'}}>
+      <tr
+        className={`spacer`}
+        style={{ display: props.reveal && !props.total ? '' : 'none' }}
+      >
         <td></td>
         <td></td>
         <td></td>
@@ -126,7 +150,7 @@ function Row(props) {
         Object.keys(sortedDistricts).map((district, index) => {
           if (district.toLowerCase()!=='unknown') {
             return (
-              <tr key={index} className={`district`} style={{display: props.reveal && !props.total ? '' : 'none'}}>
+              <tr key={index} className={`district`} style={{display: props.reveal && !props.total ? '' : 'none'}} onMouseEnter={() => props.onHighlightDistrict?.(district, index)} onMouseLeave={() => props.onHighlightDistrict?.()} touchstart={() => props.onHighlightDistrict?.(district, index)}>
                 <td style={{fontWeight: 600}}>{district}</td>
                 <td>{sortedDistricts[district].confirmed}</td>
               </tr>

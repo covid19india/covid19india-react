@@ -271,7 +271,7 @@ const mapMeta = {
   },
 };
 
-export default function({states, stateDistrictWiseData, stateHighlighted}) {
+export default function({states, stateDistrictWiseData, regionHighlighted}) {
   // const [states, setStates] = useState(props.states);
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
@@ -287,20 +287,22 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
   }, [states]);
 
   useEffect(() => {
-    if (currentMap.mapType === MAP_TYPES.STATE) {
-      return;
-    }
+    if (regionHighlighted?.district && currentMap.mapType !== MAP_TYPES.STATE)
+      return
 
-    if (stateHighlighted === null) {
+    if (regionHighlighted === null) {
       highlightRegionInMap(null, currentMap.mapType);
     } else {
-      if (stateHighlighted !== undefined) {
-        let regionHighlighted = getRegionFromState(stateHighlighted.state);
-        setCurrentHoveredRegion(regionHighlighted);
-        highlightRegionInMap(regionHighlighted.name, currentMap.mapType);
+      if (regionHighlighted !== undefined) {
+        console.log(regionHighlighted);
+        const targetRegion = regionHighlighted.state ?
+          getRegionFromState(regionHighlighted.state) :
+          getRegionFromDistrict(regionHighlighted.district);
+        setCurrentHoveredRegion(targetRegion);
+        highlightRegionInMap(targetRegion.name, currentMap.mapType);
       }
     }
-  }, [stateHighlighted]);
+  }, [regionHighlighted]);
 
   if (!currentHoveredRegion) {
     return null;
@@ -359,11 +361,11 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
           recovered: 0,
         };
       }
-      setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
+      setCurrentHoveredRegion(getRegionFromDistrict({districtData, name}));
     }
   };
 
-  const getRegionFromDistrict = (districtData, name) => {
+  const getRegionFromDistrict = ({districtData, name}) => {
     if (!districtData) {
       return;
     }
@@ -407,7 +409,6 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
 
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
-
       <div className="header">
         <h1>{currentMap.name} Map</h1>
         <h6>
@@ -453,15 +454,21 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
 
       <div className="meta">
         <h2>{currentHoveredRegion.name}</h2>
-        {currentMap.mapType === MAP_TYPES.STATE && currentMapData.Unknown > 0 ? (
-            <h4 className="unknown">Districts unknown for {currentMapData.Unknown} people</h4>
-          ) : null}
+        {currentMap.mapType === MAP_TYPES.STATE &&
+        currentMapData.Unknown > 0 ? (
+          <h4 className="unknown">
+            Districts unknown for {currentMapData.Unknown} people
+          </h4>
+        ) : null}
 
         {currentMap.mapType === MAP_TYPES.STATE ? (
-          <div className="button back-button" onClick={() => switchMapToState('India')}>
+          <div
+            className="button back-button"
+            onClick={() => switchMapToState('India')}
+          >
             Back
           </div>
-      ) : null}
+        ) : null}
       </div>
 
       <ChoroplethMap
@@ -471,7 +478,6 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
         setHoveredRegion={(region) => setHoveredRegion(region, currentMap)}
         changeMap={switchMapToState}
       />
-
     </div>
   );
 }
