@@ -104,7 +104,7 @@ $gray-light: #6c757d10;
 $gray-hover: #6c757d20;
 $gray-mid: #6c757d99;
 $gray-dark: #343a40;
-$gray-opaque: #343a4020;
+$gray-opaque: #f1f1f1;
 $primary: #007bff;
 $secondary: #6c757d;
 $success: #28a745;
@@ -317,7 +317,7 @@ h6 {
   }
 }
 
-a.button {
+.button {
   display: flex;
   flex-direction: row;
   padding: 0.5rem;
@@ -459,7 +459,12 @@ table {
       padding: 0.5rem;
       cursor: pointer;
       border-radius: 5px;
-      transition: all 0.1s ease-in-out;
+  	  transition: all 0.1s ease-in-out;
+      z-index: 99;
+  	  &.sticky {
+    		top: 4px;
+    		background: $gray-opaque;
+	   }
       &:hover {
         background: $gray-hover;
       }
@@ -469,6 +474,7 @@ table {
         position: relative;
         flex-direction: row;
         height: 0.9rem;
+        align-items: center;
         abbr {
           text-align: right;
         }
@@ -476,10 +482,7 @@ table {
           width: 10px;
           margin: 0;
           right: 0;
-          transform: rotate(135deg);
           stroke-width: 4px;
-          align-self: center;
-          margin-top: -0.35rem;
           margin-left: 0.25rem;
           color: $gray-mid;
         }
@@ -594,31 +597,42 @@ table {
   }
 }
 
-.ChoroplethMap {
+#chart {
+  z-index: 10;
+}
+
+.back-button {
+  z-index: 11;
+}
+
+.map-default {
+  stroke: None;
+}
+
+.map-hover {
+  stroke: #ff073a;
+  stroke-width: 2;
+}
+
+.MapExplorer {
   display: flex;
-  position: relative;
+  flex-direction: column;
   align-self: center;
-  margin-top: 4rem;
-  margin-bottom: -10rem;
   width: 30rem;
   .header {
-    position: absolute;
-    top: -5rem;
+    display: flex;
+    flex-direction: column;
     color: $gray-dark;
-  }
-  h6.header {
-    margin-top: 3rem;
-    color: $gray;
-    margin-left: 1px;
-    width: 10rem;
+    margin-bottom: 2.5rem;
+    align-self: flex-start;
   }
   .svg-parent {
     display: flex;
     flex-direction: row;
-    justify-content: center;
     width: 100%;
+    margin-top: 1rem;
     svg {
-      align-self: center ;
+      align-self: center;
       text {
         text-transform: uppercase;
         text-align: right;
@@ -629,20 +643,45 @@ table {
       }
     }
   }
-  .map-stats {
-    flex: 0.1;
+  .back-button {
     position: absolute;
-    top: 4rem;
-    left: 1px;
-    h1, h5, h6 {
+    right: 0;
+  }
+  .meta {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 1rem;
+    h2 {
       margin: 0;
+      color: #e23028;
+      word-wrap: break-word;
+      font-weight: 900;
     }
     h4 {
-      color: #e23028;
+      margin: 0;
+      color: $gray-mid;
+      word-wrap: break-word;
+    }
+    .unknown {
+      position: absolute;
+      bottom: -4.5rem;
       width: 5rem;
     }
-    h1 {
-      font-weight: 600;
+  }
+  .map-stats {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 5rem;
+    position: relative;
+    h1, h5, h6, h3 {
+      margin: 0;
+    }
+    h3 {
+      color: $gray-mid;
+      font-weight: 900;
     }
     .stats {
       background: $cherry-light;
@@ -651,15 +690,20 @@ table {
       border-radius: 5px;
       display: flex;
       flex-direction: column;
+      margin-left: 0.25rem;
+      margin-right: 0.25rem;
       margin-bottom: 0.5rem;
+      width: 100%;
       .stats-bottom {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
         h6 {
           margin-top: auto;
           margin-bottom: 0.25rem;
         }
+      }
+      h1 {
+        font-weight: 600;
       }
       &.is-green {
         background: $green-light;
@@ -675,6 +719,17 @@ table {
         background: $gray-light;
         h5, h6 {color: $gray-mid;}
         h1 {color: $gray;}
+      }
+      &.is-yellow {
+        background: $warning;
+        h5, h6 {color: $white;}
+        h1 {color: $white;}
+      }
+      &:first-child {
+        margin-left: 0;
+      }
+      &:last-child {
+        margin-right: 0;
       }
     }
   }
@@ -992,7 +1047,7 @@ footer {
 }
 
 @media (max-width: 769px) {
-  .ChoroplethMap, .TimeSeries, table, .header, .Level, .timeseries-header, .TimeSeries-Parent, .Links, .Minigraph, .Summary, .FAQ {
+  .TimeSeries, table, .header, .Level, .timeseries-header, .TimeSeries-Parent, .Links, .Minigraph, .Summary, .FAQ, .MapExplorer {
     width: calc(100% - 2rem);
   }
   .Home {
@@ -1109,44 +1164,6 @@ footer {
   }
 }
 
-/*.rollDown {
-  animation-name: rollDown;
-  animation-duration: 0.250s;
-  animation-fill-mode: both;
-}
-
-@keyframes rollDown {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.rollUp {
-  animation-name: rollUp;
-  animation-duration: 0.250s;
-  animation-fill-mode: both;
-}
-
-@keyframes rollUp {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-    color: transparent;
-    visibility: none;
-  }
-  100% {
-    opacity: 0;
-    visibility: none;
-    position: absolute;
-    pointer-events: none;
-  }
-}*/
-
 .iframe-container{
   width: 100%;
   min-height : 100vh;
@@ -1162,4 +1179,8 @@ footer {
   > * + * {
     margin-left: 8px;
   }
+}
+
+.sticky{
+	position: sticky;
 }

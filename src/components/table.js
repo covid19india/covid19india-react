@@ -6,6 +6,7 @@ import Row from './row';
 
 function Table(props) {
   const [sortedStates, setSortedStates] = useState(props.states);
+  const [revealedStates, setRevealedStates] = useState({});
   const [districts, setDistricts] = useState({});
   const [count, setCount] = useState(0);
   const [sortData, setSortData] = useState({
@@ -18,6 +19,14 @@ function Table(props) {
       setSortedStates(props.states.slice(0, 9));
     } else {
       setSortedStates(props.states);
+    }
+  }, [props.states]);
+
+  useEffect(() => {
+    if (props.states[0]) {
+      setRevealedStates(props.states.reduce((a, state) => {
+        return ({...a, [state.state]: false});
+      }, {}));
     }
   }, [props.states]);
 
@@ -85,6 +94,13 @@ function Table(props) {
     {key: 'deaths', title: 'Deceased', titleShort: 'Dcsd', titleSmall: 'D', desktopStyle: '', mobileStyle: 'is-gray'},
   ];
 
+  const handleReveal = (state) => {
+    setRevealedStates({
+      ...revealedStates,
+      [state]: !revealedStates[state],
+    });
+  };
+
   return (
     <table className="table fadeInUp" style={{animationDelay: '1s'}}>
       <h5 className="affected-count">{count} States/UTS Affected</h5>
@@ -98,12 +114,14 @@ function Table(props) {
             titleSmall,
             titleShort,
           }, index) =>
-            <th key={index} className="state-heading" onClick={handleSort} >
+            <th key={index} className="sticky state-heading" onClick={handleSort} >
               <div className='heading-content'>
                 <abbr className={`${window.innerWidth <=769 ? mobileStyle : desktopStyle}`} title={title}>
                   {window.innerWidth <=769 ? window.innerWidth <=375 ? titleSmall : titleShort : title}
                 </abbr>
-                <div style={{display: sortData.sortColumn === key ? 'initial': 'none'}}><Icon.Maximize2/></div>
+                <div style={{display: sortData.sortColumn === key ? 'initial': 'none'}}>
+                  {sortData.isAscending ? <Icon.ArrowDown/> : <Icon.ArrowUp/>}
+                </div>
               </div>
             </th>)}
         </tr>
@@ -119,6 +137,8 @@ function Table(props) {
                   index={index}
                   state={state}
                   total={false}
+                  reveal={revealedStates[state.state]}
+                  handleReveal={handleReveal}
                   districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []}
                   onHighlightState={props.onHighlightState} />
               </tbody>

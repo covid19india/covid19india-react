@@ -42,7 +42,7 @@ function Banner(props) {
   };
 
   return (
-    <div className="Banner fadeInUp" style={{animationDelay: '0.2s'}}>
+    <div onClick={() => snippetChooser(0, snippets.length-1)} className="Banner fadeInUp" style={{animationDelay: '0.2s'}}>
       <div className="snippet">
         {snippet ? snippet.banner : ''} &nbsp;
       </div>
