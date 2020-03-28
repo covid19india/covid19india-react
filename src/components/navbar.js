@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function Navbar(props) {
   const [view, setView] = useState("Home");
 
-  if (window.location.pathname !== "/summary") {
+  if (props.location.pathname !== "/summary") {
     return (
       <div
         className="Navbar"
@@ -33,7 +33,7 @@ function Navbar(props) {
             }}
           >
             <span
-              className={`fadeInUp ${view === "Home" ? "focused" : ""}`}
+              className={`fadeInUp ${props.location.pathname === "/" ? "focused" : ""}`}
               style={{ animationDelay: "0.2s" }}
             >
               Home
@@ -53,7 +53,7 @@ function Navbar(props) {
             }}
           >
             <span
-              className={`fadeInUp ${view === "Network Map" ? "focused" : ""}`}
+              className={`fadeInUp ${props.location.pathname === "/clusters" ? "focused" : ""}`}
               style={{ animationDelay: "0.3s" }}
             >
               Clusters
@@ -68,7 +68,7 @@ function Navbar(props) {
           >
             <span
               className={`fadeInUp ${
-                view === "Helpful Links" ? "focused" : ""
+                props.location.pathname === "/links" ? "focused" : ""
               }`}
               style={{ animationDelay: "0.4s" }}
             >
@@ -83,7 +83,7 @@ function Navbar(props) {
             }}
           >
             <span
-              className={`fadeInUp ${view === "FAQs" ? "focused" : ""}`}
+              className={`fadeInUp ${props.location.pathname === "/faq" ? "focused" : ""}`}
               style={{ animationDelay: "0.4s" }}
             >
               FAQ
