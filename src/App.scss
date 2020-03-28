@@ -1036,13 +1036,16 @@ footer {
     margin: 0;
     font-weight: 600;
     text-transform: none;
+    letter-spacing: 0.02em;
   }
   .question {
     margin-bottom: 0.5rem;
     color: $gray-dark;
+    font-size: 1.5em !important;
   }
   .answer {
     color: $blue;
+    line-height: 1.5em;
   }
 }
 
