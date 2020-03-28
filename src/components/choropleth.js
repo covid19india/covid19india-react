@@ -2,103 +2,159 @@ import React, {useState, useEffect, useRef} from 'react';
 import * as d3 from 'd3';
 import {legendColor} from 'd3-svg-legend';
 import * as topojson from 'topojson';
+import {MAP_TYPES} from '../constants';
 
-function ChoroplethMap(props) {
+const propertyFieldMap = {
+  country: 'ST_NM',
+  state: 'district',
+};
+
+export const highlightRegionInMap = (name, mapType) => {
+  const propertyField = propertyFieldMap[mapType];
+  let paths = d3.selectAll('.path-region');
+  paths.classed('map-hover', (d, i, nodes) => {
+    if (name == d.properties[propertyField]) {
+      nodes[i].parentNode.appendChild(nodes[i]);
+      return true;
+    }
+    return false;
+  });
+}
+
+function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap}) {
   const [rendered, setRendered] = useState(false);
-  const [states, setStates] = useState(props.states);
-  const [state, setState] = useState({});
-  const [statistic, setStatistic] = useState({});
+  // const [states, setStates] = useState(props.states);
+  // const [state, setState] = useState({});
   const [index, setIndex] = useState(1);
   const choroplethMap = useRef(null);
 
   useEffect(()=>{
-    if (props.stateHighlighted === null) {
-      setState(states[1]);
-      setIndex(1);
-    } else {
-      if (props.stateHighlighted !== undefined) {
-        setState(props.stateHighlighted.state);
-        setIndex(props.stateHighlighted.index);
+    (async () => {
+      d3.selectAll('svg#chart > *').remove();
+      const data = await d3.json(mapMeta.geoDataFile);
+      if (statistic && choroplethMap.current) {
+        ready(data);
+        renderData();
+      // setState(states[1]);
       }
-    }
-  }, [props.stateHighlighted])
-
-  useEffect(()=>{
-    if (props.states.length>1 && choroplethMap.current) {
-      mapData(choroplethMap.current);
-      setState(states[1]);
-    }
-  }, [statistic]);
-
-  useEffect(()=>{
-    if (states.length > 1) {
-      let total = 0;
-      let maxConfirmed = parseInt(states[1].confirmed);
-      let minConfirmed = parseInt(states[1].confirmed);
-      for (let i=1; i<states.length; i++) {
-        total+=parseInt(states[i].confirmed);
-        if (parseInt(states[i].confirmed) > parseInt(maxConfirmed)) maxConfirmed = parseInt(states[i].confirmed);
-        if (parseInt(states[i].confirmed) < parseInt(minConfirmed)) minConfirmed = parseInt(states[i].confirmed);
-      }
-      setStatistic({
-        total: total,
-        maxConfirmed: maxConfirmed,
-        minConfirmed: minConfirmed,
-      });
-    }
-  }, [states.length]);
-
-  useEffect(()=>{
-    setStates(props.states);
-  }, [props.states]);
+    })();
+  }, [mapMeta.geoDataFile]);
 
   const handleMouseover = (name) => {
-    states.map((state, index) => {
-      if (state.state.toLowerCase()===name.toLowerCase()) {
-        setState(state);
-        setIndex(index);
-      }
-    });
+    try {
+      setHoveredRegion(name, mapMeta.mapType);
+    } catch (err) {
+      console.log('err', err);
+    }
   };
 
-  const mapData = (selector) => {
-    const svg = d3.select(selector);
+  const propertyField = propertyFieldMap[mapMeta.mapType];
+  const maxInterpolation = 0.8;
+
+  function ready(geoData) {
+    const svg = d3.select(choroplethMap.current);
     const width = +svg.attr('width');
     const height = +svg.attr('height');
 
-    const unemployment = d3.map();
-
     const projection = d3.geoMercator()
-        .center([78.9, 19])
-        .scale(1000)
+        .center(mapMeta.center)
+        .scale(mapMeta.scale)
         .translate([width/2, height/2]);
 
     const path = d3.geoPath(projection);
 
+    var onceTouchedRegion = null;
+
+    svg.append('g')
+        .attr('class', 'states')
+        .selectAll('path')
+        .data(topojson.feature(geoData, geoData.objects[mapMeta.graphObjectName]).features)
+        .enter().append('path')
+        .attr('class', 'path-region')
+        .attr('fill', function(d) {
+          const n = mapData[d.properties[propertyField]] || 0;
+          const color = (n == 0) ? '#ffffff' : d3.interpolateReds(maxInterpolation * n/(statistic.maxConfirmed || 0.001));
+          return color;
+        })
+        .attr('d', path)
+        .attr('pointer-events', 'all')
+        .on('mouseover', (d) => {
+          handleMouseover(d.properties[propertyField]);
+          const target = d3.event.target;
+          d3.select(target.parentNode.appendChild(target)).attr('class', 'map-hover');
+        })
+        .on('mouseleave', (d) => {
+          const n = mapData[d.properties[propertyField]] || 0;
+          const target = d3.event.target;
+          d3.select(target).attr('class', 'path-region map-default');
+          if (onceTouchedRegion == d) onceTouchedRegion = null;
+        })
+        .on('touchstart', (d) => {
+          if (onceTouchedRegion == d) onceTouchedRegion = null;
+          else onceTouchedRegion = d;
+        })
+        .on('click', (d) => {
+          if (onceTouchedRegion) {
+            return;
+          }
+          if (mapMeta.mapType === MAP_TYPES.STATE) {
+            return;
+          }
+          changeMap(d.properties[propertyField], mapMeta.mapType);
+        })
+        .style('cursor', 'pointer')
+        .append('title')
+        .text(function(d) {
+          const value = mapData[d.properties[propertyField]] || 0;
+          return parseFloat(100*(value/(statistic.total || 0.001))).toFixed(2) + '% from ' + toTitleCase(d.properties[propertyField]);
+        });
+
+    svg.append('path')
+        .attr('stroke', '#ff073a20')
+        .attr('fill', 'none')
+        .attr('stroke-width', 2)
+        .attr('d', path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName])));
+  };
+
+  const toTitleCase = (str) => {
+    str = str.toLowerCase().split(' ');
+    for (let i = 0; i < str.length; i++) {
+      str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+    }
+    return str.join(' ');
+  };
+
+  const renderData = () => {
+    const svg = d3.select(choroplethMap.current);
+
     // Colorbar
     const maxInterpolation = 0.8;
+    const color = d3
+        .scaleSequential(d3.interpolateReds)
+        .domain([0, (statistic.maxConfirmed / maxInterpolation) || 10]);
 
-    function label({i, genLength, generatedLabels, labelDelimiter}) {
+    let cells = null;
+    let label = null;
+
+    label = ({i, genLength, generatedLabels, labelDelimiter}) => {
       if (i === genLength - 1) {
         const n = Math.floor(generatedLabels[i]);
         return `${n}+`;
       } else {
         const n1 = 1 + Math.floor(generatedLabels[i]);
-        const n2 = Math.floor(generatedLabels[i+1]);
+        const n2 = Math.floor(generatedLabels[i + 1]);
         return `${n1} - ${n2}`;
       }
-    }
+    };
 
-    const color = d3.scaleSequential(d3.interpolateReds)
-        .domain([0, statistic.maxConfirmed / maxInterpolation]);
+    const numCells = 6;
+    const delta = Math.floor((statistic.maxConfirmed < numCells ? numCells : statistic.maxConfirmed) / (numCells - 1));
+
+    cells = Array.from(Array(numCells).keys()).map((i) => i * delta);
 
     svg.append('g')
         .attr('class', 'legendLinear')
-        .attr('transform', 'translate(1, 450)');
-
-    const numCells = 6;
-    const delta = Math.floor(statistic.maxConfirmed / (numCells - 1));
-    const cells = Array.from(Array(numCells).keys()).map((i) => i * delta);
+        .attr('transform', 'translate(1, 375)');
 
     const legendLinear = legendColor()
         .shapeWidth(50)
@@ -111,109 +167,11 @@ function ChoroplethMap(props) {
 
     svg.select('.legendLinear')
         .call(legendLinear);
-
-
-    const promises = [
-      d3.json('/india.json'),
-    ];
-
-    Promise.all(promises).then(ready);
-
-    function ready([india]) {
-      states.map((state, index) => {
-        unemployment.set(state.state.toLowerCase(), state.confirmed);
-      });
-
-      svg.append('g')
-          .attr('class', 'states')
-          .selectAll('path')
-          .data(topojson.feature(india, india.objects.india).features)
-          .enter().append('path')
-          .attr('fill', function(d) {
-            const n = unemployment.get(d.properties.ST_NM.toLowerCase());
-            const color = (n == 0) ? '#ffffff' : d3.interpolateReds(maxInterpolation * n/statistic.maxConfirmed);
-            return color;
-          })
-          .attr('d', path)
-          .attr('pointer-events', 'all')
-          .on('mouseenter', (d) => {
-            handleMouseover(d.properties.ST_NM);
-            const target = d3.event.target;
-            d3.select(target.parentNode.appendChild(target)).attr('stroke', '#ff073a').attr('stroke-width', 2);
-          })
-          .on('mouseleave', (d) => {
-            const n = unemployment.get(d.properties.ST_NM.toLowerCase());
-            const target = d3.event.target;
-            const color = (n == 0) ? '#ffffff' : d3.interpolateReds(maxInterpolation * n/statistic.maxConfirmed);
-            d3.select(target).attr('fill', color).attr('stroke', 'None');
-          })
-          .style('cursor', 'pointer')
-          .append('title')
-          .text(function(d) {
-            return parseFloat(100*(unemployment.get(d.properties.ST_NM.toLowerCase())/statistic.total)).toFixed(2) + '% from ' + toTitleCase(d.properties.ST_NM);
-          });
-
-      svg.append('path')
-          .attr('stroke', '#ff073a20')
-          .attr('fill', 'none')
-          .attr('stroke-width', 2)
-          .attr('d', path(topojson.mesh(india, india.objects.india)));
-    };
-  };
-
-  const toTitleCase = (str) => {
-    str = str.toLowerCase().split(' ');
-    for (let i = 0; i < str.length; i++) {
-      str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
-    }
-    return str.join(' ');
   };
 
   return (
-    <div className="ChoroplethMap fadeInUp" style={{animationDelay: '1.2s'}}>
-      <h1 className="header">Statistics by State</h1>
-      <h6 className="header">{window.innerWidth <=769 ? 'Tap' : 'Hover'} over a state for more details</h6>
-      <div className="svg-parent">
-        <svg id="chart" width="650" height={window.innerWidth <= 479 ? 650: 750} viewBox={`0 0 650 ${window.innerWidth <= 479 ? 650: 750}`} preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
-      </div>
-
-      <div className="map-stats">
-        <h4>{state.state}</h4>
-
-        <div className="stats">
-          <h5>Confirmed</h5>
-          <div className="stats-bottom">
-            <h1>{state.confirmed}</h1>
-            <h6>{}</h6>
-          </div>
-        </div>
-
-        <div className="stats is-blue">
-          <h5>Active</h5>
-          <div className="stats-bottom">
-            <h1>{state.active}</h1>
-            <h6>{}</h6>
-          </div>
-        </div>
-
-        <div className="stats is-green">
-          <h5>Recovered</h5>
-          <div className="stats-bottom">
-            <h1>{state.recovered}</h1>
-            <h6>{}</h6>
-          </div>
-        </div>
-
-        <div className="stats is-gray">
-          <h5>Deceased</h5>
-          <div className="stats-bottom">
-            <h1>{state.deaths}</h1>
-            <h6>{}</h6>
-          </div>
-        </div>
-
-      </div>
-
+    <div className="svg-parent">
+      <svg id="chart" width="650" height="450" viewBox="0 0 650 450" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}></svg>
     </div>
   );
 }
