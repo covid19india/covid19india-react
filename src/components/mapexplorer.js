@@ -276,7 +276,6 @@ export default function({states, stateDistrictWiseData, stateHighlighted, distri
   // const [states, setStates] = useState(props.states);
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
-  const [currentState,setCurrentState] = useState({});
 
   useEffect(() => {
     // setStates(props.states);
@@ -289,12 +288,8 @@ export default function({states, stateDistrictWiseData, stateHighlighted, distri
   }, [states]);
 
   useEffect(() => {
-    if (currentMap.mapType === MAP_TYPES.STATE) {
       const newMap = mapMeta['India'];
       setCurrentMap(newMap)
-      highlightRegionInMap(stateHighlighted?.state.state, currentMap.mapType);
-    }
-    else{
       if (stateHighlighted === null) {
         highlightRegionInMap(null, currentMap.mapType);
       } else {
@@ -304,26 +299,15 @@ export default function({states, stateDistrictWiseData, stateHighlighted, distri
           highlightRegionInMap(regionHighlighted.name, currentMap.mapType);
         }
       }
-    }
   }, [stateHighlighted]);
 
   useEffect(() => {
     const newMap = mapMeta[districtHighlighted?.state.state];
-    if(currentState === districtHighlighted?.state.state){
-      setHoveredRegion(districtHighlighted?.district, newMap);
-      highlightRegionInMap(districtHighlighted?.district, currentMap.mapType);
-    }
-    else{
-    setCurrentState(districtHighlighted?.state.state);
     if (!newMap) {
       return;
     }
     setCurrentMap(newMap);
-    // const districtData = (stateDistrictWiseData[districtHighlighted?.state.state] || {districtData: {}})
-    //     .districtData;
-    //     const selectedDistrict = Object.keys(districtData).filter(district => districtData.district === districtHighlighted.district);
     setHoveredRegion(districtHighlighted?.district, newMap);
-    }
   }, [districtHighlighted]);
 
   if (!currentHoveredRegion) {

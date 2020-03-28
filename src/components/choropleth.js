@@ -34,7 +34,6 @@ function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap
       const data = await d3.json(mapMeta.geoDataFile);
       if (statistic && choroplethMap.current) {
         ready(data);
-        console.log('called');
         renderData();
       // setState(states[1]);
       }
