@@ -60,16 +60,7 @@ function Home(props) {
   const onHighlightDistrict = (districtName, index) => {
     if (!districtName && !index) setMapRegionHighlighted(null);
     else {
-      const district = {
-        districtData: {
-          confirmed: 0,
-          active: 0,
-          deaths: 0,
-          recovered: 0,
-        },
-        name: districtName,
-      };
-      setMapRegionHighlighted({district, index});
+      setMapRegionHighlighted({districtName, index});
     }
   };
 

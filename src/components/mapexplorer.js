@@ -287,16 +287,30 @@ export default function({states, stateDistrictWiseData, regionHighlighted}) {
   }, [states]);
 
   useEffect(() => {
-    if (regionHighlighted?.district && currentMap.mapType !== MAP_TYPES.STATE)
+    if (regionHighlighted?.districtName && currentMap.mapType !== MAP_TYPES.STATE)
       return
 
     if (regionHighlighted === null) {
       highlightRegionInMap(null, currentMap.mapType);
     } else {
       if (regionHighlighted !== undefined) {
-        const targetRegion = regionHighlighted.state ?
-          getRegionFromState(regionHighlighted.state) :
-          getRegionFromDistrict(regionHighlighted.district);
+        let targetRegion;
+        if (regionHighlighted.state)
+          targetRegion = getRegionFromState(regionHighlighted.state);
+        else {
+          const name = regionHighlighted.districtName.trim();
+          let districtData = (stateDistrictWiseData[currentMap.name] || {
+            districtData: {},
+          }).districtData[name];
+          if (!districtData)
+            districtData = {
+              confirmed: 0,
+              active: 0,
+              deaths: 0,
+              recovered: 0,
+            };
+          targetRegion = getRegionFromDistrict({districtData, name});
+        }
         setCurrentHoveredRegion(targetRegion);
         highlightRegionInMap(targetRegion.name, currentMap.mapType);
       }
@@ -370,7 +384,7 @@ export default function({states, stateDistrictWiseData, regionHighlighted}) {
     }
     const region = {...districtData};
     if (!region.name) {
-      region.name = name;
+      region.name = name.trim();
     }
     return region;
   };
@@ -381,7 +395,7 @@ export default function({states, stateDistrictWiseData, regionHighlighted}) {
     }
     const region = {...state};
     if (!region.name) {
-      region.name = region.state;
+      region.name = region.state.trim();
     }
     return region;
   };
