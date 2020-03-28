@@ -69,7 +69,7 @@ function Table(props) {
   };
 
   useEffect(() => {
-    const data = props.states.slice(1, props.states.length);
+    const data = props.states.slice(1);
     const {sortColumn, isAscending} = sortData;
     setSortedStates([props.states[0]].concat(sortByKey(data, sortColumn, isAscending)));
   }, [sortData, props.states.length]);
