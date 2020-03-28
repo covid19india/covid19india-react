@@ -308,6 +308,7 @@ export default function({states, stateDistrictWiseData, stateHighlighted, distri
     }
     setCurrentMap(newMap);
     setHoveredRegion(districtHighlighted?.district, newMap);
+    highlightRegionInMap(districtHighlighted?.district, currentMap.mapType);
   }, [districtHighlighted]);
 
   if (!currentHoveredRegion) {
