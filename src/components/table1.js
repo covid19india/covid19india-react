@@ -155,7 +155,7 @@ function Table(props) {
             if (index!==0 && state.confirmed>0) {
               return (
                 <tbody>
-                  <Row key={index} index={index} state={state} total={false} reveal={revealedStates[state.state]} districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []} onHighlightState={props.onHighlightState} handleReveal={handleReveal} onHighlightDistrict = {props.onHighlightDistrict}/>
+                  <Row key={index} index={index} state={state} total={false} reveal={revealedStates[state.state]} districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []} onHighlightState={props.onHighlightState} handleReveal={handleReveal} />
                 </tbody>
               );
             }
