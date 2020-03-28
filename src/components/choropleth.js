@@ -63,6 +63,8 @@ function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap
 
     const path = d3.geoPath(projection);
 
+    var onceTouchedRegion = null;
+
     svg.append('g')
         .attr('class', 'states')
         .selectAll('path')
@@ -85,8 +87,16 @@ function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap
           const n = mapData[d.properties[propertyField]] || 0;
           const target = d3.event.target;
           d3.select(target).attr('class', 'path-region map-default');
+          if (onceTouchedRegion == d) onceTouchedRegion = null;
+        })
+        .on('touchstart', (d) => {
+          if (onceTouchedRegion == d) onceTouchedRegion = null;
+          else onceTouchedRegion = d;
         })
         .on('click', (d) => {
+          if (onceTouchedRegion) {
+            return;
+          }
           if (mapMeta.mapType === MAP_TYPES.STATE) {
             return;
           }
