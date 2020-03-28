@@ -10,7 +10,7 @@ function Row(props) {
   }, [props.state]);
 
   useEffect(()=>{
-    setDistricts(props.districts);
+    setDistricts(sort(props.districts));
   }, [props.districts]);
 
   useEffect(()=>{
@@ -21,8 +21,24 @@ function Row(props) {
     props.handleReveal(props.state.state);
   };
 
-  const sort = (aDistricts) => {
-    return aDistricts;
+  const sort = (aDistricts={}) => {
+    let sortedDistricts = {};
+    const sortedKeys = Object.keys(aDistricts).sort((district1, district2) => {
+      const confirmed1 = aDistricts[district1].confirmed;
+      const confirmed2 = aDistricts[district2].confirmed;
+      
+      if(confirmed1 > confirmed2) {
+        return -1;
+      }
+      if(confirmed1 === confirmed2) {
+        return 0;
+      }
+      return 1;
+    });
+    sortedKeys.forEach(key => {
+      sortedDistricts[key] = aDistricts[key];
+    });
+    return sortedDistricts;
   };
 
   return (
@@ -84,19 +100,19 @@ function Row(props) {
         <td><abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'Dcsd' : 'Deceased'}</abbr></td>*/}
       </tr>
 
-      {districts?.Unknown &&
-      <tr className={`district`} style={{display: props.reveal && !props.total ? '' : 'none'}}>
+      {/* districts?.Unknown &&
+      <tr className={`district`} style={{display: reveal && !props.total ? '' : 'none'}}>
         <td style={{fontWeight: 600}}>Unknown</td>
         <td>{districts['Unknown'].confirmed}</td>
          {/*<td>{districts['Unknown'].active}</td>
         <td>{districts['Unknown'].recovered}</td>
-        <td>{districts['Unknown'].deaths}</td>*/}
-      </tr>
+        <td>{districts['Unknown'].deaths}</td>
+      </tr> */
       }
 
       {
         Object.keys(districts ? districts : {}).map((district, index) => {
-          if (district.toLowerCase()!=='unknown') {
+          //if (district.toLowerCase()!=='unknown') {
             return (
               <tr key={index} className={`district`} style={{display: props.reveal && !props.total ? '' : 'none'}}>
                 <td style={{fontWeight: 600}}>{district}</td>
@@ -106,7 +122,7 @@ function Row(props) {
                 <td>{districts[district].deaths}</td>*/}
               </tr>
             );
-          }
+          //}
         })
       }
 
