@@ -572,10 +572,11 @@ table {
 
   tbody {
     color: $gray;
-
+    
     tr {
       transition: background 0.1s ease-in-out;
       cursor: pointer;
+      background: $light;
 
       &:hover {
         background: $gray-hover;
@@ -593,23 +594,27 @@ table {
     }
 
     & > tr:nth-child(odd) {
-      background: $light;
-
       &:hover {
         background: $gray-hover;
       }
+      // &:nth-child(odd) {
+      //   background: $white ;
+      // }
+    }
 
-      &:nth-child(odd) {
-        background: $white !important;
+    & > tr:nth-child() {
+      &:hover{
+        background: $gray-hover ;
       }
     }
 
-    &:nth-child(even) {
-      background-color: $light;
+    
 
+    &:nth-child(odd){
       &.spacer {
         background: transparent !important;
       }
+      
     }
 
     td {
@@ -617,7 +622,6 @@ table {
       font-size: 0.9rem;
       border-radius: 5px;
       text-align: right;
-
       .deltas {
         margin-right: 0.25rem;
         font-size: 11px !important;
@@ -630,6 +634,7 @@ table {
         }
       }
     }
+
 
     td:first-child {
       text-align: left;
