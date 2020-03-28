@@ -104,7 +104,7 @@ $gray-light: #6c757d10;
 $gray-hover: #6c757d20;
 $gray-mid: #6c757d99;
 $gray-dark: #343a40;
-$gray-opaque: #343a4020;
+$gray-opaque: #f1f1f1;
 $primary: #007bff;
 $secondary: #6c757d;
 $success: #28a745;
@@ -459,11 +459,12 @@ table {
       padding: 0.5rem;
       cursor: pointer;
       border-radius: 5px;
-	  transition: all 0.1s ease-in-out;
-	  &.sticky {
-		top: 4px;
-		background: rgb(241, 241, 241);
-	  }
+  	  transition: all 0.1s ease-in-out;
+      z-index: 99;
+  	  &.sticky {
+    		top: 4px;
+    		background: $gray-opaque;
+	   }
       &:hover {
         background: $gray-hover;
       }
