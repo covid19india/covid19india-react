@@ -29,9 +29,9 @@ const mapMeta = {
   },
   'Andhra Pradesh': {
     name: 'Andhra Pradesh',
-    geoDataFile: '/andhrapradesh.json',
+    geoDataFile: `${MAPS_DIR}/andhrapradesh.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectName: 'AndhraPradesh',
+    graphObjectName: 'andhrapradesh_district',
     center: [80, 16],
     scale: 3200,
   },
@@ -116,6 +116,14 @@ const mapMeta = {
     center: [77, 32],
     scale: 7000,
   },
+  'Jammu and Kashmir': {
+    name: 'Jammu and Kashmir',
+    geoDataFile: `${MAPS_DIR}/jammukashmir.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'jammukashmir_district',
+    center: [75, 34],
+    scale: 5000,
+  },
   'Jharkhand': {
     name: 'Jharkhand',
     geoDataFile: `${MAPS_DIR}/jharkhand.json`,
@@ -123,6 +131,14 @@ const mapMeta = {
     graphObjectName: 'jharkhand_district',
     center: [85, 23],
     scale: 4500,
+  },
+  'Ladakh': {
+    name: 'Ladakh',
+    geoDataFile: `${MAPS_DIR}/ladakh.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'ladakh_district',
+    center: [76, 33],
+    scale: 3000,
   },
   'Madhya Pradesh': {
     name: 'Madhya Pradesh',
@@ -214,10 +230,10 @@ const mapMeta = {
   },
   'Telangana': {
     name: 'Telangana',
-    geoDataFile: '/telugana.json',
+    geoDataFile: `${MAPS_DIR}/telugana.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'telugana',
-    center: [80, 17],
+    center: [79, 17],
     scale: 5000,
   },
   'Tripura': {
@@ -413,7 +429,7 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
         <div className="stats is-blue">
           <h5>Active</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.active || 'NA'}</h1>
+            <h1>{currentHoveredRegion.active || ''}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -421,7 +437,7 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
         <div className="stats is-green">
           <h5>Recovered</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.recovered || 'NA'}</h1>
+            <h1>{currentHoveredRegion.recovered || ''}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -429,7 +445,7 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
         <div className="stats is-gray">
           <h5>Deceased</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.deaths || 'NA'}</h1>
+            <h1>{currentHoveredRegion.deaths || ''}</h1>
             <h6>{}</h6>
           </div>
         </div>
