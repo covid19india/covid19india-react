@@ -429,7 +429,7 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
         <div className="stats is-blue">
           <h5>Active</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.active || 'NA'}</h1>
+            <h1>{currentHoveredRegion.active || ''}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -437,7 +437,7 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
         <div className="stats is-green">
           <h5>Recovered</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.recovered || 'NA'}</h1>
+            <h1>{currentHoveredRegion.recovered || ''}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -445,7 +445,7 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
         <div className="stats is-gray">
           <h5>Deceased</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.deaths || 'NA'}</h1>
+            <h1>{currentHoveredRegion.deaths || ''}</h1>
             <h6>{}</h6>
           </div>
         </div>
