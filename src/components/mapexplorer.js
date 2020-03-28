@@ -29,7 +29,7 @@ const mapMeta = {
   },
   'Andhra Pradesh': {
     name: 'Andhra Pradesh',
-    geoDataFile: '/andhrapradesh.json',
+    geoDataFile: '${MAPS_DIR}/andhrapradesh.json',
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'AndhraPradesh',
     center: [80, 16],
