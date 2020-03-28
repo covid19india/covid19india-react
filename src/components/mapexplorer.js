@@ -294,14 +294,15 @@ export default function({states, stateDistrictWiseData, stateHighlighted, distri
       setCurrentMap(newMap)
       highlightRegionInMap(stateHighlighted?.state.state, currentMap.mapType);
     }
-
-    if (stateHighlighted === null) {
-      highlightRegionInMap(null, currentMap.mapType);
-    } else {
-      if (stateHighlighted !== undefined) {
-        const regionHighlighted = getRegionFromState(stateHighlighted.state);
-        setCurrentHoveredRegion(regionHighlighted);
-        highlightRegionInMap(regionHighlighted.name, currentMap.mapType);
+    else{
+      if (stateHighlighted === null) {
+        highlightRegionInMap(null, currentMap.mapType);
+      } else {
+        if (stateHighlighted !== undefined) {
+          const regionHighlighted = getRegionFromState(stateHighlighted.state);
+          setCurrentHoveredRegion(regionHighlighted);
+          highlightRegionInMap(regionHighlighted.name, currentMap.mapType);
+        }
       }
     }
   }, [stateHighlighted]);
@@ -310,7 +311,6 @@ export default function({states, stateDistrictWiseData, stateHighlighted, distri
     const newMap = mapMeta[districtHighlighted?.state.state];
     if(currentState === districtHighlighted?.state.state){
       setHoveredRegion(districtHighlighted?.district, newMap);
-      setCurrentMap(newMap);
       highlightRegionInMap(districtHighlighted?.district, currentMap.mapType);
     }
     else{

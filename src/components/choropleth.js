@@ -10,7 +10,6 @@ const propertyFieldMap = {
 };
 
 export const highlightRegionInMap = (name, mapType) => {
-  console.log(name);
   const propertyField = propertyFieldMap[mapType];
   let paths = d3.selectAll('.path-region');
   paths.classed('map-hover', (d, i, nodes) => {
@@ -35,6 +34,7 @@ function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap
       const data = await d3.json(mapMeta.geoDataFile);
       if (statistic && choroplethMap.current) {
         ready(data);
+        console.log('called');
         renderData();
       // setState(states[1]);
       }
@@ -42,7 +42,6 @@ function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap
   }, [mapMeta.geoDataFile]);
 
   const handleMouseover = (name) => {
-    console.log(name);
     try {
       setHoveredRegion(name, mapMeta.mapType);
     } catch (err) {
@@ -54,6 +53,7 @@ function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap
   const maxInterpolation = 0.8;
 
   function ready(geoData) {
+    d3.selectAll('svg#chart > *').remove();
     const svg = d3.select(choroplethMap.current);
     const width = +svg.attr('width');
     const height = +svg.attr('height');
