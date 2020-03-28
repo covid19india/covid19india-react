@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import * as Icon from 'react-feather';
 import axios from 'axios';
-
+import _ from 'lodash';
 import Row from './row';
 
 function Table(props) {
@@ -96,6 +96,16 @@ function Table(props) {
     });
   };
 
+  const mapStates = (state, index) => {
+    if (index!==0 && state.confirmed>0) {
+      return (
+        <tbody>
+          <Row key={index} index={index} state={state} total={false} reveal={revealedStates[state.state]} districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []} onHighlightState={props.onHighlightState} handleReveal={handleReveal} />
+        </tbody>
+      );
+    }
+  }
+
   doSort();
 
   return (
@@ -149,17 +159,7 @@ function Table(props) {
         </tr>
       </thead>
 
-      {
-        states.map((state, index) => {
-          if (index!==0 && state.confirmed>0) {
-            return (
-              <tbody>
-                <Row key={index} index={index} state={state} total={false} reveal={revealedStates[state.state]} districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []} onHighlightState={props.onHighlightState} handleReveal={handleReveal} />
-              </tbody>
-            );
-          }
-        })
-      }
+      {_.map(states, (state, index) => mapStates(state, index))}
 
       <tbody>
         {states.length > 1 && props.summary===false && <Row key={0} state={states[0]} total={true}/>}

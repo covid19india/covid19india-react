@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import axios from 'axios';
+import _ from 'lodash';
 import * as d3 from 'd3';
 
 function TimeSeries(props) {
@@ -15,6 +16,7 @@ function TimeSeries(props) {
   const graphElement4 = useRef(null);
   const graphElement5 = useRef(null);
   const graphElement6 = useRef(null);
+  const { map } = _;
 
   useEffect(()=>{
     if (props.timeseries.length>1) {
@@ -87,14 +89,14 @@ function TimeSeries(props) {
     const maxDataTypes = Array.from({ length: svgArray.length }, (_, i) => {
       return d3.max(data, (d) => { return +d[dataTypes[i]]; })
     })
-    const yScales = maxDataTypes.map((d) => {
+    const yScales = map(maxDataTypes, (d) => {
       return d3.scaleLinear()
-          .domain([-d/10, d])
-          .range([height, margin.top]);
-    });
+              .domain([-d/10, d])
+              .range([height, margin.top])
+    })
 
     /* Focus dots */
-    const focus = svgArray.map((d, i) => {
+    const focus = map(svgArray, (d, i) => {
       const y = mode ? yScales[0] : yScales[i];
       return d.append('g')
           .append('circle')
@@ -103,7 +105,7 @@ function TimeSeries(props) {
           .attr('r', 5)
           .attr('cx', x(new Date(data[timeseries.length-1]['date'] + '2020')))
           .attr('cy', y(data[timeseries.length-1][dataTypes[i]]));
-    });
+    })
 
     function mouseout() {
       setDatapoint(data[timeseries.length - 1]);

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import * as Icon from 'react-feather';
+import _ from 'lodash';
 
 function Row(props) {
   const [state, setState] = useState(props.state);
@@ -24,6 +25,20 @@ function Row(props) {
   const sort = (aDistricts) => {
     return aDistricts;
   };
+
+  const mapDistricts = (district, index) => {
+    if (district.toLowerCase()!=='unknown') {
+      return (
+        <tr key={index} className={`district`} style={{display: props.reveal && !props.total ? '' : 'none'}}>
+          <td style={{fontWeight: 600}}>{district}</td>
+          <td>{districts[district].confirmed}</td>
+            {/*<td>{districts[district].active}</td>
+          <td>{districts[district].recovered}</td>
+          <td>{districts[district].deaths}</td>*/}
+        </tr>
+      );
+    }
+  }
 
   return (
     <React.Fragment>
@@ -94,21 +109,7 @@ function Row(props) {
       </tr>
       }
 
-      {
-        Object.keys(districts ? districts : {}).map((district, index) => {
-          if (district.toLowerCase()!=='unknown') {
-            return (
-              <tr key={index} className={`district`} style={{display: props.reveal && !props.total ? '' : 'none'}}>
-                <td style={{fontWeight: 600}}>{district}</td>
-                <td>{districts[district].confirmed}</td>
-                 {/*<td>{districts[district].active}</td>
-               <td>{districts[district].recovered}</td>
-                <td>{districts[district].deaths}</td>*/}
-              </tr>
-            );
-          }
-        })
-      }
+      {_.map(Object.keys(districts? districts : {}), (district, index) => mapDistricts(district, index))}
 
       <tr className={`spacer`} style={{display: props.reveal && !props.total ? '' : 'none'}}>
         <td></td>

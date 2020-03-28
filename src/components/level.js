@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import _ from 'lodash';
 
 function Level(props) {
   const [data, setData] = useState(props.data);
@@ -17,13 +18,13 @@ function Level(props) {
     let active = 0;
     let recoveries = 0;
     let deaths = 0;
-    data.map((state, index) => {
+    _.map(data, (state, index) => {
       if (index !== 0) {
         confirmed += parseInt(state.confirmed);
         active += parseInt(state.active);
         recoveries += parseInt(state.recovered);
         deaths += parseInt(state.deaths);
-      }
+      };
     });
     setConfirmed(confirmed);
     setActive(active);
