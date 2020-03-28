@@ -41,7 +41,7 @@ function Table(props) {
 
   useEffect(()=>{
     getDistricts();
-  }, [1]);
+  }, []);
 
 
   const getDistricts = () => {
@@ -61,14 +61,11 @@ function Table(props) {
   }, []);
 
   const sortByKey = (arr, key, isAscending) => {
+    console.warn(key);
     return arr.concat().sort((s1, s2) => {
       const v1 = key !== 'state' ? parseInt(s1[key]) : s1[key];
       const v2 = key !== 'state' ? parseInt(s2[key]) : s2[key];
-      if (isAscending) {
-        return v1 > v2 ? 1 : (v1 == v1) && s1['state'] > s2['state'] ? 1 : -1;
-      } else {
-        return v1 < v2 ? 1 : (v1 == v2) && s1['state'] > s2['state'] ? 1 : -1;
-      }
+      return (v1 > v2 ? 1 : (v1 == v2) && s1['state'] > s2['state'] ? 1 : -1) * (isAscending ? 1 : -1);
     });
   };
 
@@ -78,11 +75,10 @@ function Table(props) {
     setSortedStates([props.states[0]].concat(sortByKey(data, sortColumn, isAscending)));
   }, [sortData, props.states.length]);
 
-  const handleSort = (e) => {
-    const currentsortColumn = e.currentTarget.querySelector('abbr').getAttribute('title').toLowerCase();
+  const handleSort = (column) => {
     setSortData({
-      sortColumn: currentsortColumn,
-      isAscending: sortData.sortColumn == currentsortColumn? !sortData.isAscending : sortData.sortColumn === 'state',
+      sortColumn: column,
+      isAscending: sortData.sortColumn == column? !sortData.isAscending : sortData.sortColumn === 'state',
     });
   };
 
@@ -114,7 +110,7 @@ function Table(props) {
             titleSmall,
             titleShort,
           }, index) =>
-            <th key={index} className="sticky state-heading" onClick={handleSort} >
+            <th key={index} className="sticky state-heading" onClick={() => handleSort(key)} >
               <div className='heading-content'>
                 <abbr className={`${window.innerWidth <=769 ? mobileStyle : desktopStyle}`} title={title}>
                   {window.innerWidth <=769 ? window.innerWidth <=375 ? titleSmall : titleShort : title}
