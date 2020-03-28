@@ -44,9 +44,13 @@
     "react-dom": "^16.13.1",
     "react-feather": "^2.0.3",
     "react-marquee": "^1.0.0",
+    "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "react-ticker": "^1.2.2",
+    "redux": "^4.0.5",
+    "redux-devtools": "^3.5.0",
+    "redux-thunk": "^2.3.0",
     "topojson": "^3.0.2",
     "vx": "0.0.1"
   },

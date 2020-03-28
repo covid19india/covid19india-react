@@ -1,0 +1,1 @@
+export const GET_WEBSITE_DATA = "GET_WEBSITE_DATA";
