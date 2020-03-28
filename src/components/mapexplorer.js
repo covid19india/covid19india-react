@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import ChoroplethMap, {highlightRegionInMap} from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
+import {map} from 'd3';
 
 const mapMeta = {
   'India': {
@@ -255,10 +256,11 @@ const mapMeta = {
   },
 };
 
-export default function({states, stateDistrictWiseData, stateHighlighted}) {
+export default function({states, stateDistrictWiseData, stateHighlighted, districtHighlighted}) {
   // const [states, setStates] = useState(props.states);
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
+  const [currentState,setCurrentState] = useState({});
 
   useEffect(() => {
     // setStates(props.states);
@@ -272,19 +274,41 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
 
   useEffect(() => {
     if (currentMap.mapType === MAP_TYPES.STATE) {
-      return;
+      const newMap = mapMeta['India'];
+      setCurrentMap(newMap)
+      highlightRegionInMap(stateHighlighted?.state.state, currentMap.mapType);
     }
 
     if (stateHighlighted === null) {
       highlightRegionInMap(null, currentMap.mapType);
     } else {
       if (stateHighlighted !== undefined) {
-        let regionHighlighted = getRegionFromState(stateHighlighted.state);
+        const regionHighlighted = getRegionFromState(stateHighlighted.state);
         setCurrentHoveredRegion(regionHighlighted);
         highlightRegionInMap(regionHighlighted.name, currentMap.mapType);
       }
     }
   }, [stateHighlighted]);
+
+  useEffect(() => {
+    const newMap = mapMeta[districtHighlighted?.state.state];
+    if(currentState === districtHighlighted?.state.state){
+      setHoveredRegion(districtHighlighted?.district, newMap);
+      setCurrentMap(newMap);
+      highlightRegionInMap(districtHighlighted?.district, currentMap.mapType);
+    }
+    else{
+    setCurrentState(districtHighlighted?.state.state);
+    if (!newMap) {
+      return;
+    }
+    setCurrentMap(newMap);
+    // const districtData = (stateDistrictWiseData[districtHighlighted?.state.state] || {districtData: {}})
+    //     .districtData;
+    //     const selectedDistrict = Object.keys(districtData).filter(district => districtData.district === districtHighlighted.district);
+    setHoveredRegion(districtHighlighted?.district, newMap);
+    }
+  }, [districtHighlighted]);
 
   if (!currentHoveredRegion) {
     return null;
@@ -385,6 +409,7 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
           .sort((a, b) => {
             return districtData[b].confirmed - districtData[a].confirmed;
           })[0];
+          console.log(topDistrict,'few');
       setHoveredRegion(topDistrict, newMap);
     }
   };

@@ -129,7 +129,7 @@ function Table(props) {
               </div>
             </div>
           </th>
-          <th  className="sticky" onClick={(e) => handleSort(e, props)}>
+          <th className="sticky" onClick={(e) => handleSort(e, props)}>
             <div className='heading-content'>
               <abbr className={`${window.innerWidth <=769 ? 'is-green' : ''}`} title="Recovered">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'R' : 'Rcvrd' : 'Recovered'}</abbr>
               <div className={ sortData.sortColumn === 'recovered'? 'sort-black' : ''}></div>
@@ -154,7 +154,7 @@ function Table(props) {
           if (index!==0 && state.confirmed>0) {
             return (
               <tbody>
-                <Row key={index} index={index} state={state} total={false} reveal={revealedStates[state.state]} districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []} onHighlightState={props.onHighlightState} handleReveal={handleReveal} />
+                <Row key={index} index={index} state={state} total={false} reveal={revealedStates[state.state]} districts={Object.keys(districts).length-1 > 0 ? districts[state.state].districtData : []} onHighlightState={props.onHighlightState} handleReveal={handleReveal} onHighlightDistrict = {props.onHighlightDistrict}/>
               </tbody>
             );
           }

@@ -10,6 +10,7 @@ const propertyFieldMap = {
 };
 
 export const highlightRegionInMap = (name, mapType) => {
+  console.log(name);
   const propertyField = propertyFieldMap[mapType];
   let paths = d3.selectAll('.path-region');
   paths.classed('map-hover', (d, i, nodes) => {
@@ -41,6 +42,7 @@ function ChoroplethMap({statistic, mapData, setHoveredRegion, mapMeta, changeMap
   }, [mapMeta.geoDataFile]);
 
   const handleMouseover = (name) => {
+    console.log(name);
     try {
       setHoveredRegion(name, mapMeta.mapType);
     } catch (err) {

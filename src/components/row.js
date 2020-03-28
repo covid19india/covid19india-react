@@ -98,7 +98,11 @@ function Row(props) {
         Object.keys(districts ? districts : {}).map((district, index) => {
           if (district.toLowerCase()!=='unknown') {
             return (
-              <tr key={index} className={`district`} style={{display: props.reveal && !props.total ? '' : 'none'}}>
+              <tr key={index} className={`district`} style={{display: props.reveal && !props.total ? '' : 'none'}}
+              onMouseEnter={() => props.onHighlightDistrict?.(district,state, props.index)}
+              // onMouseLeave={() => props.onHighlightDistrict?.()}
+              touchstart={() => props.onHighlightDistrict?.(district,state, props.index)}>
+
                 <td style={{fontWeight: 600}}>{district}</td>
                 <td>{districts[district].confirmed}</td>
                  {/*<td>{districts[district].active}</td>
