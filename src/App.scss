@@ -442,6 +442,12 @@ abbr {
   }
 }
 
+.affected-count {
+  text-align: right;
+  margin: 1rem 0 0 0;
+  color: $gray-mid;
+}
+
 table {
   position: relative;
   width: 30rem;
@@ -449,7 +455,6 @@ table {
   font-family: 'archia';
   text-transform: uppercase;
   margin-bottom: 1rem;
-  margin-top: 2rem;
   thead {
     background: $gray-light;
     color: $gray-dark;
@@ -465,7 +470,7 @@ table {
 		background: rgb(241, 241, 241);
 	  }
       &:hover {
-        background: $gray-hover;
+        background: #ECEDEE;
       }
       .heading-content {
         display: flex;
@@ -489,7 +494,7 @@ table {
     }
   }
   &:nth-child(odd){
-    background-color: $light;
+    background-color: $white;
   }
   tbody {
     color: $gray;
@@ -518,7 +523,7 @@ table {
       }
     }
 
-    &:nth-child(odd){
+    &:nth-child(even){
       background-color: $light;
       &.spacer {
         background: transparent !important;
