@@ -26,6 +26,7 @@ function Navbar(props) {
           className="fadeInUp"
           alt="India COVID-19 Tracker"
           src="/icon.png"
+          alt="https://www.covid19india.org | Coronavirus cases live dashboard"
           style={{
             animationDelay: "0.0s",
             width: view === "Clusters" ? "1.5rem" : "",
