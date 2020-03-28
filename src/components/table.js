@@ -10,8 +10,8 @@ function Table(props) {
   const [districts, setDistricts] = useState({});
   const [count, setCount] = useState(0);
   const [sortData, setSortData] = useState({
-    sortColumn: 'confirmed',
-    isAscending: false,
+    sortColumn: localStorage.getItem('state.sortColumn')? localStorage.getItem('state.sortColumn') : 'confirmed',
+    isAscending: localStorage.getItem('state.isAscending')? localStorage.getItem('state.isAscending') == 'true' : false,
   });
 
   useEffect(()=>{
@@ -61,7 +61,6 @@ function Table(props) {
   }, []);
 
   const sortByKey = (arr, key, isAscending) => {
-    console.warn(key);
     return arr.concat().sort((s1, s2) => {
       const v1 = key !== 'state' ? parseInt(s1[key]) : s1[key];
       const v2 = key !== 'state' ? parseInt(s2[key]) : s2[key];
@@ -75,11 +74,14 @@ function Table(props) {
     setSortedStates([props.states[0]].concat(sortByKey(data, sortColumn, isAscending)));
   }, [sortData, props.states.length]);
 
-  const handleSort = (column) => {
+  const handleSort = (sortColumn) => {
+    const isAscending = sortData.sortColumn == sortColumn? !sortData.isAscending : sortData.sortColumn === 'state';
     setSortData({
-      sortColumn: column,
-      isAscending: sortData.sortColumn == column? !sortData.isAscending : sortData.sortColumn === 'state',
+      sortColumn,
+      isAscending,
     });
+    localStorage.setItem('state.sortColumn', sortColumn);
+    localStorage.setItem('state.isAscending', isAscending);
   };
 
   const tableRows = [

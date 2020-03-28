@@ -4,6 +4,12 @@ import * as Icon from 'react-feather';
 function Row(props) {
   const [state, setState] = useState(props.state);
   const [districts, setDistricts] = useState(props.districts);
+  const [sortData, setSortData] = useState({
+    sortColumn: localStorage.getItem('district.sortColumn')? localStorage.getItem('district.sortColumn') : 'confirmed',
+    isAscending: localStorage.getItem('district.isAscending')? localStorage.getItem('district.isAscending') == 'true' : false,
+  });
+
+  let sortedDistricts = {};
 
   useEffect(()=>{
     setState(props.state);
@@ -20,10 +26,33 @@ function Row(props) {
   const handleReveal = () => {
     props.handleReveal(props.state.state);
   };
-
+  
   const sort = (aDistricts) => {
-    return aDistricts;
+    sortedDistricts = {};
+    if(aDistricts) {
+      Object.keys(aDistricts).sort((district1, district2) => {
+        const sortColumn = sortData.sortColumn;
+        let value1 = sortColumn === 'district' ? district1 : parseInt(aDistricts[district1].confirmed);
+        let value2 = sortColumn === 'district' ? district2 : parseInt(aDistricts[district2].confirmed);
+        let comparisonValue = value1 > value2 ? 1 : (value1 == value2) && district1 > district2 ? 1 : -1;
+        return sortData.isAscending? comparisonValue : (comparisonValue * -1)
+      }).forEach(key => {
+        sortedDistricts[key] = aDistricts[key];
+      });
+    }
   };
+
+  const handleSort = (column) => {
+    const isAscending = sortData.sortColumn == column? !sortData.isAscending : sortData.sortColumn === 'district';
+    setSortData({
+      sortColumn: column,
+      isAscending: isAscending ,
+    });
+    localStorage.setItem('district.sortColumn', column);
+    localStorage.setItem('district.isAscending', isAscending);
+  };
+
+  sort(districts);
 
   return (
     <React.Fragment>
@@ -77,38 +106,41 @@ function Row(props) {
       </tr>
 
       <tr className={`district-heading`} style={{display: props.reveal && !props.total ? '' : 'none'}}>
-        <td>District</td>
-        <td><abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'Confirmed' : 'Confirmed' : 'Confirmed'}</abbr></td>
-         {/*<td><abbr className={`${window.innerWidth <=769 ? 'is-blue' : ''}`} title="Active">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'A' : 'Actv' : 'Active'}</abbr></td>
-        <td><abbr className={`${window.innerWidth <=769 ? 'is-green' : ''}`} title="Recovered">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'R' : 'Rcvrd' : 'Recovered'}</abbr></td>
-        <td><abbr className={`${window.innerWidth <=769 ? 'is-gray' : ''}`} title="Deaths">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'D' : 'Dcsd' : 'Deceased'}</abbr></td>*/}
+        <td onClick={(e) => handleSort('district')} >
+          <div className='heading-content'>
+            <abbr title="District">
+              District
+            </abbr>
+            <div style={{display: sortData.sortColumn === 'district' ? 'initial': 'none'}}>{sortData.isAscending ? <Icon.ArrowUp/> : <Icon.ArrowDown/>}</div>
+          </div>
+        </td>
+        <td onClick={(e) => handleSort('confirmed')}>
+          <div className='heading-content'>
+            <abbr className={`${window.innerWidth <=769 ? 'is-cherry' : ''}`} title="Confirmed">{window.innerWidth <=769 ? window.innerWidth <=375 ? 'C' : 'Cnfmd' : 'Confirmed'}</abbr>
+            <div style={{display: sortData.sortColumn === 'confirmed' ? 'initial': 'none'}}>{sortData.isAscending ? <Icon.ArrowUp/> : <Icon.ArrowDown/>}</div>
+          </div>
+        </td>
       </tr>
-
-      {districts?.Unknown &&
-      <tr className={`district`} style={{display: props.reveal && !props.total ? '' : 'none'}}>
-        <td style={{fontWeight: 600}}>Unknown</td>
-        <td>{districts['Unknown'].confirmed}</td>
-         {/*<td>{districts['Unknown'].active}</td>
-        <td>{districts['Unknown'].recovered}</td>
-        <td>{districts['Unknown'].deaths}</td>*/}
-      </tr>
-      }
 
       {
-        Object.keys(districts ? districts : {}).map((district, index) => {
+        Object.keys(sortedDistricts).map((district, index) => {
           if (district.toLowerCase()!=='unknown') {
             return (
               <tr key={index} className={`district`} style={{display: props.reveal && !props.total ? '' : 'none'}}>
                 <td style={{fontWeight: 600}}>{district}</td>
-                <td>{districts[district].confirmed}</td>
-                 {/*<td>{districts[district].active}</td>
-               <td>{districts[district].recovered}</td>
-                <td>{districts[district].deaths}</td>*/}
+                <td>{sortedDistricts[district].confirmed}</td>
               </tr>
             );
-          }
+            }
         })
       }
+
+      {sortedDistricts?.Unknown &&
+        <tr className={`district`} style={{display: props.reveal && !props.total ? '' : 'none'}}>
+          <td class="unknown">Unknown</td>
+          <td>{sortedDistricts['Unknown'].confirmed}</td>
+        </tr>
+        }
 
       <tr className={`spacer`} style={{display: props.reveal && !props.total ? '' : 'none'}}>
         <td></td>

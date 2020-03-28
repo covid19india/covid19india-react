@@ -16,7 +16,7 @@ const mapMeta = {
     geoDataFile: `${MAPS_DIR}/andamannicobarislands.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'andamannicobarislands_district',
-    center: [92, 8],
+    center: [92, 10],
     scale: 4000,
   },
   'Arunachal Pradesh': {
@@ -25,7 +25,7 @@ const mapMeta = {
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'arunachalpradesh_district',
     center: [94, 27],
-    scale: 1000,
+    scale: 5000,
   },
   'Andhra Pradesh': {
     name: 'Andhra Pradesh',

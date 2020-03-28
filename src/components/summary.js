@@ -42,7 +42,7 @@ function Summary(props) {
 
       <div className="summary-bottom">
         <div className="summary-bottom-left">
-          <img src="icon.png" alt="logo"/>
+          <img src="icon.png" alt="https://www.covid19india.org | Coronavirus cases live dashboard" />
           <h5>We stand with everyone fighting on the frontlines</h5>
         </div>
         <div className="link">
