@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function Navbar(props) {
   const [view, setView] = useState("Home");
 
-  if (props.location.pathname !== "/summary") {
+  if (window.location.pathname !== "/summary") {
     return (
       <div
         className="Navbar"
@@ -33,7 +33,7 @@ function Navbar(props) {
             }}
           >
             <span
-              className={`fadeInUp ${props.location.pathname === "/" ? "focused" : ""}`}
+              className={`fadeInUp ${window.location.pathname === "/" ? "focused" : ""}`}
               style={{ animationDelay: "0.2s" }}
             >
               Home
@@ -53,7 +53,7 @@ function Navbar(props) {
             }}
           >
             <span
-              className={`fadeInUp ${props.location.pathname === "/clusters" ? "focused" : ""}`}
+              className={`fadeInUp ${window.location.pathname === "/clusters" ? "focused" : ""}`}
               style={{ animationDelay: "0.3s" }}
             >
               Clusters
@@ -68,7 +68,7 @@ function Navbar(props) {
           >
             <span
               className={`fadeInUp ${
-                props.location.pathname === "/links" ? "focused" : ""
+                window.location.pathname === "/links" ? "focused" : ""
               }`}
               style={{ animationDelay: "0.4s" }}
             >
@@ -83,7 +83,7 @@ function Navbar(props) {
             }}
           >
             <span
-              className={`fadeInUp ${props.location.pathname === "/faq" ? "focused" : ""}`}
+              className={`fadeInUp ${window.location.pathname === "/faq" ? "focused" : ""}`}
               style={{ animationDelay: "0.4s" }}
             >
               FAQ
