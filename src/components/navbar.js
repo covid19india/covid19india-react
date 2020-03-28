@@ -4,6 +4,14 @@ import { Link } from "react-router-dom";
 function Navbar(props) {
   const [view, setView] = useState("Home");
 
+  // HTML Properties for each of the links in UI
+  const navLinkProps = (path, animationDelay) => ({
+    className: `fadeInUp ${window.location.pathname === path ? "focused": ""}`,
+    style: {
+      animationDelay: `${animationDelay}s`
+    }
+  });
+
   if (window.location.pathname !== "/summary") {
     return (
       <div
@@ -32,10 +40,7 @@ function Navbar(props) {
               setView("Home");
             }}
           >
-            <span
-              className={`fadeInUp ${window.location.pathname === "/" ? "focused" : ""}`}
-              style={{ animationDelay: "0.2s" }}
-            >
+            <span {...navLinkProps('/', 0.2)}>
               Home
             </span>
           </Link>
@@ -52,10 +57,7 @@ function Navbar(props) {
               setView("Clusters");
             }}
           >
-            <span
-              className={`fadeInUp ${window.location.pathname === "/clusters" ? "focused" : ""}`}
-              style={{ animationDelay: "0.3s" }}
-            >
+            <span {...navLinkProps('/clusters', 0.3)}>
               Clusters
             </span>
           </Link>
@@ -66,12 +68,7 @@ function Navbar(props) {
               setView("Helpful Links");
             }}
           >
-            <span
-              className={`fadeInUp ${
-                window.location.pathname === "/links" ? "focused" : ""
-              }`}
-              style={{ animationDelay: "0.4s" }}
-            >
+            <span {...navLinkProps('/links', 0.4)}>
               Helpful Links
             </span>
           </Link>
@@ -82,10 +79,7 @@ function Navbar(props) {
               setView("FAQs");
             }}
           >
-            <span
-              className={`fadeInUp ${window.location.pathname === "/faq" ? "focused" : ""}`}
-              style={{ animationDelay: "0.4s" }}
-            >
+            <span {...navLinkProps('/faq', 0.4)}>
               FAQ
             </span>
           </Link>
