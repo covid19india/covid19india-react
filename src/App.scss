@@ -521,7 +521,7 @@ table {
         background: $gray-hover;
       }
       &:nth-child(odd) {
-        background: $white !important;
+        background: $white;
       }
     }
 
@@ -588,6 +588,14 @@ table {
       transform: translateX(1rem);
       .unknown {
         font-style: italic;
+      }
+
+      &:nth-child(odd) {
+        background: $light !important;
+      }
+
+      &:hover {
+        background: $gray-hover !important;
       }
     }
   }

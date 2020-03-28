@@ -294,7 +294,6 @@ export default function({states, stateDistrictWiseData, regionHighlighted}) {
       highlightRegionInMap(null, currentMap.mapType);
     } else {
       if (regionHighlighted !== undefined) {
-        console.log(regionHighlighted);
         const targetRegion = regionHighlighted.state ?
           getRegionFromState(regionHighlighted.state) :
           getRegionFromDistrict(regionHighlighted.district);
