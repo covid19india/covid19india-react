@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import ChoroplethMap, {highlightRegionInMap} from './choropleth';
+import DISTRICT_ALIASES from './district_aliases';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 
 const mapMeta = {
@@ -312,13 +313,17 @@ export default function({states, stateDistrictWiseData, stateHighlighted}) {
       const districtWiseData = (
         stateDistrictWiseData[currentMap.name] || {districtData: {}}
       ).districtData;
+
       currentMapData = Object.keys(districtWiseData).reduce((acc, district) => {
         const confirmed = parseInt(districtWiseData[district].confirmed);
         statistic.total += confirmed;
         if (confirmed > statistic.maxConfirmed) {
           statistic.maxConfirmed = confirmed;
         }
-        acc[district] = districtWiseData[district].confirmed;
+        const map_district = (DISTRICT_ALIASES[currentMap.name] &&
+                              DISTRICT_ALIASES[currentMap.name][district]) ||
+                              district
+        acc[map_district] = districtWiseData[district].confirmed;
         return acc;
       }, {});
     }
