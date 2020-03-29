@@ -5,24 +5,38 @@ import axios from 'axios';
 function Banner(props) {
   const [snippets, setSnippets] = useState([]);
   const [snippet, setSnippet] = useState();
-  const [start, setStart] = useState(props.start ? new Date(props.date) : localStorage.getItem('start')==='null' ? new Date() : new Date(localStorage.getItem('start')));
-  const [difference, setDifference] = useState(new Date(differenceInMilliseconds(new Date(), start)).toISOString().slice(11, 19));
+  const [start] = useState(
+    props.start
+      ? new Date(props.date)
+      : localStorage.getItem('start') === 'null'
+      ? new Date()
+      : new Date(localStorage.getItem('start'))
+  );
+  const [difference, setDifference] = useState(
+    new Date(differenceInMilliseconds(new Date(), start))
+      .toISOString()
+      .slice(11, 19)
+  );
 
-  useEffect(()=>{
+  useEffect(() => {
     getSnippets();
   }, [1]);
 
-  useEffect(()=>{
-    if (snippets.length>1) {
+  useEffect(() => {
+    if (snippets.length > 1) {
       setSnippet(snippets[0]);
     }
   }, [snippets]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const interval = setInterval(() => {
-      setDifference(new Date(differenceInMilliseconds(new Date(), start)).toISOString().slice(11, 19));
+      setDifference(
+        new Date(differenceInMilliseconds(new Date(), start))
+          .toISOString()
+          .slice(11, 19)
+      );
     }, 10000);
-    snippetChooser(0, snippets.length-1);
+    snippetChooser(0, snippets.length - 1);
     return () => clearInterval(interval);
   }, [difference]);
 
@@ -32,20 +46,23 @@ function Banner(props) {
   };
 
   const getSnippets = () => {
-    axios.get('https://api.covid19india.org/website_data.json')
-        .then((response)=>{
-          setSnippets(response.data.factoids);
-        })
-        .catch((err)=>{
-          console.log(err);
-        });
+    axios
+      .get('https://api.covid19india.org/website_data.json')
+      .then((response) => {
+        setSnippets(response.data.factoids);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
-    <div onClick={() => snippetChooser(0, snippets.length-1)} className="Banner fadeInUp" style={{animationDelay: '0.2s'}}>
-      <div className="snippet">
-        {snippet ? snippet.banner : ''} &nbsp;
-      </div>
+    <div
+      onClick={() => snippetChooser(0, snippets.length - 1)}
+      className="Banner fadeInUp"
+      style={{animationDelay: '0.2s'}}
+    >
+      <div className="snippet">{snippet ? snippet.banner : ''} &nbsp;</div>
     </div>
   );
 }
