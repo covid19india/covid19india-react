@@ -6,7 +6,7 @@ function CSVDownloadLink(props) {
     return '';
   }
   try {
-    const parser = new Parser(Object.keys(props.patients[0]));
+    const parser = new Parser({fields: Object.keys(props.patients[0]), eol: "\r\n"});
     const csv = parser.parse(props.patients);
     const data = "data:text/csv;charset=utf-8," + csv;
     return (
