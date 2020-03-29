@@ -1,7 +1,7 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
-title: ''
+name: Donation
+about: Donation link to PM's Covid-19 relief funds.
+title: 'DONATION IN COVID-19'
 labels: 'Status: Review Needed, Type: Enhancement'
 assignees: JunaidBabu, sudevschiz
 ---
