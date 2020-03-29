@@ -14,6 +14,7 @@ import Links from './components/links';
 import Cluster from './components/cluster';
 import FAQ from './components/faq';
 import Banner from './components/banner';
+import PatientDB from './components/patientdb';
 
 const history = require('history').createBrowserHistory;
 
@@ -42,7 +43,13 @@ function App() {
       pageLink: '/faq',
       view: FAQ,
       displayName: 'FAQ',
-      animationDelayForNavbar: 0.4,
+      animationDelayForNavbar: 0.5,
+    },
+    {
+      pageLink: '/patientsDB',
+      view: PatientDB,
+      displayName: 'Patients DB',
+      animationDelayForNavbar: 0.6,
     },
   ];
 
