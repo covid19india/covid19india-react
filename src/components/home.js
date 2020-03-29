@@ -4,6 +4,7 @@ import {formatDistance} from 'date-fns';
 
 import Table from './table';
 import Level from './level';
+import RateOfNewCases from './newcases';
 import MapExplorer from './mapexplorer';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
@@ -80,6 +81,7 @@ function Home(props) {
 
         <Level data={states} deltas={deltas} />
         <Minigraph timeseries={timeseries} animate={true} />
+        <RateOfNewCases data={states} deltas={deltas} timeseries={timeseries} />
 
         <Table
           states={states}
