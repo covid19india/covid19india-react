@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 function Links(props) {
   useEffect(() => {
     document.title = "Official Support helpline & useful links | Coronavirus"
- }, []);
+  }, []);
 
   return (
     <div className="Links">
