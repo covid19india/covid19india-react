@@ -43,6 +43,18 @@ function Navbar(props) {
           >
             <span {...navLinkProps('/', 0.2)}>Home</span>
           </Link>
+          <Link
+            to="/patientdb"
+            onClick={() => {
+              setView("PatientDB");
+            }}
+          >
+            <span {...navLinkProps('/patientdb', 0.2)}>
+              Patient DB
+            </span>
+          </Link>
+
+
 
           {/* <Link to="/updates" onClick={()=>{
             setView('Updates');

@@ -15,6 +15,7 @@ import Summary from './components/summary';
 import Cluster from './components/cluster';
 import FAQ from './components/faq';
 import Banner from './components/banner';
+import PatientDB from './components/patientdb';
 
 const history = require('history').createBrowserHistory;
 
@@ -30,6 +31,11 @@ function App() {
               <Route exact path="/" render={() => <Redirect to="/" />} />
               <Switch location={location}>
                 <Route exact path="/" render={(props) => <Home {...props} />} />
+                <Route
+                  exact
+                  path="/patientdb"
+                  render={(props) => <PatientDB {...props}/>}
+                />
                 <Route
                   exact
                   path="/links"
