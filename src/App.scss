@@ -233,7 +233,7 @@ h6 {
 
   .snippet {
     align-self: center;
-    width: calc(100%-10rem);
+    width: calc(100% - 10rem);
     word-wrap: break-word;
     padding: 1.5rem;
     text-align: center;
@@ -642,6 +642,27 @@ table {
       word-wrap: break-word;
     }
 
+    .state-last-update{
+      background: transparent;
+      transform: translateX(1rem);
+      &:hover{
+        background: transparent;
+      }
+
+      td{
+        .last-update{
+          text-align: left;
+          display: flex;
+          flex-direction: row;
+          align-items: baseline;
+          width: 100%;
+          h3{
+            margin: 0 0 0 5px;
+          }
+        }
+      }
+    }
+
     .district-heading {
       transform: translateX(1rem);
       background: $gray-light;
@@ -786,10 +807,15 @@ table {
 
   .meta {
     display: flex;
-    position: relative;
     flex-direction: row;
     justify-content: space-between;
     height: 1rem;
+
+    .district-last-update{
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
 
     h2 {
       margin: 0;
@@ -806,7 +832,7 @@ table {
 
     .unknown {
       position: absolute;
-      bottom: -4.5rem;
+      top: 14rem;
       width: 5rem;
     }
   }
