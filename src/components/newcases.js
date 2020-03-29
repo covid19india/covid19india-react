@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 
 function RateOfNewCases(props) {
   const [yesterdayCases, setYesterdayCases] = useState(0);
+  const [todayCases, setTodayCases] = useState(0);
   const [secondLastDayCases, setSecondLastDayCases] = useState(0);
   const [secondLastDayDate, setSecondLastDayDate] = useState(0);
   const [thirdLastDayCases, setThirdLastDayCases] = useState(0);
@@ -21,6 +22,7 @@ function RateOfNewCases(props) {
       setThirdLastDayCases(props.timeseries[length - 3]['dailyconfirmed']);
       setThirdLastDayDate(props.timeseries[length - 3]['date']);
       setFourthLastDayCases(props.timeseries[length - 4]['dailyconfirmed']);
+      setTodayCases(props.deltas.confirmeddelta);
     }
   };
 
@@ -50,8 +52,10 @@ function RateOfNewCases(props) {
         >
           <h5 className="heading"> </h5>
           <h1>
-            {(secondLastDayCases - thirdLastDayCases > 0 ? '+' : '') +
-              (secondLastDayCases - thirdLastDayCases)}
+            {secondLastDayCases - thirdLastDayCases > 0
+              ? String.fromCharCode(8593)
+              : String.fromCharCode(8595)}
+            {Math.abs(secondLastDayCases - thirdLastDayCases)}
           </h1>
           <h1 className="title has-text-grey">{}</h1>
         </div>
@@ -74,8 +78,10 @@ function RateOfNewCases(props) {
         >
           <h5 className="heading has-text-info">{} </h5>
           <h1 className="has-text-info">
-            {(yesterdayCases - secondLastDayCases > 0 ? '+' : '') +
-              (yesterdayCases - secondLastDayCases)}
+            {yesterdayCases - secondLastDayCases > 0
+              ? String.fromCharCode(8593)
+              : String.fromCharCode(8595)}
+            {Math.abs(yesterdayCases - secondLastDayCases)}
           </h1>
           <h1 className="title has-text-grey">{}</h1>
         </div>
@@ -92,15 +98,17 @@ function RateOfNewCases(props) {
         <div className="level-item is-blue">
           <h5 className="heading"> </h5>
           <h1>
-            {(props.deltas.confirmeddelta - yesterdayCases > 0 ? '+' : '') +
-              (props.deltas.confirmeddelta - yesterdayCases)}
+            {todayCases - yesterdayCases > 0
+              ? String.fromCharCode(8593)
+              : String.fromCharCode(8595)}
+            {Math.abs(todayCases - yesterdayCases)}*
           </h1>
           <h1 className="title has-text-grey">{}</h1>
         </div>
 
         <div className="level-item is-blue">
           <h5>Today</h5>
-          <h2> {props.deltas.confirmeddelta}* </h2>
+          <h2> {todayCases}* </h2>
         </div>
       </div>
     </div>
