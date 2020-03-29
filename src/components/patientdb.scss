@@ -106,3 +106,16 @@ input.form-control {
 .text-orange {
     color: $orange;
 }
+.expand:hover {
+    background-color: #f8f7ff;
+}
+
+.text-normal {
+    text-transform: none;
+}
+.detail-row {
+    background-color: #f4f2ff !important;
+}
+table tbody > tr:nth-child(odd):nth-child(odd).detail-row {
+    background-color: #f4f2ff !important;
+}

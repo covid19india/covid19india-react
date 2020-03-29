@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
 
 import {
@@ -13,11 +13,13 @@ import {
     faAngleDoubleRight,
     faChevronLeft,
     faAngleDoubleLeft,
-    faArrowAltCircleRight,
     faSort,
     faSortAmountDown,
-    faSortAmountUp,
+    faSortAmountDownAlt,
+    faCaretRight,
+    faCaretDown,
 } from '@fortawesome/free-solid-svg-icons'
+import ExtraDetails from './extradetails';
 
 
 function Table({columns, data}) {
@@ -45,11 +47,22 @@ function Table({columns, data}) {
     useSortBy,
     usePagination);
 
+  const [openCard, setOpenCard] = useState(null);
+  
+  function toggleCard(id) {
+    if (openCard === id){
+      setOpenCard(null);
+      return;
+    }
+    setOpenCard(id);
+  }
+
   return (
     <div className="table-responsive">
       <table {...getTableProps()} className="table">
         <thead>
         <tr>
+          <th></th>
           {headers.map(column => (
             <th {...column.getHeaderProps(column.getSortByToggleProps())}>
               <span className="mr-2">
@@ -60,30 +73,40 @@ function Table({columns, data}) {
                 column.isSorted ?
                   (column.isSortedDesc ?
                     <FontAwesomeIcon icon={faSortAmountDown} className="text-orange" />:
-                    <FontAwesomeIcon icon={faSortAmountUp} className="text-orange" />
+                    <FontAwesomeIcon icon={faSortAmountDownAlt} className="text-orange" />
                 ) : <FontAwesomeIcon icon={faSort} className="text-gray"/>
               }
               </i>
             </th>
           ))}
-          <th>Details</th>
         </tr>
         </thead>
         <tbody {...getTableBodyProps()}>
         {page.map((row, i) => {
           prepareRow(row);
           return (
+            <React.Fragment>
             <tr {...row.getRowProps()}>
+              <td className="expand" onClick={() => toggleCard(row.values.patientnumber)}>
+                {
+                  openCard === row.values.patientnumber ? 
+                  <FontAwesomeIcon icon={faCaretDown} /> :
+                  <FontAwesomeIcon icon={faCaretRight} />
+                }
+              </td>
               {row.cells.map(cell => {
                 return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
               })}
-              <td>
-                <Link to={`/patient/${row.values.patientnumber}`}>
-                  Details
-                  <FontAwesomeIcon icon={faArrowAltCircleRight} className="d-inline-block ml-2" />
-                </Link>
-              </td>
             </tr>
+            {
+              openCard === row.values.patientnumber ?
+                <tr className="detail-row">
+                  <td colSpan={9}>
+                    <ExtraDetails patient={data.find(p => p.patientnumber == row.values.patientnumber)} />
+                  </td>
+                </tr>: null
+            }
+            </React.Fragment>
           )
         })}
         </tbody>
@@ -165,7 +188,7 @@ function PatientTable({ patients }) {
         Header: 'ID',
         accessor: 'patientnumber',
       }, {
-        Header: 'Diagnosed Date',
+        Header: 'Announced on',
         accessor: 'dateannounced',
       }, {
         Header: 'Age',
@@ -177,6 +200,9 @@ function PatientTable({ patients }) {
       }, {
         Header: 'City',
         accessor: 'detectedcity'
+      }, {
+        Header: 'District',
+        accessor: 'detecteddistrict'
       }, {
         Header: 'State',
         accessor: 'detectedstate'
