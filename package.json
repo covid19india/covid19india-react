@@ -1,68 +1,62 @@
 {
-  "name": "covid",
-  "version": "0.1.0",
+  "name": "covid19india",
+  "version": "1.0.0",
   "private": true,
   "homepage": "http://covid19india.github.io/",
   "dependencies": {
-    "@testing-library/jest-dom": "^5.1.1",
-    "@testing-library/react": "^10.0.1",
-    "@testing-library/user-event": "^10.0.0",
-    "@vx/annotation": "0.0.195",
-    "@vx/axis": "0.0.195",
-    "@vx/curve": "0.0.195",
-    "@vx/event": "0.0.195",
-    "@vx/geo": "0.0.195",
-    "@vx/glyph": "0.0.195",
-    "@vx/gradient": "0.0.195",
-    "@vx/grid": "0.0.195",
-    "@vx/group": "0.0.195",
-    "@vx/heatmap": "0.0.195",
-    "@vx/legend": "0.0.195",
-    "@vx/marker": "0.0.195",
-    "@vx/mock-data": "0.0.195",
-    "@vx/pattern": "0.0.195",
-    "@vx/point": "0.0.195",
-    "@vx/responsive": "0.0.195",
-    "@vx/scale": "0.0.195",
-    "@vx/shape": "0.0.195",
-    "@vx/text": "0.0.195",
-    "@vx/tooltip": "0.0.195",
-    "@vx/voronoi": "0.0.195",
-    "animejs": "^3.1.0",
     "axios": "^0.19.2",
-    "bulma": "^0.8.0",
     "d3": "^5.15.0",
-    "d3-geo": "^1.11.9",
     "d3-svg-legend": "^2.25.6",
     "date-fns": "^2.11.0",
-    "date-fns-tz": "^1.0.10",
     "install": "^0.13.0",
-    "nice-react-ticker": "^1.1.0",
     "node-sass": "^4.13.1",
     "npm": "^6.14.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-feather": "^2.0.3",
-    "react-marquee": "^1.0.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
-    "react-ticker": "^1.2.2",
-    "topojson": "^3.0.2",
-    "vx": "0.0.1"
+    "sass-lint": "^1.13.1",
+    "topojson": "^3.0.2"
   },
   "scripts": {
-    "start": "PORT=3001 react-scripts start css-watch",
-    "start-win": "react-scripts start css-watch",
+    "start": "react-scripts start",
     "build": "react-scripts build && cp build/index.html build/404.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "css-build": "node-sass --omit-source-map-url sass/custom.scss src/App.css",
-    "css-watch": "npm run css-build -- --watch",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "eslint": "eslint .",
+    "eslint:fix": "eslint --fix .",
+    "format": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|css|md|vue)\"",
+    "scsslint": "sass-lint-auto-fix"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run eslint && npm run format && npm run scsslint"
+    }
+  },
+  "lint-staged": {
+    "*.+(js|jsx)": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.+(json|css|md)": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.19.0",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.9",
+    "prettier": "^2.0.2",
+    "sass-lint-auto-fix": "^0.21.0"
   },
   "browserslist": {
     "production": [
@@ -75,11 +69,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "eslint": "^6.8.0",
-    "eslint-config-google": "^0.14.0",
-    "eslint-plugin-react": "^7.19.0",
-    "gh-pages": "^2.2.0"
   }
 }

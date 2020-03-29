@@ -5,22 +5,19 @@
 </p>
 
 <p align="center">
-  View our <a href="https://docs.google.com/spreadsheets/d/1nzXUdaIWC84QipdVGUKTiCSc5xntBbpMpzLm6Si33zk">live patient database</a>.  If you'd like to collaborate, join the <a href="https://t.me/covid19indiaops">Telegram Group</a>.
+  View our <a href="https://bit.ly/patientdb">live patient database</a>.
  </p>
 
-
 ## Setup
-On Windows
-```
-npm i && npm run start-win
-```
-On Linux
+
 ```
 npm i && npm start
 ```
 
 ## Maintainers
+
 - [jeremyphilemon](https://github.com/jeremyphilemon)
 
-## Contributors
-- [s-naveen](https://github.com/jeremyphilemon/covid19-india/pulls?q=is%3Apr+author%3As-naveen+is%3Aclosed)
+## Contribution
+
+If you're new to contributing to Open Source on Github, [this guide](https://guides.github.com/activities/contributing-to-open-source/) can help you get started. Please check out the contribution guide for more details on how issues and pull requests work.

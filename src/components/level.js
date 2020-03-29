@@ -7,7 +7,7 @@ function Level(props) {
   const [recoveries, setRecoveries] = useState(0);
   const [deaths, setDeaths] = useState(0);
 
-  useEffect(()=>{
+  useEffect(() => {
     setData(props.data);
     parseData();
   });
@@ -33,10 +33,17 @@ function Level(props) {
 
   return (
     <div className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
-
       <div className="level-item is-cherry">
         <h5>Confirmed</h5>
-        <h4>[{props.deltas ? props.deltas.confirmeddelta>=0 ? '+'+props.deltas.confirmeddelta : '+0' : ''}]</h4>
+        <h4>
+          [
+          {props.deltas
+            ? props.deltas.confirmeddelta >= 0
+              ? '+' + props.deltas.confirmeddelta
+              : '+0'
+            : ''}
+          ]
+        </h4>
         <h1>{confirmed} </h1>
       </div>
 
@@ -49,16 +56,31 @@ function Level(props) {
 
       <div className="level-item is-green">
         <h5 className="heading">Recovered</h5>
-        <h4>[{props.deltas ? props.deltas.recovereddelta>=0 ? '+'+props.deltas.recovereddelta : '+0' : ''}]</h4>
+        <h4>
+          [
+          {props.deltas
+            ? props.deltas.recovereddelta >= 0
+              ? '+' + props.deltas.recovereddelta
+              : '+0'
+            : ''}
+          ]
+        </h4>
         <h1 className="title has-text-success">{recoveries} </h1>
       </div>
 
       <div className="level-item is-gray">
         <h5 className="heading">Deceased</h5>
-        <h4>[{props.deltas ? props.deltas.deceaseddelta>=0 ? '+'+props.deltas.deceaseddelta : '+0' : ''}]</h4>
+        <h4>
+          [
+          {props.deltas
+            ? props.deltas.deceaseddelta >= 0
+              ? '+' + props.deltas.deceaseddelta
+              : '+0'
+            : ''}
+          ]
+        </h4>
         <h1 className="title has-text-grey">{deaths}</h1>
       </div>
-
     </div>
   );
 }
