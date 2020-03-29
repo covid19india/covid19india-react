@@ -18,6 +18,7 @@ function Home(props) {
   const [deltas, setDeltas] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [stateHighlighted, setStateHighlighted] = useState(undefined);
+  const [districtHighlighted, setDistrictHighlighted] = useState(undefined);
 
   useEffect(() => {
     if (fetched === false) {
@@ -54,6 +55,10 @@ function Home(props) {
     if (!state && !index) setStateHighlighted(null);
     else setStateHighlighted({state, index});
   };
+  const onHighlightDistrict = (district, state, index) => {
+    if (!state && !index && !district) setDistrictHighlighted(null);
+    else setDistrictHighlighted({district, state, index});
+  };
 
   return (
     <div className="Home">
@@ -78,8 +83,10 @@ function Home(props) {
           </div>
         </div>
 
-        <Level data={states} deltas={deltas} />
-        <Minigraph timeseries={timeseries} animate={true} />
+        <Level data={states} deltas={deltas}/>
+        <Minigraph timeseries={timeseries} animate={true}/>
+
+        <Table states={states} summary={false} onHighlightState={onHighlightState} stateDistrictWiseData = {stateDistrictWiseData} onHighlightDistrict = {onHighlightDistrict}/>
 
         <Table
           states={states}
@@ -95,7 +102,7 @@ function Home(props) {
             <MapExplorer
               states={states}
               stateDistrictWiseData={stateDistrictWiseData}
-              stateHighlighted={stateHighlighted}
+              stateHighlighted={stateHighlighted} districtHighlighted = {districtHighlighted}
             />
 
             <div

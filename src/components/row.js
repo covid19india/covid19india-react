@@ -185,30 +185,35 @@ function Row(props) {
         </td>
       </tr>
 
-      {Object.keys(sortedDistricts).map((district, index) => {
-        if (district.toLowerCase() !== 'unknown') {
-          return (
-            <tr
-              key={index}
-              className={`district`}
-              style={{display: props.reveal && !props.total ? '' : 'none'}}
-            >
-              <td style={{fontWeight: 600}}>{district}</td>
-              <td>{sortedDistricts[district].confirmed}</td>
-            </tr>
-          );
-        }
-      })}
+      {districts?.Unknown &&
+      <tr className={`district`} style={{display: props.reveal && !props.total ? '' : 'none'}}>
+        <td style={{fontWeight: 600}}>Unknown</td>
+        <td>{districts['Unknown'].confirmed}</td>
+         {/*<td>{districts['Unknown'].active}</td>
+        <td>{districts['Unknown'].recovered}</td>
+        <td>{districts['Unknown'].deaths}</td>*/}
+      </tr>
+      }
 
-      {sortedDistricts?.Unknown && (
-        <tr
-          className={`district`}
-          style={{display: props.reveal && !props.total ? '' : 'none'}}
-        >
-          <td style={{fontWeight: 600}}>Unknown</td>
-          <td>{sortedDistricts['Unknown'].confirmed}</td>
-        </tr>
-      )}
+      {
+        Object.keys(districts ? districts : {}).map((district, index) => {
+          if (district.toLowerCase()!=='unknown') {
+            return (
+              <tr key={index} className={`district`} style={{display: props.reveal && !props.total ? '' : 'none'}}
+              onMouseEnter={() => props.onHighlightDistrict?.(district,state, props.index)}
+              onMouseLeave={() => props.onHighlightDistrict?.()}
+              touchstart={() => props.onHighlightDistrict?.(district,state, props.index)}>
+
+                <td style={{fontWeight: 600}}>{district}</td>
+                <td>{districts[district].confirmed}</td>
+                 {/*<td>{districts[district].active}</td>
+               <td>{districts[district].recovered}</td>
+                <td>{districts[district].deaths}</td>*/}
+              </tr>
+            );
+          }
+        })
+      }
 
       <tr
         className={`spacer`}
