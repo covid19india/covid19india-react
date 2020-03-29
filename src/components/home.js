@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import {format, zonedTimeToUtc} from 'date-fns-tz';
 import {formatDistance} from 'date-fns';
 
 import Table from './table';
@@ -8,7 +7,6 @@ import Level from './level';
 import MapExplorer from './mapexplorer';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
-import Banner from './banner';
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -22,15 +20,18 @@ function Home(props) {
   const [stateHighlighted, setStateHighlighted] = useState(undefined);
   const [districtHighlighted, setDistrictHighlighted] = useState(undefined);
 
-  useEffect(()=> {
-    if (fetched===false) {
+  useEffect(() => {
+    if (fetched === false) {
       getStates();
     }
   }, [fetched]);
 
   const getStates = async () => {
     try {
-      const [response, stateDistrictWiseResponse] = await Promise.all([axios.get('https://api.covid19india.org/data.json'), axios.get('https://api.covid19india.org/state_district_wise.json')]);
+      const [response, stateDistrictWiseResponse] = await Promise.all([
+        axios.get('https://api.covid19india.org/data.json'),
+        axios.get('https://api.covid19india.org/state_district_wise.json'),
+      ]);
       setStates(response.data.statewise);
       setTimeseries(response.data.cases_time_series);
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
@@ -70,7 +71,14 @@ function Home(props) {
             </div>
             <div className="last-update">
               <h6>Last Updated</h6>
-              <h3>{isNaN(Date.parse(formatDate(lastUpdated))) ? '' : formatDistance(new Date(formatDate(lastUpdated)), new Date())+' Ago'}</h3>
+              <h3>
+                {isNaN(Date.parse(formatDate(lastUpdated)))
+                  ? ''
+                  : formatDistance(
+                      new Date(formatDate(lastUpdated)),
+                      new Date()
+                    ) + ' Ago'}
+              </h3>
             </div>
           </div>
         </div>
@@ -80,10 +88,15 @@ function Home(props) {
 
         <Table states={states} summary={false} onHighlightState={onHighlightState} stateDistrictWiseData = {stateDistrictWiseData} onHighlightDistrict = {onHighlightDistrict}/>
 
+        <Table
+          states={states}
+          summary={false}
+          onHighlightState={onHighlightState}
+          stateDistrictWiseData={stateDistrictWiseData}
+        />
       </div>
 
       <div className="home-right">
-
         {fetched && (
           <React.Fragment>
             <MapExplorer
@@ -120,6 +133,7 @@ function Home(props) {
                 <label htmlFor="timeseries-mode">Scale Uniformly</label>
                 <input
                   type="checkbox"
+                  className="switch"
                   aria-label="Checked by default to scale uniformly."
                   checked={timeseriesMode}
                   onChange={(event) => {

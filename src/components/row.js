@@ -57,6 +57,7 @@ function Row(props) {
           sortedDistricts[key] = aDistricts[key];
         });
     }
+<<<<<<< HEAD
   };
 
   const handleSort = (column) => {
@@ -72,6 +73,23 @@ function Row(props) {
     localStorage.setItem('district.isAscending', isAscending);
   };
 
+=======
+  };
+
+  const handleSort = (column) => {
+    const isAscending =
+      sortData.sortColumn === column
+        ? !sortData.isAscending
+        : sortData.sortColumn === 'district';
+    setSortData({
+      sortColumn: column,
+      isAscending: isAscending,
+    });
+    localStorage.setItem('district.sortColumn', column);
+    localStorage.setItem('district.isAscending', isAscending);
+  };
+
+>>>>>>> bd65bd194d09a3de7c1ea287fdbed4f64c0e9a89
   sort(districts);
 
   return (
