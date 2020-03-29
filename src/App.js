@@ -18,6 +18,7 @@ import Banner from './components/banner';
 const history = require('history').createBrowserHistory;
 
 function App() {
+  // Add a new page simply by adding a new entry in this array.
   const pages = [{
     pageLink: '/',
     view: Home,
