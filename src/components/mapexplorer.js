@@ -273,7 +273,7 @@ const mapMeta = {
 };
 
 export default function({states, stateDistrictWiseData, stateHighlighted, districtHighlighted}) {
-  // const [states, setStates] = useState(props.states);
+  const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
@@ -297,6 +297,7 @@ export default function({states, stateDistrictWiseData, stateHighlighted, distri
           const regionHighlighted = getRegionFromState(stateHighlighted.state);
           setCurrentHoveredRegion(regionHighlighted);
           highlightRegionInMap(regionHighlighted.name, currentMap.mapType);
+          setSelectedRegion(regionHighlighted.name);
         }
       }
   }, [stateHighlighted]);
@@ -309,6 +310,7 @@ export default function({states, stateDistrictWiseData, stateHighlighted, distri
     setCurrentMap(newMap);
     setHoveredRegion(districtHighlighted?.district, newMap);
     highlightRegionInMap(districtHighlighted?.district, currentMap.mapType);
+    setSelectedRegion(districtHighlighted?.district);
   }, [districtHighlighted]);
 
   if (!currentHoveredRegion) {
@@ -484,6 +486,7 @@ export default function({states, stateDistrictWiseData, stateHighlighted, distri
         mapData={currentMapData}
         setHoveredRegion={(region) => setHoveredRegion(region, currentMap)}
         changeMap={switchMapToState}
+        selectedRegion = {selectedRegion}
       />
     </div>
   );

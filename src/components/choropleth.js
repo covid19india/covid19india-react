@@ -10,6 +10,7 @@ const propertyFieldMap = {
 };
 
 export const highlightRegionInMap = (name, mapType) => {
+  console.log(name);
   const propertyField = propertyFieldMap[mapType];
   const paths = d3.selectAll('.path-region');
   paths.classed('map-hover', (d, i, nodes) => {
@@ -27,6 +28,7 @@ function ChoroplethMap({
   setHoveredRegion,
   mapMeta,
   changeMap,
+  selectedRegion,
 }) {
   const choroplethMap = useRef(null);
 
@@ -194,6 +196,7 @@ function ChoroplethMap({
       .scale(color);
 
     svg.select('.legendLinear').call(legendLinear);
+    highlightRegionInMap(selectedRegion, mapMeta.mapType);
   };
 
   return (
