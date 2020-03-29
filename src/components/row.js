@@ -192,6 +192,13 @@ function Row(props) {
               key={index}
               className={`district`}
               style={{display: props.reveal && !props.total ? '' : 'none'}}
+              onMouseEnter={() =>
+                props.onHighlightDistrict?.(district, state, props.index)
+              }
+              onMouseLeave={() => props.onHighlightDistrict?.()}
+              touchstart={() =>
+                props.onHighlightDistrict?.(district, state, props.index)
+              }
             >
               <td style={{fontWeight: 600}}>{district}</td>
               <td>{sortedDistricts[district].confirmed}</td>

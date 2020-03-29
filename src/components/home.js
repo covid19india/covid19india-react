@@ -11,6 +11,7 @@ function Home(props) {
   const [graphOption, setGraphOption] = useState(1);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [stateHighlighted, setStateHighlighted] = useState(undefined);
+  const [districtHighlighted, setDistrictHighlighted] = useState(undefined);
   const {
     fetchStates,
     didFetchStates,
@@ -41,6 +42,10 @@ function Home(props) {
     if (!state && !index) setStateHighlighted(null);
     else setStateHighlighted({state, index});
   };
+  const onHighlightDistrict = (district, state, index) => {
+    if (!state && !index && !district) setDistrictHighlighted(null);
+    else setDistrictHighlighted({district, state, index});
+  };
 
   return (
     <div className="Home">
@@ -66,6 +71,7 @@ function Home(props) {
           summary={false}
           onHighlightState={onHighlightState}
           stateDistrictWiseData={stateDistrictWiseData}
+          onHighlightDistrict={onHighlightDistrict}
         />
       </div>
 
@@ -76,6 +82,7 @@ function Home(props) {
               states={states}
               stateDistrictWiseData={stateDistrictWiseData}
               stateHighlighted={stateHighlighted}
+              districtHighlighted={districtHighlighted}
             />
 
             <div
