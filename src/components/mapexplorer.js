@@ -271,8 +271,13 @@ const mapMeta = {
   },
 };
 
-export default function ({states, stateDistrictWiseData, stateHighlighted}) {
-  // const [states, setStates] = useState(props.states);
+export default function ({
+  states,
+  stateDistrictWiseData,
+  stateHighlighted,
+  districtHighlighted,
+}) {
+  const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
@@ -287,10 +292,8 @@ export default function ({states, stateDistrictWiseData, stateHighlighted}) {
   }, [states]);
 
   useEffect(() => {
-    if (currentMap.mapType === MAP_TYPES.STATE) {
-      return;
-    }
-
+    const newMap = mapMeta['India'];
+    setCurrentMap(newMap);
     if (stateHighlighted === null) {
       highlightRegionInMap(null, currentMap.mapType);
     } else {
@@ -298,9 +301,25 @@ export default function ({states, stateDistrictWiseData, stateHighlighted}) {
         const regionHighlighted = getRegionFromState(stateHighlighted.state);
         setCurrentHoveredRegion(regionHighlighted);
         highlightRegionInMap(regionHighlighted.name, currentMap.mapType);
+        setSelectedRegion(regionHighlighted.name);
       }
     }
   }, [stateHighlighted]);
+
+  useEffect(() => {
+    if (districtHighlighted === null) {
+      highlightRegionInMap(null, currentMap.mapType);
+      return;
+    }
+    const newMap = mapMeta[districtHighlighted?.state.state];
+    if (!newMap) {
+      return;
+    }
+    setCurrentMap(newMap);
+    setHoveredRegion(districtHighlighted?.district, newMap);
+    highlightRegionInMap(districtHighlighted?.district, currentMap.mapType);
+    setSelectedRegion(districtHighlighted?.district);
+  }, [districtHighlighted]);
 
   if (!currentHoveredRegion) {
     return null;
@@ -475,6 +494,7 @@ export default function ({states, stateDistrictWiseData, stateHighlighted}) {
         mapData={currentMapData}
         setHoveredRegion={(region) => setHoveredRegion(region, currentMap)}
         changeMap={switchMapToState}
+        selectedRegion={selectedRegion}
       />
     </div>
   );
