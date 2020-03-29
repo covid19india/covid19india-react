@@ -5,9 +5,9 @@ function FAQ(props) {
   const [faq, setFaq] = useState([]);
 
   useEffect(() => {
-    document.title = "FAQ | covid19india"
+    document.title = "FAQ | covid19india";
     getFAQs();
-  });
+  }, []);
 
   const getFAQs = () => {
     axios
