@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 
 function Navbar(props) {
   const [view, setView] = useState('Home');
+  const history = useHistory();
 
   // HTML Properties for each of the links in UI
   const navLinkProps = (path, animationDelay) => ({
@@ -23,6 +24,9 @@ function Navbar(props) {
         }}
       >
         <img
+          onClick={() => {
+            history.push('/');
+          }}
           className="fadeInUp logo"
           alt="India COVID-19 Tracker"
           src="/icon.png"
