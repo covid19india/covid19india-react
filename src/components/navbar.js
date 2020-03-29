@@ -1,37 +1,36 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, {useState} from 'react';
+import {Link} from 'react-router-dom';
 
 function Navbar(props) {
-  const [view, setView] = useState("Home");
+  const [view, setView] = useState('Home');
 
   // HTML Properties for each of the links in UI
   const navLinkProps = (path, animationDelay) => ({
-    className: `fadeInUp ${window.location.pathname === path ? "focused": ""}`,
+    className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
     style: {
-      animationDelay: `${animationDelay}s`
-    }
+      animationDelay: `${animationDelay}s`,
+    },
   });
 
-  if (window.location.pathname !== "/summary") {
+  if (window.location.pathname !== '/summary') {
     return (
       <div
         className="Navbar"
         style={{
-          animationDelay: "0.5s",
-          height: view === "Clusters" ? "2.5rem" : "",
-          transition: "all 0.3s ease-in-out"
+          animationDelay: '0.5s',
+          height: view === 'Clusters' ? '2.5rem' : '',
+          transition: 'all 0.3s ease-in-out',
         }}
       >
         <img
           className="fadeInUp"
           alt="India COVID-19 Tracker"
           src="/icon.png"
-          alt="https://www.covid19india.org | Coronavirus cases live dashboard"
           style={{
-            animationDelay: "0.0s",
-            width: view === "Clusters" ? "1.5rem" : "",
-            height: view === "Clusters" ? "1.5rem" : "",
-            transition: "all 0.3s ease-in-out"
+            animationDelay: '0.0s',
+            width: view === 'Clusters' ? '1.5rem' : '',
+            height: view === 'Clusters' ? '1.5rem' : '',
+            transition: 'all 0.3s ease-in-out',
           }}
         />
 
@@ -39,12 +38,10 @@ function Navbar(props) {
           <Link
             to="/"
             onClick={() => {
-              setView("Home");
+              setView('Home');
             }}
           >
-            <span {...navLinkProps('/', 0.2)}>
-              Home
-            </span>
+            <span {...navLinkProps('/', 0.2)}>Home</span>
           </Link>
 
           {/* <Link to="/updates" onClick={()=>{
@@ -56,34 +53,28 @@ function Navbar(props) {
           <Link
             to="/clusters"
             onClick={() => {
-              setView("Clusters");
+              setView('Clusters');
             }}
           >
-            <span {...navLinkProps('/clusters', 0.3)}>
-              Clusters
-            </span>
+            <span {...navLinkProps('/clusters', 0.3)}>Clusters</span>
           </Link>
 
           <Link
             to="/links"
             onClick={() => {
-              setView("Helpful Links");
+              setView('Helpful Links');
             }}
           >
-            <span {...navLinkProps('/links', 0.4)}>
-              Helpful Links
-            </span>
+            <span {...navLinkProps('/links', 0.4)}>Helpful Links</span>
           </Link>
 
           <Link
             to="/faq"
             onClick={() => {
-              setView("FAQs");
+              setView('FAQs');
             }}
           >
-            <span {...navLinkProps('/faq', 0.4)}>
-              FAQ
-            </span>
+            <span {...navLinkProps('/faq', 0.4)}>FAQ</span>
           </Link>
         </div>
 
