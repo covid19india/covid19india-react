@@ -10,7 +10,6 @@ const propertyFieldMap = {
 };
 
 export const highlightRegionInMap = (name, mapType) => {
-  console.log(name);
   const propertyField = propertyFieldMap[mapType];
   const paths = d3.selectAll('.path-region');
   paths.classed('map-hover', (d, i, nodes) => {
@@ -34,7 +33,6 @@ function ChoroplethMap({
 
   useEffect(() => {
     (async () => {
-      d3.selectAll('svg#chart > *').remove();
       const data = await d3.json(mapMeta.geoDataFile);
       if (statistic && choroplethMap.current) {
         ready(data);
@@ -196,6 +194,8 @@ function ChoroplethMap({
       .scale(color);
 
     svg.select('.legendLinear').call(legendLinear);
+    // Hack: Added to ensure district is highlighted even if SVG is not loaded
+    //       Ideally should be covered by districtHighlighted effect hook
     highlightRegionInMap(selectedRegion, mapMeta.mapType);
   };
 
