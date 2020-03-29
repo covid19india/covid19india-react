@@ -83,16 +83,15 @@ function Home(props) {
           </div>
         </div>
 
-        <Level data={states} deltas={deltas}/>
-        <Minigraph timeseries={timeseries} animate={true}/>
-
-        <Table states={states} summary={false} onHighlightState={onHighlightState} stateDistrictWiseData = {stateDistrictWiseData} onHighlightDistrict = {onHighlightDistrict}/>
+        <Level data={states} deltas={deltas} />
+        <Minigraph timeseries={timeseries} animate={true} />
 
         <Table
           states={states}
           summary={false}
           onHighlightState={onHighlightState}
           stateDistrictWiseData={stateDistrictWiseData}
+          onHighlightDistrict={onHighlightDistrict}
         />
       </div>
 
@@ -102,7 +101,8 @@ function Home(props) {
             <MapExplorer
               states={states}
               stateDistrictWiseData={stateDistrictWiseData}
-              stateHighlighted={stateHighlighted} districtHighlighted = {districtHighlighted}
+              stateHighlighted={stateHighlighted}
+              districtHighlighted={districtHighlighted}
             />
 
             <div
