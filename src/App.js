@@ -7,9 +7,9 @@ import {
 } from 'react-router-dom';
 import * as Icon from 'react-feather';
 import Spinner from './components/spinner';
+import Navbar from './components/navbar';
 import './App.scss';
 const Home = lazy(() => import('./components/home'));
-const Navbar = lazy(() => import('./components/navbar'));
 const Links = lazy(() => import('./components/links'));
 const Summary = lazy(() => import('./components/summary'));
 const Cluster = lazy(() => import('./components/cluster'));
