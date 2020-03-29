@@ -46,7 +46,7 @@ function App() {
         <Route
           render={({location}) => (
             <div className="Almighty-Router">
-              <Navbar />
+              <Navbar pages={pages}/>
               <Banner />
               <Route exact path="/" render={() => <Redirect to="/" />} />
               <Switch location={location}>

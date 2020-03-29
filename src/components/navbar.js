@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 
 function Navbar(props) {
-  const [view, setView] = useState('Home');
+  const [view] = useState('Home');
 
   // HTML Properties for each of the links in UI
   const navLinkProps = (path, animationDelay) => ({
@@ -35,41 +35,20 @@ function Navbar(props) {
         />
 
         <div className='navbar-left'>
-          <Link
-            to='/'
-            onClick={() => {
-              setView('Home');
-            }}
-          >
-            <span {...navLinkProps('/', 0.2)}>Home</span>
-          </Link>
-
-          <Link
-            to='/clusters'
-            onClick={() => {
-              setView('Clusters');
-            }}
-          >
-            <span {...navLinkProps('/clusters', 0.3)}>Clusters</span>
-          </Link>
-
-          <Link
-            to='/links'
-            onClick={() => {
-              setView('Helpful Links');
-            }}
-          >
-            <span {...navLinkProps('/links', 0.4)}>Helpful Links</span>
-          </Link>
-
-          <Link
-            to="/faq"
-            onClick={() => {
-              setView('FAQs');
-            }}
-          >
-            <span {...navLinkProps('/faq', 0.4)}>FAQ</span>
-          </Link>
+          {
+            props.pages.map((page, i) => {
+              return (
+                <Link
+                  to={page.pageLink}
+                  key={i}
+                >
+                  <span {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}>
+                    {page.displayName}
+                  </span>
+                </Link>
+              );
+            })
+          }
         </div>
 
         <div className="navbar-right"></div>
