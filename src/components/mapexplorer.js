@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo} from 'react';
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ChoroplethMap, {highlightRegionInMap} from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 import {formatDate} from '../utils/common-functions';
@@ -228,12 +228,12 @@ export default function ({
   }, [states]);
 
   useEffect(() => {
-    const newMap = mapMeta['India'];
-    setCurrentMap(newMap);
     if (stateHighlighted === null) {
       highlightRegionInMap(null, currentMap.mapType);
     } else {
       if (stateHighlighted !== undefined) {
+        const newMap = mapMeta['India'];
+        setCurrentMap(newMap);
         const regionHighlighted = getRegionFromState(stateHighlighted.state);
         setCurrentHoveredRegion(regionHighlighted);
         highlightRegionInMap(regionHighlighted.name, currentMap.mapType);
@@ -296,27 +296,30 @@ export default function ({
     return [statistic, currentMapData];
   }, [currentMap, states, stateDistrictWiseData]);
 
-  const setHoveredRegion = (name, currentMap) => {
-    if (currentMap.mapType === MAP_TYPES.COUNTRY) {
-      setCurrentHoveredRegion(
-        getRegionFromState(states.filter((state) => name === state.state)[0])
-      );
-    } else if (currentMap.mapType === MAP_TYPES.STATE) {
-      const state = stateDistrictWiseData[currentMap.name] || {
-        districtData: {},
-      };
-      let districtData = state.districtData[name];
-      if (!districtData) {
-        districtData = {
-          confirmed: 0,
-          active: 0,
-          deaths: 0,
-          recovered: 0,
+  const setHoveredRegion = useCallback(
+    (name, currentMap) => {
+      if (currentMap.mapType === MAP_TYPES.COUNTRY) {
+        setCurrentHoveredRegion(
+          getRegionFromState(states.filter((state) => name === state.state)[0])
+        );
+      } else if (currentMap.mapType === MAP_TYPES.STATE) {
+        const state = stateDistrictWiseData[currentMap.name] || {
+          districtData: {},
         };
+        let districtData = state.districtData[name];
+        if (!districtData) {
+          districtData = {
+            confirmed: 0,
+            active: 0,
+            deaths: 0,
+            recovered: 0,
+          };
+        }
+        setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
       }
-      setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
-    }
-  };
+    },
+    [stateDistrictWiseData, states]
+  );
 
   const getRegionFromDistrict = (districtData, name) => {
     if (!districtData) {
@@ -340,26 +343,30 @@ export default function ({
     return region;
   };
 
-  const switchMapToState = (name) => {
-    const newMap = mapMeta[name];
-    if (!newMap) {
-      return;
-    }
-    setCurrentMap(newMap);
-    if (newMap.mapType === MAP_TYPES.COUNTRY) {
-      setHoveredRegion(states[1].state, newMap);
-    } else if (newMap.mapType === MAP_TYPES.STATE) {
-      const districtData = (stateDistrictWiseData[name] || {districtData: {}})
-        .districtData;
-      const topDistrict = Object.keys(districtData)
-        .filter((name) => name !== 'Unknown')
-        .sort((a, b) => {
-          return districtData[b].confirmed - districtData[a].confirmed;
-        })[0];
-      setHoveredRegion(topDistrict, newMap);
-    }
-  };
+  const switchMapToState = useCallback(
+    (name) => {
+      const newMap = mapMeta[name];
+      if (!newMap) {
+        return;
+      }
+      setCurrentMap(newMap);
+      if (newMap.mapType === MAP_TYPES.COUNTRY) {
+        setHoveredRegion(states[1].state, newMap);
+      } else if (newMap.mapType === MAP_TYPES.STATE) {
+        const districtData = (stateDistrictWiseData[name] || {districtData: {}})
+          .districtData;
+        const topDistrict = Object.keys(districtData)
+          .filter((name) => name !== 'Unknown')
+          .sort((a, b) => {
+            return districtData[b].confirmed - districtData[a].confirmed;
+          })[0];
+        setHoveredRegion(topDistrict, newMap);
+      }
+    },
+    [setHoveredRegion, stateDistrictWiseData, states]
+  );
   const {name, lastupdatedtime} = currentHoveredRegion;
+
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
       <div className="header">
