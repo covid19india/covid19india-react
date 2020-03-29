@@ -240,7 +240,7 @@ export default function ({
         setSelectedRegion(regionHighlighted.name);
       }
     }
-  }, [stateHighlighted]);
+  }, [stateHighlighted, currentMap.mapType]);
 
   useEffect(() => {
     if (districtHighlighted === null) {
@@ -294,7 +294,7 @@ export default function ({
       }, {});
     }
     return [statistic, currentMapData];
-  }, [currentMap]);
+  }, [currentMap, states, stateDistrictWiseData]);
 
   const setHoveredRegion = (name, currentMap) => {
     if (currentMap.mapType === MAP_TYPES.COUNTRY) {
