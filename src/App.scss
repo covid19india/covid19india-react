@@ -802,10 +802,15 @@ table {
 
   .meta {
     display: flex;
-    position: relative;
     flex-direction: row;
     justify-content: space-between;
     height: 1rem;
+
+    .district-last-update{
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
 
     h2 {
       margin: 0;
@@ -822,7 +827,7 @@ table {
 
     .unknown {
       position: absolute;
-      bottom: -4.5rem;
+      top: 14rem;
       width: 5rem;
     }
   }

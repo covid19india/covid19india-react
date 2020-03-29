@@ -454,8 +454,14 @@ export default function ({states, stateDistrictWiseData, stateHighlighted}) {
 
       <div className="meta">
         <h2>{name}</h2>
-        {lastupdatedtime && currentMap.mapType === MAP_TYPES.COUNTRY && (
-          <div className="last-update">
+        {lastupdatedtime && (
+          <div
+            className={`last-update ${
+              currentMap.mapType === MAP_TYPES.STATE
+                ? 'district-last-update'
+                : 'state-last-update'
+            }`}
+          >
             <h6>Last Updated</h6>
             <h3>
               {isNaN(Date.parse(formatDate(lastupdatedtime)))
