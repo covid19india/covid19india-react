@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {lazy, Suspense} from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -6,55 +6,71 @@ import {
   Redirect,
 } from 'react-router-dom';
 import * as Icon from 'react-feather';
-
+import Spinner from './components/spinner';
 import './App.scss';
-import Home from './components/home';
-import Navbar from './components/navbar';
-import Links from './components/links';
-import Summary from './components/summary';
-import Cluster from './components/cluster';
-import FAQ from './components/faq';
-import Banner from './components/banner';
-
+const Home = lazy(() => import('./components/home'));
+const Navbar = lazy(() => import('./components/navbar'));
+const Links = lazy(() => import('./components/links'));
+const Summary = lazy(() => import('./components/summary'));
+const Cluster = lazy(() => import('./components/cluster'));
+const FAQ = lazy(() => import('./components/faq'));
+const Banner = lazy(() => import('./components/banner'));
 const history = require('history').createBrowserHistory;
 
 function App() {
   return (
     <div className="App">
-      <Router history={history}>
-        <Route
-          render={({location}) => (
-            <div className="Almighty-Router">
-              <Navbar />
-              <Banner />
-              <Route exact path="/" render={() => <Redirect to="/" />} />
-              <Switch location={location}>
-                <Route exact path="/" render={(props) => <Home {...props} />} />
-                <Route
-                  exact
-                  path="/links"
-                  render={(props) => <Links {...props} />}
-                />
-                <Route
-                  exact
-                  path="/summary"
-                  render={(props) => <Summary {...props} />}
-                />
-                <Route
-                  exact
-                  path="/clusters"
-                  render={(props) => <Cluster {...props} />}
-                />
-                <Route
-                  exact
-                  path="/faq"
-                  render={(props) => <FAQ {...props} />}
-                />
-              </Switch>
-            </div>
-          )}
-        />
-      </Router>
+      <Suspense
+        fallback={
+          <div
+            style={{
+              width: '90vw',
+              height: '100vh',
+            }}
+          >
+            <Spinner />
+          </div>
+        }
+      >
+        <Router history={history}>
+          <Route
+            render={({location}) => (
+              <div className="Almighty-Router">
+                <Navbar />
+                <Banner />
+                <Route exact path="/" render={() => <Redirect to="/" />} />
+                <Switch location={location}>
+                  <Route
+                    exact
+                    path="/"
+                    render={(props) => <Home {...props} />}
+                  />
+                  <Route
+                    exact
+                    path="/links"
+                    render={(props) => <Links {...props} />}
+                  />
+                  <Route
+                    exact
+                    path="/summary"
+                    render={(props) => <Summary {...props} />}
+                  />
+                  <Route
+                    exact
+                    path="/clusters"
+                    render={(props) => <Cluster {...props} />}
+                  />
+                  <Route
+                    exact
+                    path="/faq"
+                    render={(props) => <FAQ {...props} />}
+                  />
+                </Switch>
+              </div>
+            )}
+          />
+        </Router>
+      </Suspense>
       <footer className="fadeInUp" style={{animationDelay: '2s'}}>
         <img
           src="/icon.png"
