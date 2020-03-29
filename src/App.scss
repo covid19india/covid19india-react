@@ -207,7 +207,7 @@ h6 {
 .Home {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
   flex-wrap: wrap;
   margin-left: 10rem;
   margin-right: 10rem;
@@ -217,6 +217,7 @@ h6 {
     display: flex;
     flex-direction: column;
     width: 30rem;
+    margin: 0 2rem;
   }
 }
 
@@ -1341,6 +1342,7 @@ footer {
       width: 100%;
       display: flex;
       flex-direction: column;
+      margin: unset;
     }
   }
 
