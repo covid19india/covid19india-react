@@ -2,8 +2,10 @@ import React, {useState, useEffect} from 'react';
 import * as Icon from 'react-feather';
 
 import Row from './row';
+import {useTranslation} from 'react-i18next';
 
 function Table(props) {
+  const {t} = useTranslation();
   const [states, setStates] = useState(props.states);
   const [revealedStates, setRevealedStates] = useState({});
   const [districts, setDistricts] = useState({});
@@ -108,7 +110,7 @@ function Table(props) {
   return (
     <>
       <h5 className="affected-count fadeInUp" style={{animationDelay: '1s'}}>
-        {count} States/UTS Affected
+        {count} {t('States/UTS Affected')}
       </h5>
       <table className="table fadeInUp" style={{animationDelay: '1s'}}>
         <thead>
@@ -118,7 +120,7 @@ function Table(props) {
               onClick={(e) => handleSort(e, props)}
             >
               <div className="heading-content">
-                <abbr title="State">State/UT</abbr>
+                <abbr title="State">{t('State/UT')}</abbr>
                 <div
                   style={{
                     display:
@@ -133,13 +135,13 @@ function Table(props) {
               <div className="heading-content">
                 <abbr
                   className={`${window.innerWidth <= 769 ? 'is-cherry' : ''}`}
-                  title="Confirmed"
+                  title={t('Confirmed')}
                 >
                   {window.innerWidth <= 769
                     ? window.innerWidth <= 375
                       ? 'C'
                       : 'Cnfmd'
-                    : 'Confirmed'}
+                    : t('Confirmed')}
                 </abbr>
                 <div
                   style={{
@@ -155,13 +157,13 @@ function Table(props) {
               <div className="heading-content">
                 <abbr
                   className={`${window.innerWidth <= 769 ? 'is-blue' : ''}`}
-                  title="Active"
+                  title={t('Active')}
                 >
                   {window.innerWidth <= 769
                     ? window.innerWidth <= 375
                       ? 'A'
                       : 'Actv'
-                    : 'Active'}
+                    : t('Active')}
                 </abbr>
                 <div
                   style={{
@@ -177,13 +179,13 @@ function Table(props) {
               <div className="heading-content">
                 <abbr
                   className={`${window.innerWidth <= 769 ? 'is-green' : ''}`}
-                  title="Recovered"
+                  title={t('Recovered')}
                 >
                   {window.innerWidth <= 769
                     ? window.innerWidth <= 375
                       ? 'R'
                       : 'Rcvrd'
-                    : 'Recovered'}
+                    : t('Recovered')}
                 </abbr>
                 <div
                   className={
@@ -204,13 +206,13 @@ function Table(props) {
               <div className="heading-content">
                 <abbr
                   className={`${window.innerWidth <= 769 ? 'is-gray' : ''}`}
-                  title="Deaths"
+                  title={t('Deaths')}
                 >
                   {window.innerWidth <= 769
                     ? window.innerWidth <= 375
                       ? 'D'
                       : 'Dcsd'
-                    : 'Deceased'}
+                    : t('Deaths')}
                 </abbr>
                 <div
                   style={{

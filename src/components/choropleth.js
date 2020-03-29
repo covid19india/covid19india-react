@@ -2,6 +2,8 @@ import React, {useEffect, useRef} from 'react';
 import * as d3 from 'd3';
 import {legendColor} from 'd3-svg-legend';
 import * as topojson from 'topojson';
+import {useTranslation} from 'react-i18next';
+
 import {MAP_TYPES} from '../constants';
 
 const propertyFieldMap = {
@@ -29,6 +31,7 @@ function ChoroplethMap({
   changeMap,
   selectedRegion,
 }) {
+  const {i18n, t} = useTranslation();
   const choroplethMap = useRef(null);
 
   useEffect(() => {
@@ -40,7 +43,7 @@ function ChoroplethMap({
         // setState(states[1]);
       }
     })();
-  }, [mapMeta.geoDataFile]);
+  }, [mapMeta.geoDataFile, i18n.language]);
 
   const handleMouseover = (name) => {
     try {
@@ -124,8 +127,13 @@ function ChoroplethMap({
         const value = mapData[d.properties[propertyField]] || 0;
         return (
           parseFloat(100 * (value / (statistic.total || 0.001))).toFixed(2) +
-          '% from ' +
-          toTitleCase(d.properties[propertyField])
+          `% ${t('from')} ` +
+          toTitleCase(
+            t([
+              `state.${d.properties[propertyField]}`,
+              d.properties[propertyField],
+            ])
+          )
         );
       });
 
@@ -187,9 +195,9 @@ function ChoroplethMap({
     const legendLinear = legendColor()
       .shapeWidth(50)
       .cells(cells)
-      .titleWidth(3)
+      .titleWidth(70)
       .labels(label)
-      .title('Confirmed Cases')
+      .title(t('Confirmed Cases'))
       .orient('vertical')
       .scale(color);
 

@@ -1,7 +1,11 @@
 import React, {useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 
+import LanguageSwitcher from './languageswitcher';
+
 function Navbar(props) {
+  const {t} = useTranslation();
   const [view, setView] = useState('Home');
 
   // HTML Properties for each of the links in UI
@@ -24,7 +28,7 @@ function Navbar(props) {
       >
         <img
           className="fadeInUp logo"
-          alt="India COVID-19 Tracker"
+          alt={t('India COVID-19 Tracker')}
           src="/icon.png"
           style={{
             animationDelay: '0.0s',
@@ -41,7 +45,7 @@ function Navbar(props) {
               setView('Home');
             }}
           >
-            <span {...navLinkProps('/', 0.2)}>Home</span>
+            <span {...navLinkProps('/', 0.2)}>{t('Home')}</span>
           </Link>
 
           {/* <Link to="/updates" onClick={()=>{
@@ -56,7 +60,7 @@ function Navbar(props) {
               setView('Clusters');
             }}
           >
-            <span {...navLinkProps('/clusters', 0.3)}>Clusters</span>
+            <span {...navLinkProps('/clusters', 0.3)}>{t('Clusters')}</span>
           </Link>
 
           <Link
@@ -65,7 +69,7 @@ function Navbar(props) {
               setView('Helpful Links');
             }}
           >
-            <span {...navLinkProps('/links', 0.4)}>Helpful Links</span>
+            <span {...navLinkProps('/links', 0.4)}>{t('Helpful Links')}</span>
           </Link>
 
           <Link
@@ -74,11 +78,13 @@ function Navbar(props) {
               setView('FAQs');
             }}
           >
-            <span {...navLinkProps('/faq', 0.4)}>FAQ</span>
+            <span {...navLinkProps('/faq', 0.4)}>{t('FAQ')}</span>
           </Link>
         </div>
 
-        <div className="navbar-right"></div>
+        <div className="navbar-right">
+          <LanguageSwitcher />
+        </div>
       </div>
     );
   } else {

@@ -4,8 +4,10 @@ import axios from 'axios';
 import Level from './level';
 import Minigraph from './minigraph';
 import Table from './table';
+import {useTranslation} from 'react-i18next';
 
 function Summary(props) {
+  const {t} = useTranslation();
   const [states, setStates] = useState([]);
   const [deltas, setDeltas] = useState([]);
   const [timeseries, setTimeseries] = useState([]);
@@ -34,7 +36,7 @@ function Summary(props) {
   return (
     <div className="Summary">
       <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
-        <h1>India COVID-19 Tracker</h1>
+        <h1>{t('India COVID-19 Tracker')}</h1>
       </div>
 
       <Minigraph timeseries={timeseries} animate={false} />
@@ -45,9 +47,11 @@ function Summary(props) {
         <div className="summary-bottom-left">
           <img
             src="icon.png"
-            alt="https://www.covid19india.org | Coronavirus cases live dashboard"
+            alt={`https://www.covid19india.org | ${t(
+              'Coronavirus cases live dashboard'
+            )}`}
           />
-          <h5>We stand with everyone fighting on the frontlines</h5>
+          <h5>{t('We stand with everyone fighting on the frontlines')}</h5>
         </div>
         <div className="link">
           <a href="https://github.com/covid19india">covid19india.org</a>

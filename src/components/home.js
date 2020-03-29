@@ -7,8 +7,10 @@ import Level from './level';
 import MapExplorer from './mapexplorer';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
+import {useTranslation} from 'react-i18next';
 
 function Home(props) {
+  const {t} = useTranslation();
   const [states, setStates] = useState([]);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
   const [fetched, setFetched] = useState(false);
@@ -66,18 +68,18 @@ function Home(props) {
         <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
           <div className="header-mid">
             <div className="titles">
-              <h1>India COVID-19 Tracker</h1>
-              <h6>A Crowdsourced Initiative</h6>
+              <h1>{t('India COVID-19 Tracker')}</h1>
+              <h6>{t('A Crowdsourced Initiative')}</h6>
             </div>
             <div className="last-update">
-              <h6>Last Updated</h6>
+              <h6>{t('Last Updated')}</h6>
               <h3>
                 {isNaN(Date.parse(formatDate(lastUpdated)))
                   ? ''
                   : formatDistance(
                       new Date(formatDate(lastUpdated)),
                       new Date()
-                    ) + ' Ago'}
+                    ) + ` ${t('Ago')}`}
               </h3>
             </div>
           </div>
@@ -109,7 +111,7 @@ function Home(props) {
               className="timeseries-header fadeInUp"
               style={{animationDelay: '1.5s'}}
             >
-              <h1>Spread Trends</h1>
+              <h1>{t('Spread Trends')}</h1>
               <div className="tabs">
                 <div
                   className={`tab ${graphOption === 1 ? 'focused' : ''}`}
@@ -117,7 +119,7 @@ function Home(props) {
                     setGraphOption(1);
                   }}
                 >
-                  <h4>Cumulative</h4>
+                  <h4>{t('Cumulative')}</h4>
                 </div>
                 <div
                   className={`tab ${graphOption === 2 ? 'focused' : ''}`}
@@ -125,16 +127,16 @@ function Home(props) {
                     setGraphOption(2);
                   }}
                 >
-                  <h4>Daily</h4>
+                  <h4>{t('Daily')}</h4>
                 </div>
               </div>
 
               <div className="timeseries-mode">
-                <label htmlFor="timeseries-mode">Scale Uniformly</label>
+                <label htmlFor="timeseries-mode">{t('Scale Uniformly')}</label>
                 <input
                   type="checkbox"
                   className="switch"
-                  aria-label="Checked by default to scale uniformly."
+                  aria-label={t('Checked by default to scale uniformly.')}
                   checked={timeseriesMode}
                   onChange={(event) => {
                     setTimeseriesMode(!timeseriesMode);

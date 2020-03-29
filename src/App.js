@@ -15,10 +15,13 @@ import Summary from './components/summary';
 import Cluster from './components/cluster';
 import FAQ from './components/faq';
 import Banner from './components/banner';
+import {useTranslation} from 'react-i18next';
 
 const history = require('history').createBrowserHistory;
 
 function App() {
+  const {t} = useTranslation();
+
   return (
     <div className="App">
       <Router history={history}>
@@ -60,7 +63,7 @@ function App() {
           src="/icon.png"
           alt="https://www.covid19india.org | Coronavirus cases live dashboard"
         />
-        <h5>We stand with everyone fighting on the frontlines</h5>
+        <h5>{t('We stand with everyone fighting on the frontlines')}</h5>
         <div className="link">
           <a href="https://github.com/covid19india">covid19india</a>
         </div>
@@ -71,7 +74,7 @@ function App() {
             target="_noblank"
           >
             <Icon.Database />
-            <span>Crowdsourced Patient Database&nbsp;</span>
+            <span>{t('Crowdsourced Patient Database')}</span>
           </a>
           <a
             href="https://bit.ly/covid19crowd"
@@ -79,7 +82,7 @@ function App() {
             target="_noblank"
           >
             <Icon.MessageCircle />
-            <span>Join Telegram to Collaborate!</span>
+            <span>{t('Join Telegram to Collaborate!')}</span>
           </a>
         </div>
       </footer>

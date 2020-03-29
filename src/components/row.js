@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import * as Icon from 'react-feather';
+import {useTranslation} from 'react-i18next';
 
 function Row(props) {
+  const {t} = useTranslation();
   const [state, setState] = useState(props.state);
   const [districts, setDistricts] = useState(props.districts);
   const [sortData, setSortData] = useState({
@@ -96,7 +98,7 @@ function Row(props) {
           handleReveal();
         }}
       >
-        <td style={{fontWeight: 600}}>{state.state}</td>
+        <td style={{fontWeight: 600}}>{t(`state.${state.state}`)}</td>
         <td>
           <span className="deltas" style={{color: '#ff073a'}}>
             {!state.delta.confirmed == 0 && <Icon.ArrowUp />}
@@ -165,13 +167,13 @@ function Row(props) {
           <div className="heading-content">
             <abbr
               className={`${window.innerWidth <= 769 ? 'is-cherry' : ''}`}
-              title="Confirmed"
+              title={t('Confirmed')}
             >
               {window.innerWidth <= 769
                 ? window.innerWidth <= 375
                   ? 'C'
                   : 'Cnfmd'
-                : 'Confirmed'}
+                : t('Confirmed')}
             </abbr>
             <div
               style={{
