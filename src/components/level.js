@@ -10,7 +10,7 @@ function Level(props) {
   useEffect(() => {
     setData(props.data);
     parseData();
-  }, [props.data]);
+  });
 
   const parseData = () => {
     let confirmed = 0;

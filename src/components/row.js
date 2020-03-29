@@ -99,7 +99,7 @@ function Row(props) {
         <td style={{fontWeight: 600}}>{state.state}</td>
         <td>
           <span className="deltas" style={{color: '#ff073a'}}>
-            {!state.delta.confirmed === 0 && <Icon.ArrowUp />}
+            {!state.delta.confirmed == 0 && <Icon.ArrowUp />}
             {state.delta.confirmed > 0 ? `${state.delta.confirmed}` : ''}
           </span>
           {parseInt(state.confirmed) === 0 ? '-' : state.confirmed}
@@ -205,7 +205,7 @@ function Row(props) {
           className={`district`}
           style={{display: props.reveal && !props.total ? '' : 'none'}}
         >
-          <td className="unknown">Unknown</td>
+          <td style={{fontWeight: 600}}>Unknown</td>
           <td>{sortedDistricts['Unknown'].confirmed}</td>
         </tr>
       )}

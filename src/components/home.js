@@ -85,6 +85,7 @@ function Home(props) {
           states={states}
           summary={false}
           onHighlightState={onHighlightState}
+          stateDistrictWiseData={stateDistrictWiseData}
         />
       </div>
 

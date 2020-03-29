@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import * as Icon from 'react-feather';
-import axios from 'axios';
 
 import Row from './row';
 
@@ -48,21 +47,8 @@ function Table(props) {
   }, [states.length]);
 
   useEffect(() => {
-    getDistricts();
-  }, [1]);
-
-  const getDistricts = () => {
-    axios
-      .get('https://api.covid19india.org/state_district_wise.json')
-      .then((response) => {
-        setDistricts(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  // make a axios call every 10minutes
-  setInterval(getDistricts, 600000);
+    setDistricts(props.stateDistrictWiseData);
+  }, [props.stateDistrictWiseData]);
 
   const doSort = (e, props) => {
     const totalRow = states.splice(0, 1);
@@ -90,9 +76,6 @@ function Table(props) {
           : -1;
       }
     });
-    {
-      /* console.log(states);*/
-    }
     states.unshift(totalRow[0]);
   };
 
@@ -245,7 +228,7 @@ function Table(props) {
         {states.map((state, index) => {
           if (index !== 0 && state.confirmed > 0) {
             return (
-              <tbody>
+              <tbody key={index}>
                 <Row
                   key={index}
                   index={index}
