@@ -14,7 +14,7 @@ function PatientDB(props) {
     async function fetchRawData() {
       const response = await axios.get('https://api.covid19india.org/raw_data.json');
       if (response.data) {
-        setPatients(response.data.raw_data.filter(p => p.dateannounced));
+        setPatients(response.data.raw_data.filter(p => p.detectedstate));
         setFetched(true);
       } else {
         setError("Couldn't fetch patient data. Try again after sometime.");
@@ -25,7 +25,6 @@ function PatientDB(props) {
     if (!fetched) {
       fetchRawData();
     }
-
   }, [fetched]);
 
   return (
