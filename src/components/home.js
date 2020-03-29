@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {formatDistance} from 'date-fns';
-
+import {formatDate} from '../utils/common-functions';
 import Table from './table';
 import Level from './level';
 import MapExplorer from './mapexplorer';
@@ -43,14 +43,6 @@ function Home(props) {
     } catch (err) {
       console.log(err);
     }
-  };
-
-  const formatDate = (unformattedDate) => {
-    const day = unformattedDate.slice(0, 2);
-    const month = unformattedDate.slice(3, 5);
-    const year = unformattedDate.slice(6, 10);
-    const time = unformattedDate.slice(11);
-    return `${year}-${month}-${day}T${time}+05:30`;
   };
 
   const onHighlightState = (state, index) => {

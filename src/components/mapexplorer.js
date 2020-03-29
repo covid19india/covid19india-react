@@ -2,6 +2,8 @@ import React, {useState, useEffect, useMemo} from 'react';
 import ChoroplethMap, {highlightRegionInMap} from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 import {useTranslation} from 'react-i18next';
+import {formatDate} from '../utils/common-functions';
+import {formatDistance} from 'date-fns';
 
 const mapMeta = {
   India: {
@@ -425,7 +427,7 @@ export default function ({
       setHoveredRegion(topDistrict, newMap);
     }
   };
-
+  const {name, lastupdatedtime} = currentHoveredRegion;
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
       <div className="header">
@@ -478,12 +480,27 @@ export default function ({
       </div>
 
       <div className="meta">
-        <h2>
-          {t([
-            `state.${currentHoveredRegion.name}`,
-            currentHoveredRegion.name || 'Unknown',
-          ])}
-        </h2>
+        <h2>{name}</h2>
+        {lastupdatedtime && (
+          <div
+            className={`last-update ${
+              currentMap.mapType === MAP_TYPES.STATE
+                ? 'district-last-update'
+                : 'state-last-update'
+            }`}
+          >
+            <h6>Last Updated</h6>
+            <h3>
+              {isNaN(Date.parse(formatDate(lastupdatedtime)))
+                ? ''
+                : formatDistance(
+                    new Date(formatDate(lastupdatedtime)),
+                    new Date()
+                  ) + ' Ago'}
+            </h3>
+          </div>
+        )}
+
         {currentMap.mapType === MAP_TYPES.STATE &&
         currentMapData.Unknown > 0 ? (
           <h4 className="unknown" style={{lineHeight: '1rem'}}>

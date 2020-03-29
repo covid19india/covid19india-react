@@ -6,7 +6,6 @@ import LanguageSwitcher from './languageswitcher';
 
 function Navbar(props) {
   const {t} = useTranslation();
-  const [view, setView] = useState('Home');
 
   // HTML Properties for each of the links in UI
   const navLinkProps = (path, animationDelay) => ({
@@ -22,7 +21,7 @@ function Navbar(props) {
         className="Navbar"
         style={{
           animationDelay: '0.5s',
-          height: view === 'Clusters' ? '2.5rem' : '',
+          height: window.location.pathname === '/clusters' ? '2.5rem' : '',
           transition: 'all 0.3s ease-in-out',
         }}
       >
@@ -32,54 +31,27 @@ function Navbar(props) {
           src="/icon.png"
           style={{
             animationDelay: '0.0s',
-            width: view === 'Clusters' ? '1.5rem' : '',
-            height: view === 'Clusters' ? '1.5rem' : '',
+            width: window.location.pathname === '/clusters' ? '1.5rem' : '',
+            height: window.location.pathname === '/clusters' ? '1.5rem' : '',
             transition: 'all 0.3s ease-in-out',
           }}
         />
 
-        <div className="navbar-left">
-          <Link
-            to="/"
-            onClick={() => {
-              setView('Home');
-            }}
-          >
-            <span {...navLinkProps('/', 0.2)}>{t('Home')}</span>
-          </Link>
-
-          {/* <Link to="/updates" onClick={()=>{
-            setView('Updates');
-          }}>
-            <span className={`fadeInUp ${view==='Updates' ? 'focused' : ''}`} style={{animationDelay: '0.2s'}}>Updates</span>
-          </Link>*/}
-
-          <Link
-            to="/clusters"
-            onClick={() => {
-              setView('Clusters');
-            }}
-          >
-            <span {...navLinkProps('/clusters', 0.3)}>{t('Clusters')}</span>
-          </Link>
-
-          <Link
-            to="/links"
-            onClick={() => {
-              setView('Helpful Links');
-            }}
-          >
-            <span {...navLinkProps('/links', 0.4)}>{t('Helpful Links')}</span>
-          </Link>
-
-          <Link
-            to="/faq"
-            onClick={() => {
-              setView('FAQs');
-            }}
-          >
-            <span {...navLinkProps('/faq', 0.4)}>{t('FAQ')}</span>
-          </Link>
+        <div className='navbar-left'>
+          {
+            props.pages.map((page, i) => {
+              return (
+                <Link
+                  to={page.pageLink}
+                  key={i}
+                >
+                  <span {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}>
+                    {t(page.displayName)}
+                  </span>
+                </Link>
+              );
+            })
+          }
         </div>
 
         <div className="navbar-right">
