@@ -2383,7 +2383,7 @@
             "censuscode": 126,
             "st_cen_cd": 8,
             "dt_cen_cd": 28,
-            "district": "Chittaurgarh",
+            "district": "Chittorgarh",
             "st_nm": "Rajasthan"
           }
         },
@@ -2395,7 +2395,7 @@
             "censuscode": 99,
             "st_cen_cd": 8,
             "dt_cen_cd": 1,
-            "district": "Ganganagar",
+            "district": "Sri Ganganagar",
             "st_nm": "Rajasthan"
           }
         },
@@ -2711,7 +2711,7 @@
             "censuscode": 106,
             "st_cen_cd": 8,
             "dt_cen_cd": 8,
-            "district": "Dhaulpur",
+            "district": "Dholpur",
             "st_nm": "Rajasthan"
           }
         },
@@ -2735,7 +2735,7 @@
             "censuscode": 116,
             "st_cen_cd": 8,
             "dt_cen_cd": 18,
-            "district": "Jalor",
+            "district": "Jalore",
             "st_nm": "Rajasthan"
           }
         },
