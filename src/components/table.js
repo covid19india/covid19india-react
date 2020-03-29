@@ -23,7 +23,7 @@ function Table(props) {
     } else {
       setStates(props.states);
     }
-  }, [props.states]);
+  }, [props.states, props.summary]);
 
   useEffect(() => {
     if (props.states[0]) {
@@ -37,14 +37,10 @@ function Table(props) {
 
   useEffect(() => {
     if (states.length > 0) {
-      let length = 0;
-
-      props.states.map((state, i) => {
-        if (i !== 0 && state.confirmed > 0) length += 1;
-        if (i === props.states.length - 1) setCount(length);
-      });
+      // slice to ignore the first item which is the total count
+      setCount(states.slice(1).filter((s) => s && s.confirmed > 0).length);
     }
-  }, [states.length]);
+  }, [states]);
 
   useEffect(() => {
     setDistricts(props.stateDistrictWiseData);
@@ -247,6 +243,7 @@ function Table(props) {
               </tbody>
             );
           }
+          return null;
         })}
 
         <tbody>
