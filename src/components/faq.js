@@ -5,6 +5,7 @@ function FAQ(props) {
   const [faq, setFaq] = useState([]);
 
   useEffect(() => {
+    document.title = "FAQs | covid19india"
     getFAQs();
   });
 

@@ -20,6 +20,7 @@ function Home(props) {
   const [stateHighlighted, setStateHighlighted] = useState(undefined);
 
   useEffect(() => {
+    document.title = "COVID-19 Tracker | India"
     if (fetched === false) {
       getStates();
     }

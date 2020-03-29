@@ -12,6 +12,7 @@ function Summary(props) {
   const [fetched, setFetched] = useState(false);
 
   useEffect(() => {
+    document.title = "Coronavirus cases summary dashboard | India"
     if (fetched === false) {
       getStates();
     }
