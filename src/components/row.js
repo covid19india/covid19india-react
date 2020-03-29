@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import * as Icon from 'react-feather';
-
+import {formatDate} from '../utils/common-functions';
+import {formatDistance} from 'date-fns';
 function Row(props) {
   const [state, setState] = useState(props.state);
   const [districts, setDistricts] = useState(props.districts);
@@ -134,16 +135,24 @@ function Row(props) {
           {parseInt(state.deaths) === 0 ? '-' : state.deaths}
         </td>
       </tr>
-
       <tr
-        className={`spacer`}
+        className={'state-last-update'}
         style={{display: props.reveal && !props.total ? '' : 'none'}}
       >
-        <td></td>
-        <td></td>
-        <td></td>
+        <td colSpan={5}>
+          <div className="last-update">
+            <h6>Last Updated : </h6>
+            <h3>
+              {isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
+                ? ''
+                : formatDistance(
+                    new Date(formatDate(props.state.lastupdatedtime)),
+                    new Date()
+                  ) + ' Ago'}
+            </h3>
+          </div>
+        </td>
       </tr>
-
       <tr
         className={`district-heading`}
         style={{display: props.reveal && !props.total ? '' : 'none'}}

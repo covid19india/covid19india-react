@@ -233,7 +233,7 @@ h6 {
 
   .snippet {
     align-self: center;
-    width: calc(100%-10rem);
+    width: calc(100% - 10rem);
     word-wrap: break-word;
     padding: 1.5rem;
     text-align: center;
@@ -635,6 +635,26 @@ table {
       text-align: left;
       max-width: 7.5rem;
       word-wrap: break-word;
+    }
+
+    .state-last-update{
+      background: transparent;
+      transform: translateX(1rem);
+      &:hover{
+        background: transparent;
+      }
+
+      td{
+        .last-update{
+          text-align: left;
+          display: flex;
+          flex-direction: row;
+          align-items: baseline;
+          h3{
+            margin: 0 0 0 5px;
+          }
+        }
+      }
     }
 
     .district-heading {
