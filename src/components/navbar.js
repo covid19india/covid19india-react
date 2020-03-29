@@ -34,9 +34,9 @@ function Navbar(props) {
           }}
         />
 
-        <div className="navbar-left">
+        <div className='navbar-left'>
           <Link
-            to="/"
+            to='/'
             onClick={() => {
               setView('Home');
             }}
@@ -44,14 +44,8 @@ function Navbar(props) {
             <span {...navLinkProps('/', 0.2)}>Home</span>
           </Link>
 
-          {/* <Link to="/updates" onClick={()=>{
-            setView('Updates');
-          }}>
-            <span className={`fadeInUp ${view==='Updates' ? 'focused' : ''}`} style={{animationDelay: '0.2s'}}>Updates</span>
-          </Link>*/}
-
           <Link
-            to="/clusters"
+            to='/clusters'
             onClick={() => {
               setView('Clusters');
             }}
@@ -60,7 +54,7 @@ function Navbar(props) {
           </Link>
 
           <Link
-            to="/links"
+            to='/links'
             onClick={() => {
               setView('Helpful Links');
             }}
