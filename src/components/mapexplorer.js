@@ -451,6 +451,7 @@ export default function ({states, stateDistrictWiseData, stateHighlighted}) {
           </div>
         </div>
       </div>
+
       <div className="meta">
         <h2>{name}</h2>
         {lastupdatedtime && currentMap.mapType === MAP_TYPES.COUNTRY && (
@@ -466,6 +467,7 @@ export default function ({states, stateDistrictWiseData, stateHighlighted}) {
             </h3>
           </div>
         )}
+
         {currentMap.mapType === MAP_TYPES.STATE &&
         currentMapData.Unknown > 0 ? (
           <h4 className="unknown">
