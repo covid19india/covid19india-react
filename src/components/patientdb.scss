@@ -1,0 +1,121 @@
+@import '../App.scss';
+
+.container {
+    max-width: 960px;
+    margin: 1rem auto;
+}
+.table {
+    width: 100%;
+    display: block;
+    overflow: auto;
+
+    tbody{
+        tr {
+        width: 100%;
+        th, td {
+            width: max-content;
+            padding: 0.5rem 1rem;
+            }
+        }
+    }
+
+}
+select.form-control {
+    padding: 0.2rem 0.8rem;
+    background-color:white;
+    border: 1px solid #aaa;
+    border-radius: 5%;
+}
+input.form-control {
+    padding: 0.3rem 0.2rem;
+    background-color:white;
+    border: 1px solid #aaa;
+    border-radius: 5%;
+}
+.pagination {
+    display: flex;
+    list-style: none;
+}
+.page-link {
+    position: relative;
+    display: block;
+    text-decoration: none;
+    padding: 0.2rem 0.8rem;
+    background-color:white;
+    border: 1px solid #aaa;
+    border-radius: 0.2rem;
+
+    &:hover {
+        z-index: 2;
+        background-color: #ebe7fb;
+    }
+    &:focus {
+        z-index: 3;
+    }
+    &:disabled{
+        color: #ddd;
+        border: 1px solid #ccc;
+
+    &:hover {
+            background-color: white;
+        }
+
+    }
+}
+
+.page-item {
+    &:not(:first-child) .page-link {
+        margin-left: 0.5rem;
+    }
+    
+      &.active .page-link {
+        z-index: 3;
+      }
+    
+      &.disabled .page-link {
+        pointer-events: none;
+      }
+}
+
+.row {
+    display: flex;
+    flex: row;
+}
+.col-12 {
+    flex: column;
+}
+
+.text-center {
+    text-align: center;
+}
+.text-right {
+    text-align: right;
+}
+@media screen and (min-width: 960px) {
+    .text-md-right {
+        text-align: right;
+    }
+    .text-md-left {
+        text-align: left;
+    }
+}
+
+.text-gray {
+    color: $gray;
+}
+.text-orange {
+    color: $orange;
+}
+.expand:hover {
+    background-color: #f8f7ff;
+}
+
+.text-normal {
+    text-transform: none;
+}
+.detail-row {
+    background-color: #f4f2ff !important;
+}
+table tbody > tr:nth-child(odd):nth-child(odd).detail-row {
+    background-color: #f4f2ff !important;
+}
