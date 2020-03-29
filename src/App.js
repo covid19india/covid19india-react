@@ -15,6 +15,7 @@ const Summary = lazy(() => import('./components/summary'));
 const Cluster = lazy(() => import('./components/cluster'));
 const FAQ = lazy(() => import('./components/faq'));
 const Banner = lazy(() => import('./components/banner'));
+
 const history = require('history').createBrowserHistory;
 
 function App() {
