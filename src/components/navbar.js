@@ -22,17 +22,19 @@ function Navbar(props) {
           transition: 'all 0.3s ease-in-out',
         }}
       >
-        <img
-          className="fadeInUp logo"
-          alt="India COVID-19 Tracker"
-          src="/icon.png"
-          style={{
-            animationDelay: '0.0s',
-            width: view === 'Clusters' ? '1.5rem' : '',
-            height: view === 'Clusters' ? '1.5rem' : '',
-            transition: 'all 0.3s ease-in-out',
-          }}
-        />
+        <Link to="/" className="img-link">
+          <img
+            className="fadeInUp logo"
+            alt="India COVID-19 Tracker"
+            src="/icon.png"
+            style={{
+              animationDelay: '0.0s',
+              width: view === 'Clusters' ? '1.5rem' : '',
+              height: view === 'Clusters' ? '1.5rem' : '',
+              transition: 'all 0.3s ease-in-out',
+            }}
+          />
+        </Link>
 
         <div className="navbar-left">
           <Link
