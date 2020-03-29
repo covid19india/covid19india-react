@@ -277,16 +277,20 @@ h6 {
     color: $gray;
   }
 
+  a {
+    margin: auto;
+  }
+
   img {
     width: 3rem;
     height: 3rem;
     align-self: center;
     margin-left: 5rem;
     cursor: pointer;
-  }
-  
-  .img-link {
-    margin: auto;
+
+    &:hover {
+      filter: invert(15%);
+    }
   }
 }
 

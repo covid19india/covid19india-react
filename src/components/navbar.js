@@ -22,7 +22,7 @@ function Navbar(props) {
           transition: 'all 0.3s ease-in-out',
         }}
       >
-        <Link to="/" className="img-link">
+        <Link to="/">
           <img
             className="fadeInUp logo"
             alt="India COVID-19 Tracker"
