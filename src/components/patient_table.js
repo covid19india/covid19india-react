@@ -193,7 +193,6 @@ function PatientTable({ patients }) {
       }, {
         Header: 'Age',
         accessor: 'agebracket',
-        sortType: 'basic'
       }, {
         Header: 'Gender',
         accessor: 'gender'
