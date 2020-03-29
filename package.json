@@ -17,7 +17,9 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "sass-lint": "^1.13.1",
-    "topojson": "^3.0.2"
+    "topojson": "^3.0.2",
+    "react-spring": "^7.2.8",
+    "react-with-gesture": "^4.0.2"
   },
   "scripts": {
     "start": "react-scripts start",

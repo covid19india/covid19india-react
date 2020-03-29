@@ -1475,3 +1475,43 @@ footer {
 .sticky {
   position: sticky;
 }
+
+/* MythBuster Deck */
+#deck {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+#card > div {
+  position: absolute;
+  width: 100vw;
+  height: 80vh;
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#card > div > div {
+  padding: 10px;
+  background-color: #ffffff;
+  background-size: auto 85%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: auto;
+  max-width: 85%;
+  will-change: transform;
+  border-radius: 10px;
+  box-shadow: 0 12.5px 50px -10px rgba(50, 50, 73, 0.4),
+    0 10px 10px -10px rgba(50, 50, 73, 0.3);
+}
+
+.card-img {
+  max-height: 400px;
+  height: auto;
+  max-width: 100%;
+  border-radius: 10px;
+  pointer-events: none;
+}
+

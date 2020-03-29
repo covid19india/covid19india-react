@@ -60,6 +60,15 @@ function Navbar(props) {
           </Link>
 
           <Link
+            to="/mythbuster"
+            onClick={() => {
+              setView('Myth Buster');
+            }}
+          >
+            <span {...navLinkProps('/links', 0.4)}>Myth Buster</span>
+          </Link>
+
+          <Link
             to="/links"
             onClick={() => {
               setView('Helpful Links');

@@ -15,6 +15,7 @@ import Summary from './components/summary';
 import Cluster from './components/cluster';
 import FAQ from './components/faq';
 import Banner from './components/banner';
+import MythBuster from './components/mythbuster';
 
 const history = require('history').createBrowserHistory;
 
@@ -49,6 +50,11 @@ function App() {
                   exact
                   path="/faq"
                   render={(props) => <FAQ {...props} />}
+                />
+                <Route
+                  exact
+                  path="/mythbuster"
+                  render={(props) => <MythBuster {...props} />}
                 />
               </Switch>
             </div>
