@@ -135,24 +135,26 @@ function Row(props) {
           {parseInt(state.deaths) === 0 ? '-' : state.deaths}
         </td>
       </tr>
+
       <tr
         className={'state-last-update'}
         style={{display: props.reveal && !props.total ? '' : 'none'}}
       >
         <td colSpan={5}>
           <div className="last-update">
-            <h6>Last Updated : </h6>
-            <h3>
+            <h6>Last Updated&nbsp;</h6>
+            <h6>
               {isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
                 ? ''
-                : formatDistance(
+                : `${formatDistance(
                     new Date(formatDate(props.state.lastupdatedtime)),
                     new Date()
-                  ) + ' Ago'}
-            </h3>
+                  )} Ago`}
+            </h6>
           </div>
         </td>
       </tr>
+
       <tr
         className={`district-heading`}
         style={{display: props.reveal && !props.total ? '' : 'none'}}
