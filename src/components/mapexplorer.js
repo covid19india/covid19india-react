@@ -4,7 +4,7 @@ import {MAP_TYPES, MAPS_DIR} from '../constants';
 import {map} from 'd3';
 
 const mapMeta = {
-  'India': {
+  India: {
     name: 'India',
     geoDataFile: `${MAPS_DIR}/india.json`,
     mapType: MAP_TYPES.COUNTRY,
@@ -37,7 +37,7 @@ const mapMeta = {
     scale: 3200,
   },
 
-  'Assam': {
+  Assam: {
     name: 'Assam',
     geoDataFile: `${MAPS_DIR}/assam.json`,
     mapType: MAP_TYPES.STATE,
@@ -45,7 +45,7 @@ const mapMeta = {
     center: [92, 26],
     scale: 4500,
   },
-  'Bihar': {
+  Bihar: {
     name: 'Bihar',
     geoDataFile: `${MAPS_DIR}/bihar.json`,
     mapType: MAP_TYPES.STATE,
@@ -53,7 +53,7 @@ const mapMeta = {
     center: [85, 25],
     scale: 6000,
   },
-  'Chhattisgarh': {
+  Chhattisgarh: {
     name: 'Chhattisgarh',
     geoDataFile: `${MAPS_DIR}/chhattisgarh.json`,
     mapType: MAP_TYPES.STATE,
@@ -61,7 +61,7 @@ const mapMeta = {
     center: [82, 21],
     scale: 4500,
   },
-  'Delhi': {
+  Delhi: {
     name: 'Delhi',
     geoDataFile: `${MAPS_DIR}/delhi.json`,
     mapType: MAP_TYPES.STATE,
@@ -69,7 +69,7 @@ const mapMeta = {
     center: [77, 28.5],
     scale: 30000,
   },
-  'Karnataka': {
+  Karnataka: {
     name: 'Karnataka',
     geoDataFile: `${MAPS_DIR}/karnataka.json`,
     mapType: MAP_TYPES.STATE,
@@ -77,7 +77,7 @@ const mapMeta = {
     center: [76, 15.05],
     scale: 4900,
   },
-  'Kerala': {
+  Kerala: {
     name: 'Kerala',
     geoDataFile: `${MAPS_DIR}/kerala.json`,
     mapType: MAP_TYPES.STATE,
@@ -85,7 +85,7 @@ const mapMeta = {
     center: [76, 10.5],
     scale: 5000,
   },
-  'Goa': {
+  Goa: {
     name: 'Goa',
     geoDataFile: `${MAPS_DIR}/goa.json`,
     mapType: MAP_TYPES.STATE,
@@ -93,7 +93,7 @@ const mapMeta = {
     center: [74, 15],
     scale: 20000,
   },
-  'Gujarat': {
+  Gujarat: {
     name: 'Gujarat',
     geoDataFile: `${MAPS_DIR}/gujarat.json`,
     mapType: MAP_TYPES.STATE,
@@ -101,7 +101,7 @@ const mapMeta = {
     center: [70.5, 22],
     scale: 4000,
   },
-  'Haryana': {
+  Haryana: {
     name: 'Haryana',
     geoDataFile: `${MAPS_DIR}/haryana.json`,
     mapType: MAP_TYPES.STATE,
@@ -125,7 +125,7 @@ const mapMeta = {
     center: [75, 34],
     scale: 5000,
   },
-  'Jharkhand': {
+  Jharkhand: {
     name: 'Jharkhand',
     geoDataFile: `${MAPS_DIR}/jharkhand.json`,
     mapType: MAP_TYPES.STATE,
@@ -133,7 +133,7 @@ const mapMeta = {
     center: [85, 23],
     scale: 4500,
   },
-  'Ladakh': {
+  Ladakh: {
     name: 'Ladakh',
     geoDataFile: `${MAPS_DIR}/ladakh.json`,
     mapType: MAP_TYPES.STATE,
@@ -149,7 +149,7 @@ const mapMeta = {
     center: [77, 23],
     scale: 3000,
   },
-  'Maharashtra': {
+  Maharashtra: {
     name: 'Maharashtra',
     geoDataFile: `${MAPS_DIR}/maharashtra.json`,
     mapType: MAP_TYPES.STATE,
@@ -157,7 +157,7 @@ const mapMeta = {
     center: [75, 18],
     scale: 3000,
   },
-  'Manipur': {
+  Manipur: {
     name: 'Manipur',
     geoDataFile: `${MAPS_DIR}/manipur.json`,
     mapType: MAP_TYPES.STATE,
@@ -165,7 +165,7 @@ const mapMeta = {
     center: [93.5, 24],
     scale: 9000,
   },
-  'Meghalaya': {
+  Meghalaya: {
     name: 'Meghalaya',
     geoDataFile: `${MAPS_DIR}/meghalaya.json`,
     mapType: MAP_TYPES.STATE,
@@ -173,7 +173,7 @@ const mapMeta = {
     center: [91, 24],
     scale: 6500,
   },
-  'Mizoram': {
+  Mizoram: {
     name: 'Mizoram',
     geoDataFile: `${MAPS_DIR}/mizoram.json`,
     mapType: MAP_TYPES.STATE,
@@ -181,7 +181,7 @@ const mapMeta = {
     center: [92.5, 23],
     scale: 10000,
   },
-  'Nagaland': {
+  Nagaland: {
     name: 'Nagaland',
     geoDataFile: `${MAPS_DIR}/nagaland.json`,
     mapType: MAP_TYPES.STATE,
@@ -189,7 +189,7 @@ const mapMeta = {
     center: [94, 25],
     scale: 7500,
   },
-  'Odisha': {
+  Odisha: {
     name: 'Odisha',
     geoDataFile: `${MAPS_DIR}/odisha.json`,
     mapType: MAP_TYPES.STATE,
@@ -197,7 +197,7 @@ const mapMeta = {
     center: [84, 20],
     scale: 4000,
   },
-  'Punjab': {
+  Punjab: {
     name: 'Punjab',
     geoDataFile: `${MAPS_DIR}/punjab.json`,
     mapType: MAP_TYPES.STATE,
@@ -205,7 +205,7 @@ const mapMeta = {
     center: [75, 30.7],
     scale: 8000,
   },
-  'Rajasthan': {
+  Rajasthan: {
     name: 'Rajasthan',
     geoDataFile: `${MAPS_DIR}/rajasthan.json`,
     mapType: MAP_TYPES.STATE,
@@ -213,7 +213,7 @@ const mapMeta = {
     center: [73, 25],
     scale: 3000,
   },
-  'Sikkim': {
+  Sikkim: {
     name: 'Sikkim',
     geoDataFile: `${MAPS_DIR}/sikkim.json`,
     mapType: MAP_TYPES.STATE,
@@ -229,7 +229,7 @@ const mapMeta = {
     center: [83, 18],
     scale: 1500,
   },
-  'Telangana': {
+  Telangana: {
     name: 'Telangana',
     geoDataFile: `${MAPS_DIR}/telugana.json`,
     mapType: MAP_TYPES.STATE,
@@ -237,7 +237,7 @@ const mapMeta = {
     center: [79, 17],
     scale: 5000,
   },
-  'Tripura': {
+  Tripura: {
     name: 'Tripura',
     geoDataFile: `${MAPS_DIR}/tripura.json`,
     mapType: MAP_TYPES.STATE,
@@ -245,7 +245,7 @@ const mapMeta = {
     center: [91.5, 23],
     scale: 10000,
   },
-  'Uttarakhand': {
+  Uttarakhand: {
     name: 'Uttarakhand',
     geoDataFile: `${MAPS_DIR}/uttarakhand.json`,
     mapType: MAP_TYPES.STATE,
@@ -353,7 +353,7 @@ export default function({states, stateDistrictWiseData, stateHighlighted, distri
   const setHoveredRegion = (name, currentMap) => {
     if (currentMap.mapType === MAP_TYPES.COUNTRY) {
       setCurrentHoveredRegion(
-          getRegionFromState(states.filter((state) => name === state.state)[0]),
+        getRegionFromState(states.filter((state) => name === state.state)[0])
       );
     } else if (currentMap.mapType === MAP_TYPES.STATE) {
       const state = stateDistrictWiseData[currentMap.name] || {
@@ -404,20 +404,18 @@ export default function({states, stateDistrictWiseData, stateHighlighted, distri
       setHoveredRegion(states[1].state, newMap);
     } else if (newMap.mapType === MAP_TYPES.STATE) {
       const districtData = (stateDistrictWiseData[name] || {districtData: {}})
-          .districtData;
+        .districtData;
       const topDistrict = Object.keys(districtData)
-          .filter((name) => name !== 'Unknown')
-          .sort((a, b) => {
-            return districtData[b].confirmed - districtData[a].confirmed;
-          })[0];
-          console.log(topDistrict,'few');
+        .filter((name) => name !== 'Unknown')
+        .sort((a, b) => {
+          return districtData[b].confirmed - districtData[a].confirmed;
+        })[0];
       setHoveredRegion(topDistrict, newMap);
     }
   };
 
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
-
       <div className="header">
         <h1>{currentMap.name} Map</h1>
         <h6>
@@ -463,15 +461,21 @@ export default function({states, stateDistrictWiseData, stateHighlighted, distri
 
       <div className="meta">
         <h2>{currentHoveredRegion.name}</h2>
-        {currentMap.mapType === MAP_TYPES.STATE && currentMapData.Unknown > 0 ? (
-            <h4 className="unknown">Districts unknown for {currentMapData.Unknown} people</h4>
-          ) : null}
+        {currentMap.mapType === MAP_TYPES.STATE &&
+        currentMapData.Unknown > 0 ? (
+          <h4 className="unknown">
+            Districts unknown for {currentMapData.Unknown} people
+          </h4>
+        ) : null}
 
         {currentMap.mapType === MAP_TYPES.STATE ? (
-          <div className="button back-button" onClick={() => switchMapToState('India')}>
+          <div
+            className="button back-button"
+            onClick={() => switchMapToState('India')}
+          >
             Back
           </div>
-      ) : null}
+        ) : null}
       </div>
 
       <ChoroplethMap
@@ -481,7 +485,6 @@ export default function({states, stateDistrictWiseData, stateHighlighted, distri
         setHoveredRegion={(region) => setHoveredRegion(region, currentMap)}
         changeMap={switchMapToState}
       />
-
     </div>
   );
 }

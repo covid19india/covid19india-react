@@ -78,7 +78,7 @@ function Home(props) {
         <Level data={states} deltas={deltas}/>
         <Minigraph timeseries={timeseries} animate={true}/>
 
-        <Table states={states} summary={false} onHighlightState={onHighlightState} onHighlightDistrict = {onHighlightDistrict}/>
+        <Table states={states} summary={false} onHighlightState={onHighlightState} stateDistrictWiseData = {stateDistrictWiseData} onHighlightDistrict = {onHighlightDistrict}/>
 
       </div>
 
