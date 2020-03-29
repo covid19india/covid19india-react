@@ -201,7 +201,7 @@ function Row(props) {
             return (
               <tr key={index} className={`district`} style={{display: props.reveal && !props.total ? '' : 'none'}}
               onMouseEnter={() => props.onHighlightDistrict?.(district,state, props.index)}
-              // onMouseLeave={() => props.onHighlightDistrict?.()}
+              onMouseLeave={() => props.onHighlightDistrict?.()}
               touchstart={() => props.onHighlightDistrict?.(district,state, props.index)}>
 
                 <td style={{fontWeight: 600}}>{district}</td>

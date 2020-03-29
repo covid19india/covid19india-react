@@ -303,6 +303,10 @@ export default function({states, stateDistrictWiseData, stateHighlighted, distri
   }, [stateHighlighted]);
 
   useEffect(() => {
+    if (districtHighlighted === null) {
+      highlightRegionInMap(null, currentMap.mapType);
+      return ;
+    } 
     const newMap = mapMeta[districtHighlighted?.state.state];
     if (!newMap) {
       return;
