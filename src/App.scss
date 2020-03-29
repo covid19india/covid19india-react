@@ -572,7 +572,7 @@ table {
 
   tbody {
     color: $gray;
-    
+
     tr {
       transition: background 0.1s ease-in-out;
       cursor: pointer;
@@ -608,13 +608,13 @@ table {
       }
     }
 
-    
+
 
     &:nth-child(odd){
       &.spacer {
         background: transparent !important;
       }
-      
+
     }
 
     td {
@@ -774,7 +774,7 @@ table {
         font-family: 'archia';
         font-weight: 600;
         fill: $gray;
-        font-size: 14px;
+        font-size: 10px;
       }
     }
   }

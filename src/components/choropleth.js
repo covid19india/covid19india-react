@@ -59,11 +59,23 @@ function ChoroplethMap({
     const width = +svg.attr('width');
     const height = +svg.attr('height');
 
-    const projection = d3
-      .geoMercator()
-      .center(mapMeta.center)
-      .scale(mapMeta.scale)
-      .translate([width / 2, height / 2]);
+    const topology = topojson.feature(
+      geoData,
+      geoData.objects[mapMeta.graphObjectName]
+    );
+
+    const projection = d3.geoMercator();
+
+    if (mapMeta.mapType == MAP_TYPES.COUNTRY)
+      projection.fitSize([width, height], topology);
+    else
+      projection.fitExtent(
+        [
+          [90, 20],
+          [width, height],
+        ],
+        topology
+      );
 
     const path = d3.geoPath(projection);
 
@@ -73,10 +85,7 @@ function ChoroplethMap({
       .append('g')
       .attr('class', 'states')
       .selectAll('path')
-      .data(
-        topojson.feature(geoData, geoData.objects[mapMeta.graphObjectName])
-          .features
-      )
+      .data(topology.features)
       .enter()
       .append('path')
       .attr('class', 'path-region')
@@ -182,10 +191,11 @@ function ChoroplethMap({
     svg
       .append('g')
       .attr('class', 'legendLinear')
-      .attr('transform', 'translate(1, 375)');
+      .attr('transform', 'translate(1, 335)');
 
     const legendLinear = legendColor()
-      .shapeWidth(50)
+      .shapeWidth(36)
+      .shapeHeight(10)
       .cells(cells)
       .titleWidth(3)
       .labels(label)
@@ -193,7 +203,11 @@ function ChoroplethMap({
       .orient('vertical')
       .scale(color);
 
-    svg.select('.legendLinear').call(legendLinear);
+    svg
+      .select('.legendLinear')
+      .call(legendLinear)
+      .selectAll('text')
+      .style('font-size', '10px');
     // Hack: Added to ensure district is highlighted even if SVG is not loaded
     //       Ideally should be covered by districtHighlighted effect hook
     highlightRegionInMap(selectedRegion, mapMeta.mapType);
@@ -203,9 +217,9 @@ function ChoroplethMap({
     <div className="svg-parent">
       <svg
         id="chart"
-        width="650"
+        width="480"
         height="450"
-        viewBox="0 0 650 450"
+        viewBox="0 0 480 450"
         preserveAspectRatio="xMidYMid meet"
         ref={choroplethMap}
       ></svg>
