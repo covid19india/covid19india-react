@@ -8,7 +8,7 @@ function CSVDownloadLink(props) {
   try {
     const parser = new Parser({fields: Object.keys(props.patients[0]), eol: "\r\n"});
     const csv = parser.parse(props.patients);
-    const data = "data:text/csv;charset=utf-8," + csv;
+    const data = "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
     return (
       <a href={data} download="patients.csv"><code>CSV</code></a>
     )
