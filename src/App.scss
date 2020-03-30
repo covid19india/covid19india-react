@@ -661,7 +661,7 @@ table {
       }
     }
 
-    &:nth-child(odd) {
+    &:nth-child(odd){
       &.spacer {
         background: transparent !important;
       }
@@ -844,7 +844,7 @@ table {
         font-family: 'archia';
         font-weight: 600;
         fill: $gray;
-        font-size: 14px;
+        font-size: 10px;
       }
     }
   }
