@@ -12,6 +12,7 @@ import Home from './components/home';
 import Navbar from './components/navbar';
 import Links from './components/links';
 import Cluster from './components/cluster';
+import HowYouFeel from './components/howyoufeel';
 import FAQ from './components/faq';
 import Banner from './components/banner';
 
@@ -31,6 +32,12 @@ function App() {
       view: Cluster,
       displayName: 'Clusters',
       animationDelayForNavbar: 0.3,
+    },
+    {
+      pageLink: '/howyoufeel',
+      view: HowYouFeel,
+      displayName: 'How You Feel',
+      animationDelayForNavbar: 0.4,
     },
     {
       pageLink: '/links',
