@@ -34,16 +34,21 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run eslint && npm run format && npm run scsslint"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
     "*.+(js|jsx)": [
-      "eslint --fix",
+      "eslint --fix --max-warnings=0",
+      "prettier --write",
       "git add"
     ],
-    "*.+(json|css|md)": [
+    "*.+(json|yml|yaml|md|vue)": [
       "prettier --write",
+      "git add"
+    ],
+    "*.+(css|scss)": [
+      "sass-lint-auto-fix",
       "git add"
     ]
   },
