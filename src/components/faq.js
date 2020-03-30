@@ -6,7 +6,7 @@ function FAQ(props) {
 
   useEffect(() => {
     getFAQs();
-  });
+  }, []);
 
   const getFAQs = () => {
     axios
