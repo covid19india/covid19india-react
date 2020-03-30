@@ -6,6 +6,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 import * as Icon from 'react-feather';
+import Helmet from 'react-helmet';
 
 import './App.scss';
 import Home from './components/home';
@@ -46,59 +47,76 @@ function App() {
     },
   ];
 
+  //Image URL and other schema markup to be added here
+  const schemaMarkup = {
+    "@context": "http://schema.org/",
+    "@type": "NGO",
+    "name": "Coronavirus Live Dashboard",
+    "alternateName": "COVID-19 Tracker",
+    "url": "https://www.covid19india.org/",
+    // "image": ""
+  }
+
   return (
-    <div className="App">
-      <Router history={history}>
-        <Route
-          render={({location}) => (
-            <div className="Almighty-Router">
-              <Navbar pages={pages} />
-              <Banner />
-              <Route exact path="/" render={() => <Redirect to="/" />} />
-              <Switch location={location}>
-                {pages.map((page, i) => {
-                  return (
-                    <Route
-                      exact
-                      path={page.pageLink}
-                      component={page.view}
-                      key={i}
-                    />
-                  );
-                })}
-              </Switch>
-            </div>
-          )}
-        />
-      </Router>
-      <footer className="fadeInUp" style={{animationDelay: '2s'}}>
-        <img
-          src="/icon.png"
-          alt="https://www.covid19india.org | Coronavirus cases live dashboard"
-        />
-        <h5>We stand with everyone fighting on the frontlines</h5>
-        <div className="link">
-          <a href="https://github.com/covid19india">covid19india</a>
-        </div>
-        <div id="footerButtons">
-          <a
-            className="button"
-            href="https://bit.ly/patientdb"
-            target="_noblank"
-          >
-            <Icon.Database />
-            <span>Crowdsourced Patient Database&nbsp;</span>
-          </a>
-          <a
-            href="https://bit.ly/covid19crowd"
-            className="button telegram"
-            target="_noblank"
-          >
-            <Icon.MessageCircle />
-            <span>Join Telegram to Collaborate!</span>
-          </a>
-        </div>
-      </footer>
+    <div>
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(schemaMarkup)}
+        </script>
+      </Helmet>
+      <div className="App">
+        <Router history={history}>
+          <Route
+            render={({ location }) => (
+              <div className="Almighty-Router">
+                <Navbar pages={pages} />
+                <Banner />
+                <Route exact path="/" render={() => <Redirect to="/" />} />
+                <Switch location={location}>
+                  {pages.map((page, i) => {
+                    return (
+                      <Route
+                        exact
+                        path={page.pageLink}
+                        component={page.view}
+                        key={i}
+                      />
+                    );
+                  })}
+                </Switch>
+              </div>
+            )}
+          />
+        </Router>
+        <footer className="fadeInUp" style={{ animationDelay: '2s' }}>
+          <img
+            src="/icon.png"
+            alt="https://www.covid19india.org | Coronavirus cases live dashboard"
+          />
+          <h5>We stand with everyone fighting on the frontlines</h5>
+          <div className="link">
+            <a href="https://github.com/covid19india">covid19india</a>
+          </div>
+          <div id="footerButtons">
+            <a
+              className="button"
+              href="https://bit.ly/patientdb"
+              target="_noblank"
+            >
+              <Icon.Database />
+              <span>Crowdsourced Patient Database&nbsp;</span>
+            </a>
+            <a
+              href="https://bit.ly/covid19crowd"
+              className="button telegram"
+              target="_noblank"
+            >
+              <Icon.MessageCircle />
+              <span>Join Telegram to Collaborate!</span>
+            </a>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
