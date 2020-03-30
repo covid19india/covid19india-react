@@ -27,6 +27,7 @@ function App() {
       animationDelayForNavbar: 0.2,
     },
     {
+      abc: 'xyz',
       pageLink: '/clusters',
       view: Cluster,
       displayName: 'Clusters',
