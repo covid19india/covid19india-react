@@ -242,21 +242,6 @@ export default function ({
     }
   }, [stateHighlighted, currentMap.mapType]);
 
-  useEffect(() => {
-    if (districtHighlighted === null) {
-      highlightRegionInMap(null, currentMap.mapType);
-      return;
-    }
-    const newMap = mapMeta[districtHighlighted?.state.state];
-    if (!newMap) {
-      return;
-    }
-    setCurrentMap(newMap);
-    setHoveredRegion(districtHighlighted?.district, newMap);
-    highlightRegionInMap(districtHighlighted?.district, currentMap.mapType);
-    setSelectedRegion(districtHighlighted?.district);
-  }, [districtHighlighted]);
-
   if (!currentHoveredRegion) {
     return null;
   }
@@ -320,6 +305,21 @@ export default function ({
     },
     [stateDistrictWiseData, states]
   );
+
+  useEffect(() => {
+    if (districtHighlighted === null) {
+      highlightRegionInMap(null, currentMap.mapType);
+      return;
+    }
+    const newMap = mapMeta[districtHighlighted?.state.state];
+    if (!newMap) {
+      return;
+    }
+    setCurrentMap(newMap);
+    setHoveredRegion(districtHighlighted?.district, newMap);
+    highlightRegionInMap(districtHighlighted?.district, currentMap.mapType);
+    setSelectedRegion(districtHighlighted?.district);
+  }, [districtHighlighted, currentMap.mapType, setHoveredRegion]);
 
   const getRegionFromDistrict = (districtData, name) => {
     if (!districtData) {
@@ -455,7 +455,7 @@ export default function ({
         statistic={statistic}
         mapMeta={currentMap}
         mapData={currentMapData}
-        setHoveredRegion={(region) => setHoveredRegion(region, currentMap)}
+        setHoveredRegion={setHoveredRegion}
         changeMap={switchMapToState}
         selectedRegion={selectedRegion}
       />

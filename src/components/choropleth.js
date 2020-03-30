@@ -42,7 +42,7 @@ function ChoroplethMap({
 
       const handleMouseover = (name) => {
         try {
-          setHoveredRegion(name, mapMeta.mapType);
+          setHoveredRegion(name, mapMeta);
         } catch (err) {
           console.log('err', err);
         }
@@ -55,7 +55,7 @@ function ChoroplethMap({
 
       const projection = d3.geoMercator();
 
-      if (mapMeta.mapType == MAP_TYPES.COUNTRY)
+      if (mapMeta.mapType === MAP_TYPES.COUNTRY)
         projection.fitSize([width, height], topology);
       else
         projection.fitExtent(
@@ -137,7 +137,14 @@ function ChoroplethMap({
           path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName]))
         );
     },
-    [mapData, mapMeta, statistic.total, statistic.maxConfirmed, changeMap]
+    [
+      mapData,
+      mapMeta,
+      statistic.total,
+      statistic.maxConfirmed,
+      changeMap,
+      setHoveredRegion,
+    ]
   );
 
   const toTitleCase = (str) => {
@@ -199,9 +206,6 @@ function ChoroplethMap({
       .call(legendLinear)
       .selectAll('text')
       .style('font-size', '10px');
-    // Hack: Added to ensure district is highlighted even if SVG is not loaded
-    //       Ideally should be covered by districtHighlighted effect hook
-    highlightRegionInMap(selectedRegion, mapMeta.mapType);
   }, [statistic.maxConfirmed]);
 
   useEffect(() => {
