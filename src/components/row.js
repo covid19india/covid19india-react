@@ -104,7 +104,7 @@ function Row(props) {
         <td style={{fontWeight: 600}}>{state.state}</td>
         <td>
           <span className="deltas" style={{color: '#ff073a'}}>
-            {!state.delta.confirmed === 0 && <Icon.ArrowUp />}
+            {state.delta.confirmed > 0 && <Icon.ArrowUp />}
             {state.delta.confirmed > 0 ? `${state.delta.confirmed}` : ''}
           </span>
           {parseInt(state.confirmed) === 0 ? '-' : state.confirmed}
@@ -217,17 +217,18 @@ function Row(props) {
                 }
               >
                 <td style={{fontWeight: 600}}>{district}</td>
-              <td>
-                <span className="deltas" style={{color: '#ff073a'}}>
-                  {!sortedDistricts[district].delta.confirmed == 0 && (
-                    <Icon.ArrowUp />
-                  )}
-                  {sortedDistricts[district].delta.confirmed > 0
-                    ? `${sortedDistricts[district].delta.confirmed}`
-                    : ''}
-                </span>
+                <td>
+                  <span className="deltas" style={{color: '#ff073a'}}>
+                    {sortedDistricts[district].delta.confirmed > 0 && (
+                      <Icon.ArrowUp />
+                    )}
+                    {sortedDistricts[district].delta.confirmed > 0
+                      ? `${sortedDistricts[district].delta.confirmed}`
+                      : ''}
+                  </span>
 
-                {sortedDistricts[district].confirmed}</td>
+                  {sortedDistricts[district].confirmed}
+                </td>
               </tr>
             );
           }
@@ -242,7 +243,7 @@ function Row(props) {
           <td style={{fontWeight: 600}}>Unknown</td>
           <td>
             <span className="deltas" style={{color: '#ff073a'}}>
-              {!sortedDistricts['Unknown'].delta.confirmed == 0 && (
+              {sortedDistricts['Unknown'].delta.confirmed > 0 && (
                 <Icon.ArrowUp />
               )}
               {sortedDistricts['Unknown'].delta.confirmed > 0

@@ -25,6 +25,7 @@ function Minigraph(props) {
 
   const graphData = useCallback(
     (timeseries) => {
+      if (timeseries.length <= 1) return 0;
       const data = timeseries;
 
       const x = d3
@@ -292,14 +293,13 @@ function Minigraph(props) {
         .duration(props.animate ? 3000 : 0)
         .style('opacity', 1);
     },
-    [height, props.animate, svg1, svg2, svg3, svg4, width]
+    [width, height, svg1, props.animate, svg2, svg3, svg4]
   );
 
   useEffect(() => {
-    if (timeseries.length > 1) {
-      graphData(timeseries);
-    }
-  }, [timeseries.length, timeseries, graphData]);
+    graphData(timeseries);
+    // eslint-disable-next-line
+  }, [timeseries]);
 
   return (
     <div className="Minigraph">
