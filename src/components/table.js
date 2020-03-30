@@ -241,6 +241,7 @@ function Table(props) {
                       : []
                   }
                   onHighlightState={props.onHighlightState}
+                  onHighlightDistrict={props.onHighlightDistrict}
                   handleReveal={handleReveal}
                 />
               </tbody>
