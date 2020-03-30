@@ -40,16 +40,13 @@
   "lint-staged": {
     "*.+(js|jsx)": [
       "eslint --fix --max-warnings=0",
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ],
     "*.+(json|yml|yaml|md|vue)": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ],
     "*.+(css|scss)": [
-      "sass-lint-auto-fix",
-      "git add"
+      "sass-lint-auto-fix"
     ]
   },
   "devDependencies": {
