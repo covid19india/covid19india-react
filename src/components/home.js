@@ -126,6 +126,7 @@ function Home(props) {
                 <input
                   type="checkbox"
                   className="switch"
+                  id="timeseries-mode"
                   aria-label="Checked by default to scale uniformly."
                   checked={timeseriesMode}
                   onChange={(event) => {
