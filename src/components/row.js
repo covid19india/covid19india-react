@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import * as Icon from 'react-feather';
-
+import {formatDate} from '../utils/common-functions';
+import {formatDistance} from 'date-fns';
 function Row(props) {
   const [state, setState] = useState(props.state);
   const [districts, setDistricts] = useState(props.districts);
@@ -136,12 +137,22 @@ function Row(props) {
       </tr>
 
       <tr
-        className={`spacer`}
+        className={'state-last-update'}
         style={{display: props.reveal && !props.total ? '' : 'none'}}
       >
-        <td></td>
-        <td></td>
-        <td></td>
+        <td colSpan={5}>
+          <div className="last-update">
+            <h6>Last Updated&nbsp;</h6>
+            <h6>
+              {isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
+                ? ''
+                : `${formatDistance(
+                    new Date(formatDate(props.state.lastupdatedtime)),
+                    new Date()
+                  )} Ago`}
+            </h6>
+          </div>
+        </td>
       </tr>
 
       <tr
@@ -192,6 +203,13 @@ function Row(props) {
               key={index}
               className={`district`}
               style={{display: props.reveal && !props.total ? '' : 'none'}}
+              onMouseEnter={() =>
+                props.onHighlightDistrict?.(district, state, props.index)
+              }
+              onMouseLeave={() => props.onHighlightDistrict?.()}
+              touchstart={() =>
+                props.onHighlightDistrict?.(district, state, props.index)
+              }
             >
               <td style={{fontWeight: 600}}>{district}</td>
               <td>{sortedDistricts[district].confirmed}</td>
