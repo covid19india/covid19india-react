@@ -1,10 +1,11 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-thin-webfont.eot');
-  src: url('fonts/Archia/archia-thin-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-thin-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-thin-webfont.woff') format('woff'),       
-  url('fonts/Archia/archia-thin-webfont.ttf') format('truetype');
+  src:
+    url('fonts/Archia/archia-thin-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Archia/archia-thin-webfont.woff2') format('woff2'),
+    url('fonts/Archia/archia-thin-webfont.woff') format('woff'),
+    url('fonts/Archia/archia-thin-webfont.ttf') format('truetype');
   font-weight: 100;
   font-style: normal;
 }
@@ -12,10 +13,11 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-light-webfont.eot');
-  src: url('fonts/Archia/archia-light-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-light-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-light-webfont.woff') format('woff'),       
-  url('fonts/Archia/archia-light-webfont.ttf') format('truetype');
+  src:
+    url('fonts/Archia/archia-light-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Archia/archia-light-webfont.woff2') format('woff2'),
+    url('fonts/Archia/archia-light-webfont.woff') format('woff'),
+    url('fonts/Archia/archia-light-webfont.ttf') format('truetype');
   font-weight: 200;
   font-style: normal;
 }
@@ -23,10 +25,11 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-regular-webfont.eot');
-  src: url('fonts/Archia/archia-regular-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-regular-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-regular-webfont.woff') format('woff'),       
-  url('fonts/Archia/archia-regular-webfont.ttf') format('truetype');
+  src:
+    url('fonts/Archia/archia-regular-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Archia/archia-regular-webfont.woff2') format('woff2'),
+    url('fonts/Archia/archia-regular-webfont.woff') format('woff'),
+    url('fonts/Archia/archia-regular-webfont.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
 }
@@ -34,10 +37,11 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-medium-webfont.eot');
-  src: url('fonts/Archia/archia-medium-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-medium-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-medium-webfont.woff') format('woff'),       
-  url('fonts/Archia/archia-medium-webfont.ttf') format('truetype');
+  src:
+    url('fonts/Archia/archia-medium-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Archia/archia-medium-webfont.woff2') format('woff2'),
+    url('fonts/Archia/archia-medium-webfont.woff') format('woff'),
+    url('fonts/Archia/archia-medium-webfont.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
@@ -45,10 +49,11 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-semibold-webfont.eot');
-  src: url('fonts/Archia/archia-semibold-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-semibold-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-semibold-webfont.woff') format('woff'),       
-  url('fonts/Archia/archia-semibold-webfont.ttf') format('truetype');
+  src:
+    url('fonts/Archia/archia-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Archia/archia-semibold-webfont.woff2') format('woff2'),
+    url('fonts/Archia/archia-semibold-webfont.woff') format('woff'),
+    url('fonts/Archia/archia-semibold-webfont.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
 }
@@ -56,15 +61,16 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-bold-webfont.eot');
-  src: url('fonts/Archia/archia-bold-webfont.eot?#iefix') format('embedded-opentype'),       
-  url('fonts/Archia/archia-bold-webfont.woff2') format('woff2'),       
-  url('fonts/Archia/archia-bold-webfont.woff') format('woff'),       
-  url('fonts/Archia/archia-bold-webfont.ttf') format('truetype');
+  src:
+    url('fonts/Archia/archia-bold-webfont.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Archia/archia-bold-webfont.woff2') format('woff2'),
+    url('fonts/Archia/archia-bold-webfont.woff') format('woff'),
+    url('fonts/Archia/archia-bold-webfont.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
 }
 
-/* -- */
+/* Color Pallete */
 
 $blue: #007bff;
 $blue-light: #007bff10;
@@ -104,7 +110,7 @@ $gray-light: #6c757d10;
 $gray-hover: #6c757d20;
 $gray-mid: #6c757d99;
 $gray-dark: #343a40;
-$gray-opaque: #343a4020;
+$gray-opaque: #f1f1f1;
 $primary: #007bff;
 $secondary: #6c757d;
 $success: #28a745;
@@ -123,24 +129,29 @@ $purple-light-opaque: #e3e2f3;
   $animation-name: unique-id() !global;
 
   animation-name: $animation-name;
-  animation-duration: 0.750s;
+  animation-duration: 0.75s;
   animation-timing-function: ease-in-out;
   animation-fill-mode: both;
 
   @keyframes #{$animation-name} {
+
     0% {
       background: transparent;
     }
+
     100% {
-      background: $color;;
+      background: $color;
     }
   }
 }
 
 @mixin levelColor($color) {
   .is-#{$color} {
-    h1 {color: $color;}
-    h4, h5 {color: #{$color}-mid;}
+
+    h1 { color: $color; }
+
+    h4,
+    h5 { color: #{$color}-mid; }
   }
 }
 
@@ -169,28 +180,28 @@ h3 {
   font-family: 'archia';
   font-size: 14px !important;
   font-weight: 400;
-  text-transform: uppercase; 
+  text-transform: uppercase;
 }
 
 h4 {
   font-family: 'archia';
   font-size: 13px !important;
   font-weight: 900;
-  text-transform: uppercase; 
+  text-transform: uppercase;
 }
 
 h5 {
   font-family: 'archia';
   font-size: 12px !important;
   font-weight: 900;
-  text-transform: uppercase; 
+  text-transform: uppercase;
 }
 
 h6 {
   font-family: 'archia';
   font-size: 11px !important;
   font-weight: 600;
-  text-transform: uppercase; 
+  text-transform: uppercase;
 }
 
 .Home {
@@ -200,10 +211,32 @@ h6 {
   flex-wrap: wrap;
   margin-left: 10rem;
   margin-right: 10rem;
-  .home-left, .home-right  {
+
+  .home-left,
+  .home-right {
     display: flex;
     flex-direction: column;
     width: 30rem;
+  }
+}
+
+.Banner {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  line-height: 20px;
+  font-family: 'Archia';
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $purple;
+  background: $purple-light;
+
+  .snippet {
+    align-self: center;
+    width: calc(100% - 10rem);
+    word-wrap: break-word;
+    padding: 1.5rem;
+    text-align: center;
   }
 }
 
@@ -214,11 +247,14 @@ h6 {
   justify-content: space-around;
   text-transform: uppercase;
   font-weight: 900;
+
   @include navbarReveal($gray-light);
+
   .navbar-left {
     margin-left: 2rem;
     flex: 1;
     align-self: center;
+
     a {
       display: inline-block;
       font-size: 14px;
@@ -226,17 +262,21 @@ h6 {
       text-decoration: none;
       margin-right: 2rem;
       color: $gray-mid;
+
       span {
         display: inline-block;
+
         &:hover {
           color: $gray;
         }
       }
     }
   }
+
   .focused {
     color: $gray;
   }
+
   img {
     width: 3rem;
     height: 3rem;
@@ -253,19 +293,30 @@ h6 {
   width: 30rem;
   align-self: center;
   justify-content: space-between;
-  padding-top: 2.5rem;
+  padding-top: 2rem;
   margin-bottom: 1rem;
-  h1, h6 {
+
+  h1,
+  h6 {
     margin: 0;
   }
+
   h1 {
     color: $gray-dark;
-    margin-bottom: 1rem;
   }
+
   .header-mid {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
+    .titles {
+      h6 {
+        margin-top: 0.25rem;
+        color: $gray;
+      }
+    }
+
     & > * {
       align-self: center;
     }
@@ -279,59 +330,70 @@ h6 {
   text-align: right;
   margin-bottom: auto;
   margin-top: 0.25rem;
+
   h6 {
     color: $green-mid;
     font-weight: 900;
   }
+
   h3 {
     color: $green;
     font-weight: 600;
   }
-  h3, h6 {
+
+  h3,
+  h6 {
     margin: 0;
   }
 }
 
-a.button {
+.button {
   display: flex;
   flex-direction: row;
   padding: 0.5rem;
-  border: none;
+  border: 0;
   font-family: 'archia';
   text-transform: uppercase;
   background: $blue-light;
   color: $blue-mid;
   cursor: pointer;
   font-weight: 900;
-  border-radius: 5px; 
+  border-radius: 5px;
   transition: background 0.2s ease-in-out;
   margin-bottom: 0.5rem;
   margin-top: 0.25rem;
   outline: none;
   font-size: 0.75rem;
   text-decoration: none;
+
   svg {
     margin-right: 0.5rem;
     width: 20px;
     stroke-width: 2px;
   }
+
   &.is-purple {
     color: $purple-mid;
     background: $purple-light;
+
     &:hover {
       background: $purple-hover;
     }
   }
-    &.is-green {
+
+  &.is-green {
     color: $green-mid;
     background: $green-light;
+
     &:hover {
       background: $green-hover;
     }
   }
+
   &:hover {
-  background: $blue-hover;
+    background: $blue-hover;
   }
+
   & > * {
     align-self: center;
   }
@@ -340,18 +402,20 @@ a.button {
 .telegram {
   width: 15.5rem;
   background: $gray-light !important;
-  color: #0088cc !important;
+  color: #08c !important;
   padding-left: 0.65rem;
+
   &:hover {
     background: $gray-hover !important;
   }
 }
 
 .excel {
-  color: #33A667;
-  background: #33A66730;
+  color: #33a667;
+  background: #33a66730;
+
   &:hover {
-    background: #33A66750;
+    background: #33a66750;
   }
 }
 
@@ -361,60 +425,90 @@ a.button {
   justify-content: space-between;
   align-self: center;
   width: 30rem;
+
   .level-item {
     display: flex;
     flex-direction: column;
+
     & > * {
       align-self: center;
     }
+
     &:first-child {
       margin-left: 0.5rem;
-    } 
+    }
+
     &:last-child {
       margin-right: 0.5rem;
     }
   }
-  h1, h5 {
+
+  h1,
+  h5 {
     margin-bottom: 0;
   }
+
   h1 {
     font-weight: 600;
   }
+
   h4 {
     margin-bottom: -0.5rem;
   }
+
   .is-cherry {
-    h1 {color: $cherry;}
-    h4, h5 {color: $cherry-mid;}
+    h1 { color: $cherry; }
+
+    h4,
+    h5 { color: $cherry-mid; }
   }
+
   .is-blue {
-    h1 {color: $blue;}
-    h4, h5 {color: $blue-mid;}
+    h1 { color: $blue; }
+
+    h4,
+    h5 { color: $blue-mid; }
   }
+
   .is-green {
-    h1 {color: $green;}
-    h4, h5 {color: $green-mid;}
+    h1 { color: $green; }
+
+    h4,
+    h5 { color: $green-mid; }
   }
+
   .is-gray {
-    h1 {color: $gray;}
-    h4, h5 {color: $gray-mid;}
+    h1 { color: $gray; }
+
+    h4,
+    h5 { color: $gray-mid; }
   }
 }
 
 abbr {
   text-decoration: none;
+
   &.is-cherry {
     color: $cherry;
   }
+
   &.is-blue {
     color: $blue;
   }
+
   &.is-green {
     color: $green;
   }
+
   &.is-gray {
     color: $gray;
   }
+}
+
+.affected-count {
+  text-align: right;
+  margin: 1rem 0 0 0;
+  color: $gray-mid;
 }
 
 table {
@@ -424,58 +518,198 @@ table {
   font-family: 'archia';
   text-transform: uppercase;
   margin-bottom: 1rem;
-  margin-top: 2rem;
+
   thead {
     background: $gray-light;
     color: $gray-dark;
     text-align: left;
     font-size: 0.75rem;
+
     th {
       padding: 0.5rem;
       cursor: pointer;
       border-radius: 5px;
       transition: all 0.1s ease-in-out;
-      &:hover {
-        background: $gray-hover;
+      z-index: 99;
+
+      &.sticky {
+        top: 4px;
+        background: $gray-opaque;
       }
+
+      &:hover {
+        background: #ecedee;
+      }
+
       .heading-content {
         display: flex;
         justify-content: space-between;
         position: relative;
         flex-direction: row;
         height: 0.9rem;
+        align-items: center;
+
+        abbr {
+          text-align: right;
+        }
+
         svg {
           width: 10px;
           margin: 0;
           right: 0;
-          transform: rotate(135deg);
           stroke-width: 4px;
-          align-self: center;
-          margin-top: -0.35rem;
+          margin-top: 0.15rem;
           margin-left: 0.25rem;
           color: $gray-mid;
         }
       }
     }
   }
+
+  &:nth-child(odd) {
+    background-color: $white;
+  }
+
   tbody {
     color: $gray;
+
     tr {
       transition: background 0.1s ease-in-out;
+      cursor: pointer;
+      background: $light;
+
       &:hover {
         background: $gray-hover;
       }
+
+      &.divider {
+        height: 0.5rem;
+        background: #6c757d10 !important;
+      }
+
+      &.spacer {
+        height: 0.5rem;
+        background: #fff !important;
+      }
     }
+
+    & > tr:nth-child(odd) {
+      &:hover {
+        background: $gray-hover;
+      }
+      // &:nth-child(odd) {
+      //   background: $white ;
+      // }
+    }
+
+    & > tr:nth-child() {
+      &:hover{
+        background: $gray-hover ;
+      }
+    }
+
+
+
+    &:nth-child(odd){
+      &.spacer {
+        background: transparent !important;
+      }
+
+    }
+
     td {
       padding: 0.25rem;
       font-size: 0.9rem;
       border-radius: 5px;
       text-align: right;
+      .deltas {
+        margin-right: 0.25rem;
+        font-size: 11px !important;
+
+        svg {
+          width: 9px;
+          height: 9px;
+          stroke-width: 3;
+          vertical-align: -0.25px;
+        }
+      }
     }
+
+
     td:first-child {
       text-align: left;
+      max-width: 7.5rem;
+      word-wrap: break-word;
+    }
+
+    .state-last-update{
+      background: transparent;
+      transform: translateX(1rem);
+      &:hover{
+        background: transparent;
+      }
+
+      td{
+        .last-update{
+          text-align: left;
+          display: flex;
+          flex-direction: row;
+          align-items: baseline;
+          width: 100%;
+          h3{
+            margin: 0 0 0 5px;
+          }
+        }
+      }
+    }
+
+    .district-heading {
+      transform: translateX(1rem);
+      background: $gray-light;
+
+      td {
+        font-size: 0.75rem;
+        font-weight: 900;
+        padding: 0.45rem;
+        color: $gray-dark;
+        background: $gray-light;
+
+        .heading-content {
+          display: flex;
+          justify-content: space-between;
+          position: relative;
+          flex-direction: row;
+          height: 0.9rem;
+          align-items: center;
+
+          abbr {
+            text-align: right;
+          }
+
+          svg {
+            width: 10px;
+            margin: 0;
+            right: 0;
+            stroke-width: 4px;
+            margin-left: 0.25rem;
+            margin-top: 0.15rem;
+            color: $gray-mid;
+          }
+        }
+      }
+    }
+
+    max-width: 10rem;
+
+    .district {
+      transform: translateX(1rem);
+
+      .unknown {
+        font-style: italic;
+      }
     }
   }
+
   .affected-count {
     position: absolute;
     margin: 0;
@@ -483,63 +717,145 @@ table {
     color: $gray-mid;
     right: 0;
   }
+
   .is-total {
     td {
       background: $gray-hover;
     }
   }
+
+  .dropdown {
+    position: absolute;
+    left: -0.75rem;
+    background: $gray-light;
+    border-radius: 50%;
+    width: 13px;
+    height: 13px;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+
+    &:hover {
+      background: $gray-hover;
+    }
+
+    svg {
+      position: absolute;
+      top: -0.35rem;
+      left: 1px;
+      width: 11px;
+      stroke-width: 3;
+    }
+  }
 }
 
-.ChoroplethMap {
+#chart {
+  z-index: 10;
+}
+
+.back-button {
+  z-index: 11;
+}
+
+.map-default {
+  stroke: none;
+}
+
+.map-hover {
+  stroke: #ff073a;
+  stroke-width: 2;
+}
+
+.MapExplorer {
   display: flex;
-  position: relative;
+  flex-direction: column;
   align-self: center;
-  margin-top: 4rem;
-  margin-bottom: -10rem;
   width: 30rem;
+
   .header {
-    position: absolute;
-    top: -5rem;
+    display: flex;
+    flex-direction: column;
     color: $gray-dark;
+    margin-bottom: 2.5rem;
+    align-self: flex-start;
   }
-  h6.header {
-    margin-top: 3rem;
-    color: $gray;
-    margin-left: 1px;
-    width: 10rem;
-  }
+
   .svg-parent {
     display: flex;
     flex-direction: row;
-    justify-content: center;
     width: 100%;
+    margin-top: 1rem;
+
     svg {
-      align-self: center ;
+      align-self: center;
+
       text {
         text-transform: uppercase;
         text-align: right;
         font-family: 'archia';
         font-weight: 600;
         fill: $gray;
-        font-size: 14px;
+        font-size: 10px;
       }
     }
   }
-  .map-stats {
-    flex: 0.1;
+
+  .back-button {
     position: absolute;
-    top: 1.25rem;
-    left: 1px;
-    h1, h5, h6 {
-      margin: 0;
+    right: 0;
+  }
+
+  .meta {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 1rem;
+
+    .district-last-update{
+      position: absolute;
+      right: 0;
+      bottom: 0;
     }
-    h4 {
+
+    h2 {
+      margin: 0;
       color: #e23028;
+      word-wrap: break-word;
+      font-weight: 900;
+    }
+
+    h4 {
+      margin: 0;
+      color: $gray-mid;
+      word-wrap: break-word;
+    }
+
+    .unknown {
+      position: absolute;
+      top: 14rem;
       width: 5rem;
     }
-    h1 {
-      font-weight: 600;
+  }
+
+  .map-stats {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 5rem;
+    position: relative;
+
+    h1,
+    h5,
+    h6,
+    h3 {
+      margin: 0;
     }
+
+    h3 {
+      color: $gray-mid;
+      font-weight: 900;
+    }
+
     .stats {
       background: $cherry-light;
       color: $cherry;
@@ -547,30 +863,63 @@ table {
       border-radius: 5px;
       display: flex;
       flex-direction: column;
+      margin-left: 0.25rem;
+      margin-right: 0.25rem;
       margin-bottom: 0.5rem;
+      width: 100%;
+
       .stats-bottom {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
+
         h6 {
           margin-top: auto;
           margin-bottom: 0.25rem;
         }
       }
+
+      h1 {
+        font-weight: 600;
+      }
+
       &.is-green {
         background: $green-light;
-        h5, h6 {color: $green-mid;}
-        h1 {color: $green;}
+        h5,
+        h6 { color: $green-mid; }
+
+        h1 { color: $green; }
       }
+
       &.is-blue {
         background: $blue-light;
-        h5, h6 {color: $blue-mid;}
-        h1 {color: $blue;}
+        h5,
+        h6 { color: $blue-mid; }
+
+        h1 { color: $blue; }
       }
+
       &.is-gray {
         background: $gray-light;
-        h5, h6 {color: $gray-mid;}
-        h1 {color: $gray;}
+        h5,
+        h6 { color: $gray-mid; }
+
+        h1 { color: $gray; }
+      }
+
+      &.is-yellow {
+        background: $warning;
+        h5,
+        h6 { color: $white; }
+
+        h1 { color: $white; }
+      }
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
       }
     }
   }
@@ -581,6 +930,7 @@ table {
   z-index: 99;
   display: flex;
   flex-direction: row;
+
   .tab {
     min-width: 5rem;
     background: $gray-light;
@@ -593,9 +943,11 @@ table {
     text-align: center;
     margin-right: 0.25rem;
     transition: all 0.3s ease-in-out;
+
     &:hover {
       background: $gray-hover;
     }
+
     &.focused {
       color: $gray;
       background: $gray-opaque;
@@ -616,9 +968,11 @@ table {
     margin: 0;
     margin-bottom: 0.5rem;
   }
+
   width: 30rem;
   align-self: center;
   margin-top: 1rem;
+
   .timeseries-mode {
     position: absolute;
     display: flex;
@@ -626,7 +980,44 @@ table {
     top: 4.5rem;
     right: 0;
     z-index: 99;
-    input {margin: 0; cursor: pointer;}
+
+    input.switch {
+      position: relative;
+      appearance: none;
+      outline: none;
+      margin: 0;
+      cursor: pointer;
+      width: 22px;
+      height: 12px;
+      background-color: #fff;
+      border: 1px solid #d9dadc;
+      border-radius: 10px;
+      box-shadow: inset -10px 0 0 0 #fff;
+      transition-duration: 200ms;
+    }
+
+    input.switch::after {
+      content: "";
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      width: 9px;
+      height: 9px;
+      background-color: transparent;
+      border-radius: 50%;
+      box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    }
+
+    input.switch:checked {
+      border-color: $gray-mid;
+      box-shadow: inset 10px 0 0 0 $gray-mid;
+    }
+
+    input.switch:checked::after {
+      left: 10px;
+      box-shadow: -2px 4px 3px rgba(0, 0, 0, 0.05);
+    }
+
     label {
       font-family: 'archia';
       text-transform: uppercase;
@@ -639,12 +1030,13 @@ table {
   }
 }
 
-
-.timeseries, .Minigraph {
+.timeseries,
+.Minigraph {
   display: flex;
   flex-direction: column;
   margin-top: 1rem;
   width: 100%;
+
   .stats {
     padding: 0.25rem;
     position: absolute;
@@ -654,37 +1046,55 @@ table {
     border-radius: 3px;
     display: flex;
     flex-direction: column;
-    h2, h5, h6 {
+
+    h2,
+    h5,
+    h6 {
       margin: 0;
       color: $cherry-mid;
     }
-    h2, h6 {
+
+    h2,
+    h6 {
       color: $cherry;
     }
+
     .stats-bottom {
       display: flex;
       flex-direction: row;
+
       h6 {
         margin-bottom: 0.1rem;
         margin-left: 0.25rem;
       }
+
       & > * {
         margin-top: auto;
       }
     }
+
     &.is-green {
-      h5 {color: $green-mid;}
-      h2, h6 {color: $green;}
+      h5 { color: $green-mid; }
+
+      h2,
+      h6 { color: $green; }
     }
+
     &.is-gray {
-      h5 {color: $gray-mid;}
-      h2, h6 {color: $gray;}
+      h5 { color: $gray-mid; }
+
+      h2,
+      h6 { color: $gray; }
     }
+
     &.is-blue {
-      h5 {color: $blue-mid;}
-      h2, h6 {color: $blue;}
+      h5 { color: $blue-mid; }
+
+      h2,
+      h6 { color: $blue; }
     }
   }
+
   .svg-parent {
     position: relative;
     display: flex;
@@ -694,12 +1104,16 @@ table {
     border-radius: 5px;
     margin-bottom: 1rem;
     height: 10rem;
+
     svg {
-      .domain, .tick, line {
+      .domain,
+      .tick,
+      line {
         stroke: $cherry;
         stroke-width: 2;
       }
-      text {  
+
+      text {
         font-family: 'archia';
         text-transform: uppercase;
         color: $cherry-mid;
@@ -707,23 +1121,33 @@ table {
         font-size: 12px;
       }
     }
+
     &.is-green {
       background: $green-light;
-      svg{
-        .domain, .tick, line {
+
+      svg {
+        .domain,
+        .tick,
+        line {
           stroke: $green;
         }
+
         text {
           color: $green-mid;
           stroke: transparent;
         }
       }
     }
+
     &.is-gray {
       background: $gray-light;
-      .domain, .tick, line {
+
+      .domain,
+      .tick,
+      line {
         stroke: $gray;
       }
+
       text {
         color: $gray-mid;
         stroke: transparent;
@@ -739,12 +1163,15 @@ table {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
   .svg-parent {
     width: 5rem;
     background: transparent !important;
     height: 7rem;
   }
+
   margin-bottom: -3rem;
+
   .tooltip {
     position: fixed;
     top: 0;
@@ -763,6 +1190,7 @@ table {
   margin-top: 1rem;
   margin-bottom: 1rem;
   align-self: center;
+
   a {
     font-family: 'archia';
     text-transform: uppercase;
@@ -772,10 +1200,12 @@ table {
     color: $blue;
     background: $blue-light;
     transition: background 0.2s ease-in-out;
+
     &:hover {
       background: $blue-hover;
     }
   }
+
   h3 {
     margin-bottom: 0;
     color: $gray-dark;
@@ -789,11 +1219,14 @@ footer {
   margin-bottom: 5rem;
   justify-content: center;
   margin-top: 5rem;
+
   & > * {
     align-self: center;
     text-align: center;
   }
-  h5 {margin: 0; margin-top: 1rem; margin-bottom: 0.5rem; color: $gray;}
+
+  h5 { margin: 0; margin-top: 1rem; margin-bottom: 0.5rem; color: $gray; }
+
   img {
     width: 2rem;
     height: 2rem;
@@ -808,52 +1241,64 @@ footer {
   position: relative;
   padding-left: 1rem;
   padding-right: 1rem;
+
   img {
     width: 2rem;
     height: 2rem;
   }
+
   .link {
     margin: 0;
   }
+
   .header {
     h1 {
       margin-top: -1rem;
     }
   }
+
   h5 {
     margin: 0;
     color: $gray;
   }
+
   .Minigraph {
     align-self: center;
-    margin-bottom: -3.25rem
+    margin-bottom: -3.25rem;
   }
+
   .summary-bottom {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-self: center;
-    width: calc(100% - 0rem);
+    width: calc(100% - 0);
+
     .link {
       width: 12rem;
       margin-right: -0.75rem;
     }
+
     & > * {
       align-self: center;
     }
+
     img {
       margin-bottom: 0.25rem;
       margin-right: 0.25rem;
       margin-left: 1rem;
     }
+
     h5 {
       width: 15rem;
     }
   }
+
   .summary-bottom-left {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+
     & > * {
       align-self: center;
     }
@@ -865,52 +1310,77 @@ footer {
   flex-direction: column;
   width: 100%;
   min-height: 30rem;
+
   & > * {
     align-self: center;
     width: 30rem;
     margin-bottom: 1.5rem;
   }
+
   & > *:first-child {
     margin-top: 2rem;
   }
+
   h2 {
     margin: 0;
     font-weight: 600;
     text-transform: none;
+    letter-spacing: 0.02em;
   }
+
   .question {
     margin-bottom: 0.5rem;
     color: $gray-dark;
+    font-size: 1.5em !important;
   }
+
   .answer {
     color: $blue;
+    line-height: 1.5em;
   }
 }
 
 @media (max-width: 769px) {
-  .ChoroplethMap, .TimeSeries, table, .header, .Level, .timeseries-header, .TimeSeries-Parent, .Links, .Minigraph, .Summary, .FAQ {
+  .TimeSeries,
+  table,
+  .header,
+  .Level,
+  .timeseries-header,
+  .TimeSeries-Parent,
+  .Links,
+  .Minigraph,
+  .Summary,
+  .FAQ,
+  .MapExplorer {
     width: calc(100% - 2rem);
   }
+
   .Home {
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-left: 0rem;
-    margin-right: 0rem;
-    .home-left, .home-right {
+    margin-left: 0;
+    margin-right: 0;
+
+    .home-left,
+    .home-right {
       width: 100%;
       display: flex;
       flex-direction: column;
     }
   }
-  .link, .faq {
+
+  .link,
+  .faq {
     width: calc(100% - 2rem);
   }
+
   .Navbar {
     a {
       font-size: 0.75rem !important;
       margin-right: 0.75rem !important;
     }
+
     img {
       width: 2rem;
       height: 2rem;
@@ -919,29 +1389,50 @@ footer {
       cursor: pointer;
     }
   }
+
   .timeseries {
     .svg-parent {
       width: 100%;
     }
   }
+
   .last-update {
     width: 10rem;
   }
+
   a.button {
     width: 10rem;
+
     svg {
       width: 38px;
     }
   }
+
+  .Banner {
+    height: 7rem;
+
+    .snippet {
+      width: 100%;
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+  }
+
+  table {
+    td {
+      max-width: 6.75rem;
+    }
+  }
 }
 
-/* For the iPhone X folks OMG WHY ARE YOUR SCREENS SO NARROW T_T*/ 
+/* For the iPhone X folks OMG WHY ARE YOUR SCREENS SO NARROW T_T */
 @media (max-width: 375px) {
   .timeseries-mode {
     display: block !important;
     width: 4.25rem;
     top: 2rem !important;
     text-align: right;
+
     input {
       margin: 0;
       margin-top: 0.25rem !important;
@@ -953,7 +1444,7 @@ footer {
 
 .fadeInUp {
   animation-name: fadeInUp;
-  animation-duration: 0.450s;
+  animation-duration: 0.45s;
   animation-fill-mode: both;
 }
 
@@ -962,25 +1453,56 @@ footer {
     opacity: 0;
     transform: translateY(20px);
   }
+
   100% {
     opacity: 1;
-    transform: translateY(0px);
+    transform: translateY(0);
   }
 }
 
-.iframe-container{
+.rotateDownRight {
+  animation-name: rotateDownRight;
+  animation-duration: 0.25s;
+  animation-fill-mode: both;
+}
+
+@keyframes rotateDownRight {
+  100% {
+    transform: rotate(-90deg);
+  }
+}
+
+.rotateRightDown {
+  animation-name: rotateRightDown;
+  animation-duration: 0.25s;
+  animation-fill-mode: both;
+}
+
+@keyframes rotateRightDown {
+  0% {
+    transform: rotate(-90deg);
+  }
+}
+
+.iframe-container {
   width: 100%;
-  min-height : 100vh;
+  min-height: 100vh;
+
   iframe {
     width: 100vw;
     height: 100vh;
-    border: none;
+    border: 0;
   }
 }
 
 #footerButtons {
   display: flex;
+
   > * + * {
     margin-left: 8px;
   }
+}
+
+.sticky {
+  position: sticky;
 }
