@@ -22,7 +22,9 @@
   "State Title": "অবস্থা",
   "District Title": "জেলা",
   "country": {
-    "India": "ভারত"
+    "India": {
+      "title": "ভারত"
+    }
   },
   "state": {
     "Andaman and Nicobar Islands": {

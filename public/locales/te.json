@@ -22,7 +22,9 @@
   "State Title": "రాష్ట్ర",
   "District Title": "జిల్లా",
   "country": {
-    "India": "భారతదేశం"
+    "India": {
+      "title": "భారతదేశం"
+    }
   },
   "state": {
     "Andaman and Nicobar Islands": {

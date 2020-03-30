@@ -22,7 +22,9 @@
   "State Title": "ರಾಜ್ಯ",
   "District Title": "ಜಿಲ್ಲೆ",
   "country": {
-    "India": "ಭಾರತ"
+    "India": {
+      "title": "ಭಾರತ"
+    }
   },
   "state": {
     "Andaman and Nicobar Islands": {

@@ -219,7 +219,9 @@ function Row(props) {
                   props.onHighlightDistrict?.(district, state, props.index)
                 }
               >
-                <td style={{fontWeight: 600}}>{t([`state.${state.state}.${district}`, district])}</td>
+                <td style={{fontWeight: 600}}>
+                  {t([`state.${state.state}.${district}`, district])}
+                </td>
                 <td>
                   <span className="deltas" style={{color: '#ff073a'}}>
                     {sortedDistricts[district].delta.confirmed > 0 && (

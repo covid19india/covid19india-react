@@ -22,7 +22,9 @@
   "State Title": "state",
   "District Title": "district",
   "country": {
-    "India": "India"
+    "India": {
+      "title": "India"
+    }
   },
   "state": {
     "Andaman and Nicobar Islands": {

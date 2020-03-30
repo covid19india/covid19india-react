@@ -351,6 +351,7 @@ export default function ({
       if (newMap.mapType === MAP_TYPES.COUNTRY) {
         setHoveredRegion(states[1].state, newMap);
       } else if (newMap.mapType === MAP_TYPES.STATE) {
+        setCurrentStatename(name);
         const districtData = (stateDistrictWiseData[name] || {districtData: {}})
           .districtData;
         const topDistrict = Object.keys(districtData)
@@ -369,7 +370,7 @@ export default function ({
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
       <div className="header">
         <h1>
-          {t(`${currentMap.mapType}.${currentMap.name}`)} {t('Map')}
+          {t(`${currentMap.mapType}.${currentMap.name}.title`)} {t('Map')}
         </h1>
         <h6>
           {t('Hover over a shape for more details', {

@@ -22,7 +22,9 @@
   "State Title": "நிலை",
   "District Title": "மாவட்டம்",
   "country": {
-    "India": "இந்தியா"
+    "India": {
+      "title": "இந்தியா"
+    }
   },
   "state": {
     "Andaman and Nicobar Islands": {

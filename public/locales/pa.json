@@ -22,7 +22,9 @@
   "State Title": "ਰਾਜ",
   "District Title": "ਜ਼ਿਲ੍ਹਾ",
   "country": {
-    "India": "ਭਾਰਤ"
+    "India": {
+      "title": "ਭਾਰਤ"
+    }
   },
   "state": {
     "Andaman and Nicobar Islands": {

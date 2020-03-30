@@ -127,11 +127,11 @@ function ChoroplethMap({
             parseFloat(100 * (value / (statistic.total || 0.001))).toFixed(2) +
             `% ${t('from')} ` +
             toTitleCase(
-            t([
-              `state.${d.properties[propertyField]}.title`,
-              d.properties[propertyField],
-            ])
-          )
+              t([
+                `state.${d.properties[propertyField]}.title`,
+                d.properties[propertyField],
+              ])
+            )
           );
         });
 

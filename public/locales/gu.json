@@ -22,7 +22,9 @@
   "State Title": "રાજ્ય",
   "District Title": "જીલ્લો",
   "country": {
-    "India": "ભારત"
+    "India": {
+      "title": "ભારત"
+    }
   },
   "state": {
     "Andaman and Nicobar Islands": {

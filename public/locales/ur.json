@@ -22,7 +22,9 @@
   "State Title": "حالت",
   "District Title": "ضلع",
   "country": {
-    "India": "ہندوستان"
+    "India": {
+      "title": "ہندوستان"
+    }
   },
   "state": {
     "Andaman and Nicobar Islands": {
