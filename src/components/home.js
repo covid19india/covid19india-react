@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import { formatDistance } from 'date-fns';
-import { formatDate } from '../utils/common-functions';
+import {formatDistance} from 'date-fns';
+import {formatDate} from '../utils/common-functions';
 import Table from './table';
 import Level from './level';
 import MapExplorer from './mapexplorer';
@@ -46,11 +46,11 @@ function Home(props) {
 
   const onHighlightState = (state, index) => {
     if (!state && !index) setStateHighlighted(null);
-    else setStateHighlighted({ state, index });
+    else setStateHighlighted({state, index});
   };
   const onHighlightDistrict = (district, state, index) => {
     if (!state && !index && !district) setDistrictHighlighted(null);
-    else setDistrictHighlighted({ district, state, index });
+    else setDistrictHighlighted({district, state, index});
   };
 
   return (
@@ -58,12 +58,18 @@ function Home(props) {
       <Helmet>
         <title>Coronavirus Cases Live Dashboard | India</title>
         <meta name="title" content="Coronavirus Cases Live Dashboard | India" />
-        <meta name="description" content="Volunteer-driven crowdsourced initiative to track the spread of Coronavirus (COVID-19) in India" />
-        <meta name="keywords" content="coronavirus,corona,covid,covid19,covid-19,covidindia,india,virus" />
+        <meta
+          name="description"
+          content="Volunteer-driven crowdsourced initiative to track the spread of Coronavirus (COVID-19) in India"
+        />
+        <meta
+          name="keywords"
+          content="coronavirus,corona,covid,covid19,covid-19,covidindia,india,virus"
+        />
       </Helmet>
       <div className="Home">
         <div className="home-left">
-          <div className="header fadeInUp" style={{ animationDelay: '0.5s' }}>
+          <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
             <div className="header-mid">
               <div className="titles">
                 <h1>India COVID-19 Tracker</h1>
@@ -75,9 +81,9 @@ function Home(props) {
                   {isNaN(Date.parse(formatDate(lastUpdated)))
                     ? ''
                     : formatDistance(
-                      new Date(formatDate(lastUpdated)),
-                      new Date()
-                    ) + ' Ago'}
+                        new Date(formatDate(lastUpdated)),
+                        new Date()
+                      ) + ' Ago'}
                 </h3>
               </div>
             </div>
@@ -107,7 +113,7 @@ function Home(props) {
 
               <div
                 className="timeseries-header fadeInUp"
-                style={{ animationDelay: '1.5s' }}
+                style={{animationDelay: '1.5s'}}
               >
                 <h1>Spread Trends</h1>
                 <div className="tabs">

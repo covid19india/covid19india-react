@@ -49,13 +49,13 @@ function App() {
 
   //Image URL and other schema markup to be added here
   const schemaMarkup = {
-    "@context": "http://schema.org/",
-    "@type": "NGO",
-    "name": "Coronavirus Live Dashboard",
-    "alternateName": "COVID-19 Tracker",
-    "url": "https://www.covid19india.org/",
+    '@context': 'http://schema.org/',
+    '@type': 'NGO',
+    name: 'Coronavirus Live Dashboard',
+    alternateName: 'COVID-19 Tracker',
+    url: 'https://www.covid19india.org/',
     // "image": ""
-  }
+  };
 
   return (
     <div>
@@ -67,7 +67,7 @@ function App() {
       <div className="App">
         <Router history={history}>
           <Route
-            render={({ location }) => (
+            render={({location}) => (
               <div className="Almighty-Router">
                 <Navbar pages={pages} />
                 <Banner />
@@ -88,7 +88,7 @@ function App() {
             )}
           />
         </Router>
-        <footer className="fadeInUp" style={{ animationDelay: '2s' }}>
+        <footer className="fadeInUp" style={{animationDelay: '2s'}}>
           <img
             src="/icon.png"
             alt="https://www.covid19india.org | Coronavirus cases live dashboard"
