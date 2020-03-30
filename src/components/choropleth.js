@@ -206,11 +206,13 @@ function ChoroplethMap({
       .call(legendLinear)
       .selectAll('text')
       .style('font-size', '10px');
+    // Hack: Added to ensure district is highlighted even if SVG is not loaded
+    //       Ideally should be covered by districtHighlighted effect hook
+    highlightRegionInMap(selectedRegion, mapMeta.mapType);
   }, [statistic.maxConfirmed]);
 
   useEffect(() => {
     (async () => {
-      d3.selectAll('svg#chart > *').remove();
       const data = await d3.json(mapMeta.geoDataFile);
       if (statistic && choroplethMap.current) {
         ready(data);
