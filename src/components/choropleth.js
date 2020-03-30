@@ -79,7 +79,7 @@ function ChoroplethMap({
         .append('path')
         .attr('class', 'path-region')
         .attr('fill', function (d) {
-          const n = mapData[d.properties[propertyField]] || 0;
+          const n = parseInt(mapData[d.properties[propertyField]]) || 0;
           const color =
             n === 0
               ? '#ffffff'
