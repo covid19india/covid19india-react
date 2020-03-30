@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useMemo} from 'react';
 import {formatDistance} from 'date-fns';
 import useStates from './../hooks/useStates';
+import {formatDate} from '../utils/common-functions';
 import Table from './table';
 import Level from './level';
 import MapExplorer from './mapexplorer';
@@ -25,13 +26,7 @@ function Home(props) {
   useEffect(() => {
     fetchStates();
   }, []);
-  const formatDate = (unformattedDate) => {
-    const day = unformattedDate.slice(0, 2);
-    const month = unformattedDate.slice(3, 5);
-    const year = unformattedDate.slice(6, 10);
-    const time = unformattedDate.slice(11);
-    return `${year}-${month}-${day}T${time}+05:30`;
-  };
+
   const lastUpdatedPhrase = useMemo(() => {
     return isNaN(Date.parse(formatDate(lastUpdated)))
       ? ''
@@ -62,10 +57,8 @@ function Home(props) {
             </div>
           </div>
         </div>
-
         <Level data={states} deltas={deltas} />
         <Minigraph timeseries={timeseries} animate={true} />
-
         <Table
           states={states}
           summary={false}
@@ -74,7 +67,6 @@ function Home(props) {
           onHighlightDistrict={onHighlightDistrict}
         />
       </div>
-
       <div className="home-right">
         {didFetchStates && (
           <React.Fragment>
@@ -84,7 +76,6 @@ function Home(props) {
               stateHighlighted={stateHighlighted}
               districtHighlighted={districtHighlighted}
             />
-
             <div
               className="timeseries-header fadeInUp"
               style={{animationDelay: '1.5s'}}
@@ -108,7 +99,6 @@ function Home(props) {
                   <h4>Daily</h4>
                 </div>
               </div>
-
               <div className="timeseries-mode">
                 <label htmlFor="timeseries-mode">Scale Uniformly</label>
                 <input
@@ -122,7 +112,6 @@ function Home(props) {
                 />
               </div>
             </div>
-
             <TimeSeries
               timeseries={timeseries}
               type={graphOption}

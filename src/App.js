@@ -19,53 +19,55 @@ const Banner = lazy(() => import('./components/banner'));
 const history = require('history').createBrowserHistory;
 
 function App() {
+  // Add a new page simply by adding a new entry in this array.
+  const pages = [
+    {
+      pageLink: '/',
+      view: Home,
+      displayName: 'Home',
+      animationDelayForNavbar: 0.2,
+    },
+    {
+      pageLink: '/clusters',
+      view: Cluster,
+      displayName: 'Clusters',
+      animationDelayForNavbar: 0.3,
+    },
+    {
+      pageLink: '/links',
+      view: Links,
+      displayName: 'Helpful Links',
+      animationDelayForNavbar: 0.4,
+    },
+    {
+      pageLink: '/faq',
+      view: FAQ,
+      displayName: 'FAQ',
+      animationDelayForNavbar: 0.4,
+    },
+  ];
+
   return (
     <div className="App">
-      <Suspense
-        fallback={
-          <div
-            style={{
-              width: '90vw',
-              height: '100vh',
-            }}
-          >
-            <Spinner />
-          </div>
-        }
-      >
+      <Suspense fallback={<Spinner />}>
         <Router history={history}>
           <Route
             render={({location}) => (
               <div className="Almighty-Router">
-                <Navbar />
+                <Navbar pages={pages} />
                 <Banner />
                 <Route exact path="/" render={() => <Redirect to="/" />} />
                 <Switch location={location}>
-                  <Route
-                    exact
-                    path="/"
-                    render={(props) => <Home {...props} />}
-                  />
-                  <Route
-                    exact
-                    path="/links"
-                    render={(props) => <Links {...props} />}
-                  />
-                  <Route
-                    exact
-                    path="/summary"
-                    render={(props) => <Summary {...props} />}
-                  />
-                  <Route
-                    exact
-                    path="/clusters"
-                    render={(props) => <Cluster {...props} />}
-                  />
-                  <Route
-                    exact
-                    path="/faq"
-                    render={(props) => <FAQ {...props} />}
-                  />
+                  {pages.map((page, i) => {
+                    return (
+                      <Route
+                        exact
+                        path={page.pageLink}
+                        component={page.view}
+                        key={i}
+                      />
+                    );
+                  })}
                 </Switch>
               </div>
             )}
