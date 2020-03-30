@@ -1,3 +1,5 @@
+# Name : Srinivas Guni
+
 # Contributing to covid19india.org website
 
 First off, thanks for taking the time to contribute! :+1:
