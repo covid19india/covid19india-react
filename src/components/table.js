@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import * as Icon from 'react-feather';
 
 import Row from './row';
 
@@ -121,7 +120,11 @@ function Table(props) {
                       sortData.sortColumn === 'state' ? 'initial' : 'none',
                   }}
                 >
-                  {sortData.isAscending ? <Icon.ArrowUp /> : <Icon.ArrowDown />}
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
                 </div>
               </div>
             </th>
@@ -143,7 +146,11 @@ function Table(props) {
                       sortData.sortColumn === 'confirmed' ? 'initial' : 'none',
                   }}
                 >
-                  {sortData.isAscending ? <Icon.ArrowUp /> : <Icon.ArrowDown />}
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
                 </div>
               </div>
             </th>
@@ -165,7 +172,11 @@ function Table(props) {
                       sortData.sortColumn === 'active' ? 'initial' : 'none',
                   }}
                 >
-                  {sortData.isAscending ? <Icon.ArrowUp /> : <Icon.ArrowDown />}
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
                 </div>
               </div>
             </th>
@@ -192,7 +203,11 @@ function Table(props) {
                       sortData.sortColumn === 'recovered' ? 'initial' : 'none',
                   }}
                 >
-                  {sortData.isAscending ? <Icon.ArrowUp /> : <Icon.ArrowDown />}
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
                 </div>
               </div>
             </th>
@@ -214,7 +229,11 @@ function Table(props) {
                       sortData.sortColumn === 'deaths' ? 'initial' : 'none',
                   }}
                 >
-                  {sortData.isAscending ? <Icon.ArrowUp /> : <Icon.ArrowDown />}
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
                 </div>
               </div>
             </th>
