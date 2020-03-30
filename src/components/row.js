@@ -175,7 +175,11 @@ function Row(props) {
                   sortData.sortColumn === 'district' ? 'initial' : 'none',
               }}
             >
-              {sortData.isAscending ? <Icon.ArrowUp /> : <Icon.ArrowDown />}
+              {sortData.isAscending ? (
+                <div className="arrow-up" />
+              ) : (
+                <div className="arrow-down" />
+              )}
             </div>
           </div>
         </td>
@@ -197,7 +201,11 @@ function Row(props) {
                   sortData.sortColumn === 'confirmed' ? 'initial' : 'none',
               }}
             >
-              {sortData.isAscending ? <Icon.ArrowUp /> : <Icon.ArrowDown />}
+              {sortData.isAscending ? (
+                <div className="arrow-up" />
+              ) : (
+                <div className="arrow-down" />
+              )}
             </div>
           </div>
         </td>

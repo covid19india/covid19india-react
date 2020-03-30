@@ -236,6 +236,19 @@ h6 {
     border-top: 5px solid $gray-mid;
   }
 }
+.arrow-up {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid $gray-mid;
+  margin-left: 0.25rem;
+}
+
+.arrow-down {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid $gray-mid;
+  margin-left: 0.25rem;
+}
 
 .Home {
   display: flex;
