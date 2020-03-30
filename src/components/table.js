@@ -107,9 +107,11 @@ function Table(props) {
 
   return (
     <>
-      <h5 className="affected-count fadeInUp" style={{animationDelay: '1s'}}>
+      
+      <h5 className="affected-count fadeInUp" style={{animationDelay: '1s',alignSelf:'center',padding:'8px'}}>
         {count} States/UTS Affected
       </h5>
+      
       <table className="table fadeInUp" style={{animationDelay: '1s'}}>
         <thead>
           <tr>

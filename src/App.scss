@@ -162,7 +162,7 @@ body {
   -webkit-touch-callout: none;
 }
 
-h1, {
+h1{
   font-family: 'archia';
   font-size: 24px !important;
   font-weight: 900;
@@ -207,16 +207,18 @@ h6 {
 .Home {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  // justify-content: space-around;
   flex-wrap: wrap;
-  margin-left: 10rem;
-  margin-right: 10rem;
+  flex:1;
+  // margin-left: 10rem;
+  // margin-right: 10rem;
 
   .home-left,
   .home-right {
     display: flex;
     flex-direction: column;
-    width: 30rem;
+    flex:0.5;
+    // width: 30rem;
   }
 }
 
