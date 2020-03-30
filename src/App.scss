@@ -810,6 +810,7 @@ table {
     flex-direction: row;
     justify-content: space-between;
     height: 1rem;
+    width: calc(100% - 80px);
 
     .district-last-update{
       position: absolute;
@@ -832,7 +833,7 @@ table {
 
     .unknown {
       position: absolute;
-      top: 14rem;
+      top: 14.9rem;
       width: 5rem;
     }
   }
