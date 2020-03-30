@@ -7,7 +7,7 @@ import {useTranslation} from 'react-i18next';
 import {MAP_TYPES} from '../constants';
 
 const propertyFieldMap = {
-  country: 'ST_NM',
+  country: 'st_nm',
   state: 'district',
 };
 
@@ -130,7 +130,7 @@ function ChoroplethMap({
           `% ${t('from')} ` +
           toTitleCase(
             t([
-              `state.${d.properties[propertyField]}`,
+              `state.${d.properties[propertyField]}.title`,
               d.properties[propertyField],
             ])
           )

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 
@@ -37,21 +37,18 @@ function Navbar(props) {
           }}
         />
 
-        <div className='navbar-left'>
-          {
-            props.pages.map((page, i) => {
-              return (
-                <Link
-                  to={page.pageLink}
-                  key={i}
+        <div className="navbar-left">
+          {props.pages.map((page, i) => {
+            return (
+              <Link to={page.pageLink} key={i}>
+                <span
+                  {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}
                 >
-                  <span {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}>
-                    {t(page.displayName)}
-                  </span>
-                </Link>
-              );
-            })
-          }
+                  {t(page.displayName)}
+                </span>
+              </Link>
+            );
+          })}
         </div>
 
         <div className="navbar-right">

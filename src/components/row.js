@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import {formatDistance} from 'date-fns';
+import React, {useEffect, useState} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
+
 import {formatDate} from '../utils/common-functions';
-import {formatDistance} from 'date-fns';
 
 function Row(props) {
   const {t} = useTranslation();
@@ -100,7 +101,7 @@ function Row(props) {
           handleReveal();
         }}
       >
-        <td style={{fontWeight: 600}}>{t(`state.${state.state}`)}</td>
+        <td style={{fontWeight: 600}}>{t(`state.${state.state}.title`)}</td>
         <td>
           <span className="deltas" style={{color: '#ff073a'}}>
             {!state.delta.confirmed == 0 && <Icon.ArrowUp />}
@@ -145,14 +146,14 @@ function Row(props) {
       >
         <td colSpan={5}>
           <div className="last-update">
-            <h6>Last Updated&nbsp;</h6>
+            <h6>{t('Last Updated')}&nbsp;</h6>
             <h6>
               {isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
                 ? ''
                 : `${formatDistance(
                     new Date(formatDate(props.state.lastupdatedtime)),
                     new Date()
-                  )} Ago`}
+                  )} ${t('Ago')}`}
             </h6>
           </div>
         </td>
@@ -164,7 +165,7 @@ function Row(props) {
       >
         <td onClick={(e) => handleSort('district')}>
           <div className="heading-content">
-            <abbr title="District">District</abbr>
+            <abbr title="District">{t('District Title')}</abbr>
             <div
               style={{
                 display:
@@ -214,7 +215,9 @@ function Row(props) {
                 props.onHighlightDistrict?.(district, state, props.index)
               }
             >
-              <td style={{fontWeight: 600}}>{district}</td>
+              <td style={{fontWeight: 600}}>
+                {t([`state.${state.state}.${district}`, district])}
+              </td>
               <td>{sortedDistricts[district].confirmed}</td>
             </tr>
           );

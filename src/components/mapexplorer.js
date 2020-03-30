@@ -284,11 +284,7 @@ export default function ({
   const {t} = useTranslation();
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
-
-  useEffect(() => {
-    // setStates(props.states);
-    // setCurrentHoveredRegion()
-  }, [states]);
+  const [currentStateName, setCurrentStatename] = useState();
 
   useEffect(() => {
     const region = getRegionFromState(states[1]);
@@ -390,7 +386,7 @@ export default function ({
     if (!districtData) {
       return;
     }
-    const region = {...districtData, type: MAP_TYPES.DISTRICT};
+    const region = {...districtData, mapType: MAP_TYPES.DISTRICT};
     if (!region.name) {
       region.name = name;
     }
@@ -401,7 +397,7 @@ export default function ({
     if (!state) {
       return;
     }
-    const region = {...state, type: MAP_TYPES.STATE};
+    const region = state;
     if (!region.name) {
       region.name = region.state;
     }
@@ -417,6 +413,7 @@ export default function ({
     if (newMap.mapType === MAP_TYPES.COUNTRY) {
       setHoveredRegion(states[1].state, newMap);
     } else if (newMap.mapType === MAP_TYPES.STATE) {
+      setCurrentStatename(name);
       const districtData = (stateDistrictWiseData[name] || {districtData: {}})
         .districtData;
       const topDistrict = Object.keys(districtData)
@@ -427,7 +424,9 @@ export default function ({
       setHoveredRegion(topDistrict, newMap);
     }
   };
-  const {name, lastupdatedtime} = currentHoveredRegion;
+
+  const {name, lastupdatedtime, mapType} = currentHoveredRegion;
+
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
       <div className="header">
@@ -480,44 +479,53 @@ export default function ({
       </div>
 
       <div className="meta">
-        <h2>{name}</h2>
-        {lastupdatedtime && (
-          <div
-            className={`last-update ${
-              currentMap.mapType === MAP_TYPES.STATE
-                ? 'district-last-update'
-                : 'state-last-update'
-            }`}
-          >
-            <h6>Last Updated</h6>
-            <h3>
-              {isNaN(Date.parse(formatDate(lastupdatedtime)))
-                ? ''
-                : formatDistance(
-                    new Date(formatDate(lastupdatedtime)),
-                    new Date()
-                  ) + ' Ago'}
-            </h3>
-          </div>
-        )}
+        <div>
+          <h2>
+            {mapType === MAP_TYPES.DISTRICT
+              ? t([`state.${currentStateName}.${name}`, name])
+              : name && t([`state.${name}.title`, name])}
+          </h2>
 
-        {currentMap.mapType === MAP_TYPES.STATE &&
-        currentMapData.Unknown > 0 ? (
-          <h4 className="unknown" style={{lineHeight: '1rem'}}>
-            {t('Districts unknown for people', {
-              unknownCount: currentMapData.Unknown,
-            })}
-          </h4>
-        ) : null}
+          {currentMap.mapType === MAP_TYPES.STATE &&
+          currentMapData.Unknown > 0 ? (
+            <h4 className="unknown" style={{lineHeight: '1rem'}}>
+              {t('Districts unknown for people', {
+                unknownCount: currentMapData.Unknown,
+              })}
+            </h4>
+          ) : null}
+        </div>
 
-        {currentMap.mapType === MAP_TYPES.STATE ? (
-          <div
-            className="button back-button"
-            onClick={() => switchMapToState('India')}
-          >
-            {t('Back')}
-          </div>
-        ) : null}
+        <div className="meta-right">
+          {lastupdatedtime && (
+            <div
+              className={`last-update ${
+                currentMap.mapType === MAP_TYPES.STATE
+                  ? 'district-last-update'
+                  : 'state-last-update'
+              }`}
+            >
+              <h6>{t('Last Updated')}</h6>
+              <h3>
+                {isNaN(Date.parse(formatDate(lastupdatedtime)))
+                  ? ''
+                  : formatDistance(
+                      new Date(formatDate(lastupdatedtime)),
+                      new Date()
+                    ) + ` ${t('Ago')}`}
+              </h3>
+            </div>
+          )}
+
+          {currentMap.mapType === MAP_TYPES.STATE ? (
+            <div
+              className="button back-button"
+              onClick={() => switchMapToState('India')}
+            >
+              {t('Back')}
+            </div>
+          ) : null}
+        </div>
       </div>
 
       <ChoroplethMap
