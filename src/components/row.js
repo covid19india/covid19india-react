@@ -215,10 +215,18 @@ function Row(props) {
                 props.onHighlightDistrict?.(district, state, props.index)
               }
             >
-              <td style={{fontWeight: 600}}>
-                {t([`state.${state.state}.${district}`, district])}
+              <td style={{fontWeight: 600}}>{t([`state.${state.state}.${district}`, district])}</td>
+              <td>
+                <span className="deltas" style={{color: '#ff073a'}}>
+                  {!sortedDistricts[district].delta.confirmed == 0 && (
+                    <Icon.ArrowUp />
+                  )}
+                  {sortedDistricts[district].delta.confirmed > 0
+                    ? `${sortedDistricts[district].delta.confirmed}`
+                    : ''}
+                </span>
+                {sortedDistricts[district].confirmed}
               </td>
-              <td>{sortedDistricts[district].confirmed}</td>
             </tr>
           );
         }
@@ -230,7 +238,17 @@ function Row(props) {
           style={{display: props.reveal && !props.total ? '' : 'none'}}
         >
           <td style={{fontWeight: 600}}>Unknown</td>
-          <td>{sortedDistricts['Unknown'].confirmed}</td>
+          <td>
+            <span className="deltas" style={{color: '#ff073a'}}>
+              {!sortedDistricts['Unknown'].delta.confirmed == 0 && (
+                <Icon.ArrowUp />
+              )}
+              {sortedDistricts['Unknown'].delta.confirmed > 0
+                ? `${sortedDistricts['Unknown'].delta.confirmed}`
+                : ''}
+            </span>
+            {sortedDistricts['Unknown'].confirmed}
+          </td>
         </tr>
       )}
 
