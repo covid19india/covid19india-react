@@ -48,88 +48,52 @@ function RateOfNewCases(props) {
             Rate of New Cases
           </h2>
           <div className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
-            <div
-              className={`level-item ${
-                casesMap[3].cases - casesMap[4].cases < 0
-                  ? 'is-green'
-                  : 'is-cherry'
-              }`}
-            >
-              <h5 className="heading">{casesMap[3].date}</h5>
-              <h2 className="title has-text-grey">{casesMap[3].cases}</h2>
-            </div>
-
-            <div
-              className={`level-item ${
-                casesMap[2].cases - casesMap[3].cases < 0
-                  ? 'is-green'
-                  : 'is-cherry'
-              }`}
-            >
-              <h5 className="heading"> </h5>
-              <h1>
-                {casesMap[2].cases - casesMap[3].cases > 0
-                  ? upArrow
-                  : downArrow}
-                {Math.abs(casesMap[2].cases - casesMap[3].cases)}
-              </h1>
-              <h1 className="title has-text-grey">{}</h1>
-            </div>
-
-            <div
-              className={`level-item ${
-                casesMap[2].cases - casesMap[3].cases < 0
-                  ? 'is-green'
-                  : 'is-cherry'
-              }`}
-            >
-              <h5 className="heading">{casesMap[2].date}</h5>
-              <h2 className="title has-text-success">{casesMap[2].cases} </h2>
-            </div>
-
-            <div
-              className={`level-item ${
-                casesMap[1].cases - casesMap[2].cases < 0
-                  ? 'is-green'
-                  : 'is-cherry'
-              }`}
-            >
-              <h5 className="heading has-text-info">{} </h5>
-              <h1 className="has-text-info">
-                {casesMap[1].cases - casesMap[2].cases > 0
-                  ? upArrow
-                  : downArrow}
-                {Math.abs(casesMap[1].cases - casesMap[2].cases)}
-              </h1>
-              <h1 className="title has-text-grey">{}</h1>
-            </div>
-
-            <div
-              className={`level-item ${
-                casesMap[1].cases - casesMap[2].cases < 0
-                  ? 'is-green'
-                  : 'is-cherry'
-              }`}
-            >
-              <h5 className="heading">{casesMap[1].date}</h5>
-              <h2 className="title has-text-info">{casesMap[1].cases}</h2>
-            </div>
-
-            <div className="level-item is-blue">
-              <h5 className="heading"> </h5>
-              <h1>
-                {casesMap[0].cases - casesMap[1].cases > 0
-                  ? upArrow
-                  : downArrow}
-                {Math.abs(casesMap[0].cases - casesMap[1].cases)}*
-              </h1>
-              <h1 className="title has-text-grey">{}</h1>
-            </div>
-
-            <div className="level-item is-blue">
-              <h5>{casesMap[0].date}</h5>
-              <h2> {casesMap[0].cases}* </h2>
-            </div>
+            {(function () {
+              const rows = [];
+              for (let index = casesMap.length - 1; index > 0; index--) {
+                rows.push(
+                  <React.Fragment>
+                    {index < casesMap.length - 1 && (
+                      <div
+                        className={`level-item ${
+                          casesMap[index - 1].cases - casesMap[index].cases < 0
+                            ? casesMap[index - 1].date == 'Today'
+                              ? 'is-blue'
+                              : 'is-green'
+                            : 'is-cherry'
+                        }`}
+                      >
+                        <h5 className="heading"> </h5>
+                        <h1>
+                          {casesMap[index - 1].cases - casesMap[index].cases > 0
+                            ? upArrow
+                            : downArrow}
+                          {Math.abs(
+                            casesMap[index - 1].cases - casesMap[index].cases
+                          )}
+                        </h1>
+                        <h1 className="title has-text-grey">{}</h1>
+                      </div>
+                    )}
+                    <div
+                      className={`level-item ${
+                        casesMap[index - 1].cases - casesMap[index].cases < 0
+                          ? casesMap[index - 1].date == 'Today'
+                            ? 'is-blue'
+                            : 'is-green'
+                          : 'is-cherry'
+                      }`}
+                    >
+                      <h5 className="heading">{casesMap[index - 1].date}</h5>
+                      <h2 className="title has-text-grey">
+                        {casesMap[index - 1].cases}
+                      </h2>
+                    </div>
+                  </React.Fragment>
+                );
+              }
+              return rows;
+            })()}
           </div>
         </React.Fragment>
       )}
