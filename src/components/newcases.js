@@ -71,6 +71,7 @@ function RateOfNewCases(props) {
                           {Math.abs(
                             casesMap[index - 1].cases - casesMap[index].cases
                           )}
+                          {casesMap[index - 1].date == 'Today' ? '*' : ''}
                         </h1>
                         <h1 className="title has-text-grey">{}</h1>
                       </div>
@@ -87,6 +88,7 @@ function RateOfNewCases(props) {
                       <h5 className="heading">{casesMap[index - 1].date}</h5>
                       <h2 className="title has-text-grey">
                         {casesMap[index - 1].cases}
+                        {casesMap[index - 1].date == 'Today' ? '*' : ''}
                       </h2>
                     </div>
                   </React.Fragment>
