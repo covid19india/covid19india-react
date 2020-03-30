@@ -14,19 +14,18 @@ function Minigraph(props) {
     }
   }, [props.timeseries]);
 
-  const svg1 = d3.select(graphElement1.current);
-  const margin = {top: 30, right: 5, bottom: 30, left: 0};
-  const width = 100 - margin.left - margin.right;
-  const height = 100 - margin.top - margin.bottom;
-
-  const svg2 = d3.select(graphElement2.current);
-  const svg3 = d3.select(graphElement3.current);
-  const svg4 = d3.select(graphElement4.current);
-
   const graphData = useCallback(
     (timeseries) => {
       if (timeseries.length <= 1) return 0;
       const data = timeseries;
+      const svg1 = d3.select(graphElement1.current);
+      const margin = {top: 30, right: 5, bottom: 30, left: 0};
+      const width = 100 - margin.left - margin.right;
+      const height = 100 - margin.top - margin.bottom;
+
+      const svg2 = d3.select(graphElement2.current);
+      const svg3 = d3.select(graphElement3.current);
+      const svg4 = d3.select(graphElement4.current);
 
       const x = d3
         .scaleTime()
@@ -293,13 +292,12 @@ function Minigraph(props) {
         .duration(props.animate ? 3000 : 0)
         .style('opacity', 1);
     },
-    [width, height, svg1, props.animate, svg2, svg3, svg4]
+    [props.animate]
   );
 
   useEffect(() => {
     graphData(timeseries);
-    // eslint-disable-next-line
-  }, [timeseries]);
+  }, [timeseries, graphData]);
 
   return (
     <div className="Minigraph">
