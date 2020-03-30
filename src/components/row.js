@@ -95,6 +95,7 @@ function Row(props) {
         touchstart={() => props.onHighlightState?.(state, props.index)}
         onClick={() => {
           handleReveal();
+          props.onTableClick(state,props)
         }}
       >
         <td style={{fontWeight: 600}}>{state.state}</td>

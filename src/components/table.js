@@ -240,6 +240,7 @@ function Table(props) {
                       ? districts[state.state].districtData
                       : []
                   }
+                  onTableClick={props.onTableClick}
                   onHighlightState={props.onHighlightState}
                   onHighlightDistrict={props.onHighlightDistrict}
                   handleReveal={handleReveal}

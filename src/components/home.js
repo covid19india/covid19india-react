@@ -51,7 +51,11 @@ function Home(props) {
     if (!state && !index && !district) setDistrictHighlighted(null);
     else setDistrictHighlighted({district, state, index});
   };
-
+const onTableClick =(state,props)=>{
+  let {index,reveal} = props
+  !reveal?setDistrictHighlighted({state,index}):setStateHighlighted({state, index});
+  
+};
   return (
     <div className="Home">
       <div className="home-left">
@@ -80,6 +84,7 @@ function Home(props) {
 
         <Table
           states={states}
+          onTableClick ={onTableClick}
           summary={false}
           onHighlightState={onHighlightState}
           stateDistrictWiseData={stateDistrictWiseData}
