@@ -8,7 +8,7 @@ function RateOfNewCases(props) {
 
   useEffect(() => {
     parseData();
-  });
+  }, [props.timeseries, props.deltas]);
 
   const parseData = () => {
     const length = props.timeseries.length;
@@ -42,12 +42,12 @@ function RateOfNewCases(props) {
 
   return (
     <div className="home-left">
-      <h2 className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
-        Rate of New Cases
-      </h2>
-      <div className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
-        {length > 0 && (
-          <React.Fragment>
+      {length > 0 && (
+        <React.Fragment>
+          <h2 className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
+            Rate of New Cases
+          </h2>
+          <div className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
             <div
               className={`level-item ${
                 casesMap[3].cases - casesMap[4].cases < 0
@@ -130,9 +130,9 @@ function RateOfNewCases(props) {
               <h5>{casesMap[0].date}</h5>
               <h2> {casesMap[0].cases}* </h2>
             </div>
-          </React.Fragment>
-        )}
-      </div>
+          </div>
+        </React.Fragment>
+      )}
     </div>
   );
 }
