@@ -11,7 +11,6 @@ import Navbar from './components/navbar';
 import './App.scss';
 const Home = lazy(() => import('./components/home'));
 const Links = lazy(() => import('./components/links'));
-const Summary = lazy(() => import('./components/summary'));
 const Cluster = lazy(() => import('./components/cluster'));
 const FAQ = lazy(() => import('./components/faq'));
 const Banner = lazy(() => import('./components/banner'));
