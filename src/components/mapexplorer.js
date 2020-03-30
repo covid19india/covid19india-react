@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useMemo, useCallback} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import ChoroplethMap, {highlightRegionInMap} from './choropleth';
-import {MAP_TYPES, MAPS_DIR} from '../constants';
+import {HELPLINES, MAP_TYPES, MAPS_DIR} from '../constants';
 import {formatDate} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
 
@@ -10,24 +10,28 @@ const mapMeta = {
     geoDataFile: `${MAPS_DIR}/india.json`,
     mapType: MAP_TYPES.COUNTRY,
     graphObjectName: 'india',
+    helpline: HELPLINES.Central,
   },
   'Andaman and Nicobar Islands': {
     name: 'Andaman and Nicobar Islands',
     geoDataFile: `${MAPS_DIR}/andamannicobarislands.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'andamannicobarislands_district',
+    helpline: HELPLINES['Andaman and Nicobar Islands'],
   },
   'Arunachal Pradesh': {
     name: 'Arunachal Pradesh',
     geoDataFile: `${MAPS_DIR}/arunachalpradesh.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'arunachalpradesh_district',
+    helpline: HELPLINES['Andhra Pradesh'],
   },
   'Andhra Pradesh': {
     name: 'Andhra Pradesh',
     geoDataFile: `${MAPS_DIR}/andhrapradesh.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'andhrapradesh_district',
+    helpline: HELPLINES['Andhra Pradesh'],
   },
 
   Assam: {
@@ -35,168 +39,196 @@ const mapMeta = {
     geoDataFile: `${MAPS_DIR}/assam.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'assam_district',
+    helpline: HELPLINES.Assam,
   },
   Bihar: {
     name: 'Bihar',
     geoDataFile: `${MAPS_DIR}/bihar.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'bihar_district',
+    helpline: HELPLINES['104'],
   },
   Chhattisgarh: {
     name: 'Chhattisgarh',
     geoDataFile: `${MAPS_DIR}/chhattisgarh.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'chhattisgarh_district',
+    helpline: HELPLINES['104'],
   },
   Delhi: {
     name: 'Delhi',
     geoDataFile: `${MAPS_DIR}/delhi.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'delhi_1997-2012_district',
+    helpline: HELPLINES.Delhi,
   },
   Karnataka: {
     name: 'Karnataka',
     geoDataFile: `${MAPS_DIR}/karnataka.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'karnataka_district',
+    helpline: HELPLINES[104],
   },
   Kerala: {
     name: 'Kerala',
     geoDataFile: `${MAPS_DIR}/kerala.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'kerala_district',
+    helpline: HELPLINES.Kerala,
   },
   Goa: {
     name: 'Goa',
     geoDataFile: `${MAPS_DIR}/goa.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'goa_district',
+    helpline: HELPLINES[104],
   },
   Gujarat: {
     name: 'Gujarat',
     geoDataFile: `${MAPS_DIR}/gujarat.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'gujarat_district_2011',
+    helpline: HELPLINES[104],
   },
   Haryana: {
     name: 'Haryana',
     geoDataFile: `${MAPS_DIR}/haryana.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'haryana_district',
+    helpline: HELPLINES.Haryana,
   },
   'Himachal Pradesh': {
     name: 'Himachal Pradesh',
     geoDataFile: `${MAPS_DIR}/himachalpradesh.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'himachalpradesh_district',
+    helpline: HELPLINES[104],
   },
   'Jammu and Kashmir': {
     name: 'Jammu and Kashmir',
     geoDataFile: `${MAPS_DIR}/jammukashmir.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'jammukashmir_district',
+    helpline: HELPLINES[104],
   },
   Jharkhand: {
     name: 'Jharkhand',
     geoDataFile: `${MAPS_DIR}/jharkhand.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'jharkhand_district',
+    helpline: HELPLINES[104],
   },
   Ladakh: {
     name: 'Ladakh',
     geoDataFile: `${MAPS_DIR}/ladakh.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'ladakh_district',
+    helpline: HELPLINES.Ladakh,
   },
   'Madhya Pradesh': {
     name: 'Madhya Pradesh',
     geoDataFile: `${MAPS_DIR}/madhyapradesh.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'madhyapradesh_district',
+    helpline: HELPLINES['Madhya Pradesh'],
   },
   Maharashtra: {
     name: 'Maharashtra',
     geoDataFile: `${MAPS_DIR}/maharashtra.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'maharashtra_district',
+    helpline: HELPLINES.Maharashtra,
   },
   Manipur: {
     name: 'Manipur',
     geoDataFile: `${MAPS_DIR}/manipur.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'manipur_pre2016_districts',
+    helpline: HELPLINES.Manipur,
   },
   Meghalaya: {
     name: 'Meghalaya',
     geoDataFile: `${MAPS_DIR}/meghalaya.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'meghalaya_district',
+    helpline: HELPLINES.Meghalaya,
   },
   Mizoram: {
     name: 'Mizoram',
     geoDataFile: `${MAPS_DIR}/mizoram.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'mizoram_district',
+    helpline: HELPLINES.Mizoram,
   },
   Nagaland: {
     name: 'Nagaland',
     geoDataFile: `${MAPS_DIR}/nagaland.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'nagaland_district',
+    helpline: HELPLINES[104],
   },
   Odisha: {
     name: 'Odisha',
     geoDataFile: `${MAPS_DIR}/odisha.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'odisha_district',
+    helpline: HELPLINES.Odisha,
   },
   Punjab: {
     name: 'Punjab',
     geoDataFile: `${MAPS_DIR}/punjab.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'punjab_district',
+    helpline: HELPLINES[104],
   },
   Rajasthan: {
     name: 'Rajasthan',
     geoDataFile: `${MAPS_DIR}/rajasthan.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'rajasthan_district',
+    helpline: HELPLINES.Rajasthan,
   },
   Sikkim: {
     name: 'Sikkim',
     geoDataFile: `${MAPS_DIR}/sikkim.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'sikkim_district',
+    helpline: HELPLINES[104],
   },
   'Tamil Nadu': {
     name: 'Tamil Nadu',
     geoDataFile: `${MAPS_DIR}/tamil-nadu.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'tamilnadu_district',
+    helpline: HELPLINES['Tamil Nadu'],
   },
   Telangana: {
     name: 'Telangana',
     geoDataFile: `${MAPS_DIR}/telugana.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'telugana',
+    helpline: HELPLINES[104],
   },
   Tripura: {
     name: 'Tripura',
     geoDataFile: `${MAPS_DIR}/tripura.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'tripura_district',
+    helpline: HELPLINES.Tripura,
   },
   Uttarakhand: {
     name: 'Uttarakhand',
     geoDataFile: `${MAPS_DIR}/uttarakhand.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'uttarakhand_district',
+    helpline: HELPLINES[104],
   },
   'Uttar Pradesh': {
     name: 'Uttar Pradesh',
     geoDataFile: `${MAPS_DIR}/uttarpradesh.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'uttarpradesh_district',
+    helpline: HELPLINES['Uttar Pradesh'],
   },
 
   'West Bengal': {
@@ -204,6 +236,7 @@ const mapMeta = {
     geoDataFile: `${MAPS_DIR}/westbengal.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'westbengal_district',
+    helpline: HELPLINES['West Bengal'],
   },
 };
 
@@ -228,19 +261,34 @@ export default function ({
   }, [states]);
 
   useEffect(() => {
+    const newMap = mapMeta['India'];
+    setCurrentMap(newMap);
     if (stateHighlighted === null) {
       highlightRegionInMap(null, currentMap.mapType);
     } else {
       if (stateHighlighted !== undefined) {
-        const newMap = mapMeta['India'];
-        setCurrentMap(newMap);
         const regionHighlighted = getRegionFromState(stateHighlighted.state);
         setCurrentHoveredRegion(regionHighlighted);
         highlightRegionInMap(regionHighlighted.name, currentMap.mapType);
         setSelectedRegion(regionHighlighted.name);
       }
     }
-  }, [stateHighlighted, currentMap.mapType]);
+  }, [stateHighlighted]);
+
+  useEffect(() => {
+    if (districtHighlighted === null) {
+      highlightRegionInMap(null, currentMap.mapType);
+      return;
+    }
+    const newMap = mapMeta[districtHighlighted?.state.state];
+    if (!newMap) {
+      return;
+    }
+    setCurrentMap(newMap);
+    setHoveredRegion(districtHighlighted?.district, newMap);
+    highlightRegionInMap(districtHighlighted?.district, currentMap.mapType);
+    setSelectedRegion(districtHighlighted?.district);
+  }, [districtHighlighted]);
 
   if (!currentHoveredRegion) {
     return null;
@@ -279,47 +327,29 @@ export default function ({
       }, {});
     }
     return [statistic, currentMapData];
-  }, [currentMap, states, stateDistrictWiseData]);
+  }, [currentMap]);
 
-  const setHoveredRegion = useCallback(
-    (name, currentMap) => {
-      if (currentMap.mapType === MAP_TYPES.COUNTRY) {
-        setCurrentHoveredRegion(
-          getRegionFromState(states.filter((state) => name === state.state)[0])
-        );
-      } else if (currentMap.mapType === MAP_TYPES.STATE) {
-        const state = stateDistrictWiseData[currentMap.name] || {
-          districtData: {},
+  const setHoveredRegion = (name, currentMap) => {
+    if (currentMap.mapType === MAP_TYPES.COUNTRY) {
+      setCurrentHoveredRegion(
+        getRegionFromState(states.filter((state) => name === state.state)[0])
+      );
+    } else if (currentMap.mapType === MAP_TYPES.STATE) {
+      const state = stateDistrictWiseData[currentMap.name] || {
+        districtData: {},
+      };
+      let districtData = state.districtData[name];
+      if (!districtData) {
+        districtData = {
+          confirmed: 0,
+          active: 0,
+          deaths: 0,
+          recovered: 0,
         };
-        let districtData = state.districtData[name];
-        if (!districtData) {
-          districtData = {
-            confirmed: 0,
-            active: 0,
-            deaths: 0,
-            recovered: 0,
-          };
-        }
-        setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
       }
-    },
-    [stateDistrictWiseData, states]
-  );
-
-  useEffect(() => {
-    if (districtHighlighted === null) {
-      highlightRegionInMap(null, currentMap.mapType);
-      return;
+      setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
     }
-    const newMap = mapMeta[districtHighlighted?.state.state];
-    if (!newMap) {
-      return;
-    }
-    setCurrentMap(newMap);
-    setHoveredRegion(districtHighlighted?.district, newMap);
-    highlightRegionInMap(districtHighlighted?.district, currentMap.mapType);
-    setSelectedRegion(districtHighlighted?.district);
-  }, [districtHighlighted, currentMap.mapType, setHoveredRegion]);
+  };
 
   const getRegionFromDistrict = (districtData, name) => {
     if (!districtData) {
@@ -343,34 +373,31 @@ export default function ({
     return region;
   };
 
-  const switchMapToState = useCallback(
-    (name) => {
-      const newMap = mapMeta[name];
-      if (!newMap) {
-        return;
-      }
-      setCurrentMap(newMap);
-      if (newMap.mapType === MAP_TYPES.COUNTRY) {
-        setHoveredRegion(states[1].state, newMap);
-      } else if (newMap.mapType === MAP_TYPES.STATE) {
-        const districtData = (stateDistrictWiseData[name] || {districtData: {}})
-          .districtData;
-        const topDistrict = Object.keys(districtData)
-          .filter((name) => name !== 'Unknown')
-          .sort((a, b) => {
-            return districtData[b].confirmed - districtData[a].confirmed;
-          })[0];
-        setHoveredRegion(topDistrict, newMap);
-      }
-    },
-    [setHoveredRegion, stateDistrictWiseData, states]
-  );
+  const switchMapToState = (name) => {
+    const newMap = mapMeta[name];
+    if (!newMap) {
+      return;
+    }
+    setCurrentMap(newMap);
+    if (newMap.mapType === MAP_TYPES.COUNTRY) {
+      setHoveredRegion(states[1].state, newMap);
+    } else if (newMap.mapType === MAP_TYPES.STATE) {
+      const districtData = (stateDistrictWiseData[name] || {districtData: {}})
+        .districtData;
+      const topDistrict = Object.keys(districtData)
+        .filter((name) => name !== 'Unknown')
+        .sort((a, b) => {
+          return districtData[b].confirmed - districtData[a].confirmed;
+        })[0];
+      setHoveredRegion(topDistrict, newMap);
+    }
+  };
   const {name, lastupdatedtime} = currentHoveredRegion;
-
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
       <div className="header">
         <h1>{currentMap.name} Map</h1>
+        <h6>Helpline : {currentMap.helpline}</h6>
         <h6>
           Hover over a{' '}
           {currentMap.mapType === MAP_TYPES.COUNTRY ? 'state' : 'district'} for
@@ -455,7 +482,7 @@ export default function ({
         statistic={statistic}
         mapMeta={currentMap}
         mapData={currentMapData}
-        setHoveredRegion={setHoveredRegion}
+        setHoveredRegion={(region) => setHoveredRegion(region, currentMap)}
         changeMap={switchMapToState}
         selectedRegion={selectedRegion}
       />
