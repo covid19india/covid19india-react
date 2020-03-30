@@ -29,4 +29,5 @@ export const HELPLINES = {
   Delhi: '011-22307145',
   Ladakh: '01982256462',
   '104': '104',
+  'Jammu and Kashmir': '01912520982, 0194-2440283',
 };

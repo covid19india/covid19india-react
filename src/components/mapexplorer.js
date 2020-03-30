@@ -109,7 +109,7 @@ const mapMeta = {
     geoDataFile: `${MAPS_DIR}/jammukashmir.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'jammukashmir_district',
-    helpline: HELPLINES[104],
+    helpline: HELPLINES['Jammu and Kashmir'],
   },
   Jharkhand: {
     name: 'Jharkhand',
