@@ -15,7 +15,7 @@ function PatientDB(props) {
         'https://api.covid19india.org/raw_data.json'
       );
       if (response.data) {
-        setPatients(response.data.raw_data.filter((p) => p.detectedstate));
+        setPatients(response.data.raw_data.filter((p) => p.patientnumber));
         setFetched(true);
       } else {
         setError("Couldn't fetch patient data. Try again after sometime.");

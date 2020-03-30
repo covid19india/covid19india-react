@@ -17,8 +17,8 @@
     "react-feather": "^2.0.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
-    "react-table": "^7.0.0",
     "sass-lint": "^1.13.1",
+    "react-table": "^7.0.0",
     "topojson": "^3.0.2"
   },
   "scripts": {
