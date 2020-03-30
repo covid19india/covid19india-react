@@ -1,17 +1,20 @@
 import React from 'react';
-import { Parser } from "json2csv";
+import {Parser} from 'json2csv';
+import * as Icon from 'react-feather';
 
 function CSVDownloadLink(props) {
-  if(!props.patients) {
+  if (!props.patients) {
     return '';
   }
   try {
     const parser = new Parser(Object.keys(props.patients[0]));
     const csv = parser.parse(props.patients);
-    const data = "data:text/csv;charset=utf-8," + csv;
+    const data = 'data:text/csv;charset=utf-8,' + csv;
     return (
-      <a href={data} download="patients.csv"><code>CSV</code></a>
-    )
+      <a href={data} download="patients.csv">
+        <code>CSV</code>
+      </a>
+    );
   } catch (e) {
     console.log(e);
     return '';
@@ -22,23 +25,22 @@ function DownloadBlock(props) {
     return '';
   }
 
-  const dataJSON = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(props.patients));
+  const dataJSON =
+    'data:text/json;charset=utf-8,' +
+    encodeURIComponent(JSON.stringify(props.patients));
 
   return (
-    <div className="d-block my-3">
-      <p className="text-right">
-        <small>
-          <strong>Download </strong>
-          <span className="ml-2">
-            <CSVDownloadLink patients={props.patients}/>
-          </span>
-          <span className="ml-2">
-            <a href={dataJSON} download="patients.json">
-              <code>JSON</code>
-            </a>
-          </span>
-        </small>
-      </p>
+    <div className="DownloadBlock fadeInUp" style={{animationDelay: '0.5s'}}>
+      <button className="button">
+        <Icon.Save />
+        <CSVDownloadLink patients={props.patients} />
+      </button>
+      <button className="button">
+        <Icon.Save />
+        <a href={dataJSON} download="patients.json">
+          JSON
+        </a>
+      </button>
     </div>
   );
 }

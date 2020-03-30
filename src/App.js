@@ -8,6 +8,7 @@ import {
 import * as Icon from 'react-feather';
 
 import './App.scss';
+
 import Home from './components/home';
 import Navbar from './components/navbar';
 import Links from './components/links';
@@ -19,7 +20,6 @@ import PatientDB from './components/patientdb';
 const history = require('history').createBrowserHistory;
 
 function App() {
-  // Add a new page simply by adding a new entry in this array.
   const pages = [
     {
       pageLink: '/',
@@ -78,6 +78,7 @@ function App() {
           )}
         />
       </Router>
+
       <footer className="fadeInUp" style={{animationDelay: '2s'}}>
         <img
           src="/icon.png"
