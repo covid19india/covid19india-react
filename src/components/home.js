@@ -121,10 +121,12 @@ function Home(props) {
                 </div>
               </div>
 
-              <div className="timeseries-mode">
+              <div className="timeseries-mode" >
                 <label htmlFor="timeseries-mode">Scale Uniformly</label>
+                
                 <input
                   type="checkbox"
+                  id="timeseries-mode"
                   className="switch"
                   aria-label="Checked by default to scale uniformly."
                   checked={timeseriesMode}
