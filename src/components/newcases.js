@@ -1,36 +1,42 @@
 import React, {useState, useEffect} from 'react';
 
 function RateOfNewCases(props) {
-  const [firstDayCases, setFirstDayCases] = useState(0);
-  const [firstDayDate, setFirstDayDate] = useState(0);
-  const [secondDayCases, setSecondDayCases] = useState(0);
-  const [secondDayDate, setSecondDayDate] = useState(0);
-  const [thirdDayCases, setThirdDayCases] = useState(0);
-  const [thirdDayDate, setThirdDayDate] = useState(0);
-  const [fourthDayCases, setFourthDayCases] = useState(0);
-  const [fourthDayDate, setFourthDayDate] = useState(0);
-  const [fifthDayCases, setFifthDayCases] = useState(0);
-  const [upArrow, setUpArrow] = useState(0);
-  const [downArrow, setDownArrow] = useState(0);
+  const [casesMap, setCasesMap] = useState(0);
+  const [length, setLength] = useState(0);
+  const upArrow = String.fromCharCode(8593);
+  const downArrow = String.fromCharCode(8595);
 
   useEffect(() => {
     parseData();
-    setUpArrow(String.fromCharCode(8593));
-    setDownArrow(String.fromCharCode(8595));
   });
 
   const parseData = () => {
     const length = props.timeseries.length;
     if (length > 0) {
-      setFirstDayCases(props.deltas.confirmeddelta);
-      setFirstDayDate('Today');
-      setSecondDayCases(props.timeseries[length - 1]['dailyconfirmed']);
-      setSecondDayDate('Yesterday');
-      setThirdDayCases(props.timeseries[length - 2]['dailyconfirmed']);
-      setThirdDayDate(props.timeseries[length - 2]['date']);
-      setFourthDayCases(props.timeseries[length - 3]['dailyconfirmed']);
-      setFourthDayDate(props.timeseries[length - 3]['date']);
-      setFifthDayCases(props.timeseries[length - 4]['dailyconfirmed']);
+      const casesDetails = [
+        {
+          cases: props.deltas.confirmeddelta,
+          date: 'Today',
+        },
+        {
+          cases: props.timeseries[length - 1]['dailyconfirmed'],
+          date: 'Yesterday',
+        },
+        {
+          cases: props.timeseries[length - 2]['dailyconfirmed'],
+          date: props.timeseries[length - 2]['date'],
+        },
+        {
+          cases: props.timeseries[length - 3]['dailyconfirmed'],
+          date: props.timeseries[length - 3]['date'],
+        },
+        {
+          cases: props.timeseries[length - 4]['dailyconfirmed'],
+          date: props.timeseries[length - 4]['date'],
+        },
+      ];
+      setCasesMap(casesDetails);
+      setLength(length);
     }
   };
 
@@ -40,72 +46,92 @@ function RateOfNewCases(props) {
         Rate of New Cases
       </h2>
       <div className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
-        <div
-          className={`level-item ${
-            fourthDayCases - fifthDayCases < 0 ? 'is-green' : 'is-cherry'
-          }`}
-        >
-          <h5 className="heading">{fourthDayDate}</h5>
-          <h2 className="title has-text-grey">{fourthDayCases}</h2>
-        </div>
+        {length > 0 && (
+          <React.Fragment>
+            <div
+              className={`level-item ${
+                casesMap[3].cases - casesMap[4].cases < 0
+                  ? 'is-green'
+                  : 'is-cherry'
+              }`}
+            >
+              <h5 className="heading">{casesMap[3].date}</h5>
+              <h2 className="title has-text-grey">{casesMap[3].cases}</h2>
+            </div>
 
-        <div
-          className={`level-item ${
-            thirdDayCases - fourthDayCases < 0 ? 'is-green' : 'is-cherry'
-          }`}
-        >
-          <h5 className="heading"> </h5>
-          <h1>
-            {thirdDayCases - fourthDayCases > 0 ? upArrow : downArrow}
-            {Math.abs(thirdDayCases - fourthDayCases)}
-          </h1>
-          <h1 className="title has-text-grey">{}</h1>
-        </div>
+            <div
+              className={`level-item ${
+                casesMap[2].cases - casesMap[3].cases < 0
+                  ? 'is-green'
+                  : 'is-cherry'
+              }`}
+            >
+              <h5 className="heading"> </h5>
+              <h1>
+                {casesMap[2].cases - casesMap[3].cases > 0
+                  ? upArrow
+                  : downArrow}
+                {Math.abs(casesMap[2].cases - casesMap[3].cases)}
+              </h1>
+              <h1 className="title has-text-grey">{}</h1>
+            </div>
 
-        <div
-          className={`level-item ${
-            thirdDayCases - fourthDayCases < 0 ? 'is-green' : 'is-cherry'
-          }`}
-        >
-          <h5 className="heading">{thirdDayDate}</h5>
-          <h2 className="title has-text-success">{thirdDayCases} </h2>
-        </div>
+            <div
+              className={`level-item ${
+                casesMap[2].cases - casesMap[3].cases < 0
+                  ? 'is-green'
+                  : 'is-cherry'
+              }`}
+            >
+              <h5 className="heading">{casesMap[2].date}</h5>
+              <h2 className="title has-text-success">{casesMap[2].cases} </h2>
+            </div>
 
-        <div
-          className={`level-item ${
-            secondDayCases - thirdDayCases < 0 ? 'is-green' : 'is-cherry'
-          }`}
-        >
-          <h5 className="heading has-text-info">{} </h5>
-          <h1 className="has-text-info">
-            {secondDayCases - thirdDayCases > 0 ? upArrow : downArrow}
-            {Math.abs(secondDayCases - thirdDayCases)}
-          </h1>
-          <h1 className="title has-text-grey">{}</h1>
-        </div>
+            <div
+              className={`level-item ${
+                casesMap[1].cases - casesMap[2].cases < 0
+                  ? 'is-green'
+                  : 'is-cherry'
+              }`}
+            >
+              <h5 className="heading has-text-info">{} </h5>
+              <h1 className="has-text-info">
+                {casesMap[1].cases - casesMap[2].cases > 0
+                  ? upArrow
+                  : downArrow}
+                {Math.abs(casesMap[1].cases - casesMap[2].cases)}
+              </h1>
+              <h1 className="title has-text-grey">{}</h1>
+            </div>
 
-        <div
-          className={`level-item ${
-            secondDayCases - thirdDayCases < 0 ? 'is-green' : 'is-cherry'
-          }`}
-        >
-          <h5 className="heading">{secondDayDate}</h5>
-          <h2 className="title has-text-info">{secondDayCases}</h2>
-        </div>
+            <div
+              className={`level-item ${
+                casesMap[1].cases - casesMap[2].cases < 0
+                  ? 'is-green'
+                  : 'is-cherry'
+              }`}
+            >
+              <h5 className="heading">{casesMap[1].date}</h5>
+              <h2 className="title has-text-info">{casesMap[1].cases}</h2>
+            </div>
 
-        <div className="level-item is-blue">
-          <h5 className="heading"> </h5>
-          <h1>
-            {firstDayCases - secondDayCases > 0 ? upArrow : downArrow}
-            {Math.abs(firstDayCases - secondDayCases)}*
-          </h1>
-          <h1 className="title has-text-grey">{}</h1>
-        </div>
+            <div className="level-item is-blue">
+              <h5 className="heading"> </h5>
+              <h1>
+                {casesMap[0].cases - casesMap[1].cases > 0
+                  ? upArrow
+                  : downArrow}
+                {Math.abs(casesMap[0].cases - casesMap[1].cases)}*
+              </h1>
+              <h1 className="title has-text-grey">{}</h1>
+            </div>
 
-        <div className="level-item is-blue">
-          <h5>{firstDayDate}</h5>
-          <h2> {firstDayCases}* </h2>
-        </div>
+            <div className="level-item is-blue">
+              <h5>{casesMap[0].date}</h5>
+              <h2> {casesMap[0].cases}* </h2>
+            </div>
+          </React.Fragment>
+        )}
       </div>
     </div>
   );
