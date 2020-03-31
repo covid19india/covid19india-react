@@ -11968,7 +11968,7 @@
           "properties": {
             "unique_id": "15",
             "district": "Agra",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "15",
             "censuscode": "146"
@@ -11980,7 +11980,7 @@
           "properties": {
             "unique_id": "20",
             "district": "Bareilly",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "19",
             "censuscode": "150"
@@ -11992,7 +11992,7 @@
           "properties": {
             "unique_id": "17",
             "district": "Etah",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "70",
             "censuscode": "201"
@@ -12004,7 +12004,7 @@
           "properties": {
             "unique_id": "22",
             "district": "Shahjahanpur",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "21",
             "censuscode": "152"
@@ -12016,7 +12016,7 @@
           "properties": {
             "unique_id": "21",
             "district": "Pilibhit",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "20",
             "censuscode": "151"
@@ -12028,7 +12028,7 @@
           "properties": {
             "unique_id": "45",
             "district": "Allahabad",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "44",
             "censuscode": "175"
@@ -12040,7 +12040,7 @@
           "properties": {
             "unique_id": "43",
             "district": "Pratapgarh",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "42",
             "censuscode": "173"
@@ -12052,7 +12052,7 @@
           "properties": {
             "unique_id": "36",
             "district": "Jhansi",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "35",
             "censuscode": "166"
@@ -12064,7 +12064,7 @@
           "properties": {
             "unique_id": "35",
             "district": "Jalaun",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "34",
             "censuscode": "165"
@@ -12076,7 +12076,7 @@
           "properties": {
             "unique_id": "64",
             "district": "Jaunpur",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "63",
             "censuscode": "194"
@@ -12088,7 +12088,7 @@
           "properties": {
             "unique_id": "69",
             "district": "Mirzapur",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "68",
             "censuscode": "199"
@@ -12100,7 +12100,7 @@
           "properties": {
             "unique_id": "70",
             "district": "Sonbhadra",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "69",
             "censuscode": "200"
@@ -12112,7 +12112,7 @@
           "properties": {
             "unique_id": "61",
             "district": "Azamgarh",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "60",
             "censuscode": "191"
@@ -12124,7 +12124,7 @@
           "properties": {
             "unique_id": "58",
             "district": "Gorakhpur",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "57",
             "censuscode": "188"
@@ -12136,7 +12136,7 @@
           "properties": {
             "unique_id": "59",
             "district": "Kushinagar",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "58",
             "censuscode": "189"
@@ -12148,7 +12148,7 @@
           "properties": {
             "unique_id": "55",
             "district": "Basti",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "54",
             "censuscode": "185"
@@ -12160,7 +12160,7 @@
           "properties": {
             "unique_id": "24",
             "district": "Sitapur",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "23",
             "censuscode": "154"
@@ -12172,7 +12172,7 @@
           "properties": {
             "unique_id": "26",
             "district": "Unnao",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "25",
             "censuscode": "156"
@@ -12184,7 +12184,7 @@
           "properties": {
             "unique_id": "49",
             "district": "Sultanpur",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "48",
             "censuscode": "179"
@@ -12196,7 +12196,7 @@
           "properties": {
             "unique_id": "52",
             "district": "Balrampur",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "51",
             "censuscode": "182"
@@ -12208,7 +12208,7 @@
           "properties": {
             "unique_id": "72",
             "district": "Amethi",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "NA",
             "censuscode": "NA"
@@ -12220,7 +12220,7 @@
           "properties": {
             "unique_id": "46",
             "district": "Barabanki",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "45",
             "censuscode": "176"
@@ -12232,7 +12232,7 @@
           "properties": {
             "unique_id": "50",
             "district": "Bahraich",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "49",
             "censuscode": "180"
@@ -12244,7 +12244,7 @@
           "properties": {
             "unique_id": "41",
             "district": "Chitrakoot",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "40",
             "censuscode": "171"
@@ -12256,7 +12256,7 @@
           "properties": {
             "unique_id": "38",
             "district": "Hamirpur",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "37",
             "censuscode": "168"
@@ -12268,7 +12268,7 @@
           "properties": {
             "unique_id": "39",
             "district": "Mahoba",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "38",
             "censuscode": "169"
@@ -12280,7 +12280,7 @@
           "properties": {
             "unique_id": "40",
             "district": "Banda",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "39",
             "censuscode": "170"
@@ -12292,7 +12292,7 @@
           "properties": {
             "unique_id": "8",
             "district": "Baghpat",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "8",
             "censuscode": "139"
@@ -12304,7 +12304,7 @@
           "properties": {
             "unique_id": "34",
             "district": "Kanpur Nagar",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "33",
             "censuscode": "164"
@@ -12316,7 +12316,7 @@
           "properties": {
             "unique_id": "56",
             "district": "Sant Kabir Nagar",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "55",
             "censuscode": "186"
@@ -12328,7 +12328,7 @@
           "properties": {
             "unique_id": "9",
             "district": "Ghaziabad",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "9",
             "censuscode": "140"
@@ -12340,7 +12340,7 @@
           "properties": {
             "unique_id": "44",
             "district": "Kaushambi",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "43",
             "censuscode": "174"
@@ -12352,7 +12352,7 @@
           "properties": {
             "unique_id": "2",
             "district": "Muzaffarnagar",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "2",
             "censuscode": "133"
@@ -12364,7 +12364,7 @@
           "properties": {
             "unique_id": "11",
             "district": "Bulandshahr",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "11",
             "censuscode": "142"
@@ -12376,7 +12376,7 @@
           "properties": {
             "unique_id": "10",
             "district": "Gautam Buddha Nagar",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "10",
             "censuscode": "141"
@@ -12388,7 +12388,7 @@
           "properties": {
             "unique_id": "7",
             "district": "Meerut",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "7",
             "censuscode": "138"
@@ -12400,7 +12400,7 @@
           "properties": {
             "unique_id": "1",
             "district": "Saharanpur",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "1",
             "censuscode": "132"
@@ -12412,7 +12412,7 @@
           "properties": {
             "unique_id": "12",
             "district": "Aligarh",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "12",
             "censuscode": "143"
@@ -12424,7 +12424,7 @@
           "properties": {
             "unique_id": "14",
             "district": "Mathura",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "14",
             "censuscode": "145"
@@ -12436,7 +12436,7 @@
           "properties": {
             "unique_id": "16",
             "district": "Firozabad",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "16",
             "censuscode": "147"
@@ -12448,7 +12448,7 @@
           "properties": {
             "unique_id": "18",
             "district": "Mainpuri",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "17",
             "censuscode": "148"
@@ -12460,7 +12460,7 @@
           "properties": {
             "unique_id": "13",
             "district": "Mahamaya Nagar",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "13",
             "censuscode": "144"
@@ -12472,7 +12472,7 @@
           "properties": {
             "unique_id": "19",
             "district": "Budaun",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "18",
             "censuscode": "149"
@@ -12484,7 +12484,7 @@
           "properties": {
             "unique_id": "4",
             "district": "Moradabad",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "4",
             "censuscode": "135"
@@ -12496,7 +12496,7 @@
           "properties": {
             "unique_id": "5",
             "district": "Rampur",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "5",
             "censuscode": "136"
@@ -12508,7 +12508,7 @@
           "properties": {
             "unique_id": "6",
             "district": "Amroha",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "6",
             "censuscode": "137"
@@ -12520,7 +12520,7 @@
           "properties": {
             "unique_id": "3",
             "district": "Bijnor",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "3",
             "censuscode": "134"
@@ -12532,7 +12532,7 @@
           "properties": {
             "unique_id": "33",
             "district": "Kanpur Dehat",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "32",
             "censuscode": "163"
@@ -12544,7 +12544,7 @@
           "properties": {
             "unique_id": "31",
             "district": "Etawah",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "30",
             "censuscode": "161"
@@ -12556,7 +12556,7 @@
           "properties": {
             "unique_id": "29",
             "district": "Farrukhabad",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "28",
             "censuscode": "159"
@@ -12568,7 +12568,7 @@
           "properties": {
             "unique_id": "30",
             "district": "Kannauj",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "29",
             "censuscode": "160"
@@ -12580,7 +12580,7 @@
           "properties": {
             "unique_id": "32",
             "district": "Auraiya",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "31",
             "censuscode": "162"
@@ -12592,7 +12592,7 @@
           "properties": {
             "unique_id": "37",
             "district": "Lalitpur",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "36",
             "censuscode": "167"
@@ -12604,7 +12604,7 @@
           "properties": {
             "unique_id": "67",
             "district": "Varanasi",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "66",
             "censuscode": "197"
@@ -12616,7 +12616,7 @@
           "properties": {
             "unique_id": "65",
             "district": "Ghazipur",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "64",
             "censuscode": "195"
@@ -12628,7 +12628,7 @@
           "properties": {
             "unique_id": "66",
             "district": "Chandauli",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "65",
             "censuscode": "196"
@@ -12640,7 +12640,7 @@
           "properties": {
             "unique_id": "68",
             "district": "Sant Ravidas Nagar",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "67",
             "censuscode": "198"
@@ -12652,7 +12652,7 @@
           "properties": {
             "unique_id": "62",
             "district": "Mau",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "61",
             "censuscode": "192"
@@ -12664,7 +12664,7 @@
           "properties": {
             "unique_id": "63",
             "district": "Ballia",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "62",
             "censuscode": "193"
@@ -12676,7 +12676,7 @@
           "properties": {
             "unique_id": "57",
             "district": "Maharajganj",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "56",
             "censuscode": "187"
@@ -12688,7 +12688,7 @@
           "properties": {
             "unique_id": "60",
             "district": "Deoria",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "59",
             "censuscode": "190"
@@ -12700,7 +12700,7 @@
           "properties": {
             "unique_id": "28",
             "district": "Rae Bareli",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "27",
             "censuscode": "158"
@@ -12712,7 +12712,7 @@
           "properties": {
             "unique_id": "25",
             "district": "Hardoi",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "24",
             "censuscode": "155"
@@ -12724,7 +12724,7 @@
           "properties": {
             "unique_id": "54",
             "district": "Siddharth Nagar",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "53",
             "censuscode": "184"
@@ -12736,7 +12736,7 @@
           "properties": {
             "unique_id": "27",
             "district": "Lucknow",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "26",
             "censuscode": "157"
@@ -12748,7 +12748,7 @@
           "properties": {
             "unique_id": "47",
             "district": "Faizabad",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "46",
             "censuscode": "177"
@@ -12760,7 +12760,7 @@
           "properties": {
             "unique_id": "71",
             "district": "Kasganj",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "71",
             "censuscode": "202"
@@ -12772,7 +12772,7 @@
           "properties": {
             "unique_id": "48",
             "district": "Ambedkar Nagar",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "47",
             "censuscode": "178"
@@ -12784,7 +12784,7 @@
           "properties": {
             "unique_id": "73",
             "district": "Hapur",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "NA",
             "censuscode": "NA"
@@ -12796,7 +12796,7 @@
           "properties": {
             "unique_id": "74",
             "district": "Shamli",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "NA",
             "censuscode": "NA"
@@ -12808,7 +12808,7 @@
           "properties": {
             "unique_id": "75",
             "district": "Sambhal",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "NA",
             "censuscode": "NA"
@@ -12820,7 +12820,7 @@
           "properties": {
             "unique_id": "42",
             "district": "Fatehpur",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "41",
             "censuscode": "172"
@@ -12855,7 +12855,7 @@
           "properties": {
             "unique_id": "53",
             "district": "Gonda",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "52",
             "censuscode": "183"
@@ -12867,7 +12867,7 @@
           "properties": {
             "unique_id": "23",
             "district": "Lakhimpur Kheri",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "22",
             "censuscode": "153"
@@ -12900,7 +12900,7 @@
           "properties": {
             "unique_id": "51",
             "district": "Shravasti",
-            "state": "Uttar Pradesh",
+            "st_nm": "Uttar Pradesh",
             "ST_CEN_CD": "9",
             "DT_CEN_CD": "50",
             "censuscode": "181"
