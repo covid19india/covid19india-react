@@ -1,14 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import {format, zonedTimeToUtc} from 'date-fns-tz';
 import {formatDistance} from 'date-fns';
-
+import {formatDate} from '../utils/common-functions';
 import Table from './table';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
-import Banner from './banner';
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -20,16 +18,20 @@ function Home(props) {
   const [deltas, setDeltas] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [stateHighlighted, setStateHighlighted] = useState(undefined);
+  const [districtHighlighted, setDistrictHighlighted] = useState(undefined);
 
-  useEffect(()=> {
-    if (fetched===false) {
+  useEffect(() => {
+    if (fetched === false) {
       getStates();
     }
   }, [fetched]);
 
   const getStates = async () => {
     try {
-      const [response, stateDistrictWiseResponse] = await Promise.all([axios.get('https://api.covid19india.org/data.json'), axios.get('https://api.covid19india.org/state_district_wise.json')]);
+      const [response, stateDistrictWiseResponse] = await Promise.all([
+        axios.get('https://api.covid19india.org/data.json'),
+        axios.get('https://api.covid19india.org/state_district_wise.json'),
+      ]);
       setStates(response.data.statewise);
       setTimeseries(response.data.cases_time_series);
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
@@ -41,17 +43,13 @@ function Home(props) {
     }
   };
 
-  const formatDate = (unformattedDate) => {
-    const day = unformattedDate.slice(0, 2);
-    const month = unformattedDate.slice(3, 5);
-    const year = unformattedDate.slice(6, 10);
-    const time = unformattedDate.slice(11);
-    return `${year}-${month}-${day}T${time}+05:30`;
-  };
-
   const onHighlightState = (state, index) => {
     if (!state && !index) setStateHighlighted(null);
     else setStateHighlighted({state, index});
+  };
+  const onHighlightDistrict = (district, state, index) => {
+    if (!state && !index && !district) setDistrictHighlighted(null);
+    else setDistrictHighlighted({district, state, index});
   };
 
   return (
@@ -65,26 +63,38 @@ function Home(props) {
             </div>
             <div className="last-update">
               <h6>Last Updated</h6>
-              <h3>{isNaN(Date.parse(formatDate(lastUpdated))) ? '' : formatDistance(new Date(formatDate(lastUpdated)), new Date())+' Ago'}</h3>
+              <h3>
+                {isNaN(Date.parse(formatDate(lastUpdated)))
+                  ? ''
+                  : formatDistance(
+                      new Date(formatDate(lastUpdated)),
+                      new Date()
+                    ) + ' Ago'}
+              </h3>
             </div>
           </div>
         </div>
 
-        <Level data={states} deltas={deltas}/>
-        <Minigraph timeseries={timeseries} animate={true}/>
+        <Level data={states} deltas={deltas} />
+        <Minigraph timeseries={timeseries} animate={true} />
 
-        <Table states={states} summary={false} onHighlightState={onHighlightState} />
-
+        <Table
+          states={states}
+          summary={false}
+          onHighlightState={onHighlightState}
+          stateDistrictWiseData={stateDistrictWiseData}
+          onHighlightDistrict={onHighlightDistrict}
+        />
       </div>
 
       <div className="home-right">
-
         {fetched && (
           <React.Fragment>
             <MapExplorer
               states={states}
               stateDistrictWiseData={stateDistrictWiseData}
               stateHighlighted={stateHighlighted}
+              districtHighlighted={districtHighlighted}
             />
 
             <div
@@ -115,6 +125,8 @@ function Home(props) {
                 <label htmlFor="timeseries-mode">Scale Uniformly</label>
                 <input
                   type="checkbox"
+                  className="switch"
+                  aria-label="Checked by default to scale uniformly."
                   checked={timeseriesMode}
                   onChange={(event) => {
                     setTimeseriesMode(!timeseriesMode);
