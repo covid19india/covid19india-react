@@ -30,7 +30,7 @@ function Home(props) {
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
   const [stateTimeSeries, setStateTimeSeries] = useState({});
-  const [resultSeries, setresultSeries] = useState([]);
+  const [resultSeries, setresultSeries] = useState({series: [], state: ''});
 
   useEffect(() => {
     if (fetched === false) {
@@ -90,6 +90,7 @@ function Home(props) {
     if (!state && !index) setRegionHighlighted(null);
     else setRegionHighlighted({state, index});
   };
+
   const onHighlightDistrict = (district, state, index) => {
     if (!state && !index && !district) setRegionHighlighted(null);
     else setRegionHighlighted({district, state, index});
@@ -124,7 +125,7 @@ function Home(props) {
         dateStr = date.format('YYYY-MM-DD');
       }
       console.log(state, stateTimeSeries[state], resultSeries);
-      setresultSeries(resultSeries);
+      setresultSeries({series: resultSeries, state: state});
     },
     [stateTimeSeries]
   );
@@ -172,7 +173,8 @@ function Home(props) {
         />
         <TimeSeries
           key={'state'}
-          timeseries={resultSeries}
+          stateName={resultSeries.state}
+          timeseries={resultSeries.series}
           confirmedOnly={true}
           update={1}
           type={graphOption}

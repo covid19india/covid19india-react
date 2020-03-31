@@ -294,6 +294,7 @@ function TimeSeries(props) {
         className="timeseries"
         style={{display: props.type === 1 ? 'flex' : 'none'}}
       >
+        {props.stateName ? <h4> {props.stateName} </h4> : <></>}
         <div className="svg-parent">
           <div className="stats">
             <h5>Confirmed</h5>
@@ -404,6 +405,7 @@ function TimeSeries(props) {
         className="timeseries"
         style={{display: props.type === 2 ? 'flex' : 'none'}}
       >
+        {props.stateName ? <h4> {props.stateName} </h4> : <></>}
         <div className="svg-parent">
           <div className="stats">
             <h5>Confirmed</h5>
