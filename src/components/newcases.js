@@ -38,43 +38,40 @@ function RateOfNewCases(props) {
     }
   };
 
-  function displayRateOfNewCases() {
-    const rows = [];
-    for (let index = casesMap.length - 1; index > 0; index--) {
-      const casesDiff = casesMap[index - 1].cases - casesMap[index].cases;
-      const isToday = casesMap[index - 1].date === 'Today';
-      rows.push(
-        <React.Fragment key={index}>
-          {index < casesMap.length - 1 && (
-            <div
-              className={`level-item ${
-                casesDiff < 0 ? (isToday ? 'is-blue' : 'is-green') : 'is-cherry'
-              }`}
-            >
-              <h5 className="heading"> </h5>
-              <h1>
-                {casesDiff > 0 ? upArrow : downArrow}
-                {Math.abs(casesDiff)}
-                {isToday ? '*' : ''}
-              </h1>
-              <h1 className="title has-text-grey"></h1>
-            </div>
-          )}
+  const rows = [];
+  for (let index = casesMap.length - 1; index > 0; index--) {
+    const casesDiff = casesMap[index - 1].cases - casesMap[index].cases;
+    const isToday = casesMap[index - 1].date === 'Today';
+    rows.push(
+      <React.Fragment key={index}>
+        {index < casesMap.length - 1 && (
           <div
             className={`level-item ${
               casesDiff < 0 ? (isToday ? 'is-blue' : 'is-green') : 'is-cherry'
             }`}
           >
-            <h5 className="heading">{casesMap[index - 1].date}</h5>
-            <h2 className="title has-text-grey">
-              {casesMap[index - 1].cases}
+            <h5 className="heading"> </h5>
+            <h1>
+              {casesDiff > 0 ? upArrow : downArrow}
+              {Math.abs(casesDiff)}
               {isToday ? '*' : ''}
-            </h2>
+            </h1>
+            <h1 className="title has-text-grey"></h1>
           </div>
-        </React.Fragment>
-      );
-    }
-    return rows;
+        )}
+        <div
+          className={`level-item ${
+            casesDiff < 0 ? (isToday ? 'is-blue' : 'is-green') : 'is-cherry'
+          }`}
+        >
+          <h5 className="heading">{casesMap[index - 1].date}</h5>
+          <h2 className="title has-text-grey">
+            {casesMap[index - 1].cases}
+            {isToday ? '*' : ''}
+          </h2>
+        </div>
+      </React.Fragment>
+    );
   }
 
   return (
@@ -84,7 +81,7 @@ function RateOfNewCases(props) {
           Rate of New Cases
         </h2>
         <div className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
-          {displayRateOfNewCases()}
+          {rows}
         </div>
       </React.Fragment>
     </div>
