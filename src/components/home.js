@@ -18,8 +18,7 @@ function Home(props) {
   const [timeseries, setTimeseries] = useState([]);
   const [deltas, setDeltas] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
-  const [stateHighlighted, setStateHighlighted] = useState(undefined);
-  const [districtHighlighted, setDistrictHighlighted] = useState(undefined);
+  const [regionHighlighted, setRegionHighlighted] = useState(undefined);
 
   useEffect(() => {
     if (fetched === false) {
@@ -45,12 +44,12 @@ function Home(props) {
   };
 
   const onHighlightState = (state, index) => {
-    if (!state && !index) setStateHighlighted(null);
-    else setStateHighlighted({state, index});
+    if (!state && !index) setRegionHighlighted(null);
+    else setRegionHighlighted({state, index});
   };
   const onHighlightDistrict = (district, state, index) => {
-    if (!state && !index && !district) setDistrictHighlighted(null);
-    else setDistrictHighlighted({district, state, index});
+    if (!state && !index && !district) setRegionHighlighted(null);
+    else setRegionHighlighted({district, state, index});
   };
 
   return (
@@ -92,24 +91,23 @@ function Home(props) {
           <Level data={states} deltas={deltas} />
           <Minigraph timeseries={timeseries} animate={true} />
 
-          <Table
-            states={states}
-            summary={false}
-            onHighlightState={onHighlightState}
-            stateDistrictWiseData={stateDistrictWiseData}
-            onHighlightDistrict={onHighlightDistrict}
-          />
-        </div>
+        <Table
+          states={states}
+          summary={false}
+          stateDistrictWiseData={stateDistrictWiseData}
+          onHighlightState={onHighlightState}
+          onHighlightDistrict={onHighlightDistrict}
+        />
+      </div>
 
-        <div className="home-right">
-          {fetched && (
-            <React.Fragment>
-              <MapExplorer
-                states={states}
-                stateDistrictWiseData={stateDistrictWiseData}
-                stateHighlighted={stateHighlighted}
-                districtHighlighted={districtHighlighted}
-              />
+      <div className="home-right">
+        {fetched && (
+          <React.Fragment>
+            <MapExplorer
+              states={states}
+              stateDistrictWiseData={stateDistrictWiseData}
+              regionHighlighted={regionHighlighted}
+            />
 
               <div
                 className="timeseries-header fadeInUp"

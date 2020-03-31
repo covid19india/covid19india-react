@@ -9,27 +9,29 @@ function Level(props) {
 
   useEffect(() => {
     setData(props.data);
-    parseData();
-  });
+  }, [props.data]);
 
-  const parseData = () => {
-    let confirmed = 0;
-    let active = 0;
-    let recoveries = 0;
-    let deaths = 0;
-    data.map((state, index) => {
-      if (index !== 0) {
-        confirmed += parseInt(state.confirmed);
-        active += parseInt(state.active);
-        recoveries += parseInt(state.recovered);
-        deaths += parseInt(state.deaths);
-      }
-    });
-    setConfirmed(confirmed);
-    setActive(active);
-    setRecoveries(recoveries);
-    setDeaths(deaths);
-  };
+  useEffect(() => {
+    const parseData = () => {
+      let confirmed = 0;
+      let active = 0;
+      let recoveries = 0;
+      let deaths = 0;
+      data.forEach((state, index) => {
+        if (index !== 0) {
+          confirmed += parseInt(state.confirmed);
+          active += parseInt(state.active);
+          recoveries += parseInt(state.recovered);
+          deaths += parseInt(state.deaths);
+        }
+      });
+      setConfirmed(confirmed);
+      setActive(active);
+      setRecoveries(recoveries);
+      setDeaths(deaths);
+    };
+    parseData();
+  }, [data]);
 
   return (
     <div className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
