@@ -1046,8 +1046,8 @@ table {
       }
       
       label{
-        font-size: 12px;
-        margin-right: 0.5rem;
+        font-size: 11px;
+        margin-right: 0.2rem;
         padding-bottom: 0;
       }
     }
@@ -1448,20 +1448,6 @@ footer {
   table {
     td {
       max-width: 6.75rem;
-    }
-  }
-}
-
-/* For the iPhone X folks OMG WHY ARE YOUR SCREENS SO NARROW T_T */
-@media (max-width: 375px) {
-  .timeseries-mode, .timeseries-logmode {
-    display: block !important;
-    top: 2rem !important;
-    text-align: right;
-
-    input {
-      margin: 0;
-      margin-top: 0.25rem !important;
     }
   }
 }

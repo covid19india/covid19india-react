@@ -120,7 +120,6 @@ function TimeSeries(props) {
         setDatapoint(data[timeseries.length - 1]);
         setIndex(timeseries.length - 1);
         focus.forEach((d,i) => {
-          const y = mode ? yScales[0] : yScales[i];
           d.attr(
             'cx',
             x(new Date(data[timeseries.length - 1]['date'] + '2020'))
@@ -136,7 +135,6 @@ function TimeSeries(props) {
           setDatapoint(d);
           setIndex(i);
           focus.forEach((f,j) => {
-            const y = mode ? yScales[0] : yScales[j];
             f.attr('cx',x(new Date(d['date'] + '2020'))).attr(
               'cy',
               y(j,d)
@@ -169,7 +167,7 @@ function TimeSeries(props) {
               .axisRight(mode ? yScales[0] : yScales[i])
               .ticks(tickCount(i))
               .tickPadding(5)
-              .tickFormat(d3.format(".0s"))
+              .tickFormat(d3.format(".2s"))
           );
 
         /* Focus dots */
