@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react';
-import ChoroplethMap, {highlightRegionInMap} from './choropleth';
+import ChoroplethMap from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 import {useTranslation} from 'react-i18next';
 import {formatDate} from '../utils/common-functions';
@@ -208,12 +208,7 @@ const mapMeta = {
   },
 };
 
-export default function ({
-  states,
-  stateDistrictWiseData,
-  stateHighlighted,
-  districtHighlighted,
-}) {
+export default function ({states, stateDistrictWiseData, regionHighlighted}) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const {t} = useTranslation();
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
@@ -224,21 +219,6 @@ export default function ({
     const region = getRegionFromState(states[1]);
     setCurrentHoveredRegion(region);
   }, [states]);
-
-  useEffect(() => {
-    if (stateHighlighted === null) {
-      highlightRegionInMap(null, currentMap.mapType);
-    } else {
-      if (stateHighlighted !== undefined) {
-        const newMap = mapMeta['India'];
-        setCurrentMap(newMap);
-        const regionHighlighted = getRegionFromState(stateHighlighted.state);
-        setCurrentHoveredRegion(regionHighlighted);
-        highlightRegionInMap(regionHighlighted.name, currentMap.mapType);
-        setSelectedRegion(regionHighlighted.name);
-      }
-    }
-  }, [stateHighlighted, currentMap.mapType]);
 
   if (!currentHoveredRegion) {
     return null;
@@ -305,19 +285,29 @@ export default function ({
   );
 
   useEffect(() => {
-    if (districtHighlighted === null) {
-      highlightRegionInMap(null, currentMap.mapType);
+    if (regionHighlighted === undefined) {
+      return;
+    } else if (regionHighlighted === null) {
+      setSelectedRegion(null);
       return;
     }
-    const newMap = mapMeta[districtHighlighted?.state.state];
-    if (!newMap) {
-      return;
+    const isState = !('district' in regionHighlighted);
+    if (isState) {
+      const newMap = mapMeta['India'];
+      setCurrentMap(newMap);
+      const region = getRegionFromState(regionHighlighted.state);
+      setCurrentHoveredRegion(region);
+      setSelectedRegion(region.name);
+    } else {
+      const newMap = mapMeta[regionHighlighted.state.state];
+      if (!newMap) {
+        return;
+      }
+      setCurrentMap(newMap);
+      setHoveredRegion(regionHighlighted.district, newMap);
+      setSelectedRegion(regionHighlighted.district);
     }
-    setCurrentMap(newMap);
-    setHoveredRegion(districtHighlighted?.district, newMap);
-    highlightRegionInMap(districtHighlighted?.district, currentMap.mapType);
-    setSelectedRegion(districtHighlighted?.district);
-  }, [districtHighlighted, currentMap.mapType, setHoveredRegion]);
+  }, [regionHighlighted, currentMap.mapType, setHoveredRegion]);
 
   const getRegionFromDistrict = (districtData, name) => {
     if (!districtData) {

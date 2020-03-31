@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import * as d3 from 'd3';
 import {legendColor} from 'd3-svg-legend';
 import * as topojson from 'topojson';
@@ -11,18 +11,6 @@ const propertyFieldMap = {
   state: 'district',
 };
 
-export const highlightRegionInMap = (name, mapType) => {
-  const propertyField = propertyFieldMap[mapType];
-  const paths = d3.selectAll('.path-region');
-  paths.classed('map-hover', (d, i, nodes) => {
-    if (name === d.properties[propertyField]) {
-      nodes[i].parentNode.appendChild(nodes[i]);
-      return true;
-    }
-    return false;
-  });
-};
-
 function ChoroplethMap({
   statistic,
   mapData,
@@ -33,6 +21,7 @@ function ChoroplethMap({
 }) {
   const {i18n, t} = useTranslation();
   const choroplethMap = useRef(null);
+  const [svgRenderCount, setSvgRenderCount] = useState(0);
 
   const ready = useCallback(
     (geoData) => {
@@ -82,7 +71,7 @@ function ChoroplethMap({
         .append('path')
         .attr('class', 'path-region')
         .attr('fill', function (d) {
-          const n = mapData[d.properties[propertyField]] || 0;
+          const n = parseInt(mapData[d.properties[propertyField]]) || 0;
           const color =
             n === 0
               ? '#ffffff'
@@ -218,14 +207,30 @@ function ChoroplethMap({
 
   useEffect(() => {
     (async () => {
-      d3.selectAll('svg#chart > *').remove();
       const data = await d3.json(mapMeta.geoDataFile);
       if (statistic && choroplethMap.current) {
         ready(data);
         renderData();
+        setSvgRenderCount((prevCount) => prevCount + 1);
       }
     })();
   }, [mapMeta.geoDataFile, statistic, renderData, ready, i18n.language]);
+
+  const highlightRegionInMap = (name, mapType) => {
+    const propertyField = propertyFieldMap[mapType];
+    const paths = d3.selectAll('.path-region');
+    paths.classed('map-hover', (d, i, nodes) => {
+      if (name === d.properties[propertyField]) {
+        nodes[i].parentNode.appendChild(nodes[i]);
+        return true;
+      }
+      return false;
+    });
+  };
+
+  useEffect(() => {
+    highlightRegionInMap(selectedRegion, mapMeta.mapType);
+  }, [mapMeta.mapType, svgRenderCount, selectedRegion]);
 
   return (
     <div className="svg-parent">
