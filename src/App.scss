@@ -1432,7 +1432,6 @@ footer {
     .patient-card-right {
       text-align: right;
       margin-left: 0.5rem;
-      word-wrap: break-word;
       .patient-card-right-top {
         display: flex;
         flex-direction: column;
@@ -1442,6 +1441,8 @@ footer {
         h5 {
           color: $pblue;
           margin-bottom: 0.25rem;
+          word-wrap: break-word;
+          width: 7rem;
         }
         h6 {
           color: $pblue-mid;
@@ -1497,6 +1498,7 @@ footer {
   flex-direction: row;
   justify-content: center;
   background: $pblue-light;
+  z-index: 99;
   .modal-content {
     position: fixed;
     padding: 1rem;
@@ -1507,7 +1509,7 @@ footer {
     height: 40rem;
     overflow-y: scroll;
     svg {
-      width: 16px;
+      width: 20px;
       stroke: $pblue-mid;
       stroke-width: 3;
       transition: all 0.1s ease-in-out;
@@ -1524,6 +1526,7 @@ footer {
     }
     h5, h3 {
       margin: 0;
+      font-weight: 900;
     }
     h3 {
       margin-bottom: 0.5rem;
@@ -1531,6 +1534,40 @@ footer {
     }
     h5 {
       color: $pblue-mid;
+    }
+    .meta {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      height: 10rem;
+      & > * {
+        width: 10rem;
+      }
+    }
+    .modal-top {
+      display: flex;
+      flex-direction: row;
+      & > {
+        align-self: center;
+      }
+    }
+    .notes {
+      width: 10rem;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+    .link {
+      margin: 0;
+      margin-top: 0.25rem;
+      margin-bottom: 0.5rem;
+      a {
+        color: $pblue;
+        background: $pblue-light;
+        transition: background 0.2s ease-in-out;
+        &:hover {
+          background: $pblue-hover;
+        }
+      }
     }
   }
 }
@@ -1626,6 +1663,14 @@ footer {
     }
     .Patients {
       width: 100%;
+    }
+    .modal {
+      .modal-content {
+        width: calc(100% - 5rem);
+        .meta {
+          height: 20rem;
+        }
+      }
     }
   }
 }

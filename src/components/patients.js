@@ -26,7 +26,7 @@ function Patients(props) {
             >
               <div className="patient-card-left">
                 <div className="patient-card-left-top">
-                  <h2>#{index + 1}</h2>
+                  <h2>#{patient.patientnumber}</h2>
                   <h6>Announced</h6>
                   <h3>{patient.dateannounced}</h3>
                 </div>
@@ -69,34 +69,80 @@ function Patients(props) {
               />
             </div>
 
-            <h1>#{patients[index].patientnumber}</h1>
+            <div className="modal-top">
+              <h1>#{patients[index].patientnumber}</h1>
+            </div>
 
-            <h5>Age</h5>
-            <h3>{patients[index].agebracket}</h3>
+            <div className="meta">
+              <h5>Date Announced</h5>
+              <h3>
+                {patients[index].dateannounced
+                  ? patients[index].dateannounced
+                  : '?'}
+              </h3>
 
-            <h5>Date Announced</h5>
-            <h3>{patients[index].dateannounced}</h3>
+              <h5>Contracted from</h5>
+              <h3>
+                {patients[index].contractedfromwhichpatientsuspected
+                  ? patients[index].contractedfromwhichpatientsuspected
+                  : '?'}
+              </h3>
 
-            <h5>Detected City</h5>
-            <h3>{patients[index].detectedcity}</h3>
+              <h5>Detected City</h5>
+              <h3>
+                {patients[index].detectedcity
+                  ? patients[index].detectedcity
+                  : '?'}
+              </h3>
 
-            <h5>Detected District</h5>
-            <h3>{patients[index].detecteddistrict}</h3>
+              <h5>Detected District</h5>
+              <h3>
+                {patients[index].detecteddistrict
+                  ? patients[index].detecteddistrict
+                  : '?'}
+              </h3>
 
-            <h5>Detected State</h5>
-            <h3>{patients[index].detectedstate}</h3>
+              <h5>Detected State</h5>
+              <h3>
+                {patients[index].detectedstate
+                  ? patients[index].detectedstate
+                  : '?'}
+              </h3>
 
-            <h5>Nationality</h5>
-            <h3>{patients[index].nationality}</h3>
+              <h5>Nationality</h5>
+              <h3>
+                {patients[index].nationality
+                  ? patients[index].nationality
+                  : '?'}
+              </h3>
 
-            <h5>Gender</h5>
-            <h3>{patients[index].gender}</h3>
+              <h5>Age</h5>
+              <h3>
+                {patients[index].agebracket ? patients[index].agebracket : '?'}
+              </h3>
 
-            <h5>Age</h5>
-            <h3>{patients[index].agebracket}</h3>
+              <h5>Gender</h5>
+              <h3>{patients[index].gender ? patients[index].gender : '?'}</h3>
 
-            <h5>Notes</h5>
-            <h3>{patients[index].notes}</h3>
+              <h5>State Patient Number</h5>
+              <h3>
+                {patients[index].statepatientnumber
+                  ? patients[index].statepatientnumber
+                  : '?'}
+              </h3>
+
+              <h5>Type of transmission</h5>
+              <h3>
+                {patients[index].typeoftransmission
+                  ? patients[index].typeoftransmission
+                  : '?'}
+              </h3>
+            </div>
+
+            <div className="notes">
+              <h5>Notes</h5>
+              <h3>{patients[index].notes}</h3>
+            </div>
 
             <h5>Source 1</h5>
             <div className="link">
