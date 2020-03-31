@@ -4,6 +4,7 @@ import ScrollToTop from './utils/ScrollToTop';
 
 import React, {Suspense, lazy} from 'react';
 import {Helmet} from 'react-helmet';
+// import {useTranslation} from 'react-i18next';
 import {
   BrowserRouter as Router,
   Route,
@@ -30,6 +31,8 @@ const schemaMarkup = {
 };
 
 function App() {
+  // const {t} = useTranslation();
+
   const pages = [
     {
       pageLink: '/',
@@ -60,9 +63,9 @@ function App() {
       showInNavbar: true,
     },
     {
-      pageLink: '/faq',
+      pageLink: '/about',
       view: FAQ,
-      displayName: 'FAQ',
+      displayName: 'About',
       animationDelayForNavbar: 0.6,
       showInNavbar: true,
     },
