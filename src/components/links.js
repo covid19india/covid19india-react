@@ -5,8 +5,8 @@ function Links(props) {
     <div className="Links">
       <div className="link fadeInUp" style={{animationDelay: '0.2s'}}>
         <h3>DONATE and Help India Fight [Prime Minister's National Relief Fund]</h3>
-        <a href="https://pmnrf.gov.in/en/online-donation">
-          https://pmnrf.gov.in/en/online-donation
+        <a href="https://www.pmindia.gov.in/en/">
+          https://www.pmindia.gov.in/en/
         </a>
       </div>
 
