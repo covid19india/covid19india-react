@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import * as Icon from 'react-feather';
 
 import Row from './row';
 
@@ -23,7 +22,7 @@ function Table(props) {
     } else {
       setStates(props.states);
     }
-  }, [props.states]);
+  }, [props.states, props.summary]);
 
   useEffect(() => {
     if (props.states[0]) {
@@ -37,14 +36,10 @@ function Table(props) {
 
   useEffect(() => {
     if (states.length > 0) {
-      let length = 0;
-
-      props.states.map((state, i) => {
-        if (i !== 0 && state.confirmed > 0) length += 1;
-        if (i === props.states.length - 1) setCount(length);
-      });
+      // slice to ignore the first item which is the total count
+      setCount(states.slice(1).filter((s) => s && s.confirmed > 0).length);
     }
-  }, [states.length]);
+  }, [states]);
 
   useEffect(() => {
     setDistricts(props.stateDistrictWiseData);
@@ -125,7 +120,11 @@ function Table(props) {
                       sortData.sortColumn === 'state' ? 'initial' : 'none',
                   }}
                 >
-                  {sortData.isAscending ? <Icon.ArrowUp /> : <Icon.ArrowDown />}
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
                 </div>
               </div>
             </th>
@@ -147,7 +146,11 @@ function Table(props) {
                       sortData.sortColumn === 'confirmed' ? 'initial' : 'none',
                   }}
                 >
-                  {sortData.isAscending ? <Icon.ArrowUp /> : <Icon.ArrowDown />}
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
                 </div>
               </div>
             </th>
@@ -169,7 +172,11 @@ function Table(props) {
                       sortData.sortColumn === 'active' ? 'initial' : 'none',
                   }}
                 >
-                  {sortData.isAscending ? <Icon.ArrowUp /> : <Icon.ArrowDown />}
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
                 </div>
               </div>
             </th>
@@ -196,7 +203,11 @@ function Table(props) {
                       sortData.sortColumn === 'recovered' ? 'initial' : 'none',
                   }}
                 >
-                  {sortData.isAscending ? <Icon.ArrowUp /> : <Icon.ArrowDown />}
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
                 </div>
               </div>
             </th>
@@ -218,7 +229,11 @@ function Table(props) {
                       sortData.sortColumn === 'deaths' ? 'initial' : 'none',
                   }}
                 >
-                  {sortData.isAscending ? <Icon.ArrowUp /> : <Icon.ArrowDown />}
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
                 </div>
               </div>
             </th>
@@ -241,11 +256,13 @@ function Table(props) {
                       : []
                   }
                   onHighlightState={props.onHighlightState}
+                  onHighlightDistrict={props.onHighlightDistrict}
                   handleReveal={handleReveal}
                 />
               </tbody>
             );
           }
+          return null;
         })}
 
         <tbody>

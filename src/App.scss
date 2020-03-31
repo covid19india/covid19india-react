@@ -204,6 +204,20 @@ h6 {
   text-transform: uppercase;
 }
 
+.arrow-up {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid $gray-mid;
+  margin-left: 0.25rem;
+}
+
+.arrow-down {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid $gray-mid;
+  margin-left: 0.25rem;
+}
+
 .Home {
   display: flex;
   flex-direction: row;
@@ -233,7 +247,7 @@ h6 {
 
   .snippet {
     align-self: center;
-    width: calc(100%-10rem);
+    width: calc(100% - 10rem);
     word-wrap: break-word;
     padding: 1.5rem;
     text-align: center;
@@ -576,6 +590,7 @@ table {
     tr {
       transition: background 0.1s ease-in-out;
       cursor: pointer;
+      background: $light;
 
       &:hover {
         background: $gray-hover;
@@ -593,23 +608,27 @@ table {
     }
 
     & > tr:nth-child(odd) {
-      background: $light;
-
       &:hover {
         background: $gray-hover;
       }
+      // &:nth-child(odd) {
+      //   background: $white ;
+      // }
+    }
 
-      &:nth-child(odd) {
-        background: $white !important;
+    & > tr:nth-child() {
+      &:hover{
+        background: $gray-hover ;
       }
     }
 
-    &:nth-child(even) {
-      background-color: $light;
 
+
+    &:nth-child(odd){
       &.spacer {
         background: transparent !important;
       }
+
     }
 
     td {
@@ -617,7 +636,6 @@ table {
       font-size: 0.9rem;
       border-radius: 5px;
       text-align: right;
-
       .deltas {
         margin-right: 0.25rem;
         font-size: 11px !important;
@@ -631,10 +649,32 @@ table {
       }
     }
 
+
     td:first-child {
       text-align: left;
       max-width: 7.5rem;
       word-wrap: break-word;
+    }
+
+    .state-last-update{
+      background: transparent;
+      transform: translateX(1rem);
+      &:hover{
+        background: transparent;
+      }
+
+      td{
+        .last-update{
+          text-align: left;
+          display: flex;
+          flex-direction: row;
+          align-items: baseline;
+          width: 100%;
+          h3{
+            margin: 0 0 0 5px;
+          }
+        }
+      }
     }
 
     .district-heading {
@@ -769,7 +809,7 @@ table {
         font-family: 'archia';
         font-weight: 600;
         fill: $gray;
-        font-size: 14px;
+        font-size: 10px;
       }
     }
   }
@@ -781,10 +821,15 @@ table {
 
   .meta {
     display: flex;
-    position: relative;
     flex-direction: row;
     justify-content: space-between;
     height: 1rem;
+
+    .district-last-update{
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
 
     h2 {
       margin: 0;
@@ -801,7 +846,7 @@ table {
 
     .unknown {
       position: absolute;
-      bottom: -4.5rem;
+      top: 14rem;
       width: 5rem;
     }
   }

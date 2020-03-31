@@ -5,6 +5,9 @@ node_modules/
 /.pnp
 .pnp.js
 
+#IDE file
+.idea
+
 # testing
 /coverage
 
