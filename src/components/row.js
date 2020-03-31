@@ -138,6 +138,18 @@ function Row(props) {
           </span>*/}
           {parseInt(state.deaths) === 0 ? '-' : state.deaths}
         </td>
+        <td
+          style={{
+            color: parseInt(state.firstReported) === 0 ? '#B5B5B5' : 'inherit',
+            textAlign: 'center',
+          }}
+        >
+          {/* <span className="deltas" style={{color: '#28a745'}}>
+            {!state.delta.recovered==0 && <Icon.ArrowUp/>}
+            {state.delta.recovered > 0 ? `${state.delta.recovered}` : ''}
+          </span>*/}
+          {state.firstReported || '-'}
+        </td>
       </tr>
 
       <tr

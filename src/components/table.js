@@ -237,6 +237,28 @@ function Table(props) {
                 </div>
               </div>
             </th>
+            <th className="sticky">
+              <div className="heading-content">
+                <abbr
+                  className={`${window.innerWidth <= 769 ? 'is-gray' : ''}`}
+                  title="Deaths"
+                >
+                  {window.innerWidth <= 769
+                    ? window.innerWidth <= 375
+                      ? 'F'
+                      : 'FR'
+                    : 'First Reported'}
+                </abbr>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'firstReported'
+                        ? 'initial'
+                        : 'none',
+                  }}
+                ></div>
+              </div>
+            </th>
           </tr>
         </thead>
 

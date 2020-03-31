@@ -7,6 +7,8 @@ import Level from './level';
 import MapExplorer from './mapexplorer';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
+import {firstReportedDates} from '../constants';
+import {BASE_API} from '../constants';
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -28,11 +30,21 @@ function Home(props) {
 
   const getStates = async () => {
     try {
-      const [response, stateDistrictWiseResponse] = await Promise.all([
+      const [
+        response,
+        stateDistrictWiseResponse,
+        firstReported,
+      ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
+        axios.get(`${BASE_API}state_wise_first_reported.json`),
       ]);
-      setStates(response.data.statewise);
+      setStates(
+        formatStateWiseData(
+          response.data.statewise,
+          firstReported || firstReportedDates
+        )
+      );
       setTimeseries(response.data.cases_time_series);
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
       setDeltas(response.data.key_values[0]);
@@ -50,6 +62,14 @@ function Home(props) {
   const onHighlightDistrict = (district, state, index) => {
     if (!state && !index && !district) setDistrictHighlighted(null);
     else setDistrictHighlighted({district, state, index});
+  };
+
+  const formatStateWiseData = (data, firstReported) => {
+    const stateWiseData = data.map((d) => {
+      d['firstReported'] = firstReported[d.state];
+      return d;
+    });
+    return stateWiseData;
   };
 
   return (
