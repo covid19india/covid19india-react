@@ -18,3 +18,12 @@ Two kinds of issues can be raised in this project:
 - People looking to contribute, filter issues by ["Status:Available"](https://github.com/covid19india/covid19india-react/issues?q=is%3Aissue+is%3Aopen+label%3A%22Status%3A+Available%22) and comment on the issue that they would like to be assigned to work on it.
 - Mods change the status label to "Status:Accepted" and assign the issue to the contributor.
 - Contributor change the label to "Status: In Progress" and finally submit the pull request.
+
+## Localization
+
+If you are using vscode as your IDE then [i18n-ally](https://marketplace.visualstudio.com/items?itemName=antfu.i18n-ally) might save you some jumps in google translate
+
+### Adding new language
+
+- create entry in `src/i18n/locales.json`
+- add translation file at `public/locales/[yourLanguage].json`

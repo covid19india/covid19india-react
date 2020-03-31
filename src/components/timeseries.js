@@ -1,7 +1,9 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as d3 from 'd3';
+import {useTranslation} from 'react-i18next';
 
 function TimeSeries(props) {
+  const {t} = useTranslation();
   const [timeseries, setTimeseries] = useState([]);
   const [datapoint, setDatapoint] = useState({});
   const [index, setIndex] = useState(10);
@@ -278,7 +280,9 @@ function TimeSeries(props) {
       >
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed {datapoint['date']}</h5>
+            <h5>
+              {t('Confirmed')} {datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['totalconfirmed']}</h2>
               <h6>
@@ -306,7 +310,9 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>Recovered {datapoint['date']}</h5>
+            <h5>
+              {t('Recovered')} {datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['totalrecovered']}</h2>
               <h6>
@@ -335,7 +341,7 @@ function TimeSeries(props) {
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
             <h5>
-              Deceased <br />
+              {t('Deaths')} <br />
               {datapoint['date']}
             </h5>
             <div className="stats-bottom">
@@ -370,7 +376,9 @@ function TimeSeries(props) {
       >
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed {datapoint['date']}</h5>
+            <h5>
+              {t('Confirmed')} {datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailyconfirmed']}</h2>
               <h6>
@@ -398,7 +406,9 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>Recovered {datapoint['date']}</h5>
+            <h5>
+              {t('Recovered')} {datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailyrecovered']}</h2>
               <h6>
@@ -427,7 +437,7 @@ function TimeSeries(props) {
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
             <h5>
-              Deceased <br />
+              {t('Deaths')} <br />
               {datapoint['date']}
             </h5>
             <div className="stats-bottom">
