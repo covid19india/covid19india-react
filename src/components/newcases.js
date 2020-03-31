@@ -70,14 +70,12 @@ function RateOfNewCases(props) {
 
   return (
     <div className="home-left">
-      <React.Fragment>
-        <h2 className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
-          Rate of New Cases
-        </h2>
-        <div className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
-          {rows}
-        </div>
-      </React.Fragment>
+      <h2 className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
+        Rate of New Cases
+      </h2>
+      <div className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
+        {rows}
+      </div>
     </div>
   );
 }
