@@ -1,7 +1,9 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as d3 from 'd3';
+import {useTranslation} from 'react-i18next';
 
 function TimeSeries(props) {
+  const {t} = useTranslation();
   const [timeseries, setTimeseries] = useState([]);
   const [datapoint, setDatapoint] = useState({});
   const [index, setIndex] = useState(10);

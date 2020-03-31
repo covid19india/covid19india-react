@@ -14,11 +14,17 @@ import Navbar from './components/navbar';
 import Links from './components/links';
 import FAQ from './components/faq';
 import Banner from './components/banner';
+import Popup from './components/popup';
+import {useTranslation} from 'react-i18next';
 /* import PatientDB from './components/patientdb';*/
+
+import {useTranslation} from 'react-i18next';
 
 const history = require('history').createBrowserHistory;
 
 function App() {
+  const {t} = useTranslation();
+
   const pages = [
     {
       pageLink: '/',
@@ -39,9 +45,9 @@ function App() {
       animationDelayForNavbar: 0.5,
     },
     {
-      pageLink: '/faq',
+      pageLink: '/about',
       view: FAQ,
-      displayName: 'FAQ',
+      displayName: 'About',
       animationDelayForNavbar: 0.6,
     },
   ];
@@ -115,6 +121,8 @@ function App() {
           <span>Join Telegram to Collaborate!</span>
         </a>
       </footer>
+
+      <Popup />
     </div>
   );
 }
