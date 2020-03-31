@@ -10,6 +10,7 @@ import State from './components/state';
 import ScrollToTop from './utils/ScrollToTop';
 
 import React from 'react';
+// import {useTranslation} from 'react-i18next';
 import {
   BrowserRouter as Router,
   Route,
@@ -19,6 +20,8 @@ import {
 import {useLocalStorage} from 'react-use';
 
 function App() {
+  // const {t} = useTranslation();
+
   const pages = [
     {
       pageLink: '/',
@@ -49,9 +52,9 @@ function App() {
       showInNavbar: true,
     },
     {
-      pageLink: '/faq',
+      pageLink: '/about',
       view: FAQ,
-      displayName: 'FAQ',
+      displayName: 'About',
       animationDelayForNavbar: 0.6,
       showInNavbar: true,
     },
