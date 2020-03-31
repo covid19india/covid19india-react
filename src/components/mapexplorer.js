@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react';
-import ChoroplethMap, {highlightRegionInMap} from './choropleth';
+import ChoroplethMap from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 import {formatDate} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
@@ -213,11 +213,6 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
-    // setStates(props.states);
-    // setCurrentHoveredRegion()
-  }, [states]);
-
-  useEffect(() => {
     const region = getRegionFromState(states[1]);
     setCurrentHoveredRegion(region);
   }, [states]);
@@ -291,7 +286,6 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
       return;
     } else if (regionHighlighted === null) {
       setSelectedRegion(null);
-      highlightRegionInMap(null, currentMap.mapType);
       return;
     }
     const isState = !('district' in regionHighlighted);
@@ -300,7 +294,6 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
       setCurrentMap(newMap);
       const region = getRegionFromState(regionHighlighted.state);
       setCurrentHoveredRegion(region);
-      highlightRegionInMap(region.name, currentMap.mapType);
       setSelectedRegion(region.name);
     } else {
       const newMap = mapMeta[regionHighlighted.state.state];
@@ -309,7 +302,6 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
       }
       setCurrentMap(newMap);
       setHoveredRegion(regionHighlighted.district, newMap);
-      highlightRegionInMap(regionHighlighted.district, currentMap.mapType);
       setSelectedRegion(regionHighlighted.district);
     }
   }, [regionHighlighted, currentMap.mapType, setHoveredRegion]);
