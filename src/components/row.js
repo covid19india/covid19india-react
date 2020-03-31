@@ -93,11 +93,7 @@ function Row(props) {
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
         touchstart={() => props.onHighlightState?.(state, props.index)}
-        onClick={() => {
-          if (!props.total) {
-            handleReveal();
-          }
-        }}
+        onClick={!props.total ? handleReveal : null}
       >
         <td style={{fontWeight: 600}}>{state.state}</td>
         <td>
