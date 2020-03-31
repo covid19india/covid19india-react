@@ -3,6 +3,44 @@ import ChoroplethMap, {highlightRegionInMap} from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 import {formatDate} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
+import LocalizedStrings from 'react-localization';
+
+const translate = require('../translate/' +
+  localStorage.getItem('language') +
+  '.json');
+
+const strings = new LocalizedStrings({
+  en: {
+    hover: 'Hover over a',
+    state: 'state',
+    district: 'district',
+    moreDetails: ' for more details',
+    confirmed: 'Confirmed ',
+    recovered: 'Recovered ',
+    active: 'Active',
+    deceased: 'Deceased ',
+    map: 'Map',
+    back: 'Back',
+    lastUpdated: 'Last Updated',
+    ago: ' Ago',
+    unknownDist: 'Districts unknown for {0} people',
+  },
+  kan: {
+    hover: 'ಹೆಚ್ಚಿನ ಮಾಹಿತಿಗೆ ',
+    state: 'ರಾಜ್ಯದ ನಕ಼ೆಯ',
+    district: 'ಜಿಲ್ಲೆಯ ನಕ಼ೆಯ',
+    moreDetails: ' ಮೇಲೆ ಇಣುಕಿ',
+    confirmed: 'ಖಚಿತ ',
+    recovered: 'ವಾಸಿ ',
+    active: 'ಸಕ್ರಿಯ',
+    deceased: 'ಸಾವು ',
+    map: 'ನಕ಼ೆ',
+    back: 'ಹಿಂದಿರುಗು',
+    lastUpdated: 'ಕೊನೆ ಬದಲಾವಣೆ',
+    ago: ' ಹಿಂದೆ',
+    unknownDist: '{0} ಜನರ ಜಿಲ್ಲೆ ಗೊತ್ತಿಲ್ಲ',
+  },
+});
 
 const mapMeta = {
   India: {
@@ -207,6 +245,8 @@ const mapMeta = {
   },
 };
 
+strings.setLanguage(localStorage.getItem('language'));
+
 export default function ({
   states,
   stateDistrictWiseData,
@@ -370,17 +410,21 @@ export default function ({
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
       <div className="header">
-        <h1>{currentMap.name} Map</h1>
+        <h1>
+          {translate[currentMap.name]} {strings.map}
+        </h1>
         <h6>
-          Hover over a{' '}
-          {currentMap.mapType === MAP_TYPES.COUNTRY ? 'state' : 'district'} for
-          more details
+          {strings.hover}
+          {currentMap.mapType === MAP_TYPES.COUNTRY
+            ? strings.state
+            : strings.district}
+          {strings.moreDetails}
         </h6>
       </div>
 
       <div className="map-stats">
         <div className="stats">
-          <h5>Confirmed</h5>
+          <h5>{strings.confirmed}</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.confirmed}</h1>
             <h6>{}</h6>
@@ -388,7 +432,7 @@ export default function ({
         </div>
 
         <div className="stats is-blue">
-          <h5>Active</h5>
+          <h5>{strings.active}</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.active || ''}</h1>
             <h6>{}</h6>
@@ -396,7 +440,7 @@ export default function ({
         </div>
 
         <div className="stats is-green">
-          <h5>Recovered</h5>
+          <h5>{strings.recovered}</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.recovered || ''}</h1>
             <h6>{}</h6>
@@ -404,7 +448,7 @@ export default function ({
         </div>
 
         <div className="stats is-gray">
-          <h5>Deceased</h5>
+          <h5>{strings.deceased}</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.deaths || ''}</h1>
             <h6>{}</h6>
@@ -413,7 +457,7 @@ export default function ({
       </div>
 
       <div className="meta">
-        <h2>{name}</h2>
+        <h2>{translate[name]}</h2>
         {lastupdatedtime && (
           <div
             className={`last-update ${
@@ -422,22 +466,22 @@ export default function ({
                 : 'state-last-update'
             }`}
           >
-            <h6>Last Updated</h6>
+            <h6>{strings.lastUpdated}</h6>
             <h3>
               {isNaN(Date.parse(formatDate(lastupdatedtime)))
                 ? ''
                 : formatDistance(
                     new Date(formatDate(lastupdatedtime)),
                     new Date()
-                  ) + ' Ago'}
+                  ) + strings.ago}
             </h3>
           </div>
         )}
 
         {currentMap.mapType === MAP_TYPES.STATE &&
         currentMapData.Unknown > 0 ? (
-          <h4 className="unknown">
-            Districts unknown for {currentMapData.Unknown} people
+          <h4 className={`unknown-${localStorage.getItem('language')}`}>
+            {strings.formatString(strings.unknownDist, currentMapData.Unknown)}
           </h4>
         ) : null}
 
@@ -446,7 +490,7 @@ export default function ({
             className="button back-button"
             onClick={() => switchMapToState('India')}
           >
-            Back
+            {strings.back}
           </div>
         ) : null}
       </div>

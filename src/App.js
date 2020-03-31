@@ -15,6 +15,33 @@ import Cluster from './components/cluster';
 import FAQ from './components/faq';
 import Banner from './components/banner';
 
+import LocalizedStrings from 'react-localization';
+
+const strings = new LocalizedStrings({
+  en: {
+    message: 'We stand with everyone fighting on the frontlines',
+    patientDb: 'Crowdsourced Patient Database ',
+    telegram: 'Join Telegram to Collaborate!',
+    covid19: 'covid19india',
+    home: 'Home',
+    cluster: 'Clusters',
+    helpLinks: 'Helpful Links',
+    faq: 'FAQ',
+  },
+  kan: {
+    message: 'ಮುಂದೆ ನಿಂತು ಹೋರಾಡುತ್ತಿರುವ ಎಲ್ಲರೊಟ್ಟಿಗೆ ನಾವಿದ್ದೇವೆ',
+    patientDb: 'ಸಾರ್ವಜನಿಕ ಪಾಲುದಗಾರಿಕೆಯಲ್ಲಿ ರೋಗಿ ದತ್ತ ಸಂಚಯ ',
+    telegram: 'ಒಟ್ಟುಗೂಡಿ ಕೆಲಸ ಮಾದಲು ಟೆಲಿಗ್ರಾಮ್‌ ಸೇರಿ!',
+    covid19: 'ಕೋವಿಡ್-‌೧೯ ಭಾರತ',
+    home: 'ಮುಖಪುಟ',
+    cluster: 'ಗುಛ್ಛಗಳು',
+    helpLinks: 'ಸಹಾಯ ಕೊಂಡಿಗಳು',
+    faq: 'ಪ್ರಶ್ನೋತ್ತರ',
+  },
+});
+
+strings.setLanguage(localStorage.getItem('language'));
+
 const history = require('history').createBrowserHistory;
 
 function App() {
@@ -23,25 +50,25 @@ function App() {
     {
       pageLink: '/',
       view: Home,
-      displayName: 'Home',
+      displayName: strings.home,
       animationDelayForNavbar: 0.2,
     },
     {
       pageLink: '/clusters',
       view: Cluster,
-      displayName: 'Clusters',
+      displayName: strings.cluster,
       animationDelayForNavbar: 0.3,
     },
     {
       pageLink: '/links',
       view: Links,
-      displayName: 'Helpful Links',
+      displayName: strings.helpLinks,
       animationDelayForNavbar: 0.4,
     },
     {
       pageLink: '/faq',
       view: FAQ,
-      displayName: 'FAQ',
+      displayName: strings.faq,
       animationDelayForNavbar: 0.4,
     },
   ];
@@ -76,9 +103,9 @@ function App() {
           src="/icon.png"
           alt="https://www.covid19india.org | Coronavirus cases live dashboard"
         />
-        <h5>We stand with everyone fighting on the frontlines</h5>
+        <h5>{strings.message}</h5>
         <div className="link">
-          <a href="https://github.com/covid19india">covid19india</a>
+          <a href="https://github.com/covid19india">{strings.covid19}</a>
         </div>
         <div id="footerButtons">
           <a
@@ -87,7 +114,7 @@ function App() {
             target="_noblank"
           >
             <Icon.Database />
-            <span>Crowdsourced Patient Database&nbsp;</span>
+            <span>{strings.patientDb}</span>
           </a>
           <a
             href="https://bit.ly/covid19crowd"
@@ -95,7 +122,7 @@ function App() {
             target="_noblank"
           >
             <Icon.MessageCircle />
-            <span>Join Telegram to Collaborate!</span>
+            <span>{strings.telegram}</span>
           </a>
         </div>
       </footer>

@@ -1,7 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 
 function Navbar(props) {
+  const [language, setLanguage] = useState(localStorage.getItem('language'));
+
+  const handleLangChange = (language) => {
+    setLanguage(language);
+    localStorage.setItem('language', language);
+    window.location.reload();
+  };
+
   // HTML Properties for each of the links in UI
   const navLinkProps = (path, animationDelay) => ({
     className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
@@ -46,7 +54,16 @@ function Navbar(props) {
           })}
         </div>
 
-        <div className="navbar-right"></div>
+        <div className="navbar-right">
+          <select
+            name="language"
+            value={language}
+            onChange={(event) => handleLangChange(event.target.value)}
+          >
+            <option value="en">English</option>
+            <option value="kan">ಕನ್ನಡ</option>
+          </select>
+        </div>
       </div>
     );
   } else {

@@ -1,4 +1,22 @@
 import React, {useState, useEffect} from 'react';
+import LocalizedStrings from 'react-localization';
+
+const strings = new LocalizedStrings({
+  en: {
+    confirmed: 'Confirmed ',
+    recovered: 'Recovered ',
+    active: 'Active',
+    deceased: 'Deceased ',
+  },
+  kan: {
+    confirmed: 'ಖಚಿತ ',
+    recovered: 'ವಾಸಿ ',
+    active: 'ಸಕ್ರಿಯ',
+    deceased: 'ಸಾವು ',
+  },
+});
+
+strings.setLanguage(localStorage.getItem('language'));
 
 function Level(props) {
   const [data, setData] = useState(props.data);
@@ -36,7 +54,7 @@ function Level(props) {
   return (
     <div className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
       <div className="level-item is-cherry">
-        <h5>Confirmed</h5>
+        <h5>{strings.confirmed}</h5>
         <h4>
           [
           {props.deltas
@@ -50,14 +68,14 @@ function Level(props) {
       </div>
 
       <div className="level-item is-blue">
-        <h5 className="heading">Active</h5>
+        <h5 className="heading">{strings.active}</h5>
         <h4>&nbsp;</h4>
         {/* <h4>[{props.deltas ? props.deltas.confirmeddelta-(props.deltas.recovereddelta+props.deltas.deceaseddelta) >=0 ? '+'+(props.deltas.confirmeddelta-(props.deltas.recovereddelta+props.deltas.deceaseddelta)).toString() : '+0' : ''}]</h4>*/}
         <h1 className="title has-text-info">{active}</h1>
       </div>
 
       <div className="level-item is-green">
-        <h5 className="heading">Recovered</h5>
+        <h5 className="heading">{strings.recovered}</h5>
         <h4>
           [
           {props.deltas
@@ -71,7 +89,7 @@ function Level(props) {
       </div>
 
       <div className="level-item is-gray">
-        <h5 className="heading">Deceased</h5>
+        <h5 className="heading">{strings.deceased}</h5>
         <h4>
           [
           {props.deltas

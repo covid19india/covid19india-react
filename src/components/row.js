@@ -2,6 +2,35 @@ import React, {useState, useEffect, useCallback} from 'react';
 import * as Icon from 'react-feather';
 import {formatDate} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
+import LocalizedStrings from 'react-localization';
+
+const translate = require('../translate/' +
+  localStorage.getItem('language') +
+  '.json');
+
+const strings = new LocalizedStrings({
+  en: {
+    district: 'District',
+    confirmed: 'Confirmed',
+    mdConfirmed: 'Cnfmd',
+    smConfirmed: 'C',
+    unknown: 'Unknown',
+    lastUpdated: 'Last Updated',
+    ago: ' Ago',
+  },
+  kan: {
+    district: 'ಜಿಲ್ಲೆ',
+    confirmed: 'ಖಚಿತ',
+    mdConfirmed: 'ಖಚಿತ',
+    smConfirmed: 'ಖ',
+    unknown: 'ಗೊತ್ತಿರದ',
+    lastUpdated: 'ಕೊನೆ ಬದಲಾವಣೆ',
+    ago: ' ಹಿಂದೆ',
+  },
+});
+
+strings.setLanguage(localStorage.getItem('language'));
+
 function Row(props) {
   const [state, setState] = useState(props.state);
   const [districts, setDistricts] = useState(props.districts);
@@ -101,7 +130,7 @@ function Row(props) {
           handleReveal();
         }}
       >
-        <td style={{fontWeight: 600}}>{state.state}</td>
+        <td style={{fontWeight: 600}}>{translate[state.state]}</td>
         <td>
           <span className="deltas" style={{color: '#ff073a'}}>
             {state.delta.confirmed > 0 && <Icon.ArrowUp />}
@@ -146,14 +175,14 @@ function Row(props) {
       >
         <td colSpan={5}>
           <div className="last-update">
-            <h6>Last Updated&nbsp;</h6>
+            <h6>{strings.lastUpdated}&nbsp;</h6>
             <h6>
               {isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
                 ? ''
                 : `${formatDistance(
                     new Date(formatDate(props.state.lastupdatedtime)),
                     new Date()
-                  )} Ago`}
+                  )} ${strings.ago}`}
             </h6>
           </div>
         </td>
@@ -165,7 +194,7 @@ function Row(props) {
       >
         <td onClick={(e) => handleSort('district')}>
           <div className="heading-content">
-            <abbr title="District">District</abbr>
+            <abbr title="District">{strings.district}</abbr>
             <div
               style={{
                 display:
@@ -188,9 +217,9 @@ function Row(props) {
             >
               {window.innerWidth <= 769
                 ? window.innerWidth <= 375
-                  ? 'C'
-                  : 'Cnfmd'
-                : 'Confirmed'}
+                  ? strings.smConfirmed
+                  : strings.mdConfirmed
+                : strings.confirmed}
             </abbr>
             <div
               style={{
@@ -224,7 +253,7 @@ function Row(props) {
                   props.onHighlightDistrict?.(district, state, props.index)
                 }
               >
-                <td style={{fontWeight: 600}}>{district}</td>
+                <td style={{fontWeight: 600}}>{translate[district]}</td>
                 <td>
                   <span className="deltas" style={{color: '#ff073a'}}>
                     {sortedDistricts[district].delta.confirmed > 0 && (
@@ -248,7 +277,7 @@ function Row(props) {
           className={`district`}
           style={{display: props.reveal && !props.total ? '' : 'none'}}
         >
-          <td style={{fontWeight: 600}}>Unknown</td>
+          <td style={{fontWeight: 600}}>{strings.unknown}</td>
           <td>
             <span className="deltas" style={{color: '#ff073a'}}>
               {sortedDistricts['Unknown'].delta.confirmed > 0 && (

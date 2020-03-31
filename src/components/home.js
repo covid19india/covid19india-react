@@ -7,6 +7,32 @@ import Level from './level';
 import MapExplorer from './mapexplorer';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
+import LocalizedStrings from 'react-localization';
+
+const strings = new LocalizedStrings({
+  en: {
+    title: 'India COVID-19 Tracker',
+    subtitle: 'A Crowdsourced Initiative',
+    lastUpdated: 'Last Updated',
+    daily: 'Daily',
+    cumulative: 'Cumulative',
+    ago: ' Ago',
+    trend: 'Spread Trends',
+    scale: 'Scale Uniformly',
+  },
+  kan: {
+    title: 'ಕೋವಿಡ್-‌೧೯ ಭಾರತ ಹಿಂಬಾಲಕ',
+    subtitle: 'ಸಾರ್ವಜನಿಕರ ಪಾಲುಗಾರಿಕೆಯಲ್ಲಿ',
+    lastUpdated: 'ಕೊನೆ ಬದಲಾವಣೆ',
+    daily: 'ದೈನಿಕ',
+    cumulative: 'ಒಟ್ಟು',
+    ago: ' ಹಿಂದೆ',
+    trend: 'ಹರಡುವಿಕೆ ದಿಕ್ಕು',
+    scale: 'ಸಮ ಅಂತರದಲ್ಲಿ ಬಿಂಬಿಸು',
+  },
+});
+
+strings.setLanguage(localStorage.getItem('language'));
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -58,18 +84,19 @@ function Home(props) {
         <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
           <div className="header-mid">
             <div className="titles">
-              <h1>India COVID-19 Tracker</h1>
-              <h6>A Crowdsourced Initiative</h6>
+              <h1>{strings.title}</h1>
+              <h6>{strings.subtitle}</h6>
             </div>
             <div className="last-update">
-              <h6>Last Updated</h6>
+              <h6>{strings.lastUpdated}</h6>
               <h3>
                 {isNaN(Date.parse(formatDate(lastUpdated)))
                   ? ''
                   : formatDistance(
                       new Date(formatDate(lastUpdated)),
                       new Date()
-                    ) + ' Ago'}
+                    )}{' '}
+                {strings.ago}
               </h3>
             </div>
           </div>
@@ -101,7 +128,7 @@ function Home(props) {
               className="timeseries-header fadeInUp"
               style={{animationDelay: '1.5s'}}
             >
-              <h1>Spread Trends</h1>
+              <h1>{strings.trend}</h1>
               <div className="tabs">
                 <div
                   className={`tab ${graphOption === 1 ? 'focused' : ''}`}
@@ -109,7 +136,7 @@ function Home(props) {
                     setGraphOption(1);
                   }}
                 >
-                  <h4>Cumulative</h4>
+                  <h4>{strings.cumulative}</h4>
                 </div>
                 <div
                   className={`tab ${graphOption === 2 ? 'focused' : ''}`}
@@ -117,12 +144,12 @@ function Home(props) {
                     setGraphOption(2);
                   }}
                 >
-                  <h4>Daily</h4>
+                  <h4>{strings.daily}</h4>
                 </div>
               </div>
 
               <div className="timeseries-mode">
-                <label htmlFor="timeseries-mode">Scale Uniformly</label>
+                <label htmlFor="timeseries-mode">{strings.scale}</label>
                 <input
                   type="checkbox"
                   className="switch"

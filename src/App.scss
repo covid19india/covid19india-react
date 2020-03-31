@@ -284,7 +284,16 @@ h6 {
           color: $gray;
         }
       }
-    }
+    }    
+  }
+
+  select{
+    font-size: 0.75rem;
+    margin-right: 0.75rem !important;
+    margin-top: 1.25rem !important;
+    padding:0.25rem;
+    color: $gray;
+    font-family: 'archia';
   }
 
   .focused {
@@ -844,9 +853,15 @@ table {
       word-wrap: break-word;
     }
 
-    .unknown {
+    .unknown-en {
       position: absolute;
       top: 14rem;
+      width: 5rem;
+    }
+
+    .unknown-kan {
+      position: absolute;
+      top: 15rem;
       width: 5rem;
     }
   }
@@ -1401,6 +1416,15 @@ footer {
       margin-left: 1rem;
       margin-right: -1rem;
       cursor: pointer;
+    }
+
+    select{
+      font-size: 0.75rem;
+      margin-right: 0.75rem !important;
+      margin-top: 1.25rem !important;
+      padding:0.25rem;
+      color: $gray;
+      font-family: 'archia';
     }
   }
 

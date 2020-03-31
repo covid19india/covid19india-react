@@ -2,6 +2,45 @@ import React, {useState, useEffect} from 'react';
 
 import Row from './row';
 
+import LocalizedStrings from 'react-localization';
+
+const strings = new LocalizedStrings({
+  en: {
+    state: 'State/UT',
+    confirmed: 'Confirmed',
+    mdConfirmed: 'Cnfmd',
+    smConfirmed: 'C',
+    active: 'Active',
+    mdActive: 'Actv',
+    smActive: 'A',
+    recovered: 'Recovered',
+    mdRecovered: 'Rcvrd',
+    smRecovered: 'R',
+    deceased: 'Deceased',
+    mdDeceased: 'Dcsd',
+    smDeceased: 'D',
+    statesAffected: 'States/UTS Affected',
+  },
+  kan: {
+    state: 'ರಾಜ್ಯ/ಕೇಂ.ಪ್ರ',
+    confirmed: 'ಖಚಿತ',
+    mdConfirmed: 'ಖಚಿತ',
+    smConfirmed: 'ಖ',
+    active: 'ಸಕ್ರಿಯ',
+    mdActive: 'ಸಕ್ರಿಯ',
+    smActive: 'ಸ',
+    recovered: 'ವಾಸಿ',
+    mdRecovered: 'ವಾಸಿ',
+    smRecovered: 'ವಾ',
+    deceased: 'ಸಾವು',
+    mdDeceased: 'ಸಾವು',
+    smDeceased: 'ಸಾ',
+    statesAffected: 'ಭಾದಿತ ರಾಜ್ಯ/ಕೇಂ.ಪ್ರ ಗಳು',
+  },
+});
+
+strings.setLanguage(localStorage.getItem('language'));
+
 function Table(props) {
   const [states, setStates] = useState(props.states);
   const [revealedStates, setRevealedStates] = useState({});
@@ -103,7 +142,7 @@ function Table(props) {
   return (
     <>
       <h5 className="affected-count fadeInUp" style={{animationDelay: '1s'}}>
-        {count} States/UTS Affected
+        {count} {strings.statesAffected}
       </h5>
       <table className="table fadeInUp" style={{animationDelay: '1s'}}>
         <thead>
@@ -113,7 +152,7 @@ function Table(props) {
               onClick={(e) => handleSort(e, props)}
             >
               <div className="heading-content">
-                <abbr title="State">State/UT</abbr>
+                <abbr title="State">{strings.state}</abbr>
                 <div
                   style={{
                     display:
@@ -136,9 +175,9 @@ function Table(props) {
                 >
                   {window.innerWidth <= 769
                     ? window.innerWidth <= 375
-                      ? 'C'
-                      : 'Cnfmd'
-                    : 'Confirmed'}
+                      ? strings.smConfirmed
+                      : strings.mdConfirmed
+                    : strings.confirmed}
                 </abbr>
                 <div
                   style={{
@@ -162,9 +201,9 @@ function Table(props) {
                 >
                   {window.innerWidth <= 769
                     ? window.innerWidth <= 375
-                      ? 'A'
-                      : 'Actv'
-                    : 'Active'}
+                      ? strings.smActive
+                      : strings.mdActive
+                    : strings.active}
                 </abbr>
                 <div
                   style={{
@@ -188,9 +227,9 @@ function Table(props) {
                 >
                   {window.innerWidth <= 769
                     ? window.innerWidth <= 375
-                      ? 'R'
-                      : 'Rcvrd'
-                    : 'Recovered'}
+                      ? strings.smRecovered
+                      : strings.mdRecovered
+                    : strings.recovered}
                 </abbr>
                 <div
                   className={
@@ -219,9 +258,9 @@ function Table(props) {
                 >
                   {window.innerWidth <= 769
                     ? window.innerWidth <= 375
-                      ? 'D'
-                      : 'Dcsd'
-                    : 'Deceased'}
+                      ? strings.smDeceased
+                      : strings.mdDeceased
+                    : strings.deceased}
                 </abbr>
                 <div
                   style={{

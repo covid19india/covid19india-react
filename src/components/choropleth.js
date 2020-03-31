@@ -4,6 +4,19 @@ import {legendColor} from 'd3-svg-legend';
 import * as topojson from 'topojson';
 import {MAP_TYPES} from '../constants';
 
+import LocalizedStrings from 'react-localization';
+
+const strings = new LocalizedStrings({
+  en: {
+    confirmed: 'Confirmed Cases',
+  },
+  kan: {
+    confirmed: 'ಖಚಿತ ಪ್ರಕರಣಗಳು',
+  },
+});
+
+strings.setLanguage(localStorage.getItem('language'));
+
 const propertyFieldMap = {
   country: 'ST_NM',
   state: 'district',
@@ -197,7 +210,7 @@ function ChoroplethMap({
       .cells(cells)
       .titleWidth(3)
       .labels(label)
-      .title('Confirmed Cases')
+      .title(strings.confirmed)
       .orient('vertical')
       .scale(color);
 

@@ -1,5 +1,21 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as d3 from 'd3';
+import LocalizedStrings from 'react-localization';
+
+const strings = new LocalizedStrings({
+  en: {
+    confirmed: 'Confirmed ',
+    recovered: 'Recovered ',
+    deceased: 'Deceased ',
+  },
+  kan: {
+    confirmed: 'ಖಚಿತ ',
+    recovered: 'ವಾಸಿ ',
+    deceased: 'ಸಾವು ',
+  },
+});
+
+strings.setLanguage(localStorage.getItem('language'));
 
 function TimeSeries(props) {
   const [timeseries, setTimeseries] = useState([]);
@@ -264,7 +280,10 @@ function TimeSeries(props) {
       >
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed {datapoint['date']}</h5>
+            <h5>
+              {strings.confirmed}
+              <br /> {datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['totalconfirmed']}</h2>
               <h6>
@@ -292,7 +311,10 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>Recovered {datapoint['date']}</h5>
+            <h5>
+              {strings.recovered} <br />
+              {datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['totalrecovered']}</h2>
               <h6>
@@ -321,7 +343,7 @@ function TimeSeries(props) {
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
             <h5>
-              Deceased <br />
+              {strings.deceased} <br />
               {datapoint['date']}
             </h5>
             <div className="stats-bottom">
@@ -356,7 +378,10 @@ function TimeSeries(props) {
       >
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed {datapoint['date']}</h5>
+            <h5>
+              {strings.confirmed} <br />
+              {datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailyconfirmed']}</h2>
               <h6>
@@ -384,7 +409,10 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>Recovered {datapoint['date']}</h5>
+            <h5>
+              {strings.recovered} <br />
+              {datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailyrecovered']}</h2>
               <h6>
@@ -413,7 +441,7 @@ function TimeSeries(props) {
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
             <h5>
-              Deceased <br />
+              {strings.deceased} <br />
               {datapoint['date']}
             </h5>
             <div className="stats-bottom">
