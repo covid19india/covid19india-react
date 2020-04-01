@@ -1,4 +1,4 @@
-import React,{ useState,useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {formatDistance} from 'date-fns';
 import {formatDate} from '../utils/common-functions';
@@ -17,18 +17,18 @@ function Home(props) {
   const [timeseries, setTimeseries] = useState([]);
   const [deltas, setDeltas] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
-  const [timeseriesLogMode,setTimeseriesLogMode] = useState(false);
+  const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
 
   useEffect(() => {
     if (fetched === false) {
       getStates();
     }
-  },[fetched]);
+  }, [fetched]);
 
   const getStates = async () => {
     try {
-      const [response,stateDistrictWiseResponse] = await Promise.all([
+      const [response, stateDistrictWiseResponse] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
       ]);
@@ -55,7 +55,7 @@ function Home(props) {
   return (
     <div className="Home">
       <div className="home-left">
-        <div className="header fadeInUp" style={{ animationDelay: '0.5s' }}>
+        <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
           <div className="header-mid">
             <div className="titles">
               <h1>India COVID-19 Tracker</h1>
@@ -67,9 +67,9 @@ function Home(props) {
                 {isNaN(Date.parse(formatDate(lastUpdated)))
                   ? ''
                   : formatDistance(
-                    new Date(formatDate(lastUpdated)),
-                    new Date()
-                  ) + ' Ago'}
+                      new Date(formatDate(lastUpdated)),
+                      new Date()
+                    ) + ' Ago'}
               </h3>
             </div>
           </div>
@@ -98,7 +98,7 @@ function Home(props) {
 
             <div
               className="timeseries-header fadeInUp"
-              style={{ animationDelay: '1.5s' }}
+              style={{animationDelay: '1.5s'}}
             >
               <h1>Spread Trends</h1>
               <div className="tabs">
@@ -120,39 +120,45 @@ function Home(props) {
                 </div>
               </div>
 
-
               <div className="scale-modes">
                 <label>Scale Mode</label>
                 <div className="timeseries-mode">
                   <label htmlFor="timeseries-mode">Uniform</label>
-                  <input type="checkbox"
+                  <input
+                    type="checkbox"
                     checked={timeseriesMode}
                     className="switch"
                     aria-label="Checked by default to scale uniformly."
                     onChange={(event) => {
                       setTimeseriesMode(!timeseriesMode);
-                    }} />
+                    }}
+                  />
                 </div>
-                <div className={`timeseries-logmode ${graphOption !== 1 ? 'disabled' : ''}`}>
+                <div
+                  className={`timeseries-logmode ${
+                    graphOption !== 1 ? 'disabled' : ''
+                  }`}
+                >
                   <label htmlFor="timeseries-logmode">Logarithmic</label>
-                  <input type="checkbox"
+                  <input
+                    type="checkbox"
                     checked={graphOption === 1 && timeseriesLogMode}
                     className="switch"
                     disabled={graphOption !== 1}
                     onChange={(event) => {
                       setTimeseriesLogMode(!timeseriesLogMode);
-                    }} />
+                    }}
+                  />
                 </div>
               </div>
-
             </div>
 
             <TimeSeries
               timeseries={timeseries}
               type={graphOption}
               mode={timeseriesMode}
-              logMode={timeseriesLogMode} />
-
+              logMode={timeseriesLogMode}
+            />
           </React.Fragment>
         )}
       </div>
