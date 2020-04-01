@@ -793,9 +793,12 @@ table {
   .header {
     display: flex;
     flex-direction: column;
-    color: $gray-dark;
+    color: $gray;
     margin-bottom: 2.5rem;
     align-self: flex-start;
+    h1 {
+      margin-bottom: 0.25rem;
+    }
   }
 
   .svg-parent {
@@ -998,24 +1001,29 @@ table {
   margin-top: 1rem;
 
   .scale-modes{
-    position: absolute;
-    z-index: 99;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-end;
     bottom: 0;
     right: 0;
     z-index: 99;
     color: $gray;
+    margin-top: 1rem;
     label {
       font-family: 'archia';
       text-transform: uppercase;
-      font-size: 13px;
+      font-size: 0.75rem;
       font-weight: 900;
       z-index: 99;
-      padding-bottom: 0.5rem;
+      color: $gray-mid;
     }
+
+    & > * {
+      align-self: center;
+    }
+
     .timeseries-mode, .timeseries-logmode {
+      margin-left: 1rem;
       display: flex;
       flex-direction: row;
       input.switch {
@@ -1024,43 +1032,43 @@ table {
         outline: none;
         margin: 0;
         cursor: pointer;
-        width: 22px;
-        height: 12px;
+        width: 24px;
+        height: 14px;
         background-color: #fff;
-        border: 1px solid #d9dadc;
+        border: 2px solid #d9dadc;
         border-radius: 10px;
-        box-shadow: inset -10px 0 0 0 #fff;
-        transition-duration: 200ms;
+        transition: all 200ms ease-in-out;
       }
   
       input.switch::after {
         content: "";
         position: absolute;
-        top: 1px;
-        left: 1px;
-        width: 9px;
-        height: 9px;
-        background-color: transparent;
+        top: 0;
+        left: 0;
+        width: 10px;
+        height: 10px;
+        background-color: $gray-mid;
         border-radius: 50%;
-        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
       }
   
       input.switch:checked {
-        border-color: $gray-mid;
-        box-shadow: inset 10px 0 0 0 $gray-mid;
+        background-color: $gray-mid;
+        transition: all 200ms ease-in-out;
       }
   
       input.switch:checked::after {
         left: 10px;
-        box-shadow: -2px 4px 3px rgba(0, 0, 0, 0.05);
+        background-color: $light;
       }
       
       label{
-        font-size: 11px;
+        font-size: 0.75rem;
         margin-right: 0.2rem;
         padding-bottom: 0;
+        color: $gray;
       }
     }
+
     .disabled {
       color: $gray-mid;
     }

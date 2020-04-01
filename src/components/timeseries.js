@@ -102,7 +102,11 @@ function TimeSeries(props) {
             : d3.scaleLinear().domain([-maxY / 10, maxY]);
 
         return (mode
-          ? applyLogMode(dTypeMaxMap['totalconfirmed'])
+          ? applyLogMode(
+              type.match('^total')
+                ? dTypeMaxMap['totalconfirmed']
+                : dTypeMaxMap['dailyconfirmed']
+            )
           : applyLogMode(maxY)
         ).range([height, margin.top]);
       });
