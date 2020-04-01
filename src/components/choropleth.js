@@ -5,7 +5,7 @@ import * as topojson from 'topojson';
 import {MAP_TYPES} from '../constants';
 
 const propertyFieldMap = {
-  country: 'ST_NM',
+  country: 'st_nm',
   state: 'district',
 };
 
