@@ -19,18 +19,9 @@ function Navbar(props) {
 
   if (window.location.pathname !== '/summary') {
     return (
-      <div
-        className="Navbar"
-        style={{
-          animationDelay: '0.5s',
-          height: window.location.pathname === '/clusters' ? '2.5rem' : '',
-          transition: 'all 0.3s ease-in-out',
-        }}
-      >
-        <img
-          className="fadeInUp logo"
-          alt={t('India COVID-19 Tracker')}
-          src="/icon.png"
+      <React.Fragment>
+        <div
+          className="Navbar"
           style={{
             animationDelay: '0.5s',
             height: window.location.pathname === '/clusters' ? '2.5rem' : '',
@@ -84,6 +75,31 @@ function Navbar(props) {
             display: window.innerWidth < 769 ? 'none' : '',
           }}
         />
+        {sidebar && (
+          <div className="side-navbar fadeRight">
+            <div className="fadeInUp">
+              <Icon.ArrowLeftCircle
+                onClick={() => {
+                  setSidebar(!sidebar);
+                }}
+              />
+            </div>
+            {props.pages.map((page, i) => {
+              return (
+                <Link to={page.pageLink} key={i}>
+                  <span
+                    {...navLinkProps(
+                      page.pageLink,
+                      page.animationDelayForNavbar
+                    )}
+                  >
+                    {t(page.displayName)}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        )}
 
         <div
           className="navbar-left"
@@ -105,7 +121,7 @@ function Navbar(props) {
         <div className="navbar-right fadeInUp" style={{animationDelay: '0.8s'}}>
           <LanguageSwitcher />
         </div>
-      </div>
+      </React.Fragment>
     );
   } else {
     return <div></div>;
