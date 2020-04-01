@@ -286,7 +286,7 @@ h6 {
       span {
         display: inline-block;
         transition: color 0.2s ease-in-out;
-        
+
         &:hover {
           color: $gray;
         }
@@ -1469,7 +1469,7 @@ footer {
         display: flex;
         flex-direction: column;
         & > * {
-          align-self: flex-end; 
+          align-self: flex-end;
         }
 
         h5 {
@@ -1693,7 +1693,7 @@ footer {
 
   a.button {
     display: flex;
-    flex: row;
+    flex-direction: row;
     width: 10rem;
     justify-content: center;
 
