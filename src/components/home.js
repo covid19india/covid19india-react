@@ -126,7 +126,7 @@ function Home(props) {
               </div>
 
               <div className="scale-modes">
-                <label>Scale Mode</label>
+                <label>Scale Modes</label>
                 <div className="timeseries-mode">
                   <label htmlFor="timeseries-mode">Uniform</label>
                   <input
