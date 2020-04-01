@@ -46,6 +46,40 @@ function Minigraph(props) {
         ])
         .range([height, 0]);
 
+      const y2 = d3
+        .scaleLinear()
+        .domain([
+          0,
+          d3.max(data, function (d) {
+            return +(
+              d['dailyconfirmed'] -
+              d['dailyrecovered'] -
+              d['dailydeceased']
+            );
+          }),
+        ])
+        .range([height, 0]);
+
+      const y3 = d3
+        .scaleLinear()
+        .domain([
+          0,
+          d3.max(data, function (d) {
+            return +d['dailyrecovered'];
+          }),
+        ])
+        .range([height, 0]);
+
+      const y4 = d3
+        .scaleLinear()
+        .domain([
+          0,
+          d3.max(data, function (d) {
+            return +d['dailydeceased'];
+          }),
+        ])
+        .range([height, 0]);
+
       const path1 = svg1
         .append('path')
         .datum(data)
@@ -118,11 +152,11 @@ function Minigraph(props) {
             })
             .y(function (d, i) {
               if (i === 0) {
-                return y1(
+                return y2(
                   d['dailyconfirmed'] - d['dailyrecovered'] - d['dailydeceased']
                 );
               } else {
-                return y1(
+                return y2(
                   d['dailyconfirmed'] - d['dailyrecovered'] - d['dailydeceased']
                 );
               }
@@ -159,7 +193,7 @@ function Minigraph(props) {
           data[data.length - 2]['dailyconfirmed'] -
           data[data.length - 2]['dailyrecovered'] -
           data[data.length - 2]['dailydeceased'];*/
-          return y1(
+          return y2(
             d['dailyconfirmed'] - d['dailyrecovered'] - d['dailydeceased']
           );
         })
@@ -190,15 +224,15 @@ function Minigraph(props) {
             })
             .y(function (d, i) {
               if (i === 0) {
-                return y1(d['dailyrecovered']);
+                return y3(d['dailyrecovered']);
               } else {
-                return y1(d['dailyrecovered']);
+                return y3(d['dailyrecovered']);
               }
             })
             .curve(d3.curveCardinal)
         );
 
-      const totalLength3 = path1.node().getTotalLength();
+      const totalLength3 = path3.node().getTotalLength();
       path3
         .attr('stroke-dasharray', totalLength3 + ' ' + totalLength3)
         .attr('stroke-dashoffset', totalLength3)
@@ -219,7 +253,7 @@ function Minigraph(props) {
           return x(new Date(d['date'] + '2020'));
         })
         .attr('cy', function (d) {
-          return y1(d['dailyrecovered']);
+          return y3(d['dailyrecovered']);
         })
         .on('mouseover', (d) => {
           d3.select(d3.event.target).attr('r', '5');
@@ -250,9 +284,9 @@ function Minigraph(props) {
             })
             .y(function (d, i) {
               if (i === 0) {
-                return y1(d['dailydeceased']);
+                return y4(d['dailydeceased']);
               } else {
-                return y1(d['dailydeceased']);
+                return y4(d['dailydeceased']);
               }
             })
             .curve(d3.curveCardinal)
@@ -279,7 +313,7 @@ function Minigraph(props) {
           return x(new Date(d['date'] + '2020'));
         })
         .attr('cy', function (d) {
-          return y1(d['dailydeceased']);
+          return y4(d['dailydeceased']);
         })
         .on('mouseover', (d) => {
           d3.select(d3.event.target).attr('r', '5');
