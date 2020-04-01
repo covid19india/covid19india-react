@@ -95,15 +95,21 @@ function TimeSeries(props) {
       }, {});
 
       const yScales = Object.entries(dTypeMaxMap).map(([type, maxY]) => {
-        return (logMode && logCharts.has(type)
-          ? d3.scaleLog().domain([1, maxY]).nice()
-          : d3.scaleLinear().domain([-maxY / 10, maxY])
+        // apply mode, logMode, etc -- determine scales once and for all
+        const applyLogMode = (maxY) =>
+          logMode && logCharts.has(type)
+            ? d3.scaleLog().domain([1, maxY]).nice()
+            : d3.scaleLinear().domain([-maxY / 10, maxY]);
+
+        return (mode
+          ? applyLogMode(dTypeMaxMap['totalconfirmed'])
+          : applyLogMode(maxY)
         ).range([height, margin.top]);
       });
 
       const y = (dataTypeIdx, day) => {
         // Scaling mode filters
-        const y = mode ? yScales[0] : yScales[dataTypeIdx];
+        const y = yScales[dataTypeIdx];
         const dType = dataTypes[dataTypeIdx];
         return y(logMode ? Math.max(1, day[dType]) : day[dType]); // max(1,y) for logmode
       };
@@ -146,9 +152,7 @@ function TimeSeries(props) {
 
       const tickCount = (scaleIdx) => {
         return logMode
-          ? Math.ceil(
-              Math.log10((mode ? yScales[0] : yScales[scaleIdx]).domain()[1])
-            )
+          ? Math.ceil(Math.log10(yScales[scaleIdx].domain()[1]))
           : 5;
       };
 
@@ -166,7 +170,7 @@ function TimeSeries(props) {
           .attr('class', 'axis')
           .call(
             d3
-              .axisRight(mode ? yScales[0] : yScales[i])
+              .axisRight(yScales[i])
               .ticks(tickCount(i))
               .tickPadding(5)
               .tickFormat(d3.format('.2s'))
@@ -230,7 +234,7 @@ function TimeSeries(props) {
         }
       });
     },
-    [mode, logMode]
+    [logMode, mode]
   );
 
   const refreshGraphs = useCallback(() => {
