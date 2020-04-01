@@ -5,16 +5,20 @@ export function removeFileExtension(fileName) {
   return fileName.substr(0, fileName.lastIndexOf('.'));
 }
 
+function removeUnknown(e) {
+  return e !== 'Unknown';
+}
+
 export async function getStatesAndDistrictsFromAPI() {
   const stateDistrictWiseResponse = (
     await axios.get('https://api.covid19india.org/state_district_wise.json')
   ).data;
-  const states = Object.keys(stateDistrictWiseResponse);
+  const states = Object.keys(stateDistrictWiseResponse).filter(removeUnknown);
   const result = {};
   states.map((stateName) => {
     result[stateName] = Object.keys(
       stateDistrictWiseResponse[stateName]['districtData']
-    );
+    ).filter(removeUnknown);
   });
   return result;
 }
