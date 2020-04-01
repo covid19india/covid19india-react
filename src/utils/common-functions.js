@@ -24,5 +24,5 @@ export const formatDateAbsolute = (unformattedDate) => {
   const day = unformattedDate.slice(0, 2);
   const month = unformattedDate.slice(3, 5);
   const time = unformattedDate.slice(11);
-  return `${day} ${months[month]}, ${time} IST`;
+  return `${day} ${months[month]}, ${time.slice(0, 5)} IST`;
 };
