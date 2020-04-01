@@ -547,7 +547,7 @@ abbr {
 
 .affected-count {
   text-align: right;
-  margin: 1rem 0 0 0;
+  margin: 0 0 0 0;
   color: $gray-mid;
 }
 
@@ -662,7 +662,7 @@ table {
       background: transparent;
       transform: translateX(1rem);
       &:hover{
-        background: #ffffff !important;
+        background: #fff !important;
       }
 
       td{
@@ -1543,7 +1543,7 @@ footer {
     padding: 1rem;
     border-radius: 5px;
     align-self: center;
-    background: #ffffff;
+    background: #fff;
     width: 30rem;
     height: 40rem;
     overflow-y: scroll;
