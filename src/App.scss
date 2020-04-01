@@ -441,8 +441,7 @@ h6 {
   transition: all 0.2s ease-in-out;
 
   &:hover {
-    color: #8ffe09 !important;
-    background: $light !important;
+    background: $gray-dark !important;
   }
 }
 
@@ -545,10 +544,14 @@ abbr {
   }
 }
 
-.affected-count {
+.table-fineprint {
   text-align: right;
   margin: 0 0 0 0;
   color: $gray-mid;
+  a {
+    text-decoration-thickness: 2px;
+    color: inherit;
+  }
 }
 
 .sticky {
@@ -561,7 +564,6 @@ table {
   align-self: center;
   font-family: 'archia';
   text-transform: uppercase;
-  margin-bottom: 1rem;
   border-spacing: 3px 2px;
   border-collapse: separate;
 
@@ -1340,18 +1342,17 @@ footer {
     margin: 0;
     font-weight: 600;
     text-transform: none;
-    letter-spacing: 0.02em;
   }
 
   .question {
-    margin-bottom: 0.5rem;
     color: $gray-dark;
-    font-size: 1.5em !important;
+    margin: 0;
+    margin-bottom: 0.25rem;
   }
 
   .answer {
     color: $blue;
-    line-height: 1.5em;
+    line-height: 1.5rem;
   }
 }
 
