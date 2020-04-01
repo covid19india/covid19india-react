@@ -1,5 +1,6 @@
 @font-face {
   font-family: 'Archia';
+  font-display: fallback;
   src: url('fonts/Archia/archia-thin-webfont.eot');
   src:
     url('fonts/Archia/archia-thin-webfont.eot?#iefix') format('embedded-opentype'),
@@ -12,6 +13,7 @@
 
 @font-face {
   font-family: 'Archia';
+  font-display: fallback;
   src: url('fonts/Archia/archia-light-webfont.eot');
   src:
     url('fonts/Archia/archia-light-webfont.eot?#iefix') format('embedded-opentype'),
@@ -24,6 +26,7 @@
 
 @font-face {
   font-family: 'Archia';
+  font-display: fallback;
   src: url('fonts/Archia/archia-regular-webfont.eot');
   src:
     url('fonts/Archia/archia-regular-webfont.eot?#iefix') format('embedded-opentype'),
@@ -36,6 +39,7 @@
 
 @font-face {
   font-family: 'Archia';
+  font-display: fallback;
   src: url('fonts/Archia/archia-medium-webfont.eot');
   src:
     url('fonts/Archia/archia-medium-webfont.eot?#iefix') format('embedded-opentype'),
@@ -48,6 +52,7 @@
 
 @font-face {
   font-family: 'Archia';
+  font-display: fallback;
   src: url('fonts/Archia/archia-semibold-webfont.eot');
   src:
     url('fonts/Archia/archia-semibold-webfont.eot?#iefix') format('embedded-opentype'),
@@ -60,6 +65,7 @@
 
 @font-face {
   font-family: 'Archia';
+  font-display: fallback;
   src: url('fonts/Archia/archia-bold-webfont.eot');
   src:
     url('fonts/Archia/archia-bold-webfont.eot?#iefix') format('embedded-opentype'),
@@ -286,7 +292,7 @@ h6 {
       span {
         display: inline-block;
         transition: color 0.2s ease-in-out;
-        
+
         &:hover {
           color: $gray;
         }
@@ -1469,7 +1475,7 @@ footer {
         display: flex;
         flex-direction: column;
         & > * {
-          align-self: flex-end; 
+          align-self: flex-end;
         }
 
         h5 {
