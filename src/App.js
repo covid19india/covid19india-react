@@ -92,6 +92,8 @@ function App() {
         <a
           href="https://github.com/covid19india/covid19india-react"
           className="button github"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <Icon.GitHub />
           <span>Open Sourced on GitHub</span>
