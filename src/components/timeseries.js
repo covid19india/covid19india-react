@@ -233,13 +233,10 @@ function TimeSeries(props) {
       graphElement5,
       graphElement6,
     ];
-    for (let i = 0; i <= graphs.length; i++) {
-      if (i === graphs.length) {
-        graphData(timeseries);
-        return;
-      } else d3.select(graphs[i].current).selectAll('*').remove();
+    for (let i = 0; i < graphs.length; i++) {
+      d3.select(graphs[i].current).selectAll('*').remove();
     }
-  }, [timeseries, graphData]);
+  }, []);
 
   useEffect(() => {
     if (update > 0) {

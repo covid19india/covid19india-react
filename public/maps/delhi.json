@@ -321,7 +321,7 @@
           "properties": {
             "OBJECTID": 99,
             "district": "Central Delhi",
-            "STATE": "Nation Capital Region"
+            "st_nm": "Delhi"
           }
         },
         {
@@ -330,7 +330,7 @@
           "properties": {
             "OBJECTID": 167,
             "district": "East Delhi",
-            "STATE": "Nation Capital Region"
+            "st_nm": "Delhi"
           }
         },
         {
@@ -339,7 +339,7 @@
           "properties": {
             "OBJECTID": 417,
             "district": "North East Delhi",
-            "STATE": "Nation Capital Region"
+            "st_nm": "Delhi"
           }
         },
         {
@@ -348,7 +348,7 @@
           "properties": {
             "OBJECTID": 413,
             "district": "North Delhi",
-            "STATE": "Nation Capital Region"
+            "st_nm": "Delhi"
           }
         },
         {
@@ -357,7 +357,7 @@
           "properties": {
             "OBJECTID": 420,
             "district": "North West Delhi",
-            "STATE": "Nation Capital Region"
+            "st_nm": "Delhi"
           }
         },
         {
@@ -366,7 +366,7 @@
           "properties": {
             "OBJECTID": 411,
             "district": "New Delhi",
-            "STATE": "Nation Capital Region"
+            "st_nm": "Delhi"
           }
         },
         {
@@ -375,7 +375,7 @@
           "properties": {
             "OBJECTID": 544,
             "district": "South Delhi",
-            "STATE": "Nation Capital Region"
+            "st_nm": "Delhi"
           }
         },
         {
@@ -384,7 +384,7 @@
           "properties": {
             "OBJECTID": 550,
             "district": "South West Delhi",
-            "STATE": "Nation Capital Region"
+            "st_nm": "Delhi"
           }
         },
         {
@@ -393,7 +393,7 @@
           "properties": {
             "OBJECTID": 613,
             "district": "West Delhi",
-            "STATE": "Nation Capital Region"
+            "st_nm": "Delhi"
           }
         }
       ]
