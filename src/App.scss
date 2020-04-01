@@ -548,9 +548,16 @@ abbr {
   text-align: right;
   margin: 0 0 0 0;
   color: $gray-mid;
+  margin-bottom: 0.25rem;
+  margin-right: 0.25rem;
   a {
-    text-decoration-thickness: 2px;
+    text-decoration: none;
     color: inherit;
+    border-bottom: 2px solid $gray-hover;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      background: $gray-hover;
+    }
   }
 }
 
