@@ -176,9 +176,9 @@ const mapMeta = {
   },
   Telangana: {
     name: 'Telangana',
-    geoDataFile: `${MAPS_DIR}/telugana.json`,
+    geoDataFile: `${MAPS_DIR}/telangana.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectName: 'telugana',
+    graphObjectName: 'telangana',
   },
   Tripura: {
     name: 'Tripura',
