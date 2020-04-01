@@ -13,6 +13,7 @@ import Navbar from './components/navbar';
 import Links from './components/links';
 import Cluster from './components/cluster';
 import FAQ from './components/faq';
+import Covid19Global from './components/covid19global';
 import Banner from './components/banner';
 
 const history = require('history').createBrowserHistory;
@@ -42,6 +43,12 @@ function App() {
       pageLink: '/faq',
       view: FAQ,
       displayName: 'FAQ',
+      animationDelayForNavbar: 0.4,
+    },
+    {
+      pageLink: '/covid19global',
+      view: Covid19Global,
+      displayName: 'Covid-19 Global',
       animationDelayForNavbar: 0.4,
     },
   ];
