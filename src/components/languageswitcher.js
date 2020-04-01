@@ -15,7 +15,7 @@ export default function LanguageSwitcher() {
       <select onChange={onLanguageChange} aria-label={t('Select Language')}>
         {Object.entries(locales).map(([key, lang]) => (
           <option key={key} value={key}>
-            {lang}
+            {lang === 'English' ? 'Eng' : lang}
           </option>
         ))}
       </select>

@@ -15,7 +15,6 @@ import Links from './components/links';
 import FAQ from './components/faq';
 import Banner from './components/banner';
 import Popup from './components/popup';
-import {useTranslation} from 'react-i18next';
 /* import PatientDB from './components/patientdb';*/
 
 import {useTranslation} from 'react-i18next';
@@ -84,7 +83,7 @@ function App() {
           alt="https://www.covid19india.org | Coronavirus cases live dashboard"
         />*/}
 
-        <h5>We stand with everyone fighting on the frontlines</h5>
+        <h5>{t('We stand with everyone fighting on the frontlines')}</h5>
         <div className="link">
           <a href="https://github.com/covid19india">covid19india</a>
         </div>

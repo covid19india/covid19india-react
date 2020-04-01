@@ -144,6 +144,7 @@ $pink-mid: #ffa8cb99;
   animation-fill-mode: both;
 
   @keyframes #{$animation-name} {
+
     0% {
       background: transparent;
     }
@@ -156,6 +157,7 @@ $pink-mid: #ffa8cb99;
 
 @mixin levelColor($color) {
   .is-#{$color} {
+
     h1 {
       color: $color;
     }
@@ -228,6 +230,7 @@ h6 {
       color: $gray;
     }
   }
+
   select {
     text-align: center;
     text-align-last: center;
@@ -235,7 +238,7 @@ h6 {
     font-weight: 600;
     width: auto;
     padding: 0.5rem;
-    border: none;
+    border: 0;
     background-color: transparent;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -248,6 +251,7 @@ h6 {
     transition: color 0.2s ease-in-out;
   }
 }
+
 .arrow-up {
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
@@ -616,7 +620,6 @@ abbr {
 
 .table-fineprint {
   text-align: right;
-  margin: none;
   color: $gray-mid;
   margin-bottom: 0.25rem;
   margin-right: 0.25rem;
@@ -839,10 +842,6 @@ table {
 
 #chart {
   z-index: 10;
-}
-
-.back-button {
-  z-index: 11;
 }
 
 .map-default {
@@ -1116,7 +1115,6 @@ table {
       border: 1px solid #d9dadc;
       border-radius: 10px;
       box-shadow: inset -10px 0 0 0 #fff;
-      transition-duration: 200ms;
     }
 
     input.switch::after {
@@ -1135,6 +1133,8 @@ table {
       align-self: center;
     }
 
+  }
+
     .timeseries-mode, .timeseries-logmode {
       margin-left: 1rem;
       display: flex;
@@ -1150,7 +1150,7 @@ table {
         background-color: #fff;
         border: 2px solid #d9dadc;
         border-radius: 10px;
-        transition: all 200ms ease-in-out;
+        transition: all 300ms ease-in-out;
       }
   
       input.switch::after {
@@ -1162,16 +1162,18 @@ table {
         height: 10px;
         background-color: $gray-mid;
         border-radius: 50%;
+        transition: all 300ms ease-in-out;
       }
   
       input.switch:checked {
         background-color: $gray-mid;
-        transition: all 200ms ease-in-out;
+        transition: all 300ms ease-in-out;
       }
   
       input.switch:checked::after {
         left: 10px;
         background-color: $light;
+        transition: all 300ms ease-in-out;
       }
       
       label{
@@ -2257,9 +2259,11 @@ select {
   h4 {
     margin: 0;
   }
+
   & > * {
     align-self: center;
   }
+
   svg {
     width: 16px;
     stroke-width: 3;
@@ -2440,6 +2444,7 @@ select {
     justify-content: space-between;
     .navbar-right {
     }
+
     .navbar-burger {
       align-self: center;
       margin-left: 1rem;
@@ -2451,6 +2456,7 @@ select {
         }
       }
     }
+
     .side-navbar {
       position: fixed;
       height: 100vh;
@@ -2553,7 +2559,7 @@ select {
 
 .fadeRight {
   animation-name: fadeRight;
-  animation-duration: 0.450s;
+  animation-duration: 0.45s;
   animation-fill-mode: both;
 }
 
@@ -2562,8 +2568,9 @@ select {
     opacity: 0;
     transform: translateX(-20px);
   }
+
   100% {
     opacity: 1;
-    transform: translateX(0px);
+    transform: translateX(0);
   }
 }
