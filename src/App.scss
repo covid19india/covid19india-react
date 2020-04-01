@@ -226,16 +226,24 @@ h6 {
 .Home {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
   flex-wrap: wrap;
-  margin-left: 10rem;
-  margin-right: 10rem;
+  margin-left: 5rem;
+  margin-right: 5rem;
 
   .home-left,
   .home-right {
     display: flex;
     flex-direction: column;
     width: 30rem;
+  }
+
+  .home-left {
+    margin-right: 2.5rem;
+  }
+
+  .home-right {
+    margin-left: 2.5rem;
   }
 }
 
