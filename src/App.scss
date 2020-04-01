@@ -130,6 +130,8 @@ $purple-hover: #201aa230;
 $purple-mid: #201aa299;
 $purple-light-opaque: #e3e2f3;
 
+$headerSize: 2.5rem;
+$stickyTop: 2.6rem;
 @mixin navbarReveal($color) {
   $animation-name: unique-id() !global;
 
@@ -141,7 +143,7 @@ $purple-light-opaque: #e3e2f3;
   @keyframes #{$animation-name} {
 
     0% {
-      background: transparent;
+      background: $light;
     }
 
     100% {
@@ -241,6 +243,7 @@ h6 {
 
 .Banner {
   display: flex;
+  padding-top: $headerSize;
   flex-direction: row;
   justify-content: center;
   line-height: 20px;
@@ -263,12 +266,15 @@ h6 {
 .Navbar {
   display: flex;
   flex-direction: row;
-  height: 4.5rem;
+  height: $headerSize;
   justify-content: space-around;
   text-transform: uppercase;
   font-weight: 900;
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
 
-  @include navbarReveal($gray-light);
+  @include navbarReveal($gray-opaque);
 
   .navbar-left {
     margin-left: 2rem;
@@ -299,8 +305,8 @@ h6 {
   }
 
   img {
-    width: 3rem;
-    height: 3rem;
+    width: 2rem;
+    height: 2rem;
     align-self: center;
     margin-left: 5rem;
     cursor: pointer;
@@ -554,7 +560,7 @@ table {
       z-index: 99;
 
       &.sticky {
-        top: 4px;
+        top: $stickyTop;
         background: $gray-opaque;
       }
 
