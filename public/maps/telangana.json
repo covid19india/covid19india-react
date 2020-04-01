@@ -7831,9 +7831,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Nirmal",
-            "Dist_Code": null
+            "Dist_Code": "940"
           }
         },
         {
@@ -7843,7 +7843,7 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Hyderabad",
             "Dist_Code": "536"
           }
@@ -7883,9 +7883,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
-            "district": "Jaya Shankar",
-            "Dist_Code": null
+            "State_Code": "36",
+            "district": "JayaShankar Bhupalapally",
+            "Dist_Code": "934"
           }
         },
         {
@@ -7895,9 +7895,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
-            "district": "Kothagudem",
-            "Dist_Code": null
+            "State_Code": "36",
+            "district": "Bhadradri Kothagudem",
+            "Dist_Code": "931"
           }
         },
         {
@@ -7937,9 +7937,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Nagarkurnool",
-            "Dist_Code": null
+            "Dist_Code": "927"
           }
         },
         {
@@ -7968,9 +7968,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Siddipet",
-            "Dist_Code": null
+            "Dist_Code": "929"
           }
         },
         {
@@ -8006,9 +8006,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Suryapet",
-            "Dist_Code": null
+            "Dist_Code": "925"
           }
         },
         {
@@ -8053,7 +8053,7 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Nizamabad",
             "Dist_Code": "533"
           }
@@ -8104,7 +8104,7 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Shamshabad",
             "Dist_Code": null
           }
@@ -8141,9 +8141,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
-            "district": "Komaram Bheem",
-            "Dist_Code": null
+            "State_Code": "36",
+            "district": "Kumuram Bheem Asifabad",
+            "Dist_Code": "922"
           }
         },
         {
@@ -8153,7 +8153,7 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Adilabad",
             "Dist_Code": "532"
           }
@@ -8201,9 +8201,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Jagtial",
-            "Dist_Code": null
+            "Dist_Code": "939"
           }
         },
         {
@@ -8231,9 +8231,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
-            "district": "Peddapalle",
-            "Dist_Code": null
+            "State_Code": "36",
+            "district": "Peddapalli",
+            "Dist_Code": "938"
           }
         },
         {
@@ -8281,7 +8281,7 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Karimnagar",
             "Dist_Code": "534"
           }
@@ -8322,9 +8322,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
-            "district": "Hanamkonda",
-            "Dist_Code": null
+            "State_Code": "36",
+            "district": "Warangal Rural",
+            "Dist_Code": "941"
           }
         },
         {
@@ -8360,9 +8360,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Mahabubabad",
-            "Dist_Code": null
+            "Dist_Code": "933"
           }
         },
         {
@@ -8390,7 +8390,7 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Khammam",
             "Dist_Code": "541"
           }
@@ -8430,7 +8430,7 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Mahbubnagar",
             "Dist_Code": "538"
           }
@@ -8442,9 +8442,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Wanaparthy",
-            "Dist_Code": null
+            "Dist_Code": "928"
           }
         },
         {
@@ -8495,9 +8495,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Sangareddy",
-            "Dist_Code": null
+            "Dist_Code": "930"
           }
         },
         {
@@ -8538,7 +8538,7 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Medak",
             "Dist_Code": "535"
           }
@@ -8571,9 +8571,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
-            "district": "Yadadri",
-            "Dist_Code": null
+            "State_Code": "36",
+            "district": "Yadadri Bhuvanagiri",
+            "Dist_Code": "924"
           }
         },
         {
@@ -8608,7 +8608,7 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Nalgonda",
             "Dist_Code": "539"
           }
@@ -8661,9 +8661,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
-            "district": "Kamareddy",
-            "Dist_Code": null
+            "State_Code": "36",
+            "district": "KamaReddy",
+            "Dist_Code": "935"
           }
         },
         {
@@ -8709,7 +8709,7 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Ranga Reddy",
             "Dist_Code": "537"
           }
@@ -8743,9 +8743,9 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
-            "district": "Malkajgiri",
-            "Dist_Code": null
+            "State_Code": "36",
+            "district": "Medchal Malkajgiri",
+            "Dist_Code": "921"
           }
         },
         {
@@ -8772,7 +8772,7 @@
             "REMARKS_2": null,
             "Country": "India",
             "st_nm": "Telangana",
-            "State_Code": null,
+            "State_Code": "36",
             "district": "Warangal",
             "Dist_Code": "540"
           }
