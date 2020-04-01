@@ -2,6 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import * as Icon from 'react-feather';
 import {formatDate} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
+import {roundNumber} from '../utils/common-functions';
 function Row(props) {
   const [state, setState] = useState(props.state);
   const [districts, setDistricts] = useState(props.districts);
@@ -138,6 +139,29 @@ function Row(props) {
             {state.delta.deaths>0 ? `${state.delta.deaths}` : ''}
           </span>*/}
           {parseInt(state.deaths) === 0 ? '-' : state.deaths}
+        </td>
+        <td
+          style={{
+            color: parseInt(state.deaths) === 0 ? '#B5B5B5' : 'inherit',
+          }}
+        >
+          {parseInt(state.active) === 0 || state.deaths / state.active <= 0.01
+            ? '-'
+            : roundNumber((state.deaths / state.active) * 100, 2)
+                .toString()
+                .concat('%')}
+        </td>
+        <td
+          style={{
+            color: parseInt(state.recovered) === 0 ? '#B5B5B5' : 'inherit',
+          }}
+        >
+          {parseInt(state.active) === 0 ||
+          state.recovered / state.active <= 0.01
+            ? '-'
+            : roundNumber((state.recovered / state.active) * 100, 2)
+                .toString()
+                .concat('%')}
         </td>
       </tr>
 

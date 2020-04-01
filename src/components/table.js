@@ -238,6 +238,58 @@ function Table(props) {
                 </div>
               </div>
             </th>
+            <th className="sticky" onClick={(e) => handleSort(e, props)}>
+              <div className="heading-content">
+                <abbr
+                  className={`${window.innerWidth <= 769 ? 'is-gray' : ''}`}
+                  title="Mortality Rate"
+                >
+                  {window.innerWidth <= 769
+                    ? window.innerWidth <= 375
+                      ? 'MRT'
+                      : 'MRATE'
+                    : 'Mortality Rate'}
+                </abbr>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'deaths' ? 'initial' : 'none',
+                  }}
+                >
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
+                </div>
+              </div>
+            </th>
+            <th className="sticky" onClick={(e) => handleSort(e, props)}>
+              <div className="heading-content">
+                <abbr
+                  className={`${window.innerWidth <= 769 ? 'is-gray' : ''}`}
+                  title="Recovery Rate"
+                >
+                  {window.innerWidth <= 769
+                    ? window.innerWidth <= 375
+                      ? 'RRT'
+                      : 'RRATE'
+                    : 'Recovery Rate'}
+                </abbr>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'recovered' ? 'initial' : 'none',
+                  }}
+                >
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
+                </div>
+              </div>
+            </th>
           </tr>
         </thead>
 

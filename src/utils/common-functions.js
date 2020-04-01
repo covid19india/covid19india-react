@@ -27,3 +27,20 @@ export const formatDateAbsolute = (unformattedDate) => {
   const time = unformattedDate.slice(11);
   return `${day} ${months[month]}, ${time.slice(0, 5)} IST`;
 };
+
+export const roundNumber = (num, scale) => {
+  if (!('' + num).includes('e')) {
+    return +(Math.round(num + 'e+' + scale) + 'e-' + scale);
+  } else {
+    const arr = ('' + num).split('e');
+    let sig = '';
+    if (+arr[1] + scale > 0) {
+      sig = '+';
+    }
+    return +(
+      Math.round(+arr[0] + 'e' + sig + (+arr[1] + scale)) +
+      'e-' +
+      scale
+    );
+  }
+};
