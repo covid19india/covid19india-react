@@ -149,7 +149,7 @@ function TimeSeries(props) {
               .ticks(5)
               .tickPadding(5)
               .tickFormat((tick) => {
-                if (Math.floor(tick) === tick) return tick;
+                if (Math.floor(tick) === tick) return d3.format('~s')(tick);
               })
           );
 
