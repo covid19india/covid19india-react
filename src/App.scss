@@ -167,7 +167,7 @@ body {
   -webkit-touch-callout: none;
 }
 
-h1, {
+h1 {
   font-family: 'archia';
   font-size: 24px !important;
   font-weight: 900;
@@ -997,59 +997,72 @@ table {
   align-self: center;
   margin-top: 1rem;
 
-  .timeseries-mode {
+  .scale-modes{
     position: absolute;
+    z-index: 99;
     display: flex;
-    flex-direction: row;
-    top: 4.5rem;
+    flex-direction: column;
+    align-items: flex-end;
+    bottom: 0;
     right: 0;
     z-index: 99;
-
-    input.switch {
-      position: relative;
-      appearance: none;
-      outline: none;
-      margin: 0;
-      cursor: pointer;
-      width: 22px;
-      height: 12px;
-      background-color: #fff;
-      border: 1px solid #d9dadc;
-      border-radius: 10px;
-      box-shadow: inset -10px 0 0 0 #fff;
-      transition-duration: 200ms;
-    }
-
-    input.switch::after {
-      content: "";
-      position: absolute;
-      top: 1px;
-      left: 1px;
-      width: 9px;
-      height: 9px;
-      background-color: transparent;
-      border-radius: 50%;
-      box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-    }
-
-    input.switch:checked {
-      border-color: $gray-mid;
-      box-shadow: inset 10px 0 0 0 $gray-mid;
-    }
-
-    input.switch:checked::after {
-      left: 10px;
-      box-shadow: -2px 4px 3px rgba(0, 0, 0, 0.05);
-    }
-
+    color: $gray;
     label {
       font-family: 'archia';
       text-transform: uppercase;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 900;
-      margin-right: 0.5rem;
-      color: $gray;
       z-index: 99;
+      padding-bottom: 0.5rem;
+    }
+    .timeseries-mode, .timeseries-logmode {
+      display: flex;
+      flex-direction: row;
+      input.switch {
+        position: relative;
+        appearance: none;
+        outline: none;
+        margin: 0;
+        cursor: pointer;
+        width: 22px;
+        height: 12px;
+        background-color: #fff;
+        border: 1px solid #d9dadc;
+        border-radius: 10px;
+        box-shadow: inset -10px 0 0 0 #fff;
+        transition-duration: 200ms;
+      }
+  
+      input.switch::after {
+        content: "";
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        width: 9px;
+        height: 9px;
+        background-color: transparent;
+        border-radius: 50%;
+        box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+      }
+  
+      input.switch:checked {
+        border-color: $gray-mid;
+        box-shadow: inset 10px 0 0 0 $gray-mid;
+      }
+  
+      input.switch:checked::after {
+        left: 10px;
+        box-shadow: -2px 4px 3px rgba(0, 0, 0, 0.05);
+      }
+      
+      label{
+        font-size: 11px;
+        margin-right: 0.2rem;
+        padding-bottom: 0;
+      }
+    }
+    .disabled {
+      color: $gray-mid;
     }
   }
 }
@@ -1766,21 +1779,6 @@ footer {
   }
 }
 
-
-/* For the iPhone X folks OMG WHY ARE YOUR SCREENS SO NARROW T_T */
-@media (max-width: 375px) {
-  .timeseries-mode {
-    display: block !important;
-    width: 4.25rem;
-    top: 2rem !important;
-    text-align: right;
-
-    input {
-      margin: 0;
-      margin-top: 0.25rem !important;
-    }
-  }
-}
 
 /* Animation Support */
 
