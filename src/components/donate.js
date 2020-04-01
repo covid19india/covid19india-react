@@ -11,8 +11,8 @@ function Donate(props) {
     getDonate();
   }, []);
 
-  const url = 'http://localhost:7777/donate';
-  // const  url = 'https://api.covid19india.org/donate.json';
+  // const url = 'http://localhost:7777/donate';
+  const url = 'https://api.covid19india.org/donate.json';
   const getDonate = () => {
     axios
       .get(url)
