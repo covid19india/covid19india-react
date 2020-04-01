@@ -8,12 +8,26 @@ import MapExplorer from './mapexplorer';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
 
+function getLatestState(stateWiseData) {
+  return stateWiseData
+    .map(function (e) {
+      if (e.state !== 'Total') {
+        return [formatDate(e.lastupdatedtime), e.state];
+      } else {
+        return ['0000-00-00T00:00', e.state];
+      }
+    })
+    .sort()
+    .reverse()[0][1];
+}
+
 function Home(props) {
   const [states, setStates] = useState([]);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
   const [fetched, setFetched] = useState(false);
   const [graphOption, setGraphOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
+  const [mostRecentlyUpdatedState, setmostRecentlyUpdatedState] = useState('');
   const [timeseries, setTimeseries] = useState([]);
   const [deltas, setDeltas] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
@@ -34,6 +48,7 @@ function Home(props) {
       setStates(response.data.statewise);
       setTimeseries(response.data.cases_time_series);
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
+      setmostRecentlyUpdatedState(getLatestState(response.data.statewise));
       setDeltas(response.data.key_values[0]);
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
       setFetched(true);
@@ -74,6 +89,12 @@ function Home(props) {
                 {isNaN(Date.parse(formatDate(lastUpdated)))
                   ? ''
                   : formatDateAbsolute(lastUpdated)}
+              </h6>
+              <h6 style={{color: '#BDB76B', fontWeight: 600}}>
+                Most recent case from
+              </h6>
+              <h6 style={{color: '#BDB76B', fontWeight: 600}}>
+                {mostRecentlyUpdatedState}
               </h6>
             </div>
           </div>
