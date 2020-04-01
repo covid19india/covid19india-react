@@ -45,7 +45,6 @@ function Navbar(props) {
             );
           })}
         </div>
-
         <div className="navbar-right"></div>
       </div>
     );
