@@ -15,6 +15,7 @@ import Links from './components/links';
 import Cluster from './components/cluster';
 import FAQ from './components/faq';
 import Banner from './components/banner';
+import Donate from './components/donate';
 /* import PatientDB from './components/patientdb';*/
 
 const history = require('history').createBrowserHistory;
@@ -50,6 +51,12 @@ function App() {
       view: FAQ,
       displayName: 'FAQ',
       animationDelayForNavbar: 0.6,
+    },
+    {
+      pageLink: '/donate',
+      view: Donate,
+      displayName: 'Donate',
+      animationDelayForNavbar: 0.5,
     },
   ];
 
