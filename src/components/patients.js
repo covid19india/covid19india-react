@@ -42,9 +42,10 @@ function Patients(props) {
   }, [parseByDate, patients]);
 
   const switchPatient = (patientIndexArg) => {
+    if (patientIndexArg === '') return;
     try {
       const patientIndex = patientIndexArg.slice(1);
-      setIndex(patientIndex);
+      setIndex(parseInt(patientIndex) - 1);
     } catch (err) {
       console.log(err);
     }
@@ -53,35 +54,40 @@ function Patients(props) {
   return (
     <React.Fragment>
       <div className="Patients fadeInUp" style={{animationDelay: '1s'}}>
-        {Object.keys(logs).map((day, index) => {
-          if (day !== 'Invalid Date') {
-            return (
-              <React.Fragment>
-                <h5 className="daylabel">
-                  {format(new Date(day), 'dd MMM, yyyy')}
-                </h5>
-                <div key={index} className="day">
-                  {logs[day].map((patient, indexTwo) => {
-                    return (
-                      <div
-                        key={indexTwo}
-                        className="patient-card"
-                        onClick={() => {
-                          setModal(true);
-                          setIndex(patient.index);
-                        }}
-                      >
-                        <h3>{patients[patient.index].patientnumber}</h3>
-                      </div>
-                    );
-                  })}
-                </div>
-              </React.Fragment>
-            );
-          } else {
-            return null;
-          }
-        })}
+        {Object.keys(logs)
+          .slice(props.summary ? -1 : 0)
+          .map((day, index) => {
+            if (day !== 'Invalid Date') {
+              return (
+                <React.Fragment>
+                  <h5 className="daylabel">
+                    {format(new Date(day), 'dd MMM, yyyy')}
+                  </h5>
+                  <div
+                    key={index}
+                    className={`day ${props.summary ? 'summary' : ''}`}
+                  >
+                    {logs[day].map((patient, indexTwo) => {
+                      return (
+                        <div
+                          key={indexTwo}
+                          className="patient-card"
+                          onClick={() => {
+                            setModal(true);
+                            setIndex(patient.index);
+                          }}
+                        >
+                          <h3>{patients[patient.index].patientnumber}</h3>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </React.Fragment>
+              );
+            } else {
+              return null;
+            }
+          })}
       </div>
 
       {modal && (

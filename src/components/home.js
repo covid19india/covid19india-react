@@ -2,15 +2,20 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {formatDistance} from 'date-fns';
 import {formatDate, formatDateAbsolute} from '../utils/common-functions';
+import * as Icon from 'react-feather';
+import {Link} from 'react-router-dom';
+
 import Table from './table';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
+import Patients from './patients';
 
 function Home(props) {
   const [states, setStates] = useState([]);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
+  const [patients, setPatients] = useState([]);
   const [fetched, setFetched] = useState(false);
   const [graphOption, setGraphOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
@@ -28,15 +33,21 @@ function Home(props) {
 
   const getStates = async () => {
     try {
-      const [response, stateDistrictWiseResponse] = await Promise.all([
+      const [
+        response,
+        stateDistrictWiseResponse,
+        rawDataResponse,
+      ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
+        axios.get('https://api.covid19india.org/raw_data.json'),
       ]);
       setStates(response.data.statewise);
       setTimeseries(response.data.cases_time_series);
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
       setDeltas(response.data.key_values[0]);
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
+      setPatients(rawDataResponse.data.raw_data.filter((p) => p.detectedstate));
       setFetched(true);
     } catch (err) {
       console.log(err);
@@ -79,10 +90,8 @@ function Home(props) {
             </div>
           </div>
         </div>
-
         <Level data={states} deltas={deltas} />
         <Minigraph timeseries={timeseries} animate={true} />
-
         <Table
           states={states}
           summary={false}
@@ -90,6 +99,22 @@ function Home(props) {
           onHighlightState={onHighlightState}
           onHighlightDistrict={onHighlightDistrict}
         />
+
+        {patients.length > 1 && (
+          <div className="patients-summary">
+            <h1>Latest Cases</h1>
+            <h6>A summary of the latest reported cases</h6>
+            <div className="patients-wrapper">
+              <Patients patients={patients} summary={true} />
+            </div>
+            <button className="button">
+              <Link to="/patients">
+                <Icon.Database />
+                <span>View the Patients Database</span>
+              </Link>
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="home-right">
