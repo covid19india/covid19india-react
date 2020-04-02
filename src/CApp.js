@@ -54,13 +54,13 @@ function App() {
   ];
 
   return (
-    <div className="App">
+    <div className="CApp">
       <Router history={history}>
         <Route
           render={({location}) => (
             <div className="Almighty-Router">
               <Navbar pages={pages} />
-              
+              <Banner />
               <Route exact path="/" render={() => <Redirect to="/" />} />
               <Switch location={location}>
                 {pages.map((page, i) => {
