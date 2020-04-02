@@ -33,7 +33,12 @@ function App() {
       displayName: 'Patients DB',
       animationDelayForNavbar: 0.3,
     },*/
-    
+    {
+      pageLink: '/clusters',
+      view: Cluster,
+      displayName: 'Clusters',
+      animationDelayForNavbar: 0.4,
+    },
     {
       pageLink: '/links',
       view: Links,
@@ -54,9 +59,8 @@ function App() {
         <Route
           render={({location}) => (
             <div className="Almighty-Router">
-              <Navbar pages={pages} />
-              <Banner />
-              <Route exact path="/" render={() => <Redirect to="/" />} />
+              
+              <Route exact path="/cindex" render={() => <Redirect to="/cindex" />} />
               <Switch location={location}>
                 {pages.map((page, i) => {
                   return (
