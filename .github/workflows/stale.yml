@@ -1,0 +1,21 @@
+name: Mark stale issues and pull requests
+author:
+- name: Sayantan Das
+  affiliation: IEM Kolkata
+on:
+  schedule:
+  - cron: "0 0 * * *"
+
+jobs:
+  stale:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/stale@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        stale-issue-message: 'This issue hasn't received attention for a while. Please attend to it soon. '
+        stale-pr-message: 'This PR hasn't received attention for a while. Please attend to it soon. '
+        stale-issue-label: 'no-issue-activity'
+        stale-pr-label: 'no-pr-activity'
