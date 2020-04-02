@@ -643,7 +643,7 @@ table {
       cursor: pointer;
 
       &:hover {
-        background: $gray-hover;
+        background: $gray-hover !important;
       }
 
       &.divider {
