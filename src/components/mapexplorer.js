@@ -52,7 +52,7 @@ const mapMeta = {
     name: 'Delhi',
     geoDataFile: `${MAPS_DIR}/delhi.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectName: 'delhi_1997-2012_district',
+    graphObjectName: 'delhi_district',
   },
   Karnataka: {
     name: 'Karnataka',
@@ -76,7 +76,7 @@ const mapMeta = {
     name: 'Gujarat',
     geoDataFile: `${MAPS_DIR}/gujarat.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectName: 'gujarat_district_2011',
+    graphObjectName: 'gujarat_district',
   },
   Haryana: {
     name: 'Haryana',
@@ -124,7 +124,7 @@ const mapMeta = {
     name: 'Manipur',
     geoDataFile: `${MAPS_DIR}/manipur.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectName: 'manipur_pre2016_districts',
+    graphObjectName: 'manipur_district',
   },
   Meghalaya: {
     name: 'Meghalaya',
@@ -176,9 +176,9 @@ const mapMeta = {
   },
   Telangana: {
     name: 'Telangana',
-    geoDataFile: `${MAPS_DIR}/telugana.json`,
+    geoDataFile: `${MAPS_DIR}/telangana.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectName: 'telugana',
+    graphObjectName: 'telangana_district',
   },
   Tripura: {
     name: 'Tripura',
