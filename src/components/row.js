@@ -141,11 +141,11 @@ function Row(props) {
         </td>
         <td>
           {isNaN(Date.parse(formatDate(state.lastupdatedtime)))
-                ? ''
-                : `${formatDistance(
-                    new Date(formatDate(state.lastupdatedtime)),
-                    new Date()
-                  )} Ago`}
+            ? ''
+            : `${formatDistance(
+                new Date(formatDate(state.lastupdatedtime)),
+                new Date()
+              )} Ago`}
         </td>
       </tr>
 

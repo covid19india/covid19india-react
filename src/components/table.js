@@ -245,8 +245,7 @@ function Table(props) {
             <th className="sticky" onClick={(e) => handleSort(e, props)}>
               <div className="heading-content">
                 <abbr
-                  style={{color:
-                    window.innerWidth <= 769 ? '#28a74599': ''}}
+                  style={{color: window.innerWidth <= 769 ? '#28a74599' : ''}}
                   title="LastUpdatedTime"
                 >
                   {window.innerWidth <= 769
@@ -257,13 +256,17 @@ function Table(props) {
                 </abbr>
                 <div
                   className={
-                    sortData.sortColumn === 'lastupdatedtime' ? 'sort-black' : ''
+                    sortData.sortColumn === 'lastupdatedtime'
+                      ? 'sort-black'
+                      : ''
                   }
                 ></div>
                 <div
                   style={{
                     display:
-                      sortData.sortColumn === 'lastupdatedtime' ? 'initial' : 'none',
+                      sortData.sortColumn === 'lastupdatedtime'
+                        ? 'initial'
+                        : 'none',
                   }}
                 >
                   {sortData.isAscending ? (
