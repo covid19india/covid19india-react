@@ -91,7 +91,7 @@ function Home(props) {
         />
       </div>
 
-      <div className="home-right">
+      <div className="home-right" style={{display: 'none'}}>
         {fetched && (
           <React.Fragment>
             <MapExplorer
