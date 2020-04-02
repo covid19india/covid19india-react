@@ -1070,7 +1070,15 @@ table {
     }
 
     .disabled {
-      color: $gray-mid;
+      input.switch {
+        background: $gray-light;
+        border: $gray-light 2px solid;
+        cursor: not-allowed;
+      }
+
+      input.switch::after {
+        background: $gray-light;
+      }
     }
   }
 }
