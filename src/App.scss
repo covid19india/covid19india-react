@@ -226,10 +226,10 @@ h6 {
 .Home {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
   flex-wrap: wrap;
-  margin-left: 5rem;
-  margin-right: 5rem;
+  margin-left: 10rem;
+  margin-right: 10rem;
 
   .home-left,
   .home-right {
@@ -237,19 +237,11 @@ h6 {
     flex-direction: column;
     width: 30rem;
   }
-
-  .home-left {
-    margin-right: 2.5rem;
-  }
-
-  .home-right {
-    margin-left: 2.5rem;
-  }
 }
 
 .Banner {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   line-height: 20px;
   font-family: 'Archia';
@@ -262,9 +254,19 @@ h6 {
     align-self: center;
     width: calc(100% - 10rem);
     word-wrap: break-word;
-    padding: 1.5rem;
+    padding: 0.5rem 0;
     text-align: center;
     cursor: pointer;
+    letter-spacing: .07rem;
+  }
+
+  .social-distancing {	
+    padding-bottom: .5rem;	
+    letter-spacing: .7rem;	
+    font-size: medium;	
+    font-stretch: expanded;	
+    text-align: center;	
+    font-weight: 700;	
   }
 }
 
@@ -277,7 +279,6 @@ h6 {
   font-weight: 900;
 
   @include navbarReveal($gray-light);
-
   .navbar-left {
     margin-left: 2rem;
     flex: 1;
@@ -556,16 +557,9 @@ abbr {
   text-align: right;
   margin: 0 0 0 0;
   color: $gray-mid;
-  margin-bottom: 0.25rem;
-  margin-right: 0.25rem;
   a {
-    text-decoration: none;
+    text-decoration-thickness: 2px;
     color: inherit;
-    border-bottom: 2px solid $gray-hover;
-    transition: all 0.2s ease-in-out;
-    &:hover {
-      background: $gray-hover;
-    }
   }
 }
 
@@ -801,12 +795,9 @@ table {
   .header {
     display: flex;
     flex-direction: column;
-    color: $gray;
+    color: $gray-dark;
     margin-bottom: 2.5rem;
     align-self: flex-start;
-    h1 {
-      margin-bottom: 0.25rem;
-    }
   }
 
   .svg-parent {
@@ -1008,85 +999,59 @@ table {
   align-self: center;
   margin-top: 1rem;
 
-  .scale-modes{
+  .timeseries-mode {
+    position: absolute;
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
-    bottom: 0;
+    top: 4.5rem;
     right: 0;
     z-index: 99;
-    color: $gray;
-    margin-top: 1rem;
+
+    input.switch {
+      position: relative;
+      appearance: none;
+      outline: none;
+      margin: 0;
+      cursor: pointer;
+      width: 22px;
+      height: 12px;
+      background-color: #fff;
+      border: 1px solid #d9dadc;
+      border-radius: 10px;
+      box-shadow: inset -10px 0 0 0 #fff;
+      transition-duration: 200ms;
+    }
+
+    input.switch::after {
+      content: "";
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      width: 9px;
+      height: 9px;
+      background-color: transparent;
+      border-radius: 50%;
+      box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    }
+
+    input.switch:checked {
+      border-color: $gray-mid;
+      box-shadow: inset 10px 0 0 0 $gray-mid;
+    }
+
+    input.switch:checked::after {
+      left: 10px;
+      box-shadow: -2px 4px 3px rgba(0, 0, 0, 0.05);
+    }
+
     label {
       font-family: 'archia';
       text-transform: uppercase;
-      font-size: 0.75rem;
+      font-size: 12px;
       font-weight: 900;
+      margin-right: 0.5rem;
+      color: $gray;
       z-index: 99;
-      color: $gray-mid;
-    }
-
-    & > * {
-      align-self: center;
-    }
-
-    .timeseries-mode, .timeseries-logmode {
-      margin-left: 1rem;
-      display: flex;
-      flex-direction: row;
-      input.switch {
-        position: relative;
-        appearance: none;
-        outline: none;
-        margin: 0;
-        cursor: pointer;
-        width: 24px;
-        height: 14px;
-        background-color: #fff;
-        border: 2px solid #d9dadc;
-        border-radius: 10px;
-        transition: all 200ms ease-in-out;
-      }
-  
-      input.switch::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 10px;
-        height: 10px;
-        background-color: $gray-mid;
-        border-radius: 50%;
-      }
-  
-      input.switch:checked {
-        background-color: $gray-mid;
-        transition: all 200ms ease-in-out;
-      }
-  
-      input.switch:checked::after {
-        left: 10px;
-        background-color: $light;
-      }
-      
-      label{
-        font-size: 0.75rem;
-        margin-right: 0.2rem;
-        padding-bottom: 0;
-        color: $gray;
-      }
-    }
-
-    .disabled {
-      input.switch {
-        background: $gray-light;
-        border: $gray-light 2px solid;
-        cursor: not-allowed;
-      }
-
-      input.switch::after {
-        background: $gray-light;
-      }
     }
   }
 }
@@ -1703,7 +1668,6 @@ footer {
       width: 100%;
       display: flex;
       flex-direction: column;
-      margin: 0;
     }
   }
 
@@ -1759,7 +1723,19 @@ footer {
       width: 100%;
       margin-left: 1rem;
       margin-right: 1rem;
+      padding: .7rem 0;	
+      letter-spacing: 0.04rem;
     }
+
+    .social-distancing {	
+      padding-bottom: .4rem;	
+      letter-spacing: .32rem;	
+      font-size: small;	
+      font-stretch: expanded;	
+      text-align: center;	
+      font-weight: 700;	
+      font-size: .8rem;
+    }	
   }
 
   table {
@@ -1788,7 +1764,7 @@ footer {
     }
   }
 
-  .table-fineprint {
+  .affected-count {
     margin-right: 1.25rem;
   }
 }
@@ -1804,6 +1780,21 @@ footer {
   }
 }
 
+
+/* For the iPhone X folks OMG WHY ARE YOUR SCREENS SO NARROW T_T */
+@media (max-width: 375px) {
+  .timeseries-mode {
+    display: block !important;
+    width: 4.25rem;
+    top: 2rem !important;
+    text-align: right;
+
+    input {
+      margin: 0;
+      margin-top: 0.25rem !important;
+    }
+  }
+}
 
 /* Animation Support */
 

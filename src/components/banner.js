@@ -39,6 +39,7 @@ function Banner(props) {
       style={{animationDelay: '0.2s'}}
     >
       <div className="snippet">{snippet ? snippet.banner : ''} &nbsp;</div>
+      <div className="social-distancing">PRACTICE SOCIAL DISTANCING</div>
     </div>
   );
 }
