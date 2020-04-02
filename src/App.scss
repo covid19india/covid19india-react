@@ -1342,16 +1342,66 @@ footer {
     text-transform: none;
     letter-spacing: 0.02em;
   }
-
-  .question {
-    margin-bottom: 0.5rem;
-    color: $gray-dark;
-    font-size: 1.5em !important;
+  
+  .faqs {
+    width: 100%;
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 15px;
   }
-
-  .answer {
+  
+  .faqs .faq {
+    margin: 15px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .faqs .faq .question {
+    position: relative;
+    font-size: 20px;
+    padding-right: 80px;
+  
+    transition: all 0.4s ease;
+  }
+  
+  .faqs .faq .question::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+  
+    background-image: url('./arrow-down-mint.svg');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  
+    transition: all 0.4s ease-out;
+  }
+  
+  .faqs .faq .answer {
+    opacity: 0;
+    max-height: 0;
     color: $blue;
-    line-height: 1.5em;
+    overflow-y: hidden;
+    transition: all 0.4s ease-out;
+  }
+  
+  .faqs .faq.open .question {
+    margin-bottom: 15px;
+  }
+  
+  .faqs .faq.open .question::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+  
+  .faqs .faq.open .answer {
+    max-height: 1000px;
+    opacity: 1;
   }
 }
 

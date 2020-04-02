@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
 function FAQ(props) {
-  const [faq, setFaq] = useState([]);
+  const [faq, setFaq] = useState([{open: false}]);
 
   useEffect(() => {
     getFAQs();
@@ -19,20 +19,34 @@ function FAQ(props) {
       });
   };
 
+  const toggleFAQ = (index) => {
+    setFaq(
+      faq.map((faq, i) => {
+        if (i === index) {
+          faq.open = !faq.open;
+        } else {
+          faq.open = false;
+        }
+
+        return faq;
+      })
+    );
+  };
+
   return (
     <div className="FAQ">
-      {faq.map((faq, index) => {
-        return (
+      <div className="faqs">
+        {faq.map((faq, i) => (
           <div
-            key={index}
-            className="faq fadeInUp"
-            style={{animationDelay: `${0.5 + index * 0.1}s`}}
+            className={'faq ' + (faq.open ? 'open' : '')}
+            key={i}
+            onClick={() => toggleFAQ(i)}
           >
-            <h2 className="question">{faq.question}</h2>
-            <h2 className="answer">{faq.answer}</h2>
+            <div className="question">{faq.question}</div>
+            <div className="answer">{faq.answer}</div>
           </div>
-        );
-      })}
+        ))}
+      </div>
     </div>
   );
 }
