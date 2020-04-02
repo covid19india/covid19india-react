@@ -915,7 +915,7 @@ table {
 
     .meta-right {
       display: flex;
-      align-items: flex-end;
+      align-items: baseline;
       flex-direction: row;
     }
   }
@@ -1188,7 +1188,7 @@ table {
     position: absolute;
     top: 0.5rem;
     left: 0.5rem;
-    width: 5rem;
+    width: 6rem;
     border-radius: 3px;
     display: flex;
     flex-direction: column;

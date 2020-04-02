@@ -60,18 +60,20 @@ function Home(props) {
         <div className="header">
           <div className="header-mid fadeInUp" style={{animationDelay: '1s'}}>
             <div className="titles">
-              <h1>India COVID-19 Tracker</h1>
-              <h6 style={{fontWeight: 600}}>A Crowdsourced Initiative</h6>
+              <h1>{t('India COVID-19 Tracker')}</h1>
+              <h6 style={{fontWeight: 600}}>
+                {t('A Crowdsourced Initiative')}
+              </h6>
             </div>
             <div className="last-update">
-              <h6>Last Updated</h6>
+              <h6>{t('Last Updated')}</h6>
               <h6 style={{color: '#28a745', fontWeight: 600}}>
                 {isNaN(Date.parse(formatDate(lastUpdated)))
                   ? ''
                   : formatDistance(
                       new Date(formatDate(lastUpdated)),
                       new Date()
-                    ) + ' Ago'}
+                    ) + ` ${t('Ago')}`}
               </h6>
               <h6 style={{color: '#28a745', fontWeight: 600}}>
                 {isNaN(Date.parse(formatDate(lastUpdated)))

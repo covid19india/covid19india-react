@@ -280,8 +280,12 @@ function TimeSeries(props) {
       >
         <div className="svg-parent">
           <div className="stats">
+            <h5>{t('Confirmed')}</h5>
             <h5>
               {t('Confirmed')} {datapoint['date']}
+              {timeseries.length - 1 === index
+                ? `${datapoint['date']} ${t('Yesterday')}`
+                : datapoint['date']}
             </h5>
             <div className="stats-bottom">
               <h2>{datapoint['totalconfirmed']}</h2>
@@ -310,8 +314,12 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
+            <h5>{t('Recovered')}</h5>
             <h5>
               {t('Recovered')} {datapoint['date']}
+              {timeseries.length - 1 === index
+                ? `${datapoint['date']} ${t('Yesterday')}`
+                : datapoint['date']}
             </h5>
             <div className="stats-bottom">
               <h2>{datapoint['totalrecovered']}</h2>
@@ -340,9 +348,13 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
+            <h5>{t('Deaths')}</h5>
             <h5>
               {t('Deaths')} <br />
               {datapoint['date']}
+              {timeseries.length - 1 === index
+                ? `${datapoint['date']} ${t('Yesterday')}`
+                : datapoint['date']}
             </h5>
             <div className="stats-bottom">
               <h2>{datapoint['totaldeceased']}</h2>
@@ -376,8 +388,12 @@ function TimeSeries(props) {
       >
         <div className="svg-parent">
           <div className="stats">
+            <h5>{t('Confirmed')}</h5>
             <h5>
               {t('Confirmed')} {datapoint['date']}
+              {timeseries.length - 1 === index
+                ? `${datapoint['date']} ${t('Yesterday')}`
+                : datapoint['date']}
             </h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailyconfirmed']}</h2>
@@ -406,8 +422,12 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
+            <h5>{t('Recovered')}</h5>
             <h5>
               {t('Recovered')} {datapoint['date']}
+              {timeseries.length - 1 === index
+                ? `${datapoint['date']} ${t('Yesterday')}`
+                : datapoint['date']}
             </h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailyrecovered']}</h2>
@@ -436,9 +456,13 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
+            <h5>{t('Deaths')}</h5>
             <h5>
               {t('Deaths')} <br />
               {datapoint['date']}
+              {timeseries.length - 1 === index
+                ? `${datapoint['date']} ${t('Yesterday')}`
+                : datapoint['date']}
             </h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailydeceased']}</h2>

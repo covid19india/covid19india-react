@@ -436,9 +436,13 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
       <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
         <div>
           <h2>
-            {mapType === MAP_TYPES.DISTRICT
-              ? t([`state.${currentStateName}.${name}`, name])
-              : name && t([`state.${name}.title`, name])}
+            {name &&
+              t([
+                mapType === MAP_TYPES.DISTRICT
+                  ? `state.${currentStateName}.${name}`
+                  : `state.${name}.title`,
+                name,
+              ])}
           </h2>
 
           {currentMap.mapType === MAP_TYPES.STATE &&
