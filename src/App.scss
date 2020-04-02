@@ -1703,6 +1703,7 @@ footer {
       width: 100%;
       display: flex;
       flex-direction: column;
+      margin: 0;
     }
   }
 
@@ -1787,7 +1788,7 @@ footer {
     }
   }
 
-  .affected-count {
+  .table-fineprint {
     margin-right: 1.25rem;
   }
 }
