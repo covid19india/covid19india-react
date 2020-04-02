@@ -164,7 +164,7 @@ function Row(props) {
         className={`district-heading`}
         style={{display: props.reveal && !props.total ? '' : 'none'}}
       >
-        <td onClick={(e) => handleSort('district')}>
+        <td colSpan={2} onClick={(e) => handleSort('district')}>
           <div className="heading-content">
             <abbr title="District">District</abbr>
             <div
@@ -181,7 +181,7 @@ function Row(props) {
             </div>
           </div>
         </td>
-        <td onClick={(e) => handleSort('confirmed')}>
+        <td colSpan={2} onClick={(e) => handleSort('confirmed')}>
           <div className="heading-content">
             <abbr
               className={`${window.innerWidth <= 769 ? 'is-cherry' : ''}`}
@@ -228,8 +228,10 @@ function Row(props) {
                   props.onHighlightDistrict?.(district, state, props.index)
                 }
               >
-                <td style={{fontWeight: 600}}>{district}</td>
-                <td>
+                <td colSpan={2} style={{fontWeight: 600}}>
+                  {district}
+                </td>
+                <td colSpan={2}>
                   <span className="deltas" style={{color: '#ff073a'}}>
                     {sortedDistricts[district].delta.confirmed > 0 && (
                       <Icon.ArrowUp />
