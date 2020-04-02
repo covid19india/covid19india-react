@@ -10,9 +10,6 @@ function Links(props) {
         <h3>{t('HELPLINE NUMBERS (by State)')}</h3>
         <a href="https://www.mohfw.gov.in/pdf/coronvavirushelplinenumber.pdf">
           https://www.mohfw.gov.in/pdf/coronvavirushelplinenumber.pdf
-        <h3></h3>
-        <a href="https://www.mohfw.gov.in/coronvavirushelplinenumber.pdf">
-          https://www.mohfw.gov.in/coronvavirushelplinenumber.pdf
         </a>
       </div>
 
