@@ -3,13 +3,14 @@ const months = {
   '02': 'Feb',
   '03': 'Mar',
   '04': 'Apr',
-  '06': 'May',
-  '07': 'Jun',
-  '08': 'Jul',
-  '09': 'Aug',
-  '10': 'Sept',
-  '11': 'Oct',
-  '12': 'Nov',
+  '05': 'May',
+  '06': 'Jun',
+  '07': 'Jul',
+  '08': 'Aug',
+  '09': 'Sep',
+  '10': 'Oct',
+  '11': 'Nov',
+  '12': 'Dec',
 };
 
 export const formatDate = (unformattedDate) => {

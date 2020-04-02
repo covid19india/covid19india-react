@@ -167,7 +167,7 @@ body {
   -webkit-touch-callout: none;
 }
 
-h1, {
+h1 {
   font-family: 'archia';
   font-size: 24px !important;
   font-weight: 900;
@@ -226,16 +226,24 @@ h6 {
 .Home {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
   flex-wrap: wrap;
-  margin-left: 10rem;
-  margin-right: 10rem;
+  margin-left: 5rem;
+  margin-right: 5rem;
 
   .home-left,
   .home-right {
     display: flex;
     flex-direction: column;
     width: 30rem;
+  }
+
+  .home-left {
+    margin-right: 2.5rem;
+  }
+
+  .home-right {
+    margin-left: 2.5rem;
   }
 }
 
@@ -441,8 +449,7 @@ h6 {
   transition: all 0.2s ease-in-out;
 
   &:hover {
-    color: #8ffe09 !important;
-    background: $light !important;
+    background: $gray-dark !important;
   }
 }
 
@@ -545,10 +552,21 @@ abbr {
   }
 }
 
-.affected-count {
+.table-fineprint {
   text-align: right;
   margin: 0 0 0 0;
   color: $gray-mid;
+  margin-bottom: 0.25rem;
+  margin-right: 0.25rem;
+  a {
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 2px solid $gray-hover;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      background: $gray-hover;
+    }
+  }
 }
 
 .sticky {
@@ -561,7 +579,6 @@ table {
   align-self: center;
   font-family: 'archia';
   text-transform: uppercase;
-  margin-bottom: 1rem;
   border-spacing: 3px 2px;
   border-collapse: separate;
 
@@ -784,9 +801,12 @@ table {
   .header {
     display: flex;
     flex-direction: column;
-    color: $gray-dark;
+    color: $gray;
     margin-bottom: 2.5rem;
     align-self: flex-start;
+    h1 {
+      margin-bottom: 0.25rem;
+    }
   }
 
   .svg-parent {
@@ -988,59 +1008,85 @@ table {
   align-self: center;
   margin-top: 1rem;
 
-  .timeseries-mode {
-    position: absolute;
+  .scale-modes{
     display: flex;
     flex-direction: row;
-    top: 4.5rem;
+    align-items: flex-end;
+    bottom: 0;
     right: 0;
     z-index: 99;
-
-    input.switch {
-      position: relative;
-      appearance: none;
-      outline: none;
-      margin: 0;
-      cursor: pointer;
-      width: 22px;
-      height: 12px;
-      background-color: #fff;
-      border: 1px solid #d9dadc;
-      border-radius: 10px;
-      box-shadow: inset -10px 0 0 0 #fff;
-      transition-duration: 200ms;
-    }
-
-    input.switch::after {
-      content: "";
-      position: absolute;
-      top: 1px;
-      left: 1px;
-      width: 9px;
-      height: 9px;
-      background-color: transparent;
-      border-radius: 50%;
-      box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
-    }
-
-    input.switch:checked {
-      border-color: $gray-mid;
-      box-shadow: inset 10px 0 0 0 $gray-mid;
-    }
-
-    input.switch:checked::after {
-      left: 10px;
-      box-shadow: -2px 4px 3px rgba(0, 0, 0, 0.05);
-    }
-
+    color: $gray;
+    margin-top: 1rem;
     label {
       font-family: 'archia';
       text-transform: uppercase;
-      font-size: 12px;
+      font-size: 0.75rem;
       font-weight: 900;
-      margin-right: 0.5rem;
-      color: $gray;
       z-index: 99;
+      color: $gray-mid;
+    }
+
+    & > * {
+      align-self: center;
+    }
+
+    .timeseries-mode, .timeseries-logmode {
+      margin-left: 1rem;
+      display: flex;
+      flex-direction: row;
+      input.switch {
+        position: relative;
+        appearance: none;
+        outline: none;
+        margin: 0;
+        cursor: pointer;
+        width: 24px;
+        height: 14px;
+        background-color: #fff;
+        border: 2px solid #d9dadc;
+        border-radius: 10px;
+        transition: all 200ms ease-in-out;
+      }
+  
+      input.switch::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 10px;
+        height: 10px;
+        background-color: $gray-mid;
+        border-radius: 50%;
+      }
+  
+      input.switch:checked {
+        background-color: $gray-mid;
+        transition: all 200ms ease-in-out;
+      }
+  
+      input.switch:checked::after {
+        left: 10px;
+        background-color: $light;
+      }
+      
+      label{
+        font-size: 0.75rem;
+        margin-right: 0.2rem;
+        padding-bottom: 0;
+        color: $gray;
+      }
+    }
+
+    .disabled {
+      input.switch {
+        background: $gray-light;
+        border: $gray-light 2px solid;
+        cursor: not-allowed;
+      }
+
+      input.switch::after {
+        background: $gray-light;
+      }
     }
   }
 }
@@ -1340,18 +1386,17 @@ footer {
     margin: 0;
     font-weight: 600;
     text-transform: none;
-    letter-spacing: 0.02em;
   }
 
   .question {
-    margin-bottom: 0.5rem;
     color: $gray-dark;
-    font-size: 1.5em !important;
+    margin: 0;
+    margin-bottom: 0.25rem;
   }
 
   .answer {
     color: $blue;
-    line-height: 1.5em;
+    line-height: 1.5rem;
   }
 }
 
@@ -1658,6 +1703,7 @@ footer {
       width: 100%;
       display: flex;
       flex-direction: column;
+      margin: 0;
     }
   }
 
@@ -1742,7 +1788,7 @@ footer {
     }
   }
 
-  .affected-count {
+  .table-fineprint {
     margin-right: 1.25rem;
   }
 }
@@ -1758,21 +1804,6 @@ footer {
   }
 }
 
-
-/* For the iPhone X folks OMG WHY ARE YOUR SCREENS SO NARROW T_T */
-@media (max-width: 375px) {
-  .timeseries-mode {
-    display: block !important;
-    width: 4.25rem;
-    top: 2rem !important;
-    text-align: right;
-
-    input {
-      margin: 0;
-      margin-top: 0.25rem !important;
-    }
-  }
-}
 
 /* Animation Support */
 

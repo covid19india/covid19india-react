@@ -5,8 +5,8 @@ function Links(props) {
     <div className="Links">
       <div className="link fadeInUp" style={{animationDelay: '0.2s'}}>
         <h3>HELPLINE NUMBERS [by State]</h3>
-        <a href="https://www.mohfw.gov.in/coronvavirushelplinenumber.pdf">
-          https://www.mohfw.gov.in/coronvavirushelplinenumber.pdf
+        <a href="https://www.mohfw.gov.in/pdf/coronvavirushelplinenumber.pdf">
+          https://www.mohfw.gov.in/pdf/coronvavirushelplinenumber.pdf
         </a>
       </div>
 
