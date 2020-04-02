@@ -99,22 +99,6 @@ function Home(props) {
           onHighlightState={onHighlightState}
           onHighlightDistrict={onHighlightDistrict}
         />
-
-        {patients.length > 1 && (
-          <div className="patients-summary">
-            <h1>Latest Cases</h1>
-            <h6>A summary of the latest reported cases</h6>
-            <div className="patients-wrapper">
-              <Patients patients={patients} summary={true} />
-            </div>
-            <button className="button">
-              <Link to="/patients">
-                <Icon.Database />
-                <span>View the Patients Database</span>
-              </Link>
-            </button>
-          </div>
-        )}
       </div>
 
       <div className="home-right">
@@ -194,6 +178,25 @@ function Home(props) {
           </React.Fragment>
         )}
       </div>
+
+      <div className="home-left">
+        {patients.length > 1 && (
+          <div className="patients-summary">
+            <h1>Latest Cases</h1>
+            <h6>A summary of the latest reported cases</h6>
+            <div className="patients-wrapper">
+              <Patients patients={patients} summary={true} />
+            </div>
+            <button className="button">
+              <Link to="/patients">
+                <Icon.Database />
+                <span>View the Patients Database</span>
+              </Link>
+            </button>
+          </div>
+        )}
+      </div>
+      <div className="home-right"></div>
     </div>
   );
 }
