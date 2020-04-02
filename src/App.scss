@@ -129,6 +129,9 @@ $purple-light: #201aa220;
 $purple-hover: #201aa230;
 $purple-mid: #201aa299;
 $purple-light-opaque: #e3e2f3;
+$pink: #fb5581;
+$pink-light: #ffa8cb10;
+$pink-mid: #ffa8cb99;
 
 @mixin navbarReveal($color) {
   $animation-name: unique-id() !global;
@@ -1425,7 +1428,7 @@ footer {
 
 .Patients {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   flex-wrap: wrap;
   width: 100%;
   align-self: center;
@@ -1444,7 +1447,7 @@ footer {
   .patient-card {
     width: 3.25rem;
     height: 3.25rem;
-    background: $pblue-light;
+    background: $gray-light;
     margin: 0.25rem;
     border-radius: 5px;
     cursor: pointer;
@@ -1462,7 +1465,22 @@ footer {
 
     h3 {
       font-weight: 900;
-      color: $pblue;
+      color: $gray-mid;
+    }
+
+    &.is-femme {
+      background: $pink-mid;
+      h3 {
+        color: $pink;
+      }
+    }
+
+
+    &.is-male {
+      background: $pblue-light;
+      h3 {
+        color: $pblue;
+      }
     }
   }
 
@@ -1845,6 +1863,7 @@ footer {
 
   .PatientsDB {
     width: 100%;
+
     .header {
       width: calc(100% - 2rem);
     }
@@ -1877,6 +1896,20 @@ footer {
       }
     }
   }
+}
+
+select {
+  padding: 1rem;
+  font-family: 'archia';
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+
+.filters {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 2rem;
 }
 
 .iframe-container {

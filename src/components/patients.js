@@ -67,20 +67,28 @@ function Patients(props) {
                     key={index}
                     className={`day ${props.summary ? 'summary' : ''}`}
                   >
-                    {logs[day].map((patient, indexTwo) => {
-                      return (
-                        <div
-                          key={indexTwo}
-                          className="patient-card"
-                          onClick={() => {
-                            setModal(true);
-                            setIndex(patient.index);
-                          }}
-                        >
-                          <h3>{patients[patient.index].patientnumber}</h3>
-                        </div>
-                      );
-                    })}
+                    {logs[day]
+                      .slice(props.summary ? -40 : 0)
+                      .map((patient, indexTwo) => {
+                        return (
+                          <div
+                            key={indexTwo}
+                            className={`patient-card ${
+                              patients[patient.index].gender === 'F'
+                                ? 'is-femme'
+                                : patients[patient.index].gender === 'M'
+                                ? 'is-male'
+                                : ''
+                            }`}
+                            onClick={() => {
+                              setModal(true);
+                              setIndex(patient.index);
+                            }}
+                          >
+                            <h3>{patients[patient.index].patientnumber}</h3>
+                          </div>
+                        );
+                      })}
                   </div>
                 </React.Fragment>
               );

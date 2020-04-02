@@ -10,6 +10,11 @@ function PatientDB(props) {
   const [patients, setPatients] = useState([]);
   const [error, setError] = useState('');
   const {pathname} = useLocation();
+  const [filters, setFilters] = useState({
+    state: '',
+    dateFrom: '',
+    dateTo: '',
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -32,7 +37,12 @@ function PatientDB(props) {
     if (!fetched) {
       fetchRawData();
     }
-  }, [fetched]);
+  }, [fetched, patients]);
+
+  const handleFilters = (filterLabel, value) => {
+    filters[filterLabel] = value;
+    setFilters(filters);
+  };
 
   return (
     <div className="PatientsDB">
@@ -41,6 +51,50 @@ function PatientDB(props) {
       <div className="header fadeInUp" style={{animationDelay: '0.3s'}}>
         <h1>Patients Database</h1>
         <h3>No. of Patients: {patients.length}</h3>
+      </div>
+
+      <div className="filters">
+        <select
+          className="fadeInUp"
+          style={{animationDelay: '0.3s'}}
+          onChange={(event) => {
+            handleFilters('state', event.target.value);
+          }}
+        >
+          {Array.from(new Set(patients.map((p) => p.detectedstate))).map(
+            (state, index) => {
+              return (
+                <option key={index} value={state}>
+                  {state}
+                </option>
+              );
+            }
+          )}
+        </select>
+
+        <select className="fadeInUp" style={{animationDelay: '0.4s'}}>
+          {Array.from(new Set(patients.map((p) => p.dateannounced))).map(
+            (date, index) => {
+              return (
+                <option key={index} value={date}>
+                  {date}
+                </option>
+              );
+            }
+          )}
+        </select>
+
+        <select className="fadeInUp" style={{animationDelay: '0.5s'}}>
+          {Array.from(new Set(patients.map((p) => p.dateannounced))).map(
+            (date, index) => {
+              return (
+                <option key={index} value={date}>
+                  {date}
+                </option>
+              );
+            }
+          )}
+        </select>
       </div>
 
       <Patients patients={patients} />
