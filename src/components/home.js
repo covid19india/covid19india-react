@@ -146,6 +146,7 @@ function Home(props) {
                 >
                   <label htmlFor="timeseries-logmode">Logarithmic</label>
                   <input
+                    id="timeseries-logmode"
                     type="checkbox"
                     checked={graphOption === 1 && timeseriesLogMode}
                     className="switch"
