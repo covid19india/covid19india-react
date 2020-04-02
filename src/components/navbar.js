@@ -44,6 +44,26 @@ function Navbar(props) {
               </Link>
             );
           })}
+          {window.innerWidth <= 769 && (
+            <a
+              href="https://bit.ly/39Gk7uW"
+              className="fadeInUp"
+              style={{
+                margin: 0,
+                animationDelay: '0.0s',
+                width: window.location.pathname === '/clusters' ? '1.5rem' : '',
+                height:
+                  window.location.pathname === '/clusters' ? '1.5rem' : '',
+                transition: 'all 0.3s ease-in-out',
+              }}
+            >
+              <img
+                alt="share on whatsapp"
+                src="/whatsapp.svg"
+                style={{margin: 0}}
+              />
+            </a>
+          )}
         </div>
 
         <div className="navbar-right"></div>
