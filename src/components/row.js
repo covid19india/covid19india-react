@@ -254,8 +254,10 @@ function Row(props) {
           className={`district`}
           style={{display: props.reveal && !props.total ? '' : 'none'}}
         >
-          <td style={{fontWeight: 600}}>Unknown</td>
-          <td>
+          <td colSpan={2} style={{fontWeight: 600}}>
+            Unknown
+          </td>
+          <td colSpan={2}>
             <span className="deltas" style={{color: '#ff073a'}}>
               {sortedDistricts['Unknown'].delta.confirmed > 0 && (
                 <Icon.ArrowUp />
