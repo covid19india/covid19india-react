@@ -14,6 +14,7 @@ function Row(props) {
       ? localStorage.getItem('district.isAscending') === 'true'
       : false,
   });
+  const [isRevealed, setIsRevealed] = useState(false);
 
   useEffect(() => {
     setState(props.state);
@@ -25,6 +26,10 @@ function Row(props) {
   }, [props.districts]);
 
   const handleReveal = () => {
+    isRevealed
+      ? props.onHighlightState(state, props.index)
+      : props.onHighlightDistrict(null, state);
+    setIsRevealed(!isRevealed);
     props.handleReveal(props.state.state);
   };
 
