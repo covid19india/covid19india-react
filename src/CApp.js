@@ -33,12 +33,7 @@ function App() {
       displayName: 'Patients DB',
       animationDelayForNavbar: 0.3,
     },*/
-    {
-      pageLink: '/clusters',
-      view: Cluster,
-      displayName: 'Clusters',
-      animationDelayForNavbar: 0.4,
-    },
+    
     {
       pageLink: '/links',
       view: Links,
