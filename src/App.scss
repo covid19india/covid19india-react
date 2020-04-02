@@ -240,10 +240,12 @@ h6 {
 
   .home-left {
     margin-right: 2.5rem;
+    margin-left: 2.5rem;
   }
 
   .home-right {
     margin-left: 2.5rem;
+    margin-right: 2.5rem;
   }
 }
 
@@ -1403,8 +1405,11 @@ footer {
 .PatientsDB {
   display: flex;
   flex-direction: column;
+  width: 30rem;
+  align-self: center;
+  margin-left: auto;
+  margin-right: auto;
   .header {
-    width: 40rem;
     align-self: center;
     h1 {
       color: $pblue;
@@ -1422,7 +1427,7 @@ footer {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  width: 40rem;
+  width: 100%;
   align-self: center;
   min-height: 50rem;
 
@@ -1437,8 +1442,8 @@ footer {
   }
 
   .patient-card {
-    width: 3rem;
-    height: 3rem;
+    width: 3.25rem;
+    height: 3.25rem;
     background: $pblue-light;
     margin: 0.25rem;
     border-radius: 5px;
@@ -1446,8 +1451,13 @@ footer {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    transition: all 0.2s ease-in-out;
     & > * {
       align-self: center;
+    }
+
+    &:hover {
+      background: $pblue-hover;
     }
 
     h3 {
@@ -1676,6 +1686,59 @@ footer {
   }
 }
 
+.patients-summary {
+  width: 30rem;
+  align-self: center;
+  .Patients {
+    min-height: 5rem;
+  }
+
+  h1 {
+    color: $gray-dark;
+    margin-bottom: 0.25rem;
+  }
+
+  h6 {
+    margin: 0;
+    margin-top: 0;
+    color: $gray;
+    font-weight: 600;
+  }
+
+  .summary { 
+    flex-direction: row-reverse;
+    flex-wrap: wrap-reverse
+  }
+
+  .patients-wrapper {
+    /*height: 26rem;
+    overflow-y: scroll;*/
+  }
+
+  .button {
+    background: $pblue-light;
+    color: $pblue;
+    & > * {
+      align-self: center;
+    }
+
+    &:hover {
+      background: $pblue-hover;
+    }
+    margin-top: 1rem;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    & > * {
+      align-self: center;
+    }
+  }
+}
+
 @media (max-width: 769px) {
   .TimeSeries,
   table,
@@ -1687,7 +1750,8 @@ footer {
   .Minigraph,
   .Summary,
   .FAQ,
-  .MapExplorer {
+  .MapExplorer,
+  .patients-summary {
     width: calc(100% - 2rem);
   }
 
@@ -1790,6 +1854,17 @@ footer {
 
   .table-fineprint {
     margin-right: 1.25rem;
+  }
+
+  .patients-summary {
+    .modal {
+      .modal-content {
+        width: calc(100% - 5rem);
+        .meta {
+          height: 20rem;
+        }
+      }
+    }
   }
 }
 

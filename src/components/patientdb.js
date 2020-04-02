@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useLocation} from 'react-router-dom';
 import axios from 'axios';
 
 import Patients from './patients';
@@ -8,6 +9,11 @@ function PatientDB(props) {
   const [fetched, setFetched] = useState(false);
   const [patients, setPatients] = useState([]);
   const [error, setError] = useState('');
+  const {pathname} = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   useEffect(() => {
     async function fetchRawData() {
