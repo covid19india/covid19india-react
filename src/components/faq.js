@@ -29,7 +29,10 @@ function FAQ(props) {
             style={{animationDelay: `${0.5 + index * 0.1}s`}}
           >
             <h2 className="question">{faq.question}</h2>
-            <h2 className="answer">{faq.answer}</h2>
+            <h2
+              className="answer"
+              dangerouslySetInnerHTML={{__html: faq.answer}}
+            ></h2>
           </div>
         );
       })}

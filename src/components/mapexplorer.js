@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useMemo} from 'react';
-import ChoroplethMap, {highlightRegionInMap} from './choropleth';
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
+import ChoroplethMap from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 import {formatDate} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
@@ -52,7 +52,7 @@ const mapMeta = {
     name: 'Delhi',
     geoDataFile: `${MAPS_DIR}/delhi.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectName: 'delhi_1997-2012_district',
+    graphObjectName: 'delhi_district',
   },
   Karnataka: {
     name: 'Karnataka',
@@ -76,7 +76,7 @@ const mapMeta = {
     name: 'Gujarat',
     geoDataFile: `${MAPS_DIR}/gujarat.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectName: 'gujarat_district_2011',
+    graphObjectName: 'gujarat_district',
   },
   Haryana: {
     name: 'Haryana',
@@ -124,7 +124,7 @@ const mapMeta = {
     name: 'Manipur',
     geoDataFile: `${MAPS_DIR}/manipur.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectName: 'manipur_pre2016_districts',
+    graphObjectName: 'manipur_district',
   },
   Meghalaya: {
     name: 'Meghalaya',
@@ -176,9 +176,9 @@ const mapMeta = {
   },
   Telangana: {
     name: 'Telangana',
-    geoDataFile: `${MAPS_DIR}/telugana.json`,
+    geoDataFile: `${MAPS_DIR}/telangana.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectName: 'telugana',
+    graphObjectName: 'telangana_district',
   },
   Tripura: {
     name: 'Tripura',
@@ -207,55 +207,15 @@ const mapMeta = {
   },
 };
 
-export default function ({
-  states,
-  stateDistrictWiseData,
-  stateHighlighted,
-  districtHighlighted,
-}) {
+export default function ({states, stateDistrictWiseData, regionHighlighted}) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
-    // setStates(props.states);
-    // setCurrentHoveredRegion()
-  }, [states]);
-
-  useEffect(() => {
     const region = getRegionFromState(states[1]);
     setCurrentHoveredRegion(region);
   }, [states]);
-
-  useEffect(() => {
-    const newMap = mapMeta['India'];
-    setCurrentMap(newMap);
-    if (stateHighlighted === null) {
-      highlightRegionInMap(null, currentMap.mapType);
-    } else {
-      if (stateHighlighted !== undefined) {
-        const regionHighlighted = getRegionFromState(stateHighlighted.state);
-        setCurrentHoveredRegion(regionHighlighted);
-        highlightRegionInMap(regionHighlighted.name, currentMap.mapType);
-        setSelectedRegion(regionHighlighted.name);
-      }
-    }
-  }, [stateHighlighted]);
-
-  useEffect(() => {
-    if (districtHighlighted === null) {
-      highlightRegionInMap(null, currentMap.mapType);
-      return;
-    }
-    const newMap = mapMeta[districtHighlighted?.state.state];
-    if (!newMap) {
-      return;
-    }
-    setCurrentMap(newMap);
-    setHoveredRegion(districtHighlighted?.district, newMap);
-    highlightRegionInMap(districtHighlighted?.district, currentMap.mapType);
-    setSelectedRegion(districtHighlighted?.district);
-  }, [districtHighlighted]);
 
   if (!currentHoveredRegion) {
     return null;
@@ -294,29 +254,57 @@ export default function ({
       }, {});
     }
     return [statistic, currentMapData];
-  }, [currentMap]);
+  }, [currentMap, states, stateDistrictWiseData]);
 
-  const setHoveredRegion = (name, currentMap) => {
-    if (currentMap.mapType === MAP_TYPES.COUNTRY) {
-      setCurrentHoveredRegion(
-        getRegionFromState(states.filter((state) => name === state.state)[0])
-      );
-    } else if (currentMap.mapType === MAP_TYPES.STATE) {
-      const state = stateDistrictWiseData[currentMap.name] || {
-        districtData: {},
-      };
-      let districtData = state.districtData[name];
-      if (!districtData) {
-        districtData = {
-          confirmed: 0,
-          active: 0,
-          deaths: 0,
-          recovered: 0,
+  const setHoveredRegion = useCallback(
+    (name, currentMap) => {
+      if (currentMap.mapType === MAP_TYPES.COUNTRY) {
+        setCurrentHoveredRegion(
+          getRegionFromState(states.filter((state) => name === state.state)[0])
+        );
+      } else if (currentMap.mapType === MAP_TYPES.STATE) {
+        const state = stateDistrictWiseData[currentMap.name] || {
+          districtData: {},
         };
+        let districtData = state.districtData[name];
+        if (!districtData) {
+          districtData = {
+            confirmed: 0,
+            active: 0,
+            deaths: 0,
+            recovered: 0,
+          };
+        }
+        setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
       }
-      setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
+    },
+    [stateDistrictWiseData, states]
+  );
+
+  useEffect(() => {
+    if (regionHighlighted === undefined) {
+      return;
+    } else if (regionHighlighted === null) {
+      setSelectedRegion(null);
+      return;
     }
-  };
+    const isState = !('district' in regionHighlighted);
+    if (isState) {
+      const newMap = mapMeta['India'];
+      setCurrentMap(newMap);
+      const region = getRegionFromState(regionHighlighted.state);
+      setCurrentHoveredRegion(region);
+      setSelectedRegion(region.name);
+    } else {
+      const newMap = mapMeta[regionHighlighted.state.state];
+      if (!newMap) {
+        return;
+      }
+      setCurrentMap(newMap);
+      setHoveredRegion(regionHighlighted.district, newMap);
+      setSelectedRegion(regionHighlighted.district);
+    }
+  }, [regionHighlighted, currentMap.mapType, setHoveredRegion]);
 
   const getRegionFromDistrict = (districtData, name) => {
     if (!districtData) {
@@ -340,35 +328,56 @@ export default function ({
     return region;
   };
 
-  const switchMapToState = (name) => {
-    const newMap = mapMeta[name];
-    if (!newMap) {
-      return;
-    }
-    setCurrentMap(newMap);
-    if (newMap.mapType === MAP_TYPES.COUNTRY) {
-      setHoveredRegion(states[1].state, newMap);
-    } else if (newMap.mapType === MAP_TYPES.STATE) {
-      const districtData = (stateDistrictWiseData[name] || {districtData: {}})
-        .districtData;
-      const topDistrict = Object.keys(districtData)
-        .filter((name) => name !== 'Unknown')
-        .sort((a, b) => {
-          return districtData[b].confirmed - districtData[a].confirmed;
-        })[0];
-      setHoveredRegion(topDistrict, newMap);
-    }
-  };
+  const switchMapToState = useCallback(
+    (name) => {
+      const newMap = mapMeta[name];
+      if (!newMap) {
+        return;
+      }
+      setCurrentMap(newMap);
+      if (newMap.mapType === MAP_TYPES.COUNTRY) {
+        setHoveredRegion(states[1].state, newMap);
+      } else if (newMap.mapType === MAP_TYPES.STATE) {
+        const districtData = (stateDistrictWiseData[name] || {districtData: {}})
+          .districtData;
+        const topDistrict = Object.keys(districtData)
+          .filter((name) => name !== 'Unknown')
+          .sort((a, b) => {
+            return districtData[b].confirmed - districtData[a].confirmed;
+          })[0];
+        setHoveredRegion(topDistrict, newMap);
+      }
+    },
+    [setHoveredRegion, stateDistrictWiseData, states]
+  );
   const {name, lastupdatedtime} = currentHoveredRegion;
+
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
       <div className="header">
         <h1>{currentMap.name} Map</h1>
         <h6>
-          Hover over a{' '}
+          {window.innerWidth <= 769 ? 'Tap' : 'Hover'} over a{' '}
           {currentMap.mapType === MAP_TYPES.COUNTRY ? 'state' : 'district'} for
           more details
         </h6>
+        {window.innerWidth <= 769 && (
+          <h6 style={{marginTop: '1rem'}}>
+            <span
+              style={{
+                fontWeight: 900,
+                color: '#fff',
+                background: '#000',
+                padding: '0.25rem',
+                borderRadius: '2.5px',
+                marginRight: '0.25rem',
+              }}
+            >
+              Update!
+            </span>{' '}
+            Tap twice on states to view districts!
+          </h6>
+        )}
       </div>
 
       <div className="map-stats">
@@ -448,7 +457,7 @@ export default function ({
         statistic={statistic}
         mapMeta={currentMap}
         mapData={currentMapData}
-        setHoveredRegion={(region) => setHoveredRegion(region, currentMap)}
+        setHoveredRegion={setHoveredRegion}
         changeMap={switchMapToState}
         selectedRegion={selectedRegion}
       />

@@ -1,24 +1,12 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import * as d3 from 'd3';
 import {legendColor} from 'd3-svg-legend';
 import * as topojson from 'topojson';
 import {MAP_TYPES} from '../constants';
 
 const propertyFieldMap = {
-  country: 'ST_NM',
+  country: 'st_nm',
   state: 'district',
-};
-
-export const highlightRegionInMap = (name, mapType) => {
-  const propertyField = propertyFieldMap[mapType];
-  const paths = d3.selectAll('.path-region');
-  paths.classed('map-hover', (d, i, nodes) => {
-    if (name === d.properties[propertyField]) {
-      nodes[i].parentNode.appendChild(nodes[i]);
-      return true;
-    }
-    return false;
-  });
 };
 
 function ChoroplethMap({
@@ -30,124 +18,123 @@ function ChoroplethMap({
   selectedRegion,
 }) {
   const choroplethMap = useRef(null);
+  const [svgRenderCount, setSvgRenderCount] = useState(0);
 
-  useEffect(() => {
-    (async () => {
-      const data = await d3.json(mapMeta.geoDataFile);
-      if (statistic && choroplethMap.current) {
-        ready(data);
-        renderData();
-        // setState(states[1]);
-      }
-    })();
-  }, [mapMeta.geoDataFile]);
+  const ready = useCallback(
+    (geoData) => {
+      d3.selectAll('svg#chart > *').remove();
+      const propertyField = propertyFieldMap[mapMeta.mapType];
+      const maxInterpolation = 0.8;
+      const svg = d3.select(choroplethMap.current);
+      const width = +svg.attr('width');
+      const height = +svg.attr('height');
 
-  const handleMouseover = (name) => {
-    try {
-      setHoveredRegion(name, mapMeta.mapType);
-    } catch (err) {
-      console.log('err', err);
-    }
-  };
+      const handleMouseover = (name) => {
+        try {
+          setHoveredRegion(name, mapMeta);
+        } catch (err) {
+          console.log('err', err);
+        }
+      };
 
-  const propertyField = propertyFieldMap[mapMeta.mapType];
-  const maxInterpolation = 0.8;
-
-  function ready(geoData) {
-    d3.selectAll('svg#chart > *').remove();
-    const svg = d3.select(choroplethMap.current);
-    const width = +svg.attr('width');
-    const height = +svg.attr('height');
-
-    const topology = topojson.feature(
-      geoData,
-      geoData.objects[mapMeta.graphObjectName]
-    );
-
-    const projection = d3.geoMercator();
-
-    if (mapMeta.mapType == MAP_TYPES.COUNTRY)
-      projection.fitSize([width, height], topology);
-    else
-      projection.fitExtent(
-        [
-          [90, 20],
-          [width, height],
-        ],
-        topology
+      const topology = topojson.feature(
+        geoData,
+        geoData.objects[mapMeta.graphObjectName]
       );
 
-    const path = d3.geoPath(projection);
+      const projection = d3.geoMercator();
 
-    let onceTouchedRegion = null;
-
-    svg
-      .append('g')
-      .attr('class', 'states')
-      .selectAll('path')
-      .data(topology.features)
-      .enter()
-      .append('path')
-      .attr('class', 'path-region')
-      .attr('fill', function (d) {
-        const n = mapData[d.properties[propertyField]] || 0;
-        const color =
-          n === 0
-            ? '#ffffff'
-            : d3.interpolateReds(
-                (maxInterpolation * n) / (statistic.maxConfirmed || 0.001)
-              );
-        return color;
-      })
-      .attr('d', path)
-      .attr('pointer-events', 'all')
-      .on('mouseover', (d) => {
-        handleMouseover(d.properties[propertyField]);
-        const target = d3.event.target;
-        d3.select(target.parentNode.appendChild(target)).attr(
-          'class',
-          'map-hover'
+      if (mapMeta.mapType === MAP_TYPES.COUNTRY)
+        projection.fitSize([width, height], topology);
+      else
+        projection.fitExtent(
+          [
+            [90, 20],
+            [width, height],
+          ],
+          topology
         );
-      })
-      .on('mouseleave', (d) => {
-        const target = d3.event.target;
-        d3.select(target).attr('class', 'path-region map-default');
-        if (onceTouchedRegion === d) onceTouchedRegion = null;
-      })
-      .on('touchstart', (d) => {
-        if (onceTouchedRegion === d) onceTouchedRegion = null;
-        else onceTouchedRegion = d;
-      })
-      .on('click', (d) => {
-        if (onceTouchedRegion) {
-          return;
-        }
-        if (mapMeta.mapType === MAP_TYPES.STATE) {
-          return;
-        }
-        changeMap(d.properties[propertyField], mapMeta.mapType);
-      })
-      .style('cursor', 'pointer')
-      .append('title')
-      .text(function (d) {
-        const value = mapData[d.properties[propertyField]] || 0;
-        return (
-          parseFloat(100 * (value / (statistic.total || 0.001))).toFixed(2) +
-          '% from ' +
-          toTitleCase(d.properties[propertyField])
-        );
-      });
 
-    svg
-      .append('path')
-      .attr('stroke', '#ff073a20')
-      .attr('fill', 'none')
-      .attr('stroke-width', 2)
-      .attr(
-        'd',
-        path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName]))
-      );
-  }
+      const path = d3.geoPath(projection);
+
+      let onceTouchedRegion = null;
+
+      svg
+        .append('g')
+        .attr('class', 'states')
+        .selectAll('path')
+        .data(topology.features)
+        .enter()
+        .append('path')
+        .attr('class', 'path-region')
+        .attr('fill', function (d) {
+          const n = parseInt(mapData[d.properties[propertyField]]) || 0;
+          const color =
+            n === 0
+              ? '#ffffff'
+              : d3.interpolateReds(
+                  (maxInterpolation * n) / (statistic.maxConfirmed || 0.001)
+                );
+          return color;
+        })
+        .attr('d', path)
+        .attr('pointer-events', 'all')
+        .on('mouseover', (d) => {
+          handleMouseover(d.properties[propertyField]);
+          const target = d3.event.target;
+          d3.select(target.parentNode.appendChild(target)).attr(
+            'class',
+            'map-hover'
+          );
+        })
+        .on('mouseleave', (d) => {
+          const target = d3.event.target;
+          d3.select(target).attr('class', 'path-region map-default');
+          if (onceTouchedRegion === d) onceTouchedRegion = null;
+        })
+        .on('touchstart', (d) => {
+          if (onceTouchedRegion === d) onceTouchedRegion = null;
+          else onceTouchedRegion = d;
+        })
+        .on('click', (d) => {
+          if (onceTouchedRegion) {
+            return;
+          }
+          if (mapMeta.mapType === MAP_TYPES.STATE) {
+            return;
+          }
+          changeMap(d.properties[propertyField], mapMeta.mapType);
+        })
+        .style('cursor', 'pointer')
+        .append('title')
+        .text(function (d) {
+          const value = mapData[d.properties[propertyField]] || 0;
+          return (
+            parseFloat(100 * (value / (statistic.total || 0.001))).toFixed(2) +
+            '% from ' +
+            toTitleCase(d.properties[propertyField])
+          );
+        });
+
+      svg
+        .append('path')
+        .attr('stroke', '#ff073a20')
+        .attr('fill', 'none')
+        .attr('stroke-width', 2)
+        .attr(
+          'd',
+          path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName]))
+        );
+    },
+    [
+      mapData,
+      mapMeta,
+      statistic.total,
+      statistic.maxConfirmed,
+      changeMap,
+      setHoveredRegion,
+    ]
+  );
 
   const toTitleCase = (str) => {
     str = str.toLowerCase().split(' ');
@@ -157,7 +144,7 @@ function ChoroplethMap({
     return str.join(' ');
   };
 
-  const renderData = () => {
+  const renderData = useCallback(() => {
     const svg = d3.select(choroplethMap.current);
 
     // Colorbar
@@ -208,10 +195,34 @@ function ChoroplethMap({
       .call(legendLinear)
       .selectAll('text')
       .style('font-size', '10px');
-    // Hack: Added to ensure district is highlighted even if SVG is not loaded
-    //       Ideally should be covered by districtHighlighted effect hook
-    highlightRegionInMap(selectedRegion, mapMeta.mapType);
+  }, [statistic.maxConfirmed]);
+
+  useEffect(() => {
+    (async () => {
+      const data = await d3.json(mapMeta.geoDataFile);
+      if (statistic && choroplethMap.current) {
+        ready(data);
+        renderData();
+        setSvgRenderCount((prevCount) => prevCount + 1);
+      }
+    })();
+  }, [mapMeta.geoDataFile, statistic, renderData, ready]);
+
+  const highlightRegionInMap = (name, mapType) => {
+    const propertyField = propertyFieldMap[mapType];
+    const paths = d3.selectAll('.path-region');
+    paths.classed('map-hover', (d, i, nodes) => {
+      if (name === d.properties[propertyField]) {
+        nodes[i].parentNode.appendChild(nodes[i]);
+        return true;
+      }
+      return false;
+    });
   };
+
+  useEffect(() => {
+    highlightRegionInMap(selectedRegion, mapMeta.mapType);
+  }, [mapMeta.mapType, svgRenderCount, selectedRegion]);
 
   return (
     <div className="svg-parent">
