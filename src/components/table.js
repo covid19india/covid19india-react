@@ -1,5 +1,4 @@
-import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
 
 import Row from './row';
 
@@ -104,27 +103,27 @@ function Table(props) {
   return (
     <React.Fragment>
       <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1s'}}>
-        Compiled from State Govt. numbers <Link to="/faq">Know More</Link>
+        Compiled from State Govt. numbers <a href="https://www.covid19india.org/faq" target='_blank'>Know More</a>
       </h5>
       <table className="table fadeInUp" style={{animationDelay: '1s'}}>
         <thead>
-          <tr>
-            <th
-              className="sticky state-heading"
-              onClick={(e) => handleSort(e, props)}
-            >
-              <div className="heading-content">
-                <abbr title="State">State/UT</abbr>
-                <div
-                  style={{
-                    display:
-                      sortData.sortColumn === 'state' ? 'initial' : 'none',
-                  }}
-                >
-                  {sortData.isAscending ? (
-                    <div className="arrow-up" />
-                  ) : (
-                    <div className="arrow-down" />
+        <tr>
+          <th
+            className="sticky state-heading"
+            onClick={(e) => handleSort(e, props)}
+          >
+            <div className="heading-content">
+              <abbr title="State">State/UT</abbr>
+              <div
+                style={{
+                  display:
+                    sortData.sortColumn === 'state' ? 'initial' : 'none',
+                }}
+              >
+                {sortData.isAscending ? (
+                  <div className="arrow-up"/>
+                ) : (
+                  <div className="arrow-down"/>
                   )}
                 </div>
               </div>

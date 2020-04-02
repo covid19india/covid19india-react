@@ -58,7 +58,8 @@ function Home(props) {
         <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
           <div className="header-mid">
             <div className="titles">
-              <h1>India COVID-19 Updates</h1>
+              <h1>India COVID-19 Tracker</h1>
+              <h6 style={{fontWeight: 600}}>A Crowdsourced Initiative</h6>
             </div>
             <div className="last-update">
               <h6>Last Updated</h6>
@@ -66,9 +67,9 @@ function Home(props) {
                 {isNaN(Date.parse(formatDate(lastUpdated)))
                   ? ''
                   : formatDistance(
-                      new Date(formatDate(lastUpdated)),
-                      new Date()
-                    ) + ' Ago'}
+                  new Date(formatDate(lastUpdated)),
+                  new Date(),
+                ) + ' Ago'}
               </h6>
               <h6 style={{color: '#28a745', fontWeight: 600}}>
                 {isNaN(Date.parse(formatDate(lastUpdated)))
@@ -79,8 +80,8 @@ function Home(props) {
           </div>
         </div>
 
-        <Level data={states} deltas={deltas} />
-        <Minigraph timeseries={timeseries} animate={true} />
+        <Level data={states} deltas={deltas}/>
+        <Minigraph timeseries={timeseries} animate={true}/>
 
         <Table
           states={states}
