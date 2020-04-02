@@ -14,11 +14,11 @@ const ExpansionPanelItem = (props) => {
   const rows = [];
   const links = [];
   props.props.content !== undefined &&
-    Object.entries(props.props.content).map(([key, value]) => {
+    Object.entries(props.props.content).forEach(([key, value]) => {
       rows.push({key, value});
     });
   props.props.links !== undefined &&
-    Object.entries(props.props.links).map(([key, value]) => {
+    Object.entries(props.props.links).forEach(([key, value]) => {
       links.push({key, value});
     });
   return (
