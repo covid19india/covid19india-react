@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
+import {formatDate} from '../utils/common-functions';
 
 import Row from './row';
 
@@ -53,7 +54,10 @@ function Table(props) {
       let value1 = StateData1[sortColumn];
       let value2 = StateData2[sortColumn];
 
-      if (sortColumn !== 'state') {
+      if (sortColumn === 'lastupdatedtime') {
+        value1 = Date.parse(formatDate(value1));
+        value2 = Date.parse(formatDate(value2));
+      } else if (sortColumn !== 'state') {
         value1 = parseInt(StateData1[sortColumn]);
         value2 = parseInt(StateData2[sortColumn]);
       }
@@ -228,6 +232,38 @@ function Table(props) {
                   style={{
                     display:
                       sortData.sortColumn === 'deaths' ? 'initial' : 'none',
+                  }}
+                >
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
+                </div>
+              </div>
+            </th>
+            <th className="sticky" onClick={(e) => handleSort(e, props)}>
+              <div className="heading-content">
+                <abbr
+                  style={{color:
+                    window.innerWidth <= 769 ? '#28a74599': ''}}
+                  title="LastUpdatedTime"
+                >
+                  {window.innerWidth <= 769
+                    ? window.innerWidth <= 375
+                      ? 'Lt Upd'
+                      : 'Last Uptd'
+                    : 'Last Updated'}
+                </abbr>
+                <div
+                  className={
+                    sortData.sortColumn === 'lastupdatedtime' ? 'sort-black' : ''
+                  }
+                ></div>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'lastupdatedtime' ? 'initial' : 'none',
                   }}
                 >
                   {sortData.isAscending ? (

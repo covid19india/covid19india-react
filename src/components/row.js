@@ -139,6 +139,14 @@ function Row(props) {
           </span>*/}
           {parseInt(state.deaths) === 0 ? '-' : state.deaths}
         </td>
+        <td>
+          {isNaN(Date.parse(formatDate(state.lastupdatedtime)))
+                ? ''
+                : `${formatDistance(
+                    new Date(formatDate(state.lastupdatedtime)),
+                    new Date()
+                  )} Ago`}
+        </td>
       </tr>
 
       <tr

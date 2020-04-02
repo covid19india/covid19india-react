@@ -235,15 +235,16 @@ h6 {
   .home-right {
     display: flex;
     flex-direction: column;
-    width: 30rem;
   }
 
   .home-left {
     margin-right: 2.5rem;
+    width: 35rem;
   }
 
   .home-right {
     margin-left: 2.5rem;
+    width: 30rem;
   }
 }
 
@@ -319,7 +320,7 @@ h6 {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 30rem;
+  width: 35rem;
   align-self: center;
   justify-content: space-between;
   padding-top: 2rem;
@@ -471,7 +472,7 @@ h6 {
   flex-direction: row;
   justify-content: space-between;
   align-self: center;
-  width: 30rem;
+  width: 35rem;
 
   .level-item {
     display: flex;
@@ -575,7 +576,7 @@ abbr {
 
 table {
   position: relative;
-  width: 30rem;
+  width: 35rem;
   align-self: center;
   font-family: 'archia';
   text-transform: uppercase;
@@ -1218,7 +1219,7 @@ table {
 }
 
 .Minigraph {
-  width: 30rem;
+  width: 35rem;
   align-self: center;
   margin: 0;
   display: flex;
