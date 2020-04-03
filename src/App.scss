@@ -1404,6 +1404,15 @@ footer {
     color: $blue;
     line-height: 1.5rem;
   }
+
+  a {
+    background: $blue-light;
+    color: $blue;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .PatientsDB {

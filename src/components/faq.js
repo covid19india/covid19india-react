@@ -10,9 +10,9 @@ function FAQ(props) {
 
   const getFAQs = () => {
     axios
-      .get('https://api.covid19india.org/faq.json')
+      .get('https://api.covid19india.org/website_data.json')
       .then((response) => {
-        setFaq(response.data.faq);
+        setFaq(response.data['faq']);
       })
       .catch((error) => {
         console.log(error);
