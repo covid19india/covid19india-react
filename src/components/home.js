@@ -202,7 +202,7 @@ function Home(props) {
               />
             </div>
             <button className="button">
-              <Link to="/patients">
+              <Link to="/database">
                 <Icon.Database />
                 <span>View the Patients Database</span>
               </Link>
