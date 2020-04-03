@@ -222,7 +222,7 @@ function Patients(props) {
       )}
 
       {modal && (
-        <div className="modal">
+        <div className="modal" id="modal">
           <div
             className={`modal-content ${modal ? 'fadeInUp' : 'fadeOutDown'}`}
           >
