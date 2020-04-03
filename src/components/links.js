@@ -9,7 +9,12 @@ function Links(props) {
           https://www.mohfw.gov.in/pdf/coronvavirushelplinenumber.pdf
         </a>
       </div>
-
+      <div className="link fadeInUp" style={{animationDelay: '0.2s'}}>
+        <h3>To find testing centres near you</h3>
+        <a href="">
+          https://covid.icmr.org.in/index.php/testing-facilities
+        </a>
+      </div>
       <div className="link fadeInUp" style={{animationDelay: '0.3s'}}>
         <h3>Ministry of Health and Family Welfare, Gov. of India</h3>
         <a href="https://www.mohfw.gov.in/">https://www.mohfw.gov.in/</a>
