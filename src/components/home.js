@@ -182,7 +182,7 @@ function Home(props) {
       <div className="home-left">
         {patients.length > 1 && (
           <div className="patients-summary">
-            <h1>Latest Cases</h1>
+            <h1>Recent Cases</h1>
             <h6>A summary of the latest reported cases</h6>
             <div className="legend">
               <div className="legend-left">
