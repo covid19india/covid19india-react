@@ -10,7 +10,7 @@ function Patients(props) {
 
   // When the user clicks anywhere outside of the modal, close modal
   window.onclick = function (event) {
-    const modal = this.document.getElementById('modal');
+    const modal = document.getElementById('modal');
     if (event.target === modal) {
       setModal(false);
       document.body.classList.remove('modal-open'); // to remove modal-open class from body
