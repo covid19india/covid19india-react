@@ -5,19 +5,29 @@ import axios from 'axios';
 import Patients from './patients';
 import DownloadBlock from './downloadblock';
 
+function filterByObject(obj, filters) {
+  const keys = Object.keys(filters);
+  return obj.filter((p) => {
+    return keys.every((key) => {
+      if (!filters[key].length) return true;
+      return p[key] === filters[key];
+    });
+  });
+}
+
 function PatientDB(props) {
   const [fetched, setFetched] = useState(false);
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [error, setError] = useState('');
   const {pathname} = useLocation();
-  const [colorMode, setColorMode] = useState('genders');
   const [filters, setFilters] = useState({
     detectedstate: '',
-    detectedcity: '',
     detecteddistrict: '',
+    detectedcity: '',
     dateannounced: '',
   });
+  const [colorMode, setColorMode] = useState('genders');
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -29,12 +39,8 @@ function PatientDB(props) {
         'https://api.covid19india.org/raw_data.json'
       );
       if (response.data) {
-        setPatients(
-          response.data.raw_data.filter((p) => p.detectedstate).reverse()
-        );
-        setFilteredPatients(
-          response.data.raw_data.filter((p) => p.detectedstate).reverse()
-        );
+        setPatients(response.data.raw_data.reverse());
+        setFilteredPatients(patients);
         setFetched(true);
       } else {
         setError("Couldn't fetch patient data. Try again after sometime.");
@@ -47,25 +53,30 @@ function PatientDB(props) {
     }
   }, [fetched, patients]);
 
-  const handleFilters = (filterLabel, value) => {
-    const newFilters = filters;
-    newFilters[filterLabel] = value;
-    setFilters(newFilters);
-    filter();
+  const handleFilters = (label, value) => {
+    setFilters((f) => {
+      // Create new object (deep copy)
+      const newFilters = {...f};
+      newFilters[label] = value;
+      if (label === 'detectedstate') {
+        newFilters['detecteddistrict'] = '';
+        newFilters['detectedcity'] = '';
+      } else if (label === 'detecteddistrict') {
+        newFilters['detectedcity'] = '';
+      }
+      return newFilters;
+    });
   };
 
-  const filter = () => {
-    const filteringPatients = patients.filter((patient) => {
-      for (const key in filters) {
-        if (filters[key] !== '') {
-          if (patient[key] === undefined || patient[key] !== filters[key])
-            return false;
-        }
-      }
-      return true;
-    });
-    setFilteredPatients(filteringPatients);
-  };
+  useEffect(() => {
+    setFilteredPatients(filterByObject(patients, filters));
+  }, [patients, filters]);
+
+  function getSortedValues(obj, key) {
+    const setValues = new Set(obj.map((p) => p[key]));
+    if (setValues.size > 1) setValues.add('');
+    return Array.from(setValues).sort();
+  }
 
   return (
     <div className="PatientsDB">
@@ -80,7 +91,7 @@ function PatientDB(props) {
                 handleFilters('detectedstate', event.target.value);
               }}
             >
-              {Array.from(new Set(patients.map((p) => p.detectedstate))).map(
+              {getSortedValues(patients, 'detectedstate').map(
                 (state, index) => {
                   return (
                     <option key={index} value={state}>
@@ -96,21 +107,18 @@ function PatientDB(props) {
             <select
               style={{animationDelay: '0.4s'}}
               onChange={(event) => {
-                handleFilters('detectedcity', event.target.value);
+                handleFilters('detecteddistrict', event.target.value);
               }}
             >
-              {Array.from(
-                new Set(
-                  patients.map((p) =>
-                    p.detectedstate === filters.detectedstate
-                      ? p.detectedcity
-                      : ''
-                  )
-                )
-              ).map((date, index) => {
+              {getSortedValues(
+                filterByObject(patients, {
+                  detectedstate: filters.detectedstate,
+                }),
+                'detecteddistrict'
+              ).map((district, index) => {
                 return (
-                  <option key={index} value={date}>
-                    {date}
+                  <option key={index} value={district}>
+                    {district}
                   </option>
                 );
               })}
@@ -121,21 +129,19 @@ function PatientDB(props) {
             <select
               style={{animationDelay: '0.4s'}}
               onChange={(event) => {
-                handleFilters('detecteddistrict', event.target.value);
+                handleFilters('detectedcity', event.target.value);
               }}
             >
-              {Array.from(
-                new Set(
-                  patients.map((p) =>
-                    p.detectedstate === filters.detectedstate
-                      ? p.detecteddistrict
-                      : ''
-                  )
-                )
-              ).map((date, index) => {
+              {getSortedValues(
+                filterByObject(patients, {
+                  detectedstate: filters.detectedstate,
+                  detecteddistrict: filters.detecteddistrict,
+                }),
+                'detectedcity'
+              ).map((city, index) => {
                 return (
-                  <option key={index} value={date}>
-                    {date}
+                  <option key={index} value={city}>
+                    {city}
                   </option>
                 );
               })}
