@@ -14,6 +14,7 @@
     "esri-leaflet-geocoder": "^2.3.2",
     "install": "^0.13.0",
     "leaflet": "^1.6.0",
+    "json2csv": "^5.0.0",
     "node-sass": "^4.13.1",
     "npm": "^6.14.3",
     "react": "^16.13.1",
@@ -40,17 +41,19 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run eslint && npm run format && npm run scsslint"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
     "*.+(js|jsx)": [
-      "eslint --fix",
-      "git add"
+      "eslint --fix --max-warnings=0",
+      "prettier --write"
     ],
-    "*.+(json|css|md)": [
-      "prettier --write",
-      "git add"
+    "*.+(json|yml|yaml|md|vue)": [
+      "prettier --write"
+    ],
+    "*.+(css|scss)": [
+      "sass-lint-auto-fix"
     ]
   },
   "devDependencies": {

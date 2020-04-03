@@ -4309,22 +4309,22 @@
             [[10]]
           ],
           "type": "MultiPolygon",
-          "properties": {"ST_NM": "Andaman and Nicobar Islands"}
+          "properties": {"st_nm": "Andaman and Nicobar Islands"}
         },
         {
           "arcs": [[11, 12, 13]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Arunachal Pradesh"}
+          "properties": {"st_nm": "Arunachal Pradesh"}
         },
         {
           "arcs": [[14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, -13]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Assam"}
+          "properties": {"st_nm": "Assam"}
         },
         {
           "arcs": [[27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Bihar"}
+          "properties": {"st_nm": "Bihar"}
         },
         {
           "arcs": [
@@ -4358,7 +4358,7 @@
             ]
           ],
           "type": "Polygon",
-          "properties": {"ST_NM": "Chandigarh"}
+          "properties": {"st_nm": "Chandigarh"}
         },
         {
           "arcs": [
@@ -4392,7 +4392,7 @@
             ]
           ],
           "type": "Polygon",
-          "properties": {"ST_NM": "Chhattisgarh"}
+          "properties": {"st_nm": "Chhattisgarh"}
         },
         {
           "arcs": [
@@ -4479,17 +4479,17 @@
             ]
           ],
           "type": "Polygon",
-          "properties": {"ST_NM": "Dadra and Nagar Haveli"}
+          "properties": {"st_nm": "Dadra and Nagar Haveli"}
         },
         {
           "arcs": [[172, 173]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Daman and Diu"}
+          "properties": {"st_nm": "Daman and Diu"}
         },
         {
           "arcs": [[174, 175, 176]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Goa"}
+          "properties": {"st_nm": "Goa"}
         },
         {
           "arcs": [
@@ -4568,7 +4568,7 @@
             ]
           ],
           "type": "MultiPolygon",
-          "properties": {"ST_NM": "Gujarat"}
+          "properties": {"st_nm": "Gujarat"}
         },
         {
           "arcs": [
@@ -4597,24 +4597,24 @@
             ]
           ],
           "type": "Polygon",
-          "properties": {"ST_NM": "Haryana"}
+          "properties": {"st_nm": "Haryana"}
         },
         {
           "arcs": [[238, 239, -222, 240, -220, -238, 241, 242, 243, 244]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Himachal Pradesh"}
+          "properties": {"st_nm": "Himachal Pradesh"}
         },
         {
           "arcs": [
             [245, 246, -71, 247, -69, 248, -93, 249, -33, 250, -31, 251, -29]
           ],
           "type": "Polygon",
-          "properties": {"ST_NM": "Jharkhand"}
+          "properties": {"st_nm": "Jharkhand"}
         },
         {
           "arcs": [[252, 253, 254, 255, 256, -175, 257]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Karnataka"}
+          "properties": {"st_nm": "Karnataka"}
         },
         {
           "arcs": [
@@ -4640,12 +4640,12 @@
             ]
           ],
           "type": "Polygon",
-          "properties": {"ST_NM": "Kerala"}
+          "properties": {"st_nm": "Kerala"}
         },
         {
           "arcs": [[[277]], [[278]]],
           "type": "MultiPolygon",
-          "properties": {"ST_NM": "Lakshadweep"}
+          "properties": {"st_nm": "Lakshadweep"}
         },
         {
           "arcs": [
@@ -4674,7 +4674,7 @@
             ]
           ],
           "type": "Polygon",
-          "properties": {"ST_NM": "Madhya Pradesh"}
+          "properties": {"st_nm": "Madhya Pradesh"}
         },
         {
           "arcs": [
@@ -4712,32 +4712,32 @@
             ]
           ],
           "type": "Polygon",
-          "properties": {"ST_NM": "Maharashtra"}
+          "properties": {"st_nm": "Maharashtra"}
         },
         {
           "arcs": [[308, 309, -16, 310]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Manipur"}
+          "properties": {"st_nm": "Manipur"}
         },
         {
           "arcs": [[311, -22, 312, -20]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Meghalaya"}
+          "properties": {"st_nm": "Meghalaya"}
         },
         {
           "arcs": [[-310, 313, 314, -17]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Mizoram"}
+          "properties": {"st_nm": "Mizoram"}
         },
         {
           "arcs": [[315, -311, -15, -12]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Nagaland"}
+          "properties": {"st_nm": "Nagaland"}
         },
         {
           "arcs": [[316, 317, 318, -224]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Delhi"}
+          "properties": {"st_nm": "Delhi"}
         },
         {
           "arcs": [
@@ -4924,7 +4924,7 @@
             [[503, 504, 505, 506]]
           ],
           "type": "MultiPolygon",
-          "properties": {"ST_NM": "Puducherry"}
+          "properties": {"st_nm": "Puducherry"}
         },
         {
           "arcs": [
@@ -4968,7 +4968,7 @@
             ]
           ],
           "type": "Polygon",
-          "properties": {"ST_NM": "Punjab"}
+          "properties": {"st_nm": "Punjab"}
         },
         {
           "arcs": [
@@ -4998,12 +4998,12 @@
             ]
           ],
           "type": "Polygon",
-          "properties": {"ST_NM": "Rajasthan"}
+          "properties": {"st_nm": "Rajasthan"}
         },
         {
           "arcs": [[538, 539]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Sikkim"}
+          "properties": {"st_nm": "Sikkim"}
         },
         {
           "arcs": [
@@ -5181,17 +5181,17 @@
             ]
           ],
           "type": "MultiPolygon",
-          "properties": {"ST_NM": "Tamil Nadu"}
+          "properties": {"st_nm": "Tamil Nadu"}
         },
         {
           "arcs": [[664, -253, -295, -81, 665, -79, 666, -77, 667]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Telangana"}
+          "properties": {"st_nm": "Telangana"}
         },
         {
           "arcs": [[-18, -315, 668]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Tripura"}
+          "properties": {"st_nm": "Tripura"}
         },
         {
           "arcs": [
@@ -5218,12 +5218,12 @@
             ]
           ],
           "type": "Polygon",
-          "properties": {"ST_NM": "Uttar Pradesh"}
+          "properties": {"st_nm": "Uttar Pradesh"}
         },
         {
           "arcs": [[-675, -239, 675]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Uttarakhand"}
+          "properties": {"st_nm": "Uttarakhand"}
         },
         {
           "arcs": [
@@ -5239,28 +5239,28 @@
             [[685, -26, 686, -24, 687, 688, -246, -28, 689, -539]]
           ],
           "type": "MultiPolygon",
-          "properties": {"ST_NM": "West Bengal"}
+          "properties": {"st_nm": "West Bengal"}
         },
         {
           "arcs": [[-689, 690, 691, -72, -247]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Odisha"}
+          "properties": {"st_nm": "Odisha"}
         },
         {
           "arcs": [[-73, -692, 692, -600, -254, -665, 693, -75, 694]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Andhra Pradesh"}
+          "properties": {"st_nm": "Andhra Pradesh"}
         },
         {
           "arcs": [[695, 696, 697, 698]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Jammu and Kashmir"}
+          "properties": {"st_nm": "Jammu and Kashmir"}
         },
-        {"type": null, "properties": {"ST_NM": "Hello"}},
+        {"type": null, "properties": {"st_nm": "Hello"}},
         {
           "arcs": [[-698, 699, -696, 700]],
           "type": "Polygon",
-          "properties": {"ST_NM": "Ladakh"}
+          "properties": {"st_nm": "Ladakh"}
         }
       ]
     }
