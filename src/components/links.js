@@ -30,6 +30,11 @@ function Links(props) {
       </div>
 
       <div className="link fadeInUp" style={{animationDelay: '0.6s'}}>
+        <h3>Crowdsourced list of Resources & Essentials from across India</h3>
+        <a href="bit.ly/covid19resourcelist">bit.ly/covid19resourcelist</a>
+      </div>
+
+      <div className="link fadeInUp" style={{animationDelay: '0.7s'}}>
         <h3>COVID-19 Global Tracker</h3>
         <a href="https://coronavirus.thebaselab.com/">
           https://coronavirus.thebaselab.com/
