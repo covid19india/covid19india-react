@@ -168,8 +168,7 @@ function Patients(props) {
                             <div
                               key={indexTwo}
                               className={`patient-card ${
-                                patient.nationality === 'india' ||
-                                patient.nationality === 'Indian'
+                                patient.nationality === 'India'
                                   ? 'is-in'
                                   : patient.nationality === 'Myanmar'
                                   ? 'is-mm'
