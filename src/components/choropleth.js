@@ -118,9 +118,9 @@ function ChoroplethMap({
 
       svg
         .append('path')
-        .attr('stroke', '#ff073a20')
+        .attr('stroke', '#6B8E2380')
         .attr('fill', 'none')
-        .attr('stroke-width', 2)
+        .attr('stroke-width', 1)
         .attr(
           'd',
           path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName]))
