@@ -1491,12 +1491,6 @@ footer {
         background: $pink-hover;
       }
     }
-  }
- .MapExplorer .meta .unknown {
-    top: 16rem;
-  }
-}
-
 
     &.is-male {
       background: $pblue-light;
@@ -2295,7 +2289,17 @@ select {
   }
 }
 
+@media (max-width: 375px){
+  .MapExplorer .meta .unknown {
+    top: 17.5rem;
+  }
+}
 
+@media (max-width: 320px){
+  .MapExplorer .meta .unknown {
+    top: 20rem;
+  }
+}
 /* Animation Support */
 
 .fadeInUp {
