@@ -1856,8 +1856,8 @@ body.modal-open {
     background: #fff;
     cursor: default;
     width: 30rem;
-    height: 40rem;
-    overflow-y: scroll;
+    height: 30rem;
+    overflow-y: auto;
     svg {
       width: 20px;
       stroke: $pblue-mid;
