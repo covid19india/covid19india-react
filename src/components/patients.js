@@ -8,6 +8,15 @@ function Patients(props) {
   const [logs, setLogs] = useState({});
   const [modal, setModal] = useState(false);
 
+  // When the user clicks anywhere outside of the modal, close modal
+  window.onclick = function (event) {
+    const modal = this.document.getElementById('modal');
+    if (event.target === modal) {
+      setModal(false);
+      document.body.classList.remove('modal-open'); // to remove modal-open class from body
+    }
+  };
+
   useEffect(() => {
     setPatients(props.patients);
   }, [props.patients]);
@@ -83,6 +92,7 @@ function Patients(props) {
                               onClick={() => {
                                 setModal(true);
                                 setPatient(patient);
+                                document.body.classList.add('modal-open');
                               }}
                             >
                               <h3>P{patient.patientnumber}</h3>
@@ -130,6 +140,7 @@ function Patients(props) {
                               onClick={() => {
                                 setModal(true);
                                 setPatient(patient);
+                                document.body.classList.add('modal-open');
                               }}
                             >
                               <h3>P{patient.patientnumber}</h3>
@@ -193,6 +204,7 @@ function Patients(props) {
                               onClick={() => {
                                 setModal(true);
                                 setPatient(patient);
+                                document.body.classList.add('modal-open');
                               }}
                             >
                               <h3>P{patient.patientnumber}</h3>
@@ -218,6 +230,7 @@ function Patients(props) {
               <Icon.XCircle
                 onClick={() => {
                   setModal(false);
+                  document.body.classList.remove('modal-open');
                 }}
               />
             </div>

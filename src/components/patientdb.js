@@ -105,8 +105,9 @@ function PatientDB(props) {
               onChange={(event) => {
                 handleFilters('detectedstate', event.target.value);
               }}
+              defaultValue="State"
             >
-              <option value="" disabled selected>
+              <option value="State" disabled>
                 Select State
               </option>
               {getSortedValues(patients, 'detectedstate').map(
@@ -128,8 +129,9 @@ function PatientDB(props) {
               onChange={(event) => {
                 handleFilters('detecteddistrict', event.target.value);
               }}
+              defaultValue="District"
             >
-              <option value="" disabled selected>
+              <option value="District" disabled>
                 Select District
               </option>
               {getSortedValues(
@@ -154,8 +156,9 @@ function PatientDB(props) {
               onChange={(event) => {
                 handleFilters('detectedcity', event.target.value);
               }}
+              defaultValue="City"
             >
-              <option value="" disabled selected>
+              <option value="City" disabled>
                 Select City
               </option>
               {getSortedValues(
@@ -246,8 +249,9 @@ function PatientDB(props) {
               onChange={(event) => {
                 setColorMode(event.target.value);
               }}
+              defaultValue="color"
             >
-              <option value="" disabled selected>
+              <option value="color" disabled>
                 Color modes
               </option>
               <option value="genders">Genders</option>

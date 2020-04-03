@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-thin-webfont.eot');
-  src:
-    url('fonts/Archia/archia-thin-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-thin-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-thin-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-thin-webfont.woff') format('woff'),
     url('fonts/Archia/archia-thin-webfont.ttf') format('truetype');
@@ -13,8 +13,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-light-webfont.eot');
-  src:
-    url('fonts/Archia/archia-light-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-light-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-light-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-light-webfont.woff') format('woff'),
     url('fonts/Archia/archia-light-webfont.ttf') format('truetype');
@@ -25,8 +25,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-regular-webfont.eot');
-  src:
-    url('fonts/Archia/archia-regular-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-regular-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-regular-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-regular-webfont.woff') format('woff'),
     url('fonts/Archia/archia-regular-webfont.ttf') format('truetype');
@@ -37,8 +37,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-medium-webfont.eot');
-  src:
-    url('fonts/Archia/archia-medium-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-medium-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-medium-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-medium-webfont.woff') format('woff'),
     url('fonts/Archia/archia-medium-webfont.ttf') format('truetype');
@@ -49,8 +49,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-semibold-webfont.eot');
-  src:
-    url('fonts/Archia/archia-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-semibold-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-semibold-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-semibold-webfont.woff') format('woff'),
     url('fonts/Archia/archia-semibold-webfont.ttf') format('truetype');
@@ -61,8 +61,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-bold-webfont.eot');
-  src:
-    url('fonts/Archia/archia-bold-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-bold-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-bold-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-bold-webfont.woff') format('woff'),
     url('fonts/Archia/archia-bold-webfont.ttf') format('truetype');
@@ -157,10 +157,14 @@ $pink-mid: #ffa8cb99;
 @mixin levelColor($color) {
   .is-#{$color} {
 
-    h1 { color: $color; }
+    h1 {
+      color: $color;
+    }
 
     h4,
-    h5 { color: #{$color}-mid; }
+    h5 {
+      color: #{$color}-mid;
+    }
   }
 }
 
@@ -300,7 +304,7 @@ h6 {
       span {
         display: inline-block;
         transition: color 0.2s ease-in-out;
-        
+
         &:hover {
           color: $gray;
         }
@@ -510,31 +514,47 @@ h6 {
   }
 
   .is-cherry {
-    h1 { color: $cherry; }
+    h1 {
+      color: $cherry;
+    }
 
     h4,
-    h5 { color: $cherry-mid; }
+    h5 {
+      color: $cherry-mid;
+    }
   }
 
   .is-blue {
-    h1 { color: $blue; }
+    h1 {
+      color: $blue;
+    }
 
     h4,
-    h5 { color: $blue-mid; }
+    h5 {
+      color: $blue-mid;
+    }
   }
 
   .is-green {
-    h1 { color: $green; }
+    h1 {
+      color: $green;
+    }
 
     h4,
-    h5 { color: $green-mid; }
+    h5 {
+      color: $green-mid;
+    }
   }
 
   .is-gray {
-    h1 { color: $gray; }
+    h1 {
+      color: $gray;
+    }
 
     h4,
-    h5 { color: $gray-mid; }
+    h5 {
+      color: $gray-mid;
+    }
   }
 }
 
@@ -681,15 +701,15 @@ table {
       word-wrap: break-word;
     }
 
-    .state-last-update{
+    .state-last-update {
       background: transparent;
       transform: translateX(1rem);
-      &:hover{
+      &:hover {
         background: #fff !important;
       }
 
-      td{
-        .last-update{
+      td {
+        .last-update {
           text-align: left;
           display: flex;
           flex-direction: row;
@@ -852,7 +872,7 @@ table {
     justify-content: space-between;
     height: 1rem;
 
-    .district-last-update{
+    .district-last-update {
       position: absolute;
       right: 0;
       bottom: 0;
@@ -926,33 +946,49 @@ table {
       &.is-green {
         background: $green-light;
         h5,
-        h6 { color: $green-mid; }
+        h6 {
+          color: $green-mid;
+        }
 
-        h1 { color: $green; }
+        h1 {
+          color: $green;
+        }
       }
 
       &.is-blue {
         background: $blue-light;
         h5,
-        h6 { color: $blue-mid; }
+        h6 {
+          color: $blue-mid;
+        }
 
-        h1 { color: $blue; }
+        h1 {
+          color: $blue;
+        }
       }
 
       &.is-gray {
         background: $gray-light;
         h5,
-        h6 { color: $gray-mid; }
+        h6 {
+          color: $gray-mid;
+        }
 
-        h1 { color: $gray; }
+        h1 {
+          color: $gray;
+        }
       }
 
       &.is-yellow {
         background: $warning;
         h5,
-        h6 { color: $white; }
+        h6 {
+          color: $white;
+        }
 
-        h1 { color: $white; }
+        h1 {
+          color: $white;
+        }
       }
 
       &:first-child {
@@ -1014,7 +1050,7 @@ table {
   align-self: center;
   margin-top: 1rem;
 
-  .scale-modes{
+  .scale-modes {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
@@ -1036,7 +1072,8 @@ table {
       align-self: center;
     }
 
-    .timeseries-mode, .timeseries-logmode {
+    .timeseries-mode,
+    .timeseries-logmode {
       margin-left: 1rem;
       display: flex;
       flex-direction: row;
@@ -1053,9 +1090,9 @@ table {
         border-radius: 10px;
         transition: all 200ms ease-in-out;
       }
-  
+
       input.switch::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 0;
         left: 0;
@@ -1064,18 +1101,18 @@ table {
         background-color: $gray-mid;
         border-radius: 50%;
       }
-  
+
       input.switch:checked {
         background-color: $gray-mid;
         transition: all 200ms ease-in-out;
       }
-  
+
       input.switch:checked::after {
         left: 10px;
         background-color: $light;
       }
-      
-      label{
+
+      label {
         font-size: 0.75rem;
         margin-right: 0.2rem;
         padding-bottom: 0;
@@ -1141,24 +1178,36 @@ table {
     }
 
     &.is-green {
-      h5 { color: $green-mid; }
+      h5 {
+        color: $green-mid;
+      }
 
       h2,
-      h6 { color: $green; }
+      h6 {
+        color: $green;
+      }
     }
 
     &.is-gray {
-      h5 { color: $gray-mid; }
+      h5 {
+        color: $gray-mid;
+      }
 
       h2,
-      h6 { color: $gray; }
+      h6 {
+        color: $gray;
+      }
     }
 
     &.is-blue {
-      h5 { color: $blue-mid; }
+      h5 {
+        color: $blue-mid;
+      }
 
       h2,
-      h6 { color: $blue; }
+      h6 {
+        color: $blue;
+      }
     }
   }
 
@@ -1292,7 +1341,12 @@ footer {
     text-align: center;
   }
 
-  h5 { margin: 0; margin-top: 1rem; margin-bottom: 0.5rem; color: $gray; }
+  h5 {
+    margin: 0;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: $gray;
+  }
 
   img {
     width: 2rem;
@@ -1491,7 +1545,6 @@ footer {
         background: $pink-hover;
       }
     }
-
 
     &.is-male {
       background: $pblue-light;
@@ -1746,36 +1799,41 @@ footer {
 .DownloadBlock {
   margin-top: 2rem;
   align-self: center;
-    code {
-      font-family: 'archia';
-      color: $orange-mid;
-    }
+  code {
+    font-family: 'archia';
+    color: $orange-mid;
+  }
 
-    a {
-     text-decoration: none !important;
-     color: $orange-mid;
-    }
+  a {
+    text-decoration: none !important;
+    color: $orange-mid;
+  }
 
-    .button {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      & > * {
-        align-self: center;
-      }
-      background: $orange-light;
-      height: 3rem;
-      width: 10rem;
-      text-align: center;
-      &:hover {
-        background: $orange-hover;
-      }
+  .button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    & > * {
+      align-self: center;
     }
+    background: $orange-light;
+    height: 3rem;
+    width: 10rem;
+    text-align: center;
+    &:hover {
+      background: $orange-hover;
+    }
+  }
 
-    svg {
-      stroke: $orange-mid;
-      stroke-width: 3;
-    }
+  svg {
+    stroke: $orange-mid;
+    stroke-width: 3;
+  }
+}
+
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
 }
 
 .modal {
@@ -1788,6 +1846,7 @@ footer {
   flex-direction: row;
   justify-content: center;
   background: $pblue-mid;
+  cursor: pointer;
   z-index: 9999;
   .modal-content {
     position: fixed;
@@ -1795,6 +1854,7 @@ footer {
     border-radius: 5px;
     align-self: center;
     background: #fff;
+    cursor: default;
     width: 30rem;
     height: 40rem;
     overflow-y: scroll;
@@ -1818,7 +1878,8 @@ footer {
       color: $pblue;
     }
 
-    h5, h3 {
+    h5,
+    h3 {
       margin: 0;
       font-weight: 900;
     }
@@ -1902,9 +1963,9 @@ footer {
     font-weight: 600;
   }
 
-  .summary { 
+  .summary {
     flex-direction: row-reverse;
-    flex-wrap: wrap-reverse
+    flex-wrap: wrap-reverse;
   }
 
   .patients-summary-wrapper {
@@ -1991,7 +2052,7 @@ select {
   flex-direction: row;
   flex-wrap: wrap;
   border-radius: 5px;
-  box-shadow: 0 2px 6px 0 rgba(0,0,0,.12),inset 0 -1px 0 0 #dadce0;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 #dadce0;
   justify-content: space-between;
 
   & > * {
@@ -2099,7 +2160,7 @@ select {
 
     &.is-it {
       background: url('/flags/italy.png');
-    background-size: cover !important;
+      background-size: cover !important;
     }
 
     &.is-ca {
@@ -2131,8 +2192,7 @@ select {
   .Summary,
   .FAQ,
   .MapExplorer,
-  .patients-summary
-  .filters {
+  .patients-summary .filters {
     width: calc(100% - 2rem);
   }
 
@@ -2289,7 +2349,6 @@ select {
     border: 0;
   }
 }
-
 
 /* Animation Support */
 
