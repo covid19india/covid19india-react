@@ -107,13 +107,13 @@ function PatientDB(props) {
               }}
             >
               <option value="" disabled selected>
-                State
+                Select State
               </option>
               {getSortedValues(patients, 'detectedstate').map(
                 (state, index) => {
                   return (
                     <option key={index} value={state}>
-                      {state}
+                      {state === '' ? 'All' : state}
                     </option>
                   );
                 }
@@ -130,7 +130,7 @@ function PatientDB(props) {
               }}
             >
               <option value="" disabled selected>
-                District
+                Select District
               </option>
               {getSortedValues(
                 filterByObject(patients, {
@@ -140,7 +140,7 @@ function PatientDB(props) {
               ).map((district, index) => {
                 return (
                   <option key={index} value={district}>
-                    {district}
+                    {district === '' ? 'All' : district}
                   </option>
                 );
               })}
@@ -156,7 +156,7 @@ function PatientDB(props) {
               }}
             >
               <option value="" disabled selected>
-                City
+                Select City
               </option>
               {getSortedValues(
                 filterByObject(patients, {
@@ -167,7 +167,7 @@ function PatientDB(props) {
               ).map((city, index) => {
                 return (
                   <option key={index} value={city}>
-                    {city}
+                    {city === '' ? 'All' : city}
                   </option>
                 );
               })}
@@ -247,6 +247,9 @@ function PatientDB(props) {
                 setColorMode(event.target.value);
               }}
             >
+              <option value="" disabled selected>
+                Color modes
+              </option>
               <option value="genders">Genders</option>
               <option value="transmission">Transmission</option>
               <option value="nationality">Nationality</option>
