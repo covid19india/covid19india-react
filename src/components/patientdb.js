@@ -106,6 +106,9 @@ function PatientDB(props) {
                 handleFilters('detectedstate', event.target.value);
               }}
             >
+              <option value="" disabled selected>
+                State
+              </option>
               {getSortedValues(patients, 'detectedstate').map(
                 (state, index) => {
                   return (
@@ -126,6 +129,9 @@ function PatientDB(props) {
                 handleFilters('detecteddistrict', event.target.value);
               }}
             >
+              <option value="" disabled selected>
+                District
+              </option>
               {getSortedValues(
                 filterByObject(patients, {
                   detectedstate: filters.detectedstate,
@@ -149,6 +155,9 @@ function PatientDB(props) {
                 handleFilters('detectedcity', event.target.value);
               }}
             >
+              <option value="" disabled selected>
+                City
+              </option>
               {getSortedValues(
                 filterByObject(patients, {
                   detectedstate: filters.detectedstate,
