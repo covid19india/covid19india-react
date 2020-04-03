@@ -32,7 +32,7 @@ function Patients(props) {
   }, []);
 
   useEffect(() => {
-    if (patients.length > 1) {
+    if (patients.length) {
       parseByDate(patients);
     }
   }, [parseByDate, patients]);
