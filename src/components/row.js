@@ -2,6 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import * as Icon from 'react-feather';
 import {formatDate} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
+
 function Row(props) {
   const [state, setState] = useState(props.state);
   const [districts, setDistricts] = useState(props.districts);
@@ -25,7 +26,9 @@ function Row(props) {
   }, [props.districts]);
 
   const handleReveal = () => {
-    props.handleReveal(props.state.state);
+    if (typeof props.handleReveal === 'function') {
+      props.handleReveal(props.state.state);
+    }
   };
 
   const sortDistricts = useCallback(
