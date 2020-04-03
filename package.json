@@ -2,7 +2,6 @@
   "name": "covid19india",
   "version": "1.0.0",
   "private": true,
-  "proxy":"http://tracker-covid-19.herokuapp.com",
   "homepage": "http://covid19india.github.io/",
   "dependencies": {
     "@material-ui/core": "^4.9.8",

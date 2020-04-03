@@ -8,7 +8,7 @@ import RoomTwoToneIcon from '@material-ui/icons/RoomTwoTone';
 import { TextField } from '@material-ui/core';
 import Display from './display.js'
 import { AlignCenter } from 'react-feather';
-
+const URL ='http://tracker-covid-19.herokuapp.com'
 let pinLocation=null;
 let reset=false;
 
@@ -27,7 +27,7 @@ const header={
 useEffect(()=>{
   if(currentLocation){
     
-  axios.get('/tracker',{
+  axios.get(URL+'/tracker',{
     params:{
       latitude:currentLocation[0],
       longitude:currentLocation[1]
@@ -68,7 +68,7 @@ const getLocationHandler = (event)=>{
 const clickListener=()=>{
   console.log('clicked');
   reset=false;
-  axios.get('/tracker',{
+  axios.get(URL+'/tracker',{
     params:{pinCode:input},
     headers:header
   }).then(response=>{
