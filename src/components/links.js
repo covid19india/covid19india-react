@@ -35,6 +35,12 @@ function Links(props) {
           https://coronavirus.thebaselab.com/
         </a>
       </div>
+      <div className="link fadeInUp" style={{animationDelay: '0.7s'}}>
+        <h3>TESTING-FACILITIES</h3>
+        <a href="https://covid.icmr.org.in/index.php/testing-facilities">
+          https://covid.icmr.org.in/index.php/testing-facilities
+        </a>
+      </div>
     </div>
   );
 }
