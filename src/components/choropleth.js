@@ -110,7 +110,9 @@ function ChoroplethMap({
         .text(function (d) {
           const value = mapData[d.properties[propertyField]] || 0;
           return (
-            (value==0? 0: parseFloat(100 * (value / (statistic.total || 0.001))).toFixed(2)) +
+            Number(
+              parseFloat(100 * (value / (statistic.total || 0.001))).toFixed(2)
+            ).toString() +
             '% from ' +
             toTitleCase(d.properties[propertyField])
           );
