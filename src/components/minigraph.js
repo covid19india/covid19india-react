@@ -19,7 +19,7 @@ function Minigraph(props) {
       if (timeseries.length <= 1) return 0;
       const data = timeseries;
       const svg1 = d3.select(graphElement1.current);
-      const margin = {top: 30, right: 5, bottom: 30, left: 0};
+      const margin = {top: 30, right: 10, bottom: 30, left: 0};
       const width = 100 - margin.left - margin.right;
       const height = 100 - margin.top - margin.bottom;
 

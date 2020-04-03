@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {Link} from 'react-router-dom';
 
 import Row from './row';
 
@@ -101,9 +102,9 @@ function Table(props) {
   doSort();
 
   return (
-    <>
-      <h5 className="affected-count fadeInUp" style={{animationDelay: '1s'}}>
-        {count} States/UTS Affected
+    <React.Fragment>
+      <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1s'}}>
+        Compiled from State Govt. numbers <Link to="/faq">Know More</Link>
       </h5>
       <table className="table fadeInUp" style={{animationDelay: '1s'}}>
         <thead>
@@ -240,10 +241,10 @@ function Table(props) {
           </tr>
         </thead>
 
-        {states.map((state, index) => {
-          if (index !== 0 && state.confirmed > 0) {
-            return (
-              <tbody key={index}>
+        <tbody>
+          {states.map((state, index) => {
+            if (index !== 0 && state.confirmed > 0) {
+              return (
                 <Row
                   key={index}
                   index={index}
@@ -259,11 +260,11 @@ function Table(props) {
                   onHighlightDistrict={props.onHighlightDistrict}
                   handleReveal={handleReveal}
                 />
-              </tbody>
-            );
-          }
-          return null;
-        })}
+              );
+            }
+            return null;
+          })}
+        </tbody>
 
         <tbody>
           {states.length > 1 && props.summary === false && (
@@ -271,7 +272,10 @@ function Table(props) {
           )}
         </tbody>
       </table>
-    </>
+      <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1s'}}>
+        {count} States/UTS Affected
+      </h5>
+    </React.Fragment>
   );
 }
 

@@ -97,6 +97,7 @@ function Row(props) {
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
         touchstart={() => props.onHighlightState?.(state, props.index)}
+        style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
         onClick={() => {
           handleReveal();
         }}
@@ -144,7 +145,7 @@ function Row(props) {
         className={'state-last-update'}
         style={{display: props.reveal && !props.total ? '' : 'none'}}
       >
-        <td colSpan={5}>
+        <td colSpan={2}>
           <div className="last-update">
             <h6>Last Updated&nbsp;</h6>
             <h6>
@@ -215,7 +216,10 @@ function Row(props) {
               <tr
                 key={index}
                 className={`district`}
-                style={{display: props.reveal && !props.total ? '' : 'none'}}
+                style={{
+                  display: props.reveal && !props.total ? '' : 'none',
+                  background: index % 2 === 0 ? '#f8f9fa' : '',
+                }}
                 onMouseEnter={() =>
                   props.onHighlightDistrict?.(district, state, props.index)
                 }
