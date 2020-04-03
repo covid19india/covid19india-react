@@ -54,13 +54,9 @@ function Home(props) {
 
   return (
     <div className="Home">
-      <div className="home-left">
+      <div className="home-center">
         <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
           <div className="header-mid">
-            <div className="titles">
-              <h1>India COVID-19 Tracker</h1>
-              <h6 style={{fontWeight: 600}}>A Crowdsourced Initiative</h6>
-            </div>
             <div className="last-update">
               <h6>Last Updated</h6>
               <h6 style={{color: '#28a745', fontWeight: 600}}>
@@ -81,6 +77,8 @@ function Home(props) {
         </div>
 
         <Level data={states} deltas={deltas} />
+      </div>
+      <div className="home-left">
         <Minigraph timeseries={timeseries} animate={true} />
 
         <Table
