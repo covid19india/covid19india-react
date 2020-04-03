@@ -1845,7 +1845,7 @@ body.modal-open {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  background: $pblue-mid;
+  background: rgba(0, 0, 0, 0.5);
   cursor: pointer;
   z-index: 9999;
   .modal-content {
