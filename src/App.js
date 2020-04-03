@@ -27,7 +27,7 @@ function App() {
       animationDelayForNavbar: 0.2,
     },
     {
-      pageLink: '/patients',
+      pageLink: '/database',
       view: PatientDB,
       displayName: 'Patients DB',
       animationDelayForNavbar: 0.3,
