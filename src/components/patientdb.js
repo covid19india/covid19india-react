@@ -40,7 +40,7 @@ function PatientDB(props) {
       );
       if (response.data) {
         setPatients(response.data.raw_data.reverse());
-        setFilteredPatients(patients);
+        setFilteredPatients(response.data.raw_data.reverse());
         setFetched(true);
       } else {
         setError("Couldn't fetch patient data. Try again after sometime.");
