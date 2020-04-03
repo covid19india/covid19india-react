@@ -8,7 +8,7 @@ import RoomTwoToneIcon from '@material-ui/icons/RoomTwoTone';
 import { TextField } from '@material-ui/core';
 import Display from './display.js'
 import { AlignCenter } from 'react-feather';
-const URL ='http://tracker-covid-19.herokuapp.com'
+const URL ='https://tracker-covid-19.herokuapp.com'
 let pinLocation=null;
 let reset=false;
 
