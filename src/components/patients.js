@@ -85,7 +85,7 @@ function Patients(props) {
                                 setPatient(patient);
                               }}
                             >
-                              <h3>{patient.patientnumber}</h3>
+                              <h3>P{patient.patientnumber}</h3>
                             </div>
                           );
                         })}
@@ -132,7 +132,7 @@ function Patients(props) {
                                 setPatient(patient);
                               }}
                             >
-                              <h3>{patient.patientnumber}</h3>
+                              <h3>P{patient.patientnumber}</h3>
                             </div>
                           );
                         })}
@@ -195,7 +195,7 @@ function Patients(props) {
                                 setPatient(patient);
                               }}
                             >
-                              <h3>{patient.patientnumber}</h3>
+                              <h3>P{patient.patientnumber}</h3>
                             </div>
                           );
                         })}
