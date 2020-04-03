@@ -31,8 +31,7 @@ useEffect(()=>{
     params:{
       latitude:currentLocation[0],
       longitude:currentLocation[1]
-    },
-    headers:header
+    }
    
   }).then(response=>{
     reset=true;
@@ -69,8 +68,7 @@ const clickListener=()=>{
   console.log('clicked');
   reset=false;
   axios.get(URL+'/tracker',{
-    params:{pinCode:input},
-    headers:header
+    params:{pinCode:input}
   }).then(response=>{
     console.log(response.data);
     if(!response.data.PIN_validity){
