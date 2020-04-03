@@ -40,7 +40,6 @@ function PatientDB(props) {
       );
       if (response.data) {
         setPatients(response.data.raw_data.reverse());
-        setFilteredPatients(response.data.raw_data.reverse());
         setFetched(true);
       } else {
         setError("Couldn't fetch patient data. Try again after sometime.");
@@ -51,7 +50,7 @@ function PatientDB(props) {
     if (!fetched) {
       fetchRawData();
     }
-  }, [fetched, patients]);
+  }, [fetched]);
 
   const handleFilters = (label, value) => {
     setFilters((f) => {
@@ -59,9 +58,24 @@ function PatientDB(props) {
       const newFilters = {...f};
       newFilters[label] = value;
       if (label === 'detectedstate') {
+        const district = document.getElementById('district');
+        const city = document.getElementById('city');
+        // Hide boxes
+        if (value === '') district.style.display = 'none';
+        else district.style.display = 'inline';
+        city.style.display = 'none';
+        // Default to empty selection
+        district.selectedIndex = 0;
+        city.selectedIndex = 0;
         newFilters['detecteddistrict'] = '';
         newFilters['detectedcity'] = '';
       } else if (label === 'detecteddistrict') {
+        const city = document.getElementById('city');
+        // Hide box
+        if (value === '') city.style.display = 'none';
+        else city.style.display = 'inline';
+        // Default to empty selection
+        city.selectedIndex = 0;
         newFilters['detectedcity'] = '';
       }
       return newFilters;
@@ -87,6 +101,7 @@ function PatientDB(props) {
           <div className="select">
             <select
               style={{animationDelay: '0.3s'}}
+              id="state"
               onChange={(event) => {
                 handleFilters('detectedstate', event.target.value);
               }}
@@ -105,7 +120,8 @@ function PatientDB(props) {
 
           <div className="select">
             <select
-              style={{animationDelay: '0.4s'}}
+              style={{animationDelay: '0.4s', display: 'none'}}
+              id="district"
               onChange={(event) => {
                 handleFilters('detecteddistrict', event.target.value);
               }}
@@ -127,7 +143,8 @@ function PatientDB(props) {
 
           <div className="select">
             <select
-              style={{animationDelay: '0.4s'}}
+              style={{animationDelay: '0.4s', display: 'none'}}
+              id="city"
               onChange={(event) => {
                 handleFilters('detectedcity', event.target.value);
               }}
@@ -148,7 +165,7 @@ function PatientDB(props) {
             </select>
           </div>
 
-          <div className="select">
+          {/* <div className="select">
             <select
               style={{animationDelay: '0.4s'}}
               onChange={(event) => {
@@ -165,7 +182,7 @@ function PatientDB(props) {
                 }
               )}
             </select>
-          </div>
+          </div>*/}
         </div>
 
         <div className="legend">
