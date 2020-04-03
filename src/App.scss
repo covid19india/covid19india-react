@@ -1809,6 +1809,7 @@ footer {
 
     .close-button {
       cursor: pointer;
+      position: absolute;
       right: 1rem;
     }
 
@@ -1905,16 +1906,21 @@ footer {
     flex-wrap: wrap-reverse
   }
 
-  .patients-wrapper {
-    /*height: 26rem;
-    overflow-y: scroll;*/
+  .patients-summary-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    & > * {
+      align-self: center;
+    }
   }
 
   .button {
     background: $pblue-light;
-    height: 2.5rem;
+    height: 3rem;
     display: flex;
     flex-direction: row;
+    margin-top: 1rem;
     color: $pblue;
     & > * {
       align-self: center;
@@ -1923,18 +1929,20 @@ footer {
     &:hover {
       background: $pblue-hover;
     }
-    margin-top: 1rem;
   }
 
   a {
     color: inherit;
     text-decoration: none;
     flex-direction: row;
-    padding-bottom: 1rem;
     display: flex;
     & > * {
       align-self: center;
     }
+  }
+
+  .daylabel {
+    align-self: flex-start;
   }
 
   .link {
@@ -1942,6 +1950,13 @@ footer {
       display: inline !important;
       padding-bottom: 0;
     }
+  }
+
+  .legend {
+    padding: 1rem;
+    justify-content: flex-start;
+    padding-left: 0;
+    padding-bottom: 0.25rem;
   }
 }
 
@@ -1968,7 +1983,7 @@ select {
   position: sticky;
   top: 0;
   padding: 1rem;
-  background: #ffffff !important;
+  background: #fff !important;
   z-index: 101;
   font-family: archia;
   display: flex;
@@ -1986,119 +2001,119 @@ select {
     display: flex;
     flex-direction: row;
   }
+}
 
-  .legend {
-    background: #ffffff;
-    z-index: 101;
-    font-family: archia;
+.legend {
+  background: #fff;
+  z-index: 101;
+  font-family: archia;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  & > * {
+    align-self: center;
+  }
+
+  .legend-left {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: row;
 
-    & > * {
-      align-self: center;
+    &.nationality {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  select {
+    margin-left: 1rem;
+  }
+
+  h5 {
+    margin: 0;
+    margin-right: 0.5rem;
+    color: $gray;
+    &.is-female {
+      color: $pink;
     }
 
-    .legend-left {
-      display: flex;
-      flex-direction: row;
-
-      &.nationality {
-        margin-bottom: 0.5rem;
-      }
+    &.is-male {
+      color: $pblue;
     }
 
-    select {
-      margin-left: 1rem;
+    &.is-local {
+      color: $cherry;
     }
 
-    h5 {
-      margin: 0;
-      margin-right: 0.5rem;
-      color: $gray;
-      &.is-female {
-        color: $pink;
-      }
+    &.is-imported {
+      color: $purple;
+    }
+  }
 
-      &.is-male {
-        color: $pblue;
-      }
-
-      &.is-local {
-        color: $cherry;
-      }
-
-      &.is-imported {
-        color: $purple;
-      }
+  .circle {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    background: $gray-mid;
+    margin-right: 0.25rem;
+    &.is-female {
+      background: $pink;
     }
 
-    .circle {
-      width: 0.8rem;
-      height: 0.8rem;
-      border-radius: 50%;
-      background: $gray-mid;
-      margin-right: 0.25rem;
-      &.is-female {
-        background: $pink;
-      }
+    &.is-male {
+      background: $pblue;
+    }
 
-      &.is-male {
-        background: $pblue;
-      }
+    &.is-local {
+      background: $cherry;
+    }
 
-      &.is-local {
-        background: $cherry;
-      }
+    &.is-imported {
+      background: $purple;
+    }
 
-      &.is-imported {
-        background: $purple;
-      }
-
-      &.is-in {
-        background: url('/flags/india.png');
-        background-size: cover !important;
-      }
-
-      &.is-uk {
-        background: url('/flags/uk.png');
-        background-size: cover !important;
-      }
-
-      &.is-us {
-        background: url('/flags/usa.png');
-        background-size: cover !important;
-      }
-
-      &.is-th {
-        background: url('/flags/thailand.png');
-        background-size: cover !important;
-      }
-
-      &.is-ph {
-        background: url('/flags/philippines.png');
-        background-size: cover !important;
-      }
-
-      &.is-it {
-        background: url('/flags/italy.png');
+    &.is-in {
+      background: url('/flags/india.png');
       background-size: cover !important;
-      }
+    }
 
-      &.is-ca {
-        background: url('/flags/canada.png');
-        background-size: cover !important;
-      }
+    &.is-uk {
+      background: url('/flags/uk.png');
+      background-size: cover !important;
+    }
 
-      &.is-id {
-        background: url('/flags/indonesia.png');
-        background-size: cover !important;
-      }
+    &.is-us {
+      background: url('/flags/usa.png');
+      background-size: cover !important;
+    }
 
-      &.is-mm {
-        background: url('/flags/myanmar.png');
-        background-size: cover !important;
-      }
+    &.is-th {
+      background: url('/flags/thailand.png');
+      background-size: cover !important;
+    }
+
+    &.is-ph {
+      background: url('/flags/philippines.png');
+      background-size: cover !important;
+    }
+
+    &.is-it {
+      background: url('/flags/italy.png');
+    background-size: cover !important;
+    }
+
+    &.is-ca {
+      background: url('/flags/canada.png');
+      background-size: cover !important;
+    }
+
+    &.is-id {
+      background: url('/flags/indonesia.png');
+      background-size: cover !important;
+    }
+
+    &.is-mm {
+      background: url('/flags/myanmar.png');
+      background-size: cover !important;
     }
   }
 }
