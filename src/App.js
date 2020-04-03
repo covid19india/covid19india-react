@@ -9,6 +9,7 @@ import * as Icon from 'react-feather';
 
 import './App.scss';
 import Home from './components/home';
+import Tracker from './components/tracker'
 import Navbar from './components/navbar';
 import Links from './components/links';
 import Cluster from './components/cluster';
@@ -24,7 +25,13 @@ function App() {
     view: Home,
     displayName: 'Home',
     animationDelayForNavbar: 0.2,
-  }, {
+  }, 
+  {
+    pageLink: '/tracker',
+    view: Tracker,
+    displayName: 'Tracker',
+    animationDelayForNavbar: 0.2,
+  },{
     pageLink: '/clusters',
     view: Cluster,
     displayName: 'Clusters',
