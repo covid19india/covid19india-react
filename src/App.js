@@ -12,10 +12,9 @@ import './App.scss';
 import Home from './components/home';
 import Navbar from './components/navbar';
 import Links from './components/links';
-import Cluster from './components/cluster';
 import FAQ from './components/faq';
 import Banner from './components/banner';
-/* import PatientDB from './components/patientdb';*/
+import PatientDB from './components/patientdb';
 
 const history = require('history').createBrowserHistory;
 
@@ -27,17 +26,11 @@ function App() {
       displayName: 'Home',
       animationDelayForNavbar: 0.2,
     },
-    /* {
-      pageLink: '/patientsDB',
+    {
+      pageLink: '/database',
       view: PatientDB,
       displayName: 'Patients DB',
       animationDelayForNavbar: 0.3,
-    },*/
-    {
-      pageLink: '/clusters',
-      view: Cluster,
-      displayName: 'Clusters',
-      animationDelayForNavbar: 0.4,
     },
     {
       pageLink: '/links',

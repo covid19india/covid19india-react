@@ -129,6 +129,10 @@ $purple-light: #201aa220;
 $purple-hover: #201aa230;
 $purple-mid: #201aa299;
 $purple-light-opaque: #e3e2f3;
+$pink: #fb5581;
+$pink-light: #ffa8cb10;
+$pink-hover: #ffa8cb30;
+$pink-mid: #ffa8cb99;
 
 @mixin navbarReveal($color) {
   $animation-name: unique-id() !global;
@@ -240,10 +244,12 @@ h6 {
 
   .home-left {
     margin-right: 2.5rem;
+    margin-left: 2.5rem;
   }
 
   .home-right {
     margin-left: 2.5rem;
+    margin-right: 2.5rem;
   }
 }
 
@@ -1403,9 +1409,14 @@ footer {
 .PatientsDB {
   display: flex;
   flex-direction: column;
+  align-self: center;
+  margin-left: auto;
+  margin-right: auto;
+
   .header {
-    width: 40rem;
-    align-self: center;
+    padding-left: 5.25rem;
+    margin-top: 1.75rem;
+    align-self: flex-start;
     h1 {
       color: $pblue;
     }
@@ -1416,15 +1427,24 @@ footer {
       font-weight: 900;
     }
   }
+
+  .patientdb-wrapper {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
 }
 
 .Patients {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  width: 40rem;
+  width: 100%;
   align-self: center;
-  min-height: 50rem;
+  min-height: 20rem;
+
+  & > * {
+    align-self: center;
+  }
 
   h5.daylabel {
     color: $pblue;
@@ -1437,22 +1457,208 @@ footer {
   }
 
   .patient-card {
-    width: 3rem;
-    height: 3rem;
-    background: $pblue-light;
+    width: 3.25rem;
+    height: 3.25rem;
+    background: $gray-light;
     margin: 0.25rem;
     border-radius: 5px;
     cursor: pointer;
     display: flex;
     flex-direction: row;
     justify-content: center;
+    transition: all 0.2s ease-in-out;
     & > * {
       align-self: center;
     }
 
+    &:hover {
+      background: $gray-hover;
+    }
+
     h3 {
       font-weight: 900;
-      color: $pblue;
+      color: $gray-mid;
+      font-size: 11px !important;
+    }
+
+    &.is-femme {
+      background: $pink-mid;
+      h3 {
+        color: $pink;
+      }
+
+      &:hover {
+        background: $pink-hover;
+      }
+    }
+
+
+    &.is-male {
+      background: $pblue-light;
+      h3 {
+        color: $pblue;
+      }
+
+      &:hover {
+        background: $pblue-hover;
+      }
+    }
+
+    &.is-local {
+      background: $cherry-light;
+      h3 {
+        color: $cherry;
+      }
+
+      &:hover {
+        background: $cherry-hover;
+      }
+    }
+
+    &.is-imported {
+      background: $purple-light;
+      h3 {
+        color: $purple;
+      }
+
+      &:hover {
+        background: $purple-hover;
+      }
+    }
+
+    &.is-in {
+      background: url('/flags/india.png');
+      background-size: cover !important;
+      h3 {
+        color: transparent;
+      }
+
+      &:hover {
+        background: $gray-light;
+        h3 {
+          color: $gray-mid;
+        }
+      }
+    }
+
+    &.is-uk {
+      background: url('/flags/uk.png');
+      background-size: cover !important;
+      h3 {
+        color: transparent;
+      }
+
+      &:hover {
+        background: $gray-light;
+        h3 {
+          color: $gray-mid;
+        }
+      }
+    }
+
+    &.is-us {
+      background: url('/flags/usa.png');
+      background-size: cover !important;
+      h3 {
+        color: transparent;
+      }
+
+      &:hover {
+        background: $gray-light;
+        h3 {
+          color: $gray-mid;
+        }
+      }
+    }
+
+    &.is-th {
+      background: url('/flags/thailand.png');
+      background-size: cover !important;
+      h3 {
+        color: transparent;
+      }
+
+      &:hover {
+        background: $gray-light;
+        h3 {
+          color: $gray-mid;
+        }
+      }
+    }
+
+    &.is-ph {
+      background: url('/flags/philippines.png');
+      background-size: cover !important;
+      h3 {
+        color: transparent;
+      }
+
+      &:hover {
+        background: $gray-light;
+        h3 {
+          color: $gray-mid;
+        }
+      }
+    }
+
+    &.is-it {
+      background: url('/flags/italy.png');
+      background-size: cover !important;
+      h3 {
+        color: transparent;
+      }
+
+      &:hover {
+        background: $gray-light;
+        h3 {
+          color: $gray-mid;
+        }
+      }
+    }
+
+    &.is-ca {
+      background: url('/flags/canada.png');
+      background-size: cover !important;
+      h3 {
+        color: transparent;
+      }
+
+      &:hover {
+        background: $gray-light;
+        h3 {
+          color: $gray-mid;
+        }
+      }
+    }
+
+    &.is-id {
+      background: url('/flags/indonesia.png');
+      background-size: cover !important;
+      h3 {
+        color: transparent;
+      }
+
+      &:hover {
+        background: $gray-light;
+        h3 {
+          color: $gray-mid;
+        }
+      }
+    }
+
+    &.is-mm {
+      background: url('/flags/myanmar.png');
+      background-size: cover !important;
+      h3 {
+        color: transparent;
+      }
+
+      &:hover {
+        background: $gray-light;
+        h3 {
+          color: $gray-mid;
+        }
+      }
     }
   }
 
@@ -1582,7 +1788,7 @@ footer {
   flex-direction: row;
   justify-content: center;
   background: $pblue-mid;
-  z-index: 99;
+  z-index: 9999;
   .modal-content {
     position: fixed;
     padding: 1rem;
@@ -1604,7 +1810,8 @@ footer {
 
     .close-button {
       cursor: pointer;
-      float: right;
+      position: absolute;
+      right: 1rem;
     }
 
     h1 {
@@ -1676,6 +1883,242 @@ footer {
   }
 }
 
+.patients-summary {
+  width: 30rem;
+  align-self: center;
+  .Patients {
+    min-height: 5rem;
+  }
+
+  h1 {
+    color: $gray-dark;
+    margin-bottom: 0.25rem;
+  }
+
+  h6 {
+    margin: 0;
+    margin-top: 0;
+    color: $gray;
+    font-weight: 600;
+  }
+
+  .summary { 
+    flex-direction: row-reverse;
+    flex-wrap: wrap-reverse
+  }
+
+  .patients-summary-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    & > * {
+      align-self: center;
+    }
+  }
+
+  .button {
+    background: $pblue-light;
+    height: 3rem;
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+    color: $pblue;
+    & > * {
+      align-self: center;
+    }
+
+    &:hover {
+      background: $pblue-hover;
+    }
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    flex-direction: row;
+    display: flex;
+    & > * {
+      align-self: center;
+    }
+  }
+
+  .daylabel {
+    align-self: flex-start;
+  }
+
+  .link {
+    a {
+      display: inline !important;
+      padding-bottom: 0;
+    }
+  }
+
+  .legend {
+    padding: 1rem;
+    justify-content: flex-start;
+    padding-left: 0;
+    padding-bottom: 0.25rem;
+  }
+}
+
+.select {
+  display: flex;
+  flex-direction: column;
+  label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 900;
+    color: $gray-mid;
+    margin-bottom: 0.25rem;
+  }
+}
+
+select {
+  width: 7rem;
+  margin-right: 0.25rem;
+  cursor: pointer;
+}
+
+.filters {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  padding: 1rem;
+  background: #fff !important;
+  z-index: 101;
+  font-family: archia;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px 0 rgba(0,0,0,.12),inset 0 -1px 0 0 #dadce0;
+  justify-content: space-between;
+
+  & > * {
+    align-self: center;
+  }
+
+  .filters-left {
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+.legend {
+  background: #fff;
+  z-index: 101;
+  font-family: archia;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  & > * {
+    align-self: center;
+  }
+
+  .legend-left {
+    display: flex;
+    flex-direction: row;
+
+    &.nationality {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  select {
+    margin-left: 1rem;
+  }
+
+  h5 {
+    margin: 0;
+    margin-right: 0.5rem;
+    color: $gray;
+    &.is-female {
+      color: $pink;
+    }
+
+    &.is-male {
+      color: $pblue;
+    }
+
+    &.is-local {
+      color: $cherry;
+    }
+
+    &.is-imported {
+      color: $purple;
+    }
+  }
+
+  .circle {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    background: $gray-mid;
+    margin-right: 0.25rem;
+    &.is-female {
+      background: $pink;
+    }
+
+    &.is-male {
+      background: $pblue;
+    }
+
+    &.is-local {
+      background: $cherry;
+    }
+
+    &.is-imported {
+      background: $purple;
+    }
+
+    &.is-in {
+      background: url('/flags/india.png');
+      background-size: cover !important;
+    }
+
+    &.is-uk {
+      background: url('/flags/uk.png');
+      background-size: cover !important;
+    }
+
+    &.is-us {
+      background: url('/flags/usa.png');
+      background-size: cover !important;
+    }
+
+    &.is-th {
+      background: url('/flags/thailand.png');
+      background-size: cover !important;
+    }
+
+    &.is-ph {
+      background: url('/flags/philippines.png');
+      background-size: cover !important;
+    }
+
+    &.is-it {
+      background: url('/flags/italy.png');
+    background-size: cover !important;
+    }
+
+    &.is-ca {
+      background: url('/flags/canada.png');
+      background-size: cover !important;
+    }
+
+    &.is-id {
+      background: url('/flags/indonesia.png');
+      background-size: cover !important;
+    }
+
+    &.is-mm {
+      background: url('/flags/myanmar.png');
+      background-size: cover !important;
+    }
+  }
+}
+
 @media (max-width: 769px) {
   .TimeSeries,
   table,
@@ -1687,7 +2130,9 @@ footer {
   .Minigraph,
   .Summary,
   .FAQ,
-  .MapExplorer {
+  .MapExplorer,
+  .patients-summary
+  .filters {
     width: calc(100% - 2rem);
   }
 
@@ -1770,8 +2215,11 @@ footer {
 
   .PatientsDB {
     width: 100%;
+
     .header {
       width: calc(100% - 2rem);
+      align-self: center;
+      padding-left: 2rem;
     }
 
     .Patients {
@@ -1786,10 +2234,48 @@ footer {
         }
       }
     }
+
+    .filters-left {
+      flex-wrap: wrap;
+      justify-content: space-between;
+      select {
+        margin-bottom: 1rem;
+      }
+    }
+
+    .filters {
+      height: 7rem;
+      justify-content: center;
+    }
   }
 
   .table-fineprint {
     margin-right: 1.25rem;
+  }
+
+  .patients-summary {
+    width: calc(100% - 2rem);
+    .modal {
+      .modal-content {
+        width: calc(100% - 5rem);
+        .meta {
+          height: 20rem;
+        }
+      }
+    }
+  }
+
+  .patientdb-wrapper {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    .Patients {
+      width: 100%;
+    }
+
+    .day {
+      justify-content: center;
+      width: 100%;
+    }
   }
 }
 
