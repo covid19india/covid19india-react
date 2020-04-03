@@ -164,6 +164,8 @@ function Home(props) {
               mode={timeseriesMode}
               logMode={timeseriesLogMode}
             />
+
+            {/* Testing Rebuild*/}
           </React.Fragment>
         )}
       </div>
