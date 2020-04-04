@@ -36,10 +36,15 @@ function Home(props) {
 
   const getStates = async () => {
     try {
-      const [response, stateDistrictWiseResponse] = await Promise.all([
+      const [
+        response,
+        stateDistrictWiseResponse,
+        /* rawDataResponse*/
+        ,
+      ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
-        /* axios.get('https://api.covid19india.org/raw_data.json'),*/
+        axios.get('https://api.covid19india.org/raw_data.json'),
       ]);
       setStates(response.data.statewise);
       setTimeseries(validateCTS(response.data.cases_time_series));
@@ -64,7 +69,7 @@ function Home(props) {
   return (
     <div className="Home">
       <div className="home-left">
-        <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
+        <div className="header fadeInUp" style={{animationDelay: '1s'}}>
           <div className="header-mid">
             <div className="titles">
               <h1>India COVID-19 Tracker</h1>
@@ -111,7 +116,7 @@ function Home(props) {
 
             <div
               className="timeseries-header fadeInUp"
-              style={{animationDelay: '1.5s'}}
+              style={{animationDelay: '2.3s'}}
             >
               <h1>Spread Trends</h1>
               <div className="tabs">
@@ -172,8 +177,6 @@ function Home(props) {
               mode={timeseriesMode}
               logMode={timeseriesLogMode}
             />
-
-            {/* Testing Rebuild*/}
           </React.Fragment>
         )}
       </div>
@@ -198,6 +201,7 @@ function Home(props) {
                 patients={patients}
                 summary={true}
                 colorMode={'genders'}
+                expand={true}
               />
             </div>
             <button className="button">

@@ -14,7 +14,7 @@ import Navbar from './components/navbar';
 import Links from './components/links';
 import FAQ from './components/faq';
 import Banner from './components/banner';
-/* import PatientDB from './components/patientdb';*/
+import PatientDB from './components/patientdb';
 
 const history = require('history').createBrowserHistory;
 
@@ -26,23 +26,23 @@ function App() {
       displayName: 'Home',
       animationDelayForNavbar: 0.2,
     },
-    /* {
+    {
       pageLink: '/database',
       view: PatientDB,
-      displayName: 'Patients DB',
+      displayName: 'Database',
       animationDelayForNavbar: 0.3,
-    },*/
+    },
     {
       pageLink: '/links',
       view: Links,
       displayName: 'Helpful Links',
-      animationDelayForNavbar: 0.5,
+      animationDelayForNavbar: 0.4,
     },
     {
       pageLink: '/faq',
       view: FAQ,
-      displayName: 'FAQ',
-      animationDelayForNavbar: 0.6,
+      displayName: 'About',
+      animationDelayForNavbar: 0.5,
     },
   ];
 

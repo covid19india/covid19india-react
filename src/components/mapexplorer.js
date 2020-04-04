@@ -353,7 +353,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
   const {name, lastupdatedtime} = currentHoveredRegion;
 
   return (
-    <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
+    <div className="MapExplorer fadeInUp" style={{animationDelay: '1.5s'}}>
       <div className="header">
         <h1>{currentMap.name}</h1>
         <h6>
@@ -383,7 +383,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
       </div>
 
       <div className="map-stats">
-        <div className="stats">
+        <div className="stats fadeInUp" style={{animationDelay: '2s'}}>
           <h5>Confirmed</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.confirmed}</h1>
@@ -391,7 +391,10 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
           </div>
         </div>
 
-        <div className="stats is-blue">
+        <div
+          className="stats is-blue fadeInUp"
+          style={{animationDelay: '2.1s'}}
+        >
           <h5>Active</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.active || ''}</h1>
@@ -399,7 +402,10 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
           </div>
         </div>
 
-        <div className="stats is-green">
+        <div
+          className="stats is-green fadeInUp"
+          style={{animationDelay: '2.2s'}}
+        >
           <h5>Recovered</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.recovered || ''}</h1>
@@ -407,7 +413,10 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
           </div>
         </div>
 
-        <div className="stats is-gray">
+        <div
+          className="stats is-gray fadeInUp"
+          style={{animationDelay: '2.3s'}}
+        >
           <h5>Deceased</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.deaths || ''}</h1>
@@ -416,7 +425,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
         </div>
       </div>
 
-      <div className="meta">
+      <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
         <h2>{name}</h2>
         {lastupdatedtime && (
           <div

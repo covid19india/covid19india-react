@@ -230,7 +230,7 @@ function ChoroplethMap({
   }, [svgRenderCount, selectedRegion]);
 
   return (
-    <div className="svg-parent">
+    <div className="svg-parent fadeInUp" style={{animationDelay: '2.5s'}}>
       <svg
         id="chart"
         width="480"
