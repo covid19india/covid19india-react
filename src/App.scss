@@ -899,6 +899,13 @@ table {
       word-wrap: break-word;
     }
 
+    .district-confirmed {
+      color: #e23028;
+      position: absolute;
+      top: 14rem;
+      width: 5rem;
+    }
+
     .unknown {
       position: absolute;
       top: 17rem;
@@ -927,15 +934,16 @@ table {
 
     .stats {
       background: $cherry-light;
+      position: relative;
       color: $cherry;
-      padding: 0.5rem;
       border-radius: 5px;
       display: flex;
       flex-direction: column;
       margin-left: 0.25rem;
       margin-right: 0.25rem;
       margin-bottom: 0.5rem;
-      width: 100%;
+      flex: 1;
+      padding: 0.25rem;
 
       .stats-bottom {
         display: flex;
@@ -981,6 +989,35 @@ table {
         h6 { color: $white; }
 
         h1 { color: $white; }
+      }
+
+      &.is-purple {
+        background: $purple-light;
+        padding-right: 1rem;
+        h5,
+        h6 { 
+          color: $purple-mid; 
+          &.timestamp {
+            margin: 0;
+            font-weight: 900;
+          }
+        }
+
+        h1 { color: $purple; }
+
+        svg {
+          position: absolute;
+          right: 0.35rem;
+          top: 0;
+          stroke-width: 3;
+          width: 12px;
+          stroke: $purple-mid;
+          cursor: pointer;
+          transition: stroke 0.2s ease-in-out;
+          &:hover {
+            stroke: $purple;
+          }
+        }
       }
 
       &:first-child {
@@ -1069,6 +1106,40 @@ table {
     margin-left: 1rem;
     display: flex;
     flex-direction: row;
+    input.switch {
+      position: relative;
+      appearance: none;
+      outline: none;
+      margin: 0;
+      cursor: pointer;
+      width: 24px;
+      height: 14px;
+      background-color: #fff;
+      border: 2px solid #d9dadc;
+      border-radius: 10px;
+      transition: all 200ms ease-in-out;
+    }
+
+    input.switch::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 10px;
+      height: 10px;
+      background-color: $gray-mid;
+      border-radius: 50%;
+    }
+
+    input.switch:checked {
+      background-color: $gray-mid;
+      transition: all 200ms ease-in-out;
+    }
+
+    input.switch:checked::after {
+      left: 10px;
+      background-color: $light;
+    }
 
     label{
       font-size: 0.75rem;
@@ -1076,6 +1147,7 @@ table {
       padding-bottom: 0;
       color: $gray;
     }
+
   }
 }
 
@@ -2473,6 +2545,14 @@ select {
   .timeseries {
     .svg-parent {
       width: 100%;
+    }
+  }
+
+  .map-stats {
+    .stats { 
+      .timestamp {
+        width: 4.5rem;
+      }
     }
   }
 
