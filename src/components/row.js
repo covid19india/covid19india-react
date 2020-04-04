@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import * as Icon from 'react-feather';
-import {formatDate} from '../utils/common-functions';
+import {formatDate, formatDateAbsolute} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
 function Row(props) {
   const [state, setState] = useState(props.state);
@@ -148,7 +148,13 @@ function Row(props) {
         <td colSpan={2}>
           <div className="last-update">
             <h6>Last Updated&nbsp;</h6>
-            <h6>
+            <h6
+              title={
+                isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
+                  ? ''
+                  : formatDateAbsolute(props.state.lastupdatedtime)
+              }
+            >
               {isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
                 ? ''
                 : `${formatDistance(

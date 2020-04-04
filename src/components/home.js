@@ -206,8 +206,8 @@ function Home(props) {
           </div>
         )}
       </div>
-    */}
       <div className="home-right"></div>
+    */}
     </div>
   );
 }
