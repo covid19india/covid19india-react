@@ -23,23 +23,20 @@
     "New Delhi",
     "South Delhi",
     "North East Delhi",
-    "North West Delhi",
-    "Unknown"
+    "North West Delhi"
   ],
   "Telangana": [
     "Hyderabad",
     "Karimnagar",
     "Bhadradri Kothagudem",
     "Ranga Reddy",
-    "Medchal Malkajgiri",
-    "Unknown"
+    "Medchal Malkajgiri"
   ],
   "Rajasthan": [
     "Jaipur",
     "Jhunjhunu",
     "Bhilwara",
     "Jodhpur",
-    "Unknown",
     "Pratapgarh",
     "Ajmer",
     "Alwar",
@@ -60,7 +57,6 @@
   ],
   "Uttar Pradesh": [
     "Agra",
-    "Unknown",
     "Ghaziabad",
     "Lucknow",
     "Gautam Buddha Nagar",
@@ -104,7 +100,6 @@
     "Jammu",
     "Srinagar",
     "Bandipore",
-    "Unknown",
     "Rajouri",
     "Badgam",
     "Baramula",
@@ -135,7 +130,6 @@
     "Aurangabad",
     "Ratnagiri",
     "Mumbai Suburban",
-    "Unknown",
     "Sangli",
     "Satara",
     "Kolhapur",
@@ -150,7 +144,6 @@
     "S.A.S. Nagar",
     "Hoshiarpur",
     "Jalandhar",
-    "Unknown",
     "Ludhiana"
   ],
   "Andhra Pradesh": [
@@ -164,10 +157,9 @@
     "Kurnool",
     "Anantapur",
     "West Godavari",
-    "Y.S.R.",
-    "Unknown"
+    "Y.S.R."
   ],
-  "Uttarakhand": ["Dehradun", "Pauri Garhwal", "Unknown"],
+  "Uttarakhand": ["Dehradun", "Pauri Garhwal"],
   "Odisha": ["Khordha", "Bhadrak"],
   "Puducherry": ["Mahe", "Puducherry"],
   "West Bengal": [
@@ -178,18 +170,10 @@
     "Kalimpong",
     "Hooghly",
     "Howrah",
-    "South 24 Parganas",
-    "Unknown"
+    "South 24 Parganas"
   ],
-  "Chandigarh": ["Chandigarh", "Unknown"],
-  "Chhattisgarh": [
-    "Raipur",
-    "Rajnandgaon",
-    "Bilaspur",
-    "Durg",
-    "Korba",
-    "Unknown"
-  ],
+  "Chandigarh": ["Chandigarh"],
+  "Chhattisgarh": ["Raipur", "Rajnandgaon", "Bilaspur", "Durg", "Korba"],
   "Gujarat": [
     "Rajkot",
     "Surat",
@@ -197,11 +181,11 @@
     "Vadodara",
     "Gandhinagar",
     "Kachchh",
-    "Unknown",
     "Mahesana",
+    "Bhavnagar",
     "Porbandar",
     "Gir Somnath",
-    "Bhavnagar"
+    "Panch Mahals"
   ],
   "Himachal Pradesh": ["Kangra"],
   "Madhya Pradesh": [
@@ -210,15 +194,13 @@
     "Indore",
     "Ujjain",
     "Gwalior",
-    "Shivpuri",
-    "Unknown"
+    "Shivpuri"
   ],
   "Bihar": [
     "Munger",
     "Patna",
     "Siwan",
     "Nalanda",
-    "Unknown",
     "Lakhisarai",
     "Bhagalpur",
     "Gopalganj",
@@ -227,13 +209,9 @@
   ],
   "Manipur": ["Imphal West"],
   "Mizoram": ["Aizawl"],
-  "Goa": ["North Goa", "Unknown"],
-  "Andaman and Nicobar Islands": [
-    "South Andaman",
-    "North and Middle Andaman",
-    "Unknown"
-  ],
+  "Goa": ["North Goa"],
+  "Andaman and Nicobar Islands": ["South Andaman", "North and Middle Andaman"],
   "Jharkhand": ["Ranchi"],
-  "Assam": ["Cachar", "Kamrup Metropolitan", "Jorhat"],
-  "Unknown": ["Unknown"]
+  "Assam": ["Cachar", "Kamrup Metropolitan", "Jorhat", "Goalpara"],
+  "Arunachal Pradesh": []
 }

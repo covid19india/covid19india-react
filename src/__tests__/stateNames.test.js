@@ -7,30 +7,39 @@ import staticStatesAndDistrictsFromAPI from '../testUtils/data/statesAndDistrict
 import staticStatesAndDistrictsFromMaps from '../testUtils/data/statesAndDistrictsFromMaps.json';
 
 describe('Compare the map and the API', () => {
-  describe('dynamic data', () => {
+  describe('with dynamic data', () => {
     test('for any discrepancies', async () => {
       const statesAndDistrictsFromAPI = await getStatesAndDistrictsFromAPI();
       const statesAndDistrictsFromMaps = await getStatesAndDistrictsFromMaps();
 
-      Object.keys(statesAndDistrictsFromAPI).forEach((state) => {
-        const expected = statesAndDistrictsFromAPI[state]
-          .sort()
-          .filter((e) => e !== 'Unknown');
-        const received = statesAndDistrictsFromMaps[state].sort();
+      const statesFromAPI = Object.keys(statesAndDistrictsFromAPI);
+      const statesFromMaps = Object.keys(statesAndDistrictsFromMaps);
 
-        expect(expected).toEqual(expect.arrayContaining(received));
+      expect(statesFromAPI).toContain(...statesFromMaps);
+
+      statesFromAPI.forEach((state) => {
+        const expectedDistricts = statesAndDistrictsFromMaps[state]?.sort();
+        const receivedDistricts = statesAndDistrictsFromAPI[state]?.sort();
+
+        if (expectedDistricts !== undefined)
+          expect(expectedDistricts).toContain(...receivedDistricts);
       });
     });
   });
 
   describe('from stored response for any discrepancies', () => {
-    const states = Object.keys(staticStatesAndDistrictsFromAPI);
-    states.forEach((state) => {
+    const statesFromAPI = Object.keys(staticStatesAndDistrictsFromAPI);
+    const statesFromMaps = Object.keys(staticStatesAndDistrictsFromMaps);
+    statesFromAPI.forEach((state) => {
       test(`${state}`, async () => {
         const expectedState = staticStatesAndDistrictsFromMaps[state]?.sort();
         const receivedState = staticStatesAndDistrictsFromAPI[state]?.sort();
 
-        expect(expectedState).not.toBe(undefined);
+        expect(
+          statesFromMaps
+            .map((e) => e.toLowerCase())
+            .indexOf(state.toLowerCase())
+        ).not.toEqual(-1);
 
         const expected = expectedState.filter((e) => e !== 'Unknown').sort();
         const received = receivedState.filter((e) => e !== 'Unknown').sort();
