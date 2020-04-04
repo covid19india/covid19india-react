@@ -10,6 +10,7 @@ import Level from './level';
 import MapExplorer from './mapexplorer';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
+import {POLLING_FREQUENCY} from '../constants';
 /* import Patients from './patients';*/
 
 function Home(props) {
@@ -29,7 +30,7 @@ function Home(props) {
       getStates();
       setInterval(() => {
         getStates();
-      }, 10000);
+      }, POLLING_FREQUENCY);
     }
   }, [fetched]);
 

@@ -4,3 +4,5 @@ export const MAP_TYPES = {
 };
 
 export const MAPS_DIR = '/maps';
+
+export const POLLING_FREQUENCY = 15000; // 15 minutes
