@@ -4,8 +4,8 @@ import * as Icon from 'react-feather';
 
 function Patients(props) {
   const [patients, setPatients] = useState(props.patients);
+  const [patient, setPatient] = useState(props.patients.slice(-1));
   const [logs, setLogs] = useState({});
-  const [index, setIndex] = useState(0);
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
@@ -20,15 +20,11 @@ function Patients(props) {
       );
       if (!(day in log)) {
         const list = [];
-        list.push({
-          index: i,
-        });
+        list.push(patients[i]);
         log[day] = list;
       } else {
         const list = log[day];
-        list.push({
-          index: i,
-        });
+        list.push(patients[i]);
         log[day] = list;
       }
     }
@@ -36,15 +32,19 @@ function Patients(props) {
   }, []);
 
   useEffect(() => {
-    if (patients.length > 1) {
+    if (patients.length) {
       parseByDate(patients);
     }
   }, [parseByDate, patients]);
 
   const switchPatient = (patientIndexArg) => {
+    if (patientIndexArg === '') return;
     try {
       const patientIndex = patientIndexArg.slice(1);
-      setIndex(patientIndex);
+      // eslint-disable-next-line
+      patients.map((patient, index) => {
+        if (patient.patientnumber === patientIndex) setPatient(patient);
+      });
     } catch (err) {
       console.log(err);
     }
@@ -52,37 +52,161 @@ function Patients(props) {
 
   return (
     <React.Fragment>
-      <div className="Patients fadeInUp" style={{animationDelay: '1s'}}>
-        {Object.keys(logs).map((day, index) => {
-          if (day !== 'Invalid Date') {
-            return (
-              <React.Fragment>
-                <h5 className="daylabel">
-                  {format(new Date(day), 'dd MMM, yyyy')}
-                </h5>
-                <div key={index} className="day">
-                  {logs[day].map((patient, indexTwo) => {
-                    return (
-                      <div
-                        key={indexTwo}
-                        className="patient-card"
-                        onClick={() => {
-                          setModal(true);
-                          setIndex(patient.index);
-                        }}
-                      >
-                        <h3>{patients[patient.index].patientnumber}</h3>
-                      </div>
-                    );
-                  })}
-                </div>
-              </React.Fragment>
-            );
-          } else {
-            return null;
-          }
-        })}
-      </div>
+      {props.colorMode === 'genders' && (
+        <div className="Patients fadeInUp" style={{animationDelay: '1s'}}>
+          {Object.keys(logs)
+            .slice(props.summary ? -1 : 0)
+            .map((day, index) => {
+              if (day !== 'Invalid Date') {
+                return (
+                  <React.Fragment>
+                    <h5 className="daylabel">
+                      {format(new Date(day), 'dd MMM, yyyy')}
+                    </h5>
+                    <div
+                      key={index}
+                      className={`day ${props.summary ? 'summary' : ''}`}
+                    >
+                      {logs[day]
+                        .slice(props.summary ? -40 : 0)
+                        .map((patient, indexTwo) => {
+                          return (
+                            <div
+                              key={indexTwo}
+                              className={`patient-card ${
+                                patient.gender === 'F'
+                                  ? 'is-femme'
+                                  : patient.gender === 'M'
+                                  ? 'is-male'
+                                  : ''
+                              }`}
+                              onClick={() => {
+                                setModal(true);
+                                setPatient(patient);
+                              }}
+                            >
+                              <h3>P{patient.patientnumber}</h3>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </React.Fragment>
+                );
+              } else {
+                return null;
+              }
+            })}
+        </div>
+      )}
+
+      {props.colorMode === 'transmission' && (
+        <div className="Patients fadeInUp" style={{animationDelay: '1s'}}>
+          {Object.keys(logs)
+            .slice(props.summary ? -1 : 0)
+            .map((day, index) => {
+              if (day !== 'Invalid Date') {
+                return (
+                  <React.Fragment>
+                    <h5 className="daylabel">
+                      {format(new Date(day), 'dd MMM, yyyy')}
+                    </h5>
+                    <div
+                      key={index}
+                      className={`day ${props.summary ? 'summary' : ''}`}
+                    >
+                      {logs[day]
+                        .slice(props.summary ? -40 : 0)
+                        .map((patient, indexTwo) => {
+                          return (
+                            <div
+                              key={indexTwo}
+                              className={`patient-card ${
+                                patient.typeoftransmission === 'Local'
+                                  ? 'is-local'
+                                  : patient.typeoftransmission === 'Imported'
+                                  ? 'is-imported'
+                                  : ''
+                              }`}
+                              onClick={() => {
+                                setModal(true);
+                                setPatient(patient);
+                              }}
+                            >
+                              <h3>P{patient.patientnumber}</h3>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </React.Fragment>
+                );
+              } else {
+                return null;
+              }
+            })}
+        </div>
+      )}
+
+      {props.colorMode === 'nationality' && (
+        <div className="Patients fadeInUp" style={{animationDelay: '1s'}}>
+          {Object.keys(logs)
+            .slice(props.summary ? -1 : 0)
+            .map((day, index) => {
+              if (day !== 'Invalid Date') {
+                return (
+                  <React.Fragment>
+                    <h5 className="daylabel">
+                      {format(new Date(day), 'dd MMM, yyyy')}
+                    </h5>
+                    <div
+                      key={index}
+                      className={`day ${props.summary ? 'summary' : ''}`}
+                    >
+                      {logs[day]
+                        .slice(props.summary ? -40 : 0)
+                        .map((patient, indexTwo) => {
+                          return (
+                            <div
+                              key={indexTwo}
+                              className={`patient-card ${
+                                patient.nationality === 'India'
+                                  ? 'is-in'
+                                  : patient.nationality === 'Myanmar'
+                                  ? 'is-mm'
+                                  : patient.nationality === 'Indonesia'
+                                  ? 'is-id'
+                                  : patient.nationality === 'United Kingdom'
+                                  ? 'is-uk'
+                                  : patient.nationality ===
+                                    'United States of America'
+                                  ? 'is-us'
+                                  : patient.nationality === 'Thailand'
+                                  ? 'is-th'
+                                  : patient.nationality === 'Phillipines'
+                                  ? 'is-ph'
+                                  : patient.nationality === 'Italy'
+                                  ? 'is-it'
+                                  : patient.nationality === 'Canada'
+                                  ? 'is-ca'
+                                  : ''
+                              }`}
+                              onClick={() => {
+                                setModal(true);
+                                setPatient(patient);
+                              }}
+                            >
+                              <h3>P{patient.patientnumber}</h3>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </React.Fragment>
+                );
+              } else {
+                return null;
+              }
+            })}
+        </div>
+      )}
 
       {modal && (
         <div className="modal">
@@ -98,105 +222,79 @@ function Patients(props) {
             </div>
 
             <div className="modal-top">
-              <h1>#{patients[index].patientnumber}</h1>
+              <h1>#{patient.patientnumber}</h1>
             </div>
 
             <div className="meta">
               <h5>Date Announced</h5>
-              <h3>
-                {patients[index].dateannounced
-                  ? patients[index].dateannounced
-                  : '?'}
-              </h3>
+              <h3>{patient.dateannounced ? patient.dateannounced : '?'}</h3>
 
               <h5>Contracted from</h5>
               <h3
                 className="contracted-from"
                 onClick={() => {
-                  switchPatient(
-                    patients[index].contractedfromwhichpatientsuspected
-                  );
+                  switchPatient(patient.contractedfromwhichpatientsuspected);
                 }}
               >
-                {patients[index].contractedfromwhichpatientsuspected
-                  ? patients[index].contractedfromwhichpatientsuspected
+                {patient.contractedfromwhichpatientsuspected
+                  ? patient.contractedfromwhichpatientsuspected
                   : '?'}
               </h3>
 
               <h5>Detected City</h5>
-              <h3>
-                {patients[index].detectedcity
-                  ? patients[index].detectedcity
-                  : '?'}
-              </h3>
+              <h3>{patient.detectedcity ? patient.detectedcity : '?'}</h3>
 
               <h5>Detected District</h5>
               <h3>
-                {patients[index].detecteddistrict
-                  ? patients[index].detecteddistrict
-                  : '?'}
+                {patient.detecteddistrict ? patient.detecteddistrict : '?'}
               </h3>
 
               <h5>Detected State</h5>
-              <h3>
-                {patients[index].detectedstate
-                  ? patients[index].detectedstate
-                  : '?'}
-              </h3>
+              <h3>{patient.detectedstate ? patient.detectedstate : '?'}</h3>
 
               <h5>Nationality</h5>
-              <h3>
-                {patients[index].nationality
-                  ? patients[index].nationality
-                  : '?'}
-              </h3>
+              <h3>{patient.nationality ? patient.nationality : '?'}</h3>
 
               <h5>Age</h5>
-              <h3>
-                {patients[index].agebracket ? patients[index].agebracket : '?'}
-              </h3>
+              <h3>{patient.agebracket ? patient.agebracket : '?'}</h3>
 
               <h5>Gender</h5>
-              <h3>{patients[index].gender ? patients[index].gender : '?'}</h3>
+              <h3>{patient.gender ? patient.gender : '?'}</h3>
 
               <h5>State Patient Number</h5>
               <h3>
-                {patients[index].statepatientnumber
-                  ? patients[index].statepatientnumber
-                  : '?'}
+                {patient.statepatientnumber ? patient.statepatientnumber : '?'}
               </h3>
 
               <h5>Type of transmission</h5>
               <h3>
-                {patients[index].typeoftransmission
-                  ? patients[index].typeoftransmission
-                  : '?'}
+                {patient.typeoftransmission ? patient.typeoftransmission : '?'}
               </h3>
             </div>
 
             <div className="notes">
               <h5>Notes</h5>
-              <h3>{patients[index].notes}</h3>
+              <h3>{patient.notes}</h3>
             </div>
 
             <h5>Source 1</h5>
             <div className="link">
-              <a href={patients[index].source1} target="_noblank">
-                {patients[index].source1}
+              <a href={patient.source1} target="_noblank">
+                {patient.source1}
               </a>
             </div>
 
             <h5>Source 2</h5>
             <div className="link">
-              <a href={patients[index].source1} target="_noblank">
-                {patients[index].source2}
+              <a href={patient.source1} target="_noblank">
+                {patient.source2}
               </a>
             </div>
 
             <h5>Source 3</h5>
             <div className="link">
-              <a href={patients[index].source1} target="_noblank">
-                {patients[index].source3}
+              <a href={patient.source1} target="_noblank">
+                {patient.source3}
               </a>
             </div>
           </div>
