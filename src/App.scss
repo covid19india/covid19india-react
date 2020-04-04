@@ -955,6 +955,28 @@ table {
         h1 { color: $white; }
       }
 
+      &.is-purple {
+        background: $purple-light;
+        h5,
+        h6 { color: $purple; }
+
+        h1 { color: $purple; }
+
+        svg {
+          position: absolute;
+          right: 0.35rem;
+          top: 0.25rem;
+          stroke-width: 3;
+          width: 12px;
+          stroke: $purple-mid;
+          cursor: pointer;
+          transition: stroke 0.2s ease-in-out;
+          &:hover {
+            stroke: $purple;
+          }
+        }
+      }
+
       &:first-child {
         margin-left: 0;
       }

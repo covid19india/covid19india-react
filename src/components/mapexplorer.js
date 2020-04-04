@@ -2,7 +2,8 @@ import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ChoroplethMap from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 import {formatDate} from '../utils/common-functions';
-import {formatDistance} from 'date-fns';
+import {formatDistance, format, parse} from 'date-fns';
+import * as Icon from 'react-feather';
 
 const mapMeta = {
   India: {
@@ -207,9 +208,15 @@ const mapMeta = {
   },
 };
 
-export default function ({states, stateDistrictWiseData, regionHighlighted}) {
+export default function ({
+  states,
+  stateDistrictWiseData,
+  stateTestData,
+  regionHighlighted,
+}) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
+  const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
@@ -355,7 +362,17 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
     },
     [setHoveredRegion, stateDistrictWiseData, states]
   );
+
   const {name, lastupdatedtime} = currentHoveredRegion;
+
+  useEffect(() => {
+    console.log(currentHoveredRegion);
+    stateTestData.map((stateObj, index) => {
+      if (stateObj.state === currentHoveredRegion.name) {
+        setTestObj(stateObj);
+      }
+    });
+  }, [currentHoveredRegion, stateTestData, testObj]);
 
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
@@ -416,6 +433,26 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
             <h1>{currentHoveredRegion.deaths || ''}</h1>
             <h6>{}</h6>
           </div>
+        </div>
+
+        <div className="stats is-purple tested">
+          <h5>Tested</h5>
+          <div className="stats-bottom">
+            <h1>{testObj?.totaltested || '-'}</h1>
+          </div>
+          <h6>
+            {!isNaN(new Date(testObj?.updatedon))
+              ? ` As of ${format(
+                  parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
+                  'dd MMM'
+                )}`
+              : ''}
+          </h6>
+          {testObj?.totaltested?.length > 1 && (
+            <a href={testObj.source} target="_noblank">
+              <Icon.Link />
+            </a>
+          )}
         </div>
       </div>
 
