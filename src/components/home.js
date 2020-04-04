@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {formatDistance} from 'date-fns';
+import {faSyncAlt} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {formatDate, formatDateAbsolute} from '../utils/common-functions';
 /* import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';*/
@@ -24,6 +26,7 @@ function Home(props) {
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (fetched === false) {
@@ -48,6 +51,14 @@ function Home(props) {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const refreshData = async () => {
+    setLoading(true);
+    await getStates();
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
   };
 
   const onHighlightState = (state, index) => {
@@ -83,6 +94,17 @@ function Home(props) {
                   ? ''
                   : formatDateAbsolute(lastUpdated)}
               </h6>
+            </div>
+            <div>
+              <button
+                className="button refresh"
+                onClick={() => {
+                  refreshData();
+                }}
+              >
+                {loading && <FontAwesomeIcon icon={faSyncAlt} spin />}
+                {!loading && <FontAwesomeIcon icon={faSyncAlt} />}
+              </button>
             </div>
           </div>
         </div>

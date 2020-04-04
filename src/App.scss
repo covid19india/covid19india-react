@@ -463,6 +463,21 @@ h6 {
   width: 15.5rem;
 }
 
+.refresh {
+
+  background: $gray-light;
+  color: #000 !important;
+
+  svg {
+    margin-right: 0
+  }
+
+  &:hover {
+    background: $gray-hover;
+  }
+}
+
+
 .excel {
   color: #33a667;
   background: #33a66730;
