@@ -28,6 +28,9 @@ function Home(props) {
   useEffect(() => {
     if (fetched === false) {
       getStates();
+      setInterval(() => {
+        getStates();
+      }, 10000);
     }
   }, [fetched]);
 

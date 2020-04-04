@@ -26,16 +26,6 @@ function Table(props) {
   }, [props.states, props.summary]);
 
   useEffect(() => {
-    if (props.states[0]) {
-      setRevealedStates(
-        props.states.reduce((a, state) => {
-          return {...a, [state.state]: false};
-        }, {})
-      );
-    }
-  }, [props.states]);
-
-  useEffect(() => {
     if (states.length > 0) {
       // slice to ignore the first item which is the total count
       setCount(states.slice(1).filter((s) => s && s.confirmed > 0).length);
@@ -95,7 +85,7 @@ function Table(props) {
   const handleReveal = (state) => {
     setRevealedStates({
       ...revealedStates,
-      [state]: !revealedStates[state],
+      [state]: !Boolean(revealedStates[state]),
     });
   };
 
