@@ -1380,7 +1380,7 @@ footer {
 
   & > * {
     align-self: center;
-    width: 30rem;
+    width: 40rem;
     margin-bottom: 1.5rem;
   }
 
@@ -1395,14 +1395,16 @@ footer {
   }
 
   .question {
-    color: $gray-dark;
+    color: $purple;
     margin: 0;
     margin-bottom: 0.25rem;
   }
 
   .answer {
-    color: $blue;
+    color: $gray-mid;
     line-height: 1.5rem;
+    font-weight: 300;
+    text-transform: none;
   }
 
   a {
