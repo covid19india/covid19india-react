@@ -32,8 +32,7 @@ function ChoroplethMap({
 
       const handleMouseover = (name) => {
         try {
-          if (mapMeta.mapType === MAP_TYPES.COUNTRY)
-            setHoveredRegion(name, mapMeta);
+          setHoveredRegion(name, mapMeta);
           setSelectedRegion(name);
         } catch (err) {
           console.log('err', err);

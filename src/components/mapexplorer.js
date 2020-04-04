@@ -263,22 +263,27 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
           getRegionFromState(states.filter((state) => name === state.state)[0])
         );
       } else if (currentMap.mapType === MAP_TYPES.STATE) {
-        const state = stateDistrictWiseData[currentMap.name] || {
-          districtData: {},
-        };
-        let districtData = state.districtData[name];
-        if (!districtData) {
-          districtData = {
-            confirmed: 0,
-            active: 0,
-            deaths: 0,
-            recovered: 0,
-          };
-        }
-        setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
+        // const state = stateDistrictWiseData[currentMap.name] || {
+        //   districtData: {},
+        // };
+        // let districtData = state.districtData[name];
+        // if (!districtData) {
+        //   districtData = {
+        //     confirmed: 0,
+        //     active: 0,
+        //     deaths: 0,
+        //     recovered: 0,
+        //   };
+        // }
+        // setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
+        const regionData = getRegionFromState(
+          states.filter((state) => currentMap.name === state.state)[0]
+        );
+        regionData.name = name;
+        setCurrentHoveredRegion(regionData);
       }
     },
-    [stateDistrictWiseData, states]
+    [states] // stateDistrictWiseData
   );
 
   useEffect(() => {
@@ -301,21 +306,21 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
         return;
       }
       setCurrentMap(newMap);
-      // setHoveredRegion(regionHighlighted.district, newMap);
+      setHoveredRegion(regionHighlighted.district, newMap);
       setSelectedRegion(regionHighlighted.district);
     }
   }, [regionHighlighted, currentMap.mapType, setHoveredRegion]);
 
-  const getRegionFromDistrict = (districtData, name) => {
-    if (!districtData) {
-      return;
-    }
-    const region = {...districtData};
-    if (!region.name) {
-      region.name = name;
-    }
-    return region;
-  };
+  // const getRegionFromDistrict = (districtData, name) => {
+  //   if (!districtData) {
+  //     return;
+  //   }
+  //   const region = {...districtData};
+  //   if (!region.name) {
+  //     region.name = name;
+  //   }
+  //   return region;
+  // };
 
   const getRegionFromState = (state) => {
     if (!state) {
