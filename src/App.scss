@@ -1253,7 +1253,7 @@ table {
 }
 
 .link {
-  width: 30rem;
+  width: 40rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
   align-self: center;
@@ -1262,7 +1262,7 @@ table {
     font-family: 'archia';
     text-transform: uppercase;
     word-wrap: break-word;
-    font-weight: 900;
+    font-weight: 600;
     text-decoration: none;
     color: $blue;
     background: $blue-light;
@@ -1275,8 +1275,9 @@ table {
 
   h3 {
     margin-bottom: 0;
-    color: $gray-dark;
+    color: $purple;
     font-weight: 900;
+    margin-bottom: 10px;
   }
 }
 
