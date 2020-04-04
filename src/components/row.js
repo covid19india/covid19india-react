@@ -4,7 +4,6 @@ import {formatDate} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
 function Row(props) {
   const [state, setState] = useState(props.state);
-  const [districts, setDistricts] = useState(props.districts);
   const [sortedDistricts, setSortedDistricts] = useState(props.districts);
   const [sortData, setSortData] = useState({
     sortColumn: localStorage.getItem('district.sortColumn')
@@ -18,11 +17,6 @@ function Row(props) {
   useEffect(() => {
     setState(props.state);
   }, [props.state]);
-
-  useEffect(() => {
-    setDistricts(props.districts);
-    setSortedDistricts(props.districts);
-  }, [props.districts]);
 
   const handleReveal = () => {
     props.handleReveal(props.state.state);
@@ -62,6 +56,10 @@ function Row(props) {
     [sortData.isAscending, sortData.sortColumn]
   );
 
+  useEffect(() => {
+    sortDistricts(props.districts);
+  }, [props.districts, sortData, sortDistricts]);
+
   const handleSort = (column) => {
     const isAscending =
       sortData.sortColumn === column
@@ -74,10 +72,6 @@ function Row(props) {
     localStorage.setItem('district.sortColumn', column);
     localStorage.setItem('district.isAscending', isAscending);
   };
-
-  useEffect(() => {
-    sortDistricts(districts);
-  }, [districts, sortData, sortDistricts]);
 
   return (
     <React.Fragment>
