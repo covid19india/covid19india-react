@@ -214,7 +214,8 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
   useEffect(() => {
     const region = getRegionFromState(states[1]);
     setCurrentHoveredRegion(region);
-  }, [states]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!currentHoveredRegion) {
     return null;
