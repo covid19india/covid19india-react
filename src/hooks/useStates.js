@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import {useState, useCallback} from 'react';
 import axios from 'axios';
 
 const useStates = () => {
@@ -25,10 +25,9 @@ const useStates = () => {
       setDidFetchedStates(true);
       setError(err);
     }
-  });
+  }, []);
   return {
     fetchStates,
-
     states,
     lastUpdated,
     timeseries,

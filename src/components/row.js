@@ -97,6 +97,7 @@ function Row(props) {
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
         touchstart={() => props.onHighlightState?.(state, props.index)}
+        style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
         onClick={() => {
           handleReveal();
         }}
@@ -104,8 +105,8 @@ function Row(props) {
         <td style={{fontWeight: 600}}>{state.state}</td>
         <td>
           <span className="deltas" style={{color: '#ff073a'}}>
-            {state.delta.confirmed > 0 && <Icon.ArrowUp />}
-            {state.delta.confirmed > 0 ? `${state.delta.confirmed}` : ''}
+            {state.deltaconfirmed > 0 && <Icon.ArrowUp />}
+            {state.deltaconfirmed > 0 ? `${state.deltaconfirmed}` : ''}
           </span>
           {parseInt(state.confirmed) === 0 ? '-' : state.confirmed}
         </td>
@@ -123,19 +124,19 @@ function Row(props) {
             color: parseInt(state.recovered) === 0 ? '#B5B5B5' : 'inherit',
           }}
         >
-          {/* <span className="deltas" style={{color: '#28a745'}}>
-            {!state.delta.recovered==0 && <Icon.ArrowUp/>}
-            {state.delta.recovered > 0 ? `${state.delta.recovered}` : ''}
-          </span>*/}
+          <span className="deltas" style={{color: '#28a745'}}>
+            {state.deltarecovered > 0 && <Icon.ArrowUp />}
+            {state.deltarecovered > 0 ? `${state.deltarecovered}` : ''}
+          </span>
           {parseInt(state.recovered) === 0 ? '-' : state.recovered}
         </td>
         <td
           style={{color: parseInt(state.deaths) === 0 ? '#B5B5B5' : 'inherit'}}
         >
-          {/* <span className="deltas" style={{color: '#6c757d'}}>
-            {!state.delta.deaths==0 && <Icon.ArrowUp/>}
-            {state.delta.deaths>0 ? `${state.delta.deaths}` : ''}
-          </span>*/}
+          <span className="deltas" style={{color: '#6c757d'}}>
+            {state.deltadeaths > 0 && <Icon.ArrowUp />}
+            {state.deltadeaths > 0 ? `${state.deltadeaths}` : ''}
+          </span>
           {parseInt(state.deaths) === 0 ? '-' : state.deaths}
         </td>
       </tr>
@@ -144,7 +145,7 @@ function Row(props) {
         className={'state-last-update'}
         style={{display: props.reveal && !props.total ? '' : 'none'}}
       >
-        <td colSpan={5}>
+        <td colSpan={2}>
           <div className="last-update">
             <h6>Last Updated&nbsp;</h6>
             <h6>
@@ -215,7 +216,10 @@ function Row(props) {
               <tr
                 key={index}
                 className={`district`}
-                style={{display: props.reveal && !props.total ? '' : 'none'}}
+                style={{
+                  display: props.reveal && !props.total ? '' : 'none',
+                  background: index % 2 === 0 ? '#f8f9fa' : '',
+                }}
                 onMouseEnter={() =>
                   props.onHighlightDistrict?.(district, state, props.index)
                 }
