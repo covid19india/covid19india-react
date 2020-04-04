@@ -114,6 +114,7 @@ function Home(props) {
                 <div
                   className={`tab ${graphOption === 1 ? 'focused' : ''}`}
                   onClick={() => {
+                    console.log(graphOption);
                     setGraphOption(1);
                   }}
                 >
@@ -139,13 +140,18 @@ function Home(props) {
 
               <div className="scale-modes">
                 <label>Scale Modes</label>
-                <div className="timeseries-mode">
+                <div
+                  className={`timeseries-logmode ${
+                    graphOption === 3 ? 'disabled' : ''
+                  }`}
+                >
                   <label htmlFor="timeseries-mode">Uniform</label>
                   <input
                     type="checkbox"
-                    checked={timeseriesMode}
+                    checked={timeseriesMode && graphOption!=3}
                     className="switch"
                     aria-label="Checked by default to scale uniformly."
+                    disabled={graphOption === 3}
                     onChange={(event) => {
                       setTimeseriesMode(!timeseriesMode);
                     }}

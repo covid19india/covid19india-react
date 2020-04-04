@@ -22,7 +22,6 @@ function TimeSeries(props) {
 
   
   useEffect(() => {
-    console.log(props.statesData);
     graphDataStates(props.statesData);
   },[props.statesData])
 
