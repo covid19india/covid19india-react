@@ -1182,7 +1182,12 @@ table {
         font-size: 12px;
       }
     }
-
+    .stateWiseMapAxis{
+      text{
+        font-size: 10px;
+        font-weight: bold;
+      }
+    }
     &.is-green {
       background: $green-light;
 

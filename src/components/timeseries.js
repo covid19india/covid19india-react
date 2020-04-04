@@ -8,6 +8,7 @@ function TimeSeries(props) {
   const [mode, setMode] = useState(props.mode);
   const [logMode, setLogMode] = useState(props.logMode);
   const [update, setUpdate] = useState(-1);
+  const [DatapointForState,setDatapointForState] = useState({});
 
   const graphElement1 = useRef(null);
   const graphElement2 = useRef(null);
@@ -15,6 +16,15 @@ function TimeSeries(props) {
   const graphElement4 = useRef(null);
   const graphElement5 = useRef(null);
   const graphElement6 = useRef(null);
+  const graphElement7 = useRef(null);
+  const graphElement8 = useRef(null);
+  const graphElement9 = useRef(null);
+
+  
+  useEffect(() => {
+    console.log(props.statesData);
+    graphDataStates(props.statesData);
+  },[props.statesData])
 
   useEffect(() => {
     if (props.timeseries.length > 1) {
@@ -93,7 +103,6 @@ function TimeSeries(props) {
         a[c] = d3.max(data, (d) => +d[c]);
         return a;
       }, {});
-
       const yScales = Object.entries(dTypeMaxMap).map(([type, maxY]) => {
         // apply mode, logMode, etc -- determine scales once and for all
         const applyLogMode = (maxY) =>
@@ -236,6 +245,186 @@ function TimeSeries(props) {
             .style('stroke-width', 4);
           dots.attr('r', 2);
         }
+      });
+    },
+    [logMode, mode]
+  );
+
+  const graphDataStates = useCallback(
+    (statesData) => {
+      const data = statesData;
+      data.splice(0,1);
+      data.sort((a,b)=> {
+        return a.confirmed - b.confirmed;
+      }) 
+      setDatapointForState(data[data.length - 1]);
+      setIndex(data.length - 1);
+      const svg7 = d3.select(graphElement7.current);
+      const svg8 = d3.select(graphElement8.current);
+      const svg9 = d3.select(graphElement9.current);
+
+      // Margins
+      const margin = {top: 0, right: 20, bottom: 50, left: 20};
+      const width = 650 - margin.left - margin.right;
+      const height = 200 - margin.top - margin.bottom;
+
+      // const dateMin = new Date(data[0]['date'] + '2020');
+      // dateMin.setDate(dateMin.getDate() - 1);
+      // const dateMax = new Date(data[timeseries.length - 1]['date'] + '2020');
+      // dateMax.setDate(dateMax.getDate() + 1);
+
+      const x = d3.scaleBand()
+        .domain(data.map(state => state.statecode))
+        .range([margin.left, width])
+        .padding(1);
+
+      const indexScale = d3
+        .scaleLinear()
+        .domain([0, data.length])
+        .range([margin.left, width]);
+
+      // Arrays of objects
+      const svgArray = [svg7, svg8, svg9];
+      const dataTypes = [
+        'confirmed',
+        'recovered',
+        'deaths',
+      ];
+      const colors = [ 
+        '#ff073a', 
+        '#28a745',
+        '#6c757d',
+      ];
+      const logCharts = new Set([
+        'confirmed',
+        'recovered',
+        'deaths',
+      ]);
+
+      const dTypeMaxMap = dataTypes.reduce((a, c) => {
+        a[c] = d3.max(data, (d) => +d[c]);
+        return a;
+      }, {});
+
+      const yScales = Object.entries(dTypeMaxMap).map(([type, maxY]) => {
+        // apply mode, logMode, etc -- determine scales once and for all
+        const applyLogMode = (maxY) =>
+          logMode && logCharts.has(type)
+            ? d3.scaleLog().domain([1, maxY]).nice()
+            : d3.scaleLinear().domain([-maxY / 10, maxY]);
+
+        return (
+          applyLogMode(maxY)
+          .range([height, margin.top])
+        );
+      });
+
+      const y = (dataTypeIdx, day) => {
+        // Scaling mode filters
+        const y = yScales[dataTypeIdx];
+        const dType = dataTypes[dataTypeIdx];
+        return y(logMode ? Math.max(1, day[dType]) : day[dType]); // max(1,y) for logmode
+      };
+
+      /* Focus dots */
+      const focus = svgArray.map((d, i) => {
+        return d
+          .append('g')
+          .append('circle')
+          .attr('fill', colors[i])
+          .attr('stroke', colors[i])
+          .attr('r', 5)
+          .attr('cx', x(data[data.length - 1]['statecode']))
+          .attr('cy', y(i, data[data.length - 1]));
+      });
+
+      function mouseout() {
+          setDatapointForState(data[data.length - 1]);
+        setIndex(data.length - 1);
+        focus.forEach((d, i) => {
+          d.attr(
+            'cx',
+            x(data[data.length - 1]['statecode'])
+          ).attr('cy', y(i, data[data.length - 1]));
+        });
+      }
+
+      function mousemove() {
+        const xm = d3.mouse(this)[0];
+        const i = Math.round(indexScale.invert(xm));
+        if (0 <= i && i < data.length) {
+          const d = data.sort((a,b) => { return a.confirmed - b.confirmed})[i];
+          setDatapointForState(d);
+          setIndex(i);
+          focus.forEach((f, j) => {
+            f.attr('cx', x(d['statecode'])).attr('cy', y(j, d));
+          });
+        }
+      }
+
+      const tickCount = (scaleIdx) => {
+        return logMode
+          ? Math.ceil(Math.log10(yScales[scaleIdx].domain()[1]))
+          : 5;
+      };
+
+      /* Begin drawing charts */
+      svgArray.forEach((s, i) => {
+        /* X axis */
+        s.append('g')
+          .attr('transform', 'translate(0,' + height + ')')
+          .attr('class', 'stateWiseMapAxis')
+          .call(d3.axisBottom(x));
+
+        /* Y axis */
+        s.append('g')
+          .attr('transform', `translate(${width}, ${0})`)
+          .attr('class', 'axis')
+          .call(
+            d3
+              .axisRight(yScales[i])
+              .ticks(tickCount(i))
+              .tickPadding(5)
+              .tickFormat(d3.format('.2s'))
+          );
+
+        /* Focus dots */
+        s.on('mousemove', mousemove)
+          .on('touchmove', mousemove)
+          .on('mouseout', mouseout)
+          .on('touchend', mouseout);
+
+        /* Path dots */
+        const dots = s
+          .selectAll('.dot')
+          .data(data)
+          .enter()
+          .append('circle')
+          .attr('fill', colors[i])
+          .attr('stroke', colors[i])
+          .attr('cursor', 'pointer')
+          .attr('cx', (d) => {
+            return x(d['statecode']);
+          })
+          .attr('cy', (d) => y(i, d));
+
+        /* Paths */
+          s.selectAll('stem-line')
+            .data(data)
+            .enter()
+            .append('line')
+            .attr('x1', (d) => {
+              return x(d['statecode']);
+            })
+            .attr('y1', height)
+            .attr('x2', (d) => {
+              return x(d['statecode']);
+            })
+            .attr('y2', (d) => y(i, d))
+            .style('stroke', colors[i] + '99')
+            .style('stroke-width', 4);
+            
+          dots.attr('r', 2)
       });
     },
     [logMode, mode]
@@ -479,6 +668,89 @@ function TimeSeries(props) {
           />
         </div>
       </div>
+
+      <div
+        className="timeseries"
+        style={{display: props.type === 3 ? 'flex' : 'none'}}
+      >
+        <div className="svg-parent">
+          <div className="stats">
+            <h5>Confirmed {DatapointForState['state']}</h5>
+            <div className="stats-bottom">
+              <h2>{DatapointForState['confirmed']}</h2>
+            </div>
+          </div>
+          <svg
+            ref={graphElement7}
+            width="650"
+            height="200"
+            viewBox="0 0 650 200"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
+
+        <div className="svg-parent is-green">
+          <div className="stats is-green">
+            <h5>Recovered {DatapointForState['state']}</h5>
+            <div className="stats-bottom">
+              <h2>{DatapointForState['recovered']}</h2>
+            {/* <div className="stats-bottom">
+              <h2>{datapoint['dailyrecovered']}</h2>
+              <h6>
+                {timeseries.length > 0 && index !== 0
+                  ? timeseries[index]['dailyrecovered'] -
+                      timeseries[index - 1]['dailyrecovered'] >=
+                    0
+                    ? '+' +
+                      (timeseries[index]['dailyrecovered'] -
+                        timeseries[index - 1]['dailyrecovered'])
+                    : timeseries[index]['dailyrecovered'] -
+                      timeseries[index - 1]['dailyrecovered']
+                  : ''}
+              </h6>
+            </div> */}
+            </div>
+          </div>
+          <svg
+            ref={graphElement8}
+            width="650"
+            height="200"
+            viewBox="0 0 650 200"
+            preserveAspectRatio="xMidYMid meet"
+          />
+          </div>
+
+        <div className="svg-parent is-gray">
+          <div className="stats is-gray">
+            <h5>Deceased {DatapointForState['state']}</h5>
+            <div className="stats-bottom">
+              <h2>{DatapointForState['deaths']}</h2>
+            {/* <div className="stats-bottom">
+              <h2>{datapoint['dailydeceased']}</h2>
+              <h6>
+                {timeseries.length > 0 && index !== 0
+                  ? timeseries[index]['dailydeceased'] -
+                      timeseries[index - 1]['dailydeceased'] >=
+                    0
+                    ? '+' +
+                      (timeseries[index]['dailydeceased'] -
+                        timeseries[index - 1]['dailydeceased'])
+                    : timeseries[index]['dailydeceased'] -
+                      timeseries[index - 1]['dailydeceased']
+                  : ''}
+              </h6>
+            </div> */}
+          </div>
+        </div>
+          <svg
+            ref={graphElement9}
+            width="650"
+            height="200"
+            viewBox="0 0 650 200"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
+    </div>
     </div>
   );
 }

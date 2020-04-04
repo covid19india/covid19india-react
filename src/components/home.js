@@ -123,6 +123,14 @@ function Home(props) {
                 >
                   <h4>Daily</h4>
                 </div>
+                <div
+                  className={`tab ${graphOption === 3 ? 'focused' : ''}`}
+                  onClick={() => {
+                    setGraphOption(3);
+                  }}
+                >
+                  <h4>States</h4>
+                </div>
               </div>
 
               <div className="scale-modes">
@@ -163,6 +171,7 @@ function Home(props) {
               type={graphOption}
               mode={timeseriesMode}
               logMode={timeseriesLogMode}
+              statesData = {states}
             />
           </React.Fragment>
         )}
