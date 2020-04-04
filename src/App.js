@@ -13,6 +13,7 @@ const Home = lazy(() => import('./components/home'));
 const Links = lazy(() => import('./components/links'));
 const FAQ = lazy(() => import('./components/faq'));
 const Banner = lazy(() => import('./components/banner'));
+
 const history = require('history').createBrowserHistory;
 
 function App() {
@@ -70,6 +71,7 @@ function App() {
           />
         </Router>
       </Suspense>
+
       <footer className="fadeInUp" style={{animationDelay: '2s'}}>
         {/* <img
           src="/icon.png"
