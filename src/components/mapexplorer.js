@@ -301,7 +301,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
         return;
       }
       setCurrentMap(newMap);
-      setHoveredRegion(regionHighlighted.district, newMap);
+      // setHoveredRegion(regionHighlighted.district, newMap);
       setSelectedRegion(regionHighlighted.district);
     }
   }, [regionHighlighted, currentMap.mapType, setHoveredRegion]);
@@ -460,6 +460,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
         setHoveredRegion={setHoveredRegion}
         changeMap={switchMapToState}
         selectedRegion={selectedRegion}
+        setSelectedRegion={setSelectedRegion}
       />
     </div>
   );
