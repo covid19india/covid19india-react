@@ -1,29 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {formatDistance} from 'date-fns';
-import {
-  formatDate,
-  formatDateAbsolute,
-  validateCTS,
-} from '../utils/common-functions';
-/* import * as Icon from 'react-feather';
-import {Link} from 'react-router-dom';*/
-
+import {formatDate, formatDateAbsolute} from '../utils/common-functions';
 import Table from './table';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
-/* import Patients from './patients';*/
 
 function Home(props) {
   const [states, setStates] = useState([]);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
-  /* const [patients, setPatients] = useState([]);*/
   const [fetched, setFetched] = useState(false);
   const [graphOption, setGraphOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState([]);
+  const [deltas, setDeltas] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
@@ -39,13 +31,12 @@ function Home(props) {
       const [response, stateDistrictWiseResponse] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
-        /* axios.get('https://api.covid19india.org/raw_data.json'),*/
       ]);
       setStates(response.data.statewise);
-      setTimeseries(validateCTS(response.data.cases_time_series));
+      setTimeseries(response.data.cases_time_series);
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
+      setDeltas(response.data.key_values[0]);
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
-      /* setPatients(rawDataResponse.data.raw_data.filter((p) => p.detectedstate));*/
       setFetched(true);
     } catch (err) {
       console.log(err);
@@ -67,7 +58,8 @@ function Home(props) {
         <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
           <div className="header-mid">
             <div className="titles">
-              <h1>India COVID-19 Updates</h1>
+              <h1>India COVID-19 Tracker</h1>
+              <h6 style={{fontWeight: 600}}>A Crowdsourced Initiative</h6>
             </div>
             <div className="last-update">
               <h6>Last Updated</h6>
@@ -88,8 +80,9 @@ function Home(props) {
           </div>
         </div>
 
-        {states.length > 1 && <Level data={states} />}
+        <Level data={states} deltas={deltas} />
         <Minigraph timeseries={timeseries} animate={true} />
+
         <Table
           states={states}
           summary={false}
@@ -99,7 +92,7 @@ function Home(props) {
         />
       </div>
 
-      <div className="home-right" style={{display: 'none'}}>
+      <div className="home-right">
         {fetched && (
           <React.Fragment>
             <MapExplorer
@@ -171,45 +164,9 @@ function Home(props) {
               mode={timeseriesMode}
               logMode={timeseriesLogMode}
             />
-
-            {/* Testing Rebuild*/}
           </React.Fragment>
         )}
       </div>
-
-      {/* <div className="home-left">
-        {patients.length > 1 && (
-          <div className="patients-summary">
-            <h1>Recent Cases</h1>
-            <h6>A summary of the latest reported cases</h6>
-            <div className="legend">
-              <div className="legend-left">
-                <div className="circle is-female"></div>
-                <h5 className="is-female">Female</h5>
-                <div className="circle is-male"></div>
-                <h5 className="is-male">Male</h5>
-                <div className="circle"></div>
-                <h5 className="">Unknown</h5>
-              </div>
-            </div>
-            <div className="patients-summary-wrapper">
-              <Patients
-                patients={patients}
-                summary={true}
-                colorMode={'genders'}
-              />
-            </div>
-            <button className="button">
-              <Link to="/database">
-                <Icon.Database />
-                <span>View the Patients Database</span>
-              </Link>
-            </button>
-          </div>
-        )}
-      </div>
-      <div className="home-right"></div>
-    */}
     </div>
   );
 }

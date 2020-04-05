@@ -1,5 +1,4 @@
-import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
 
 import Row from './row';
 
@@ -103,9 +102,7 @@ function Table(props) {
 
   return (
     <React.Fragment>
-      <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1s'}}>
-        Compiled from State Govt. numbers <Link to="/faq">Know More</Link>
-      </h5>
+      <div style={{'min-height': '10px'}}></div>
       <table className="table fadeInUp" style={{animationDelay: '1s'}}>
         <thead>
           <tr>
