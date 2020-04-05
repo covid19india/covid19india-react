@@ -98,11 +98,21 @@ function Home(props) {
 
   const getTimeSeries = useCallback(
     (data) => {
+      let state;
       if (data === undefined || data === null) {
-        return [];
+        if (states[1] === undefined) {
+          return;
+        } else {
+          console.log(states);
+          state = states[1].state;
+        }
+      } else {
+        state = data.state.state;
       }
-      const state = data.state.state;
       const series = stateTimeSeries[state];
+      if (!series) {
+        return;
+      }
       const resultSeries = [];
       let total = 0;
       let dateStr = '2020-01-30';
@@ -124,10 +134,10 @@ function Home(props) {
         date = date.add(1, 'days');
         dateStr = date.format('YYYY-MM-DD');
       }
-      console.log(state, stateTimeSeries[state], resultSeries);
+      // console.log(state, stateTimeSeries[state], resultSeries);
       setresultSeries({series: resultSeries, state: state});
     },
-    [stateTimeSeries]
+    [states, stateTimeSeries]
   );
 
   useEffect(() => {
@@ -171,16 +181,6 @@ function Home(props) {
           onHighlightState={onHighlightState}
           onHighlightDistrict={onHighlightDistrict}
         />
-        <TimeSeries
-          key={'state'}
-          stateName={resultSeries.state}
-          timeseries={resultSeries.series}
-          confirmedOnly={true}
-          update={1}
-          type={graphOption}
-          logMode={timeseriesLogMode}
-          mode={timeseriesMode}
-        />
       </div>
 
       <div className="home-right">
@@ -196,6 +196,16 @@ function Home(props) {
               className="timeseries-header fadeInUp"
               style={{animationDelay: '1.5s'}}
             >
+              <TimeSeries
+                key={'state'}
+                stateName={resultSeries.state}
+                timeseries={resultSeries.series}
+                confirmedOnly={true}
+                update={1}
+                type={graphOption}
+                logMode={timeseriesLogMode}
+                mode={timeseriesMode}
+              />
               <h1>Spread Trends</h1>
               <div className="tabs">
                 <div
