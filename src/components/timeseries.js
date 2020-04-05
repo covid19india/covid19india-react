@@ -18,7 +18,6 @@ function TimeSeries(props) {
 
   useEffect(() => {
     if (props.timeseries.length > 1) {
-      console.log(props.timeseries);
       setTimeseries(props.timeseries);
     }
   }, [props.timeseries]);
@@ -294,9 +293,9 @@ function TimeSeries(props) {
         className="timeseries"
         style={{display: props.type === 1 ? 'flex' : 'none'}}
       >
-        {props.stateName ? <h4> {props.stateName} </h4> : <></>}
         <div className="svg-parent">
           <div className="stats">
+            {props.stateName ? <h4> {props.stateName} </h4> : <></>}
             <h5>Confirmed</h5>
             <h5>
               {isYesterday
@@ -405,9 +404,9 @@ function TimeSeries(props) {
         className="timeseries"
         style={{display: props.type === 2 ? 'flex' : 'none'}}
       >
-        {props.stateName ? <h4> {props.stateName} </h4> : <></>}
         <div className="svg-parent">
           <div className="stats">
+            {props.stateName ? <h4> {props.stateName} </h4> : <></>}
             <h5>Confirmed</h5>
             <h5>
               {isYesterday

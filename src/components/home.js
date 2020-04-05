@@ -30,7 +30,10 @@ function Home(props) {
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
   const [stateTimeSeries, setStateTimeSeries] = useState({});
-  const [resultSeries, setresultSeries] = useState({series: [], state: ''});
+  const [stateGraphTimeSeries, setStateGraphTimeSeries] = useState({
+    series: [],
+    state: '',
+  });
 
   useEffect(() => {
     if (fetched === false) {
@@ -100,10 +103,10 @@ function Home(props) {
     (data) => {
       let state;
       if (data === undefined || data === null) {
+        // if (resultSeries.state) {
         if (states[1] === undefined) {
           return;
         } else {
-          console.log(states);
           state = states[1].state;
         }
       } else {
@@ -135,13 +138,13 @@ function Home(props) {
         dateStr = date.format('YYYY-MM-DD');
       }
       // console.log(state, stateTimeSeries[state], resultSeries);
-      setresultSeries({series: resultSeries, state: state});
+      setStateGraphTimeSeries({series: resultSeries, state: state});
     },
     [states, stateTimeSeries]
   );
 
   useEffect(() => {
-    getTimeSeries(regionHighlighted);
+    if (regionHighlighted !== null) getTimeSeries(regionHighlighted);
   }, [getTimeSeries, regionHighlighted]);
 
   return (
@@ -198,8 +201,8 @@ function Home(props) {
             >
               <TimeSeries
                 key={'state'}
-                stateName={resultSeries.state}
-                timeseries={resultSeries.series}
+                stateName={stateGraphTimeSeries.state}
+                timeseries={stateGraphTimeSeries.series}
                 confirmedOnly={true}
                 update={1}
                 type={graphOption}

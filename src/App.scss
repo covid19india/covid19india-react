@@ -1114,6 +1114,12 @@ table {
     display: flex;
     flex-direction: column;
 
+    h4 {
+      margin: 0;
+      color: $gray-dark;
+      width: 10rem;
+    }
+
     h2,
     h5,
     h6 {
