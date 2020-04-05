@@ -395,15 +395,16 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
             <h1>{currentHoveredRegion.active || ''}</h1>
 
             <h6>
-              (
-              {currentHoveredRegion.confirmed > 0
-                ? (
+              {currentHoveredRegion.confirmed > 0 &&
+              !isNaN(currentHoveredRegion.active)
+                ? '(' +
+                  (
                     (currentHoveredRegion.active /
                       currentHoveredRegion.confirmed) *
                     100
-                  ).toFixed(2)
-                : 0}
-              %)
+                  ).toFixed(2) +
+                  '%)'
+                : ''}
             </h6>
           </div>
         </div>
@@ -413,15 +414,16 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.recovered || ''}</h1>
             <h6>
-              (
-              {currentHoveredRegion.confirmed > 0
-                ? (
+              {currentHoveredRegion.confirmed > 0 &&
+              !isNaN(currentHoveredRegion.recovered)
+                ? '(' +
+                  (
                     (currentHoveredRegion.recovered /
                       currentHoveredRegion.confirmed) *
                     100
-                  ).toFixed(2)
-                : 0}
-              %)
+                  ).toFixed(2) +
+                  '%)'
+                : ''}
             </h6>
           </div>
         </div>
@@ -431,15 +433,16 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.deaths || ''}</h1>
             <h6>
-              (
-              {currentHoveredRegion.confirmed > 0
-                ? (
+              {currentHoveredRegion.confirmed > 0 &&
+              !isNaN(currentHoveredRegion.deaths)
+                ? '(' +
+                  (
                     (currentHoveredRegion.deaths /
                       currentHoveredRegion.confirmed) *
                     100
-                  ).toFixed(2)
-                : 0}
-              %)
+                  ).toFixed(2) +
+                  '%)'
+                : ''}
             </h6>
           </div>
         </div>
