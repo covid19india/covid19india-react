@@ -237,11 +237,11 @@ function Row(props) {
                   <td style={{fontWeight: 600}}>{district}</td>
                   <td>
                     <span className="deltas" style={{color: '#ff073a'}}>
-                      {sortedDistricts[district].deltaconfirmed > 0 && (
+                      {sortedDistricts[district].delta.confirmed > 0 && (
                         <Icon.ArrowUp />
                       )}
-                      {sortedDistricts[district].deltaconfirmed > 0
-                        ? `${sortedDistricts[district].deltaconfirmed}`
+                      {sortedDistricts[district].delta.confirmed > 0
+                        ? `${sortedDistricts[district].delta.confirmed}`
                         : ''}
                     </span>
                     {sortedDistricts[district].confirmed}
@@ -260,11 +260,11 @@ function Row(props) {
           <td style={{fontWeight: 600}}>Unknown</td>
           <td>
             <span className="deltas" style={{color: '#ff073a'}}>
-              {sortedDistricts['Unknown'].deltaconfirmed > 0 && (
+              {sortedDistricts['Unknown'].delta.confirmed > 0 && (
                 <Icon.ArrowUp />
               )}
-              {sortedDistricts['Unknown'].deltaconfirmed > 0
-                ? `${sortedDistricts['Unknown'].deltaconfirmed}`
+              {sortedDistricts['Unknown'].delta.confirmed > 0
+                ? `${sortedDistricts['Unknown'].delta.confirmed}`
                 : ''}
             </span>
             {sortedDistricts['Unknown'].confirmed}
