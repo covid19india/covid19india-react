@@ -82,16 +82,17 @@ function ChoroplethMap({
         .on('mouseover', (d) => {
           handleMouseover(d.properties[propertyField]);
           const target = d3.event.target;
+          d3.selectAll('.map-hover').attr('class', 'path-refion map-default');
           d3.select(target.parentNode.appendChild(target)).attr(
             'class',
             'map-hover'
           );
         })
-        .on('mouseleave', (d) => {
-          const target = d3.event.target;
-          d3.select(target).attr('class', 'path-region map-default');
-          if (onceTouchedRegion === d) onceTouchedRegion = null;
-        })
+        // .on('mouseleave', (d) => {
+        //   const target = d3.event.target;
+        //   d3.select(target).attr('class', 'path-region map-default');
+        //   if (onceTouchedRegion === d) onceTouchedRegion = null;
+        // })
         .on('touchstart', (d) => {
           if (onceTouchedRegion === d) onceTouchedRegion = null;
           else onceTouchedRegion = d;
