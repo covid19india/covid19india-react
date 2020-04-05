@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import {legendColor} from 'd3-svg-legend';
 import * as topojson from 'topojson';
 import {MAP_TYPES} from '../constants';
+import {usePrevious} from '../utils/common-functions';
 
 const propertyFieldMap = {
   country: 'st_nm',
@@ -197,16 +198,19 @@ function ChoroplethMap({
       .style('font-size', '10px');
   }, [statistic.maxConfirmed]);
 
+  const prevGeoDataFile = usePrevious(mapMeta.geoDataFile);
   useEffect(() => {
     (async () => {
-      const data = await d3.json(mapMeta.geoDataFile);
-      if (statistic && choroplethMap.current) {
+      // Condition to avoid the API call to {india}.json and {state}.json on every update
+      // Make API call to these API when user changes from Country map to district map and vice versa.
+      if (choroplethMap.current && prevGeoDataFile !== mapMeta.geoDataFile) {
+        const data = await d3.json(mapMeta.geoDataFile);
         ready(data);
         renderData();
         setSvgRenderCount((prevCount) => prevCount + 1);
       }
     })();
-  }, [mapMeta.geoDataFile, statistic, renderData, ready]);
+  }, [mapMeta.geoDataFile, prevGeoDataFile, renderData, ready]);
 
   const highlightRegionInMap = (name) => {
     const paths = d3.selectAll('.path-region');

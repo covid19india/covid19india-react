@@ -1,3 +1,5 @@
+import {useEffect, useRef} from 'react';
+
 const months = {
   '01': 'Jan',
   '02': 'Feb',
@@ -26,4 +28,12 @@ export const formatDateAbsolute = (unformattedDate) => {
   const month = unformattedDate.slice(3, 5);
   const time = unformattedDate.slice(11);
   return `${day} ${months[month]}, ${time.slice(0, 5)} IST`;
+};
+
+export const usePrevious = (value) => {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
 };
