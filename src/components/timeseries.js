@@ -6,6 +6,7 @@ function TimeSeries(props) {
   const [datapoint, setDatapoint] = useState({});
   const [index, setIndex] = useState(10);
   const [mode, setMode] = useState(props.mode);
+  const [logMode, setLogMode] = useState(props.logMode);
   const [update, setUpdate] = useState(-1);
 
   const graphElement1 = useRef(null);
@@ -25,6 +26,11 @@ function TimeSeries(props) {
     setMode(props.mode);
     setUpdate((u) => u + 1);
   }, [props.mode]);
+
+  useEffect(() => {
+    setLogMode(props.logMode);
+    setUpdate((u) => u + 1);
+  }, [props.logMode]);
 
   const graphData = useCallback(
     (timeseries) => {
@@ -77,21 +83,51 @@ function TimeSeries(props) {
         '#28a745',
         '#6c757d',
       ];
-      const maxDataTypes = Array.from({length: svgArray.length}, (_, i) => {
-        return d3.max(data, (d) => {
-          return +d[dataTypes[i]];
-        });
+      const logCharts = new Set([
+        'totalconfirmed',
+        'totalrecovered',
+        'totaldeceased',
+      ]);
+
+      const dTypeMaxMap = dataTypes.reduce((a, c) => {
+        a[c] = d3.max(data, (d) => +d[c]);
+        return a;
+      }, {});
+
+      const yScales = Object.entries(dTypeMaxMap).map(([type, maxY]) => {
+        // apply mode, logMode, etc -- determine scales once and for all
+        const applyLogMode = (maxY) =>
+          logMode && logCharts.has(type)
+            ? d3
+                .scaleLog()
+                .domain([1, 1.1 * maxY])
+                .nice()
+            : d3
+                .scaleLinear()
+                .domain([0, 1.1 * maxY])
+                .nice();
+
+        return (mode
+          ? applyLogMode(
+              type.match('^total')
+                ? dTypeMaxMap['totalconfirmed']
+                : dTypeMaxMap['dailyconfirmed']
+            )
+          : applyLogMode(maxY)
+        ).range([height, margin.top]);
       });
-      const yScales = maxDataTypes.map((d) => {
-        return d3
-          .scaleLinear()
-          .domain([-d / 10, d])
-          .range([height, margin.top]);
-      });
+
+      const y = (dataTypeIdx, day) => {
+        // Scaling mode filters
+        const scale = yScales[dataTypeIdx];
+        const dType = dataTypes[dataTypeIdx];
+        return scale(
+          logMode && logCharts.has(dType) ? Math.max(1, day[dType]) : day[dType]
+        ); // max(1,y) for logmode
+      };
 
       /* Focus dots */
       const focus = svgArray.map((d, i) => {
-        const y = mode ? yScales[0] : yScales[i];
         return d
           .append('g')
           .append('circle')
@@ -99,18 +135,17 @@ function TimeSeries(props) {
           .attr('stroke', colors[i])
           .attr('r', 5)
           .attr('cx', x(new Date(data[timeseries.length - 1]['date'] + '2020')))
-          .attr('cy', y(data[timeseries.length - 1][dataTypes[i]]));
+          .attr('cy', y(i, data[timeseries.length - 1]));
       });
 
       function mouseout() {
         setDatapoint(data[timeseries.length - 1]);
         setIndex(timeseries.length - 1);
         focus.forEach((d, i) => {
-          const y = mode ? yScales[0] : yScales[i];
           d.attr(
             'cx',
             x(new Date(data[timeseries.length - 1]['date'] + '2020'))
-          ).attr('cy', y(data[timeseries.length - 1][dataTypes[i]]));
+          ).attr('cy', y(i, data[timeseries.length - 1]));
         });
       }
 
@@ -122,14 +157,17 @@ function TimeSeries(props) {
           setDatapoint(d);
           setIndex(i);
           focus.forEach((f, j) => {
-            const y = mode ? yScales[0] : yScales[j];
-            f.attr('cx', x(new Date(d['date'] + '2020'))).attr(
-              'cy',
-              y(d[dataTypes[j]])
-            );
+            f.attr('cx', x(new Date(d['date'] + '2020'))).attr('cy', y(j, d));
           });
         }
       }
+
+      const tickCount = (scaleIdx) => {
+        const dType = dataTypes[scaleIdx];
+        return logMode && logCharts.has(dType)
+          ? Math.ceil(Math.log10(yScales[scaleIdx].domain()[1]))
+          : 5;
+      };
 
       /* Begin drawing charts */
       svgArray.forEach((s, i) => {
@@ -145,12 +183,10 @@ function TimeSeries(props) {
           .attr('class', 'axis')
           .call(
             d3
-              .axisRight(mode ? yScales[0] : yScales[i])
-              .ticks(5)
+              .axisRight(yScales[i])
+              .ticks(tickCount(i))
               .tickPadding(5)
-              .tickFormat((tick) => {
-                if (Math.floor(tick) === tick) return tick;
-              })
+              .tickFormat(d3.format('~s'))
           );
 
         /* Focus dots */
@@ -171,10 +207,7 @@ function TimeSeries(props) {
           .attr('cx', (d) => {
             return x(new Date(d['date'] + '2020'));
           })
-          .attr('cy', (d) => {
-            if (mode) return yScales[0](d[dataTypes[i]]);
-            return yScales[i](d[dataTypes[i]]);
-          });
+          .attr('cy', (d) => y(i, d));
 
         /* Paths */
         if (i < Math.floor(svgArray.length / 2)) {
@@ -191,10 +224,7 @@ function TimeSeries(props) {
                 .x((d) => {
                   return x(new Date(d['date'] + '2020'));
                 })
-                .y((d) => {
-                  if (mode) return yScales[0](d[dataTypes[i]]);
-                  return yScales[i](d[dataTypes[i]]);
-                })
+                .y((d) => y(i, d))
                 .curve(d3.curveCardinal)
             );
           dots.attr('r', 3);
@@ -210,18 +240,14 @@ function TimeSeries(props) {
             .attr('x2', (d) => {
               return x(new Date(d['date'] + '2020'));
             })
-            .attr('y2', (d) => {
-              return mode
-                ? yScales[0](d[dataTypes[i]])
-                : yScales[i](d[dataTypes[i]]);
-            })
+            .attr('y2', (d) => y(i, d))
             .style('stroke', colors[i] + '99')
             .style('stroke-width', 4);
           dots.attr('r', 2);
         }
       });
     },
-    [mode]
+    [logMode, mode]
   );
 
   const refreshGraphs = useCallback(() => {
@@ -250,6 +276,13 @@ function TimeSeries(props) {
     }
   }, [timeseries, graphData]);
 
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  const lastDate = new Date(datapoint['date'] + '2020');
+  const isYesterday =
+    lastDate.getMonth() === yesterdayDate.getMonth() &&
+    lastDate.getDate() === yesterdayDate.getDate();
+
   return (
     <div
       className="TimeSeries-Parent fadeInUp"
@@ -261,7 +294,12 @@ function TimeSeries(props) {
       >
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed {datapoint['date']}</h5>
+            <h5>Confirmed</h5>
+            <h5>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['totalconfirmed']}</h2>
               <h6>
@@ -289,7 +327,12 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>Recovered {datapoint['date']}</h5>
+            <h5>Recovered</h5>
+            <h5>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['totalrecovered']}</h2>
               <h6>
@@ -317,9 +360,11 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
+            <h5>Deceased</h5>
             <h5>
-              Deceased <br />
-              {datapoint['date']}
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
             </h5>
             <div className="stats-bottom">
               <h2>{datapoint['totaldeceased']}</h2>
@@ -353,7 +398,12 @@ function TimeSeries(props) {
       >
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed {datapoint['date']}</h5>
+            <h5>Confirmed</h5>
+            <h5>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailyconfirmed']}</h2>
               <h6>
@@ -381,7 +431,12 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>Recovered {datapoint['date']}</h5>
+            <h5>Recovered</h5>
+            <h5>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailyrecovered']}</h2>
               <h6>
@@ -409,9 +464,11 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
+            <h5>Deceased</h5>
             <h5>
-              Deceased <br />
-              {datapoint['date']}
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
             </h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailydeceased']}</h2>

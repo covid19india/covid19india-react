@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ChoroplethMap from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
-import {formatDate} from '../utils/common-functions';
+import {formatDate, formatDateAbsolute} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
 
 const mapMeta = {
@@ -52,7 +52,7 @@ const mapMeta = {
     name: 'Delhi',
     geoDataFile: `${MAPS_DIR}/delhi.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectName: 'delhi_1997-2012_district',
+    graphObjectName: 'delhi_district',
   },
   Karnataka: {
     name: 'Karnataka',
@@ -76,7 +76,7 @@ const mapMeta = {
     name: 'Gujarat',
     geoDataFile: `${MAPS_DIR}/gujarat.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectName: 'gujarat_district_2011',
+    graphObjectName: 'gujarat_district',
   },
   Haryana: {
     name: 'Haryana',
@@ -124,7 +124,7 @@ const mapMeta = {
     name: 'Manipur',
     geoDataFile: `${MAPS_DIR}/manipur.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectName: 'manipur_pre2016_districts',
+    graphObjectName: 'manipur_district',
   },
   Meghalaya: {
     name: 'Meghalaya',
@@ -176,9 +176,9 @@ const mapMeta = {
   },
   Telangana: {
     name: 'Telangana',
-    geoDataFile: `${MAPS_DIR}/telugana.json`,
+    geoDataFile: `${MAPS_DIR}/telangana.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectName: 'telugana',
+    graphObjectName: 'telangana_district',
   },
   Tripura: {
     name: 'Tripura',
@@ -355,11 +355,11 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
       <div className="header">
-        <h1>{currentMap.name} Map</h1>
+        <h1>{currentMap.name}</h1>
         <h6>
           {window.innerWidth <= 769 ? 'Tap' : 'Hover'} over a{' '}
-          {currentMap.mapType === MAP_TYPES.COUNTRY ? 'state' : 'district'} for
-          more details
+          {currentMap.mapType === MAP_TYPES.COUNTRY ? 'state/ut' : 'district'}{' '}
+          for more details
         </h6>
         {window.innerWidth <= 769 && (
           <h6 style={{marginTop: '1rem'}}>
@@ -425,7 +425,13 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
             }`}
           >
             <h6>Last Updated</h6>
-            <h3>
+            <h3
+              title={
+                isNaN(Date.parse(formatDate(lastupdatedtime)))
+                  ? ''
+                  : formatDateAbsolute(lastupdatedtime)
+              }
+            >
               {isNaN(Date.parse(formatDate(lastupdatedtime)))
                 ? ''
                 : formatDistance(
