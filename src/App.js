@@ -1,4 +1,4 @@
-import React from 'react';
+importt React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -16,6 +16,7 @@ import FAQ from './components/faq';
 import Banner from './components/banner';
 import PatientDB from './components/patientdb';
 import DeepDive from './components/deepdive';
+import Resources from './components/resources'
 
 const history = require('history').createBrowserHistory;
 
@@ -51,6 +52,13 @@ function App() {
       displayName: 'About',
       animationDelayForNavbar: 0.5,
     },
+    {
+      pageLink: '/resources',
+      view: Resources,
+      displayName: 'Helpful Resources',
+      animationDelayForNavbar: 0.7,
+    },
+    
   ];
 
   return (
