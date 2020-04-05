@@ -96,10 +96,8 @@ function Row(props) {
       <tr
         className={props.total ? 'state is-total' : 'state'}
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
-        onMouseLeave={
-          window.innerWidth > 768 ? () => props.onHighlightState?.() : null
-        }
-        touchstart={() => {
+        onMouseLeave={() => props.onHighlightState?.()}
+        onTouchStart={() => {
           props.setShowFloatingButton(true);
           return props.onHighlightState?.(state, props.index);
         }}
@@ -235,12 +233,8 @@ function Row(props) {
                   onMouseEnter={() =>
                     props.onHighlightDistrict?.(district, state, props.index)
                   }
-                  onMouseLeave={
-                    window.innerWidth > 768
-                      ? () => props.onHighlightState?.()
-                      : null
-                  }
-                  touchstart={() => {
+                  onMouseLeave={() => props.onHighlightDistrict?.()}
+                  onTouchStart={() => {
                     props.setShowFloatingButton(true);
                     return props.onHighlightDistrict?.(
                       district,
