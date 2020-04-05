@@ -800,7 +800,7 @@
     }
   },
   "Map": "ਨਕਸ਼ਾ",
-  "Hover over a shape for more details": "ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ {{shapeType}} hover &#39;ਤੇ ਹੋਵਰ ਕਰੋ",
+  "Hover over a shape for more details": "ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ {{shapeType}} {{actionType}} ਹੋਵਰ ਕਰੋ",
   "Districts unknown for people": "ਜ਼ਿਲ੍ਹੇ {{unknownCount}} ਲੋਕਾਂ ਲਈ ਅਣਜਾਣ ਹਨ",
   "Back": "ਵਾਪਸ",
   "Home": "ਘਰ",
@@ -819,5 +819,9 @@
   "Yesterday": "ਕੱਲ",
   "Compiled from State Goverment numbers": "ਰਾਜ ਸਰਕਾਰ ਦੇ ਨੰਬਰਾਂ ਤੋਂ ਕੰਪਾਇਲ ਕੀਤਾ",
   "Know More": "ਹੋਰ ਜਾਣੋ",
-  "About": "ਬਾਰੇ"
+  "About": "ਬਾਰੇ",
+  "Hover": "ਹੋਵਰ",
+  "Tap": "ਟੈਪ",
+  "Tap twice on states to view districts": "ਰਾਜਾਂ 'ਤੇ ਦੋ ਵਾਰ ਜ਼ਿਲੇ ਦੇਖਣ ਲਈ ਟੈਪ ਕਰੋ!",
+  "Crowdsourced list of Resources & Essentials from across India": "ਭਾਰਤ ਭਰ ਦੇ ਸਰੋਤਾਂ ਅਤੇ ਜ਼ਰੂਰੀ ਵਸਤਾਂ ਦੀ ਕ੍ਰਾdsਡ ਸੋਰਸਡ ਸੂਚੀ"
 }

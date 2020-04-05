@@ -800,7 +800,7 @@
     }
   },
   "Map": "ನಕ್ಷೆ",
-  "Hover over a shape for more details": "ಹೆಚ್ಚಿನ ವಿವರಗಳಿಗಾಗಿ {{shapeType}} hover ಮೇಲೆ ಸುಳಿದಾಡಿ",
+  "Hover over a shape for more details": "ಹೆಚ್ಚಿನ ವಿವರಗಳಿಗಾಗಿ {{shapeType}} {{actionType}} ಮೇಲೆ ಸುಳಿದಾಡಿ",
   "Districts unknown for people": "{{unknownCount}} ಜನರಿಗೆ ತಿಳಿದಿಲ್ಲದ ಜಿಲ್ಲೆಗಳು",
   "Back": "ಹಿಂದೆ",
   "Home": "ಮನೆ",
@@ -819,5 +819,9 @@
   "Yesterday": "ನಿನ್ನೆ",
   "Compiled from State Goverment numbers": "ರಾಜ್ಯ ಆಡಳಿತ ಸಂಖ್ಯೆಗಳಿಂದ ಸಂಕಲಿಸಲಾಗಿದೆ",
   "Know More": "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ",
-  "About": "ಬಗ್ಗೆ"
+  "About": "ಬಗ್ಗೆ",
+  "Hover": "ಹಾರಾಡುತ್ತಿರು",
+  "Tap": "ಟ್ಯಾಪ್ ಮಾಡಿ",
+  "Tap twice on states to view districts": "ಜಿಲ್ಲೆಗಳನ್ನು ವೀಕ್ಷಿಸಲು ರಾಜ್ಯಗಳ ಮೇಲೆ ಎರಡು ಬಾರಿ ಟ್ಯಾಪ್ ಮಾಡಿ!",
+  "Crowdsourced list of Resources & Essentials from across India": "ಭಾರತದಾದ್ಯಂತದ ಸಂಪನ್ಮೂಲಗಳು ಮತ್ತು ಎಸೆನ್ಷಿಯಲ್‌ಗಳ ಕ್ರೌಡ್‌ಸೋರ್ಸ್ಡ್ ಪಟ್ಟಿ"
 }

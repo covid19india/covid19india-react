@@ -800,7 +800,7 @@
     }
   },
   "Map": "ମାନଚିତ୍ର",
-  "Hover over a shape for more details": "ଅଧିକ ବିବରଣୀ ପାଇଁ ଏକ {{shapeType}} over ଉପରେ ଚଲାନ୍ତୁ",
+  "Hover over a shape for more details": "ଅଧିକ ବିବରଣୀ ପାଇଁ ଏକ {{shapeType}} {{actionType}} ଉପରେ ଚଲାନ୍ତୁ",
   "Districts unknown for people": "{{unknownCount}} ଲୋକଙ୍କ ପାଇଁ ଅଜ୍ଞାତ ଜିଲ୍ଲା",
   "Back": "ପଛକୁ",
   "Home": "ଘର",
@@ -819,5 +819,9 @@
   "Yesterday": "ଗତକାଲି",
   "Compiled from State Goverment numbers": "ରାଜ୍ୟ ସରକାର ନମ୍ବରରୁ ସଂକଳିତ |",
   "Know More": "ଅଧିକ ଜାଣନ୍ତୁ |",
-  "About": "ବିଷୟରେ"
+  "About": "ବିଷୟରେ",
+  "Hover": "ହୋଭର୍ |",
+  "Tap": "ଟ୍ୟାପ୍ କରନ୍ତୁ",
+  "Tap twice on states to view districts": "ଜିଲ୍ଲାଗୁଡିକୁ ଦେଖିବା ପାଇଁ ରାଜ୍ୟଗୁଡିକ ଉପରେ ଦୁଇଥର ଟ୍ୟାପ୍ କରନ୍ତୁ!",
+  "Crowdsourced list of Resources & Essentials from across India": "ସମଗ୍ର ଭାରତରୁ ଉତ୍ସ ଏବଂ ଆବଶ୍ୟକୀୟ ସାମଗ୍ରୀର କ୍ରାଉଡ୍ ସୋର୍ସଡ୍ ତାଲିକା |"
 }

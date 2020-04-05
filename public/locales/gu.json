@@ -800,7 +800,7 @@
     }
   },
   "Map": "નકશો",
-  "Hover over a shape for more details": "વધુ વિગતો માટે {{shapeType}} પર હોવર કરો",
+  "Hover over a shape for more details": "વધુ વિગતો માટે {{shapeType}} પર {{actionType}} કરો",
   "Districts unknown for people": "{{unknownCount}} લોકો ના જિલ્લાઓ અજાણ્યા",
   "Back": "પાછળ",
   "Home": "ખેર",
@@ -819,5 +819,9 @@
   "Yesterday": "ગઇકાલે",
   "Compiled from State Goverment numbers": "રાજ્ય સરકારના નંબરોથી સંકલિત",
   "Know More": "વધુ જાણો",
-  "About": "અમારા વિશે"
+  "About": "અમારા વિશે",
+  "Tap": "ટેપ",
+  "Hover": "હોવર",
+  "Tap twice on states to view districts": "રાજ્યો પર જિલ્લા જોવા માટે બે વાર ટેપ કરો!",
+  "Crowdsourced list of Resources & Essentials from across India": "ભારતભરના સંસાધનો અને આવશ્યક વસ્તુઓ ની સૂચિ (ક્રાઉડ સોર્સ)"
 }

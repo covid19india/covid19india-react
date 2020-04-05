@@ -800,7 +800,7 @@
     }
   },
   "Map": "نقشہ",
-  "Hover over a shape for more details": "مزید تفصیلات کے لئے ایک {{shapeType}} hover پر گھمائیں",
+  "Hover over a shape for more details": "مزید تفصیلات کے لئے ایک {{shapeType}} {{actionType}} پر گھمائیں",
   "Districts unknown for people": "اضلاع {{unknownCount}} لوگوں کے لئے نامعلوم ہیں",
   "Back": "پیچھے",
   "Home": "گھر",
@@ -819,5 +819,9 @@
   "Yesterday": "کل",
   "Compiled from State Goverment numbers": "اسٹیٹ گورنمنٹ نمبروں سے مرتب کیا گیا",
   "Know More": "زیادہ جانو",
-  "About": "کے بارے میں"
+  "About": "کے بارے میں",
+  "Hover": "ہوور",
+  "Tap": "نل",
+  "Tap twice on states to view districts": "ریاستوں پر اضلاع دیکھنے کے لئے دو بار تھپتھپائیں!",
+  "Crowdsourced list of Resources & Essentials from across India": "ہندوستان بھر کے وسائل اور لوازمات کی فہرست کو بھیڑ سورس"
 }

@@ -800,7 +800,7 @@
     }
   },
   "Map": "नकाशा",
-  "Hover over a shape for more details": "अधिक तपशीलांसाठी {{shapeType}} hover वर फिरवा",
+  "Hover over a shape for more details": "अधिक तपशीलांसाठी {{shapeType}} {{actionType}} वर फिरवा",
   "Districts unknown for people": "{{unknownCount}} लोकांसाठी जिल्हा अज्ञात आहेत",
   "Back": "मागे",
   "Home": "मुख्यपृष्ठ",
@@ -819,5 +819,9 @@
   "Yesterday": "काल",
   "Compiled from State Goverment numbers": "राज्य सरकार क्रमांकांकडून संकलित",
   "Know More": "अधिक जाणून घ्या",
-  "About": "बद्दल"
+  "About": "बद्दल",
+  "Hover": "फिरवा",
+  "Tap": "टॅप",
+  "Tap twice on states to view districts": "जिल्हे पाहण्यासाठी दोनदा टॅप करा!",
+  "Crowdsourced list of Resources & Essentials from across India": "भारतभरातील संसाधने व जीवनावश्यक वस्तूंची क्राऊडसोर्स यादी"
 }

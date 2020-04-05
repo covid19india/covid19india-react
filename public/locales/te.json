@@ -800,7 +800,7 @@
     }
   },
   "Map": "మ్యాప్",
-  "Hover over a shape for more details": "మరిన్ని వివరాల కోసం {{shapeType}} hover పై ఉంచండి",
+  "Hover over a shape for more details": "మరిన్ని వివరాల కోసం {{shapeType}} {{actionType}} పై ఉంచండి",
   "Districts unknown for people": "{{unknownCount}} వ్యక్తులకు తెలియని జిల్లాలు",
   "Back": "తిరిగి",
   "Home": "హోమ్",
@@ -819,5 +819,9 @@
   "Yesterday": "నిన్న",
   "Compiled from State Goverment numbers": "రాష్ట్ర పాలన సంఖ్యల నుండి సంకలనం చేయబడింది",
   "Know More": "మరింత తెలుసుకోండి",
-  "About": "గురించి"
+  "About": "గురించి",
+  "Hover": "హోవర్",
+  "Tap": "కుళాయి",
+  "Tap twice on states to view districts": "జిల్లాలను వీక్షించడానికి రాష్ట్రాలపై రెండుసార్లు నొక్కండి!",
+  "Crowdsourced list of Resources & Essentials from across India": "భారతదేశం అంతటా ఉన్న వనరులు & ఎస్సెన్షియల్స్ యొక్క క్రౌడ్ సోర్స్ జాబితా"
 }
