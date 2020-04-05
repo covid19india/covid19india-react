@@ -906,15 +906,16 @@ table {
 
     .stats {
       background: $cherry-light;
+      position: relative;
       color: $cherry;
-      padding: 0.5rem;
       border-radius: 5px;
       display: flex;
       flex-direction: column;
       margin-left: 0.25rem;
       margin-right: 0.25rem;
       margin-bottom: 0.5rem;
-      width: 100%;
+      flex: 1;
+      padding: 0.25rem;
 
       .stats-bottom {
         display: flex;
@@ -964,15 +965,22 @@ table {
 
       &.is-purple {
         background: $purple-light;
+        padding-right: 1rem;
         h5,
-        h6 { color: $purple; }
+        h6 { 
+          color: $purple-mid; 
+          &.timestamp {
+            margin: 0;
+            font-weight: 900;
+          }
+        }
 
         h1 { color: $purple; }
 
         svg {
           position: absolute;
           right: 0.35rem;
-          top: 0.25rem;
+          top: 0;
           stroke-width: 3;
           width: 12px;
           stroke: $purple-mid;
@@ -2213,6 +2221,14 @@ select {
   .timeseries {
     .svg-parent {
       width: 100%;
+    }
+  }
+
+  .map-stats {
+    .stats { 
+      .timestamp {
+        width: 4.5rem;
+      }
     }
   }
 

@@ -359,28 +359,11 @@ export default function ({
           {currentMap.mapType === MAP_TYPES.COUNTRY ? 'state' : 'district'} for
           more details
         </h6>
-        {window.innerWidth <= 769 && (
-          <h6 style={{marginTop: '1rem'}}>
-            <span
-              style={{
-                fontWeight: 900,
-                color: '#fff',
-                background: '#000',
-                padding: '0.25rem',
-                borderRadius: '2.5px',
-                marginRight: '0.25rem',
-              }}
-            >
-              Update!
-            </span>{' '}
-            Tap twice on states to view districts!
-          </h6>
-        )}
       </div>
 
       <div className="map-stats">
         <div className="stats">
-          <h5>Confirmed</h5>
+          <h5>{window.innerWidth <= 769 ? 'Cnfmd' : 'Confirmed'}</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.confirmed}</h1>
             <h6>{}</h6>
@@ -388,7 +371,7 @@ export default function ({
         </div>
 
         <div className="stats is-blue">
-          <h5>Active</h5>
+          <h5>{window.innerWidth <= 769 ? 'Actv' : 'Active'}</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.active || ''}</h1>
             <h6>{}</h6>
@@ -396,7 +379,7 @@ export default function ({
         </div>
 
         <div className="stats is-green">
-          <h5>Recovered</h5>
+          <h5>{window.innerWidth <= 769 ? 'Rcvrd' : 'Recovered'}</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.recovered || ''}</h1>
             <h6>{}</h6>
@@ -404,7 +387,7 @@ export default function ({
         </div>
 
         <div className="stats is-gray">
-          <h5>Deceased</h5>
+          <h5>{window.innerWidth <= 769 ? 'Dcsd' : 'Deceased'}</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.deaths || ''}</h1>
             <h6>{}</h6>
@@ -412,13 +395,13 @@ export default function ({
         </div>
 
         <div className="stats is-purple tested">
-          <h5>Tested</h5>
+          <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
           <div className="stats-bottom">
             <h1>{testObj?.totaltested || '-'}</h1>
           </div>
-          <h6>
+          <h6 className="timestamp">
             {!isNaN(new Date(testObj?.updatedon))
-              ? ` As of ${format(
+              ? `As of ${format(
                   parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
                   'dd MMM'
                 )}`
