@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
+import * as Icon from 'react-feather';
 import {
   Container,
   Button,
@@ -123,7 +124,7 @@ function Table(props) {
                 color: lightColors.white,
               }}
             >
-              View &#8595;
+              <Icon.ArrowDownCircle />
             </Button>
           </ScrollIntoView>
         </Container>
