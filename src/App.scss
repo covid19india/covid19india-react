@@ -164,6 +164,89 @@ $pink-mid: #ffa8cb99;
   }
 }
 
+$indices: (
+  0: 50ms,
+  1: 100ms,
+  2: 150ms,
+  3: 200ms,
+  4: 250ms,
+  5: 300ms,
+  6: 350ms,
+  7: 400ms,
+  8: 450ms,
+  9: 500ms,
+  10: 550ms,
+  11: 600ms,
+  12: 650ms,
+  13: 700ms,
+  14: 750ms,
+  15: 800ms,
+  16: 850ms,
+  17: 900ms,
+  18: 950ms,
+  19: 1000ms,
+  20: 1050ms,
+  21: 1100ms,
+  22: 1150ms,
+  23: 1200ms,
+  24: 1250ms,
+  25: 1300ms,
+  26: 1350ms,
+  27: 1400ms,
+  28: 1450ms,
+  29: 1500ms,
+  30: 1550ms,
+  31: 1600ms,
+  32: 1650ms,
+  33: 1700ms,
+  34: 1750ms,
+  35: 1800ms,
+  36: 1850ms,
+  37: 1900ms,
+  38: 1950ms,
+  39: 2000ms,
+  40: 2050ms,
+  41: 2100ms,
+  42: 2150ms,
+  43: 2200ms,
+  44: 2250ms,
+  45: 2300ms,
+  46: 2350ms,
+  47: 2400ms,
+  48: 2450ms,
+  49: 2500ms,
+  50: 2550ms,
+  51: 2600ms,
+  52: 2650ms,
+  53: 2700ms,
+  54: 2750ms,
+  55: 2800ms,
+  56: 2850ms,
+  57: 2900ms,
+  58: 2950ms,
+  59: 3000ms,
+  60: 3050ms,
+  61: 3100ms,
+  62: 3150ms,
+  63: 3200ms,
+  64: 3250ms,
+  65: 3300ms,
+  66: 3350ms,
+  67: 3400ms,
+  68: 3450ms,
+  69: 3500ms,
+  70: 3550ms,
+  71: 3600ms,
+  72: 3650ms,
+  73: 3700ms,
+  74: 3750ms,
+  75: 3800ms,
+  76: 3850ms,
+  77: 3900ms,
+  78: 3950ms,
+  79: 4000ms
+);
+
 body {
   padding: 0;
   margin: 0;
@@ -739,6 +822,20 @@ table {
 
     .district {
       transform: translateX(1rem);
+      display: none;
+
+      @each $index, $delay in $indices {
+        &.reveal--#{$index} {
+          display: table-row;
+          td {
+            animation: rotation 300ms linear $delay;
+          }
+        }
+      }
+
+      &.even {
+        background: #f8f9fa;
+      }
     }
   }
 
@@ -2359,5 +2456,15 @@ select {
   100% {
     opacity: 0;
     transform: translateY(20px);
+  }
+}
+
+@keyframes rotation {
+  from {
+    transform: rotateX(180deg);
+  }
+
+  to {
+    transform: rotateX(359deg);
   }
 }

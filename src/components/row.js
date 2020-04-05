@@ -221,11 +221,9 @@ function Row(props) {
               return (
                 <tr
                   key={index}
-                  className={`district`}
-                  style={{
-                    display: props.reveal && !props.total ? '' : 'none',
-                    background: index % 2 === 0 ? '#f8f9fa' : '',
-                  }}
+                  className={`district ${
+                    props.reveal && !props.total ? `reveal--${index}` : ''
+                  } ${index % 2 === 0 ? 'even' : ''}`}
                   onMouseEnter={() =>
                     props.onHighlightDistrict?.(district, state, props.index)
                   }
@@ -254,8 +252,13 @@ function Row(props) {
 
       {sortedDistricts?.Unknown && (
         <tr
-          className={`district`}
-          style={{display: props.reveal && !props.total ? '' : 'none'}}
+          className={`district ${
+            props.reveal && !props.total
+              ? `reveal--${Object.keys(sortedDistricts).length - 1}`
+              : ''
+          } ${
+            (Object.keys(sortedDistricts).length - 1) % 2 === 0 ? 'even' : ''
+          }`}
         >
           <td style={{fontWeight: 600}}>Unknown</td>
           <td>
