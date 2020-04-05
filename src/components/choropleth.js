@@ -110,7 +110,9 @@ function ChoroplethMap({
         .text(function (d) {
           const value = mapData[d.properties[propertyField]] || 0;
           return (
-            parseFloat(100 * (value / (statistic.total || 0.001))).toFixed(2) +
+            Number(
+              parseFloat(100 * (value / (statistic.total || 0.001))).toFixed(2)
+            ).toString() +
             '% from ' +
             toTitleCase(d.properties[propertyField])
           );
@@ -208,10 +210,13 @@ function ChoroplethMap({
     })();
   }, [mapMeta.geoDataFile, statistic, renderData, ready]);
 
-  const highlightRegionInMap = (name, mapType) => {
-    const propertyField = propertyFieldMap[mapType];
+  const highlightRegionInMap = (name) => {
     const paths = d3.selectAll('.path-region');
     paths.classed('map-hover', (d, i, nodes) => {
+      const propertyField =
+        'district' in d.properties
+          ? propertyFieldMap['state']
+          : propertyFieldMap['country'];
       if (name === d.properties[propertyField]) {
         nodes[i].parentNode.appendChild(nodes[i]);
         return true;
@@ -221,8 +226,8 @@ function ChoroplethMap({
   };
 
   useEffect(() => {
-    highlightRegionInMap(selectedRegion, mapMeta.mapType);
-  }, [mapMeta.mapType, svgRenderCount, selectedRegion]);
+    highlightRegionInMap(selectedRegion);
+  }, [svgRenderCount, selectedRegion]);
 
   return (
     <div className="svg-parent">

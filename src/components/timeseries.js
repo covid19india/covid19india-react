@@ -98,8 +98,14 @@ function TimeSeries(props) {
         // apply mode, logMode, etc -- determine scales once and for all
         const applyLogMode = (maxY) =>
           logMode && logCharts.has(type)
-            ? d3.scaleLog().domain([1, maxY]).nice()
-            : d3.scaleLinear().domain([-maxY / 10, maxY]);
+            ? d3
+                .scaleLog()
+                .domain([1, 1.1 * maxY])
+                .nice()
+            : d3
+                .scaleLinear()
+                .domain([0, 1.1 * maxY])
+                .nice();
 
         return (mode
           ? applyLogMode(
@@ -113,9 +119,11 @@ function TimeSeries(props) {
 
       const y = (dataTypeIdx, day) => {
         // Scaling mode filters
-        const y = yScales[dataTypeIdx];
+        const scale = yScales[dataTypeIdx];
         const dType = dataTypes[dataTypeIdx];
-        return y(logMode ? Math.max(1, day[dType]) : day[dType]); // max(1,y) for logmode
+        return scale(
+          logMode && logCharts.has(dType) ? Math.max(1, day[dType]) : day[dType]
+        ); // max(1,y) for logmode
       };
 
       /* Focus dots */
@@ -155,7 +163,8 @@ function TimeSeries(props) {
       }
 
       const tickCount = (scaleIdx) => {
-        return logMode
+        const dType = dataTypes[scaleIdx];
+        return logMode && logCharts.has(dType)
           ? Math.ceil(Math.log10(yScales[scaleIdx].domain()[1]))
           : 5;
       };
@@ -177,7 +186,7 @@ function TimeSeries(props) {
               .axisRight(yScales[i])
               .ticks(tickCount(i))
               .tickPadding(5)
-              .tickFormat(d3.format('.2s'))
+              .tickFormat(d3.format('~s'))
           );
 
         /* Focus dots */
@@ -267,6 +276,13 @@ function TimeSeries(props) {
     }
   }, [timeseries, graphData]);
 
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  const lastDate = new Date(datapoint['date'] + '2020');
+  const isYesterday =
+    lastDate.getMonth() === yesterdayDate.getMonth() &&
+    lastDate.getDate() === yesterdayDate.getDate();
+
   return (
     <div
       className="TimeSeries-Parent fadeInUp"
@@ -280,7 +296,7 @@ function TimeSeries(props) {
           <div className="stats">
             <h5>Confirmed</h5>
             <h5>
-              {timeseries.length - 1 === index
+              {isYesterday
                 ? `${datapoint['date']} Yesterday`
                 : datapoint['date']}
             </h5>
@@ -313,7 +329,7 @@ function TimeSeries(props) {
           <div className="stats is-green">
             <h5>Recovered</h5>
             <h5>
-              {timeseries.length - 1 === index
+              {isYesterday
                 ? `${datapoint['date']} Yesterday`
                 : datapoint['date']}
             </h5>
@@ -346,7 +362,7 @@ function TimeSeries(props) {
           <div className="stats is-gray">
             <h5>Deceased</h5>
             <h5>
-              {timeseries.length - 1 === index
+              {isYesterday
                 ? `${datapoint['date']} Yesterday`
                 : datapoint['date']}
             </h5>
@@ -384,7 +400,7 @@ function TimeSeries(props) {
           <div className="stats">
             <h5>Confirmed</h5>
             <h5>
-              {timeseries.length - 1 === index
+              {isYesterday
                 ? `${datapoint['date']} Yesterday`
                 : datapoint['date']}
             </h5>
@@ -417,7 +433,7 @@ function TimeSeries(props) {
           <div className="stats is-green">
             <h5>Recovered</h5>
             <h5>
-              {timeseries.length - 1 === index
+              {isYesterday
                 ? `${datapoint['date']} Yesterday`
                 : datapoint['date']}
             </h5>
@@ -450,7 +466,7 @@ function TimeSeries(props) {
           <div className="stats is-gray">
             <h5>Deceased</h5>
             <h5>
-              {timeseries.length - 1 === index
+              {isYesterday
                 ? `${datapoint['date']} Yesterday`
                 : datapoint['date']}
             </h5>
