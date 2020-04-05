@@ -164,7 +164,7 @@ $pink-mid: #ffa8cb99;
   }
 }
 
-$indices: (
+$indicesToDelay: (
   0: 50ms,
   1: 100ms,
   2: 150ms,
@@ -824,7 +824,7 @@ table {
       transform: translateX(1rem);
       display: none;
 
-      @each $index, $delay in $indices {
+      @each $index, $delay in $indicesToDelay {
         &.reveal--#{$index} {
           display: table-row;
           td {
