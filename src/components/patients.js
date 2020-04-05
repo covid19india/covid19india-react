@@ -12,6 +12,11 @@ function Patients(props) {
     setPatients(props.patients);
   }, [props.patients]);
 
+  useEffect(() => {
+    if (modal) document.body.style.overflow = 'hidden';
+    if (!modal) document.body.style.overflow = 'unset';
+  }, [modal]);
+
   const parseByDate = useCallback((patients) => {
     const log = {};
     for (let i = 0; i < patients.length; i++) {
