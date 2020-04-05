@@ -15,6 +15,7 @@ node_modules/
 /build
 
 # misc
+.npmrc
 .DS_Store
 .env.local
 .env.development.local
