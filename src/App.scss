@@ -673,6 +673,22 @@ table {
           vertical-align: -0.25px;
         }
       }
+
+      a {
+        height: 1px;
+        svg {
+          width: 12px;
+          stroke-width: 3px;
+          align-self: center;
+          color: $gray-mid;
+          transition: all 0.2s ease-in-out;
+          vertical-align: -0.435rem;
+          margin-left: 0.25rem;
+          &:hover {
+            stroke: $gray;
+          }
+        }
+      }
     }
 
     td:first-child {

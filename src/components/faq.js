@@ -8,6 +8,10 @@ function FAQ(props) {
     getFAQs();
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const getFAQs = () => {
     axios
       .get('https://api.covid19india.org/website_data.json')
