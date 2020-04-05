@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-thin-webfont.eot');
-  src:
-    url('fonts/Archia/archia-thin-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-thin-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-thin-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-thin-webfont.woff') format('woff'),
     url('fonts/Archia/archia-thin-webfont.ttf') format('truetype');
@@ -13,8 +13,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-light-webfont.eot');
-  src:
-    url('fonts/Archia/archia-light-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-light-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-light-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-light-webfont.woff') format('woff'),
     url('fonts/Archia/archia-light-webfont.ttf') format('truetype');
@@ -25,8 +25,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-regular-webfont.eot');
-  src:
-    url('fonts/Archia/archia-regular-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-regular-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-regular-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-regular-webfont.woff') format('woff'),
     url('fonts/Archia/archia-regular-webfont.ttf') format('truetype');
@@ -37,8 +37,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-medium-webfont.eot');
-  src:
-    url('fonts/Archia/archia-medium-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-medium-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-medium-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-medium-webfont.woff') format('woff'),
     url('fonts/Archia/archia-medium-webfont.ttf') format('truetype');
@@ -49,8 +49,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-semibold-webfont.eot');
-  src:
-    url('fonts/Archia/archia-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-semibold-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-semibold-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-semibold-webfont.woff') format('woff'),
     url('fonts/Archia/archia-semibold-webfont.ttf') format('truetype');
@@ -61,8 +61,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-bold-webfont.eot');
-  src:
-    url('fonts/Archia/archia-bold-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-bold-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-bold-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-bold-webfont.woff') format('woff'),
     url('fonts/Archia/archia-bold-webfont.ttf') format('truetype');
@@ -107,6 +107,7 @@ $green: #28a745;
 $green-light: #28a74520;
 $green-hover: #28a74530;
 $green-mid: #28a74599;
+$green-light-opaque: #e4f4e8ee;
 $teal: #20c997;
 $cyan: #17a2b8;
 $white: #fff;
@@ -157,10 +158,14 @@ $pink-mid: #ffa8cb99;
 @mixin levelColor($color) {
   .is-#{$color} {
 
-    h1 { color: $color; }
+    h1 {
+      color: $color;
+    }
 
     h4,
-    h5 { color: #{$color}-mid; }
+    h5 {
+      color: #{$color}-mid;
+    }
   }
 }
 
@@ -211,6 +216,40 @@ h6 {
   font-size: 11px !important;
   font-weight: 600;
   text-transform: uppercase;
+}
+
+.select-dropdown {
+  position: relative;
+  background: $gray-light;
+  width: auto;
+  border-radius: 5px;
+  transition: background 0.2s ease-in-out;
+  &:hover {
+    background: $gray-hover;
+    select {
+      color: $gray;
+    }
+  }
+
+  select {
+    text-align: center;
+    text-align-last: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    width: auto;
+    padding: 0.5rem;
+    border: 0;
+    background-color: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    color: $gray-mid;
+    text-transform: uppercase;
+    outline: none;
+    font-weight: 800;
+    transition: color 0.2s ease-in-out;
+  }
 }
 
 .arrow-up {
@@ -308,6 +347,11 @@ h6 {
     }
   }
 
+  .navbar-right {
+    margin-right: 5rem;
+    align-self: center;
+  }
+
   .focused {
     color: $gray;
   }
@@ -329,6 +373,7 @@ h6 {
   align-self: center;
   justify-content: space-between;
   padding-top: 2rem;
+  margin-top:  1rem;
   margin-bottom: 1rem;
 
   h1,
@@ -435,7 +480,6 @@ h6 {
 }
 
 .telegram {
-  width: 15.5rem;
   background: $gray-light !important;
   color: #08c !important;
   padding-left: 0.65rem;
@@ -510,31 +554,47 @@ h6 {
   }
 
   .is-cherry {
-    h1 { color: $cherry; }
+    h1 {
+      color: $cherry;
+    }
 
     h4,
-    h5 { color: $cherry-mid; }
+    h5 {
+      color: $cherry-mid;
+    }
   }
 
   .is-blue {
-    h1 { color: $blue; }
+    h1 {
+      color: $blue;
+    }
 
     h4,
-    h5 { color: $blue-mid; }
+    h5 {
+      color: $blue-mid;
+    }
   }
 
   .is-green {
-    h1 { color: $green; }
+    h1 {
+      color: $green;
+    }
 
     h4,
-    h5 { color: $green-mid; }
+    h5 {
+      color: $green-mid;
+    }
   }
 
   .is-gray {
-    h1 { color: $gray; }
+    h1 {
+      color: $gray;
+    }
 
     h4,
-    h5 { color: $gray-mid; }
+    h5 {
+      color: $gray-mid;
+    }
   }
 }
 
@@ -560,7 +620,6 @@ abbr {
 
 .table-fineprint {
   text-align: right;
-  margin: 0 0 0 0;
   color: $gray-mid;
   margin-bottom: 0.25rem;
   margin-right: 0.25rem;
@@ -681,15 +740,15 @@ table {
       word-wrap: break-word;
     }
 
-    .state-last-update{
+    .state-last-update {
       background: transparent;
       transform: translateX(1rem);
       &:hover{
         background: #fff !important;
       }
 
-      td{
-        .last-update{
+      td {
+        .last-update {
           text-align: left;
           display: flex;
           flex-direction: row;
@@ -785,10 +844,6 @@ table {
   z-index: 10;
 }
 
-.back-button {
-  z-index: 11;
-}
-
 .map-default {
   stroke: none;
 }
@@ -847,16 +902,11 @@ table {
   }
 
   .meta {
+    position: relative;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     height: 1rem;
-
-    .district-last-update{
-      position: absolute;
-      right: 0;
-      bottom: 0;
-    }
 
     h2 {
       margin: 0;
@@ -875,6 +925,12 @@ table {
       position: absolute;
       top: 17rem;
       width: 5rem;
+    }
+
+    .meta-right {
+      display: flex;
+      align-items: baseline;
+      flex-direction: row;
     }
   }
 
@@ -926,33 +982,49 @@ table {
       &.is-green {
         background: $green-light;
         h5,
-        h6 { color: $green-mid; }
+        h6 {
+          color: $green-mid;
+        }
 
-        h1 { color: $green; }
+        h1 {
+          color: $green;
+        }
       }
 
       &.is-blue {
         background: $blue-light;
         h5,
-        h6 { color: $blue-mid; }
+        h6 {
+          color: $blue-mid;
+        }
 
-        h1 { color: $blue; }
+        h1 {
+          color: $blue;
+        }
       }
 
       &.is-gray {
         background: $gray-light;
         h5,
-        h6 { color: $gray-mid; }
+        h6 {
+          color: $gray-mid;
+        }
 
-        h1 { color: $gray; }
+        h1 {
+          color: $gray;
+        }
       }
 
       &.is-yellow {
         background: $warning;
         h5,
-        h6 { color: $white; }
+        h6 {
+          color: $white;
+        }
 
-        h1 { color: $white; }
+        h1 {
+          color: $white;
+        }
       }
 
       &:first-child {
@@ -1030,11 +1102,38 @@ table {
       font-weight: 900;
       z-index: 99;
       color: $gray-mid;
+
+    input.switch {
+      position: relative;
+      appearance: none;
+      outline: none;
+      margin: 0;
+      cursor: pointer;
+      width: 22px;
+      height: 12px;
+      background-color: #fff;
+      border: 1px solid #d9dadc;
+      border-radius: 10px;
+      box-shadow: inset -10px 0 0 0 #fff;
+    }
+
+    input.switch::after {
+      content: '';
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      width: 9px;
+      height: 9px;
+      background-color: transparent;
+      border-radius: 50%;
+      box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
     }
 
     & > * {
       align-self: center;
     }
+
+  }
 
     .timeseries-mode, .timeseries-logmode {
       margin-left: 1rem;
@@ -1051,7 +1150,7 @@ table {
         background-color: #fff;
         border: 2px solid #d9dadc;
         border-radius: 10px;
-        transition: all 200ms ease-in-out;
+        transition: all 300ms ease-in-out;
       }
   
       input.switch::after {
@@ -1063,16 +1162,18 @@ table {
         height: 10px;
         background-color: $gray-mid;
         border-radius: 50%;
+        transition: all 300ms ease-in-out;
       }
   
       input.switch:checked {
         background-color: $gray-mid;
-        transition: all 200ms ease-in-out;
+        transition: all 300ms ease-in-out;
       }
   
       input.switch:checked::after {
         left: 10px;
         background-color: $light;
+        transition: all 300ms ease-in-out;
       }
       
       label{
@@ -1109,7 +1210,7 @@ table {
     position: absolute;
     top: 0.5rem;
     left: 0.5rem;
-    width: 5rem;
+    width: 6rem;
     border-radius: 3px;
     display: flex;
     flex-direction: column;
@@ -1141,24 +1242,36 @@ table {
     }
 
     &.is-green {
-      h5 { color: $green-mid; }
+      h5 {
+        color: $green-mid;
+      }
 
       h2,
-      h6 { color: $green; }
+      h6 {
+        color: $green;
+      }
     }
 
     &.is-gray {
-      h5 { color: $gray-mid; }
+      h5 {
+        color: $gray-mid;
+      }
 
       h2,
-      h6 { color: $gray; }
+      h6 {
+        color: $gray;
+      }
     }
 
     &.is-blue {
-      h5 { color: $blue-mid; }
+      h5 {
+        color: $blue-mid;
+      }
 
       h2,
-      h6 { color: $blue; }
+      h6 {
+        color: $blue;
+      }
     }
   }
 
@@ -1292,7 +1405,12 @@ footer {
     text-align: center;
   }
 
-  h5 { margin: 0; margin-top: 1rem; margin-bottom: 0.5rem; color: $gray; }
+  h5 {
+    margin: 0;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: $gray;
+  }
 
   img {
     width: 2rem;
@@ -2128,6 +2246,37 @@ select {
   }
 }
 
+.snackbar {
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  background: $green-light-opaque;
+  border-radius: 5px;
+  padding: 1rem;
+  color: $green;
+  h4 {
+    margin: 0;
+  }
+
+  & > * {
+    align-self: center;
+  }
+
+  svg {
+    width: 16px;
+    stroke-width: 3;
+    stroke: $green-mid;
+    cursor: pointer;
+    margin-left: 1rem;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      stroke: $green;
+    }
+  }
+}
+
 @media (max-width: 769px) {
   .TimeSeries,
   table,
@@ -2178,6 +2327,10 @@ select {
       margin-left: 1rem;
       margin-right: -1rem;
       cursor: pointer;
+    }
+
+    .navbar-right {
+      margin-right: 1rem;
     }
   }
 
@@ -2286,6 +2439,48 @@ select {
       width: 100%;
     }
   }
+
+  .Navbar {
+    justify-content: space-between;
+    .navbar-right {
+    }
+
+    .navbar-burger {
+      align-self: center;
+      margin-left: 1rem;
+      cursor: pointer;
+      svg {
+        color: $gray-mid;
+        &:hover {
+          stroke: $gray;
+        }
+      }
+    }
+
+    .side-navbar {
+      position: fixed;
+      height: 100vh;
+      width: 7.5rem;
+      padding-top: 5rem;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      padding-left: 1rem;
+      background: $white;
+      border-right: 1px solid $gray-light;
+      a {
+        font-family: 'archia';
+        text-decoration: none;
+        color: $gray;
+        margin-bottom: 1rem;
+      } svg {
+        position: absolute;
+        top: -3.5rem;
+        stroke: $gray-mid;
+        cursor: pointer;
+      }
+    }
+  }
 }
 
 .iframe-container {
@@ -2359,5 +2554,23 @@ select {
   100% {
     opacity: 0;
     transform: translateY(20px);
+  }
+}
+
+.fadeRight {
+  animation-name: fadeRight;
+  animation-duration: 0.45s;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeRight {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
   }
 }

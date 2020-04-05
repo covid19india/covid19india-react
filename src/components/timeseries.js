@@ -1,7 +1,9 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as d3 from 'd3';
+import {useTranslation} from 'react-i18next';
 
 function TimeSeries(props) {
+  const {t} = useTranslation();
   const [timeseries, setTimeseries] = useState([]);
   const [datapoint, setDatapoint] = useState({});
   const [index, setIndex] = useState(10);
@@ -294,10 +296,10 @@ function TimeSeries(props) {
       >
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed</h5>
+            <h5>{t('Confirmed')}</h5>
             <h5>
               {isYesterday
-                ? `${datapoint['date']} Yesterday`
+                ? `${datapoint['date']} ${t('Yesterday')}`
                 : datapoint['date']}
             </h5>
             <div className="stats-bottom">
@@ -327,10 +329,10 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>Recovered</h5>
+            <h5>{t('Recovered')}</h5>
             <h5>
               {isYesterday
-                ? `${datapoint['date']} Yesterday`
+                ? `${datapoint['date']} ${t('Yesterday')}`
                 : datapoint['date']}
             </h5>
             <div className="stats-bottom">
@@ -360,10 +362,10 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
-            <h5>Deceased</h5>
+            <h5>{t('Deceased')}</h5>
             <h5>
               {isYesterday
-                ? `${datapoint['date']} Yesterday`
+                ? `${datapoint['date']} ${t('Yesterday')}`
                 : datapoint['date']}
             </h5>
             <div className="stats-bottom">
@@ -398,10 +400,10 @@ function TimeSeries(props) {
       >
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed</h5>
+            <h5>{t('Confirmed')}</h5>
             <h5>
               {isYesterday
-                ? `${datapoint['date']} Yesterday`
+                ? `${datapoint['date']} ${t('Yesterday')}`
                 : datapoint['date']}
             </h5>
             <div className="stats-bottom">
@@ -431,10 +433,10 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>Recovered</h5>
+            <h5>{t('Recovered')}</h5>
             <h5>
               {isYesterday
-                ? `${datapoint['date']} Yesterday`
+                ? `${datapoint['date']} ${t('Yesterday')}`
                 : datapoint['date']}
             </h5>
             <div className="stats-bottom">
@@ -464,10 +466,10 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
-            <h5>Deceased</h5>
+            <h5>{t('Deaths')}</h5>
             <h5>
               {isYesterday
-                ? `${datapoint['date']} Yesterday`
+                ? `${datapoint['date']} ${t('Yesterday')}`
                 : datapoint['date']}
             </h5>
             <div className="stats-bottom">

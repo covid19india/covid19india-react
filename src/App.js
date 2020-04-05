@@ -14,11 +14,16 @@ import Navbar from './components/navbar';
 import Links from './components/links';
 import FAQ from './components/faq';
 import Banner from './components/banner';
+import Popup from './components/popup';
 /* import PatientDB from './components/patientdb';*/
+
+import {useTranslation} from 'react-i18next';
 
 const history = require('history').createBrowserHistory;
 
 function App() {
+  const {t} = useTranslation();
+
   const pages = [
     {
       pageLink: '/',
@@ -39,9 +44,9 @@ function App() {
       animationDelayForNavbar: 0.5,
     },
     {
-      pageLink: '/faq',
+      pageLink: '/about',
       view: FAQ,
-      displayName: 'FAQ',
+      displayName: 'About',
       animationDelayForNavbar: 0.6,
     },
   ];
@@ -79,11 +84,15 @@ function App() {
           alt="https://www.covid19india.org | Coronavirus cases live dashboard"
         />*/}
 
-        <h5>We stand with everyone fighting on the frontlines</h5>
+        <h5>{t('We stand with everyone fighting on the frontlines')}</h5>
         <div className="link">
-          <a href="https://github.com/covid19india"
-          target="_blank"
-          rel="noopener noreferrer">covid19india</a>
+          <a
+            href="https://github.com/covid19india"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            covid19india
+          </a>
         </div>
         <a
           href="https://github.com/covid19india/covid19india-react"
@@ -123,6 +132,8 @@ function App() {
           <span>Join Telegram to Collaborate!</span>
         </a>
       </footer>
+
+      <Popup />
     </div>
   );
 }

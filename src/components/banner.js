@@ -1,7 +1,10 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import axios from 'axios';
 
+import {useTranslation} from 'react-i18next';
+
 function Banner(props) {
+  const {t} = useTranslation();
   const [snippets, setSnippets] = useState([]);
   const [snippet, setSnippet] = useState();
 
@@ -42,9 +45,9 @@ function Banner(props) {
     <div
       onClick={() => snippetChooser(0, snippets.length - 1)}
       className="Banner fadeInUp"
-      style={{animationDelay: '0.2s'}}
+      style={{animationDelay: '0.8s'}}
     >
-      <div className="snippet">{snippet ? snippet.banner : ''} &nbsp;</div>
+      <div className="snippet">{snippet ? t(snippet.banner) : ''} &nbsp;</div>
     </div>
   );
 }

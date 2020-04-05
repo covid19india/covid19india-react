@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ChoroplethMap from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
+import {useTranslation} from 'react-i18next';
 import {formatDate, formatDateAbsolute} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
 
@@ -209,8 +210,10 @@ const mapMeta = {
 
 export default function ({states, stateDistrictWiseData, regionHighlighted}) {
   const [selectedRegion, setSelectedRegion] = useState({});
+  const {t} = useTranslation();
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
+  const [currentStateName, setCurrentStatename] = useState();
 
   useEffect(() => {
     const region = getRegionFromState(states[1]);
@@ -310,7 +313,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
     if (!districtData) {
       return;
     }
-    const region = {...districtData};
+    const region = {...districtData, mapType: MAP_TYPES.DISTRICT};
     if (!region.name) {
       region.name = name;
     }
@@ -321,7 +324,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
     if (!state) {
       return;
     }
-    const region = {...state};
+    const region = state;
     if (!region.name) {
       region.name = region.state;
     }
@@ -338,6 +341,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
       if (newMap.mapType === MAP_TYPES.COUNTRY) {
         setHoveredRegion(states[1].state, newMap);
       } else if (newMap.mapType === MAP_TYPES.STATE) {
+        setCurrentStatename(name);
         const districtData = (stateDistrictWiseData[name] || {districtData: {}})
           .districtData;
         const topDistrict = Object.keys(districtData)
@@ -350,16 +354,20 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
     },
     [setHoveredRegion, stateDistrictWiseData, states]
   );
-  const {name, lastupdatedtime} = currentHoveredRegion;
+  const {name, lastupdatedtime, mapType} = currentHoveredRegion;
 
   return (
-    <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
+    <div className="MapExplorer fadeInUp" style={{animationDelay: '1.5s'}}>
       <div className="header">
-        <h1>{currentMap.name}</h1>
+        <h1>{t(`${currentMap.mapType}.${currentMap.name}.title`)}</h1>
         <h6>
-          {window.innerWidth <= 769 ? 'Tap' : 'Hover'} over a{' '}
-          {currentMap.mapType === MAP_TYPES.COUNTRY ? 'state/ut' : 'district'}{' '}
-          for more details
+          {t('Tap/Hover over a shape for more details', {
+            actionType: t(window.innerWidth <= 769 ? 'Tap' : 'Hover'),
+            shapeType:
+              currentMap.mapType === MAP_TYPES.COUNTRY
+                ? 'State Title'
+                : 'District Title',
+          })}
         </h6>
         {window.innerWidth <= 769 && (
           <h6 style={{marginTop: '1rem'}}>
@@ -375,14 +383,14 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
             >
               Update!
             </span>{' '}
-            Tap twice on states to view districts!
+            {t('Tap twice on states to view districts')}
           </h6>
         )}
       </div>
 
       <div className="map-stats">
         <div className="stats">
-          <h5>Confirmed</h5>
+          <h5>{t('Confirmed')}</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.confirmed}</h1>
             <h6>{}</h6>
@@ -390,7 +398,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
         </div>
 
         <div className="stats is-blue">
-          <h5>Active</h5>
+          <h5>{t('Active')}</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.active || ''}</h1>
             <h6>{}</h6>
@@ -398,7 +406,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
         </div>
 
         <div className="stats is-green">
-          <h5>Recovered</h5>
+          <h5>{t('Recovered')}</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.recovered || ''}</h1>
             <h6>{}</h6>
@@ -406,7 +414,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
         </div>
 
         <div className="stats is-gray">
-          <h5>Deceased</h5>
+          <h5>{t('Deceased')}</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.deaths || ''}</h1>
             <h6>{}</h6>
@@ -415,7 +423,15 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
       </div>
 
       <div className="meta">
-        <h2>{name}</h2>
+        <h2>
+          {name &&
+            t([
+              mapType === MAP_TYPES.DISTRICT
+                ? `state.${currentStateName}.${name}`
+                : `state.${name}.title`,
+              name,
+            ])}
+        </h2>
         {lastupdatedtime && (
           <div
             className={`last-update ${
@@ -424,7 +440,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
                 : 'state-last-update'
             }`}
           >
-            <h6>Last Updated</h6>
+            <h6>{t('Last Updated')}</h6>
             <h3
               title={
                 isNaN(Date.parse(formatDate(lastupdatedtime)))
@@ -437,7 +453,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
                 : formatDistance(
                     new Date(formatDate(lastupdatedtime)),
                     new Date()
-                  ) + ' Ago'}
+                  ) + ` ${t('Ago')}`}
             </h3>
           </div>
         )}
@@ -445,7 +461,9 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
         {currentMap.mapType === MAP_TYPES.STATE &&
         currentMapData.Unknown > 0 ? (
           <h4 className="unknown">
-            Districts unknown for {currentMapData.Unknown} people
+            {t('Districts unknown for people', {
+              unknownCount: currentMapData.Unknown,
+            })}
           </h4>
         ) : null}
 
@@ -454,7 +472,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
             className="button back-button"
             onClick={() => switchMapToState('India')}
           >
-            Back
+            {t('Back')}
           </div>
         ) : null}
       </div>

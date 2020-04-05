@@ -2,6 +2,8 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import * as d3 from 'd3';
 import {legendColor} from 'd3-svg-legend';
 import * as topojson from 'topojson';
+import {useTranslation} from 'react-i18next';
+
 import {MAP_TYPES} from '../constants';
 
 const propertyFieldMap = {
@@ -17,6 +19,7 @@ function ChoroplethMap({
   changeMap,
   selectedRegion,
 }) {
+  const {i18n, t} = useTranslation();
   const choroplethMap = useRef(null);
   const [svgRenderCount, setSvgRenderCount] = useState(0);
 
@@ -110,11 +113,14 @@ function ChoroplethMap({
         .text(function (d) {
           const value = mapData[d.properties[propertyField]] || 0;
           return (
-            Number(
-              parseFloat(100 * (value / (statistic.total || 0.001))).toFixed(2)
-            ).toString() +
-            '% from ' +
-            toTitleCase(d.properties[propertyField])
+            parseFloat(100 * (value / (statistic.total || 0.001))).toFixed(2) +
+            `% ${t('from')} ` +
+            toTitleCase(
+              t([
+                `state.${d.properties[propertyField]}.title`,
+                d.properties[propertyField],
+              ])
+            )
           );
         });
 
@@ -129,12 +135,13 @@ function ChoroplethMap({
         );
     },
     [
-      mapData,
       mapMeta,
-      statistic.total,
-      statistic.maxConfirmed,
-      changeMap,
       setHoveredRegion,
+      mapData,
+      statistic.maxConfirmed,
+      statistic.total,
+      changeMap,
+      t,
     ]
   );
 
@@ -186,9 +193,9 @@ function ChoroplethMap({
       .shapeWidth(36)
       .shapeHeight(10)
       .cells(cells)
-      .titleWidth(3)
+      .titleWidth(70)
       .labels(label)
-      .title('Confirmed Cases')
+      .title(t('Confirmed Cases'))
       .orient('vertical')
       .scale(color);
 
@@ -197,7 +204,7 @@ function ChoroplethMap({
       .call(legendLinear)
       .selectAll('text')
       .style('font-size', '10px');
-  }, [statistic.maxConfirmed]);
+  }, [statistic.maxConfirmed, t]);
 
   useEffect(() => {
     (async () => {
@@ -208,7 +215,7 @@ function ChoroplethMap({
         setSvgRenderCount((prevCount) => prevCount + 1);
       }
     })();
-  }, [mapMeta.geoDataFile, statistic, renderData, ready]);
+  }, [mapMeta.geoDataFile, statistic, renderData, ready, i18n.language]);
 
   const highlightRegionInMap = (name) => {
     const paths = d3.selectAll('.path-region');
@@ -230,7 +237,7 @@ function ChoroplethMap({
   }, [svgRenderCount, selectedRegion]);
 
   return (
-    <div className="svg-parent">
+    <div className="svg-parent fadeInUp" style={{animationDelay: '2.5s'}}>
       <svg
         id="chart"
         width="480"

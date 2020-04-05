@@ -16,7 +16,10 @@ import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
 /* import Patients from './patients';*/
 
+import {useTranslation} from 'react-i18next';
+
 function Home(props) {
+  const {t} = useTranslation();
   const [states, setStates] = useState([]);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
   /* const [patients, setPatients] = useState([]);*/
@@ -64,21 +67,23 @@ function Home(props) {
   return (
     <div className="Home">
       <div className="home-left">
-        <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
-          <div className="header-mid">
+        <div className="header">
+          <div className="header-mid fadeInUp" style={{animationDelay: '1s'}}>
             <div className="titles">
-              <h1>India COVID-19 Tracker</h1>
-              <h6 style={{fontWeight: 600}}>A Crowdsourced Initiative</h6>
+              <h1>{t('India COVID-19 Tracker')}</h1>
+              <h6 style={{fontWeight: 600}}>
+                {t('A Crowdsourced Initiative')}
+              </h6>
             </div>
             <div className="last-update">
-              <h6>Last Updated</h6>
+              <h6>{t('Last Updated')}</h6>
               <h6 style={{color: '#28a745', fontWeight: 600}}>
                 {isNaN(Date.parse(formatDate(lastUpdated)))
                   ? ''
                   : formatDistance(
                       new Date(formatDate(lastUpdated)),
                       new Date()
-                    ) + ' Ago'}
+                    ) + ` ${t('Ago')}`}
               </h6>
               <h6 style={{color: '#28a745', fontWeight: 600}}>
                 {isNaN(Date.parse(formatDate(lastUpdated)))
@@ -111,9 +116,9 @@ function Home(props) {
 
             <div
               className="timeseries-header fadeInUp"
-              style={{animationDelay: '1.5s'}}
+              style={{animationDelay: '2.3s'}}
             >
-              <h1>Spread Trends</h1>
+              <h1>{t('Spread Trends')}</h1>
               <div className="tabs">
                 <div
                   className={`tab ${graphOption === 1 ? 'focused' : ''}`}
@@ -121,7 +126,7 @@ function Home(props) {
                     setGraphOption(1);
                   }}
                 >
-                  <h4>Cumulative</h4>
+                  <h4>{t('Cumulative')}</h4>
                 </div>
                 <div
                   className={`tab ${graphOption === 2 ? 'focused' : ''}`}
@@ -129,7 +134,7 @@ function Home(props) {
                     setGraphOption(2);
                   }}
                 >
-                  <h4>Daily</h4>
+                  <h4>{t('Daily')}</h4>
                 </div>
               </div>
 
