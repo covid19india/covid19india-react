@@ -1273,6 +1273,10 @@ table {
     }
   }
 
+  .texttransform {
+    text-transform: none !important;
+  }
+
   h3 {
     margin-bottom: 0;
     color: $gray-dark;
@@ -2360,4 +2364,37 @@ select {
     opacity: 0;
     transform: translateY(20px);
   }
+}
+
+
+.profileCard {
+  margin-bottom: 15px !important;
+  font-family: 'Archia';
+  /* background-color: 'pink'; */
+  /* border: black solid 3px; */
+}
+
+.profiles {
+  margin:.875em .5em !important;
+}
+
+.filters {
+  margin-bottom: 40px;
+}
+
+.tagSelectFilter {
+  margin-top:10px;
+}
+.tags {
+  display: inline;
+  background-color:$purple-light;
+  color: $purple;
+  padding:4px 8px;
+  border-radius: 7px;
+  margin-right: 4px;
+  margin-bottom: 10px;
+}
+
+.jobFilter {
+  /* margin-left: 30px; */
 }

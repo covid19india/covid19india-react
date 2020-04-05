@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import axios from 'axios';
+import websitedata from '../data/websitedata';
 
 function FAQ(props) {
   const [faq, setFaq] = useState([]);
@@ -9,14 +9,7 @@ function FAQ(props) {
   }, []);
 
   const getFAQs = () => {
-    axios
-      .get('https://api.covid19india.org/website_data.json')
-      .then((response) => {
-        setFaq(response.data['faq']);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      setFaq(websitedata['faq']);
   };
 
   return (

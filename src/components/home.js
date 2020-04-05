@@ -1,212 +1,231 @@
-import React, {useState, useEffect} from 'react';
-import axios from 'axios';
-import {formatDistance} from 'date-fns';
-import {formatDate, formatDateAbsolute} from '../utils/common-functions';
-/* import * as Icon from 'react-feather';
-import {Link} from 'react-router-dom';*/
+import React from 'react';
+import candidatedata from '../data/candidatedata';
+import { titleData, tagData} from '../data/tagandtitledata';
+import { Dropdown, Card, Button, Header, Grid } from 'semantic-ui-react';
 
-import Table from './table';
-import Level from './level';
-import MapExplorer from './mapexplorer';
-import TimeSeries from './timeseries';
-import Minigraph from './minigraph';
-/* import Patients from './patients';*/
+
+const profiles =  candidatedata;
+
+class CandidateFilter extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      filter:null,
+      tags:null,
+    };
+    this.dropDownMenu = titleData;
+    this.tagOptions = tagData;
+  }
+
+  onFilterSelection = (filterValue) => {
+    this.setState({filter:filterValue});
+  }
+
+  doTagExistInProfile = (tags) => {
+    if (!this.state.tags || this.state.tags.length === 0)
+      return true;
+
+      var allAvail = true;
+      for (var j in this.state.tags){
+        var individualExist = false
+        for ( var i in tags){
+          individualExist = individualExist || (tags[i] === this.state.tags[j]);
+        }
+        allAvail = allAvail && individualExist;
+      }
+    return allAvail;
+  }
+
+  doTitleExistInProfile = (title, role) => {
+      if (!title){
+        return true;
+      }
+      return role === title;
+  }
+
+  isAnyFilterApplied = () => {
+    return this.state.filter || this.state.tags;
+  }
+
+  applyFitlerToProfiles = () => {
+      var filteredProfiles = this.isAnyFilterApplied() ?  profiles.filter( profile => this.doTitleExistInProfile(this.state.filter, profile.role) && this.doTagExistInProfile(profile.tags) )  : profiles;
+     console.log(filteredProfiles);
+     return (<div className="profiles fadeInUp" style={{animationDelay:'1s'}}>
+              <Card.Group>
+                {filteredProfiles.map( profile => <CandidateProfile profile ={profile}/>)}
+              </Card.Group>
+             </div>
+            );
+  };
+
+  jobTitleDropDown = () => {
+    return (
+          <Dropdown search 
+            button
+            onChange = {(event,data)=> this.onFilterSelection(data.value)}
+            placeholder="Job Title"
+            options={this.dropDownMenu}/>
+    );
+  }
+
+  tagFilterSelector = (event, tags) => {
+    console.log("Printing the tags", tags);
+    this.setState({
+      tags:tags
+    });
+    event.text = ""
+  }
+
+  tagSelectDropDown = () => {
+    return (
+          <Dropdown options={this.tagOptions}   button multiple onChange = { (event, data) => this.tagFilterSelector(event, data.value)}
+          placeholder="Tags" style={{height:'auto'}} ></Dropdown>
+    );
+  }
+
+  renderFilters = () => {
+    return (
+      <div className="filters" style={{display:'flex'}}>
+          <Header  style ={{fontFamily:'Archia', color:'#343a40', verticalAlign:'middle', margin:'auto', marginLeft:'-3px', width:'auto'}}>Filter Candidates</Header>
+          {this.tagSelectDropDown()}
+          {this.jobTitleDropDown()}
+      </div>
+    );
+  }  
+  render() {
+  return (
+      <>
+        {this.renderFilters()}
+        {this.applyFitlerToProfiles()}
+      </>
+    );
+  }
+}
+
+
+class CandidateProfile extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      emailVisible:false
+    };
+  }
+
+  showMoreHandler = () => (
+    this.setState({showMore:true})
+  )
+
+  showEmail = () => (
+      this.setState({emailVisible:true})
+  )
+  hideEmail = () => {
+    this.setState({emailVisible:false})
+  }
+
+  createCard = (profile) => {
+    return (
+        <Card fluid className="profileCard">
+            <Card.Content 
+            >
+              <Card.Header>{profile.role}</Card.Header>
+              <Card.Meta >{profile.exp} of Experience</Card.Meta>
+              <Card.Meta>{profile.college}</Card.Meta>
+              <Card.Description style={{color:'#343a40'}}>{profile.summary}</Card.Description>
+            </Card.Content>
+            <Card.Content extra>
+              <div style = { {display:'flex', flexDirection:'row'} }>
+              {profile.tags.map((element, index) => {
+                return this.createTags(element,index);
+              })}
+              </div>
+              <div className="link" style={{marginLeft:'4px'}}>
+                <a  href={profile.linkedin}>linkedin</a>
+              </div>          
+              {!this.state.emailVisible?<Button basic color='blue' onClick={this.showEmail}>Contact</Button>:<div onClick={this.hideEmail}>{profile.email}</div>}
+
+            </Card.Content>
+        </Card>
+        // </div>
+      );
+    };
+
+
+  createTags = (tags, index) => {
+      return (
+            <div className = "tags" key = {index}>
+              {tags}
+            </div>
+      );
+  }
+
+  render(){
+  return (
+    <div className="App">
+      {this.createCard(this.props.profile)}
+    </div>
+  );
+  }
+}
+
+
+class Profile extends React.Component {
+
+  constructor(props){
+    super(props);
+  }
+
+  render(){
+    return(
+      <>
+        <Header  style ={{fontFamily:'Archia', color:'#343a40'}} >Many bright students lost their Internships and Jobs offers because of Coronavirus.</Header>
+        <Header as="p" style ={{fontFamily:'Archia',color:'#6c757d99'}}>If you are a company looking to hire talented people. You can hire from the list of the verified people in the right column.</Header> 
+        <Header as="p" style ={{fontFamily:'Archia',color:'#6c757d99'}}>If you want to list openings in your company. 
+Please fill the form.<a href="https://forms.gle/sYxi7azBMDXCgmaD8">Company Listing</a>
+</Header> 
+
+
+        <Header  style ={{fontFamily:'Archia', color:'#343a40'}}>If you are a student with a revoked offer.</Header>
+        <Header as="p" style ={{fontFamily:'Archia',color:'#6c757d99'}}>Please fill the form below to get listed.<a href="https://forms.gle/E9ibHspkUrQwnANAA">Candidate Listing</a>
+</Header> 
+      </>
+    );
+  }
+
+}
+
+class Listing extends React.Component {
+  render(){
+    return(
+      <Grid 
+      // style = {{display:'flex', margin:'10px'}}
+       columns={2}
+       divided
+       stackable
+       style= {{margin:'10px'}}
+      >
+        <Grid.Row>
+          <Grid.Column>
+            <div style = {{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', height:'100%vh', marginTop:'10%'}}>
+              <Profile />
+            </div>
+          </Grid.Column>
+          <Grid.Column>
+            <div style = {{alignItems:'rights'}}>
+              <CandidateFilter/>
+            </div>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    );
+  }
+}
 
 function Home(props) {
-  const [states, setStates] = useState([]);
-  const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
-  /* const [patients, setPatients] = useState([]);*/
-  const [fetched, setFetched] = useState(false);
-  const [graphOption, setGraphOption] = useState(1);
-  const [lastUpdated, setLastUpdated] = useState('');
-  const [timeseries, setTimeseries] = useState([]);
-  const [timeseriesMode, setTimeseriesMode] = useState(true);
-  const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
-  const [regionHighlighted, setRegionHighlighted] = useState(undefined);
-
-  useEffect(() => {
-    if (fetched === false) {
-      getStates();
-    }
-  }, [fetched]);
-
-  const getStates = async () => {
-    try {
-      const [response, stateDistrictWiseResponse] = await Promise.all([
-        axios.get('https://api.covid19india.org/data.json'),
-        axios.get('https://api.covid19india.org/state_district_wise.json'),
-        /* axios.get('https://api.covid19india.org/raw_data.json'),*/
-      ]);
-      setStates(response.data.statewise);
-      setTimeseries(response.data.cases_time_series);
-      setLastUpdated(response.data.statewise[0].lastupdatedtime);
-      setStateDistrictWiseData(stateDistrictWiseResponse.data);
-      /* setPatients(rawDataResponse.data.raw_data.filter((p) => p.detectedstate));*/
-      setFetched(true);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const onHighlightState = (state, index) => {
-    if (!state && !index) setRegionHighlighted(null);
-    else setRegionHighlighted({state, index});
-  };
-  const onHighlightDistrict = (district, state, index) => {
-    if (!state && !index && !district) setRegionHighlighted(null);
-    else setRegionHighlighted({district, state, index});
-  };
 
   return (
-    <div className="Home">
-      <div className="home-left">
-        <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
-          <div className="header-mid">
-            <div className="titles">
-              <h1>India COVID-19 Tracker</h1>
-              <h6 style={{fontWeight: 600}}>A Crowdsourced Initiative</h6>
-            </div>
-            <div className="last-update">
-              <h6>Last Updated</h6>
-              <h6 style={{color: '#28a745', fontWeight: 600}}>
-                {isNaN(Date.parse(formatDate(lastUpdated)))
-                  ? ''
-                  : formatDistance(
-                      new Date(formatDate(lastUpdated)),
-                      new Date()
-                    ) + ' Ago'}
-              </h6>
-              <h6 style={{color: '#28a745', fontWeight: 600}}>
-                {isNaN(Date.parse(formatDate(lastUpdated)))
-                  ? ''
-                  : formatDateAbsolute(lastUpdated)}
-              </h6>
-            </div>
-          </div>
-        </div>
-
-        {states.length > 1 && <Level data={states} />}
-        <Minigraph timeseries={timeseries} animate={true} />
-        <Table
-          states={states}
-          summary={false}
-          stateDistrictWiseData={stateDistrictWiseData}
-          onHighlightState={onHighlightState}
-          onHighlightDistrict={onHighlightDistrict}
-        />
-      </div>
-
-      <div className="home-right">
-        {fetched && (
-          <React.Fragment>
-            <MapExplorer
-              states={states}
-              stateDistrictWiseData={stateDistrictWiseData}
-              regionHighlighted={regionHighlighted}
-            />
-
-            <div
-              className="timeseries-header fadeInUp"
-              style={{animationDelay: '1.5s'}}
-            >
-              <h1>Spread Trends</h1>
-              <div className="tabs">
-                <div
-                  className={`tab ${graphOption === 1 ? 'focused' : ''}`}
-                  onClick={() => {
-                    setGraphOption(1);
-                  }}
-                >
-                  <h4>Cumulative</h4>
-                </div>
-                <div
-                  className={`tab ${graphOption === 2 ? 'focused' : ''}`}
-                  onClick={() => {
-                    setGraphOption(2);
-                  }}
-                >
-                  <h4>Daily</h4>
-                </div>
-              </div>
-
-              <div className="scale-modes">
-                <label>Scale Modes</label>
-                <div className="timeseries-mode">
-                  <label htmlFor="timeseries-mode">Uniform</label>
-                  <input
-                    type="checkbox"
-                    checked={timeseriesMode}
-                    className="switch"
-                    aria-label="Checked by default to scale uniformly."
-                    onChange={(event) => {
-                      setTimeseriesMode(!timeseriesMode);
-                    }}
-                  />
-                </div>
-                <div
-                  className={`timeseries-logmode ${
-                    graphOption !== 1 ? 'disabled' : ''
-                  }`}
-                >
-                  <label htmlFor="timeseries-logmode">Logarithmic</label>
-                  <input
-                    type="checkbox"
-                    checked={graphOption === 1 && timeseriesLogMode}
-                    className="switch"
-                    disabled={graphOption !== 1}
-                    onChange={(event) => {
-                      setTimeseriesLogMode(!timeseriesLogMode);
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <TimeSeries
-              timeseries={timeseries}
-              type={graphOption}
-              mode={timeseriesMode}
-              logMode={timeseriesLogMode}
-            />
-
-            {/* Testing Rebuild*/}
-          </React.Fragment>
-        )}
-      </div>
-
-      {/* <div className="home-left">
-        {patients.length > 1 && (
-          <div className="patients-summary">
-            <h1>Recent Cases</h1>
-            <h6>A summary of the latest reported cases</h6>
-            <div className="legend">
-              <div className="legend-left">
-                <div className="circle is-female"></div>
-                <h5 className="is-female">Female</h5>
-                <div className="circle is-male"></div>
-                <h5 className="is-male">Male</h5>
-                <div className="circle"></div>
-                <h5 className="">Unknown</h5>
-              </div>
-            </div>
-            <div className="patients-summary-wrapper">
-              <Patients
-                patients={patients}
-                summary={true}
-                colorMode={'genders'}
-              />
-            </div>
-            <button className="button">
-              <Link to="/database">
-                <Icon.Database />
-                <span>View the Patients Database</span>
-              </Link>
-            </button>
-          </div>
-        )}
-      </div>
-    */}
-      <div className="home-right"></div>
+    <div className="fadeInUp" style={{animationDelay: '0.5s'}}>
+      <Listing/>
     </div>
   );
 }
