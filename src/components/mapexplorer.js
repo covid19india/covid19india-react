@@ -355,11 +355,11 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
       <div className="header">
-        <h1>{currentMap.name} Map</h1>
+        <h1>{currentMap.name}</h1>
         <h6>
           {window.innerWidth <= 769 ? 'Tap' : 'Hover'} over a{' '}
-          {currentMap.mapType === MAP_TYPES.COUNTRY ? 'state' : 'district'} for
-          more details
+          {currentMap.mapType === MAP_TYPES.COUNTRY ? 'state/ut' : 'district'}{' '}
+          for more details
         </h6>
         {window.innerWidth <= 769 && (
           <h6 style={{marginTop: '1rem'}}>
