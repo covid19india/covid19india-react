@@ -29,6 +29,7 @@ function Home(props) {
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
+  const [selectedState, setSelectedState] = useState(undefined);
   const [stateTimeSeries, setStateTimeSeries] = useState({});
   const [stateGraphTimeSeries, setStateGraphTimeSeries] = useState({
     series: [],
@@ -40,6 +41,16 @@ function Home(props) {
       getStates();
     }
   }, [fetched]);
+
+  useEffect(() => {
+    if (
+      regionHighlighted !== undefined &&
+      regionHighlighted !== null &&
+      regionHighlighted.state.state !== selectedState
+    ) {
+      setSelectedState(regionHighlighted.state.state);
+    }
+  }, [regionHighlighted, selectedState]);
 
   useEffect(() => {
     calculateStatewiseTimeSeries(rawData);
@@ -99,6 +110,16 @@ function Home(props) {
     else setRegionHighlighted({district, state, index});
   };
 
+  const onHighlightMapRegion = (data) => {
+    if (
+      data !== undefined &&
+      data.state !== undefined &&
+      (selectedState === undefined || data.state.state !== selectedState)
+    ) {
+      setSelectedState(data.state.state);
+    }
+  };
+
   const getTimeSeries = useCallback(
     (data) => {
       let state;
@@ -110,7 +131,7 @@ function Home(props) {
           state = states[1].state;
         }
       } else {
-        state = data.state.state;
+        state = data;
       }
       const series = stateTimeSeries[state];
       if (!series) {
@@ -144,8 +165,8 @@ function Home(props) {
   );
 
   useEffect(() => {
-    if (regionHighlighted !== null) getTimeSeries(regionHighlighted);
-  }, [getTimeSeries, regionHighlighted]);
+    if (selectedState !== undefined) getTimeSeries(selectedState);
+  }, [getTimeSeries, selectedState]);
 
   return (
     <div className="Home">
@@ -193,6 +214,7 @@ function Home(props) {
               states={states}
               stateDistrictWiseData={stateDistrictWiseData}
               regionHighlighted={regionHighlighted}
+              setMapRegionHighlighted={onHighlightMapRegion}
             />
 
             <div

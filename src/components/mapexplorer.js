@@ -207,7 +207,12 @@ const mapMeta = {
   },
 };
 
-export default function ({states, stateDistrictWiseData, regionHighlighted}) {
+export default function ({
+  states,
+  stateDistrictWiseData,
+  regionHighlighted,
+  setMapRegionHighlighted,
+}) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
@@ -220,6 +225,12 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
   if (!currentHoveredRegion) {
     return null;
   }
+
+  useEffect(() => {
+    if (currentHoveredRegion.state !== undefined) {
+      setMapRegionHighlighted({state: currentHoveredRegion});
+    }
+  }, [currentHoveredRegion, setMapRegionHighlighted]);
 
   const [statistic, currentMapData] = useMemo(() => {
     const statistic = {total: 0, maxConfirmed: 0};
