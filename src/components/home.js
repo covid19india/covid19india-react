@@ -118,7 +118,6 @@ function Home(props) {
                 <div
                   className={`tab ${graphOption === 1 ? 'focused' : ''}`}
                   onClick={() => {
-                    console.log(graphOption);
                     setGraphOption(1);
                   }}
                 >
@@ -138,7 +137,7 @@ function Home(props) {
                     setGraphOption(3);
                   }}
                 >
-                  <h4>States</h4>
+                  <h4>States/UT</h4>
                 </div>
               </div>
 
