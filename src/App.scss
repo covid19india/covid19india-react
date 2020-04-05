@@ -300,7 +300,7 @@ h6 {
       span {
         display: inline-block;
         transition: color 0.2s ease-in-out;
-        
+
         &:hover {
           color: $gray;
         }
@@ -329,7 +329,7 @@ h6 {
   align-self: center;
   justify-content: space-between;
   padding-top: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: .5rem;
 
   h1,
   h6 {
@@ -346,6 +346,7 @@ h6 {
     justify-content: space-between;
 
     .titles {
+      align-self: flex-start;
       h6 {
         margin-top: 0.25rem;
         color: $gray;
@@ -1069,7 +1070,7 @@ table {
         border-radius: 10px;
         transition: all 200ms ease-in-out;
       }
-  
+
       input.switch::after {
         content: "";
         position: absolute;
@@ -1080,17 +1081,17 @@ table {
         background-color: $gray-mid;
         border-radius: 50%;
       }
-  
+
       input.switch:checked {
         background-color: $gray-mid;
         transition: all 200ms ease-in-out;
       }
-  
+
       input.switch:checked::after {
         left: 10px;
         background-color: $light;
       }
-      
+
       label{
         font-size: 0.75rem;
         margin-right: 0.2rem;
@@ -1745,7 +1746,7 @@ footer {
         display: flex;
         flex-direction: column;
         & > * {
-          align-self: flex-end; 
+          align-self: flex-end;
         }
 
         h5 {
@@ -1927,7 +1928,7 @@ footer {
     font-weight: 600;
   }
 
-  .summary { 
+  .summary {
     flex-direction: row-reverse;
     flex-wrap: wrap-reverse
   }
@@ -2377,3 +2378,63 @@ select {
     transform: translateY(20px);
   }
 }
+
+/* Animation CSS for automatic refresh icon */
+.loader {
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  overflow: hidden;
+  background: none;
+  margin-right: 5px;
+
+  @keyframes loader-animation { 0% { transform: rotate(0) } 100% { transform: rotate(360deg); } }
+
+  .loader-animation > div {
+    animation: loader-animation 1s infinite linear;
+    transform-origin: 50px 50px;
+  }
+
+  .loader-animation > div div { position: absolute; }
+
+  .loader-animation > div div:nth-child(1), .loader-animation > div div:nth-child(2) {
+    width: 72px;
+    height: 72px;
+    border: 12px solid;
+    border-radius: 50%;
+    border-color: transparent #199c00 #199c00 #199c00;
+    box-sizing: border-box;
+    position: absolute;
+    transform: rotate(45deg);
+    transform-origin: 50px 50px;
+  }
+
+  .loader-animation > div div:nth-child(1) {
+    transform: rotate(45deg) translate(14px, 14px);
+  }
+
+  .loader-animation > div div:nth-child(2) {
+    transform: rotate(36deg) translate(14px, 14px);;
+  }
+
+  .loader-animation > div div:nth-child(3) {
+    width: 0;
+    height: 0;
+    border: 25px solid;
+    border-color: transparent transparent transparent #199c00;
+    transform: translate(50px, 1.5px);
+  }
+
+  .loader-animation {
+    margin-left: 2px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: translateZ(0) scale(0.25);
+    backface-visibility: hidden;
+    transform-origin: 0 0; /* see note above */
+  }
+
+  .loader-animation div { box-sizing: content-box; }
+}
+

@@ -89,6 +89,17 @@ function Home(props) {
                   ? ''
                   : formatDateAbsolute(lastUpdated)}
               </h6>
+              <h6>
+                <span className="loader">
+                  <div className="loader-animation">
+                    <div>
+                      <div />
+                      <div />
+                      <div />
+                    </div>
+                  </div>
+                </span>
+              </h6>
             </div>
           </div>
         </div>
