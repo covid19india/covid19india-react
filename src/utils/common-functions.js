@@ -30,6 +30,26 @@ export const formatDateAbsolute = (unformattedDate) => {
   return `${day} ${months[month]}, ${time.slice(0, 5)} IST`;
 };
 
+export const validateCTS = (data = []) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const dataTypes = [
+    'dailyconfirmed',
+    'dailydeceased',
+    'dailyrecovered',
+    'totalconfirmed',
+    'totaldeceased',
+    'totalrecovered',
+  ];
+  return data
+    .filter((d) => dataTypes.every((dt) => d[dt]) && d.date)
+    .filter((d) => dataTypes.every((dt) => Number(d[dt]) >= 0))
+    .filter((d) => {
+      const year = today.getFullYear();
+      return new Date(d.date + year) < today;
+    });
+};
+
 export const usePrevious = (value) => {
   const ref = useRef();
   useEffect(() => {

@@ -1,7 +1,9 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import * as Icon from 'react-feather';
-import {formatDate} from '../utils/common-functions';
+import {formatDate, formatDateAbsolute} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
+import {Link} from 'react-router-dom';
+
 function Row(props) {
   const [state, setState] = useState(props.state);
   const [sortedDistricts, setSortedDistricts] = useState(props.districts);
@@ -91,12 +93,17 @@ function Row(props) {
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
         touchstart={() => props.onHighlightState?.(state, props.index)}
+        onClick={!props.total ? handleReveal : null}
         style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
-        onClick={() => {
-          handleReveal();
-        }}
       >
-        <td style={{fontWeight: 600}}>{state.state}</td>
+        <td style={{fontWeight: 600}}>
+          {state.state}
+          {state.state === 'West Bengal' && (
+            <Link to="/faq">
+              <Icon.AlertCircle />
+            </Link>
+          )}
+        </td>
         <td>
           <span className="deltas" style={{color: '#ff073a'}}>
             {state.deltaconfirmed > 0 && <Icon.ArrowUp />}
@@ -142,7 +149,13 @@ function Row(props) {
         <td colSpan={2}>
           <div className="last-update">
             <h6>Last Updated&nbsp;</h6>
-            <h6>
+            <h6
+              title={
+                isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
+                  ? ''
+                  : formatDateAbsolute(props.state.lastupdatedtime)
+              }
+            >
               {isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
                 ? ''
                 : `${formatDistance(
@@ -204,42 +217,43 @@ function Row(props) {
       </tr>
 
       {sortedDistricts &&
-        Object.keys(sortedDistricts).map((district, index) => {
-          if (district.toLowerCase() !== 'unknown') {
-            return (
-              <tr
-                key={index}
-                className={`district`}
-                style={{
-                  display: props.reveal && !props.total ? '' : 'none',
-                  background: index % 2 === 0 ? '#f8f9fa' : '',
-                }}
-                onMouseEnter={() =>
-                  props.onHighlightDistrict?.(district, state, props.index)
-                }
-                onMouseLeave={() => props.onHighlightDistrict?.()}
-                touchstart={() =>
-                  props.onHighlightDistrict?.(district, state, props.index)
-                }
-              >
-                <td style={{fontWeight: 600}}>{district}</td>
-                <td>
-                  <span className="deltas" style={{color: '#ff073a'}}>
-                    {sortedDistricts[district].delta.confirmed > 0 && (
-                      <Icon.ArrowUp />
-                    )}
-                    {sortedDistricts[district].delta.confirmed > 0
-                      ? `${sortedDistricts[district].delta.confirmed}`
-                      : ''}
-                  </span>
-
-                  {sortedDistricts[district].confirmed}
-                </td>
-              </tr>
-            );
-          }
-          return null;
-        })}
+        Object.keys(sortedDistricts)
+          .filter((district) => district.toLowerCase() !== 'unknown')
+          .map((district, index) => {
+            if (district.toLowerCase() !== 'unknown') {
+              return (
+                <tr
+                  key={index}
+                  className={`district`}
+                  style={{
+                    display: props.reveal && !props.total ? '' : 'none',
+                    background: index % 2 === 0 ? '#f8f9fa' : '',
+                  }}
+                  onMouseEnter={() =>
+                    props.onHighlightDistrict?.(district, state, props.index)
+                  }
+                  onMouseLeave={() => props.onHighlightDistrict?.()}
+                  touchstart={() =>
+                    props.onHighlightDistrict?.(district, state, props.index)
+                  }
+                >
+                  <td style={{fontWeight: 600}}>{district}</td>
+                  <td>
+                    <span className="deltas" style={{color: '#ff073a'}}>
+                      {sortedDistricts[district].delta.confirmed > 0 && (
+                        <Icon.ArrowUp />
+                      )}
+                      {sortedDistricts[district].delta.confirmed > 0
+                        ? `${sortedDistricts[district].delta.confirmed}`
+                        : ''}
+                    </span>
+                    {sortedDistricts[district].confirmed}
+                  </td>
+                </tr>
+              );
+            }
+            return null;
+          })}
 
       {sortedDistricts?.Unknown && (
         <tr
