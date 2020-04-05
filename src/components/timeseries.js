@@ -288,7 +288,7 @@ function TimeSeries(props) {
 
       const indexScale = d3
         .scaleLinear()
-        .domain([0, data.length])
+        .domain([-1, data.length])
         .range([margin.left, width]);
 
       // Arrays of objects
@@ -316,10 +316,7 @@ function TimeSeries(props) {
 
       const yScales = Object.entries(dTypeMaxMap).map(([type, maxY]) => {
         // apply mode, logMode, etc -- determine scales once and for all
-        const applyLogMode = (maxY) =>
-          logMode && logCharts.has(type)
-            ? d3.scaleLog().domain([1, maxY]).nice()
-            : d3.scaleLinear().domain([-maxY / 10, maxY]);
+        const applyLogMode = (maxY) => d3.scaleLinear().domain([0, 1.1 * maxY]).nice();
 
         return (
           applyLogMode(maxY)
