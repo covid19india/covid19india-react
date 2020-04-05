@@ -8,6 +8,7 @@ function Level(props) {
   const [active, setActive] = useState(0);
   const [recoveries, setRecoveries] = useState(0);
   const [deaths, setDeaths] = useState(0);
+  const [deltas, setDeltas] = useState(0);
 
   useEffect(() => {
     setData(props.data);
@@ -19,18 +20,26 @@ function Level(props) {
       let active = 0;
       let recoveries = 0;
       let deaths = 0;
+      let deltas = {};
       data.forEach((state, index) => {
         if (index !== 0) {
           confirmed += parseInt(state.confirmed);
           active += parseInt(state.active);
           recoveries += parseInt(state.recovered);
           deaths += parseInt(state.deaths);
+        } else {
+          deltas = {
+            confirmed: parseInt(state.deltaconfirmed),
+            deaths: parseInt(state.deltadeaths),
+            recovered: parseInt(state.deltarecovered),
+          };
         }
       });
       setConfirmed(confirmed);
       setActive(active);
       setRecoveries(recoveries);
       setDeaths(deaths);
+      setDeltas(deltas);
     };
     parseData();
   }, [data]);
@@ -44,9 +53,9 @@ function Level(props) {
         <h5>{t('Confirmed')}</h5>
         <h4>
           [
-          {props.deltas
-            ? props.deltas.confirmeddelta >= 0
-              ? '+' + props.deltas.confirmeddelta
+          {deltas
+            ? deltas.confirmed >= 0
+              ? '+' + deltas.confirmed
               : '+0'
             : ''}
           ]
@@ -71,9 +80,9 @@ function Level(props) {
         <h5 className="heading">{t('Recovered')}</h5>
         <h4>
           [
-          {props.deltas
-            ? props.deltas.recovereddelta >= 0
-              ? '+' + props.deltas.recovereddelta
+          {deltas
+            ? deltas.recovered >= 0
+              ? '+' + deltas.recovered
               : '+0'
             : ''}
           ]
@@ -87,13 +96,7 @@ function Level(props) {
       >
         <h5 className="heading">{t('Deaths')}</h5>
         <h4>
-          [
-          {props.deltas
-            ? props.deltas.deceaseddelta >= 0
-              ? '+' + props.deltas.deceaseddelta
-              : '+0'
-            : ''}
-          ]
+          [{deltas ? (deltas.deaths >= 0 ? '+' + deltas.deaths : '+0') : ''}]
         </h4>
         <h1 className="title has-text-grey">{deaths}</h1>
       </div>

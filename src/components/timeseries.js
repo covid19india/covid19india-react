@@ -278,6 +278,13 @@ function TimeSeries(props) {
     }
   }, [timeseries, graphData]);
 
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  const lastDate = new Date(datapoint['date'] + '2020');
+  const isYesterday =
+    lastDate.getMonth() === yesterdayDate.getMonth() &&
+    lastDate.getDate() === yesterdayDate.getDate();
+
   return (
     <div
       className="TimeSeries-Parent fadeInUp"
@@ -291,7 +298,7 @@ function TimeSeries(props) {
           <div className="stats">
             <h5>{t('Confirmed')}</h5>
             <h5>
-              {timeseries.length - 1 === index
+              {isYesterday
                 ? `${datapoint['date']} ${t('Yesterday')}`
                 : datapoint['date']}
             </h5>
@@ -324,7 +331,7 @@ function TimeSeries(props) {
           <div className="stats is-green">
             <h5>{t('Recovered')}</h5>
             <h5>
-              {timeseries.length - 1 === index
+              {isYesterday
                 ? `${datapoint['date']} ${t('Yesterday')}`
                 : datapoint['date']}
             </h5>
@@ -357,7 +364,7 @@ function TimeSeries(props) {
           <div className="stats is-gray">
             <h5>{t('Deceased')}</h5>
             <h5>
-              {timeseries.length - 1 === index
+              {isYesterday
                 ? `${datapoint['date']} ${t('Yesterday')}`
                 : datapoint['date']}
             </h5>
@@ -395,7 +402,7 @@ function TimeSeries(props) {
           <div className="stats">
             <h5>{t('Confirmed')}</h5>
             <h5>
-              {timeseries.length - 1 === index
+              {isYesterday
                 ? `${datapoint['date']} ${t('Yesterday')}`
                 : datapoint['date']}
             </h5>
@@ -428,7 +435,7 @@ function TimeSeries(props) {
           <div className="stats is-green">
             <h5>{t('Recovered')}</h5>
             <h5>
-              {timeseries.length - 1 === index
+              {isYesterday
                 ? `${datapoint['date']} ${t('Yesterday')}`
                 : datapoint['date']}
             </h5>
@@ -461,7 +468,7 @@ function TimeSeries(props) {
           <div className="stats is-gray">
             <h5>{t('Deaths')}</h5>
             <h5>
-              {timeseries.length - 1 === index
+              {isYesterday
                 ? `${datapoint['date']} ${t('Yesterday')}`
                 : datapoint['date']}
             </h5>
