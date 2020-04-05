@@ -644,9 +644,9 @@ table {
 
       &:hover {
         background: $gray-hover !important;
-		
-		.dropdown {
-          background: $gray-hover;
+
+        .dropdown {
+            background: $gray-hover;
         }
       }
 
@@ -667,8 +667,8 @@ table {
       border-radius: 5px;
       text-align: right;
       .deltas {
-		display: inline-block;
-        font-size: 11px !important;
+        display: inline-block;
+		    font-size: 11px !important;
 
         svg {
           width: 9px;
@@ -695,7 +695,7 @@ table {
       }
     }
 	
-	.table__count-text {
+    .table__count-text {
       margin-left: 0.25rem;
     }
 
