@@ -5,4 +5,4 @@ export const MAP_TYPES = {
 
 export const MAPS_DIR = '/maps';
 
-export const POLLING_FREQUENCY = 10000; // 900000; // 15 minutes
+export const POLLING_FREQUENCY = 900000; // 15 minutes for auto refresh the page
