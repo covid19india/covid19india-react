@@ -216,15 +216,17 @@ export default function ({
 }) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
+  const [panelRegion, setPanelRegion] = useState({});
   const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
     const region = getRegionFromState(states[1]);
+    setPanelRegion(region);
     setCurrentHoveredRegion(region);
   }, [states]);
 
-  if (!currentHoveredRegion) {
+  if (!panelRegion) {
     return null;
   }
 
@@ -266,19 +268,32 @@ export default function ({
   const setHoveredRegion = useCallback(
     (name, currentMap) => {
       if (currentMap.mapType === MAP_TYPES.COUNTRY) {
-        setCurrentHoveredRegion(
-          getRegionFromState(states.filter((state) => name === state.state)[0])
+        const region = getRegionFromState(
+          states.filter((state) => name === state.state)[0]
         );
+        setCurrentHoveredRegion(region);
+        setPanelRegion(region);
       } else if (currentMap.mapType === MAP_TYPES.STATE) {
-        // Hack to display only the state cases count on the coloured boxes
-        const panelData = getRegionFromState(
+        const state = stateDistrictWiseData[currentMap.name] || {
+          districtData: {},
+        };
+        let districtData = state.districtData[name];
+        if (!districtData) {
+          districtData = {
+            confirmed: 0,
+            active: 0,
+            deaths: 0,
+            recovered: 0,
+          };
+        }
+        setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
+        const panelRegion = getRegionFromState(
           states.filter((state) => currentMap.name === state.state)[0]
         );
-        panelData.name = name;
-        setCurrentHoveredRegion(panelData);
+        setPanelRegion(panelRegion);
       }
     },
-    [states]
+    [states, stateDistrictWiseData]
   );
 
   useEffect(() => {
@@ -305,6 +320,17 @@ export default function ({
       setSelectedRegion(regionHighlighted.district);
     }
   }, [regionHighlighted, currentMap.mapType, setHoveredRegion]);
+
+  const getRegionFromDistrict = (districtData, name) => {
+    if (!districtData) {
+      return;
+    }
+    const region = {...districtData};
+    if (!region.name) {
+      region.name = name;
+    }
+    return region;
+  };
 
   const getRegionFromState = (state) => {
     if (!state) {
@@ -344,11 +370,11 @@ export default function ({
 
   useEffect(() => {
     stateTestData.forEach((stateObj, index) => {
-      if (stateObj.state === currentHoveredRegion.name) {
+      if (stateObj.state === panelRegion.name) {
         setTestObj(stateObj);
       }
     });
-  }, [currentHoveredRegion, stateTestData, testObj]);
+  }, [panelRegion, stateTestData, testObj]);
 
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
@@ -365,7 +391,7 @@ export default function ({
         <div className="stats">
           <h5>{window.innerWidth <= 769 ? 'Cnfmd' : 'Confirmed'}</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.confirmed}</h1>
+            <h1>{panelRegion.confirmed}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -373,7 +399,7 @@ export default function ({
         <div className="stats is-blue">
           <h5>{window.innerWidth <= 769 ? 'Actv' : 'Active'}</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.active || ''}</h1>
+            <h1>{panelRegion.active || ''}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -381,7 +407,7 @@ export default function ({
         <div className="stats is-green">
           <h5>{window.innerWidth <= 769 ? 'Rcvrd' : 'Recovered'}</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.recovered || ''}</h1>
+            <h1>{panelRegion.recovered || ''}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -389,7 +415,7 @@ export default function ({
         <div className="stats is-gray">
           <h5>{window.innerWidth <= 769 ? 'Dcsd' : 'Deceased'}</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.deaths || ''}</h1>
+            <h1>{panelRegion.deaths || ''}</h1>
             <h6>{}</h6>
           </div>
         </div>
