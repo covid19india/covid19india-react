@@ -1,8 +1,6 @@
 # covid19india
 
-<p align="center">
-<img scr="https://photos.app.goo.gl/rhgLp4ZFFZJLWUKk9" />
-</p>
+![Screenshot (237)](https://user-images.githubusercontent.com/40329238/78465480-f400d280-7713-11ea-8acf-4a3847997fa9.png)
 
 <p align="center">
   View our <a href="https://bit.ly/patientdb">live patient database</a>.
