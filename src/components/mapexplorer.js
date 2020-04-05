@@ -213,7 +213,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
-    const region = getRegionFromState(states[1]);
+    const region = getRegionFromState(states[0]);
     setCurrentHoveredRegion(region);
   }, [states]);
 
