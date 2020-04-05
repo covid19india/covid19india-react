@@ -69,10 +69,10 @@ function App() {
       <footer className="fadeInUp" style={{animationDelay: '2s', display:'flex'}}>
         <h5>We stand with everyone fighting on the frontlines</h5>
         <div className="link texttransform">
-          <a className="texttansform" href="https://github.com/covid19india">covidJobAid</a>
+          <a className="texttansform" href="https://github.com/rahulbansal16/covid19india-react">covidJobAid</a>
         </div>
         <a
-          href="https://github.com/covid19india/covid19india-react"
+          href="https://github.com/rahulbansal16/covid19india-react"
           className="button github"
         >
           <Icon.GitHub />
