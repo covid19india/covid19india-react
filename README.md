@@ -1,7 +1,7 @@
 # covid19india
 
 <p align="center">
-<img scr="https://user-images.githubusercontent.com/40329238/78465480-f400d280-7713-11ea-8acf-4a3847997fa9.png" />
+<img scr="https://photos.app.goo.gl/rhgLp4ZFFZJLWUKk9" />
 </p>
 
 <p align="center">
