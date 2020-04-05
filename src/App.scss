@@ -643,7 +643,7 @@ table {
       cursor: pointer;
 
       &:hover {
-        background: $gray-hover;
+        background: $gray-hover !important;
       }
 
       &.divider {
@@ -1811,7 +1811,7 @@ footer {
     background: #fff;
     width: 30rem;
     height: 40rem;
-    overflow-y: scroll;
+    overflow-y: auto;
     svg {
       width: 20px;
       stroke: $pblue-mid;
