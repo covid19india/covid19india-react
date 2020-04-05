@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import axios from 'axios';
 import {formatDistance} from 'date-fns';
 import {
@@ -8,6 +8,7 @@ import {
 } from '../utils/common-functions';
 /* import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';*/
+import moment from 'moment';
 
 import Table from './table';
 import Level from './level';
@@ -21,12 +22,15 @@ function Home(props) {
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
   /* const [patients, setPatients] = useState([]);*/
   const [fetched, setFetched] = useState(false);
+  const [rawData, setRawData] = useState([]);
   const [graphOption, setGraphOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
+  const [stateTimeSeries, setStateTimeSeries] = useState({});
+  const [resultSeries, setresultSeries] = useState([]);
 
   useEffect(() => {
     if (fetched === false) {
@@ -34,22 +38,52 @@ function Home(props) {
     }
   }, [fetched]);
 
+  useEffect(() => {
+    calculateStatewiseTimeSeries(rawData);
+  }, [rawData]);
+
   const getStates = async () => {
     try {
-      const [response, stateDistrictWiseResponse] = await Promise.all([
+      const [
+        response,
+        stateDistrictWiseResponse,
+        rawDataResponse,
+      ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
-        /* axios.get('https://api.covid19india.org/raw_data.json'),*/
+        axios.get('https://api.covid19india.org/raw_data.json'),
       ]);
       setStates(response.data.statewise);
       setTimeseries(validateCTS(response.data.cases_time_series));
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
       /* setPatients(rawDataResponse.data.raw_data.filter((p) => p.detectedstate));*/
+      setRawData(rawDataResponse.data.raw_data);
       setFetched(true);
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const calculateStatewiseTimeSeries = (data) => {
+    // console.log(data);
+    const filteredData = data.filter((r) => r.dateannounced !== '');
+    const statewiseSeries = {};
+    filteredData.forEach((d) => {
+      const st = d.detectedstate;
+      if (statewiseSeries[st] === undefined) {
+        statewiseSeries[st] = {};
+      }
+      const date = moment(d.dateannounced, 'DD/MM/YYYY').format('YYYY-MM-DD');
+      if (statewiseSeries[st][date] === undefined) {
+        statewiseSeries[st][date] = 1;
+      } else {
+        statewiseSeries[st][date] += 1;
+      }
+    });
+    // console.log(statewiseSeries);
+    // console.log(filteredData);
+    setStateTimeSeries(statewiseSeries);
   };
 
   const onHighlightState = (state, index) => {
@@ -60,6 +94,44 @@ function Home(props) {
     if (!state && !index && !district) setRegionHighlighted(null);
     else setRegionHighlighted({district, state, index});
   };
+
+  const getTimeSeries = useCallback(
+    (data) => {
+      if (data === undefined || data === null) {
+        return [];
+      }
+      const state = data.state.state;
+      const series = stateTimeSeries[state];
+      const resultSeries = [];
+      let total = 0;
+      let dateStr = '2020-01-30';
+      let date = moment(dateStr);
+      const today = moment().format('YYYY-MM-DD');
+      while (dateStr !== today) {
+        const num = series[dateStr] || 0;
+        total += num;
+        resultSeries.push({
+          dailyconfirmed: num,
+          dailydeceased: 0,
+          dailyrecovered: 0,
+          date: date.format('DD MMMM '),
+          totalconfirmed: total,
+          totaldeceased: 0,
+          totalrecovered: 0,
+        });
+
+        date = date.add(1, 'days');
+        dateStr = date.format('YYYY-MM-DD');
+      }
+      console.log(state, stateTimeSeries[state], resultSeries);
+      setresultSeries(resultSeries);
+    },
+    [stateTimeSeries]
+  );
+
+  useEffect(() => {
+    getTimeSeries(regionHighlighted);
+  }, [getTimeSeries, regionHighlighted]);
 
   return (
     <div className="Home">
@@ -97,6 +169,15 @@ function Home(props) {
           stateDistrictWiseData={stateDistrictWiseData}
           onHighlightState={onHighlightState}
           onHighlightDistrict={onHighlightDistrict}
+        />
+        <TimeSeries
+          key={'state'}
+          timeseries={resultSeries}
+          confirmedOnly={true}
+          update={1}
+          type={graphOption}
+          logMode={timeseriesLogMode}
+          mode={timeseriesMode}
         />
       </div>
 
