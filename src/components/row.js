@@ -2,6 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import * as Icon from 'react-feather';
 import {formatDate, formatDateAbsolute} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
+
 function Row(props) {
   const [state, setState] = useState(props.state);
   const [districts, setDistricts] = useState(props.districts);
@@ -95,8 +96,13 @@ function Row(props) {
       <tr
         className={props.total ? 'state is-total' : 'state'}
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
-        onMouseLeave={() => props.onHighlightState?.()}
-        touchstart={() => props.onHighlightState?.(state, props.index)}
+        onMouseLeave={
+          window.innerWidth > 768 ? () => props.onHighlightState?.() : null
+        }
+        touchstart={() => {
+          props.setShowFloatingButton(true);
+          return props.onHighlightState?.(state, props.index);
+        }}
         onClick={!props.total ? handleReveal : null}
         style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
       >
@@ -229,10 +235,19 @@ function Row(props) {
                   onMouseEnter={() =>
                     props.onHighlightDistrict?.(district, state, props.index)
                   }
-                  onMouseLeave={() => props.onHighlightDistrict?.()}
-                  touchstart={() =>
-                    props.onHighlightDistrict?.(district, state, props.index)
+                  onMouseLeave={
+                    window.innerWidth > 768
+                      ? () => props.onHighlightState?.()
+                      : null
                   }
+                  touchstart={() => {
+                    props.setShowFloatingButton(true);
+                    return props.onHighlightDistrict?.(
+                      district,
+                      state,
+                      props.index
+                    );
+                  }}
                 >
                   <td style={{fontWeight: 600}}>{district}</td>
                   <td>
