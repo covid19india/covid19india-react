@@ -214,6 +214,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
   useEffect(() => {
     const region = getRegionFromState(states[1]);
     setCurrentHoveredRegion(region);
+    // want to execute the hook on component did mount so passed empty array
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

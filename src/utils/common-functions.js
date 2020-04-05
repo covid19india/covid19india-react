@@ -50,6 +50,7 @@ export const validateCTS = (data = []) => {
     });
 };
 
+// Function to get the previous value of property
 export const usePrevious = (value) => {
   const ref = useRef();
   useEffect(() => {
