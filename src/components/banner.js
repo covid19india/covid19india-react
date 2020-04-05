@@ -10,7 +10,13 @@ function Banner(props) {
       .get('https://api.covid19india.org/website_data.json')
       .then((response) => {
         setSnippets(response.data.factoids || []);
-        setSnippet(response.data.factoids[0] || '');
+        setSnippet(
+          response.data.factoids[
+            Math.floor(
+              Math.random() * (response.data.factoids.length - 1 - 0) + 0
+            )
+          ] || ''
+        );
       })
       .catch((err) => {
         console.log(err);
