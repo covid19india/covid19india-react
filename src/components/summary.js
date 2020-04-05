@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
 import Level from './level';
-import Minigraph from './minigraph';
 import Table from './table';
 
 function Summary(props) {
@@ -37,7 +36,6 @@ function Summary(props) {
         <h1>India COVID-19 Tracker</h1>
       </div>
 
-      <Minigraph timeseries={timeseries} animate={false} />
       <Level data={states} deltas={deltas} />
       <Table states={states} summary={true} />
 

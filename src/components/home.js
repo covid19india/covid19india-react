@@ -55,31 +55,33 @@ function Home(props) {
   return (
     <div className="Home">
       <div className="home-center">
-        <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
+        <Level data={states} deltas={deltas} timeseries={timeseries} />
+        <div
+          className="fadeInUp"
+          style={{animationDelay: '0.5s', marginBottom: '2rem'}}
+        >
           <div className="header-mid">
             <div className="last-update">
-              <h6>Last Updated</h6>
-              <h6 style={{color: '#28a745', fontWeight: 600}}>
+              <h6 style={{fontWeight: 600}}>
+                Last Updated:&nbsp;
                 {isNaN(Date.parse(formatDate(lastUpdated)))
                   ? ''
                   : formatDistance(
                       new Date(formatDate(lastUpdated)),
                       new Date()
                     ) + ' Ago'}
-              </h6>
-              <h6 style={{color: '#28a745', fontWeight: 600}}>
+                (
                 {isNaN(Date.parse(formatDate(lastUpdated)))
                   ? ''
                   : formatDateAbsolute(lastUpdated)}
+                )
               </h6>
             </div>
           </div>
         </div>
-
-        <Level data={states} deltas={deltas} />
       </div>
       <div className="home-left">
-        <Minigraph timeseries={timeseries} animate={true} />
+        {/* <Minigraph timeseries={timeseries} animate={true} /> */}
 
         <Table
           states={states}

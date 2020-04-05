@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 
 function Minigraph(props) {
   const [timeseries, setTimeseries] = useState([]);
+  const [panelType, setPanelType] = useState([]);
   const graphElement1 = useRef(null);
   const graphElement2 = useRef(null);
   const graphElement3 = useRef(null);
@@ -13,6 +14,10 @@ function Minigraph(props) {
       setTimeseries(props.timeseries.slice(props.timeseries.length - 20));
     }
   }, [props.timeseries]);
+
+  useEffect(() => {
+    setPanelType(props.panelType);
+  }, [props.panelType]);
 
   const graphData = useCallback(
     (timeseries) => {
@@ -66,7 +71,8 @@ function Minigraph(props) {
             .curve(d3.curveCardinal)
         );
 
-      const totalLength1 = path1.node().getTotalLength();
+      const totalLength1 =
+        path1 && path1.node() && path1.node().getTotalLength();
       path1
         .attr('stroke-dasharray', totalLength1 + ' ' + totalLength1)
         .attr('stroke-dashoffset', totalLength1)
@@ -130,7 +136,8 @@ function Minigraph(props) {
             .curve(d3.curveCardinal)
         );
 
-      const totalLength2 = path2.node().getTotalLength();
+      const totalLength2 =
+        path2 && path2.node() && path2.node().getTotalLength();
       path2
         .attr('stroke-dasharray', totalLength2 + ' ' + totalLength2)
         .attr('stroke-dashoffset', totalLength2)
@@ -198,7 +205,8 @@ function Minigraph(props) {
             .curve(d3.curveCardinal)
         );
 
-      const totalLength3 = path1.node().getTotalLength();
+      const totalLength3 =
+        path1 && path1.node() && path1.node().getTotalLength();
       path3
         .attr('stroke-dasharray', totalLength3 + ' ' + totalLength3)
         .attr('stroke-dashoffset', totalLength3)
@@ -258,7 +266,8 @@ function Minigraph(props) {
             .curve(d3.curveCardinal)
         );
 
-      const totalLength4 = path4.node().getTotalLength();
+      const totalLength4 =
+        path4 && path4.node() && path4.node().getTotalLength();
       path4
         .attr('stroke-dasharray', totalLength4 + ' ' + totalLength4)
         .attr('stroke-dashoffset', totalLength4)
@@ -296,61 +305,84 @@ function Minigraph(props) {
   );
 
   useEffect(() => {
-    graphData(timeseries);
+    if (panelType) {
+      graphData(timeseries);
+    }
   }, [timeseries, graphData]);
 
-  return (
-    <div className="Minigraph">
-      <div className="svg-parent fadeInUp" style={{animationDelay: '0.6s'}}>
-        <svg
-          ref={graphElement1}
-          width="100"
-          height="100"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="xMidYMid meet"
-        />
+  if (panelType === 'CONFIRMED') {
+    return (
+      <div className="Minigraph">
+        <div className="svg-parent fadeInUp" style={{animationDelay: '0.6s'}}>
+          <svg
+            ref={graphElement1}
+            width="100"
+            height="100"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
       </div>
+    );
+  }
 
-      <div
-        className="svg-parent is-blue fadeInUp"
-        style={{animationDelay: '0.7s'}}
-      >
-        <svg
-          ref={graphElement2}
-          width="100"
-          height="100"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="xMidYMid meet"
-        />
+  if (panelType === 'ACTIVE') {
+    return (
+      <div className="Minigraph">
+        <div
+          className="svg-parent is-blue fadeInUp"
+          style={{animationDelay: '0.7s'}}
+        >
+          <svg
+            ref={graphElement2}
+            width="100"
+            height="100"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
       </div>
+    );
+  }
 
-      <div
-        className="svg-parent is-green fadeInUp"
-        style={{animationDelay: '0.8s'}}
-      >
-        <svg
-          ref={graphElement3}
-          width="100"
-          height="100"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="xMidYMid meet"
-        />
+  if (panelType === 'RECOVERIES') {
+    return (
+      <div className="Minigraph">
+        <div
+          className="svg-parent is-green fadeInUp"
+          style={{animationDelay: '0.8s'}}
+        >
+          <svg
+            ref={graphElement3}
+            width="100"
+            height="100"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
       </div>
+    );
+  }
 
-      <div
-        className="svg-parent is-gray fadeInUp"
-        style={{animationDelay: '0.9s'}}
-      >
-        <svg
-          ref={graphElement4}
-          width="100"
-          height="100"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="xMidYMid meet"
-        />
+  if (panelType === 'DEATHS') {
+    return (
+      <div className="Minigraph">
+        <div
+          className="svg-parent is-gray fadeInUp"
+          style={{animationDelay: '0.9s'}}
+        >
+          <svg
+            ref={graphElement4}
+            width="100"
+            height="100"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+  return null;
 }
 
 export default Minigraph;

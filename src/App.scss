@@ -285,8 +285,20 @@ h6 {
   }
 }
 
-.border-left-primary {
-  border-left: .25rem solid #4e73df !important;
+.border-left-cherry {
+  border-left: .25rem solid $cherry !important;
+}
+
+.border-left-blue {
+  border-left: .25rem solid $blue !important;
+}
+
+.border-left-green {
+  border-left: .25rem solid $green !important;
+}
+
+.border-left-gray {
+  border-left: .25rem solid $gray !important;
 }
 
 .home-center {
@@ -306,10 +318,42 @@ h6 {
   border: 1px solid #e3e6f0;
   border-radius: .35rem;
   margin: 0.5rem;
+  height: 7rem;
 
   .body {
     flex: 1 1 auto;
-    padding: 1.25rem;
+    padding: 0.75rem;
+    display: flex;
+
+    h1,
+    h4 {
+      color: $gray;
+    }
+  }
+
+  .is-cherry {
+    h5 {
+      color: $cherry;
+    }
+  }
+
+  .is-blue {
+    h5 {
+      color: $blue;
+    }
+  }
+
+  .is-green {
+
+    h5 {
+      color: $green;
+    }
+  }
+
+  .is-gray {
+    h5 {
+      color: $gray;
+    }
   }
 }
 
@@ -369,7 +413,6 @@ h6 {
   width: 30rem;
   align-self: center;
   justify-content: space-between;
-  padding-top: 2rem;
   margin-bottom: 1rem;
 
   h1,
@@ -548,50 +591,6 @@ h6 {
 
   h4 {
     margin-bottom: -0.5rem;
-  }
-
-  .is-cherry {
-    h1 {
-      color: $cherry;
-    }
-
-    h4,
-    h5 {
-      color: $cherry-mid;
-    }
-  }
-
-  .is-blue {
-    h1 {
-      color: $blue;
-    }
-
-    h4,
-    h5 {
-      color: $blue-mid;
-    }
-  }
-
-  .is-green {
-    h1 {
-      color: $green;
-    }
-
-    h4,
-    h5 {
-      color: $green-mid;
-    }
-  }
-
-  .is-gray {
-    h1 {
-      color: $gray;
-    }
-
-    h4,
-    h5 {
-      color: $gray-mid;
-    }
   }
 }
 
@@ -1324,12 +1323,12 @@ table {
 }
 
 .Minigraph {
-  width: 30rem;
   align-self: center;
   margin: 0;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin: 1.5rem 0.5rem 0.5rem 2rem;
 
   .svg-parent {
     width: 5rem;
