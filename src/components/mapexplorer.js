@@ -270,27 +270,15 @@ export default function ({
           getRegionFromState(states.filter((state) => name === state.state)[0])
         );
       } else if (currentMap.mapType === MAP_TYPES.STATE) {
-        // const state = stateDistrictWiseData[currentMap.name] || {
-        //   districtData: {},
-        // };
-        // let districtData = state.districtData[name];
-        // if (!districtData) {
-        //   districtData = {
-        //     confirmed: 0,
-        //     active: 0,
-        //     deaths: 0,
-        //     recovered: 0,
-        //   };
-        // }
-        // setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
-        const regionData = getRegionFromState(
+        // Hack to display only the state cases count on the coloured boxes
+        const panelData = getRegionFromState(
           states.filter((state) => currentMap.name === state.state)[0]
         );
-        regionData.name = name;
-        setCurrentHoveredRegion(regionData);
+        panelData.name = name;
+        setCurrentHoveredRegion(panelData);
       }
     },
-    [states] // stateDistrictWiseData
+    [states]
   );
 
   useEffect(() => {
@@ -317,17 +305,6 @@ export default function ({
       setSelectedRegion(regionHighlighted.district);
     }
   }, [regionHighlighted, currentMap.mapType, setHoveredRegion]);
-
-  // const getRegionFromDistrict = (districtData, name) => {
-  //   if (!districtData) {
-  //     return;
-  //   }
-  //   const region = {...districtData};
-  //   if (!region.name) {
-  //     region.name = name;
-  //   }
-  //   return region;
-  // };
 
   const getRegionFromState = (state) => {
     if (!state) {
@@ -366,8 +343,7 @@ export default function ({
   const {name, lastupdatedtime} = currentHoveredRegion;
 
   useEffect(() => {
-    console.log(currentHoveredRegion);
-    stateTestData.map((stateObj, index) => {
+    stateTestData.forEach((stateObj, index) => {
       if (stateObj.state === currentHoveredRegion.name) {
         setTestObj(stateObj);
       }
@@ -477,6 +453,15 @@ export default function ({
             </h3>
           </div>
         )}
+
+        {currentMap.mapType === MAP_TYPES.STATE ? (
+          <h4 className="district-confirmed">
+            Confirmed cases:{' '}
+            {currentMapData[currentHoveredRegion.name]
+              ? currentMapData[currentHoveredRegion.name]
+              : 0}
+          </h4>
+        ) : null}
 
         {currentMap.mapType === MAP_TYPES.STATE &&
         currentMapData.Unknown > 0 ? (
