@@ -5,7 +5,6 @@ import {
   formatDate,
   formatDateAbsolute,
   validateCTS,
-  getDateFromEpoch,
 } from '../utils/common-functions';
 /* import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';*/
@@ -118,13 +117,20 @@ function Home(props) {
 
           {activityLog && activityLog.length && (
             <div className="activity-center">
-              {activityLog.map(function (activity, index) {
-                return (
-                  <p key={index} className="activity">
-                    {getDateFromEpoch(activity.timestamp)} : {activity.update}
-                  </p>
-                );
-              })}
+              {activityLog
+                .slice()
+                .reverse()
+                .map(function (activity, index) {
+                  return (
+                    <p key={index} className="activity">
+                      {formatDistance(
+                        new Date(activity.timestamp * 1000),
+                        new Date()
+                      ) + ' Ago'}
+                      : {activity.update}
+                    </p>
+                  );
+                })}
             </div>
           )}
         </div>
