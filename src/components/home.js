@@ -63,28 +63,19 @@ function Home(props) {
     <div className="Home">
       <div className="home-center">
         {states.length > 0 && <Level data={states} timeseries={timeseries} />}
-        <div
-          className="fadeInUp"
-          style={{animationDelay: '0.5s', marginBottom: '2rem'}}
-        >
-          <div className="header-mid">
-            <div className="last-update">
-              <h6 style={{fontWeight: 600}}>
-                Last Updated:&nbsp;
-                {isNaN(Date.parse(formatDate(lastUpdated)))
-                  ? ''
-                  : formatDistance(
-                      new Date(formatDate(lastUpdated)),
-                      new Date()
-                    ) + ' Ago'}
-                (
-                {isNaN(Date.parse(formatDate(lastUpdated)))
-                  ? ''
-                  : formatDateAbsolute(lastUpdated)}
-                )
-              </h6>
-            </div>
-          </div>
+        <div className="last-update">
+          <h6 style={{fontWeight: 600}}>
+            Last Updated:&nbsp;
+            {isNaN(Date.parse(formatDate(lastUpdated)))
+              ? ''
+              : formatDistance(new Date(formatDate(lastUpdated)), new Date()) +
+                ' Ago'}
+            (
+            {isNaN(Date.parse(formatDate(lastUpdated)))
+              ? ''
+              : formatDateAbsolute(lastUpdated)}
+            )
+          </h6>
         </div>
       </div>
       <div className="home-left">

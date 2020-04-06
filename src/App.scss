@@ -261,7 +261,6 @@ h6 {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  line-height: 20px;
   font-family: 'Archia';
   font-size: 0.8rem;
   font-weight: 600;
@@ -272,7 +271,7 @@ h6 {
     align-self: center;
     width: calc(100% - 10rem);
     word-wrap: break-word;
-    padding: 1.5rem;
+    padding: 1rem;
     text-align: center;
     cursor: pointer;
   }
@@ -289,6 +288,24 @@ h6 {
   h6 {
     margin-top: 0;
   }
+}
+
+.total-change {
+  align-self: center;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.color-cherry {
+  color: $cherry;
+}
+
+.color-green {
+  color: $green;
+}
+
+.color-gray {
+  color: $gray;
 }
 
 .border-left-cherry {
@@ -313,6 +330,14 @@ h6 {
   width: 65rem;
 }
 
+.cards-container {
+  animation-delay: 0.8s;
+  display: flex;
+  flex-direction: row;
+  margin-top: 1rem;
+
+}
+
 .card {
   position: relative;
   display: flex;
@@ -334,6 +359,10 @@ h6 {
     h1,
     h4 {
       color: $gray;
+    }
+
+    h1 {
+      width: 8rem;
     }
   }
 
@@ -451,9 +480,8 @@ h6 {
 .last-update {
   display: flex;
   flex-direction: column;
-  align-self: center;
   text-align: right;
-  margin-bottom: auto;
+  margin-bottom: 1.5rem;
   margin-top: 0.25rem;
   float: right;
 
@@ -1359,7 +1387,7 @@ table {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 1.5rem 0.5rem 0.5rem 2rem;
+  margin: 1.5rem 0.5rem 0.5rem 1rem;
 
   .svg-parent {
     width: 5rem;
@@ -2310,6 +2338,23 @@ select {
 
 @media (max-width: 769px) {
 
+  .card {
+    width: auto;
+  }
+
+  .cards-container {
+    flex-direction: column;
+    margin: 0.25rem;
+  }
+
+  .Navbar .navbar-right {
+    text-align: inherit;
+  }
+
+  .home-center {
+    width: inherit;
+  }
+
   .TimeSeries,
   table,
   .header,
@@ -2372,7 +2417,8 @@ select {
   }
 
   .last-update {
-    width: 20rem;
+    width: auto;
+    margin-right: 0.75rem;
   }
 
   a.button {

@@ -51,29 +51,21 @@ function Level(props) {
   }, [data]);
 
   return (
-    <div
-      className="fadeInUp"
-      style={{
-        animationDelay: '0.8s',
-        display: 'flex',
-        marginTop: '1rem',
-      }}
-    >
+    <div className="fadeInUp cards-container">
       <div className="card border-left-cherry">
         <div className="body is-cherry">
           <div>
             <h5>Confirmed</h5>
-            <h1 style={{width: '6rem'}}>
+            <h1>
               {confirmed}
-              <small style={{alignSelf: 'center', fontSize: '1rem'}}>
-                &nbsp; [
+              <span className="total-change color-cherry">
+                &nbsp;
                 {deltas
-                  ? deltas.confirmeddelta >= 0
-                    ? '+' + deltas.confirmeddelta
+                  ? deltas.confirmed >= 0
+                    ? '+' + deltas.confirmed
                     : '+0'
                   : ''}
-                ]
-              </small>
+              </span>
             </h1>
           </div>
           <Minigraph
@@ -105,15 +97,14 @@ function Level(props) {
             <h5 className="heading">Recovered</h5>
             <h1 className="title has-text-success" style={{width: '6rem'}}>
               {recoveries}
-              <small style={{alignSelf: 'center', fontSize: '1rem'}}>
-                &nbsp; [
+              <span className="total-change color-green">
+                &nbsp;
                 {deltas
-                  ? deltas.recovereddelta >= 0
-                    ? '+' + deltas.recovereddelta
+                  ? deltas.recovered >= 0
+                    ? '+' + deltas.recovered
                     : '+0'
                   : ''}
-                ]
-              </small>
+              </span>
             </h1>
           </div>
 
@@ -131,15 +122,14 @@ function Level(props) {
             <h5 className="heading">Deceased</h5>
             <h1 className="title has-text-grey" style={{width: '6rem'}}>
               {deaths}
-              <small style={{alignSelf: 'center', fontSize: '1rem'}}>
-                &nbsp; [
+              <span className="total-change color-gray">
+                &nbsp;
                 {deltas
-                  ? deltas.deceaseddelta >= 0
-                    ? '+' + deltas.deceaseddelta
+                  ? deltas.deaths >= 0
+                    ? '+' + deltas.deaths
                     : '+0'
                   : ''}
-                ]
-              </small>
+              </span>
             </h1>
           </div>
 
