@@ -1018,15 +1018,17 @@ table {
   display: flex;
   flex-direction: row;
   width: 30rem;
+  flex-wrap: wrap;
 
   .activity {
     min-width: 5rem;
+    margin-top: 8px;
     width: 100%;
     background: $gray-light;
     padding-left: 1rem;
     padding-right: 1rem;
-    color: $gray-mid;
-    border-top-left-radius: 5px;
+    color: $gray-dark;
+    border-top-left-radius: 2px;
     border-top-right-radius: 5px;
     text-align: left;
     margin-right: 0.25rem;

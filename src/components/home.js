@@ -24,6 +24,7 @@ function Home(props) {
   const [graphOption, setGraphOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState([]);
+  const [activityLog, setActivityLog] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
@@ -36,15 +37,21 @@ function Home(props) {
 
   const getStates = async () => {
     try {
-      const [response, stateDistrictWiseResponse] = await Promise.all([
+      const [
+        response,
+        stateDistrictWiseResponse,
+        updateLogResponse,
+      ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
+        axios.get('https://api.covid19india.org/updatelog/log.json'),
         /* axios.get('https://api.covid19india.org/raw_data.json'),*/
       ]);
       setStates(response.data.statewise);
       setTimeseries(validateCTS(response.data.cases_time_series));
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
+      setActivityLog(updateLogResponse.data);
       /* setPatients(rawDataResponse.data.raw_data.filter((p) => p.detectedstate));*/
       setFetched(true);
     } catch (err) {
@@ -98,6 +105,7 @@ function Home(props) {
           onHighlightState={onHighlightState}
           onHighlightDistrict={onHighlightDistrict}
         />
+
         <div
           className="timeseries-header fadeInUp"
           style={{animationDelay: '1.5s'}}
@@ -107,9 +115,17 @@ function Home(props) {
             <h4>{timeseries[timeseries.length - 1].date}</h4>
           )}
 
-          <div className="activity-center">
-            <p className="activity">Activity 1</p>
-          </div>
+          {activityLog && activityLog.length && (
+            <div className="activity-center">
+              {activityLog.map(function (activity, index) {
+                return (
+                  <p key={index} className="activity">
+                    {activity.timestamp}: {activity.update}
+                  </p>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
