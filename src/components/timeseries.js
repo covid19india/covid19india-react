@@ -82,6 +82,7 @@ function TimeSeries(props) {
 
       const yScaleUniformLinear = d3
         .scaleLinear()
+        .clamp(true)
         .domain([0, yBuffer * d3.max(ts, (d) => d.totalconfirmed)])
         .nice()
         .range([chartHeight, margin.top]);
@@ -126,6 +127,7 @@ function TimeSeries(props) {
       const yScales = dataTypes.map((type) => {
         const yScaleLinear = d3
           .scaleLinear()
+          .clamp(true)
           .domain([0, yBuffer * d3.max(ts, (d) => d[type])])
           .nice()
           .range([chartHeight, margin.top]);
