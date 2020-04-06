@@ -1229,6 +1229,11 @@ table {
     h6 {
       margin: 0;
       color: $cherry-mid;
+      transition: all 0.15s ease-in-out;
+    }
+
+    h5.title {
+      color: $cherry;
     }
 
     h2,
@@ -1309,6 +1314,7 @@ table {
         color: $cherry-mid;
         stroke: transparent;
         font-size: 12px;
+        font-weight: 900;
       }
     }
 
