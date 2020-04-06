@@ -17,11 +17,11 @@ const FormattedCell = ({
 
     // If the initialValue is changed externall, sync it up with our state
     React.useEffect(() => {
-        let s1 = initialValue.replace(reurl, '<a href="$1">$1</a>');
+        let s1 = initialValue.replace(reurl, '<a href="$1">Link</a>');
         let s2 = s1.replace(reinsta, '<a href="https://www.instagram.com/$1">Instagram: @$1</a>');
         let s3 = s2.replace(refb, '<a href="https://www.facebook.com/$1">Facebook: @$1</a>')
         setValue(s3);
-    }, [initialValue])
+    }, [initialValue, reurl, refb, reinsta])
 
     return (
         <div className="tablecelldata" dangerouslySetInnerHTML={{
@@ -93,27 +93,29 @@ function ResourceTable({ columns, data }) {
                 </tbody>
             </table>
             <div className="pagination">
-                <button className="button is-purple" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-                    {'<<'}
-                </button>{' '}
-                <button className="button is-purple" onClick={() => previousPage()} disabled={!canPreviousPage}>
-                    {'<'}
-                </button>{' '}
-                <button className="button is-purple" onClick={() => nextPage()} disabled={!canNextPage}>
-                    {'>'}
-                </button>{' '}
-                <button className="button is-purple" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-                    {'>>'}
-                </button>{' '}
-                <h5>
+                <div className="paginationbutton">
+                    <button className="button is-purple" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+                        {'\u003c\u003c'}
+                    </button>{' '}
+                    <button className="button is-purple" onClick={() => previousPage()} disabled={!canPreviousPage}>
+                        {'<'}
+                    </button>{' '}
+                    <button className="button is-purple" onClick={() => nextPage()} disabled={!canNextPage}>
+                        {'>'}
+                    </button>{' '}
+                    <button className="button is-purple" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                        {'>>'}
+                    </button>{' '}
+                </div>
+                <h5 style={{color: '#201aa299'}}>
                     Page{' '}
                     <strong>
                         {pageIndex + 1} of {pageOptions.length}
                     </strong>{' '}
                 </h5>
-                <h5 style={{marginLeft:'0.2rem'}}>
-                     | Go to page:{' '}
-                </h5>
+                {/* <h5 style={{marginLeft:'0.2rem'}}>
+                     Go to page:{' '}
+                </h5> */}
                     <input
                         type="number"
                         defaultValue={pageIndex + 1}
@@ -121,7 +123,6 @@ function ResourceTable({ columns, data }) {
                             const page = e.target.value ? Number(e.target.value) - 1 : 0
                             gotoPage(page)
                         }}
-                        style={{ width: '100px', height: '1.5rem', margin: '0.7rem 0.7rem 0rem 0.7rem' }}
                     />
                 
                 <select className="select"
@@ -139,16 +140,6 @@ function ResourceTable({ columns, data }) {
             </div>
         </div>
     )
-}
-
-function getCityList() {
-    return ['Kolkata', 'Mumbai', 'Delhi', 'Bengaluru', 'Pune', 'Ahmedabad']
-}
-function getIndianStateList() {
-    return ['Maharashtra', 'Gujarat', 'West Bengal', 'Kerala']
-}
-function getCategoryList() {
-    return ['Community Kitchen', 'CoVID-19 Tesing Lab', 'Free Food'];
 }
 
 function Resources(props) {
@@ -177,7 +168,7 @@ function Resources(props) {
             // console.log(columns)
             // setData(response.data.resources);
             const hashmap = {};
-            response.data.resources.map((x) => {
+            response.data.resources.forEach((x) => {
                 // console.log(x)
                 if (typeof hashmap[x['state']] === 'undefined') hashmap[x['state']] = {};
                 if (typeof hashmap[x['state']][x['city']] === 'undefined') hashmap[x['state']][x['city']] = {};
@@ -213,11 +204,11 @@ function Resources(props) {
                 accessor: 'descriptionandorserviceprovided'
             },
             {
-                Header: 'Phone Number',
+                Header: 'Phone',
                 accessor: 'phonenumber'
             },
             {
-                Header: 'Contact',
+                Header: 'Website',
                 accessor: 'contact'
             }
 
@@ -230,18 +221,18 @@ function Resources(props) {
 
     const getCityOptions = function () {
         if (indianstate) {
-            return Object.keys(resourcedict[indianstate]).map((x) => <option value={x}>{x}</option>)
+            return Object.keys(resourcedict[indianstate]).sort().map((x) => <option value={x}>{x}</option>)
         }
         else return [];
         // return getCityList().map((x) => <option value={x}>{x}</option>)
     }
     const getIndianStateOptions = function () {
         // let defaultOption = ['Please select']
-        return Object.keys(resourcedict).map((x) => <option value={x}>{x}</option>)
+        return Object.keys(resourcedict).sort().map((x) => <option value={x}>{x}</option>)
     }
     const getCategoryOptions = function () {
         if (indianstate && city) {
-            return Object.keys(resourcedict[indianstate][city]).map((x) => <option value={x}>{x}</option>)
+            return Object.keys(resourcedict[indianstate][city]).sort().map((x) => <option value={x}>{x}</option>)
         }
         else return [];
     }
@@ -294,37 +285,36 @@ function Resources(props) {
                 </div>
                 <div className='resourcefilters'>
                     <div className='resourcefilter'>
-                        <label for='stateselect1' className='filterlabel'>
+                        {/* <label for='stateselect1' className='filterlabel'>
                             State
-                        </label>
+                        </label> */}
                         <select id="stateselect1" onChange={changeIndianState}>
-                            <option value="" selected>Choose here</option>
+                            <option value="" selected>Choose State</option>
                             {getIndianStateOptions()}
                         </select>
                     </div>
                     <div className='resourcefilter'>
-                        <label for='cityselect1' className='filterlabel'>
+                        {/* <label for='cityselect1' className='filterlabel'>
                             City
-                        </label>
+                        </label> */}
                         <select id="cityselect1" onChange={changeCity}>
-                            <option value="" selected disabled hidden>Choose here</option>
+                            <option value="" selected disabled hidden>Choose City</option>
 
                             {getCityOptions()}
                         </select>
                     </div>
                     <div className='resourcefilter'>
-                        <label for='categoryselect' className='filterlabel'>
+                        {/* <label for='categoryselect' className='filterlabel'>
                             Category
-                        </label>
+                        </label> */}
                         <select id="categoryselect" onChange={changeCategory}>
-                            <option value="" selected disabled hidden>Choose here</option>
+                            <option value="" selected disabled hidden>Choose Category</option>
                             <option value="all">All Categories</option>
                             {getCategoryOptions()}
                         </select>
                     </div>
                     <div className='resourcefilter'>
                         <button className='button is-purple'
-                            style={{ position: "relative", top: '0.5rem' }}
                             onClick={filterTable}>Search</button>
                     </div>
                 </div>
