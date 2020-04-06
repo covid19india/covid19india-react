@@ -252,7 +252,7 @@ function Table(props) {
                   total={false}
                   reveal={revealedStates[state.state]}
                   districts={
-                    Object.keys(districts).length - 1 > 0
+                    state.state in districts
                       ? districts[state.state].districtData
                       : []
                   }
