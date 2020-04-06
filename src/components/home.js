@@ -98,6 +98,19 @@ function Home(props) {
           onHighlightState={onHighlightState}
           onHighlightDistrict={onHighlightDistrict}
         />
+        <div
+          className="timeseries-header fadeInUp"
+          style={{animationDelay: '1.5s'}}
+        >
+          <h1>Activity Center</h1>
+          {timeseries && timeseries.length && (
+            <h4>{timeseries[timeseries.length - 1].date}</h4>
+          )}
+
+          <div className="activity-center">
+            <p className="activity">Activity 1</p>
+          </div>
+        </div>
       </div>
 
       <div className="home-right">
