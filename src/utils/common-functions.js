@@ -47,3 +47,14 @@ export const validateCTS = (data = []) => {
       return new Date(d.date + year) < today;
     });
 };
+
+/**
+ * Returns the last `days` entries
+ * @param {Array<Object>} timeseries
+ * @param {number} days
+ *
+ * @return {Array<Object>}
+ */
+export function lastDaysFromTimeseries(timeseries, days) {
+  return timeseries.slice(timeseries.length - days);
+}
