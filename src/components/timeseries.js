@@ -51,8 +51,8 @@ function TimeSeries(props) {
 
       // Margins
       const margin = {top: 0, right: 25, bottom: 60, left: 20};
-      const width = 650 - margin.left - margin.right;
-      const height = 200 - margin.top - margin.bottom;
+      const chartWidth = 650 - margin.left - margin.right;
+      const chartHeight = 200 - margin.top - margin.bottom;
 
       const dateMin = new Date(ts[0]['date']);
       dateMin.setDate(dateMin.getDate() - 1);
@@ -62,12 +62,12 @@ function TimeSeries(props) {
       const x = d3
         .scaleTime()
         .domain([dateMin, dateMax])
-        .range([margin.left, width]);
+        .range([margin.left, chartWidth]);
 
       const indexScale = d3
         .scaleLinear()
         .domain([0, timeseries.length])
-        .range([margin.left, width]);
+        .range([margin.left, chartWidth]);
 
       // Arrays of objects
       const svgArray = [svg1, svg2, svg3, svg4, svg5, svg6];
@@ -118,7 +118,7 @@ function TimeSeries(props) {
                 : dTypeMaxMap['dailyconfirmed']
             )
           : applyLogMode(maxY)
-        ).range([height, margin.top]);
+        ).range([chartHeight, margin.top]);
       });
 
       const y = (dataTypeIdx, day) => {
@@ -176,13 +176,12 @@ function TimeSeries(props) {
       svgArray.forEach((s, i) => {
         /* X axis */
         s.append('g')
-          .attr('transform', 'translate(0,' + height + ')')
           .attr('class', 'axis')
-          .call(d3.axisBottom(x));
+          .call(d3.axisBottom(x))
+          .style('transform', `translateY(${chartHeight}px)`);
 
         /* Y axis */
         s.append('g')
-          .attr('transform', `translate(${width}, ${0})`)
           .attr('class', 'axis')
           .call(
             d3
@@ -190,7 +189,8 @@ function TimeSeries(props) {
               .ticks(tickCount(i))
               .tickPadding(5)
               .tickFormat(d3.format('~s'))
-          );
+          )
+          .style('transform', `translateX(${chartWidth}px)`);
 
         /* Focus dots */
         s.on('mousemove', mousemove)
@@ -233,7 +233,7 @@ function TimeSeries(props) {
             .enter()
             .append('line')
             .attr('x1', (d) => x(d['date']))
-            .attr('y1', height)
+            .attr('y1', chartHeight)
             .attr('x2', (d) => x(d['date']))
             .attr('y2', (d) => y(i, d))
             .style('stroke', colors[i] + '99')
