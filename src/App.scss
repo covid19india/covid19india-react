@@ -455,6 +455,7 @@ h6 {
   text-align: right;
   margin-bottom: auto;
   margin-top: 0.25rem;
+  float: right;
 
   h6 {
     color: $green-mid;
@@ -2352,6 +2353,10 @@ select {
       margin-right: -1rem;
       cursor: pointer;
     }
+
+    .navbar-left {
+      display: none;
+    }
   }
 
   .timeseries {
@@ -2361,7 +2366,7 @@ select {
   }
 
   .last-update {
-    width: 10rem;
+    width: 20rem;
   }
 
   a.button {

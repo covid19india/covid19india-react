@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import Minigraph from './minigraph';
 
 function Level(props) {
   const [data, setData] = useState(props.data);
@@ -7,10 +8,15 @@ function Level(props) {
   const [recoveries, setRecoveries] = useState(0);
   const [deaths, setDeaths] = useState(0);
   const [deltas, setDeltas] = useState(0);
+  const [timeseries, setTimeseries] = useState(props.timeseries);
 
   useEffect(() => {
     setData(props.data);
   }, [props.data]);
+
+  useEffect(() => {
+    setTimeseries(props.timeseries);
+  }, [props.timeseries]);
 
   useEffect(() => {
     const parseData = () => {
@@ -20,17 +26,19 @@ function Level(props) {
       let deaths = 0;
       let deltas = {};
       data.forEach((state, index) => {
-        if (index !== 0) {
-          confirmed += parseInt(state.confirmed);
-          active += parseInt(state.active);
-          recoveries += parseInt(state.recovered);
-          deaths += parseInt(state.deaths);
-        } else {
-          deltas = {
-            confirmed: parseInt(state.deltaconfirmed),
-            deaths: parseInt(state.deltadeaths),
-            recovered: parseInt(state.deltarecovered),
-          };
+        if (state) {
+          if (index !== 0) {
+            confirmed += parseInt(state.confirmed);
+            active += parseInt(state.active);
+            recoveries += parseInt(state.recovered);
+            deaths += parseInt(state.deaths);
+          } else {
+            deltas = {
+              confirmed: parseInt(state.deltaconfirmed),
+              deaths: parseInt(state.deltadeaths),
+              recovered: parseInt(state.deltarecovered),
+            };
+          }
         }
       });
       setConfirmed(confirmed);
@@ -43,48 +51,104 @@ function Level(props) {
   }, [data]);
 
   return (
-    <div className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
-      <div className="level-item is-cherry">
-        <h5>Confirmed</h5>
-        <h4>
-          [
-          {deltas
-            ? deltas.confirmed >= 0
-              ? '+' + deltas.confirmed
-              : '+0'
-            : ''}
-          ]
-        </h4>
-        <h1>{confirmed} </h1>
+    <div
+      className="fadeInUp"
+      style={{
+        animationDelay: '0.8s',
+        display: 'flex',
+        marginTop: '1rem',
+      }}
+    >
+      <div className="card border-left-cherry">
+        <div className="body is-cherry">
+          <div>
+            <h5>Confirmed</h5>
+            <h1 style={{width: '6rem'}}>
+              {confirmed}
+              <small style={{alignSelf: 'center', fontSize: '1rem'}}>
+                &nbsp; [
+                {deltas
+                  ? deltas.confirmeddelta >= 0
+                    ? '+' + deltas.confirmeddelta
+                    : '+0'
+                  : ''}
+                ]
+              </small>
+            </h1>
+          </div>
+          <Minigraph
+            timeseries={timeseries}
+            animate={false}
+            panelType="CONFIRMED"
+          />
+        </div>
       </div>
 
-      <div className="level-item is-blue">
-        <h5 className="heading">Active</h5>
-        <h4>&nbsp;</h4>
-        {/* <h4>[{props.deltas ? props.deltas.confirmeddelta-(props.deltas.recovereddelta+props.deltas.deceaseddelta) >=0 ? '+'+(props.deltas.confirmeddelta-(props.deltas.recovereddelta+props.deltas.deceaseddelta)).toString() : '+0' : ''}]</h4>*/}
-        <h1 className="title has-text-info">{active}</h1>
+      <div className="card border-left-blue">
+        <div className="body is-blue">
+          <div>
+            <h5 className="heading">Active</h5>
+            <h1 className="title has-text-info">{active}</h1>
+          </div>
+
+          <Minigraph
+            timeseries={timeseries}
+            animate={false}
+            panelType="ACTIVE"
+          />
+        </div>
       </div>
 
-      <div className="level-item is-green">
-        <h5 className="heading">Recovered</h5>
-        <h4>
-          [
-          {deltas
-            ? deltas.recovered >= 0
-              ? '+' + deltas.recovered
-              : '+0'
-            : ''}
-          ]
-        </h4>
-        <h1 className="title has-text-success">{recoveries} </h1>
+      <div className="card border-left-green">
+        <div className="body is-green">
+          <div>
+            <h5 className="heading">Recovered</h5>
+            <h1 className="title has-text-success" style={{width: '6rem'}}>
+              {recoveries}
+              <small style={{alignSelf: 'center', fontSize: '1rem'}}>
+                &nbsp; [
+                {deltas
+                  ? deltas.recovereddelta >= 0
+                    ? '+' + deltas.recovereddelta
+                    : '+0'
+                  : ''}
+                ]
+              </small>
+            </h1>
+          </div>
+
+          <Minigraph
+            timeseries={timeseries}
+            animate={false}
+            panelType="RECOVERIES"
+          />
+        </div>
       </div>
 
-      <div className="level-item is-gray">
-        <h5 className="heading">Deceased</h5>
-        <h4>
-          [{deltas ? (deltas.deaths >= 0 ? '+' + deltas.deaths : '+0') : ''}]
-        </h4>
-        <h1 className="title has-text-grey">{deaths}</h1>
+      <div className="card border-left-gray">
+        <div className="body is-gray">
+          <div>
+            <h5 className="heading">Deceased</h5>
+            <h1 className="title has-text-grey" style={{width: '6rem'}}>
+              {deaths}
+              <small style={{alignSelf: 'center', fontSize: '1rem'}}>
+                &nbsp; [
+                {deltas
+                  ? deltas.deceaseddelta >= 0
+                    ? '+' + deltas.deceaseddelta
+                    : '+0'
+                  : ''}
+                ]
+              </small>
+            </h1>
+          </div>
+
+          <Minigraph
+            timeseries={timeseries}
+            animate={false}
+            panelType="DEATHS"
+          />
+        </div>
       </div>
     </div>
   );

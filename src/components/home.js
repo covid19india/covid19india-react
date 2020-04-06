@@ -13,7 +13,6 @@ import Table from './table';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import TimeSeries from './timeseries';
-import Minigraph from './minigraph';
 /* import Patients from './patients';*/
 
 function Home(props) {
@@ -39,7 +38,6 @@ function Home(props) {
       const [response, stateDistrictWiseResponse] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
-        /* axios.get('https://api.covid19india.org/raw_data.json'),*/
       ]);
       setStates(response.data.statewise);
       setTimeseries(validateCTS(response.data.cases_time_series));
@@ -63,34 +61,33 @@ function Home(props) {
 
   return (
     <div className="Home">
-      <div className="home-left">
-        <div className="header fadeInUp" style={{animationDelay: '0.5s'}}>
+      <div className="home-center">
+        {states.length > 0 && <Level data={states} timeseries={timeseries} />}
+        <div
+          className="fadeInUp"
+          style={{animationDelay: '0.5s', marginBottom: '2rem'}}
+        >
           <div className="header-mid">
-            <div className="titles">
-              <h1>India COVID-19 Tracker</h1>
-              <h6 style={{fontWeight: 600}}>A Crowdsourced Initiative</h6>
-            </div>
             <div className="last-update">
-              <h6>Last Updated</h6>
-              <h6 style={{color: '#28a745', fontWeight: 600}}>
+              <h6 style={{fontWeight: 600}}>
+                Last Updated:&nbsp;
                 {isNaN(Date.parse(formatDate(lastUpdated)))
                   ? ''
                   : formatDistance(
                       new Date(formatDate(lastUpdated)),
                       new Date()
                     ) + ' Ago'}
-              </h6>
-              <h6 style={{color: '#28a745', fontWeight: 600}}>
+                (
                 {isNaN(Date.parse(formatDate(lastUpdated)))
                   ? ''
                   : formatDateAbsolute(lastUpdated)}
+                )
               </h6>
             </div>
           </div>
         </div>
-
-        {states.length > 1 && <Level data={states} />}
-        <Minigraph timeseries={timeseries} animate={true} />
+      </div>
+      <div className="home-left">
         <Table
           states={states}
           summary={false}

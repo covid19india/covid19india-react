@@ -36,7 +36,6 @@ function Summary(props) {
         <h1>India COVID-19 Tracker</h1>
       </div>
 
-      <Level data={states} deltas={deltas} />
       <Table states={states} summary={true} />
 
       <div className="summary-bottom">
