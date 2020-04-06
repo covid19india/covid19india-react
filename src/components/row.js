@@ -102,7 +102,7 @@ function Row(props) {
         onClick={!props.total ? handleReveal : null}
         style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
       >
-        <td style={{fontWeight: 600}}>
+        <td style={{fontWeight: 600}} title={"Today Newly Confirmed:"+state.deltaconfirmed+"  Recovered:"+state.deltarecovered+"  Deceased:"+state.deltadeaths}>
           {state.state}
           {state.state === 'West Bengal' && (
             <Link to="/faq">
