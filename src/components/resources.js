@@ -72,7 +72,7 @@ function ResourceTable({ columns, data }) {
             <table {...getTableProps()}>
                 <thead>
                     {headerGroups.map(headerGroup => (
-                        <tr {...headerGroup.getHeaderGroupProps()}>
+                        <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
                             {headerGroup.headers.map(column => (
                                 <th {...column.getHeaderProps()}>{column.render('Header')}</th>
                             ))}
@@ -83,7 +83,7 @@ function ResourceTable({ columns, data }) {
                     {page.map((row, i) => {
                         prepareRow(row)
                         return (
-                            <tr {...row.getRowProps()}>
+                            <tr key={row.id} {...row.getRowProps()}>
                                 {row.cells.map(cell => {
                                     return <td {...cell.getCellProps()}>{cell.render('Cell', { editable: false })}</td>
                                 })}
@@ -262,19 +262,20 @@ function Resources(props) {
     }
 
     const changeIndianState = function (changedstateevent) {
-        setCity('');
-        setCategory('');
-        // console.log(changedstateevent.target.value);
         setIndianState(changedstateevent.target.value);
+        setCity(Object.keys(resourcedict[changedstateevent.target.value]).sort()[0]);
+        document.getElementById('cityselect1').selectedIndex = 1;
+        setCategory('all');
+        document.getElementById('categoryselect').selectedIndex = 1;
     }
     const changeCity = function (changedcityevent) {
-        setCategory('');
         setCity(changedcityevent.target.value);
-        // console.log(changedcityevent.target.value);
+        setCategory('all');
+        document.getElementById('categoryselect').selectedIndex = 1;
     }
     const changeCategory = function (changedcategoryevent) {
         setCategory(changedcategoryevent.target.value);
-        // console.log(changedcategoryevent.target.value);
+        console.log(changedcategoryevent.target.value);
     }
     return (
         <div className="Resources">
