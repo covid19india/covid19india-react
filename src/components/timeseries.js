@@ -66,7 +66,7 @@ function TimeSeries(props) {
 
       // can be moved in for loop
       const xAxis = g => g
-        .attr('class', 'axis')
+        .attr('class', 'x-axis')
         .call(d3.axisBottom(xScale))
         .style('transform', `translateY(${chartHeight}px)`);
 
@@ -75,16 +75,14 @@ function TimeSeries(props) {
         .domain([0, timeseries.length])
         .range([margin.left, chartWidth]);
 
-      const yAxisAdd = (g, y) => g
-        .attr('class', 'axis')
+      const yAxis = (g, yScale) => g
+        .attr('class', 'y-axis')
         .call(d3
-            .axisRight(y)
+            .axisRight(yScale)
             .ticks(4, '0~s')
             .tickPadding(5)
-        ).style('transform', `translateX(${chartWidth}px)`);
-
-      const yTickPosition = (g, y) =>
-        g.selectAll(".tick").style('transform', d => `translateY(${y(d)}px)`);
+        )
+        .style('transform', `translateX(${chartWidth}px)`);
 
       const yScaleUniformLinear = d3
           .scaleLinear()
@@ -120,11 +118,11 @@ function TimeSeries(props) {
 
       /* Begin drawing charts */
       svgArray.forEach((svg, i) => {
+        // Transition interval
+        const t = svg.transition().duration(750);
+
         const caseType = dataTypes[i];
         const color = colors[i];
-        /* X axis */
-        svg.append('g')
-          .call(xAxis);
 
         const yScaleLinear = d3
             .scaleLinear()
@@ -140,39 +138,29 @@ function TimeSeries(props) {
           .range([chartHeight, margin.top]);
 
         const y = (mode) ? ((!logMode) ? yScaleUniformLinear : yScaleUniformLog) : ((!logMode) ? yScaleLinear : yScaleLog);
-        // Transition interval
-        const t = svg.transition().duration(750);
 
-        const yAxisLinear = svg
-          .append('g')
-          .call(yAxisAdd, yScaleLinear)
+        // WARNING: Bad code ahead.
+        /* X axis */
+        if (svg.select('.x-axis').empty()){
+          svg.append('g')
+            .attr('class','x-axis')
+            .call(xAxis);
+        } else {
+          svg.select('.x-axis').transition(t).call(xAxis)
+        }
+        /* Y axis */
+        if (svg.select('.y-axis').empty()){
+          svg.append('g')
+            .call(yAxis, y);
+        } else {
+          svg.select('.y-axis')
           .transition(t)
-          .style('opacity', !mode && !logMode ? 1 : 0)
-          .call(yTickPosition, y);
-
-        const yAxisLog = svg
-          .append('g')
-          .call(yAxisAdd, yScaleLog)
-          .transition(t)
-          .style('opacity', !mode && logMode ? 1 : 0)
-          .call(yTickPosition, y);
-
-        const yAxisUniformLinear = svg
-          .append('g')
-          .call(yAxisAdd, yScaleUniformLinear)
-          .transition(t)
-          .style('opacity', mode && !logMode ? 1 : 0)
-          .call(yTickPosition, y);
-
-        const yAxisUniformLog = svg
-          .append('g')
-          .call(yAxisAdd, yScaleUniformLog)
-          .transition(t)
-          .style('opacity', mode && logMode ? 1 : 0)
-          .call(yTickPosition, y);
+          .call(yAxis, y);
+        }
+        // ^This block of code should be written in a more d3 way following the General Update Pattern.
 
         /* Path dots */
-        const dots = svg
+        svg
           .selectAll('.dot')
           .data(ts)
           .join('circle')
