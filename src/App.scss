@@ -2038,6 +2038,7 @@ select {
     text-align: center;
     font-weight: 800;
     transition: background 0.15s ease-in-out;
+    padding: 4px 10px;
 
     &.selected {
       background-color: #c9d6fb;
