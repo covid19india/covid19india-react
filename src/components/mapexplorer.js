@@ -227,10 +227,8 @@ export default function ({
   }
 
   useEffect(() => {
-    if (currentHoveredRegion.state !== undefined) {
-      setMapRegionHighlighted({state: currentHoveredRegion});
-    }
-  }, [currentHoveredRegion, setMapRegionHighlighted]);
+    setMapRegionHighlighted({state: {state: currentMap.name}});
+  }, [currentMap, setMapRegionHighlighted]);
 
   const [statistic, currentMapData] = useMemo(() => {
     const statistic = {total: 0, maxConfirmed: 0};

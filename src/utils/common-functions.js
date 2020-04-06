@@ -40,7 +40,7 @@ export const validateCTS = (data = []) => {
     'totalrecovered',
   ];
   return data
-    .filter((d) => dataTypes.every((dt) => d[dt]) && d.date)
+    .filter((d) => dataTypes.every((dt) => d[dt] !== undefined) && d.date)
     .filter((d) => dataTypes.every((dt) => Number(d[dt]) >= 0))
     .filter((d) => {
       const year = today.getFullYear();

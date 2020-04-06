@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {formatDistance} from 'date-fns';
 import {
@@ -22,15 +22,16 @@ function Home(props) {
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
   /* const [patients, setPatients] = useState([]);*/
   const [fetched, setFetched] = useState(false);
-  const [rawData, setRawData] = useState([]);
+  /* const [rawData, setRawData] = useState([]);*/
   const [graphOption, setGraphOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
-  const [selectedState, setSelectedState] = useState(undefined);
+  const [selectedState, setSelectedState] = useState({table: null, map: null});
   const [stateTimeSeries, setStateTimeSeries] = useState({});
+  const [statesDailyData, setStatesDailyData] = useState([]);
   const [stateGraphTimeSeries, setStateGraphTimeSeries] = useState({
     series: [],
     state: '',
@@ -43,62 +44,73 @@ function Home(props) {
   }, [fetched]);
 
   useEffect(() => {
-    if (
-      regionHighlighted !== undefined &&
-      regionHighlighted !== null &&
-      regionHighlighted.state.state !== selectedState
-    ) {
-      setSelectedState(regionHighlighted.state.state);
+    if (regionHighlighted !== undefined && regionHighlighted !== null) {
+      if (regionHighlighted.state.state !== selectedState.table)
+        setSelectedState({
+          ...selectedState,
+          table: regionHighlighted.state.state,
+        });
+    } else {
+      if (selectedState.table !== undefined && selectedState.table !== null) {
+        setSelectedState({
+          ...selectedState,
+          table: regionHighlighted,
+        });
+      }
+      // if (selectedState !== 'India') setSelectedState('India');
     }
   }, [regionHighlighted, selectedState]);
-
-  useEffect(() => {
-    calculateStatewiseTimeSeries(rawData);
-  }, [rawData]);
 
   const getStates = async () => {
     try {
       const [
         response,
         stateDistrictWiseResponse,
-        rawDataResponse,
+        statesDailyResponse,
+        /* rawDataResponse, */
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
-        axios.get('https://api.covid19india.org/raw_data.json'),
+        axios.get('https://api.covid19india.org/states_daily.json'),
+        /* axios.get('https://api.covid19india.org/raw_data.json'), */
       ]);
       setStates(response.data.statewise);
       setTimeseries(validateCTS(response.data.cases_time_series));
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
+      setStatesDailyData(statesDailyResponse.data.states_daily);
       /* setPatients(rawDataResponse.data.raw_data.filter((p) => p.detectedstate));*/
-      setRawData(rawDataResponse.data.raw_data);
+      /* setRawData(rawDataResponse.data.raw_data);*/
       setFetched(true);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const calculateStatewiseTimeSeries = (data) => {
-    // console.log(data);
-    const filteredData = data.filter((r) => r.dateannounced !== '');
-    const statewiseSeries = {};
-    filteredData.forEach((d) => {
-      const st = d.detectedstate;
-      if (statewiseSeries[st] === undefined) {
-        statewiseSeries[st] = {};
-      }
-      const date = moment(d.dateannounced, 'DD/MM/YYYY').format('YYYY-MM-DD');
-      if (statewiseSeries[st][date] === undefined) {
-        statewiseSeries[st][date] = 1;
-      } else {
-        statewiseSeries[st][date] += 1;
-      }
-    });
-    // console.log(statewiseSeries);
-    // console.log(filteredData);
-    setStateTimeSeries(statewiseSeries);
-  };
+  useEffect(() => {
+    const calculateStatewiseTimeSeries = (data) => {
+      const statewiseSeries = {};
+      data.forEach((d) => {
+        const date = moment(d.date, 'DD-MMM-YY').format('YYYY-MM-DD');
+        const status = d.status.toLowerCase();
+        states.forEach((st) => {
+          const code = st.statecode.toLowerCase();
+          const name = st.state;
+          if (statewiseSeries[name] === undefined) {
+            statewiseSeries[name] = {};
+          }
+          if (statewiseSeries[name][date] === undefined) {
+            statewiseSeries[name][date] = {};
+          }
+          if (statewiseSeries[name][date][status] === undefined) {
+            statewiseSeries[name][date][status] = parseInt(d[code] || 0);
+          }
+        });
+      });
+      setStateTimeSeries(statewiseSeries);
+    };
+    calculateStatewiseTimeSeries(statesDailyData);
+  }, [states, statesDailyData]);
 
   const onHighlightState = (state, index) => {
     if (!state && !index) setRegionHighlighted(null);
@@ -116,57 +128,62 @@ function Home(props) {
       data.state !== undefined &&
       (selectedState === undefined || data.state.state !== selectedState)
     ) {
-      setSelectedState(data.state.state);
+      setSelectedState({
+        ...selectedState,
+        map: data.state.state,
+      });
     }
   };
 
-  const getTimeSeries = useCallback(
-    (data) => {
-      let state;
-      if (data === undefined || data === null) {
-        // if (resultSeries.state) {
-        if (states[1] === undefined) {
-          return;
-        } else {
-          state = states[1].state;
-        }
-      } else {
-        state = data;
+  useEffect(() => {
+    const getTimeSeries = (selectData) => {
+      let state = selectData.map;
+      if (selectData.table !== undefined && selectData.table !== null) {
+        state = selectData.table;
+      }
+      if (state === undefined || state === null || state === 'India') {
+        setStateGraphTimeSeries({series: timeseries, state: 'India'});
+        return;
       }
       const series = stateTimeSeries[state];
       if (!series) {
         return;
       }
       const resultSeries = [];
-      let total = 0;
+      const total = {confirmed: 0, recovered: 0, deceased: 0};
       let dateStr = '2020-01-30';
       let date = moment(dateStr);
       const today = moment().format('YYYY-MM-DD');
       while (dateStr !== today) {
-        const num = series[dateStr] || 0;
-        total += num;
+        const dayData = {
+          confirmed: (series[dateStr] || {}).confirmed || 0,
+          recovered: (series[dateStr] || {}).recovered || 0,
+          deceased: (series[dateStr] || {}).deceased || 0,
+        };
+        total.confirmed += dayData.confirmed;
+        total.recovered += dayData.recovered;
+        total.deceased += dayData.deceased;
         resultSeries.push({
-          dailyconfirmed: num,
-          dailydeceased: 0,
-          dailyrecovered: 0,
+          dailyconfirmed: dayData.confirmed,
+          dailydeceased: dayData.deceased,
+          dailyrecovered: dayData.recovered,
           date: date.format('DD MMMM '),
-          totalconfirmed: total,
-          totaldeceased: 0,
-          totalrecovered: 0,
+          totalconfirmed: total.confirmed,
+          totaldeceased: total.deceased,
+          totalrecovered: total.recovered,
         });
 
         date = date.add(1, 'days');
         dateStr = date.format('YYYY-MM-DD');
       }
       // console.log(state, stateTimeSeries[state], resultSeries);
-      setStateGraphTimeSeries({series: resultSeries, state: state});
-    },
-    [states, stateTimeSeries]
-  );
-
-  useEffect(() => {
-    if (selectedState !== undefined) getTimeSeries(selectedState);
-  }, [getTimeSeries, selectedState]);
+      setStateGraphTimeSeries({
+        series: validateCTS(resultSeries),
+        state: state,
+      });
+    };
+    getTimeSeries(selectedState);
+  }, [selectedState, stateTimeSeries, timeseries]);
 
   return (
     <div className="Home">
@@ -221,16 +238,6 @@ function Home(props) {
               className="timeseries-header fadeInUp"
               style={{animationDelay: '1.5s'}}
             >
-              <TimeSeries
-                key={'state'}
-                stateName={stateGraphTimeSeries.state}
-                timeseries={stateGraphTimeSeries.series}
-                confirmedOnly={true}
-                update={1}
-                type={graphOption}
-                logMode={timeseriesLogMode}
-                mode={timeseriesMode}
-              />
               <h1>Spread Trends</h1>
               <div className="tabs">
                 <div
@@ -285,7 +292,9 @@ function Home(props) {
             </div>
 
             <TimeSeries
-              timeseries={timeseries}
+              stateName={stateGraphTimeSeries.state}
+              timeseries={stateGraphTimeSeries.series}
+              key={'main'}
               type={graphOption}
               mode={timeseriesMode}
               logMode={timeseriesLogMode}
