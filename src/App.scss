@@ -285,9 +285,11 @@ h6 {
     text-transform: none;
     border-spacing: 3px 2px;
     border-collapse: separate;
+    // animation-name: fadeInOut;
+    // animation-duration: 2s;
   
     thead {
-      background: $gray-light;
+      background: $purple-light;
       color: $gray-dark;
       text-align: center;
       font-size: 0.9rem;
@@ -354,6 +356,7 @@ h6 {
           background: #fff !important;
         }
       }
+       tr:nth-child(even) {background-color: $purple-light;}
   
       td {
         // padding: 0.25rem;
@@ -490,6 +493,9 @@ h6 {
     align-self: center;
     color: $cherry;
   }
+  animation-name: fadeInUp;
+  animation-duration: 1s;
+  animation-timing-function: ease-in;
   
 }
 .resourcefilters {
@@ -2960,7 +2966,7 @@ select {
       // border: 0.1rem solid rgb(151, 150, 221);
     
       thead {
-        background: $gray-light;
+        background: $purple-light;
         color: $gray-dark;
         text-align: center;
         font-size: 0.7rem;
@@ -3027,6 +3033,7 @@ select {
             background: #fff !important;
           }
         }
+        tr:nth-child(even) {background-color: $purple-light;}
     
         td {
           // padding: 0.25rem;
@@ -3178,6 +3185,9 @@ select {
       text-align: center;
       color: $cherry;
     }
+    animation-name: fadeInUp;
+    animation-duration: 1s;
+    animation-timing-function: ease-in;
     
   }
   .pagination{

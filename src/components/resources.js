@@ -140,7 +140,7 @@ function Resources(props) {
         <div className="Resources">
             <div className='filtersection'>
                 <div className='filtertitle'>
-                    <h3>Please apply the filters to get corresponding resources</h3>
+                    <h3>Apply filters and hit search to get corresponding resources</h3>
 
                 </div>
                 <div className='resourcefilters'>
@@ -174,14 +174,14 @@ function Resources(props) {
                         </select>
                     </div>
                     <div className='resourcefilter'>
-                        <button className='button is-purple'
+                        <button className='button is-purple' disabled={!indianstate}
                             onClick={filterTable}>Search</button>
                     </div>
                 </div>
 
             </div>
             <br></br>
-            <div className='TableArea'>
+            <div className='TableArea fadeInOut'>
                 {showTable && <ResourceTable columns={memocols} data={data} />}
             </div>
 
