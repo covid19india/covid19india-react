@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
+import {preprocessTimeseries} from '../utils/common-functions.js';
 import * as d3 from 'd3';
 
 function TimeSeries(props) {
@@ -35,9 +36,11 @@ function TimeSeries(props) {
 
   const graphData = useCallback(
     (timeseries) => {
-      const data = timeseries;
-      setDatapoint(timeseries[timeseries.length - 1]);
-      setIndex(timeseries.length - 1);
+      const ts = preprocessTimeseries(timeseries);
+      const T = ts.length;
+
+      setDatapoint(timeseries[T - 1]);
+      setIndex(T - 1);
 
       const svg1 = d3.select(graphElement1.current);
       const svg2 = d3.select(graphElement2.current);
@@ -51,9 +54,9 @@ function TimeSeries(props) {
       const width = 650 - margin.left - margin.right;
       const height = 200 - margin.top - margin.bottom;
 
-      const dateMin = new Date(data[0]['date'] + '2020');
+      const dateMin = new Date(ts[0]['date']);
       dateMin.setDate(dateMin.getDate() - 1);
-      const dateMax = new Date(data[timeseries.length - 1]['date'] + '2020');
+      const dateMax = new Date(ts[T - 1]['date']);
       dateMax.setDate(dateMax.getDate() + 1);
 
       const x = d3
@@ -91,7 +94,7 @@ function TimeSeries(props) {
       ]);
 
       const dTypeMaxMap = dataTypes.reduce((a, c) => {
-        a[c] = d3.max(data, (d) => +d[c]);
+        a[c] = d3.max(ts, (d) => d[c]);
         return a;
       }, {});
 
@@ -135,19 +138,16 @@ function TimeSeries(props) {
           .attr('fill', colors[i])
           .attr('stroke', colors[i])
           .attr('r', 5)
-          .attr('cx', x(new Date(data[timeseries.length - 1]['date'] + '2020')))
-          .attr('cy', y(i, data[timeseries.length - 1]));
+          .attr('cx', x(ts[T - 1]['date']))
+          .attr('cy', y(i, ts[T - 1]));
       });
 
       function mouseout() {
-        setDatapoint(data[timeseries.length - 1]);
-        setIndex(timeseries.length - 1);
+        setDatapoint(timeseries[T - 1]);
+        setIndex(T - 1);
         setMoving(false);
         focus.forEach((d, i) => {
-          d.attr(
-            'cx',
-            x(new Date(data[timeseries.length - 1]['date'] + '2020'))
-          ).attr('cy', y(i, data[timeseries.length - 1]));
+          d.attr('cx', x(ts[T - 1]['date'])).attr('cy', y(i, ts[T - 1]));
         });
       }
 
@@ -155,12 +155,12 @@ function TimeSeries(props) {
         const xm = d3.mouse(this)[0];
         const i = Math.round(indexScale.invert(xm));
         if (0 <= i && i < timeseries.length) {
-          const d = data[i];
-          setDatapoint(d);
-          setMoving(true);
+          setDatapoint(timeseries[i]);
           setIndex(i);
+          const d = ts[i];
+          setMoving(true);
           focus.forEach((f, j) => {
-            f.attr('cx', x(new Date(d['date'] + '2020'))).attr('cy', y(j, d));
+            f.attr('cx', x(d['date'])).attr('cy', y(j, d));
           });
         }
       }
@@ -201,21 +201,19 @@ function TimeSeries(props) {
         /* Path dots */
         const dots = s
           .selectAll('.dot')
-          .data(data)
+          .data(ts)
           .enter()
           .append('circle')
           .attr('fill', colors[i])
           .attr('stroke', colors[i])
           .attr('cursor', 'pointer')
-          .attr('cx', (d) => {
-            return x(new Date(d['date'] + '2020'));
-          })
+          .attr('cx', (d) => x(d['date']))
           .attr('cy', (d) => y(i, d));
 
         /* Paths */
         if (i < Math.floor(svgArray.length / 2)) {
           s.append('path')
-            .datum(data)
+            .datum(ts)
             .attr('fill', 'none')
             .attr('stroke', colors[i] + '99')
             .attr('stroke-width', 5)
@@ -224,25 +222,19 @@ function TimeSeries(props) {
               'd',
               d3
                 .line()
-                .x((d) => {
-                  return x(new Date(d['date'] + '2020'));
-                })
+                .x((d) => x(d['date']))
                 .y((d) => y(i, d))
                 .curve(d3.curveCardinal)
             );
           dots.attr('r', 3);
         } else {
           s.selectAll('stem-line')
-            .data(data)
+            .data(ts)
             .enter()
             .append('line')
-            .attr('x1', (d) => {
-              return x(new Date(d['date'] + '2020'));
-            })
+            .attr('x1', (d) => x(d['date']))
             .attr('y1', height)
-            .attr('x2', (d) => {
-              return x(new Date(d['date'] + '2020'));
-            })
+            .attr('x2', (d) => x(d['date']))
             .attr('y2', (d) => y(i, d))
             .style('stroke', colors[i] + '99')
             .style('stroke-width', 5);
