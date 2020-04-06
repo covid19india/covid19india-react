@@ -1,7 +1,9 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as d3 from 'd3';
+import {lastDaysFromTimeseries} from '../utils/common-functions';
 
 function TimeSeries(props) {
+  const [timeseriesDays] = useState(Infinity);
   const [timeseries, setTimeseries] = useState([]);
   const [datapoint, setDatapoint] = useState({});
   const [index, setIndex] = useState(10);
@@ -18,9 +20,15 @@ function TimeSeries(props) {
 
   useEffect(() => {
     if (props.timeseries.length > 1) {
-      setTimeseries(props.timeseries);
+      const slicedTimeseries = lastDaysFromTimeseries(
+        props.timeseries,
+        timeseriesDays
+      );
+
+      setIndex(slicedTimeseries.length - 1);
+      setTimeseries(slicedTimeseries);
     }
-  }, [props.timeseries]);
+  }, [props.timeseries, timeseriesDays]);
 
   useEffect(() => {
     setMode(props.mode);
