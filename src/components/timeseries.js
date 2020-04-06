@@ -59,18 +59,48 @@ function TimeSeries(props) {
       const dateMax = new Date(ts[T - 1]['date']);
       dateMax.setDate(dateMax.getDate() + 1);
 
-      const x = d3
+      const xScale = d3
         .scaleTime()
         .domain([dateMin, dateMax])
         .range([margin.left, chartWidth]);
+
+      // can be moved in for loop
+      const xAxis = g => g
+        .attr('class', 'axis')
+        .call(d3.axisBottom(xScale))
+        .style('transform', `translateY(${chartHeight}px)`);
 
       const indexScale = d3
         .scaleLinear()
         .domain([0, timeseries.length])
         .range([margin.left, chartWidth]);
 
+      const yAxisAdd = (g, y) => g
+        .attr('class', 'axis')
+        .call(d3
+            .axisRight(y)
+            .ticks(4, '0~s')
+            .tickPadding(5)
+        ).style('transform', `translateX(${chartWidth}px)`);
+
+      const yTickPosition = (g, y) =>
+        g.selectAll(".tick").style('transform', d => `translateY(${y(d)}px)`);
+
+      const yScaleUniformLinear = d3
+          .scaleLinear()
+          .domain([0, d3.max(ts, d => d.totalconfirmed)])
+          .nice()
+          .range([chartHeight, margin.top]);
+
+      const yScaleUniformLog = d3
+          .scaleLog()
+          .clamp(true)
+          .domain([1, d3.max(ts, d => d.totalconfirmed)])
+          .nice()
+          .range([chartHeight, margin.top]);
+
       // Arrays of objects
-      const svgArray = [svg1, svg2, svg3, svg4, svg5, svg6];
+      const svgArray = [svg1, svg2, svg3];
       const dataTypes = [
         'totalconfirmed',
         'totalrecovered',
@@ -87,159 +117,120 @@ function TimeSeries(props) {
         '#28a745',
         '#6c757d',
       ];
-      const logCharts = new Set([
-        'totalconfirmed',
-        'totalrecovered',
-        'totaldeceased',
-      ]);
-
-      const dTypeMaxMap = dataTypes.reduce((a, c) => {
-        a[c] = d3.max(ts, (d) => d[c]);
-        return a;
-      }, {});
-
-      const yScales = Object.entries(dTypeMaxMap).map(([type, maxY]) => {
-        // apply mode, logMode, etc -- determine scales once and for all
-        const applyLogMode = (maxY) =>
-          logMode && logCharts.has(type)
-            ? d3
-                .scaleLog()
-                .domain([1, 1.1 * maxY])
-                .nice()
-            : d3
-                .scaleLinear()
-                .domain([0, 1.1 * maxY])
-                .nice();
-
-        return (mode
-          ? applyLogMode(
-              type.match('^total')
-                ? dTypeMaxMap['totalconfirmed']
-                : dTypeMaxMap['dailyconfirmed']
-            )
-          : applyLogMode(maxY)
-        ).range([chartHeight, margin.top]);
-      });
-
-      const y = (dataTypeIdx, day) => {
-        // Scaling mode filters
-        const scale = yScales[dataTypeIdx];
-        const dType = dataTypes[dataTypeIdx];
-        return scale(
-          logMode && logCharts.has(dType) ? Math.max(1, day[dType]) : day[dType]
-        ); // max(1,y) for logmode
-      };
-
-      /* Focus dots */
-      const focus = svgArray.map((d, i) => {
-        return d
-          .append('g')
-          .append('circle')
-          .attr('fill', colors[i])
-          .attr('stroke', colors[i])
-          .attr('r', 5)
-          .attr('cx', x(ts[T - 1]['date']))
-          .attr('cy', y(i, ts[T - 1]));
-      });
-
-      function mouseout() {
-        setDatapoint(timeseries[T - 1]);
-        setIndex(T - 1);
-        setMoving(false);
-        focus.forEach((d, i) => {
-          d.attr('cx', x(ts[T - 1]['date'])).attr('cy', y(i, ts[T - 1]));
-        });
-      }
-
-      function mousemove() {
-        const xm = d3.mouse(this)[0];
-        const i = Math.round(indexScale.invert(xm));
-        if (0 <= i && i < timeseries.length) {
-          setDatapoint(timeseries[i]);
-          setIndex(i);
-          const d = ts[i];
-          setMoving(true);
-          focus.forEach((f, j) => {
-            f.attr('cx', x(d['date'])).attr('cy', y(j, d));
-          });
-        }
-      }
-
-      const tickCount = (scaleIdx) => {
-        const dType = dataTypes[scaleIdx];
-        return logMode && logCharts.has(dType)
-          ? Math.ceil(Math.log10(yScales[scaleIdx].domain()[1]))
-          : 5;
-      };
 
       /* Begin drawing charts */
-      svgArray.forEach((s, i) => {
+      svgArray.forEach((svg, i) => {
+        const caseType = dataTypes[i];
+        const color = colors[i];
         /* X axis */
-        s.append('g')
-          .attr('class', 'axis')
-          .call(d3.axisBottom(x))
-          .style('transform', `translateY(${chartHeight}px)`);
+        svg.append('g')
+          .call(xAxis);
 
-        /* Y axis */
-        s.append('g')
-          .attr('class', 'axis')
-          .call(
-            d3
-              .axisRight(yScales[i])
-              .ticks(tickCount(i))
-              .tickPadding(5)
-              .tickFormat(d3.format('~s'))
-          )
-          .style('transform', `translateX(${chartWidth}px)`);
+        const yScaleLinear = d3
+            .scaleLinear()
+            .domain([0, d3.max(ts, d => d[caseType])])
+            .nice()
+            .range([chartHeight, margin.top]);
 
-        /* Focus dots */
-        s.on('mousemove', mousemove)
-          .on('touchmove', mousemove)
-          .on('mouseout', mouseout)
-          .on('touchend', mouseout);
+        const yScaleLog = d3
+          .scaleLog()
+          .clamp(true)
+          .domain([1, d3.max(ts, d => d[caseType])])
+          .nice()
+          .range([chartHeight, margin.top]);
+
+        const y = (mode) ? ((!logMode) ? yScaleUniformLinear : yScaleUniformLog) : ((!logMode) ? yScaleLinear : yScaleLog);
+        // Transition interval
+        const t = svg.transition().duration(750);
+
+        const yAxisLinear = svg
+          .append('g')
+          .call(yAxisAdd, yScaleLinear)
+          .transition(t)
+          .style('opacity', !mode && !logMode ? 1 : 0)
+          .call(yTickPosition, y);
+
+        const yAxisLog = svg
+          .append('g')
+          .call(yAxisAdd, yScaleLog)
+          .transition(t)
+          .style('opacity', !mode && logMode ? 1 : 0)
+          .call(yTickPosition, y);
+
+        const yAxisUniformLinear = svg
+          .append('g')
+          .call(yAxisAdd, yScaleUniformLinear)
+          .transition(t)
+          .style('opacity', mode && !logMode ? 1 : 0)
+          .call(yTickPosition, y);
+
+        const yAxisUniformLog = svg
+          .append('g')
+          .call(yAxisAdd, yScaleUniformLog)
+          .transition(t)
+          .style('opacity', mode && logMode ? 1 : 0)
+          .call(yTickPosition, y);
 
         /* Path dots */
-        const dots = s
+        const dots = svg
           .selectAll('.dot')
           .data(ts)
-          .enter()
-          .append('circle')
-          .attr('fill', colors[i])
-          .attr('stroke', colors[i])
-          .attr('cursor', 'pointer')
-          .attr('cx', (d) => x(d['date']))
-          .attr('cy', (d) => y(i, d));
+          .join('circle')
+          .attr('class', 'dot')
+          .attr('fill', color)
+          .attr('stroke', color)
+          .attr('r', 3)
+          .attr('cx', d => xScale(d.date))
+          .transition(t)
+          .attr('cy', d => y(d[caseType]));
 
-        /* Paths */
-        if (i < Math.floor(svgArray.length / 2)) {
-          s.append('path')
-            .datum(ts)
-            .attr('fill', 'none')
-            .attr('stroke', colors[i] + '99')
-            .attr('stroke-width', 5)
-            .attr('cursor', 'pointer')
-            .attr(
-              'd',
-              d3
-                .line()
-                .x((d) => x(d['date']))
-                .y((d) => y(i, d))
-                .curve(d3.curveCardinal)
-            );
-          dots.attr('r', 3);
-        } else {
-          s.selectAll('stem-line')
-            .data(ts)
-            .enter()
-            .append('line')
-            .attr('x1', (d) => x(d['date']))
-            .attr('y1', chartHeight)
-            .attr('x2', (d) => x(d['date']))
-            .attr('y2', (d) => y(i, d))
-            .style('stroke', colors[i] + '99')
-            .style('stroke-width', 5);
-          dots.attr('r', 3);
+        /* Focus dots */
+        const focus = svg
+          .selectAll('.focus')
+          .data([ts[T - 1]])
+          .join('circle')
+          .attr('class', 'focus')
+          .attr('fill', color)
+          .attr('stroke', color)
+          .attr('r', 5)
+          .attr('cx', d => xScale(d.date))
+          .transition(t)
+          .attr('cy', d => y(d[caseType]));
+
+        const line = y =>
+          d3
+            .line()
+            .x(d => xScale(d.date))
+            .y(d => y(d[caseType]))
+            .curve(d3.curveCardinal);
+
+        const path = svg
+          .selectAll('.trend')
+          .data([ts])
+          .join('path')
+          .attr('class', 'trend')
+          .attr('fill', 'none')
+          .attr('stroke', color + '99')
+          .attr('stroke-width', 5)
+          .attr('cursor', 'pointer')
+          .transition(t)
+          .attr('d', line(y));
+
+        function mouseout(y) {
+          focus
+            .attr('cx', xScale(ts[T - 1].date))
+            .attr('cy', y(ts[T - 1][caseType]));
         }
+
+        function mousemove(y) {
+          const xm = d3.mouse(svg.node())[0];
+          const i = Math.round(indexScale.invert(xm));
+          if (0 <= i && i < T) {
+            const d = ts[i];
+            focus.attr('cx', xScale(d.date)).attr('cy', y(d[caseType]));
+          }
+        }
+        // svg.on('mousemove', () => mousemove(y)).on('mouseout', () => mouseout(y));
       });
     },
     [logMode, mode]
@@ -255,7 +246,7 @@ function TimeSeries(props) {
       graphElement6,
     ];
     for (let i = 0; i < graphs.length; i++) {
-      d3.select(graphs[i].current).selectAll('*').remove();
+      // d3.select(graphs[i].current).selectAll('*').remove();
     }
   }, []);
 
