@@ -1,8 +1,10 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {preprocessTimeseries} from '../utils/common-functions.js';
 import * as d3 from 'd3';
+import {lastDaysFromTimeseries} from '../utils/common-functions';
 
 function TimeSeries(props) {
+  const [lastDaysCount, setLastDaysCount] = useState(Infinity);
   const [timeseries, setTimeseries] = useState([]);
   const [datapoint, setDatapoint] = useState({});
   const [index, setIndex] = useState(10);
@@ -19,9 +21,14 @@ function TimeSeries(props) {
 
   useEffect(() => {
     if (props.timeseries.length > 1) {
-      setTimeseries(props.timeseries);
+      const slicedTimeseries = lastDaysFromTimeseries(
+        props.timeseries,
+        timeseriesDays
+      );
+      setIndex(slicedTimeseries.length - 1);
+      setTimeseries(slicedTimeseries);
     }
-  }, [props.timeseries]);
+  }, [props.timeseries, timeseriesDays]);
 
   useEffect(() => {
     setMode(props.mode);
@@ -273,12 +280,6 @@ function TimeSeries(props) {
     [logMode, mode]
   );
 
-  useEffect(() => {
-    if (timeseries.length > 1) {
-      graphData(timeseries);
-    }
-  }, [timeseries, graphData]);
-
   const yesterdayDate = new Date();
   yesterdayDate.setDate(yesterdayDate.getDate() - 1);
   const lastDate = new Date(datapoint['date'] + '2020');
@@ -497,6 +498,32 @@ function TimeSeries(props) {
             preserveAspectRatio="xMidYMid meet"
           />
         </div>
+      </div>
+
+      <div className="pills" style={{marginTop: '32px', textAlign: 'right'}}>
+        <button
+          type="button"
+          onClick={() => setTimeseriesDays(Infinity)}
+          className={timeseriesDays === Infinity ? 'selected' : ''}
+        >
+          All
+        </button>
+        <button
+          type="button"
+          onClick={() => setTimeseriesDays(30)}
+          className={timeseriesDays === 30 ? 'selected' : ''}
+          aria-label="1 month"
+        >
+          1M
+        </button>
+        <button
+          type="button"
+          onClick={() => setTimeseriesDays(7)}
+          className={timeseriesDays === 7 ? 'selected' : ''}
+          aria-label="7 days"
+        >
+          7D
+        </button>
       </div>
     </div>
   );

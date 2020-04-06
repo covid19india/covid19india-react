@@ -103,3 +103,14 @@ export const preprocessTimeseries = (timeseries) => {
     dailydeceased: +stat.dailydeceased,
   }));
 };
+
+/**
+ * Returns the last `days` entries
+ * @param {Array<Object>} timeseries
+ * @param {number} days
+ *
+ * @return {Array<Object>}
+ */
+export function sliceTimeseriesFromEnd(timeseries, days) {
+  return timeseries.slice(timeseries.length - days);
+}
