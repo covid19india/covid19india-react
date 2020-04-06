@@ -371,6 +371,8 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
                 padding: '0.25rem',
                 borderRadius: '2.5px',
                 marginRight: '0.25rem',
+                display: 'inline-block',
+                verticalAlign: 'middle',
               }}
             >
               Update!

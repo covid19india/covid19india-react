@@ -644,6 +644,10 @@ table {
 
       &:hover {
         background: $gray-hover !important;
+
+        .dropdown {
+            background: $gray-hover;
+        }
       }
 
       &.divider {
@@ -663,8 +667,8 @@ table {
       border-radius: 5px;
       text-align: right;
       .deltas {
-        margin-right: 0.25rem;
-        font-size: 11px !important;
+        display: inline-block;
+		    font-size: 11px !important;
 
         svg {
           width: 9px;
@@ -689,6 +693,10 @@ table {
           }
         }
       }
+    }
+	
+    .table__count-text {
+      margin-left: 0.25rem;
     }
 
     td:first-child {
@@ -771,15 +779,19 @@ table {
       background: $gray-hover;
     }
   }
+  
+	.table__title-wrapper {
+		position: relative;
+	}
 
   .dropdown {
     position: absolute;
-    left: -0.75rem;
+    left: -1.25rem;
+    top: 0.125rem;
     background: $gray-light;
     border-radius: 50%;
     width: 13px;
     height: 13px;
-    margin-top: 0.5rem;
     cursor: pointer;
     transition: background 0.2s ease-in-out;
 
@@ -2392,4 +2404,8 @@ select {
     opacity: 0;
     transform: translateY(20px);
   }
+}
+
+.height-22 {
+	height: 22px;
 }
