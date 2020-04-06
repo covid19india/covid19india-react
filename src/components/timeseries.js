@@ -183,7 +183,7 @@ function TimeSeries(props) {
         s.append('g')
           .attr('transform', 'translate(0,' + height + ')')
           .attr('class', 'axis')
-          .call(d3.axisBottom(x));
+          .call(d3.axisBottom(x).ticks(7));
 
         /* Y axis */
         s.append('g')
