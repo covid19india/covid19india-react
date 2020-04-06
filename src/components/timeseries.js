@@ -276,7 +276,7 @@ function TimeSeries(props) {
     if (update > 0) {
       refreshGraphs();
     }
-  }, [update, refreshGraphs]);
+  }, [update, refreshGraphs, timeseries]);
 
   useEffect(() => {
     if (timeseries.length > 1) {
