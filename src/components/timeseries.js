@@ -8,7 +8,6 @@ function TimeSeries(props) {
   const [index, setIndex] = useState(10);
   const [mode, setMode] = useState(props.mode);
   const [logMode, setLogMode] = useState(props.logMode);
-  const [update, setUpdate] = useState(-1);
   const [moving, setMoving] = useState(false);
 
   const graphElement1 = useRef(null);
@@ -26,12 +25,10 @@ function TimeSeries(props) {
 
   useEffect(() => {
     setMode(props.mode);
-    setUpdate((u) => u + 1);
   }, [props.mode]);
 
   useEffect(() => {
     setLogMode(props.logMode);
-    setUpdate((u) => u + 1);
   }, [props.logMode]);
 
   const graphData = useCallback(
@@ -260,26 +257,6 @@ function TimeSeries(props) {
     },
     [logMode, mode]
   );
-
-  const refreshGraphs = useCallback(() => {
-    const graphs = [
-      graphElement1,
-      graphElement2,
-      graphElement3,
-      graphElement4,
-      graphElement5,
-      graphElement6,
-    ];
-    for (let i = 0; i < graphs.length; i++) {
-      // d3.select(graphs[i].current).selectAll('*').remove();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (update > 0) {
-      refreshGraphs();
-    }
-  }, [update, refreshGraphs]);
 
   useEffect(() => {
     if (timeseries.length > 1) {
