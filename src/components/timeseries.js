@@ -123,6 +123,70 @@ function TimeSeries(props) {
         'totaldeceased',
       ]);
 
+      const yScales = dataTypes.map((type) => {
+        const yScaleLinear = d3
+          .scaleLinear()
+          .domain([0, yBuffer * d3.max(ts, (d) => d[type])])
+          .nice()
+          .range([chartHeight, margin.top]);
+
+        if (logCharts.has(type)) {
+          const yScaleLog = d3
+            .scaleLog()
+            .clamp(true)
+            .domain([1, yBuffer * d3.max(ts, (d) => d[type])])
+            .nice()
+            .range([chartHeight, margin.top]);
+          if (logMode) return mode ? yScaleUniformLog : yScaleLog;
+          else return mode ? yScaleUniformLinear : yScaleLinear;
+        } else {
+          return mode ? yScaleDailyUniform : yScaleLinear;
+        }
+      });
+
+      /* Focus dots */
+      const focus = svgArray.map((svg, i) => {
+        return svg
+          .selectAll('.focus')
+          .data([ts[T - 1]])
+          .join('circle')
+          .attr('class', 'focus')
+          .attr('fill', colors[i])
+          .attr('stroke', colors[i])
+          .attr('r', 5)
+          .attr('cx', (d) => xScale(d.date));
+      });
+
+      function mousemove() {
+        const xm = d3.mouse(this)[0];
+        const i = Math.round(indexScale.invert(xm));
+        if (0 <= i && i < T) {
+          setDatapoint(timeseries[i]);
+          setIndex(i);
+          setMoving(true);
+          const d = ts[i];
+          focus.forEach((f, j) => {
+            const yScale = yScales[j];
+            const type = dataTypes[j];
+            f.attr('cx', xScale(d.date)).attr('cy', yScale(d[type]));
+          });
+        }
+      }
+
+      function mouseout() {
+        setDatapoint(timeseries[T - 1]);
+        setIndex(T - 1);
+        setMoving(false);
+        focus.forEach((f, j) => {
+          const yScale = yScales[j];
+          const type = dataTypes[j];
+          f.attr('cx', xScale(ts[T - 1].date)).attr(
+            'cy',
+            yScale(ts[T - 1][type])
+          );
+        });
+      }
+
       /* Begin drawing charts */
       svgArray.forEach((svg, i) => {
         // Transition interval
@@ -130,27 +194,7 @@ function TimeSeries(props) {
 
         const type = dataTypes[i];
         const color = colors[i];
-
-        const yScaleLinear = d3
-          .scaleLinear()
-          .domain([0, yBuffer * d3.max(ts, (d) => d[type])])
-          .nice()
-          .range([chartHeight, margin.top]);
-
-        let y;
-        let yScaleLog;
-        if (logCharts.has(type)) {
-          yScaleLog = d3
-            .scaleLog()
-            .clamp(true)
-            .domain([1, yBuffer * d3.max(ts, (d) => d[type])])
-            .nice()
-            .range([chartHeight, margin.top]);
-          if (logMode) y = mode ? yScaleUniformLog : yScaleLog;
-          else y = mode ? yScaleUniformLinear : yScaleLinear;
-        } else {
-          y = mode ? yScaleDailyUniform : yScaleLinear;
-        }
+        const yScale = yScales[i];
         // WARNING: Bad code ahead.
         /* X axis */
         if (svg.select('.x-axis').empty()) {
@@ -160,9 +204,9 @@ function TimeSeries(props) {
         }
         /* Y axis */
         if (svg.select('.y-axis').empty()) {
-          svg.append('g').call(yAxis, y);
+          svg.append('g').call(yAxis, yScale);
         } else {
-          svg.select('.y-axis').transition(t).call(yAxis, y);
+          svg.select('.y-axis').transition(t).call(yAxis, yScale);
         }
         // ^This block of code should be written in a more d3 way following the
         //  General Update Pattern. Can't find of a way to do that within React.
@@ -178,20 +222,9 @@ function TimeSeries(props) {
           .attr('r', 3)
           .attr('cx', (d) => xScale(d.date))
           .transition(t)
-          .attr('cy', (d) => y(d[type]));
+          .attr('cy', (d) => yScale(d[type]));
 
-        /* Focus dots */
-        const focus = svg
-          .selectAll('.focus')
-          .data([ts[T - 1]])
-          .join('circle')
-          .attr('class', 'focus')
-          .attr('fill', color)
-          .attr('stroke', color)
-          .attr('r', 5)
-          .attr('cx', (d) => xScale(d.date));
-
-        focus.transition(t).attr('cy', (d) => y(d[type]));
+        focus[i].transition(t).attr('cy', (d) => yScale(d[type]));
 
         /* Add trend path */
         if (logCharts.has(type)) {
@@ -210,7 +243,7 @@ function TimeSeries(props) {
               d3
                 .line()
                 .x((d) => xScale(d.date))
-                .y((d) => y(d[type]))
+                .y((d) => yScale(d[type]))
                 .curve(d3.curveCardinal)
             );
         } else {
@@ -225,28 +258,7 @@ function TimeSeries(props) {
             .attr('y1', chartHeight)
             .attr('x2', (d) => xScale(d.date))
             .transition(t)
-            .attr('y2', (d) => y(d[type]));
-        }
-
-        function mousemove() {
-          const xm = d3.mouse(svg.node())[0];
-          const i = Math.round(indexScale.invert(xm));
-          if (0 <= i && i < T) {
-            setDatapoint(timeseries[i]);
-            setIndex(i);
-            setMoving(true);
-            const d = ts[i];
-            focus.attr('cx', xScale(d.date)).attr('cy', y(d[type]));
-          }
-        }
-
-        function mouseout() {
-          setDatapoint(timeseries[T - 1]);
-          setIndex(T - 1);
-          setMoving(false);
-          focus
-            .attr('cx', xScale(ts[T - 1].date))
-            .attr('cy', y(ts[T - 1][type]));
+            .attr('y2', (d) => yScale(d[type]));
         }
 
         svg
