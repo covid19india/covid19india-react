@@ -3,6 +3,8 @@ import * as d3 from 'd3';
 
 function TimeSeries(props) {
   const [timeseries, setTimeseries] = useState([]);
+  const [statesDaily, setStatesDaily] = useState({});
+  const [highlightedState, setHighlightedState] = useState('kl');
   const [datapoint, setDatapoint] = useState({});
   const [index, setIndex] = useState(10);
   const [mode, setMode] = useState(props.mode);
@@ -16,12 +18,25 @@ function TimeSeries(props) {
   const graphElement4 = useRef(null);
   const graphElement5 = useRef(null);
   const graphElement6 = useRef(null);
+  const graphElement7 = useRef(null);
+  const graphElement8 = useRef(null);
+  const graphElement9 = useRef(null);
 
   useEffect(() => {
     if (props.timeseries.length > 1) {
       setTimeseries(props.timeseries);
     }
   }, [props.timeseries]);
+
+  useEffect(() => {
+    const statesDaily = {
+      Confirmed: [],
+      Recovered: [],
+      Deceased: [],
+    };
+    props.statesDaily.forEach((i) => statesDaily[i.status].push(i));
+    setStatesDaily(statesDaily);
+  }, [props.statesDaily]);
 
   useEffect(() => {
     setMode(props.mode);
@@ -32,6 +47,111 @@ function TimeSeries(props) {
     setLogMode(props.logMode);
     setUpdate((u) => u + 1);
   }, [props.logMode]);
+
+  useEffect(() => {
+    if (props.regionHighlighted && props.regionHighlighted.state) {
+      if (highlightedState === props.regionHighlighted.state.statecode) return;
+      setHighlightedState(
+        props.regionHighlighted.state.statecode.toLowerCase()
+      );
+    }
+  }, [props.regionHighlighted, highlightedState, setHighlightedState]);
+
+  const graphData1 = useCallback(
+    ({Confirmed, Recovered, Deceased}) => {
+      const graphs = [graphElement7, graphElement8, graphElement9];
+      for (let i = 0; i < graphs.length; i++) {
+        d3.select(graphs[i].current).selectAll('*').remove();
+      }
+      if (!highlightedState) return;
+      const svgArray = [
+        d3.select(graphElement7.current),
+        d3.select(graphElement8.current),
+        d3.select(graphElement9.current),
+      ];
+      const colors = ['#ff073a', '#28a745', '#6c757d'];
+
+      // Margins
+      const margin = {top: 0, right: 20, bottom: 50, left: 20};
+      const width = 650 - margin.left - margin.right;
+      const height = 200 - margin.top - margin.bottom;
+
+      const dateMin = new Date(Confirmed[0]['date'] + '20');
+      dateMin.setDate(dateMin.getDate() - 1);
+      const dateMax = new Date(Confirmed[Confirmed.length - 1]['date'] + '20');
+      dateMax.setDate(dateMax.getDate() + 1);
+
+      const x = d3
+        .scaleTime()
+        .domain([dateMin, dateMax])
+        .range([margin.left, width]);
+
+      const yScaleMaxMap = [
+        d3.max(Confirmed, (d) => +d[highlightedState]),
+        d3.max(Recovered, (d) => +d[highlightedState]),
+        d3.max(Deceased, (d) => +d[highlightedState]),
+      ];
+      const yScales = yScaleMaxMap.map((maxY) => {
+        return d3
+          .scaleLinear()
+          .domain([0, maxY])
+          .nice()
+          .range([height, margin.top]);
+      });
+
+      svgArray.forEach((s, i) => {
+        /* X axis */
+        s.append('g')
+          .attr('transform', 'translate(0,' + height + ')')
+          .attr('class', 'axis')
+          .call(d3.axisBottom(x));
+
+        const yScale = mode ? yScales[0] : yScales[i];
+        /* Y axis */
+        s.append('g')
+          .attr('transform', `translate(${width}, ${0})`)
+          .attr('class', 'axis')
+          .call(
+            d3
+              .axisRight(yScale)
+              .ticks(5)
+              .tickPadding(5)
+              .tickFormat(d3.format('~s'))
+          );
+
+        /* Line */
+        s.selectAll('stem-line')
+          .data(i === 0 ? Confirmed : i === 1 ? Recovered : Deceased)
+          .enter()
+          .append('line')
+          .attr('x1', (d) => {
+            return x(new Date(d['date'] + '20'));
+          })
+          .attr('y1', height)
+          .attr('x2', (d) => {
+            return x(new Date(d['date'] + '20'));
+          })
+          .attr('y2', (d) => yScale(d[highlightedState]))
+          .style('stroke', colors[i] + '99')
+          .style('stroke-width', 5);
+
+        /* Path dots */
+        s.selectAll('.dot')
+          .data(i === 0 ? Confirmed : i === 1 ? Recovered : Deceased)
+          .enter()
+          .append('circle')
+          .attr('fill', colors[i])
+          .attr('stroke', colors[i])
+          .attr('cursor', 'pointer')
+          .attr('cx', (d) => {
+            return x(new Date(d['date'] + '20'));
+          })
+          .attr('cy', (d) => yScale(d[highlightedState]))
+          .attr('r', 3);
+      });
+    },
+    [mode, highlightedState]
+  );
 
   const graphData = useCallback(
     (timeseries) => {
@@ -261,6 +381,9 @@ function TimeSeries(props) {
       graphElement4,
       graphElement5,
       graphElement6,
+      graphElement7,
+      graphElement8,
+      graphElement9,
     ];
     for (let i = 0; i < graphs.length; i++) {
       d3.select(graphs[i].current).selectAll('*').remove();
@@ -276,8 +399,9 @@ function TimeSeries(props) {
   useEffect(() => {
     if (timeseries.length > 1) {
       graphData(timeseries);
+      graphData1(statesDaily);
     }
-  }, [timeseries, graphData]);
+  }, [timeseries, graphData, statesDaily, graphData1]);
 
   const yesterdayDate = new Date();
   yesterdayDate.setDate(yesterdayDate.getDate() - 1);
@@ -491,6 +615,50 @@ function TimeSeries(props) {
           </div>
           <svg
             ref={graphElement6}
+            width="650"
+            height="200"
+            viewBox="0 0 650 200"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
+      </div>
+
+      <div
+        className="timeseries"
+        style={{display: props.type === 3 ? 'flex' : 'none'}}
+      >
+        <div className="svg-parent">
+          <div className="stats">
+            <h5>Confirmed</h5>
+          </div>
+          <svg
+            ref={graphElement7}
+            width="650"
+            height="200"
+            viewBox="0 0 650 200"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
+
+        <div className="svg-parent is-green">
+          <div className="stats is-green">
+            <h5>Recovered</h5>
+          </div>
+          <svg
+            ref={graphElement8}
+            width="650"
+            height="200"
+            viewBox="0 0 650 200"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
+
+        <div className="svg-parent is-gray">
+          <div className="stats is-gray">
+            <h5>Deceased</h5>
+          </div>
+          <svg
+            ref={graphElement9}
             width="650"
             height="200"
             viewBox="0 0 650 200"

@@ -24,6 +24,7 @@ function Home(props) {
   const [graphOption, setGraphOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState([]);
+  const [statesDaily, setStatesDaily] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
@@ -36,15 +37,21 @@ function Home(props) {
 
   const getStates = async () => {
     try {
-      const [response, stateDistrictWiseResponse] = await Promise.all([
+      const [
+        response,
+        stateDistrictWiseResponse,
+        statesDailyResponse,
+      ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
+        axios.get('https://api.covid19india.org/states_daily.json'),
         /* axios.get('https://api.covid19india.org/raw_data.json'),*/
       ]);
       setStates(response.data.statewise);
       setTimeseries(validateCTS(response.data.cases_time_series));
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
+      setStatesDaily(statesDailyResponse.data.states_daily);
       /* setPatients(rawDataResponse.data.raw_data.filter((p) => p.detectedstate));*/
       setFetched(true);
     } catch (err) {
@@ -131,6 +138,14 @@ function Home(props) {
                 >
                   <h4>Daily</h4>
                 </div>
+                <div
+                  className={`tab ${graphOption === 3 ? 'focused' : ''}`}
+                  onClick={() => {
+                    setGraphOption(3);
+                  }}
+                >
+                  <h4>State Wise</h4>
+                </div>
               </div>
 
               <div className="scale-modes">
@@ -168,9 +183,11 @@ function Home(props) {
 
             <TimeSeries
               timeseries={timeseries}
+              statesDaily={statesDaily}
               type={graphOption}
               mode={timeseriesMode}
               logMode={timeseriesLogMode}
+              regionHighlighted={regionHighlighted}
             />
 
             {/* Testing Rebuild*/}
