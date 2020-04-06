@@ -2,6 +2,8 @@ import React, {useState, useEffect, useCallback} from 'react';
 import * as Icon from 'react-feather';
 import {formatDate, formatDateAbsolute} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
+import {Link} from 'react-router-dom';
+
 function Row(props) {
   const [state, setState] = useState(props.state);
   const [districts, setDistricts] = useState(props.districts);
@@ -100,7 +102,14 @@ function Row(props) {
         onClick={!props.total ? handleReveal : null}
         style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
       >
-        <td style={{fontWeight: 600}}>{state.state}</td>
+        <td style={{fontWeight: 600}}>
+          {state.state}
+          {state.state === 'West Bengal' && (
+            <Link to="/faq">
+              <Icon.AlertCircle />
+            </Link>
+          )}
+        </td>
         <td>
           <span className="deltas" style={{color: '#ff073a'}}>
             {state.deltaconfirmed > 0 && <Icon.ArrowUp />}

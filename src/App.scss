@@ -673,6 +673,22 @@ table {
           vertical-align: -0.25px;
         }
       }
+
+      a {
+        height: 1px;
+        svg {
+          width: 12px;
+          stroke-width: 3px;
+          align-self: center;
+          color: $gray-mid;
+          transition: all 0.2s ease-in-out;
+          vertical-align: -0.435rem;
+          margin-left: 2px;
+          &:hover {
+            stroke: $gray;
+          }
+        }
+      }
     }
 
     td:first-child {
@@ -1119,6 +1135,11 @@ table {
     h6 {
       margin: 0;
       color: $cherry-mid;
+      transition: all 0.15s ease-in-out;
+    }
+
+    h5.title {
+      color: $cherry;
     }
 
     h2,
@@ -1141,14 +1162,24 @@ table {
     }
 
     &.is-green {
-      h5 { color: $green-mid; }
+      h5 { 
+        color: $green-mid; 
+        &.title {
+          color: $green;
+        }
+      }
 
       h2,
       h6 { color: $green; }
     }
 
     &.is-gray {
-      h5 { color: $gray-mid; }
+      h5 { 
+        color: $gray-mid; 
+        &.title {
+          color: $gray;
+        }
+      }
 
       h2,
       h6 { color: $gray; }
@@ -1186,6 +1217,7 @@ table {
         color: $cherry-mid;
         stroke: transparent;
         font-size: 12px;
+        font-weight: 900;
       }
     }
 
