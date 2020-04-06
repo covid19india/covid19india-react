@@ -5,6 +5,7 @@ import {
   formatDate,
   formatDateAbsolute,
   validateCTS,
+  getDateFromEpoch,
 } from '../utils/common-functions';
 /* import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';*/
@@ -120,7 +121,7 @@ function Home(props) {
               {activityLog.map(function (activity, index) {
                 return (
                   <p key={index} className="activity">
-                    {activity.timestamp}: {activity.update}
+                    {getDateFromEpoch(activity.timestamp)} : {activity.update}
                   </p>
                 );
               })}

@@ -1019,6 +1019,8 @@ table {
   flex-direction: row;
   width: 30rem;
   flex-wrap: wrap;
+  max-height: 17rem;
+  overflow: scroll;
 
   .activity {
     min-width: 5rem;

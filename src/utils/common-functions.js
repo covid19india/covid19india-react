@@ -47,3 +47,7 @@ export const validateCTS = (data = []) => {
       return new Date(d.date + year) < today;
     });
 };
+
+export const getDateFromEpoch = (epochDate) => {
+  return new Date(epochDate * 1000).toDateString();
+};
