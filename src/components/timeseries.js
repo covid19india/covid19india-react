@@ -35,6 +35,7 @@ function TimeSeries(props) {
     (timeseries) => {
       const ts = preprocessTimeseries(timeseries);
       const T = ts.length;
+      const yBuffer = 1.1;
 
       setDatapoint(timeseries[T - 1]);
       setIndex(T - 1);
@@ -81,20 +82,20 @@ function TimeSeries(props) {
 
       const yScaleUniformLinear = d3
         .scaleLinear()
-        .domain([0, d3.max(ts, (d) => d.totalconfirmed)])
+        .domain([0, yBuffer * d3.max(ts, (d) => d.totalconfirmed)])
         .nice()
         .range([chartHeight, margin.top]);
 
       const yScaleUniformLog = d3
         .scaleLog()
         .clamp(true)
-        .domain([1, d3.max(ts, (d) => d.totalconfirmed)])
+        .domain([1, yBuffer * d3.max(ts, (d) => d.totalconfirmed)])
         .nice()
         .range([chartHeight, margin.top]);
 
       const yScaleDailyUniform = d3
         .scaleLinear()
-        .domain([0, d3.max(ts, (d) => d.dailyconfirmed)])
+        .domain([0, yBuffer * d3.max(ts, (d) => d.dailyconfirmed)])
         .nice()
         .range([chartHeight, margin.top]);
 
@@ -132,19 +133,19 @@ function TimeSeries(props) {
 
         const yScaleLinear = d3
           .scaleLinear()
-          .domain([0, d3.max(ts, (d) => d[type])])
-          .nice()
-          .range([chartHeight, margin.top]);
-
-        const yScaleLog = d3
-          .scaleLog()
-          .clamp(true)
-          .domain([1, d3.max(ts, (d) => d[type])])
+          .domain([0, yBuffer * d3.max(ts, (d) => d[type])])
           .nice()
           .range([chartHeight, margin.top]);
 
         let y;
+        let yScaleLog;
         if (logCharts.has(type)) {
+          yScaleLog = d3
+            .scaleLog()
+            .clamp(true)
+            .domain([1, yBuffer * d3.max(ts, (d) => d[type])])
+            .nice()
+            .range([chartHeight, margin.top]);
           if (logMode) y = mode ? yScaleUniformLog : yScaleLog;
           else y = mode ? yScaleUniformLinear : yScaleLinear;
         } else {
