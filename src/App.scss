@@ -2029,6 +2029,36 @@ select {
   }
 }
 
+.pills {
+  >button {
+    border: 1px solid #c9d6fb;
+    background-color: #edf1fe;
+    color: $blue;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 800;
+    transition: background 0.15s ease-in-out;
+
+    &.selected {
+      background-color: #c9d6fb;
+    }
+
+    &:focus:not(:focus-visible) {
+      outline: none;
+    }
+
+    &:first-of-type {
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+
+    &:last-of-type {
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+  }
+}
+
 .legend {
   background: #fff;
   z-index: 101;
