@@ -1023,6 +1023,11 @@ table {
   overflow: scroll;
 
   .activity {
+    font-family: 'archia';
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 900;
+    z-index: 99;
     min-width: 5rem;
     margin-top: 8px;
     width: 100%;
