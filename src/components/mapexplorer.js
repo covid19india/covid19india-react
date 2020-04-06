@@ -207,10 +207,20 @@ const mapMeta = {
   },
 };
 
-export default function ({states, stateDistrictWiseData, regionHighlighted}) {
+export default function ({
+  states,
+  stateDistrictWiseData,
+  regionHighlighted,
+  onMapHighlightChange,
+}) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
+
+  useEffect(() => {
+    if (currentHoveredRegion.state)
+      onMapHighlightChange(currentHoveredRegion.statecode);
+  }, [regionHighlighted, currentHoveredRegion, onMapHighlightChange]);
 
   useEffect(() => {
     const region = getRegionFromState(states[1]);

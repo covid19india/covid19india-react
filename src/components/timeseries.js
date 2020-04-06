@@ -3,7 +3,11 @@ import * as d3 from 'd3';
 
 function TimeSeries(props) {
   const [timeseries, setTimeseries] = useState([]);
-  const [statesDaily, setStatesDaily] = useState({});
+  const [statesDaily, setStatesDaily] = useState({
+    Confirmed: [],
+    Recovered: [],
+    Deceased: [],
+  });
   const [highlightedState, setHighlightedState] = useState('kl');
   const [datapoint, setDatapoint] = useState({});
   const [index, setIndex] = useState(10);
@@ -50,12 +54,16 @@ function TimeSeries(props) {
 
   useEffect(() => {
     if (props.regionHighlighted && props.regionHighlighted.state) {
-      if (highlightedState === props.regionHighlighted.state.statecode) return;
       setHighlightedState(
         props.regionHighlighted.state.statecode.toLowerCase()
       );
     }
-  }, [props.regionHighlighted, highlightedState, setHighlightedState]);
+  }, [props.regionHighlighted, setHighlightedState]);
+
+  useEffect(() => {
+    if (props.stateHighlightedInMap)
+      setHighlightedState(props.stateHighlightedInMap.toLowerCase());
+  }, [props.stateHighlightedInMap, setHighlightedState]);
 
   const graphData1 = useCallback(
     ({Confirmed, Recovered, Deceased}) => {
@@ -64,6 +72,7 @@ function TimeSeries(props) {
         d3.select(graphs[i].current).selectAll('*').remove();
       }
       if (!highlightedState) return;
+
       const svgArray = [
         d3.select(graphElement7.current),
         d3.select(graphElement8.current),
@@ -98,6 +107,55 @@ function TimeSeries(props) {
           .nice()
           .range([height, margin.top]);
       });
+      if (mode) yScales[1] = yScales[2] = yScales[0];
+
+      const indexScale = d3
+        .scaleLinear()
+        .domain([0, Confirmed.length])
+        .range([margin.left, width]);
+
+      /* Focus dots */
+      const focus = svgArray.map((f, i) => {
+        const d = i === 0 ? Confirmed : i === 1 ? Recovered : Deceased;
+        return f
+          .append('g')
+          .append('circle')
+          .attr('fill', colors[i])
+          .attr('stroke', colors[i])
+          .attr('r', 5)
+          .attr('cx', x(new Date(d[d.length - 1]['date'] + '20')))
+          .attr('cy', yScales[i](d[d.length - 1][highlightedState]));
+      });
+
+      function mouseout() {
+        setDatapoint(Confirmed[Confirmed.length - 1]);
+        setIndex(Confirmed.length - 1);
+        setMoving(false);
+        focus.forEach((f, i) => {
+          const d = i === 0 ? Confirmed : i === 1 ? Recovered : Deceased;
+          f.attr('cx', x(new Date(d[d.length - 1]['date'] + '20'))).attr(
+            'cy',
+            yScales[i](d[d.length - 1][highlightedState])
+          );
+        });
+      }
+
+      function mousemove() {
+        const xm = d3.mouse(this)[0];
+        const xPos = Math.round(indexScale.invert(xm));
+        if (xPos >= 0 && xPos < Confirmed.length) {
+          setDatapoint(Confirmed[xPos]);
+          setIndex(xPos);
+          setMoving(true);
+          focus.forEach((f, i) => {
+            const d = i === 0 ? Confirmed : i === 1 ? Recovered : Deceased;
+            f.attr('cx', x(new Date(d[xPos]['date'] + '20'))).attr(
+              'cy',
+              yScales[i](d[xPos][highlightedState])
+            );
+          });
+        }
+      }
 
       svgArray.forEach((s, i) => {
         /* X axis */
@@ -106,14 +164,13 @@ function TimeSeries(props) {
           .attr('class', 'axis')
           .call(d3.axisBottom(x));
 
-        const yScale = mode ? yScales[0] : yScales[i];
         /* Y axis */
         s.append('g')
           .attr('transform', `translate(${width}, ${0})`)
           .attr('class', 'axis')
           .call(
             d3
-              .axisRight(yScale)
+              .axisRight(yScales[i])
               .ticks(5)
               .tickPadding(5)
               .tickFormat(d3.format('~s'))
@@ -131,7 +188,7 @@ function TimeSeries(props) {
           .attr('x2', (d) => {
             return x(new Date(d['date'] + '20'));
           })
-          .attr('y2', (d) => yScale(d[highlightedState]))
+          .attr('y2', (d) => yScales[i](d[highlightedState]))
           .style('stroke', colors[i] + '99')
           .style('stroke-width', 5);
 
@@ -146,8 +203,14 @@ function TimeSeries(props) {
           .attr('cx', (d) => {
             return x(new Date(d['date'] + '20'));
           })
-          .attr('cy', (d) => yScale(d[highlightedState]))
+          .attr('cy', (d) => yScales[i](d[highlightedState]))
           .attr('r', 3);
+
+        /* Focus dots */
+        s.on('mousemove', mousemove)
+          .on('touchmove', mousemove)
+          .on('mouseout', mouseout)
+          .on('touchend', mouseout);
       });
     },
     [mode, highlightedState]
@@ -381,9 +444,6 @@ function TimeSeries(props) {
       graphElement4,
       graphElement5,
       graphElement6,
-      graphElement7,
-      graphElement8,
-      graphElement9,
     ];
     for (let i = 0; i < graphs.length; i++) {
       d3.select(graphs[i].current).selectAll('*').remove();
@@ -405,7 +465,9 @@ function TimeSeries(props) {
 
   const yesterdayDate = new Date();
   yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-  const lastDate = new Date(datapoint['date'] + '2020');
+  const lastDate = new Date(
+    datapoint['date'] + (props.type !== 3 ? '2020' : '20')
+  );
   const isYesterday =
     lastDate.getMonth() === yesterdayDate.getMonth() &&
     lastDate.getDate() === yesterdayDate.getDate();
@@ -629,7 +691,30 @@ function TimeSeries(props) {
       >
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed</h5>
+            <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
+            <div className="stats-bottom">
+              <h2>
+                {statesDaily['Confirmed'][index] &&
+                  statesDaily['Confirmed'][index][highlightedState]}
+              </h2>
+              <h6>
+                {statesDaily['Confirmed'][index] && index !== 0
+                  ? statesDaily['Confirmed'][index][highlightedState] -
+                      statesDaily['Confirmed'][index - 1][highlightedState] >=
+                    0
+                    ? '+' +
+                      (statesDaily['Confirmed'][index][highlightedState] -
+                        statesDaily['Confirmed'][index - 1][highlightedState])
+                    : statesDaily['Confirmed'][index][highlightedState] -
+                      statesDaily['Confirmed'][index - 1][highlightedState]
+                  : ''}
+              </h6>
+            </div>
           </div>
           <svg
             ref={graphElement7}
@@ -642,7 +727,30 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>Recovered</h5>
+            <h5 className={`${!moving ? 'title' : ''}`}>Recovered</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
+            <div className="stats-bottom">
+              <h2>
+                {statesDaily['Recovered'][index] &&
+                  statesDaily['Recovered'][index][highlightedState]}
+              </h2>
+              <h6>
+                {statesDaily['Recovered'][index] && index !== 0
+                  ? statesDaily['Recovered'][index][highlightedState] -
+                      statesDaily['Recovered'][index - 1][highlightedState] >=
+                    0
+                    ? '+' +
+                      (statesDaily['Recovered'][index][highlightedState] -
+                        statesDaily['Recovered'][index - 1][highlightedState])
+                    : statesDaily['Recovered'][index][highlightedState] -
+                      statesDaily['Recovered'][index - 1][highlightedState]
+                  : ''}
+              </h6>
+            </div>
           </div>
           <svg
             ref={graphElement8}
@@ -655,7 +763,28 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
-            <h5>Deceased</h5>
+            <h5 className={`${!moving ? 'title' : ''}`}>Deceased</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
+            <div className="stats-bottom">
+              <h2>
+                {statesDaily['Deceased'][index] &&
+                  statesDaily['Deceased'][index][highlightedState]}
+              </h2>
+              {statesDaily['Deceased'][index] && index !== 0
+                ? statesDaily['Deceased'][index][highlightedState] -
+                    statesDaily['Deceased'][index - 1][highlightedState] >=
+                  0
+                  ? '+' +
+                    (statesDaily['Deceased'][index][highlightedState] -
+                      statesDaily['Deceased'][index - 1][highlightedState])
+                  : statesDaily['Deceased'][index][highlightedState] -
+                    statesDaily['Deceased'][index - 1][highlightedState]
+                : ''}
+            </div>
           </div>
           <svg
             ref={graphElement9}

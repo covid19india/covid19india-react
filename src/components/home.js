@@ -28,6 +28,7 @@ function Home(props) {
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
+  const [stateHighlightedInMap, setStateHighlightedInMap] = useState();
 
   useEffect(() => {
     if (fetched === false) {
@@ -66,6 +67,11 @@ function Home(props) {
   const onHighlightDistrict = (district, state, index) => {
     if (!state && !index && !district) setRegionHighlighted(null);
     else setRegionHighlighted({district, state, index});
+  };
+
+  const onMapHighlightChange = (statecode) => {
+    if (stateHighlightedInMap !== statecode)
+      setStateHighlightedInMap(statecode);
   };
 
   return (
@@ -114,6 +120,7 @@ function Home(props) {
               states={states}
               stateDistrictWiseData={stateDistrictWiseData}
               regionHighlighted={regionHighlighted}
+              onMapHighlightChange={onMapHighlightChange}
             />
 
             <div
@@ -188,6 +195,7 @@ function Home(props) {
               mode={timeseriesMode}
               logMode={timeseriesLogMode}
               regionHighlighted={regionHighlighted}
+              stateHighlightedInMap={stateHighlightedInMap}
             />
 
             {/* Testing Rebuild*/}
