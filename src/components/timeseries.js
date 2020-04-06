@@ -223,7 +223,7 @@ function TimeSeries(props) {
         svg
           .selectAll('.dot')
           .data(ts, (d) => d.date)
-          .join('circle')
+          .join((enter) => enter.append('circle').attr('cy', chartHeight))
           .attr('class', 'dot')
           .attr('fill', color)
           .attr('stroke', color)
@@ -257,11 +257,12 @@ function TimeSeries(props) {
                 .y((d) => yScale(d[type]))
                 .curve(d3.curveCardinal)
             );
+          // .style('transform', `translateX(${xScale(-7)}px)`);
         } else {
           svg
             .selectAll('.stem')
             .data(ts, (d) => d.date)
-            .join('line')
+            .join((enter) => enter.append('line').attr('y2', chartHeight))
             .attr('class', 'stem')
             .style('stroke', color + '99')
             .style('stroke-width', 4)
