@@ -35,13 +35,15 @@ function Navbar(props) {
 
           <div className="navbar-left">
             <div className="fadeInUp">
-              <h1>India COVID-19 Tracker</h1>
-              <h6 style={{fontWeight: 600}}>A Crowdsourced Initiative</h6>
+              <span className="header">India COVID-19 Tracker</span>
+              <span className="sub-header" style={{fontWeight: 600}}>
+                A Crowdsourced Initiative
+              </span>
             </div>
           </div>
         </div>
 
-        <div className="navbar-right">
+        <div className="navbar-center">
           {props.pages.map((page, i) => {
             return (
               <Link to={page.pageLink} key={i}>

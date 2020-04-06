@@ -271,7 +271,7 @@ h6 {
     align-self: center;
     width: calc(100% - 10rem);
     word-wrap: break-word;
-    padding: 1rem;
+    padding: 1.5rem;
     text-align: center;
     cursor: pointer;
   }
@@ -280,6 +280,7 @@ h6 {
 .logo {
   float: left;
   display: flex;
+  width: 18rem;
 
   h1 {
     margin-bottom: 5px;
@@ -287,6 +288,18 @@ h6 {
 
   h6 {
     margin-top: 0;
+  }
+
+  .header {
+    font-family: 'Archia';
+    font-size: 15px;
+    margin-top: 1rem;
+  }
+
+  .sub-header {
+    font-family: 'Archia';
+    font-size: 11px;
+    color: #6c757d;
   }
 }
 
@@ -402,12 +415,10 @@ h6 {
 
   @include navbarReveal($gray-light);
 
-  .navbar-right {
+  .navbar-center {
     margin-left: 2rem;
     flex: 1;
     align-self: center;
-    float: right;
-    text-align: right;
 
     a {
       display: inline-block;
@@ -436,7 +447,7 @@ h6 {
     width: 3rem;
     height: 3rem;
     align-self: center;
-    margin-left: 5rem;
+    margin-left: 0.5rem;
     cursor: pointer;
   }
 }
@@ -448,7 +459,7 @@ h6 {
   width: 30rem;
   align-self: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 0.1rem;
 
   h1,
   h6 {
