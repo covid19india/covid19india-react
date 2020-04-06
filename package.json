@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "http://covid19india.github.io/",
   "dependencies": {
+    "@material-ui/core": "^4.9.9",
     "axios": "^0.19.2",
     "chart.js": "^2.9.3",
     "d3": "^5.15.0",
