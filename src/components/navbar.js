@@ -16,7 +16,6 @@ function Navbar(props) {
         className="Navbar"
         style={{
           animationDelay: '0.5s',
-          height: window.location.pathname === '/clusters' ? '2.5rem' : '',
           transition: 'all 0.3s ease-in-out',
         }}
       >
