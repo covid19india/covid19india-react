@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {parse, format} from 'date-fns';
 import * as Icon from 'react-feather';
+import * as d3 from 'd3';
 
 function Patients(props) {
   const [patients, setPatients] = useState(props.patients);
@@ -84,13 +85,17 @@ function Patients(props) {
                                   : patient.gender === 'M'
                                   ? 'is-male'
                                   : ''
-                              }`}
+                              } ${props.expand ? '' : 'is-small'}`}
                               onClick={() => {
                                 setModal(true);
                                 setPatient(patient);
                               }}
                             >
-                              <h3>P{patient.patientnumber}</h3>
+                              <h3>
+                                {props.expand
+                                  ? `P${patient.patientnumber}`
+                                  : ''}
+                              </h3>
                             </div>
                           );
                         })}
@@ -131,13 +136,17 @@ function Patients(props) {
                                   : patient.typeoftransmission === 'Imported'
                                   ? 'is-imported'
                                   : ''
-                              }`}
+                              } ${props.expand ? '' : 'is-small'}`}
                               onClick={() => {
                                 setModal(true);
                                 setPatient(patient);
                               }}
                             >
-                              <h3>P{patient.patientnumber}</h3>
+                              <h3>
+                                {props.expand
+                                  ? `P${patient.patientnumber}`
+                                  : ''}
+                              </h3>
                             </div>
                           );
                         })}
@@ -193,13 +202,73 @@ function Patients(props) {
                                   : patient.nationality === 'Canada'
                                   ? 'is-ca'
                                   : ''
+                              } ${props.expand ? '' : 'is-small'}`}
+                              onClick={() => {
+                                setModal(true);
+                                setPatient(patient);
+                              }}
+                            >
+                              <h3>
+                                {props.expand
+                                  ? `P${patient.patientnumber}`
+                                  : ''}
+                              </h3>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </React.Fragment>
+                );
+              } else {
+                return null;
+              }
+            })}
+        </div>
+      )}
+
+      {props.colorMode === 'age' && (
+        <div className="Patients fadeInUp" style={{animationDelay: '1s'}}>
+          {Object.keys(logs)
+            .slice(props.summary ? -1 : 0)
+            .map((day, index) => {
+              if (day !== 'Invalid Date') {
+                return (
+                  <React.Fragment>
+                    <h5 className="daylabel">
+                      {format(new Date(day), 'dd MMM, yyyy')}
+                    </h5>
+                    <div
+                      key={index}
+                      className={`day ${props.summary ? 'summary' : ''}`}
+                    >
+                      {logs[day]
+                        .slice(props.summary ? -40 : 0)
+                        .map((patient, indexTwo) => {
+                          return (
+                            <div
+                              key={indexTwo}
+                              style={{
+                                background: d3.interpolateReds(
+                                  patient.agebracket / 100
+                                ),
+                              }}
+                              className={`patient-card ${
+                                props.expand ? '' : 'is-small'
                               }`}
                               onClick={() => {
                                 setModal(true);
                                 setPatient(patient);
                               }}
                             >
-                              <h3>P{patient.patientnumber}</h3>
+                              <h3
+                                style={{
+                                  color: d3.interpolateReds(
+                                    1 - patient.agebracket / 100
+                                  ),
+                                }}
+                              >
+                                {props.expand ? `${patient.agebracket}` : ''}
+                              </h3>
                             </div>
                           );
                         })}
