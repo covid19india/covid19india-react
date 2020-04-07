@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef, useLayoutEffect} from 'react';
 import axios from 'axios';
 import {formatDistance} from 'date-fns';
 import {
@@ -6,8 +6,8 @@ import {
   formatDateAbsolute,
   validateCTS,
 } from '../utils/common-functions';
-/* import * as Icon from 'react-feather';
-import {Link} from 'react-router-dom';*/
+import * as Icon from 'react-feather';
+/* import {Link} from 'react-router-dom';*/
 
 import Table from './table';
 import Level from './level';
@@ -29,6 +29,7 @@ function Home(props) {
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
   const [stateHighlightedInMap, setStateHighlightedInMap] = useState();
+  const [isShowFloatingButtons, setIsShowFloatingButtons] = useState(false);
 
   useEffect(() => {
     if (fetched === false) {
@@ -74,6 +75,31 @@ function Home(props) {
       setStateHighlightedInMap({code: statecode, name});
   };
 
+  const refs = [useRef(), useRef(), useRef()];
+  const scrollHandlers = refs.map((ref) => () =>
+    window.scrollTo({
+      top: ref.current.offsetTop,
+      behavior: 'smooth',
+    })
+  );
+
+  function useScrollPosition(effect) {
+    const position = useRef(window.scrollY);
+    useLayoutEffect(() => {
+      const handleScroll = () => {
+        const currPos = window.scrollY;
+        effect({prevPos: position.current, currPos});
+        position.current = currPos;
+      };
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    });
+  }
+
+  useScrollPosition(({prevPos, currPos}) => {
+    setIsShowFloatingButtons(parseInt(prevPos) > parseInt(currPos));
+  });
+
   return (
     <div className="Home">
       <div className="home-left">
@@ -105,6 +131,7 @@ function Home(props) {
         {states.length > 1 && <Level data={states} />}
         <Minigraph timeseries={timeseries} animate={true} />
         <Table
+          forwardRef={refs[0]}
           states={states}
           summary={false}
           stateDistrictWiseData={stateDistrictWiseData}
@@ -117,6 +144,7 @@ function Home(props) {
         {fetched && (
           <React.Fragment>
             <MapExplorer
+              forwardRef={refs[1]}
               states={states}
               stateDistrictWiseData={stateDistrictWiseData}
               regionHighlighted={regionHighlighted}
@@ -126,6 +154,7 @@ function Home(props) {
             <div
               className="timeseries-header fadeInUp"
               style={{animationDelay: '1.5s'}}
+              ref={refs[2]}
             >
               <h1>
                 Spread Trends
@@ -200,6 +229,21 @@ function Home(props) {
             {/* Testing Rebuild*/}
           </React.Fragment>
         )}
+      </div>
+
+      <div
+        className="floating-buttons"
+        style={{display: isShowFloatingButtons ? 'block' : 'none'}}
+      >
+        <button className="" onClick={scrollHandlers[0]}>
+          <Icon.Grid />
+        </button>
+        <button className="" onClick={scrollHandlers[1]}>
+          <Icon.MapPin />
+        </button>
+        <button className="" onClick={scrollHandlers[2]}>
+          <Icon.Activity />
+        </button>
       </div>
 
       {/* <div className="home-left">

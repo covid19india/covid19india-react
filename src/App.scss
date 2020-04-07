@@ -1285,6 +1285,27 @@ table {
   }
 }
 
+.floating-buttons {
+  position: fixed;
+  bottom: 2rem;
+  text-align: center;
+  width: 100%;
+  z-index: 1;
+
+  button {
+    margin: 0 1rem;
+    color: #34a668;
+    background-color: #0080005e;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 0;
+  }
+
+  @media screen and (min-width: 1200px) {
+    display: none !important;
+  }
+}
+
 .Links {
   display: flex;
   flex-direction: column;
