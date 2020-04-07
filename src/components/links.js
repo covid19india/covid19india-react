@@ -57,6 +57,18 @@ function Links(props) {
           https://bit.ly/covid19resourcelist
         </a>
       </div>
+    
+     <div className="link fadeInUp" style={{animationDelay: '0.7s'}}>
+        <h3>Citizen Engagement Platform - Government of India</h3>
+        <a
+          href="https://www.mygov.in/covid-19/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          https://www.mygov.in/covid-19/
+        </a>
+      </div>
+    </div>
 
       <div className="link fadeInUp" style={{animationDelay: '0.7s'}}>
         <h3>COVID-19 Global Tracker</h3>
