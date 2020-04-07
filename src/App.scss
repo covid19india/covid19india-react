@@ -1933,6 +1933,11 @@ footer {
     }
 }
 
+body.modal-open {
+  overflow: hidden;
+  height: 100vh;
+}
+
 .modal {
   position: fixed;
   height: 100vh;
@@ -1943,6 +1948,7 @@ footer {
   flex-direction: row;
   justify-content: center;
   background: $pblue-mid;
+  cursor: pointer;
   z-index: 9999;
   .modal-content {
     position: fixed;
@@ -1951,7 +1957,8 @@ footer {
     align-self: center;
     background: #fff;
     width: 30rem;
-    height: calc(100vh - 10rem);
+    height: 30rem;
+    cursor: default;
     overflow-y: auto;
     svg {
       width: 20px;
@@ -2334,6 +2341,12 @@ select {
     & > * {
       align-self: center;
     }
+  }
+}
+
+@media(max-width: 400px){
+  .PatientsDB .modal .modal-content .meta {
+    height: 25rem !important;
   }
 }
 
