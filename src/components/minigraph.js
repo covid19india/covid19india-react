@@ -7,6 +7,7 @@ function Minigraph(props) {
   const graphElement2 = useRef(null);
   const graphElement3 = useRef(null);
   const graphElement4 = useRef(null);
+  const graphElement5 = useRef(null);
 
   useEffect(() => {
     if (props.timeseries.length > 1) {
@@ -343,6 +344,18 @@ function Minigraph(props) {
       >
         <svg
           ref={graphElement4}
+          width="100"
+          height="100"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="xMidYMid meet"
+        />
+      </div>
+      <div
+        className="svg-parent is-gray fadeInUp"
+        style={{animationDelay: '1.7s'}}
+      >
+        <svg
+          ref={graphElement5}
           width="100"
           height="100"
           viewBox="0 0 100 100"

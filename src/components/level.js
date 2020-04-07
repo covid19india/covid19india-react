@@ -7,6 +7,7 @@ function Level(props) {
   const [recoveries, setRecoveries] = useState(0);
   const [deaths, setDeaths] = useState(0);
   const [deltas, setDeltas] = useState(0);
+  const testedLength = props.total_tested.length;
 
   useEffect(() => {
     setData(props.data);
@@ -97,6 +98,27 @@ function Level(props) {
           [{deltas ? (deltas.deaths >= 0 ? '+' + deltas.deaths : '+0') : ''}]
         </h4>
         <h1 className="title has-text-grey">{deaths}</h1>
+      </div>
+
+      <div
+        className="level-item is-green fadeInUp"
+        style={{animationDelay: '1.3s'}}
+      >
+        <h5 className="heading">Tested</h5>
+        <h4>
+          [
+          {testedLength !== 0
+            ? '+' +
+              (props.total_tested[testedLength - 1]['totalsamplestested'] -
+                props.total_tested[testedLength - 2]['totalsamplestested'])
+            : '+0'}
+          ]
+        </h4>
+        <h1 className="title has-text-success">
+          {testedLength !== 0
+            ? props.total_tested[testedLength - 1]['totalsamplestested']
+            : ''}
+        </h1>
       </div>
     </div>
   );

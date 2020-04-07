@@ -7,6 +7,7 @@ import Table from './table';
 
 function Summary(props) {
   const [states, setStates] = useState([]);
+  const [tested, setTested] = useState([]);
   const [deltas, setDeltas] = useState([]);
   const [timeseries, setTimeseries] = useState([]);
   const [fetched, setFetched] = useState(false);
@@ -24,6 +25,7 @@ function Summary(props) {
         setStates(response.data.statewise);
         setDeltas(response.data.key_values[0]);
         setTimeseries(response.data.cases_time_series);
+        setTested(response.data.tested);
         setFetched(true);
       })
       .catch((err) => {
@@ -38,7 +40,7 @@ function Summary(props) {
       </div>
 
       <Minigraph timeseries={timeseries} animate={false} />
-      <Level data={states} deltas={deltas} />
+      <Level data={states} deltas={deltas} total_tested={tested} />
       <Table states={states} summary={true} />
 
       <div className="summary-bottom">

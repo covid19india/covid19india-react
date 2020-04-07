@@ -18,6 +18,7 @@ import Minigraph from './minigraph';
 
 function Home(props) {
   const [states, setStates] = useState([]);
+  const [tested, setTested] = useState([]);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
   /* const [patients, setPatients] = useState([]);*/
   const [fetched, setFetched] = useState(false);
@@ -47,6 +48,7 @@ function Home(props) {
         axios.get('https://api.covid19india.org/raw_data.json'),
       ]);
       setStates(response.data.statewise);
+      setTested(response.data.tested);
       setTimeseries(validateCTS(response.data.cases_time_series));
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
@@ -94,7 +96,7 @@ function Home(props) {
           </div>
         </div>
 
-        {states.length > 1 && <Level data={states} />}
+        {states.length > 1 && <Level data={states} total_tested={tested} />}
         <Minigraph timeseries={timeseries} animate={true} />
         <Table
           states={states}
