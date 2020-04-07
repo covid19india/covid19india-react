@@ -44,14 +44,11 @@ function TimeSeries(props) {
         : props.stateHighlightedInMap
         ? props.stateHighlightedInMap.statecode
         : '';
+    const graphType = props.type === 1 ? 'cumulative' : 'daily';
 
-    if (stateCode) {
-      const graphType = props.type === 1 ? 'cumulative' : 'daily';
+    if (stateCode && stateCode !== 'TT')
       setGraphData(stateTimeSeries[stateCode.toLowerCase()][graphType]);
-    } else if (countryTimeSeries)
-      setGraphData(
-        countryTimeSeries[props.type === 1 ? 'cumulative' : 'daily']
-      );
+    else if (countryTimeSeries) setGraphData(countryTimeSeries[graphType]);
   }, [
     props.regionHighlighted,
     props.stateHighlightedInMap,
@@ -62,7 +59,7 @@ function TimeSeries(props) {
 
   const initializeGraph = useCallback(
     (graphData) => {
-      if (!graphData) return;
+      setIndex(0);
 
       const graphs = [graphElement1, graphElement2, graphElement3];
       for (let i = 0; i < graphs.length; i++) {
@@ -130,8 +127,7 @@ function TimeSeries(props) {
           .attr('class', 'focus')
           .attr('fill', colors[i])
           .attr('stroke', colors[i])
-          .attr('r', 5)
-          .attr('cx', (d) => xScale(d.date));
+          .attr('r', 5);
       });
 
       const indexScale = d3
@@ -146,7 +142,7 @@ function TimeSeries(props) {
       }
 
       function mouseout() {
-        setFocusDot(null);
+        setFocusDot();
       }
 
       function setFocusDot(i) {
@@ -207,7 +203,7 @@ function TimeSeries(props) {
             .attr('class', 'trend')
             .attr('fill', 'none')
             .attr('stroke', color + '99')
-            .attr('stroke-width', 5)
+            .attr('stroke-width', 4)
             .attr('cursor', 'pointer')
             .transition(t)
             .attr(
@@ -238,6 +234,8 @@ function TimeSeries(props) {
           .on('touchmove', mousemove)
           .on('mouseout', mouseout)
           .on('touchend', mouseout);
+
+        setFocusDot();
       });
     },
     [logMode, mode, props.type]
@@ -248,6 +246,9 @@ function TimeSeries(props) {
   }, [graphData, initializeGraph]);
 
   if (!graphData) return <></>;
+
+  const i = index > graphData.c.length ? 0 : index;
+
   const yesterdayDate = new Date();
   yesterdayDate.setDate(yesterdayDate.getDate() - 1);
   const lastDate = new Date(graphData['c'].date + '2020');
@@ -267,20 +268,16 @@ function TimeSeries(props) {
           <div className="stats">
             <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
             <h5 className={`${moving ? 'title' : ''}`}>
-              {graphData['c'][index]['date'].toLocaleDateString() + yesterday}
+              {graphData['c'][i].date.toLocaleDateString() + yesterday}
             </h5>
             <div className="stats-bottom">
-              <h2>{graphData['c'][index].count}</h2>
+              <h2>{graphData['c'][i].count}</h2>
               <h6>
-                {graphData['c'][index] > 0 && index !== 0
-                  ? graphData['c'][index].count -
-                      graphData['c'][index - 1].count >=
-                    0
+                {graphData['c'][i] > 0 && index !== 0
+                  ? graphData['c'][i].count - graphData['c'][i - 1].count >= 0
                     ? '+' +
-                      (graphData['c'][index].count -
-                        graphData['c'][index - 1].count)
-                    : graphData['c'][index].count -
-                      graphData['c'][index - 1].count
+                      (graphData['c'][i].count - graphData['c'][i - 1].count)
+                    : graphData['c'][i].count - graphData['c'][i - 1].count
                   : ''}
               </h6>
             </div>
@@ -298,20 +295,16 @@ function TimeSeries(props) {
           <div className="stats is-green">
             <h5 className={`${!moving ? 'title' : ''}`}>Recovered</h5>
             <h5 className={`${moving ? 'title' : ''}`}>
-              {graphData['r'][index]['date'].toLocaleDateString() + yesterday}
+              {graphData['r'][i]['date'].toLocaleDateString() + yesterday}
             </h5>
             <div className="stats-bottom">
-              <h2>{graphData['r'][index].count}</h2>
+              <h2>{graphData['r'][i].count}</h2>
               <h6>
-                {graphData['r'][index] > 0 && index !== 0
-                  ? graphData['r'][index].count -
-                      graphData['r'][index - 1].count >=
-                    0
+                {graphData['r'][i] > 0 && index !== 0
+                  ? graphData['r'][i].count - graphData['r'][i - 1].count >= 0
                     ? '+' +
-                      (graphData['r'][index].count -
-                        graphData['r'][index - 1].count)
-                    : graphData['r'][index].count -
-                      graphData['r'][index - 1].count
+                      (graphData['r'][i].count - graphData['r'][i - 1].count)
+                    : graphData['r'][i].count - graphData['r'][i - 1].count
                   : ''}
               </h6>
             </div>
@@ -329,20 +322,16 @@ function TimeSeries(props) {
           <div className="stats is-gray">
             <h5 className={`${!moving ? 'title' : ''}`}>Deceased</h5>
             <h5 className={`${moving ? 'title' : ''}`}>
-              {graphData['d'][index]['date'].toLocaleDateString() + yesterday}
+              {graphData['d'][i]['date'].toLocaleDateString() + yesterday}
             </h5>
             <div className="stats-bottom">
-              <h2>{graphData['d'][index].count}</h2>
+              <h2>{graphData['d'][i].count}</h2>
               <h6>
-                {graphData['d'][index] > 0 && index !== 0
-                  ? graphData['d'][index].count -
-                      graphData['d'][index - 1].count >=
-                    0
+                {graphData['d'][i] > 0 && index !== 0
+                  ? graphData['d'][i].count - graphData['d'][i - 1].count >= 0
                     ? '+' +
-                      (graphData['d'][index].count -
-                        graphData['d'][index - 1].count)
-                    : graphData['d'][index].count -
-                      graphData['d'][index - 1].count
+                      (graphData['d'][i].count - graphData['d'][i - 1].count)
+                    : graphData['d'][i].count - graphData['d'][i - 1].count
                   : ''}
               </h6>
             </div>

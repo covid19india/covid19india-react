@@ -223,7 +223,7 @@ export default function ({
   }, [regionHighlighted, currentHoveredRegion, onMapHighlightChange]);
 
   useEffect(() => {
-    const region = getRegionFromState(states[1]);
+    const region = getRegionFromState(states[0]);
     setCurrentHoveredRegion(region);
   }, [states]);
 
