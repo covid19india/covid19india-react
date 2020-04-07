@@ -1934,9 +1934,10 @@ footer {
 }
 
 body.modal-open {
-  overflow: hidden;
-  padding-right: 15px;
-  height: 100vh;
+  overflow-y: hidden;
+  min-height: 100vh;
+  width: calc(100% - 14.7px); //for chrome/safari
+  width: -moz-calc(100% - 16px); //for firefox
 }
 
 .modal {
@@ -2386,7 +2387,7 @@ select {
   }
 
   body.modal-open {
-    padding-right: 0;
+    width: 100%;
   }
 
   .link,
