@@ -15,6 +15,7 @@ import Links from './components/links';
 import FAQ from './components/faq';
 import Banner from './components/banner';
 import PatientDB from './components/patientdb';
+import DeepDive from './components/deepdive';
 
 const history = require('history').createBrowserHistory;
 
@@ -31,6 +32,12 @@ function App() {
       view: PatientDB,
       displayName: 'Demographics',
       animationDelayForNavbar: 0.3,
+    },
+    {
+      pageLink: '/deepdive',
+      view: DeepDive,
+      displayName: 'Deep Dive',
+      animationDelayForNavbar: 0.4,
     },
     {
       pageLink: '/links',
