@@ -17,6 +17,7 @@ import Banner from './components/banner';
 import PatientDB from './components/patientdb';
 import DeepDive from './components/deepdive';
 import Resources from './components/resources'
+/* import PatientDB from './components/patientdb';*/
 
 const history = require('history').createBrowserHistory;
 
@@ -55,10 +56,9 @@ function App() {
     {
       pageLink: '/resources',
       view: Resources,
-      displayName: 'Helpful Resources',
+      displayName: 'Essentials',
       animationDelayForNavbar: 0.7,
     },
-    
   ];
 
   return (
