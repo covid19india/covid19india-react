@@ -53,7 +53,7 @@ function TimeSeries(props) {
       const height = dimensions.height;
 
       // Margins
-      const margin = {top: 15, right: 35, bottom: 30, left: 25};
+      const margin = {top: 15, right: 35, bottom: 25, left: 25};
       const chartRight = width - margin.right;
       const chartBottom = height - margin.bottom;
 
@@ -270,66 +270,70 @@ function TimeSeries(props) {
           .attr('cx', (d) => xScale(d.date))
           .attr('cy', (d) => yScale(d[type]));
 
-        /* TOTAL TRENDS */
-        const path = svg
-          .selectAll('.trend')
-          .data([[...ts].reverse()])
-          .join('path')
-          .attr('class', 'trend')
-          .attr('fill', 'none')
-          .attr('stroke', color + '99')
-          .attr('stroke-width', 4);
-
-        // HACK
-        // Path interpolation is non-trivial. Ideally, a custom path tween
-        // function should be defined which takes care that old path dots
-        // transition synchronously along with the path transition. This hack
-        // simulates that behaviour.
-        if (path.attr('d')) {
-          const n = path.node().getTotalLength();
-          const p = path.node().getPointAtLength(n);
-          // Append points at end of path for better interpolation
-          path.attr('d', () => path.attr('d') + `L${p.x},${p.y}`.repeat(3 * T));
+        if (plotTotal) {
+          /* TOTAL TRENDS */
+          svg.selectAll('.stem').remove();
+          const path = svg
+            .selectAll('.trend')
+            .data([[...ts].reverse()])
+            .join('path')
+            .attr('class', 'trend')
+            .attr('fill', 'none')
+            .attr('stroke', color + '99')
+            .attr('stroke-width', 4);
+          // HACK
+          // Path interpolation is non-trivial. Ideally, a custom path tween
+          // function should be defined which takes care that old path dots
+          // transition synchronously along with the path transition. This hack
+          // simulates that behaviour.
+          if (path.attr('d')) {
+            const n = path.node().getTotalLength();
+            const p = path.node().getPointAtLength(n);
+            // Append points at end of path for better interpolation
+            path.attr(
+              'd',
+              () => path.attr('d') + `L${p.x},${p.y}`.repeat(3 * T)
+            );
+          }
+          path
+            .transition(t)
+            .attr('opacity', plotTotal ? 1 : 0)
+            .attr(
+              'd',
+              d3
+                .line()
+                .x((d) => xScale(d.date))
+                .y((d) => yScale(d[typeTotal]))
+                .curve(d3.curveCardinal)
+            );
+          // Using d3-interpolate-path
+          // .attrTween('d', function (d) {
+          //   var previous = path.attr('d');
+          //   var current = line(d);
+          //   return interpolatePath(previous, current);
+          // });
+        } else {
+          /* DAILY TRENDS */
+          svg.selectAll('.trend').remove();
+          svg
+            .selectAll('.stem')
+            .data(ts, (d) => d.date)
+            .join((enter) =>
+              enter
+                .append('line')
+                .attr('x1', (d) => xScale(d.date))
+                .attr('x2', (d) => xScale(d.date))
+                .attr('y2', chartBottom)
+            )
+            .attr('class', 'stem')
+            .style('stroke', color + '99')
+            .style('stroke-width', 4)
+            .attr('y1', chartBottom)
+            .transition(t)
+            .attr('x1', (d) => xScale(d.date))
+            .attr('x2', (d) => xScale(d.date))
+            .attr('y2', (d) => yScale(d[typeDaily]));
         }
-
-        path
-          .transition(t)
-          .attr('opacity', plotTotal ? 1 : 0)
-          .attr(
-            'd',
-            d3
-              .line()
-              .x((d) => xScale(d.date))
-              .y((d) => yScale(d[typeTotal]))
-              .curve(d3.curveCardinal)
-          );
-        // Using d3-interpolate-path
-        // .attrTween('d', function (d) {
-        //   var previous = path.attr('d');
-        //   var current = line(d);
-        //   return interpolatePath(previous, current);
-        // });
-
-        /* DAILY TRENDS */
-        svg
-          .selectAll('.stem')
-          .data(ts, (d) => d.date)
-          .join((enter) =>
-            enter
-              .append('line')
-              .attr('x1', (d) => xScale(d.date))
-              .attr('x2', (d) => xScale(d.date))
-              .attr('y2', chartBottom)
-          )
-          .attr('class', 'stem')
-          .style('stroke', color + '99')
-          .style('stroke-width', 4)
-          .attr('y1', chartBottom)
-          .transition(t)
-          .attr('opacity', plotTotal ? 0 : 1)
-          .attr('x1', (d) => xScale(d.date))
-          .attr('x2', (d) => xScale(d.date))
-          .attr('y2', (d) => yScale(d[typeDaily]));
 
         svg
           .on('mousemove', mousemove)
