@@ -239,25 +239,44 @@ function TimeSeries(props) {
 
         /* Add trend path */
         if (logCharts.has(type)) {
-          svg
+          const path = svg
             .selectAll('.trend')
-            .data([ts])
+            .data([[...ts].reverse()])
             .join('path')
             .attr('class', 'trend')
             .attr('fill', 'none')
             .attr('stroke', color + '99')
-            .attr('stroke-width', 5)
-            .attr('cursor', 'pointer')
-            .transition(t)
-            .attr(
+            .attr('stroke-width', 5);
+
+          // HACK
+          // Path interpolation is non-trivial. Ideally, a custom path tween
+          // function should be defined which takes care that old path dots
+          // transition synchronously along with the path transition. This hack
+          // simulates that behaviour.
+          if (path.attr('d')) {
+            const n = path.node().getTotalLength();
+            const p = path.node().getPointAtLength(n);
+            // Append points at end of path for better interpolation
+            path.attr(
               'd',
-              d3
-                .line()
-                .x((d) => xScale(d.date))
-                .y((d) => yScale(d[type]))
-                .curve(d3.curveCardinal)
+              () => path.attr('d') + `L${p.x},${p.y}`.repeat(3 * T)
             );
-          // .style('transform', `translateX(${xScale(-7)}px)`);
+          }
+
+          path.transition(t).attr(
+            'd',
+            d3
+              .line()
+              .x((d) => xScale(d.date))
+              .y((d) => yScale(d[type]))
+              .curve(d3.curveCardinal)
+          );
+          // Using d3-interpolate-path
+          // .attrTween('d', function (d) {
+          //   var previous = path.attr('d');
+          //   var current = line(d);
+          //   return interpolatePath(previous, current);
+          // });
         } else {
           svg
             .selectAll('.stem')
