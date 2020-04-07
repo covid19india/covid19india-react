@@ -47,11 +47,13 @@ function TimeSeries(props) {
   const graphData = useCallback(
     (timeseries) => {
       if (!dimensions) return;
-      console.log(dimensions);
+      const width = dimensions.width;
+      const height = dimensions.height;
+
       // Margins
-      const margin = {top: 0, right: 40, bottom: 60, left: 35};
-      const chartRight = 650 - margin.right;
-      const chartBottom = 200 - margin.bottom;
+      const margin = {top: 15, right: 35, bottom: 30, left: 25};
+      const chartRight = width - margin.right;
+      const chartBottom = height - margin.bottom;
 
       const ts = preprocessTimeseries(timeseries);
       const T = ts.length;
@@ -77,10 +79,13 @@ function TimeSeries(props) {
         .domain([dateMin, dateMax])
         .range([margin.left, chartRight]);
 
+      // Number of x-axis ticks
+      const numTicksX = width < 480 ? 4 : 8;
+
       const xAxis = (g) =>
         g
           .attr('class', 'x-axis')
-          .call(d3.axisBottom(xScale).ticks(8))
+          .call(d3.axisBottom(xScale).ticks(numTicksX))
           .style('transform', `translateY(${chartBottom}px)`);
 
       const yAxis = (g, yScale) =>
@@ -191,7 +196,7 @@ function TimeSeries(props) {
           .attr('class', 'focus')
           .attr('fill', colors[i])
           .attr('stroke', colors[i])
-          .attr('r', 5);
+          .attr('r', 4);
       });
 
       function mousemove() {
@@ -259,7 +264,7 @@ function TimeSeries(props) {
           .attr('class', 'dot')
           .attr('fill', color)
           .attr('stroke', color)
-          .attr('r', 3)
+          .attr('r', 2)
           .transition(t)
           .attr('cx', (d) => xScale(d.date))
           .attr('cy', (d) => yScale(d[type]));
@@ -278,7 +283,7 @@ function TimeSeries(props) {
             .attr('class', 'trend')
             .attr('fill', 'none')
             .attr('stroke', color + '99')
-            .attr('stroke-width', 5);
+            .attr('stroke-width', 4);
 
           // HACK
           // Path interpolation is non-trivial. Ideally, a custom path tween
@@ -380,13 +385,7 @@ function TimeSeries(props) {
               </h6>
             </div>
           </div>
-          <svg
-            ref={svgRef1}
-            width="650"
-            height="200"
-            viewBox="0 0 650 200"
-            preserveAspectRatio="xMidYMid meet"
-          />
+          <svg ref={svgRef1} preserveAspectRatio="xMidYMid meet" />
         </div>
 
         <div className="svg-parent is-green">
@@ -413,13 +412,7 @@ function TimeSeries(props) {
               </h6>
             </div>
           </div>
-          <svg
-            ref={svgRef2}
-            width="650"
-            height="200"
-            viewBox="0 0 650 200"
-            preserveAspectRatio="xMidYMid meet"
-          />
+          <svg ref={svgRef2} preserveAspectRatio="xMidYMid meet" />
         </div>
 
         <div className="svg-parent is-gray">
@@ -446,13 +439,7 @@ function TimeSeries(props) {
               </h6>
             </div>
           </div>
-          <svg
-            ref={svgRef3}
-            width="650"
-            height="200"
-            viewBox="0 0 650 200"
-            preserveAspectRatio="xMidYMid meet"
-          />
+          <svg ref={svgRef3} preserveAspectRatio="xMidYMid meet" />
         </div>
       </div>
 
@@ -484,13 +471,7 @@ function TimeSeries(props) {
               </h6>
             </div>
           </div>
-          <svg
-            ref={svgRef4}
-            width="650"
-            height="200"
-            viewBox="0 0 650 200"
-            preserveAspectRatio="xMidYMid meet"
-          />
+          <svg ref={svgRef4} preserveAspectRatio="xMidYMid meet" />
         </div>
 
         <div className="svg-parent is-green">
@@ -517,13 +498,7 @@ function TimeSeries(props) {
               </h6>
             </div>
           </div>
-          <svg
-            ref={svgRef5}
-            width="650"
-            height="200"
-            viewBox="0 0 650 200"
-            preserveAspectRatio="xMidYMid meet"
-          />
+          <svg ref={svgRef5} preserveAspectRatio="xMidYMid meet" />
         </div>
 
         <div className="svg-parent is-gray">
@@ -550,17 +525,11 @@ function TimeSeries(props) {
               </h6>
             </div>
           </div>
-          <svg
-            ref={svgRef6}
-            width="650"
-            height="200"
-            viewBox="0 0 650 200"
-            preserveAspectRatio="xMidYMid meet"
-          />
+          <svg ref={svgRef6} preserveAspectRatio="xMidYMid meet" />
         </div>
       </div>
 
-      <div className="pills" style={{marginTop: '32px', textAlign: 'right'}}>
+      <div className="pills">
         <button
           type="button"
           onClick={() => setLastDaysCount(Infinity)}
