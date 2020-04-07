@@ -2159,6 +2159,38 @@ select {
   }
 }
 
+.pills {
+  >button {
+    border: 1px solid #c9d6fb;
+    background-color: #edf1fe;
+    color: $blue;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 800;
+    transition: background 0.15s ease-in-out;
+    padding: 4px 10px;
+    font-family: 'archia';
+
+    &.selected {
+      background-color: #c9d6fb;
+    }
+
+    &:focus:not(:focus-visible) {
+      outline: none;
+    }
+
+    &:first-of-type {
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+
+    &:last-of-type {
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+  }
+}
+
 .legend {
   background: #fff;
   z-index: 101;
@@ -2316,7 +2348,7 @@ select {
     display: flex;
     flex-direction: row;
     color: $pblue;
-    width: 14.5rem;
+    width: 13rem;
     & > * {
       align-self: center;
     }
@@ -2336,6 +2368,51 @@ select {
     }
   }
 }
+
+.cards-container {
+  padding: 4rem;
+  .cards {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .card {
+      margin-bottom: 2em;
+      flex: 0 1 calc(33% - 1em);
+      box-shadow: rgba(#000, 0.2) 0 0 8px 0;
+      &:hover {
+        box-shadow: rgba(#000, 0.3) 0 0 8px 0;
+      }
+      height: 30rem;
+        .charts-header {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          .chart-title {
+            font-family: 'archia';
+            font-size: 1.5rem !important;
+            color: #6c757d;
+            font-weight: 900;
+            text-transform: uppercase;
+            padding: 20px 0 20px 0;
+          }
+
+          .chart-content {
+            height: 100%;
+            width: 100%;
+          }
+
+          .chart-note {
+           color: $gray;
+           height: 50px;
+           margin-top: 5px;
+          }
+        }
+    }
+  }
+}
+  
 
 @media (max-width: 769px) {
   .TimeSeries,
@@ -2436,6 +2513,16 @@ select {
       max-width: 6.75rem;
     }
   }
+
+  .cards-container {
+    padding: 1rem;
+    .cards {
+      .card {
+        flex: 0 1 calc(100%);
+      }
+    }
+  }
+
 
   .PatientsDB {
     width: 100%;

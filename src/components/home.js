@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import {formatDistance} from 'date-fns';
+import {formatDistance, format} from 'date-fns';
 import {
   formatDate,
   formatDateAbsolute,
@@ -225,9 +225,7 @@ function Home(props) {
             style={{animationDelay: '1.5s'}}
           >
             <h1>Updates</h1>
-            {timeseries && timeseries.length && (
-              <h2>{timeseries[timeseries.length - 1].date}</h2>
-            )}
+            <h2>{format(new Date(), 'd MMM')}</h2>
           </div>
 
           <div className="updates fadeInUp" style={{animationDelay: '1.7s'}}>
@@ -248,9 +246,9 @@ function Home(props) {
                 );
               })}
             <button className="button">
-              <Link to="/database">
+              <Link to="/demographics">
                 <Icon.Database />
-                <span>View the Patient Database</span>
+                <span>Demographic Overview</span>
               </Link>
             </button>
           </div>
