@@ -358,9 +358,9 @@ function TimeSeries(props) {
     lastDate.getMonth() === yesterdayDate.getMonth() &&
     lastDate.getDate() === yesterdayDate.getDate();
 
-  const chartKey1 = chartType ? 'totalconfirmed' : 'dailyconfirmed';
-  const chartKey2 = chartType ? 'totalrecovered' : 'dailyrecovered';
-  const chartKey3 = chartType ? 'totaldeceased' : 'dailydeceased';
+  const chartKey1 = chartType === 1 ? 'totalconfirmed' : 'dailyconfirmed';
+  const chartKey2 = chartType === 1 ? 'totalrecovered' : 'dailyrecovered';
+  const chartKey3 = chartType === 1 ? 'totaldeceased' : 'dailydeceased';
 
   return (
     <div
