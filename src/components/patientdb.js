@@ -322,7 +322,7 @@ function PatientDB(props) {
 
       <div className="header fadeInUp" style={{animationDelay: '0.3s'}}>
         <div>
-          <h1>Patient Database</h1>
+          <h1>Demographics</h1>
           {/* <h3>No. of Patients: {patients.length}</h3>*/}
 
           <div className="deep-dive">

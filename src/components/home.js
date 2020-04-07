@@ -248,9 +248,9 @@ function Home(props) {
                 );
               })}
             <button className="button">
-              <Link to="/database">
+              <Link to="/demographics">
                 <Icon.Database />
-                <span>View the Patient Database</span>
+                <span>Demographic Overview</span>
               </Link>
             </button>
           </div>
