@@ -27,9 +27,9 @@ function App() {
       animationDelayForNavbar: 0.2,
     },
     {
-      pageLink: '/database',
+      pageLink: '/demographics',
       view: PatientDB,
-      displayName: 'Database',
+      displayName: 'Demographics',
       animationDelayForNavbar: 0.3,
     },
     {
@@ -81,9 +81,13 @@ function App() {
 
         <h5>We stand with everyone fighting on the frontlines</h5>
         <div className="link">
-          <a href="https://github.com/covid19india"
-          target="_blank"
-          rel="noopener noreferrer">covid19india</a>
+          <a
+            href="https://github.com/covid19india"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            covid19india
+          </a>
         </div>
         <a
           href="https://github.com/covid19india/covid19india-react"

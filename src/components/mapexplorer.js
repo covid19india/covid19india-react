@@ -361,25 +361,6 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
           {currentMap.mapType === MAP_TYPES.COUNTRY ? 'state/ut' : 'district'}{' '}
           for more details
         </h6>
-        {window.innerWidth <= 769 && (
-          <h6 style={{marginTop: '1rem'}}>
-            <span
-              style={{
-                fontWeight: 900,
-                color: '#fff',
-                background: '#000',
-                padding: '0.25rem',
-                borderRadius: '2.5px',
-                marginRight: '0.25rem',
-                display: 'inline-block',
-                verticalAlign: 'middle',
-              }}
-            >
-              Update!
-            </span>{' '}
-            Tap twice on states to view districts!
-          </h6>
-        )}
       </div>
 
       <div className="map-stats">
