@@ -1935,6 +1935,7 @@ footer {
 
 body.modal-open {
   overflow: hidden;
+  padding-right: 15px;
   height: 100vh;
 }
 
@@ -2382,6 +2383,10 @@ select {
       flex-direction: column;
       margin: 0;
     }
+  }
+
+  body.modal-open {
+    padding-right: 0;
   }
 
   .link,
