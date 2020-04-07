@@ -226,10 +226,6 @@ export default function ({
     return null;
   }
 
-  useEffect(() => {
-    setMapRegionHighlighted({state: {state: currentMap.name}});
-  }, [currentMap, setMapRegionHighlighted]);
-
   const [statistic, currentMapData] = useMemo(() => {
     const statistic = {total: 0, maxConfirmed: 0};
     let currentMapData = {};
@@ -298,14 +294,15 @@ export default function ({
       return;
     }
     const isState = !('district' in regionHighlighted);
+    let newMap = {};
     if (isState) {
-      const newMap = mapMeta['India'];
+      newMap = mapMeta['India'];
       setCurrentMap(newMap);
       const region = getRegionFromState(regionHighlighted.state);
       setCurrentHoveredRegion(region);
       setSelectedRegion(region.name);
     } else {
-      const newMap = mapMeta[regionHighlighted.state.state];
+      newMap = mapMeta[regionHighlighted.state.state];
       if (!newMap) {
         return;
       }
@@ -313,7 +310,13 @@ export default function ({
       setHoveredRegion(regionHighlighted.district, newMap);
       setSelectedRegion(regionHighlighted.district);
     }
-  }, [regionHighlighted, currentMap.mapType, setHoveredRegion]);
+    setMapRegionHighlighted({state: {state: newMap.name}});
+  }, [
+    setMapRegionHighlighted,
+    regionHighlighted,
+    currentMap.mapType,
+    setHoveredRegion,
+  ]);
 
   const getRegionFromDistrict = (districtData, name) => {
     if (!districtData) {
@@ -344,6 +347,7 @@ export default function ({
         return;
       }
       setCurrentMap(newMap);
+      setMapRegionHighlighted({state: {state: newMap.name}});
       if (newMap.mapType === MAP_TYPES.COUNTRY) {
         setHoveredRegion(states[1].state, newMap);
       } else if (newMap.mapType === MAP_TYPES.STATE) {
@@ -357,12 +361,12 @@ export default function ({
         setHoveredRegion(topDistrict, newMap);
       }
     },
-    [setHoveredRegion, stateDistrictWiseData, states]
+    [setHoveredRegion, setMapRegionHighlighted, stateDistrictWiseData, states]
   );
   const {name, lastupdatedtime} = currentHoveredRegion;
 
   return (
-    <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
+    <div className="MapExplorer fadeInUp" style={{animationDelay: '1.5s'}}>
       <div className="header">
         <h1>{currentMap.name}</h1>
         <h6>
@@ -380,6 +384,8 @@ export default function ({
                 padding: '0.25rem',
                 borderRadius: '2.5px',
                 marginRight: '0.25rem',
+                display: 'inline-block',
+                verticalAlign: 'middle',
               }}
             >
               Update!
@@ -390,7 +396,7 @@ export default function ({
       </div>
 
       <div className="map-stats">
-        <div className="stats">
+        <div className="stats fadeInUp" style={{animationDelay: '2s'}}>
           <h5>Confirmed</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.confirmed}</h1>
@@ -398,7 +404,10 @@ export default function ({
           </div>
         </div>
 
-        <div className="stats is-blue">
+        <div
+          className="stats is-blue fadeInUp"
+          style={{animationDelay: '2.1s'}}
+        >
           <h5>Active</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.active || ''}</h1>
@@ -406,7 +415,10 @@ export default function ({
           </div>
         </div>
 
-        <div className="stats is-green">
+        <div
+          className="stats is-green fadeInUp"
+          style={{animationDelay: '2.2s'}}
+        >
           <h5>Recovered</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.recovered || ''}</h1>
@@ -414,7 +426,10 @@ export default function ({
           </div>
         </div>
 
-        <div className="stats is-gray">
+        <div
+          className="stats is-gray fadeInUp"
+          style={{animationDelay: '2.3s'}}
+        >
           <h5>Deceased</h5>
           <div className="stats-bottom">
             <h1>{currentHoveredRegion.deaths || ''}</h1>
@@ -423,7 +438,7 @@ export default function ({
         </div>
       </div>
 
-      <div className="meta">
+      <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
         <h2>{name}</h2>
         {lastupdatedtime && (
           <div

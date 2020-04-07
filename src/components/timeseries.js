@@ -8,6 +8,7 @@ function TimeSeries(props) {
   const [mode, setMode] = useState(props.mode);
   const [logMode, setLogMode] = useState(props.logMode);
   const [update, setUpdate] = useState(-1);
+  const [moving, setMoving] = useState(false);
 
   const graphElement1 = useRef(null);
   const graphElement2 = useRef(null);
@@ -46,7 +47,7 @@ function TimeSeries(props) {
       const svg6 = d3.select(graphElement6.current);
 
       // Margins
-      const margin = {top: 0, right: 20, bottom: 50, left: 20};
+      const margin = {top: 0, right: 25, bottom: 60, left: 20};
       const width = 650 - margin.left - margin.right;
       const height = 200 - margin.top - margin.bottom;
 
@@ -141,6 +142,7 @@ function TimeSeries(props) {
       function mouseout() {
         setDatapoint(data[timeseries.length - 1]);
         setIndex(timeseries.length - 1);
+        setMoving(false);
         focus.forEach((d, i) => {
           d.attr(
             'cx',
@@ -155,6 +157,7 @@ function TimeSeries(props) {
         if (0 <= i && i < timeseries.length) {
           const d = data[i];
           setDatapoint(d);
+          setMoving(true);
           setIndex(i);
           focus.forEach((f, j) => {
             f.attr('cx', x(new Date(d['date'] + '2020'))).attr('cy', y(j, d));
@@ -242,8 +245,8 @@ function TimeSeries(props) {
             })
             .attr('y2', (d) => y(i, d))
             .style('stroke', colors[i] + '99')
-            .style('stroke-width', 4);
-          dots.attr('r', 2);
+            .style('stroke-width', 5);
+          dots.attr('r', 3);
         }
       });
     },
@@ -275,7 +278,7 @@ function TimeSeries(props) {
       refreshGraphs();
       graphData(timeseries);
     }
-  }, [timeseries, refreshGraphs, graphData]);
+  }, [timeseries, graphData, refreshGraphs]);
 
   const yesterdayDate = new Date();
   yesterdayDate.setDate(yesterdayDate.getDate() - 1);
@@ -296,8 +299,8 @@ function TimeSeries(props) {
         {props.stateName ? <h4> {props.stateName} </h4> : <></>}
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed</h5>
-            <h5>
+            <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
               {isYesterday
                 ? `${datapoint['date']} Yesterday`
                 : datapoint['date']}
@@ -327,77 +330,71 @@ function TimeSeries(props) {
           />
         </div>
 
-        {props.confirmedOnly ? (
-          <></>
-        ) : (
-          <>
-            <div className="svg-parent is-green">
-              <div className="stats is-green">
-                <h5>Recovered</h5>
-                <h5>
-                  {isYesterday
-                    ? `${datapoint['date']} Yesterday`
-                    : datapoint['date']}
-                </h5>
-                <div className="stats-bottom">
-                  <h2>{datapoint['totalrecovered']}</h2>
-                  <h6>
-                    {timeseries.length > 0 && index !== 0
-                      ? timeseries[index]['totalrecovered'] -
-                          timeseries[index - 1]['totalrecovered'] >=
-                        0
-                        ? '+' +
-                          (timeseries[index]['totalrecovered'] -
-                            timeseries[index - 1]['totalrecovered'])
-                        : timeseries[index]['totalrecovered'] -
-                          timeseries[index - 1]['totalrecovered']
-                      : ''}
-                  </h6>
-                </div>
-              </div>
-              <svg
-                ref={graphElement2}
-                width="650"
-                height="200"
-                viewBox="0 0 650 200"
-                preserveAspectRatio="xMidYMid meet"
-              />
+        <div className="svg-parent is-green">
+          <div className="stats is-green">
+            <h5 className={`${!moving ? 'title' : ''}`}>Recovered</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
+            <div className="stats-bottom">
+              <h2>{datapoint['totalrecovered']}</h2>
+              <h6>
+                {timeseries.length > 0 && index !== 0
+                  ? timeseries[index]['totalrecovered'] -
+                      timeseries[index - 1]['totalrecovered'] >=
+                    0
+                    ? '+' +
+                      (timeseries[index]['totalrecovered'] -
+                        timeseries[index - 1]['totalrecovered'])
+                    : timeseries[index]['totalrecovered'] -
+                      timeseries[index - 1]['totalrecovered']
+                  : ''}
+              </h6>
             </div>
+          </div>
+          <svg
+            ref={graphElement2}
+            width="650"
+            height="200"
+            viewBox="0 0 650 200"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
 
-            <div className="svg-parent is-gray">
-              <div className="stats is-gray">
-                <h5>Deceased</h5>
-                <h5>
-                  {isYesterday
-                    ? `${datapoint['date']} Yesterday`
-                    : datapoint['date']}
-                </h5>
-                <div className="stats-bottom">
-                  <h2>{datapoint['totaldeceased']}</h2>
-                  <h6>
-                    {timeseries.length > 0 && index !== 0
-                      ? timeseries[index]['totaldeceased'] -
-                          timeseries[index - 1]['totaldeceased'] >=
-                        0
-                        ? '+' +
-                          (timeseries[index]['totaldeceased'] -
-                            timeseries[index - 1]['totaldeceased'])
-                        : timeseries[index]['totaldeceased'] -
-                          timeseries[index - 1]['totaldeceased']
-                      : ''}
-                  </h6>
-                </div>
-              </div>
-              <svg
-                ref={graphElement3}
-                width="650"
-                height="200"
-                viewBox="0 0 650 200"
-                preserveAspectRatio="xMidYMid meet"
-              />
+        <div className="svg-parent is-gray">
+          <div className="stats is-gray">
+            <h5 className={`${!moving ? 'title' : ''}`}>Deceased</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
+            <div className="stats-bottom">
+              <h2>{datapoint['totaldeceased']}</h2>
+              <h6>
+                {timeseries.length > 0 && index !== 0
+                  ? timeseries[index]['totaldeceased'] -
+                      timeseries[index - 1]['totaldeceased'] >=
+                    0
+                    ? '+' +
+                      (timeseries[index]['totaldeceased'] -
+                        timeseries[index - 1]['totaldeceased'])
+                    : timeseries[index]['totaldeceased'] -
+                      timeseries[index - 1]['totaldeceased']
+                  : ''}
+              </h6>
             </div>
-          </>
-        )}
+          </div>
+          <svg
+            ref={graphElement3}
+            width="650"
+            height="200"
+            viewBox="0 0 650 200"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
       </div>
 
       <div
@@ -407,8 +404,8 @@ function TimeSeries(props) {
         {props.stateName ? <h4> {props.stateName} </h4> : <></>}
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed</h5>
-            <h5>
+            <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
               {isYesterday
                 ? `${datapoint['date']} Yesterday`
                 : datapoint['date']}
@@ -438,77 +435,71 @@ function TimeSeries(props) {
           />
         </div>
 
-        {props.confirmedOnly ? (
-          <></>
-        ) : (
-          <>
-            <div className="svg-parent is-green">
-              <div className="stats is-green">
-                <h5>Recovered</h5>
-                <h5>
-                  {isYesterday
-                    ? `${datapoint['date']} Yesterday`
-                    : datapoint['date']}
-                </h5>
-                <div className="stats-bottom">
-                  <h2>{datapoint['dailyrecovered']}</h2>
-                  <h6>
-                    {timeseries.length > 0 && index !== 0
-                      ? timeseries[index]['dailyrecovered'] -
-                          timeseries[index - 1]['dailyrecovered'] >=
-                        0
-                        ? '+' +
-                          (timeseries[index]['dailyrecovered'] -
-                            timeseries[index - 1]['dailyrecovered'])
-                        : timeseries[index]['dailyrecovered'] -
-                          timeseries[index - 1]['dailyrecovered']
-                      : ''}
-                  </h6>
-                </div>
-              </div>
-              <svg
-                ref={graphElement5}
-                width="650"
-                height="200"
-                viewBox="0 0 650 200"
-                preserveAspectRatio="xMidYMid meet"
-              />
+        <div className="svg-parent is-green">
+          <div className="stats is-green">
+            <h5 className={`${!moving ? 'title' : ''}`}>Recovered</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
+            <div className="stats-bottom">
+              <h2>{datapoint['dailyrecovered']}</h2>
+              <h6>
+                {timeseries.length > 0 && index !== 0
+                  ? timeseries[index]['dailyrecovered'] -
+                      timeseries[index - 1]['dailyrecovered'] >=
+                    0
+                    ? '+' +
+                      (timeseries[index]['dailyrecovered'] -
+                        timeseries[index - 1]['dailyrecovered'])
+                    : timeseries[index]['dailyrecovered'] -
+                      timeseries[index - 1]['dailyrecovered']
+                  : ''}
+              </h6>
             </div>
+          </div>
+          <svg
+            ref={graphElement5}
+            width="650"
+            height="200"
+            viewBox="0 0 650 200"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
 
-            <div className="svg-parent is-gray">
-              <div className="stats is-gray">
-                <h5>Deceased</h5>
-                <h5>
-                  {isYesterday
-                    ? `${datapoint['date']} Yesterday`
-                    : datapoint['date']}
-                </h5>
-                <div className="stats-bottom">
-                  <h2>{datapoint['dailydeceased']}</h2>
-                  <h6>
-                    {timeseries.length > 0 && index !== 0
-                      ? timeseries[index]['dailydeceased'] -
-                          timeseries[index - 1]['dailydeceased'] >=
-                        0
-                        ? '+' +
-                          (timeseries[index]['dailydeceased'] -
-                            timeseries[index - 1]['dailydeceased'])
-                        : timeseries[index]['dailydeceased'] -
-                          timeseries[index - 1]['dailydeceased']
-                      : ''}
-                  </h6>
-                </div>
-              </div>
-              <svg
-                ref={graphElement6}
-                width="650"
-                height="200"
-                viewBox="0 0 650 200"
-                preserveAspectRatio="xMidYMid meet"
-              />
+        <div className="svg-parent is-gray">
+          <div className="stats is-gray">
+            <h5 className={`${!moving ? 'title' : ''}`}>Deceased</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
+            <div className="stats-bottom">
+              <h2>{datapoint['dailydeceased']}</h2>
+              <h6>
+                {timeseries.length > 0 && index !== 0
+                  ? timeseries[index]['dailydeceased'] -
+                      timeseries[index - 1]['dailydeceased'] >=
+                    0
+                    ? '+' +
+                      (timeseries[index]['dailydeceased'] -
+                        timeseries[index - 1]['dailydeceased'])
+                    : timeseries[index]['dailydeceased'] -
+                      timeseries[index - 1]['dailydeceased']
+                  : ''}
+              </h6>
             </div>
-          </>
-        )}
+          </div>
+          <svg
+            ref={graphElement6}
+            width="650"
+            height="200"
+            viewBox="0 0 650 200"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
       </div>
     </div>
   );
