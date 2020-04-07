@@ -23,6 +23,7 @@ function GenderChart(props) {
 
   let male = 0;
   let female = 0;
+  let unknown = 0;
 
   if (!props.data || props.data.length === 0) {
     return <div></div>;
@@ -33,18 +34,20 @@ function GenderChart(props) {
       male++;
     } else if (patient.gender === 'F') {
       female++;
+    } else {
+      unknown++;
     }
   });
 
   const chartData = {
     datasets: [
       {
-        data: [male, female],
-        backgroundColor: ['blue', 'pink'],
+        data: [male, female, unknown],
+        backgroundColor: ['blue', 'pink', 'grey'],
         label: 'Hola',
       },
     ],
-    labels: ['Male', 'Female'],
+    labels: ['Male', 'Female', 'Awaiting Details'],
   };
 
   const chartOptions = {
