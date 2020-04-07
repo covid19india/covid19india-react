@@ -289,7 +289,7 @@ function TimeSeries(props) {
   return (
     <div
       className="TimeSeries-Parent fadeInUp"
-      style={{animationDelay: '1.7s'}}
+      style={{animationDelay: '2.7s'}}
     >
       <div
         className="timeseries"

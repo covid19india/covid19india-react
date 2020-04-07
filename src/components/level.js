@@ -43,8 +43,11 @@ function Level(props) {
   }, [data]);
 
   return (
-    <div className="Level fadeInUp" style={{animationDelay: '0.8s'}}>
-      <div className="level-item is-cherry">
+    <div className="Level">
+      <div
+        className="level-item is-cherry fadeInUp"
+        style={{animationDelay: '1s'}}
+      >
         <h5>Confirmed</h5>
         <h4>
           [
@@ -58,14 +61,20 @@ function Level(props) {
         <h1>{confirmed} </h1>
       </div>
 
-      <div className="level-item is-blue">
+      <div
+        className="level-item is-blue fadeInUp"
+        style={{animationDelay: '1.1s'}}
+      >
         <h5 className="heading">Active</h5>
         <h4>&nbsp;</h4>
         {/* <h4>[{props.deltas ? props.deltas.confirmeddelta-(props.deltas.recovereddelta+props.deltas.deceaseddelta) >=0 ? '+'+(props.deltas.confirmeddelta-(props.deltas.recovereddelta+props.deltas.deceaseddelta)).toString() : '+0' : ''}]</h4>*/}
         <h1 className="title has-text-info">{active}</h1>
       </div>
 
-      <div className="level-item is-green">
+      <div
+        className="level-item is-green fadeInUp"
+        style={{animationDelay: '1.2s'}}
+      >
         <h5 className="heading">Recovered</h5>
         <h4>
           [
@@ -79,7 +88,10 @@ function Level(props) {
         <h1 className="title has-text-success">{recoveries} </h1>
       </div>
 
-      <div className="level-item is-gray">
+      <div
+        className="level-item is-gray fadeInUp"
+        style={{animationDelay: '1.3s'}}
+      >
         <h5 className="heading">Deceased</h5>
         <h4>
           [{deltas ? (deltas.deaths >= 0 ? '+' + deltas.deaths : '+0') : ''}]

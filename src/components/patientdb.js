@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 import axios from 'axios';
+import {format, parse, subDays} from 'date-fns';
 
 import Patients from './patients';
 import DownloadBlock from './downloadblock';
@@ -21,13 +22,14 @@ function PatientDB(props) {
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [error, setError] = useState('');
   const {pathname} = useLocation();
+  const [colorMode, setColorMode] = useState('genders');
+  const [scaleMode, setScaleMode] = useState(false);
   const [filters, setFilters] = useState({
     detectedstate: '',
     detecteddistrict: '',
     detectedcity: '',
-    dateannounced: '',
+    dateannounced: format(subDays(new Date(), 1), 'dd/MM/yyyy'),
   });
-  const [colorMode, setColorMode] = useState('genders');
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -89,6 +91,7 @@ function PatientDB(props) {
   function getSortedValues(obj, key) {
     const setValues = new Set(obj.map((p) => p[key]));
     if (setValues.size > 1) setValues.add('');
+    if (key === 'dateannounced') return Array.from(setValues);
     return Array.from(setValues).sort();
   }
 
@@ -174,6 +177,64 @@ function PatientDB(props) {
             </select>
           </div>
 
+          <div className="select">
+            <select
+              style={{animationDelay: '0.4s', display: 'none'}}
+              id="city"
+              onChange={(event) => {
+                handleFilters('detectedcity', event.target.value);
+              }}
+            >
+              <option value="" disabled selected>
+                Select City
+              </option>
+              {getSortedValues(
+                filterByObject(patients, {
+                  detectedstate: filters.detectedstate,
+                  detecteddistrict: filters.detecteddistrict,
+                }),
+                'detectedcity'
+              ).map((city, index) => {
+                return (
+                  <option key={index} value={city}>
+                    {city === '' ? 'All' : city}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+
+          <div className="select">
+            <select
+              style={{animationDelay: '0.4s'}}
+              id="district"
+              onChange={(event) => {
+                handleFilters('dateannounced', event.target.value);
+              }}
+            >
+              <option value="" disabled selected>
+                Select Day
+              </option>
+              {getSortedValues(
+                filterByObject(patients, {
+                  detectedstate: filters.detectedstate,
+                }),
+                'dateannounced'
+              ).map((date, index) => {
+                return (
+                  <option key={index} value={date}>
+                    {date === ''
+                      ? 'All'
+                      : format(
+                          parse(date, 'dd/MM/yyyy', new Date()),
+                          'dd MMM, yyyy'
+                        )}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+
           {/* <div className="select">
             <select
               style={{animationDelay: '0.4s'}}
@@ -240,7 +301,7 @@ function PatientDB(props) {
             </div>
           )}
 
-          <div className="select">
+          <div className={`select ${colorMode}`}>
             <select
               style={{animationDelay: '0.4s'}}
               onChange={(event) => {
@@ -253,18 +314,54 @@ function PatientDB(props) {
               <option value="genders">Genders</option>
               <option value="transmission">Transmission</option>
               <option value="nationality">Nationality</option>
+              {/* <option value="age">Age</option>*/}
             </select>
           </div>
         </div>
       </div>
 
       <div className="header fadeInUp" style={{animationDelay: '0.3s'}}>
-        <h1>Patients Database</h1>
-        <h3>No. of Patients: {patients.length}</h3>
+        <div>
+          <h1>Demographics</h1>
+          {/* <h3>No. of Patients: {patients.length}</h3>*/}
+
+          <div className="deep-dive">
+            <h5>Expand</h5>
+            <input
+              type="checkbox"
+              checked={scaleMode}
+              onChange={(event) => {
+                setScaleMode(!scaleMode);
+              }}
+              className="switch"
+            />
+          </div>
+        </div>
+        <h6 className="disclaimer">
+          Some of the data provided might be missing/unknown as the details have
+          not been shared by the state/central governments.
+        </h6>
+      </div>
+
+      <div className="reminder fadeInUp" style={{animationDelay: '1s'}}>
+        <p>
+          It is important that we do not think of these as just tiny boxes,
+          numbers, or just another part of statistics - among these are our
+          neighbors, our teachers, our healthcare workers, our supermarket
+          vendors, our friends, our co-workers, our children or our
+          grandparents.
+          <br />
+          <br />
+          Among these are our people.
+        </p>
       </div>
 
       <div className="patientdb-wrapper">
-        <Patients patients={filteredPatients} colorMode={colorMode} />
+        <Patients
+          patients={filteredPatients}
+          colorMode={colorMode}
+          expand={scaleMode}
+        />
       </div>
       <DownloadBlock patients={patients} />
     </div>
