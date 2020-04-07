@@ -16,6 +16,7 @@ import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
 import {POLLING_FREQUENCY} from '../constants';
 
+let timeIntervalID = null;
 function Home(props) {
   const [states, setStates] = useState([]);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
@@ -30,9 +31,16 @@ function Home(props) {
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
 
   useEffect(() => {
+    // returned function will be called on component unmount
+    return () => {
+      clearInterval(timeIntervalID);
+    };
+  }, []);
+
+  useEffect(() => {
     if (fetched === false) {
       getStates();
-      setInterval(() => {
+      timeIntervalID = setInterval(() => {
         getStates();
       }, POLLING_FREQUENCY);
     }
