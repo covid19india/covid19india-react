@@ -94,13 +94,13 @@ function AllStatesChart(props) {
     }
 
     datasets.push({
-      borderWidth: 3,
+      borderWidth: 0.75,
       data: statesData.get(key),
       borderCapStyle: 'round',
       pointBackgroundColor: colors[index],
       label: getStateName(key),
       borderColor: colors[index],
-      pointHoverRadius: 2,
+      pointHoverRadius: 0.5,
     });
 
     index++;
@@ -123,7 +123,7 @@ function AllStatesChart(props) {
         radius: 0,
       },
       line: {
-        tension: 0.3,
+        tension: 0,
       },
     },
     layout: {
