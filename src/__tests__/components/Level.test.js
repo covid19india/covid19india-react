@@ -4,10 +4,9 @@ import Level from '../../components/level';
 
 const states = [
   {
-    active: '1010',
-    confirmed: '1127',
-    deaths: '27',
-    state: 'Total',
+    deltaconfirmed: '10',
+    deltadeaths: '3',
+    deltarecovered: '5',
   },
   {
     active: '75',
@@ -25,14 +24,8 @@ const states = [
   },
 ];
 
-const deltas = {
-  confirmeddelta: '10',
-  deceaseddelta: '3',
-  recovereddelta: '5',
-};
-
 test('Level renders total state data', () => {
-  const {container} = render(<Level data={states} deltas={deltas} />);
+  const {container} = render(<Level data={states} />);
 
   expect(container).toHaveTextContent(
     'Confirmed[+10]86 Active 80Recovered[+5]7 Deceased[+3]4'
