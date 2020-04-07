@@ -8,6 +8,7 @@ function TimeSeries(props) {
   const [mode, setMode] = useState(props.mode);
   const [logMode, setLogMode] = useState(props.logMode);
   const [update, setUpdate] = useState(-1);
+  const [moving, setMoving] = useState(false);
 
   const graphElement1 = useRef(null);
   const graphElement2 = useRef(null);
@@ -46,7 +47,7 @@ function TimeSeries(props) {
       const svg6 = d3.select(graphElement6.current);
 
       // Margins
-      const margin = {top: 0, right: 20, bottom: 50, left: 20};
+      const margin = {top: 0, right: 25, bottom: 60, left: 20};
       const width = 650 - margin.left - margin.right;
       const height = 200 - margin.top - margin.bottom;
 
@@ -141,6 +142,7 @@ function TimeSeries(props) {
       function mouseout() {
         setDatapoint(data[timeseries.length - 1]);
         setIndex(timeseries.length - 1);
+        setMoving(false);
         focus.forEach((d, i) => {
           d.attr(
             'cx',
@@ -155,6 +157,7 @@ function TimeSeries(props) {
         if (0 <= i && i < timeseries.length) {
           const d = data[i];
           setDatapoint(d);
+          setMoving(true);
           setIndex(i);
           focus.forEach((f, j) => {
             f.attr('cx', x(new Date(d['date'] + '2020'))).attr('cy', y(j, d));
@@ -242,8 +245,8 @@ function TimeSeries(props) {
             })
             .attr('y2', (d) => y(i, d))
             .style('stroke', colors[i] + '99')
-            .style('stroke-width', 4);
-          dots.attr('r', 2);
+            .style('stroke-width', 5);
+          dots.attr('r', 3);
         }
       });
     },
@@ -286,7 +289,7 @@ function TimeSeries(props) {
   return (
     <div
       className="TimeSeries-Parent fadeInUp"
-      style={{animationDelay: '1.7s'}}
+      style={{animationDelay: '2.7s'}}
     >
       <div
         className="timeseries"
@@ -294,8 +297,8 @@ function TimeSeries(props) {
       >
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed</h5>
-            <h5>
+            <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
               {isYesterday
                 ? `${datapoint['date']} Yesterday`
                 : datapoint['date']}
@@ -327,8 +330,8 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>Recovered</h5>
-            <h5>
+            <h5 className={`${!moving ? 'title' : ''}`}>Recovered</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
               {isYesterday
                 ? `${datapoint['date']} Yesterday`
                 : datapoint['date']}
@@ -360,8 +363,8 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
-            <h5>Deceased</h5>
-            <h5>
+            <h5 className={`${!moving ? 'title' : ''}`}>Deceased</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
               {isYesterday
                 ? `${datapoint['date']} Yesterday`
                 : datapoint['date']}
@@ -398,8 +401,8 @@ function TimeSeries(props) {
       >
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed</h5>
-            <h5>
+            <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
               {isYesterday
                 ? `${datapoint['date']} Yesterday`
                 : datapoint['date']}
@@ -431,8 +434,8 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>Recovered</h5>
-            <h5>
+            <h5 className={`${!moving ? 'title' : ''}`}>Recovered</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
               {isYesterday
                 ? `${datapoint['date']} Yesterday`
                 : datapoint['date']}
@@ -464,8 +467,8 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
-            <h5>Deceased</h5>
-            <h5>
+            <h5 className={`${!moving ? 'title' : ''}`}>Deceased</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
               {isYesterday
                 ? `${datapoint['date']} Yesterday`
                 : datapoint['date']}

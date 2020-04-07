@@ -301,7 +301,7 @@ function Minigraph(props) {
 
   return (
     <div className="Minigraph">
-      <div className="svg-parent fadeInUp" style={{animationDelay: '0.6s'}}>
+      <div className="svg-parent fadeInUp" style={{animationDelay: '1.4s'}}>
         <svg
           ref={graphElement1}
           width="100"
@@ -313,7 +313,7 @@ function Minigraph(props) {
 
       <div
         className="svg-parent is-blue fadeInUp"
-        style={{animationDelay: '0.7s'}}
+        style={{animationDelay: '1.5s'}}
       >
         <svg
           ref={graphElement2}
@@ -326,7 +326,7 @@ function Minigraph(props) {
 
       <div
         className="svg-parent is-green fadeInUp"
-        style={{animationDelay: '0.8s'}}
+        style={{animationDelay: '1.6s'}}
       >
         <svg
           ref={graphElement3}
@@ -339,7 +339,7 @@ function Minigraph(props) {
 
       <div
         className="svg-parent is-gray fadeInUp"
-        style={{animationDelay: '0.9s'}}
+        style={{animationDelay: '1.7s'}}
       >
         <svg
           ref={graphElement4}
