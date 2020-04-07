@@ -2336,6 +2336,7 @@ select {
     }
   }
 }
+
 .cards-container {
   padding: 4rem;
   .cards {
@@ -2368,6 +2369,12 @@ select {
           .chart-content {
             height: 100%;
             width: 100%;
+          }
+
+          .chart-note {
+           color: $gray;
+           height: 50px;
+           margin-top: 5px;
           }
         }
     }

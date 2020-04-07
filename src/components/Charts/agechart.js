@@ -22,7 +22,7 @@ function AgeChart(props) {
   defaults.global.hover.intersect = false;
 
   const ages = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
+  let unknown = 0;
   if (!props.data || props.data.length === 0) {
     return <div></div>;
   }
@@ -60,6 +60,8 @@ function AgeChart(props) {
       if (age > 90 && age <= 100) {
         ages[9]++;
       }
+    } else {
+      unknown++;
     }
   });
 
@@ -97,7 +99,7 @@ function AgeChart(props) {
         left: 20,
         right: 20,
         top: 20,
-        bottom: 20,
+        bottom: 0,
       },
     },
     scales: {
@@ -123,6 +125,7 @@ function AgeChart(props) {
       <div className="chart-content doughnut">
         <Bar data={chartData} options={chartOptions} />
       </div>
+      <div className="chart-note">*Awaiting details for {unknown} patients</div>
     </div>
   );
 }
