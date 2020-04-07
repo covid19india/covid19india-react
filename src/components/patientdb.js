@@ -323,7 +323,7 @@ function PatientDB(props) {
       <div className="header fadeInUp" style={{animationDelay: '0.3s'}}>
         <div>
           <h1>Patient Database</h1>
-          <h3>No. of Patients: {patients.length}</h3>
+          {/* <h3>No. of Patients: {patients.length}</h3>*/}
 
           <div className="deep-dive">
             <h5>Expand</h5>
@@ -339,7 +339,7 @@ function PatientDB(props) {
         </div>
         <h6 className="disclaimer">
           Some of the data provided might be missing/unknown as the details have
-          not been shared by the state/central governments
+          not been shared by the state/central governments.
         </h6>
       </div>
 
