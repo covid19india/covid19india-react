@@ -28,7 +28,7 @@ function Home(props) {
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
-  const [stateHighlightedInMap, setStateHighlightedInMap] = useState();
+  const [stateHighlightedInMap, setStateHighlightedInMap] = useState({});
   const [isShowFloatingButtons, setIsShowFloatingButtons] = useState(false);
 
   useEffect(() => {
@@ -71,8 +71,8 @@ function Home(props) {
   };
 
   const onMapHighlightChange = ({statecode, name}) => {
-    if (!stateHighlightedInMap || stateHighlightedInMap.code !== statecode)
-      setStateHighlightedInMap({code: statecode, name});
+    if (stateHighlightedInMap.statecode !== statecode)
+      setStateHighlightedInMap({statecode, name});
   };
 
   const refs = [useRef(), useRef(), useRef()];
@@ -156,14 +156,7 @@ function Home(props) {
               style={{animationDelay: '1.5s'}}
               ref={refs[2]}
             >
-              <h1>
-                Spread Trends
-                <span>
-                  {stateHighlightedInMap
-                    ? ` - ${stateHighlightedInMap.name}`
-                    : ''}
-                </span>
-              </h1>
+              <h1>Spread Trends</h1>
               <div className="tabs">
                 <div
                   className={`tab ${graphOption === 1 ? 'focused' : ''}`}
@@ -216,6 +209,31 @@ function Home(props) {
               </div>
             </div>
 
+            {window.innerWidth <= 769 &&
+              (stateHighlightedInMap || regionHighlighted) && (
+                <div className="trends-state-name">
+                  <select
+                    onChange={({target}) => {
+                      onHighlightState(JSON.parse(target.value));
+                    }}
+                  >
+                    {states.map((s) => {
+                      return (
+                        <option
+                          key={s.statecode}
+                          value={JSON.stringify(s)}
+                          selected={
+                            s.statecode === stateHighlightedInMap.statecode
+                          }
+                        >
+                          {s.state === 'Total' ? 'All States' : s.state}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              )}
+
             <TimeSeries
               timeseries={timeseries}
               statesDaily={statesDaily}
@@ -235,14 +253,14 @@ function Home(props) {
         className="floating-buttons"
         style={{display: isShowFloatingButtons ? 'block' : 'none'}}
       >
-        <button className="" onClick={scrollHandlers[0]}>
+        <button className="table-nav" onClick={scrollHandlers[0]}>
           <Icon.Grid />
         </button>
-        <button className="" onClick={scrollHandlers[1]}>
+        <button className="map-nav" onClick={scrollHandlers[1]}>
           <Icon.MapPin />
         </button>
-        <button className="" onClick={scrollHandlers[2]}>
-          <Icon.Activity />
+        <button className="trends-nav" onClick={scrollHandlers[2]}>
+          <Icon.TrendingUp />
         </button>
       </div>
 

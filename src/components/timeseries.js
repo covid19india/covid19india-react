@@ -42,7 +42,7 @@ function TimeSeries(props) {
       props.regionHighlighted && props.regionHighlighted.state
         ? props.regionHighlighted.state.statecode
         : props.stateHighlightedInMap
-        ? props.stateHighlightedInMap.code
+        ? props.stateHighlightedInMap.statecode
         : '';
 
     if (stateCode) {
