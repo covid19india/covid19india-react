@@ -107,7 +107,7 @@ function Row(props) {
             {state.state}
             {state.state === 'West Bengal' && (
               <Link to="/faq">
-                <Icon.AlertCircle className="height-22" />
+                <Icon.HelpCircle className="height-22" />
               </Link>
             )}
           </div>

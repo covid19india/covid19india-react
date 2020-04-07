@@ -1238,7 +1238,7 @@ input.switch:checked::after {
         color: $cherry-mid;
         stroke: transparent;
         font-size: 12px;
-        font-weight: 900;
+        font-weight: 600;
       }
     }
 
@@ -1513,6 +1513,7 @@ footer {
       margin-bottom: 1rem;
       width: 10rem;
       text-align: right;
+      text-transform: unset;
     }
 
     .deep-dive {
@@ -1535,7 +1536,6 @@ footer {
   flex-wrap: wrap;
   width: 100%;
   align-self: center;
-  min-height: 20rem;
 
   & > * {
     align-self: center;
@@ -1905,7 +1905,7 @@ footer {
 }
 
 .DownloadBlock {
-  margin-top: 10rem;
+  margin-top: 7rem;
   align-self: center;
     code {
       font-family: 'archia';
@@ -2276,6 +2276,112 @@ select {
   }
 }
 
+.updates-header {
+  width: 30rem;
+  align-self: center;
+  color: $gray-dark;
+  h2 {
+    color: $pblue;
+    font-weight: 900;
+  }
+}
+
+.updates {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: 100%;
+  .update {
+    background: $gray-light;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      background: $gray-hover;
+    }
+
+    h5, h4 {
+      margin: 0;
+    }
+
+    h5 {
+      color: $gray-mid;
+      margin-bottom: 0.15rem;
+    }
+
+    h4 {
+      color: $gray;
+      font-weight: 600;
+    }
+  }
+
+  .button {
+    background: $pblue-light;
+    height: 3rem;
+    display: flex;
+    flex-direction: row;
+    color: $pblue;
+    width: 13rem;
+    & > * {
+      align-self: center;
+    }
+
+    &:hover {
+      background: $pblue-hover;
+    }
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    flex-direction: row;
+    display: flex;
+    & > * {
+      align-self: center;
+    }
+  }
+}
+
+.cards-container {
+  padding: 4rem;
+  .cards {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .card {
+      margin-bottom: 2em;
+      flex: 0 1 calc(33% - 1em);
+      box-shadow: rgba(#000, 0.2) 0 0 8px 0;
+      &:hover {
+        box-shadow: rgba(#000, 0.3) 0 0 8px 0;
+      }
+      height: 30rem;
+        .charts-header {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          .chart-title {
+            font-family: 'archia';
+            font-size: 1.5rem !important;
+            color: #6c757d;
+            font-weight: 900;
+            text-transform: uppercase;
+            padding: 20px 0 20px 0;
+          }
+
+          .chart-content {
+            height: 100%;
+            width: 100%;
+          }
+        }
+    }
+  }
+}
+  
+
 @media (max-width: 769px) {
   .TimeSeries,
   table,
@@ -2289,7 +2395,8 @@ select {
   .FAQ,
   .MapExplorer,
   .patients-summary
-  .filters {
+  .filters,
+  .updates, .updates-header {
     width: calc(100% - 2rem);
   }
 
@@ -2332,6 +2439,11 @@ select {
   .timeseries {
     .svg-parent {
       width: 100%;
+      svg {
+        text {
+          font-size: 0.95rem;
+        }
+      }
     }
   }
 
@@ -2369,6 +2481,16 @@ select {
       max-width: 6.75rem;
     }
   }
+
+  .cards-container {
+    padding: 1rem;
+    .cards {
+      .card {
+        flex: 0 1 calc(100%);
+      }
+    }
+  }
+
 
   .PatientsDB {
     width: 100%;
