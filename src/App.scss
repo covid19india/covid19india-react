@@ -1021,9 +1021,16 @@ table {
 
 .timeseries-header {
   h1 {
+    align-items: center;
     color: $gray-dark;
+    display: flex;
     margin: 0;
     margin-bottom: 0.5rem;
+    white-space: pre;
+
+    span {
+      font-size: medium;
+    }
   }
 
   width: 30rem;

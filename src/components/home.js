@@ -69,9 +69,9 @@ function Home(props) {
     else setRegionHighlighted({district, state, index});
   };
 
-  const onMapHighlightChange = (statecode) => {
-    if (stateHighlightedInMap !== statecode)
-      setStateHighlightedInMap(statecode);
+  const onMapHighlightChange = ({statecode, name}) => {
+    if (!stateHighlightedInMap || stateHighlightedInMap.code !== statecode)
+      setStateHighlightedInMap({code: statecode, name});
   };
 
   return (
@@ -127,7 +127,14 @@ function Home(props) {
               className="timeseries-header fadeInUp"
               style={{animationDelay: '1.5s'}}
             >
-              <h1>Spread Trends</h1>
+              <h1>
+                Spread Trends
+                <span>
+                  {stateHighlightedInMap
+                    ? ` - ${stateHighlightedInMap.name}`
+                    : ''}
+                </span>
+              </h1>
               <div className="tabs">
                 <div
                   className={`tab ${graphOption === 1 ? 'focused' : ''}`}

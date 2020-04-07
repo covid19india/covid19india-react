@@ -218,8 +218,7 @@ export default function ({
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
-    if (currentHoveredRegion.state)
-      onMapHighlightChange(currentHoveredRegion.statecode);
+    if (currentHoveredRegion.state) onMapHighlightChange(currentHoveredRegion);
   }, [regionHighlighted, currentHoveredRegion, onMapHighlightChange]);
 
   useEffect(() => {
