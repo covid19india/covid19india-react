@@ -145,14 +145,6 @@ function Home(props) {
                 >
                   <h4>Daily</h4>
                 </div>
-                <div
-                  className={`tab ${graphOption === 3 ? 'focused' : ''}`}
-                  onClick={() => {
-                    setGraphOption(3);
-                  }}
-                >
-                  <h4>State Wise</h4>
-                </div>
               </div>
 
               <div className="scale-modes">
