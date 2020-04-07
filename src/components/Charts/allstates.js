@@ -94,7 +94,7 @@ function AllStatesChart(props) {
     }
 
     datasets.push({
-      borderWidth: 0.75,
+      borderWidth: 1.5,
       data: statesData.get(key),
       borderCapStyle: 'round',
       pointBackgroundColor: colors[index],
