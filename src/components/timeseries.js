@@ -69,43 +69,17 @@ function TimeSeries(props) {
         .domain([dateMin, dateMax])
         .range([margin.left, chartWidth]);
 
-      // can be moved in for loop
       const xAxis = (g) =>
         g
           .attr('class', 'x-axis')
           .call(d3.axisBottom(xScale))
           .style('transform', `translateY(${chartHeight}px)`);
 
-      const indexScale = d3
-        .scaleLinear()
-        .domain([0, timeseries.length])
-        .range([margin.left, chartWidth]);
-
       const yAxis = (g, yScale) =>
         g
           .attr('class', 'y-axis')
           .call(d3.axisRight(yScale).ticks(4, '0~s').tickPadding(5))
           .style('transform', `translateX(${chartWidth}px)`);
-
-      const yScaleUniformLinear = d3
-        .scaleLinear()
-        .clamp(true)
-        .domain([0, yBuffer * d3.max(ts, (d) => d.totalconfirmed)])
-        .nice()
-        .range([chartHeight, margin.top]);
-
-      const yScaleUniformLog = d3
-        .scaleLog()
-        .clamp(true)
-        .domain([1, yBuffer * d3.max(ts, (d) => d.totalconfirmed)])
-        .nice()
-        .range([chartHeight, margin.top]);
-
-      const yScaleDailyUniform = d3
-        .scaleLinear()
-        .domain([0, yBuffer * d3.max(ts, (d) => d.dailyconfirmed)])
-        .nice()
-        .range([chartHeight, margin.top]);
 
       // Arrays of objects
       const svgArray = [svg1, svg2, svg3, svg4, svg5, svg6];
@@ -125,30 +99,77 @@ function TimeSeries(props) {
         '#28a745',
         '#6c757d',
       ];
-      const logCharts = new Set([
+      const totalCharts = new Set([
         'totalconfirmed',
         'totalrecovered',
         'totaldeceased',
       ]);
 
-      const yScales = dataTypes.map((type) => {
-        const yScaleLinear = d3
-          .scaleLinear()
-          .clamp(true)
-          .domain([0, yBuffer * d3.max(ts, (d) => d[type])])
-          .nice()
-          .range([chartHeight, margin.top]);
+      let uniformScaleMin = Infinity;
+      totalCharts.forEach((type) => {
+        uniformScaleMin = Math.min(
+          uniformScaleMin,
+          d3.min(ts, (d) => d[type])
+        );
+      });
+      const yScaleUniformLinear = d3
+        .scaleLinear()
+        .clamp(true)
+        .domain([
+          uniformScaleMin,
+          yBuffer * d3.max(ts, (d) => d.totalconfirmed),
+        ])
+        .nice()
+        .range([chartHeight, margin.top]);
 
-        if (logCharts.has(type)) {
+      const yScaleUniformLog = d3
+        .scaleLog()
+        .clamp(true)
+        .domain([
+          Math.max(1, uniformScaleMin),
+          yBuffer * d3.max(ts, (d) => d.totalconfirmed),
+        ])
+        .nice()
+        .range([chartHeight, margin.top]);
+
+      const yScaleDailyUniform = d3
+        .scaleLinear()
+        .domain([0, yBuffer * d3.max(ts, (d) => d.dailyconfirmed)])
+        .nice()
+        .range([chartHeight, margin.top]);
+
+      const yScales = dataTypes.map((type) => {
+        if (totalCharts.has(type)) {
+          const yScaleLinear = d3
+            .scaleLinear()
+            .clamp(true)
+            .domain([
+              d3.min(ts, (d) => d[type]),
+              yBuffer * d3.max(ts, (d) => d[type]),
+            ])
+            .nice()
+            .range([chartHeight, margin.top]);
           const yScaleLog = d3
             .scaleLog()
             .clamp(true)
-            .domain([1, yBuffer * d3.max(ts, (d) => d[type])])
+            .domain([
+              Math.max(
+                1,
+                d3.min(ts, (d) => d[type])
+              ),
+              yBuffer * d3.max(ts, (d) => d[type]),
+            ])
             .nice()
             .range([chartHeight, margin.top]);
           if (logMode) return mode ? yScaleUniformLog : yScaleLog;
           else return mode ? yScaleUniformLinear : yScaleLinear;
         } else {
+          const yScaleLinear = d3
+            .scaleLinear()
+            .clamp(true)
+            .domain([0, yBuffer * d3.max(ts, (d) => d[type])])
+            .nice()
+            .range([chartHeight, margin.top]);
           return mode ? yScaleDailyUniform : yScaleLinear;
         }
       });
@@ -167,8 +188,11 @@ function TimeSeries(props) {
 
       function mousemove() {
         const xm = d3.mouse(this)[0];
-        const i = Math.round(indexScale.invert(xm));
+        const date = xScale.invert(xm);
+        const bisectDate = d3.bisector((d) => d.date).left;
+        let i = bisectDate(ts, date, 1);
         if (0 <= i && i < T) {
+          if (date - ts[i - 1].date < ts[i].date - date) --i;
           setDatapoint(timeseries[i]);
           setIndex(i);
           setMoving(true);
@@ -238,7 +262,7 @@ function TimeSeries(props) {
           .attr('cy', (d) => yScale(d[type]));
 
         /* Add trend path */
-        if (logCharts.has(type)) {
+        if (totalCharts.has(type)) {
           const path = svg
             .selectAll('.trend')
             .data([[...ts].reverse()])
