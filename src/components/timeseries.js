@@ -95,23 +95,29 @@ function TimeSeries(props) {
 
       // Arrays of objects
       const svgArray = [svg1, svg2, svg3];
-      const isTotal = chartType === 1;
-      const dataTypes = isTotal
-        ? ['totalconfirmed', 'totalrecovered', 'totaldeceased']
-        : ['dailyconfirmed', 'dailyrecovered', 'dailydeceased'];
+      const plotTotal = chartType === 1;
+      const dataTypesTotal = [
+        'totalconfirmed',
+        'totalrecovered',
+        'totaldeceased',
+      ];
+      const dataTypesDaily = [
+        'dailyconfirmed',
+        'dailyrecovered',
+        'dailydeceased',
+      ];
 
       const colors = ['#ff073a', '#28a745', '#6c757d'];
 
-      let uniformScaleMin = Infinity;
-      dataTypes.forEach((type) => {
-        uniformScaleMin = Math.min(
-          uniformScaleMin,
-          d3.min(ts, (d) => d[type])
-        );
-      });
-
       let yScales;
-      if (isTotal) {
+      if (plotTotal) {
+        let uniformScaleMin = Infinity;
+        dataTypesTotal.forEach((type) => {
+          uniformScaleMin = Math.min(
+            uniformScaleMin,
+            d3.min(ts, (d) => d[type])
+          );
+        });
         const yScaleUniformLinear = d3
           .scaleLinear()
           .clamp(true)
@@ -132,7 +138,7 @@ function TimeSeries(props) {
           .nice()
           .range([chartBottom, margin.top]);
 
-        yScales = dataTypes.map((type) => {
+        yScales = dataTypesTotal.map((type) => {
           const yScaleLinear = d3
             .scaleLinear()
             .clamp(true)
@@ -164,7 +170,7 @@ function TimeSeries(props) {
           .nice()
           .range([chartBottom, margin.top]);
 
-        yScales = dataTypes.map((type) => {
+        yScales = dataTypesDaily.map((type) => {
           const yScaleLinear = d3
             .scaleLinear()
             .clamp(true)
@@ -200,7 +206,7 @@ function TimeSeries(props) {
           const d = ts[i];
           focus.forEach((f, j) => {
             const yScale = yScales[j];
-            const type = dataTypes[j];
+            const type = plotTotal ? dataTypesTotal[j] : dataTypesDaily[j];
             f.attr('cx', xScale(d.date)).attr('cy', yScale(d[type]));
           });
         }
@@ -212,7 +218,7 @@ function TimeSeries(props) {
         setMoving(false);
         focus.forEach((f, j) => {
           const yScale = yScales[j];
-          const type = dataTypes[j];
+          const type = plotTotal ? dataTypesTotal[j] : dataTypesDaily[j];
           f.attr('cx', xScale(ts[T - 1].date)).attr(
             'cy',
             yScale(ts[T - 1][type])
@@ -224,8 +230,10 @@ function TimeSeries(props) {
       svgArray.forEach((svg, i) => {
         // Transition interval
         const t = svg.transition().duration(500);
+        const typeTotal = dataTypesTotal[i];
+        const typeDaily = dataTypesDaily[i];
+        const type = plotTotal ? typeTotal : typeDaily;
 
-        const type = dataTypes[i];
         const color = colors[i];
         const yScale = yScales[i];
         // WARNING: Bad code ahead.
@@ -262,72 +270,66 @@ function TimeSeries(props) {
           .attr('cx', (d) => xScale(d.date))
           .attr('cy', (d) => yScale(d[type]));
 
-        /* Add trend path */
-        if (isTotal) {
-          svg.selectAll('.stem').transition(t).attr('opacity', 0);
-          const path = svg
-            .selectAll('.trend')
-            .data([[...ts].reverse()])
-            .join('path')
-            .attr('class', 'trend')
-            .attr('fill', 'none')
-            .attr('stroke', color + '99')
-            .attr('stroke-width', 4);
+        /* TOTAL TRENDS */
+        const path = svg
+          .selectAll('.trend')
+          .data([[...ts].reverse()])
+          .join('path')
+          .attr('class', 'trend')
+          .attr('fill', 'none')
+          .attr('stroke', color + '99')
+          .attr('stroke-width', 4);
 
-          // HACK
-          // Path interpolation is non-trivial. Ideally, a custom path tween
-          // function should be defined which takes care that old path dots
-          // transition synchronously along with the path transition. This hack
-          // simulates that behaviour.
-          if (path.attr('d')) {
-            const n = path.node().getTotalLength();
-            const p = path.node().getPointAtLength(n);
-            // Append points at end of path for better interpolation
-            path.attr(
-              'd',
-              () => path.attr('d') + `L${p.x},${p.y}`.repeat(3 * T)
-            );
-          }
-
-          path
-            .transition(t)
-            .attr('opacity', 1)
-            .attr(
-              'd',
-              d3
-                .line()
-                .x((d) => xScale(d.date))
-                .y((d) => yScale(d[type]))
-                .curve(d3.curveCardinal)
-            );
-          // Using d3-interpolate-path
-          // .attrTween('d', function (d) {
-          //   var previous = path.attr('d');
-          //   var current = line(d);
-          //   return interpolatePath(previous, current);
-          // });
-        } else {
-          svg.selectAll('.trend').transition(t).attr('opacity', 0);
-          svg
-            .selectAll('.stem')
-            .data(ts, (d) => d.date)
-            .join((enter) =>
-              enter
-                .append('line')
-                .attr('x1', (d) => xScale(d.date))
-                .attr('x2', (d) => xScale(d.date))
-                .attr('y2', chartBottom)
-            )
-            .attr('class', 'stem')
-            .style('stroke', color + '99')
-            .style('stroke-width', 4)
-            .attr('y1', chartBottom)
-            .transition(t)
-            .attr('opacity', 1)
-            .attr('x1', (d) => xScale(d.date))
-            .attr('x2', (d) => xScale(d.date))
-            .attr('y2', (d) => yScale(d[type]));
+        // HACK
+        // Path interpolation is non-trivial. Ideally, a custom path tween
+        // function should be defined which takes care that old path dots
+        // transition synchronously along with the path transition. This hack
+        // simulates that behaviour.
+        if (path.attr('d')) {
+          const n = path.node().getTotalLength();
+          const p = path.node().getPointAtLength(n);
+          // Append points at end of path for better interpolation
+          path.attr('d', () => path.attr('d') + `L${p.x},${p.y}`.repeat(3 * T));
         }
+
+        path
+          .transition(t)
+          .attr('opacity', plotTotal ? 1 : 0)
+          .attr(
+            'd',
+            d3
+              .line()
+              .x((d) => xScale(d.date))
+              .y((d) => yScale(d[typeTotal]))
+              .curve(d3.curveCardinal)
+          );
+        // Using d3-interpolate-path
+        // .attrTween('d', function (d) {
+        //   var previous = path.attr('d');
+        //   var current = line(d);
+        //   return interpolatePath(previous, current);
+        // });
+
+        /* DAILY TRENDS */
+        svg
+          .selectAll('.stem')
+          .data(ts, (d) => d.date)
+          .join((enter) =>
+            enter
+              .append('line')
+              .attr('x1', (d) => xScale(d.date))
+              .attr('x2', (d) => xScale(d.date))
+              .attr('y2', chartBottom)
+          )
+          .attr('class', 'stem')
+          .style('stroke', color + '99')
+          .style('stroke-width', 4)
+          .attr('y1', chartBottom)
+          .transition(t)
+          .attr('opacity', plotTotal ? 0 : 1)
+          .attr('x1', (d) => xScale(d.date))
+          .attr('x2', (d) => xScale(d.date))
+          .attr('y2', (d) => yScale(d[typeDaily]));
 
         svg
           .on('mousemove', mousemove)
