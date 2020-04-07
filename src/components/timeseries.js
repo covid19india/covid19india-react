@@ -4,6 +4,7 @@ import {
   preprocessTimeseries,
   sliceTimeseriesFromEnd,
 } from '../utils/common-functions';
+import {useResizeObserver} from '../utils/hooks';
 
 function TimeSeries(props) {
   const [lastDaysCount, setLastDaysCount] = useState(Infinity);
@@ -14,12 +15,15 @@ function TimeSeries(props) {
   const [logMode, setLogMode] = useState(props.logMode);
   const [moving, setMoving] = useState(false);
 
-  const graphElement1 = useRef(null);
-  const graphElement2 = useRef(null);
-  const graphElement3 = useRef(null);
-  const graphElement4 = useRef(null);
-  const graphElement5 = useRef(null);
-  const graphElement6 = useRef(null);
+  const svgRef1 = useRef();
+  const svgRef2 = useRef();
+  const svgRef3 = useRef();
+  const svgRef4 = useRef();
+  const svgRef5 = useRef();
+  const svgRef6 = useRef();
+
+  const wrapperRef = useRef();
+  const dimensions = useResizeObserver(wrapperRef);
 
   useEffect(() => {
     if (props.timeseries.length > 1) {
@@ -42,6 +46,8 @@ function TimeSeries(props) {
 
   const graphData = useCallback(
     (timeseries) => {
+      if (!dimensions) return;
+      console.log(dimensions);
       // Margins
       const margin = {top: 0, right: 40, bottom: 60, left: 35};
       const chartRight = 650 - margin.right;
@@ -54,12 +60,12 @@ function TimeSeries(props) {
       setDatapoint(timeseries[T - 1]);
       setIndex(T - 1);
 
-      const svg1 = d3.select(graphElement1.current);
-      const svg2 = d3.select(graphElement2.current);
-      const svg3 = d3.select(graphElement3.current);
-      const svg4 = d3.select(graphElement4.current);
-      const svg5 = d3.select(graphElement5.current);
-      const svg6 = d3.select(graphElement6.current);
+      const svg1 = d3.select(svgRef1.current);
+      const svg2 = d3.select(svgRef2.current);
+      const svg3 = d3.select(svgRef3.current);
+      const svg4 = d3.select(svgRef4.current);
+      const svg5 = d3.select(svgRef5.current);
+      const svg6 = d3.select(svgRef6.current);
 
       const dateMin = new Date(ts[0]['date']);
       dateMin.setDate(dateMin.getDate() - 1);
@@ -325,7 +331,7 @@ function TimeSeries(props) {
           .on('touchend', mouseout);
       });
     },
-    [logMode, mode]
+    [dimensions, logMode, mode]
   );
 
   useEffect(() => {
@@ -350,7 +356,7 @@ function TimeSeries(props) {
         className="timeseries"
         style={{display: props.type === 1 ? 'flex' : 'none'}}
       >
-        <div className="svg-parent">
+        <div className="svg-parent" ref={wrapperRef}>
           <div className="stats">
             <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
             <h5 className={`${moving ? 'title' : ''}`}>
@@ -375,7 +381,7 @@ function TimeSeries(props) {
             </div>
           </div>
           <svg
-            ref={graphElement1}
+            ref={svgRef1}
             width="650"
             height="200"
             viewBox="0 0 650 200"
@@ -408,7 +414,7 @@ function TimeSeries(props) {
             </div>
           </div>
           <svg
-            ref={graphElement2}
+            ref={svgRef2}
             width="650"
             height="200"
             viewBox="0 0 650 200"
@@ -441,7 +447,7 @@ function TimeSeries(props) {
             </div>
           </div>
           <svg
-            ref={graphElement3}
+            ref={svgRef3}
             width="650"
             height="200"
             viewBox="0 0 650 200"
@@ -479,7 +485,7 @@ function TimeSeries(props) {
             </div>
           </div>
           <svg
-            ref={graphElement4}
+            ref={svgRef4}
             width="650"
             height="200"
             viewBox="0 0 650 200"
@@ -512,7 +518,7 @@ function TimeSeries(props) {
             </div>
           </div>
           <svg
-            ref={graphElement5}
+            ref={svgRef5}
             width="650"
             height="200"
             viewBox="0 0 650 200"
@@ -545,7 +551,7 @@ function TimeSeries(props) {
             </div>
           </div>
           <svg
-            ref={graphElement6}
+            ref={svgRef6}
             width="650"
             height="200"
             viewBox="0 0 650 200"

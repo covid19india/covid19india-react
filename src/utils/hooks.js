@@ -1,11 +1,12 @@
-import ResizeObserver from 'resize-observer-polyfill';
+import {useState, useEffect} from 'react';
+import {ResizeObserver} from '@juggle/resize-observer';
 
 export const useResizeObserver = (ref) => {
   const [dimensions, setDimensions] = useState(null);
   useEffect(() => {
     const observeTarget = ref.current;
-    const resizeObserver = new ResizeObserver((entries) => {
-      entries.forEach((entry) => {
+    const resizeObserver = new ResizeObserver((entries, observer) => {
+      entries.forEach((entry, index) => {
         setDimensions(entry.contentRect);
       });
     });
