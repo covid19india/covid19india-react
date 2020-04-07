@@ -12,7 +12,7 @@
   "Daily": "ದೈನಿಕ",
   "Confirmed": "ಖಚಿತ",
   "Active": "ಸಕ್ರಿಯ",
-  "Recovered": "ವಾಸಿ",
+  "Recovered": "ಗುಣಮುಖ",
   "Deceased": "ಸಾವು",
   "HELPLINE NUMBERS (by State)": "ಸಹಾಯ ಸಂಖ್ಯೆಗಳು (ರಾಜ್ಯದಿಂದ)",
   "Ministry of Health and Family Welfare, Goverment of India": "ಆರೋಗ್ಯ ಮತ್ತು ಕುಟುಂಬ ಕಲ್ಯಾಣ ಸಚಿವಾಲಯ, ಭಾರತ ಸರಕಾರ",
@@ -313,7 +313,7 @@
     },
     "Karnataka": {
       "title": "ಕರ್ನಾಟಕ",
-      "Chikmagalur": "ಚಿಕ್ಮಮಗಳೂರು",
+      "Chikmagalur": "ಚಿಕ್ಕಮಗಳೂರು",
       "Dakshina Kannada": "ದಕ್ಷಿಣ ಕನ್ನಡ",
       "Davanagere": "ದಾವಣಗೆರೆ",
       "Gadag": "ಗದಗ್",
