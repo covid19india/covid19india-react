@@ -585,7 +585,7 @@ table {
   align-self: center;
   font-family: 'archia';
   text-transform: uppercase;
-  border-spacing: 3px 2px;
+  border-spacing: 3px 4px;
   border-collapse: separate;
 
   thead {
@@ -644,6 +644,10 @@ table {
 
       &:hover {
         background: $gray-hover !important;
+
+        .dropdown {
+            background: $gray-hover;
+        }
       }
 
       &.divider {
@@ -663,8 +667,8 @@ table {
       border-radius: 5px;
       text-align: right;
       .deltas {
-        margin-right: 0.25rem;
-        font-size: 11px !important;
+        display: inline-block;
+		    font-size: 11px !important;
 
         svg {
           width: 9px;
@@ -689,6 +693,10 @@ table {
           }
         }
       }
+    }
+	
+    .table__count-text {
+      margin-left: 0.25rem;
     }
 
     td:first-child {
@@ -771,15 +779,19 @@ table {
       background: $gray-hover;
     }
   }
+  
+	.table__title-wrapper {
+		position: relative;
+	}
 
   .dropdown {
     position: absolute;
-    left: -0.75rem;
+    left: -1.25rem;
+    top: 0.125rem;
     background: $gray-light;
     border-radius: 50%;
     width: 13px;
     height: 13px;
-    margin-top: 0.5rem;
     cursor: pointer;
     transition: background 0.2s ease-in-out;
 
@@ -1051,66 +1063,69 @@ table {
     & > * {
       align-self: center;
     }
+  }
 
-    .timeseries-mode, .timeseries-logmode {
-      margin-left: 1rem;
-      display: flex;
-      flex-direction: row;
-      input.switch {
-        position: relative;
-        appearance: none;
-        outline: none;
-        margin: 0;
-        cursor: pointer;
-        width: 24px;
-        height: 14px;
-        background-color: #fff;
-        border: 2px solid #d9dadc;
-        border-radius: 10px;
-        transition: all 200ms ease-in-out;
-      }
-  
-      input.switch::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 10px;
-        height: 10px;
-        background-color: $gray-mid;
-        border-radius: 50%;
-      }
-  
-      input.switch:checked {
-        background-color: $gray-mid;
-        transition: all 200ms ease-in-out;
-      }
-  
-      input.switch:checked::after {
-        left: 10px;
-        background-color: $light;
-      }
-      
-      label{
-        font-size: 0.75rem;
-        margin-right: 0.2rem;
-        padding-bottom: 0;
-        color: $gray;
-      }
-    }
-
-    .disabled {
-      input.switch {
-        background: $gray-light;
-        border: $gray-light 2px solid;
-        cursor: not-allowed;
-      }
-
-      input.switch::after {
-        background: $gray-light;
-      }
+  .timeseries-mode, .timeseries-logmode {
+    margin-left: 1rem;
+    display: flex;
+    flex-direction: row;
+    
+    label{
+      font-size: 0.75rem;
+      margin-right: 0.2rem;
+      padding-bottom: 0;
+      color: $gray;
     }
   }
+}
+
+.disabled {
+  input.switch {
+    background: $gray-light;
+    border: $gray-light 2px solid;
+    cursor: not-allowed;
+  }
+
+  input.switch::after {
+    background: $gray-light;
+  }
+}
+
+input.switch {
+  position: relative;
+  appearance: none;
+  outline: none;
+  margin: 0;
+  cursor: pointer;
+  width: 24px;
+  height: 14px;
+  background-color: #fff;
+  border: 2px solid #d9dadc;
+  border-radius: 10px;
+  transition: all 300ms ease-in-out;
+}
+
+input.switch::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  background-color: $gray-mid;
+  border-radius: 50%;
+  transition: all 300ms ease-in-out;
+}
+
+input.switch:checked {
+  background-color: $gray-mid;
+  transition: all 300ms ease-in-out;
+}
+
+input.switch:checked::after {
+  left: 10px;
+  background-color: $light;
+  transition: all 300ms ease-in-out;
 }
 
 .timeseries,
@@ -1217,7 +1232,7 @@ table {
         color: $cherry-mid;
         stroke: transparent;
         font-size: 12px;
-        font-weight: 900;
+        font-weight: 600;
       }
     }
 
@@ -1454,10 +1469,29 @@ footer {
   margin-left: auto;
   margin-right: auto;
 
+  .reminder {
+    align-self: center !important;
+    font-family: 'archia';
+    color: $pblue;
+    font-size: 0.9rem;
+    margin-bottom: 3rem;
+    margin-top: 3rem;
+    font-weight: 600;
+    text-align: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 30rem;
+    line-height: 23px;
+  }
+
   .header {
-    padding-left: 5.25rem;
     margin-top: 1.75rem;
     align-self: flex-start;
+    display: flex;
+    flex-direction: row;
+    width: calc(100% - 10.5rem);
+    justify-content: space-between;
+    margin-left: 5.25rem;
     h1 {
       color: $pblue;
     }
@@ -1466,6 +1500,21 @@ footer {
       margin-top: 0;
       color: $pblue-mid;
       font-weight: 900;
+    }
+
+    h6.disclaimer {
+      color: $gray-mid;
+      margin-bottom: 1rem;
+      width: 10rem;
+      text-align: right;
+      text-transform: unset;
+    }
+
+    .deep-dive {
+      align-self: flex-start;
+      display: flex;
+      flex-direction: row;
+      h5 {margin: 0; margin-right: 1rem; color: $gray;}
     }
   }
 
@@ -1481,7 +1530,6 @@ footer {
   flex-wrap: wrap;
   width: 100%;
   align-self: center;
-  min-height: 20rem;
 
   & > * {
     align-self: center;
@@ -1507,7 +1555,7 @@ footer {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    transition: all 0.2s ease-in-out;
+    transition: background 0.3s ease-in-out;
     & > * {
       align-self: center;
     }
@@ -1520,6 +1568,31 @@ footer {
       font-weight: 900;
       color: $gray-mid;
       font-size: 11px !important;
+    }
+
+    &.is-small {
+      height: 1rem;
+      width: 1rem;
+      background: $gray-hover;
+      &:hover {
+        background: $gray-mid
+      }
+
+      &.is-femme {
+        background: $pink;
+      }
+
+      &.is-male {
+        background: $pblue;
+      }
+
+      &.is-local {
+        background: $cherry;
+      }
+
+      &.is-imported {
+        background: $purple;
+      }
     }
 
     &.is-femme {
@@ -1701,6 +1774,47 @@ footer {
         }
       }
     }
+    
+    &.age1-9 {
+      background: #006400;
+    }
+
+    &.age10-19 {
+      background: #00008b;
+    }
+
+    &.age20-29 {
+      background: #b03060;
+    }
+
+    &.age30-39 {
+      background: #ff4500;
+    }
+
+    &.age40-49 {
+      background: #ff0;
+    }
+
+    &.age50-59 {
+      background: #deb887;
+    }
+
+    &.age60-69 {
+      background: #0f0;
+    }
+
+    &.age70-79 {
+      background: #0ff;
+    }
+
+    &.age80-89 {
+      background: #f0f;
+    }
+
+    &.age90-99 {
+      background: #6495ed;
+    }
+
   }
 
   /*
@@ -1785,7 +1899,7 @@ footer {
 }
 
 .DownloadBlock {
-  margin-top: 2rem;
+  margin-top: 7rem;
   align-self: center;
     code {
       font-family: 'archia';
@@ -1837,7 +1951,7 @@ footer {
     align-self: center;
     background: #fff;
     width: 30rem;
-    height: 40rem;
+    height: calc(100vh - 10rem);
     overflow-y: auto;
     svg {
       width: 20px;
@@ -2060,10 +2174,6 @@ select {
   .legend-left {
     display: flex;
     flex-direction: row;
-
-    &.nationality {
-      margin-bottom: 0.5rem;
-    }
   }
 
   select {
@@ -2160,6 +2270,73 @@ select {
   }
 }
 
+.updates-header {
+  width: 30rem;
+  align-self: center;
+  color: $gray-dark;
+  h2 {
+    color: $pblue;
+    font-weight: 900;
+  }
+}
+
+.updates {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: 100%;
+  .update {
+    background: $gray-light;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      background: $gray-hover;
+    }
+
+    h5, h4 {
+      margin: 0;
+    }
+
+    h5 {
+      color: $gray-mid;
+      margin-bottom: 0.15rem;
+    }
+
+    h4 {
+      color: $gray;
+      font-weight: 600;
+    }
+  }
+
+  .button {
+    background: $pblue-light;
+    height: 3rem;
+    display: flex;
+    flex-direction: row;
+    color: $pblue;
+    width: 13rem;
+    & > * {
+      align-self: center;
+    }
+
+    &:hover {
+      background: $pblue-hover;
+    }
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    flex-direction: row;
+    display: flex;
+    & > * {
+      align-self: center;
+    }
+  }
+}
+
 @media (max-width: 769px) {
   .TimeSeries,
   table,
@@ -2173,7 +2350,8 @@ select {
   .FAQ,
   .MapExplorer,
   .patients-summary
-  .filters {
+  .filters,
+  .updates, .updates-header {
     width: calc(100% - 2rem);
   }
 
@@ -2216,6 +2394,11 @@ select {
   .timeseries {
     .svg-parent {
       width: 100%;
+      svg {
+        text {
+          font-size: 0.95rem;
+        }
+      }
     }
   }
 
@@ -2257,10 +2440,16 @@ select {
   .PatientsDB {
     width: 100%;
 
-    .header {
+    .header{
       width: calc(100% - 2rem);
-      align-self: center;
-      padding-left: 2rem;
+      margin: 0;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .reminder {
+      width: calc(100% - 2rem);
+      padding: 0;
     }
 
     .Patients {
@@ -2279,9 +2468,6 @@ select {
     .filters-left {
       flex-wrap: wrap;
       justify-content: space-between;
-      select {
-        margin-bottom: 1rem;
-      }
     }
 
     .filters {
@@ -2317,6 +2503,61 @@ select {
       justify-content: center;
       width: 100%;
     }
+  }
+
+  .Navbar {
+    justify-content: space-between;
+    .navbar-right {
+    }
+
+    .navbar-burger {
+      align-self: center;
+      margin-left: 1rem;
+      cursor: pointer;
+      svg {
+        color: $gray-mid;
+        &:hover {
+          stroke: $gray;
+        }
+      }
+    }
+
+    .side-navbar {
+      position: fixed;
+      height: 100vh;
+      width: 7.5rem;
+      padding-top: 5rem;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      padding-left: 1rem;
+      background: $white;
+      border-right: 1px solid $gray-light;
+      a {
+        font-family: 'archia';
+        text-decoration: none;
+        color: $gray;
+        margin-bottom: 1rem;
+      } svg {
+        position: absolute;
+        top: -3.5rem;
+        stroke: $gray-mid;
+        cursor: pointer;
+      }
+    }
+  }
+
+  select {
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+
+  &.nationality {
+    margin-bottom: 0.5rem;
+  }
+
+  &.genders {
+    margin-top: 0.5rem;
   }
 }
 
@@ -2392,4 +2633,8 @@ select {
     opacity: 0;
     transform: translateY(20px);
   }
+}
+
+.height-22 {
+	height: 22px;
 }
