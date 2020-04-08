@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef, useLayoutEffect} from 'react';
 import axios from 'axios';
 import {formatDistance, format} from 'date-fns';
 import {
   formatDate,
   formatDateAbsolute,
   validateCTS,
+  parseStateTimeseries,
 } from '../utils/common-functions';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
@@ -22,11 +23,13 @@ function Home(props) {
   const [fetched, setFetched] = useState(false);
   const [graphOption, setGraphOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
-  const [timeseries, setTimeseries] = useState([]);
+  const [timeseries, setTimeseries] = useState({});
+  const [activeStateCode, setActiveStateCode] = useState('TT');
   const [activityLog, setActivityLog] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
+  const [isShowFloatingButtons, setIsShowFloatingButtons] = useState(false);
 
   useEffect(() => {
     if (fetched === false) {
@@ -40,13 +43,17 @@ function Home(props) {
         response,
         stateDistrictWiseResponse,
         updateLogResponse,
+        {data: statesDailyResponse},
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
         axios.get('https://api.covid19india.org/updatelog/log.json'),
+        axios.get('https://api.covid19india.org/states_daily.json'),
       ]);
       setStates(response.data.statewise);
-      setTimeseries(validateCTS(response.data.cases_time_series));
+      const timeSeries = parseStateTimeseries(statesDailyResponse);
+      timeSeries['TT'] = validateCTS(response.data.cases_time_series);
+      setTimeseries(timeSeries);
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
       setActivityLog(updateLogResponse.data);
@@ -58,13 +65,46 @@ function Home(props) {
   };
 
   const onHighlightState = (state, index) => {
-    if (!state && !index) setRegionHighlighted(null);
-    else setRegionHighlighted({state, index});
+    if (!state && !index) return setRegionHighlighted(null);
+    setRegionHighlighted({state, index});
+    setActiveStateCode(state ? state.statecode : 'TT');
+    setIsShowFloatingButtons(true);
   };
   const onHighlightDistrict = (district, state, index) => {
-    if (!state && !index && !district) setRegionHighlighted(null);
-    else setRegionHighlighted({district, state, index});
+    if (!state && !index && !district) return setRegionHighlighted(null);
+    setRegionHighlighted({district, state, index});
+    setActiveStateCode(state ? state.statecode : 'TT');
+    setIsShowFloatingButtons(true);
   };
+
+  const onMapHighlightChange = ({statecode, name}) => {
+    if (activeStateCode !== statecode) setActiveStateCode(statecode);
+  };
+
+  const refs = [useRef(), useRef(), useRef()];
+  const scrollHandlers = refs.map((ref) => () =>
+    window.scrollTo({
+      top: ref.current.offsetTop,
+      behavior: 'smooth',
+    })
+  );
+
+  function useScrollPosition(effect) {
+    const position = useRef(window.scrollY);
+    useLayoutEffect(() => {
+      const handleScroll = () => {
+        const currPos = window.scrollY;
+        effect({prevPos: position.current, currPos});
+        position.current = currPos;
+      };
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    });
+  }
+
+  useScrollPosition(({prevPos, currPos}) => {
+    setIsShowFloatingButtons(parseInt(prevPos) > parseInt(currPos));
+  });
 
   return (
     <React.Fragment>
@@ -98,6 +138,7 @@ function Home(props) {
           {states.length > 1 && <Level data={states} />}
           <Minigraph timeseries={timeseries} animate={true} />
           <Table
+            forwardRef={refs[0]}
             states={states}
             summary={false}
             stateDistrictWiseData={stateDistrictWiseData}
@@ -110,14 +151,17 @@ function Home(props) {
           {fetched && (
             <React.Fragment>
               <MapExplorer
+                forwardRef={refs[1]}
                 states={states}
                 stateDistrictWiseData={stateDistrictWiseData}
                 regionHighlighted={regionHighlighted}
+                onMapHighlightChange={onMapHighlightChange}
               />
 
               <div
                 className="timeseries-header fadeInUp"
                 style={{animationDelay: '2.5s'}}
+                ref={refs[2]}
               >
                 <h1>Spread Trends</h1>
                 <div className="tabs">
@@ -172,14 +216,51 @@ function Home(props) {
                 </div>
               </div>
 
+              {window.innerWidth <= 769 && (
+                <div className="trends-state-name">
+                  <select
+                    onChange={({target}) => {
+                      onHighlightState(JSON.parse(target.value));
+                    }}
+                  >
+                    {states.map((s) => {
+                      return (
+                        <option
+                          key={s.statecode}
+                          value={JSON.stringify(s)}
+                          selected={s.statecode === activeStateCode}
+                        >
+                          {s.state === 'Total' ? 'All States' : s.state}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              )}
+
               <TimeSeries
-                timeseries={timeseries}
+                timeseries={timeseries[activeStateCode]}
                 type={graphOption}
                 mode={timeseriesMode}
                 logMode={timeseriesLogMode}
               />
             </React.Fragment>
           )}
+        </div>
+
+        <div
+          className="floating-buttons"
+          style={{display: isShowFloatingButtons ? 'block' : 'none'}}
+        >
+          <button className="table-nav" onClick={scrollHandlers[0]}>
+            <Icon.Grid />
+          </button>
+          <button className="map-nav" onClick={scrollHandlers[1]}>
+            <Icon.MapPin />
+          </button>
+          <button className="trends-nav" onClick={scrollHandlers[2]}>
+            <Icon.TrendingUp />
+          </button>
         </div>
 
         {/* <div className="home-left">

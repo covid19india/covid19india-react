@@ -361,7 +361,7 @@ function TimeSeries(props) {
             <div className="stats-bottom">
               <h2>{datapoint['totalconfirmed']}</h2>
               <h6>
-                {timeseries.length > 0 && index !== 0
+                {timeseries.length > index && index !== 0
                   ? timeseries[index]['totalconfirmed'] -
                       timeseries[index - 1]['totalconfirmed'] >=
                     0
@@ -394,7 +394,7 @@ function TimeSeries(props) {
             <div className="stats-bottom">
               <h2>{datapoint['totalrecovered']}</h2>
               <h6>
-                {timeseries.length > 0 && index !== 0
+                {timeseries.length > index && index !== 0
                   ? timeseries[index]['totalrecovered'] -
                       timeseries[index - 1]['totalrecovered'] >=
                     0
@@ -427,7 +427,7 @@ function TimeSeries(props) {
             <div className="stats-bottom">
               <h2>{datapoint['totaldeceased']}</h2>
               <h6>
-                {timeseries.length > 0 && index !== 0
+                {timeseries.length > index && index !== 0
                   ? timeseries[index]['totaldeceased'] -
                       timeseries[index - 1]['totaldeceased'] >=
                     0
@@ -465,7 +465,7 @@ function TimeSeries(props) {
             <div className="stats-bottom">
               <h2>{datapoint['dailyconfirmed']}</h2>
               <h6>
-                {timeseries.length > 0 && index !== 0
+                {timeseries.length > index && index !== 0
                   ? timeseries[index]['dailyconfirmed'] -
                       timeseries[index - 1]['dailyconfirmed'] >=
                     0
@@ -498,7 +498,7 @@ function TimeSeries(props) {
             <div className="stats-bottom">
               <h2>{datapoint['dailyrecovered']}</h2>
               <h6>
-                {timeseries.length > 0 && index !== 0
+                {timeseries.length > index && index !== 0
                   ? timeseries[index]['dailyrecovered'] -
                       timeseries[index - 1]['dailyrecovered'] >=
                     0
@@ -531,7 +531,7 @@ function TimeSeries(props) {
             <div className="stats-bottom">
               <h2>{datapoint['dailydeceased']}</h2>
               <h6>
-                {timeseries.length > 0 && index !== 0
+                {timeseries.length > index && index !== 0
                   ? timeseries[index]['dailydeceased'] -
                       timeseries[index - 1]['dailydeceased'] >=
                     0
