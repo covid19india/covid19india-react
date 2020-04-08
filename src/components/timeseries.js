@@ -8,7 +8,7 @@ import {useResizeObserver} from '../utils/hooks';
 
 function TimeSeries(props) {
   const [lastDaysCount, setLastDaysCount] = useState(
-    window.innerWidth > 769 ? Infinity : 30
+    window.innerWidth > 512 ? Infinity : 30
   );
   const [timeseries, setTimeseries] = useState([]);
   const [datapoint, setDatapoint] = useState({});
