@@ -23,6 +23,8 @@ function Resources(props) {
   }, []);
 
   useEffect(() => {
+    if (window.innerWidth > 639) setIsDesktop(true);
+    else setIsDesktop(false);
     window.addEventListener('resize', checkForResizeEvent);
     return () => {
       window.removeEventListener('resize', checkForResizeEvent);

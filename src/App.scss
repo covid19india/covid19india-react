@@ -252,6 +252,7 @@ h6 {
     margin-right: 2.5rem;
   }
 }
+
 .Resources {
   display: flex;
   flex-direction: row;
@@ -277,9 +278,15 @@ h6 {
     margin-right: 2.5rem;
   }
 
+  .tableandcontrols{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
   table {
     position: relative;
-    width: 80rem;
+    width: 100%;
     align-self: center;
     font-family: 'archia';
     text-transform: none;
@@ -356,6 +363,7 @@ h6 {
           background: #fff !important;
         }
       }
+
        tr:nth-child(even) {background-color: $purple-light;}
   
       td {
@@ -484,6 +492,7 @@ h6 {
   
   
 }
+
 .filtersection {
   display: flex;
   flex-direction: column;
@@ -498,6 +507,7 @@ h6 {
   animation-timing-function: ease-in;
   
 }
+
 .resourcefilters {
   display: flex;
   flex-direction: row;
@@ -505,6 +515,7 @@ h6 {
   align-items: center;
   
 }
+
 .resourcefilter { 
 
   display: flex;
@@ -521,13 +532,15 @@ h6 {
     text-transform: uppercase;
     color: $indigo;
   }
+
   select {
-    width: 15rem;
+    width: 100%;
     // background-color: $purple-light-opaque;
     // border-radius: 10px;
   }
   
 }
+
 .pagination{
   display: flex;
   flex-direction: row;
@@ -544,11 +557,13 @@ h6 {
     align-items: center;
     // margin-top
   }
+
   select{
     // height: 2.2 rem;
     // margin-top: 0.7rem;
     margin: 0.7rem 0.7rem 0.2rem 0.1rem;
   }
+
   input{
     // max-height: fit-content;
     // height: 0.5rem;
@@ -556,6 +571,7 @@ h6 {
     margin: 0.7rem 0.7rem 0.2rem 0.7rem;
   }
 }
+
 .paginationbutton {
   display: flex;
   flex-direction: row;
@@ -2900,6 +2916,7 @@ select {
       width: 100%;
     }
   }
+<<<<<<< HEAD
   .Navbar {
     justify-content: space-between;
     .navbar-right {
@@ -2954,6 +2971,9 @@ select {
   &.genders {
     margin-top: 0.5rem;
   }
+=======
+
+>>>>>>> 6848792... Further CSS fixes and fixing initial screen width choose bug
   .Resources {
     table {
       position: relative;
@@ -3033,6 +3053,7 @@ select {
             background: #fff !important;
           }
         }
+
         tr:nth-child(even) {background-color: $purple-light;}
     
         td {
@@ -3171,6 +3192,7 @@ select {
     align-items: center;
     
   }
+
   .resourcefilter {
     margin-bottom: 0.4rem;
   }
@@ -3190,6 +3212,7 @@ select {
     animation-timing-function: ease-in;
     
   }
+
   .pagination{
     display: flex;
     flex-direction: column;
@@ -3198,16 +3221,18 @@ select {
     .select{
       // height: max-content;
       margin-top: 0.4rem;
-      margin-right: 0rem;
+      margin-right: 0;
       // min-width: 9rem;
     }
+
     input{
       // min-width: 8rem;
       // height: max-content;
       margin: 0.1rem 0.1rem 0.1rem 0.1rem;
     }
+
     h5{
-      margin-top: 0rem;
+      margin-top: 0;
       margin-bottom: 0.1rem;
     }
   }
