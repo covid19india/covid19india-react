@@ -27,6 +27,7 @@ function Home(props) {
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
+  const [showUpdate,setShowUpdate] = useState(false);
 
   useEffect(() => {
     if (fetched === false) {
@@ -52,6 +53,7 @@ function Home(props) {
       setActivityLog(updateLogResponse.data);
       /* setPatients(rawDataResponse.data.raw_data.filter((p) => p.detectedstate));*/
       setFetched(true);
+      setShowUpdate(true)
     } catch (err) {
       console.log(err);
     }
@@ -106,7 +108,46 @@ function Home(props) {
           />
         </div>
 
+        
         <div className="home-right">
+          
+        <div className="update-block">
+        
+        {showUpdate && (
+          <React.Fragment>
+            
+            <div
+            className="updates-header fadeInUp"
+            style={{animationDelay: '1.5s'}}
+          >
+            <h1>Updates <span className="update-beacon"></span></h1>
+            
+          </div>
+          <div className="updates fadeInUp" style={{animationDelay: '1.7s'}}>
+            {activityLog
+              .slice(-5)
+              .reverse()
+              .map(function (activity, index) {
+                return (
+                  <div key={index} className="update">
+                    <h5>
+                      {format(new Date(activity.timestamp*1000),'dd MMM yyyy hh:mm:ss aaa')}
+                      
+                      {/* {formatDistance(
+                        new Date(activity.timestamp * 1000),
+                        new Date()
+                      ) + ' Ago'} */}
+                    </h5>
+                    <h4>{activity.update.split('\n').map((item, key) => {
+                      return <React.Fragment key={key}>{item} {key == activity.update.split('\n').length-1 ? '' : <br/>}</React.Fragment>
+                      })}</h4>
+                  </div>
+                );
+              })}
+          </div>
+          </React.Fragment>
+        )}
+        </div>
           {fetched && (
             <React.Fragment>
               <MapExplorer
@@ -218,44 +259,7 @@ function Home(props) {
     */}
       </div>
 
-      <div className="Home">
-        <div className="home-left">
-          <div
-            className="updates-header fadeInUp"
-            style={{animationDelay: '1.5s'}}
-          >
-            <h1>Updates</h1>
-            <h2>{format(new Date(), 'd MMM')}</h2>
-          </div>
-
-          <div className="updates fadeInUp" style={{animationDelay: '1.7s'}}>
-            {activityLog
-              .slice(-5)
-              .reverse()
-              .map(function (activity, index) {
-                return (
-                  <div key={index} className="update">
-                    <h5>
-                      {formatDistance(
-                        new Date(activity.timestamp * 1000),
-                        new Date()
-                      ) + ' Ago'}
-                    </h5>
-                    <h4>{activity.update}</h4>
-                  </div>
-                );
-              })}
-            <button className="button">
-              <Link to="/demographics">
-                <Icon.Database />
-                <span>Demographic Overview</span>
-              </Link>
-            </button>
-          </div>
-        </div>
-
-        <div className="home-right"></div>
-      </div>
+      
     </React.Fragment>
   );
 }

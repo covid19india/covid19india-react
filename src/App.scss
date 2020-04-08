@@ -245,11 +245,16 @@ h6 {
   .home-left {
     margin-right: 2.5rem;
     margin-left: 2.5rem;
+  
   }
 
   .home-right {
     margin-left: 2.5rem;
     margin-right: 2.5rem;
+  }
+
+  .update-block{
+    margin-top: 1.5rem;
   }
 }
 
@@ -2446,6 +2451,11 @@ select {
       flex-direction: column;
       margin: 0;
     }
+
+    .update-block{
+      width: 100%;
+      margin: 0;
+    }
   }
 
   .link,
@@ -2724,4 +2734,58 @@ select {
 
 .height-22 {
 	height: 22px;
+}
+
+//update beacon
+
+.update-beacon{
+  position:absolute;
+  top:50%;
+  left:30%;
+  background-color:#007bff;
+  height:1em;
+  width:1em;
+  border-radius:50%;
+  -webkit-transform:translateX(-50%) translateY(-50%);
+}
+.update-beacon:before{
+  position:absolute;
+  content:"";
+  height:1em;
+  width:1em;
+  left:0;
+  top:0;
+  background-color:transparent;
+  border-radius:50%;
+  box-shadow:0px 0px 2px 2px #2980b9;
+  -webkit-animation:active 2s infinite linear;
+  animation:active 2s infinite linear;
+}
+
+@-webkit-keyframes active{
+  0%{
+    -webkit-transform:scale(.1);
+    opacity:1;
+  }
+  70%{
+    -webkit-transform:scale(2.5);
+    opacity:0;
+  }
+  100%{
+    opacity:0;
+  }
+}
+
+@keyframes active{
+  0%{
+    transform:scale(.1);
+    opacity:1;
+  }
+  70%{
+    transform:scale(2.5);
+    opacity:0;
+  }
+  100%{
+    opacity:0;
+  }
 }
