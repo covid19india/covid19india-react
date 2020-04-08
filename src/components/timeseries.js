@@ -77,6 +77,7 @@ function TimeSeries(props) {
 
       const xScale = d3
         .scaleTime()
+        .clamp(true)
         .domain([dateMin, dateMax])
         .range([margin.left, chartRight]);
 
@@ -168,6 +169,7 @@ function TimeSeries(props) {
       } else {
         const yScaleDailyUniform = d3
           .scaleLinear()
+          .clamp(true)
           .domain([0, yBuffer * d3.max(ts, (d) => d.dailyconfirmed)])
           .nice()
           .range([chartBottom, margin.top]);
