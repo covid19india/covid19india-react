@@ -238,6 +238,7 @@ export default function ({
   stateDistrictWiseData,
   stateTestData,
   regionHighlighted,
+  setMapRegionHighlighted,
 }) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
@@ -329,14 +330,15 @@ export default function ({
       return;
     }
     const isState = !('district' in regionHighlighted);
+    let newMap = {};
     if (isState) {
-      const newMap = mapMeta['India'];
+      newMap = mapMeta['India'];
       setCurrentMap(newMap);
       const region = getRegionFromState(regionHighlighted.state);
       setHoveredRegion(region.name, newMap);
       setSelectedRegion(region.name);
     } else {
-      const newMap = mapMeta[regionHighlighted.state.state];
+      newMap = mapMeta[regionHighlighted.state.state];
       if (!newMap) {
         return;
       }
@@ -344,7 +346,13 @@ export default function ({
       setHoveredRegion(regionHighlighted.district, newMap);
       setSelectedRegion(regionHighlighted.district);
     }
-  }, [regionHighlighted, currentMap.mapType, setHoveredRegion]);
+    setMapRegionHighlighted({state: {state: newMap.name}});
+  }, [
+    setMapRegionHighlighted,
+    regionHighlighted,
+    currentMap.mapType,
+    setHoveredRegion,
+  ]);
 
   const getRegionFromDistrict = (districtData, name) => {
     if (!districtData) {
@@ -375,6 +383,7 @@ export default function ({
         return;
       }
       setCurrentMap(newMap);
+      setMapRegionHighlighted({state: {state: newMap.name}});
       if (newMap.mapType === MAP_TYPES.COUNTRY) {
         setHoveredRegion(states[1].state, newMap);
       } else if (newMap.mapType === MAP_TYPES.STATE) {
@@ -388,7 +397,7 @@ export default function ({
         setHoveredRegion(topDistrict, newMap);
       }
     },
-    [setHoveredRegion, stateDistrictWiseData, states]
+    [setHoveredRegion, setMapRegionHighlighted, stateDistrictWiseData, states]
   );
 
   const {name, lastupdatedtime} = currentHoveredRegion;

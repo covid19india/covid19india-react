@@ -352,9 +352,10 @@ function TimeSeries(props) {
 
   useEffect(() => {
     if (timeseries.length > 1) {
+      refreshGraphs();
       graphData(timeseries);
     }
-  }, [timeseries, graphData]);
+  }, [timeseries, graphData, refreshGraphs]);
 
   const yesterdayDate = new Date();
   yesterdayDate.setDate(yesterdayDate.getDate() - 1);
@@ -425,6 +426,110 @@ function TimeSeries(props) {
         </div>
       </div>
 
+      <div
+        className="timeseries"
+        style={{display: props.type === 2 ? 'flex' : 'none'}}
+      >
+        {props.stateName ? <h4> {props.stateName} </h4> : <></>}
+        <div className="svg-parent">
+          <div className="stats">
+            <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
+            <div className="stats-bottom">
+              <h2>{datapoint['dailyconfirmed']}</h2>
+              <h6>
+                {timeseries.length > 0 && index !== 0
+                  ? timeseries[index]['dailyconfirmed'] -
+                      timeseries[index - 1]['dailyconfirmed'] >=
+                    0
+                    ? '+' +
+                      (timeseries[index]['dailyconfirmed'] -
+                        timeseries[index - 1]['dailyconfirmed'])
+                    : timeseries[index]['dailyconfirmed'] -
+                      timeseries[index - 1]['dailyconfirmed']
+                  : ''}
+              </h6>
+            </div>
+          </div>
+          <svg
+            ref={graphElement4}
+            width="650"
+            height="200"
+            viewBox="0 0 650 200"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
+
+        <div className="svg-parent is-green">
+          <div className="stats is-green">
+            <h5 className={`${!moving ? 'title' : ''}`}>Recovered</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
+            <div className="stats-bottom">
+              <h2>{datapoint['dailyrecovered']}</h2>
+              <h6>
+                {timeseries.length > 0 && index !== 0
+                  ? timeseries[index]['dailyrecovered'] -
+                      timeseries[index - 1]['dailyrecovered'] >=
+                    0
+                    ? '+' +
+                      (timeseries[index]['dailyrecovered'] -
+                        timeseries[index - 1]['dailyrecovered'])
+                    : timeseries[index]['dailyrecovered'] -
+                      timeseries[index - 1]['dailyrecovered']
+                  : ''}
+              </h6>
+            </div>
+          </div>
+          <svg
+            ref={graphElement5}
+            width="650"
+            height="200"
+            viewBox="0 0 650 200"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
+
+        <div className="svg-parent is-gray">
+          <div className="stats is-gray">
+            <h5 className={`${!moving ? 'title' : ''}`}>Deceased</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
+            <div className="stats-bottom">
+              <h2>{datapoint['dailydeceased']}</h2>
+              <h6>
+                {timeseries.length > 0 && index !== 0
+                  ? timeseries[index]['dailydeceased'] -
+                      timeseries[index - 1]['dailydeceased'] >=
+                    0
+                    ? '+' +
+                      (timeseries[index]['dailydeceased'] -
+                        timeseries[index - 1]['dailydeceased'])
+                    : timeseries[index]['dailydeceased'] -
+                      timeseries[index - 1]['dailydeceased']
+                  : ''}
+              </h6>
+            </div>
+          </div>
+          <svg
+            ref={graphElement6}
+            width="650"
+            height="200"
+            viewBox="0 0 650 200"
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </div>
+
       <div className="pills">
         <button
           type="button"
@@ -450,6 +555,7 @@ function TimeSeries(props) {
           14D
         </button>
       </div>
+
     </div>
   );
 }

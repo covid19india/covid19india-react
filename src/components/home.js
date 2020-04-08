@@ -6,6 +6,7 @@ import {
   formatDateAbsolute,
   validateCTS,
 } from '../utils/common-functions';
+import moment from 'moment';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
 
@@ -20,6 +21,7 @@ function Home(props) {
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
   const [stateTestData, setStateTestData] = useState({});
   const [fetched, setFetched] = useState(false);
+  /* const [rawData, setRawData] = useState([]);*/
   const [graphOption, setGraphOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState([]);
@@ -27,6 +29,13 @@ function Home(props) {
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
+  const [selectedState, setSelectedState] = useState({table: null, map: null});
+  const [stateTimeSeries, setStateTimeSeries] = useState({});
+  const [statesDailyData, setStatesDailyData] = useState([]);
+  const [stateGraphTimeSeries, setStateGraphTimeSeries] = useState({
+    series: [],
+    state: '',
+  });
 
   useEffect(() => {
     if (fetched === false) {
@@ -34,16 +43,37 @@ function Home(props) {
     }
   }, [fetched]);
 
+  useEffect(() => {
+    if (regionHighlighted !== undefined && regionHighlighted !== null) {
+      if (regionHighlighted.state.state !== selectedState.table)
+        setSelectedState({
+          ...selectedState,
+          table: regionHighlighted.state.state,
+        });
+    } else {
+      if (selectedState.table !== undefined && selectedState.table !== null) {
+        setSelectedState({
+          ...selectedState,
+          table: regionHighlighted,
+        });
+      }
+      // if (selectedState !== 'India') setSelectedState('India');
+    }
+  }, [regionHighlighted, selectedState]);
+
   const getStates = async () => {
     try {
       const [
         response,
         stateDistrictWiseResponse,
+        statesDailyResponse,
         updateLogResponse,
         stateTestResponse,
+        /* rawDataResponse, */
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
+        axios.get('https://api.covid19india.org/states_daily.json'),
         axios.get('https://api.covid19india.org/updatelog/log.json'),
         axios.get('https://api.covid19india.org/state_test_data.json'),
       ]);
@@ -52,22 +82,113 @@ function Home(props) {
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
       setStateTestData(stateTestResponse.data.states_tested_data.reverse());
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
+      setStatesDailyData(statesDailyResponse.data.states_daily);
       setActivityLog(updateLogResponse.data);
       /* setPatients(rawDataResponse.data.raw_data.filter((p) => p.detectedstate));*/
+      /* setRawData(rawDataResponse.data.raw_data);*/
       setFetched(true);
     } catch (err) {
       console.log(err);
     }
   };
 
+  useEffect(() => {
+    const calculateStatewiseTimeSeries = (data) => {
+      const statewiseSeries = {};
+      data.forEach((d) => {
+        const date = moment(d.date, 'DD-MMM-YY').format('YYYY-MM-DD');
+        const status = d.status.toLowerCase();
+        states.forEach((st) => {
+          const code = st.statecode.toLowerCase();
+          const name = st.state;
+          if (statewiseSeries[name] === undefined) {
+            statewiseSeries[name] = {};
+          }
+          if (statewiseSeries[name][date] === undefined) {
+            statewiseSeries[name][date] = {};
+          }
+          if (statewiseSeries[name][date][status] === undefined) {
+            statewiseSeries[name][date][status] = parseInt(d[code] || 0);
+          }
+        });
+      });
+      setStateTimeSeries(statewiseSeries);
+    };
+    calculateStatewiseTimeSeries(statesDailyData);
+  }, [states, statesDailyData]);
+
   const onHighlightState = (state, index) => {
     if (!state && !index) setRegionHighlighted(null);
     else setRegionHighlighted({state, index});
   };
+
   const onHighlightDistrict = (district, state, index) => {
     if (!state && !index && !district) setRegionHighlighted(null);
     else setRegionHighlighted({district, state, index});
   };
+
+  const onHighlightMapRegion = (data) => {
+    if (
+      data !== undefined &&
+      data.state !== undefined &&
+      (selectedState === undefined || data.state.state !== selectedState.map)
+    ) {
+      setSelectedState({
+        ...selectedState,
+        map: data.state.state,
+      });
+    }
+  };
+
+  useEffect(() => {
+    const getTimeSeries = (selectData) => {
+      let state = selectData.map;
+      if (selectData.table !== undefined && selectData.table !== null) {
+        state = selectData.table;
+      }
+      if (state === undefined || state === null || state === 'India') {
+        setStateGraphTimeSeries({series: timeseries, state: 'India'});
+        return;
+      }
+      const series = stateTimeSeries[state];
+      if (!series) {
+        return;
+      }
+      const resultSeries = [];
+      const total = {confirmed: 0, recovered: 0, deceased: 0};
+      let dateStr = '2020-01-30';
+      let date = moment(dateStr);
+      const today = moment().format('YYYY-MM-DD');
+      while (dateStr !== today) {
+        const dayData = {
+          confirmed: (series[dateStr] || {}).confirmed || 0,
+          recovered: (series[dateStr] || {}).recovered || 0,
+          deceased: (series[dateStr] || {}).deceased || 0,
+        };
+        total.confirmed += dayData.confirmed;
+        total.recovered += dayData.recovered;
+        total.deceased += dayData.deceased;
+        resultSeries.push({
+          dailyconfirmed: dayData.confirmed,
+          dailydeceased: dayData.deceased,
+          dailyrecovered: dayData.recovered,
+          date: date.format('DD MMMM '),
+          totalconfirmed: total.confirmed,
+          totaldeceased: total.deceased,
+          totalrecovered: total.recovered,
+        });
+
+        date = date.add(1, 'days');
+        dateStr = date.format('YYYY-MM-DD');
+      }
+      // console.log(state, stateTimeSeries[state], resultSeries);
+      setStateGraphTimeSeries({
+        series: validateCTS(resultSeries),
+        state: state,
+      });
+    };
+    getTimeSeries(selectedState);
+  }, [selectedState, stateTimeSeries, timeseries]);
 
   return (
     <React.Fragment>
@@ -117,11 +238,12 @@ function Home(props) {
                 stateDistrictWiseData={stateDistrictWiseData}
                 stateTestData={stateTestData}
                 regionHighlighted={regionHighlighted}
+                setMapRegionHighlighted={onHighlightMapRegion}
               />
 
               <div
                 className="timeseries-header fadeInUp"
-                style={{animationDelay: '2.5s'}}
+                style={{animationDelay: '2.3s'}}
               >
                 <h1>Spread Trends</h1>
                 <div className="tabs">
@@ -177,7 +299,9 @@ function Home(props) {
               </div>
 
               <TimeSeries
-                timeseries={timeseries}
+                stateName={stateGraphTimeSeries.state}
+                timeseries={stateGraphTimeSeries.series}
+                key={'main'}
                 type={graphOption}
                 mode={timeseriesMode}
                 logMode={timeseriesLogMode}
