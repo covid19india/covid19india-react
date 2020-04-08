@@ -26,8 +26,13 @@ function NationalityChart(props) {
   }
 
   const nationality = {};
+  let unknown = 0;
 
   props.data.forEach((patient) => {
+    if (!patient.nationality) {
+      unknown++;
+      return;
+    }
     if (!nationality.hasOwnProperty(patient.nationality.toLowerCase())) {
       nationality[patient.nationality.toLowerCase()] = 0;
     }
@@ -113,6 +118,7 @@ function NationalityChart(props) {
       <div className="chart-content doughnut">
         <Doughnut data={chartData} options={chartOptions} />
       </div>
+      <div className="chart-note">*Awaiting details for {unknown} patients</div>
     </div>
   );
 }
