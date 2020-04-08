@@ -643,7 +643,7 @@ table {
       cursor: pointer;
 
       &:hover {
-        background: $gray-hover !important;
+        background: #f1f1f1 !important;
 
         .dropdown {
             background: $gray-hover;
@@ -725,7 +725,11 @@ table {
 
     .district-heading {
       transform: translateX(1rem);
-      background: $gray-light;
+      /*background: $gray-light;*/
+      position: sticky;
+      top: 45px;
+      background-color: #f1f1f1;
+      z-index: 99;
 
       td {
         font-size: 0.75rem;
@@ -733,6 +737,7 @@ table {
         padding: 0.45rem;
         color: $gray-dark;
         background: $gray-light;
+        box-shadow: 0 -11px #ffffff;
 
         .heading-content {
           display: flex;
@@ -2499,7 +2504,7 @@ select {
   }
 
   .Banner {
-    height: 7rem;
+    height: 5rem;
 
     .snippet {
       width: 100%;
