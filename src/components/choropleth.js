@@ -24,17 +24,12 @@ function ChoroplethMap({
 
   const ready = useCallback(
     (geoData) => {
-      d3.selectAll('svg#chart > *').style('display', 'none');
       const propertyField = propertyFieldMap[mapMeta.mapType];
       const maxInterpolation = 0.8;
-
       const svg = d3.select(choroplethMap.current);
-      const mapSelection = svg.select(`.${mapMeta.graphObjectName}`);
-      if (!mapSelection.empty()) {
-        console.log('here');
-        mapSelection.style('display', 'block');
-        return;
-      }
+
+      // Hide all objects on map (don't delete to cache)
+      d3.selectAll('svg#chart > *').style('display', 'none');
 
       const handleMouseover = (name) => {
         try {
@@ -78,55 +73,70 @@ function ChoroplethMap({
         .nice();
 
       let onceTouchedRegion = null;
+      let g;
+      const mapSelection = svg.select(`.${mapMeta.graphObjectName}`);
+      if (mapSelection.empty()) {
+        g = svg.append('g').attr('class', mapMeta.graphObjectName);
+        g.append('g')
+          .attr('class', 'states')
+          .selectAll('path')
+          .data(topology.features)
+          .enter()
+          .append('path')
+          .attr('class', 'path-region')
+          .attr('fill', function (d) {
+            const n = parseInt(mapData[d.properties[propertyField]]) || 0;
+            const color = n === 0 ? '#ffffff' : colorScale(n);
+            return color;
+          })
+          .attr('d', path)
+          .attr('pointer-events', 'all')
+          .on('mouseover', (d) => {
+            handleMouseover(d.properties[propertyField]);
+            const target = d3.event.target;
+            d3.select(target.parentNode.appendChild(target)).attr(
+              'class',
+              'map-hover'
+            );
+          })
+          .on('mouseleave', (d) => {
+            const target = d3.event.target;
+            d3.select(target).attr('class', 'path-region map-default');
+            if (onceTouchedRegion === d) onceTouchedRegion = null;
+          })
+          .on('touchstart', (d) => {
+            if (onceTouchedRegion === d) onceTouchedRegion = null;
+            else onceTouchedRegion = d;
+          })
+          .on('click', clicked)
+          .style('cursor', 'pointer')
+          .append('title')
+          .text(function (d) {
+            const value = mapData[d.properties[propertyField]] || 0;
+            return (
+              Number(
+                parseFloat(100 * (value / (statistic.total || 0.001))).toFixed(
+                  2
+                )
+              ).toString() +
+              '% from ' +
+              toTitleCase(d.properties[propertyField])
+            );
+          });
 
-      const g = svg.append('g').attr('class', mapMeta.graphObjectName);
-      g.append('g')
-        .attr('class', 'states')
-        .selectAll('path')
-        .data(topology.features)
-        .enter()
-        .append('path')
-        .attr('class', 'path-region')
-        .attr('fill', function (d) {
-          const n = parseInt(mapData[d.properties[propertyField]]) || 0;
-          const color = n === 0 ? '#ffffff' : colorScale(n);
-          return color;
-        })
-        .attr('d', path)
-        .attr('pointer-events', 'all')
-        .on('mouseover', (d) => {
-          handleMouseover(d.properties[propertyField]);
-        })
-        .on('mouseleave', (d) => {
-          setSelectedRegion(null);
-          if (onceTouchedRegion === d) onceTouchedRegion = null;
-        })
-        .on('touchstart', (d) => {
-          if (onceTouchedRegion === d) onceTouchedRegion = null;
-          else onceTouchedRegion = d;
-        })
-        .on('click', clicked)
-        .style('cursor', 'pointer')
-        .append('title')
-        .text(function (d) {
-          const value = mapData[d.properties[propertyField]] || 0;
-          return (
-            Number(
-              parseFloat(100 * (value / (statistic.total || 0.001))).toFixed(2)
-            ).toString() +
-            '% from ' +
-            toTitleCase(d.properties[propertyField])
+        g.append('path')
+          .attr('stroke', '#ff073a20')
+          .attr('fill', 'none')
+          .attr('stroke-width', 2)
+          .attr(
+            'd',
+            path(
+              topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName])
+            )
           );
-        });
-
-      g.append('path')
-        .attr('stroke', '#ff073a20')
-        .attr('fill', 'none')
-        .attr('stroke-width', 2)
-        .attr(
-          'd',
-          path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName]))
-        );
+      } else {
+        g = mapSelection.style('display', 'block');
+      }
 
       function clicked(d) {
         if (onceTouchedRegion) return;
@@ -177,29 +187,18 @@ function ChoroplethMap({
       // Reset on clicking outside map
       svg.on('click', () => {
         changeMap('India');
-        // svg
-        //   .call(
-        //     zoom.transform,
-        //     d3.zoomIdentity,
-        //   );
-        // reset(750);
-      })
-      svg
-        .call(
-          zoom.transform,
-          d3.zoomIdentity,
-        );
+      });
       // Reset zoom
-      // reset(0);
+      if (mapMeta.mapType === MAP_TYPES.COUNTRY) reset(750);
 
       /* LEGEND */
       d3.selectAll('svg#legend > *').remove();
       const svgLegend = d3.select(choroplethLegend.current);
       // Colorbar
-      const margin = {left: 0.05 * width, right: 0.2 * width};
+      const margin = {left: 0.02 * width, right: 0.2 * width};
       const barWidth = width - margin.left - margin.right;
       const heightLegend = +svgLegend.attr('height');
-      const numTicks = Math.min(6, statistic.maxConfirmed)
+      const numTicks = Math.min(6, statistic.maxConfirmed);
       svgLegend
         .append('g')
         .style('transform', `translateX(${margin.left}px)`)
