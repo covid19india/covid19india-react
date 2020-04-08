@@ -1,12 +1,18 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as d3 from 'd3';
+import {
+  preprocessTimeseries,
+  sliceTimeseriesFromEnd,
+} from '../utils/common-functions';
 
 function TimeSeries(props) {
+  const [lastDaysCount, setLastDaysCount] = useState(Infinity);
   const [timeseries, setTimeseries] = useState([]);
   const [datapoint, setDatapoint] = useState({});
   const [index, setIndex] = useState(10);
   const [mode, setMode] = useState(props.mode);
-  const [update, setUpdate] = useState(-1);
+  const [logMode, setLogMode] = useState(props.logMode);
+  const [moving, setMoving] = useState(false);
 
   const graphElement1 = useRef(null);
   const graphElement2 = useRef(null);
@@ -17,20 +23,36 @@ function TimeSeries(props) {
 
   useEffect(() => {
     if (props.timeseries.length > 1) {
-      setTimeseries(props.timeseries);
+      const slicedTimeseries = sliceTimeseriesFromEnd(
+        props.timeseries,
+        lastDaysCount
+      );
+      setIndex(slicedTimeseries.length - 1);
+      setTimeseries(slicedTimeseries);
     }
-  }, [props.timeseries]);
+  }, [props.timeseries, lastDaysCount]);
 
   useEffect(() => {
     setMode(props.mode);
-    setUpdate((u) => u + 1);
   }, [props.mode]);
+
+  useEffect(() => {
+    setLogMode(props.logMode);
+  }, [props.logMode]);
 
   const graphData = useCallback(
     (timeseries) => {
-      const data = timeseries;
-      setDatapoint(timeseries[timeseries.length - 1]);
-      setIndex(timeseries.length - 1);
+      // Margins
+      const margin = {top: 0, right: 40, bottom: 60, left: 35};
+      const chartRight = 650 - margin.right;
+      const chartBottom = 200 - margin.bottom;
+
+      const ts = preprocessTimeseries(timeseries);
+      const T = ts.length;
+      const yBuffer = 1.1;
+
+      setDatapoint(timeseries[T - 1]);
+      setIndex(T - 1);
 
       const svg1 = d3.select(graphElement1.current);
       const svg2 = d3.select(graphElement2.current);
@@ -39,25 +61,27 @@ function TimeSeries(props) {
       const svg5 = d3.select(graphElement5.current);
       const svg6 = d3.select(graphElement6.current);
 
-      // Margins
-      const margin = {top: 0, right: 20, bottom: 50, left: 20};
-      const width = 650 - margin.left - margin.right;
-      const height = 200 - margin.top - margin.bottom;
-
-      const dateMin = new Date(data[0]['date'] + '2020');
+      const dateMin = new Date(ts[0]['date']);
       dateMin.setDate(dateMin.getDate() - 1);
-      const dateMax = new Date(data[timeseries.length - 1]['date'] + '2020');
+      const dateMax = new Date(ts[T - 1]['date']);
       dateMax.setDate(dateMax.getDate() + 1);
 
-      const x = d3
+      const xScale = d3
         .scaleTime()
         .domain([dateMin, dateMax])
-        .range([margin.left, width]);
+        .range([margin.left, chartRight]);
 
-      const indexScale = d3
-        .scaleLinear()
-        .domain([0, timeseries.length])
-        .range([margin.left, width]);
+      const xAxis = (g) =>
+        g
+          .attr('class', 'x-axis')
+          .call(d3.axisBottom(xScale).ticks(8))
+          .style('transform', `translateY(${chartBottom}px)`);
+
+      const yAxis = (g, yScale) =>
+        g
+          .attr('class', 'y-axis')
+          .call(d3.axisRight(yScale).ticks(4, '0~s').tickPadding(5))
+          .style('transform', `translateX(${chartRight}px)`);
 
       // Arrays of objects
       const svgArray = [svg1, svg2, svg3, svg4, svg5, svg6];
@@ -77,175 +101,232 @@ function TimeSeries(props) {
         '#28a745',
         '#6c757d',
       ];
-      const maxDataTypes = Array.from({length: svgArray.length}, (_, i) => {
-        return d3.max(data, (d) => {
-          return +d[dataTypes[i]];
-        });
+      const totalCharts = new Set([
+        'totalconfirmed',
+        'totalrecovered',
+        'totaldeceased',
+      ]);
+
+      let uniformScaleMin = Infinity;
+      totalCharts.forEach((type) => {
+        uniformScaleMin = Math.min(
+          uniformScaleMin,
+          d3.min(ts, (d) => d[type])
+        );
       });
-      const yScales = maxDataTypes.map((d) => {
-        return d3
-          .scaleLinear()
-          .domain([-d / 10, d])
-          .range([height, margin.top]);
+      const yScaleUniformLinear = d3
+        .scaleLinear()
+        .clamp(true)
+        .domain([
+          uniformScaleMin,
+          yBuffer * d3.max(ts, (d) => d.totalconfirmed),
+        ])
+        .nice()
+        .range([chartBottom, margin.top]);
+
+      const yScaleUniformLog = d3
+        .scaleLog()
+        .clamp(true)
+        .domain([
+          Math.max(1, uniformScaleMin),
+          yBuffer * d3.max(ts, (d) => d.totalconfirmed),
+        ])
+        .nice()
+        .range([chartBottom, margin.top]);
+
+      const yScaleDailyUniform = d3
+        .scaleLinear()
+        .domain([0, yBuffer * d3.max(ts, (d) => d.dailyconfirmed)])
+        .nice()
+        .range([chartBottom, margin.top]);
+
+      const yScales = dataTypes.map((type) => {
+        if (totalCharts.has(type)) {
+          const yScaleLinear = d3
+            .scaleLinear()
+            .clamp(true)
+            .domain([
+              d3.min(ts, (d) => d[type]),
+              yBuffer * d3.max(ts, (d) => d[type]),
+            ])
+            .nice()
+            .range([chartBottom, margin.top]);
+          const yScaleLog = d3
+            .scaleLog()
+            .clamp(true)
+            .domain([
+              Math.max(
+                1,
+                d3.min(ts, (d) => d[type])
+              ),
+              yBuffer * d3.max(ts, (d) => d[type]),
+            ])
+            .nice()
+            .range([chartBottom, margin.top]);
+          if (logMode) return mode ? yScaleUniformLog : yScaleLog;
+          else return mode ? yScaleUniformLinear : yScaleLinear;
+        } else {
+          const yScaleLinear = d3
+            .scaleLinear()
+            .clamp(true)
+            .domain([0, yBuffer * d3.max(ts, (d) => d[type])])
+            .nice()
+            .range([chartBottom, margin.top]);
+          return mode ? yScaleDailyUniform : yScaleLinear;
+        }
       });
 
       /* Focus dots */
-      const focus = svgArray.map((d, i) => {
-        const y = mode ? yScales[0] : yScales[i];
-        return d
-          .append('g')
-          .append('circle')
+      const focus = svgArray.map((svg, i) => {
+        return svg
+          .selectAll('.focus')
+          .data([ts[T - 1]], (d) => d.date)
+          .join('circle')
+          .attr('class', 'focus')
           .attr('fill', colors[i])
           .attr('stroke', colors[i])
-          .attr('r', 5)
-          .attr('cx', x(new Date(data[timeseries.length - 1]['date'] + '2020')))
-          .attr('cy', y(data[timeseries.length - 1][dataTypes[i]]));
+          .attr('r', 5);
       });
-
-      function mouseout() {
-        setDatapoint(data[timeseries.length - 1]);
-        setIndex(timeseries.length - 1);
-        focus.forEach((d, i) => {
-          const y = mode ? yScales[0] : yScales[i];
-          d.attr(
-            'cx',
-            x(new Date(data[timeseries.length - 1]['date'] + '2020'))
-          ).attr('cy', y(data[timeseries.length - 1][dataTypes[i]]));
-        });
-      }
 
       function mousemove() {
         const xm = d3.mouse(this)[0];
-        const i = Math.round(indexScale.invert(xm));
-        if (0 <= i && i < timeseries.length) {
-          const d = data[i];
-          setDatapoint(d);
+        const date = xScale.invert(xm);
+        const bisectDate = d3.bisector((d) => d.date).left;
+        let i = bisectDate(ts, date, 1);
+        if (0 <= i && i < T) {
+          if (date - ts[i - 1].date < ts[i].date - date) --i;
+          setDatapoint(timeseries[i]);
           setIndex(i);
+          setMoving(true);
+          const d = ts[i];
           focus.forEach((f, j) => {
-            const y = mode ? yScales[0] : yScales[j];
-            f.attr('cx', x(new Date(d['date'] + '2020'))).attr(
-              'cy',
-              y(d[dataTypes[j]])
-            );
+            const yScale = yScales[j];
+            const type = dataTypes[j];
+            f.attr('cx', xScale(d.date)).attr('cy', yScale(d[type]));
           });
         }
       }
 
-      /* Begin drawing charts */
-      svgArray.forEach((s, i) => {
-        /* X axis */
-        s.append('g')
-          .attr('transform', 'translate(0,' + height + ')')
-          .attr('class', 'axis')
-          .call(d3.axisBottom(x));
-
-        /* Y axis */
-        s.append('g')
-          .attr('transform', `translate(${width}, ${0})`)
-          .attr('class', 'axis')
-          .call(
-            d3
-              .axisRight(mode ? yScales[0] : yScales[i])
-              .ticks(5)
-              .tickPadding(5)
-              .tickFormat((tick) => {
-                if (Math.floor(tick) === tick) return tick;
-              })
+      function mouseout() {
+        setDatapoint(timeseries[T - 1]);
+        setIndex(T - 1);
+        setMoving(false);
+        focus.forEach((f, j) => {
+          const yScale = yScales[j];
+          const type = dataTypes[j];
+          f.attr('cx', xScale(ts[T - 1].date)).attr(
+            'cy',
+            yScale(ts[T - 1][type])
           );
+        });
+      }
 
-        /* Focus dots */
-        s.on('mousemove', mousemove)
+      /* Begin drawing charts */
+      svgArray.forEach((svg, i) => {
+        // Transition interval
+        const t = svg.transition().duration(500);
+
+        const type = dataTypes[i];
+        const color = colors[i];
+        const yScale = yScales[i];
+        // WARNING: Bad code ahead.
+        /* X axis */
+        if (svg.select('.x-axis').empty()) {
+          svg.append('g').attr('class', 'x-axis').call(xAxis);
+        } else {
+          svg.select('.x-axis').transition(t).call(xAxis);
+        }
+        /* Y axis */
+        if (svg.select('.y-axis').empty()) {
+          svg.append('g').call(yAxis, yScale);
+        } else {
+          svg.select('.y-axis').transition(t).call(yAxis, yScale);
+        }
+        // ^This block of code should be written in a more d3 way following the
+        //  General Update Pattern. Can't find of a way to do that within React.
+
+        /* Path dots */
+        svg
+          .selectAll('.dot')
+          .data(ts, (d) => d.date)
+          .join((enter) => enter.append('circle').attr('cy', chartBottom))
+          .attr('class', 'dot')
+          .attr('fill', color)
+          .attr('stroke', color)
+          .attr('r', 3)
+          .transition(t)
+          .attr('cx', (d) => xScale(d.date))
+          .attr('cy', (d) => yScale(d[type]));
+
+        focus[i]
+          .transition(t)
+          .attr('cx', (d) => xScale(d.date))
+          .attr('cy', (d) => yScale(d[type]));
+
+        /* Add trend path */
+        if (totalCharts.has(type)) {
+          const path = svg
+            .selectAll('.trend')
+            .data([[...ts].reverse()])
+            .join('path')
+            .attr('class', 'trend')
+            .attr('fill', 'none')
+            .attr('stroke', color + '99')
+            .attr('stroke-width', 5);
+
+          // HACK
+          // Path interpolation is non-trivial. Ideally, a custom path tween
+          // function should be defined which takes care that old path dots
+          // transition synchronously along with the path transition. This hack
+          // simulates that behaviour.
+          if (path.attr('d')) {
+            const n = path.node().getTotalLength();
+            const p = path.node().getPointAtLength(n);
+            // Append points at end of path for better interpolation
+            path.attr(
+              'd',
+              () => path.attr('d') + `L${p.x},${p.y}`.repeat(3 * T)
+            );
+          }
+
+          path.transition(t).attr(
+            'd',
+            d3
+              .line()
+              .x((d) => xScale(d.date))
+              .y((d) => yScale(d[type]))
+              .curve(d3.curveCardinal)
+          );
+          // Using d3-interpolate-path
+          // .attrTween('d', function (d) {
+          //   var previous = path.attr('d');
+          //   var current = line(d);
+          //   return interpolatePath(previous, current);
+          // });
+        } else {
+          svg
+            .selectAll('.stem')
+            .data(ts, (d) => d.date)
+            .join((enter) => enter.append('line').attr('y2', chartBottom))
+            .attr('class', 'stem')
+            .style('stroke', color + '99')
+            .style('stroke-width', 4)
+            .attr('y1', chartBottom)
+            .transition(t)
+            .attr('x1', (d) => xScale(d.date))
+            .attr('x2', (d) => xScale(d.date))
+            .attr('y2', (d) => yScale(d[type]));
+        }
+
+        svg
+          .on('mousemove', mousemove)
           .on('touchmove', mousemove)
           .on('mouseout', mouseout)
           .on('touchend', mouseout);
-
-        /* Path dots */
-        const dots = s
-          .selectAll('.dot')
-          .data(data)
-          .enter()
-          .append('circle')
-          .attr('fill', colors[i])
-          .attr('stroke', colors[i])
-          .attr('cursor', 'pointer')
-          .attr('cx', (d) => {
-            return x(new Date(d['date'] + '2020'));
-          })
-          .attr('cy', (d) => {
-            if (mode) return yScales[0](d[dataTypes[i]]);
-            return yScales[i](d[dataTypes[i]]);
-          });
-
-        /* Paths */
-        if (i < Math.floor(svgArray.length / 2)) {
-          s.append('path')
-            .datum(data)
-            .attr('fill', 'none')
-            .attr('stroke', colors[i] + '99')
-            .attr('stroke-width', 5)
-            .attr('cursor', 'pointer')
-            .attr(
-              'd',
-              d3
-                .line()
-                .x((d) => {
-                  return x(new Date(d['date'] + '2020'));
-                })
-                .y((d) => {
-                  if (mode) return yScales[0](d[dataTypes[i]]);
-                  return yScales[i](d[dataTypes[i]]);
-                })
-                .curve(d3.curveCardinal)
-            );
-          dots.attr('r', 3);
-        } else {
-          s.selectAll('stem-line')
-            .data(data)
-            .enter()
-            .append('line')
-            .attr('x1', (d) => {
-              return x(new Date(d['date'] + '2020'));
-            })
-            .attr('y1', height)
-            .attr('x2', (d) => {
-              return x(new Date(d['date'] + '2020'));
-            })
-            .attr('y2', (d) => {
-              return mode
-                ? yScales[0](d[dataTypes[i]])
-                : yScales[i](d[dataTypes[i]]);
-            })
-            .style('stroke', colors[i] + '99')
-            .style('stroke-width', 4);
-          dots.attr('r', 2);
-        }
       });
     },
-    [mode]
+    [logMode, mode]
   );
-
-  const refreshGraphs = useCallback(() => {
-    const graphs = [
-      graphElement1,
-      graphElement2,
-      graphElement3,
-      graphElement4,
-      graphElement5,
-      graphElement6,
-    ];
-    for (let i = 0; i <= graphs.length; i++) {
-      if (i === graphs.length) {
-        graphData(timeseries);
-        return;
-      } else d3.select(graphs[i].current).selectAll('*').remove();
-    }
-  }, [timeseries, graphData]);
-
-  useEffect(() => {
-    if (update > 0) {
-      refreshGraphs();
-    }
-  }, [update, refreshGraphs]);
 
   useEffect(() => {
     if (timeseries.length > 1) {
@@ -253,10 +334,17 @@ function TimeSeries(props) {
     }
   }, [timeseries, graphData]);
 
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  const lastDate = new Date(datapoint['date'] + '2020');
+  const isYesterday =
+    lastDate.getMonth() === yesterdayDate.getMonth() &&
+    lastDate.getDate() === yesterdayDate.getDate();
+
   return (
     <div
       className="TimeSeries-Parent fadeInUp"
-      style={{animationDelay: '1.7s'}}
+      style={{animationDelay: '2.7s'}}
     >
       <div
         className="timeseries"
@@ -264,7 +352,12 @@ function TimeSeries(props) {
       >
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed {datapoint['date']}</h5>
+            <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['totalconfirmed']}</h2>
               <h6>
@@ -292,7 +385,12 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>Recovered {datapoint['date']}</h5>
+            <h5 className={`${!moving ? 'title' : ''}`}>Recovered</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['totalrecovered']}</h2>
               <h6>
@@ -320,9 +418,11 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
-            <h5>
-              Deceased <br />
-              {datapoint['date']}
+            <h5 className={`${!moving ? 'title' : ''}`}>Deceased</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
             </h5>
             <div className="stats-bottom">
               <h2>{datapoint['totaldeceased']}</h2>
@@ -356,7 +456,12 @@ function TimeSeries(props) {
       >
         <div className="svg-parent">
           <div className="stats">
-            <h5>Confirmed {datapoint['date']}</h5>
+            <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailyconfirmed']}</h2>
               <h6>
@@ -384,7 +489,12 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5>Recovered {datapoint['date']}</h5>
+            <h5 className={`${!moving ? 'title' : ''}`}>Recovered</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailyrecovered']}</h2>
               <h6>
@@ -412,9 +522,11 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
-            <h5>
-              Deceased <br />
-              {datapoint['date']}
+            <h5 className={`${!moving ? 'title' : ''}`}>Deceased</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
             </h5>
             <div className="stats-bottom">
               <h2>{datapoint['dailydeceased']}</h2>
@@ -440,6 +552,32 @@ function TimeSeries(props) {
             preserveAspectRatio="xMidYMid meet"
           />
         </div>
+      </div>
+
+      <div className="pills" style={{marginTop: '32px', textAlign: 'right'}}>
+        <button
+          type="button"
+          onClick={() => setLastDaysCount(Infinity)}
+          className={lastDaysCount === Infinity ? 'selected' : ''}
+        >
+          All
+        </button>
+        <button
+          type="button"
+          onClick={() => setLastDaysCount(30)}
+          className={lastDaysCount === 30 ? 'selected' : ''}
+          aria-label="1 month"
+        >
+          1M
+        </button>
+        <button
+          type="button"
+          onClick={() => setLastDaysCount(14)}
+          className={lastDaysCount === 14 ? 'selected' : ''}
+          aria-label="14 days"
+        >
+          14D
+        </button>
       </div>
     </div>
   );
