@@ -411,7 +411,11 @@ export default function ({
   }, [panelRegion, stateTestData, testObj]);
 
   return (
-    <div className="MapExplorer fadeInUp" style={{animationDelay: '1.5s'}}>
+    <div
+      id="main-map"
+      className="MapExplorer fadeInUp"
+      style={{animationDelay: '1.2s'}}
+    >
       <div className="header">
         <h1>{currentMap.name}</h1>
         <h6>
