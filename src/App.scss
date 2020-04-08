@@ -2662,6 +2662,13 @@ select {
   }
 }
 
+.floating-action-btn {
+  z-index: 10000;
+
+  @media screen and (min-width: 1200px) {
+    display: none !important;
+  }
+}
 
 /* Animation Support */
 

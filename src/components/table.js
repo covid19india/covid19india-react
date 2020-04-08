@@ -1,5 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
+import * as Icon from 'react-feather';
+import {
+  Container,
+  Button,
+  lightColors,
+  darkColors,
+} from 'react-floating-action-button';
+import ScrollIntoView from 'react-scroll-into-view';
 
 import Row from './row';
 
@@ -16,6 +24,7 @@ function Table(props) {
       ? localStorage.getItem('state.isAscending') === 'true'
       : false,
   });
+  const [showFloatingButton, setShowFloatingButton] = useState(false);
 
   useEffect(() => {
     if (props.summary === true) {
@@ -103,7 +112,24 @@ function Table(props) {
 
   return (
     <React.Fragment>
-      <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1.5s'}}>
+      {showFloatingButton && (
+        <Container className="floating-action-btn fadeInUp">
+          <ScrollIntoView selector="#main-map" smooth={true}>
+            <Button
+              tooltip="View in map"
+              rotate={false}
+              onClick={() => setShowFloatingButton(false)}
+              styles={{
+                backgroundColor: darkColors.lighterRed,
+                color: lightColors.white,
+              }}
+            >
+              <Icon.ArrowDownCircle />
+            </Button>
+          </ScrollIntoView>
+        </Container>
+      )}
+      <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1s'}}>
         Compiled from State Govt. numbers <Link to="/faq">Know More</Link>
       </h5>
       <table className="table fadeInUp" style={{animationDelay: '1.8s'}}>
@@ -259,6 +285,7 @@ function Table(props) {
                   onHighlightState={props.onHighlightState}
                   onHighlightDistrict={props.onHighlightDistrict}
                   handleReveal={handleReveal}
+                  setShowFloatingButton={setShowFloatingButton}
                 />
               );
             }
