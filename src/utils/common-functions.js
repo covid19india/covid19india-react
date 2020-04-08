@@ -125,7 +125,7 @@ export const parseStateTimeseries = ({states_daily: data}) => {
 
   for (let i = 0; i < data.length; i += 3) {
     const date = moment(data[i].date, 'DD-MMM-YY');
-    Object.entries(statewiseSeries).map(([k, v]) => {
+    Object.entries(statewiseSeries).forEach(([k, v]) => {
       const stateCode = k.toLowerCase();
       const prev = v[v.length - 1] || {};
       v.push({
