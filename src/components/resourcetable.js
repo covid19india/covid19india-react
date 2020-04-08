@@ -242,7 +242,7 @@ function ResourceTable({columns, data, isDesktop}) {
         {page.map((row, i) => {
           prepareRow(row);
           {
-            console.log(row);
+            // consoleconsole.log(row);
           }
           return (
             <ExpansionPanel key={row.id} classes={{root: classesPanel.root}}>

@@ -61,7 +61,7 @@ function Resources(props) {
       setFetched(true);
       // console.log(resourcedict);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
   const memocols = React.useMemo(
