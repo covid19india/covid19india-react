@@ -180,7 +180,7 @@ function Row(props) {
           </div>
         </td>
       </tr>
-
+      <div>
       <tr
         className={`district-heading`}
         style={{display: props.reveal && !props.total ? '' : 'none'}}
@@ -292,11 +292,12 @@ function Row(props) {
           </td>
         </tr>
       )}
-
+      </div>
       <tr
         className={`spacer`}
         style={{display: props.reveal && !props.total ? '' : 'none'}}
       >
+
         <td></td>
         <td></td>
         <td></td>
