@@ -625,7 +625,7 @@ h6 {
       span {
         display: inline-block;
         transition: color 0.2s ease-in-out;
-        
+
         &:hover {
           color: $gray;
         }
@@ -1019,7 +1019,7 @@ table {
         }
       }
     }
-	
+
     .table__count-text {
       margin-left: 0.25rem;
     }
@@ -1104,7 +1104,7 @@ table {
       background: $gray-hover;
     }
   }
-  
+
 	.table__title-wrapper {
 		position: relative;
 	}
@@ -1394,7 +1394,7 @@ table {
     margin-left: 1rem;
     display: flex;
     flex-direction: row;
-    
+
     label{
       font-size: 0.75rem;
       margin-right: 0.2rem;
@@ -1502,8 +1502,8 @@ input.switch:checked::after {
     }
 
     &.is-green {
-      h5 { 
-        color: $green-mid; 
+      h5 {
+        color: $green-mid;
         &.title {
           color: $green;
         }
@@ -1514,8 +1514,8 @@ input.switch:checked::after {
     }
 
     &.is-gray {
-      h5 { 
-        color: $gray-mid; 
+      h5 {
+        color: $gray-mid;
         &.title {
           color: $gray;
         }
@@ -1544,11 +1544,12 @@ input.switch:checked::after {
     height: 10rem;
 
     svg {
+      width: 100%;
       .domain,
       .tick,
       line {
         stroke: $cherry;
-        stroke-width: 2;
+        stroke-width: 1.5;
       }
 
       text {
@@ -1556,7 +1557,7 @@ input.switch:checked::after {
         text-transform: uppercase;
         color: $cherry-mid;
         stroke: transparent;
-        font-size: 12px;
+        font-size: 9px;
         font-weight: 600;
       }
     }
@@ -2099,7 +2100,7 @@ footer {
         }
       }
     }
-    
+
     &.age1-9 {
       background: #006400;
     }
@@ -2200,7 +2201,7 @@ footer {
         display: flex;
         flex-direction: column;
         & > * {
-          align-self: flex-end; 
+          align-self: flex-end;
         }
 
         h5 {
@@ -2382,7 +2383,7 @@ footer {
     font-weight: 600;
   }
 
-  .summary { 
+  .summary {
     flex-direction: row-reverse;
     flex-wrap: wrap-reverse
   }
@@ -2485,6 +2486,7 @@ select {
 }
 
 .pills {
+  text-align: right;
   >button {
     border: 1px solid #c9d6fb;
     background-color: #edf1fe;
@@ -2737,7 +2739,7 @@ select {
     }
   }
 }
-  
+
 
 @media (max-width: 769px) {
   .TimeSeries,
@@ -2796,11 +2798,6 @@ select {
   .timeseries {
     .svg-parent {
       width: 100%;
-      svg {
-        text {
-          font-size: 0.95rem;
-        }
-      }
     }
   }
 
