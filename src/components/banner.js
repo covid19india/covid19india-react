@@ -38,15 +38,19 @@ function Banner(props) {
     return () => clearInterval(interval);
   }, [snippetChooser, snippets]);
 
-  return (
-    <div
-      onClick={() => snippetChooser(0, snippets.length - 1)}
-      className="Banner fadeInUp"
-      style={{animationDelay: '0.2s'}}
-    >
-      <div className="snippet">{snippet ? snippet.banner : ''} &nbsp;</div>
-    </div>
-  );
+  if (window.location.pathname !== '/database') {
+    return (
+      <div
+        onClick={() => snippetChooser(0, snippets.length - 1)}
+        className="Banner fadeInUp"
+        style={{animationDelay: '0.8s'}}
+      >
+        <div className="snippet">{snippet ? snippet.banner : ''} &nbsp;</div>
+      </div>
+    );
+  } else {
+    return <div></div>;
+  }
 }
 
 export default Banner;
