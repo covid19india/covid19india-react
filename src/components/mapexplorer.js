@@ -346,7 +346,7 @@ export default function ({
       }
       setCurrentMap(newMap);
       if (newMap.mapType === MAP_TYPES.COUNTRY) {
-        setHoveredRegion(states[1].state, newMap);
+        setHoveredRegion(states[0].state, newMap);
       } else if (newMap.mapType === MAP_TYPES.STATE) {
         const districtData = (stateDistrictWiseData[name] || {districtData: {}})
           .districtData;

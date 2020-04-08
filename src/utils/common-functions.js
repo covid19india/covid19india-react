@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 const months = {
   '01': 'Jan',
   '02': 'Feb',
@@ -124,15 +122,15 @@ export const parseStateTimeseries = ({states_daily: data}) => {
   }, {});
 
   for (let i = 0; i < data.length; i += 3) {
-    const date = moment(data[i].date, 'DD-MMM-YY');
+    const date = new Date(data[i].date);
     Object.entries(statewiseSeries).forEach(([k, v]) => {
       const stateCode = k.toLowerCase();
       const prev = v[v.length - 1] || {};
       v.push({
+        date,
         dailyconfirmed: +data[i][stateCode] || 0,
         dailyrecovered: +data[i + 1][stateCode] || 0,
         dailydeceased: +data[i + 2][stateCode] || 0,
-        date: date.format('DD MMMM '),
         totalconfirmed: +data[i][stateCode] + prev.dailyconfirmed || 0,
         totaldeceased: +data[i + 1][stateCode] + prev.dailyrecovered || 0,
         totalrecovered: +data[i + 2][stateCode] + prev.dailydeceased || 0,
