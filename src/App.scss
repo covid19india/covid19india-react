@@ -1128,18 +1128,17 @@ input.switch:checked::after {
   transition: all 300ms ease-in-out;
 }
 
-.trends-state-name{
+.trends-state-name {
   text-align: center;
 
   select {
     appearance: none;
     background-color: #eee;
-    background-image: linear-gradient(45deg, transparent 50%, #808080 50%), linear-gradient(135deg, #808080 50%, transparent 50%);
+    background-image:
+      linear-gradient(45deg, transparent 50%, #808080 50%),
+      linear-gradient(135deg, #808080 50%, transparent 50%);
     background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
-    background-size:
-      5px 5px,
-      5px 5px,
-      1px 1.5em;
+    background-size: 5px 5px, 5px 5px;
     background-repeat: no-repeat;
     border: 2px solid #e8e8e9;
     border-radius: 4px;
@@ -1149,10 +1148,10 @@ input.switch:checked::after {
     padding: 0.5rem;
     text-transform: uppercase;
     width: auto;
-  }
 
-  select:focus {
-    outline: none;
+    &:focus {
+      outline: none;
+    }
   }
 }
 
@@ -1162,12 +1161,6 @@ input.switch:checked::after {
   flex-direction: column;
   margin-top: 1rem;
   width: 100%;
-
-  h4 {
-    margin: 1rem;
-    color: $gray-dark;
-    width: 10rem;
-  }
 
   .stats {
     padding: 0.25rem;
@@ -2725,13 +2718,6 @@ select {
   }
 }
 
-.floating-action-btn {
-  z-index: 10000;
-
-  @media screen and (min-width: 1200px) {
-    display: none !important;
-  }
-}
 
 /* Animation Support */
 

@@ -1,14 +1,14 @@
 import React, {useState, useEffect, useRef, useLayoutEffect} from 'react';
 import axios from 'axios';
 import {formatDistance, format} from 'date-fns';
+import * as Icon from 'react-feather';
+
 import {
   formatDate,
   formatDateAbsolute,
   preprocessTimeseries,
   parseStateTimeseries,
 } from '../utils/common-functions';
-import moment from 'moment';
-import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
 
 import Table from './table';
@@ -69,7 +69,6 @@ function Home(props) {
     setActiveStateCode(state ? state.statecode : 'TT');
     setIsShowFloatingButtons(true);
   };
-
   const onHighlightDistrict = (district, state, index) => {
     if (!state && !index && !district) return setRegionHighlighted(null);
     setRegionHighlighted({district, state, index});
