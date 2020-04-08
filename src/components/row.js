@@ -155,7 +155,6 @@ function Row(props) {
           </span>
         </td>
       </tr>
-
       <tr
         className={'state-last-update'}
         style={{display: props.reveal && !props.total ? '' : 'none'}}
@@ -180,7 +179,7 @@ function Row(props) {
           </div>
         </td>
       </tr>
-      <div>
+      <div style={{'maxWidth' : '100px'}}>
         <tr
           className={`district-heading`}
           style={{display: props.reveal && !props.total ? '' : 'none'}}
