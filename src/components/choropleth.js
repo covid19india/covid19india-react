@@ -64,7 +64,7 @@ function ChoroplethMap({
 
       let onceTouchedRegion = null;
 
-      svg.on('click', reset);
+      svg.on('click', () => reset(750));
 
       const g = svg.append("g");
 
@@ -123,18 +123,6 @@ function ChoroplethMap({
           path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName]))
         );
 
-      const zoom = d3.zoom()
-          .scaleExtent([1, 8])
-          .on("zoom", zoomed);
-
-      function reset() {
-        svg.transition().duration(750).call(
-          zoom.transform,
-          d3.zoomIdentity,
-          d3.zoomTransform(svg.node()).invert([width / 2, height / 2])
-        );
-      }
-
       function clicked(d) {
         if (onceTouchedRegion) return;
         if (mapMeta.mapType === MAP_TYPES.STATE) return;
@@ -150,9 +138,20 @@ function ChoroplethMap({
           d3.mouse(svg.node())
         )
         .on('end', () => {
-          reset();
           changeMap(d.properties[propertyField], mapMeta.mapType);
         });
+      }
+
+      const zoom = d3.zoom()
+          .scaleExtent([1, 8])
+          .on("zoom", zoomed);
+
+      function reset(t) {
+        svg.transition().duration(t).call(
+          zoom.transform,
+          d3.zoomIdentity,
+          d3.zoomTransform(svg.node()).invert([width / 2, height / 2])
+        );
       }
 
       function zoomed() {
@@ -160,7 +159,7 @@ function ChoroplethMap({
         g.attr("transform", transform);
         g.attr("stroke-width", 1 / transform.k);
       }
-
+      reset(0);
     },
     [
       mapData,
