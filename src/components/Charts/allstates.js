@@ -70,17 +70,16 @@ function AllStatesChart(props) {
     '#342ead',
     '#7D5BA6',
     '#DD7596',
-    '#533B4D',
-    '#6c757d',
+    '#16c8f0',
+    '#f67575',
     '#2b580c',
-    '#DD7596',
-    '#55D6BE',
+    '#9D44B5',
+    '#91132d',
     '#6D9DC5',
     '#2b580c',
-    '#9c5518',
+    '#6c757d',
     '#f67575',
     '#d4f8e8',
-    '#9D44B5',
   ];
 
   let index = 0;
@@ -95,13 +94,13 @@ function AllStatesChart(props) {
     }
 
     datasets.push({
-      borderWidth: 3,
+      borderWidth: 1.5,
       data: statesData.get(key),
       borderCapStyle: 'round',
       pointBackgroundColor: colors[index],
       label: getStateName(key),
       borderColor: colors[index],
-      pointHoverRadius: 2,
+      pointHoverRadius: 0.5,
     });
 
     index++;
@@ -124,7 +123,7 @@ function AllStatesChart(props) {
         radius: 0,
       },
       line: {
-        tension: 0.3,
+        tension: 0,
       },
     },
     layout: {
