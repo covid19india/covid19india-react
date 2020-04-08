@@ -53,6 +53,9 @@ const stateCodes = {
   PY: 'Puducherry',
 };
 
+// Date Lockdown was initiated - 25th March
+const lockdownDate = new Date(2020, 2, 25);
+
 export const getStateName = (code) => {
   return stateCodes[code.toUpperCase()];
 };
@@ -113,4 +116,11 @@ export const preprocessTimeseries = (timeseries) => {
  */
 export function sliceTimeseriesFromEnd(timeseries, days) {
   return timeseries.slice(timeseries.length - days);
+}
+
+export function getDaysFromLockdown() {
+  const today = new Date();
+  const diffTime = Math.abs(today - lockdownDate);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
 }
