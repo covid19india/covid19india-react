@@ -208,17 +208,22 @@ const mapMeta = {
 };
 
 export default function ({
+  forwardRef,
   states,
   stateDistrictWiseData,
   regionHighlighted,
-  setMapRegionHighlighted,
+  onMapHighlightChange,
 }) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
-    const region = getRegionFromState(states[1]);
+    if (currentHoveredRegion.state) onMapHighlightChange(currentHoveredRegion);
+  }, [regionHighlighted, currentHoveredRegion, onMapHighlightChange]);
+
+  useEffect(() => {
+    const region = getRegionFromState(states[0]);
     setCurrentHoveredRegion(region);
   }, [states]);
 
@@ -367,9 +372,9 @@ export default function ({
 
   return (
     <div
-      id="main-map"
       className="MapExplorer fadeInUp"
-      style={{animationDelay: '1.2s'}}
+      style={{animationDelay: '1.5s'}}
+      ref={forwardRef}
     >
       <div className="header">
         <h1>{currentMap.name}</h1>

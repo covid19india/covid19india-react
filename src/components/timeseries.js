@@ -1,9 +1,6 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as d3 from 'd3';
-import {
-  preprocessTimeseries,
-  sliceTimeseriesFromEnd,
-} from '../utils/common-functions';
+import { sliceTimeseriesFromEnd } from '../utils/common-functions';
 import {useResizeObserver} from '../utils/hooks';
 
 function TimeSeries(props) {
@@ -49,7 +46,7 @@ function TimeSeries(props) {
   }, [props.type]);
 
   const graphData = useCallback(
-    (timeseries) => {
+    (ts) => {
       if (!dimensions) return;
       const width = dimensions.width;
       const height = dimensions.height;
@@ -59,7 +56,6 @@ function TimeSeries(props) {
       const chartRight = width - margin.right;
       const chartBottom = height - margin.bottom;
 
-      const ts = preprocessTimeseries(timeseries);
       const T = ts.length;
       const yBuffer = 1.1;
 
@@ -385,7 +381,7 @@ function TimeSeries(props) {
               <h2>{datapoint[chartKey1]}</h2>
               <h6>
                 {' '}
-                {timeseries.length > 0 && index !== 0
+                {timeseries.length > index && index !== 0
                   ? timeseries[index][chartKey1] -
                       timeseries[index - 1][chartKey1] >=
                     0
@@ -412,7 +408,7 @@ function TimeSeries(props) {
             <div className="stats-bottom">
               <h2>{datapoint[chartKey2]}</h2>
               <h6>
-                {timeseries.length > 0 && index !== 0
+                {timeseries.length > index && index !== 0
                   ? timeseries[index][chartKey2] -
                       timeseries[index - 1][chartKey2] >=
                     0
@@ -439,7 +435,7 @@ function TimeSeries(props) {
             <div className="stats-bottom">
               <h2>{datapoint[chartKey3]}</h2>
               <h6>
-                {timeseries.length > 0 && index !== 0
+                {timeseries.length > index && index !== 0
                   ? timeseries[index][chartKey3] -
                       timeseries[index - 1][chartKey3] >=
                     0
@@ -472,7 +468,7 @@ function TimeSeries(props) {
             <div className="stats-bottom">
               <h2>{datapoint['dailyconfirmed']}</h2>
               <h6>
-                {timeseries.length > 0 && index !== 0
+                {timeseries.length > index && index !== 0
                   ? timeseries[index]['dailyconfirmed'] -
                       timeseries[index - 1]['dailyconfirmed'] >=
                     0
@@ -505,7 +501,7 @@ function TimeSeries(props) {
             <div className="stats-bottom">
               <h2>{datapoint['dailyrecovered']}</h2>
               <h6>
-                {timeseries.length > 0 && index !== 0
+                {timeseries.length > index && index !== 0
                   ? timeseries[index]['dailyrecovered'] -
                       timeseries[index - 1]['dailyrecovered'] >=
                     0
@@ -538,7 +534,7 @@ function TimeSeries(props) {
             <div className="stats-bottom">
               <h2>{datapoint['dailydeceased']}</h2>
               <h6>
-                {timeseries.length > 0 && index !== 0
+                {timeseries.length > index && index !== 0
                   ? timeseries[index]['dailydeceased'] -
                       timeseries[index - 1]['dailydeceased'] >=
                     0

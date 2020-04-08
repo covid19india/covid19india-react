@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef, useLayoutEffect} from 'react';
 import axios from 'axios';
 import {formatDistance, format} from 'date-fns';
 import {
   formatDate,
   formatDateAbsolute,
-  validateCTS,
+  preprocessTimeseries,
+  parseStateTimeseries,
 } from '../utils/common-functions';
 import moment from 'moment';
 import * as Icon from 'react-feather';
@@ -19,23 +20,16 @@ import Minigraph from './minigraph';
 function Home(props) {
   const [states, setStates] = useState([]);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
-  /* const [patients, setPatients] = useState([]);*/
   const [fetched, setFetched] = useState(false);
-  /* const [rawData, setRawData] = useState([]);*/
   const [graphOption, setGraphOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
-  const [timeseries, setTimeseries] = useState([]);
+  const [timeseries, setTimeseries] = useState({});
+  const [activeStateCode, setActiveStateCode] = useState('TT'); // TT -> India
   const [activityLog, setActivityLog] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
-  const [selectedState, setSelectedState] = useState({table: null, map: null});
-  const [stateTimeSeries, setStateTimeSeries] = useState({});
-  const [statesDailyData, setStatesDailyData] = useState([]);
-  const [stateGraphTimeSeries, setStateGraphTimeSeries] = useState({
-    series: [],
-    state: '',
-  });
+  const [isShowFloatingButtons, setIsShowFloatingButtons] = useState(false);
 
   useEffect(() => {
     if (fetched === false) {
@@ -43,150 +37,74 @@ function Home(props) {
     }
   }, [fetched]);
 
-  useEffect(() => {
-    if (regionHighlighted !== undefined && regionHighlighted !== null) {
-      if (regionHighlighted.state.state !== selectedState.table)
-        setSelectedState({
-          ...selectedState,
-          table: regionHighlighted.state.state,
-        });
-    } else {
-      if (selectedState.table !== undefined && selectedState.table !== null) {
-        setSelectedState({
-          ...selectedState,
-          table: regionHighlighted,
-        });
-      }
-      // if (selectedState !== 'India') setSelectedState('India');
-    }
-  }, [regionHighlighted, selectedState]);
-
   const getStates = async () => {
     try {
       const [
         response,
         stateDistrictWiseResponse,
-        statesDailyResponse,
+        {data: statesDailyResponse},
         updateLogResponse,
-        /* rawDataResponse, */
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
         axios.get('https://api.covid19india.org/states_daily.json'),
         axios.get('https://api.covid19india.org/updatelog/log.json'),
-        /* axios.get('https://api.covid19india.org/raw_data.json'), */
       ]);
       setStates(response.data.statewise);
-      setTimeseries(validateCTS(response.data.cases_time_series));
+      const timeSeries = parseStateTimeseries(statesDailyResponse);
+      timeSeries['TT'] = preprocessTimeseries(response.data.cases_time_series); // TT -> India
+      setTimeseries(timeSeries);
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
-      setStatesDailyData(statesDailyResponse.data.states_daily);
       setActivityLog(updateLogResponse.data);
-      /* setPatients(rawDataResponse.data.raw_data.filter((p) => p.detectedstate));*/
-      /* setRawData(rawDataResponse.data.raw_data);*/
       setFetched(true);
     } catch (err) {
       console.log(err);
     }
   };
 
-  useEffect(() => {
-    const calculateStatewiseTimeSeries = (data) => {
-      const statewiseSeries = {};
-      data.forEach((d) => {
-        const date = moment(d.date, 'DD-MMM-YY').format('YYYY-MM-DD');
-        const status = d.status.toLowerCase();
-        states.forEach((st) => {
-          const code = st.statecode.toLowerCase();
-          const name = st.state;
-          if (statewiseSeries[name] === undefined) {
-            statewiseSeries[name] = {};
-          }
-          if (statewiseSeries[name][date] === undefined) {
-            statewiseSeries[name][date] = {};
-          }
-          if (statewiseSeries[name][date][status] === undefined) {
-            statewiseSeries[name][date][status] = parseInt(d[code] || 0);
-          }
-        });
-      });
-      setStateTimeSeries(statewiseSeries);
-    };
-    calculateStatewiseTimeSeries(statesDailyData);
-  }, [states, statesDailyData]);
-
   const onHighlightState = (state, index) => {
-    if (!state && !index) setRegionHighlighted(null);
-    else setRegionHighlighted({state, index});
+    if (!state && !index) return setRegionHighlighted(null);
+    setRegionHighlighted({state, index});
+    setActiveStateCode(state ? state.statecode : 'TT');
+    setIsShowFloatingButtons(true);
   };
 
   const onHighlightDistrict = (district, state, index) => {
-    if (!state && !index && !district) setRegionHighlighted(null);
-    else setRegionHighlighted({district, state, index});
+    if (!state && !index && !district) return setRegionHighlighted(null);
+    setRegionHighlighted({district, state, index});
+    setActiveStateCode(state ? state.statecode : 'TT');
+    setIsShowFloatingButtons(true);
   };
 
-  const onHighlightMapRegion = (data) => {
-    if (
-      data !== undefined &&
-      data.state !== undefined &&
-      (selectedState === undefined || data.state.state !== selectedState.map)
-    ) {
-      setSelectedState({
-        ...selectedState,
-        map: data.state.state,
-      });
-    }
+  const onMapHighlightChange = ({statecode, name}) => {
+    if (activeStateCode !== statecode) setActiveStateCode(statecode);
   };
 
-  useEffect(() => {
-    const getTimeSeries = (selectData) => {
-      let state = selectData.map;
-      if (selectData.table !== undefined && selectData.table !== null) {
-        state = selectData.table;
-      }
-      if (state === undefined || state === null || state === 'India') {
-        setStateGraphTimeSeries({series: timeseries, state: 'India'});
-        return;
-      }
-      const series = stateTimeSeries[state];
-      if (!series) {
-        return;
-      }
-      const resultSeries = [];
-      const total = {confirmed: 0, recovered: 0, deceased: 0};
-      let dateStr = '2020-01-30';
-      let date = moment(dateStr);
-      const today = moment().format('YYYY-MM-DD');
-      while (dateStr !== today) {
-        const dayData = {
-          confirmed: (series[dateStr] || {}).confirmed || 0,
-          recovered: (series[dateStr] || {}).recovered || 0,
-          deceased: (series[dateStr] || {}).deceased || 0,
-        };
-        total.confirmed += dayData.confirmed;
-        total.recovered += dayData.recovered;
-        total.deceased += dayData.deceased;
-        resultSeries.push({
-          dailyconfirmed: dayData.confirmed,
-          dailydeceased: dayData.deceased,
-          dailyrecovered: dayData.recovered,
-          date: date.format('DD MMMM '),
-          totalconfirmed: total.confirmed,
-          totaldeceased: total.deceased,
-          totalrecovered: total.recovered,
-        });
+  const refs = [useRef(), useRef(), useRef()];
+  const scrollHandlers = refs.map((ref) => () =>
+    window.scrollTo({
+      top: ref.current.offsetTop,
+      behavior: 'smooth',
+    })
+  );
 
-        date = date.add(1, 'days');
-        dateStr = date.format('YYYY-MM-DD');
-      }
-      // console.log(state, stateTimeSeries[state], resultSeries);
-      setStateGraphTimeSeries({
-        series: validateCTS(resultSeries),
-        state: state,
-      });
-    };
-    getTimeSeries(selectedState);
-  }, [selectedState, stateTimeSeries, timeseries]);
+  function useScrollPosition(effect) {
+    const position = useRef(window.scrollY);
+    useLayoutEffect(() => {
+      const handleScroll = () => {
+        const currPos = window.scrollY;
+        effect({prevPos: position.current, currPos});
+        position.current = currPos;
+      };
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    });
+  }
+
+  useScrollPosition(({prevPos, currPos}) => {
+    setIsShowFloatingButtons(parseInt(prevPos) > parseInt(currPos));
+  });
 
   return (
     <React.Fragment>
@@ -220,6 +138,7 @@ function Home(props) {
           {states.length > 1 && <Level data={states} />}
           <Minigraph timeseries={timeseries} animate={true} />
           <Table
+            forwardRef={refs[0]}
             states={states}
             summary={false}
             stateDistrictWiseData={stateDistrictWiseData}
@@ -232,15 +151,17 @@ function Home(props) {
           {fetched && (
             <React.Fragment>
               <MapExplorer
+                forwardRef={refs[1]}
                 states={states}
                 stateDistrictWiseData={stateDistrictWiseData}
                 regionHighlighted={regionHighlighted}
-                setMapRegionHighlighted={onHighlightMapRegion}
+                onMapHighlightChange={onMapHighlightChange}
               />
 
               <div
                 className="timeseries-header fadeInUp"
-                style={{animationDelay: '2.3s'}}
+                style={{animationDelay: '2.5s'}}
+                ref={refs[2]}
               >
                 <h1>Spread Trends</h1>
                 <div className="tabs">
@@ -295,16 +216,51 @@ function Home(props) {
                 </div>
               </div>
 
+              {window.innerWidth <= 769 && (
+                <div className="trends-state-name">
+                  <select
+                    onChange={({target}) => {
+                      onHighlightState(JSON.parse(target.value));
+                    }}
+                  >
+                    {states.map((s) => {
+                      return (
+                        <option
+                          key={s.statecode}
+                          value={JSON.stringify(s)}
+                          selected={s.statecode === activeStateCode}
+                        >
+                          {s.state === 'Total' ? 'All States' : s.state}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              )}
+
               <TimeSeries
-                stateName={stateGraphTimeSeries.state}
-                timeseries={stateGraphTimeSeries.series}
-                key={'main'}
+                timeseries={timeseries[activeStateCode]}
                 type={graphOption}
                 mode={timeseriesMode}
                 logMode={timeseriesLogMode}
               />
             </React.Fragment>
           )}
+        </div>
+
+        <div
+          className="floating-buttons"
+          style={{display: isShowFloatingButtons ? 'block' : 'none'}}
+        >
+          <button className="table-nav" onClick={scrollHandlers[0]}>
+            <Icon.Grid />
+          </button>
+          <button className="map-nav" onClick={scrollHandlers[1]}>
+            <Icon.MapPin />
+          </button>
+          <button className="trends-nav" onClick={scrollHandlers[2]}>
+            <Icon.TrendingUp />
+          </button>
         </div>
 
         {/* <div className="home-left">
