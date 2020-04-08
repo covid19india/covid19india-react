@@ -207,7 +207,12 @@ const mapMeta = {
   },
 };
 
-export default function ({states, stateDistrictWiseData, regionHighlighted}) {
+export default function ({
+  states,
+  stateDistrictWiseData,
+  regionHighlighted,
+  setMapRegionHighlighted,
+}) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
@@ -289,14 +294,15 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
       return;
     }
     const isState = !('district' in regionHighlighted);
+    let newMap = {};
     if (isState) {
-      const newMap = mapMeta['India'];
+      newMap = mapMeta['India'];
       setCurrentMap(newMap);
       const region = getRegionFromState(regionHighlighted.state);
       setCurrentHoveredRegion(region);
       setSelectedRegion(region.name);
     } else {
-      const newMap = mapMeta[regionHighlighted.state.state];
+      newMap = mapMeta[regionHighlighted.state.state];
       if (!newMap) {
         return;
       }
@@ -304,7 +310,13 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
       setHoveredRegion(regionHighlighted.district, newMap);
       setSelectedRegion(regionHighlighted.district);
     }
-  }, [regionHighlighted, currentMap.mapType, setHoveredRegion]);
+    setMapRegionHighlighted({state: {state: newMap.name}});
+  }, [
+    setMapRegionHighlighted,
+    regionHighlighted,
+    currentMap.mapType,
+    setHoveredRegion,
+  ]);
 
   const getRegionFromDistrict = (districtData, name) => {
     if (!districtData) {
@@ -335,6 +347,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
         return;
       }
       setCurrentMap(newMap);
+      setMapRegionHighlighted({state: {state: newMap.name}});
       if (newMap.mapType === MAP_TYPES.COUNTRY) {
         setHoveredRegion(states[1].state, newMap);
       } else if (newMap.mapType === MAP_TYPES.STATE) {
@@ -348,7 +361,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
         setHoveredRegion(topDistrict, newMap);
       }
     },
-    [setHoveredRegion, stateDistrictWiseData, states]
+    [setHoveredRegion, setMapRegionHighlighted, stateDistrictWiseData, states]
   );
   const {name, lastupdatedtime} = currentHoveredRegion;
 

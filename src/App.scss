@@ -1135,6 +1135,12 @@ input.switch:checked::after {
   margin-top: 1rem;
   width: 100%;
 
+  h4 {
+    margin: 1rem;
+    color: $gray-dark;
+    width: 10rem;
+  }
+
   .stats {
     padding: 0.25rem;
     position: absolute;
