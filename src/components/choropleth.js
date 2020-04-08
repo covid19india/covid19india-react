@@ -24,11 +24,17 @@ function ChoroplethMap({
 
   const ready = useCallback(
     (geoData) => {
-      d3.selectAll('svg#chart > *').remove();
+      d3.selectAll('svg#chart > *').style('display', 'none');
       const propertyField = propertyFieldMap[mapMeta.mapType];
       const maxInterpolation = 0.8;
 
       const svg = d3.select(choroplethMap.current);
+      const mapSelection = svg.select(`.${mapMeta.graphObjectName}`);
+      if (!mapSelection.empty()) {
+        console.log('here');
+        mapSelection.style('display', 'block');
+        return;
+      }
 
       const handleMouseover = (name) => {
         try {
@@ -73,7 +79,7 @@ function ChoroplethMap({
 
       let onceTouchedRegion = null;
 
-      const g = svg.append('g');
+      const g = svg.append('g').attr('class', mapMeta.graphObjectName);
       g.append('g')
         .attr('class', 'states')
         .selectAll('path')
@@ -145,7 +151,7 @@ function ChoroplethMap({
             d3.mouse(svg.node())
           )
           .on('end', () => {
-            changeMap(d.properties[propertyField], mapMeta.mapType);
+            changeMap(d.properties[propertyField]);
           });
       }
 
@@ -169,9 +175,22 @@ function ChoroplethMap({
       }
 
       // Reset on clicking outside map
-      svg.on('click', () => reset(750));
+      svg.on('click', () => {
+        changeMap('India');
+        // svg
+        //   .call(
+        //     zoom.transform,
+        //     d3.zoomIdentity,
+        //   );
+        // reset(750);
+      })
+      svg
+        .call(
+          zoom.transform,
+          d3.zoomIdentity,
+        );
       // Reset zoom
-      reset(0);
+      // reset(0);
 
       /* LEGEND */
       d3.selectAll('svg#legend > *').remove();
@@ -180,6 +199,7 @@ function ChoroplethMap({
       const margin = {left: 0.05 * width, right: 0.2 * width};
       const barWidth = width - margin.left - margin.right;
       const heightLegend = +svgLegend.attr('height');
+      const numTicks = Math.min(6, statistic.maxConfirmed)
       svgLegend
         .append('g')
         .style('transform', `translateX(${margin.left}px)`)
@@ -189,9 +209,9 @@ function ChoroplethMap({
             title: 'Confirmed Cases',
             width: barWidth,
             height: 0.8 * heightLegend,
-            ticks: 6,
+            ticks: numTicks,
             tickFormat: function (d, i, n) {
-              return n[i + 1] ? d : d + '+';
+              if (Number.isInteger(d)) return n[i + 1] ? d : d + '+';
             },
           })
         );
