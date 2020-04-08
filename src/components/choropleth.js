@@ -44,23 +44,31 @@ function ChoroplethMap({
 
       const projection = d3.geoMercator();
       let path;
+      let width;
+      let height;
       if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
-        const width = parseInt(svg.style('width'));
-        projection.fitWidth(width, topology);
+        const widthStyle = parseInt(svg.style('width'));
+        projection.fitWidth(widthStyle, topology);
         path = d3.geoPath(projection);
         const bBox = path.bounds(topology);
-        svg.node().setAttribute('viewBox', `${bBox[0][0]} ${bBox[0][1]} ${bBox[1][0]} ${bBox[1][1]}`);
+        width = +bBox[1][0];
+        height = +bBox[1][1];
+        svg.attr('viewBox', `0 0 ${width} ${height}`);
       } else {
-        const bBox = svg.node().getAttribute('viewBox').split(' ');
-        const width = +bBox[2];
-        const height = +bBox[3];
+        const bBox = svg.attr('viewBox').split(' ');
+        width = +bBox[2];
+        height = +bBox[3];
         projection.fitSize([width, height], topology);
         path = d3.geoPath(projection);
       }
 
       let onceTouchedRegion = null;
 
-      svg
+      svg.on('click', reset);
+
+      const g = svg.append("g");
+
+      g
         .append('g')
         .attr('class', 'states')
         .selectAll('path')
@@ -91,15 +99,7 @@ function ChoroplethMap({
           if (onceTouchedRegion === d) onceTouchedRegion = null;
           else onceTouchedRegion = d;
         })
-        .on('click', (d) => {
-          if (onceTouchedRegion) {
-            return;
-          }
-          if (mapMeta.mapType === MAP_TYPES.STATE) {
-            return;
-          }
-          changeMap(d.properties[propertyField], mapMeta.mapType);
-        })
+        .on('click', clicked)
         .style('cursor', 'pointer')
         .append('title')
         .text(function (d) {
@@ -113,7 +113,7 @@ function ChoroplethMap({
           );
         });
 
-      svg
+      g
         .append('path')
         .attr('stroke', '#ff073a20')
         .attr('fill', 'none')
@@ -122,6 +122,45 @@ function ChoroplethMap({
           'd',
           path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName]))
         );
+
+      const zoom = d3.zoom()
+          .scaleExtent([1, 8])
+          .on("zoom", zoomed);
+
+      function reset() {
+        svg.transition().duration(750).call(
+          zoom.transform,
+          d3.zoomIdentity,
+          d3.zoomTransform(svg.node()).invert([width / 2, height / 2])
+        );
+      }
+
+      function clicked(d) {
+        if (onceTouchedRegion) return;
+        if (mapMeta.mapType === MAP_TYPES.STATE) return;
+        // Zoom
+        const [[x0, y0], [x1, y1]] = path.bounds(d);
+        d3.event.stopPropagation();
+        svg.transition().duration(750).call(
+          zoom.transform,
+          d3.zoomIdentity
+            .translate(width / 2, height / 2)
+            .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
+            .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
+          d3.mouse(svg.node())
+        )
+        .on('end', () => {
+          reset();
+          changeMap(d.properties[propertyField], mapMeta.mapType);
+        });
+      }
+
+      function zoomed() {
+        const {transform} = d3.event;
+        g.attr("transform", transform);
+        g.attr("stroke-width", 1 / transform.k);
+      }
+
     },
     [
       mapData,
