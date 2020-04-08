@@ -1,8 +1,8 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import * as d3 from 'd3';
-import {legendColor} from 'd3-svg-legend';
 import * as topojson from 'topojson';
 import {MAP_TYPES} from '../constants';
+import legend from './legend';
 
 const propertyFieldMap = {
   country: 'st_nm',
@@ -27,8 +27,6 @@ function ChoroplethMap({
       const propertyField = propertyFieldMap[mapMeta.mapType];
       const maxInterpolation = 0.8;
       const svg = d3.select(choroplethMap.current);
-      const width = +svg.attr('width');
-      const height = +svg.attr('height');
 
       const handleMouseover = (name) => {
         try {
@@ -45,19 +43,20 @@ function ChoroplethMap({
       );
 
       const projection = d3.geoMercator();
-
-      if (mapMeta.mapType === MAP_TYPES.COUNTRY)
+      let path;
+      if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
+        const width = parseInt(svg.style('width'));
+        projection.fitWidth(width, topology);
+        path = d3.geoPath(projection);
+        const bBox = path.bounds(topology);
+        svg.node().setAttribute('viewBox', `${bBox[0][0]} ${bBox[0][1]} ${bBox[1][0]} ${bBox[1][1]}`);
+      } else {
+        const bBox = svg.node().getAttribute('viewBox').split(' ');
+        const width = +bBox[2];
+        const height = +bBox[3];
         projection.fitSize([width, height], topology);
-      else
-        projection.fitExtent(
-          [
-            [90, 20],
-            [width, height],
-          ],
-          topology
-        );
-
-      const path = d3.geoPath(projection);
+        path = d3.geoPath(projection);
+      }
 
       let onceTouchedRegion = null;
 
@@ -152,48 +151,18 @@ function ChoroplethMap({
       .scaleSequential(d3.interpolateReds)
       .domain([0, statistic.maxConfirmed / maxInterpolation || 10]);
 
-    let cells = null;
-    let label = null;
+    const barWidth = 240;
+    // svg.append('g')
+    //   .style('transform', `translateX(${+svg.attr('width') - barWidth - 20}px)`)
+    //   .append(() => legend({
+    //     color,
+    //     title: 'Confirmed Cases',
+    //     width: barWidth,
+    //     height: 50,
+    //     ticks: 5,
+    //     tickFormat: function(d, i, n) { return n[i + 1] ? d : d + '+'; }
+    //   }));
 
-    label = ({i, genLength, generatedLabels, labelDelimiter}) => {
-      if (i === genLength - 1) {
-        const n = Math.floor(generatedLabels[i]);
-        return `${n}+`;
-      } else {
-        const n1 = 1 + Math.floor(generatedLabels[i]);
-        const n2 = Math.floor(generatedLabels[i + 1]);
-        return `${n1} - ${n2}`;
-      }
-    };
-
-    const numCells = 6;
-    const delta = Math.floor(
-      (statistic.maxConfirmed < numCells ? numCells : statistic.maxConfirmed) /
-        (numCells - 1)
-    );
-
-    cells = Array.from(Array(numCells).keys()).map((i) => i * delta);
-
-    svg
-      .append('g')
-      .attr('class', 'legendLinear')
-      .attr('transform', 'translate(1, 335)');
-
-    const legendLinear = legendColor()
-      .shapeWidth(36)
-      .shapeHeight(10)
-      .cells(cells)
-      .titleWidth(3)
-      .labels(label)
-      .title('Confirmed Cases')
-      .orient('vertical')
-      .scale(color);
-
-    svg
-      .select('.legendLinear')
-      .call(legendLinear)
-      .selectAll('text')
-      .style('font-size', '10px');
   }, [statistic.maxConfirmed]);
 
   useEffect(() => {
@@ -230,9 +199,6 @@ function ChoroplethMap({
     <div className="svg-parent fadeInUp" style={{animationDelay: '2.5s'}}>
       <svg
         id="chart"
-        width="480"
-        height="450"
-        viewBox="0 0 480 450"
         preserveAspectRatio="xMidYMid meet"
         ref={choroplethMap}
       ></svg>
