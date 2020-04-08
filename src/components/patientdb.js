@@ -218,6 +218,8 @@ function PatientDB(props) {
               {getSortedValues(
                 filterByObject(patients, {
                   detectedstate: filters.detectedstate,
+                  detectedcity: filters.detectedcity,
+                  detecteddistrict: filters.detecteddistrict,
                 }),
                 'dateannounced'
               ).map((date, index) => {
