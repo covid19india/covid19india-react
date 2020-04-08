@@ -142,11 +142,15 @@ function Resources(props) {
       // console.log(`Category chosen ${category}`);
       a = resourcedict[indianstate][city][category];
     }
-    resourcedict['PAN India']['Multiple']['CoVID-19 Testing Lab'].forEach(
-      (element) => {
-        a.push(element);
-      }
-    );
+    try {
+      resourcedict['PAN India']['Multiple']['CoVID-19 Testing Lab'].forEach(
+        (element) => {
+          a.push(element);
+        }
+      );
+    } catch (err) {
+      console.log('No PAN India row found');
+    }
     setData(a);
     // console.log(resourcedict[indianstate][city][category]);
     // console.log(data);
