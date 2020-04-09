@@ -1934,6 +1934,13 @@ footer {
     }
 }
 
+body.modal-open {
+  overflow-y: hidden;
+  min-height: 100vh;
+  width: calc(100% - 14.7px); //for chrome/safari
+  width: -moz-calc(100% - 16px); //for firefox
+}
+
 .modal {
   position: fixed;
   height: 100vh;
@@ -1944,6 +1951,7 @@ footer {
   flex-direction: row;
   justify-content: center;
   background: $pblue-mid;
+  cursor: pointer;
   z-index: 9999;
   .modal-content {
     position: fixed;
@@ -1952,7 +1960,8 @@ footer {
     align-self: center;
     background: #fff;
     width: 30rem;
-    height: calc(100vh - 10rem);
+    height: 30rem;
+    cursor: default;
     overflow-y: auto;
     svg {
       width: 20px;
@@ -2371,6 +2380,11 @@ select {
   }
 }
 
+@media(max-width: 400px){
+  .PatientsDB .modal .modal-content .meta {
+    height: 25rem !important;
+  }
+}
 .cards-container {
   padding: 4rem;
   .cards {
@@ -2415,7 +2429,6 @@ select {
   }
 }
 
-
 @media (max-width: 769px) {
   .TimeSeries,
   table,
@@ -2448,6 +2461,10 @@ select {
       flex-direction: column;
       margin: 0;
     }
+  }
+
+  body.modal-open {
+    width: 100%;
   }
 
   .link,
