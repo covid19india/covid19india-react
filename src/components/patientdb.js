@@ -1,10 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, Suspense} from 'react';
 import {useLocation} from 'react-router-dom';
-import axios from 'axios';
+
 import {format, parse, subDays} from 'date-fns';
 
 import Patients from './patients';
 import DownloadBlock from './downloadblock';
+
+import {createResource} from './patientdbapi';
 
 function filterByObject(obj, filters) {
   const keys = Object.keys(filters);
@@ -16,11 +18,22 @@ function filterByObject(obj, filters) {
   });
 }
 
-function PatientDB(props) {
-  const [fetched, setFetched] = useState(false);
-  const [patients, setPatients] = useState([]);
+const resource = createResource();
+
+const LoadingIndicator = () => <div className="spinner"></div>;
+
+function PatientDB() {
+  return (
+    <Suspense fallback={<LoadingIndicator />}>
+      <PatientDBComponent resource={resource} />
+    </Suspense>
+  );
+}
+
+function PatientDBComponent({resource}) {
+  const patients = resource.patients.read().result;
   const [filteredPatients, setFilteredPatients] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(resource.patients.read().err ?? '');
   const {pathname} = useLocation();
   const [colorMode, setColorMode] = useState('genders');
   const [scaleMode, setScaleMode] = useState(false);
@@ -36,23 +49,11 @@ function PatientDB(props) {
   }, [pathname]);
 
   useEffect(() => {
-    async function fetchRawData() {
-      const response = await axios.get(
-        'https://api.covid19india.org/raw_data.json'
-      );
-      if (response.data) {
-        setPatients(response.data.raw_data.reverse());
-        setFetched(true);
-      } else {
-        setError("Couldn't fetch patient data. Try again after sometime.");
-        console.log(response);
-      }
+    if (error) {
+      setError("Couldn't fetch patient data. Try again after sometime.");
+      console.log(error);
     }
-
-    if (!fetched) {
-      fetchRawData();
-    }
-  }, [fetched]);
+  }, [error]);
 
   const handleFilters = (label, value) => {
     setFilters((f) => {
