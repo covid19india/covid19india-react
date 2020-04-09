@@ -74,8 +74,8 @@ function Home(props) {
     setActiveStateCode(state ? state.statecode : 'TT');
   };
 
-  const onMapHighlightChange = ({statecode, name}) => {
-    if (activeStateCode !== statecode) setActiveStateCode(statecode);
+  const onMapHighlightChange = ({statecode}) => {
+    setActiveStateCode(statecode);
   };
 
   const refs = [useRef(), useRef(), useRef()];
