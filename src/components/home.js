@@ -120,7 +120,9 @@ function Home(props) {
           </div>
 
           {states.length > 1 && <Level data={states} />}
-          <Minigraph timeseries={timeseries} animate={true} />
+          {fetched && (
+            <Minigraph timeseries={timeseries['TT']} animate={true} />
+          )}
           <Table
             forwardRef={refs[0]}
             states={states}
