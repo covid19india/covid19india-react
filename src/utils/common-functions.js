@@ -39,7 +39,7 @@ export const validateCTS = (data = []) => {
     'totaldeceased',
     'totalrecovered',
   ];
-  console.log(data);
+
   return data
     .filter((d) => dataTypes.every((dt) => d[dt]) && d.date)
     .filter((d) => dataTypes.every((dt) => Number(d[dt]) >= 0))
