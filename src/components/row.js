@@ -87,10 +87,7 @@ function Row(props) {
         className={props.total ? 'state is-total' : 'state'}
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
-        onTouchStart={() => {
-          props.setShowFloatingButton(true);
-          return props.onHighlightState?.(state, props.index);
-        }}
+        touchstart={() => props.onHighlightState?.(state, props.index)}
         onClick={!props.total ? handleReveal : null}
         style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
       >
@@ -250,14 +247,9 @@ function Row(props) {
                     props.onHighlightDistrict?.(district, state, props.index)
                   }
                   onMouseLeave={() => props.onHighlightDistrict?.()}
-                  onTouchStart={() => {
-                    props.setShowFloatingButton(true);
-                    return props.onHighlightDistrict?.(
-                      district,
-                      state,
-                      props.index
-                    );
-                  }}
+                  touchstart={() =>
+                    props.onHighlightDistrict?.(district, state, props.index)
+                  }
                 >
                   <td style={{fontWeight: 600}}>{district}</td>
                   <td>
