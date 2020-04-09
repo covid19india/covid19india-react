@@ -2498,7 +2498,7 @@ select {
       align-items: center;
       background: $gray-light;
       border-radius: 5px;
-      border: 1px solid $gray-mid;
+      border: 2px solid $gray-mid;
       color: $gray-mid;
       cursor: pointer;
       display: flex;
@@ -2509,6 +2509,7 @@ select {
       justify-content: center;
       margin-right: 1rem;
       width: 1.25rem;
+      transition: all 0.2s ease-in-out;
 
       &:hover {
         border-color: $gray;
