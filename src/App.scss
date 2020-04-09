@@ -1135,9 +1135,11 @@ table {
   }
 }
 
-.home-left{
-  table.table{
-    width: 35rem;
+@media (min-width: 770px){
+  .home-left{
+    table.table{
+      width: 35rem;
+    }
   }
 }
 
@@ -2787,6 +2789,12 @@ select {
 @media(max-width: 400px){
   .PatientsDB .modal .modal-content .meta {
     height: 25rem !important;
+  }
+
+  table tbody td,
+  table tbody th{
+    font-size: 0.7rem;
+    padding: 0.2rem 0.1rem;
   }
 }
 
