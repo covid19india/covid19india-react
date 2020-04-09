@@ -30,6 +30,7 @@ function PatientDB(props) {
     detectedcity: '',
     dateannounced: format(subDays(new Date(), 1), 'dd/MM/yyyy'),
   });
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -37,12 +38,14 @@ function PatientDB(props) {
 
   useEffect(() => {
     async function fetchRawData() {
+      setLoader(true);
       const response = await axios.get(
         'https://api.covid19india.org/raw_data.json'
       );
       if (response.data) {
         setPatients(response.data.raw_data.reverse());
         setFetched(true);
+        setLoader(false);
       } else {
         setError("Couldn't fetch patient data. Try again after sometime.");
         console.log(response);
@@ -355,15 +358,22 @@ function PatientDB(props) {
           Among these are our people.
         </p>
       </div>
-
-      <div className="patientdb-wrapper">
-        <Patients
-          patients={filteredPatients}
-          colorMode={colorMode}
-          expand={scaleMode}
-        />
-      </div>
-      <DownloadBlock patients={patients} />
+      {loader ? (
+        <div className="container" style={{animationDelay: '0.5s'}}>
+          <div className="spinner"></div>
+        </div>
+      ) : (
+        <>
+          <div className="patientdb-wrapper">
+            <Patients
+              patients={filteredPatients}
+              colorMode={colorMode}
+              expand={scaleMode}
+            />
+          </div>
+          <DownloadBlock patients={patients} />
+        </>
+      )}
     </div>
   );
 }
