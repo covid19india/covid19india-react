@@ -44,28 +44,31 @@ function TotalConfirmedChart(props) {
     labels: dates,
     datasets: [
       {
-        borderWidth: 4,
+        borderWidth: 2,
         data: confirmed,
         borderCapStyle: 'round',
         pointBackgroundColor: '#ff073a',
         label: 'Confirmed',
         borderColor: '#ff073a',
+        pointHoverRadius: 2,
       },
       {
-        borderWidth: 4,
+        borderWidth: 2,
         data: recovered,
         borderCapStyle: 'round',
         pointBackgroundColor: '#28a745',
         label: 'Recovered',
         borderColor: '#28a745',
+        pointHoverRadius: 2,
       },
       {
-        borderWidth: 4,
+        borderWidth: 2,
         data: deceased,
         borderCapStyle: 'round',
         pointBackgroundColor: '#6c757d',
         label: 'Deceased',
         borderColor: '#6c757d',
+        pointHoverRadius: 2,
       },
     ],
   };
@@ -89,7 +92,7 @@ function TotalConfirmedChart(props) {
         radius: 0,
       },
       line: {
-        tension: 0.2,
+        tension: 0.1,
       },
     },
     layout: {
