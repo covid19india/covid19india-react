@@ -24,21 +24,13 @@ function ChoroplethMap({
 
   const ready = useCallback(
     (geoData) => {
+      // Hide all objects on map (don't delete)
+      d3.selectAll('svg#chart > *').style('display', 'none');
+
       const propertyField = propertyFieldMap[mapMeta.mapType];
       const maxInterpolation = 0.8;
       const svg = d3.select(choroplethMap.current);
-
-      // Hide all objects on map (don't delete to cache)
-      d3.selectAll('svg#chart > *').style('display', 'none');
-
-      const handleMouseover = (name) => {
-        try {
-          setHoveredRegion(name, mapMeta);
-          setSelectedRegion(name);
-        } catch (err) {
-          console.log('err', err);
-        }
-      };
+      const t = d3.transition().duration(500);
 
       const topology = topojson.feature(
         geoData,
@@ -74,6 +66,7 @@ function ChoroplethMap({
 
       let onceTouchedRegion = null;
       let g;
+      // Check in cache
       const mapSelection = svg.select(`.${mapMeta.graphObjectName}`);
       if (mapSelection.empty()) {
         g = svg.append('g').attr('class', mapMeta.graphObjectName);
@@ -81,8 +74,7 @@ function ChoroplethMap({
           .attr('class', 'states')
           .selectAll('path')
           .data(topology.features)
-          .enter()
-          .append('path')
+          .join('path')
           .attr('class', 'path-region')
           .attr('fill', function (d) {
             const n = parseInt(mapData[d.properties[propertyField]]) || 0;
@@ -108,7 +100,7 @@ function ChoroplethMap({
             if (onceTouchedRegion === d) onceTouchedRegion = null;
             else onceTouchedRegion = d;
           })
-          .on('click', clicked)
+          .on('click', handleClick)
           .style('cursor', 'pointer')
           .append('title')
           .text(function (d) {
@@ -139,21 +131,29 @@ function ChoroplethMap({
         g = mapSelection.style('display', 'block');
       }
 
-      function clicked(d) {
+      const handleMouseover = (name) => {
+        try {
+          setHoveredRegion(name, mapMeta);
+        } catch (err) {
+          console.log('err', err);
+        }
+      };
+
+      const zoom = d3.zoom().scaleExtent([1, 8]).on('zoom', zoomed);
+
+      function handleClick(d) {
         if (onceTouchedRegion) return;
         if (mapMeta.mapType === MAP_TYPES.STATE) return;
-        g.selectAll('.borders').transition().duration(750).style('opacity', 0);
-        g.selectAll('.path-region')
-          .transition()
-          .duration(750)
-          .style('opacity', 0);
-        console.log(g.selectAll('.path-region'));
-        // Zoom
+        // Slowly fade away all the states except highlighted one
+        const t = d3.transition().duration(500);
+        g.selectAll('.borders').transition(t).style('opacity', 0);
+        g.selectAll('.path-region').transition(t).style('opacity', 0);
+        // Zoom to click
         const [[x0, y0], [x1, y1]] = path.bounds(d);
         d3.event.stopPropagation();
+        // For some reason transition(t) d
         svg
-          .transition()
-          .duration(750)
+          .transition(t)
           .call(
             zoom.transform,
             d3.zoomIdentity
@@ -167,17 +167,15 @@ function ChoroplethMap({
               .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
             d3.mouse(svg.node())
           )
+          // Change map at end of zoom
           .on('end', () => {
             changeMap(d.properties[propertyField]);
           });
       }
 
-      const zoom = d3.zoom().scaleExtent([1, 8]).on('zoom', zoomed);
-
-      function reset(t) {
+      function reset() {
         svg
-          .transition()
-          .duration(t)
+          .transition(t)
           .call(
             zoom.transform,
             d3.zoomIdentity,
@@ -191,23 +189,16 @@ function ChoroplethMap({
         g.attr('stroke-width', 1 / transform.k);
       }
 
-      // Reset on clicking outside map
-      svg.on('click', () => {
-        changeMap('India');
-      });
-      // Reset zoom
       if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
-        g.selectAll('.borders').transition().duration(750).style('opacity', 1);
-        g.selectAll('.path-region')
-          .transition()
-          .duration(750)
-          .style('opacity', 1);
-        reset(750);
+        // Bring back all states
+        g.selectAll('*').transition(t).style('opacity', 1);
+        // Reset zoom
+        reset();
       }
 
       /* LEGEND */
-      d3.selectAll('svg#legend > *').remove();
       const svgLegend = d3.select(choroplethLegend.current);
+      svgLegend.selectAll('*').remove();
       // Colorbar
       const margin = {left: 0.02 * width, right: 0.2 * width};
       const barWidth = width - margin.left - margin.right;
