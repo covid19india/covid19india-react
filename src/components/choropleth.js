@@ -101,7 +101,7 @@ function ChoroplethMap({
           })
           .on('mouseleave', (d) => {
             const target = d3.event.target;
-            d3.select(target).attr('class', 'path-region map-default');
+            d3.select(target).attr('class', 'path-region');
             if (onceTouchedRegion === d) onceTouchedRegion = null;
           })
           .on('touchstart', (d) => {
@@ -125,6 +125,7 @@ function ChoroplethMap({
           });
 
         g.append('path')
+          .attr('class', 'borders')
           .attr('stroke', '#ff073a20')
           .attr('fill', 'none')
           .attr('stroke-width', 2)
@@ -141,6 +142,9 @@ function ChoroplethMap({
       function clicked(d) {
         if (onceTouchedRegion) return;
         if (mapMeta.mapType === MAP_TYPES.STATE) return;
+        g.selectAll('.borders').style('opacity', 0);
+        g.selectAll('.path-region').style('opacity', 0);
+        console.log(g.selectAll('.path-region'));
         // Zoom
         const [[x0, y0], [x1, y1]] = path.bounds(d);
         d3.event.stopPropagation();
@@ -189,7 +193,11 @@ function ChoroplethMap({
         changeMap('India');
       });
       // Reset zoom
-      if (mapMeta.mapType === MAP_TYPES.COUNTRY) reset(750);
+      if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
+        g.selectAll('.borders').style('opacity', 1);
+        g.selectAll('.path-region').style('opacity', 1);
+        reset(750);
+      }
 
       /* LEGEND */
       d3.selectAll('svg#legend > *').remove();
