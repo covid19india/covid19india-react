@@ -3,6 +3,8 @@ import ChoroplethMap from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 import {formatDate, formatDateAbsolute} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
+/* import {formatDistance, format, parse} from 'date-fns';*/
+/* import * as Icon from 'react-feather';*/
 
 const mapMeta = {
   India: {
@@ -207,17 +209,25 @@ const mapMeta = {
   },
 };
 
-export default function ({states, stateDistrictWiseData, regionHighlighted}) {
+export default function ({
+  states,
+  stateDistrictWiseData,
+  stateTestData,
+  regionHighlighted,
+}) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
+  const [panelRegion, setPanelRegion] = useState({});
+  /* const [testObj, setTestObj] = useState({});*/
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
     const region = getRegionFromState(states[1]);
+    setPanelRegion(region);
     setCurrentHoveredRegion(region);
   }, [states]);
 
-  if (!currentHoveredRegion) {
+  if (!panelRegion) {
     return null;
   }
 
@@ -259,9 +269,11 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
   const setHoveredRegion = useCallback(
     (name, currentMap) => {
       if (currentMap.mapType === MAP_TYPES.COUNTRY) {
-        setCurrentHoveredRegion(
-          getRegionFromState(states.filter((state) => name === state.state)[0])
+        const region = getRegionFromState(
+          states.filter((state) => name === state.state)[0]
         );
+        setCurrentHoveredRegion(region);
+        setPanelRegion(region);
       } else if (currentMap.mapType === MAP_TYPES.STATE) {
         const state = stateDistrictWiseData[currentMap.name] || {
           districtData: {},
@@ -276,9 +288,13 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
           };
         }
         setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
+        const panelRegion = getRegionFromState(
+          states.filter((state) => currentMap.name === state.state)[0]
+        );
+        setPanelRegion(panelRegion);
       }
     },
-    [stateDistrictWiseData, states]
+    [states, stateDistrictWiseData]
   );
 
   useEffect(() => {
@@ -293,7 +309,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
       const newMap = mapMeta['India'];
       setCurrentMap(newMap);
       const region = getRegionFromState(regionHighlighted.state);
-      setCurrentHoveredRegion(region);
+      setHoveredRegion(region.name, newMap);
       setSelectedRegion(region.name);
     } else {
       const newMap = mapMeta[regionHighlighted.state.state];
@@ -350,7 +366,19 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
     },
     [setHoveredRegion, stateDistrictWiseData, states]
   );
+
   const {name, lastupdatedtime} = currentHoveredRegion;
+
+  /* useEffect(() => {
+    let found = false;
+    stateTestData.forEach((testObj, index) => {
+      if (testObj.state === panelRegion.name) {
+        found = true;
+        setTestObj(testObj);
+      }
+    });
+    if (!found) setTestObj({});
+  }, [panelRegion, stateTestData, testObj]);*/
 
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.5s'}}>
@@ -365,9 +393,9 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
 
       <div className="map-stats">
         <div className="stats fadeInUp" style={{animationDelay: '2s'}}>
-          <h5>Confirmed</h5>
+          <h5>{window.innerWidth <= 769 ? 'Cnfmd' : 'Confirmed'}</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.confirmed}</h1>
+            <h1>{panelRegion.confirmed}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -376,9 +404,9 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
           className="stats is-blue fadeInUp"
           style={{animationDelay: '2.1s'}}
         >
-          <h5>Active</h5>
+          <h5>{window.innerWidth <= 769 ? 'Actv' : 'Active'}</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.active || ''}</h1>
+            <h1>{panelRegion.active || ''}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -387,9 +415,9 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
           className="stats is-green fadeInUp"
           style={{animationDelay: '2.2s'}}
         >
-          <h5>Recovered</h5>
+          <h5>{window.innerWidth <= 769 ? 'Rcvrd' : 'Recovered'}</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.recovered || ''}</h1>
+            <h1>{panelRegion.recovered || ''}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -398,12 +426,36 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
           className="stats is-gray fadeInUp"
           style={{animationDelay: '2.3s'}}
         >
-          <h5>Deceased</h5>
+          <h5>{window.innerWidth <= 769 ? 'Dcsd' : 'Deceased'}</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.deaths || ''}</h1>
+            <h1>{panelRegion.deaths || ''}</h1>
             <h6>{}</h6>
           </div>
         </div>
+
+        {/* <div
+          className="stats is-purple tested fadeInUp"
+          style={{animationDelay: '2.4s'}}
+        >
+          <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
+          <div className="stats-bottom">
+            <h1>{testObj?.totaltested || '-'}</h1>
+          </div>
+          <h6 className="timestamp">
+            {!isNaN(new Date(testObj?.updatedon))
+              ? `As of ${format(
+                  parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
+                  'dd MMM'
+                )}`
+              : ''}
+          </h6>
+          {testObj?.totaltested?.length > 1 && (
+            <a href={testObj.source} target="_noblank">
+              <Icon.Link />
+            </a>
+          )}
+        </div>
+        */}
       </div>
 
       <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
@@ -434,6 +486,15 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
           </div>
         )}
 
+        {currentMap.mapType === MAP_TYPES.STATE ? (
+          <h4 className="district-confirmed">
+            Confirmed cases:{' '}
+            {currentMapData[currentHoveredRegion.name]
+              ? currentMapData[currentHoveredRegion.name]
+              : 0}
+          </h4>
+        ) : null}
+
         {currentMap.mapType === MAP_TYPES.STATE &&
         currentMapData.Unknown > 0 ? (
           <h4 className="unknown">
@@ -458,6 +519,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
         setHoveredRegion={setHoveredRegion}
         changeMap={switchMapToState}
         selectedRegion={selectedRegion}
+        setSelectedRegion={setSelectedRegion}
       />
     </div>
   );
