@@ -308,7 +308,7 @@ export default function ({
       const newMap = mapMeta['India'];
       setCurrentMap(newMap);
       const region = getRegionFromState(regionHighlighted.state);
-      setCurrentHoveredRegion(region);
+      setHoveredRegion(region.name, newMap);
       setSelectedRegion(region.name);
     } else {
       const newMap = mapMeta[regionHighlighted.state.state];
