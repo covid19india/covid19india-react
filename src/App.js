@@ -16,6 +16,8 @@ import FAQ from './components/faq';
 import Banner from './components/banner';
 import PatientDB from './components/patientdb';
 import DeepDive from './components/deepdive';
+import Resources from './components/resources';
+/* import PatientDB from './components/patientdb';*/
 
 const history = require('history').createBrowserHistory;
 
@@ -50,6 +52,12 @@ function App() {
       view: FAQ,
       displayName: 'About',
       animationDelayForNavbar: 0.5,
+    },
+    {
+      pageLink: '/essentials',
+      view: Resources,
+      displayName: 'Essentials',
+      animationDelayForNavbar: 0.7,
     },
   ];
 
