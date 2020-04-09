@@ -1525,18 +1525,39 @@ input.switch:checked::after {
   transition: all 300ms ease-in-out;
 }
 
+.trends-state-name {
+  text-align: center;
+
+  select {
+    appearance: none;
+    background-color: #eee;
+    background-image:
+      linear-gradient(45deg, transparent 50%, #808080 50%),
+      linear-gradient(135deg, #808080 50%, transparent 50%);
+    background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    border: 2px solid #e8e8e9;
+    border-radius: 4px;
+    font-family: 'archia';
+    font-weight: 600;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    text-transform: uppercase;
+    width: auto;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
 .timeseries,
 .Minigraph {
   display: flex;
   flex-direction: column;
   margin-top: 1rem;
   width: 100%;
-
-  h4 {
-    margin: 1rem;
-    color: $gray-dark;
-    width: 10rem;
-  }
 
   .stats {
     padding: 0.25rem;
@@ -1694,6 +1715,41 @@ input.switch:checked::after {
     position: fixed;
     top: 0;
     right: 0;
+  }
+}
+
+.floating-buttons {
+  position: fixed;
+  bottom: 2rem;
+  text-align: center;
+  width: 100%;
+  z-index: 1;
+
+  button {
+    border-radius: 5px;
+    border: 0;
+    box-shadow: 2px 2px 3px #999;
+    margin: 0 1.5rem;
+    padding: 0.7rem;
+  }
+
+  button.table-nav {
+    background-color: #f6f7f7;
+    color: #6d767e;
+  }
+
+  button.map-nav {
+    background-color: #fde5e9;
+    color: #f5083d;
+  }
+
+  button.trends-nav {
+    background-color: #e5f5ea;
+    color: #32a949;
+  }
+
+  @media screen and (min-width: 1200px) {
+    display: none !important;
   }
 }
 
@@ -3402,13 +3458,6 @@ select {
   }
 }
 
-.floating-action-btn {
-  z-index: 10000;
-
-  @media screen and (min-width: 1200px) {
-    display: none !important;
-  }
-}
 
 /* Animation Support */
 

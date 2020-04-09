@@ -23,14 +23,10 @@
     "react-chartjs-2": "^2.9.0",
     "react-dom": "^16.13.1",
     "react-feather": "^2.0.3",
-    "react-floating-action-button": "^1.0.5",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
-<<<<<<< HEAD
     "react-table": "^7.0.4",
-=======
     "react-scroll-into-view": "^1.8.1",
->>>>>>> ce16e07... Floating button for auto-scroll to map on mobile viewport (#696)
     "sass-lint": "^1.13.1",
     "topojson": "^3.0.2"
   },
