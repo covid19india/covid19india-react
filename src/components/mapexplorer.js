@@ -369,11 +369,14 @@ export default function ({
   const {name, lastupdatedtime} = currentHoveredRegion;
 
   useEffect(() => {
-    stateTestData.forEach((stateObj, index) => {
-      if (stateObj.state === panelRegion.name) {
-        setTestObj(stateObj);
+    let found = false;
+    stateTestData.forEach((testObj, index) => {
+      if (testObj.state === panelRegion.name) {
+        found = true;
+        setTestObj(testObj);
       }
     });
+    if (!found) setTestObj({});
   }, [panelRegion, stateTestData, testObj]);
 
   return (
