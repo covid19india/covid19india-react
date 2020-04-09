@@ -16,6 +16,7 @@ function ChoroplethMap({
   mapMeta,
   changeMap,
   selectedRegion,
+  setSelectedRegion,
 }) {
   const choroplethMap = useRef(null);
   const [svgRenderCount, setSvgRenderCount] = useState(0);
@@ -32,6 +33,7 @@ function ChoroplethMap({
       const handleMouseover = (name) => {
         try {
           setHoveredRegion(name, mapMeta);
+          setSelectedRegion(name);
         } catch (err) {
           console.log('err', err);
         }
@@ -81,15 +83,9 @@ function ChoroplethMap({
         .attr('pointer-events', 'all')
         .on('mouseover', (d) => {
           handleMouseover(d.properties[propertyField]);
-          const target = d3.event.target;
-          d3.select(target.parentNode.appendChild(target)).attr(
-            'class',
-            'map-hover'
-          );
         })
         .on('mouseleave', (d) => {
-          const target = d3.event.target;
-          d3.select(target).attr('class', 'path-region map-default');
+          setSelectedRegion(null);
           if (onceTouchedRegion === d) onceTouchedRegion = null;
         })
         .on('touchstart', (d) => {
@@ -135,6 +131,7 @@ function ChoroplethMap({
       statistic.maxConfirmed,
       changeMap,
       setHoveredRegion,
+      setSelectedRegion,
     ]
   );
 
