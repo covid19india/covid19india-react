@@ -1227,13 +1227,13 @@ table {
     .district-confirmed {
       color: #e23028;
       position: absolute;
-      top: 14rem;
+      top: 3rem;
       width: 5rem;
     }
 
     .unknown {
       position: absolute;
-      top: 17rem;
+      top: 5rem;
       width: 5rem;
     }
   }
@@ -2782,6 +2782,7 @@ select {
     height: 25rem !important;
   }
 }
+
 .cards-container {
   padding: 4rem;
   .cards {
