@@ -196,27 +196,29 @@ function ChoroplethMap({
       /* LEGEND */
       const svgLegend = d3.select(choroplethLegend.current);
       svgLegend.selectAll('*').remove();
-      // Colorbar
-      const margin = {left: 0.02 * width, right: 0.2 * width};
-      const barWidth = width - margin.left - margin.right;
-      const heightLegend = +svgLegend.attr('height');
-      const numTicks = Math.min(6, statistic.maxConfirmed);
-      svgLegend
-        .append('g')
-        .style('transform', `translateX(${margin.left}px)`)
-        .append(() =>
-          legend({
-            color: colorScale,
-            title: 'Confirmed Cases',
-            width: barWidth,
-            height: 0.8 * heightLegend,
-            ticks: numTicks,
-            tickFormat: function (d, i, n) {
-              if (Number.isInteger(d)) return n[i + 1] ? d : d + '+';
-            },
-          })
-        );
-      svgLegend.attr('viewBox', `0 0 ${width} ${heightLegend}`);
+      if (statistic.maxConfirmed) {
+        // Colorbar
+        const margin = {left: 0.02 * width, right: 0.2 * width};
+        const barWidth = width - margin.left - margin.right;
+        const heightLegend = +svgLegend.attr('height');
+        const numTicks = Math.min(6, statistic.maxConfirmed);
+        svgLegend
+          .append('g')
+          .style('transform', `translateX(${margin.left}px)`)
+          .append(() =>
+            legend({
+              color: colorScale,
+              title: 'Confirmed Cases',
+              width: barWidth,
+              height: 0.8 * heightLegend,
+              ticks: numTicks,
+              tickFormat: function (d, i, n) {
+                if (Number.isInteger(d)) return n[i + 1] ? d : d + '+';
+              },
+            })
+          );
+        svgLegend.attr('viewBox', `0 0 ${width} ${heightLegend}`);
+      }
     },
     [
       mapData,
