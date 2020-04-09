@@ -142,8 +142,11 @@ function ChoroplethMap({
       function clicked(d) {
         if (onceTouchedRegion) return;
         if (mapMeta.mapType === MAP_TYPES.STATE) return;
-        g.selectAll('.borders').style('opacity', 0);
-        g.selectAll('.path-region').style('opacity', 0);
+        g.selectAll('.borders').transition().duration(750).style('opacity', 0);
+        g.selectAll('.path-region')
+          .transition()
+          .duration(750)
+          .style('opacity', 0);
         console.log(g.selectAll('.path-region'));
         // Zoom
         const [[x0, y0], [x1, y1]] = path.bounds(d);
@@ -194,8 +197,11 @@ function ChoroplethMap({
       });
       // Reset zoom
       if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
-        g.selectAll('.borders').style('opacity', 1);
-        g.selectAll('.path-region').style('opacity', 1);
+        g.selectAll('.borders').transition().duration(750).style('opacity', 1);
+        g.selectAll('.path-region')
+          .transition()
+          .duration(750)
+          .style('opacity', 1);
         reset(750);
       }
 
