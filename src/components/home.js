@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useLayoutEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import axios from 'axios';
 import {formatDistance, format} from 'date-fns';
 import * as Icon from 'react-feather';
@@ -29,7 +29,7 @@ function Home(props) {
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
-  const [isShowFloatingButtons, setIsShowFloatingButtons] = useState(false);
+  const [isShowFloatingButtons] = useState(true);
 
   useEffect(() => {
     if (fetched === false) {
@@ -67,13 +67,11 @@ function Home(props) {
     if (!state && !index) return setRegionHighlighted(null);
     setRegionHighlighted({state, index});
     setActiveStateCode(state ? state.statecode : 'TT');
-    setIsShowFloatingButtons(true);
   };
   const onHighlightDistrict = (district, state, index) => {
     if (!state && !index && !district) return setRegionHighlighted(null);
     setRegionHighlighted({district, state, index});
     setActiveStateCode(state ? state.statecode : 'TT');
-    setIsShowFloatingButtons(true);
   };
 
   const onMapHighlightChange = ({statecode, name}) => {
@@ -87,23 +85,6 @@ function Home(props) {
       behavior: 'smooth',
     })
   );
-
-  function useScrollPosition(effect) {
-    const position = useRef(window.scrollY);
-    useLayoutEffect(() => {
-      const handleScroll = () => {
-        const currPos = window.scrollY;
-        effect({prevPos: position.current, currPos});
-        position.current = currPos;
-      };
-      window.addEventListener('scroll', handleScroll);
-      return () => window.removeEventListener('scroll', handleScroll);
-    });
-  }
-
-  useScrollPosition(({prevPos, currPos}) => {
-    setIsShowFloatingButtons(parseInt(prevPos) > parseInt(currPos));
-  });
 
   return (
     <React.Fragment>
@@ -213,29 +194,29 @@ function Home(props) {
                     />
                   </div>
                 </div>
-              </div>
 
-              {window.innerWidth <= 769 && (
-                <div className="trends-state-name">
-                  <select
-                    onChange={({target}) => {
-                      onHighlightState(JSON.parse(target.value));
-                    }}
-                  >
-                    {states.map((s) => {
-                      return (
-                        <option
-                          key={s.statecode}
-                          value={JSON.stringify(s)}
-                          selected={s.statecode === activeStateCode}
-                        >
-                          {s.state === 'Total' ? 'All States' : s.state}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-              )}
+                {window.innerWidth <= 769 && (
+                  <div className="trends-state-name">
+                    <select
+                      onChange={({target}) => {
+                        onHighlightState(JSON.parse(target.value));
+                      }}
+                    >
+                      {states.map((s) => {
+                        return (
+                          <option
+                            key={s.statecode}
+                            value={JSON.stringify(s)}
+                            selected={s.statecode === activeStateCode}
+                          >
+                            {s.state === 'Total' ? 'All States' : s.state}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                )}
+              </div>
 
               <TimeSeries
                 timeseries={timeseries[activeStateCode]}
@@ -249,15 +230,29 @@ function Home(props) {
 
         <div
           className="floating-buttons"
-          style={{display: isShowFloatingButtons ? 'block' : 'none'}}
+          style={{
+            display: isShowFloatingButtons ? 'block' : 'none',
+          }}
         >
-          <button className="table-nav" onClick={scrollHandlers[0]}>
+          <button
+            className="table-nav fadeInUp"
+            onClick={scrollHandlers[0]}
+            style={{animationDelay: '2.2s'}}
+          >
             <Icon.Grid />
           </button>
-          <button className="map-nav" onClick={scrollHandlers[1]}>
+          <button
+            className="map-nav fadeInUp"
+            onClick={scrollHandlers[1]}
+            style={{animationDelay: '2.1s'}}
+          >
             <Icon.MapPin />
           </button>
-          <button className="trends-nav" onClick={scrollHandlers[2]}>
+          <button
+            className="trends-nav fadeInUp"
+            onClick={scrollHandlers[2]}
+            style={{animationDelay: '2s'}}
+          >
             <Icon.TrendingUp />
           </button>
         </div>

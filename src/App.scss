@@ -1129,6 +1129,8 @@ input.switch:checked::after {
 }
 
 .trends-state-name {
+  display: flex;
+  flex-direction: row;
   text-align: center;
 
   select {
@@ -1143,11 +1145,12 @@ input.switch:checked::after {
     border: 2px solid #e8e8e9;
     border-radius: 4px;
     font-family: 'archia';
-    font-weight: 600;
+    font-weight: 900;
     margin-top: 1rem;
     padding: 0.5rem;
     text-transform: uppercase;
     width: auto;
+    color: $gray;
 
     &:focus {
       outline: none;
@@ -1322,33 +1325,48 @@ input.switch:checked::after {
 }
 
 .floating-buttons {
+  display: flex;
+  flex-direction: column;
   position: fixed;
-  bottom: 2rem;
-  text-align: center;
-  width: 100%;
+  bottom: 1rem;
+  right: 1rem;
+  padding: 0;
   z-index: 1;
+  width: 3rem;
 
   button {
-    border-radius: 5px;
+    border-radius: 50%;
     border: 0;
-    box-shadow: 2px 2px 3px #999;
-    margin: 0 1.5rem;
-    padding: 0.7rem;
+    padding: 0.75rem;
+    background: $yellow-mid;
+    color: $orange;
+    cursor: pointer;
+    margin: 0.25rem;
+    display: flex;
+    flex-direction: row;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    backdrop-filter: saturate(180%) blur(2px);
+    &:hover {
+      background: #orange;
+      svg {
+        stroke: #orange;
+      }
+    }
+
+    svg {
+      align-self: center;
+      stroke: $orange;
+    }
   }
 
   button.table-nav {
-    background-color: #f6f7f7;
-    color: #6d767e;
   }
 
   button.map-nav {
-    background-color: #fde5e9;
-    color: #f5083d;
   }
 
   button.trends-nav {
-    background-color: #e5f5ea;
-    color: #32a949;
   }
 
   @media screen and (min-width: 1200px) {
@@ -2223,20 +2241,28 @@ select {
 }
 
 .pills {
-  text-align: right;
-  >button {
-    border: 1px solid #c9d6fb;
-    background-color: #edf1fe;
-    color: $blue;
+  display: flex;
+  flex-direction: row;
+  align-self: flex-end;
+  > button {
+    border: 2px $yellow-light solid;
+    background-color: $yellow-light;
+    color: $orange;
     text-transform: uppercase;
     text-align: center;
-    font-weight: 800;
-    transition: background 0.15s ease-in-out;
-    padding: 4px 10px;
+    font-weight: 900;
+    transition: background 0.25s ease-in-out;
+    padding: 5px 15px;
     font-family: 'archia';
+    cursor: pointer;
+    margin: 0;
+    outline: none;
+    &:hover {
+      background: $yellow-hover;
+    }
 
     &.selected {
-      background-color: #c9d6fb;
+      background-color: $yellow-mid;
     }
 
     &:focus:not(:focus-visible) {
@@ -2246,11 +2272,13 @@ select {
     &:first-of-type {
       border-top-left-radius: 5px;
       border-bottom-left-radius: 5px;
+      border-right: 0;
     }
 
     &:last-of-type {
       border-top-right-radius: 5px;
       border-bottom-right-radius: 5px;
+      border-left: 0;
     }
   }
 }
@@ -2476,6 +2504,7 @@ select {
     }
   }
 }
+
 
 
 @media (max-width: 769px) {
