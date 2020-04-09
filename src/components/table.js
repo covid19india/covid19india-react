@@ -105,7 +105,7 @@ function Table(props) {
     <React.Fragment>
       <h5
         className="table-fineprint fadeInUp"
-        style={{animationDelay: '1.5s'}}
+        style={{animationDelay: '1.8s'}}
         ref={props.forwardRef}
       >
         Compiled from State Govt. numbers <Link to="/faq">Know More</Link>

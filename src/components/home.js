@@ -116,17 +116,17 @@ function Home(props) {
           </div>
 
           {states.length > 1 && <Level data={states} />}
+          {fetched && <Minigraph timeseries={timeseries['TT']} />}
           {fetched && (
-            <Minigraph timeseries={timeseries['TT']} animate={true} />
+            <Table
+              forwardRef={refs[0]}
+              states={states}
+              summary={false}
+              stateDistrictWiseData={stateDistrictWiseData}
+              onHighlightState={onHighlightState}
+              onHighlightDistrict={onHighlightDistrict}
+            />
           )}
-          <Table
-            forwardRef={refs[0]}
-            states={states}
-            summary={false}
-            stateDistrictWiseData={stateDistrictWiseData}
-            onHighlightState={onHighlightState}
-            onHighlightDistrict={onHighlightDistrict}
-          />
         </div>
 
         <div className="home-right">
