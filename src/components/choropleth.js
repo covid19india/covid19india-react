@@ -85,15 +85,9 @@ function ChoroplethMap({
           .attr('pointer-events', 'all')
           .on('mouseover', (d) => {
             handleMouseover(d.properties[propertyField]);
-            const target = d3.event.target;
-            d3.select(target.parentNode.appendChild(target)).attr(
-              'class',
-              'map-hover'
-            );
           })
           .on('mouseleave', (d) => {
-            const target = d3.event.target;
-            d3.select(target).attr('class', 'path-region');
+            setSelectedRegion(null);
             if (onceTouchedRegion === d) onceTouchedRegion = null;
           })
           .on('touchstart', (d) => {
@@ -134,6 +128,7 @@ function ChoroplethMap({
       const handleMouseover = (name) => {
         try {
           setHoveredRegion(name, mapMeta);
+          setSelectedRegion(name);
         } catch (err) {
           console.log('err', err);
         }
