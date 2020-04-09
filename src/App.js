@@ -54,7 +54,7 @@ function App() {
       animationDelayForNavbar: 0.5,
     },
     {
-      pageLink: '/resources',
+      pageLink: '/essentials',
       view: Resources,
       displayName: 'Essentials',
       animationDelayForNavbar: 0.7,
