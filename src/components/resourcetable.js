@@ -241,9 +241,6 @@ function ResourceTable({columns, data, isDesktop}) {
       <div className="resourcesaccordion">
         {page.map((row, i) => {
           prepareRow(row);
-          {
-            // consoleconsole.log(row);
-          }
           return (
             <ExpansionPanel key={row.id} classes={{root: classesPanel.root}}>
               <ExpansionPanelSummary
@@ -253,8 +250,8 @@ function ResourceTable({columns, data, isDesktop}) {
                 }}
               >
                 {/* <div className="expanelheading"
-                                 style={{display: 'flex', 
-                                         flexDirection: 'row', 
+                                 style={{display: 'flex',
+                                         flexDirection: 'row',
                                          justifyContent: 'space-between',
                                          backgroundColor: 'blue'}}> */}
                 <div
