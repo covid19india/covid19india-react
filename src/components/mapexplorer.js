@@ -429,7 +429,10 @@ export default function ({
           </div>
         </div>
 
-        <div className="stats is-purple tested">
+        <div
+          className="stats is-purple tested fadeInUp"
+          style={{animationDelay: '2.4s'}}
+        >
           <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
           <div className="stats-bottom">
             <h1>{testObj?.totaltested || '-'}</h1>
