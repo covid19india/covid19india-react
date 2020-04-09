@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 
 function Navbar(props) {
+  const [menuVisible, setMenuVisible] = useState(false);
+
   // HTML Properties for each of the links in UI
   const navLinkProps = (path, animationDelay) => ({
     className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
@@ -30,20 +32,40 @@ function Navbar(props) {
         />
 
         <div className="navbar-left">
-          {props.pages.map((page, i) => {
-            return (
-              <Link to={page.pageLink} key={i}>
-                <span
-                  {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}
+          <div className={`navbar-menu ${!menuVisible ? 'hidden' : ''}`}>
+            {props.pages.map((page, i) => {
+              return (
+                <Link
+                  onClick={() => setMenuVisible(false)}
+                  to={page.pageLink}
+                  key={i}
                 >
-                  {page.displayName}
-                </span>
-              </Link>
-            );
-          })}
+                  <span
+                    {...navLinkProps(
+                      page.pageLink,
+                      page.animationDelayForNavbar
+                    )}
+                  >
+                    {page.displayName}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
 
-        <div className="navbar-right"></div>
+        <div className="navbar-right">
+          <div
+            className="navbar-toggle"
+            onClick={() => {
+              setMenuVisible(!menuVisible);
+            }}
+          >
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
       </div>
     );
   } else {

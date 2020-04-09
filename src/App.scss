@@ -112,6 +112,7 @@ $cyan: #17a2b8;
 $white: #fff;
 $gray: #6c757d;
 $gray-light: #6c757d10;
+$gray-light-opaque: #f6f6f7;
 $gray-hover: #6c757d20;
 $gray-mid: #6c757d99;
 $gray-dark: #343a40;
@@ -281,13 +282,13 @@ h6 {
   justify-content: space-around;
   text-transform: uppercase;
   font-weight: 900;
+  align-items: center;
 
   @include navbarReveal($gray-light);
 
   .navbar-left {
     margin-left: 2rem;
     flex: 1;
-    align-self: center;
 
     a {
       display: inline-block;
@@ -315,7 +316,6 @@ h6 {
   img {
     width: 3rem;
     height: 3rem;
-    align-self: center;
     margin-left: 5rem;
     cursor: pointer;
   }
@@ -2456,6 +2456,8 @@ select {
   }
 
   .Navbar {
+    position: relative;
+
     a {
       font-size: 0.75rem !important;
       margin-right: 0.75rem !important;
@@ -2467,6 +2469,58 @@ select {
       margin-left: 1rem;
       margin-right: -1rem;
       cursor: pointer;
+    }
+
+    .navbar-menu {
+      background: $gray-light-opaque;
+      border-bottom: 1px solid;
+      border-top: 1px solid;
+      border-color: $gray-hover;
+      box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 #dadce0;
+      left: 0;
+      padding: 0.5rem 0;
+      position: absolute;
+      right: 0;
+      top: 4.5rem;
+      z-index: 999;
+
+      &.hidden {
+        display: none;
+      }
+
+      a {
+        display: block;
+        padding: 0.75rem 1rem;
+      }
+    }
+
+    .navbar-toggle {
+      align-items: center;
+      background: $gray-light;
+      border-radius: 5px;
+      border: 1px solid $gray-mid;
+      color: $gray-mid;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Archia';
+      font-size: 14px;
+      height: 1.25rem;
+      justify-content: center;
+      margin-right: 1rem;
+      width: 1.25rem;
+
+      &:hover {
+        border-color: $gray;
+        color: $gray;
+      }
+
+      div {
+        background: currentColor;
+        margin: 1px 0;
+        width: 0.75rem;
+        height: 2px;
+      }
     }
   }
 
@@ -2591,8 +2645,6 @@ select {
 
   .Navbar {
     justify-content: space-between;
-    .navbar-right {
-    }
 
     .navbar-burger {
       align-self: center;
