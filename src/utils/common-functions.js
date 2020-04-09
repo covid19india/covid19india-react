@@ -136,9 +136,9 @@ export const parseStateTimeseries = ({states_daily: data}) => {
         dailyconfirmed: +data[i][stateCode] || 0,
         dailyrecovered: +data[i + 1][stateCode] || 0,
         dailydeceased: +data[i + 2][stateCode] || 0,
-        totalconfirmed: +data[i][stateCode] + prev.dailyconfirmed || 0,
-        totaldeceased: +data[i + 1][stateCode] + prev.dailyrecovered || 0,
-        totalrecovered: +data[i + 2][stateCode] + prev.dailydeceased || 0,
+        totalconfirmed: +data[i][stateCode] + prev.totalconfirmed || 0,
+        totaldeceased: +data[i + 1][stateCode] + prev.totaldeceased || 0,
+        totalrecovered: +data[i + 2][stateCode] + prev.totalrecovered || 0,
       });
     });
   }
