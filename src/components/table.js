@@ -75,6 +75,19 @@ function Table(props) {
     states.unshift(totalRow[0]);
   };
 
+  const handleSearch = (e, props) => {
+    const filterdStates = props.states.filter((value, i) => {
+      return (
+        value.state.toLowerCase().indexOf(e.target.value.toLowerCase()) > -1 ||
+        value.state.toLowerCase().indexOf('total') > -1
+      );
+    });
+
+    setStates((state, props) => {
+      return filterdStates;
+    });
+  };
+
   const handleSort = (e, props) => {
     const currentsortColumn = e.currentTarget
       .querySelector('abbr')
@@ -106,6 +119,12 @@ function Table(props) {
       <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1.5s'}}>
         Compiled from State Govt. numbers <Link to="/faq">Know More</Link>
       </h5>
+      <input
+        type="text"
+        style={{animationDelay: '1.5s'}}
+        className="table-fineprint fadeInUp search"
+        onChange={(e) => handleSearch(e, props)}
+      ></input>
       <table className="table fadeInUp" style={{animationDelay: '1.8s'}}>
         <thead>
           <tr>

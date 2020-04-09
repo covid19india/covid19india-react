@@ -2385,6 +2385,7 @@ select {
     height: 25rem !important;
   }
 }
+
 .cards-container {
   padding: 4rem;
   .cards {
@@ -2791,4 +2792,26 @@ select {
 
 .height-22 {
 	height: 22px;
+}
+
+.search {
+    appearance: none;
+    background: #b1a8a8;
+    text-align: left !important;
+    border: 0;
+    color: #fff !important;
+    font-size: 18px;
+    font-weight: 300;
+    font-family: inherit;
+    position: relative;
+    padding: 4px 4px 4px 29px;
+    background-image: url('/search.svg');
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 4px;
+    border-radius: 25px;
+    font-family: inherit;
+    outline: none;
+    -webkit-appearance: none;
 }
