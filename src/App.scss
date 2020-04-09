@@ -564,8 +564,8 @@ h6 {
     #outlined-number {
       font-family: 'archia';
       font-size: 0.7rem !important;
-      font-weight: 400;    
-      font-family: 'archia';  
+      font-weight: 400;
+      font-family: 'archia';
       height: 0.1rem;
     }
   }
@@ -1201,7 +1201,7 @@ table {
     display: flex;
     flex-direction: row;
     width: 100%;
-    margin-top: 1rem;
+    margin-top: 4rem;
     overflow: hidden;
 
     svg {
@@ -1217,6 +1217,10 @@ table {
         font-size: 10px;
       }
     }
+  }
+
+  .legend {
+    margin-top: 0;
   }
 
   .back-button {
@@ -1264,8 +1268,9 @@ table {
 
     .unknown {
       position: absolute;
-      top: 5rem;
-      width: 5rem;
+      right: 0;
+      top: 3rem;
+      width: 9rem;
     }
   }
 

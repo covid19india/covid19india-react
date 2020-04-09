@@ -142,7 +142,9 @@ function ChoroplethMap({
         // Slowly fade away all the states except highlighted one
         const t = d3.transition().duration(500);
         g.selectAll('.borders').transition(t).style('opacity', 0);
-        g.selectAll('.path-region').transition(t).style('opacity', 0);
+        g.selectAll('.path-region:not(.map-hover)')
+          .transition(t)
+          .style('opacity', 0);
         // Zoom to click
         const [[x0, y0], [x1, y1]] = path.bounds(d);
         d3.event.stopPropagation();
@@ -273,8 +275,10 @@ function ChoroplethMap({
           ref={choroplethMap}
         ></svg>
       </div>
-
-      <div className="svg-parent fadeInUp" style={{animationDelay: '2.5s'}}>
+      <div
+        className="svg-parent legend fadeInUp"
+        style={{animationDelay: '2.5s'}}
+      >
         <svg
           id="legend"
           height="65"
