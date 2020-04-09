@@ -368,14 +368,14 @@ function Patients(props) {
 
             <h5>Source 2</h5>
             <div className="link">
-              <a href={patient.source1} target="_noblank">
+              <a href={patient.source2} target="_noblank">
                 {patient.source2}
               </a>
             </div>
 
             <h5>Source 3</h5>
             <div className="link">
-              <a href={patient.source1} target="_noblank">
+              <a href={patient.source3} target="_noblank">
                 {patient.source3}
               </a>
             </div>
