@@ -246,6 +246,7 @@ h6 {
   .home-left {
     margin-right: 2.5rem;
     margin-left: 2.5rem;
+    width: 35rem;
   }
 
   .home-right {
@@ -1131,6 +1132,12 @@ table {
       width: 11px;
       stroke-width: 3;
     }
+  }
+}
+
+.home-left{
+  table.table{
+    width: 35rem;
   }
 }
 

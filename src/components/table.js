@@ -53,7 +53,7 @@ function Table(props) {
       let value1 = StateData1[sortColumn];
       let value2 = StateData2[sortColumn];
 
-      if (sortColumn !== 'state') {
+      if (sortColumn !== 'state' && sortColumn !== 'deathper') {
         value1 = parseInt(StateData1[sortColumn]);
         value2 = parseInt(StateData2[sortColumn]);
       }
@@ -76,10 +76,11 @@ function Table(props) {
   };
 
   const handleSort = (e, props) => {
-    const currentsortColumn = e.currentTarget
-      .querySelector('abbr')
-      .getAttribute('title')
-      .toLowerCase();
+    const el = e.currentTarget.querySelector('abbr');
+
+    let currentsortColumn = el.getAttribute('title').toLowerCase();
+    if (el.getAttribute('data-sort-by'))
+      currentsortColumn = el.getAttribute('data-sort-by');
     const isAscending =
       sortData.sortColumn === currentsortColumn
         ? !sortData.isAscending
@@ -228,6 +229,33 @@ function Table(props) {
                   style={{
                     display:
                       sortData.sortColumn === 'deaths' ? 'initial' : 'none',
+                  }}
+                >
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
+                </div>
+              </div>
+            </th>
+            <th
+              className="sticky"
+              onClick={(e) => handleSort(e, props)}
+              title="Deaths %"
+            >
+              <div className="heading-content">
+                <abbr
+                  className={`${window.innerWidth <= 769 ? 'is-gray' : ''}`}
+                  title="Deaths %"
+                  data-sort-by="deathper"
+                >
+                  D%
+                </abbr>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'deathper' ? 'initial' : 'none',
                   }}
                 >
                   {sortData.isAscending ? (

@@ -47,6 +47,12 @@ function Home(props) {
         axios.get('https://api.covid19india.org/updatelog/log.json'),
         axios.get('https://api.covid19india.org/state_test_data.json'),
       ]);
+      response.data.statewise.forEach((s) => {
+        s.deathper =
+          s.deaths > 0
+            ? parseFloat((s.deaths * 100) / s.confirmed).toFixed(2)
+            : '';
+      });
       setStates(response.data.statewise);
       setTimeseries(validateCTS(response.data.cases_time_series));
       setLastUpdated(response.data.statewise[0].lastupdatedtime);

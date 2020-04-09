@@ -87,7 +87,7 @@ function Row(props) {
         className={props.total ? 'state is-total' : 'state'}
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
-        touchstart={() => props.onHighlightState?.(state, props.index)}
+        onTouchStart={() => props.onHighlightState?.(state, props.index)}
         onClick={!props.total ? handleReveal : null}
         style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
       >
@@ -152,6 +152,13 @@ function Row(props) {
           </span>
           <span className="table__count-text">
             {parseInt(state.deaths) === 0 ? '-' : state.deaths}
+          </span>
+        </td>
+        <td
+          style={{color: parseInt(state.deaths) === 0 ? '#B5B5B5' : 'inherit'}}
+        >
+          <span className="table__count-text">
+            {state.deathper === '' ? '-' : state.deathper}
           </span>
         </td>
       </tr>
@@ -247,7 +254,7 @@ function Row(props) {
                     props.onHighlightDistrict?.(district, state, props.index)
                   }
                   onMouseLeave={() => props.onHighlightDistrict?.()}
-                  touchstart={() =>
+                  onTouchStart={() =>
                     props.onHighlightDistrict?.(district, state, props.index)
                   }
                 >
