@@ -237,6 +237,7 @@ function Home(props) {
               .slice(-5)
               .reverse()
               .map(function (activity, index) {
+                activity.update = activity.update.replace('\n', '<br/>');
                 return (
                   <div key={index} className="update">
                     <h5>
@@ -245,7 +246,11 @@ function Home(props) {
                         new Date()
                       ) + ' Ago'}
                     </h5>
-                    <h4>{activity.update}</h4>
+                    <h4
+                      dangerouslySetInnerHTML={{
+                        __html: activity.update,
+                      }}
+                    ></h4>
                   </div>
                 );
               })}
