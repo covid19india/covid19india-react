@@ -1,6 +1,6 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import {useTable, usePagination} from 'react-table';
+import { makeStyles } from '@material-ui/core/styles';
+import { useTable, usePagination } from 'react-table';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -49,7 +49,7 @@ const getFormattedLink = (initialValue) => {
   // let reurl2 = /\s*.*(www\..+)\s*/g
   const reinsta = /\s*Instagram: @(.+)\s*/g;
   const refb = /\s*Facebook: @(.+)\s*/g;
-  const s1 = initialValue.replace(reurl1, '<a href="$1">Link</a>');
+  const s1 = initialValue.replace(reurl1, '<a href="$1" target="_blank" rel="noopener noreferrer">Link</a>');
   const s2 = s1.replace(
     reinsta,
     '<a href="https://www.instagram.com/$1">Instagram: @$1</a>'
@@ -68,7 +68,7 @@ const getFormattedLink = (initialValue) => {
   );
 };
 
-const FormattedCell = ({value: initialValue, editable}) => {
+const FormattedCell = ({ value: initialValue, editable }) => {
   // We need to keep and update the state of the cell normally
   const [value, setValue] = React.useState(initialValue);
   const reurl1 = /\s*(https?:\/\/.+)\s*/g;
@@ -101,7 +101,7 @@ const FormattedCell = ({value: initialValue, editable}) => {
   );
 };
 
-function ResourceTable({columns, data, isDesktop}) {
+function ResourceTable({ columns, data, isDesktop }) {
   const classesPannelSummary = usePanelSummaryStyles();
   const classesPanel = usePanelStyles();
   const classesListItemText = useItemTextStyles();
@@ -127,13 +127,13 @@ function ResourceTable({columns, data, isDesktop}) {
     nextPage,
     previousPage,
     setPageSize,
-    state: {pageIndex, pageSize},
+    state: { pageIndex, pageSize },
   } = useTable(
     {
       columns,
       data,
       defaultColumn,
-      initialState: {pageIndex: 0, pageSize: 5},
+      initialState: { pageIndex: 0, pageSize: 5 },
     },
     usePagination
   );
@@ -162,7 +162,7 @@ function ResourceTable({columns, data, isDesktop}) {
                   {row.cells.map((cell) => {
                     return (
                       <td key={cell.id} {...cell.getCellProps()}>
-                        {cell.render('Cell', {editable: false})}
+                        {cell.render('Cell', { editable: false })}
                       </td>
                     );
                   })}
@@ -202,7 +202,7 @@ function ResourceTable({columns, data, isDesktop}) {
               {'>>'}
             </button>{' '}
           </div>
-          <h5 style={{color: '#201aa299'}}>
+          <h5 style={{ color: '#201aa299' }}>
             Page{' '}
             <strong>
               {pageIndex + 1} of {pageOptions.length}
@@ -242,7 +242,7 @@ function ResourceTable({columns, data, isDesktop}) {
         {page.map((row, i) => {
           prepareRow(row);
           return (
-            <ExpansionPanel key={row.id} classes={{root: classesPanel.root}}>
+            <ExpansionPanel key={row.id} classes={{ root: classesPanel.root }}>
               <ExpansionPanelSummary
                 classes={{
                   content: classesPannelSummary.content,
@@ -266,7 +266,7 @@ function ResourceTable({columns, data, isDesktop}) {
                 </div>
                 <div
                   className="orgcategory"
-                  style={{maxWidth: '10.9rem', textAlign: 'end'}}
+                  style={{ maxWidth: '10.9rem', textAlign: 'end' }}
                 >
                   <h6>{row.values['category']}</h6>
                 </div>
@@ -370,7 +370,7 @@ function ResourceTable({columns, data, isDesktop}) {
               {'>>'}
             </button>{' '}
           </div>
-          <h5 style={{color: '#201aa299'}}>
+          <h5 style={{ color: '#201aa299' }}>
             Page{' '}
             <strong>
               {pageIndex + 1} of {pageOptions.length}
