@@ -2,8 +2,9 @@ import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ChoroplethMap from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 import {formatDate, formatDateAbsolute} from '../utils/common-functions';
-import {formatDistance, format, parse} from 'date-fns';
-import * as Icon from 'react-feather';
+import {formatDistance} from 'date-fns';
+/* import {formatDistance, format, parse} from 'date-fns';*/
+/* import * as Icon from 'react-feather';*/
 
 const mapMeta = {
   India: {
@@ -255,27 +256,16 @@ function MapExplorer({
   onMapHighlightChange,
 }) {
   const [selectedRegion, setSelectedRegion] = useState({});
-  const [panelRegion, setPanelRegion] = useState({});
-  const [testObj, setTestObj] = useState({});
+  const [panelRegion, setPanelRegion] = useState(getRegionFromState(states[0]));
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState(
     getRegionFromState(states[0])
   );
+  /* const [testObj, setTestObj] = useState({});*/
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
-    const region = getRegionFromState(states[1]);
-    setPanelRegion(region);
-    if (currentHoveredRegion.state) onMapHighlightChange(currentHoveredRegion);
-  }, [currentHoveredRegion, onMapHighlightChange, states]);
-
-  useEffect(() => {
-    const region = getRegionFromState(states[0]);
-    setCurrentHoveredRegion(region);
-  }, [states]);
-
-  if (!panelRegion) {
-    return null;
-  }
+    if (panelRegion.state) onMapHighlightChange(panelRegion);
+  }, [panelRegion, onMapHighlightChange]);
 
   const [statistic, currentMapData] = useMemo(() => {
     const statistic = {total: 0, maxConfirmed: 0};
@@ -316,7 +306,7 @@ function MapExplorer({
     (name, currentMap) => {
       if (currentMap.mapType === MAP_TYPES.COUNTRY) {
         const region = getRegionFromState(
-          states.filter((state) => name === state.state)[0]
+          states.find((state) => name === state.state)
         );
         setCurrentHoveredRegion(region);
         setPanelRegion(region);
@@ -335,7 +325,7 @@ function MapExplorer({
         }
         setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
         const panelRegion = getRegionFromState(
-          states.filter((state) => currentMap.name === state.state)[0]
+          states.find((state) => currentMap.name === state.state)
         );
         setPanelRegion(panelRegion);
       }
@@ -375,6 +365,7 @@ function MapExplorer({
         return;
       }
       setCurrentMap(newMap);
+      setSelectedRegion(null);
       if (newMap.mapType === MAP_TYPES.COUNTRY) {
         setHoveredRegion(states[0].state, newMap);
       } else if (newMap.mapType === MAP_TYPES.STATE) {
@@ -392,9 +383,16 @@ function MapExplorer({
 
   const {name, lastupdatedtime} = currentHoveredRegion;
 
-  useEffect(() => {
-    setTestObj(stateTestData.find((obj) => obj.state === panelRegion.name));
-  }, [panelRegion, stateTestData, testObj]);
+  /* useEffect(() => {
+    let found = false;
+    stateTestData.forEach((testObj, index) => {
+      if (testObj.state === panelRegion.name) {
+        found = true;
+        setTestObj(testObj);
+      }
+    });
+    if (!found) setTestObj({});
+  }, [panelRegion, stateTestData, testObj]);*/
 
   return (
     <div
@@ -453,30 +451,29 @@ function MapExplorer({
           </div>
         </div>
 
-        {
-          <div
-            className="stats is-purple tested fadeInUp"
-            style={{animationDelay: '2.4s'}}
-          >
-            <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
-            <div className="stats-bottom">
-              <h1>{testObj?.totaltested || '-'}</h1>
-            </div>
-            <h6 className="timestamp">
-              {!isNaN(new Date(testObj?.updatedon))
-                ? `As of ${format(
-                    parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
-                    'dd MMM'
-                  )}`
-                : ''}
-            </h6>
-            {testObj?.totaltested?.length > 1 && (
-              <a href={testObj.source} target="_noblank">
-                <Icon.Link />
-              </a>
-            )}
+        {/* <div
+          className="stats is-purple tested fadeInUp"
+          style={{animationDelay: '2.4s'}}
+        >
+          <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
+          <div className="stats-bottom">
+            <h1>{testObj?.totaltested || '-'}</h1>
           </div>
-        }
+          <h6 className="timestamp">
+            {!isNaN(new Date(testObj?.updatedon))
+              ? `As of ${format(
+                  parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
+                  'dd MMM'
+                )}`
+              : ''}
+          </h6>
+          {testObj?.totaltested?.length > 1 && (
+            <a href={testObj.source} target="_noblank">
+              <Icon.Link />
+            </a>
+          )}
+        </div>
+        */}
       </div>
 
       <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
