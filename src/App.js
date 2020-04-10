@@ -14,6 +14,9 @@ import Navbar from './components/navbar';
 import Links from './components/links';
 import FAQ from './components/faq';
 import Banner from './components/banner';
+import PatientDB from './components/patientdb';
+import DeepDive from './components/deepdive';
+import Resources from './components/resources';
 /* import PatientDB from './components/patientdb';*/
 
 const history = require('history').createBrowserHistory;
@@ -26,23 +29,35 @@ function App() {
       displayName: 'Home',
       animationDelayForNavbar: 0.2,
     },
-    /* {
-      pageLink: '/database',
+    {
+      pageLink: '/demographics',
       view: PatientDB,
-      displayName: 'Patients DB',
+      displayName: 'Demographics',
       animationDelayForNavbar: 0.3,
-    },*/
+    },
+    {
+      pageLink: '/deepdive',
+      view: DeepDive,
+      displayName: 'Deep Dive',
+      animationDelayForNavbar: 0.4,
+    },
     {
       pageLink: '/links',
       view: Links,
       displayName: 'Helpful Links',
-      animationDelayForNavbar: 0.5,
+      animationDelayForNavbar: 0.4,
     },
     {
       pageLink: '/faq',
       view: FAQ,
-      displayName: 'FAQ',
-      animationDelayForNavbar: 0.6,
+      displayName: 'About',
+      animationDelayForNavbar: 0.5,
+    },
+    {
+      pageLink: '/essentials',
+      view: Resources,
+      displayName: 'Essentials',
+      animationDelayForNavbar: 0.7,
     },
   ];
 
@@ -66,6 +81,7 @@ function App() {
                     />
                   );
                 })}
+                <Redirect to="/" />
               </Switch>
             </div>
           )}
@@ -80,11 +96,19 @@ function App() {
 
         <h5>We stand with everyone fighting on the frontlines</h5>
         <div className="link">
-          <a href="https://github.com/covid19india">covid19india</a>
+          <a
+            href="https://github.com/covid19india"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            covid19india
+          </a>
         </div>
         <a
           href="https://github.com/covid19india/covid19india-react"
           className="button github"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <Icon.GitHub />
           <span>Open Sourced on GitHub</span>
@@ -92,14 +116,16 @@ function App() {
         <a
           className="button excel"
           href="https://bit.ly/patientdb"
-          target="_noblank"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <Icon.Database />
           <span>Crowdsourced Patient Database&nbsp;</span>
         </a>
         <a
           href="https://twitter.com/covid19indiaorg"
-          target="_noblank"
+          target="_blank"
+          rel="noopener noreferrer"
           className="button twitter"
           style={{justifyContent: 'center'}}
         >
@@ -109,7 +135,8 @@ function App() {
         <a
           href="https://bit.ly/covid19crowd"
           className="button telegram"
-          target="_noblank"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <Icon.MessageCircle />
           <span>Join Telegram to Collaborate!</span>

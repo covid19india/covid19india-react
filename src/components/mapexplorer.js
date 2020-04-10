@@ -1,8 +1,9 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ChoroplethMap from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
-import {formatDate} from '../utils/common-functions';
-import {formatDistance} from 'date-fns';
+import {formatDate, formatDateAbsolute} from '../utils/common-functions';
+import {formatDistance, format, parse} from 'date-fns';
+import * as Icon from 'react-feather';
 
 const mapMeta = {
   India: {
@@ -42,11 +43,23 @@ const mapMeta = {
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'bihar_district',
   },
+  Chandigarh: {
+    name: 'Chandigarh',
+    geoDataFile: `${MAPS_DIR}/chandigarh.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'chandigarh_district',
+  },
   Chhattisgarh: {
     name: 'Chhattisgarh',
     geoDataFile: `${MAPS_DIR}/chhattisgarh.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'chhattisgarh_district',
+  },
+  'Dadra and Nagar Haveli': {
+    name: 'Dadra and Nagar Haveli',
+    geoDataFile: `${MAPS_DIR}/dadranagarhaveli.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'dadranagarhaveli_district',
   },
   Delhi: {
     name: 'Delhi',
@@ -108,6 +121,12 @@ const mapMeta = {
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'ladakh_district',
   },
+  Lakshadweep: {
+    name: 'Lakshadweep',
+    geoDataFile: `${MAPS_DIR}/lakshadweep.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'lakshadweep_district',
+  },
   'Madhya Pradesh': {
     name: 'Madhya Pradesh',
     geoDataFile: `${MAPS_DIR}/madhyapradesh.json`,
@@ -149,6 +168,12 @@ const mapMeta = {
     geoDataFile: `${MAPS_DIR}/odisha.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'odisha_district',
+  },
+  Puducherry: {
+    name: 'Puducherry',
+    geoDataFile: `${MAPS_DIR}/puducherry.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'puducherry_district',
   },
   Punjab: {
     name: 'Punjab',
@@ -207,17 +232,25 @@ const mapMeta = {
   },
 };
 
-export default function ({states, stateDistrictWiseData, regionHighlighted}) {
+export default function ({
+  states,
+  stateDistrictWiseData,
+  stateTestData,
+  regionHighlighted,
+}) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
+  const [panelRegion, setPanelRegion] = useState({});
+  const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
     const region = getRegionFromState(states[1]);
+    setPanelRegion(region);
     setCurrentHoveredRegion(region);
   }, [states]);
 
-  if (!currentHoveredRegion) {
+  if (!panelRegion) {
     return null;
   }
 
@@ -259,9 +292,11 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
   const setHoveredRegion = useCallback(
     (name, currentMap) => {
       if (currentMap.mapType === MAP_TYPES.COUNTRY) {
-        setCurrentHoveredRegion(
-          getRegionFromState(states.filter((state) => name === state.state)[0])
+        const region = getRegionFromState(
+          states.filter((state) => name === state.state)[0]
         );
+        setCurrentHoveredRegion(region);
+        setPanelRegion(region);
       } else if (currentMap.mapType === MAP_TYPES.STATE) {
         const state = stateDistrictWiseData[currentMap.name] || {
           districtData: {},
@@ -276,9 +311,13 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
           };
         }
         setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
+        const panelRegion = getRegionFromState(
+          states.filter((state) => currentMap.name === state.state)[0]
+        );
+        setPanelRegion(panelRegion);
       }
     },
-    [stateDistrictWiseData, states]
+    [states, stateDistrictWiseData]
   );
 
   useEffect(() => {
@@ -293,7 +332,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
       const newMap = mapMeta['India'];
       setCurrentMap(newMap);
       const region = getRegionFromState(regionHighlighted.state);
-      setCurrentHoveredRegion(region);
+      setHoveredRegion(region.name, newMap);
       setSelectedRegion(region.name);
     } else {
       const newMap = mapMeta[regionHighlighted.state.state];
@@ -350,71 +389,93 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
     },
     [setHoveredRegion, stateDistrictWiseData, states]
   );
+
   const {name, lastupdatedtime} = currentHoveredRegion;
 
+  useEffect(() => {
+    setTestObj(stateTestData.find((obj) => obj.state === panelRegion.name));
+  }, [panelRegion, stateTestData, testObj]);
+
   return (
-    <div className="MapExplorer fadeInUp" style={{animationDelay: '1.2s'}}>
+    <div className="MapExplorer fadeInUp" style={{animationDelay: '1.5s'}}>
       <div className="header">
-        <h1>{currentMap.name} Map</h1>
+        <h1>{currentMap.name}</h1>
         <h6>
           {window.innerWidth <= 769 ? 'Tap' : 'Hover'} over a{' '}
-          {currentMap.mapType === MAP_TYPES.COUNTRY ? 'state' : 'district'} for
-          more details
+          {currentMap.mapType === MAP_TYPES.COUNTRY ? 'state/ut' : 'district'}{' '}
+          for more details
         </h6>
-        {window.innerWidth <= 769 && (
-          <h6 style={{marginTop: '1rem'}}>
-            <span
-              style={{
-                fontWeight: 900,
-                color: '#fff',
-                background: '#000',
-                padding: '0.25rem',
-                borderRadius: '2.5px',
-                marginRight: '0.25rem',
-              }}
-            >
-              Update!
-            </span>{' '}
-            Tap twice on states to view districts!
-          </h6>
-        )}
       </div>
 
       <div className="map-stats">
-        <div className="stats">
-          <h5>Confirmed</h5>
+        <div className="stats fadeInUp" style={{animationDelay: '2s'}}>
+          <h5>{window.innerWidth <= 769 ? 'Cnfmd' : 'Confirmed'}</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.confirmed}</h1>
+            <h1>{panelRegion.confirmed}</h1>
             <h6>{}</h6>
           </div>
         </div>
 
-        <div className="stats is-blue">
-          <h5>Active</h5>
+        <div
+          className="stats is-blue fadeInUp"
+          style={{animationDelay: '2.1s'}}
+        >
+          <h5>{window.innerWidth <= 769 ? 'Actv' : 'Active'}</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.active || ''}</h1>
+            <h1>{panelRegion.active || ''}</h1>
             <h6>{}</h6>
           </div>
         </div>
 
-        <div className="stats is-green">
-          <h5>Recovered</h5>
+        <div
+          className="stats is-green fadeInUp"
+          style={{animationDelay: '2.2s'}}
+        >
+          <h5>{window.innerWidth <= 769 ? 'Rcvrd' : 'Recovered'}</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.recovered || ''}</h1>
+            <h1>{panelRegion.recovered || ''}</h1>
             <h6>{}</h6>
           </div>
         </div>
 
-        <div className="stats is-gray">
-          <h5>Deceased</h5>
+        <div
+          className="stats is-gray fadeInUp"
+          style={{animationDelay: '2.3s'}}
+        >
+          <h5>{window.innerWidth <= 769 ? 'Dcsd' : 'Deceased'}</h5>
           <div className="stats-bottom">
-            <h1>{currentHoveredRegion.deaths || ''}</h1>
+            <h1>{panelRegion.deaths || ''}</h1>
             <h6>{}</h6>
           </div>
         </div>
+
+        {
+          <div
+            className="stats is-purple tested fadeInUp"
+            style={{animationDelay: '2.4s'}}
+          >
+            <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
+            <div className="stats-bottom">
+              <h1>{testObj?.totaltested || '-'}</h1>
+            </div>
+            <h6 className="timestamp">
+              {!isNaN(new Date(testObj?.updatedon))
+                ? `As of ${format(
+                    parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
+                    'dd MMM'
+                  )}`
+                : ''}
+            </h6>
+            {testObj?.totaltested?.length > 1 && (
+              <a href={testObj.source} target="_noblank">
+                <Icon.Link />
+              </a>
+            )}
+          </div>
+        }
       </div>
 
-      <div className="meta">
+      <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
         <h2>{name}</h2>
         {lastupdatedtime && (
           <div
@@ -425,7 +486,13 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
             }`}
           >
             <h6>Last Updated</h6>
-            <h3>
+            <h3
+              title={
+                isNaN(Date.parse(formatDate(lastupdatedtime)))
+                  ? ''
+                  : formatDateAbsolute(lastupdatedtime)
+              }
+            >
               {isNaN(Date.parse(formatDate(lastupdatedtime)))
                 ? ''
                 : formatDistance(
@@ -435,6 +502,15 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
             </h3>
           </div>
         )}
+
+        {currentMap.mapType === MAP_TYPES.STATE ? (
+          <h4 className="district-confirmed">
+            Confirmed cases:{' '}
+            {currentMapData[currentHoveredRegion.name]
+              ? currentMapData[currentHoveredRegion.name]
+              : 0}
+          </h4>
+        ) : null}
 
         {currentMap.mapType === MAP_TYPES.STATE &&
         currentMapData.Unknown > 0 ? (
@@ -460,6 +536,7 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
         setHoveredRegion={setHoveredRegion}
         changeMap={switchMapToState}
         selectedRegion={selectedRegion}
+        setSelectedRegion={setSelectedRegion}
       />
     </div>
   );

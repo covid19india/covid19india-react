@@ -103,10 +103,10 @@ function Table(props) {
 
   return (
     <React.Fragment>
-      <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1s'}}>
+      <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1.5s'}}>
         Compiled from State Govt. numbers <Link to="/faq">Know More</Link>
       </h5>
-      <table className="table fadeInUp" style={{animationDelay: '1s'}}>
+      <table className="table fadeInUp" style={{animationDelay: '1.8s'}}>
         <thead>
           <tr>
             <th
@@ -252,7 +252,7 @@ function Table(props) {
                   total={false}
                   reveal={revealedStates[state.state]}
                   districts={
-                    Object.keys(districts).length - 1 > 0
+                    state.state in districts
                       ? districts[state.state].districtData
                       : []
                   }
