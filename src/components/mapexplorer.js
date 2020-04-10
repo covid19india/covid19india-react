@@ -256,27 +256,16 @@ function MapExplorer({
   onMapHighlightChange,
 }) {
   const [selectedRegion, setSelectedRegion] = useState({});
-  const [panelRegion, setPanelRegion] = useState({});
-  const [testObj, setTestObj] = useState({});
+  const [panelRegion, setPanelRegion] = useState(getRegionFromState(states[0]));
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState(
     getRegionFromState(states[0])
   );
+  const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
-    const region = getRegionFromState(states[1]);
-    setPanelRegion(region);
-    if (currentHoveredRegion.state) onMapHighlightChange(currentHoveredRegion);
-  }, [currentHoveredRegion, onMapHighlightChange, states]);
-
-  useEffect(() => {
-    const region = getRegionFromState(states[0]);
-    setCurrentHoveredRegion(region);
-  }, [states]);
-
-  if (!panelRegion) {
-    return null;
-  }
+    if (panelRegion.state) onMapHighlightChange(panelRegion);
+  }, [panelRegion, onMapHighlightChange]);
 
   const [statistic, currentMapData] = useMemo(() => {
     const statistic = {total: 0, maxConfirmed: 0};
@@ -317,7 +306,7 @@ function MapExplorer({
     (name, currentMap) => {
       if (currentMap.mapType === MAP_TYPES.COUNTRY) {
         const region = getRegionFromState(
-          states.filter((state) => name === state.state)[0]
+          states.find((state) => name === state.state)
         );
         setCurrentHoveredRegion(region);
         setPanelRegion(region);
@@ -336,7 +325,7 @@ function MapExplorer({
         }
         setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
         const panelRegion = getRegionFromState(
-          states.filter((state) => currentMap.name === state.state)[0]
+          states.find((state) => currentMap.name === state.state)
         );
         setPanelRegion(panelRegion);
       }
@@ -376,6 +365,7 @@ function MapExplorer({
         return;
       }
       setCurrentMap(newMap);
+      setSelectedRegion(null);
       if (newMap.mapType === MAP_TYPES.COUNTRY) {
         setHoveredRegion(states[0].state, newMap);
       } else if (newMap.mapType === MAP_TYPES.STATE) {
