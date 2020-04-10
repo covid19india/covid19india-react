@@ -263,10 +263,6 @@ function MapExplorer({
   const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
-  useEffect(() => {
-    if (panelRegion.state) onMapHighlightChange(panelRegion);
-  }, [panelRegion, onMapHighlightChange]);
-
   const [statistic, currentMapData] = useMemo(() => {
     const statistic = {total: 0, maxConfirmed: 0};
     let currentMapData = {};
@@ -310,6 +306,7 @@ function MapExplorer({
         );
         setCurrentHoveredRegion(region);
         setPanelRegion(region);
+        onMapHighlightChange(region);
       } else if (currentMap.mapType === MAP_TYPES.STATE) {
         const state = stateDistrictWiseData[currentMap.name] || {
           districtData: {},
@@ -330,7 +327,7 @@ function MapExplorer({
         setPanelRegion(panelRegion);
       }
     },
-    [states, stateDistrictWiseData]
+    [states, stateDistrictWiseData, onMapHighlightChange]
   );
 
   useEffect(() => {

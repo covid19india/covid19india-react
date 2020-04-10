@@ -1745,9 +1745,9 @@ input.switch:checked::after {
     transition: all 0.2s ease-in-out;
     backdrop-filter: saturate(180%) blur(2px);
     &:hover {
-      background: #orange;
+      background: #ffa500;
       svg {
-        stroke: #orange;
+        stroke: #ffa500;
       }
     }
 
@@ -1755,15 +1755,6 @@ input.switch:checked::after {
       align-self: center;
       stroke: $orange;
     }
-  }
-
-  button.table-nav {
-  }
-
-  button.map-nav {
-  }
-
-  button.trends-nav {
   }
 
   @media screen and (min-width: 1200px) {

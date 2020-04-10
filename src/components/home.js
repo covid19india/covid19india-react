@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import axios from 'axios';
 import {formatDistance, format} from 'date-fns';
 import * as Icon from 'react-feather';
@@ -30,7 +30,6 @@ function Home(props) {
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
-  const [isShowFloatingButtons] = useState(true);
 
   useEffect(() => {
     if (fetched === false) {
@@ -70,17 +69,15 @@ function Home(props) {
   const onHighlightState = (state, index) => {
     if (!state && !index) return setRegionHighlighted(null);
     setRegionHighlighted({state, index});
-    setActiveStateCode(state ? state.statecode : 'TT');
   };
   const onHighlightDistrict = (district, state, index) => {
     if (!state && !index && !district) return setRegionHighlighted(null);
     setRegionHighlighted({district, state, index});
-    setActiveStateCode(state ? state.statecode : 'TT');
   };
 
-  const onMapHighlightChange = ({statecode}) => {
+  const onMapHighlightChange = useCallback(({statecode}) => {
     setActiveStateCode(statecode);
-  };
+  }, []);
 
   const refs = [useRef(), useRef(), useRef()];
   const scrollHandlers = refs.map((ref) => () =>
@@ -235,12 +232,7 @@ function Home(props) {
           )}
         </div>
 
-        <div
-          className="floating-buttons"
-          style={{
-            display: isShowFloatingButtons ? 'block' : 'none',
-          }}
-        >
+        <div className="floating-buttons">
           <button
             className="table-nav fadeInUp"
             onClick={scrollHandlers[0]}
