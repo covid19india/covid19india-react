@@ -201,7 +201,7 @@ function ChoroplethMap({
         const margin = {left: 0.02 * width, right: 0.2 * width};
         const barWidth = width - margin.left - margin.right;
         const heightLegend = +svgLegend.attr('height');
-        const numTicks = Math.min(6, statistic.maxConfirmed);
+        const numTicks = Math.min(width > 400 ? 6 : 5, statistic.maxConfirmed);
         svgLegend
           .append('g')
           .style('transform', `translateX(${margin.left}px)`)
