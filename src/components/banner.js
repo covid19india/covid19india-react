@@ -10,7 +10,13 @@ function Banner(props) {
       .get('https://api.covid19india.org/website_data.json')
       .then((response) => {
         setSnippets(response.data.factoids || []);
-        setSnippet(response.data.factoids[0] || '');
+        setSnippet(
+          response.data.factoids[
+            Math.floor(
+              Math.random() * (response.data.factoids.length - 1 - 0) + 0
+            )
+          ] || ''
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -32,15 +38,19 @@ function Banner(props) {
     return () => clearInterval(interval);
   }, [snippetChooser, snippets]);
 
-  return (
-    <div
-      onClick={() => snippetChooser(0, snippets.length - 1)}
-      className="Banner fadeInUp"
-      style={{animationDelay: '0.2s'}}
-    >
-      <div className="snippet">{snippet ? snippet.banner : ''} &nbsp;</div>
-    </div>
-  );
+  if (window.location.pathname !== '/database') {
+    return (
+      <div
+        onClick={() => snippetChooser(0, snippets.length - 1)}
+        className="Banner fadeInUp"
+        style={{animationDelay: '0.8s'}}
+      >
+        <div className="snippet">{snippet ? snippet.banner : ''} &nbsp;</div>
+      </div>
+    );
+  } else {
+    return <div></div>;
+  }
 }
 
 export default Banner;
