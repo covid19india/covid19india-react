@@ -112,7 +112,7 @@ export const preprocessTimeseries = (timeseries) => {
  * @return {Array<Object>}
  */
 export function sliceTimeseriesFromEnd(timeseries, days) {
-  return timeseries.slice(timeseries.length - days);
+  return timeseries.slice(-days);
 }
 
 export const formatNumber = (value) => {
