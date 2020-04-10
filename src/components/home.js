@@ -50,7 +50,7 @@ function Home(props) {
       setStates(response.data.statewise);
       setTimeseries(validateCTS(response.data.cases_time_series));
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
-      setStateTestData(stateTestResponse.data.states_tested_data);
+      setStateTestData(stateTestResponse.data.states_tested_data.reverse());
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
       setActivityLog(updateLogResponse.data);
       /* setPatients(rawDataResponse.data.raw_data.filter((p) => p.detectedstate));*/
