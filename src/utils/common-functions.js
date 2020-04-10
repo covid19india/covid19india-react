@@ -121,21 +121,25 @@ export const parseStateTimeseries = ({states_daily: data}) => {
     return a;
   }, {});
 
+  const today = new Date();
   for (let i = 0; i < data.length; i += 3) {
     const date = new Date(data[i].date);
-    Object.entries(statewiseSeries).forEach(([k, v]) => {
-      const stateCode = k.toLowerCase();
-      const prev = v[v.length - 1] || {};
-      v.push({
-        date,
-        dailyconfirmed: +data[i][stateCode] || 0,
-        dailyrecovered: +data[i + 1][stateCode] || 0,
-        dailydeceased: +data[i + 2][stateCode] || 0,
-        totalconfirmed: +data[i][stateCode] + prev.totalconfirmed || 0,
-        totaldeceased: +data[i + 1][stateCode] + prev.totaldeceased || 0,
-        totalrecovered: +data[i + 2][stateCode] + prev.totalrecovered || 0,
+    // Skip data from the current day
+    if (new Date(date.toDateString()) < new Date(today.toDateString())) {
+      Object.entries(statewiseSeries).forEach(([k, v]) => {
+        const stateCode = k.toLowerCase();
+        const prev = v[v.length - 1] || {};
+        v.push({
+          date,
+          dailyconfirmed: +data[i][stateCode] || 0,
+          dailyrecovered: +data[i + 1][stateCode] || 0,
+          dailydeceased: +data[i + 2][stateCode] || 0,
+          totalconfirmed: +data[i][stateCode] + prev.totalconfirmed || 0,
+          totaldeceased: +data[i + 1][stateCode] + prev.totaldeceased || 0,
+          totalrecovered: +data[i + 2][stateCode] + prev.totalrecovered || 0,
+        });
       });
-    });
+    }
   }
 
   return statewiseSeries;
