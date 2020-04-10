@@ -242,15 +242,15 @@ function Table(props) {
             <th
               className="sticky"
               onClick={(e) => handleSort(e, props)}
-              title="Deaths %"
+              title="Mortality rate"
             >
               <div className="heading-content">
                 <abbr
                   className={`${window.innerWidth <= 769 ? 'is-gray' : ''}`}
-                  title="Deaths %"
+                  title="Mortality rate"
                   data-sort-by="deathper"
                 >
-                  D%
+                  M%
                 </abbr>
                 <div
                   style={{

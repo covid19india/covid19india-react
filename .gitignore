@@ -25,3 +25,5 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+covid19.sublime-project
+covid19.sublime-workspace
