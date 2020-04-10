@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
+import {useLocalStorage} from 'react-use';
 import axios from 'axios';
 
 import {MAP_META} from '../constants';
@@ -28,12 +29,18 @@ function Home(props) {
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState({});
   const [activeStateCode, setActiveStateCode] = useState('TT'); // TT -> India
-  const [timeseriesMode, setTimeseriesMode] = useState(true);
-  const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
   const [showUpdates, setShowUpdates] = useState(false);
   const [seenUpdates, setSeenUpdates] = useState(false);
   const [newUpdate, setNewUpdate] = useState(true);
+  const [timeseriesMode, setTimeseriesMode] = useLocalStorage(
+    'timeseriesMode',
+    true
+  );
+  const [timeseriesLogMode, setTimeseriesLogMode] = useLocalStorage(
+    'timeseriesLogMode',
+    false
+  );
 
   useEffect(() => {
     // this if block is for checking if user opened a page for first time.
