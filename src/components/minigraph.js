@@ -305,7 +305,7 @@ function Minigraph(props) {
       <div className="svg-parent fadeInUp" style={{animationDelay: '1.4s'}}>
         <svg
           ref={graphElement1}
-          width="75"
+          width={window.innerWidth <= 769 ? '60' : '100'}
           height="100"
           viewBox="0 0 100 100"
           preserveAspectRatio="xMidYMid meet"
@@ -318,7 +318,7 @@ function Minigraph(props) {
       >
         <svg
           ref={graphElement2}
-          width="75"
+          width={window.innerWidth <= 769 ? '60' : '100'}
           height="100"
           viewBox="0 0 100 100"
           preserveAspectRatio="xMidYMid meet"
@@ -331,7 +331,7 @@ function Minigraph(props) {
       >
         <svg
           ref={graphElement3}
-          width="75"
+          width={window.innerWidth <= 769 ? '60' : '100'}
           height="100"
           viewBox="0 0 100 100"
           preserveAspectRatio="xMidYMid meet"
@@ -344,7 +344,7 @@ function Minigraph(props) {
       >
         <svg
           ref={graphElement4}
-          width="75"
+          width={window.innerWidth <= 769 ? '60' : '100'}
           height="100"
           viewBox="0 0 100 100"
           preserveAspectRatio="xMidYMid meet"
@@ -356,7 +356,7 @@ function Minigraph(props) {
       >
         <svg
           ref={graphElement5}
-          width="75"
+          width={window.innerWidth <= 769 ? '60' : '100'}
           height="100"
           viewBox="0 0 100 100"
           preserveAspectRatio="xMidYMid meet"
