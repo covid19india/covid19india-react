@@ -2,7 +2,8 @@ import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ChoroplethMap from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 import {formatDate, formatDateAbsolute} from '../utils/common-functions';
-import {formatDistance} from 'date-fns';
+import {formatDistance, format, parse} from 'date-fns';
+import * as Icon from 'react-feather';
 
 const mapMeta = {
   India: {
@@ -210,6 +211,8 @@ const mapMeta = {
 export default function ({states, stateDistrictWiseData, regionHighlighted}) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
+  const [panelRegion, setPanelRegion] = useState({});
+  const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
@@ -351,7 +354,9 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
     [setHoveredRegion, stateDistrictWiseData, states]
   );
   const {name, lastupdatedtime} = currentHoveredRegion;
-
+  useEffect(() => {
+    setTestObj(stateTestData.find((obj) => obj.state === panelRegion.name));
+  }, [panelRegion, stateTestData, testObj]);
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.5s'}}>
       <div className="header">
@@ -404,6 +409,31 @@ export default function ({states, stateDistrictWiseData, regionHighlighted}) {
             <h6>{}</h6>
           </div>
         </div>
+
+        {
+          <div
+            className="stats is-purple tested fadeInUp"
+            style={{animationDelay: '2.4s'}}
+          >
+            <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
+            <div className="stats-bottom">
+              <h1>{testObj?.totaltested || '-'}</h1>
+            </div>
+            <h6 className="timestamp">
+              {!isNaN(new Date(testObj?.updatedon))
+                ? `As of ${format(
+                    parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
+                    'dd MMM'
+                  )}`
+                : ''}
+            </h6>
+            {testObj?.totaltested?.length > 1 && (
+              <a href={testObj.source} target="_noblank">
+                <Icon.Link />
+              </a>
+            )}
+          </div>
+        }
       </div>
 
       <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
