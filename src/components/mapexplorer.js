@@ -393,7 +393,11 @@ export default function ({
   const {name, lastupdatedtime} = currentHoveredRegion;
 
   useEffect(() => {
-    setTestObj(stateTestData.find((obj) => obj.state === panelRegion.name));
+    setTestObj(
+      stateTestData.find(
+        (obj) => obj.state === panelRegion.name && obj.totaltested !== ''
+      )
+    );
   }, [panelRegion, stateTestData, testObj]);
 
   return (
