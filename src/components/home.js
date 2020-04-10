@@ -54,9 +54,9 @@ function Home(props) {
         axios.get('https://api.covid19india.org/state_test_data.json'),
       ]);
       setStates(response.data.statewise);
-      const timeSeries = parseStateTimeseries(statesDailyResponse);
-      timeSeries['TT'] = preprocessTimeseries(response.data.cases_time_series); // TT -> India
-      setTimeseries(timeSeries);
+      const ts = parseStateTimeseries(statesDailyResponse);
+      ts['TT'] = preprocessTimeseries(response.data.cases_time_series); // TT -> India
+      setTimeseries(ts);
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
       setStateTestData(stateTestResponse.data.states_tested_data.reverse());
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
