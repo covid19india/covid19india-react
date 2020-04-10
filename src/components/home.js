@@ -28,7 +28,7 @@ function Home(props) {
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState({});
   const [activeStateCode, setActiveStateCode] = useState('TT'); // TT -> India
-  const [timeseriesMode, setTimeseriesMode] = useState(true);
+  const [timeseriesMode, setTimeseriesMode] = useState(false);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
   const [showUpdates, setShowUpdates] = useState(false);
