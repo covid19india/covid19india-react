@@ -2,9 +2,8 @@ import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ChoroplethMap from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 import {formatDate, formatDateAbsolute} from '../utils/common-functions';
-import {formatDistance} from 'date-fns';
-/* import {formatDistance, format, parse} from 'date-fns';*/
-/* import * as Icon from 'react-feather';*/
+import {formatDistance, format, parse} from 'date-fns';
+import * as Icon from 'react-feather';
 
 const mapMeta = {
   India: {
@@ -260,7 +259,7 @@ function MapExplorer({
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState(
     getRegionFromState(states[0])
   );
-  /* const [testObj, setTestObj] = useState({});*/
+  const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
@@ -383,16 +382,9 @@ function MapExplorer({
 
   const {name, lastupdatedtime} = currentHoveredRegion;
 
-  /* useEffect(() => {
-    let found = false;
-    stateTestData.forEach((testObj, index) => {
-      if (testObj.state === panelRegion.name) {
-        found = true;
-        setTestObj(testObj);
-      }
-    });
-    if (!found) setTestObj({});
-  }, [panelRegion, stateTestData, testObj]);*/
+  useEffect(() => {
+    setTestObj(stateTestData.find((obj) => obj.state === panelRegion.name));
+  }, [panelRegion, stateTestData]);
 
   return (
     <div
@@ -451,7 +443,7 @@ function MapExplorer({
           </div>
         </div>
 
-        {/* <div
+        <div
           className="stats is-purple tested fadeInUp"
           style={{animationDelay: '2.4s'}}
         >
@@ -473,7 +465,6 @@ function MapExplorer({
             </a>
           )}
         </div>
-        */}
       </div>
 
       <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
