@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {useTable, usePagination} from 'react-table';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -112,6 +113,8 @@ function ResourceTable({columns, data, isDesktop}) {
     []
   );
 
+  const [currentPageIndex, setCurrentPageIndex] = useState(0)
+
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -175,28 +178,40 @@ function ResourceTable({columns, data, isDesktop}) {
           <div className="paginationbutton">
             <button
               className="button is-purple"
-              onClick={() => gotoPage(0)}
+              onClick={() => {
+                setCurrentPageIndex(0);
+                gotoPage(0);
+              }}
               disabled={!canPreviousPage}
             >
               {'\u003c\u003c'}
             </button>{' '}
             <button
               className="button is-purple"
-              onClick={() => previousPage()}
+              onClick={() => {
+                setCurrentPageIndex(pageIndex - 1);
+                previousPage();
+              }}
               disabled={!canPreviousPage}
             >
               {'<'}
             </button>{' '}
             <button
               className="button is-purple"
-              onClick={() => nextPage()}
+              onClick={() => {
+                setCurrentPageIndex(pageIndex + 1);
+                nextPage();
+              }}
               disabled={!canNextPage}
             >
               {'>'}
             </button>{' '}
             <button
               className="button is-purple"
-              onClick={() => gotoPage(pageCount - 1)}
+              onClick={() => {
+                setCurrentPageIndex(pageCount - 1);
+                gotoPage(pageCount - 1);
+              }}
               disabled={!canNextPage}
             >
               {'>>'}
@@ -213,9 +228,12 @@ function ResourceTable({columns, data, isDesktop}) {
                 </h5> */}
           <input
             type="number"
-            defaultValue={pageIndex + 1}
+            min="1"
+            max={pageOptions.length}
+            value={currentPageIndex + 1}
             onChange={(e) => {
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              setCurrentPageIndex(page)
               gotoPage(page);
             }}
           />
@@ -343,28 +361,40 @@ function ResourceTable({columns, data, isDesktop}) {
           <div className="paginationbutton">
             <button
               className="button is-purple"
-              onClick={() => gotoPage(0)}
+              onClick={() => {
+                setCurrentPageIndex(0);
+                gotoPage(0);
+              }}
               disabled={!canPreviousPage}
             >
               {'\u003c\u003c'}
             </button>{' '}
             <button
               className="button is-purple"
-              onClick={() => previousPage()}
+              onClick={() => {
+                setCurrentPageIndex(pageIndex - 1);
+                previousPage();
+              }}
               disabled={!canPreviousPage}
             >
               {'<'}
             </button>{' '}
             <button
               className="button is-purple"
-              onClick={() => nextPage()}
+              onClick={() => {
+                setCurrentPageIndex(pageIndex + 1);
+                nextPage();
+              }}
               disabled={!canNextPage}
             >
               {'>'}
             </button>{' '}
             <button
               className="button is-purple"
-              onClick={() => gotoPage(pageCount - 1)}
+              onClick={() => {
+                setCurrentPageIndex(pageCount - 1);
+                gotoPage(pageCount - 1);
+              }}
               disabled={!canNextPage}
             >
               {'>>'}
@@ -381,9 +411,12 @@ function ResourceTable({columns, data, isDesktop}) {
                 </h5> */}
           <input
             type="number"
-            defaultValue={pageIndex + 1}
+            min="1"
+            max={pageOptions.length}
+            value={currentPageIndex + 1}
             onChange={(e) => {
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              setCurrentPageIndex(page)
               gotoPage(page);
             }}
           />
