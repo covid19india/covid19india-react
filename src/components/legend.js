@@ -23,8 +23,11 @@ function legend({
     .style('overflow', 'visible')
     .style('display', 'block');
 
-  let tickAdjust = (g) =>
-    g.selectAll('.tick line').attr('y1', marginTop + marginBottom - height);
+  let tickAdjust = (g) => {
+    const ticks = g.selectAll('.tick line');
+    ticks.attr('y1', marginTop + marginBottom - height);
+    d3.select(ticks.nodes()[ticks.size() - 1]).remove();
+  };
   let x;
 
   // Continuous
@@ -119,8 +122,14 @@ function legend({
       .attr('height', height - marginTop - marginBottom)
       .attr('fill', (d) => d);
 
-    tickValues = d3.range(thresholds.length);
-    tickFormat = (i) => thresholdFormat(thresholds[i], i);
+    tickValues = d3.range(-1, thresholds.length);
+    tickFormat = (i) => {
+      if (i === -1) return thresholdFormat(1);
+      else if (i === thresholds.length - 1) return;
+      else if (i === thresholds.length - 2)
+        return thresholdFormat(thresholds[i] + '+', i);
+      return thresholdFormat(thresholds[i], i);
+    };
   }
 
   // Ordinal

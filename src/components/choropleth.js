@@ -28,7 +28,6 @@ function ChoroplethMap({
       d3.selectAll('svg#chart > *').style('display', 'none');
 
       const propertyField = propertyFieldMap[mapMeta.mapType];
-      const maxInterpolation = 0.8;
       const svg = d3.select(choroplethMap.current);
       const t = d3.transition().duration(500);
 
@@ -38,6 +37,7 @@ function ChoroplethMap({
       );
 
       const projection = d3.geoMercator();
+      // Set size of map
       let path;
       let width;
       let height;
@@ -57,13 +57,39 @@ function ChoroplethMap({
         path = d3.geoPath(projection);
       }
 
-      const colorScale = d3
-        .scaleSequential(
-          [0, statistic.maxConfirmed / maxInterpolation],
-          d3.interpolateReds
-        )
-        .nice();
+      /* LEGEND */
+      const domainMax = Math.max(3, statistic.maxConfirmed);
+      const steps = Math.min(6, domainMax);
+      const domainMin = Math.max(2, Math.floor(statistic.maxConfirmed / steps));
+      const domain = Array.from(
+        {length: steps},
+        (e, i) => domainMin + i * Math.floor(domainMax / steps)
+      );
 
+      const svgLegend = d3.select(choroplethLegend.current);
+      svgLegend.selectAll('*').remove();
+      const colorScale = d3
+        .scaleThreshold()
+        .domain(domain)
+        .range(d3.schemeReds[steps]);
+      // Colorbar
+      const margin = {left: 0.02 * width, right: 0.02 * width};
+      const barWidth = width - margin.left - margin.right;
+      const heightLegend = +svgLegend.attr('height');
+      svgLegend
+        .append('g')
+        .style('transform', `translateX(${margin.left}px)`)
+        .append(() =>
+          legend({
+            color: colorScale,
+            title: 'Confirmed Cases',
+            width: barWidth,
+            height: 0.8 * heightLegend,
+          })
+        );
+      svgLegend.attr('viewBox', `0 0 ${width} ${heightLegend}`);
+
+      /* DRAW MAP */
       let onceTouchedRegion = null;
       let g;
       // Check in cache
@@ -191,33 +217,6 @@ function ChoroplethMap({
         g.selectAll('*').transition(t).style('opacity', 1);
         // Reset zoom
         reset();
-      }
-
-      /* LEGEND */
-      const svgLegend = d3.select(choroplethLegend.current);
-      svgLegend.selectAll('*').remove();
-      if (statistic.maxConfirmed) {
-        // Colorbar
-        const margin = {left: 0.02 * width, right: 0.2 * width};
-        const barWidth = width - margin.left - margin.right;
-        const heightLegend = +svgLegend.attr('height');
-        const numTicks = Math.min(width > 400 ? 6 : 5, statistic.maxConfirmed);
-        svgLegend
-          .append('g')
-          .style('transform', `translateX(${margin.left}px)`)
-          .append(() =>
-            legend({
-              color: colorScale,
-              title: 'Confirmed Cases',
-              width: barWidth,
-              height: 0.8 * heightLegend,
-              ticks: numTicks,
-              tickFormat: function (d, i, n) {
-                if (Number.isInteger(d)) return n[i + 1] ? d : d + '+';
-              },
-            })
-          );
-        svgLegend.attr('viewBox', `0 0 ${width} ${heightLegend}`);
       }
     },
     [
