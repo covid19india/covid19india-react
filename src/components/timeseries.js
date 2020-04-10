@@ -81,7 +81,7 @@ function TimeSeries(props) {
         .range([margin.left, chartRight]);
 
       // Number of x-axis ticks
-      const numTicksX = width < 480 ? 4 : 8;
+      const numTicksX = width < 480 ? 4 : 7;
 
       const xAxis = (g) =>
         g
