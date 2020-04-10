@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {useTable, usePagination} from 'react-table';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -7,7 +7,7 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-// import Divider from '@material-ui/core/Divider';
+import Autosuggest from 'react-autosuggest';
 
 const usePanelSummaryStyles = makeStyles((theme) => ({
   content: {
@@ -101,6 +101,32 @@ const FormattedCell = ({value: initialValue, editable}) => {
   );
 };
 
+// searchbar stuff
+
+const getSuggestions = (value, resources) => {
+  const inputValue = value.trim().toLowerCase();
+  const inputLength = inputValue.length;
+  // console.log(resources);
+  return inputLength === 0
+    ? resources
+    : resources.filter(
+        (resource) =>
+          resource.category.toLowerCase().includes(inputValue.toLowerCase()) ||
+          resource.descriptionandorserviceprovided
+            .toLowerCase()
+            .includes(inputValue.toLowerCase()) ||
+          resource.nameoftheorganisation
+            .toLowerCase()
+            .includes(inputValue.toLowerCase())
+      );
+};
+
+const getSuggestionValue = (suggestion) => suggestion.nameoftheorganisation;
+
+const renderSuggestion = (suggestion) => (
+  <div>{suggestion.nameoftheorganisation}</div>
+);
+
 function ResourceTable({columns, data, isDesktop}) {
   const classesPannelSummary = usePanelSummaryStyles();
   const classesPanel = usePanelStyles();
@@ -111,6 +137,28 @@ function ResourceTable({columns, data, isDesktop}) {
     }),
     []
   );
+
+  const [searchValue, setSearchValue] = useState('');
+  const [suggestions, setSuggestions] = useState(data);
+
+  useEffect(() => {
+    setSuggestions(data);
+    setSearchValue('');
+  }, [data]);
+
+  const onChange = (event, {newValue}) => {
+    setSearchValue(newValue);
+  };
+
+  const onSuggestionsFetchRequested = ({value}) => {
+    setSuggestions(getSuggestions(value, data));
+  };
+
+  const inputProps = {
+    placeholder: 'Type to search',
+    value: searchValue,
+    onChange: onChange,
+  };
 
   // Use the state and functions returned from useTable to build your UI
   const {
@@ -131,7 +179,7 @@ function ResourceTable({columns, data, isDesktop}) {
   } = useTable(
     {
       columns,
-      data,
+      data: suggestions,
       defaultColumn,
       initialState: {pageIndex: 0, pageSize: 5},
     },
@@ -141,268 +189,319 @@ function ResourceTable({columns, data, isDesktop}) {
   // Render the UI for your table
   if (isDesktop === true)
     return (
-      <div className="tableandcontrols">
-        <table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th key={column.id} {...column.getHeaderProps()}>
-                    {column.render('Header')}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {page.map((row, i) => {
-              prepareRow(row);
-              return (
-                <tr key={row.id} {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td key={cell.id} {...cell.getCellProps()}>
-                        {cell.render('Cell', {editable: false})}
-                      </td>
-                    );
-                  })}
+      <>
+        <div className="searchbar">
+          <Autosuggest
+            suggestions={suggestions}
+            onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderSuggestion}
+            inputProps={inputProps}
+            alwaysRenderSuggestions={true}
+          />
+        </div>
+        <div className="tableandcontrols">
+          <table {...getTableProps()}>
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th key={column.id} {...column.getHeaderProps()}>
+                      {column.render('Header')}
+                    </th>
+                  ))}
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
-        <div className="pagination">
-          <div className="paginationbutton">
-            <button
-              className="button is-purple"
-              onClick={() => gotoPage(0)}
-              disabled={!canPreviousPage}
-            >
-              {'\u003c\u003c'}
-            </button>{' '}
-            <button
-              className="button is-purple"
-              onClick={() => previousPage()}
-              disabled={!canPreviousPage}
-            >
-              {'<'}
-            </button>{' '}
-            <button
-              className="button is-purple"
-              onClick={() => nextPage()}
-              disabled={!canNextPage}
-            >
-              {'>'}
-            </button>{' '}
-            <button
-              className="button is-purple"
-              onClick={() => gotoPage(pageCount - 1)}
-              disabled={!canNextPage}
-            >
-              {'>>'}
-            </button>{' '}
-          </div>
-          <h5 style={{color: '#201aa299'}}>
-            Page{' '}
-            <strong>
-              {pageIndex + 1} of {pageOptions.length}
-            </strong>{' '}
-          </h5>
-          {/* <h5 style={{marginLeft:'0.2rem'}}>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {page.map((row, i) => {
+                prepareRow(row);
+                return (
+                  <tr key={row.id} {...row.getRowProps()}>
+                    {row.cells.map((cell) => {
+                      return (
+                        <td key={cell.id} {...cell.getCellProps()}>
+                          {cell.render('Cell', {editable: false})}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <div className="pagination">
+            <div className="paginationbutton">
+              <button
+                className="button is-purple"
+                onClick={() => gotoPage(0)}
+                disabled={!canPreviousPage}
+              >
+                {'\u003c\u003c'}
+              </button>{' '}
+              <button
+                className="button is-purple"
+                onClick={() => previousPage()}
+                disabled={!canPreviousPage}
+              >
+                {'<'}
+              </button>{' '}
+              <button
+                className="button is-purple"
+                onClick={() => nextPage()}
+                disabled={!canNextPage}
+              >
+                {'>'}
+              </button>{' '}
+              <button
+                className="button is-purple"
+                onClick={() => gotoPage(pageCount - 1)}
+                disabled={!canNextPage}
+              >
+                {'>>'}
+              </button>{' '}
+            </div>
+            <h5 style={{color: '#201aa299'}}>
+              Page{' '}
+              <strong>
+                {pageIndex + 1} of {pageOptions.length}
+              </strong>{' '}
+            </h5>
+            {/* <h5 style={{marginLeft:'0.2rem'}}>
                      Go to page:{' '}
                 </h5> */}
-          <input
-            type="number"
-            defaultValue={pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              gotoPage(page);
-            }}
-          />
+            <input
+              type="number"
+              defaultValue={pageIndex + 1}
+              onChange={(e) => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                gotoPage(page);
+              }}
+            />
 
-          <select
-            className="select"
-            value={pageSize}
-            onChange={(e) => {
-              setPageSize(Number(e.target.value));
-            }}
-          >
-            {[5, 10, 20, 30, 40, 50].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
+            <select
+              className="select"
+              value={pageSize}
+              onChange={(e) => {
+                setPageSize(Number(e.target.value));
+              }}
+            >
+              {[5, 10, 20, 30, 40, 50].map((pageSize) => (
+                <option key={pageSize} value={pageSize}>
+                  Show {pageSize}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-      </div>
+      </>
     );
   else
     return (
-      <div className="resourcesaccordion">
-        {page.map((row, i) => {
-          prepareRow(row);
-          return (
-            <ExpansionPanel key={row.id} classes={{root: classesPanel.root}}>
-              <ExpansionPanelSummary
-                classes={{
-                  content: classesPannelSummary.content,
-                  root: classesPannelSummary.root,
-                }}
-              >
-                {/* <div className="expanelheading"
+      <>
+        <div className="searchbar">
+          <Autosuggest
+            suggestions={suggestions}
+            onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderSuggestion}
+            inputProps={inputProps}
+            // highlightFirstSuggestion={true}
+            // onSuggestionSelected = {this.props.onSuggestionSelected}
+          />
+        </div>
+        <div className="resourcesaccordion">
+          {page.map((row, i) => {
+            prepareRow(row);
+            return (
+              <ExpansionPanel key={row.id} classes={{root: classesPanel.root}}>
+                <ExpansionPanelSummary
+                  classes={{
+                    content: classesPannelSummary.content,
+                    root: classesPannelSummary.root,
+                  }}
+                >
+                  {/* <div className="expanelheading"
                                  style={{display: 'flex',
                                          flexDirection: 'row',
                                          justifyContent: 'space-between',
                                          backgroundColor: 'blue'}}> */}
-                <div
-                  className="orgname"
-                  style={{
-                    maxWidth: '10rem',
-                    textAlign: 'start',
-                    color: '#201aa2dd',
-                  }}
-                >
-                  <h6>{row.values['nameoftheorganisation']}</h6>
-                </div>
-                <div
-                  className="orgcategory"
-                  style={{maxWidth: '10.9rem', textAlign: 'end'}}
-                >
-                  <h6>{row.values['category']}</h6>
-                </div>
-                {/* </div> */}
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <List disablePadding={true} dense={true}>
-                  <ListItem alignItems="flex-start" dense={true} divider={true}>
-                    <ListItemText
-                      primary="Organisation Name"
-                      secondary={row.values['nameoftheorganisation']}
-                      classes={{
-                        primary: classesListItemText.primary,
-                        secondary: classesListItemText.secondary,
-                      }}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start" dense={true} divider={true}>
-                    <ListItemText
-                      primary="Location"
-                      secondary={row.values['city']}
-                      classes={{
-                        primary: classesListItemText.primary,
-                        secondary: classesListItemText.secondary,
-                      }}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start" dense={true} divider={true}>
-                    <ListItemText
-                      primary="Description"
-                      secondary={row.values['descriptionandorserviceprovided']}
-                      classes={{
-                        primary: classesListItemText.primary,
-                        secondary: classesListItemText.secondary,
-                      }}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start" dense={true} divider={true}>
-                    <ListItemText
-                      primary="Category"
-                      secondary={row.values['category']}
-                      classes={{
-                        primary: classesListItemText.primary,
-                        secondary: classesListItemText.secondary,
-                      }}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start" dense={true} divider={true}>
-                    <ListItemText
-                      primary="Phonenumber"
-                      secondary={getFormattedLink(row.values['phonenumber'])}
-                      classes={{
-                        primary: classesListItemText.primary,
-                        secondary: classesListItemText.secondary,
-                      }}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start" dense={true} divider={true}>
-                    <ListItemText
-                      primary="Website"
-                      secondary={getFormattedLink(row.values['contact'])}
-                      classes={{
-                        primary: classesListItemText.primary,
-                        secondary: classesListItemText.secondary,
-                      }}
-                    />
-                  </ListItem>
-                </List>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          );
-        })}
-        <div className="pagination">
-          <div className="paginationbutton">
-            <button
-              className="button is-purple"
-              onClick={() => gotoPage(0)}
-              disabled={!canPreviousPage}
-            >
-              {'\u003c\u003c'}
-            </button>{' '}
-            <button
-              className="button is-purple"
-              onClick={() => previousPage()}
-              disabled={!canPreviousPage}
-            >
-              {'<'}
-            </button>{' '}
-            <button
-              className="button is-purple"
-              onClick={() => nextPage()}
-              disabled={!canNextPage}
-            >
-              {'>'}
-            </button>{' '}
-            <button
-              className="button is-purple"
-              onClick={() => gotoPage(pageCount - 1)}
-              disabled={!canNextPage}
-            >
-              {'>>'}
-            </button>{' '}
-          </div>
-          <h5 style={{color: '#201aa299'}}>
-            Page{' '}
-            <strong>
-              {pageIndex + 1} of {pageOptions.length}
-            </strong>{' '}
-          </h5>
-          {/* <h5 style={{marginLeft:'0.2rem'}}>
+                  <div
+                    className="orgname"
+                    style={{
+                      maxWidth: '10rem',
+                      textAlign: 'start',
+                      color: '#201aa2dd',
+                    }}
+                  >
+                    <h6>{row.values['nameoftheorganisation']}</h6>
+                  </div>
+                  <div
+                    className="orgcategory"
+                    style={{maxWidth: '10.9rem', textAlign: 'end'}}
+                  >
+                    <h6>{row.values['category']}</h6>
+                  </div>
+                  {/* </div> */}
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <List disablePadding={true} dense={true}>
+                    <ListItem
+                      alignItems="flex-start"
+                      dense={true}
+                      divider={true}
+                    >
+                      <ListItemText
+                        primary="Organisation Name"
+                        secondary={row.values['nameoftheorganisation']}
+                        classes={{
+                          primary: classesListItemText.primary,
+                          secondary: classesListItemText.secondary,
+                        }}
+                      />
+                    </ListItem>
+                    <ListItem
+                      alignItems="flex-start"
+                      dense={true}
+                      divider={true}
+                    >
+                      <ListItemText
+                        primary="Location"
+                        secondary={row.values['city']}
+                        classes={{
+                          primary: classesListItemText.primary,
+                          secondary: classesListItemText.secondary,
+                        }}
+                      />
+                    </ListItem>
+                    <ListItem
+                      alignItems="flex-start"
+                      dense={true}
+                      divider={true}
+                    >
+                      <ListItemText
+                        primary="Description"
+                        secondary={
+                          row.values['descriptionandorserviceprovided']
+                        }
+                        classes={{
+                          primary: classesListItemText.primary,
+                          secondary: classesListItemText.secondary,
+                        }}
+                      />
+                    </ListItem>
+                    <ListItem
+                      alignItems="flex-start"
+                      dense={true}
+                      divider={true}
+                    >
+                      <ListItemText
+                        primary="Category"
+                        secondary={row.values['category']}
+                        classes={{
+                          primary: classesListItemText.primary,
+                          secondary: classesListItemText.secondary,
+                        }}
+                      />
+                    </ListItem>
+                    <ListItem
+                      alignItems="flex-start"
+                      dense={true}
+                      divider={true}
+                    >
+                      <ListItemText
+                        primary="Phonenumber"
+                        secondary={getFormattedLink(row.values['phonenumber'])}
+                        classes={{
+                          primary: classesListItemText.primary,
+                          secondary: classesListItemText.secondary,
+                        }}
+                      />
+                    </ListItem>
+                    <ListItem
+                      alignItems="flex-start"
+                      dense={true}
+                      divider={true}
+                    >
+                      <ListItemText
+                        primary="Website"
+                        secondary={getFormattedLink(row.values['contact'])}
+                        classes={{
+                          primary: classesListItemText.primary,
+                          secondary: classesListItemText.secondary,
+                        }}
+                      />
+                    </ListItem>
+                  </List>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            );
+          })}
+          <div className="pagination">
+            <div className="paginationbutton">
+              <button
+                className="button is-purple"
+                onClick={() => gotoPage(0)}
+                disabled={!canPreviousPage}
+              >
+                {'\u003c\u003c'}
+              </button>{' '}
+              <button
+                className="button is-purple"
+                onClick={() => previousPage()}
+                disabled={!canPreviousPage}
+              >
+                {'<'}
+              </button>{' '}
+              <button
+                className="button is-purple"
+                onClick={() => nextPage()}
+                disabled={!canNextPage}
+              >
+                {'>'}
+              </button>{' '}
+              <button
+                className="button is-purple"
+                onClick={() => gotoPage(pageCount - 1)}
+                disabled={!canNextPage}
+              >
+                {'>>'}
+              </button>{' '}
+            </div>
+            <h5 style={{color: '#201aa299'}}>
+              Page{' '}
+              <strong>
+                {pageIndex + 1} of {pageOptions.length}
+              </strong>{' '}
+            </h5>
+            {/* <h5 style={{marginLeft:'0.2rem'}}>
                      Go to page:{' '}
                 </h5> */}
-          <input
-            type="number"
-            defaultValue={pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              gotoPage(page);
-            }}
-          />
+            <input
+              type="number"
+              defaultValue={pageIndex + 1}
+              onChange={(e) => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                gotoPage(page);
+              }}
+            />
 
-          <select
-            className="select"
-            value={pageSize}
-            onChange={(e) => {
-              setPageSize(Number(e.target.value));
-            }}
-          >
-            {[5, 10, 20, 30, 40, 50].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
+            <select
+              className="select"
+              value={pageSize}
+              onChange={(e) => {
+                setPageSize(Number(e.target.value));
+              }}
+            >
+              {[5, 10, 20, 30, 40, 50].map((pageSize) => (
+                <option key={pageSize} value={pageSize}>
+                  Show {pageSize}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-      </div>
+      </>
     );
 }
 
