@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 
 function Navbar(props) {
+  const [menuVisible, setMenuVisible] = useState(false);
+
   // HTML Properties for each of the links in UI
   const navLinkProps = (path, animationDelay) => ({
     className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
@@ -16,37 +18,56 @@ function Navbar(props) {
         className="Navbar"
         style={{
           animationDelay: '0.5s',
-          height: window.location.pathname === '/clusters' ? '2.5rem' : '',
           transition: 'all 0.3s ease-in-out',
         }}
       >
-        <img
-          className="fadeInUp logo"
-          alt="India COVID-19 Tracker"
-          src="/icon.png"
-          style={{
-            animationDelay: '0.0s',
-            width: window.location.pathname === '/clusters' ? '1.5rem' : '',
-            height: window.location.pathname === '/clusters' ? '1.5rem' : '',
-            transition: 'all 0.3s ease-in-out',
-          }}
-        />
+        <Link to="/">
+          <img
+            className="fadeInUp logo"
+            alt="India COVID-19 Tracker"
+            src="/icon.png"
+            style={{
+              animationDelay: '0.0s',
+              transition: 'all 0.3s ease-in-out',
+            }}
+          />
+        </Link>
 
         <div className="navbar-left">
-          {props.pages.map((page, i) => {
-            return (
-              <Link to={page.pageLink} key={i}>
-                <span
-                  {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}
+          <div className={`navbar-menu ${!menuVisible ? 'hidden' : ''}`}>
+            {props.pages.map((page, i) => {
+              return (
+                <Link
+                  onClick={() => setMenuVisible(false)}
+                  to={page.pageLink}
+                  key={i}
                 >
-                  {page.displayName}
-                </span>
-              </Link>
-            );
-          })}
+                  <span
+                    {...navLinkProps(
+                      page.pageLink,
+                      page.animationDelayForNavbar
+                    )}
+                  >
+                    {page.displayName}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
 
-        <div className="navbar-right"></div>
+        <div className="navbar-right">
+          <div
+            className="navbar-toggle"
+            onClick={() => {
+              setMenuVisible(!menuVisible);
+            }}
+          >
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
       </div>
     );
   } else {
