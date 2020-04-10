@@ -44,11 +44,23 @@ const mapMeta = {
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'bihar_district',
   },
+  Chandigarh: {
+    name: 'Chandigarh',
+    geoDataFile: `${MAPS_DIR}/chandigarh.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'chandigarh_district',
+  },
   Chhattisgarh: {
     name: 'Chhattisgarh',
     geoDataFile: `${MAPS_DIR}/chhattisgarh.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'chhattisgarh_district',
+  },
+  'Dadra and Nagar Haveli': {
+    name: 'Dadra and Nagar Haveli',
+    geoDataFile: `${MAPS_DIR}/dadranagarhaveli.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'dadranagarhaveli_district',
   },
   Delhi: {
     name: 'Delhi',
@@ -110,6 +122,12 @@ const mapMeta = {
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'ladakh_district',
   },
+  Lakshadweep: {
+    name: 'Lakshadweep',
+    geoDataFile: `${MAPS_DIR}/lakshadweep.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'lakshadweep_district',
+  },
   'Madhya Pradesh': {
     name: 'Madhya Pradesh',
     geoDataFile: `${MAPS_DIR}/madhyapradesh.json`,
@@ -151,6 +169,12 @@ const mapMeta = {
     geoDataFile: `${MAPS_DIR}/odisha.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'odisha_district',
+  },
+  Puducherry: {
+    name: 'Puducherry',
+    geoDataFile: `${MAPS_DIR}/puducherry.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'puducherry_district',
   },
   Punjab: {
     name: 'Punjab',
