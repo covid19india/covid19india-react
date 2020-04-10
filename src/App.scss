@@ -536,8 +536,10 @@ h6 {
 
   select {
     width: 100%;
-    // background-color: $purple-light-opaque;
-    // border-radius: 10px;
+    padding: 0.4rem;
+    background-color: $purple-light-opaque;
+    border-radius: 10px;
+    font-family: 'archia';
   }
   
 }
@@ -563,6 +565,13 @@ h6 {
     // height: 2.2 rem;
     // margin-top: 0.7rem;
     margin: 0.7rem 0.7rem 0.2rem 0.1rem;
+    padding: 0.6rem 0.4rem 0.2rem 1.5rem;
+    background-color: $purple-light-opaque;
+    border-radius: 10px;
+    font-family: 'archia';
+    text-transform: capitalize; 
+    color: $purple;
+
   }
 
   input{
@@ -570,6 +579,10 @@ h6 {
     // height: 0.5rem;
     width: 100px;
     margin: 0.7rem 0.7rem 0.2rem 0.7rem;
+    border-radius: 10px;
+    border-style: solid;
+    border-color: $purple-light-opaque;
+    text-align: center;
   }
 }
 
