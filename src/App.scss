@@ -474,6 +474,14 @@ h6 {
     .header, .map-stats, .back-button, .last-update, .unknown {
       display: none;
     }
+
+    .svg-parent:not(.legend) {
+      height: 400px;
+      width: 100%;
+      svg {
+        height: 100%;
+      }
+    }
   }
 }
 
@@ -1673,7 +1681,8 @@ table {
   .svg-parent {
     display: flex;
     flex-direction: row;
-    width: 100%;
+    width: 90%;
+    margin: auto;
     margin-top: 4rem;
     overflow: hidden;
 
@@ -1692,7 +1701,8 @@ table {
   }
 
   .legend {
-    margin-top: 0;
+    margin-top: 1em;
+    width: 100%;
   }
 
   .back-button {
