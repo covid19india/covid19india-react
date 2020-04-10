@@ -542,6 +542,28 @@ h6 {
   
 }
 
+.searchbar {
+  font-family: 'archia';
+  font-size: 0.7rem !important;
+  font-weight: 400;
+  text-align: center;
+
+  .react-autosuggest__input {
+    width: 98%;
+    font-family: 'archia';
+    border: 0;
+    border-radius: 7px;
+    padding: 0.5% 1%;
+    margin-bottom: 1.5%;
+    background: #201aa220;
+  }
+
+  .react-autosuggest__suggestions-container {
+    display: none;
+  }
+
+}
+
 .pagination{
   display: flex;
   flex-direction: row;
