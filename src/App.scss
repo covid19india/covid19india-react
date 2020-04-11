@@ -2785,7 +2785,8 @@ select {
   .MapExplorer {
     .map-stats{
       flex-wrap: wrap;
-      height: 10rem;
+      height: auto;
+      vertical-align: center;
       .stats{
         margin-left: 0;
       }
