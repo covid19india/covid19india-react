@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const months = {
   '01': 'Jan',
   '02': 'Feb',
@@ -130,7 +132,7 @@ export const parseStateTimeseries = ({states_daily: data}) => {
   for (let i = 0; i < data.length; i += 3) {
     const date = new Date(data[i].date);
     // Skip data from the current day
-    if (date < today) {
+    if (moment(date).isBefore(today, 'Date')) {
       Object.entries(statewiseSeries).forEach(([k, v]) => {
         const stateCode = k.toLowerCase();
         const prev = v[v.length - 1] || {};
