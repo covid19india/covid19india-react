@@ -1241,8 +1241,9 @@ table {
   .map-stats {
     display: flex;
     flex-direction: row;
-    width: 100%;
-    height: 5rem;
+    flex-wrap: wrap;
+    width: calc(100% + 0.5rem);
+    margin-left: -0.25rem;
     position: relative;
 
     h1,
@@ -1343,14 +1344,6 @@ table {
             stroke: $purple;
           }
         }
-      }
-
-      &:first-child {
-        margin-left: 0;
-      }
-
-      &:last-child {
-        margin-right: 0;
       }
     }
   }
