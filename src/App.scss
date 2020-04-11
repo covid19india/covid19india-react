@@ -285,6 +285,18 @@ h6 {
     width: 100%;
   }
 
+  .filtersection{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: white;
+    width: 100%;
+  }
+
+  .resourcesaccordion{
+    width: 336px; //find a better solution to this
+  }
+
   table {
     position: relative;
     width: 100%;

@@ -1,8 +1,9 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ResourceTable from './resourcetable';
 import axios from 'axios';
 function Resources(props) {
   const [data, setData] = useState([]);
+  const [partData, setPartData] = useState([]);
   const [fetched, setFetched] = useState(false);
   const [city, setCity] = useState('');
   const [category, setCategory] = useState('');
@@ -176,6 +177,7 @@ function Resources(props) {
       // console.log('No PAN India row found');
     }
     setData(a);
+    setPartData(a.slice(0, 30)); // pass the first 30 rows from the data
     // console.log(resourcedict[indianstate][city][category]);
     // console.log(data);
     setShowTable(true);
@@ -207,6 +209,11 @@ function Resources(props) {
     setCategory(changedcategoryevent.target.value);
     // console.log(changedcategoryevent.target.value);
   };
+
+  const appendData = function () {
+    let tempArr = partData.concat(data.slice(partData.length, partData.length + 30))
+    setPartData(tempArr)
+  }
   return (
     <div className="Resources">
       <div className="filtersection">
@@ -268,7 +275,7 @@ function Resources(props) {
               className="button is-purple"
               disabled={!indianstate}
               onClick={filterTable}
-              style={!indianstate ? {pointerEvents: 'none'} : null}
+              style={!indianstate ? { pointerEvents: 'none' } : null}
             >
               Search
             </button>
@@ -278,7 +285,7 @@ function Resources(props) {
       <br></br>
       <div className="TableArea fadeInOut">
         {showTable && (
-          <ResourceTable columns={memocols} data={data} isDesktop={isDesktop} />
+          <ResourceTable columns={memocols} data={partData} totalCount={data.length} isDesktop={isDesktop} onScrollUpdate={appendData} />
         )}
       </div>
     </div>
