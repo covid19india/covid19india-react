@@ -270,7 +270,7 @@ function Row(props) {
                         : ''}
                     </span>
                     <span className="table__count-text">
-                      {sortedDistricts[district].confirmed}
+                      {formatNumber(sortedDistricts[district].confirmed)}
                     </span>
                   </td>
                 </tr>
@@ -295,7 +295,7 @@ function Row(props) {
                 : ''}
             </span>
             <span className="table__count-text">
-              {sortedDistricts['Unknown'].confirmed}
+              {formatNumber(sortedDistricts['Unknown'].confirmed)}
             </span>
           </td>
         </tr>
