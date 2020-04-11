@@ -531,10 +531,11 @@ h6 {
     margin-right: 2.5rem;
   }
 
-  .tableandcontrols{
+  .tableandaccordions{
     display: flex;
     flex-direction: column;
     width: 100%;
+    align-items: center;
   }
 
   table {
@@ -545,6 +546,9 @@ h6 {
     text-transform: none;
     border-spacing: 3px 2px;
     border-collapse: separate;
+    table-layout: fixed;
+    // animation-name: fadeInOut;
+    // animation-duration: 2s;
 
     thead {
       background: $purple-light;
@@ -558,6 +562,9 @@ h6 {
         border-radius: 5px;
         transition: all 0.1s ease-in-out;
         z-index: 99;
+        &.descriptionCol{
+          width: 50%;
+        }
 
         &.sticky {
           top: 4px;
@@ -792,8 +799,8 @@ h6 {
   font-size: 0.7rem !important;
   font-weight: 400;
   text-align: center;
-  margin-top: 0.2rem;
-  margin-bottom: 0.1rem;
+  margin-top: 0.6rem;
+  margin-bottom: 1rem;
   width: 100%;
 
   .react-autosuggest__input {
