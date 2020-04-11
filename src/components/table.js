@@ -54,10 +54,9 @@ function Table(props) {
       let value2 = StateData2[sortColumn];
 
       if (sortColumn !== 'state') {
-        value1 = parseInt(StateData1[sortColumn]);
-        value2 = parseInt(StateData2[sortColumn]);
+        value1 = parseFloat(StateData1[sortColumn]);
+        value2 = parseFloat(StateData2[sortColumn]);
       }
-
       if (sortData.isAscending) {
         return value1 > value2
           ? 1
@@ -238,6 +237,34 @@ function Table(props) {
                 </div>
               </div>
             </th>
+            <th className="sticky" onClick={(e) => handleSort(e, props)}>
+              <div className="heading-content">
+                <abbr
+                  className={`${window.innerWidth <= 769 ? 'is-gray' : ''}`}
+                  title="MortalityRate"
+                >
+                  {window.innerWidth <= 769
+                    ? window.innerWidth <= 375
+                      ? 'MR'
+                      : 'MR'
+                    : 'MR(%)'}
+                </abbr>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'mortalityrate'
+                        ? 'initial'
+                        : 'none',
+                  }}
+                >
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
+                </div>
+              </div>
+            </th>
           </tr>
         </thead>
 
@@ -279,4 +306,4 @@ function Table(props) {
   );
 }
 
-export default Table;
+export default React.memo(Table);

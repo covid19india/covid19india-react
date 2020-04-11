@@ -47,7 +47,7 @@ function Home(props) {
         axios.get('https://api.covid19india.org/updatelog/log.json'),
         axios.get('https://api.covid19india.org/state_test_data.json'),
       ]);
-      setStates(response.data.statewise);
+      setStates(processStateData(response.data.statewise));
       setTimeseries(validateCTS(response.data.cases_time_series));
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
       setStateTestData(stateTestResponse.data.states_tested_data.reverse());
@@ -58,6 +58,19 @@ function Home(props) {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const processStateData = (states) => {
+    states.forEach((state) => {
+      state.mortalityrate =
+        state.deaths > 0
+          ? (
+              (parseInt(state.deaths) / parseInt(state.confirmed)) *
+              100
+            ).toFixed(2)
+          : 0;
+    });
+    return states;
   };
 
   const onHighlightState = (state, index) => {

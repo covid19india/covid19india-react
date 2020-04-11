@@ -154,6 +154,15 @@ function Row(props) {
             {parseInt(state.deaths) === 0 ? '-' : state.deaths}
           </span>
         </td>
+        <td
+          style={{
+            color: state.mortalityrate === '0.00' ? '#B5B5B5' : 'inherit',
+          }}
+        >
+          <span className="table__count-text">
+            {state.mortalityrate === '0.00' ? '-' : state.mortalityrate}
+          </span>
+        </td>
       </tr>
 
       <tr
@@ -305,4 +314,4 @@ function Row(props) {
   );
 }
 
-export default Row;
+export default React.memo(Row);
