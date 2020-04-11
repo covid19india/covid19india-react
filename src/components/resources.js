@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ResourceTable from './resourcetable';
 import axios from 'axios';
 function Resources(props) {
@@ -207,6 +207,33 @@ function Resources(props) {
     setCategory(changedcategoryevent.target.value);
     // console.log(changedcategoryevent.target.value);
   };
+
+  const openSharingLink = function (message) {
+    var share_uri = `https://www.addtoany.com/share#url=${encodeURI("https://www.covid19india.org/essentials")}&title=${encodeURI(message)}`;
+
+    var h = 500, w = 500;
+    var left = (window.screen.width / 2) - (w / 2);
+    var top = (window.screen.height / 2) - (h / 2);
+    return window.open(share_uri, document.title,
+      'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='
+      + w + ', height=' + h + ', top=' + top + ', left=' + left);
+
+  }
+
+  const openSharingTray = function () {
+    var message = 'Discover nearest coronavirus support and essential service providers such as testing lab centres, accommodation shelters and vegetable vendors at ';
+    if (navigator.share !== undefined) {
+      navigator.share({
+        title: document.title,
+        text: message,
+        url: "https://www.covid19india.org/essentials",
+      }).then()
+        .catch((error) => console.log(error));
+    } else {
+      openSharingLink(message);
+    }
+  }
+
   return (
     <div className="Resources">
       <div className="filtersection">
@@ -278,7 +305,16 @@ function Resources(props) {
       <br></br>
       <div className="TableArea fadeInOut">
         {showTable && (
-          <ResourceTable columns={memocols} data={data} isDesktop={isDesktop} />
+          <div style={{ width: "100%" }}>
+            <button
+              style={{ "float": "right" }}
+              className="button is-purple"
+              onClick={openSharingTray}
+            >
+              Share
+          </button>
+            <br /><br />
+            <ResourceTable columns={memocols} data={data} isDesktop={isDesktop} /></div>
         )}
       </div>
     </div>
