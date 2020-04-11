@@ -2781,6 +2781,16 @@ select {
   .PatientsDB .modal .modal-content .meta {
     height: 25rem !important;
   }
+
+  .MapExplorer {
+    .map-stats{
+      flex-wrap: wrap;
+      height: 10rem;
+      .stats{
+        margin-left: 0;
+      }
+    }
+  }
 }
 
 .cards-container {
