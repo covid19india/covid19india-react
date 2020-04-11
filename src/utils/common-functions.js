@@ -114,3 +114,12 @@ export const preprocessTimeseries = (timeseries) => {
 export function sliceTimeseriesFromEnd(timeseries, days) {
   return timeseries.slice(timeseries.length - days);
 }
+
+/**
+ * Returns whether the value is empty or not.
+ * @param {any} value
+ *
+ * @return {Boolean}
+ */
+export const isEmpty = (value) =>
+  Object.keys(value).length === 0 && value.constructor === Object;

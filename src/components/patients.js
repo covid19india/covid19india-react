@@ -46,9 +46,7 @@ function Patients(props) {
   }, []);
 
   useEffect(() => {
-    if (patients.length) {
-      parseByDate(patients);
-    }
+    parseByDate(patients);
   }, [parseByDate, patients]);
 
   const switchPatient = (patientIndexArg) => {
