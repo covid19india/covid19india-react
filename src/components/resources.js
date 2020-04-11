@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import ResourceTable from './resourcetable';
 import axios from 'axios';
 function Resources(props) {
@@ -177,7 +177,7 @@ function Resources(props) {
       // console.log('No PAN India row found');
     }
     setData(a);
-    setPartData(a.slice(0, 30)); // pass the first 30 rows from the data
+    setPartData(a.slice(0, 30));
     // console.log(resourcedict[indianstate][city][category]);
     // console.log(data);
     setShowTable(true);
@@ -211,9 +211,52 @@ function Resources(props) {
   };
 
   const appendData = function () {
-    let tempArr = partData.concat(data.slice(partData.length, partData.length + 30))
-    setPartData(tempArr)
-  }
+    const tempArr = partData.concat(
+      data.slice(partData.length, partData.length + 30)
+    );
+    setPartData(tempArr);
+  };
+
+  const openSharingLink = function (message) {
+    const shareUri = `https://www.addtoany.com/share#url=${encodeURI(
+      'https://www.covid19india.org/essentials'
+    )}&title=${encodeURI(message)}`;
+
+    const h = 500;
+    const w = 500;
+    const left = window.screen.width / 2 - w / 2;
+    const top = window.screen.height / 2 - h / 2;
+    return window.open(
+      shareUri,
+      document.title,
+      'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' +
+        w +
+        ', height=' +
+        h +
+        ', top=' +
+        top +
+        ', left=' +
+        left
+    );
+  };
+
+  const openSharingTray = function () {
+    const message =
+      'Discover nearest coronavirus support and essential service providers such as testing lab centres, accommodation shelters and vegetable vendors at ';
+    if (navigator.share !== undefined) {
+      navigator
+        .share({
+          title: document.title,
+          text: message,
+          url: 'https://www.covid19india.org/essentials',
+        })
+        .then()
+        .catch((error) => console.log(error));
+    } else {
+      openSharingLink(message);
+    }
+  };
+
   return (
     <div className="Resources">
       <div className="filtersection">
@@ -275,7 +318,7 @@ function Resources(props) {
               className="button is-purple"
               disabled={!indianstate}
               onClick={filterTable}
-              style={!indianstate ? { pointerEvents: 'none' } : null}
+              style={!indianstate ? {pointerEvents: 'none'} : null}
             >
               Search
             </button>
@@ -285,7 +328,24 @@ function Resources(props) {
       <br></br>
       <div className="TableArea fadeInOut">
         {showTable && (
-          <ResourceTable columns={memocols} data={partData} totalCount={data.length} isDesktop={isDesktop} onScrollUpdate={appendData} />
+          <div style={{width: '100%'}}>
+            <button
+              style={{float: 'right'}}
+              className="button is-purple"
+              onClick={openSharingTray}
+            >
+              Share
+            </button>
+            <br />
+            <br />
+            <ResourceTable
+              columns={memocols}
+              data={partData}
+              totalCount={data.length}
+              isDesktop={isDesktop}
+              onScrollUpdate={appendData}
+            />
+          </div>
         )}
       </div>
     </div>
