@@ -285,6 +285,14 @@ h6 {
     width: 100%;
   }
 
+  .filtersection{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #ffffff;
+    width: 100%;
+  }
+
   table {
     position: relative;
     width: 100%;

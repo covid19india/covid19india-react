@@ -3,6 +3,7 @@ import ResourceTable from './resourcetable';
 import axios from 'axios';
 function Resources(props) {
   const [data, setData] = useState([]);
+  const [partData, setPartData] = useState([]);
   const [fetched, setFetched] = useState(false);
   const [city, setCity] = useState('');
   const [category, setCategory] = useState('');
@@ -227,6 +228,7 @@ function Resources(props) {
       // console.log('No PAN India row found');
     }
     setData(a);
+    setPartData(a.slice(0, 30));
     // console.log(resourcedict[indianstate][city][category]);
     // console.log(data);
     setShowTable(true);
@@ -259,17 +261,28 @@ function Resources(props) {
     // console.log(changedcategoryevent.target.value);
   };
 
+
+  const appendData = function () {
+    const tempArr = partData.concat(
+      data.slice(partData.length, partData.length + 30)
+    );
+    setPartData(tempArr);
+  };
+
   const openSharingLink = function (message) {
-    const share_uri = `https://www.addtoany.com/share#url=${encodeURI(
+    const shareUri = `https://www.addtoany.com/share#url=${encodeURI(
       'https://www.covid19india.org/essentials'
     )}&title=${encodeURI(message)}`;
+
 
     const h = 500;
     const w = 500;
     const left = window.screen.width / 2 - w / 2;
     const top = window.screen.height / 2 - h / 2;
     return window.open(
-      share_uri,
+
+      shareUri,
+
       document.title,
       'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' +
         w +
@@ -383,8 +396,12 @@ function Resources(props) {
             <br />
             <ResourceTable
               columns={memocols}
-              data={data}
+
+              data={partData}
+              totalCount={data.length}
               isDesktop={isDesktop}
+              onScrollUpdate={appendData}
+
             />
           </div>
         )}
