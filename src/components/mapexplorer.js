@@ -2,9 +2,9 @@ import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ChoroplethMap from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 import {formatDate, formatDateAbsolute} from '../utils/common-functions';
-import {formatDistance} from 'date-fns';
-/* import {formatDistance, format, parse} from 'date-fns';*/
-/* import * as Icon from 'react-feather';*/
+import {formatDistance, format, parse} from 'date-fns';
+import {formatNumber} from '../utils/common-functions';
+import * as Icon from 'react-feather';
 
 const mapMeta = {
   India: {
@@ -242,7 +242,7 @@ export default function ({
   const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
   const [panelRegion, setPanelRegion] = useState({});
-  /* const [testObj, setTestObj] = useState({});*/
+  const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
@@ -393,16 +393,13 @@ export default function ({
 
   const {name, lastupdatedtime} = currentHoveredRegion;
 
-  /* useEffect(() => {
-    let found = false;
-    stateTestData.forEach((testObj, index) => {
-      if (testObj.state === panelRegion.name) {
-        found = true;
-        setTestObj(testObj);
-      }
-    });
-    if (!found) setTestObj({});
-  }, [panelRegion, stateTestData, testObj]);*/
+  useEffect(() => {
+    setTestObj(
+      stateTestData.find(
+        (obj) => obj.state === panelRegion.name && obj.totaltested !== ''
+      )
+    );
+  }, [panelRegion, stateTestData, testObj]);
 
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.5s'}}>
@@ -419,7 +416,7 @@ export default function ({
         <div className="stats fadeInUp" style={{animationDelay: '2s'}}>
           <h5>{window.innerWidth <= 769 ? 'Cnfmd' : 'Confirmed'}</h5>
           <div className="stats-bottom">
-            <h1>{panelRegion.confirmed}</h1>
+            <h1>{formatNumber(panelRegion.confirmed)}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -430,7 +427,7 @@ export default function ({
         >
           <h5>{window.innerWidth <= 769 ? 'Actv' : 'Active'}</h5>
           <div className="stats-bottom">
-            <h1>{panelRegion.active || ''}</h1>
+            <h1>{formatNumber(panelRegion.active)}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -441,7 +438,7 @@ export default function ({
         >
           <h5>{window.innerWidth <= 769 ? 'Rcvrd' : 'Recovered'}</h5>
           <div className="stats-bottom">
-            <h1>{panelRegion.recovered || ''}</h1>
+            <h1>{formatNumber(panelRegion.recovered)}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -452,34 +449,35 @@ export default function ({
         >
           <h5>{window.innerWidth <= 769 ? 'Dcsd' : 'Deceased'}</h5>
           <div className="stats-bottom">
-            <h1>{panelRegion.deaths || ''}</h1>
+            <h1>{formatNumber(panelRegion.deaths)}</h1>
             <h6>{}</h6>
           </div>
         </div>
 
-        {/* <div
-          className="stats is-purple tested fadeInUp"
-          style={{animationDelay: '2.4s'}}
-        >
-          <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
-          <div className="stats-bottom">
-            <h1>{testObj?.totaltested || '-'}</h1>
+        {
+          <div
+            className="stats is-purple tested fadeInUp"
+            style={{animationDelay: '2.4s'}}
+          >
+            <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
+            <div className="stats-bottom">
+              <h1>{formatNumber(testObj?.totaltested)}</h1>
+            </div>
+            <h6 className="timestamp">
+              {!isNaN(new Date(testObj?.updatedon))
+                ? `As of ${format(
+                    parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
+                    'dd MMM'
+                  )}`
+                : ''}
+            </h6>
+            {testObj?.totaltested?.length > 1 && (
+              <a href={testObj.source} target="_noblank">
+                <Icon.Link />
+              </a>
+            )}
           </div>
-          <h6 className="timestamp">
-            {!isNaN(new Date(testObj?.updatedon))
-              ? `As of ${format(
-                  parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
-                  'dd MMM'
-                )}`
-              : ''}
-          </h6>
-          {testObj?.totaltested?.length > 1 && (
-            <a href={testObj.source} target="_noblank">
-              <Icon.Link />
-            </a>
-          )}
-        </div>
-        */}
+        }
       </div>
 
       <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
