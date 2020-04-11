@@ -553,9 +553,9 @@ h6 {
     font-family: 'archia';
     border: 0;
     border-radius: 7px;
-    padding: 0.5% 1%;
+    padding: 0.25rem;
     margin-bottom: 1.5%;
-    background: #201aa220;
+    background: $gray-opaque;
   }
 
   .react-autosuggest__suggestions-container {
