@@ -5,8 +5,9 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+// import ListItem from '@material-ui/core/ListItem';
+// import ListItemText from '@material-ui/core/ListItemText';
+import ReadMoreReact from 'read-more-react';
 // import Divider from '@material-ui/core/Divider';
 
 const usePanelSummaryStyles = makeStyles((theme) => ({
@@ -27,44 +28,72 @@ const usePanelStyles = makeStyles((theme) => ({
     marginBottom: '0.2rem',
   },
 }));
-const useItemTextStyles = makeStyles((theme) => ({
-  primary: {
-    fontFamily: 'Archia',
-    fontWeight: 500,
-    fontStyle: 'normal',
-    fontSize: '13px',
-    fontTransform: 'uppercase',
-  },
-  secondary: {
-    fontFamily: 'Archia',
-    fontWeight: 400,
-    fontStyle: 'normal',
-    fontSize: '12px',
-    // fontTransform: 'uppercase'
-  },
-}));
+// const useItemTextStyles = makeStyles((theme) => ({
+//   primary: {
+//     fontFamily: 'Archia',
+//     fontWeight: 500,
+//     fontStyle: 'normal',
+//     fontSize: '13px',
+//     fontTransform: 'uppercase',
+//   },
+//   secondary: {
+//     fontFamily: 'Archia',
+//     fontWeight: 400,
+//     fontStyle: 'normal',
+//     fontSize: '12px',
+//     // fontTransform: 'uppercase'
+//   },
+// }));
 
-const getFormattedLink = (initialValue) => {
-  const reurl1 = /\s*(https?:\/\/.+)\s*/g;
-  // let reurl2 = /\s*.*(www\..+)\s*/g
-  const reinsta = /\s*Instagram: @(.+)\s*/g;
-  const refb = /\s*Facebook: @(.+)\s*/g;
-  const s1 = initialValue.replace(reurl1, '<a href="$1">Link</a>');
-  const s2 = s1.replace(
-    reinsta,
-    '<a href="https://www.instagram.com/$1">Instagram: @$1</a>'
-  );
-  const s3 = s2.replace(
-    refb,
-    '<a href="https://www.facebook.com/$1">Facebook: @$1</a>'
-  );
+// const getFormattedLink = (initialValue) => {
+//   const reurl1 = /\s*(https?:\/\/.+)\s*/g;
+//   // let reurl2 = /\s*.*(www\..+)\s*/g
+//   const reinsta = /\s*Instagram: @(.+)\s*/g;
+//   const refb = /\s*Facebook: @(.+)\s*/g;
+//   const s1 = initialValue.replace(reurl1, '<a href="$1">Link</a>');
+//   const s2 = s1.replace(
+//     reinsta,
+//     '<a href="https://www.instagram.com/$1">Instagram: @$1</a>'
+//   );
+//   const s3 = s2.replace(
+//     refb,
+//     '<a href="https://www.facebook.com/$1">Facebook: @$1</a>'
+//   );
+//   return (
+//     <div
+//       className="tablecelldata"
+//       dangerouslySetInnerHTML={{
+//         __html: s3,
+//       }}
+//     ></div>
+//   );
+// };
+
+const formattedListOnMobileView = (row) => {
   return (
-    <div
-      className="tablecelldata"
-      dangerouslySetInnerHTML={{
-        __html: s3,
-      }}
-    ></div>
+    <div className="tablecelldata">
+      <ReadMoreReact
+        text={row.values['descriptionandorserviceprovided']}
+        readMoreText={'Read More...'}
+      />
+      <br />
+      <span style={{display: 'flex'}}>
+        <button className="button">
+          <a
+            href={`tel:${row.values['phonenumber']}`}
+            style={{textDecoration: 'none'}}
+          >
+            Call
+          </a>
+        </button>
+        &nbsp;
+        <button className="button">
+          <a href={row.values['contact']} style={{textDecoration: 'none'}}>
+            Website
+          </a>
+        </button>
+      </span>
+    </div>
   );
 };
 
@@ -104,7 +133,7 @@ const FormattedCell = ({value: initialValue, editable}) => {
 function ResourceTable({columns, data, isDesktop}) {
   const classesPannelSummary = usePanelSummaryStyles();
   const classesPanel = usePanelStyles();
-  const classesListItemText = useItemTextStyles();
+  // const classesListItemText = useItemTextStyles();
   const defaultColumn = React.useMemo(
     () => ({
       Cell: FormattedCell,
@@ -274,66 +303,7 @@ function ResourceTable({columns, data, isDesktop}) {
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <List disablePadding={true} dense={true}>
-                  <ListItem alignItems="flex-start" dense={true} divider={true}>
-                    <ListItemText
-                      primary="Organisation Name"
-                      secondary={row.values['nameoftheorganisation']}
-                      classes={{
-                        primary: classesListItemText.primary,
-                        secondary: classesListItemText.secondary,
-                      }}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start" dense={true} divider={true}>
-                    <ListItemText
-                      primary="Location"
-                      secondary={row.values['city']}
-                      classes={{
-                        primary: classesListItemText.primary,
-                        secondary: classesListItemText.secondary,
-                      }}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start" dense={true} divider={true}>
-                    <ListItemText
-                      primary="Description"
-                      secondary={row.values['descriptionandorserviceprovided']}
-                      classes={{
-                        primary: classesListItemText.primary,
-                        secondary: classesListItemText.secondary,
-                      }}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start" dense={true} divider={true}>
-                    <ListItemText
-                      primary="Category"
-                      secondary={row.values['category']}
-                      classes={{
-                        primary: classesListItemText.primary,
-                        secondary: classesListItemText.secondary,
-                      }}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start" dense={true} divider={true}>
-                    <ListItemText
-                      primary="Phonenumber"
-                      secondary={getFormattedLink(row.values['phonenumber'])}
-                      classes={{
-                        primary: classesListItemText.primary,
-                        secondary: classesListItemText.secondary,
-                      }}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start" dense={true} divider={true}>
-                    <ListItemText
-                      primary="Website"
-                      secondary={getFormattedLink(row.values['contact'])}
-                      classes={{
-                        primary: classesListItemText.primary,
-                        secondary: classesListItemText.secondary,
-                      }}
-                    />
-                  </ListItem>
+                  {formattedListOnMobileView(row)}
                 </List>
               </ExpansionPanelDetails>
             </ExpansionPanel>

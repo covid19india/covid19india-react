@@ -24,6 +24,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "react-table": "^7.0.4",
+    "read-more-react": "^1.0.10",
     "sass-lint": "^1.13.1",
     "topojson": "^3.0.2"
   },
