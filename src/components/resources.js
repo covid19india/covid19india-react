@@ -97,13 +97,16 @@ function Resources(props) {
 
   const getCityOptions = function () {
     if (indianstate) {
-      return Object.keys(resourcedict[indianstate])
-        .sort()
-        .map((x) => (
-          <option key={x.id} value={x}>
-            {x}
-          </option>
-        ));
+      if (indianstate === 'all') return [];
+      else {
+        return Object.keys(resourcedict[indianstate])
+          .sort()
+          .map((x) => (
+            <option key={x.id} value={x}>
+              {x}
+            </option>
+          ));
+      }
     } else return [];
     // return getCityList().map((x) => <option value={x}>{x}</option>)
   };
@@ -119,15 +122,42 @@ function Resources(props) {
   };
   const getCategoryOptions = function () {
     if (indianstate && city) {
-      if (city === 'all') return [];
-      else {
-        return Object.keys(resourcedict[indianstate][city])
-          .sort()
-          .map((x) => (
+      if (indianstate === 'all') {
+        const array = [];
+        Object.values(resourcedict).forEach((state) => {
+          Object.values(state).forEach((citydata) => {
+            Object.keys(citydata).forEach((x) => {
+              if (array.indexOf(x) === -1) array.push(x);
+            });
+          });
+        });
+        return array.map((x) => (
+          <option key={x.id} value={x}>
+            {x}
+          </option>
+        ));
+      } else {
+        if (city === 'all') {
+          const array = [];
+          Object.values(resourcedict[indianstate]).forEach((citydata) => {
+            Object.keys(citydata).forEach((x) => {
+              if (array.indexOf(x) === -1) array.push(x);
+            });
+          });
+          return array.map((x) => (
             <option key={x.id} value={x}>
               {x}
             </option>
           ));
+        } else {
+          return Object.keys(resourcedict[indianstate][city])
+            .sort()
+            .map((x) => (
+              <option key={x.id} value={x}>
+                {x}
+              </option>
+            ));
+        }
       }
     } else return [];
   };
@@ -139,11 +169,21 @@ function Resources(props) {
     if (category === 'all') {
       // console.log("All category selected");
       if (city === 'all') {
-        Object.values(resourcedict[indianstate]).forEach((citydata) => {
-          Object.values(citydata).forEach((category) => {
-            category.forEach((x) => a.push(x));
+        if (indianstate === 'all') {
+          Object.values(resourcedict).forEach((state) => {
+            Object.values(state).forEach((citydata) => {
+              Object.values(citydata).forEach((category) => {
+                category.forEach((x) => a.push(x));
+              });
+            });
           });
-        });
+        } else {
+          Object.values(resourcedict[indianstate]).forEach((citydata) => {
+            Object.values(citydata).forEach((category) => {
+              category.forEach((x) => a.push(x));
+            });
+          });
+        }
       } else {
         Object.values(resourcedict[indianstate][city]).forEach((x) => {
           x.forEach((y) => a.push(y));
@@ -152,7 +192,18 @@ function Resources(props) {
     } else {
       // console.log(`Category chosen ${category}`);
       // a = resourcedict[indianstate][city][category];
-      if (city === 'all') {
+
+      if (indianstate === 'all' && city === 'all') {
+        Object.values(resourcedict).forEach((state) => {
+          Object.values(state).forEach((citydata) => {
+            Object.values(citydata).forEach((categorydata) => {
+              categorydata.forEach((x) => {
+                if (x.category === category) a.push(x);
+              });
+            });
+          });
+        });
+      } else if (indianstate !== 'all' && city === 'all') {
         Object.values(resourcedict[indianstate]).forEach((citydata) => {
           if (category in citydata) {
             citydata[category].forEach((x) => {
@@ -207,6 +258,47 @@ function Resources(props) {
     setCategory(changedcategoryevent.target.value);
     // console.log(changedcategoryevent.target.value);
   };
+
+  const openSharingLink = function (message) {
+    const share_uri = `https://www.addtoany.com/share#url=${encodeURI(
+      'https://www.covid19india.org/essentials'
+    )}&title=${encodeURI(message)}`;
+
+    const h = 500;
+    const w = 500;
+    const left = window.screen.width / 2 - w / 2;
+    const top = window.screen.height / 2 - h / 2;
+    return window.open(
+      share_uri,
+      document.title,
+      'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' +
+        w +
+        ', height=' +
+        h +
+        ', top=' +
+        top +
+        ', left=' +
+        left
+    );
+  };
+
+  const openSharingTray = function () {
+    const message =
+      'Discover nearest coronavirus support and essential service providers such as testing lab centres, accommodation shelters and vegetable vendors at ';
+    if (navigator.share !== undefined) {
+      navigator
+        .share({
+          title: document.title,
+          text: message,
+          url: 'https://www.covid19india.org/essentials',
+        })
+        .then()
+        .catch((error) => console.log(error));
+    } else {
+      openSharingLink(message);
+    }
+  };
+
   return (
     <div className="Resources">
       <div className="filtersection">
@@ -226,6 +318,7 @@ function Resources(props) {
               <option value="" disabled hidden>
                 Choose State
               </option>
+              <option value="all">All States</option>
               {getIndianStateOptions()}
             </select>
           </div>
@@ -278,7 +371,22 @@ function Resources(props) {
       <br></br>
       <div className="TableArea fadeInOut">
         {showTable && (
-          <ResourceTable columns={memocols} data={data} isDesktop={isDesktop} />
+          <div style={{width: '100%'}}>
+            <button
+              style={{float: 'right'}}
+              className="button is-purple"
+              onClick={openSharingTray}
+            >
+              Share
+            </button>
+            <br />
+            <br />
+            <ResourceTable
+              columns={memocols}
+              data={data}
+              isDesktop={isDesktop}
+            />
+          </div>
         )}
       </div>
     </div>
