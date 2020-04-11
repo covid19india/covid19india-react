@@ -123,3 +123,9 @@ export function sliceTimeseriesFromEnd(timeseries, days) {
  */
 export const isEmpty = (value) =>
   Object.keys(value).length === 0 && value.constructor === Object;
+
+const numberFormatter = new Intl.NumberFormat('en-IN');
+
+export const formatNumber = (value) => {
+  return value ? numberFormatter.format(value) : '-';
+};
