@@ -45,20 +45,44 @@ const useItemTextStyles = makeStyles((theme) => ({
   },
 }));
 
+const getNumbersLink = (initialValue) => {
+  // const phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+  const numbf = initialValue.split(',');
+  // console.log('numbers are', '' + numbf.length);
+
+  const numbg = /^\d{5,12}$/g;
+  const numberList = numbf.map((iv, i) => {
+    iv = iv.trim();
+    console.log('numbr ', '' + iv);
+    return iv.replace(numbg, '<a href="tel:$&">$&</a>');
+  });
+  console.log('numberList ', '' + numberList);
+  return {numberList};
+};
+
 const getFormattedLink = (initialValue) => {
   const reurl1 = /\s*(https?:\/\/.+)\s*/g;
-  // let reurl2 = /\s*.*(www\..+)\s*/g
+  // let reurl2 = /\s*.(www\..+)\s/g
   const reinsta = /\s*Instagram: @(.+)\s*/g;
   const refb = /\s*Facebook: @(.+)\s*/g;
-  const s1 = initialValue.replace(reurl1, '<a href="$1">Link</a>');
-  const s2 = s1.replace(
-    reinsta,
-    '<a href="https://www.instagram.com/$1">Instagram: @$1</a>'
-  );
-  const s3 = s2.replace(
-    refb,
-    '<a href="https://www.facebook.com/$1">Facebook: @$1</a>'
-  );
+  const noLetters = /^[\d,\s]+$/;
+  let s3 = '';
+  if (initialValue.match(noLetters) != null) {
+    const formatedLink = getNumbersLink(initialValue);
+    const links = JSON.parse(JSON.stringify(formatedLink));
+    console.log('success val', ' --' + JSON.stringify(links.numberList));
+    s3 = String(links.numberList).replace(/,/g, '<br>');
+  } else {
+    const s1 = initialValue.replace(reurl1, '<a href="$1">Link</a>');
+    const s2 = s1.replace(
+      reinsta,
+      '<a href="https://www.instagram.com/$1">Instagram: @$1</a>'
+    );
+    s3 = s2.replace(
+      refb,
+      '<a href="https://www.facebook.com/$1">Facebook: @$1</a>'
+    );
+  }
   return (
     <div
       className="tablecelldata"
@@ -73,23 +97,29 @@ const FormattedCell = ({value: initialValue, editable}) => {
   // We need to keep and update the state of the cell normally
   const [value, setValue] = React.useState(initialValue);
   const reurl1 = /\s*(https?:\/\/.+)\s*/g;
-  // let reurl2 = /\s*.*(www\..+)\s*/g
+  // let reurl2 = /\s*.(www\..+)\s/g
   const reinsta = /\s*Instagram: @(.+)\s*/g;
   const refb = /\s*Facebook: @(.+)\s*/g;
 
   // If the initialValue is changed externall, sync it up with our state
   React.useEffect(() => {
-    const s1 = initialValue.replace(reurl1, '<a href="$1">Link</a>');
-    const s2 = s1.replace(
-      reinsta,
-      '<a href="https://www.instagram.com/$1">Instagram: @$1</a>'
-    );
-    const s3 = s2.replace(
-      refb,
-      '<a href="https://www.facebook.com/$1">Facebook: @$1</a>'
-    );
-    // let s4 = s3.replace(reurl2, '<a href="http://$1">Link</a>');
-    setValue(s3);
+    const noLetters = /^[\d,\s]+$/;
+    if (initialValue.match(noLetters) != null) {
+      const formatedLink = getNumbersLink(initialValue);
+      const links = JSON.parse(JSON.stringify(formatedLink));
+      setValue(String(links.numberList).replace(/,/g, '<br>'));
+    } else {
+      const s1 = initialValue.replace(reurl1, '<a href="$1">Link</a>');
+      const s2 = s1.replace(
+        reinsta,
+        '<a href="https://www.instagram.com/$1">Instagram: @$1</a>'
+      );
+      const s3 = s2.replace(
+        refb,
+        '<a href="https://www.facebook.com/$1">Facebook: @$1</a>'
+      );
+      setValue(s3);
+    }
   }, [initialValue, reurl1, refb, reinsta]);
 
   return (
