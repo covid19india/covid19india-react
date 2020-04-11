@@ -13,6 +13,50 @@ const months = {
   '12': 'Dec',
 };
 
+const stateCodes = {
+  AP: 'Andhra Pradesh',
+  AR: 'Arunachal Pradesh',
+  AS: 'Assam',
+  BR: 'Bihar',
+  CT: 'Chhattisgarh',
+  GA: 'Goa',
+  GJ: 'Gujarat',
+  HR: 'Haryana',
+  HP: 'Himachal Pradesh',
+  JH: 'Jharkhand',
+  KA: 'Karnataka',
+  KL: 'Kerala',
+  MP: 'Madhya Pradesh',
+  MH: 'Maharashtra',
+  MN: 'Manipur',
+  ML: 'Meghalaya',
+  MZ: 'Mizoram',
+  NL: 'Nagaland',
+  OR: 'Odisha',
+  PB: 'Punjab',
+  RJ: 'Rajasthan',
+  SK: 'Sikkim',
+  TN: 'Tamil Nadu',
+  TG: 'Telangana',
+  TR: 'Tripura',
+  UT: 'Uttarakhand',
+  UP: 'Uttar Pradesh',
+  WB: 'West Bengal',
+  AN: 'Andaman and Nicobar Islands',
+  CH: 'Chandigarh',
+  DB: 'Dadra and Nagar Haveli',
+  DD: 'Daman and Diu',
+  DL: 'Delhi',
+  JK: 'Jammu and Kashmir',
+  LA: 'Ladakh',
+  LD: 'Lakshadweep',
+  PY: 'Puducherry',
+};
+
+export const getStateName = (code) => {
+  return stateCodes[code.toUpperCase()];
+};
+
 export const formatDate = (unformattedDate) => {
   const day = unformattedDate.slice(0, 2);
   const month = unformattedDate.slice(3, 5);
@@ -47,3 +91,26 @@ export const validateCTS = (data = []) => {
       return new Date(d.date + year) < today;
     });
 };
+
+export const preprocessTimeseries = (timeseries) => {
+  return timeseries.map((stat) => ({
+    date: new Date(stat.date + ' 2020'),
+    totalconfirmed: +stat.totalconfirmed,
+    totalrecovered: +stat.totalrecovered,
+    totaldeceased: +stat.totaldeceased,
+    dailyconfirmed: +stat.dailyconfirmed,
+    dailyrecovered: +stat.dailyrecovered,
+    dailydeceased: +stat.dailydeceased,
+  }));
+};
+
+/**
+ * Returns the last `days` entries
+ * @param {Array<Object>} timeseries
+ * @param {number} days
+ *
+ * @return {Array<Object>}
+ */
+export function sliceTimeseriesFromEnd(timeseries, days) {
+  return timeseries.slice(timeseries.length - days);
+}

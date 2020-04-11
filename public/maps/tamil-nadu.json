@@ -1716,8 +1716,8 @@
           }
         },
         {
-          "arcs": [[[69, -15, 70, -36, -47, 71, 72, 73]], [[74]]],
-          "type": "MultiPolygon",
+          "arcs": [[69, -15, 70, -36, -47, 71, 72, 73]],
+          "type": "Polygon",
           "properties": {
             "cartodb_id": 605,
             "censuscode": 625,
@@ -1824,8 +1824,8 @@
           }
         },
         {
-          "arcs": [[-11, 95, -33, -71, -14]],
-          "type": "Polygon",
+          "arcs": [[[-11, 95, -33, -71, -14]], [[74]]],
+          "type": "MultiPolygon",
           "properties": {
             "cartodb_id": 471,
             "censuscode": 626,
