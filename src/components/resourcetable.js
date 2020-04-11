@@ -155,7 +155,7 @@ function ResourceTable({columns, data, isDesktop}) {
   };
 
   const inputProps = {
-    placeholder: 'Type to search',
+    placeholder: 'Search for keyword',
     value: searchValue,
     onChange: onChange,
   };
