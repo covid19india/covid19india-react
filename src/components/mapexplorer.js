@@ -2,9 +2,8 @@ import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ChoroplethMap from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 import {formatDate, formatDateAbsolute} from '../utils/common-functions';
-import {formatDistance} from 'date-fns';
-/* import {formatDistance, format, parse} from 'date-fns';*/
-/* import * as Icon from 'react-feather';*/
+import {formatDistance, format, parse} from 'date-fns';
+import * as Icon from 'react-feather';
 
 const mapMeta = {
   India: {
@@ -44,11 +43,23 @@ const mapMeta = {
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'bihar_district',
   },
+  Chandigarh: {
+    name: 'Chandigarh',
+    geoDataFile: `${MAPS_DIR}/chandigarh.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'chandigarh_district',
+  },
   Chhattisgarh: {
     name: 'Chhattisgarh',
     geoDataFile: `${MAPS_DIR}/chhattisgarh.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'chhattisgarh_district',
+  },
+  'Dadra and Nagar Haveli': {
+    name: 'Dadra and Nagar Haveli',
+    geoDataFile: `${MAPS_DIR}/dadranagarhaveli.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'dadranagarhaveli_district',
   },
   Delhi: {
     name: 'Delhi',
@@ -110,6 +121,12 @@ const mapMeta = {
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'ladakh_district',
   },
+  Lakshadweep: {
+    name: 'Lakshadweep',
+    geoDataFile: `${MAPS_DIR}/lakshadweep.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'lakshadweep_district',
+  },
   'Madhya Pradesh': {
     name: 'Madhya Pradesh',
     geoDataFile: `${MAPS_DIR}/madhyapradesh.json`,
@@ -151,6 +168,12 @@ const mapMeta = {
     geoDataFile: `${MAPS_DIR}/odisha.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'odisha_district',
+  },
+  Puducherry: {
+    name: 'Puducherry',
+    geoDataFile: `${MAPS_DIR}/puducherry.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectName: 'puducherry_district',
   },
   Punjab: {
     name: 'Punjab',
@@ -218,7 +241,7 @@ export default function ({
   const [selectedRegion, setSelectedRegion] = useState({});
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
   const [panelRegion, setPanelRegion] = useState({});
-  /* const [testObj, setTestObj] = useState({});*/
+  const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
 
   useEffect(() => {
@@ -369,16 +392,13 @@ export default function ({
 
   const {name, lastupdatedtime} = currentHoveredRegion;
 
-  /* useEffect(() => {
-    let found = false;
-    stateTestData.forEach((testObj, index) => {
-      if (testObj.state === panelRegion.name) {
-        found = true;
-        setTestObj(testObj);
-      }
-    });
-    if (!found) setTestObj({});
-  }, [panelRegion, stateTestData, testObj]);*/
+  useEffect(() => {
+    setTestObj(
+      stateTestData.find(
+        (obj) => obj.state === panelRegion.name && obj.totaltested !== ''
+      )
+    );
+  }, [panelRegion, stateTestData, testObj]);
 
   return (
     <div className="MapExplorer fadeInUp" style={{animationDelay: '1.5s'}}>
@@ -433,29 +453,30 @@ export default function ({
           </div>
         </div>
 
-        {/* <div
-          className="stats is-purple tested fadeInUp"
-          style={{animationDelay: '2.4s'}}
-        >
-          <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
-          <div className="stats-bottom">
-            <h1>{testObj?.totaltested || '-'}</h1>
+        {
+          <div
+            className="stats is-purple tested fadeInUp"
+            style={{animationDelay: '2.4s'}}
+          >
+            <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
+            <div className="stats-bottom">
+              <h1>{testObj?.totaltested || '-'}</h1>
+            </div>
+            <h6 className="timestamp">
+              {!isNaN(new Date(testObj?.updatedon))
+                ? `As of ${format(
+                    parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
+                    'dd MMM'
+                  )}`
+                : ''}
+            </h6>
+            {testObj?.totaltested?.length > 1 && (
+              <a href={testObj.source} target="_noblank">
+                <Icon.Link />
+              </a>
+            )}
           </div>
-          <h6 className="timestamp">
-            {!isNaN(new Date(testObj?.updatedon))
-              ? `As of ${format(
-                  parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
-                  'dd MMM'
-                )}`
-              : ''}
-          </h6>
-          {testObj?.totaltested?.length > 1 && (
-            <a href={testObj.source} target="_noblank">
-              <Icon.Link />
-            </a>
-          )}
-        </div>
-        */}
+        }
       </div>
 
       <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
