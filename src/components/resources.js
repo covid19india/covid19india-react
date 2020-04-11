@@ -221,7 +221,6 @@ function Resources(props) {
   }
 
   const openSharingTray = function () {
-
     var message = 'Find your nearest Covid-19 testing lab, free food shelter, home delivery provider, and many more essential service providers at ';
     if (navigator.share !== undefined) {
       navigator.share({
