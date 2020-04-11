@@ -221,7 +221,7 @@ function Resources(props) {
   }
 
   const openSharingTray = function () {
-    var message = 'Find your nearest Covid-19 testing lab, free food shelter, home delivery provider, and many more essential service providers at ';
+    var message = 'Discover nearest coronavirus support and essential service providers such as testing lab centres, accommodation shelters and vegetable vendors at ';
     if (navigator.share !== undefined) {
       navigator.share({
         title: document.title,
