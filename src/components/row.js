@@ -1,6 +1,10 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import * as Icon from 'react-feather';
-import {formatDate, formatDateAbsolute} from '../utils/common-functions';
+import {
+  formatDate,
+  formatDateAbsolute,
+  formatNumber,
+} from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
 import {Link} from 'react-router-dom';
 
@@ -118,7 +122,9 @@ function Row(props) {
             {state.deltaconfirmed > 0 ? `${state.deltaconfirmed}` : ''}
           </span>
           <span className="table__count-text">
-            {parseInt(state.confirmed) === 0 ? '-' : state.confirmed}
+            {parseInt(state.confirmed) === 0
+              ? '-'
+              : formatNumber(state.confirmed)}
           </span>
         </td>
         <td
@@ -128,7 +134,7 @@ function Row(props) {
             {!state.delta.active==0 && <Icon.ArrowUp/>}
             {state.delta.active>0 ? `${state.delta.active}` : ''}
           </span>*/}
-          {parseInt(state.active) === 0 ? '-' : state.active}
+          {parseInt(state.active) === 0 ? '-' : formatNumber(state.active)}
         </td>
         <td
           style={{
@@ -140,7 +146,9 @@ function Row(props) {
             {state.deltarecovered > 0 ? `${state.deltarecovered}` : ''}
           </span>
           <span className="table__count-text">
-            {parseInt(state.recovered) === 0 ? '-' : state.recovered}
+            {parseInt(state.recovered) === 0
+              ? '-'
+              : formatNumber(state.recovered)}
           </span>
         </td>
         <td
@@ -151,7 +159,7 @@ function Row(props) {
             {state.deltadeaths > 0 ? `${state.deltadeaths}` : ''}
           </span>
           <span className="table__count-text">
-            {parseInt(state.deaths) === 0 ? '-' : state.deaths}
+            {parseInt(state.deaths) === 0 ? '-' : formatNumber(state.deaths)}
           </span>
         </td>
       </tr>
