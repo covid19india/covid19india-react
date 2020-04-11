@@ -118,5 +118,6 @@ export function sliceTimeseriesFromEnd(timeseries, days) {
 const numberFormatter = new Intl.NumberFormat('en-IN');
 
 export const formatNumber = (value) => {
-  return value ? numberFormatter.format(value) : '-';
+  // Check if not number
+  return isNaN(value) ? '-' : numberFormatter.format(value);
 };
