@@ -57,13 +57,20 @@ const validateCTS = (data = []) => {
 
 export const preprocessTimeseries = (timeseries) => {
   return validateCTS(timeseries).map((stat) => ({
-    date: new Date(stat.date + ' 2020'),
+    dateObj: new Date(stat.date + ' 2020'),
+    date: stat.date,
     totalconfirmed: +stat.totalconfirmed,
     totalrecovered: +stat.totalrecovered,
     totaldeceased: +stat.totaldeceased,
+    // Total Active = Confimed - Recovered - Deceased
+    totalactive:
+      +stat.totalconfirmed - +stat.totalrecovered - +stat.totaldeceased,
     dailyconfirmed: +stat.dailyconfirmed,
     dailyrecovered: +stat.dailyrecovered,
     dailydeceased: +stat.dailydeceased,
+    // Daily Total = Daily Confimed - Daily Recovered - Daily Deceased
+    dailyactive:
+      +stat.dailyconfirmed - +stat.dailyrecovered - +stat.dailydeceased,
   }));
 };
 

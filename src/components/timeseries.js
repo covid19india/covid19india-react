@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as d3 from 'd3';
 import moment from 'moment';
 
-import {sliceTimeseriesFromEnd} from '../utils/common-functions';
+import {preprocessTimeseries, sliceTimeseriesFromEnd} from '../utils/common-functions';
 import {useResizeObserver} from '../utils/hooks';
 import {formatNumber} from '../utils/common-functions';
 
@@ -21,6 +21,7 @@ function TimeSeries(props) {
   const svgRef1 = useRef();
   const svgRef2 = useRef();
   const svgRef3 = useRef();
+  const svgRef4 = useRef();
 
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
@@ -32,7 +33,7 @@ function TimeSeries(props) {
         lastDaysCount
       );
       setIndex(slicedTimeseries.length - 1);
-      setTimeseries(slicedTimeseries);
+      setTimeseries(preprocessTimeseries(slicedTimeseries));
     }
   }, [props.timeseries, lastDaysCount]);
 
@@ -49,7 +50,7 @@ function TimeSeries(props) {
   }, [props.type]);
 
   const graphData = useCallback(
-    (ts) => {
+    (timeseries) => {
       if (!dimensions) return;
       const width = dimensions.width;
       const height = dimensions.height;
@@ -59,19 +60,20 @@ function TimeSeries(props) {
       const chartRight = width - margin.right;
       const chartBottom = height - margin.bottom;
 
-      const T = ts.length;
+      const T = timeseries.length;
       const yBuffer = 1.1;
 
-      setDatapoint(ts[T - 1]);
+      setDatapoint(timeseries[T - 1]);
       setIndex(T - 1);
 
       const svg1 = d3.select(svgRef1.current);
       const svg2 = d3.select(svgRef2.current);
       const svg3 = d3.select(svgRef3.current);
+      const svg4 = d3.select(svgRef4.current);
 
-      const dateMin = new Date(ts[0]['date']);
+      const dateMin = new Date(timeseries[0]['dateObj']);
       dateMin.setDate(dateMin.getDate() - 1);
-      const dateMax = new Date(ts[T - 1]['date']);
+      const dateMax = new Date(timeseries[T - 1]['dateObj']);
       dateMax.setDate(dateMax.getDate() + 1);
 
       const xScale = d3
@@ -96,20 +98,22 @@ function TimeSeries(props) {
           .style('transform', `translateX(${chartRight}px)`);
 
       // Arrays of objects
-      const svgArray = [svg1, svg2, svg3];
+      const svgArray = [svg1, svg2, svg3, svg4];
       const plotTotal = chartType === 1;
       const dataTypesTotal = [
         'totalconfirmed',
         'totalrecovered',
         'totaldeceased',
+        'totalactive',
       ];
       const dataTypesDaily = [
         'dailyconfirmed',
         'dailyrecovered',
         'dailydeceased',
+        'dailyactive',
       ];
 
-      const colors = ['#ff073a', '#28a745', '#6c757d'];
+      const colors = ['#ff073a', '#28a745', '#6c757d', '#007bff'];
 
       let yScales;
       if (plotTotal) {
@@ -117,7 +121,7 @@ function TimeSeries(props) {
         dataTypesTotal.forEach((type) => {
           uniformScaleMin = Math.min(
             uniformScaleMin,
-            d3.min(ts, (d) => d[type])
+            d3.min(timeseries, (d) => d[type])
           );
         });
         const yScaleUniformLinear = d3
@@ -125,7 +129,7 @@ function TimeSeries(props) {
           .clamp(true)
           .domain([
             uniformScaleMin,
-            Math.max(1, yBuffer * d3.max(ts, (d) => d.totalconfirmed)),
+            Math.max(1, yBuffer * d3.max(timeseries, (d) => d.totalconfirmed)),
           ])
           .nice()
           .range([chartBottom, margin.top]);
@@ -135,7 +139,7 @@ function TimeSeries(props) {
           .clamp(true)
           .domain([
             Math.max(1, uniformScaleMin),
-            Math.max(1, yBuffer * d3.max(ts, (d) => d.totalconfirmed)),
+            Math.max(1, yBuffer * d3.max(timeseries, (d) => d.totalconfirmed)),
           ])
           .nice()
           .range([chartBottom, margin.top]);
@@ -145,8 +149,8 @@ function TimeSeries(props) {
             .scaleLinear()
             .clamp(true)
             .domain([
-              d3.min(ts, (d) => d[type]),
-              Math.max(1, yBuffer * d3.max(ts, (d) => d[type])),
+              d3.min(timeseries, (d) => d[type]),
+              Math.max(1, yBuffer * d3.max(timeseries, (d) => d[type])),
             ])
             .nice()
             .range([chartBottom, margin.top]);
@@ -156,9 +160,9 @@ function TimeSeries(props) {
             .domain([
               Math.max(
                 1,
-                d3.min(ts, (d) => d[type])
+                d3.min(timeseries, (d) => d[type])
               ),
-              Math.max(1, yBuffer * d3.max(ts, (d) => d[type])),
+              Math.max(1, yBuffer * d3.max(timeseries, (d) => d[type])),
             ])
             .nice()
             .range([chartBottom, margin.top]);
@@ -174,7 +178,7 @@ function TimeSeries(props) {
             Math.max(
               1,
               yBuffer *
-                d3.max(ts, (d) =>
+                d3.max(timeseries, (d) =>
                   Math.max(d.dailyconfirmed, d.dailyrecovered, d.dailydeceased)
                 )
             ),
@@ -186,7 +190,7 @@ function TimeSeries(props) {
           const yScaleLinear = d3
             .scaleLinear()
             .clamp(true)
-            .domain([0, Math.max(1, yBuffer * d3.max(ts, (d) => d[type]))])
+            .domain([0, Math.max(1, yBuffer * d3.max(timeseries, (d) => d[type]))])
             .nice()
             .range([chartBottom, margin.top]);
           return mode ? yScaleDailyUniform : yScaleLinear;
@@ -197,7 +201,7 @@ function TimeSeries(props) {
       const focus = svgArray.map((svg, i) => {
         return svg
           .selectAll('.focus')
-          .data([ts[T - 1]], (d) => d.date)
+          .data([timeseries[T - 1]], (d) => d.dateObj)
           .join('circle')
           .attr('class', 'focus')
           .attr('fill', colors[i])
@@ -208,32 +212,33 @@ function TimeSeries(props) {
       function mousemove() {
         const xm = d3.mouse(this)[0];
         const date = xScale.invert(xm);
-        const bisectDate = d3.bisector((d) => d.date).left;
-        let i = bisectDate(ts, date, 1);
+        const bisectDate = d3.bisector((d) => d.dateObj).left;
+        let i = bisectDate(timeseries, date, 1);
         if (0 <= i && i < T) {
-          if (date - ts[i - 1].date < ts[i].date - date) --i;
-          setDatapoint(ts[i]);
+          if (date - timeseries[i - 1].dateObj < timeseries[i].dateObj - date)
+            --i;
+          setDatapoint(timeseries[i]);
           setIndex(i);
           setMoving(true);
-          const d = ts[i];
+          const d = timeseries[i];
           focus.forEach((f, j) => {
             const yScale = yScales[j];
             const type = plotTotal ? dataTypesTotal[j] : dataTypesDaily[j];
-            f.attr('cx', xScale(d.date)).attr('cy', yScale(d[type]));
+            f.attr('cx', xScale(d.dateObj)).attr('cy', yScale(d[type]));
           });
         }
       }
 
       function mouseout() {
-        setDatapoint(ts[T - 1]);
+        setDatapoint(timeseries[T - 1]);
         setIndex(T - 1);
         setMoving(false);
         focus.forEach((f, j) => {
           const yScale = yScales[j];
           const type = plotTotal ? dataTypesTotal[j] : dataTypesDaily[j];
-          f.attr('cx', xScale(ts[T - 1].date)).attr(
+          f.attr('cx', xScale(timeseries[T - 1].dateObj)).attr(
             'cy',
-            yScale(ts[T - 1][type])
+            yScale(timeseries[T - 1][type])
           );
         });
       }
@@ -267,19 +272,19 @@ function TimeSeries(props) {
         /* Path dots */
         svg
           .selectAll('.dot')
-          .data(ts, (d) => d.date)
+          .data(timeseries, (d) => d.dateObj)
           .join((enter) => enter.append('circle').attr('cy', chartBottom))
           .attr('class', 'dot')
           .attr('fill', color)
           .attr('stroke', color)
           .attr('r', 2)
           .transition(t)
-          .attr('cx', (d) => xScale(d.date))
+          .attr('cx', (d) => xScale(d.dateObj))
           .attr('cy', (d) => yScale(d[type]));
 
         focus[i]
           .transition(t)
-          .attr('cx', (d) => xScale(d.date))
+          .attr('cx', (d) => xScale(d.dateObj))
           .attr('cy', (d) => yScale(d[type]));
 
         if (plotTotal) {
@@ -287,7 +292,7 @@ function TimeSeries(props) {
           svg.selectAll('.stem').remove();
           const path = svg
             .selectAll('.trend')
-            .data([[...ts].reverse()])
+            .data([[...timeseries].reverse()])
             .join('path')
             .attr('class', 'trend')
             .attr('fill', 'none')
@@ -314,7 +319,7 @@ function TimeSeries(props) {
               'd',
               d3
                 .line()
-                .x((d) => xScale(d.date))
+                .x((d) => xScale(d.dateObj))
                 .y((d) => yScale(d[typeTotal]))
                 .curve(d3.curveMonotoneX)
             );
@@ -329,12 +334,12 @@ function TimeSeries(props) {
           svg.selectAll('.trend').remove();
           svg
             .selectAll('.stem')
-            .data(ts, (d) => d.date)
+            .data(timeseries, (d) => d.dateObj)
             .join((enter) =>
               enter
                 .append('line')
-                .attr('x1', (d) => xScale(d.date))
-                .attr('x2', (d) => xScale(d.date))
+                .attr('x1', (d) => xScale(d.dateObj))
+                .attr('x2', (d) => xScale(d.dateObj))
                 .attr('y2', chartBottom)
             )
             .attr('class', 'stem')
@@ -342,8 +347,8 @@ function TimeSeries(props) {
             .style('stroke-width', 4)
             .attr('y1', chartBottom)
             .transition(t)
-            .attr('x1', (d) => xScale(d.date))
-            .attr('x2', (d) => xScale(d.date))
+            .attr('x1', (d) => xScale(d.dateObj))
+            .attr('x2', (d) => xScale(d.dateObj))
             .attr('y2', (d) => yScale(d[typeDaily]));
         }
 
@@ -372,6 +377,7 @@ function TimeSeries(props) {
   const chartKey1 = chartType === 1 ? 'totalconfirmed' : 'dailyconfirmed';
   const chartKey2 = chartType === 1 ? 'totalrecovered' : 'dailyrecovered';
   const chartKey3 = chartType === 1 ? 'totaldeceased' : 'dailydeceased';
+  const chartKey4 = chartType === 1 ? 'totalactive' : 'dailyactive';
 
   // Function for calculate increased/decreased count for each type of data
   const currentStatusCount = (chartType) => {
@@ -423,6 +429,18 @@ function TimeSeries(props) {
             </div>
           </div>
           <svg ref={svgRef3} preserveAspectRatio="xMidYMid meet" />
+        </div>
+
+        <div className="svg-parent is-blue">
+          <div className="stats is-blue">
+            <h5 className={`${!moving ? 'title' : ''}`}>Active</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
+            <div className="stats-bottom">
+              <h2>{formatNumber(datapoint[chartKey4])}</h2>
+              <h6>{currentStatusCount(chartKey4)}</h6>
+            </div>
+          </div>
+          <svg ref={svgRef4} preserveAspectRatio="xMidYMid meet" />
         </div>
       </div>
 
