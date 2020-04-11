@@ -5,6 +5,7 @@ import {
   sliceTimeseriesFromEnd,
 } from '../utils/common-functions';
 import {useResizeObserver} from '../utils/hooks';
+import {formatNumber} from '../utils/common-functions';
 
 function TimeSeries(props) {
   const [lastDaysCount, setLastDaysCount] = useState(
@@ -381,19 +382,21 @@ function TimeSeries(props) {
                 : datapoint['date']}
             </h5>
             <div className="stats-bottom">
-              <h2>{datapoint[chartKey1]}</h2>
+              <h2>{formatNumber(datapoint[chartKey1])}</h2>
               <h6>
                 {' '}
-                {timeseries.length > 0 && index !== 0
-                  ? timeseries[index][chartKey1] -
-                      timeseries[index - 1][chartKey1] >=
-                    0
-                    ? '+' +
-                      (timeseries[index][chartKey1] -
-                        timeseries[index - 1][chartKey1])
-                    : timeseries[index][chartKey1] -
-                      timeseries[index - 1][chartKey1]
-                  : ''}{' '}
+                {formatNumber(
+                  timeseries.length > 0 && index !== 0
+                    ? timeseries[index][chartKey1] -
+                        timeseries[index - 1][chartKey1] >=
+                      0
+                      ? '+' +
+                        (timeseries[index][chartKey1] -
+                          timeseries[index - 1][chartKey1])
+                      : timeseries[index][chartKey1] -
+                        timeseries[index - 1][chartKey1]
+                    : ''
+                )}{' '}
               </h6>
             </div>
           </div>
@@ -409,18 +412,20 @@ function TimeSeries(props) {
                 : datapoint['date']}
             </h5>
             <div className="stats-bottom">
-              <h2>{datapoint[chartKey2]}</h2>
+              <h2>{formatNumber(datapoint[chartKey2])}</h2>
               <h6>
-                {timeseries.length > 0 && index !== 0
-                  ? timeseries[index][chartKey2] -
-                      timeseries[index - 1][chartKey2] >=
-                    0
-                    ? '+' +
-                      (timeseries[index][chartKey2] -
-                        timeseries[index - 1][chartKey2])
-                    : timeseries[index][chartKey2] -
-                      timeseries[index - 1][chartKey2]
-                  : ''}
+                {formatNumber(
+                  timeseries.length > 0 && index !== 0
+                    ? timeseries[index][chartKey2] -
+                        timeseries[index - 1][chartKey2] >=
+                      0
+                      ? '+' +
+                        (timeseries[index][chartKey2] -
+                          timeseries[index - 1][chartKey2])
+                      : timeseries[index][chartKey2] -
+                        timeseries[index - 1][chartKey2]
+                    : ''
+                )}
               </h6>
             </div>
           </div>
@@ -436,18 +441,20 @@ function TimeSeries(props) {
                 : datapoint['date']}
             </h5>
             <div className="stats-bottom">
-              <h2>{datapoint[chartKey3]}</h2>
+              <h2>{formatNumber(datapoint[chartKey3])}</h2>
               <h6>
-                {timeseries.length > 0 && index !== 0
-                  ? timeseries[index][chartKey3] -
-                      timeseries[index - 1][chartKey3] >=
-                    0
-                    ? '+' +
-                      (timeseries[index][chartKey3] -
-                        timeseries[index - 1][chartKey3])
-                    : timeseries[index][chartKey3] -
-                      timeseries[index - 1][chartKey3]
-                  : ''}
+                {formatNumber(
+                  timeseries.length > 0 && index !== 0
+                    ? timeseries[index][chartKey3] -
+                        timeseries[index - 1][chartKey3] >=
+                      0
+                      ? '+' +
+                        (timeseries[index][chartKey3] -
+                          timeseries[index - 1][chartKey3])
+                      : timeseries[index][chartKey3] -
+                        timeseries[index - 1][chartKey3]
+                    : ''
+                )}
               </h6>
             </div>
           </div>
