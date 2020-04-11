@@ -295,29 +295,29 @@ h6 {
     border-collapse: separate;
     // animation-name: fadeInOut;
     // animation-duration: 2s;
-  
+
     thead {
       background: $purple-light;
       color: $gray-dark;
       text-align: center;
       font-size: 0.9rem;
-  
+
       th {
         padding: 0.5rem;
         cursor: pointer;
         border-radius: 5px;
         transition: all 0.1s ease-in-out;
         z-index: 99;
-  
+
         &.sticky {
           top: 4px;
           background: $gray-opaque;
         }
-  
+
         &:hover {
           background: #ecedee;
         }
-  
+
         .heading-content {
           display: flex;
           justify-content: space-between;
@@ -325,11 +325,11 @@ h6 {
           flex-direction: row;
           height: 0.9rem;
           align-items: center;
-  
+
           abbr {
             text-align: right;
           }
-  
+
           svg {
             width: 10px;
             margin: 0;
@@ -342,23 +342,23 @@ h6 {
         }
       }
     }
-  
+
     tbody {
       color: $gray;
-  
+
       tr {
         transition: background 0.1s ease-in-out;
         // cursor: pointer;
-  
+
         &:hover {
           background: $gray-hover !important;
         }
-  
+
         &.divider {
           height: 0.5rem;
           background: #6c757d10 !important;
         }
-  
+
         &.spacer {
           height: 0.5rem;
           background: #fff !important;
@@ -366,7 +366,7 @@ h6 {
       }
 
        tr:nth-child(even) {background-color: $purple-light;}
-  
+
       td {
         // padding: 0.25rem;
         font-size: 0.7rem;
@@ -375,7 +375,7 @@ h6 {
         .deltas {
           margin-right: 0.25rem;
           font-size: 11px !important;
-  
+
           svg {
             width: 9px;
             height: 9px;
@@ -384,20 +384,20 @@ h6 {
           }
         }
       }
-  
+
       td:first-child {
         text-align: left;
         max-width: 7.5rem;
         word-wrap: break-word;
       }
-  
+
       .state-last-update{
         background: transparent;
         transform: translateX(1rem);
         &:hover{
           background: #fff !important;
         }
-  
+
         td{
           .last-update{
             text-align: left;
@@ -408,18 +408,18 @@ h6 {
           }
         }
       }
-  
+
       .district-heading {
         transform: translateX(1rem);
         background: $gray-light;
-  
+
         td {
           font-size: 0.75rem;
           font-weight: 900;
           padding: 0.45rem;
           color: $gray-dark;
           background: $gray-light;
-  
+
           .heading-content {
             display: flex;
             justify-content: space-between;
@@ -427,11 +427,11 @@ h6 {
             flex-direction: row;
             height: 0.9rem;
             align-items: center;
-  
+
             abbr {
               text-align: right;
             }
-  
+
             svg {
               width: 10px;
               margin: 0;
@@ -444,14 +444,14 @@ h6 {
           }
         }
       }
-  
+
       max-width: 10rem;
-  
+
       .district {
         transform: translateX(1rem);
       }
     }
-  
+
     .affected-count {
       position: absolute;
       margin: 0;
@@ -459,13 +459,13 @@ h6 {
       color: $gray-mid;
       right: 0;
     }
-  
+
     .is-total {
       td {
         background: $gray-hover;
       }
     }
-  
+
     .dropdown {
       position: absolute;
       left: -0.75rem;
@@ -476,11 +476,11 @@ h6 {
       margin-top: 0.5rem;
       cursor: pointer;
       transition: background 0.2s ease-in-out;
-  
+
       &:hover {
         background: $gray-hover;
       }
-  
+
       svg {
         position: absolute;
         top: -0.35rem;
@@ -490,8 +490,8 @@ h6 {
       }
     }
   }
-  
-  
+
+
 }
 
 .filtersection {
@@ -506,7 +506,7 @@ h6 {
   animation-name: fadeInUp;
   animation-duration: 1s;
   animation-timing-function: ease-in;
-  
+
 }
 
 .resourcefilters {
@@ -514,10 +514,10 @@ h6 {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  
+
 }
 
-.resourcefilter { 
+.resourcefilter {
 
   display: flex;
   flex-direction: column;
@@ -539,7 +539,7 @@ h6 {
     // background-color: $purple-light-opaque;
     // border-radius: 10px;
   }
-  
+
 }
 
 .pagination{
@@ -1320,8 +1320,8 @@ table {
         background: $purple-light;
         padding-right: 1rem;
         h5,
-        h6 { 
-          color: $purple-mid; 
+        h6 {
+          color: $purple-mid;
           &.timestamp {
             margin: 0;
             font-weight: 900;
@@ -1598,7 +1598,12 @@ input.switch:checked::after {
     }
 
     &.is-blue {
-      h5 { color: $blue-mid; }
+      h5 {
+        color: $blue-mid;
+        &.title {
+          color: $blue;
+        }
+      }
 
       h2,
       h6 { color: $blue; }
@@ -1662,6 +1667,21 @@ input.switch:checked::after {
 
       text {
         color: $gray-mid;
+        stroke: transparent;
+      }
+    }
+
+    &.is-blue {
+      background: $blue-light;
+
+      .domain,
+      .tick,
+      line {
+        stroke: $blue;
+      }
+
+      text {
+        color: $blue-mid;
         stroke: transparent;
       }
     }
@@ -2947,7 +2967,7 @@ select {
   }
 
   .map-stats {
-    .stats { 
+    .stats {
       .timestamp {
         width: 4.5rem;
       }
@@ -3130,29 +3150,29 @@ select {
       border-spacing: 3px 2px;
       border-collapse: separate;
       // border: 0.1rem solid rgb(151, 150, 221);
-    
+
       thead {
         background: $purple-light;
         color: $gray-dark;
         text-align: center;
         font-size: 0.7rem;
-    
+
         th {
           padding: 0.5rem;
           cursor: pointer;
           border-radius: 5px;
           transition: all 0.1s ease-in-out;
           z-index: 99;
-    
+
           &.sticky {
             top: 4px;
             background: $gray-opaque;
           }
-    
+
           &:hover {
             background: #ecedee;
           }
-    
+
           .heading-content {
             display: flex;
             justify-content: space-between;
@@ -3160,11 +3180,11 @@ select {
             flex-direction: row;
             height: 0.9rem;
             align-items: center;
-    
+
             abbr {
               text-align: right;
             }
-    
+
             svg {
               width: 10px;
               margin: 0;
@@ -3177,23 +3197,23 @@ select {
           }
         }
       }
-    
+
       tbody {
         color: $gray;
-    
+
         tr {
           transition: background 0.1s ease-in-out;
           // cursor: pointer;
-    
+
           &:hover {
             background: $gray-hover !important;
           }
-    
+
           &.divider {
             height: 0.5rem;
             background: #6c757d10 !important;
           }
-    
+
           &.spacer {
             height: 0.5rem;
             background: #fff !important;
@@ -3201,7 +3221,7 @@ select {
         }
 
         tr:nth-child(even) {background-color: $purple-light;}
-    
+
         td {
           // padding: 0.25rem;
           font-size: 0.6rem;
@@ -3210,7 +3230,7 @@ select {
           .deltas {
             margin-right: 0.25rem;
             font-size: 11px !important;
-    
+
             svg {
               width: 9px;
               height: 9px;
@@ -3219,20 +3239,20 @@ select {
             }
           }
         }
-    
+
         td:first-child {
           text-align: left;
           max-width: 7.5rem;
           word-wrap: break-word;
         }
-    
+
         .state-last-update{
           background: transparent;
           transform: translateX(1rem);
           &:hover{
             background: #fff !important;
           }
-    
+
           td{
             .last-update{
               text-align: left;
@@ -3243,18 +3263,18 @@ select {
             }
           }
         }
-    
+
         .district-heading {
           transform: translateX(1rem);
           background: $gray-light;
-    
+
           td {
             font-size: 0.75rem;
             font-weight: 900;
             padding: 0.45rem;
             color: $gray-dark;
             background: $gray-light;
-    
+
             .heading-content {
               display: flex;
               justify-content: space-between;
@@ -3262,11 +3282,11 @@ select {
               flex-direction: row;
               height: 0.9rem;
               align-items: center;
-    
+
               abbr {
                 text-align: right;
               }
-    
+
               svg {
                 width: 10px;
                 margin: 0;
@@ -3279,14 +3299,14 @@ select {
             }
           }
         }
-    
+
         max-width: 10rem;
-    
+
         .district {
           transform: translateX(1rem);
         }
       }
-    
+
       .affected-count {
         position: absolute;
         margin: 0;
@@ -3294,13 +3314,13 @@ select {
         color: $gray-mid;
         right: 0;
       }
-    
+
       .is-total {
         td {
           background: $gray-hover;
         }
       }
-    
+
       .dropdown {
         position: absolute;
         left: -0.75rem;
@@ -3311,11 +3331,11 @@ select {
         margin-top: 0.5rem;
         cursor: pointer;
         transition: background 0.2s ease-in-out;
-    
+
         &:hover {
           background: $gray-hover;
         }
-    
+
         svg {
           position: absolute;
           top: -0.35rem;
@@ -3325,18 +3345,18 @@ select {
         }
       }
     }
-    
-    
+
+
   }
 
-  
+
 
   .resourcefilters {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    
+
   }
 
   .resourcefilter {
@@ -3356,7 +3376,7 @@ select {
     animation-name: fadeInUp;
     animation-duration: 1s;
     animation-timing-function: ease-in;
-    
+
   }
 
   .pagination{
@@ -3382,7 +3402,7 @@ select {
       margin-bottom: 0.1rem;
     }
   }
-  
+
 }
 
 .iframe-container {
