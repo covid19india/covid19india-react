@@ -3,6 +3,7 @@ import ChoroplethMap from './choropleth';
 import {MAP_TYPES, MAPS_DIR} from '../constants';
 import {formatDate, formatDateAbsolute} from '../utils/common-functions';
 import {formatDistance, format, parse} from 'date-fns';
+import {formatNumber} from '../utils/common-functions';
 import * as Icon from 'react-feather';
 
 const mapMeta = {
@@ -393,7 +394,11 @@ export default function ({
   const {name, lastupdatedtime} = currentHoveredRegion;
 
   useEffect(() => {
-    setTestObj(stateTestData.find((obj) => obj.state === panelRegion.name));
+    setTestObj(
+      stateTestData.find(
+        (obj) => obj.state === panelRegion.name && obj.totaltested !== ''
+      )
+    );
   }, [panelRegion, stateTestData, testObj]);
 
   return (
@@ -411,7 +416,7 @@ export default function ({
         <div className="stats fadeInUp" style={{animationDelay: '2s'}}>
           <h5>{window.innerWidth <= 769 ? 'Cnfmd' : 'Confirmed'}</h5>
           <div className="stats-bottom">
-            <h1>{panelRegion.confirmed}</h1>
+            <h1>{formatNumber(panelRegion.confirmed)}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -422,7 +427,7 @@ export default function ({
         >
           <h5>{window.innerWidth <= 769 ? 'Actv' : 'Active'}</h5>
           <div className="stats-bottom">
-            <h1>{panelRegion.active || ''}</h1>
+            <h1>{formatNumber(panelRegion.active)}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -433,7 +438,7 @@ export default function ({
         >
           <h5>{window.innerWidth <= 769 ? 'Rcvrd' : 'Recovered'}</h5>
           <div className="stats-bottom">
-            <h1>{panelRegion.recovered || ''}</h1>
+            <h1>{formatNumber(panelRegion.recovered)}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -444,7 +449,7 @@ export default function ({
         >
           <h5>{window.innerWidth <= 769 ? 'Dcsd' : 'Deceased'}</h5>
           <div className="stats-bottom">
-            <h1>{panelRegion.deaths || ''}</h1>
+            <h1>{formatNumber(panelRegion.deaths)}</h1>
             <h6>{}</h6>
           </div>
         </div>
@@ -456,7 +461,7 @@ export default function ({
           >
             <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
             <div className="stats-bottom">
-              <h1>{testObj?.totaltested || '-'}</h1>
+              <h1>{formatNumber(testObj?.totaltested)}</h1>
             </div>
             <h6 className="timestamp">
               {!isNaN(new Date(testObj?.updatedon))

@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {formatNumber} from '../utils/common-functions';
 
 function Level(props) {
   const [data, setData] = useState(props.data);
@@ -52,13 +53,13 @@ function Level(props) {
         <h4>
           [
           {deltas
-            ? deltas.confirmed >= 0
-              ? '+' + deltas.confirmed
+            ? deltas.confirmed > 0
+              ? '+' + formatNumber(deltas.confirmed)
               : '+0'
             : ''}
           ]
         </h4>
-        <h1>{confirmed} </h1>
+        <h1>{formatNumber(confirmed)} </h1>
       </div>
 
       <div
@@ -68,7 +69,7 @@ function Level(props) {
         <h5 className="heading">Active</h5>
         <h4>&nbsp;</h4>
         {/* <h4>[{props.deltas ? props.deltas.confirmeddelta-(props.deltas.recovereddelta+props.deltas.deceaseddelta) >=0 ? '+'+(props.deltas.confirmeddelta-(props.deltas.recovereddelta+props.deltas.deceaseddelta)).toString() : '+0' : ''}]</h4>*/}
-        <h1 className="title has-text-info">{active}</h1>
+        <h1 className="title has-text-info">{formatNumber(active)}</h1>
       </div>
 
       <div
@@ -79,13 +80,13 @@ function Level(props) {
         <h4>
           [
           {deltas
-            ? deltas.recovered >= 0
-              ? '+' + deltas.recovered
+            ? deltas.recovered > 0
+              ? '+' + formatNumber(deltas.recovered)
               : '+0'
             : ''}
           ]
         </h4>
-        <h1 className="title has-text-success">{recoveries} </h1>
+        <h1 className="title has-text-success">{formatNumber(recoveries)} </h1>
       </div>
 
       <div
@@ -94,9 +95,15 @@ function Level(props) {
       >
         <h5 className="heading">Deceased</h5>
         <h4>
-          [{deltas ? (deltas.deaths >= 0 ? '+' + deltas.deaths : '+0') : ''}]
+          [
+          {deltas
+            ? deltas.deaths > 0
+              ? '+' + formatNumber(deltas.deaths)
+              : '+0'
+            : ''}
+          ]
         </h4>
-        <h1 className="title has-text-grey">{deaths}</h1>
+        <h1 className="title has-text-grey">{formatNumber(deaths)}</h1>
       </div>
     </div>
   );
