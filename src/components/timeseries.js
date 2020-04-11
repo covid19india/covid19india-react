@@ -26,16 +26,23 @@ function TimeSeries(props) {
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
 
+  const transformTimeSeries = useCallback(
+    (timeseries) => {
+      if (timeseries.length > 1) {
+        const slicedTimeseries = sliceTimeseriesFromEnd(
+          timeseries,
+          lastDaysCount
+        );
+        setIndex(slicedTimeseries.length - 1);
+        setTimeseries(preprocessTimeseries(slicedTimeseries));
+      }
+    },
+    [lastDaysCount]
+  );
+
   useEffect(() => {
-    if (props.timeseries.length > 1) {
-      const slicedTimeseries = sliceTimeseriesFromEnd(
-        props.timeseries,
-        lastDaysCount
-      );
-      setIndex(slicedTimeseries.length - 1);
-      setTimeseries(preprocessTimeseries(slicedTimeseries));
-    }
-  }, [props.timeseries, lastDaysCount]);
+    transformTimeSeries(props.timeseries);
+  }, [props.timeseries, lastDaysCount, transformTimeSeries]);
 
   useEffect(() => {
     setMode(props.mode);
@@ -405,6 +412,33 @@ function TimeSeries(props) {
             </div>
           </div>
           <svg ref={svgRef1} preserveAspectRatio="xMidYMid meet" />
+        </div>
+
+        <div className="svg-parent is-blue">
+          <div className="stats is-blue">
+            <h5 className={`${!moving ? 'title' : ''}`}>Active</h5>
+            <h5 className={`${moving ? 'title' : ''}`}>
+              {isYesterday
+                ? `${datapoint['date']} Yesterday`
+                : datapoint['date']}
+            </h5>
+            <div className="stats-bottom">
+              <h2>{datapoint[chartKey4]}</h2>
+              <h6>
+                {timeseries.length > 0 && index !== 0
+                  ? timeseries[index][chartKey4] -
+                      timeseries[index - 1][chartKey4] >=
+                    0
+                    ? '+' +
+                      (timeseries[index][chartKey4] -
+                        timeseries[index - 1][chartKey4])
+                    : timeseries[index][chartKey4] -
+                      timeseries[index - 1][chartKey4]
+                  : ''}
+              </h6>
+            </div>
+          </div>
+          <svg ref={svgRef4} preserveAspectRatio="xMidYMid meet" />
         </div>
 
         <div className="svg-parent is-green">
