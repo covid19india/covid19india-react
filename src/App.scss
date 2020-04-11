@@ -1241,9 +1241,8 @@ table {
   .map-stats {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    width: calc(100% + 0.5rem);
-    margin-left: -0.25rem;
+    width: 100%;
+    height: 5rem;
     position: relative;
 
     h1,
@@ -1344,6 +1343,14 @@ table {
             stroke: $purple;
           }
         }
+      }
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
       }
     }
   }
@@ -2776,11 +2783,22 @@ select {
   }
 
   .MapExplorer {
-    .map-stats{
+    .map-stats {
       flex-wrap: wrap;
       height: auto;
-      .stats{
-        margin-left: 0;
+      width: calc(100% + 0.5rem);
+      margin: -0.25rem;
+
+      .stats {
+        flex: 1 30%;
+
+        &:first-child {
+          margin-left: 0.25rem;
+        }
+  
+        &:last-child {
+          margin-right: 0.25rem;
+        }
       }
     }
   }
