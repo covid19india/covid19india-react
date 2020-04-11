@@ -118,7 +118,7 @@ function ResourceTable({columns, data, isDesktop}) {
     getTableBodyProps,
     headerGroups,
     prepareRow,
-    page,
+    pages,
     canPreviousPage,
     canNextPage,
     pageOptions,
@@ -155,7 +155,7 @@ function ResourceTable({columns, data, isDesktop}) {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map((row, i) => {
+            {pages.map((row, i) => {
               prepareRow(row);
               return (
                 <tr key={row.id} {...row.getRowProps()}>
@@ -239,7 +239,7 @@ function ResourceTable({columns, data, isDesktop}) {
   else
     return (
       <div className="resourcesaccordion">
-        {page.map((row, i) => {
+        {pages.map((row, i) => {
           prepareRow(row);
           return (
             <ExpansionPanel key={row.id} classes={{root: classesPanel.root}}>
