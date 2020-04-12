@@ -3048,6 +3048,7 @@ select {
       justify-content: center;
       select {
         margin-bottom: 10px;
+        margin-right: 0;
       }
     }
 
@@ -3057,6 +3058,10 @@ select {
       select {
         height: 100%;
       }
+    }
+
+    .legend {
+      flex-direction: column-reverse;
     }
   }
 
@@ -3139,7 +3144,11 @@ select {
   }
 
   &.genders {
-    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  &.transmission {
+    margin-bottom: 0.5rem;
   }
 
   .Resources {
