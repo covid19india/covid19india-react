@@ -1,5 +1,9 @@
 i love git 
 lets check it
+<<<<<<< HEAD
 i m bit confuse in this consept
 let rerun n check this consept
+=======
+again need to varify few lines here
+>>>>>>> refs/remotes/origin/master
 
