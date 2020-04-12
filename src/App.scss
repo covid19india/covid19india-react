@@ -514,6 +514,10 @@ h6 {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+
+  .button {
+    padding: 0.4rem;
+  }
   
 }
 
@@ -547,16 +551,25 @@ h6 {
   font-size: 0.7rem !important;
   font-weight: 400;
   text-align: center;
-  display: none;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  width: 100%;
 
   .react-autosuggest__input {
-    width: 98%;
-    font-family: 'archia';
-    border: 0;
-    border-radius: 7px;
-    padding: 0.25rem;
-    margin-bottom: 1.5%;
-    background: $gray-opaque;
+
+    #outlined-number-label {
+      font-family: 'archia';
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    #outlined-number {
+      font-family: 'archia';
+      font-size: 0.7rem !important;
+      font-weight: 400;    
+      font-family: 'archia';  
+      height: 0.1rem;
+    }
   }
 
   .react-autosuggest__suggestions-container {
@@ -750,7 +763,6 @@ h6 {
   text-decoration: none;
 
   svg {
-    margin-right: 0.5rem;
     width: 20px;
     stroke-width: 2px;
   }
@@ -3484,4 +3496,25 @@ select {
 
 .height-22 {
 	height: 22px;
+}
+
+.disclaimercontainer {
+
+  svg {
+    margin-left: 2px;
+  }
+
+  .mobile-disclaimer-button {
+    svg {
+      font-size: 0.75rem;
+    }
+  }
+
+  .disclaimer-button {
+    color: $gray-mid;
+    background: none;
+    text-transform: none;
+    font-weight: 500;
+    font-size: 0.7rem;
+  }
 }
