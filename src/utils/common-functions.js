@@ -1,5 +1,6 @@
 import moment from 'moment';
 import {STATE_CODES} from '../constants';
+import {format as d3format} from 'd3';
 
 const months = {
   '01': 'Jan',
@@ -78,9 +79,13 @@ export function sliceTimeseriesFromEnd(timeseries, days) {
   return timeseries.slice(-days);
 }
 
-export const formatNumber = (value) => {
+export const formatNumber = (value, shrinkNumbers) => {
   const numberFormatter = new Intl.NumberFormat('en-IN');
-  return isNaN(value) ? '-' : numberFormatter.format(value);
+  return isNaN(value)
+    ? '-'
+    : shrinkNumbers
+    ? d3format('.1~s')(value)
+    : numberFormatter.format(value);
 };
 
 export const parseStateTimeseries = ({states_daily: data}) => {

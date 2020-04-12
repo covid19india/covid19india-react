@@ -42,22 +42,30 @@ function Home(props) {
   const getStates = async () => {
     try {
       const [
-        response,
+        {data},
         stateDistrictWiseResponse,
         {data: statesDailyResponse},
-        stateTestResponse,
+        {data: stateTestData},
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
         axios.get('https://api.covid19india.org/states_daily.json'),
         axios.get('https://api.covid19india.org/state_test_data.json'),
       ]);
-      setStates(response.data.statewise);
+      setStates(data.statewise);
       const ts = parseStateTimeseries(statesDailyResponse);
-      ts['TT'] = preprocessTimeseries(response.data.cases_time_series); // TT -> India
+      ts['TT'] = preprocessTimeseries(data.cases_time_series); // TT -> India
       setTimeseries(ts);
-      setLastUpdated(response.data.statewise[0].lastupdatedtime);
-      setStateTestData(stateTestResponse.data.states_tested_data.reverse());
+      setLastUpdated(data.statewise[0].lastupdatedtime);
+      const testData = stateTestData.states_tested_data.reverse();
+      const totalTest = data.tested[data.tested.length - 1];
+      testData.push({
+        updatedon: totalTest.updatetimestamp.split(' ')[0],
+        totaltested: totalTest.totalindividualstested,
+        source: totalTest.source,
+        state: 'Total', // India
+      });
+      setStateTestData(testData);
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
       setFetched(true);
     } catch (err) {
