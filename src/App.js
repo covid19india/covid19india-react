@@ -15,6 +15,9 @@ import Links from './components/links';
 import FAQ from './components/faq';
 import Banner from './components/banner';
 import PatientDB from './components/patientdb';
+import DeepDive from './components/deepdive';
+import Resources from './components/resources';
+/* import PatientDB from './components/patientdb';*/
 
 const history = require('history').createBrowserHistory;
 
@@ -33,6 +36,12 @@ function App() {
       animationDelayForNavbar: 0.3,
     },
     {
+      pageLink: '/deepdive',
+      view: DeepDive,
+      displayName: 'Deep Dive',
+      animationDelayForNavbar: 0.4,
+    },
+    {
       pageLink: '/links',
       view: Links,
       displayName: 'Helpful Links',
@@ -43,6 +52,12 @@ function App() {
       view: FAQ,
       displayName: 'About',
       animationDelayForNavbar: 0.5,
+    },
+    {
+      pageLink: '/essentials',
+      view: Resources,
+      displayName: 'Essentials',
+      animationDelayForNavbar: 0.7,
     },
   ];
 
