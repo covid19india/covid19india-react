@@ -47,9 +47,10 @@ function Home(props) {
         axios.get('https://api.covid19india.org/updatelog/log.json'),
         axios.get('https://api.covid19india.org/state_test_data.json'),
       ]);
+      const reversedStateTestData = stateTestResponse.data.states_tested_data.reverse();
       response.data.statewise.forEach((s) => {
         const statePopulation = statewisePopulation[s.state.toUpperCase()];
-        const testedData = stateTestResponse.data.states_tested_data.find(
+        const testedData = reversedStateTestData.find(
           (o) => o.state === s.state
         );
         const testedCount = testedData?.totaltested
@@ -60,7 +61,7 @@ function Home(props) {
       setStates(response.data.statewise);
       setTimeseries(validateCTS(response.data.cases_time_series));
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
-      setStateTestData(stateTestResponse.data.states_tested_data.reverse());
+      setStateTestData(reversedStateTestData);
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
       setActivityLog(updateLogResponse.data);
       /* setPatients(rawDataResponse.data.raw_data.filter((p) => p.detectedstate));*/
