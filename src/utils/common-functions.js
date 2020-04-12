@@ -56,7 +56,7 @@ const validateCTS = (data = []) => {
 };
 
 export const preprocessTimeseries = (timeseries) => {
-  return validateCTS(timeseries).map((stat) => ({
+  return validateCTS(timeseries).map((stat, index) => ({
     dateObj: new Date(stat.date + ' 2020'),
     date: stat.date,
     totalconfirmed: +stat.totalconfirmed,
@@ -74,9 +74,17 @@ export const preprocessTimeseries = (timeseries) => {
     dailyrecovered: +stat.dailyrecovered,
     dailydeceased: +stat.dailydeceased,
     dailyactive: (() => {
-      // Daily Total = Daily Confimed - Daily Recovered - Daily Deceased
+      // Daily Total = Yesterday's active + today's case - (today's recovered - today's deaths)
+      if (index === 0) return 0;
+      const yesterdayActive =
+        +timeseries[index - 1].totalconfirmed -
+        +timeseries[index - 1].totalrecovered -
+        +timeseries[index - 1].totaldeceased;
       const _dailyactive =
-        +stat.dailyconfirmed - +stat.dailyrecovered - +stat.dailydeceased;
+        yesterdayActive +
+        +stat.dailyconfirmed -
+        +stat.dailyrecovered -
+        +stat.dailydeceased;
       // If it is negative then there are no active cases
       if (_dailyactive < 0) return 0;
       return _dailyactive;

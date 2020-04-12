@@ -2,7 +2,10 @@ import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as d3 from 'd3';
 import moment from 'moment';
 
-import {preprocessTimeseries, sliceTimeseriesFromEnd} from '../utils/common-functions';
+import {
+  preprocessTimeseries,
+  sliceTimeseriesFromEnd,
+} from '../utils/common-functions';
 import {useResizeObserver} from '../utils/hooks';
 import {formatNumber} from '../utils/common-functions';
 
@@ -197,7 +200,10 @@ function TimeSeries(props) {
           const yScaleLinear = d3
             .scaleLinear()
             .clamp(true)
-            .domain([0, Math.max(1, yBuffer * d3.max(timeseries, (d) => d[type]))])
+            .domain([
+              0,
+              Math.max(1, yBuffer * d3.max(timeseries, (d) => d[type])),
+            ])
             .nice()
             .range([chartBottom, margin.top]);
           return mode ? yScaleDailyUniform : yScaleLinear;
@@ -417,25 +423,10 @@ function TimeSeries(props) {
         <div className="svg-parent is-blue">
           <div className="stats is-blue">
             <h5 className={`${!moving ? 'title' : ''}`}>Active</h5>
-            <h5 className={`${moving ? 'title' : ''}`}>
-              {isYesterday
-                ? `${datapoint['date']} Yesterday`
-                : datapoint['date']}
-            </h5>
+            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
-              <h2>{datapoint[chartKey4]}</h2>
-              <h6>
-                {timeseries.length > 0 && index !== 0
-                  ? timeseries[index][chartKey4] -
-                      timeseries[index - 1][chartKey4] >=
-                    0
-                    ? '+' +
-                      (timeseries[index][chartKey4] -
-                        timeseries[index - 1][chartKey4])
-                    : timeseries[index][chartKey4] -
-                      timeseries[index - 1][chartKey4]
-                  : ''}
-              </h6>
+              <h2>{formatNumber(datapoint[chartKey4])}</h2>
+              <h6>{currentStatusCount(chartKey4)}</h6>
             </div>
           </div>
           <svg ref={svgRef4} preserveAspectRatio="xMidYMid meet" />
@@ -463,18 +454,6 @@ function TimeSeries(props) {
             </div>
           </div>
           <svg ref={svgRef3} preserveAspectRatio="xMidYMid meet" />
-        </div>
-
-        <div className="svg-parent is-blue">
-          <div className="stats is-blue">
-            <h5 className={`${!moving ? 'title' : ''}`}>Active</h5>
-            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
-            <div className="stats-bottom">
-              <h2>{formatNumber(datapoint[chartKey4])}</h2>
-              <h6>{currentStatusCount(chartKey4)}</h6>
-            </div>
-          </div>
-          <svg ref={svgRef4} preserveAspectRatio="xMidYMid meet" />
         </div>
       </div>
 
