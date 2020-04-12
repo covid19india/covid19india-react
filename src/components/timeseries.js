@@ -307,7 +307,7 @@ function TimeSeries(props) {
                 .line()
                 .x((d) => xScale(d.date))
                 .y((d) => yScale(d[typeTotal]))
-                .curve(d3.curveCardinal)
+                .curve(d3.curveMonotoneX)
             );
           // Using d3-interpolate-path
           // .attrTween('d', function (d) {
