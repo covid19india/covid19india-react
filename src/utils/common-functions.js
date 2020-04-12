@@ -99,15 +99,25 @@ export const preprocessTimeseries = (timeseries) => {
     totalconfirmed: +stat.totalconfirmed,
     totalrecovered: +stat.totalrecovered,
     totaldeceased: +stat.totaldeceased,
-    // Total Active = Confimed - Recovered - Deceased
-    totalactive:
-      +stat.totalconfirmed - +stat.totalrecovered - +stat.totaldeceased,
+    totalactive: (() => {
+      // Total Active = Confimed - Recovered - Deceased
+      const _totalactive =
+        +stat.totalconfirmed - +stat.totalrecovered - +stat.totaldeceased;
+      // If it is negative then there are no active cases
+      if (_totalactive < 0) return 0;
+      return _totalactive;
+    })(),
     dailyconfirmed: +stat.dailyconfirmed,
     dailyrecovered: +stat.dailyrecovered,
     dailydeceased: +stat.dailydeceased,
-    // Daily Total = Daily Confimed - Daily Recovered - Daily Deceased
-    dailyactive:
-      +stat.dailyconfirmed - +stat.dailyrecovered - +stat.dailydeceased,
+    dailyactive: (() => {
+      // Daily Total = Daily Confimed - Daily Recovered - Daily Deceased
+      const _dailyactive =
+        +stat.dailyconfirmed - +stat.dailyrecovered - +stat.dailydeceased;
+      // If it is negative then there are no active cases
+      if (_dailyactive < 0) return 0;
+      return _dailyactive;
+    })(),
   }));
 };
 
