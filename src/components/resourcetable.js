@@ -21,10 +21,20 @@ const usePanelSummaryStyles = makeStyles((theme) => ({
     height: '4rem',
   },
 }));
+const usePanelDetailsStyles = makeStyles((theme) => ({
+  root: {
+    padding: '0px 5px 0px 24px',
+  },
+}));
+const useListStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+  },
+}));
 
 const usePanelStyles = makeStyles((theme) => ({
   root: {
-    width: 'calc(100%-0.2rem)',
+    width: '100%',
     marginBottom: '0.2rem',
   },
 }));
@@ -41,6 +51,8 @@ const useItemTextStyles = makeStyles((theme) => ({
     fontWeight: 400,
     fontStyle: 'normal',
     fontSize: '12px',
+    width: '100%',
+    wordWrap: 'break-word',
     // fontTransform: 'uppercase'
   },
 }));
@@ -73,14 +85,17 @@ const getFormattedLink = (initialValue) => {
     console.log('success val', ' --' + JSON.stringify(links.numberList));
     s3 = String(links.numberList).replace(/,/g, '<br>');
   } else {
-    const s1 = initialValue.replace(reurl1, '<a href="$1">Link</a>');
+    const s1 = initialValue.replace(
+      reurl1,
+      '<a href="$1" target="_blank">Link</a>'
+    );
     const s2 = s1.replace(
       reinsta,
-      '<a href="https://www.instagram.com/$1">Instagram: @$1</a>'
+      '<a href="https://www.instagram.com/$1" target="_blank">Instagram: @$1</a>'
     );
     s3 = s2.replace(
       refb,
-      '<a href="https://www.facebook.com/$1">Facebook: @$1</a>'
+      '<a href="https://www.facebook.com/$1" target="_blank">Facebook: @$1</a>'
     );
   }
   return (
@@ -109,14 +124,17 @@ const FormattedCell = ({value: initialValue, editable}) => {
       const links = JSON.parse(JSON.stringify(formatedLink));
       setValue(String(links.numberList).replace(/,/g, '<br>'));
     } else {
-      const s1 = initialValue.replace(reurl1, '<a href="$1">Link</a>');
+      const s1 = initialValue.replace(
+        reurl1,
+        '<a href="$1" target="_blank">Link</a>'
+      );
       const s2 = s1.replace(
         reinsta,
-        '<a href="https://www.instagram.com/$1">Instagram: @$1</a>'
+        '<a href="https://www.instagram.com/$1" target="_blank">Instagram: @$1</a>'
       );
       const s3 = s2.replace(
         refb,
-        '<a href="https://www.facebook.com/$1">Facebook: @$1</a>'
+        '<a href="https://www.facebook.com/$1" target="_blank">Facebook: @$1</a>'
       );
       setValue(s3);
     }
@@ -162,12 +180,18 @@ function ResourceTable({columns, data, isDesktop, totalCount, onScrollUpdate}) {
   const classesPannelSummary = usePanelSummaryStyles();
   const classesPanel = usePanelStyles();
   const classesListItemText = useItemTextStyles();
+  const classesPanelDetails = usePanelDetailsStyles();
+  const classesList = useListStyles();
+  const [expanded, setExpanded] = React.useState(false);
   const defaultColumn = React.useMemo(
     () => ({
       Cell: FormattedCell,
     }),
     []
   );
+  const handleExpansionChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
   const [searchValue, setSearchValue] = useState('');
   const [suggestions, setSuggestions] = useState(data);
@@ -232,8 +256,12 @@ function ResourceTable({columns, data, isDesktop, totalCount, onScrollUpdate}) {
                     key={headerGroup.id}
                     {...headerGroup.getHeaderGroupProps()}
                   >
-                    {headerGroup.headers.map((column) => (
-                      <th key={column.id} {...column.getHeaderProps()}>
+                    {headerGroup.headers.map((column, i) => (
+                      <th
+                        key={column.id}
+                        {...column.getHeaderProps()}
+                        className={i === 3 ? 'descriptionCol sticky' : 'sticky'}
+                      >
                         {column.render('Header')}
                       </th>
                     ))}
@@ -275,12 +303,21 @@ function ResourceTable({columns, data, isDesktop, totalCount, onScrollUpdate}) {
             // onSuggestionSelected = {this.props.onSuggestionSelected}
           />
         </div>
-        <div className="resourcesaccordion">
+        <div
+          className="resourcesaccordion"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '336px',
+            alignItems: 'center',
+          }}
+        >
           <InfiniteScroll
             dataLength={data.length}
             hasMore={data.length < totalCount}
             next={onScrollUpdate}
             loader={<h4>Fetching more information, please wait.</h4>}
+            style={{width: '100%'}}
           >
             {rows.map((row, i) => {
               prepareRow(row);
@@ -288,6 +325,8 @@ function ResourceTable({columns, data, isDesktop, totalCount, onScrollUpdate}) {
                 <ExpansionPanel
                   key={row.id}
                   classes={{root: classesPanel.root}}
+                  expanded={expanded === `panel-${i}`}
+                  onChange={handleExpansionChange(`panel-${i}`)}
                 >
                   <ExpansionPanelSummary
                     classes={{
@@ -318,8 +357,14 @@ function ResourceTable({columns, data, isDesktop, totalCount, onScrollUpdate}) {
                     </div>
                     {/* </div> */}
                   </ExpansionPanelSummary>
-                  <ExpansionPanelDetails>
-                    <List disablePadding={true} dense={true}>
+                  <ExpansionPanelDetails
+                    classes={{root: classesPanelDetails.root}}
+                  >
+                    <List
+                      disablePadding={true}
+                      dense={true}
+                      classes={{root: classesList.root}}
+                    >
                       <ListItem
                         alignItems="flex-start"
                         dense={true}
