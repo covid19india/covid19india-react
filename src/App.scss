@@ -2564,6 +2564,22 @@ select {
     display: flex;
     flex-direction: row;
   }
+
+  select {
+    font-family: "archia";
+    margin-right: 10px;
+    color: #555;
+    height: 40px;
+    width: 150px;
+    padding: 0 10px 0 10px;
+    background: #fff;
+    transition: border-color .1s ease-in-out, box-shadow .1s ease-in-out;
+    border: 2px solid #ddd;
+    border-radius: 15px;
+    &:hover {
+      border: 2px solid #999;
+    }
+  }
 }
 
 .pills {
