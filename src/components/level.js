@@ -8,7 +8,8 @@ function Level(props) {
   const [recoveries, setRecoveries] = useState(0);
   const [deaths, setDeaths] = useState(0);
   const [deltas, setDeltas] = useState(0);
-  const testedLength = props.total_tested.length;
+  const testedLength =
+    props.total_tested === undefined ? 0 : props.total_tested.length;
 
   useEffect(() => {
     setData(props.data);
