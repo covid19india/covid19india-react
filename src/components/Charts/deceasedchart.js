@@ -60,7 +60,7 @@ function DeceasedChart(props) {
     datasets: [
       {
         data: ages,
-        label: 'Cases',
+        label: 'Deceased',
         backgroundColor: '#ff073a',
       },
     ],
