@@ -256,6 +256,8 @@ function MapExplorer({
   onMapHighlightChange,
 }) {
   const [selectedRegion, setSelectedRegion] = useState({});
+  const [total, setTotal] = useState({});
+  let totalTemp = 0;
   const [panelRegion, setPanelRegion] = useState(getRegionFromState(states[0]));
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState(
     getRegionFromState(states[0])
@@ -390,16 +392,6 @@ function MapExplorer({
     return dateComp;
   }
 
-  //   var formatValue;
-  //   function formatNumberInternal(formatValue) {
-  //     let value = formatNumber(formatValue);
-  //     console.log('VAlue of formatNumber', value);
-  //     return value != '-' ? value : total;
-  //   }
-
-  const [total, setTotal] = useState({});
-  let totalTemp = 0;
-
   useEffect(() => {
     const testDataFind = stateTestData.filter(
       (obj) => obj.totaltested !== '' && obj.updatedon === getCurrentDate()
@@ -411,18 +403,13 @@ function MapExplorer({
       totalTemp += Number(element);
     });
 
-    console.log('Printing total value', total);
     setTotal(totalTemp);
-    console.log('Printing total value after', total);
     setTestObj(
       stateTestData.find(
         (obj) => obj.state === panelRegion.name && obj.totaltested !== ''
       )
     );
-    console.log('total Indians tested ended', total);
-
-    console.log('total Indians tested ended', totalTemp);
-    // testObj?['totaltested'] = total;
+    console.log('total Indians tested', total);
   }, [panelRegion, stateTestData, testObj]);
 
   return (
