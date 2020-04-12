@@ -125,7 +125,7 @@ function TimeSeries(props) {
           .clamp(true)
           .domain([
             uniformScaleMin,
-            yBuffer * d3.max(ts, (d) => d.totalconfirmed),
+            Math.max(1, yBuffer * d3.max(ts, (d) => d.totalconfirmed)),
           ])
           .nice()
           .range([chartBottom, margin.top]);
@@ -146,7 +146,7 @@ function TimeSeries(props) {
             .clamp(true)
             .domain([
               d3.min(ts, (d) => d[type]),
-              yBuffer * d3.max(ts, (d) => d[type]),
+              Math.max(1, yBuffer * d3.max(ts, (d) => d[type])),
             ])
             .nice()
             .range([chartBottom, margin.top]);
@@ -169,7 +169,10 @@ function TimeSeries(props) {
         const yScaleDailyUniform = d3
           .scaleLinear()
           .clamp(true)
-          .domain([0, yBuffer * d3.max(ts, (d) => d.dailyconfirmed)])
+          .domain([
+            0,
+            Math.max(1, yBuffer * d3.max(ts, (d) => d.dailyconfirmed)),
+          ])
           .nice()
           .range([chartBottom, margin.top]);
 
@@ -177,7 +180,7 @@ function TimeSeries(props) {
           const yScaleLinear = d3
             .scaleLinear()
             .clamp(true)
-            .domain([0, yBuffer * d3.max(ts, (d) => d[type])])
+            .domain([0, Math.max(1, yBuffer * d3.max(ts, (d) => d[type]))])
             .nice()
             .range([chartBottom, margin.top]);
           return mode ? yScaleDailyUniform : yScaleLinear;
