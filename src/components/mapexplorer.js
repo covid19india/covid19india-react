@@ -380,12 +380,49 @@ function MapExplorer({
 
   const {name, lastupdatedtime} = currentHoveredRegion;
 
+  function getCurrentDate() {
+    const date = new Date();
+    let getMonth = String(date.getMonth() + 1);
+    if (getMonth.length === 1) {
+      getMonth = '0' + getMonth;
+    }
+    const dateComp = date.getDate() + '/' + getMonth + '/' + date.getFullYear();
+    return dateComp;
+  }
+
+  //   var formatValue;
+  //   function formatNumberInternal(formatValue) {
+  //     let value = formatNumber(formatValue);
+  //     console.log('VAlue of formatNumber', value);
+  //     return value != '-' ? value : total;
+  //   }
+
+  const [total, setTotal] = useState({});
+  let totalTemp = 0;
+
   useEffect(() => {
+    const testDataFind = stateTestData.filter(
+      (obj) => obj.totaltested !== '' && obj.updatedon === getCurrentDate()
+    );
+
+    const totalTMap = testDataFind.map((value) => value.totaltested);
+    totalTMap.forEach((element) => {
+      // eslint-disable-next-line
+      totalTemp += Number(element);
+    });
+
+    console.log('Printing total value', total);
+    setTotal(totalTemp);
+    console.log('Printing total value after', total);
     setTestObj(
       stateTestData.find(
         (obj) => obj.state === panelRegion.name && obj.totaltested !== ''
       )
     );
+    console.log('total Indians tested ended', total);
+
+    console.log('total Indians tested ended', totalTemp);
+    // testObj?['totaltested'] = total;
   }, [panelRegion, stateTestData, testObj]);
 
   return (
@@ -453,6 +490,7 @@ function MapExplorer({
             <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
             <div className="stats-bottom">
               <h1>{formatNumber(testObj?.totaltested)}</h1>
+              {/* <h1>{total}</h1> */}
             </div>
             <h6 className="timestamp">
               {!isNaN(new Date(testObj?.updatedon))
