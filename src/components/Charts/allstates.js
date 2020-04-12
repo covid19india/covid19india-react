@@ -4,6 +4,7 @@ import moment from 'moment';
 import {getStateName} from '../../utils/common-functions';
 function AllStatesChart(props) {
   const dates = [];
+  const chartReference = React.createRef();
 
   defaults.global.elements.line.fill = false;
 
@@ -176,11 +177,27 @@ function AllStatesChart(props) {
     },
   };
 
+  function toggleSelection() {
+    // Get reference of chartInstance and update it
+    const ci = chartReference.current.chartInstance;
+    for (let i = 0; i < ci.data.datasets.length; i++) {
+      const meta = ci.getDatasetMeta(i);
+      meta.hidden =
+        meta.hidden === null
+          ? !chartReference.current.chartInstance.data.datasets[i].hidden
+          : null;
+    }
+    ci.update();
+  }
+
   return (
     <div className="charts-header">
       <div className="chart-title">{props.title}</div>
       <div className="chart-content">
-        <Line data={dataset} options={options} />
+        <Line data={dataset} options={options} ref={chartReference} />
+      </div>
+      <div className="chart-note">
+        <button onClick={toggleSelection}>Toggle Selection</button>
       </div>
     </div>
   );
