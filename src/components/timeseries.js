@@ -1,9 +1,8 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as d3 from 'd3';
-import {
-  preprocessTimeseries,
-  sliceTimeseriesFromEnd,
-} from '../utils/common-functions';
+import moment from 'moment';
+
+import {sliceTimeseriesFromEnd} from '../utils/common-functions';
 import {useResizeObserver} from '../utils/hooks';
 import {formatNumber} from '../utils/common-functions';
 
@@ -50,7 +49,7 @@ function TimeSeries(props) {
   }, [props.type]);
 
   const graphData = useCallback(
-    (timeseries) => {
+    (ts) => {
       if (!dimensions) return;
       const width = dimensions.width;
       const height = dimensions.height;
@@ -60,11 +59,10 @@ function TimeSeries(props) {
       const chartRight = width - margin.right;
       const chartBottom = height - margin.bottom;
 
-      const ts = preprocessTimeseries(timeseries);
       const T = ts.length;
       const yBuffer = 1.1;
 
-      setDatapoint(timeseries[T - 1]);
+      setDatapoint(ts[T - 1]);
       setIndex(T - 1);
 
       const svg1 = d3.select(svgRef1.current);
@@ -83,7 +81,7 @@ function TimeSeries(props) {
         .range([margin.left, chartRight]);
 
       // Number of x-axis ticks
-      const numTicksX = width < 480 ? 4 : 8;
+      const numTicksX = width < 480 ? 4 : 7;
 
       const xAxis = (g) =>
         g
@@ -205,7 +203,7 @@ function TimeSeries(props) {
         let i = bisectDate(ts, date, 1);
         if (0 <= i && i < T) {
           if (date - ts[i - 1].date < ts[i].date - date) --i;
-          setDatapoint(timeseries[i]);
+          setDatapoint(ts[i]);
           setIndex(i);
           setMoving(true);
           const d = ts[i];
@@ -218,7 +216,7 @@ function TimeSeries(props) {
       }
 
       function mouseout() {
-        setDatapoint(timeseries[T - 1]);
+        setDatapoint(ts[T - 1]);
         setIndex(T - 1);
         setMoving(false);
         focus.forEach((f, j) => {
@@ -356,12 +354,11 @@ function TimeSeries(props) {
     }
   }, [timeseries, graphData]);
 
-  const yesterdayDate = new Date();
-  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-  const lastDate = new Date(datapoint['date'] + '2020');
-  const isYesterday =
-    lastDate.getMonth() === yesterdayDate.getMonth() &&
-    lastDate.getDate() === yesterdayDate.getDate();
+  const focusDate = moment(datapoint.date);
+  let dateStr = focusDate.format('DD MMMM');
+  dateStr += focusDate.isSame(moment().subtract(1, 'days'), 'day')
+    ? ' Yesterday'
+    : '';
 
   const chartKey1 = chartType === 1 ? 'totalconfirmed' : 'dailyconfirmed';
   const chartKey2 = chartType === 1 ? 'totalrecovered' : 'dailyrecovered';
@@ -385,9 +382,7 @@ function TimeSeries(props) {
         <div className="svg-parent" ref={wrapperRef}>
           <div className="stats">
             <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
-            <h5 className={`${moving ? 'title' : ''}`}>
-              {`${datapoint['date']}${isYesterday ? ' Yesterday ' : ' '}`}
-            </h5>
+            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
               <h2>{formatNumber(datapoint[chartKey1])}</h2>
               <h6>{currentStatusCount(chartKey1)}</h6>
@@ -399,9 +394,7 @@ function TimeSeries(props) {
         <div className="svg-parent is-green">
           <div className="stats is-green">
             <h5 className={`${!moving ? 'title' : ''}`}>Recovered</h5>
-            <h5 className={`${moving ? 'title' : ''}`}>
-              {`${datapoint['date']}${isYesterday ? ' Yesterday ' : ' '}`}
-            </h5>
+            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
               <h2>{formatNumber(datapoint[chartKey2])}</h2>
               <h6>{currentStatusCount(chartKey2)}</h6>
@@ -413,9 +406,7 @@ function TimeSeries(props) {
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
             <h5 className={`${!moving ? 'title' : ''}`}>Deceased</h5>
-            <h5 className={`${moving ? 'title' : ''}`}>
-              {`${datapoint['date']}${isYesterday ? ' Yesterday ' : ' '}`}
-            </h5>
+            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
               <h2>{formatNumber(datapoint[chartKey3])}</h2>
               <h6>{currentStatusCount(chartKey3)}</h6>

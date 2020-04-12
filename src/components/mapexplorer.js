@@ -233,27 +233,35 @@ const mapMeta = {
   },
 };
 
-export default function ({
+const getRegionFromState = (state) => {
+  if (!state) return;
+  const region = {...state};
+  if (!region.name) region.name = region.state;
+  return region;
+};
+
+const getRegionFromDistrict = (districtData, name) => {
+  if (!districtData) return;
+  const region = {...districtData};
+  if (!region.name) region.name = name;
+  return region;
+};
+
+function MapExplorer({
+  forwardRef,
   states,
   stateDistrictWiseData,
   stateTestData,
   regionHighlighted,
+  onMapHighlightChange,
 }) {
   const [selectedRegion, setSelectedRegion] = useState({});
-  const [currentHoveredRegion, setCurrentHoveredRegion] = useState({});
-  const [panelRegion, setPanelRegion] = useState({});
+  const [panelRegion, setPanelRegion] = useState(getRegionFromState(states[0]));
+  const [currentHoveredRegion, setCurrentHoveredRegion] = useState(
+    getRegionFromState(states[0])
+  );
   const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta.India);
-
-  useEffect(() => {
-    const region = getRegionFromState(states[1]);
-    setPanelRegion(region);
-    setCurrentHoveredRegion(region);
-  }, [states]);
-
-  if (!panelRegion) {
-    return null;
-  }
 
   const [statistic, currentMapData] = useMemo(() => {
     const statistic = {total: 0, maxConfirmed: 0};
@@ -294,10 +302,11 @@ export default function ({
     (name, currentMap) => {
       if (currentMap.mapType === MAP_TYPES.COUNTRY) {
         const region = getRegionFromState(
-          states.filter((state) => name === state.state)[0]
+          states.find((state) => name === state.state)
         );
         setCurrentHoveredRegion(region);
         setPanelRegion(region);
+        onMapHighlightChange(region);
       } else if (currentMap.mapType === MAP_TYPES.STATE) {
         const state = stateDistrictWiseData[currentMap.name] || {
           districtData: {},
@@ -313,12 +322,12 @@ export default function ({
         }
         setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
         const panelRegion = getRegionFromState(
-          states.filter((state) => currentMap.name === state.state)[0]
+          states.find((state) => currentMap.name === state.state)
         );
         setPanelRegion(panelRegion);
       }
     },
-    [states, stateDistrictWiseData]
+    [states, stateDistrictWiseData, onMapHighlightChange]
   );
 
   useEffect(() => {
@@ -346,28 +355,6 @@ export default function ({
     }
   }, [regionHighlighted, currentMap.mapType, setHoveredRegion]);
 
-  const getRegionFromDistrict = (districtData, name) => {
-    if (!districtData) {
-      return;
-    }
-    const region = {...districtData};
-    if (!region.name) {
-      region.name = name;
-    }
-    return region;
-  };
-
-  const getRegionFromState = (state) => {
-    if (!state) {
-      return;
-    }
-    const region = {...state};
-    if (!region.name) {
-      region.name = region.state;
-    }
-    return region;
-  };
-
   const switchMapToState = useCallback(
     (name) => {
       const newMap = mapMeta[name];
@@ -375,11 +362,11 @@ export default function ({
         return;
       }
       setCurrentMap(newMap);
+      setSelectedRegion(null);
       if (newMap.mapType === MAP_TYPES.COUNTRY) {
-        setHoveredRegion(states[1].state, newMap);
+        setHoveredRegion(states[0].state, newMap);
       } else if (newMap.mapType === MAP_TYPES.STATE) {
-        const districtData = (stateDistrictWiseData[name] || {districtData: {}})
-          .districtData;
+        const {districtData} = stateDistrictWiseData[name] || {};
         const topDistrict = Object.keys(districtData)
           .filter((name) => name !== 'Unknown')
           .sort((a, b) => {
@@ -402,7 +389,11 @@ export default function ({
   }, [panelRegion, stateTestData, testObj]);
 
   return (
-    <div className="MapExplorer fadeInUp" style={{animationDelay: '1.5s'}}>
+    <div
+      className="MapExplorer fadeInUp"
+      style={{animationDelay: '1.5s'}}
+      ref={forwardRef}
+    >
       <div className="header">
         <h1>{currentMap.name}</h1>
         <h6>
@@ -546,3 +537,5 @@ export default function ({
     </div>
   );
 }
+
+export default MapExplorer;
