@@ -3045,12 +3045,18 @@ select {
 
     .filters-left {
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: center;
+      select {
+        margin-bottom: 10px;
+      }
     }
 
     .filters {
       height: 7rem;
       justify-content: center;
+      select {
+        height: 100%;
+      }
     }
   }
 
