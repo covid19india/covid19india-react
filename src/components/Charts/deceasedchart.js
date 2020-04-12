@@ -21,7 +21,7 @@ function DeceasedChart(props) {
 
   defaults.global.hover.intersect = false;
 
-  const ages = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  const ages = Array(10).fill(0);
   let unknown = 0;
   if (!props.data || props.data.length === 0) {
     return <div></div>;
@@ -34,35 +34,10 @@ function DeceasedChart(props) {
     }
     if (patient.agebracket) {
       const age = parseInt(patient.agebracket);
-      if (age >= 0 && age <= 10 && flag) {
-        ages[0]++;
-      }
-      if (age > 10 && age <= 20 && flag) {
-        ages[1]++;
-      }
-      if (age > 20 && age <= 30 && flag) {
-        ages[2]++;
-      }
-      if (age > 30 && age <= 40 && flag) {
-        ages[3]++;
-      }
-      if (age > 40 && age <= 50 && flag) {
-        ages[4]++;
-      }
-      if (age > 50 && age <= 60 && flag) {
-        ages[5]++;
-      }
-      if (age > 60 && age <= 70 && flag) {
-        ages[6]++;
-      }
-      if (age > 70 && age <= 80 && flag) {
-        ages[7]++;
-      }
-      if (age > 80 && age <= 90 && flag) {
-        ages[8]++;
-      }
-      if (age > 90 && age <= 100 && flag) {
-        ages[9]++;
+      for (let i = 0; i < 10; i++) {
+        if (age > i * 10 && age <= (i + 1) * 10 && flag) {
+          ages[i]++;
+        }
       }
     } else if (flag) {
       unknown++;
