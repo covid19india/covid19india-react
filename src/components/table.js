@@ -238,6 +238,20 @@ function Table(props) {
                 </div>
               </div>
             </th>
+            <th className="sticky" onClick={(e) => handleSort(e, props)}>
+              <div className="heading-content">
+                <abbr
+                  className={`${window.innerWidth <= 769 ? 'is-gray' : ''}`}
+                  title="Tests per Million"
+                >
+                  {window.innerWidth <= 769
+                    ? window.innerWidth <= 375
+                      ? 'T/M'
+                      : 'T/M'
+                    : 'T/M'}
+                </abbr>
+              </div>
+            </th>
           </tr>
         </thead>
 
