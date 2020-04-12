@@ -117,9 +117,12 @@ export function sliceTimeseriesFromEnd(timeseries, days) {
   return timeseries.slice(-days);
 }
 
-export const formatNumber = (value) => {
+export const formatNumber = (value, shrinkNumbers) => {
   const numberFormatter = new Intl.NumberFormat('en-IN');
-  return isNaN(value) ? '-' : numberFormatter.format(value);
+  const number = isNaN(value) ? '-' : numberFormatter.format(value);
+  return shrinkNumbers && number.length > 7
+    ? `${number.replace(',', '').slice(0, -4)}K`
+    : number;
 };
 
 export const parseStateTimeseries = ({states_daily: data}) => {

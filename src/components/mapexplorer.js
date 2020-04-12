@@ -452,7 +452,9 @@ function MapExplorer({
           >
             <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
             <div className="stats-bottom">
-              <h1>{formatNumber(testObj?.totaltested)}</h1>
+              <h1>
+                {formatNumber(testObj?.totaltested, window.innerWidth <= 769)}
+              </h1>
             </div>
             <h6 className="timestamp">
               {!isNaN(new Date(testObj?.updatedon))
