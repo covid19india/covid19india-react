@@ -232,7 +232,7 @@ function Home(props) {
           )}
         </div>
 
-        <div className="floating-buttons">
+        {/* <div className="floating-buttons">
           <button
             className="table-nav fadeInUp"
             onClick={scrollHandlers[0]}
@@ -254,7 +254,7 @@ function Home(props) {
           >
             <Icon.TrendingUp />
           </button>
-        </div>
+        </div> */}
 
         {/* <div className="home-left">
         {patients.length > 1 && (
