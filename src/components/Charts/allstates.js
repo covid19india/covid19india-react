@@ -116,7 +116,7 @@ function AllStatesChart(props) {
     events: ['click', 'mousemove', 'mouseout', 'touchstart', 'touchmove'],
     maintainAspectRatio: false,
     tooltips: {
-      mode: 'nearest',
+      mode: 'index',
     },
     elements: {
       point: {
