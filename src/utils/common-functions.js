@@ -120,7 +120,7 @@ export function sliceTimeseriesFromEnd(timeseries, days) {
 export const formatNumber = (value) => {
   const numberFormatter = new Intl.NumberFormat('en-IN');
   return isNaN(value) ? '-' : numberFormatter.format(value);
-}
+};
 
 export const parseStateTimeseries = ({states_daily: data}) => {
   const statewiseSeries = Object.keys(stateCodes).reduce((a, c) => {
@@ -142,8 +142,8 @@ export const parseStateTimeseries = ({states_daily: data}) => {
           dailyrecovered: +data[i + 1][stateCode] || 0,
           dailydeceased: +data[i + 2][stateCode] || 0,
           totalconfirmed: +data[i][stateCode] + prev.totalconfirmed || 0,
-          totaldeceased: +data[i + 1][stateCode] + prev.totaldeceased || 0,
-          totalrecovered: +data[i + 2][stateCode] + prev.totalrecovered || 0,
+          totalrecovered: +data[i + 1][stateCode] + prev.totalrecovered || 0,
+          totaldeceased: +data[i + 2][stateCode] + prev.totaldeceased || 0,
         });
       });
     }
