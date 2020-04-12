@@ -359,7 +359,7 @@ function ResourceTable({
           style={{
             display: 'flex',
             flexDirection: 'column',
-            width: '336px',
+            width: '100%',
             alignItems: 'center',
           }}
         >
@@ -368,7 +368,7 @@ function ResourceTable({
             hasMore={data.length < totalCount}
             next={onScrollUpdate}
             loader={<h4>Fetching more information, please wait.</h4>}
-            style={{width: '100%'}}
+            style={{width: '100%', maxWidth:'345px'}} //for large texts
           >
             {rows.map((row, i) => {
               prepareRow(row);
