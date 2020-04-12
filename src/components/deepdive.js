@@ -69,7 +69,6 @@ function DeepDive(props) {
           }
         } else {
           const parts = dt.split('/');
-          console.log('parts:', parts);
           dt = new Date(
             parts[1] + '-' + parts[0] + '-' + parts[2].split(' ')[0]
           );
