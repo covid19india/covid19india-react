@@ -68,10 +68,10 @@ const getNumbersLink = (initialValue) => {
   const numbg = /^\d{5,12}$/g;
   const numberList = numbf.map((iv, i) => {
     iv = iv.trim();
-    console.log('numbr ', '' + iv);
+    //console.log('numbr ', '' + iv);
     return iv.replace(numbg, '<a href="tel:$&">$&</a>');
   });
-  console.log('numberList ', '' + numberList);
+  //console.log('numberList ', '' + numberList);
   return {numberList};
 };
 
@@ -85,7 +85,7 @@ const getFormattedLink = (initialValue) => {
   if (initialValue.match(noLetters) != null) {
     const formatedLink = getNumbersLink(initialValue);
     const links = JSON.parse(JSON.stringify(formatedLink));
-    console.log('success val', ' --' + JSON.stringify(links.numberList));
+    //console.log('success val', ' --' + JSON.stringify(links.numberList));
     s3 = String(links.numberList).replace(/,/g, '<br>');
   } else {
     const s1 = initialValue.replace(
