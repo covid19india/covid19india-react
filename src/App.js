@@ -10,14 +10,13 @@ import * as Icon from 'react-feather';
 import './App.scss';
 
 import Home from './components/home';
-import Navbar from './components/navbar';
+import Navbar from './components/navbar_new';
 import Links from './components/links';
 import FAQ from './components/faq';
-import Banner from './components/banner';
 import PatientDB from './components/patientdb';
 import DeepDive from './components/deepdive';
 import Resources from './components/resources';
-/* import PatientDB from './components/patientdb';*/
+import State from './components/state';
 
 const history = require('history').createBrowserHistory;
 
@@ -28,36 +27,49 @@ function App() {
       view: Home,
       displayName: 'Home',
       animationDelayForNavbar: 0.2,
+      showInNavbar: true,
     },
     {
       pageLink: '/demographics',
       view: PatientDB,
       displayName: 'Demographics',
       animationDelayForNavbar: 0.3,
+      showInNavbar: true,
     },
     {
       pageLink: '/deepdive',
       view: DeepDive,
       displayName: 'Deep Dive',
       animationDelayForNavbar: 0.4,
+      showInNavbar: true,
     },
     {
       pageLink: '/links',
       view: Links,
       displayName: 'Helpful Links',
-      animationDelayForNavbar: 0.4,
-    },
-    {
-      pageLink: '/faq',
-      view: FAQ,
-      displayName: 'About',
       animationDelayForNavbar: 0.5,
+      showInNavbar: true,
     },
     {
       pageLink: '/essentials',
       view: Resources,
       displayName: 'Essentials',
+      animationDelayForNavbar: 0.6,
+      showInNavbar: true,
+    },
+    {
+      pageLink: '/faq',
+      view: FAQ,
+      displayName: 'FAQ',
       animationDelayForNavbar: 0.7,
+      showInNavbar: true,
+    },
+    {
+      pageLink: '/state/:stateName',
+      view: State,
+      displayName: 'State',
+      animationDelayForNavbar: 0.8,
+      showInNavbar: false,
     },
   ];
 
@@ -68,7 +80,6 @@ function App() {
           render={({location}) => (
             <div className="Almighty-Router">
               <Navbar pages={pages} />
-              <Banner />
               <Route exact path="/" render={() => <Redirect to="/" />} />
               <Switch location={location}>
                 {pages.map((page, i) => {
