@@ -630,6 +630,7 @@ function Resources(props) {
                     margin: '0.2rem 0.2rem',
                     padding: '0.5rem 0.5rem',
                     width: '50%',
+                    justifyContent: 'center',
                   }}
                 >
                   <span>Share</span>
