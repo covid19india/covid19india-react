@@ -14,7 +14,7 @@ import Level from './level';
 import MapExplorer from './mapexplorer';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
-
+import statewisePopulation from './data/state_wise_population_2011.json';
 function Home(props) {
   const [states, setStates] = useState([]);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
@@ -47,6 +47,16 @@ function Home(props) {
         axios.get('https://api.covid19india.org/updatelog/log.json'),
         axios.get('https://api.covid19india.org/state_test_data.json'),
       ]);
+      response.data.statewise.forEach((s) => {
+        const statePopulation = statewisePopulation[s.state.toUpperCase()];
+        const testedData = stateTestResponse.data.states_tested_data.find(
+          (o) => o.state === s.state
+        );
+        const testedCount = testedData?.totaltested
+          ? testedData?.totaltested
+          : 0;
+        s.testspermillion = (testedCount * 1000000) / statePopulation;
+      });
       setStates(response.data.statewise);
       setTimeseries(validateCTS(response.data.cases_time_series));
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
