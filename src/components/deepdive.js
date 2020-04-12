@@ -2,6 +2,7 @@ import AgeChart from './Charts/agechart';
 import AllStatesChart from './Charts/allstates';
 import DailyConfirmedChart from './Charts/dailyconfirmedchart';
 import GenderChart from './Charts/genderchart';
+import GrowthTrendChart from './Charts/growthtrendchart';
 import NationalityChart from './Charts/nationalitychart';
 import TotalConfirmedChart from './Charts/totalconfirmedchart';
 
@@ -62,7 +63,14 @@ function DeepDive() {
         </div>
 
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
-          <GenderChart title="Patients by Gender" data={rawData} />
+          <GrowthTrendChart
+            title="States - Growth Trend"
+            data={statesTimeSeries}
+          />
+        </div>
+
+        <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
+          <GenderChart title="Patient Gender" data={rawData} />
         </div>
 
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
