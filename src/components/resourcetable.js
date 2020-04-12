@@ -9,6 +9,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Autosuggest from 'react-autosuggest';
+import TextField from '@material-ui/core/TextField';
+import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 const usePanelSummaryStyles = makeStyles((theme) => ({
   content: {
@@ -234,10 +237,33 @@ function ResourceTable({
   };
 
   const inputProps = {
-    placeholder: 'Search for keyword',
+    placeholder: '',
     value: searchValue,
     onChange: onChange,
   };
+
+  const renderInputComponent = (inputProps) => (
+    <TextField
+      id="outlined-number"
+      label="Search keyword"
+      fullWidth={true}
+      InputLabelProps={{
+        shrink: true,
+      }}
+      style={{
+        width: '100%',
+      }}
+      variant="outlined"
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <SearchOutlinedIcon style={{fontSize: '0.7rem'}} />
+          </InputAdornment>
+        ),
+      }}
+      {...inputProps}
+    />
+  );
 
   // Use the state and functions returned from useTable to build your UI
   const {
@@ -264,6 +290,7 @@ function ResourceTable({
             renderSuggestion={renderSuggestion}
             inputProps={inputProps}
             alwaysRenderSuggestions={true}
+            renderInputComponent={renderInputComponent}
           />
         </div>
         <div className="tableandcontrols">
@@ -323,8 +350,8 @@ function ResourceTable({
             getSuggestionValue={getSuggestionValue}
             renderSuggestion={renderSuggestion}
             inputProps={inputProps}
-            // highlightFirstSuggestion={true}
-            // onSuggestionSelected = {this.props.onSuggestionSelected}
+            alwaysRenderSuggestions={true}
+            renderInputComponent={renderInputComponent}
           />
         </div>
         <div
