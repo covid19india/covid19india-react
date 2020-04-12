@@ -355,9 +355,10 @@ function TimeSeries(props) {
   }, [timeseries, graphData]);
 
   const focusDate = moment(datapoint.date);
-  const isYesterday = focusDate.isSame(moment().subtract(1, 'days'), 'day')
-    ? 'Yesterday'
-    : focusDate.format('DD MMMM');
+  let dateStr = focusDate.format('DD MMMM');
+  dateStr += focusDate.isSame(moment().subtract(1, 'days'), 'day')
+    ? ' Yesterday'
+    : '';
 
   const chartKey1 = chartType === 1 ? 'totalconfirmed' : 'dailyconfirmed';
   const chartKey2 = chartType === 1 ? 'totalrecovered' : 'dailyrecovered';
@@ -381,9 +382,7 @@ function TimeSeries(props) {
         <div className="svg-parent" ref={wrapperRef}>
           <div className="stats">
             <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
-            <h5 className={`${moving ? 'title' : ''}`}>
-              {`${datapoint['date']}${isYesterday ? ' Yesterday ' : ' '}`}
-            </h5>
+            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
               <h2>{formatNumber(datapoint[chartKey1])}</h2>
               <h6>{currentStatusCount(chartKey1)}</h6>
@@ -395,9 +394,7 @@ function TimeSeries(props) {
         <div className="svg-parent is-green">
           <div className="stats is-green">
             <h5 className={`${!moving ? 'title' : ''}`}>Recovered</h5>
-            <h5 className={`${moving ? 'title' : ''}`}>
-              {`${datapoint['date']}${isYesterday ? ' Yesterday ' : ' '}`}
-            </h5>
+            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
               <h2>{formatNumber(datapoint[chartKey2])}</h2>
               <h6>{currentStatusCount(chartKey2)}</h6>
@@ -409,9 +406,7 @@ function TimeSeries(props) {
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
             <h5 className={`${!moving ? 'title' : ''}`}>Deceased</h5>
-            <h5 className={`${moving ? 'title' : ''}`}>
-              {`${datapoint['date']}${isYesterday ? ' Yesterday ' : ' '}`}
-            </h5>
+            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
               <h2>{formatNumber(datapoint[chartKey3])}</h2>
               <h6>{currentStatusCount(chartKey3)}</h6>
