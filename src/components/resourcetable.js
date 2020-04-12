@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {useTable} from 'react-table';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -9,6 +9,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Autosuggest from 'react-autosuggest';
+import TextField from '@material-ui/core/TextField';
+import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 const usePanelSummaryStyles = makeStyles((theme) => ({
   content: {
@@ -176,7 +179,16 @@ const renderSuggestion = (suggestion) => (
   <div>{suggestion.nameoftheorganisation}</div>
 );
 
-function ResourceTable({columns, data, isDesktop, totalCount, onScrollUpdate}) {
+function ResourceTable({
+  columns,
+  data,
+  isDesktop,
+  totalCount,
+  onScrollUpdate,
+  city,
+  category,
+  indianstate,
+}) {
   const classesPannelSummary = usePanelSummaryStyles();
   const classesPanel = usePanelStyles();
   const classesListItemText = useItemTextStyles();
@@ -196,10 +208,25 @@ function ResourceTable({columns, data, isDesktop, totalCount, onScrollUpdate}) {
   const [searchValue, setSearchValue] = useState('');
   const [suggestions, setSuggestions] = useState(data);
 
+  const prevIndianState = useRef('');
+  const prevCity = useRef('');
+  const prevCategory = useRef('');
+
   useEffect(() => {
-    setSuggestions(data);
-    setSearchValue('');
-  }, [data]);
+    if (
+      prevCategory.current === category &&
+      prevIndianState.current === indianstate &&
+      prevCity.current === city
+    ) {
+      setSuggestions(getSuggestions(searchValue, data));
+    } else {
+      setSuggestions(data);
+      setSearchValue('');
+      prevCategory.current = category;
+      prevIndianState.current = indianstate;
+      prevCity.current = city;
+    }
+  }, [searchValue, data, category, indianstate, city]);
 
   const onChange = (event, {newValue}) => {
     setSearchValue(newValue);
@@ -210,10 +237,33 @@ function ResourceTable({columns, data, isDesktop, totalCount, onScrollUpdate}) {
   };
 
   const inputProps = {
-    placeholder: 'Search for keyword',
+    placeholder: '',
     value: searchValue,
     onChange: onChange,
   };
+
+  const renderInputComponent = (inputProps) => (
+    <TextField
+      id="outlined-number"
+      label="Search keyword"
+      fullWidth={true}
+      InputLabelProps={{
+        shrink: true,
+      }}
+      style={{
+        width: '100%',
+      }}
+      variant="outlined"
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <SearchOutlinedIcon style={{fontSize: '0.7rem'}} />
+          </InputAdornment>
+        ),
+      }}
+      {...inputProps}
+    />
+  );
 
   // Use the state and functions returned from useTable to build your UI
   const {
@@ -240,6 +290,7 @@ function ResourceTable({columns, data, isDesktop, totalCount, onScrollUpdate}) {
             renderSuggestion={renderSuggestion}
             inputProps={inputProps}
             alwaysRenderSuggestions={true}
+            renderInputComponent={renderInputComponent}
           />
         </div>
         <div className="tableandcontrols">
@@ -299,8 +350,8 @@ function ResourceTable({columns, data, isDesktop, totalCount, onScrollUpdate}) {
             getSuggestionValue={getSuggestionValue}
             renderSuggestion={renderSuggestion}
             inputProps={inputProps}
-            // highlightFirstSuggestion={true}
-            // onSuggestionSelected = {this.props.onSuggestionSelected}
+            alwaysRenderSuggestions={true}
+            renderInputComponent={renderInputComponent}
           />
         </div>
         <div

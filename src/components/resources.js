@@ -9,9 +9,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
 import Fab from '@material-ui/core/Fab';
 import NavigationOutlinedIcon from '@material-ui/icons/NavigationOutlined';
-import TextField from '@material-ui/core/TextField';
-import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
-import InputAdornment from '@material-ui/core/InputAdornment';
 
 export const useFormControlStyles = makeStyles((isDesktop) => {
   if (isDesktop === true)
@@ -448,7 +445,7 @@ function Resources(props) {
               }}
             >
               <div
-                className="button is-purple"
+                className="button is-purple mobile-disclaimer-button"
                 style={{
                   margin: '0.2rem',
                   padding: '0.5rem',
@@ -457,10 +454,10 @@ function Resources(props) {
                 onClick={handleDisclaimerClick}
               >
                 Disclaimer
-                {/* <ErrorOutlineOutlinedIcon
+                <ErrorOutlineOutlinedIcon
                   htmlColor="#6c757d"
-                  fontSize="small"
-                /> */}
+                  fontSize="0.1rem"
+                />
               </div>
               <Popover
                 id={id}
@@ -646,29 +643,6 @@ function Resources(props) {
                   <span>Share</span>
                 </a>
               </div>
-              <div
-                className="searchbar2"
-                style={{width: '100%', margin: '0.6rem 0.4rem'}}
-              >
-                <TextField
-                  id="outlined-number"
-                  label="Serach keyword"
-                  fullWidth={true}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  variant="outlined"
-                  inputProps={{style: {height: '0.1rem'}}}
-                  style={{width: '100%'}}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchOutlinedIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </div>
             </div>
           </React.Fragment>
         )}
@@ -685,10 +659,10 @@ function Resources(props) {
               }}
             >
               <div
-                className="button is-purple"
+                className="button disclaimer-button"
                 style={{
-                  margin: '0.2rem',
-                  padding: '0.5rem',
+                  margin: '0rem',
+                  padding: '0.3rem',
                   alignItems: 'center',
                   justifyContent: 'space-around',
                 }}
@@ -724,6 +698,7 @@ function Resources(props) {
                 >
                   Disclaimer
                 </h5>
+
                 <h6
                   style={{
                     paddingLeft: '0.5rem',
@@ -846,37 +821,11 @@ function Resources(props) {
                 display: 'flex',
                 flexDirection: 'row',
                 width: '100%',
-                justifyContent: 'space-between',
+                justifyContent: 'center',
                 marginTop: '0.2rem',
                 marginBottom: '0.6rem',
               }}
             >
-              <div
-                className="searchbar2"
-                style={{
-                  flexGrow: 2,
-                  marginLeft: '0.4rem',
-                  marginRight: '0.2rem',
-                }}
-              >
-                <TextField
-                  id="outlined-number"
-                  label="Serach keyword"
-                  fullWidth={true}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  variant="outlined"
-                  inputProps={{style: {height: '0.1rem'}}}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchOutlinedIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </div>
               <a
                 href="https://docs.google.com/forms/d/e/1FAIpQLSfquevp7_rdgdEoDgTdimWwTXO3B9TjFEAm3DbrMDXxCiuwuA/viewform"
                 className="button add-entry is-purple"
@@ -898,7 +847,7 @@ function Resources(props) {
               <a
                 onClick={openSharingTray}
                 className="button add-entry is-purple"
-                style={{margin: '0rem 0.2rem', padding: '0.1rem 0.5rem'}}
+                style={{margin: '0rem 0.2rem', padding: '0.4rem'}}
               >
                 <span>Share</span>
               </a>
@@ -914,6 +863,9 @@ function Resources(props) {
             totalCount={data.length}
             isDesktop={isDesktop}
             onScrollUpdate={appendData}
+            city={city}
+            category={category}
+            indianstate={indianstate}
           />
           <div>
             <Fab
