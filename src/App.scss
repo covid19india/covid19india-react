@@ -551,8 +551,8 @@ h6 {
   font-size: 0.7rem !important;
   font-weight: 400;
   text-align: center;
-  margin-top: 2%;
-  margin-bottom: 2%;
+  margin-top: 0.2rem;
+  margin-bottom: 0.1rem;
   width: 100%;
 
   .react-autosuggest__input {
@@ -3505,6 +3505,10 @@ select {
   }
 
   .mobile-disclaimer-button {
+    background-color: #ffffff;
+    color: #808080;
+    font-size: xx-small;
+    justify-content: center;
     svg {
       font-size: 0.75rem;
     }

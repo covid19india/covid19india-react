@@ -68,14 +68,13 @@ const getNumbersLink = (initialValue) => {
   const numbg = /^\d{5,12}$/g;
   const numberList = numbf.map((iv, i) => {
     iv = iv.trim();
-    //console.log('numbr ', '' + iv);
+    // console.log('numbr ', '' + iv);
     return iv.replace(numbg, '<a href="tel:$&">$&</a>');
   });
-  //console.log('numberList ', '' + numberList);
+  // console.log('numberList ', '' + numberList);
   return {numberList};
 };
-
-const getFormattedLink = (initialValue) => {
+const getFormattedLinkForAccordion = (initialValue) => {
   const reurl1 = /\s*(https?:\/\/.+)\s*/g;
   // let reurl2 = /\s*.(www\..+)\s/g
   const reinsta = /\s*Instagram: @(.+)\s*/g;
@@ -85,7 +84,7 @@ const getFormattedLink = (initialValue) => {
   if (initialValue.match(noLetters) != null) {
     const formatedLink = getNumbersLink(initialValue);
     const links = JSON.parse(JSON.stringify(formatedLink));
-    //console.log('success val', ' --' + JSON.stringify(links.numberList));
+    // console.log('success val', ' --' + JSON.stringify(links.numberList));
     s3 = String(links.numberList).replace(/,/g, '<br>');
   } else {
     const s1 = initialValue.replace(
@@ -111,6 +110,59 @@ const getFormattedLink = (initialValue) => {
   );
 };
 
+const getFormattedLink = (initialValue) => {
+  const reurl1 = /\s*(https?:\/\/.+)\s*/g;
+  // let reurl2 = /\s*.(www\..+)\s/g
+  const reinsta = /\s*Instagram: @(.+)\s*/g;
+  const refb = /\s*Facebook: @(.+)\s*/g;
+  const noLetters = /^[\d,\s]+$/;
+  let s3 = '';
+  if (initialValue.match(noLetters) != null) {
+    const formatedLink = getNumbersLink(initialValue);
+    const links = JSON.parse(JSON.stringify(formatedLink));
+    // console.log('success val', ' --' + JSON.stringify(links.numberList));
+    s3 = String(links.numberList).replace(/,/g, '<br>');
+  } else {
+    const s1 = initialValue.replace(
+      reurl1,
+      '<a href="$1" target="_blank">Link</a>'
+    );
+    const s2 = s1.replace(
+      reinsta,
+      '<a href="https://www.instagram.com/$1" target="_blank">Instagram: @$1</a>'
+    );
+    s3 = s2.replace(
+      refb,
+      '<a href="https://www.facebook.com/$1" target="_blank">Facebook: @$1</a>'
+    );
+  }
+  return s3;
+};
+const rendercell = (celli) => {
+  const value = celli.cell.value;
+  console.log(celli);
+  let renderedvalue = '';
+  const link = celli.row.allCells[5].value.split(',')[0];
+
+  if (celli.column.id === 'contact') renderedvalue = getFormattedLink(value);
+  else if (celli.column.id === 'phonenumber') {
+    // renderedvalue = String(JSON.parse(JSON.stringify(getNumbersLink(value))).numberList).replace(/,/g, '<br>');
+    renderedvalue = getFormattedLink(value);
+  } else if (celli.column.id === 'nameoftheorganisation') {
+    if (link !== '')
+      renderedvalue = `<a href=${link} target="_blank">${value}</a>`;
+    else renderedvalue = value;
+  } else renderedvalue = value;
+
+  return (
+    <div
+      className="tablecelldata"
+      dangerouslySetInnerHTML={{
+        __html: renderedvalue,
+      }}
+    ></div>
+  );
+};
 const FormattedCell = ({value: initialValue, editable}) => {
   // We need to keep and update the state of the cell normally
   const [value, setValue] = React.useState(initialValue);
@@ -265,17 +317,20 @@ function ResourceTable({
     />
   );
 
-  const parseText = function(text, limit){
-    if (text.length > limit){
-        for (let i = limit; i > 0; i--){
-            if(text.charAt(i) === ' ' && (text.charAt(i-1) != ','||text.charAt(i-1) != '.'||text.charAt(i-1) != ';')) {
-                return text.substring(0, i) + '...';
-            }
+  const parseText = function (text, limit) {
+    if (text.length > limit) {
+      for (let i = limit; i > 0; i--) {
+        if (
+          text.charAt(i) === ' ' &&
+          (text.charAt(i - 1) !== ',' ||
+            text.charAt(i - 1) !== '.' ||
+            text.charAt(i - 1) !== ';')
+        ) {
+          return text.substring(0, i) + '...';
         }
-         return text.substring(0, limit) + '...';
-    }
-    else
-        return text;
+      }
+      return text.substring(0, limit) + '...';
+    } else return text;
   };
 
   // Use the state and functions returned from useTable to build your UI
@@ -289,6 +344,7 @@ function ResourceTable({
     columns,
     data: suggestions,
     defaultColumn,
+    initialState: {hiddenColumns: 'contact'},
   });
 
   // Render the UI for your table
@@ -337,10 +393,10 @@ function ResourceTable({
                   prepareRow(row);
                   return (
                     <tr key={row.id} {...row.getRowProps()}>
-                      {row.cells.map((cell) => {
+                      {row.cells.map((cell, cellindex) => {
                         return (
-                          <td key={cell.id} {...cell.getCellProps()}>
-                            {cell.render('Cell', {editable: false})}
+                          <td key={cellindex} {...cell.getCellProps()}>
+                            {cell.render(rendercell)}
                           </td>
                         );
                       })}
@@ -381,7 +437,7 @@ function ResourceTable({
             hasMore={data.length < totalCount}
             next={onScrollUpdate}
             loader={<h4>Fetching more information, please wait.</h4>}
-            style={{width: '100%', maxWidth:'335px'}} //for large texts
+            style={{width: '100%', maxWidth: '335px', overflow: 'hidden'}} // for large texts
           >
             {rows.map((row, i) => {
               prepareRow(row);
@@ -411,7 +467,9 @@ function ResourceTable({
                         color: '#201aa2dd',
                       }}
                     >
-                      <h6>{parseText(row.values['nameoftheorganisation'],50)}</h6>
+                      <h6>
+                        {parseText(row.values['nameoftheorganisation'], 50)}
+                      </h6>
                     </div>
                     <div
                       className="orgcategory"
@@ -479,7 +537,7 @@ function ResourceTable({
                         divider={true}
                       >
                         <ListItemText
-                          primary="Category"
+                          primary="Service"
                           secondary={row.values['category']}
                           classes={{
                             primary: classesListItemText.primary,
@@ -494,7 +552,7 @@ function ResourceTable({
                       >
                         <ListItemText
                           primary="Phonenumber"
-                          secondary={getFormattedLink(
+                          secondary={getFormattedLinkForAccordion(
                             row.values['phonenumber']
                           )}
                           classes={{
@@ -510,7 +568,9 @@ function ResourceTable({
                       >
                         <ListItemText
                           primary="Website"
-                          secondary={getFormattedLink(row.values['contact'])}
+                          secondary={getFormattedLinkForAccordion(
+                            row.values['contact']
+                          )}
                           classes={{
                             primary: classesListItemText.primary,
                             secondary: classesListItemText.secondary,
