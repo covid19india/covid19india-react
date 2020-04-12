@@ -27,7 +27,9 @@
     "react-scripts": "3.4.0",
     "react-table": "^7.0.4",
     "sass-lint": "^1.13.1",
-    "topojson": "^3.0.2"
+    "topojson": "^3.0.2",
+    "ion-rangeslider": "npm:ion-rangeslider@^2.1.3",
+    "jquery": "npm:jquery@^2.2.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -40,7 +42,10 @@
     "scsslint": "sass-lint-auto-fix"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "ionRangeSlider"
+    ]
   },
   "husky": {
     "hooks": {
