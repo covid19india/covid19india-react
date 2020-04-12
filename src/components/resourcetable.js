@@ -265,6 +265,19 @@ function ResourceTable({
     />
   );
 
+  const parseText = function(text, limit){
+    if (text.length > limit){
+        for (let i = limit; i > 0; i--){
+            if(text.charAt(i) === ' ' && (text.charAt(i-1) != ','||text.charAt(i-1) != '.'||text.charAt(i-1) != ';')) {
+                return text.substring(0, i) + '...';
+            }
+        }
+         return text.substring(0, limit) + '...';
+    }
+    else
+        return text;
+  };
+
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -368,7 +381,7 @@ function ResourceTable({
             hasMore={data.length < totalCount}
             next={onScrollUpdate}
             loader={<h4>Fetching more information, please wait.</h4>}
-            style={{width: '100%', maxWidth:'345px'}} //for large texts
+            style={{width: '100%', maxWidth:'335px'}} //for large texts
           >
             {rows.map((row, i) => {
               prepareRow(row);
@@ -398,7 +411,7 @@ function ResourceTable({
                         color: '#201aa2dd',
                       }}
                     >
-                      <h6>{row.values['nameoftheorganisation']}</h6>
+                      <h6>{parseText(row.values['nameoftheorganisation'],50)}</h6>
                     </div>
                     <div
                       className="orgcategory"
