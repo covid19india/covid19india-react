@@ -132,7 +132,7 @@ function AllStatesChart(props) {
         left: 20,
         right: 20,
         top: 0,
-        bottom: 20,
+        bottom: 0,
       },
     },
     scales: {
@@ -196,7 +196,7 @@ function AllStatesChart(props) {
       <div className="chart-content">
         <Line data={dataset} options={options} ref={chartReference} />
       </div>
-      <div className="chart-note">
+      <div className="chart-note" style={{marginTop: '0px', height: '30px'}}>
         <button onClick={toggleSelection}>Toggle Selection</button>
       </div>
     </div>
