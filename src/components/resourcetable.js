@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {useTable} from 'react-table';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -176,7 +176,16 @@ const renderSuggestion = (suggestion) => (
   <div>{suggestion.nameoftheorganisation}</div>
 );
 
-function ResourceTable({columns, data, isDesktop, totalCount, onScrollUpdate}) {
+function ResourceTable({
+  columns,
+  data,
+  isDesktop,
+  totalCount,
+  onScrollUpdate,
+  city,
+  category,
+  indianstate,
+}) {
   const classesPannelSummary = usePanelSummaryStyles();
   const classesPanel = usePanelStyles();
   const classesListItemText = useItemTextStyles();
@@ -196,10 +205,25 @@ function ResourceTable({columns, data, isDesktop, totalCount, onScrollUpdate}) {
   const [searchValue, setSearchValue] = useState('');
   const [suggestions, setSuggestions] = useState(data);
 
+  const prevIndianState = useRef('');
+  const prevCity = useRef('');
+  const prevCategory = useRef('');
+
   useEffect(() => {
-    setSuggestions(data);
-    setSearchValue('');
-  }, [data]);
+    if (
+      prevCategory.current === category &&
+      prevIndianState.current === indianstate &&
+      prevCity.current === city
+    ) {
+      setSuggestions(getSuggestions(searchValue, data));
+    } else {
+      setSuggestions(data);
+      setSearchValue('');
+      prevCategory.current = category;
+      prevIndianState.current = indianstate;
+      prevCity.current = city;
+    }
+  }, [searchValue, data, category, indianstate, city]);
 
   const onChange = (event, {newValue}) => {
     setSearchValue(newValue);

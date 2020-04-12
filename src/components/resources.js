@@ -913,6 +913,9 @@ function Resources(props) {
             totalCount={data.length}
             isDesktop={isDesktop}
             onScrollUpdate={appendData}
+            city={city}
+            category={category}
+            indianstate={indianstate}
           />
           <div>
             <Fab
