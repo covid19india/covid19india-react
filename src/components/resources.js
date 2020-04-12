@@ -219,7 +219,7 @@ function Resources(props) {
   const getCategoryOptions = function () {
     if (indianstate && city) {
       if (indianstate === 'all') {
-        const array = [];
+        let array = [];
         Object.values(resourcedict).forEach((state) => {
           Object.values(state).forEach((citydata) => {
             Object.keys(citydata).forEach((x) => {
@@ -578,7 +578,7 @@ function Resources(props) {
                   classes={{root: classesMenuItem.root}}
                 >
                   <option value="all" classes={{root: classesMenuItem.root}}>
-                    All cities
+                    All Cities
                   </option>
                   {getCityOptions()}
                 </Select>
@@ -606,7 +606,7 @@ function Resources(props) {
                   classes={{root: classesMenuItem.root}}
                 >
                   <option value="all" classes={{root: classesMenuItem.root}}>
-                    All categories
+                    All Categories
                   </option>
                   {getCategoryOptions()}
                 </Select>
@@ -835,6 +835,7 @@ function Resources(props) {
                 className="button is-purple"
                 disabled={!indianstate}
                 onClick={filterTable}
+                style={!indianstate ? {pointerEvents: 'none'} : null}
               >
                 Search
               </button>
