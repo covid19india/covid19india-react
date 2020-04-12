@@ -129,7 +129,6 @@ function DeepDive(props) {
 
   return (
     <div className="cards-container">
-      <h2>Range</h2>
       <div id="ui"></div>
       <section className="cards">
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
