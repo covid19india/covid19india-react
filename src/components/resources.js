@@ -59,9 +59,9 @@ function Resources(props) {
   const [data, setData] = useState([]);
   const [partData, setPartData] = useState([]);
   const [fetched, setFetched] = useState(false);
-  const [city, setCity] = useState('');
-  const [category, setCategory] = useState('');
-  const [indianstate, setIndianState] = useState('');
+  const [city, setCity] = useState('all');
+  const [category, setCategory] = useState('all');
+  const [indianstate, setIndianState] = useState('all');
   const [resourcedict, setResourceDict] = useState({});
   const [showTable, setShowTable] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -216,7 +216,7 @@ function Resources(props) {
   const getCategoryOptions = function () {
     if (indianstate && city) {
       if (indianstate === 'all') {
-        let array = [];
+        const array = [];
         Object.values(resourcedict).forEach((state) => {
           Object.values(state).forEach((citydata) => {
             Object.keys(citydata).forEach((x) => {
