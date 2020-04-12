@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Suspense, lazy} from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -14,10 +14,11 @@ import Navbar from './components/navbar';
 import Links from './components/links';
 import FAQ from './components/faq';
 import Banner from './components/banner';
-import PatientDB from './components/patientdb';
-import DeepDive from './components/deepdive';
 import Resources from './components/resources';
 /* import PatientDB from './components/patientdb';*/
+
+const Demographics = lazy(() => import('./components/patientdb'));
+const DeepDive = lazy(() => import('./components/deepdive'));
 
 const history = require('history').createBrowserHistory;
 
@@ -31,7 +32,7 @@ function App() {
     },
     {
       pageLink: '/demographics',
-      view: PatientDB,
+      view: Demographics,
       displayName: 'Demographics',
       animationDelayForNavbar: 0.3,
     },
@@ -70,19 +71,21 @@ function App() {
               <Navbar pages={pages} />
               <Banner />
               <Route exact path="/" render={() => <Redirect to="/" />} />
-              <Switch location={location}>
-                {pages.map((page, i) => {
-                  return (
-                    <Route
-                      exact
-                      path={page.pageLink}
-                      component={page.view}
-                      key={i}
-                    />
-                  );
-                })}
-                <Redirect to="/" />
-              </Switch>
+              <Suspense fallback={<Icon.Loader className="loader" />}>
+                <Switch location={location}>
+                  {pages.map((page, i) => {
+                    return (
+                      <Route
+                        exact
+                        path={page.pageLink}
+                        component={page.view}
+                        key={i}
+                      />
+                    );
+                  })}
+                  <Redirect to="/" />
+                </Switch>
+              </Suspense>
             </div>
           )}
         />
