@@ -181,7 +181,11 @@ function TimeSeries(props) {
         const yScaleDailyUniform = d3
           .scaleLinear()
           .clamp(true)
-          .domain([0, yBuffer * d3.max(timeseries, (d) => d.dailyconfirmed)])
+          .domain([
+            0,
+            yBuffer *
+              d3.max(timeseries, (d) => d.totalconfirmed - d.dailyconfirmed),
+          ])
           .nice()
           .range([chartBottom, margin.top]);
 
