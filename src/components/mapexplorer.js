@@ -353,7 +353,7 @@ function MapExplorer({
       setHoveredRegion(regionHighlighted.district, newMap);
       setSelectedRegion(regionHighlighted.district);
     }
-  }, [regionHighlighted, currentMap.mapType, setHoveredRegion]);
+  }, [regionHighlighted, setHoveredRegion]);
 
   const switchMapToState = useCallback(
     (name) => {
