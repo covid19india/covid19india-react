@@ -242,14 +242,28 @@ function Table(props) {
               <div className="heading-content">
                 <abbr
                   className={`${window.innerWidth <= 769 ? 'is-gray' : ''}`}
-                  title="Tests per Million"
+                  title="testspermillion"
                 >
                   {window.innerWidth <= 769
                     ? window.innerWidth <= 375
-                      ? 'T/M'
-                      : 'T/M'
-                    : 'T/M'}
+                      ? 'T/M*'
+                      : 'T/M*'
+                    : 'T/M*'}
                 </abbr>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'testspermillion'
+                        ? 'initial'
+                        : 'none',
+                  }}
+                >
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
+                </div>
               </div>
             </th>
           </tr>
@@ -288,6 +302,9 @@ function Table(props) {
       </table>
       <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1s'}}>
         {count} States/UTS Affected
+      </h5>
+      <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1s'}}>
+        *Tests done per million, includes retests. This is not PPM
       </h5>
     </React.Fragment>
   );
