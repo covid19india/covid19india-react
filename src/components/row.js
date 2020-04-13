@@ -170,12 +170,6 @@ function Row(props) {
           }}
           title="Tests done per million"
         >
-          <span className="deltas" style={{color: '#28a745'}}>
-            {state.testspermillion > 0 && <Icon.ArrowUp />}
-            {state.testspermillion > 0
-              ? formatNumber(`${state.testspermillion}`)
-              : ''}
-          </span>
           <span className="table__count-text">
             {parseInt(state.testspermillion) === 0
               ? '-'
