@@ -103,7 +103,11 @@ function Table(props) {
 
   return (
     <React.Fragment>
-      <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1.5s'}}>
+      <h5
+        className="table-fineprint fadeInUp"
+        style={{animationDelay: '1.8s'}}
+        ref={props.forwardRef}
+      >
         Compiled from State Govt. numbers <Link to="/faq">Know More</Link>
       </h5>
       <table className="table fadeInUp" style={{animationDelay: '1.8s'}}>
@@ -268,7 +272,12 @@ function Table(props) {
 
         <tbody>
           {states.length > 1 && props.summary === false && (
-            <Row key={0} state={states[0]} total={true} />
+            <Row
+              key={0}
+              state={states[0]}
+              total={true}
+              onHighlightState={props.onHighlightState}
+            />
           )}
         </tbody>
       </table>
