@@ -2576,9 +2576,29 @@ select {
     transition: border-color .1s ease-in-out, box-shadow .1s ease-in-out;
     border: 2px solid #ddd;
     border-radius: 15px;
+    display: inline-flex;
     &:hover {
       border: 2px solid #999;
     }
+
+    &.hidden {
+      display: none;
+    }
+
+    &.transition.hidden {
+      display: inline-flex;
+      width: 0;
+    }
+
+    &.transition {
+      -webkit-transition: width 0.5s linear;
+         -moz-transition: width 0.5s linear;
+           -o-transition: width 0.5s linear;
+              transition: width 0.5s linear;
+    }
+
+
+
   }
 }
 
