@@ -8,11 +8,15 @@ function FAQ(props) {
     getFAQs();
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const getFAQs = () => {
     axios
-      .get('https://api.covid19india.org/faq.json')
+      .get('https://api.covid19india.org/website_data.json')
       .then((response) => {
-        setFaq(response.data.faq);
+        setFaq(response.data['faq']);
       })
       .catch((error) => {
         console.log(error);
@@ -29,7 +33,10 @@ function FAQ(props) {
             style={{animationDelay: `${0.5 + index * 0.1}s`}}
           >
             <h2 className="question">{faq.question}</h2>
-            <h2 className="answer">{faq.answer}</h2>
+            <h2
+              className="answer"
+              dangerouslySetInnerHTML={{__html: faq.answer}}
+            ></h2>
           </div>
         );
       })}
