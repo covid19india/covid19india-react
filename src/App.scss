@@ -2630,13 +2630,24 @@ body.modal-open {
 .select {
   display: flex;
   flex-direction: column;
-  label {
+  select {
+    background-color: #eee;
+    border: 2px solid #e8e8e9;
+    border-radius: 4px;
+    font-family: 'archia';
     font-size: 0.75rem;
     text-transform: uppercase;
     font-weight: 900;
     color: $gray-mid;
     margin-bottom: 0.25rem;
-  }
+    padding: 0.5rem 0.1rem 0.5rem 0.2rem;
+    color: $gray;
+    width: fit-content;
+
+    &:focus {
+      outline: none;
+    }
+  } 
 }
 
 select {
@@ -3121,6 +3132,7 @@ select {
       margin: 0;
       padding-left: 1rem;
       padding-right: 1rem;
+      padding-top: 4rem;
     }
 
     .reminder {
@@ -3584,7 +3596,7 @@ select {
   }
 
   .mobile-disclaimer-button {
-    background-color: #ffffff;
+    background-color: #fff;
     color: #808080;
     font-size: xx-small;
     justify-content: center;
