@@ -199,27 +199,25 @@ function Home(props) {
                   </div>
                 </div>
 
-                {window.innerWidth <= 769 && (
-                  <div className="trends-state-name">
-                    <select
-                      onChange={({target}) => {
-                        onHighlightState(JSON.parse(target.value));
-                      }}
-                    >
-                      {states.map((s) => {
-                        return (
-                          <option
-                            key={s.statecode}
-                            value={JSON.stringify(s)}
-                            selected={s.statecode === activeStateCode}
-                          >
-                            {s.state === 'Total' ? 'All States' : s.state}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  </div>
-                )}
+                <div className="trends-state-name">
+                  <select
+                    onChange={({target}) => {
+                      onHighlightState(JSON.parse(target.value));
+                    }}
+                  >
+                    {states.map((s) => {
+                      return (
+                        <option
+                          key={s.statecode}
+                          value={JSON.stringify(s)}
+                          selected={s.statecode === activeStateCode}
+                        >
+                          {s.state === 'Total' ? 'All States' : s.state}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
               </div>
 
               <TimeSeries
@@ -307,7 +305,7 @@ function Home(props) {
               .slice(-5)
               .reverse()
               .map(function (activity, index) {
-                activity.update = activity.update.replace('\n', '<br/>');
+                activity.update = activity.update.replace(/\n/g, '<br/>');
                 return (
                   <div key={index} className="update">
                     <h5>

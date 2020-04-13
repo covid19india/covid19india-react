@@ -196,7 +196,7 @@ const mapMeta = {
   },
   'Tamil Nadu': {
     name: 'Tamil Nadu',
-    geoDataFile: `${MAPS_DIR}/tamil-nadu.json`,
+    geoDataFile: `${MAPS_DIR}/tamilnadu.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'tamilnadu_district',
   },
@@ -325,6 +325,7 @@ function MapExplorer({
           states.find((state) => currentMap.name === state.state)
         );
         setPanelRegion(panelRegion);
+        onMapHighlightChange(panelRegion);
       }
     },
     [states, stateDistrictWiseData, onMapHighlightChange]
@@ -353,7 +354,7 @@ function MapExplorer({
       setHoveredRegion(regionHighlighted.district, newMap);
       setSelectedRegion(regionHighlighted.district);
     }
-  }, [regionHighlighted, currentMap.mapType, setHoveredRegion]);
+  }, [regionHighlighted, setHoveredRegion]);
 
   const switchMapToState = useCallback(
     (name) => {
