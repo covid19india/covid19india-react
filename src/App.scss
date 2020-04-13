@@ -1478,13 +1478,13 @@ table {
 
 .disabled {
   input.switch {
-    background: $gray-light;
-    border: $gray-light 2px solid;
-    cursor: not-allowed;
+    background: $gray-light !important;
+    border: $gray-light 2px solid !important;
+    cursor: not-allowed !important;
   }
 
   input.switch::after {
-    background: $gray-light;
+    background: $gray-light !important;
   }
 }
 
@@ -1523,6 +1523,36 @@ input.switch:checked::after {
   left: 10px;
   background-color: $light;
   transition: all 300ms ease-in-out;
+}
+
+.trends-state-name {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+
+  select {
+    appearance: none;
+    background-color: #eee;
+    background-image:
+      linear-gradient(45deg, transparent 50%, #808080 50%),
+      linear-gradient(135deg, #808080 50%, transparent 50%);
+    background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    border: 2px solid #e8e8e9;
+    border-radius: 4px;
+    font-family: 'archia';
+    font-weight: 900;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    text-transform: uppercase;
+    width: auto;
+    color: $gray;
+
+    &:focus {
+      outline: none;
+    }
+  }
 }
 
 .timeseries,
@@ -1688,6 +1718,47 @@ input.switch:checked::after {
     position: fixed;
     top: 0;
     right: 0;
+  }
+}
+
+.floating-buttons {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  padding: 0;
+  z-index: 1;
+  width: 3rem;
+
+  button {
+    border-radius: 50%;
+    border: 0;
+    padding: 0.75rem;
+    background: $yellow-mid;
+    color: $orange;
+    cursor: pointer;
+    margin: 0.25rem;
+    display: flex;
+    flex-direction: row;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    backdrop-filter: saturate(180%) blur(2px);
+    &:hover {
+      background: #ffa500;
+      svg {
+        stroke: #ffa500;
+      }
+    }
+
+    svg {
+      align-self: center;
+      stroke: $orange;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    display: none !important;
   }
 }
 
@@ -2567,20 +2638,28 @@ select {
 }
 
 .pills {
-  text-align: right;
-  >button {
-    border: 1px solid #c9d6fb;
-    background-color: #edf1fe;
-    color: $blue;
+  display: flex;
+  flex-direction: row;
+  align-self: flex-end;
+  > button {
+    border: 2px $yellow-light solid;
+    background-color: $yellow-light;
+    color: $orange;
     text-transform: uppercase;
     text-align: center;
-    font-weight: 800;
-    transition: background 0.15s ease-in-out;
-    padding: 4px 10px;
+    font-weight: 900;
+    transition: background 0.25s ease-in-out;
+    padding: 5px 15px;
     font-family: 'archia';
+    cursor: pointer;
+    margin: 0;
+    outline: none;
+    &:hover {
+      background: $yellow-hover;
+    }
 
     &.selected {
-      background-color: #c9d6fb;
+      background-color: $yellow-mid;
     }
 
     &:focus:not(:focus-visible) {
@@ -2590,11 +2669,13 @@ select {
     &:first-of-type {
       border-top-left-radius: 5px;
       border-bottom-left-radius: 5px;
+      border-right: 0;
     }
 
     &:last-of-type {
       border-top-right-radius: 5px;
       border-bottom-right-radius: 5px;
+      border-left: 0;
     }
   }
 }
