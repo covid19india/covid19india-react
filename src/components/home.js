@@ -52,15 +52,18 @@ function Home(props) {
         axios.get('https://api.covid19india.org/updatelog/log.json'),
         axios.get('https://api.covid19india.org/state_test_data.json'),
       ]);
-      setStates(response.data.statewise);
-      const ts = parseStateTimeseries(statesDailyResponse);
-      ts['TT'] = preprocessTimeseries(response.data.cases_time_series); // TT -> India
-      setTimeseries(ts);
-      setLastUpdated(response.data.statewise[0].lastupdatedtime);
-      setStateTestData(stateTestResponse.data.states_tested_data.reverse());
-      setStateDistrictWiseData(stateDistrictWiseResponse.data);
-      setActivityLog(updateLogResponse.data);
-      setFetched(true);
+      
+      if(response && response.data){
+        setStates(response.data.statewise);
+        const ts = parseStateTimeseries(statesDailyResponse);
+        ts['TT'] = preprocessTimeseries(response.data.cases_time_series); // TT -> India
+        setTimeseries(ts);
+        setLastUpdated(response.data.statewise[0].lastupdatedtime);
+        setStateTestData(stateTestResponse.data.states_tested_data.reverse());
+        setStateDistrictWiseData(stateDistrictWiseResponse.data);
+        setActivityLog(updateLogResponse.data);
+        setFetched(true);
+      } 
     } catch (err) {
       console.log(err);
     }
