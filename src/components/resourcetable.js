@@ -49,7 +49,10 @@ const getFormattedLink = (initialValue) => {
   // let reurl2 = /\s*.*(www\..+)\s*/g
   const reinsta = /\s*Instagram: @(.+)\s*/g;
   const refb = /\s*Facebook: @(.+)\s*/g;
-  const s1 = initialValue.replace(reurl1, '<a href="$1" target="_blank">Link</a>');
+  const s1 = initialValue.replace(
+    reurl1,
+    '<a href="$1" target="_blank">Link</a>'
+  );
   const s2 = s1.replace(
     reinsta,
     '<a href="https://www.instagram.com/$1" target="_blank">Instagram: @$1</a>'
@@ -78,7 +81,10 @@ const FormattedCell = ({value: initialValue, editable}) => {
 
   // If the initialValue is changed externall, sync it up with our state
   React.useEffect(() => {
-    const s1 = initialValue.replace(reurl1, '<a href="$1" target="_blank">Link</a>');
+    const s1 = initialValue.replace(
+      reurl1,
+      '<a href="$1" target="_blank">Link</a>'
+    );
     const s2 = s1.replace(
       reinsta,
       '<a href="https://www.instagram.com/$1" target="_blank">Instagram: @$1</a>'
@@ -273,7 +279,11 @@ function ResourceTable({columns, data, isDesktop}) {
                 {/* </div> */}
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
-                <List disablePadding={true} dense={true}>
+                <List
+                  className="resourceList"
+                  disablePadding={true}
+                  dense={true}
+                >
                   <ListItem alignItems="flex-start" dense={true} divider={true}>
                     <ListItemText
                       primary="Organisation Name"
@@ -294,7 +304,12 @@ function ResourceTable({columns, data, isDesktop}) {
                       }}
                     />
                   </ListItem>
-                  <ListItem alignItems="flex-start" dense={true} divider={true}>
+                  <ListItem
+                    className="resourceListItem"
+                    alignItems="flex-start"
+                    dense={true}
+                    divider={true}
+                  >
                     <ListItemText
                       primary="Description"
                       secondary={row.values['descriptionandorserviceprovided']}

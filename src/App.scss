@@ -3440,6 +3440,14 @@ select {
 
   }
 
+  .TableArea, .resourceList {
+    width: 100%;
+  }
+
+  .resourceListItem {
+    overflow-wrap: break-word;
+  }
+
   .pagination{
     display: flex;
     flex-direction: column;
@@ -3450,6 +3458,11 @@ select {
       margin-top: 0.4rem;
       margin-right: 0;
       // min-width: 9rem;
+    }
+
+    .button {
+      margin-left: 0.2rem;
+      margin-right: 0.2rem;
     }
 
     input{
