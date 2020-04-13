@@ -4,7 +4,6 @@ about: Create a report to help us improve
 title: ''
 labels: 'Status: Review Needed, Type: Bug'
 assignees: ''
-
 ---
 
 **Describe the bug**

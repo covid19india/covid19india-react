@@ -1,12 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import axios from 'axios';
 import {formatDistance, format} from 'date-fns';
+import * as Icon from 'react-feather';
+
 import {
   formatDate,
   formatDateAbsolute,
-  validateCTS,
+  preprocessTimeseries,
+  parseStateTimeseries,
 } from '../utils/common-functions';
-import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
 
 import Table from './table';
@@ -18,11 +20,12 @@ import Minigraph from './minigraph';
 function Home(props) {
   const [states, setStates] = useState([]);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
-  /* const [patients, setPatients] = useState([]);*/
+  const [stateTestData, setStateTestData] = useState({});
   const [fetched, setFetched] = useState(false);
   const [graphOption, setGraphOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
-  const [timeseries, setTimeseries] = useState([]);
+  const [timeseries, setTimeseries] = useState({});
+  const [activeStateCode, setActiveStateCode] = useState('TT'); // TT -> India
   const [activityLog, setActivityLog] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
@@ -39,18 +42,24 @@ function Home(props) {
       const [
         response,
         stateDistrictWiseResponse,
+        {data: statesDailyResponse},
         updateLogResponse,
+        stateTestResponse,
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
+        axios.get('https://api.covid19india.org/states_daily.json'),
         axios.get('https://api.covid19india.org/updatelog/log.json'),
+        axios.get('https://api.covid19india.org/state_test_data.json'),
       ]);
       setStates(response.data.statewise);
-      setTimeseries(validateCTS(response.data.cases_time_series));
+      const ts = parseStateTimeseries(statesDailyResponse);
+      ts['TT'] = preprocessTimeseries(response.data.cases_time_series); // TT -> India
+      setTimeseries(ts);
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
+      setStateTestData(stateTestResponse.data.states_tested_data.reverse());
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
       setActivityLog(updateLogResponse.data);
-      /* setPatients(rawDataResponse.data.raw_data.filter((p) => p.detectedstate));*/
       setFetched(true);
     } catch (err) {
       console.log(err);
@@ -58,13 +67,25 @@ function Home(props) {
   };
 
   const onHighlightState = (state, index) => {
-    if (!state && !index) setRegionHighlighted(null);
-    else setRegionHighlighted({state, index});
+    if (!state && !index) return setRegionHighlighted(null);
+    setRegionHighlighted({state, index});
   };
   const onHighlightDistrict = (district, state, index) => {
-    if (!state && !index && !district) setRegionHighlighted(null);
-    else setRegionHighlighted({district, state, index});
+    if (!state && !index && !district) return setRegionHighlighted(null);
+    setRegionHighlighted({district, state, index});
   };
+
+  const onMapHighlightChange = useCallback(({statecode}) => {
+    setActiveStateCode(statecode);
+  }, []);
+
+  const refs = [useRef(), useRef(), useRef()];
+  // const scrollHandlers = refs.map((ref) => () =>
+  //   window.scrollTo({
+  //     top: ref.current.offsetTop,
+  //     behavior: 'smooth',
+  //   })
+  // );
 
   return (
     <React.Fragment>
@@ -96,28 +117,35 @@ function Home(props) {
           </div>
 
           {states.length > 1 && <Level data={states} />}
-          <Minigraph timeseries={timeseries} animate={true} />
-          <Table
-            states={states}
-            summary={false}
-            stateDistrictWiseData={stateDistrictWiseData}
-            onHighlightState={onHighlightState}
-            onHighlightDistrict={onHighlightDistrict}
-          />
+          {fetched && <Minigraph timeseries={timeseries['TT']} />}
+          {fetched && (
+            <Table
+              forwardRef={refs[0]}
+              states={states}
+              summary={false}
+              stateDistrictWiseData={stateDistrictWiseData}
+              onHighlightState={onHighlightState}
+              onHighlightDistrict={onHighlightDistrict}
+            />
+          )}
         </div>
 
         <div className="home-right">
           {fetched && (
             <React.Fragment>
               <MapExplorer
+                forwardRef={refs[1]}
                 states={states}
                 stateDistrictWiseData={stateDistrictWiseData}
+                stateTestData={stateTestData}
                 regionHighlighted={regionHighlighted}
+                onMapHighlightChange={onMapHighlightChange}
               />
 
               <div
                 className="timeseries-header fadeInUp"
                 style={{animationDelay: '2.5s'}}
+                ref={refs[2]}
               >
                 <h1>Spread Trends</h1>
                 <div className="tabs">
@@ -170,10 +198,30 @@ function Home(props) {
                     />
                   </div>
                 </div>
+
+                <div className="trends-state-name">
+                  <select
+                    onChange={({target}) => {
+                      onHighlightState(JSON.parse(target.value));
+                    }}
+                  >
+                    {states.map((s) => {
+                      return (
+                        <option
+                          key={s.statecode}
+                          value={JSON.stringify(s)}
+                          selected={s.statecode === activeStateCode}
+                        >
+                          {s.state === 'Total' ? 'All States' : s.state}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
               </div>
 
               <TimeSeries
-                timeseries={timeseries}
+                timeseries={timeseries[activeStateCode]}
                 type={graphOption}
                 mode={timeseriesMode}
                 logMode={timeseriesLogMode}
@@ -181,6 +229,30 @@ function Home(props) {
             </React.Fragment>
           )}
         </div>
+
+        {/* <div className="floating-buttons">
+          <button
+            className="table-nav fadeInUp"
+            onClick={scrollHandlers[0]}
+            style={{animationDelay: '2.2s'}}
+          >
+            <Icon.Grid />
+          </button>
+          <button
+            className="map-nav fadeInUp"
+            onClick={scrollHandlers[1]}
+            style={{animationDelay: '2.1s'}}
+          >
+            <Icon.MapPin />
+          </button>
+          <button
+            className="trends-nav fadeInUp"
+            onClick={scrollHandlers[2]}
+            style={{animationDelay: '2s'}}
+          >
+            <Icon.TrendingUp />
+          </button>
+        </div> */}
 
         {/* <div className="home-left">
         {patients.length > 1 && (
@@ -233,6 +305,7 @@ function Home(props) {
               .slice(-5)
               .reverse()
               .map(function (activity, index) {
+                activity.update = activity.update.replace('\n', '<br/>');
                 return (
                   <div key={index} className="update">
                     <h5>
@@ -241,7 +314,11 @@ function Home(props) {
                         new Date()
                       ) + ' Ago'}
                     </h5>
-                    <h4>{activity.update}</h4>
+                    <h4
+                      dangerouslySetInnerHTML={{
+                        __html: activity.update,
+                      }}
+                    ></h4>
                   </div>
                 );
               })}

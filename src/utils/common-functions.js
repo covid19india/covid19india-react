@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const months = {
   '01': 'Jan',
   '02': 'Feb',
@@ -44,7 +46,7 @@ const stateCodes = {
   WB: 'West Bengal',
   AN: 'Andaman and Nicobar Islands',
   CH: 'Chandigarh',
-  DB: 'Dadra and Nagar Haveli',
+  DN: 'Dadra and Nagar Haveli',
   DD: 'Daman and Diu',
   DL: 'Delhi',
   JK: 'Jammu and Kashmir',
@@ -72,7 +74,7 @@ export const formatDateAbsolute = (unformattedDate) => {
   return `${day} ${months[month]}, ${time.slice(0, 5)} IST`;
 };
 
-export const validateCTS = (data = []) => {
+const validateCTS = (data = []) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const dataTypes = [
@@ -93,7 +95,7 @@ export const validateCTS = (data = []) => {
 };
 
 export const preprocessTimeseries = (timeseries) => {
-  return timeseries.map((stat) => ({
+  return validateCTS(timeseries).map((stat) => ({
     date: new Date(stat.date + ' 2020'),
     totalconfirmed: +stat.totalconfirmed,
     totalrecovered: +stat.totalrecovered,
@@ -112,5 +114,40 @@ export const preprocessTimeseries = (timeseries) => {
  * @return {Array<Object>}
  */
 export function sliceTimeseriesFromEnd(timeseries, days) {
-  return timeseries.slice(timeseries.length - days);
+  return timeseries.slice(-days);
 }
+
+export const formatNumber = (value) => {
+  const numberFormatter = new Intl.NumberFormat('en-IN');
+  return isNaN(value) ? '-' : numberFormatter.format(value);
+};
+
+export const parseStateTimeseries = ({states_daily: data}) => {
+  const statewiseSeries = Object.keys(stateCodes).reduce((a, c) => {
+    a[c] = [];
+    return a;
+  }, {});
+
+  const today = moment();
+  for (let i = 0; i < data.length; i += 3) {
+    const date = moment(data[i].date, 'DD-MMM-YY');
+    // Skip data from the current day
+    if (date.isBefore(today, 'Date')) {
+      Object.entries(statewiseSeries).forEach(([k, v]) => {
+        const stateCode = k.toLowerCase();
+        const prev = v[v.length - 1] || {};
+        v.push({
+          date: date.toDate(),
+          dailyconfirmed: +data[i][stateCode] || 0,
+          dailyrecovered: +data[i + 1][stateCode] || 0,
+          dailydeceased: +data[i + 2][stateCode] || 0,
+          totalconfirmed: +data[i][stateCode] + prev.totalconfirmed || 0,
+          totalrecovered: +data[i + 1][stateCode] + prev.totalrecovered || 0,
+          totaldeceased: +data[i + 2][stateCode] + prev.totaldeceased || 0,
+        });
+      });
+    }
+  }
+
+  return statewiseSeries;
+};
