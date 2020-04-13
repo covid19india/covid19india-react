@@ -1,9 +1,11 @@
 import axios from 'axios';
-import {Link} from 'react-router-dom';
+import {format, parse} from 'date-fns';
 import React, {useState, useEffect} from 'react';
 // import React, {useState, useEffect, useRef, useCallback} from 'react';
+import * as Icon from 'react-feather';
+import {Link} from 'react-router-dom';
 
-import {parseStateTimeseries} from '../utils/common-functions';
+import {formatNumber, parseStateTimeseries} from '../utils/common-functions';
 import {STATE_CODES} from '../constants';
 
 import Level from './level';
@@ -14,6 +16,7 @@ function State(props) {
   const [fetched, setFetched] = useState(false);
   const [timeseries, setTimeseries] = useState({});
   const [stateData, setStateData] = useState({});
+  const [testData, setTestData] = useState({});
   // const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
   // const [stateTestData, setStateTestData] = useState({});
   // const [timeseriesMode, setTimeseriesMode] = useState(true);
@@ -35,19 +38,23 @@ function State(props) {
         {data: dataResponse},
         // stateDistrictWiseResponse,
         {data: statesDailyResponse},
-        // stateTestResponse,
+        {data: stateTestResponse},
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         // axios.get('https://api.covid19india.org/state_district_wise.json'),
         axios.get('https://api.covid19india.org/states_daily.json'),
-        // axios.get('https://api.covid19india.org/state_test_data.json'),
+        axios.get('https://api.covid19india.org/state_test_data.json'),
       ]);
       const states = dataResponse.statewise;
       setStateData(states.find((s) => s.statecode === code));
       const ts = parseStateTimeseries(statesDailyResponse)[code];
       setTimeseries(ts);
       // setLastUpdated(response.data.statewise[0].lastupdatedtime);
-      // setStateTestData(stateTestResponse.data.states_tested_data.reverse());
+      const statesTests = stateTestResponse.states_tested_data.reverse();
+      const name = STATE_CODES[code];
+      setTestData(
+        statesTests.find((obj) => obj.state === name && obj.totaltested !== '')
+      );
       // setStateDistrictWiseData(stateDistrictWiseResponse.data);
       setFetched(true);
     } catch (err) {
@@ -70,10 +77,21 @@ function State(props) {
             </div>
             <div className="header-right">
               <h5>Tested</h5>
-              <h2>30,000</h2>
-              <h5>As of 12 April</h5>
+              <h2>{formatNumber(testData?.totaltested)}</h2>
+              <h5 className="timestamp">
+                {!isNaN(parse(testData?.updatedon, 'dd/MM/yyyy', new Date()))
+                  ? `As of ${format(
+                      parse(testData?.updatedon, 'dd/MM/yyyy', new Date()),
+                      'dd MMM'
+                    )}`
+                  : ''}
+              </h5>
               <h5>
-                per <a href="https://google.com">state bulletin</a>
+                {testData?.totaltested && (
+                  <a href={testData.source} target="_noblank">
+                    <Icon.Link />
+                  </a>
+                )}
               </h5>
             </div>
           </div>

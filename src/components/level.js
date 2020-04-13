@@ -14,7 +14,6 @@ function Level(props) {
       deltadeaths: +props.data.deltadeaths,
       deltarecovered: +props.data.deltarecovered,
     });
-    console.log(props.data);
   }, [props.data]);
 
   return (
