@@ -35,6 +35,13 @@ function Links(props) {
           https://coronavirus.thebaselab.com/
         </a>
       </div>
+
+      <div className="link fadeInUp" style={{animationDelay: '0.7s'}}>
+        <h3>COVID-19 Global Tracker by JHU</h3>
+        <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/85320e2ea5424dfaaa75ae62e5c06e61">
+          https://www.arcgis.com/apps/opsdashboard
+        </a>
+      </div>
     </div>
   );
 }
