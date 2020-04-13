@@ -528,16 +528,36 @@ h6 {
   align-items: center;
   .filterlabel {
     font-family: 'archia';
-    font-size: 11px !important;
+    font-size: 9px !important;
     font-weight: 600;
     text-transform: uppercase;
     color: $indigo;
   }
 
   select {
-    width: 100%;
-    // background-color: $purple-light-opaque;
-    // border-radius: 10px;
+    width: fit-content;
+    border: 2px solid #e8e8e9;
+    border-radius: 4px;
+    font-family: 'archia';
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 900;
+    color: $gray-mid;
+    margin-bottom: 0.25rem;
+    padding: 0.7rem 0.1rem 0.7rem 0.2rem;
+    color: $gray;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  select:disabled {
+    opacity: 0.5;
+}
+
+  button {
+    padding: 0.7rem;
   }
 
 }
@@ -2597,13 +2617,24 @@ body.modal-open {
 .select {
   display: flex;
   flex-direction: column;
-  label {
+  select {
+    background-color: #eee;
+    border: 2px solid #e8e8e9;
+    border-radius: 4px;
+    font-family: 'archia';
     font-size: 0.75rem;
     text-transform: uppercase;
     font-weight: 900;
     color: $gray-mid;
     margin-bottom: 0.25rem;
-  }
+    padding: 0.5rem 0.1rem 0.5rem 0.2rem;
+    color: $gray;
+    width: fit-content;
+
+    &:focus {
+      outline: none;
+    }
+  } 
 }
 
 select {
@@ -3088,6 +3119,7 @@ select {
       margin: 0;
       padding-left: 1rem;
       padding-right: 1rem;
+      padding-top: 3rem;
     }
 
     .reminder {
@@ -3417,7 +3449,7 @@ select {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    
   }
 
   .resourcefilter {
