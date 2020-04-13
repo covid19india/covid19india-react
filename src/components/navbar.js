@@ -63,7 +63,16 @@ function Navbar(props) {
               setMenuVisible(!menuVisible);
             }}
           >
-            <div></div>
+            <div>
+              <input
+                type="checkbox"
+                id="toggle"
+                className="checkbox"
+                onChange={() => props.setDarkMode((prevMode) => !prevMode)}
+                checked={props.darkMode}
+              />
+              <label for="toggle" class="switch"></label>
+            </div>
             <div></div>
             <div></div>
           </div>
