@@ -5,7 +5,7 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import * as Icon from 'react-feather';
+// import * as Icon from 'react-feather';
 
 import './App.scss';
 
@@ -17,6 +17,7 @@ import Banner from './components/banner';
 import PatientDB from './components/patientdb';
 import DeepDive from './components/deepdive';
 import Resources from './components/resources';
+import Footer from './components/footer';
 /* import PatientDB from './components/patientdb';*/
 
 const history = require('history').createBrowserHistory;
@@ -87,12 +88,12 @@ function App() {
           )}
         />
       </Router>
-
-      <footer className="fadeInUp" style={{animationDelay: '2s'}}>
-        {/* <img
+      <Footer />
+      {/* <footer className="fadeInUp" style={{animationDelay: '2s'}}>
+        <img
           src="/icon.png"
           alt="https://www.covid19india.org | Coronavirus cases live dashboard"
-        />*/}
+        />
 
         <h5>We stand with everyone fighting on the frontlines</h5>
         <div className="link">
@@ -141,7 +142,7 @@ function App() {
           <Icon.MessageCircle />
           <span>Join Telegram to Collaborate!</span>
         </a>
-      </footer>
+      </footer> */}
     </div>
   );
 }
