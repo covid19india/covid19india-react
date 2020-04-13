@@ -30,7 +30,7 @@ function Home(props) {
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
-  const million = 1000000;
+  const MILLION = 1000000;
   useEffect(() => {
     if (fetched === false) {
       getStates();
@@ -64,13 +64,13 @@ function Home(props) {
           : 0;
         totalTestedIndia = totalTestedIndia + Number(testedCount);
 
-        s.testspermillion = ((testedCount * million) / statePopulation).toFixed(
+        s.testspermillion = ((testedCount * MILLION) / statePopulation).toFixed(
           2
         );
       });
       const total = response.data.statewise.find((o) => o.state === 'Total');
       total.testspermillion = (
-        (totalTestedIndia * million) /
+        (totalTestedIndia * MILLION) /
         statewisePopulation.TOTAL
       ).toFixed(2);
       setStates(response.data.statewise);
