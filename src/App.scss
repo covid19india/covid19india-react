@@ -376,6 +376,10 @@ h6 {
     margin-left: 2.5rem;
     margin-right: 2.5rem;
   }
+
+  .Minigraph, .Level {
+    width: calc(100% - 3rem);
+  }
 }
 
 .breadcrumb {
@@ -812,6 +816,7 @@ h6 {
     font-family: 'archia';
     color: $gray;
     padding-left: 3rem;
+    background: #fff;
   }
 
   .search-button {
@@ -2949,6 +2954,8 @@ select {
   align-self: flex-end;
   > button {
     border: 2px $yellow-light solid;
+    border-top: 0;
+    border-bottom: 0;
     background-color: $yellow-light;
     color: $orange;
     text-transform: uppercase;
@@ -2975,13 +2982,13 @@ select {
     &:first-of-type {
       border-top-left-radius: 5px;
       border-bottom-left-radius: 5px;
-      border-right: 0;
+      border: 0;
     }
 
     &:last-of-type {
       border-top-right-radius: 5px;
       border-bottom-right-radius: 5px;
-      border-left: 0;
+      border: 0;
     }
   }
 }

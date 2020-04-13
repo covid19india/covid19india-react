@@ -1,20 +1,53 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useCallback} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
+import {STATE_CODES_ARRAY} from '../constants';
+import Bloodhound from 'corejs-typeahead';
+
+const engine = new Bloodhound({
+  initialize: false,
+  local: STATE_CODES_ARRAY,
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+});
+
+const promise = engine.initialize();
+
+promise
+  .done(function () {
+    console.log('Initialized Search!');
+  })
+  .fail(function () {
+    console.log("Search didn't initialize!");
+  });
 
 function Search(props) {
   const [searchValue, setSearchValue] = useState('');
   const [expand, setExpand] = useState(false);
   const [results, setResults] = useState([]);
 
-  useEffect(() => {
-    if (searchValue === 'Karnataka')
-      setResults([
-        {name: 'Karnataka', type: 'State'},
-        {name: 'Karnataka', type: 'Resources'},
-      ]);
-    else setResults([]);
-  }, [searchValue]);
+  const handleSearch = useCallback((searchInput) => {
+    const results = [];
+    const sync = (datums) => {
+      datums.map((result, index) => {
+        const stateObj = {
+          name: result.name,
+          type: 'state',
+          route: result.code,
+        };
+        results.push(stateObj);
+        return null;
+      });
+      setResults(results);
+    };
+
+    const async = (datums) => {
+      console.log('datums from `remote`');
+      console.log(datums);
+    };
+
+    engine.search(searchInput, sync, async);
+  }, []);
 
   return (
     <div className="Search">
@@ -22,7 +55,6 @@ function Search(props) {
       <div className="line"></div>
       <input
         type="text"
-        placeholder="Karnataka"
         value={searchValue}
         onFocus={() => {
           setExpand(true);
@@ -32,6 +64,7 @@ function Search(props) {
         }}
         onChange={(event) => {
           setSearchValue(event.target.value);
+          handleSearch(event.target.value.toLowerCase());
         }}
       />
       <div className="search-button">
@@ -51,7 +84,7 @@ function Search(props) {
         <div className="results">
           {results.map((result, index) => {
             return (
-              <Link key={index} to={`state/${result.name}`}>
+              <Link key={index} to={`state/${result.route}`}>
                 <div className="result">
                   <div className="result-name">{result.name}</div>
                   <div className="result-type">

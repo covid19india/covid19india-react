@@ -2,7 +2,6 @@ import axios from 'axios';
 import {format, parse} from 'date-fns';
 import React, {useState, useEffect} from 'react';
 // import React, {useState, useEffect, useRef, useCallback} from 'react';
-import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
 
 import {formatNumber, parseStateTimeseries} from '../utils/common-functions';
@@ -66,16 +65,22 @@ function State(props) {
     <React.Fragment>
       <div className="State">
         <div className="state-left">
-          <div className="breadcrumb">
-            <Link to="/">Home</Link>
+          <div className="breadcrumb fadeInUp">
+            <Link to="/">Home</Link>/
             <Link to={`${stateCode}`}>{stateName}</Link>
           </div>
           <div className="header">
-            <div className="header-left">
+            <div
+              className="header-left fadeInUp"
+              style={{animationDelay: '0.3s'}}
+            >
               <h1>{stateName}</h1>
               <h5>11 Apr, 04:32 IST</h5>
             </div>
-            <div className="header-right">
+            <div
+              className="header-right fadeInUp"
+              style={{animationDelay: '0.5s'}}
+            >
               <h5>Tested</h5>
               <h2>{formatNumber(testData?.totaltested)}</h2>
               <h5 className="timestamp">
@@ -87,16 +92,17 @@ function State(props) {
                   : ''}
               </h5>
               <h5>
+                {'per '}
                 {testData?.totaltested && (
                   <a href={testData.source} target="_noblank">
-                    <Icon.Link />
+                    source
                   </a>
                 )}
               </h5>
             </div>
           </div>
 
-          <Level data={stateData} />
+          {fetched && <Level data={stateData} />}
           {fetched && <Minigraph timeseries={timeseries} />}
         </div>
         <div className="state-right">{/* map*/}</div>
