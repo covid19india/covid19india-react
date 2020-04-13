@@ -7,8 +7,8 @@ import Select from '@material-ui/core/Select';
 import {makeStyles} from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
-import Fab from '@material-ui/core/Fab';
-import NavigationOutlinedIcon from '@material-ui/icons/NavigationOutlined';
+import {KeyboardArrowUpRounded} from '@material-ui/icons';
+import {Fab, useScrollTrigger, Zoom} from '@material-ui/core';
 
 export const useFormControlStyles = makeStyles((isDesktop) => {
   if (isDesktop === true)
@@ -55,6 +55,41 @@ export const useTextInputStyles = makeStyles(() => ({
     height: '0.5rem',
   },
 }));
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    position: 'fixed',
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
+  },
+}));
+
+function ScrollTop(props) {
+  const {children, window} = props;
+  const classes = useStyles();
+  const trigger = useScrollTrigger({
+    target: window ? window() : undefined,
+    disableHysteresis: true,
+    threshold: 100,
+  });
+  const handleClick = (event) => {
+    const anchor = (event.target.ownerDocument || document).querySelector(
+      '#back-to-top-anchor'
+    );
+    if (anchor) {
+      document.body.scrollTo({top: 0, behavior: 'smooth'}); // For Safari
+      document.documentElement.scrollTo({top: 0, behavior: 'smooth'}); // For Chrome, Firefox, IE and Opera
+    }
+  };
+  return (
+    <Zoom in={trigger}>
+      <div onClick={handleClick} role="presentation" className={classes.root}>
+        {children}
+      </div>
+    </Zoom>
+  );
+}
+
 function Resources(props) {
   const [data, setData] = useState([]);
   const [partData, setPartData] = useState([]);
@@ -134,10 +169,6 @@ function Resources(props) {
 
   const isDisclaimerOpen = Boolean(anchorEl);
   const id = isDisclaimerOpen ? 'simple-popover' : undefined;
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
 
   const memocols = React.useMemo(
     () => [
@@ -177,9 +208,9 @@ function Resources(props) {
       else {
         return Object.keys(resourcedict[indianstate])
           .sort()
-          .map((x) => (
+          .map((x, i) => (
             <option
-              key={x.id}
+              key={i}
               value={x}
               style={{
                 fontFamily: 'archia',
@@ -199,9 +230,9 @@ function Resources(props) {
     // let defaultOption = ['Please select']
     return Object.keys(resourcedict)
       .sort()
-      .map((x) => (
+      .map((x, index) => (
         <option
-          key={x.id}
+          key={index}
           value={x}
           style={{
             fontFamily: 'archia',
@@ -225,9 +256,9 @@ function Resources(props) {
             });
           });
         });
-        return array.map((x) => (
+        return array.map((x, i) => (
           <option
-            key={x.id}
+            key={i}
             value={x}
             style={{
               fontFamily: 'archia',
@@ -247,9 +278,9 @@ function Resources(props) {
               if (array.indexOf(x) === -1) array.push(x);
             });
           });
-          return array.map((x) => (
+          return array.map((x, i) => (
             <option
-              key={x.id}
+              key={i}
               value={x}
               style={{
                 fontFamily: 'archia',
@@ -428,7 +459,7 @@ function Resources(props) {
     }
   };
   return (
-    <div className="Resources">
+    <div className="Resources" id="back-to-top-anchor">
       <div className="filtersection">
         <div className="filtertitle">
           <h3>Service Before Self</h3>
@@ -851,21 +882,15 @@ function Resources(props) {
             indianstate={indianstate}
           />
           <div>
-            <Fab
-              color="inherit"
-              aria-label="gototop"
-              id="gototopbtn"
-              onClick={topFunction}
-              size="small"
-              style={{
-                position: 'fixed',
-                bottom: '1rem',
-                right: '1rem',
-                zIndex: '1000',
-              }}
-            >
-              <NavigationOutlinedIcon htmlColor="#201aa299" />
-            </Fab>
+            <ScrollTop {...props}>
+              <Fab
+                color="secondary"
+                size="small"
+                aria-label="scroll back to top"
+              >
+                <KeyboardArrowUpRounded />
+              </Fab>
+            </ScrollTop>
           </div>
         </React.Fragment>
       )}

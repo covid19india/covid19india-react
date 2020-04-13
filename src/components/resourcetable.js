@@ -140,7 +140,7 @@ const getFormattedLink = (initialValue) => {
 };
 const rendercell = (celli) => {
   const value = celli.cell.value;
-  console.log(celli);
+  // console.log(celli);
   let renderedvalue = '';
   const link = celli.row.allCells[5].value.split(',')[0];
 
