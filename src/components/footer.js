@@ -27,7 +27,7 @@ function Footer(props) {
         <div class="tooltip">
           <a
             className="button github"
-            href="https://bit.ly/patientdb"
+            href="https://github.com/covid19india/covid19india-react"
             target="_blank"
             rel="noopener noreferrer"
             style={{justifyContent: 'center'}}
