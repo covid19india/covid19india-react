@@ -27,7 +27,7 @@ function Home(props) {
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
-
+  const million = 1000000;
   useEffect(() => {
     if (fetched === false) {
       getStates();
@@ -48,6 +48,7 @@ function Home(props) {
         axios.get('https://api.covid19india.org/state_test_data.json'),
       ]);
       const reversedStateTestData = stateTestResponse.data.states_tested_data.reverse();
+      let totalTestedIndia = 0;
       response.data.statewise.forEach((s) => {
         const statePopulation = statewisePopulation[s.state.toUpperCase()];
         const testedData = reversedStateTestData.find(
@@ -56,8 +57,17 @@ function Home(props) {
         const testedCount = testedData?.totaltested
           ? testedData?.totaltested
           : 0;
-        s.testspermillion = (testedCount * 1000000) / statePopulation;
+        totalTestedIndia = totalTestedIndia + Number(testedCount);
+
+        s.testspermillion = ((testedCount * million) / statePopulation).toFixed(
+          2
+        );
       });
+      const total = response.data.statewise.find((o) => o.state === 'Total');
+      total.testspermillion = (
+        (totalTestedIndia * million) /
+        statewisePopulation.TOTAL
+      ).toFixed(2);
       setStates(response.data.statewise);
       setTimeseries(validateCTS(response.data.cases_time_series));
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
