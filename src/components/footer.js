@@ -5,7 +5,7 @@ import '../App.scss';
 
 function Footer(props) {
 
-  // HTML Properties for each of the links in UI
+  //New footer component added
   if (window.location.pathname !== '/summary') {
     return (
 
