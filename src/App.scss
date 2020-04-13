@@ -1832,9 +1832,12 @@ input.switch:checked::after {
 footer {
   display: flex;
   flex-direction: column;
-  margin-bottom: 5rem;
   justify-content: center;
-  margin-top: 5rem;
+  height: 5rem;
+  background-color: $gray-light;
+  animation-name: fadeInUp;
+  animation-duration: 1s;
+  animation-timing-function: ease-in;
 
   & > * {
     align-self: center;
@@ -1847,6 +1850,7 @@ footer {
     width: 2rem;
     height: 2rem;
   }
+
 }
 
 .Summary {
@@ -3600,4 +3604,84 @@ select {
     font-weight: 500;
     font-size: 0.7rem;
   }
+
 }
+
+.footer-content {
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  overflow: visible;
+  animation-name: fadeInUp;
+  animation-duration: 1s;
+  animation-timing-function: ease-in;
+
+
+  a {
+
+      margin-right:2rem;
+      width: 2rem;
+      height: 2rem;
+
+  }
+
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: $gray-mid;
+  color: black;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.bottom {
+  
+  font-family: 'archia';
+  margin-top: 5rem;
+  text-align: center;
+
+  .link {
+
+  width: 30rem;
+
+  a {
+
+    font-family: 'archia';
+    text-transform: uppercase;
+    word-wrap: break-word;
+    font-weight: 900;
+    text-decoration: none;
+    color: $blue;
+    text-align: center;
+    background: $blue-light;
+    transition: background 0.2s ease-in-out;
+
+    &:hover {
+      background: $blue-hover;
+    }
+  }
+}
+}
+
+

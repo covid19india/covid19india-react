@@ -5,12 +5,12 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
-import * as Icon from 'react-feather';
 
 import './App.scss';
 
 import Home from './components/home';
 import Navbar from './components/navbar';
+import Footer from './components/footer';
 import Links from './components/links';
 import FAQ from './components/faq';
 import Banner from './components/banner';
@@ -87,12 +87,27 @@ function App() {
           )}
         />
       </Router>
+      
+      <div>
+      <Router history={history}>
+        <Route
+          render={({location}) => (
+            <div className="Almighty-Router">
+              <div class="bottom">
+              <h5>We stand with everyone fighting on the frontlines<br/><span class="link"><a>covid19india</a></span></h5>
+              </div>
+              <Footer/>
+            </div>
+          )}
+        />
+      </Router>
+      </div>
 
-      <footer className="fadeInUp" style={{animationDelay: '2s'}}>
-        {/* <img
+     {/*<footer className="fadeInUp" style={{animationDelay: '2s'}}>
+        <img
           src="/icon.png"
           alt="https://www.covid19india.org | Coronavirus cases live dashboard"
-        />*/}
+        />
 
         <h5>We stand with everyone fighting on the frontlines</h5>
         <div className="link">
@@ -141,7 +156,7 @@ function App() {
           <Icon.MessageCircle />
           <span>Join Telegram to Collaborate!</span>
         </a>
-      </footer>
+      </footer>*/}
     </div>
   );
 }
