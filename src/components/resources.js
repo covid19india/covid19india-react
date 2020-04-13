@@ -7,7 +7,7 @@ import Select from '@material-ui/core/Select';
 import {makeStyles} from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
-import {KeyboardArrowUpRounded} from '@material-ui/icons';
+import {ArrowUpwardRounded} from '@material-ui/icons';
 import {Fab, useScrollTrigger, Zoom} from '@material-ui/core';
 
 export const useFormControlStyles = makeStyles((isDesktop) => {
@@ -888,7 +888,7 @@ function Resources(props) {
                 size="small"
                 aria-label="scroll back to top"
               >
-                <KeyboardArrowUpRounded />
+                <ArrowUpwardRounded />
               </Fab>
             </ScrollTop>
           </div>
