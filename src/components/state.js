@@ -67,7 +67,7 @@ function State(props) {
       <div className="State">
         <div className="state-left">
           <div className="breadcrumb">
-            <Link to="/">Home</Link>
+            <Link to="/">Home</Link>/
             <Link to={`${stateCode}`}>{stateName}</Link>
           </div>
           <div className="header">
@@ -96,7 +96,7 @@ function State(props) {
             </div>
           </div>
 
-          <Level data={stateData} />
+          {fetched && <Level data={stateData} />}
           {fetched && <Minigraph timeseries={timeseries} />}
         </div>
         <div className="state-right">{/* map*/}</div>

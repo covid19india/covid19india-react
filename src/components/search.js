@@ -1,20 +1,29 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
+import {STATE_CODES} from '../constants';
 
 function Search(props) {
   const [searchValue, setSearchValue] = useState('');
   const [expand, setExpand] = useState(false);
   const [results, setResults] = useState([]);
 
-  useEffect(() => {
-    if (searchValue === 'Karnataka')
-      setResults([
-        {name: 'Karnataka', type: 'State'},
-        {name: 'Karnataka', type: 'Resources'},
-      ]);
-    else setResults([]);
-  }, [searchValue]);
+  useEffect(() => {});
+
+  const handleSearch = useCallback((searchInput) => {
+    if (searchInput === '') {
+      setResults([]);
+      return;
+    }
+    const result = [];
+    for (const [key, value] of Object.entries(STATE_CODES)) {
+      if (searchInput === value.toLowerCase()) {
+        const stateResult = {name: value, type: 'State', route: key};
+        result.push(stateResult);
+        setResults(result);
+      }
+    }
+  }, []);
 
   return (
     <div className="Search">
@@ -22,7 +31,6 @@ function Search(props) {
       <div className="line"></div>
       <input
         type="text"
-        placeholder="Karnataka"
         value={searchValue}
         onFocus={() => {
           setExpand(true);
@@ -32,6 +40,7 @@ function Search(props) {
         }}
         onChange={(event) => {
           setSearchValue(event.target.value);
+          handleSearch(event.target.value.toLowerCase());
         }}
       />
       <div className="search-button">
@@ -51,7 +60,7 @@ function Search(props) {
         <div className="results">
           {results.map((result, index) => {
             return (
-              <Link key={index} to={`state/${result.name}`}>
+              <Link key={index} to={`state/${result.route}`}>
                 <div className="result">
                   <div className="result-name">{result.name}</div>
                   <div className="result-type">
