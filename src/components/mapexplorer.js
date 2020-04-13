@@ -325,6 +325,7 @@ function MapExplorer({
           states.find((state) => currentMap.name === state.state)
         );
         setPanelRegion(panelRegion);
+        onMapHighlightChange(panelRegion);
       }
     },
     [states, stateDistrictWiseData, onMapHighlightChange]
