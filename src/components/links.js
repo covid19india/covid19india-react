@@ -35,6 +35,11 @@ function Links(props) {
           https://coronavirus.thebaselab.com/
         </a>
       </div>
+
+      <div className="link fadeInUp" style={{animationDelay: '0.7s'}}>
+        <h3>COVID-19 Utility Open Source App</h3>
+        <a href="https://covidsafepaths.org/">https://covidsafepaths.org/</a>
+      </div>
     </div>
   );
 }
