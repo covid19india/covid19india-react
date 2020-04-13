@@ -25,11 +25,11 @@ function Level(props) {
         <h5>Confirmed</h5>
         <h4>
           [
-          {data.deltaconfirmed
-            ? data.deltaconfirmed > 0
-              ? '+' + formatNumber(data.deltaconfirmed)
-              : '+0'
-            : ''}
+          {isNaN(data.deltaconfirmed)
+            ? ''
+            : data.deltaconfirmed > 0
+            ? '+' + formatNumber(data.deltaconfirmed)
+            : '+0'}
           ]
         </h4>
         <h1>{formatNumber(data.confirmed)} </h1>
@@ -52,11 +52,11 @@ function Level(props) {
         <h5 className="heading">Recovered</h5>
         <h4>
           [
-          {data.deltarecovered
-            ? data.deltarecovered > 0
-              ? '+' + formatNumber(data.deltarecovered)
-              : '+0'
-            : ''}
+          {isNaN(data.deltarecovered)
+            ? ''
+            : data.deltarecovered > 0
+            ? '+' + formatNumber(data.deltarecovered)
+            : '+0'}
           ]
         </h4>
         <h1 className="title has-text-success">
@@ -71,11 +71,11 @@ function Level(props) {
         <h5 className="heading">Deceased</h5>
         <h4>
           [
-          {data.deltadeaths
-            ? data.deltadeaths > 0
-              ? '+' + formatNumber(data.deltadeaths)
-              : '+0'
-            : ''}
+          {isNaN(data.deltadeaths)
+            ? ''
+            : data.deltadeaths > 0
+            ? '+' + formatNumber(data.deltadeaths)
+            : '+0'}
           ]
         </h4>
         <h1 className="title has-text-grey">{formatNumber(data.deaths)}</h1>
