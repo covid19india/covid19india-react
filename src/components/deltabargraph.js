@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import * as d3 from 'd3';
 
-function DeltaBarGraph({timeseries, typeKey}) {
+function DeltaBarGraph({timeseries, key1, key2}) {
   const [data, setData] = useState([]);
   const svgRef = useRef();
 
@@ -30,7 +30,13 @@ function DeltaBarGraph({timeseries, typeKey}) {
 
     const yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (d) => d[typeKey])])
+      .domain([
+        0,
+        Math.max(
+          1,
+          d3.max(data, (d) => d[key1])
+        ),
+      ])
       .range([chartBottom, margin.top]); // - barRadius
 
     const xAxis = d3.axisBottom(xScale).tickSize(0);
@@ -57,7 +63,7 @@ function DeltaBarGraph({timeseries, typeKey}) {
           xScale(formatTime(d.date)),
           chartBottom,
           xScale.bandwidth(),
-          chartBottom - yScale(d[typeKey]),
+          chartBottom - yScale(d[key1]),
           barRadius
         )
       )
@@ -68,21 +74,19 @@ function DeltaBarGraph({timeseries, typeKey}) {
       .attr('text-anchor', 'middle')
       .attr('font-size', '11px')
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
-      .attr('y', (d) => yScale(d[typeKey]) - 6)
+      .attr('y', (d) => yScale(d[key1]) - 6)
       .attr('fill', (d, i) => (i < data.length - 1 ? '#dc354590' : '#dc3545'))
       .attr('font-weight', '900')
-      .text((d) => d[typeKey])
+      .text((d) => d[key1])
       .append('tspan')
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
       .attr('dy', '-1em')
       .text((d, i) =>
-        i && data[i - 1][typeKey]
-          ? d3.format('.1%')(
-              (data[i][typeKey] - data[i - 1][typeKey]) / data[i - 1][typeKey]
-            )
+        i && data[i - 1][key2]
+          ? d3.format('+.1%')(data[i][key1] / data[i - 1][key2])
           : ''
       );
-  }, [data, typeKey]);
+  }, [data, key1, key2]);
 
   return (
     <div className="DeltaBarGraph fadeInUp" style={{animationDelay: '0.7s'}}>
