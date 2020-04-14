@@ -114,8 +114,6 @@ function State(props) {
 
           {fetched && <Level data={stateData} />}
           {fetched && <Minigraph timeseries={timeseries} />}
-        </div>
-        <div className="home-right">
           {fetched && (
             <React.Fragment>
               {
@@ -127,8 +125,12 @@ function State(props) {
                   stateTestData={testData}
                 />
               }
+            </React.Fragment>
+          )}
+        </div>
 
-              {/* <div
+        <div className="state-right">
+          {/* <div
                 className="timeseries-header fadeInUp"
                 style={{animationDelay: '2.5s'}}
                 ref={refs[2]}
@@ -215,8 +217,6 @@ function State(props) {
                 logMode={timeseriesLogMode}
               />
             */}
-            </React.Fragment>
-          )}
         </div>
       </div>
     </React.Fragment>

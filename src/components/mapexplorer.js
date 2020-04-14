@@ -293,8 +293,7 @@ function MapExplorer({
           </h4>
         ) : null}
 
-        {currentMap.mapType === MAP_TYPES.STATE &&
-        states[0].state === 'Total' ? (
+        {currentMap.mapType === MAP_TYPES.STATE ? (
           <div
             className="button back-button"
             onClick={() => switchMapToState('India')}
