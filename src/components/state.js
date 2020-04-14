@@ -12,6 +12,7 @@ import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
 import TimeSeries from './timeseries';
+import Footer from './footer';
 
 function State(props) {
   const mapRef = useRef();
@@ -136,42 +137,58 @@ function State(props) {
               <div className="district-bar">
                 <div className="district-bar-left">
                   <h2>Top districts</h2>
-                  <div className="districts">
-                    {Object.keys(districtData[stateName].districtData)
-                      .slice(0, 6)
-                      .map((district, index) => {
-                        return (
-                          <div key={index} className="district">
-                            <h2>
-                              {
-                                districtData[stateName].districtData[district]
-                                  .confirmed
-                              }
-                            </h2>
-                            <h5>{district}</h5>
-                            <div className="delta">
-                              <Icon.ArrowUp />
-                              <h6>
+                  {districtData[stateName] && (
+                    <div className="districts">
+                      {Object.keys(districtData[stateName].districtData)
+                        .slice(0, 6)
+                        .sort(
+                          (a, b) =>
+                            districtData[stateName].districtData[b].confirmed -
+                            districtData[stateName].districtData[a].confirmed
+                        )
+                        .map((district, index) => {
+                          return (
+                            <div key={index} className="district">
+                              <h2>
                                 {
                                   districtData[stateName].districtData[district]
-                                    .delta.confirmed
+                                    .confirmed
                                 }
-                              </h6>
+                              </h2>
+                              <h5>{district}</h5>
+                              <div className="delta">
+                                <Icon.ArrowUp />
+                                <h6>
+                                  {
+                                    districtData[stateName].districtData[
+                                      district
+                                    ].delta.confirmed
+                                  }
+                                </h6>
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })}
-                  </div>
+                          );
+                        })}
+                    </div>
+                  )}
                 </div>
                 <div className="district-bar-right">
                   {
                     <DeltaBarGraph
                       timeseries={timeseries.slice(-5)}
-                      typeKey={'dailyconfirmed'}
+                      key1={'dailyconfirmed'}
+                      key2={'totalconfirmed'}
                     />
                   }
                 </div>
               </div>
+
+              <Link to="/essentials">
+                <div className="to-essentials">
+                  <h2>Go to essentials</h2>
+                  <Icon.ArrowRightCircle />
+                </div>
+              </Link>
 
               <div
                 className="timeseries-header fadeInUp"
@@ -240,6 +257,7 @@ function State(props) {
           )}
         </div>
       </div>
+      <Footer />
     </React.Fragment>
   );
 }
