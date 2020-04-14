@@ -389,6 +389,12 @@ h6 {
   .Minigraph, .Level {
     width: calc(100% - 3rem);
   }
+
+  .MapExplorer {
+    .header, .map-stats, .back-button {
+      display: none;
+    }
+  }
 }
 
 .breadcrumb {
@@ -451,7 +457,7 @@ h6 {
     text-transform: none;
     border-spacing: 3px 2px;
     border-collapse: separate;
-    
+
     thead {
       background: $purple-light;
       color: $gray-dark;
@@ -3319,7 +3325,7 @@ select {
   .MapExplorer,
   .patients-summary
   .filters,
-  .updates, 
+  .updates,
   .updates-header {
     width: calc(100% - 2rem);
   }
