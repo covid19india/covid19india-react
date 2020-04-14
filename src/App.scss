@@ -3235,8 +3235,8 @@ select {
       display: flex;
       flex-direction: row;
       font-family: 'archia';
-      margin-top: 0.1rem;
-      margin-bottom: 0.1rem;
+      margin-top: 0.15rem;
+      margin-bottom: 0.15rem;
       h2, h5 {
         margin: 0;
         color: $gray;
@@ -3250,6 +3250,24 @@ select {
 
       & > * {
         align-self: flex-end;
+      }
+
+      .delta {
+        display: flex;
+        flex-direction: row;
+        h6 {margin: 0; color: $red-mid;}
+        height: 1rem;
+        margin-left: 0.5rem;
+        svg {
+          vertical-align: bottom;
+          width: 10px;
+          stroke-width: 4;
+          color: $red-mid;
+        }
+
+        & > * {
+          align-self: center;
+        }
       }
     }
   }
