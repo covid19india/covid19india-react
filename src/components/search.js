@@ -56,7 +56,11 @@ function Search(props) {
       <input
         type="text"
         value={searchValue}
-        onFocus={() => {
+        style={{
+          width: expand ? 'calc(100% - 3.5rem)' : '',
+          height: expand ? '2.1rem' : '',
+        }}
+        onFocus={(event) => {
           setExpand(true);
         }}
         onBlur={() => {
@@ -67,12 +71,12 @@ function Search(props) {
           handleSearch(event.target.value.toLowerCase());
         }}
       />
-      <div className="search-button">
+      <div className={`search-button ${expand ? 'is-expand' : ''}`}>
         <Icon.Search />
       </div>
       {searchValue.length > 0 && (
         <div
-          className="close-button"
+          className={`close-button ${expand ? 'is-expand' : ''}`}
           onClick={() => {
             setSearchValue('');
           }}
