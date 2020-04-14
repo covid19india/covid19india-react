@@ -2895,6 +2895,15 @@ select {
   .PatientsDB .modal .modal-content .meta {
     height: 25rem !important;
   }
+
+  table{
+    tbody{
+      td{
+        padding: 0.2rem;
+        font-size: 0.85rem; // change font-size from 0.9rem to 0.85rem
+      }
+    }
+  }
   
   .MapExplorer {
     .map-stats{
@@ -2902,10 +2911,13 @@ select {
       height: auto;
       .stats{
         margin-left: 0;
+        min-width: 85px;
+        &:last-child {
+          margin-right: 0.25rem;
+        }
       }
 
       .tested{
-        flex: 1 100%;
         height: 65px;
       }
     }
@@ -3599,7 +3611,7 @@ select {
   }
 
   .mobile-disclaimer-button {
-    background-color: #ffffff;
+    background-color: #fff;
     color: #808080;
     font-size: xx-small;
     justify-content: center;
