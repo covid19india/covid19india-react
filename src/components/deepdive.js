@@ -8,7 +8,7 @@ import TotalConfirmedChart from './Charts/totalconfirmedchart';
 import axios from 'axios';
 import React, {useState, useEffect} from 'react';
 
-function DeepDive(props) {
+function DeepDive() {
   const [fetched, setFetched] = useState(false);
   const [timeseries, setTimeseries] = useState([]);
   const [rawData, setRawData] = useState([]);
@@ -44,36 +44,33 @@ function DeepDive(props) {
     <div className="cards-container">
       <section className="cards">
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
-          <TotalConfirmedChart
-            title="India - Total Cases"
-            timeseries={timeseries}
-          />
+          <TotalConfirmedChart title="Total Cases" timeseries={timeseries} />
         </div>
 
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
-          <DailyConfirmedChart
-            title="India - Daily Cases"
-            timeseries={timeseries}
-          />
+          <DailyConfirmedChart title="Daily Cases" timeseries={timeseries} />
         </div>
 
-        <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
+        <div
+          className="card card-big fadeInUp"
+          style={{animationDelay: '0.7s'}}
+        >
           <AllStatesChart
-            title="States - Total Cases"
+            title="Total Cases by State"
             data={statesTimeSeries}
           />
         </div>
 
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
-          <GenderChart title="Patient Gender" data={rawData} />
+          <GenderChart title="Patients by Gender" data={rawData} />
         </div>
 
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
-          <AgeChart title="Patient Age" data={rawData} />
+          <AgeChart title="Patients by Age" data={rawData} />
         </div>
 
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
-          <NationalityChart title="Patient Nationality" data={rawData} />
+          <NationalityChart title="Patients by  Nationality" data={rawData} />
         </div>
       </section>
     </div>
