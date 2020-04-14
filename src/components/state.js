@@ -10,14 +10,19 @@ import {MAP_META, STATE_CODES} from '../constants';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
+import TimeSeries from './timeseries';
 
 function State(props) {
   // For scroll buttons
   const mapRef = useRef();
+  const tsRef = useRef();
 
   // const [data, setData] = useState(props.data);
   const [fetched, setFetched] = useState(false);
   const [timeseries, setTimeseries] = useState({});
+  const [graphOption, setGraphOption] = useState(1);
+  const [timeseriesMode, setTimeseriesMode] = useState(true);
+  const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [stateData, setStateData] = useState({});
   const [testData, setTestData] = useState({});
   const [districtData, setDistrictData] = useState({});
@@ -130,10 +135,12 @@ function State(props) {
         </div>
 
         <div className="state-right">
-          {/* <div
+          {fetched && (
+            <React.Fragment>
+              <div
                 className="timeseries-header fadeInUp"
                 style={{animationDelay: '2.5s'}}
-                ref={refs[2]}
+                ref={tsRef}
               >
                 <h1>Spread Trends</h1>
                 <div className="tabs">
@@ -186,37 +193,16 @@ function State(props) {
                     />
                   </div>
                 </div>
-
-                {window.innerWidth <= 769 && (
-                  <div className="trends-state-name">
-                    <select
-                      onChange={({target}) => {
-                        onHighlightState(JSON.parse(target.value));
-                      }}
-                    >
-                      {states.map((s) => {
-                        return (
-                          <option
-                            key={s.statecode}
-                            value={JSON.stringify(s)}
-                            selected={s.statecode === activeStateCode}
-                          >
-                            {s.state === 'Total' ? 'All States' : s.state}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  </div>
-                )}
               </div>
 
               <TimeSeries
-                timeseries={timeseries[activeStateCode]}
+                timeseries={timeseries}
                 type={graphOption}
                 mode={timeseriesMode}
                 logMode={timeseriesLogMode}
               />
-            */}
+            </React.Fragment>
+          )}
         </div>
       </div>
     </React.Fragment>
