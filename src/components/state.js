@@ -139,6 +139,11 @@ function State(props) {
                   <div className="districts">
                     {Object.keys(districtData[stateName].districtData)
                       .slice(0, 6)
+                      .sort(
+                        (a, b) =>
+                          districtData[stateName].districtData[b].confirmed -
+                          districtData[stateName].districtData[a].confirmed
+                      )
                       .map((district, index) => {
                         return (
                           <div key={index} className="district">
