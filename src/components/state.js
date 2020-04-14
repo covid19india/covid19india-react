@@ -1,23 +1,21 @@
 import axios from 'axios';
 import {format, parse} from 'date-fns';
 import React, {useEffect, useRef, useState} from 'react';
-// import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {Link} from 'react-router-dom';
 
 import {formatNumber, parseStateTimeseries} from '../utils/common-functions';
 import {MAP_META, STATE_CODES} from '../constants';
 
+import DeltaBarGraph from './deltabargraph';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
 import TimeSeries from './timeseries';
 
 function State(props) {
-  // For scroll buttons
   const mapRef = useRef();
   const tsRef = useRef();
 
-  // const [data, setData] = useState(props.data);
   const [fetched, setFetched] = useState(false);
   const [timeseries, setTimeseries] = useState({});
   const [graphOption, setGraphOption] = useState(1);
@@ -26,9 +24,6 @@ function State(props) {
   const [stateData, setStateData] = useState({});
   const [testData, setTestData] = useState({});
   const [districtData, setDistrictData] = useState({});
-  // const [stateTestData, setStateTestData] = useState({});
-  // const [timeseriesMode, setTimeseriesMode] = useState(true);
-  // const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
 
   // Assuming routing is already handled, this would always correspond to a state code
   const stateCode = window.location.pathname.split('/').pop().toUpperCase();
@@ -137,12 +132,18 @@ function State(props) {
         <div className="state-right">
           {fetched && (
             <React.Fragment>
+              {
+                <DeltaBarGraph
+                  timeseries={timeseries.slice(-5)}
+                  typeKey={'dailyconfirmed'}
+                />
+              }
+
               <div
                 className="timeseries-header fadeInUp"
                 style={{animationDelay: '2.5s'}}
                 ref={tsRef}
               >
-                <h1>Spread Trends</h1>
                 <div className="tabs">
                   <div
                     className={`tab ${graphOption === 1 ? 'focused' : ''}`}
