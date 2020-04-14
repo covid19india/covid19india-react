@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
 import * as d3 from 'd3';
-import {timeFormat} from 'd3-time-format';
 
 function DeltaBarGraph({timeseries, typeKey}) {
   const [data, setData] = useState([]);
@@ -22,7 +21,7 @@ function DeltaBarGraph({timeseries, typeKey}) {
     const chartBottom = height - margin.bottom;
     const barRadius = 5;
 
-    const formatTime = timeFormat('%e %b');
+    const formatTime = d3.timeFormat('%e %b');
     const xScale = d3
       .scaleBand()
       .domain(data.map((d) => formatTime(d.date)))
@@ -76,7 +75,13 @@ function DeltaBarGraph({timeseries, typeKey}) {
       .append('tspan')
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
       .attr('dy', '-1em')
-      .text((d) => '% here');
+      .text((d, i) =>
+        i && data[i - 1][typeKey]
+          ? d3.format('.1%')(
+              (data[i][typeKey] - data[i - 1][typeKey]) / data[i - 1][typeKey]
+            )
+          : ''
+      );
   }, [data, typeKey]);
 
   return (
