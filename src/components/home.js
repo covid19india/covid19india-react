@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import axios from 'axios';
 
+import {MAP_META} from '../constants';
 import {
   formatDate,
   formatDateAbsolute,
@@ -139,6 +140,7 @@ function Home(props) {
             <React.Fragment>
               <MapExplorer
                 forwardRef={refs[1]}
+                mapMeta={MAP_META.India}
                 states={states}
                 stateDistrictWiseData={stateDistrictWiseData}
                 stateTestData={stateTestData}
