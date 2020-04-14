@@ -1,4 +1,4 @@
-name: Node.js CI
+name: CI and Test
 
 on:
   push:
@@ -20,9 +20,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: |
-          npm install
-          npm ci
+      - run: npm ci
       - run: npm test
         env:
           CI: true
