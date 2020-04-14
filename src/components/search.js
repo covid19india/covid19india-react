@@ -56,7 +56,10 @@ function Search(props) {
       <input
         type="text"
         value={searchValue}
-        style={{width: expand ? 'calc(100% - 3.5rem)' : ''}}
+        style={{
+          width: expand ? 'calc(100% - 3.5rem)' : '',
+          height: expand ? '2.1rem' : '',
+        }}
         onFocus={(event) => {
           setExpand(true);
         }}
