@@ -12,6 +12,7 @@ import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
 import TimeSeries from './timeseries';
+import Footer from './footer';
 
 function State(props) {
   const mapRef = useRef();
@@ -179,6 +180,13 @@ function State(props) {
                 </div>
               </div>
 
+              <Link to="/essentials">
+                <div className="to-essentials">
+                  <h2>Go to essentials</h2>
+                  <Icon.ArrowRightCircle />
+                </div>
+              </Link>
+
               <div
                 className="timeseries-header fadeInUp"
                 style={{animationDelay: '2.5s'}}
@@ -246,6 +254,7 @@ function State(props) {
           )}
         </div>
       </div>
+      <Footer />
     </React.Fragment>
   );
 }

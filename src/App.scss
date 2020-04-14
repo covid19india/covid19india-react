@@ -386,7 +386,39 @@ h6 {
     margin-right: 2.5rem;
   }
 
-  .Minigraph, .Level, .MapExplorer, .district-bar {
+  a {
+    text-decoration: none;
+  }
+
+  .to-essentials {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0.5rem;
+    background: $gray-light;
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      background: $gray-hover;
+    }
+
+    h2 {
+      font-weight: 600;
+      color: $gray-mid;
+    }
+
+    svg {
+      color: $gray-mid;
+      margin-left: 1rem;
+      margin-bottom: 2px;
+    }
+
+    & > * {
+      align-self: center;
+    }
+  }
+
+  .Minigraph, .Level, .MapExplorer, .district-bar, .to-essentials {
     width: calc(100% - 3rem);
   }
 
@@ -3244,7 +3276,7 @@ select {
       }
 
       h2 {
-        min-width: 2rem;
+        min-width: 2.75rem;
       }
 
       h5 {
