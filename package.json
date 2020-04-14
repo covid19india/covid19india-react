@@ -12,6 +12,7 @@
     "animejs": "^3.2.0",
     "axios": "^0.19.2",
     "chart.js": "^2.9.3",
+    "corejs-typeahead": "^1.3.1",
     "d3": "^5.15.0",
     "d3-svg-legend": "^2.25.6",
     "date-fns": "^2.11.0",

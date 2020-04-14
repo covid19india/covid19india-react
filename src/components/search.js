@@ -1,28 +1,52 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useCallback} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
-import {STATE_CODES} from '../constants';
+import {STATE_CODES_ARRAY} from '../constants';
+import Bloodhound from 'corejs-typeahead';
+
+const engine = new Bloodhound({
+  initialize: false,
+  local: STATE_CODES_ARRAY,
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+});
+
+const promise = engine.initialize();
+
+promise
+  .done(function () {
+    console.log('Initialized Search!');
+  })
+  .fail(function () {
+    console.log("Search didn't initialize!");
+  });
 
 function Search(props) {
   const [searchValue, setSearchValue] = useState('');
   const [expand, setExpand] = useState(false);
   const [results, setResults] = useState([]);
 
-  useEffect(() => {});
-
   const handleSearch = useCallback((searchInput) => {
-    if (searchInput === '') {
-      setResults([]);
-      return;
-    }
-    const result = [];
-    for (const [key, value] of Object.entries(STATE_CODES)) {
-      if (searchInput === value.toLowerCase()) {
-        const stateResult = {name: value, type: 'State', route: key};
-        result.push(stateResult);
-        setResults(result);
-      }
-    }
+    const results = [];
+    const sync = (datums) => {
+      datums.map((result, index) => {
+        const stateObj = {
+          name: result.name,
+          type: 'state',
+          route: result.code,
+        };
+        results.push(stateObj);
+        return null;
+      });
+      setResults(results);
+    };
+
+    const async = (datums) => {
+      console.log('datums from `remote`');
+      console.log(datums);
+    };
+
+    engine.search(searchInput, sync, async);
   }, []);
 
   return (
