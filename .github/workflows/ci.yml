@@ -26,7 +26,8 @@ jobs:
             ${{ runner.os }}-
       - name: Install packages
         run: npm ci
-      - run: npm test
+      - name: Run Test Suite
+        run: npm test
         env:
           CI: true
           FORCE_COLOR: 1
