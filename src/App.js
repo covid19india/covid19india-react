@@ -13,8 +13,6 @@ import DeepDive from './components/deepdive';
 import Resources from './components/resources';
 import State from './components/state';
 
-const history = require('history').createBrowserHistory;
-
 function App() {
   const pages = [
     {
@@ -70,7 +68,7 @@ function App() {
 
   return (
     <div className="App">
-      <Router history={history}>
+      <Router>
         <Route
           render={({location}) => (
             <div className="Almighty-Router">

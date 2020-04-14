@@ -1,25 +1,27 @@
 import React, {useState, useCallback} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
-import {STATE_CODES_ARRAY} from '../constants';
+import {
+  STATE_CODES_ARRAY,
+  DISTRICTS_ARRAY,
+  STATE_CODES_REVERSE,
+} from '../constants';
 import Bloodhound from 'corejs-typeahead';
 
 const engine = new Bloodhound({
-  initialize: false,
+  initialize: true,
   local: STATE_CODES_ARRAY,
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
 });
 
-const promise = engine.initialize();
-
-promise
-  .done(function () {
-    console.log('Initialized Search!');
-  })
-  .fail(function () {
-    console.log("Search didn't initialize!");
-  });
+const districtEngine = new Bloodhound({
+  initialize: true,
+  local: DISTRICTS_ARRAY,
+  limit: 5,
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('district'),
+});
 
 function Search(props) {
   const [searchValue, setSearchValue] = useState('');
@@ -28,6 +30,7 @@ function Search(props) {
 
   const handleSearch = useCallback((searchInput) => {
     const results = [];
+
     const sync = (datums) => {
       datums.map((result, index) => {
         const stateObj = {
@@ -38,15 +41,23 @@ function Search(props) {
         results.push(stateObj);
         return null;
       });
-      setResults(results);
     };
 
-    const async = (datums) => {
-      console.log('datums from `remote`');
-      console.log(datums);
+    const districtSync = (datums) => {
+      datums.slice(0, 5).map((result, index) => {
+        const districtObj = {
+          name: result.district + ', ' + result.state,
+          type: 'state',
+          route: STATE_CODES_REVERSE[result.state],
+        };
+        results.push(districtObj);
+        return null;
+      });
     };
 
-    engine.search(searchInput, sync, async);
+    engine.search(searchInput, sync);
+    districtEngine.search(searchInput, districtSync);
+    setResults(results);
   }, []);
 
   return (
@@ -56,10 +67,6 @@ function Search(props) {
       <input
         type="text"
         value={searchValue}
-        style={{
-          width: expand ? 'calc(100% - 3.5rem)' : '',
-          height: expand ? '2.1rem' : '',
-        }}
         onFocus={(event) => {
           setExpand(true);
         }}
@@ -71,12 +78,12 @@ function Search(props) {
           handleSearch(event.target.value.toLowerCase());
         }}
       />
-      <div className={`search-button ${expand ? 'is-expand' : ''}`}>
+      <div className={`search-button`}>
         <Icon.Search />
       </div>
       {results.length > 0 && (
         <div
-          className={`close-button ${expand ? 'is-expand' : ''}`}
+          className={`close-button`}
           onClick={() => {
             setSearchValue('');
             setResults([]);

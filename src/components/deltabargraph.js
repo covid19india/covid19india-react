@@ -91,7 +91,7 @@ function DeltaBarGraph({timeseries, key1, key2}) {
   }, [data, key1, key2]);
 
   return (
-    <div className="DeltaBarGraph fadeInUp" style={{animationDelay: '0.7s'}}>
+    <div className="DeltaBarGraph fadeInUp" style={{animationDelay: '0.8s'}}>
       <svg
         ref={svgRef}
         width="250"
