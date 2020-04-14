@@ -3439,8 +3439,25 @@ select {
         }
       }
     }
-
-
+    .footer-wrapper {
+      padding: 40px 10px !important;
+      font-size: 12px;
+      .footer-obj {
+        padding: 70px 0 !important;
+      }
+  
+      .footer-social {
+        a {
+          margin: 0 5px !important;
+          .tooltiptext {
+            padding: 5px !important;
+            font-size: 8px !important;
+            width: 65px !important;
+            margin-left: -40px !important;
+          }
+        }
+      }
+    }  
   }
 
 
@@ -3599,5 +3616,97 @@ select {
     text-transform: none;
     font-weight: 500;
     font-size: 0.7rem;
+  }
+}
+.footer-wrapper {
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'archia';
+  font-weight: bolder;
+  text-transform: uppercase;
+  .footer-obj {
+    padding: 80px 0;
+    text-align: center;
+    color: $gray;
+  }
+
+  .footer-social {
+    display: flex;
+    flex-direction: row;
+    a {
+      border-radius: 5px;
+      margin: 0 20px;
+      div {
+        border-radius: 2px;
+        padding: 12px;
+        display: flex;
+      }
+
+      .tooltip {
+        position: relative;
+        span {
+          display: flex;
+          justify-content: center;
+        }
+      }
+
+      .tooltiptext {
+        visibility: hidden;
+        width: 150px;
+        font-size: 10px;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 130%;
+        left: 50%;
+        margin-left: -75px;
+      }
+
+      .tooltiptext::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+      }
+
+      .tooltip0::after {
+        border-color: #000 transparent transparent transparent;
+      }
+
+      .tooltip1::after {
+        border-color: rgba(51, 166, 103, 0.19) transparent transparent
+          transparent;
+      }
+
+      .tooltip2::after {
+        border-color: rgba(108, 117, 125, 0.0627451) transparent transparent
+          transparent;
+      }
+
+      .tooltip3::after {
+        border-color: rgba(0, 123, 255, 0.0627451) transparent transparent
+          transparent;
+      }
+
+      .tooltip4::after {
+        border-color: #fb558110 transparent transparent transparent;
+      }
+
+      .tooltip5::after {
+        border-color: #4c75f210 transparent transparent transparent;
+      }
+
+      .tooltip:hover .tooltiptext {
+        visibility: visible;
+      }
+    }
   }
 }
