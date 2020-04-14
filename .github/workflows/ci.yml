@@ -24,7 +24,8 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - run: npm ci
+      - name: Install packages
+        run: npm ci
       - run: npm test
         env:
           CI: true
