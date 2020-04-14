@@ -71,16 +71,16 @@ function DeltaBarGraph({timeseries, key1, key2}) {
 
     sel
       .join('text')
+      .attr('class', 'delta')
       .attr('text-anchor', 'middle')
       .attr('font-size', '11px')
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
       .attr('y', (d) => yScale(d[key1]) - 6)
-      .attr('fill', (d, i) => (i < data.length - 1 ? '#dc354590' : '#dc3545'))
-      .attr('font-weight', '900')
       .text((d) => d[key1])
       .append('tspan')
+      .attr('class', 'percent')
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
-      .attr('dy', '-1em')
+      .attr('dy', '-1.2em')
       .text((d, i) =>
         i && data[i - 1][key2]
           ? d3.format('+.1%')(data[i][key1] / data[i - 1][key2])
