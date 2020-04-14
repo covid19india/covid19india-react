@@ -323,7 +323,7 @@ function Row(props) {
               fontWeight: 600,
             }}
           >
-            State bulletin not sufficient to determine districts
+            Awaiting patient-level details from State Bulletin
           </div>
         </React.Fragment>
       )}
