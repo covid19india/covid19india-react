@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import { Tabs, Tab, Typography, Box } from '@material-ui/core';
+import {Tabs, Tab, Typography, Box} from '@material-ui/core';
 import GenderChart from './Charts/genderchart';
 import AgeChart from './Charts/agechart';
 import NationalityChart from './Charts/nationalitychart';
 import AllStatesChart from './Charts/allstates';
 import TotalConfirmedChart from './Charts/totalconfirmedchart';
 import DailyConfirmedChart from './Charts/dailyconfirmedchart';
+import MobilityChart from './Charts/mobilityChart';
 
 function DeepDive(props) {
   const [fetched, setFetched] = useState(false);
@@ -24,7 +25,8 @@ function DeepDive(props) {
     if (fetched === false) {
       getStates();
     }
-  }, [fetched]);
+    console.log(mobilityData);
+  }, [fetched, mobilityData]);
 
   const getStates = async () => {
     try {
@@ -51,7 +53,7 @@ function DeepDive(props) {
     }
   };
   function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+    const {children, value, index, ...other} = props;
 
     return (
       <Typography
@@ -77,21 +79,21 @@ function DeepDive(props) {
 
       <TabPanel value={tabValue} index={0}>
         <section className="cards">
-          <div className="card fadeInUp" style={{ animationDelay: '0.7s' }}>
+          <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
             <TotalConfirmedChart
               title="India - Total Cases"
               timeseries={timeseries}
             />
           </div>
 
-          <div className="card fadeInUp" style={{ animationDelay: '0.7s' }}>
+          <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
             <DailyConfirmedChart
               title="India - Daily Cases"
               timeseries={timeseries}
             />
           </div>
 
-          <div className="card fadeInUp" style={{ animationDelay: '0.7s' }}>
+          <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
             <AllStatesChart
               title="States - Total Cases"
               data={statesTimeSeries}
@@ -102,15 +104,15 @@ function DeepDive(props) {
 
       <TabPanel value={tabValue} index={1}>
         <section className="cards">
-          <div className="card fadeInUp" style={{ animationDelay: '0.2s' }}>
+          <div className="card fadeInUp" style={{animationDelay: '0.2s'}}>
             <GenderChart title="Patient Gender" data={rawData} />
           </div>
 
-          <div className="card fadeInUp" style={{ animationDelay: '0.5s' }}>
+          <div className="card fadeInUp" style={{animationDelay: '0.5s'}}>
             <AgeChart title="Patient Age" data={rawData} />
           </div>
 
-          <div className="card fadeInUp" style={{ animationDelay: '0.7s' }}>
+          <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
             <NationalityChart title="Patient Nationality" data={rawData} />
           </div>
         </section>
@@ -118,8 +120,65 @@ function DeepDive(props) {
 
       <TabPanel value={tabValue} index={2}>
         <section className="cards">
-          <div className="card fadeInUp" style={{ animationDelay: '0.2s' }}>
-            <div />
+          <div className="card fadeInUp" style={{animationDelay: '0.2s'}}>
+            <MobilityChart
+              title="Grocery and Pharmacy"
+              data={
+                mobilityData.data
+                  ? mobilityData.data.country.groceryAndPharmacy.points
+                  : null
+              }
+            />
+          </div>
+          <div className="card fadeInUp" style={{animationDelay: '0.2s'}}>
+            <MobilityChart
+              title="Parks"
+              data={
+                mobilityData.data
+                  ? mobilityData.data.country.parks.points
+                  : null
+              }
+            />
+          </div>
+          <div className="card fadeInUp" style={{animationDelay: '0.3s'}}>
+            <MobilityChart
+              title="Residential"
+              data={
+                mobilityData.data
+                  ? mobilityData.data.country.residential.points
+                  : null
+              }
+            />
+          </div>
+          <div className="card fadeInUp" style={{animationDelay: '0.4s'}}>
+            <MobilityChart
+              title="Retail and Recreation"
+              data={
+                mobilityData.data
+                  ? mobilityData.data.country.parks.points
+                  : null
+              }
+            />
+          </div>
+          <div className="card fadeInUp" style={{animationDelay: '0.5s'}}>
+            <MobilityChart
+              title="Transit stations"
+              data={
+                mobilityData.data
+                  ? mobilityData.data.country.transitStations.points
+                  : null
+              }
+            />
+          </div>
+          <div className="card fadeInUp" style={{animationDelay: '0.6s'}}>
+            <MobilityChart
+              title="Workplaces"
+              data={
+                mobilityData.data
+                  ? mobilityData.data.country.workplaces.points
+                  : null
+              }
+            />
           </div>
         </section>
       </TabPanel>
