@@ -26,10 +26,10 @@ function State(props) {
   const [stateData, setStateData] = useState({});
   const [testData, setTestData] = useState({});
   const [districtData, setDistrictData] = useState({});
-
-  // Assuming routing is already handled, this would always correspond to a state code
-  const stateCode = window.location.pathname.split('/').pop().toUpperCase();
-  const stateName = STATE_CODES[stateCode];
+  const [stateCode] = useState(window.location.pathname.split('/').pop());
+  const [stateName] = useState(
+    STATE_CODES[window.location.pathname.split('/').pop()]
+  );
 
   useEffect(() => {
     if (fetched === false) {
@@ -135,42 +135,42 @@ function State(props) {
           {fetched && (
             <React.Fragment>
               <div className="district-bar">
-                <div className="district-bar-left">
+                <div
+                  className="district-bar-left fadeInUp"
+                  style={{animationDelay: '0.6s'}}
+                >
                   <h2>Top districts</h2>
-                  {districtData[stateName] && (
-                    <div className="districts">
-                      {Object.keys(districtData[stateName].districtData)
-                        .slice(0, 6)
-                        .sort(
-                          (a, b) =>
-                            districtData[stateName].districtData[b].confirmed -
-                            districtData[stateName].districtData[a].confirmed
-                        )
-                        .map((district, index) => {
-                          return (
-                            <div key={index} className="district">
-                              <h2>
+                  <div className="districts">
+                    {Object.keys(districtData[stateName].districtData)
+                      .slice(0, 6)
+                      .sort(
+                        (a, b) =>
+                          districtData[stateName].districtData[b].confirmed -
+                          districtData[stateName].districtData[a].confirmed
+                      )
+                      .map((district, index) => {
+                        return (
+                          <div key={index} className="district">
+                            <h2>
+                              {
+                                districtData[stateName].districtData[district]
+                                  .confirmed
+                              }
+                            </h2>
+                            <h5>{district}</h5>
+                            <div className="delta">
+                              <Icon.ArrowUp />
+                              <h6>
                                 {
                                   districtData[stateName].districtData[district]
-                                    .confirmed
+                                    .delta.confirmed
                                 }
-                              </h2>
-                              <h5>{district}</h5>
-                              <div className="delta">
-                                <Icon.ArrowUp />
-                                <h6>
-                                  {
-                                    districtData[stateName].districtData[
-                                      district
-                                    ].delta.confirmed
-                                  }
-                                </h6>
-                              </div>
+                              </h6>
                             </div>
-                          );
-                        })}
-                    </div>
-                  )}
+                          </div>
+                        );
+                      })}
+                  </div>
                 </div>
                 <div className="district-bar-right">
                   {
@@ -184,7 +184,10 @@ function State(props) {
               </div>
 
               <Link to="/essentials">
-                <div className="to-essentials">
+                <div
+                  className="to-essentials fadeInUp"
+                  style={{animationDelay: '0.9s'}}
+                >
                   <h2>Go to essentials</h2>
                   <Icon.ArrowRightCircle />
                 </div>
