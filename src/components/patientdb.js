@@ -64,8 +64,13 @@ function PatientDB(props) {
         const city = document.getElementById('city');
         // Hide boxes
         if (value === '') district.style.display = 'none';
-        else district.style.display = 'inline';
-        city.style.display = 'none';
+        else {
+          if (district.classList.contains('hidden')) {
+            district.classList.add('transition');
+            const width = district.clientWidth;
+            district.classList.remove('hidden');
+          }
+        }
         // Default to empty selection
         district.selectedIndex = 0;
         city.selectedIndex = 0;
@@ -75,7 +80,13 @@ function PatientDB(props) {
         const city = document.getElementById('city');
         // Hide box
         if (value === '') city.style.display = 'none';
-        else city.style.display = 'inline';
+        else {
+          if (city.classList.contains('hidden')) {
+            city.classList.add('transition');
+            const width = city.clientWidth;
+            city.classList.remove('hidden');
+          }
+        }
         // Default to empty selection
         city.selectedIndex = 0;
         newFilters['detectedcity'] = '';
@@ -126,8 +137,9 @@ function PatientDB(props) {
 
           <div className="select">
             <select
-              style={{animationDelay: '0.4s', display: 'none'}}
+              style={{animationDelay: '0.4s'}}
               id="district"
+              className="hidden"
               onChange={(event) => {
                 handleFilters('detecteddistrict', event.target.value);
               }}
@@ -152,35 +164,9 @@ function PatientDB(props) {
 
           <div className="select">
             <select
-              style={{animationDelay: '0.4s', display: 'none'}}
+              style={{animationDelay: '0.4s'}}
               id="city"
-              onChange={(event) => {
-                handleFilters('detectedcity', event.target.value);
-              }}
-            >
-              <option value="" disabled selected>
-                Select City
-              </option>
-              {getSortedValues(
-                filterByObject(patients, {
-                  detectedstate: filters.detectedstate,
-                  detecteddistrict: filters.detecteddistrict,
-                }),
-                'detectedcity'
-              ).map((city, index) => {
-                return (
-                  <option key={index} value={city}>
-                    {city === '' ? 'All' : city}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-
-          <div className="select">
-            <select
-              style={{animationDelay: '0.4s', display: 'none'}}
-              id="city"
+              className="hidden"
               onChange={(event) => {
                 handleFilters('detectedcity', event.target.value);
               }}
@@ -207,7 +193,35 @@ function PatientDB(props) {
           <div className="select">
             <select
               style={{animationDelay: '0.4s'}}
-              id="district"
+              id="city"
+              className="hidden"
+              onChange={(event) => {
+                handleFilters('detectedcity', event.target.value);
+              }}
+            >
+              <option value="" disabled selected>
+                Select City
+              </option>
+              {getSortedValues(
+                filterByObject(patients, {
+                  detectedstate: filters.detectedstate,
+                  detecteddistrict: filters.detecteddistrict,
+                }),
+                'detectedcity'
+              ).map((city, index) => {
+                return (
+                  <option key={index} value={city}>
+                    {city === '' ? 'All' : city}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+
+          <div className="select">
+            <select
+              style={{animationDelay: '0.4s'}}
+              id="dates"
               onChange={(event) => {
                 handleFilters('dateannounced', event.target.value);
               }}
