@@ -53,9 +53,9 @@ function DeltaBarGraph({timeseries, key1, key2}) {
       .attr('transform', 'rotate(-90)')
       .style('text-anchor', 'start');
 
-    const sel = svg.selectAll('.bar').data(data);
-
-    sel
+    svg
+      .selectAll('.bar')
+      .data(data)
       .join('path')
       .attr('class', 'bar')
       .attr('d', (d) =>
@@ -69,7 +69,9 @@ function DeltaBarGraph({timeseries, key1, key2}) {
       )
       .attr('fill', (d, i) => (i < data.length - 1 ? '#dc354590' : '#dc3545'));
 
-    sel
+    svg
+      .selectAll('.delta')
+      .data(data)
       .join('text')
       .attr('class', 'delta')
       .attr('text-anchor', 'middle')
