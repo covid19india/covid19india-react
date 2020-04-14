@@ -163,8 +163,6 @@ function MapExplorer({
     );
   }, [panelRegion, stateTestData, testObj]);
 
-  console.log(statistic);
-
   return (
     <div
       className="MapExplorer fadeInUp"
@@ -295,7 +293,8 @@ function MapExplorer({
           </h4>
         ) : null}
 
-        {currentMap.mapType === MAP_TYPES.STATE ? (
+        {currentMap.mapType === MAP_TYPES.STATE &&
+        states[0].state === 'Total' ? (
           <div
             className="button back-button"
             onClick={() => switchMapToState('India')}
