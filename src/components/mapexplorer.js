@@ -163,8 +163,6 @@ function MapExplorer({
     );
   }, [panelRegion, stateTestData, testObj]);
 
-  console.log(statistic);
-
   return (
     <div
       className="MapExplorer fadeInUp"
