@@ -27,7 +27,7 @@ function DeltaBarGraph({timeseries, typeKey}) {
       .scaleBand()
       .domain(data.map((d) => formatTime(d.date)))
       .range([margin.left, chartRight])
-      .padding(0.5);
+      .padding(0.33);
 
     const yScale = d3
       .scaleLinear()
@@ -83,7 +83,7 @@ function DeltaBarGraph({timeseries, typeKey}) {
     <div className="DeltaBarGraph fadeInUp" style={{animationDelay: '0.7s'}}>
       <svg
         ref={svgRef}
-        width="300"
+        width="250"
         height="250"
         viewBox="0 0 300 250"
         preserveAspectRatio="xMidYMid meet"
