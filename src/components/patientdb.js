@@ -63,7 +63,13 @@ function PatientDB(props) {
         const district = document.getElementById('district');
         const city = document.getElementById('city');
         // Hide boxes
-        if (value === '') district.style.display = 'none';
+        if (value === '') {
+          if (!district.classList.contains('hidden')) {
+            district.classList.add('transition');
+            const width = district.clientWidth;
+            district.classList.add('hidden');
+          }
+        }
         else {
           if (district.classList.contains('hidden')) {
             district.classList.add('transition');
@@ -71,6 +77,17 @@ function PatientDB(props) {
             district.classList.remove('hidden');
           }
         }
+        district.addEventListener('transitionend', function () {
+          district.classList.remove('transition');
+        }, false);
+        if (!city.classList.contains('hidden')) {
+          city.classList.add('transition');
+          const width = city.clientWidth;
+          city.classList.add('hidden');
+        }
+        city.addEventListener('transitionend', function () {
+            city.classList.remove('transition');
+        }, false);
         // Default to empty selection
         district.selectedIndex = 0;
         city.selectedIndex = 0;
@@ -79,7 +96,13 @@ function PatientDB(props) {
       } else if (label === 'detecteddistrict') {
         const city = document.getElementById('city');
         // Hide box
-        if (value === '') city.style.display = 'none';
+        if (value === '') {
+          if (!city.classList.contains('hidden')) {
+            city.classList.add('transition');
+            const width = city.clientWidth;
+            city.classList.add('hidden');
+          }
+        }
         else {
           if (city.classList.contains('hidden')) {
             city.classList.add('transition');
@@ -87,6 +110,9 @@ function PatientDB(props) {
             city.classList.remove('hidden');
           }
         }
+        city.addEventListener('transitionend', function () {
+          city.classList.remove('transition');
+        }, false);
         // Default to empty selection
         city.selectedIndex = 0;
         newFilters['detectedcity'] = '';
