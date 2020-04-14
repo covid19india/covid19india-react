@@ -3852,10 +3852,6 @@ body.modal-open {
     .card {
       margin-bottom: 2em;
       flex: 0 1 calc(33% - 1em);
-      box-shadow: rgba(#000, 0.2) 0 0 8px 0;
-      &:hover {
-        box-shadow: rgba(#000, 0.3) 0 0 8px 0;
-      }
       height: 30rem;
       .charts-header {
         height: 100%;
@@ -3878,6 +3874,8 @@ body.modal-open {
         }
 
         .chart-note {
+          font-family: 'archia';
+          font-size: 0.8rem;
           color: $gray;
           height: 50px;
           margin-top: 5px;
@@ -4075,11 +4073,20 @@ body.modal-open {
   }
 
   .cards-container {
-    padding: 1rem;
+    padding: 0.5rem;
     .cards {
       .card {
-        flex: 0 1 calc(100%);
+        margin-bottom: 0;
+        height: 25rem;
       }
+
+      .chart-title {
+        padding: 20px 0 10px 0;
+      }
+
+      .card-big {
+         height: 30rem;
+       }
     }
   }
 
