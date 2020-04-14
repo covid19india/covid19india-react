@@ -16,6 +16,7 @@ import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
 import Updates from './updates';
 import Search from './search';
+import Footer from './footer';
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -233,6 +234,7 @@ function Home(props) {
           )}
         </div>
       </div>
+      <Footer />
     </React.Fragment>
   );
 }
