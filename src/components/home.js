@@ -121,7 +121,7 @@ function Home(props) {
 
           {showUpdates && <Updates />}
 
-          {states.length && <Level data={states[0]} />}
+          {states.length ? <Level data={states[0]} /> : ''}
           {fetched && <Minigraph timeseries={timeseries['TT']} />}
           {fetched && (
             <Table
