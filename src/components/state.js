@@ -132,12 +132,36 @@ function State(props) {
         <div className="state-right">
           {fetched && (
             <React.Fragment>
-              {
-                <DeltaBarGraph
-                  timeseries={timeseries.slice(-5)}
-                  typeKey={'dailyconfirmed'}
-                />
-              }
+              <div className="district-bar">
+                <div className="district-bar-left">
+                  <h2>Top districts</h2>
+                  <div className="districts">
+                    {Object.keys(districtData[stateName].districtData)
+                      .slice(0, 8)
+                      .map((district, index) => {
+                        return (
+                          <div key={index} className="district">
+                            <h2>
+                              {
+                                districtData[stateName].districtData[district]
+                                  .confirmed
+                              }
+                            </h2>
+                            <h5>{district}</h5>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+                <div className="district-bar-right">
+                  {
+                    <DeltaBarGraph
+                      timeseries={timeseries.slice(-5)}
+                      typeKey={'dailyconfirmed'}
+                    />
+                  }
+                </div>
+              </div>
 
               <div
                 className="timeseries-header fadeInUp"
