@@ -2,6 +2,7 @@ import axios from 'axios';
 import {format, parse} from 'date-fns';
 import React, {useEffect, useRef, useState} from 'react';
 import {Link} from 'react-router-dom';
+import * as Icon from 'react-feather';
 
 import {formatNumber, parseStateTimeseries} from '../utils/common-functions';
 import {MAP_META, STATE_CODES} from '../constants';
@@ -132,12 +133,45 @@ function State(props) {
         <div className="state-right">
           {fetched && (
             <React.Fragment>
-              {
-                <DeltaBarGraph
-                  timeseries={timeseries.slice(-5)}
-                  typeKey={'dailyconfirmed'}
-                />
-              }
+              <div className="district-bar">
+                <div className="district-bar-left">
+                  <h2>Top districts</h2>
+                  <div className="districts">
+                    {Object.keys(districtData[stateName].districtData)
+                      .slice(0, 6)
+                      .map((district, index) => {
+                        return (
+                          <div key={index} className="district">
+                            <h2>
+                              {
+                                districtData[stateName].districtData[district]
+                                  .confirmed
+                              }
+                            </h2>
+                            <h5>{district}</h5>
+                            <div className="delta">
+                              <Icon.ArrowUp />
+                              <h6>
+                                {
+                                  districtData[stateName].districtData[district]
+                                    .delta.confirmed
+                                }
+                              </h6>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+                <div className="district-bar-right">
+                  {
+                    <DeltaBarGraph
+                      timeseries={timeseries.slice(-5)}
+                      typeKey={'dailyconfirmed'}
+                    />
+                  }
+                </div>
+              </div>
 
               <div
                 className="timeseries-header fadeInUp"

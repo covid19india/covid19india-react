@@ -74,11 +74,12 @@ function Search(props) {
       <div className={`search-button ${expand ? 'is-expand' : ''}`}>
         <Icon.Search />
       </div>
-      {searchValue.length > 0 && (
+      {results.length > 0 && (
         <div
           className={`close-button ${expand ? 'is-expand' : ''}`}
           onClick={() => {
             setSearchValue('');
+            setResults([]);
           }}
         >
           <Icon.X />

@@ -17,7 +17,7 @@ function DeltaBarGraph({timeseries, typeKey}) {
     const width = +svg.attr('width');
     const height = +svg.attr('height');
 
-    const margin = {top: 30, right: 0, bottom: 20, left: 0};
+    const margin = {top: 50, right: 0, bottom: 50, left: 0};
     const chartRight = width - margin.right;
     const chartBottom = height - margin.bottom;
     const barRadius = 5;
@@ -27,7 +27,7 @@ function DeltaBarGraph({timeseries, typeKey}) {
       .scaleBand()
       .domain(data.map((d) => formatTime(d.date)))
       .range([margin.left, chartRight])
-      .padding(0.5);
+      .padding(0.33);
 
     const yScale = d3
       .scaleLinear()
@@ -40,14 +40,13 @@ function DeltaBarGraph({timeseries, typeKey}) {
       .select('.x-axis')
       .style('transform', `translateY(${chartBottom}px)`)
       .call(xAxis)
-      .call((g) => g.select('.domain').remove());
-    // To rotate x labels
-    // .selectAll('text')
-    //   .attr('y', 0)
-    //   .attr('x', 9)
-    //   .attr('dy', '.35em')
-    //   .attr('transform', 'rotate(90)')
-    //   .style('text-anchor', 'start');
+      .call((g) => g.select('.domain').remove())
+      .selectAll('text')
+      .attr('y', 0)
+      .attr('x', -40)
+      .attr('dy', '.35em')
+      .attr('transform', 'rotate(-90)')
+      .style('text-anchor', 'start');
 
     const sel = svg.selectAll('.bar').data(data);
 
@@ -63,16 +62,16 @@ function DeltaBarGraph({timeseries, typeKey}) {
           barRadius
         )
       )
-      .attr('fill', (d, i) => (i < data.length - 1 ? '#d9a0a6' : '#cd4c50'));
+      .attr('fill', (d, i) => (i < data.length - 1 ? '#dc354590' : '#dc3545'));
 
     sel
       .join('text')
       .attr('text-anchor', 'middle')
-      .attr('font-family', 'sans-serif')
       .attr('font-size', '11px')
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
       .attr('y', (d) => yScale(d[typeKey]) - 6)
-      .attr('fill', (d, i) => (i < data.length - 1 ? '#d9a0a6' : '#cd4c50'))
+      .attr('fill', (d, i) => (i < data.length - 1 ? '#dc354590' : '#dc3545'))
+      .attr('font-weight', '900')
       .text((d) => d[typeKey])
       .append('tspan')
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
@@ -81,12 +80,18 @@ function DeltaBarGraph({timeseries, typeKey}) {
   }, [data, typeKey]);
 
   return (
-    <React.Fragment>
-      <svg ref={svgRef} width="300" height="200">
+    <div className="DeltaBarGraph fadeInUp" style={{animationDelay: '0.7s'}}>
+      <svg
+        ref={svgRef}
+        width="250"
+        height="250"
+        viewBox="0 0 250 250"
+        preserveAspectRatio="xMidYMid meet"
+      >
         <g className="x-axis" />
         <g className="y-axis" />
       </svg>
-    </React.Fragment>
+    </div>
   );
 }
 

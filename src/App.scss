@@ -386,12 +386,12 @@ h6 {
     margin-right: 2.5rem;
   }
 
-  .Minigraph, .Level {
+  .Minigraph, .Level, .MapExplorer, .district-bar {
     width: calc(100% - 3rem);
   }
 
   .MapExplorer {
-    .header, .map-stats, .back-button {
+    .header, .map-stats, .back-button, .last-update {
       display: none;
     }
   }
@@ -3195,6 +3195,83 @@ select {
     display: flex;
     & > * {
       align-self: center;
+    }
+  }
+}
+
+.DeltaBarGraph {
+  svg {
+    text {
+      font-family: 'archia';
+      color: $red;
+    }
+  }
+}
+
+.district-bar {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  justify-content: space-between;
+  h2 {
+    font-weight: 900;
+    color: $red;
+    margin-bottom: 0.5rem;
+  }
+
+  .district-bar-left {
+    display: flex;
+    flex-direction: column;
+    width: 10rem;
+  }
+
+  .districts {
+    display: flex;
+    flex-direction: column;
+    height: 15rem;
+    flex-wrap: wrap;
+    width: 100%;
+    .district {
+      display: flex;
+      flex-direction: row;
+      font-family: 'archia';
+      margin-top: 0.15rem;
+      margin-bottom: 0.15rem;
+      h2, h5 {
+        margin: 0;
+        color: $gray;
+        font-weight: 600;
+      }
+
+      h2 {
+        min-width: 2rem;
+      }
+
+      h5 {
+        line-height: 17px;
+        margin-left: 0.5rem;
+      }
+
+      & > * {
+        align-self: flex-end;
+      }
+
+      .delta {
+        display: flex;
+        flex-direction: row;
+        h6 {margin: 0; color: $red-mid;}
+        margin-left: 0.5rem;
+        svg {
+          vertical-align: bottom;
+          width: 10px;
+          stroke-width: 4;
+          color: $red-mid;
+        }
+
+        & > * {
+          align-self: center;
+        }
+      }
     }
   }
 }
