@@ -6,7 +6,7 @@ import {
   formatNumber,
 } from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
-import {Link} from 'react-router-dom';
+import {Tooltip} from 'react-lightweight-tooltip';
 
 function Row(props) {
   const [state, setState] = useState(props.state);
@@ -109,10 +109,10 @@ function Row(props) {
               <Icon.ChevronDown />
             </span>
             {state.state}
-            {state.state === 'West Bengal' && (
-              <Link to="/faq">
-                <Icon.HelpCircle className="height-22" />
-              </Link>
+            {state.statenotes && (
+              <Tooltip content={`${state.statenotes}`}>
+                <Icon.Info style={{height: '12px'}} />
+              </Tooltip>
             )}
           </div>
         </td>
