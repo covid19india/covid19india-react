@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import axios from 'axios';
 
+import {MAP_META} from '../constants';
 import {
   formatDate,
   formatDateAbsolute,
@@ -16,6 +17,7 @@ import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
 import Updates from './updates';
 import Search from './search';
+import Footer from './footer';
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -138,6 +140,7 @@ function Home(props) {
             <React.Fragment>
               <MapExplorer
                 forwardRef={refs[1]}
+                mapMeta={MAP_META.India}
                 states={states}
                 stateDistrictWiseData={stateDistrictWiseData}
                 stateTestData={stateTestData}
@@ -233,6 +236,7 @@ function Home(props) {
           )}
         </div>
       </div>
+      <Footer />
     </React.Fragment>
   );
 }

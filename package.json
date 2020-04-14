@@ -28,6 +28,7 @@
     "react-feather": "^2.0.3",
     "react-infinite-scroll-component": "^5.0.4",
     "react-router-dom": "^5.1.2",
+    "react-router-transition": "^2.0.0",
     "react-scripts": "3.4.0",
     "react-table": "^7.0.4",
     "sass-lint": "^1.13.1",
