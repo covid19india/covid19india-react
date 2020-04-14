@@ -2580,6 +2580,9 @@ select {
     &:hover {
       border: 2px solid #999;
     }
+    &:focus {
+      outline: none;
+    }
 
     &.hidden {
       display: none;
@@ -2650,6 +2653,11 @@ select {
   .legend-left {
     display: flex;
     flex-direction: row;
+    &:after {
+    animation: fadein 2s;
+      -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  }
   }
 
   select {
