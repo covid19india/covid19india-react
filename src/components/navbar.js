@@ -1,8 +1,24 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Link} from 'react-router-dom';
 
 function Navbar(props) {
   const [menuVisible, setMenuVisible] = useState(false);
+  const navRef = useRef(null);
+
+  const handleClickOutside = (e) => {
+    if (navRef && navRef.current && !navRef.current.contains(e.target)) {
+      setMenuVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    if (menuVisible && window.innerWidth <= 768) {
+      window.addEventListener('click', handleClickOutside);
+    }
+    return () => {
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, [menuVisible]);
 
   // HTML Properties for each of the links in UI
   const navLinkProps = (path, animationDelay) => ({
@@ -20,6 +36,7 @@ function Navbar(props) {
           animationDelay: '0.5s',
           transition: 'all 0.3s ease-in-out',
         }}
+        ref={navRef}
       >
         <Link to="/">
           <img
