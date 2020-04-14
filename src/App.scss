@@ -825,6 +825,7 @@ h6 {
     color: $gray;
     padding-left: 3rem;
     background: #fff;
+    transition: all 0.2s ease-in-out;
   }
 
   .search-button {
@@ -833,6 +834,13 @@ h6 {
       left: 0.75rem;
       top: 4.15rem;
       color: $gray-mid;
+      transition: all 0.2s ease-in-out;
+    }
+
+    &.is-expand {
+      svg {
+        left: 0.5rem;
+      }
     }
   }
 
@@ -851,6 +859,10 @@ h6 {
     transition: all 0.2s ease-in-out;
     &:hover {
       background: $gray-hover !important;
+    }
+
+    &.is-expand {
+      right: 0.75rem;
     }
 
     svg {
