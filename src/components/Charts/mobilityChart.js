@@ -1,5 +1,5 @@
 import React from 'react';
-import {Bar, defaults} from 'react-chartjs-2';
+import {defaults, Line} from 'react-chartjs-2';
 import moment from 'moment';
 
 function MobilityChart(props) {
@@ -20,7 +20,7 @@ function MobilityChart(props) {
   defaults.global.legend.position = 'bottom';
   defaults.global.hover.intersect = false;
 
-  const datapointToShow = 40;
+  const datapointToShow = 30;
   const dates = [];
   const values = [];
   const reversedPropsArray = props.data ? props.data.reverse() : [];
@@ -37,7 +37,7 @@ function MobilityChart(props) {
     datasets: [
       {
         data: values,
-        label: 'comparative value',
+        label: 'percentage change',
         backgroundColor: '#ff073a',
       },
     ],
@@ -79,9 +79,9 @@ function MobilityChart(props) {
     <div className="charts-header">
       <div className="chart-title">{props.title}</div>
       <div className="chart-content doughnut">
-        <Bar data={chartData} options={chartOptions} />
+        <Line data={chartData} options={chartOptions} />
       </div>
-      <div className="chart-note">*Based on Google&apos;s data</div>
+      <div style={{margin: '10px'}}></div>
     </div>
   );
 }

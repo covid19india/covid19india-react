@@ -25,8 +25,7 @@ function DeepDive(props) {
     if (fetched === false) {
       getStates();
     }
-    console.log(mobilityData);
-  }, [fetched, mobilityData]);
+  }, [fetched]);
 
   const getStates = async () => {
     try {
@@ -71,7 +70,12 @@ function DeepDive(props) {
 
   return (
     <div className="cards-container">
-      <Tabs value={tabValue} onChange={handleTabChange} centered>
+      <Tabs
+        value={tabValue}
+        onChange={handleTabChange}
+        centered
+        variant="fullWidth"
+      >
         <Tab label="Number of cases" />
         <Tab label="Data on gender, age, nationality" />
         <Tab label="Mobility changes" />
@@ -181,6 +185,11 @@ function DeepDive(props) {
             />
           </div>
         </section>
+        <div style={{textAlign: 'center'}}>
+          <a href="https://www.google.com/covid19/mobility/">
+            Based on Google&apos;s Mobility data
+          </a>
+        </div>
       </TabPanel>
     </div>
   );
