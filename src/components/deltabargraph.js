@@ -85,7 +85,7 @@ function DeltaBarGraph({timeseries, typeKey}) {
         ref={svgRef}
         width="250"
         height="250"
-        viewBox="0 0 300 250"
+        viewBox="0 0 250 250"
         preserveAspectRatio="xMidYMid meet"
       >
         <g className="x-axis" />

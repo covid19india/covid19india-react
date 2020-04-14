@@ -3200,7 +3200,6 @@ select {
 }
 
 .DeltaBarGraph {
-  width: 300px;
   svg {
     text {
       font-family: 'archia';
@@ -3213,6 +3212,7 @@ select {
   display: flex;
   flex-direction: row;
   align-self: center;
+  justify-content: space-between;
   h2 {
     font-weight: 900;
     color: $red;
@@ -3243,6 +3243,10 @@ select {
         font-weight: 600;
       }
 
+      h2 {
+        min-width: 2rem;
+      }
+
       h5 {
         line-height: 17px;
         margin-left: 0.5rem;
@@ -3256,7 +3260,6 @@ select {
         display: flex;
         flex-direction: row;
         h6 {margin: 0; color: $red-mid;}
-        height: 1rem;
         margin-left: 0.5rem;
         svg {
           vertical-align: bottom;
