@@ -3439,25 +3439,8 @@ select {
         }
       }
     }
-    .footer-wrapper {
-      padding: 40px 10px !important;
-      font-size: 12px;
-      .footer-obj {
-        padding: 70px 0 !important;
-      }
-  
-      .footer-social {
-        a {
-          margin: 0 5px !important;
-          .tooltiptext {
-            padding: 5px !important;
-            font-size: 8px !important;
-            width: 65px !important;
-            margin-left: -40px !important;
-          }
-        }
-      }
-    }  
+
+
   }
 
 
@@ -3511,6 +3494,25 @@ select {
     h5{
       margin-top: 0;
       margin-bottom: 0.1rem;
+    }
+  }
+  .footer-wrapper {
+    padding: 40px 10px !important;
+    font-size: 12px;
+    .footer-obj {
+      padding: 70px 0 !important;
+    }
+
+    .footer-social {
+      a {
+        margin: 0 5px !important;
+        .tooltiptext {
+          padding: 5px !important;
+          font-size: 8px !important;
+          width: 65px !important;
+          margin-left: -40px !important;
+        }
+      }
     }
   }
 
