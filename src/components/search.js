@@ -1,25 +1,44 @@
 import React, {useState, useCallback} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
-import {STATE_CODES_ARRAY} from '../constants';
+import {
+  STATE_CODES_ARRAY,
+  DISTRICTS_ARRAY,
+  STATE_CODES_REVERSE,
+  RESOURCES,
+} from '../constants';
 import Bloodhound from 'corejs-typeahead';
 
 const engine = new Bloodhound({
-  initialize: false,
+  initialize: true,
   local: STATE_CODES_ARRAY,
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
 });
 
-const promise = engine.initialize();
+const districtEngine = new Bloodhound({
+  initialize: true,
+  local: DISTRICTS_ARRAY,
+  limit: 5,
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('district'),
+});
 
-promise
-  .done(function () {
-    console.log('Initialized Search!');
-  })
-  .fail(function () {
-    console.log("Search didn't initialize!");
-  });
+const essentialsEngine = new Bloodhound({
+  initialize: true,
+  limit: 5,
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace(
+    'category',
+    'city',
+    'contact',
+    'descriptionandorserviceprovided',
+    'nameoftheorganisation',
+    'state'
+  ),
+  indexRemote: true,
+  local: RESOURCES,
+});
 
 function Search(props) {
   const [searchValue, setSearchValue] = useState('');
@@ -28,6 +47,7 @@ function Search(props) {
 
   const handleSearch = useCallback((searchInput) => {
     const results = [];
+
     const sync = (datums) => {
       datums.map((result, index) => {
         const stateObj = {
@@ -38,15 +58,42 @@ function Search(props) {
         results.push(stateObj);
         return null;
       });
-      setResults(results);
     };
 
-    const async = (datums) => {
-      console.log('datums from `remote`');
+    const districtSync = (datums) => {
+      datums.slice(0, 5).map((result, index) => {
+        const districtObj = {
+          name: result.district + ', ' + result.state,
+          type: 'state',
+          route: STATE_CODES_REVERSE[result.state],
+        };
+        results.push(districtObj);
+        return null;
+      });
+    };
+
+    const essentialsSync = (datums) => {
       console.log(datums);
+      datums.slice(0, 5).map((result, index) => {
+        const essentialsObj = {
+          name: result.nameoftheorganisation,
+          type: 'essentials',
+          category: result.category,
+          contact: result.contact,
+          description: result.descriptionandorserviceprovided,
+          city: result.city,
+          state: result.state,
+        };
+        console.log(essentialsObj);
+        results.push(essentialsObj);
+        return null;
+      });
     };
 
-    engine.search(searchInput, sync, async);
+    engine.search(searchInput, sync);
+    districtEngine.search(searchInput, districtSync);
+    essentialsEngine.search(searchInput, essentialsSync);
+    setResults(results);
   }, []);
 
   return (
@@ -56,10 +103,6 @@ function Search(props) {
       <input
         type="text"
         value={searchValue}
-        style={{
-          width: expand ? 'calc(100% - 3.5rem)' : '',
-          height: expand ? '2.1rem' : '',
-        }}
         onFocus={(event) => {
           setExpand(true);
         }}
@@ -71,12 +114,12 @@ function Search(props) {
           handleSearch(event.target.value.toLowerCase());
         }}
       />
-      <div className={`search-button ${expand ? 'is-expand' : ''}`}>
+      <div className={`search-button`}>
         <Icon.Search />
       </div>
       {results.length > 0 && (
         <div
-          className={`close-button ${expand ? 'is-expand' : ''}`}
+          className={`close-button`}
           onClick={() => {
             setSearchValue('');
             setResults([]);
@@ -88,16 +131,33 @@ function Search(props) {
       {results.length > 0 && (
         <div className="results">
           {results.map((result, index) => {
-            return (
-              <Link key={index} to={`state/${result.route}`}>
-                <div className="result">
-                  <div className="result-name">{result.name}</div>
-                  <div className="result-type">
-                    Visit {result?.type?.toLowerCase()} page
+            if (result.type === 'state') {
+              return (
+                <Link key={index} to={`state/${result.route}`}>
+                  <div className="result">
+                    <div className="result-name">{result.name}</div>
+                    <div className="result-type">
+                      Visit {result?.type?.toLowerCase()} page
+                    </div>
                   </div>
+                </Link>
+              );
+            } else {
+              return (
+                <div className="essential-result">
+                  <div className="result-top">
+                    <div className="result-top-left">
+                      <div className="result-name">{result.name}</div>
+                      <div className="result-location">
+                        {result.city}, {result.state}
+                      </div>
+                    </div>
+                    <div className="result-category">{result.category}</div>
+                  </div>
+                  <div className="result-description">{result.description}</div>
                 </div>
-              </Link>
-            );
+              );
+            }
           })}
         </div>
       )}
