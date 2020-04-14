@@ -91,7 +91,7 @@ function Row(props) {
         className={props.total ? 'state is-total' : 'state'}
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
-        touchstart={() => props.onHighlightState?.(state, props.index)}
+        /* onTouchStart={() => props.onHighlightState?.(state, props.index)}*/
         onClick={!props.total ? handleReveal : null}
         style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
       >
@@ -255,9 +255,9 @@ function Row(props) {
                     props.onHighlightDistrict?.(district, state, props.index)
                   }
                   onMouseLeave={() => props.onHighlightDistrict?.()}
-                  touchstart={() =>
+                  /* onTouchStart={() =>
                     props.onHighlightDistrict?.(district, state, props.index)
-                  }
+                  }*/
                 >
                   <td style={{fontWeight: 600}}>{district}</td>
                   <td>
@@ -280,25 +280,52 @@ function Row(props) {
           })}
 
       {sortedDistricts?.Unknown && (
-        <tr
-          className={`district`}
-          style={{display: props.reveal && !props.total ? '' : 'none'}}
-        >
-          <td style={{fontWeight: 600}}>Unknown</td>
-          <td>
-            <span className="deltas" style={{color: '#ff073a'}}>
-              {sortedDistricts['Unknown'].delta.confirmed > 0 && (
-                <Icon.ArrowUp />
-              )}
-              {sortedDistricts['Unknown'].delta.confirmed > 0
-                ? `${sortedDistricts['Unknown'].delta.confirmed}`
-                : ''}
-            </span>
-            <span className="table__count-text">
-              {formatNumber(sortedDistricts['Unknown'].confirmed)}
-            </span>
-          </td>
-        </tr>
+        <React.Fragment>
+          <tr
+            className={`district`}
+            style={{display: props.reveal && !props.total ? '' : 'none'}}
+          >
+            <td style={{fontWeight: 600}}>
+              Unknown{' '}
+              <span style={{fontSize: '0.75rem', color: '#201aa299'}}>#</span>
+            </td>
+            <td>
+              <span className="deltas" style={{color: '#ff073a'}}>
+                {sortedDistricts['Unknown'].delta.confirmed > 0 && (
+                  <Icon.ArrowUp />
+                )}
+                {sortedDistricts['Unknown'].delta.confirmed > 0
+                  ? `${sortedDistricts['Unknown'].delta.confirmed}`
+                  : ''}
+              </span>
+              <span className="table__count-text">
+                {formatNumber(sortedDistricts['Unknown'].confirmed)}
+              </span>
+            </td>
+          </tr>
+          <span
+            style={{
+              display: props.reveal && !props.total ? '' : 'none',
+              fontSize: '0.75rem',
+              color: '#201aa299',
+            }}
+          >
+            #
+          </span>
+          <div
+            style={{
+              display: props.reveal && !props.total ? '' : 'none',
+              fontSize: '0.5rem',
+              paddingLeft: '1rem',
+              position: 'absolute',
+              marginTop: '-0.85rem',
+              color: '#201aa299',
+              fontWeight: 600,
+            }}
+          >
+            Awaiting patient-level details from State Bulletin
+          </div>
+        </React.Fragment>
       )}
 
       <tr
