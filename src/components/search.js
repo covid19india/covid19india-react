@@ -252,7 +252,7 @@ function Search(props) {
                 <h4
                   onMouseDown={(event) => {
                     event.preventDefault();
-                    setNativeValue(searchInput.current, 'Groceries Anna Nagar');
+                    setNativeValue(searchInput.current, 'Groceries Chennai');
                     searchInput.current.dispatchEvent(
                       new Event('input', {bubbles: true})
                     );
@@ -330,13 +330,13 @@ function Search(props) {
                 <h4
                   onMouseDown={(event) => {
                     event.preventDefault();
-                    setNativeValue(searchInput.current, 'Jharkand');
+                    setNativeValue(searchInput.current, 'Jharkhand');
                     searchInput.current.dispatchEvent(
                       new Event('input', {bubbles: true})
                     );
                   }}
                 >
-                  Jharkand
+                  Jharkhand
                 </h4>
               </div>
               <div className="suggestion">

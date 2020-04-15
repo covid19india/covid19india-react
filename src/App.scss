@@ -398,6 +398,8 @@ h6 {
     background: $gray-light;
     border-radius: 5px;
     transition: all 0.2s ease-in-out;
+    align-self: center;
+    display: none;
     &:hover {
       background: $gray-hover;
     }
@@ -418,7 +420,11 @@ h6 {
     }
   }
 
-  .Minigraph, .Level, .MapExplorer, .district-bar, .to-essentials {
+  .district-bar, .to-essentials {
+    width: 100%;
+  }
+
+  .Minigraph, .Level, .MapExplorer {
     width: calc(100% - 3rem);
   }
 
@@ -3418,8 +3424,13 @@ select {
 }
 
 .Clusters {
+  align-self: center;
+  width: 100%;
   h1 {
     color: $red;
+    margin-bottom: 0;
+    width: 100%;
+    padding-left: 1.5rem;
   }
 }
 
@@ -3567,6 +3578,12 @@ select {
       display: flex;
       flex-direction: column;
       margin: 0;
+    }
+  }
+
+  .MapExplorer {
+    .header {
+      margin-top: 2rem;
     }
   }
 
@@ -3980,6 +3997,15 @@ select {
   .Search {
     .result-name {
       max-width: 10rem !important;
+    }
+  }
+
+  .State {
+    .district-bar, .to-essentials, .Clusters {
+      width: calc(100% - 3rem);
+      h1 {
+        padding-left: 0;
+      }
     }
   }
 }
