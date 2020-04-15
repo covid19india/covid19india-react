@@ -118,13 +118,7 @@ function Clusters({stateCode}) {
         height={height}
         graphData={networkData}
         nodeLabel="id"
-        nodeColor={(node) =>
-          node.group === 'source'
-            ? node.id[0] === 'P'
-              ? '#dc3545'
-              : 'black'
-            : 'gray'
-        }
+        nodeColor={(node) => (node.group === 'source' ? '#dc3545' : 'gray')}
         linkDirectionalParticleColor={() => 'red'}
         linkDirectionalParticles={1}
         linkDirectionalParticleWidth={(link) =>
