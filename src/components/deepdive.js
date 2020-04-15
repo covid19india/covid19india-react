@@ -82,7 +82,7 @@ function DeepDive(props) {
 
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
           <DailyPrediction
-            title="Daily Increase Forecast"
+            title="Daily  Forecast"
             predictedSeries={predictedSeries}
           />
         </div>
