@@ -123,9 +123,6 @@ const getFormattedLink = (initialValue) => {
     // console.log('success val', ' --' + JSON.stringify(links.numberList));
     s3 = String(links.numberList).replace(/,/g, '<br>');
   } else {
-
-  // If the initialValue is changed externall, sync it up with our state
-  React.useEffect(() => {
     const s1 = initialValue.replace(
       reurl1,
       '<a href="$1" target="_blank">Link</a>'
