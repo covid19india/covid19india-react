@@ -5,7 +5,6 @@ import {
   STATE_CODES_ARRAY,
   DISTRICTS_ARRAY,
   STATE_CODES_REVERSE,
-  RESOURCES,
 } from '../constants';
 import Bloodhound from 'corejs-typeahead';
 
@@ -37,7 +36,12 @@ const essentialsEngine = new Bloodhound({
     'state'
   ),
   indexRemote: true,
-  local: RESOURCES,
+  remote: {
+    url: 'https://api.covid19india.org/resources/resources.json',
+    transform: function (response) {
+      return response.resources;
+    },
+  },
 });
 
 function Search(props) {
@@ -73,7 +77,6 @@ function Search(props) {
     };
 
     const essentialsSync = (datums) => {
-      console.log(datums);
       datums.slice(0, 5).map((result, index) => {
         const essentialsObj = {
           name: result.nameoftheorganisation,
@@ -84,7 +87,6 @@ function Search(props) {
           city: result.city,
           state: result.state,
         };
-        console.log(essentialsObj);
         results.push(essentialsObj);
         return null;
       });
@@ -144,7 +146,7 @@ function Search(props) {
               );
             } else {
               return (
-                <div className="essential-result">
+                <div key={index} className="essential-result">
                   <div className="result-top">
                     <div className="result-top-left">
                       <div className="result-name">{result.name}</div>
