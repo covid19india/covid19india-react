@@ -24,12 +24,10 @@ function ChoroplethMap({
 
   const ready = useCallback(
     (geoData) => {
-      // Hide all objects on map (don't delete)
-      d3.selectAll('svg#chart > *').style('display', 'none');
+      d3.selectAll('svg#chart > *').remove();
 
       const propertyField = propertyFieldMap[mapMeta.mapType];
       const svg = d3.select(choroplethMap.current);
-      const t = d3.transition().duration(500);
 
       const topology = topojson.feature(
         geoData,
@@ -96,65 +94,54 @@ function ChoroplethMap({
 
       /* DRAW MAP */
       let onceTouchedRegion = null;
-      let g;
-      // Check in cache
-      const mapSelection = svg.select(`.${mapMeta.graphObjectName}`);
-      if (mapSelection.empty()) {
-        g = svg.append('g').attr('class', mapMeta.graphObjectName);
-        g.append('g')
-          .attr('class', 'states')
-          .selectAll('path')
-          .data(topology.features)
-          .join('path')
-          .attr('class', 'path-region')
-          .attr('fill', function (d) {
-            const n = parseInt(mapData[d.properties[propertyField]]) || 0;
-            const color = n === 0 ? '#ffffff' : colorScale(n);
-            return color;
-          })
-          .attr('d', path)
-          .attr('pointer-events', 'all')
-          .on('mouseover', (d) => {
-            handleMouseover(d.properties[propertyField]);
-          })
-          .on('mouseleave', (d) => {
-            setSelectedRegion(null);
-            if (onceTouchedRegion === d) onceTouchedRegion = null;
-          })
-          .on('touchstart', (d) => {
-            if (onceTouchedRegion === d) onceTouchedRegion = null;
-            else onceTouchedRegion = d;
-          })
-          .on('click', handleClick)
-          .style('cursor', 'pointer')
-          .append('title')
-          .text(function (d) {
-            const value = mapData[d.properties[propertyField]] || 0;
-            return (
-              Number(
-                parseFloat(100 * (value / (statistic.total || 0.001))).toFixed(
-                  2
-                )
-              ).toString() +
-              '% from ' +
-              toTitleCase(d.properties[propertyField])
-            );
-          });
-
-        g.append('path')
-          .attr('class', 'borders')
-          .attr('stroke', '#ff073a20')
-          .attr('fill', 'none')
-          .attr('stroke-width', 2)
-          .attr(
-            'd',
-            path(
-              topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName])
-            )
+      const g = svg.append('g').attr('class', mapMeta.graphObjectName);
+      g.append('g')
+        .attr('class', 'states')
+        .selectAll('path')
+        .data(topology.features)
+        .join('path')
+        .attr('class', 'path-region')
+        .attr('fill', function (d) {
+          const n = parseInt(mapData[d.properties[propertyField]]) || 0;
+          const color = n === 0 ? '#ffffff' : colorScale(n);
+          return color;
+        })
+        .attr('d', path)
+        .attr('pointer-events', 'all')
+        .on('mouseover', (d) => {
+          handleMouseover(d.properties[propertyField]);
+        })
+        .on('mouseleave', (d) => {
+          setSelectedRegion(null);
+          if (onceTouchedRegion === d) onceTouchedRegion = null;
+        })
+        .on('touchstart', (d) => {
+          if (onceTouchedRegion === d) onceTouchedRegion = null;
+          else onceTouchedRegion = d;
+        })
+        .on('click', handleClick)
+        .style('cursor', 'pointer')
+        .append('title')
+        .text(function (d) {
+          const value = mapData[d.properties[propertyField]] || 0;
+          return (
+            Number(
+              parseFloat(100 * (value / (statistic.total || 0.001))).toFixed(2)
+            ).toString() +
+            '% from ' +
+            toTitleCase(d.properties[propertyField])
           );
-      } else {
-        g = mapSelection.style('display', 'block');
-      }
+        });
+
+      g.append('path')
+        .attr('class', 'borders')
+        .attr('stroke', '#ff073a20')
+        .attr('fill', 'none')
+        .attr('stroke-width', 2)
+        .attr(
+          'd',
+          path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName]))
+        );
 
       const handleMouseover = (name) => {
         try {
@@ -165,63 +152,10 @@ function ChoroplethMap({
         }
       };
 
-      const zoom = d3.zoom().scaleExtent([1, 8]).on('zoom', zoomed);
-
       function handleClick(d) {
         if (onceTouchedRegion) return;
         if (mapMeta.mapType === MAP_TYPES.STATE) return;
-        // Slowly fade away all the states except highlighted one
-        const t = d3.transition().duration(500);
-        g.selectAll('.borders').transition(t).style('opacity', 0);
-        g.selectAll('.path-region:not(.map-hover)')
-          .transition(t)
-          .style('opacity', 0);
-        // Zoom to click
-        const [[x0, y0], [x1, y1]] = path.bounds(d);
-        d3.event.stopPropagation();
-        // For some reason transition(t) d
-        svg
-          .transition(t)
-          .call(
-            zoom.transform,
-            d3.zoomIdentity
-              .translate(width / 2, height / 2)
-              .scale(
-                Math.min(
-                  8,
-                  0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)
-                )
-              )
-              .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
-            d3.mouse(svg.node())
-          )
-          // Change map at end of zoom
-          .on('end', () => {
-            changeMap(d.properties[propertyField]);
-          });
-      }
-
-      function reset() {
-        svg
-          .transition(t)
-          .call(
-            zoom.transform,
-            d3.zoomIdentity,
-            d3.zoomTransform(svg.node()).invert([width / 2, height / 2])
-          );
-      }
-
-      function zoomed() {
-        const {transform} = d3.event;
-        g.attr('transform', transform);
-        g.attr('stroke-width', 1 / transform.k);
-      }
-
-      if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
-        // Bring back all states
-        g.selectAll('*').transition(t).style('opacity', 1);
-        // Reset zoom
-        reset();
+        changeMap(d.properties[propertyField]);
       }
     },
     [
