@@ -3461,6 +3461,10 @@ select {
     width: 100%;
     padding-left: 1.5rem;
   }
+
+  canvas {
+    touch-action: auto !important;
+  }
 }
 
 @media(max-width: 400px){
