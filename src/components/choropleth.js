@@ -43,7 +43,11 @@ function ChoroplethMap({
       let height;
       if (!svg.attr('viewBox')) {
         const widthStyle = parseInt(svg.style('width'));
-        projection.fitWidth(widthStyle, topology);
+        const heightStyle = parseInt(svg.style('height'));
+        // Hack to check if height is default SVG height
+        if (heightStyle !== 150)
+          projection.fitSize([widthStyle, heightStyle], topology);
+        else projection.fitWidth(widthStyle, topology);
         path = d3.geoPath(projection);
         const bBox = path.bounds(topology);
         width = +bBox[1][0];
