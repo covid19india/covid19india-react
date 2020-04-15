@@ -4,12 +4,13 @@
   "private": true,
   "homepage": "http://covid19india.github.io/",
   "dependencies": {
-    "@material-ui/core": "^4.9.9",
     "@juggle/resize-observer": "^3.1.3",
+    "@material-ui/core": "^4.9.9",
     "@testing-library/jest-dom": "^5.3.0",
     "@testing-library/react": "^10.0.1",
     "axios": "^0.19.2",
     "chart.js": "^2.9.3",
+    "cors": "^2.8.5",
     "d3": "^5.15.0",
     "d3-svg-legend": "^2.25.6",
     "date-fns": "^2.11.0",
@@ -59,6 +60,7 @@
       "sass-lint-auto-fix"
     ]
   },
+  "proxy": "http://localhost:8000",
   "devDependencies": {
     "eslint": "^6.8.0",
     "eslint-config-google": "^0.14.0",
