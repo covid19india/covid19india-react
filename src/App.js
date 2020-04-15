@@ -141,6 +141,16 @@ function App() {
           <Icon.MessageCircle />
           <span>Join Telegram to Collaborate!</span>
         </a>
+        <a
+          href="https://twitter.com/MoHFW_INDIA"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="button twitter"
+          style={{justifyContent: 'center'}}
+        >
+          <Icon.Twitter />
+          <span>Ministry of Health official announcements</span>
+        </a>
       </footer>
     </div>
   );
