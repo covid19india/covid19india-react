@@ -130,6 +130,19 @@ function State(props) {
               }
             </React.Fragment>
           )}
+
+          {fetched && (
+            <div className="meta-secondary">
+              <div className="unknown">
+                <Icon.AlertCircle />
+                <div className="unknown-right">
+                  Awaiting district details for{' '}
+                  {districtData[stateName].districtData['Unknown']?.confirmed}{' '}
+                  cases
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="state-right">
