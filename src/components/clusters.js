@@ -68,8 +68,7 @@ function Clusters({stateCode}) {
           'https://api.covid19india.org/raw_data.json'
         );
         setStateRawData(
-          // rawDataResponse.data.raw_data.filter((d) => d.statecode === stateCode)
-          rawDataResponse.data.raw_data
+          rawDataResponse.data.raw_data.filter((d) => d.statecode === stateCode)
         );
         setFetched(true);
       } catch (err) {
@@ -93,7 +92,7 @@ function Clusters({stateCode}) {
     );
   }, [fetched, networkData]);
 
-  return <div id="clusters" className="Clusters"></div>;
+  return <div id="clusters"></div>;
 }
 
 export default Clusters;
