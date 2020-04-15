@@ -26,10 +26,10 @@ function State(props) {
   const [stateData, setStateData] = useState({});
   const [testData, setTestData] = useState({});
   const [districtData, setDistrictData] = useState({});
-  const [stateCode] = useState(window.location.pathname.split('/').pop());
-  const [stateName] = useState(
-    STATE_CODES[window.location.pathname.split('/').pop()]
+  const [stateCode] = useState(
+    window.location.pathname.split('/').pop().toUpperCase()
   );
+  const [stateName] = useState(STATE_CODES[stateCode]);
 
   useEffect(() => {
     if (fetched === false) {
