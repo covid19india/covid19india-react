@@ -4,7 +4,11 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Link} from 'react-router-dom';
 import * as Icon from 'react-feather';
 
-import {formatNumber, parseStateTimeseries} from '../utils/common-functions';
+import {
+  formatDateAbsolute,
+  formatNumber,
+  parseStateTimeseries,
+} from '../utils/common-functions';
 import {MAP_META, STATE_CODES} from '../constants';
 
 import Clusters from './clusters';
@@ -58,7 +62,6 @@ function State(props) {
       setStateData(states.find((s) => s.statecode === code));
       const ts = parseStateTimeseries(statesDailyResponse)[code];
       setTimeseries(ts);
-      // setLastUpdated(response.data.statewise[0].lastupdatedtime);
       const statesTests = stateTestResponse.states_tested_data;
       const name = STATE_CODES[code];
       setTestData(
@@ -93,7 +96,12 @@ function State(props) {
               style={{animationDelay: '0.3s'}}
             >
               <h1>{stateName}</h1>
-              <h5>11 Apr, 04:32 IST</h5>
+              <h5>
+                Last Updated on{' '}
+                {Object.keys(stateData).length
+                  ? formatDateAbsolute(stateData.lastupdatedtime)
+                  : ''}
+              </h5>
             </div>
             <div
               className="header-right fadeInUp"
@@ -150,13 +158,16 @@ function State(props) {
                 <Icon.Compass />
                 <div className="sources-right">
                   Data collected from sources{' '}
-                  {Object.keys(sources[0]).map((key, index) => {
-                    if (key.match('source') && sources[0][key] !== '')
+                  {Object.keys(sources[0]).map((key) => {
+                    if (key.match('source') && sources[0][key] !== '') {
+                      const num = key.match(/\d+/);
                       return (
                         <React.Fragment>
-                          <a href={sources[0][key]}>{index}</a>,
+                          {num > 1 ? ',' : ''}
+                          <a href={sources[0][key]}>{num}</a>
                         </React.Fragment>
                       );
+                    }
                     return null;
                   })}
                 </div>
