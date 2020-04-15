@@ -2583,6 +2583,110 @@ footer {
     flex-direction: row;
     text-align: center;
 
+    .react-date-picker.react-date-picker--closed.react-date-picker--enabled,
+    .react-date-picker.react-date-picker--open.react-date-picker--enabled {
+      height: 2.05rem;
+      margin: 0.188rem 0.625rem 0 0.1rem;
+      font-family: 'archia';
+      font-weight: 900;
+      font-size: 11px;
+      color: #6c757d;
+      background-color: #eee;
+      border: 2px solid #e8e8e9;
+      border-radius: 4px;
+      width: auto;
+      align-items: center;
+      padding-inline-start: 1px;
+      cursor: default;
+      padding: 0 0.5rem;
+    }
+
+    .react-date-picker, .react-date-picker *, .react-date-picker *:before, .react-date-picker *:after {
+      border: 0;
+    }
+
+    .react-calendar button {
+      padding: 1rem;
+      border-radius: 5px;
+      transition: all 0.1s ease-in-out;
+      font-family: 'archia';
+      &:disabled {
+        border-radius: 0 !important;
+        color: $gray-mid;
+        cursor: not-allowed;
+      }
+    }
+
+    .react-date-picker__inputGroup__input:invalid {
+      background: transparent;
+    }
+
+    .react-date-picker__wrapper {
+      border: unset;
+      svg {
+        stroke: $gray-mid;
+        &:hover {
+          stroke: $gray;
+        }
+      }
+    }
+
+    .react-calendar__tile--active {
+      background: $pblue-light;
+      color: $pblue !important;
+      &:hover {
+        background: $pblue-hover;
+        color: $pblue !important;
+      }
+    }
+
+    .react-calendar__month-view__weekdays__weekday {
+      font-family: 'archia';
+      margin-bottom: 0.5rem;
+    }
+
+    .react-calendar__month-view__days__day--weekend, .react-calendar__month-view__days__day {
+      color: $gray;
+    }
+
+    .react-date-picker__calendar {
+      top: 3.5rem !important;
+    }
+
+    .react-calendar {
+      background: $gray-light-opaque;
+      border: 2px solid $gray-light;
+      border-radius: 5px;
+    }
+
+    .react-calendar__navigation__label {
+      color: $gray !important;
+    }
+
+    .react-calendar__navigation__arrow {
+      color: $gray;
+    }
+
+    .react-date-picker__inputGroup > * {
+      color: $gray !important;
+    }
+
+    .react-date-picker__clear-button {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .react-date-picker__calendar-button {
+      padding: 0 !important;
+      margin: 0 !important;
+      margin-left: 1rem !important;
+    }
+
+    .calendar-close {
+      width: 12px;
+      stroke-width: 3;
+    }
+
     select {
       appearance: none;
       background-color: #eee;
@@ -2597,7 +2701,6 @@ footer {
       font-weight: 900;
       margin: 0.2rem 0.1rem;
       padding: 0.5rem;
-      text-transform: uppercase;
       width: 130px;
       color: $gray;
       cursor: pointer;
@@ -2659,6 +2762,10 @@ footer {
   .patientdb-wrapper {
     padding-left: 5rem;
     padding-right: 5rem;
+  }
+
+  .legend {
+    z-index: unset;
   }
 }
 
@@ -4202,6 +4309,12 @@ body.modal-open {
         padding-left: 0;
       }
     }
+  }
+
+
+  .PatientsDB .select .react-date-picker__calendar {
+    position: fixed;
+    top: 2.3rem !important;
   }
 }
 
