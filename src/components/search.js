@@ -5,6 +5,7 @@ import {
   STATE_CODES_ARRAY,
   DISTRICTS_ARRAY,
   STATE_CODES_REVERSE,
+  RESOURCES,
 } from '../constants';
 import Bloodhound from 'corejs-typeahead';
 
@@ -21,6 +22,22 @@ const districtEngine = new Bloodhound({
   limit: 5,
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('district'),
+});
+
+const essentialsEngine = new Bloodhound({
+  initialize: true,
+  limit: 5,
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace(
+    'category',
+    'city',
+    'contact',
+    'descriptionandorserviceprovided',
+    'nameoftheorganisation',
+    'state'
+  ),
+  indexRemote: true,
+  local: RESOURCES,
 });
 
 function Search(props) {
@@ -55,8 +72,27 @@ function Search(props) {
       });
     };
 
+    const essentialsSync = (datums) => {
+      console.log(datums);
+      datums.slice(0, 5).map((result, index) => {
+        const essentialsObj = {
+          name: result.nameoftheorganisation,
+          type: 'essentials',
+          category: result.category,
+          contact: result.contact,
+          description: result.descriptionandorserviceprovided,
+          city: result.city,
+          state: result.state,
+        };
+        console.log(essentialsObj);
+        results.push(essentialsObj);
+        return null;
+      });
+    };
+
     engine.search(searchInput, sync);
     districtEngine.search(searchInput, districtSync);
+    essentialsEngine.search(searchInput, essentialsSync);
     setResults(results);
   }, []);
 
@@ -95,16 +131,33 @@ function Search(props) {
       {results.length > 0 && (
         <div className="results">
           {results.map((result, index) => {
-            return (
-              <Link key={index} to={`state/${result.route}`}>
-                <div className="result">
-                  <div className="result-name">{result.name}</div>
-                  <div className="result-type">
-                    Visit {result?.type?.toLowerCase()} page
+            if (result.type === 'state') {
+              return (
+                <Link key={index} to={`state/${result.route}`}>
+                  <div className="result">
+                    <div className="result-name">{result.name}</div>
+                    <div className="result-type">
+                      Visit {result?.type?.toLowerCase()} page
+                    </div>
                   </div>
+                </Link>
+              );
+            } else {
+              return (
+                <div className="essential-result">
+                  <div className="result-top">
+                    <div className="result-top-left">
+                      <div className="result-name">{result.name}</div>
+                      <div className="result-location">
+                        {result.city}, {result.state}
+                      </div>
+                    </div>
+                    <div className="result-category">{result.category}</div>
+                  </div>
+                  <div className="result-description">{result.description}</div>
                 </div>
-              </Link>
-            );
+              );
+            }
           })}
         </div>
       )}

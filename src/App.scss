@@ -945,7 +945,7 @@ h6 {
       text-decoration: none !important;
     }
 
-    .result {
+    .result, .essential-result {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -966,7 +966,7 @@ h6 {
       }
 
       .result-name {
-        max-width: 18rem;
+        max-width: 15rem;
       }
 
       .result-type {
@@ -975,6 +975,41 @@ h6 {
         padding: 0.25rem;
         border-radius: 2px;
         font-size: 0.75rem;
+      }
+    }
+
+    .essential-result {
+      display: flex;
+      flex-direction: column;
+      .result-top {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        .result-top-left {
+          display: flex;
+          flex-direction: column;
+          .result-location {
+            display: flex;
+            flex-direction: row;
+            font-size: 0.75rem;
+          }
+        }
+      }
+
+      .result-category {
+        background: $pink-light;
+        color: $pink;
+        padding: 0.25rem;
+        border-radius: 2px;
+        font-size: 0.75rem;
+        height: 1rem;
+      }
+
+      .result-description {
+        margin-top: 1rem;
+        font-size: 0.75rem;
+        align-self: flex-start;
       }
     }
   }
