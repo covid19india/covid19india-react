@@ -120,7 +120,7 @@ function Clusters({stateCode}) {
         height={height}
         graphData={networkData}
         nodeLabel="id"
-        nodeAutoColorBy="group"
+        nodeColor={(node) => (node.group === 'source' ? '#dc3545' : 'gray')}
         linkDirectionalParticleColor={() => 'red'}
         linkDirectionalParticles={1}
         linkDirectionalParticleWidth={(link) =>
