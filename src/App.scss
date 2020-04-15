@@ -998,18 +998,54 @@ h6 {
       }
 
       .result-category {
+        display: flex;
+        flex-direction: row;
+        align-self: flex-start;
         background: $pink-light;
         color: $pink;
         padding: 0.25rem;
         border-radius: 2px;
         font-size: 0.75rem;
         height: 1rem;
+        text-align: right;
+        & > * {
+          align-self: center;
+        }
+
+        svg {
+          width: 12px;
+          stroke-width: 3px;
+          margin-left: 0.25rem;
+        }
       }
 
       .result-description {
         margin-top: 1rem;
         font-size: 0.75rem;
         align-self: flex-start;
+      }
+
+      .result-contact {
+        display: flex;
+        flex-direction: row;
+        background: $gray-light;
+        align-self: flex-start;
+        font-size: 0.75rem;
+        padding: 0.25rem;
+        border-radius: 2px;
+        height: 1rem;
+        text-align: right;
+        margin-top: 0.5rem;
+        & > * {
+          align-self: center;
+        }
+
+        svg {
+          width: 12px;
+          stroke-width: 3px;
+          margin-right: 0.25rem;
+          stroke: $gray-mid;
+        }
       }
     }
   }

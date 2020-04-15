@@ -5,7 +5,6 @@ import {
   STATE_CODES_ARRAY,
   DISTRICTS_ARRAY,
   STATE_CODES_REVERSE,
-  RESOURCES,
 } from '../constants';
 import Bloodhound from 'corejs-typeahead';
 
@@ -37,7 +36,12 @@ const essentialsEngine = new Bloodhound({
     'state'
   ),
   indexRemote: true,
-  local: RESOURCES,
+  remote: {
+    url: 'https://api.covid19india.org/resources/resources.json',
+    transform: function (response) {
+      return response.resources;
+    },
+  },
 });
 
 function Search(props) {
@@ -73,18 +77,17 @@ function Search(props) {
     };
 
     const essentialsSync = (datums) => {
-      console.log(datums);
       datums.slice(0, 5).map((result, index) => {
         const essentialsObj = {
           name: result.nameoftheorganisation,
           type: 'essentials',
           category: result.category,
-          contact: result.contact,
+          website: result.contact,
           description: result.descriptionandorserviceprovided,
           city: result.city,
           state: result.state,
+          contact: result.phonenumber,
         };
-        console.log(essentialsObj);
         results.push(essentialsObj);
         return null;
       });
@@ -144,7 +147,12 @@ function Search(props) {
               );
             } else {
               return (
-                <div className="essential-result">
+                <a
+                  key={index}
+                  href={result.website}
+                  target="_noblank"
+                  className="essential-result"
+                >
                   <div className="result-top">
                     <div className="result-top-left">
                       <div className="result-name">{result.name}</div>
@@ -152,10 +160,17 @@ function Search(props) {
                         {result.city}, {result.state}
                       </div>
                     </div>
-                    <div className="result-category">{result.category}</div>
+                    <div className="result-category">
+                      <div>{result.category}</div>
+                      <Icon.ExternalLink />
+                    </div>
                   </div>
                   <div className="result-description">{result.description}</div>
-                </div>
+                  <div className="result-contact">
+                    <Icon.Phone />
+                    <div>{result.contact}</div>
+                  </div>
+                </a>
               );
             }
           })}
