@@ -82,10 +82,11 @@ function Search(props) {
           name: result.nameoftheorganisation,
           type: 'essentials',
           category: result.category,
-          contact: result.contact,
+          website: result.contact,
           description: result.descriptionandorserviceprovided,
           city: result.city,
           state: result.state,
+          contact: result.phonenumber,
         };
         results.push(essentialsObj);
         return null;
@@ -146,7 +147,12 @@ function Search(props) {
               );
             } else {
               return (
-                <div key={index} className="essential-result">
+                <a
+                  key={index}
+                  href={result.website}
+                  target="_noblank"
+                  className="essential-result"
+                >
                   <div className="result-top">
                     <div className="result-top-left">
                       <div className="result-name">{result.name}</div>
@@ -154,10 +160,17 @@ function Search(props) {
                         {result.city}, {result.state}
                       </div>
                     </div>
-                    <div className="result-category">{result.category}</div>
+                    <div className="result-category">
+                      <div>{result.category}</div>
+                      <Icon.ExternalLink />
+                    </div>
                   </div>
                   <div className="result-description">{result.description}</div>
-                </div>
+                  <div className="result-contact">
+                    <Icon.Phone />
+                    <div>{result.contact}</div>
+                  </div>
+                </a>
               );
             }
           })}
