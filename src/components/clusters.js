@@ -1,7 +1,7 @@
 import axios from 'axios';
+// import * as d3 from 'd3';
 import ForceGraph2D from 'react-force-graph-2d';
-import React, {useEffect, useState} from 'react';
-import ReactDOM from 'react-dom';
+import React, {useEffect, useRef, useState} from 'react';
 
 function Clusters({stateCode}) {
   const [fetched, setFetched] = useState(false);
@@ -84,32 +84,50 @@ function Clusters({stateCode}) {
     setNetworkData(prepareNetworkData(stateRawData));
   }, [stateRawData]);
 
-  try {
-    const canvas = document.querySelector('canvas');
-    fitToContainer(canvas);
-    function fitToContainer(canvas) {
-      // Make it visually fill the positioned parent
-      canvas.style.width = '100%';
-      canvas.style.height = '100%';
-      // ...then set the internal size to match
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    }
-  } catch (error) {}
+  const NetworkGraph = () => {
+    const fgRef = useRef();
 
-  useEffect(() => {
-    if (!fetched) return;
-    ReactDOM.render(
-      <ForceGraph2D graphData={networkData} nodeLabel="id" />,
-      document.getElementById('clusters')
+    // useEffect(() => {
+    // const fg = fgRef.current;
+    // Deactivate existing forces
+    // fg.d3Force('center', null);
+    // fg.d3Force('charge', -10);
+
+    // // Add collision and bounding box forces
+    // fg.d3Force('collide', d3.forceCollide(4));
+    // fg.d3Force('box', () => {
+    //   const SQUARE_HALF_SIDE = N * 2;
+
+    //   nodes.forEach(node => {
+    //     const x = node.x || 0, y = node.y || 0;
+
+    //     // bounce on box walls
+    //     if (Math.abs(x) > SQUARE_HALF_SIDE) { node.vx *= -1; }
+    //     if (Math.abs(y) > SQUARE_HALF_SIDE) { node.vy *= -1; }
+    //   });
+    // });
+    // }, []);
+
+    const width = document.getElementById('clusters').offsetWidth;
+
+    return (
+      <ForceGraph2D
+        ref={fgRef}
+        width={width}
+        height={width}
+        graphData={networkData}
+        nodeLabel="id"
+        nodeAutoColorBy="group"
+        linkDirectionalParticleColor={() => 'red'}
+        linkDirectionalParticles={1}
+        linkDirectionalParticleWidth={(link) =>
+          link.source.id[0] === 'P' ? 2 : 0
+        }
+      />
     );
-  }, [fetched, networkData]);
+  };
 
-  return (
-    <div className="Clusters">
-      <div id="clusters"></div>
-    </div>
-  );
+  return <div id="clusters">{fetched ? <NetworkGraph /> : ''}</div>;
 }
 
 export default Clusters;
