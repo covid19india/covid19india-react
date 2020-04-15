@@ -26,7 +26,7 @@ function DeltaBarGraph({timeseries, key1, key2}) {
       .scaleBand()
       .domain(data.map((d) => formatTime(d.date)))
       .range([margin.left, chartRight])
-      .padding(0.33);
+      .paddingInner(0.33);
 
     const yScale = d3
       .scaleLinear()
