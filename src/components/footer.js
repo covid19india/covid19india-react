@@ -46,18 +46,14 @@ const icons = [
     }
 ];
 function Footer() {
-    const onClick = (e) => {
-        e.preventDefault();
-    };
     return (
         <div className="footer-wrapper fadeInUp" style={{ animationDelay: '2s' }}>
             <div className="footer-obj">We Stand with everyone fighting on the frontlines</div>
             <div className="footer-social">
                 {icons.map((icon, index) => (
                     <a
-                        href={window.innerWidth <= 768 ? '#' : icon.href}
+                        href={icon.href}
                         target="_blank"
-                        onClick={window.innerWidth <= 768 && onClick}
                         rel="noopener noreferrer"
                         key={index}
                     >
@@ -70,8 +66,6 @@ function Footer() {
                                     backgroundColor: icon.bgColor,
                                     textDecoration: 'none'
                                 }}
-                                onClick={() => window.open(icon.href, '_blank')}
-                                rel="noopener noreferrer"
                             >
                                 {icon.tooltip}
                             </span>
