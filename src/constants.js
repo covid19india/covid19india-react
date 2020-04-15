@@ -195,7 +195,7 @@ export const MAP_META = {
   },
   'Tamil Nadu': {
     name: 'Tamil Nadu',
-    geoDataFile: `${MAPS_DIR}/tamil-nadu.json`,
+    geoDataFile: `${MAPS_DIR}/tamilnadu.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectName: 'tamilnadu_district',
   },
