@@ -172,7 +172,7 @@ function Resources(props) {
             });
           });
         });
-        return array.map((x, i) => (
+        return array.sort().map((x, i) => (
           <option
             key={i}
             value={x}
@@ -194,7 +194,7 @@ function Resources(props) {
               if (array.indexOf(x) === -1) array.push(x);
             });
           });
-          return array.map((x, i) => (
+          return array.sort().map((x, i) => (
             <option
               key={i}
               value={x}
