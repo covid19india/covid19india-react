@@ -43,8 +43,6 @@ function ChoroplethMap({
       let height;
       if (!svg.attr('viewBox')) {
         const widthStyle = parseInt(svg.style('width'));
-        const heightStyle = parseInt(svg.style('height'));
-        console.log(widthStyle, heightStyle);
         projection.fitWidth(widthStyle, topology);
         path = d3.geoPath(projection);
         const bBox = path.bounds(topology);
@@ -155,8 +153,8 @@ function ChoroplethMap({
 
       const handleMouseover = (name) => {
         try {
-          setHoveredRegion(name, mapMeta);
           setSelectedRegion(name);
+          setHoveredRegion(name, mapMeta);
         } catch (err) {
           console.log('err', err);
         }
