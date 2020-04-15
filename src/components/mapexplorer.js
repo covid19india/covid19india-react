@@ -325,6 +325,7 @@ function MapExplorer({
           states.find((state) => currentMap.name === state.state)
         );
         setPanelRegion(panelRegion);
+        onMapHighlightChange(panelRegion);
       }
     },
     [states, stateDistrictWiseData, onMapHighlightChange]
@@ -353,7 +354,7 @@ function MapExplorer({
       setHoveredRegion(regionHighlighted.district, newMap);
       setSelectedRegion(regionHighlighted.district);
     }
-  }, [regionHighlighted, currentMap.mapType, setHoveredRegion]);
+  }, [regionHighlighted, setHoveredRegion]);
 
   const switchMapToState = useCallback(
     (name) => {
@@ -455,7 +456,7 @@ function MapExplorer({
               <h1>{formatNumber(testObj?.totaltested)}</h1>
             </div>
             <h6 className="timestamp">
-              {!isNaN(new Date(testObj?.updatedon))
+              {!isNaN(parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()))
                 ? `As of ${format(
                     parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
                     'dd MMM'
