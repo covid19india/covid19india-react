@@ -26,6 +26,7 @@ function State(props) {
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [stateData, setStateData] = useState({});
   const [testData, setTestData] = useState({});
+  const [sources, setSources] = useState({});
   const [districtData, setDistrictData] = useState({});
   const [stateCode] = useState(
     window.location.pathname.split('/').pop().toUpperCase()
@@ -45,11 +46,13 @@ function State(props) {
         {data: stateDistrictWiseResponse},
         {data: statesDailyResponse},
         {data: stateTestResponse},
+        {data: sourcesResponse},
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
         axios.get('https://api.covid19india.org/states_daily.json'),
         axios.get('https://api.covid19india.org/state_test_data.json'),
+        axios.get('https://api.covid19india.org/sources_list.json'),
       ]);
       const states = dataResponse.statewise;
       setStateData(states.find((s) => s.statecode === code));
@@ -66,6 +69,8 @@ function State(props) {
       setDistrictData({
         [name]: stateDistrictWiseResponse[name],
       });
+      const sourceList = sourcesResponse.sources_list;
+      setSources(sourceList.filter((state) => state.statecode === code));
       setFetched(true);
     } catch (err) {
       console.log(err);
@@ -139,6 +144,21 @@ function State(props) {
                   Awaiting district details for{' '}
                   {districtData[stateName].districtData['Unknown']?.confirmed}{' '}
                   cases
+                </div>
+              </div>
+              <div className="sources">
+                <Icon.Compass />
+                <div className="sources-right">
+                  Data collected from sources{' '}
+                  {Object.keys(sources[0]).map((key, index) => {
+                    if (key.match('source') && sources[0][key] !== '')
+                      return (
+                        <React.Fragment>
+                          <a href={sources[0][key]}>{index}</a>,
+                        </React.Fragment>
+                      );
+                    return null;
+                  })}
                 </div>
               </div>
             </div>

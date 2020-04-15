@@ -25,7 +25,7 @@ function Footer(props) {
       </a>
       <a
         className="button excel"
-        href="patientdb.covid19india.org"
+        href="https://patientdb.covid19india.org"
         target="_blank"
         rel="noopener noreferrer"
       >

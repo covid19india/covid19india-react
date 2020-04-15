@@ -86,32 +86,30 @@ function Clusters({stateCode}) {
 
   const NetworkGraph = () => {
     const fgRef = useRef();
-    const width = document.getElementById('clusters').offsetWidth;
-    const height = width;
 
     useEffect(() => {
       const fg = fgRef.current;
+      const width = document.getElementById('clusters').offsetWidth;
+      const height = width;
       // Deactivate existing forces
-      fg.d3Force('charge').strength(-50);
+      fg.d3Force('charge').strength(-60);
       fg.d3Force('collision', d3.forceCollide());
-      fg.d3Force('x', d3.forceX().strength(0.2));
-      fg.d3Force('y', d3.forceY().strength(0.2));
+      fg.d3Force('x', d3.forceX().strength(0.3));
+      fg.d3Force('y', d3.forceY().strength(0.3));
+      fg.d3Force('box', boxForce);
 
       // Custom force to keep everything inside box
-      // function boxForce() {
-      //   for (let i = 0, n = nodes.length; i < n; ++i) {
-      //     const currNode = nodes[i];
-      //     currNode.x = Math.max(
-      //       -width / 2 + radius,
-      //       Math.min(width / 2 - radius, currNode.x)
-      //     );
-      //     currNode.y = Math.max(
-      //       -height / 2 + radius,
-      //       Math.min(height / 2 - radius, currNode.y)
-      //     );
-      //   }
-      // }
+      function boxForce() {
+        for (let i = 0, n = networkData.nodes.length; i < n; ++i) {
+          const currNode = networkData.nodes[i];
+          currNode.x = Math.max(-width, Math.min(width, currNode.x));
+          currNode.y = Math.max(-height, Math.min(height, currNode.y));
+        }
+      }
     }, []);
+
+    const width = document.getElementById('clusters').offsetWidth;
+    const height = width;
 
     return (
       <ForceGraph2D

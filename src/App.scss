@@ -426,7 +426,7 @@ h6 {
     align-self: center;
     margin-top: 3rem;
     margin-bottom: 3rem;
-    .unknown {
+    .unknown, .sources {
       display: flex;
       flex-direction: row;
       width: 6rem;
@@ -436,12 +436,28 @@ h6 {
       padding: 0.25rem;
       border-radius: 5px;
       color: $gray;
+      margin-right: 0.5rem;
       svg {
-        width: 36px;
+        width: 36px !important;
         margin-right: 0.25rem;
         stroke-width: 2px;
         color: $gray-mid;
         margin-top: -0.25rem;
+      }
+    }
+
+    .sources {
+      .sources-right {
+        width: 10rem;
+        a {
+          color: $gray;
+          background: $gray-light;
+          padding-left: 0.1rem;
+          padding-right: 0.1rem;
+          &:hover {
+            background: $gray-hover;
+          }
+        }
       }
     }
   }
