@@ -1752,9 +1752,8 @@ table {
 
     .unknown {
       position: absolute;
-      right: 0;
-      top: 3rem;
-      width: 9rem;
+      top: 6rem;
+      width: 5rem;
       font-weight: 600;
       font-weight: 0.75rem;
     }
@@ -3453,7 +3452,7 @@ select {
       h5 {
         margin-top: 0.15rem;
         margin-left: 0.5rem;
-        display: table; 
+        display: table;
       }
 
       & > * {
@@ -4149,7 +4148,7 @@ select {
   }
 
   .mobile-disclaimer-button {
-    background-color: #ffffff;
+    background-color: #fff;
     color: #808080;
     font-size: xx-small;
     justify-content: center;

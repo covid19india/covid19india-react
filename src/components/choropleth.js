@@ -39,7 +39,7 @@ function ChoroplethMap({
       let path;
       let width;
       let height;
-      if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
+      if (!svg.attr('viewBox')) {
         const widthStyle = parseInt(svg.style('width'));
         // Hack to fix height on state pages
         if (mapMeta.mapType === MAP_TYPES.STATE) {
