@@ -257,7 +257,7 @@ function MapExplorer({
 }) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [total, setTotal] = useState({});
-  let totalTemp = 0;
+  const reducer = (accumulator, currentValue) => (accumulator += currentValue);
   const [panelRegion, setPanelRegion] = useState(getRegionFromState(states[0]));
   const [currentHoveredRegion, setCurrentHoveredRegion] = useState(
     getRegionFromState(states[0])
@@ -398,19 +398,15 @@ function MapExplorer({
     );
 
     const totalTMap = testDataFind.map((value) => value.totaltested);
-    totalTMap.forEach((element) => {
-      // eslint-disable-next-line
-      totalTemp += Number(element);
-    });
+    setTotal(totalTMap.map(Number).reduce(reducer));
 
-    setTotal(totalTemp);
     setTestObj(
       stateTestData.find(
         (obj) => obj.state === panelRegion.name && obj.totaltested !== ''
       )
     );
-    console.log('total Indians tested', total);
-  }, [panelRegion, stateTestData, testObj]);
+    console.log('Total Indians Tested:', total);
+  }, [panelRegion, stateTestData, testObj, total]);
 
   return (
     <div
@@ -477,7 +473,7 @@ function MapExplorer({
             <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
             <div className="stats-bottom">
               <h1>{formatNumber(testObj?.totaltested)}</h1>
-              {/* <h1>{total}</h1> */}
+              {/* <h1>{formatNumber(total)}</h1> */}
             </div>
             <h6 className="timestamp">
               {!isNaN(new Date(testObj?.updatedon))
