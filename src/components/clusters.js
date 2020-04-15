@@ -1,5 +1,5 @@
 import axios from 'axios';
-// import * as d3 from 'd3';
+import * as d3 from 'd3';
 import ForceGraph2D from 'react-force-graph-2d';
 import React, {useEffect, useRef, useState} from 'react';
 
@@ -86,35 +86,38 @@ function Clusters({stateCode}) {
 
   const NetworkGraph = () => {
     const fgRef = useRef();
-
-    // useEffect(() => {
-    // const fg = fgRef.current;
-    // Deactivate existing forces
-    // fg.d3Force('center', null);
-    // fg.d3Force('charge', -10);
-
-    // // Add collision and bounding box forces
-    // fg.d3Force('collide', d3.forceCollide(4));
-    // fg.d3Force('box', () => {
-    //   const SQUARE_HALF_SIDE = N * 2;
-
-    //   nodes.forEach(node => {
-    //     const x = node.x || 0, y = node.y || 0;
-
-    //     // bounce on box walls
-    //     if (Math.abs(x) > SQUARE_HALF_SIDE) { node.vx *= -1; }
-    //     if (Math.abs(y) > SQUARE_HALF_SIDE) { node.vy *= -1; }
-    //   });
-    // });
-    // }, []);
-
     const width = document.getElementById('clusters').offsetWidth;
+    const height = width;
+
+    useEffect(() => {
+      const fg = fgRef.current;
+      // Deactivate existing forces
+      fg.d3Force('charge').strength(-50);
+      fg.d3Force('collision', d3.forceCollide());
+      fg.d3Force('x', d3.forceX().strength(0.2));
+      fg.d3Force('y', d3.forceY().strength(0.2));
+
+      // Custom force to keep everything inside box
+      // function boxForce() {
+      //   for (let i = 0, n = nodes.length; i < n; ++i) {
+      //     const currNode = nodes[i];
+      //     currNode.x = Math.max(
+      //       -width / 2 + radius,
+      //       Math.min(width / 2 - radius, currNode.x)
+      //     );
+      //     currNode.y = Math.max(
+      //       -height / 2 + radius,
+      //       Math.min(height / 2 - radius, currNode.y)
+      //     );
+      //   }
+      // }
+    }, []);
 
     return (
       <ForceGraph2D
         ref={fgRef}
         width={width}
-        height={width}
+        height={height}
         graphData={networkData}
         nodeLabel="id"
         nodeAutoColorBy="group"

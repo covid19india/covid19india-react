@@ -3116,11 +3116,10 @@ select {
     border-bottom: 0;
     background-color: $yellow-light;
     color: $orange;
-    text-transform: uppercase;
     text-align: center;
     font-weight: 900;
     transition: background 0.25s ease-in-out;
-    padding: 5px 15px;
+    padding: 10px 15px;
     font-family: 'archia';
     cursor: pointer;
     margin: 0;
@@ -3418,6 +3417,12 @@ select {
   }
 }
 
+.Clusters {
+  h1 {
+    color: $red;
+  }
+}
+
 @media(max-width: 400px){
   .PatientsDB .modal .modal-content .meta {
     height: 25rem !important;
@@ -3496,7 +3501,7 @@ select {
 
     .navbar-middle {
       text-align: center;
-      width: 3rem;
+      width: 2.9rem;
       font-size: 0.6rem;
       word-wrap: break-word;
       order: 1;

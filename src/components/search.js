@@ -178,7 +178,11 @@ function Search(props) {
                       </div>
                     </div>
                     <div className="result-category">
-                      <div>{result.category}</div>
+                      <div>
+                        {result.category.match('Delivery')
+                          ? 'Home Delivery'
+                          : result.category}
+                      </div>
                       <Icon.ExternalLink />
                     </div>
                   </div>

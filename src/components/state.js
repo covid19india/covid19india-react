@@ -257,11 +257,16 @@ function State(props) {
                 mode={timeseriesMode}
                 logMode={timeseriesLogMode}
               />
-
-              <Clusters stateCode={stateCode} />
             </React.Fragment>
           )}
         </div>
+        <div className="state-left">
+          <div className="Clusters">
+            <h1>Clusters</h1>
+            <Clusters stateCode={stateCode} />
+          </div>
+        </div>
+        <div className="state-right"></div>
       </div>
       <Footer />
     </React.Fragment>
