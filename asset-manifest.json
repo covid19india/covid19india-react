@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/static/css/main.b7de18d7.chunk.css",
-    "main.js": "/static/js/main.953a39d6.chunk.js",
-    "main.js.map": "/static/js/main.953a39d6.chunk.js.map",
+    "main.css": "/static/css/main.7f9629e6.chunk.css",
+    "main.js": "/static/js/main.7eb59739.chunk.js",
+    "main.js.map": "/static/js/main.7eb59739.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.96a74c67.js",
     "runtime-main.js.map": "/static/js/runtime-main.96a74c67.js.map",
     "static/js/2.ba613550.chunk.js": "/static/js/2.ba613550.chunk.js",
     "static/js/2.ba613550.chunk.js.map": "/static/js/2.ba613550.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.c6c1989c4907421d4d59c22ddfe24aa2.js": "/precache-manifest.c6c1989c4907421d4d59c22ddfe24aa2.js",
+    "precache-manifest.af65bab30c0b9844c1f886b1d5cfbd8c.js": "/precache-manifest.af65bab30c0b9844c1f886b1d5cfbd8c.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.b7de18d7.chunk.css.map": "/static/css/main.b7de18d7.chunk.css.map",
+    "static/css/main.7f9629e6.chunk.css.map": "/static/css/main.7f9629e6.chunk.css.map",
     "static/js/2.ba613550.chunk.js.LICENSE.txt": "/static/js/2.ba613550.chunk.js.LICENSE.txt",
     "static/media/App.scss": "/static/media/archia-thin-webfont.e88f1cf3.woff2"
   },
   "entrypoints": [
     "static/js/runtime-main.96a74c67.js",
     "static/js/2.ba613550.chunk.js",
-    "static/css/main.b7de18d7.chunk.css",
-    "static/js/main.953a39d6.chunk.js"
+    "static/css/main.7f9629e6.chunk.css",
+    "static/js/main.7eb59739.chunk.js"
   ]
 }
