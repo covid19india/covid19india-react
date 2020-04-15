@@ -1049,6 +1049,30 @@ h6 {
       }
     }
   }
+
+  .suggestions {
+    display: flex;
+    flex-direction: column;
+    .suggestion {
+      display: flex;
+      flex-direction: row;
+      font-family: 'archia';
+      color: $gray-mid;
+      div {
+        padding-top: 1px;
+      }
+
+      h4 {
+        word-wrap: wrap;
+        margin-left: 0.25rem;
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+          text-decoration-thickness: 2px;
+        }
+      }
+    }
+  }
 }
 
 .header {
@@ -3390,6 +3414,13 @@ select {
         }
       }
     }
+  }
+}
+
+.Clusters {
+  width: 100%;
+  #clusters {
+    
   }
 }
 
