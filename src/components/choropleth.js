@@ -77,8 +77,9 @@ function ChoroplethMap({
         .domain(domain)
         .range(d3.schemeReds[steps]);
       // Colorbar
-      const margin = {left: 0.02 * width, right: 0.02 * width};
-      const barWidth = width - margin.left - margin.right;
+      const widthLegend = parseInt(svgLegend.style('width'));
+      const margin = {left: 0.02 * widthLegend, right: 0.02 * widthLegend};
+      const barWidth = widthLegend - margin.left - margin.right;
       const heightLegend = +svgLegend.attr('height');
       svgLegend
         .append('g')
@@ -91,7 +92,7 @@ function ChoroplethMap({
             height: 0.8 * heightLegend,
           })
         );
-      svgLegend.attr('viewBox', `0 0 ${width} ${heightLegend}`);
+      svgLegend.attr('viewBox', `0 0 ${widthLegend} ${heightLegend}`);
 
       /* DRAW MAP */
       let onceTouchedRegion = null;
