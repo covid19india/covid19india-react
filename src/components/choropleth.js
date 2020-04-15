@@ -41,11 +41,11 @@ function ChoroplethMap({
       let height;
       if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
         const widthStyle = parseInt(svg.style('width'));
-        const heightStyle = parseInt(svg.style('height'));
-        // Hack to check if height is default SVG height
-        if (heightStyle !== 150)
+        // Hack to fix height on state pages
+        if (mapMeta.mapType === MAP_TYPES.STATE) {
+          const heightStyle = parseInt(svg.style('height'));
           projection.fitSize([widthStyle, heightStyle], topology);
-        else projection.fitWidth(widthStyle, topology);
+        } else projection.fitWidth(widthStyle, topology);
         path = d3.geoPath(projection);
         const bBox = path.bounds(topology);
         width = +bBox[1][0];
