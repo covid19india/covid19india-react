@@ -37,10 +37,10 @@ function MobilityChart(props) {
     datasets: [
       {
         data: values,
-        label: 'percentage change',
         backgroundColor: '#ff073a',
       },
     ],
+    displays: ['0%'],
   };
 
   const chartOptions = {
@@ -70,6 +70,18 @@ function MobilityChart(props) {
       yAxes: [
         {
           stacked: true,
+          ticks: {
+            beginAtZero: true,
+            min: -80,
+            max: 80,
+            callback: function (value, _index) {
+              return value + '%';
+            },
+          },
+          scaleLabel: {
+            display: true,
+            labelString: 'comparative change',
+          },
         },
       ],
     },
