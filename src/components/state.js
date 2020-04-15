@@ -7,6 +7,7 @@ import * as Icon from 'react-feather';
 import {formatNumber, parseStateTimeseries} from '../utils/common-functions';
 import {MAP_META, STATE_CODES} from '../constants';
 
+import Clusters from './clusters';
 import DeltaBarGraph from './deltabargraph';
 import Level from './level';
 import MapExplorer from './mapexplorer';
@@ -256,6 +257,8 @@ function State(props) {
                 mode={timeseriesMode}
                 logMode={timeseriesLogMode}
               />
+
+              <Clusters stateCode={stateCode} />
             </React.Fragment>
           )}
         </div>

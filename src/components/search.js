@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
 import {
@@ -48,6 +48,7 @@ function Search(props) {
   const [searchValue, setSearchValue] = useState('');
   const [expand, setExpand] = useState(false);
   const [results, setResults] = useState([]);
+  const searchInput = useRef(null);
 
   const handleSearch = useCallback((searchInput) => {
     const results = [];
@@ -99,6 +100,21 @@ function Search(props) {
     setResults(results);
   }, []);
 
+  function setNativeValue(element, value) {
+    const valueSetter = Object.getOwnPropertyDescriptor(element, 'value').set;
+    const prototype = Object.getPrototypeOf(element);
+    const prototypeValueSetter = Object.getOwnPropertyDescriptor(
+      prototype,
+      'value'
+    ).set;
+
+    if (valueSetter && valueSetter !== prototypeValueSetter) {
+      prototypeValueSetter.call(element, value);
+    } else {
+      valueSetter.call(element, value);
+    }
+  }
+
   return (
     <div className="Search">
       <label>Search your city, resources, etc</label>
@@ -106,6 +122,7 @@ function Search(props) {
       <input
         type="text"
         value={searchValue}
+        ref={searchInput}
         onFocus={(event) => {
           setExpand(true);
         }}
@@ -180,19 +197,63 @@ function Search(props) {
         <div className="expanded">
           <div className="expanded-left">
             <h3>Top Resources</h3>
-            <h4> - DIY Face Masks</h4>
-            <h4> - MOFHW Tips</h4>
-            <h4> - Test Centers in Mumbai</h4>
-            <h4> - Symptoms</h4>
-            <h4> - Dave</h4>
+            <div className="suggestions">
+              <div className="suggestion">
+                <div>-</div>
+                <h4>DIY Face Masks</h4>
+              </div>
+              <div className="suggestion">
+                <div>-</div>
+                <h4>MOFHW Tips</h4>
+              </div>
+              <div className="suggestion">
+                <div>-</div>
+                <h4>Test Centers in Mumbai</h4>
+              </div>
+              <div className="suggestion">
+                <div>-</div>
+                <h4>Symptoms</h4>
+              </div>
+              <div className="suggestion">
+                <div>-</div>
+                <h4>Dave</h4>
+              </div>
+            </div>
           </div>
           <div className="expanded-right">
             <h3>Highly Searched</h3>
-            <h4> - Hyderabad</h4>
-            <h4> - Bengaluru</h4>
-            <h4> - Test Centers</h4>
-            <h4> - Lockdown</h4>
-            <h4> - Also Dave</h4>
+            <div className="suggestions">
+              <div className="suggestion">
+                <div>-</div>
+                <h4
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    setNativeValue(searchInput.current, 'Hyderabad');
+                    searchInput.current.dispatchEvent(
+                      new Event('input', {bubbles: true})
+                    );
+                  }}
+                >
+                  Hyderabad
+                </h4>
+              </div>
+              <div className="suggestion">
+                <div>-</div>
+                <h4>Bengaluru</h4>
+              </div>
+              <div className="suggestion">
+                <div>-</div>
+                <h4>Test Centers</h4>
+              </div>
+              <div className="suggestion">
+                <div>-</div>
+                <h4>Lockdown</h4>
+              </div>
+              <div className="suggestion">
+                <div>-</div>
+                <h4>Also Dave</h4>
+              </div>
+            </div>
           </div>
         </div>
       )}
