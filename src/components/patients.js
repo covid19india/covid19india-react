@@ -9,7 +9,6 @@ function Patients(props) {
   const [logs, setLogs] = useState({});
   const [modal, setModal] = useState(false);
 
-  // When the user clicks anywhere outside of the modal, close modal
   window.onclick = function (event) {
     const modal = document.getElementById('modal');
     if (event.target === modal) {
@@ -23,7 +22,7 @@ function Patients(props) {
 
   useEffect(() => {
     if (modal) document.body.classList.add('modal-open');
-    else document.body.classList.remove('modal-open'); // to remove modal-open class from body
+    else document.body.classList.remove('modal-open');
   }, [modal]);
 
   const parseByDate = useCallback((patients) => {
