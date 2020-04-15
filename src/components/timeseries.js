@@ -425,7 +425,7 @@ function TimeSeries(props) {
           onClick={() => setLastDaysCount(Infinity)}
           className={lastDaysCount === Infinity ? 'selected' : ''}
         >
-          All
+          Beginning
         </button>
         <button
           type="button"
@@ -433,7 +433,7 @@ function TimeSeries(props) {
           className={lastDaysCount === 30 ? 'selected' : ''}
           aria-label="1 month"
         >
-          1M
+          1 Month
         </button>
         <button
           type="button"
@@ -441,7 +441,7 @@ function TimeSeries(props) {
           className={lastDaysCount === 14 ? 'selected' : ''}
           aria-label="14 days"
         >
-          14D
+          2 Weeks
         </button>
       </div>
     </div>
