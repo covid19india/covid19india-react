@@ -5,7 +5,7 @@ import {AnimatedSwitch} from 'react-router-transition';
 import './App.scss';
 
 import Home from './components/home';
-import Navbar from './components/navbar_new';
+import Navbar from './components/navbar';
 import Links from './components/links';
 import FAQ from './components/faq';
 import PatientDB from './components/patientdb';
