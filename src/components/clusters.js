@@ -126,6 +126,7 @@ function Clusters({stateCode}) {
         linkDirectionalParticleWidth={(link) =>
           link.source.id[0] === 'P' ? 2 : 0
         }
+        enableZoomPanInteraction={false}
       />
     );
   };
