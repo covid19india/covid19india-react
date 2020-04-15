@@ -98,7 +98,6 @@ function Home(props) {
                   ? ''
                   : formatDateAbsolute(lastUpdated)}
               </h5>
-              <Icon.RefreshCw />
               {!showUpdates && (
                 <div className="bell-icon">
                   <Icon.Bell

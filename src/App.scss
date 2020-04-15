@@ -3278,6 +3278,7 @@ select {
   align-self: center;
   width: 100%;
   margin-bottom: 1rem;
+  min-height: 22rem !important;
   .update {
     background: $gray-light;
     margin-bottom: 0.5rem;

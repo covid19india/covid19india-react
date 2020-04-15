@@ -196,32 +196,88 @@ function Search(props) {
       {expand && (
         <div className="expanded">
           <div className="expanded-left">
-            <h3>Top Resources</h3>
+            <h3>Essentials</h3>
             <div className="suggestions">
               <div className="suggestion">
                 <div>-</div>
-                <h4>DIY Face Masks</h4>
+                <h4
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    setNativeValue(searchInput.current, 'Testing Pune');
+                    searchInput.current.dispatchEvent(
+                      new Event('input', {bubbles: true})
+                    );
+                  }}
+                >
+                  Testing Pune
+                </h4>
               </div>
               <div className="suggestion">
                 <div>-</div>
-                <h4>MOFHW Tips</h4>
+                <h4
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    setNativeValue(searchInput.current, 'Delhi Shelter');
+                    searchInput.current.dispatchEvent(
+                      new Event('input', {bubbles: true})
+                    );
+                  }}
+                >
+                  Delhi Shelter
+                </h4>
               </div>
               <div className="suggestion">
                 <div>-</div>
-                <h4>Test Centers in Mumbai</h4>
+                <h4
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    setNativeValue(
+                      searchInput.current,
+                      'Community Kitchen in Kerala'
+                    );
+                    searchInput.current.dispatchEvent(
+                      new Event('input', {bubbles: true})
+                    );
+                  }}
+                >
+                  Community Kitchen in Kerala
+                </h4>
               </div>
               <div className="suggestion">
                 <div>-</div>
-                <h4>Symptoms</h4>
+                <h4
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    setNativeValue(searchInput.current, 'Groceries Anna Nagar');
+                    searchInput.current.dispatchEvent(
+                      new Event('input', {bubbles: true})
+                    );
+                  }}
+                >
+                  Groceries Chennai
+                </h4>
               </div>
               <div className="suggestion">
                 <div>-</div>
-                <h4>Dave</h4>
+                <h4
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    setNativeValue(
+                      searchInput.current,
+                      'Senior citizen support bangalore'
+                    );
+                    searchInput.current.dispatchEvent(
+                      new Event('input', {bubbles: true})
+                    );
+                  }}
+                >
+                  Senior citizen support bangalore
+                </h4>
               </div>
             </div>
           </div>
           <div className="expanded-right">
-            <h3>Highly Searched</h3>
+            <h3>Locations</h3>
             <div className="suggestions">
               <div className="suggestion">
                 <div>-</div>
@@ -239,19 +295,59 @@ function Search(props) {
               </div>
               <div className="suggestion">
                 <div>-</div>
-                <h4>Bengaluru</h4>
+                <h4
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    setNativeValue(searchInput.current, 'Karnataka');
+                    searchInput.current.dispatchEvent(
+                      new Event('input', {bubbles: true})
+                    );
+                  }}
+                >
+                  Karnataka
+                </h4>
               </div>
               <div className="suggestion">
                 <div>-</div>
-                <h4>Test Centers</h4>
+                <h4
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    setNativeValue(searchInput.current, 'Chennai');
+                    searchInput.current.dispatchEvent(
+                      new Event('input', {bubbles: true})
+                    );
+                  }}
+                >
+                  Chennai
+                </h4>
               </div>
               <div className="suggestion">
                 <div>-</div>
-                <h4>Lockdown</h4>
+                <h4
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    setNativeValue(searchInput.current, 'Jharkand');
+                    searchInput.current.dispatchEvent(
+                      new Event('input', {bubbles: true})
+                    );
+                  }}
+                >
+                  Jharkand
+                </h4>
               </div>
               <div className="suggestion">
                 <div>-</div>
-                <h4>Also Dave</h4>
+                <h4
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    setNativeValue(searchInput.current, 'Alappuzha');
+                    searchInput.current.dispatchEvent(
+                      new Event('input', {bubbles: true})
+                    );
+                  }}
+                >
+                  Alappuzha
+                </h4>
               </div>
             </div>
           </div>
