@@ -230,7 +230,7 @@ function MapExplorer({
               <h1>{formatNumber(testObj?.totaltested)}</h1>
             </div>
             <h6 className="timestamp">
-              {!isNaN(new Date(testObj?.updatedon))
+              {!isNaN(parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()))
                 ? `As of ${format(
                     parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
                     'dd MMM'
