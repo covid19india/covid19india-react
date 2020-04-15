@@ -5,7 +5,8 @@ import moment from 'moment';
 function DailyPrediction(props) {
   const dates = [];
   const confirmed = [];
-  // const recovered = [];
+  const lower = [];
+  const upper = [];
   const expected = [];
   let l = 0;
 
@@ -40,12 +41,18 @@ function DailyPrediction(props) {
       if (index <= l - 6) {
         expected.push(null);
         confirmed.push(data.mean);
+
+        lower.push(null);
+        upper.push(null);
         // recovered.push(data.totalrecovered);
         // deceased.push(data.totaldeceased);
       } else {
         // dates.push(moment(data.date.trim(), 'YY-MM-DD'));
         confirmed.push(null);
         expected.push(data.mean);
+
+        lower.push(data.lower);
+        upper.push(data.upper);
       }
     }
   });
@@ -64,11 +71,29 @@ function DailyPrediction(props) {
       },
       {
         borderWidth: 2,
+        data: upper,
+        borderCapStyle: 'round',
+        pointBackgroundColor: '#077bff',
+        label: 'Upper',
+        borderColor: '#077bff',
+        pointHoverRadius: 2,
+      },
+      {
+        borderWidth: 2,
         data: expected,
         borderCapStyle: 'round',
         pointBackgroundColor: '#ff073a',
         label: 'Expected',
         borderColor: '#ff073a',
+        pointHoverRadius: 2,
+      },
+      {
+        borderWidth: 2,
+        data: lower,
+        borderCapStyle: 'round',
+        pointBackgroundColor: '#ffa040',
+        label: 'Lower',
+        borderColor: '#ffa040',
         pointHoverRadius: 2,
       },
     ],
