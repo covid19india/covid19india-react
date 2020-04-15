@@ -38,7 +38,7 @@ function DailyPrediction(props) {
   props.predictedSeries.forEach((data, index) => {
     if (index >= 31) {
       dates.push(moment(data.date.trim(), 'YYYY-MM-DD'));
-      if (index <= l - 6) {
+      if (index <= l - 7) {
         expected.push(null);
         confirmed.push(data.mean);
 
@@ -46,6 +46,12 @@ function DailyPrediction(props) {
         upper.push(null);
         // recovered.push(data.totalrecovered);
         // deceased.push(data.totaldeceased);
+      } else if (index === l - 6) {
+        confirmed.push(data.mean);
+        expected.push(data.mean);
+
+        lower.push(data.lower);
+        upper.push(data.upper);
       } else {
         // dates.push(moment(data.date.trim(), 'YY-MM-DD'));
         confirmed.push(null);
