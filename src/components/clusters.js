@@ -4,13 +4,13 @@ import React, {useEffect, useRef, useState} from 'react';
 
 function Clusters({stateCode}) {
   const [fetched, setFetched] = useState(false);
-  const [rawData, setRawData] = useState([]);
+  const [stateRawData, setStateRawData] = useState([]);
   const [networkData, setNetworkData] = useState([]);
   const svgRef = useRef();
 
-  function prepareNetworkData(rawData, stateCode) {
+  function prepareNetworkData(data) {
     // Parse data
-    let contractedStr = rawData.reduce(
+    let contractedStr = data.reduce(
       (acc, v) => acc + v.contractedfromwhichpatientsuspected + ', ',
       ''
     );
@@ -21,28 +21,26 @@ function Clusters({stateCode}) {
     const nodes = [];
     const nodesSet = new Set();
     const links = [];
-    rawData.forEach((d) => {
-      if (!stateCode || stateCode === d.statecode) {
-        const contractedStr = d.contractedfromwhichpatientsuspected.replace(
-          /\s+/g,
-          ''
-        );
-        const contracted = contractedStr.match(/[^,]+/g);
-        if (contracted) {
-          const pid = 'P' + d.patientnumber;
-          nodesSet.add(pid);
-          nodes.push({
-            id: pid,
-            group: sources.has(pid) ? 'source' : 'target',
-            raw: d,
+    data.forEach((d) => {
+      const contractedStr = d.contractedfromwhichpatientsuspected.replace(
+        /\s+/g,
+        ''
+      );
+      const contracted = contractedStr.match(/[^,]+/g);
+      if (contracted) {
+        const pid = 'P' + d.patientnumber;
+        nodesSet.add(pid);
+        nodes.push({
+          id: pid,
+          group: sources.has(pid) ? 'source' : 'target',
+          raw: d,
+        });
+        contracted.forEach((p) => {
+          links.push({
+            source: p,
+            target: pid,
           });
-          contracted.forEach((p) => {
-            links.push({
-              source: p,
-              target: pid,
-            });
-          });
-        }
+        });
       }
     });
 
@@ -69,7 +67,9 @@ function Clusters({stateCode}) {
         const rawDataResponse = await axios.get(
           'https://api.covid19india.org/raw_data.json'
         );
-        setRawData(rawDataResponse.data.raw_data);
+        setStateRawData(
+          rawDataResponse.data.raw_data.filter((d) => d.statecode === stateCode)
+        );
         setFetched(true);
       } catch (err) {
         console.log(err);
@@ -78,11 +78,11 @@ function Clusters({stateCode}) {
     if (!fetched) {
       getData();
     }
-  }, [fetched]);
+  }, [fetched, stateCode]);
 
   useEffect(() => {
-    setNetworkData(prepareNetworkData(rawData, stateCode));
-  }, [rawData, stateCode]);
+    setNetworkData(prepareNetworkData(stateRawData));
+  }, [stateRawData]);
 
   const drag = (simulation) => {
     function dragstarted(d) {
