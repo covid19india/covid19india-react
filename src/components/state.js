@@ -177,8 +177,7 @@ function State(props) {
                   {
                     <DeltaBarGraph
                       timeseries={timeseries.slice(-5)}
-                      key1={'dailyconfirmed'}
-                      key2={'totalconfirmed'}
+                      arrayKey={'dailyconfirmed'}
                     />
                   }
                 </div>

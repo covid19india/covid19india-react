@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import * as d3 from 'd3';
 
-function DeltaBarGraph({timeseries, key1, key2}) {
+function DeltaBarGraph({timeseries, arrayKey}) {
   const [data, setData] = useState([]);
   const svgRef = useRef();
 
@@ -34,7 +34,7 @@ function DeltaBarGraph({timeseries, key1, key2}) {
         0,
         Math.max(
           1,
-          d3.max(data, (d) => d[key1])
+          d3.max(data, (d) => d[arrayKey])
         ),
       ])
       .range([chartBottom, margin.top]); // - barRadius
@@ -63,7 +63,7 @@ function DeltaBarGraph({timeseries, key1, key2}) {
           xScale(formatTime(d.date)),
           chartBottom,
           xScale.bandwidth(),
-          chartBottom - yScale(d[key1]),
+          chartBottom - yScale(d[arrayKey]),
           barRadius
         )
       )
@@ -77,18 +77,21 @@ function DeltaBarGraph({timeseries, key1, key2}) {
       .attr('text-anchor', 'middle')
       .attr('font-size', '11px')
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
-      .attr('y', (d) => yScale(d[key1]) - 6)
-      .text((d) => d[key1])
+      .attr('y', (d) => yScale(d[arrayKey]) - 6)
+      .text((d) => d[arrayKey])
       .append('tspan')
       .attr('class', 'percent')
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
       .attr('dy', '-1.2em')
       .text((d, i) =>
-        i && data[i - 1][key2]
-          ? d3.format('+.1%')(data[i][key1] / data[i - 1][key2])
+        i && data[i - 1][arrayKey]
+          ? d3.format('+.1%')(
+              (data[i][arrayKey] - data[i - 1][arrayKey]) /
+                data[i - 1][arrayKey]
+            )
           : ''
       );
-  }, [data, key1, key2]);
+  }, [data, arrayKey]);
 
   return (
     <div className="DeltaBarGraph fadeInUp" style={{animationDelay: '0.8s'}}>
