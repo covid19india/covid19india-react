@@ -2487,6 +2487,35 @@ footer {
   margin-left: auto;
   margin-right: auto;
 
+  .select{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+  
+    select {
+      appearance: none;
+      background-color: #eee;
+      background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
+        linear-gradient(135deg, #808080 50%, transparent 50%);
+      background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+      border: 2px solid #e8e8e9;
+      border-radius: 4px;
+      font-family: 'archia';
+      font-weight: 900;
+      margin: 0.2rem 0.1rem;
+      padding: 0.5rem;
+      text-transform: uppercase;
+      width: 130px;
+      color: $gray;
+      cursor: pointer;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
   .reminder {
     align-self: center !important;
     font-family: 'archia';
@@ -3155,17 +3184,11 @@ body.modal-open {
   }
 }
 
-select {
-  width: 7rem;
-  margin-right: 0.25rem;
-  cursor: pointer;
-}
-
 .filters {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  padding: 1rem;
+  padding: 0.5rem;
   background: #fff !important;
   z-index: 101;
   font-family: archia;
@@ -3774,8 +3797,9 @@ select {
     }
 
     .filters {
-      height: 7rem;
+      height: auto;
       justify-content: center;
+      padding: 0.2rem;
     }
   }
 
@@ -3806,11 +3830,6 @@ select {
       justify-content: center;
       width: 100%;
     }
-  }
-
-  select {
-    margin-left: 2px;
-    margin-right: 2px;
   }
 
   &.nationality {
