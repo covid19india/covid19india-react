@@ -138,6 +138,7 @@ function State(props) {
                   states={[stateData]}
                   stateDistrictWiseData={districtData}
                   stateTestData={testData}
+                  isCountryLoaded={false}
                 />
               }
             </React.Fragment>

@@ -17,6 +17,7 @@ function ChoroplethMap({
   changeMap,
   selectedRegion,
   setSelectedRegion,
+  isCountryLoaded,
 }) {
   const choroplethMap = useRef(null);
   const choroplethLegend = useRef(null);
@@ -41,11 +42,11 @@ function ChoroplethMap({
       let height;
       if (!svg.attr('viewBox')) {
         const widthStyle = parseInt(svg.style('width'));
-        // Hack to fix height on state pages
-        if (mapMeta.mapType === MAP_TYPES.STATE) {
+        if (isCountryLoaded) projection.fitWidth(widthStyle, topology);
+        else {
           const heightStyle = parseInt(svg.style('height'));
           projection.fitSize([widthStyle, heightStyle], topology);
-        } else projection.fitWidth(widthStyle, topology);
+        }
         path = d3.geoPath(projection);
         const bBox = path.bounds(topology);
         width = +bBox[1][0];
@@ -111,7 +112,6 @@ function ChoroplethMap({
           handleMouseover(d.properties[propertyField]);
         })
         .on('mouseleave', (d) => {
-          setSelectedRegion(null);
           if (onceTouchedRegion === d) onceTouchedRegion = null;
         })
         .on('touchstart', (d) => {
@@ -159,6 +159,7 @@ function ChoroplethMap({
 
       // Reset on tapping outside map
       svg.on('click', () => {
+        setSelectedRegion(null);
         if (mapMeta.mapType === MAP_TYPES.COUNTRY)
           setHoveredRegion('Total', mapMeta);
       });
@@ -171,6 +172,7 @@ function ChoroplethMap({
       changeMap,
       setHoveredRegion,
       setSelectedRegion,
+      isCountryLoaded,
     ]
   );
 
