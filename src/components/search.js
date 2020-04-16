@@ -117,12 +117,11 @@ function Search(props) {
 
   return (
     <div className="Search">
-      <label>Search your city, resources, etc</label>
-      <div className="line"></div>
       <input
         type="text"
         value={searchValue}
         ref={searchInput}
+        placeholder={'Search your city, resources, etc.'}
         onFocus={(event) => {
           setExpand(true);
         }}
