@@ -384,11 +384,14 @@ function MapExplorer({
 
   function getCurrentDate() {
     const date = new Date();
-    let getMonth = String(date.getMonth() + 1);
-    if (getMonth.length === 1) {
-      getMonth = '0' + getMonth;
-    }
-    const dateComp = date.getDate() + '/' + getMonth + '/' + date.getFullYear();
+    const getMonth = String(date.getMonth() + 1);
+
+    const dateComp =
+      date.getDate() +
+      '/' +
+      getMonth.padStart(2, '0') +
+      '/' +
+      date.getFullYear();
     return dateComp;
   }
 
