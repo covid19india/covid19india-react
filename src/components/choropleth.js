@@ -51,13 +51,12 @@ function ChoroplethMap({
         width = +bBox[1][0];
         height = +bBox[1][1];
         svg.attr('viewBox', `0 0 ${width} ${height}`);
-      } else {
-        const bBox = svg.attr('viewBox').split(' ');
-        width = +bBox[2];
-        height = +bBox[3];
-        projection.fitSize([width, height], topology);
-        path = d3.geoPath(projection);
       }
+      const bBox = svg.attr('viewBox').split(' ');
+      width = +bBox[2];
+      height = +bBox[3];
+      projection.fitSize([width, height], topology);
+      path = d3.geoPath(projection);
 
       /* LEGEND */
       const domainMax = Math.max(3, statistic.maxConfirmed);
@@ -153,10 +152,16 @@ function ChoroplethMap({
       };
 
       function handleClick(d) {
-        if (onceTouchedRegion) return;
-        if (mapMeta.mapType === MAP_TYPES.STATE) return;
+        d3.event.stopPropagation();
+        if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE) return;
         changeMap(d.properties[propertyField]);
       }
+
+      // Reset on tapping outside map
+      svg.on('click', () => {
+        if (mapMeta.mapType === MAP_TYPES.COUNTRY)
+          setHoveredRegion('Total', mapMeta);
+      });
     },
     [
       mapData,
