@@ -208,6 +208,9 @@ h6 {
   justify-content: space-between;
   height: 3.9rem;
   margin-bottom: 1rem;
+  z-index: 9999;
+  position: relative;
+  
   & > * {
     align-self: center;
   }
@@ -3496,6 +3499,11 @@ select {
 }
 
 @media(max-width: 400px){
+
+  .Almighty-Router {
+    position: relative;
+  }
+
   .PatientsDB .modal .modal-content .meta {
     height: 25rem !important;
   }
