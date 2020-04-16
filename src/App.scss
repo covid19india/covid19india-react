@@ -1764,8 +1764,8 @@ table {
   .map-stats {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     width: 100%;
-    height: 5rem;
     position: relative;
     margin-bottom: 1rem;
 
@@ -1784,7 +1784,7 @@ table {
     .stats {
       background: $cherry-light;
       position: relative;
-      color: $cherry;
+      color: $cherry-mid;
       border-radius: 5px;
       display: flex;
       flex-direction: column;
@@ -1806,6 +1806,8 @@ table {
 
       h1 {
         font-weight: 600;
+        font-size: 1em !important;
+        color: $cherry;
       }
 
       &.is-green {
@@ -2287,10 +2289,6 @@ input.switch:checked::after {
       align-self: center;
       stroke: $orange;
     }
-  }
-
-  @media screen and (min-width: 1200px) {
-    display: none !important;
   }
 }
 
