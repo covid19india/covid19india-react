@@ -27,6 +27,10 @@ function Navbar({pages}) {
       document.getElementById('backdrop').style.display = expand
         ? 'block'
         : 'none';
+      const backdrop = document.getElementById('backdrop');
+      expand
+        ? backdrop.classList.add('backdrop-open')
+        : backdrop.classList.remove('backdrop-open');
     }
   }, [expand]);
   return (

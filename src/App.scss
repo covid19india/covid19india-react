@@ -3571,6 +3571,12 @@ select {
       cursor: pointer;
     }
 
+    .backdrop-open{
+      animation-name: fadeInUp;
+      animation-duration: 0.4s;
+      animation-timing-function: cubic-bezier(0.25, .8, .25, 1);
+    }
+
     .navbar-left {
       order: 3;
       margin-top: auto;
@@ -3603,7 +3609,7 @@ select {
 
     .expand {
       flex-direction: column;
-      width: 10rem;
+      width: 15rem;
       left: 5rem;
       top: 0;
       background: $gray-light-opaque;
@@ -3613,7 +3619,7 @@ select {
         height: 1.5rem;
         border: 0;
         border-left: 1px solid $gray-light;
-        width: 7rem;
+        width: 12rem;
         color: $gray;
         font-weight: 600;
       }
