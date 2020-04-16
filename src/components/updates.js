@@ -4,17 +4,25 @@ import axios from 'axios';
 
 function Updates(props) {
   const [updates, setUpdates] = useState([]);
+  const [fetched, setFetched] = useState(false);
 
   useEffect(() => {
-    axios
-      .get('https://api.covid19india.org/updatelog/log.json')
-      .then((response) => {
-        setUpdates(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
+    if (fetched === false) {
+      getStates();
+    }
+  }, [fetched]);
+
+  const getStates = async () => {
+    try {
+      const [response] = await Promise.all([
+        axios.get('https://api.covid19india.org/updatelog/log.json'),
+      ]);
+      setUpdates(response.data);
+      setFetched(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <React.Fragment>
