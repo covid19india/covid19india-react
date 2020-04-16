@@ -748,6 +748,7 @@ h6 {
   display: flex;
   flex-direction: column;
   width: 80%;
+  max-width: 1480px;
   margin-bottom: 1rem;
   .filtertitle {
     align-self: center;
@@ -765,7 +766,8 @@ h6 {
   justify-content: center;
   align-items: center;
   .button {
-    padding: 0.4rem;
+    padding: 0.6rem;
+	  margin: 0;
   }
 }
 
@@ -794,13 +796,19 @@ h6 {
 
 }
 
+.searchbar-desktop {
+  width: 80%;
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
 .searchbar {
   font-family: 'archia';
   font-size: 0.7rem !important;
   font-weight: 400;
   text-align: center;
-  margin-top: 0.2rem;
-  margin-bottom: 0.1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
   width: 100%;
 
   .react-autosuggest__input {

@@ -22,23 +22,44 @@ const usePanelSummaryStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: '#201aa220',
     height: '4rem',
+    borderRadius: '5px',
+    transition: 'border-radius  300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+
+    // Style when Expanded
+    '&.Mui-expanded': {
+      borderRadius: '5px 5px 0 0',
+    },
   },
 }));
 const usePanelDetailsStyles = makeStyles((theme) => ({
   root: {
-    padding: '0px 5px 0px 24px',
+    padding: '0 1rem',
+    border: '1px #201aa220 solid',
+    borderRadius: '0 0 5px 5px',
   },
 }));
 const useListStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
+    '& li:last-child': {
+      border: 'none',
+    },
   },
 }));
 
 const usePanelStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
-    marginBottom: '0.2rem',
+    margin: '0 0 0.2rem 0',
+    boxShadow: 'none',
+
+    '&:before': {
+      backgroundColor: 'inherit',
+    },
+    // Style when Expanded
+    '&.Mui-expanded': {
+      margin: '0.2rem 0 1rem 0',
+    },
   },
 }));
 const useItemTextStyles = makeStyles((theme) => ({
@@ -350,7 +371,7 @@ function ResourceTable({
   // Render the UI for your table
   if (isDesktop === true)
     return (
-      <>
+      <div className="searchbar-desktop">
         <div className="searchbar">
           <Autosuggest
             suggestions={suggestions}
@@ -407,11 +428,11 @@ function ResourceTable({
             </table>
           </InfiniteScroll>
         </div>
-      </>
+      </div>
     );
   else
     return (
-      <>
+      <div className="searchbar-mobile">
         <div className="searchbar">
           <Autosuggest
             suggestions={suggestions}
@@ -491,10 +512,12 @@ function ResourceTable({
                         alignItems="flex-start"
                         dense={true}
                         divider={true}
+                        disableGutters
                       >
                         <ListItemText
                           primary="Organisation Name"
                           secondary={row.values['nameoftheorganisation']}
+                          disableGutters
                           classes={{
                             primary: classesListItemText.primary,
                             secondary: classesListItemText.secondary,
@@ -505,10 +528,12 @@ function ResourceTable({
                         alignItems="flex-start"
                         dense={true}
                         divider={true}
+                        disableGutters
                       >
                         <ListItemText
                           primary="Location"
                           secondary={row.values['city']}
+                          disableGutters
                           classes={{
                             primary: classesListItemText.primary,
                             secondary: classesListItemText.secondary,
@@ -519,9 +544,11 @@ function ResourceTable({
                         alignItems="flex-start"
                         dense={true}
                         divider={true}
+                        disableGutters
                       >
                         <ListItemText
                           primary="Description"
+                          disableGutters
                           secondary={
                             row.values['descriptionandorserviceprovided']
                           }
@@ -535,10 +562,12 @@ function ResourceTable({
                         alignItems="flex-start"
                         dense={true}
                         divider={true}
+                        disableGutters
                       >
                         <ListItemText
                           primary="Service"
                           secondary={row.values['category']}
+                          disableGutters
                           classes={{
                             primary: classesListItemText.primary,
                             secondary: classesListItemText.secondary,
@@ -549,9 +578,11 @@ function ResourceTable({
                         alignItems="flex-start"
                         dense={true}
                         divider={true}
+                        disableGutters
                       >
                         <ListItemText
                           primary="Phonenumber"
+                          disableGutters
                           secondary={getFormattedLinkForAccordion(
                             row.values['phonenumber']
                           )}
@@ -565,6 +596,7 @@ function ResourceTable({
                         alignItems="flex-start"
                         dense={true}
                         divider={true}
+                        disableGutters
                       >
                         <ListItemText
                           primary="Website"
@@ -584,7 +616,7 @@ function ResourceTable({
             })}
           </InfiniteScroll>
         </div>
-      </>
+      </div>
     );
 }
 
