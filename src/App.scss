@@ -3502,7 +3502,7 @@ select {
 }
 
 .cards-container {
-  padding: 4rem;
+  padding: 2rem;
   .cards {
     display: flex;
     justify-content: space-between;
@@ -3510,9 +3510,13 @@ select {
     .card {
       margin-bottom: 2em;
       flex: 0 1 calc(33% - 1em);
-      box-shadow: rgba(#000, 0.2) 0 0 8px 0;
+      border-radius: 5px;
+      box-shadow: 0 2px 1px -1px rgba(0,0,0,0.2),
+                  0 1px 1px 0 rgba(0,0,0,0.14),
+                  0 1px 3px 0 rgba(0,0,0,0.12);
       &:hover {
-        box-shadow: rgba(#000, 0.3) 0 0 8px 0;
+        box-shadow:  8px 8px 20px #ededed, 
+             -8px -8px 57px #fff;
       }
       height: 30rem;
         .charts-header {
@@ -3607,7 +3611,8 @@ select {
     }
   }
 
-  .PatientsDB {
+  .PatientsDB,
+  #deep-dive-charts {
     margin-left: 5rem;
   }
 }

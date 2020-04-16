@@ -40,7 +40,7 @@ function DeepDive(props) {
   };
 
   return (
-    <div className="cards-container">
+    <div className="cards-container" id="deep-dive-charts">
       <section className="cards">
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
           <TotalConfirmedChart
