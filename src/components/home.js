@@ -1,21 +1,23 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import axios from 'axios';
-import {formatDistance, format} from 'date-fns';
-import * as Icon from 'react-feather';
 
+import {MAP_META} from '../constants';
 import {
   formatDate,
   formatDateAbsolute,
   preprocessTimeseries,
   parseStateTimeseries,
 } from '../utils/common-functions';
-import {Link} from 'react-router-dom';
+import * as Icon from 'react-feather';
 
 import Table from './table';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
+import Updates from './updates';
+import Search from './search';
+import Footer from './footer';
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -26,10 +28,10 @@ function Home(props) {
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState({});
   const [activeStateCode, setActiveStateCode] = useState('TT'); // TT -> India
-  const [activityLog, setActivityLog] = useState([]);
   const [timeseriesMode, setTimeseriesMode] = useState(true);
   const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
+  const [showUpdates, setShowUpdates] = useState(false);
 
   useEffect(() => {
     if (fetched === false) {
@@ -43,13 +45,11 @@ function Home(props) {
         response,
         stateDistrictWiseResponse,
         {data: statesDailyResponse},
-        updateLogResponse,
         stateTestResponse,
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
         axios.get('https://api.covid19india.org/states_daily.json'),
-        axios.get('https://api.covid19india.org/updatelog/log.json'),
         axios.get('https://api.covid19india.org/state_test_data.json'),
       ]);
       setStates(response.data.statewise);
@@ -59,7 +59,6 @@ function Home(props) {
       setLastUpdated(response.data.statewise[0].lastupdatedtime);
       setStateTestData(stateTestResponse.data.states_tested_data.reverse());
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
-      setActivityLog(updateLogResponse.data);
       setFetched(true);
     } catch (err) {
       console.log(err);
@@ -92,31 +91,36 @@ function Home(props) {
       <div className="Home">
         <div className="home-left">
           <div className="header fadeInUp" style={{animationDelay: '1s'}}>
-            <div className="header-mid">
-              <div className="titles">
-                <h1>India COVID-19 Tracker</h1>
-                <h6 style={{fontWeight: 600}}>A Crowdsourced Initiative</h6>
-              </div>
-              <div className="last-update">
-                <h6>Last Updated</h6>
-                <h6 style={{color: '#28a745', fontWeight: 600}}>
-                  {isNaN(Date.parse(formatDate(lastUpdated)))
-                    ? ''
-                    : formatDistance(
-                        new Date(formatDate(lastUpdated)),
-                        new Date()
-                      ) + ' Ago'}
-                </h6>
-                <h6 style={{color: '#28a745', fontWeight: 600}}>
-                  {isNaN(Date.parse(formatDate(lastUpdated)))
-                    ? ''
-                    : formatDateAbsolute(lastUpdated)}
-                </h6>
-              </div>
+            <Search />
+            <div className="actions">
+              <h5>
+                {isNaN(Date.parse(formatDate(lastUpdated)))
+                  ? ''
+                  : formatDateAbsolute(lastUpdated)}
+              </h5>
+              {!showUpdates && (
+                <div className="bell-icon">
+                  <Icon.Bell
+                    onClick={() => {
+                      setShowUpdates(!showUpdates);
+                    }}
+                  />
+                  <div className="indicator"></div>
+                </div>
+              )}
+              {showUpdates && (
+                <Icon.BellOff
+                  onClick={() => {
+                    setShowUpdates(!showUpdates);
+                  }}
+                />
+              )}
             </div>
           </div>
 
-          {states.length > 1 && <Level data={states} />}
+          {showUpdates && <Updates />}
+
+          {states.length ? <Level data={states[0]} /> : ''}
           {fetched && <Minigraph timeseries={timeseries['TT']} />}
           {fetched && (
             <Table
@@ -135,6 +139,7 @@ function Home(props) {
             <React.Fragment>
               <MapExplorer
                 forwardRef={refs[1]}
+                mapMeta={MAP_META.India}
                 states={states}
                 stateDistrictWiseData={stateDistrictWiseData}
                 stateTestData={stateTestData}
@@ -168,7 +173,7 @@ function Home(props) {
                 </div>
 
                 <div className="scale-modes">
-                  <label>Scale Modes</label>
+                  <label className="main">Scale Modes</label>
                   <div className="timeseries-mode">
                     <label htmlFor="timeseries-mode">Uniform</label>
                     <input
@@ -229,110 +234,8 @@ function Home(props) {
             </React.Fragment>
           )}
         </div>
-
-        {/* <div className="floating-buttons">
-          <button
-            className="table-nav fadeInUp"
-            onClick={scrollHandlers[0]}
-            style={{animationDelay: '2.2s'}}
-          >
-            <Icon.Grid />
-          </button>
-          <button
-            className="map-nav fadeInUp"
-            onClick={scrollHandlers[1]}
-            style={{animationDelay: '2.1s'}}
-          >
-            <Icon.MapPin />
-          </button>
-          <button
-            className="trends-nav fadeInUp"
-            onClick={scrollHandlers[2]}
-            style={{animationDelay: '2s'}}
-          >
-            <Icon.TrendingUp />
-          </button>
-        </div> */}
-
-        {/* <div className="home-left">
-        {patients.length > 1 && (
-          <div className="patients-summary">
-            <h1>Recent Cases</h1>
-            <h6>A summary of the latest reported cases</h6>
-            <div className="legend">
-              <div className="legend-left">
-                <div className="circle is-female"></div>
-                <h5 className="is-female">Female</h5>
-                <div className="circle is-male"></div>
-                <h5 className="is-male">Male</h5>
-                <div className="circle"></div>
-                <h5 className="">Unknown</h5>
-              </div>
-            </div>
-            <div className="patients-summary-wrapper">
-              <Patients
-                patients={patients}
-                summary={true}
-                colorMode={'genders'}
-                expand={true}
-              />
-            </div>
-            <button className="button">
-              <Link to="/database">
-                <Icon.Database />
-                <span>View the Patients Database</span>
-              </Link>
-            </button>
-          </div>
-        )}
       </div>
-      <div className="home-right"></div>
-    */}
-      </div>
-
-      <div className="Home">
-        <div className="home-left">
-          <div
-            className="updates-header fadeInUp"
-            style={{animationDelay: '1.5s'}}
-          >
-            <h1>Updates</h1>
-            <h2>{format(new Date(), 'd MMM')}</h2>
-          </div>
-
-          <div className="updates fadeInUp" style={{animationDelay: '1.7s'}}>
-            {activityLog
-              .slice(-5)
-              .reverse()
-              .map(function (activity, index) {
-                activity.update = activity.update.replace(/\n/g, '<br/>');
-                return (
-                  <div key={index} className="update">
-                    <h5>
-                      {formatDistance(
-                        new Date(activity.timestamp * 1000),
-                        new Date()
-                      ) + ' Ago'}
-                    </h5>
-                    <h4
-                      dangerouslySetInnerHTML={{
-                        __html: activity.update,
-                      }}
-                    ></h4>
-                  </div>
-                );
-              })}
-            <button className="button">
-              <Link to="/demographics">
-                <Icon.Database />
-                <span>Demographic Overview</span>
-              </Link>
-            </button>
-          </div>
-        </div>
-
-        <div className="home-right"></div>
-      </div>
+      <Footer />
     </React.Fragment>
   );
 }

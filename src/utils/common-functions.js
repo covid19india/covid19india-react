@@ -1,4 +1,5 @@
 import moment from 'moment';
+import {STATE_CODES} from '../constants';
 
 const months = {
   '01': 'Jan',
@@ -15,48 +16,8 @@ const months = {
   '12': 'Dec',
 };
 
-const stateCodes = {
-  AP: 'Andhra Pradesh',
-  AR: 'Arunachal Pradesh',
-  AS: 'Assam',
-  BR: 'Bihar',
-  CT: 'Chhattisgarh',
-  GA: 'Goa',
-  GJ: 'Gujarat',
-  HR: 'Haryana',
-  HP: 'Himachal Pradesh',
-  JH: 'Jharkhand',
-  KA: 'Karnataka',
-  KL: 'Kerala',
-  MP: 'Madhya Pradesh',
-  MH: 'Maharashtra',
-  MN: 'Manipur',
-  ML: 'Meghalaya',
-  MZ: 'Mizoram',
-  NL: 'Nagaland',
-  OR: 'Odisha',
-  PB: 'Punjab',
-  RJ: 'Rajasthan',
-  SK: 'Sikkim',
-  TN: 'Tamil Nadu',
-  TG: 'Telangana',
-  TR: 'Tripura',
-  UT: 'Uttarakhand',
-  UP: 'Uttar Pradesh',
-  WB: 'West Bengal',
-  AN: 'Andaman and Nicobar Islands',
-  CH: 'Chandigarh',
-  DN: 'Dadra and Nagar Haveli',
-  DD: 'Daman and Diu',
-  DL: 'Delhi',
-  JK: 'Jammu and Kashmir',
-  LA: 'Ladakh',
-  LD: 'Lakshadweep',
-  PY: 'Puducherry',
-};
-
 export const getStateName = (code) => {
-  return stateCodes[code.toUpperCase()];
+  return STATE_CODES[code.toUpperCase()];
 };
 
 export const formatDate = (unformattedDate) => {
@@ -123,7 +84,7 @@ export const formatNumber = (value) => {
 };
 
 export const parseStateTimeseries = ({states_daily: data}) => {
-  const statewiseSeries = Object.keys(stateCodes).reduce((a, c) => {
+  const statewiseSeries = Object.keys(STATE_CODES).reduce((a, c) => {
     a[c] = [];
     return a;
   }, {});
