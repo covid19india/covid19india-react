@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 
 const navLinkProps = (path, animationDelay) => ({
@@ -10,7 +10,10 @@ const navLinkProps = (path, animationDelay) => ({
 
 function Navbar({pages}) {
   const [expand, setExpand] = useState(false);
-
+  useEffect(() => {
+    if (expand) document.body.classList.add('modal-open');
+    else document.body.classList.remove('modal-open'); // to remove modal-open class from body
+  }, [expand]);
   return (
     <div
       className="Navbar"
