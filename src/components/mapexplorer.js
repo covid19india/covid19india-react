@@ -254,7 +254,7 @@ function MapExplorer({
                 : 'state-last-update'
             }`}
           >
-            <h6>Last Updated</h6>
+            <h6>Last updated</h6>
             <h3
               title={
                 isNaN(Date.parse(formatDate(lastupdatedtime)))
