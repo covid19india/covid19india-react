@@ -1308,6 +1308,7 @@ h6 {
   .level-item {
     display: flex;
     flex-direction: column;
+    padding: 0 0.1rem;
 
     & > * {
       align-self: center;
@@ -1761,9 +1762,10 @@ table {
 
   .map-stats {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     width: 100%;
-    height: 5rem;
+    // height: 5rem;
     position: relative;
     margin-bottom: 1rem;
 
@@ -3705,8 +3707,21 @@ select {
   }
 
   table {
+    table-layout: fixed;
+    tbody {
+      td {
+        font-size: 0.8rem;
+      }
+    }
+
     td {
       max-width: 6.75rem;
+    }
+  }
+
+  .Level {
+    .level-item {
+      margin: 0 !important;
     }
   }
 
