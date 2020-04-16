@@ -70,12 +70,10 @@ function PatientDB(props) {
             district.classList.add('hidden');
           }
         }
-        else {
-          if (district.classList.contains('hidden')) {
+        else if (district.classList.contains('hidden')) {
             district.classList.add('transition');
             const width = district.clientWidth;
             district.classList.remove('hidden');
-          }
         }
         district.addEventListener('transitionend', function () {
           district.classList.remove('transition');
@@ -103,12 +101,10 @@ function PatientDB(props) {
             city.classList.add('hidden');
           }
         }
-        else {
-          if (city.classList.contains('hidden')) {
+        else if (city.classList.contains('hidden')) {
             city.classList.add('transition');
             const width = city.clientWidth;
             city.classList.remove('hidden');
-          }
         }
         city.addEventListener('transitionend', function () {
           city.classList.remove('transition');

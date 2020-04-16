@@ -2653,11 +2653,6 @@ select {
   .legend-left {
     display: flex;
     flex-direction: row;
-    &:after {
-    animation: fadein 2s;
-      -webkit-animation-fill-mode: forwards;
-  animation-fill-mode: forwards;
-  }
   }
 
   select {
