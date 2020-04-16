@@ -24,9 +24,6 @@ function Navbar({pages}) {
     // stop scrolling when navbar is opened.
     else document.body.classList.remove('modal-open');
     if (window.innerWidth > 769) {
-      document.getElementById('backdrop').style.display = expand
-        ? 'block'
-        : 'none';
       const backdrop = document.getElementById('backdrop');
       expand
         ? backdrop.classList.add('backdrop-open')
