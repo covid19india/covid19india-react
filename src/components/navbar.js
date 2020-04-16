@@ -11,16 +11,30 @@ const navLinkProps = (path, animationDelay) => ({
 function Navbar({pages}) {
   const [expand, setExpand] = useState(false);
 
+  // When the user clicks anywhere outside of the modal, close modal
+  window.onclick = function (event) {
+    const backdrop = document.getElementById('backdrop');
+    if (event.target === backdrop) {
+      setExpand(false);
+    }
+  };
+
   useEffect(() => {
     if (expand) document.body.classList.add('modal-open');
     // stop scrolling when navbar is opened.
     else document.body.classList.remove('modal-open');
+    if (window.innerWidth > 769) {
+      document.getElementById('backdrop').style.display = expand
+        ? 'block'
+        : 'none';
+    }
   }, [expand]);
   return (
     <div
       className="Navbar"
       style={{width: window.innerWidth > 769 && expand ? '6rem' : ''}}
     >
+      <div className="backdrop" id="backdrop"></div>
       <div className="navbar-left">English</div>
       <div className="navbar-middle">
         <Link to="/">

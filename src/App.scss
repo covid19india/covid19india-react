@@ -3558,6 +3558,19 @@ select {
     height: 100%;
     justify-content: flex-start;
     z-index: 99999;
+
+    .backdrop {
+      position: fixed;
+      display: none;
+      top: 0;
+      left: 112px;
+      height: 100%;
+      width: 100%;
+      background: $pblue-mid;
+      z-index: 1000;
+      cursor: pointer;
+    }
+
     .navbar-left {
       order: 3;
       margin-top: auto;
