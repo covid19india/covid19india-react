@@ -145,6 +145,7 @@ function Home(props) {
                 stateTestData={stateTestData}
                 regionHighlighted={regionHighlighted}
                 onMapHighlightChange={onMapHighlightChange}
+                isCountryLoaded={true}
               />
 
               <div
