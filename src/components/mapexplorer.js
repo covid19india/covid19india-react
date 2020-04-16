@@ -269,7 +269,7 @@ function MapExplorer({
                 : formatDistance(
                     new Date(formatDate(lastupdatedtime)),
                     new Date()
-                  ) + ' Ago'}
+                  ) + ' ago'}
             </h3>
           </div>
         )}

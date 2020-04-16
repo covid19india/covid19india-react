@@ -34,7 +34,7 @@ function Updates(props) {
                   {formatDistance(
                     new Date(activity.timestamp * 1000),
                     new Date()
-                  ) + ' Ago'}
+                  ) + ' ago'}
                 </h5>
                 <h4
                   dangerouslySetInnerHTML={{
