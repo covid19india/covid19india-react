@@ -1,3 +1,7 @@
+import moment from 'moment';
+import {STATE_CODES} from '../constants';
+import {format as d3format} from 'd3';
+
 const months = {
   '01': 'Jan',
   '02': 'Feb',
@@ -13,48 +17,8 @@ const months = {
   '12': 'Dec',
 };
 
-const stateCodes = {
-  AP: 'Andhra Pradesh',
-  AR: 'Arunachal Pradesh',
-  AS: 'Assam',
-  BR: 'Bihar',
-  CT: 'Chhattisgarh',
-  GA: 'Goa',
-  GJ: 'Gujarat',
-  HR: 'Haryana',
-  HP: 'Himachal Pradesh',
-  JH: 'Jharkhand',
-  KA: 'Karnataka',
-  KL: 'Kerala',
-  MP: 'Madhya Pradesh',
-  MH: 'Maharashtra',
-  MN: 'Manipur',
-  ML: 'Meghalaya',
-  MZ: 'Mizoram',
-  NL: 'Nagaland',
-  OR: 'Odisha',
-  PB: 'Punjab',
-  RJ: 'Rajasthan',
-  SK: 'Sikkim',
-  TN: 'Tamil Nadu',
-  TG: 'Telangana',
-  TR: 'Tripura',
-  UT: 'Uttarakhand',
-  UP: 'Uttar Pradesh',
-  WB: 'West Bengal',
-  AN: 'Andaman and Nicobar Islands',
-  CH: 'Chandigarh',
-  DB: 'Dadra and Nagar Haveli',
-  DD: 'Daman and Diu',
-  DL: 'Delhi',
-  JK: 'Jammu and Kashmir',
-  LA: 'Ladakh',
-  LD: 'Lakshadweep',
-  PY: 'Puducherry',
-};
-
 export const getStateName = (code) => {
-  return stateCodes[code.toUpperCase()];
+  return STATE_CODES[code.toUpperCase()];
 };
 
 export const formatDate = (unformattedDate) => {
@@ -72,7 +36,7 @@ export const formatDateAbsolute = (unformattedDate) => {
   return `${day} ${months[month]}, ${time.slice(0, 5)} IST`;
 };
 
-export const validateCTS = (data = []) => {
+const validateCTS = (data = []) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const dataTypes = [
@@ -93,7 +57,7 @@ export const validateCTS = (data = []) => {
 };
 
 export const preprocessTimeseries = (timeseries) => {
-  return timeseries.map((stat) => ({
+  return validateCTS(timeseries).map((stat) => ({
     date: new Date(stat.date + ' 2020'),
     totalconfirmed: +stat.totalconfirmed,
     totalrecovered: +stat.totalrecovered,
@@ -112,5 +76,44 @@ export const preprocessTimeseries = (timeseries) => {
  * @return {Array<Object>}
  */
 export function sliceTimeseriesFromEnd(timeseries, days) {
-  return timeseries.slice(timeseries.length - days);
+  return timeseries.slice(-days);
 }
+
+export const formatNumber = (value, shrinkNumbers) => {
+  const numberFormatter = new Intl.NumberFormat('en-IN');
+  return isNaN(value)
+    ? '-'
+    : shrinkNumbers
+    ? d3format('.1~s')(value)
+    : numberFormatter.format(value);
+};
+
+export const parseStateTimeseries = ({states_daily: data}) => {
+  const statewiseSeries = Object.keys(STATE_CODES).reduce((a, c) => {
+    a[c] = [];
+    return a;
+  }, {});
+
+  const today = moment();
+  for (let i = 0; i < data.length; i += 3) {
+    const date = moment(data[i].date, 'DD-MMM-YY');
+    // Skip data from the current day
+    if (date.isBefore(today, 'Date')) {
+      Object.entries(statewiseSeries).forEach(([k, v]) => {
+        const stateCode = k.toLowerCase();
+        const prev = v[v.length - 1] || {};
+        v.push({
+          date: date.toDate(),
+          dailyconfirmed: +data[i][stateCode] || 0,
+          dailyrecovered: +data[i + 1][stateCode] || 0,
+          dailydeceased: +data[i + 2][stateCode] || 0,
+          totalconfirmed: +data[i][stateCode] + (prev.totalconfirmed || 0),
+          totalrecovered: +data[i + 1][stateCode] + (prev.totalrecovered || 0),
+          totaldeceased: +data[i + 2][stateCode] + (prev.totaldeceased || 0),
+        });
+      });
+    }
+  }
+
+  return statewiseSeries;
+};

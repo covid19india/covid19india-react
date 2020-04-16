@@ -21,7 +21,7 @@ function AgeChart(props) {
 
   defaults.global.hover.intersect = false;
 
-  const ages = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  const ages = Array(10).fill(0);
   let unknown = 0;
   if (!props.data || props.data.length === 0) {
     return <div></div>;
@@ -30,35 +30,10 @@ function AgeChart(props) {
   props.data.forEach((patient) => {
     if (patient.agebracket) {
       const age = parseInt(patient.agebracket);
-      if (age >= 0 && age <= 10) {
-        ages[0]++;
-      }
-      if (age > 10 && age <= 20) {
-        ages[1]++;
-      }
-      if (age > 20 && age <= 30) {
-        ages[2]++;
-      }
-      if (age > 30 && age <= 40) {
-        ages[3]++;
-      }
-      if (age > 40 && age <= 50) {
-        ages[4]++;
-      }
-      if (age > 50 && age <= 60) {
-        ages[5]++;
-      }
-      if (age > 60 && age <= 70) {
-        ages[6]++;
-      }
-      if (age > 70 && age <= 80) {
-        ages[7]++;
-      }
-      if (age > 80 && age <= 90) {
-        ages[8]++;
-      }
-      if (age > 90 && age <= 100) {
-        ages[9]++;
+      for (let i = 0; i < 10; i++) {
+        if (age > i * 10 && age <= (i + 1) * 10) {
+          ages[i]++;
+        }
       }
     } else {
       unknown++;
