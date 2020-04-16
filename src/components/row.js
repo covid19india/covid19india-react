@@ -6,7 +6,6 @@ import {
   formatNumber,
 } from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
-import {Link} from 'react-router-dom';
 
 function Row(props) {
   const [state, setState] = useState(props.state);
@@ -92,7 +91,7 @@ function Row(props) {
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
         /* onTouchStart={() => props.onHighlightState?.(state, props.index)}*/
-        onClick={!props.total ? handleReveal : null}
+        /* onClick={!props.total ? handleReveal : null}*/
         style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
       >
         <td style={{fontWeight: 600}}>
@@ -109,11 +108,6 @@ function Row(props) {
               <Icon.ChevronDown />
             </span>
             {state.state}
-            {state.state === 'West Bengal' && (
-              <Link to="/faq">
-                <Icon.HelpCircle className="height-22" />
-              </Link>
-            )}
           </div>
         </td>
         <td>
@@ -170,7 +164,7 @@ function Row(props) {
       >
         <td colSpan={2}>
           <div className="last-update">
-            <h6>Last Updated&nbsp;</h6>
+            <h6>Last updated&nbsp;</h6>
             <h6
               title={
                 isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
@@ -183,7 +177,7 @@ function Row(props) {
                 : `${formatDistance(
                     new Date(formatDate(props.state.lastupdatedtime)),
                     new Date()
-                  )} Ago`}
+                  )} ago`}
             </h6>
           </div>
         </td>
