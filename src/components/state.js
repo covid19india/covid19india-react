@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {format, parse} from 'date-fns';
 import React, {useEffect, useRef, useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import * as Icon from 'react-feather';
 
 import {
@@ -23,6 +23,8 @@ function State(props) {
   const mapRef = useRef();
   const tsRef = useRef();
 
+  const {stateCode} = useParams();
+
   const [fetched, setFetched] = useState(false);
   const [timeseries, setTimeseries] = useState({});
   const [graphOption, setGraphOption] = useState(1);
@@ -32,9 +34,6 @@ function State(props) {
   const [testData, setTestData] = useState({});
   const [sources, setSources] = useState({});
   const [districtData, setDistrictData] = useState({});
-  const [stateCode] = useState(
-    window.location.pathname.split('/').pop().toUpperCase()
-  );
   const [stateName] = useState(STATE_CODES[stateCode]);
 
   useEffect(() => {
