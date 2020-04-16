@@ -279,6 +279,10 @@ h6 {
       &:hover {
         background: none;
       }
+
+      h5 {
+        margin: 0;
+      }
     }
   }
 }
@@ -3592,7 +3596,7 @@ select {
     .navbar-right {
       order: 2;
       &:hover {
-        margin-left: 1rem;
+        padding-left: 2.5rem;
       }
     }
 
