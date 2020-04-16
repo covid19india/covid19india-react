@@ -58,7 +58,7 @@ function App() {
       showInNavbar: true,
     },
     {
-      pageLink: '/state/:stateName',
+      pageLink: '/state/:stateCode',
       view: State,
       displayName: 'State',
       animationDelayForNavbar: 0.8,
