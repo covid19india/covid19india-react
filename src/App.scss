@@ -433,7 +433,7 @@ h6 {
       font-family: 'archia';
       font-size: 10px;
       background: $gray-light;
-      padding: 0.25rem;
+      padding: 0.5rem;
       border-radius: 5px;
       color: $gray;
       margin-right: 0.5rem;
@@ -911,6 +911,7 @@ h6 {
     height: 2rem;
     width: calc(100% - 4rem);
     box-shadow: 0 10px 35px rgba(0,0,0,.1);
+    -webkit-box-shadow: 0 10px 35px rgba(0,0,0,.1);
     border: 0;
     outline: none;
     padding: 1rem;
@@ -3589,7 +3590,8 @@ select {
     }
 
     .expand {
-      flex-direction: row;
+      flex-direction: column;
+      width: 10rem;
       left: 5rem;
       top: 0;
       background: $gray-light-opaque;

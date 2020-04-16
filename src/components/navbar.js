@@ -62,7 +62,10 @@ function Navbar({pages}) {
             }
             return null;
           })}
-          <div className="expand-bottom">
+          <div
+            className="expand-bottom fadeInUp"
+            style={{animationDelay: '1s'}}
+          >
             <h5>A crowdsourced initiative.</h5>
           </div>
         </div>
