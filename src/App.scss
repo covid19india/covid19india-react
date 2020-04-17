@@ -1,3 +1,4 @@
+@import './Utils.scss';
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-thin-webfont.eot');
@@ -1789,12 +1790,13 @@ table {
     }
 
     .stats {
+      @extend .absolute-center;
+      @extend .flex-column;
       background: $cherry-light;
       position: relative;
       color: $cherry-mid;
       border-radius: 5px;
       display: flex;
-      flex-direction: column;
       margin-left: 0.25rem;
       margin-right: 0.25rem;
       margin-bottom: 0.5rem;
