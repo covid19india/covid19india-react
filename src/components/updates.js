@@ -5,7 +5,6 @@ import axios from 'axios';
 function Updates(props) {
   const [updates, setUpdates] = useState([]);
   const [fetched, setFetched] = useState(false);
-  let headeradded = false;
   let currentDate = new Date();
 
   useEffect(() => {
@@ -35,20 +34,27 @@ function Updates(props) {
             activity.update = activity.update.replace('\n', '<br/>');
             const activityDate = new Date(activity.timestamp * 1000);
             const addHeader = () => {
-              headeradded = !headeradded;
               currentDate = activityDate;
               return (
-                <div className="updates-header">
-                  <h2>{format(activityDate, 'd MMM')}</h2>
-                </div>
+                <>
+                  {index === 0 ? (
+                    <div className="update">
+                      <h4>No updates yet!</h4>
+                    </div>
+                  ) : (
+                    ''
+                  )}
+                  <div className="updates-header">
+                    <h2>{format(activityDate, 'd MMM')}</h2>
+                  </div>
+                </>
               );
             };
             return (
               <>
-                {activityDate.getDate() !== currentDate.getDate() &&
-                !headeradded
+                {activityDate.getDate() !== currentDate.getDate()
                   ? addHeader()
-                  : (headeradded = !headeradded)}
+                  : ' '}
                 <div key={index} className="update">
                   <h5>
                     {formatDistance(
