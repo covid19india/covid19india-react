@@ -2153,7 +2153,7 @@ export const DISTRICTS_ARRAY = [
     state: 'Maharashtra',
   },
   {
-    district: 'Bid',
+    district: 'Beed',
     othernamesspellings: '',
     state: 'Maharashtra',
   },
