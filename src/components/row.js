@@ -6,7 +6,7 @@ import {
   formatNumber,
 } from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
-import {Link} from 'react-router-dom';
+import {Tooltip} from 'react-lightweight-tooltip';
 
 function Row(props) {
   const [state, setState] = useState(props.state);
@@ -91,7 +91,7 @@ function Row(props) {
         className={props.total ? 'state is-total' : 'state'}
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
-        onTouchStart={() => props.onHighlightState?.(state, props.index)}
+        /* onTouchStart={() => props.onHighlightState?.(state, props.index)}*/
         onClick={!props.total ? handleReveal : null}
         style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
       >
@@ -108,12 +108,32 @@ function Row(props) {
             >
               <Icon.ChevronDown />
             </span>
-            {state.state}
-            {state.state === 'West Bengal' && (
-              <Link to="/faq">
-                <Icon.HelpCircle className="height-22" />
-              </Link>
-            )}
+            <span className="actual__title-wrapper">
+              {state.state}
+              {state.statenotes && (
+                <Tooltip
+                  content={[`${state.statenotes}`]}
+                  styles={{
+                    tooltip: {
+                      background: '#000',
+                      borderRadius: '5px',
+                      fontSize: '1rem',
+                      left: '250%',
+                      opacity: 1,
+                      padding: '0.5rem',
+                    },
+                    wrapper: {
+                      cursor: 'cursor',
+                      display: 'inline-block',
+                      position: 'relative',
+                      textAlign: 'center',
+                    },
+                  }}
+                >
+                  <Icon.Info />
+                </Tooltip>
+              )}
+            </span>
           </div>
         </td>
         <td>
@@ -170,7 +190,7 @@ function Row(props) {
       >
         <td colSpan={2}>
           <div className="last-update">
-            <h6>Last Updated&nbsp;</h6>
+            <h6>Last updated&nbsp;</h6>
             <h6
               title={
                 isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
@@ -183,7 +203,7 @@ function Row(props) {
                 : `${formatDistance(
                     new Date(formatDate(props.state.lastupdatedtime)),
                     new Date()
-                  )} Ago`}
+                  )} ago`}
             </h6>
           </div>
         </td>
@@ -255,9 +275,9 @@ function Row(props) {
                     props.onHighlightDistrict?.(district, state, props.index)
                   }
                   onMouseLeave={() => props.onHighlightDistrict?.()}
-                  onTouchStart={() =>
+                  /* onTouchStart={() =>
                     props.onHighlightDistrict?.(district, state, props.index)
-                  }
+                  }*/
                 >
                   <td style={{fontWeight: 600}}>{district}</td>
                   <td>
@@ -285,9 +305,29 @@ function Row(props) {
             className={`district`}
             style={{display: props.reveal && !props.total ? '' : 'none'}}
           >
-            <td style={{fontWeight: 600}}>
-              Unknown{' '}
-              <span style={{fontSize: '0.75rem', color: '#201aa299'}}>#</span>
+            <td className="unknown" style={{fontWeight: 600}}>
+              Unknown
+              <Tooltip
+                content={['Awaiting patient-level details from State Bulletin']}
+                styles={{
+                  tooltip: {
+                    background: '#000',
+                    borderRadius: '5px',
+                    fontSize: '1rem',
+                    left: '250%',
+                    opacity: 1,
+                    padding: '0.5rem',
+                  },
+                  wrapper: {
+                    cursor: 'cursor',
+                    display: 'inline-block',
+                    position: 'relative',
+                    textAlign: 'center',
+                  },
+                }}
+              >
+                <Icon.Info />
+              </Tooltip>
             </td>
             <td>
               <span className="deltas" style={{color: '#ff073a'}}>
@@ -303,28 +343,6 @@ function Row(props) {
               </span>
             </td>
           </tr>
-          <span
-            style={{
-              display: props.reveal && !props.total ? '' : 'none',
-              fontSize: '0.75rem',
-              color: '#201aa299',
-            }}
-          >
-            #
-          </span>
-          <div
-            style={{
-              display: props.reveal && !props.total ? '' : 'none',
-              fontSize: '0.5rem',
-              paddingLeft: '1rem',
-              position: 'absolute',
-              marginTop: '-0.85rem',
-              color: '#201aa299',
-              fontWeight: 600,
-            }}
-          >
-            State bulletin not sufficient to determine districts
-          </div>
         </React.Fragment>
       )}
 
