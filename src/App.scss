@@ -2506,12 +2506,30 @@ footer {
       font-weight: 900;
       margin: 0.2rem 0.1rem;
       padding: 0.5rem;
+      padding-right: 25px;
       text-transform: uppercase;
+      overflow: hidden;
+      text-overflow: clip;
       width: 130px;
       color: $gray;
       cursor: pointer;
       &:focus {
         outline: none;
+      }
+      &.hidden {
+        display: none;
+      }
+
+      &.transition.hidden {
+        display: inline-flex;
+        width: 0px;
+      }
+
+      &.transition {
+        -webkit-transition: width 0.5s linear;
+           -moz-transition: width 0.5s linear;
+             -o-transition: width 0.5s linear;
+                transition: width 0.5s linear;
       }
     }
   }
@@ -3793,13 +3811,17 @@ body.modal-open {
 
     .filters-left {
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: center;
     }
 
     .filters {
       height: auto;
       justify-content: center;
       padding: 0.2rem;
+    }
+
+    .legend {
+      flex-direction: column-reverse;
     }
   }
 
@@ -3837,7 +3859,11 @@ body.modal-open {
   }
 
   &.genders {
-    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  &.transmission {
+    margin-bottom: 0.5rem;
   }
 
   .Resources {
