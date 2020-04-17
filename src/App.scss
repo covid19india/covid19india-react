@@ -1803,11 +1803,12 @@ table {
 
       .stats-bottom {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
 
         h6 {
           margin-top: auto;
           margin-bottom: 0.25rem;
+          font-weight: 900;
         }
       }
 

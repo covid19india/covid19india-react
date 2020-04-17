@@ -306,7 +306,7 @@ function State(props) {
         </div>
         <div className="state-left">
           <div className="Clusters fadeInUp" style={{animationDelay: '0.8s'}}>
-            <h1>Clusters</h1>
+            <h1>Network of transmission</h1>
             <Clusters stateCode={stateCode} />
           </div>
         </div>
