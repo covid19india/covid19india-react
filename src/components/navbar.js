@@ -37,15 +37,15 @@ function Navbar({pages}) {
     >
       <div className="backdrop" id="backdrop"></div>
       <div className="navbar-left">English</div>
-      <div
-        className="navbar-middle"
-        onClick={() => {
-          if (expand) {
-            setExpand(false);
-          }
-        }}
-      >
-        <Link to="/">
+      <div className="navbar-middle">
+        <Link
+          to="/"
+          onClick={() => {
+            if (expand) {
+              setExpand(false);
+            }
+          }}
+        >
           Covid19<span>India</span>
         </Link>
       </div>
