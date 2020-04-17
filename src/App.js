@@ -62,13 +62,43 @@ function App() {
     },
   ];
 
+  const [darkMode, setDarkMode] = React.useState(getInitialMode());
+
+  React.useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+  }, [darkMode]);
+
+  function getInitialMode() {
+    const isReturningUser = 'darkMode' in localStorage;
+    const savedMode = JSON.parse(localStorage.getItem('darkMode'));
+    const userPrefersDark = getPreferredColorScheme();
+
+    if (isReturningUser) {
+      return savedMode;
+    } else if (userPrefersDark) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function getPreferredColorScheme() {
+    if (!window.matchMedia) return;
+
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+
   return (
-    <div className="App">
+    <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
       <Router>
         <Route
           render={({location}) => (
             <div className="Almighty-Router">
-              <Navbar pages={pages} />
+              <Navbar
+                pages={pages}
+                darkMode={darkMode}
+                setDarkMode={setDarkMode}
+              />
               <Switch location={location}>
                 {pages.map((page, index) => {
                   return (

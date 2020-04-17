@@ -143,6 +143,12 @@ body {
   -webkit-touch-callout: none;
 }
 
+.dark-mode {
+  background: #161625 !important;
+  color: #bdbdbd;
+  transition: background-color 0.25s ease-out;
+}
+
 h1 {
   font-family: 'archia';
   font-size: 24px !important;

@@ -11,14 +11,26 @@ const navLinkProps = (path, animationDelay) => ({
   },
 });
 
-function Navbar({pages}) {
+function Navbar({pages, darkMode, setDarkMode}) {
   const [expand, setExpand] = useState(false);
   useLockBodyScroll(expand);
 
   return (
-    <div className="Navbar">
-      <div className="navbar-left">English</div>
-
+    <div
+      className={`Navbar ${darkMode ? 'dark-mode' : ''}`}
+      style={{width: window.innerWidth > 769 && expand ? '6rem' : ''}}
+    >
+      <div className="navbar-left">
+        {darkMode ? (
+          <IconButton onClick={() => setDarkMode((prevMode) => !prevMode)}>
+            <Brightness7 style={{fill: '#ffeb3b'}} />
+          </IconButton>
+        ) : (
+          <IconButton onClick={() => setDarkMode((prevMode) => !prevMode)}>
+            <Brightness4 style={{fill: '#bdbdbd'}} />
+          </IconButton>
+        )}
+      </div>
       <div className="navbar-middle">
         <Link to="/">
           Covid19<span>India</span>
