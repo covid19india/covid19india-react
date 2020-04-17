@@ -3511,12 +3511,14 @@ select {
       margin-bottom: 2em;
       flex: 0 1 calc(33% - 1em);
       border-radius: 5px;
-      box-shadow: 0 2px 1px -1px rgba(0,0,0,0.2),
-                  0 1px 1px 0 rgba(0,0,0,0.14),
-                  0 1px 3px 0 rgba(0,0,0,0.12);
+      box-shadow: 0 0 11px rgba(33,33,33,.2); 
+      // box-shadow: 0 2px 1px -1px rgba(0,0,0,.2),
+      //             0 1px 1px 0 rgba(0,0,0,.14),
+      //             0 1px 3px 0 rgba(0,0,0,.12);
+      transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
       &:hover {
-        box-shadow:  8px 8px 20px #ededed, 
-             -8px -8px 57px #fff;
+        box-shadow: 8px 8px 20px #ededed,
+             -8px -8px 20px #f0f0f0e0;
       }
       height: 30rem;
         .charts-header {
