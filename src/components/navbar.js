@@ -13,7 +13,7 @@ function Navbar({pages}) {
 
   return (
     <div
-      className="Navbar fadeInUp"
+      className="Navbar"
       style={{width: window.innerWidth > 769 && expand ? '6rem' : ''}}
     >
       <div className="navbar-left">English</div>
