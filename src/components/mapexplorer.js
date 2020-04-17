@@ -181,7 +181,7 @@ function MapExplorer({
           <h5>{window.innerWidth <= 769 ? 'Cnfmd' : 'Confirmed'}</h5>
           <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.confirmed)}</h1>
-            <h6>{}</h6>
+            <h6>{`+${formatNumber(panelRegion.deltaconfirmed)}`}</h6>
           </div>
         </div>
 
@@ -192,7 +192,7 @@ function MapExplorer({
           <h5>{window.innerWidth <= 769 ? 'Actv' : 'Active'}</h5>
           <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.active)}</h1>
-            <h6>{}</h6>
+            <h6>{` `}</h6>
           </div>
         </div>
 
@@ -203,7 +203,7 @@ function MapExplorer({
           <h5>{window.innerWidth <= 769 ? 'Rcvrd' : 'Recovered'}</h5>
           <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.recovered)}</h1>
-            <h6>{}</h6>
+            <h6>{`+${formatNumber(panelRegion.deltarecovered)}`}</h6>
           </div>
         </div>
 
@@ -214,7 +214,7 @@ function MapExplorer({
           <h5>{window.innerWidth <= 769 ? 'Dcsd' : 'Deceased'}</h5>
           <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.deaths)}</h1>
-            <h6>{}</h6>
+            <h6>{`+${formatNumber(panelRegion.deltadeaths)}`}</h6>
           </div>
         </div>
 
@@ -225,9 +225,7 @@ function MapExplorer({
           >
             <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
             <div className="stats-bottom">
-              <h1>
-                {formatNumber(testObj?.totaltested, window.innerWidth <= 769)}
-              </h1>
+              <h1>{formatNumber(testObj?.totaltested)}</h1>
             </div>
             <h6 className="timestamp">
               {!isNaN(parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()))

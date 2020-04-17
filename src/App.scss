@@ -630,13 +630,6 @@ h6 {
         .deltas {
           margin-right: 0.25rem;
           font-size: 11px !important;
-
-          svg {
-            width: 9px;
-            height: 9px;
-            stroke-width: 3;
-            vertical-align: -0.25px;
-          }
         }
       }
 
@@ -1624,7 +1617,32 @@ table {
 
 	.table__title-wrapper {
 		position: relative;
+    & > * {
+      align-self: center;
+    }
+
+    .actual__title-wrapper {
+      svg {
+        width: 12px;
+        height: 12px;
+        stroke-width: 3;
+        vertical-align: -1.5px;
+        padding-left: 2px;
+        color: $gray-mid;
+      }
+    }
 	}
+
+  .unknown {
+    svg {
+      width: 12px;
+      height: 12px;
+      stroke-width: 3;
+      vertical-align: -1.5px;
+      padding-left: 2px;
+      color: $gray-mid;
+    }
+  }
 
   .dropdown {
     position: absolute;
@@ -1801,11 +1819,12 @@ table {
 
       .stats-bottom {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
 
         h6 {
           margin-top: auto;
           margin-bottom: 0.25rem;
+          font-weight: 900;
         }
       }
 
@@ -2085,7 +2104,7 @@ input.switch:checked::after {
     font-weight: 900;
     margin-top: 1rem;
     padding: 0.5rem;
-    text-transform: uppercase;
+    margin-left: -1px;
     width: auto;
     color: $gray;
 
@@ -2472,6 +2491,35 @@ footer {
   align-self: center;
   margin-left: auto;
   margin-right: auto;
+
+  .select{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+  
+    select {
+      appearance: none;
+      background-color: #eee;
+      background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
+        linear-gradient(135deg, #808080 50%, transparent 50%);
+      background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+      border: 2px solid #e8e8e9;
+      border-radius: 4px;
+      font-family: 'archia';
+      font-weight: 900;
+      margin: 0.2rem 0.1rem;
+      padding: 0.5rem;
+      text-transform: uppercase;
+      width: 130px;
+      color: $gray;
+      cursor: pointer;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
 
   .reminder {
     align-self: center !important;
@@ -3142,17 +3190,11 @@ body.scroll-disabled {
   }
 }
 
-select {
-  width: 7rem;
-  margin-right: 0.25rem;
-  cursor: pointer;
-}
-
 .filters {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  padding: 1rem;
+  padding: 0.5rem;
   background: #fff !important;
   z-index: 101;
   font-family: archia;
@@ -3782,8 +3824,9 @@ select {
     }
 
     .filters {
-      height: 7rem;
+      height: auto;
       justify-content: center;
+      padding: 0.2rem;
     }
   }
 
@@ -3814,11 +3857,6 @@ select {
       justify-content: center;
       width: 100%;
     }
-  }
-
-  select {
-    margin-left: 2px;
-    margin-right: 2px;
   }
 
   &.nationality {
