@@ -24,30 +24,43 @@ function Minigraph({timeseries}) {
     const svg3 = d3.select(svgRef3.current);
     const svg4 = d3.select(svgRef4.current);
 
+    data.forEach((d) => {
+      d['dailyactive'] = d.dailyconfirmed - d.dailyrecovered - d.dailydeceased;
+    });
+
     const xScale = d3
       .scaleTime()
       .domain(d3.extent(data, (d) => d.date))
       .range([margin.left, chartRight]);
 
     const svgArray = [svg1, svg2, svg3, svg4];
-    const dataOrder = ['confirmed', 'active', 'recovered', 'deceased'];
+    const dataTypes = [
+      'dailyconfirmed',
+      'dailyactive',
+      'dailyrecovered',
+      'dailydeceased',
+    ];
     const colors = ['#ff073a', '#007bff', '#28a745', '#6c757d'];
 
-    const extract = (d, s) => {
-      if (s === 'confirmed') return d.dailyconfirmed;
-      else if (s === 'active')
-        return d.dailyconfirmed - d.dailyrecovered - d.dailydeceased;
-      else if (s === 'recovered') return d.dailyrecovered;
-      else if (s === 'deceased') return d.dailydeceased;
-    };
-
+    const domainMin = Math.min(
+      0,
+      d3.min(data, (d) => d.dailyactive)
+    );
+    const domainMax = d3.max(data, (d) =>
+      Math.max(
+        d.dailyconfirmed,
+        d.dailyactive,
+        d.dailyrecovered,
+        d.dailydeceased
+      )
+    );
     const yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (d) => d.dailyconfirmed)])
+      .domain([domainMin, domainMax])
       .range([chartBottom, margin.top]);
 
     svgArray.forEach((svg, i) => {
-      const type = dataOrder[i];
+      const type = dataTypes[i];
       const color = colors[i];
 
       const path = svg
@@ -62,7 +75,7 @@ function Minigraph({timeseries}) {
           d3
             .line()
             .x((d) => xScale(d.date))
-            .y((d) => yScale(extract(d, type)))
+            .y((d) => yScale(d[type]))
             .curve(d3.curveCardinal)
         );
 
@@ -85,7 +98,7 @@ function Minigraph({timeseries}) {
         .attr('r', 2)
         .attr('cursor', 'pointer')
         .attr('cx', (d) => xScale(d.date))
-        .attr('cy', (d) => yScale(extract(d, type)))
+        .attr('cy', (d) => yScale(d[type]))
         .on('mouseover', (d) => {
           d3.select(d3.event.target).attr('r', '5');
         })
