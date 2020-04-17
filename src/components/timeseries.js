@@ -12,7 +12,7 @@ function TimeSeries(props) {
   );
   const [timeseries, setTimeseries] = useState([]);
   const [datapoint, setDatapoint] = useState({});
-  const [index, setIndex] = useState(10);
+  const [index, setIndex] = useState(0);
   const [mode, setMode] = useState(props.mode);
   const [logMode, setLogMode] = useState(props.logMode);
   const [chartType, setChartType] = useState(props.type);
@@ -369,7 +369,8 @@ function TimeSeries(props) {
 
   // Function for calculate increased/decreased count for each type of data
   const currentStatusCount = (chartType) => {
-    if (timeseries.length <= 0 || index === 0) return '';
+    if (timeseries.length <= 0 || index <= 0 || index >= timeseries.length)
+      return '';
     const currentDiff =
       timeseries[index][chartType] - timeseries[index - 1][chartType];
     const formatedDiff = formatNumber(currentDiff);
@@ -425,7 +426,7 @@ function TimeSeries(props) {
           onClick={() => setLastDaysCount(Infinity)}
           className={lastDaysCount === Infinity ? 'selected' : ''}
         >
-          All
+          Beginning
         </button>
         <button
           type="button"
@@ -433,7 +434,7 @@ function TimeSeries(props) {
           className={lastDaysCount === 30 ? 'selected' : ''}
           aria-label="1 month"
         >
-          1M
+          1 Month
         </button>
         <button
           type="button"
@@ -441,7 +442,7 @@ function TimeSeries(props) {
           className={lastDaysCount === 14 ? 'selected' : ''}
           aria-label="14 days"
         >
-          14D
+          2 Weeks
         </button>
       </div>
     </div>
