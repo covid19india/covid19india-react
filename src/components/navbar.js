@@ -75,15 +75,9 @@ function Navbar({pages}) {
                   onClick={() => {
                     setExpand(false);
                   }}
+                  {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}
                 >
-                  <span
-                    {...navLinkProps(
-                      page.pageLink,
-                      page.animationDelayForNavbar
-                    )}
-                  >
-                    {page.displayName}
-                  </span>
+                  <span>{page.displayName}</span>
                 </Link>
               );
             }

@@ -273,6 +273,11 @@ h6 {
       }
     }
 
+    .focused{
+      color: $gray-dark;
+      background: $pblue-hover;
+    }
+
     .expand-bottom {
       align-self: flex-start;
       border: 0;
