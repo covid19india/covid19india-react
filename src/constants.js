@@ -1408,17 +1408,17 @@ export const DISTRICTS_ARRAY = [
     state: 'Jammu and Kashmir',
   },
   {
-    district: 'Badgam',
+    district: 'Budgam',
     othernamesspellings: '',
     state: 'Jammu and Kashmir',
   },
   {
-    district: 'Bandipore',
+    district: 'Bandipora',
     othernamesspellings: '',
     state: 'Jammu and Kashmir',
   },
   {
-    district: 'Baramula',
+    district: 'Baramulla',
     othernamesspellings: '',
     state: 'Jammu and Kashmir',
   },
@@ -1473,7 +1473,7 @@ export const DISTRICTS_ARRAY = [
     state: 'Jammu and Kashmir',
   },
   {
-    district: 'Punch',
+    district: 'Poonch',
     othernamesspellings: '',
     state: 'Jammu and Kashmir',
   },
@@ -1498,7 +1498,7 @@ export const DISTRICTS_ARRAY = [
     state: 'Jammu and Kashmir',
   },
   {
-    district: 'Shupiyan',
+    district: 'Shopian',
     othernamesspellings: '',
     state: 'Jammu and Kashmir',
   },
