@@ -40,7 +40,9 @@ function Navbar({pages}) {
       <div
         className="navbar-middle"
         onClick={() => {
-          setExpand(!expand);
+          if (expand) {
+            setExpand(false);
+          }
         }}
       >
         <Link to="/">
