@@ -2507,9 +2507,9 @@ footer {
       font-family: 'archia';
       font-weight: 900;
       margin: 0.2rem 0.1rem;
-      padding: 0.5rem;
+      padding: 8px 25px 8px 8px;
       text-transform: uppercase;
-      width: 130px;
+      width: 100%;
       color: $gray;
       cursor: pointer;
       &:focus {
@@ -2570,6 +2570,14 @@ footer {
   .patientdb-wrapper {
     padding-left: 5rem;
     padding-right: 5rem;
+  }
+}
+
+@media(max-width: 769px){
+  .PatientsDB .select {
+    display: block !important;
+    width: 80%;
+    margin: 0 auto;
   }
 }
 
