@@ -11,7 +11,7 @@ const navLinkProps = (path, animationDelay) => ({
 function Navbar({pages}) {
   const [expand, setExpand] = useState(false);
 
-  // When the user clicks anywhere outside of the modal, close modal
+  // When the user clicks anywhere outside of the expanded navbar, then close expanded navbar
   window.onclick = function (event) {
     const backdrop = document.getElementById('backdrop');
     if (event.target === backdrop) {
