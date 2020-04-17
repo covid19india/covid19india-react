@@ -2493,13 +2493,7 @@ footer {
     text-align: center;
   
     select {
-      appearance: none;
       background-color: #eee;
-      background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
-        linear-gradient(135deg, #808080 50%, transparent 50%);
-      background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
-      background-size: 5px 5px, 5px 5px;
-      background-repeat: no-repeat;
       border: 2px solid #e8e8e9;
       border-radius: 4px;
       font-family: 'archia';
@@ -2509,6 +2503,7 @@ footer {
       text-transform: uppercase;
       width: 130px;
       color: $gray;
+      width: fit-content;
       cursor: pointer;
       &:focus {
         outline: none;
