@@ -1,57 +1,77 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 
-function Navbar(props) {
-  // HTML Properties for each of the links in UI
-  const navLinkProps = (path, animationDelay) => ({
-    className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
-    style: {
-      animationDelay: `${animationDelay}s`,
-    },
-  });
+const navLinkProps = (path, animationDelay) => ({
+  className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
+  style: {
+    animationDelay: `${animationDelay}s`,
+  },
+});
 
-  if (window.location.pathname !== '/summary') {
-    return (
+function Navbar({pages}) {
+  const [expand, setExpand] = useState(false);
+
+  return (
+    <div
+      className="Navbar"
+      style={{width: window.innerWidth > 769 && expand ? '6rem' : ''}}
+    >
+      <div className="navbar-left">English</div>
+      <div className="navbar-middle">
+        <Link to="/">
+          Covid19<span>India</span>
+        </Link>
+      </div>
       <div
-        className="Navbar"
+        className="navbar-right"
         style={{
-          animationDelay: '0.5s',
-          height: window.location.pathname === '/clusters' ? '2.5rem' : '',
-          transition: 'all 0.3s ease-in-out',
+          background: expand ? '#4c75f2' : '',
+          color: expand ? 'white' : '',
+        }}
+        onClick={() => {
+          setExpand(!expand);
         }}
       >
-        <img
-          className="fadeInUp logo"
-          alt="India COVID-19 Tracker"
-          src="/icon.png"
-          style={{
-            animationDelay: '0.0s',
-            width: window.location.pathname === '/clusters' ? '1.5rem' : '',
-            height: window.location.pathname === '/clusters' ? '1.5rem' : '',
-            transition: 'all 0.3s ease-in-out',
-          }}
-        />
-
-        <div className="navbar-left">
-          {props.pages.map((page, i) => {
-            return (
-              <Link to={page.pageLink} key={i}>
-                <span
-                  {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}
-                >
-                  {page.displayName}
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-
-        <div className="navbar-right"></div>
+        {expand ? 'Close' : 'Menu'}
       </div>
-    );
-  } else {
-    return <div></div>;
-  }
+      {expand && (
+        <div
+          className="expand"
+          style={{left: window.innerWidth > 769 && expand ? '6rem' : ''}}
+        >
+          {pages.map((page, i) => {
+            if (page.showInNavbar === true) {
+              return (
+                <Link
+                  to={page.pageLink}
+                  key={i}
+                  onClick={() => {
+                    setExpand(false);
+                  }}
+                >
+                  <span
+                    {...navLinkProps(
+                      page.pageLink,
+                      page.animationDelayForNavbar
+                    )}
+                  >
+                    {page.displayName}
+                  </span>
+                </Link>
+              );
+            }
+            return null;
+          })}
+          <div
+            className="expand-bottom fadeInUp"
+            style={{animationDelay: '1s'}}
+          >
+            <h5>A crowdsourced initiative.</h5>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default Navbar;
