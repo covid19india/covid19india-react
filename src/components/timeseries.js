@@ -171,7 +171,13 @@ function TimeSeries(props) {
           .clamp(true)
           .domain([
             0,
-            Math.max(1, yBuffer * d3.max(ts, (d) => d.dailyconfirmed)),
+            Math.max(
+              1,
+              yBuffer *
+                d3.max(ts, (d) =>
+                  Math.max(d.dailyconfirmed, d.dailyrecovered, d.dailydeceased)
+                )
+            ),
           ])
           .nice()
           .range([chartBottom, margin.top]);
