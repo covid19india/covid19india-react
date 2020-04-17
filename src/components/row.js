@@ -92,7 +92,7 @@ function Row(props) {
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
         /* onTouchStart={() => props.onHighlightState?.(state, props.index)}*/
-        /* onClick={!props.total ? handleReveal : null}*/
+        onClick={!props.total ? handleReveal : null}
         style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
       >
         <td style={{fontWeight: 600}}>
@@ -108,7 +108,7 @@ function Row(props) {
             >
               <Icon.ChevronDown />
             </span>
-            <span>
+            <span className="actual__title-wrapper">
               {state.state}
               {state.statenotes && (
                 <Tooltip
@@ -129,7 +129,7 @@ function Row(props) {
                     },
                   }}
                 >
-                  <Icon.Info style={{height: '16px'}} />
+                  <Icon.Info />
                 </Tooltip>
               )}
             </span>
