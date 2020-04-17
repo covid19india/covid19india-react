@@ -32,6 +32,7 @@
     "react-router-transition": "^2.0.0",
     "react-scripts": "3.4.0",
     "react-table": "^7.0.4",
+    "react-lightweight-tooltip": "1.0.0",
     "sass-lint": "^1.13.1",
     "topojson": "^3.0.2"
   },

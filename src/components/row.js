@@ -6,6 +6,7 @@ import {
   formatNumber,
 } from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
+import {Tooltip} from 'react-lightweight-tooltip';
 
 function Row(props) {
   const [state, setState] = useState(props.state);
@@ -107,7 +108,31 @@ function Row(props) {
             >
               <Icon.ChevronDown />
             </span>
-            {state.state}
+            <span>
+              {state.state}
+              {state.statenotes && (
+                <Tooltip
+                  content={[`${state.statenotes}`]}
+                  styles={{
+                    tooltip: {
+                      background: '#000',
+                      borderRadius: '10px',
+                      fontSize: '.8em',
+                      left: '250%',
+                      opacity: 0.65,
+                    },
+                    wrapper: {
+                      cursor: 'cursor',
+                      display: 'inline-block',
+                      position: 'relative',
+                      textAlign: 'center',
+                    },
+                  }}
+                >
+                  <Icon.Info style={{height: '16px'}} />
+                </Tooltip>
+              )}
+            </span>
           </div>
         </td>
         <td>
