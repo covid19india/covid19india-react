@@ -313,9 +313,29 @@ function Row(props) {
             className={`district`}
             style={{display: props.reveal && !props.total ? '' : 'none'}}
           >
-            <td style={{fontWeight: 600}}>
-              Unknown{' '}
-              <span style={{fontSize: '0.75rem', color: '#201aa299'}}>#</span>
+            <td className="unknown" style={{fontWeight: 600}}>
+              Unknown
+              <Tooltip
+                content={['Awaiting patient-level details from State Bulletin']}
+                styles={{
+                  tooltip: {
+                    background: '#000',
+                    borderRadius: '5px',
+                    fontSize: '1rem',
+                    left: '250%',
+                    opacity: 1,
+                    padding: '0.5rem',
+                  },
+                  wrapper: {
+                    cursor: 'cursor',
+                    display: 'inline-block',
+                    position: 'relative',
+                    textAlign: 'center',
+                  },
+                }}
+              >
+                <Icon.Info />
+              </Tooltip>
             </td>
             <td>
               <span className="deltas" style={{color: '#ff073a'}}>
@@ -331,28 +351,6 @@ function Row(props) {
               </span>
             </td>
           </tr>
-          <span
-            style={{
-              display: props.reveal && !props.total ? '' : 'none',
-              fontSize: '0.75rem',
-              color: '#201aa299',
-            }}
-          >
-            #
-          </span>
-          <div
-            style={{
-              display: props.reveal && !props.total ? '' : 'none',
-              fontSize: '0.5rem',
-              paddingLeft: '1rem',
-              position: 'absolute',
-              marginTop: '-0.85rem',
-              color: '#201aa299',
-              fontWeight: 600,
-            }}
-          >
-            Awaiting patient-level details from State Bulletin
-          </div>
         </React.Fragment>
       )}
 
