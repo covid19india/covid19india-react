@@ -304,9 +304,16 @@ function MapExplorer({
         const region = getRegionFromState(
           states.find((state) => name === state.state)
         );
-        setCurrentHoveredRegion(region);
-        setPanelRegion(region);
-        onMapHighlightChange(region);
+        if (region) {
+          setCurrentHoveredRegion(region);
+          setPanelRegion(region);
+          onMapHighlightChange(region);
+        } else {
+          const noregion = getRegionFromState(states[0]);
+          setCurrentHoveredRegion(noregion);
+          setPanelRegion(noregion);
+          onMapHighlightChange(noregion);
+        }
       } else if (currentMap.mapType === MAP_TYPES.STATE) {
         const state = stateDistrictWiseData[currentMap.name] || {
           districtData: {},
@@ -321,6 +328,7 @@ function MapExplorer({
           };
         }
         setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
+
         const panelRegion = getRegionFromState(
           states.find((state) => currentMap.name === state.state)
         );
@@ -358,6 +366,7 @@ function MapExplorer({
 
   const switchMapToState = useCallback(
     (name) => {
+      // debugger;
       const newMap = mapMeta[name];
       if (!newMap) {
         return;
@@ -394,8 +403,9 @@ function MapExplorer({
       className="MapExplorer fadeInUp"
       style={{animationDelay: '1.5s'}}
       ref={forwardRef}
+      onMouseOut="switchMapToState('India')"
     >
-      <div className="header">
+      <div className="header" onMouseOut="switchMapToState('India')">
         <h1>{currentMap.name}</h1>
         <h6>
           {window.innerWidth <= 769 ? 'Tap' : 'Hover'} over a{' '}
@@ -404,7 +414,7 @@ function MapExplorer({
         </h6>
       </div>
 
-      <div className="map-stats">
+      <div className="map-stats" onMouseOut="switchMapToState('India')">
         <div className="stats fadeInUp" style={{animationDelay: '2s'}}>
           <h5>{window.innerWidth <= 769 ? 'Cnfmd' : 'Confirmed'}</h5>
           <div className="stats-bottom">
@@ -534,6 +544,7 @@ function MapExplorer({
         changeMap={switchMapToState}
         selectedRegion={selectedRegion}
         setSelectedRegion={setSelectedRegion}
+        onmouseout={() => switchMapToState('India')}
       />
     </div>
   );

@@ -368,6 +368,7 @@ function TimeSeries(props) {
   const chartKey3 = chartType === 1 ? 'totaldeceased' : 'dailydeceased';
 
   // Function for calculate increased/decreased count for each type of data
+
   const currentStatusCount = (chartType) => {
     if (timeseries.length <= 0 || index === 0) return '';
     const currentDiff =

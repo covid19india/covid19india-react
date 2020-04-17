@@ -17,6 +17,13 @@ import MapExplorer from './mapexplorer';
 import TimeSeries from './timeseries';
 import Minigraph from './minigraph';
 
+// const getRegionFromState = (state) => {
+//   if (!state) return;
+//   const region = {...state};
+//   if (!region.name) region.name = region.state;
+//   return region;
+// };
+
 function Home(props) {
   const [states, setStates] = useState([]);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
@@ -66,18 +73,20 @@ function Home(props) {
     }
   };
 
-  const onHighlightState = (state, index) => {
-    if (!state && !index) return setRegionHighlighted(null);
-    setRegionHighlighted({state, index});
-  };
-  const onHighlightDistrict = (district, state, index) => {
-    if (!state && !index && !district) return setRegionHighlighted(null);
-    setRegionHighlighted({district, state, index});
-  };
-
   const onMapHighlightChange = useCallback(({statecode}) => {
     setActiveStateCode(statecode);
   }, []);
+
+  const onHighlightState = (state, index) => {
+    if (!state && !index) {
+      return setRegionHighlighted(states[0]);
+    }
+    setRegionHighlighted({state, index});
+  };
+  const onHighlightDistrict = (district, state, index) => {
+    if (!state && !index && !district) return setRegionHighlighted(states[0]);
+    setRegionHighlighted({district, state, index});
+  };
 
   const refs = [useRef(), useRef(), useRef()];
   // const scrollHandlers = refs.map((ref) => () =>
