@@ -96,15 +96,17 @@ function Row(props) {
         style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
       >
         <td style={{fontWeight: 600}}>
-          <div className="table__title-wrapper">
+          <div
+            className="table__title-wrapper"
+            onClick={() => {
+              handleReveal();
+            }}
+          >
             <span
               className={`dropdown ${
                 props.reveal ? 'rotateRightDown' : 'rotateDownRight'
               }`}
               style={{display: !props.total ? '' : 'none'}}
-              onClick={() => {
-                handleReveal();
-              }}
             >
               <Icon.ChevronDown />
             </span>
