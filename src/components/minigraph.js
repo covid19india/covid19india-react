@@ -15,7 +15,7 @@ function Minigraph({timeseries}) {
   const graphData = useCallback((data) => {
     if (data.length <= 1) return 0;
 
-    const margin = {top: 0, right: 10, bottom: 60, left: 0};
+    const margin = {top: 0, right: 10, bottom: 30, left: 0};
     const chartRight = 100 - margin.right;
     const chartBottom = 100 - margin.bottom;
 
@@ -42,21 +42,15 @@ function Minigraph({timeseries}) {
     ];
     const colors = ['#ff073a', '#007bff', '#28a745', '#6c757d'];
 
-    const domainMin = Math.min(
-      0,
-      d3.min(data, (d) => d.dailyactive)
+    const dailyMin = d3.min(data, (d) => d.dailyactive);
+    const dailyMax = d3.max(data, (d) =>
+      Math.max(d.dailyconfirmed, d.dailyrecovered, d.dailydeceased)
     );
-    const domainMax = d3.max(data, (d) =>
-      Math.max(
-        d.dailyconfirmed,
-        d.dailyactive,
-        d.dailyrecovered,
-        d.dailydeceased
-      )
-    );
+    const domainMinMax = Math.max(-dailyMin, dailyMax);
+
     const yScale = d3
       .scaleLinear()
-      .domain([domainMin, domainMax])
+      .domain([-domainMinMax, domainMinMax])
       .range([chartBottom, margin.top]);
 
     svgArray.forEach((svg, i) => {
