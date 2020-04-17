@@ -113,7 +113,21 @@ function Row(props) {
               {state.statenotes && (
                 <Tooltip
                   content={[`${state.statenotes}`]}
-                  styles={tooltipStyle}
+                  styles={{
+                    tooltip: {
+                      background: '#000',
+                      borderRadius: '10px',
+                      fontSize: '.8em',
+                      left: '250%',
+                      opacity: 0.65,
+                    },
+                    wrapper: {
+                      cursor: 'cursor',
+                      display: 'inline-block',
+                      position: 'relative',
+                      textAlign: 'center',
+                    },
+                  }}
                 >
                   <Icon.Info style={{height: '16px'}} />
                 </Tooltip>
@@ -344,21 +358,5 @@ function Row(props) {
     </React.Fragment>
   );
 }
-
-const tooltipStyle = {
-  tooltip: {
-    background: '#000',
-    borderRadius: '10px',
-    fontSize: '.8em',
-    left: '250%',
-    opacity: 0.65,
-  },
-  wrapper: {
-    cursor: 'cursor',
-    display: 'inline-block',
-    position: 'relative',
-    textAlign: 'center',
-  },
-};
 
 export default Row;
