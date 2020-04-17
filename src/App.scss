@@ -2932,7 +2932,8 @@ footer {
     }
 }
 
-body.modal-open {
+body.modal-open,
+body.scroll-disabled {
   overflow-y: hidden;
   min-height: 100vh;
   width: calc(100% - 14.7px); //for chrome/safari
@@ -3673,7 +3674,8 @@ select {
     }
   }
 
-  body.modal-open {
+  body.modal-open,
+  body.scroll-disabled {
     width: 100%;
   }
 

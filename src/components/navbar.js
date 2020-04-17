@@ -20,9 +20,9 @@ function Navbar({pages}) {
   };
 
   useEffect(() => {
-    if (expand) document.body.classList.add('modal-open');
+    if (expand) document.body.classList.add('scroll-disabled');
     // stop scrolling when navbar is opened.
-    else document.body.classList.remove('modal-open');
+    else document.body.classList.remove('scroll-disabled');
     if (window.innerWidth > 769) {
       const backdrop = document.getElementById('backdrop');
       expand
@@ -37,7 +37,12 @@ function Navbar({pages}) {
     >
       <div className="backdrop" id="backdrop"></div>
       <div className="navbar-left">English</div>
-      <div className="navbar-middle">
+      <div
+        className="navbar-middle"
+        onClick={() => {
+          setExpand(!expand);
+        }}
+      >
         <Link to="/">
           Covid19<span>India</span>
         </Link>
