@@ -1,9 +1,8 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as d3 from 'd3';
-import {
-  preprocessTimeseries,
-  sliceTimeseriesFromEnd,
-} from '../utils/common-functions';
+import moment from 'moment';
+
+import {sliceTimeseriesFromEnd} from '../utils/common-functions';
 import {useResizeObserver} from '../utils/hooks';
 import {formatNumber} from '../utils/common-functions';
 
@@ -13,7 +12,7 @@ function TimeSeries(props) {
   );
   const [timeseries, setTimeseries] = useState([]);
   const [datapoint, setDatapoint] = useState({});
-  const [index, setIndex] = useState(10);
+  const [index, setIndex] = useState(0);
   const [mode, setMode] = useState(props.mode);
   const [logMode, setLogMode] = useState(props.logMode);
   const [chartType, setChartType] = useState(props.type);
@@ -50,7 +49,7 @@ function TimeSeries(props) {
   }, [props.type]);
 
   const graphData = useCallback(
-    (timeseries) => {
+    (ts) => {
       if (!dimensions) return;
       const width = dimensions.width;
       const height = dimensions.height;
@@ -60,11 +59,10 @@ function TimeSeries(props) {
       const chartRight = width - margin.right;
       const chartBottom = height - margin.bottom;
 
-      const ts = preprocessTimeseries(timeseries);
       const T = ts.length;
       const yBuffer = 1.1;
 
-      setDatapoint(timeseries[T - 1]);
+      setDatapoint(ts[T - 1]);
       setIndex(T - 1);
 
       const svg1 = d3.select(svgRef1.current);
@@ -83,7 +81,7 @@ function TimeSeries(props) {
         .range([margin.left, chartRight]);
 
       // Number of x-axis ticks
-      const numTicksX = width < 480 ? 4 : 8;
+      const numTicksX = width < 480 ? 4 : 7;
 
       const xAxis = (g) =>
         g
@@ -127,7 +125,7 @@ function TimeSeries(props) {
           .clamp(true)
           .domain([
             uniformScaleMin,
-            yBuffer * d3.max(ts, (d) => d.totalconfirmed),
+            Math.max(1, yBuffer * d3.max(ts, (d) => d.totalconfirmed)),
           ])
           .nice()
           .range([chartBottom, margin.top]);
@@ -148,7 +146,7 @@ function TimeSeries(props) {
             .clamp(true)
             .domain([
               d3.min(ts, (d) => d[type]),
-              yBuffer * d3.max(ts, (d) => d[type]),
+              Math.max(1, yBuffer * d3.max(ts, (d) => d[type])),
             ])
             .nice()
             .range([chartBottom, margin.top]);
@@ -171,7 +169,16 @@ function TimeSeries(props) {
         const yScaleDailyUniform = d3
           .scaleLinear()
           .clamp(true)
-          .domain([0, yBuffer * d3.max(ts, (d) => d.dailyconfirmed)])
+          .domain([
+            0,
+            Math.max(
+              1,
+              yBuffer *
+                d3.max(ts, (d) =>
+                  Math.max(d.dailyconfirmed, d.dailyrecovered, d.dailydeceased)
+                )
+            ),
+          ])
           .nice()
           .range([chartBottom, margin.top]);
 
@@ -179,7 +186,7 @@ function TimeSeries(props) {
           const yScaleLinear = d3
             .scaleLinear()
             .clamp(true)
-            .domain([0, yBuffer * d3.max(ts, (d) => d[type])])
+            .domain([0, Math.max(1, yBuffer * d3.max(ts, (d) => d[type]))])
             .nice()
             .range([chartBottom, margin.top]);
           return mode ? yScaleDailyUniform : yScaleLinear;
@@ -205,7 +212,7 @@ function TimeSeries(props) {
         let i = bisectDate(ts, date, 1);
         if (0 <= i && i < T) {
           if (date - ts[i - 1].date < ts[i].date - date) --i;
-          setDatapoint(timeseries[i]);
+          setDatapoint(ts[i]);
           setIndex(i);
           setMoving(true);
           const d = ts[i];
@@ -218,7 +225,7 @@ function TimeSeries(props) {
       }
 
       function mouseout() {
-        setDatapoint(timeseries[T - 1]);
+        setDatapoint(ts[T - 1]);
         setIndex(T - 1);
         setMoving(false);
         focus.forEach((f, j) => {
@@ -309,7 +316,7 @@ function TimeSeries(props) {
                 .line()
                 .x((d) => xScale(d.date))
                 .y((d) => yScale(d[typeTotal]))
-                .curve(d3.curveCardinal)
+                .curve(d3.curveMonotoneX)
             );
           // Using d3-interpolate-path
           // .attrTween('d', function (d) {
@@ -356,12 +363,11 @@ function TimeSeries(props) {
     }
   }, [timeseries, graphData]);
 
-  const yesterdayDate = new Date();
-  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-  const lastDate = new Date(datapoint['date'] + '2020');
-  const isYesterday =
-    lastDate.getMonth() === yesterdayDate.getMonth() &&
-    lastDate.getDate() === yesterdayDate.getDate();
+  const focusDate = moment(datapoint.date);
+  let dateStr = focusDate.format('DD MMMM');
+  dateStr += focusDate.isSame(moment().subtract(1, 'days'), 'day')
+    ? ' Yesterday'
+    : '';
 
   const chartKey1 = chartType === 1 ? 'totalconfirmed' : 'dailyconfirmed';
   const chartKey2 = chartType === 1 ? 'totalrecovered' : 'dailyrecovered';
@@ -369,7 +375,8 @@ function TimeSeries(props) {
 
   // Function for calculate increased/decreased count for each type of data
   const currentStatusCount = (chartType) => {
-    if (timeseries.length <= 0 || index === 0) return '';
+    if (timeseries.length <= 0 || index <= 0 || index >= timeseries.length)
+      return '';
     const currentDiff =
       timeseries[index][chartType] - timeseries[index - 1][chartType];
     const formatedDiff = formatNumber(currentDiff);
@@ -385,9 +392,7 @@ function TimeSeries(props) {
         <div className="svg-parent" ref={wrapperRef}>
           <div className="stats">
             <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
-            <h5 className={`${moving ? 'title' : ''}`}>
-              {`${datapoint['date']}${isYesterday ? ' Yesterday ' : ' '}`}
-            </h5>
+            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
               <h2>{formatNumber(datapoint[chartKey1])}</h2>
               <h6>{currentStatusCount(chartKey1)}</h6>
@@ -399,9 +404,7 @@ function TimeSeries(props) {
         <div className="svg-parent is-green">
           <div className="stats is-green">
             <h5 className={`${!moving ? 'title' : ''}`}>Recovered</h5>
-            <h5 className={`${moving ? 'title' : ''}`}>
-              {`${datapoint['date']}${isYesterday ? ' Yesterday ' : ' '}`}
-            </h5>
+            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
               <h2>{formatNumber(datapoint[chartKey2])}</h2>
               <h6>{currentStatusCount(chartKey2)}</h6>
@@ -413,9 +416,7 @@ function TimeSeries(props) {
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
             <h5 className={`${!moving ? 'title' : ''}`}>Deceased</h5>
-            <h5 className={`${moving ? 'title' : ''}`}>
-              {`${datapoint['date']}${isYesterday ? ' Yesterday ' : ' '}`}
-            </h5>
+            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
               <h2>{formatNumber(datapoint[chartKey3])}</h2>
               <h6>{currentStatusCount(chartKey3)}</h6>
@@ -431,7 +432,7 @@ function TimeSeries(props) {
           onClick={() => setLastDaysCount(Infinity)}
           className={lastDaysCount === Infinity ? 'selected' : ''}
         >
-          All
+          Beginning
         </button>
         <button
           type="button"
@@ -439,7 +440,7 @@ function TimeSeries(props) {
           className={lastDaysCount === 30 ? 'selected' : ''}
           aria-label="1 month"
         >
-          1M
+          1 Month
         </button>
         <button
           type="button"
@@ -447,7 +448,7 @@ function TimeSeries(props) {
           className={lastDaysCount === 14 ? 'selected' : ''}
           aria-label="14 days"
         >
-          14D
+          2 Weeks
         </button>
       </div>
     </div>
