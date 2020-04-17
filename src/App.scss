@@ -1618,15 +1618,26 @@ table {
 
     .actual__title-wrapper {
       svg {
+        width: 12px;
+        height: 12px;
+        stroke-width: 3;
+        vertical-align: -1.5px;
+        padding-left: 2px;
+        color: $gray-mid;
+      }
+    }
+	}
+
+  .unknown {
+    svg {
       width: 12px;
       height: 12px;
       stroke-width: 3;
       vertical-align: -1.5px;
       padding-left: 2px;
       color: $gray-mid;
-      }
     }
-	}
+  }
 
   .dropdown {
     position: absolute;
