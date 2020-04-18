@@ -48,6 +48,7 @@ function Navbar({pages}) {
         backdrop.classList.add('backdrop-open');
         backdrop.classList.remove('backdrop-close');
       } else {
+        backdrop.style.display = 'none';
         backdrop.classList.remove('backdrop-open');
         backdrop.classList.add('backdrop-close');
       }
