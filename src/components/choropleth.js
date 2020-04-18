@@ -110,8 +110,7 @@ function ChoroplethMap({
         );
       svgLegend.attr('viewBox', `0 0 ${widthLegend} ${heightLegend}`);
 
-      /* Draw map */
-      let onceTouchedRegion = null;
+      /* DRAW MAP */
       const g = svg.append('g').attr('class', mapMeta.graphObjectName);
       g.append('g')
         .attr('class', 'states')
@@ -127,17 +126,8 @@ function ChoroplethMap({
         })
         .attr('d', path)
         .attr('pointer-events', 'all')
-        .on('mouseenter', (d) => {
-          handleMouseEnter(d.properties[propertyField]);
-        })
-        .on('mouseleave', (d) => {
-          if (onceTouchedRegion === d) onceTouchedRegion = null;
-        })
-        .on('touchstart', (d) => {
-          if (onceTouchedRegion === d) onceTouchedRegion = null;
-          else onceTouchedRegion = d;
-        })
         .on('click', handleClick)
+        .on('dblclick', handleDblClick)
         .style('cursor', 'pointer')
         .append('title')
         .text(function (d) {
@@ -177,19 +167,21 @@ function ChoroplethMap({
           path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName]))
         );
 
-      const handleMouseEnter = (name) => {
+      function handleDblClick(d) {
+        d3.event.stopPropagation();
+        if (mapMeta.mapType === MAP_TYPES.STATE) return;
+        changeMap(d.properties[propertyField]);
+      }
+
+      function handleClick(d) {
+        d3.event.stopPropagation();
+        const name = d.properties[propertyField];
         try {
           setSelectedRegion(name);
           setHoveredRegion(name, mapMeta);
         } catch (err) {
           console.log('err', err);
         }
-      };
-
-      function handleClick(d) {
-        d3.event.stopPropagation();
-        if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE) return;
-        changeMap(d.properties[propertyField]);
       }
 
       // Reset on tapping outside map
