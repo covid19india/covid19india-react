@@ -1,5 +1,7 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import axios from 'axios';
+import Fab from '@material-ui/core/Fab';
+import NavigationOutlinedIcon from '@material-ui/icons/NavigationOutlined';
 
 import {MAP_META} from '../constants';
 import {
@@ -34,6 +36,11 @@ function Home(props) {
   const [showUpdates, setShowUpdates] = useState(false);
   const [seenUpdates, setSeenUpdates] = useState(false);
   const [newUpdate, setNewUpdate] = useState(true);
+
+  function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
 
   useEffect(() => {
     // this if block is for checking if user opened a page for first time.
@@ -284,6 +291,24 @@ function Home(props) {
                 mode={timeseriesMode}
                 logMode={timeseriesLogMode}
               />
+
+              <div>
+                <Fab
+                  color="inherit"
+                  aria-label="gototop"
+                  id="gototopbtn"
+                  onClick={topFunction}
+                  size="small"
+                  style={{
+                    position: 'fixed',
+                    bottom: '1rem',
+                    right: '1rem',
+                    zIndex: '1000',
+                  }}
+                >
+                  <NavigationOutlinedIcon htmlColor="#201aa299" />
+                </Fab>
+              </div>
             </React.Fragment>
           )}
         </div>
