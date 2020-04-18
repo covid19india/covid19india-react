@@ -2,10 +2,7 @@ import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as d3 from 'd3';
 import moment from 'moment';
 
-import {
-  preprocessTimeseries,
-  sliceTimeseriesFromEnd,
-} from '../utils/common-functions';
+import {sliceTimeseriesFromEnd} from '../utils/common-functions';
 import {useResizeObserver} from '../utils/hooks';
 import {formatNumber} from '../utils/common-functions';
 
@@ -37,7 +34,7 @@ function TimeSeries(props) {
           lastDaysCount
         );
         setIndex(slicedTimeseries.length - 1);
-        setTimeseries(preprocessTimeseries(slicedTimeseries));
+        setTimeseries(slicedTimeseries);
       }
     },
     [lastDaysCount]
@@ -81,9 +78,9 @@ function TimeSeries(props) {
       const svg3 = d3.select(svgRef3.current);
       const svg4 = d3.select(svgRef4.current);
 
-      const dateMin = new Date(timeseries[0]['dateObj']);
+      const dateMin = new Date(timeseries[0]['date']);
       dateMin.setDate(dateMin.getDate() - 1);
-      const dateMax = new Date(timeseries[T - 1]['dateObj']);
+      const dateMax = new Date(timeseries[T - 1]['date']);
       dateMax.setDate(dateMax.getDate() + 1);
 
       const xScale = d3
@@ -214,7 +211,7 @@ function TimeSeries(props) {
       const focus = svgArray.map((svg, i) => {
         return svg
           .selectAll('.focus')
-          .data([timeseries[T - 1]], (d) => d.dateObj)
+          .data([timeseries[T - 1]], (d) => d.date)
           .join('circle')
           .attr('class', 'focus')
           .attr('fill', colors[i])
@@ -225,11 +222,10 @@ function TimeSeries(props) {
       function mousemove() {
         const xm = d3.mouse(this)[0];
         const date = xScale.invert(xm);
-        const bisectDate = d3.bisector((d) => d.dateObj).left;
+        const bisectDate = d3.bisector((d) => d.date).left;
         let i = bisectDate(timeseries, date, 1);
         if (0 <= i && i < T) {
-          if (date - timeseries[i - 1].dateObj < timeseries[i].dateObj - date)
-            --i;
+          if (date - timeseries[i - 1].date < timeseries[i].date - date) --i;
           setDatapoint(timeseries[i]);
           setIndex(i);
           setMoving(true);
@@ -237,7 +233,7 @@ function TimeSeries(props) {
           focus.forEach((f, j) => {
             const yScale = yScales[j];
             const type = plotTotal ? dataTypesTotal[j] : dataTypesDaily[j];
-            f.attr('cx', xScale(d.dateObj)).attr('cy', yScale(d[type]));
+            f.attr('cx', xScale(d.date)).attr('cy', yScale(d[type]));
           });
         }
       }
@@ -249,7 +245,7 @@ function TimeSeries(props) {
         focus.forEach((f, j) => {
           const yScale = yScales[j];
           const type = plotTotal ? dataTypesTotal[j] : dataTypesDaily[j];
-          f.attr('cx', xScale(timeseries[T - 1].dateObj)).attr(
+          f.attr('cx', xScale(timeseries[T - 1].date)).attr(
             'cy',
             yScale(timeseries[T - 1][type])
           );
@@ -285,19 +281,19 @@ function TimeSeries(props) {
         /* Path dots */
         svg
           .selectAll('.dot')
-          .data(timeseries, (d) => d.dateObj)
+          .data(timeseries, (d) => d.date)
           .join((enter) => enter.append('circle').attr('cy', chartBottom))
           .attr('class', 'dot')
           .attr('fill', color)
           .attr('stroke', color)
           .attr('r', 2)
           .transition(t)
-          .attr('cx', (d) => xScale(d.dateObj))
+          .attr('cx', (d) => xScale(d.date))
           .attr('cy', (d) => yScale(d[type]));
 
         focus[i]
           .transition(t)
-          .attr('cx', (d) => xScale(d.dateObj))
+          .attr('cx', (d) => xScale(d.date))
           .attr('cy', (d) => yScale(d[type]));
 
         if (plotTotal) {
@@ -332,7 +328,7 @@ function TimeSeries(props) {
               'd',
               d3
                 .line()
-                .x((d) => xScale(d.dateObj))
+                .x((d) => xScale(d.date))
                 .y((d) => yScale(d[typeTotal]))
                 .curve(d3.curveMonotoneX)
             );
@@ -347,12 +343,12 @@ function TimeSeries(props) {
           svg.selectAll('.trend').remove();
           svg
             .selectAll('.stem')
-            .data(timeseries, (d) => d.dateObj)
+            .data(timeseries, (d) => d.date)
             .join((enter) =>
               enter
                 .append('line')
-                .attr('x1', (d) => xScale(d.dateObj))
-                .attr('x2', (d) => xScale(d.dateObj))
+                .attr('x1', (d) => xScale(d.date))
+                .attr('x2', (d) => xScale(d.date))
                 .attr('y2', chartBottom)
             )
             .attr('class', 'stem')
@@ -360,8 +356,8 @@ function TimeSeries(props) {
             .style('stroke-width', 4)
             .attr('y1', chartBottom)
             .transition(t)
-            .attr('x1', (d) => xScale(d.dateObj))
-            .attr('x2', (d) => xScale(d.dateObj))
+            .attr('x1', (d) => xScale(d.date))
+            .attr('x2', (d) => xScale(d.date))
             .attr('y2', (d) => yScale(d[typeDaily]));
         }
 
