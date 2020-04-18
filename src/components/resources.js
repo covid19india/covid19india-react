@@ -10,6 +10,8 @@ import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
 import Fab from '@material-ui/core/Fab';
 import NavigationOutlinedIcon from '@material-ui/icons/NavigationOutlined';
 
+import Tracker from './tracker';
+
 export const useFormControlStyles = makeStyles((isDesktop) => {
   if (isDesktop === true)
     return {
@@ -869,6 +871,10 @@ function Resources(props) {
           </div>
         </React.Fragment>
       )}
+      <div className="Clusters fadeInUp" style={{animationDelay: '0.9s'}}>
+            <h1>Locate nearby essentials</h1>
+            <Tracker />
+      </div>
     </div>
   );
 }

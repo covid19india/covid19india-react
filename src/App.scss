@@ -202,6 +202,13 @@ h6 {
   margin-left: 0.25rem;
 }
 
+.leaflet-container {
+  width: 98%;
+  height:40vh;
+  margin:auto
+
+}
+
 .Navbar {
   display: flex;
   flex-direction: row;
@@ -4115,6 +4122,73 @@ body.modal-open {
     }
   }
 }
+
+
+.tracker_display
+{
+   margin-top: 30px;
+
+  .line {
+    position: relative;
+    top: 50%;
+    width: 100%;
+
+    margin: 0 auto;
+    border-right: 6px solid rgba(0,0,0, 0.75);
+    font-size: 5vw;
+    text-align: center;
+     white-space:nowrap;
+    overflow:hidden;transform: translateY(-50%);
+  }
+}
+
+.tracker{
+  padding: 7px;
+  position: relative;
+
+  h1{
+    border-bottom:2px $primary solid;
+    display:inline-block;
+    margin:auto;
+    border-top:2px $primary solid;
+    text-align: center;
+    color: $cyan;
+  }
+
+  .tracker_bar{
+
+       display:flex;
+       align-items: flex-end;
+       div:first-of-type{
+         margin-left:auto;
+         margin-right:10px
+       }
+       label{
+         text-align: right;
+       }
+      .input_tracker{
+
+        position: relative;
+        left:calc(100% - 60%);
+        border:1px solid rgba(155, 148, 139,0.5);
+        background:  rgba(155, 148, 139,0.5);
+        width:60%;
+        //display:block;
+        border-radius: 5px;
+          &:focus-within{
+
+          border:1px solid black;
+          background: white;
+           } } 
+    button{
+
+       padding:auto;
+     }
+
+
+  }
+}
+
 
 /* Animation Support */
 

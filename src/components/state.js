@@ -11,6 +11,7 @@ import {
 } from '../utils/common-functions';
 import {MAP_META, STATE_CODES} from '../constants';
 
+import Tracker from './tracker';
 import Clusters from './clusters';
 import DeltaBarGraph from './deltabargraph';
 import Level from './level';
@@ -319,7 +320,12 @@ function State(props) {
           </div>
         </div>
 
-        <div className="state-right"></div>
+        <div className="state-right">
+          <div className="Clusters fadeInUp" style={{animationDelay: '0.9s'}}>
+            <h1>Essentials Near Me</h1>
+            <Tracker />
+          </div>
+        </div>
       </div>
       <Footer />
     </React.Fragment>

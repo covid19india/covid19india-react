@@ -16,9 +16,12 @@
     "d3": "^5.15.0",
     "d3-svg-legend": "^2.25.6",
     "date-fns": "^2.11.0",
+    "esri-leaflet-geocoder": "^2.3.2",
     "i": "^0.3.6",
     "install": "^0.13.0",
     "json2csv": "^5.0.0",
+    "leaflet": "^1.6.0",
+    "leaflet-knn": "^0.1.0",
     "moment": "^2.24.0",
     "node-sass": "^4.13.1",
     "react": "^16.13.1",
@@ -27,6 +30,7 @@
     "react-dom": "^16.13.1",
     "react-feather": "^2.0.3",
     "react-infinite-scroll-component": "^5.0.4",
+    "react-leaflet": "^2.6.3",
     "react-force-graph-2d": "^1.15.1",
     "react-router-dom": "^5.1.2",
     "react-router-transition": "^2.0.0",
@@ -78,6 +82,7 @@
     "husky": "^4.2.3",
     "lint-staged": "^10.0.9",
     "prettier": "^2.0.2",
+    "react-openlayers": "^0.3.0",
     "sass-lint-auto-fix": "^0.21.0"
   },
   "browserslist": {
