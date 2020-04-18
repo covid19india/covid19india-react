@@ -31,6 +31,7 @@ function MapExplorer({
   onMapHighlightChange,
   isCountryLoaded,
   type,
+  setType,
 }) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [panelRegion, setPanelRegion] = useState(getRegionFromState(states[0]));
@@ -51,6 +52,7 @@ function MapExplorer({
 
     if (currentMap.mapType === MAP_TYPES.COUNTRY) {
       if (chartType === 1) {
+        setType(1);
         currentMapData = states.reduce((acc, state) => {
           if (state.state === 'Total') {
             return acc;
@@ -65,6 +67,7 @@ function MapExplorer({
           return acc;
         }, {});
       } else if (chartType === 2) {
+        setType(2);
         currentMapData = states.reduce((acc, state) => {
           if (state.state === 'Total') {
             return acc;
@@ -84,6 +87,7 @@ function MapExplorer({
         }, {});
       }
     } else if (currentMap.mapType === MAP_TYPES.STATE) {
+      setType(1);
       const districtWiseData = (
         stateDistrictWiseData[currentMap.name] || {districtData: {}}
       ).districtData;
@@ -98,7 +102,14 @@ function MapExplorer({
       }, {});
     }
     return [statistic, currentMapData];
-  }, [currentMap, states, stateDistrictWiseData, chartType]);
+  }, [
+    currentMap.mapType,
+    currentMap.name,
+    chartType,
+    setType,
+    states,
+    stateDistrictWiseData,
+  ]);
 
   const setHoveredRegion = useCallback(
     (name, currentMap) => {

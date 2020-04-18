@@ -87,6 +87,10 @@ function Home(props) {
     setActiveStateCode(statecode);
   }, []);
 
+  const setType = useCallback((type) => {
+    setStatisticOption(type);
+  }, []);
+
   const refs = [useRef(), useRef(), useRef()];
   // const scrollHandlers = refs.map((ref) => () =>
   //   window.scrollTo({
@@ -156,6 +160,7 @@ function Home(props) {
                 onMapHighlightChange={onMapHighlightChange}
                 isCountryLoaded={true}
                 type={statisticOption}
+                setType={setType}
               />
 
               <div className="tabs2">
