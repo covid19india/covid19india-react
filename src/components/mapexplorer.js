@@ -5,6 +5,7 @@ import {formatDate, formatDateAbsolute} from '../utils/common-functions';
 import {formatDistance, format, parse} from 'date-fns';
 import {formatNumber} from '../utils/common-functions';
 import * as Icon from 'react-feather';
+import statePopData from './StateStats.json';
 
 const getRegionFromState = (state) => {
   if (!state) return;
@@ -29,6 +30,7 @@ function MapExplorer({
   regionHighlighted,
   onMapHighlightChange,
   isCountryLoaded,
+  type,
 }) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [panelRegion, setPanelRegion] = useState(getRegionFromState(states[0]));
@@ -37,25 +39,50 @@ function MapExplorer({
   );
   const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta);
+  const [chartType, setChartType] = useState(type);
+
+  useEffect(() => {
+    setChartType(type);
+  }, [type]);
 
   const [statistic, currentMapData] = useMemo(() => {
     const statistic = {total: 0, maxConfirmed: 0};
     let currentMapData = {};
 
     if (currentMap.mapType === MAP_TYPES.COUNTRY) {
-      currentMapData = states.reduce((acc, state) => {
-        if (state.state === 'Total') {
-          return acc;
-        }
-        const confirmed = parseInt(state.confirmed);
-        statistic.total += confirmed;
-        if (confirmed > statistic.maxConfirmed) {
-          statistic.maxConfirmed = confirmed;
-        }
+      if (chartType === 1) {
+        currentMapData = states.reduce((acc, state) => {
+          if (state.state === 'Total') {
+            return acc;
+          }
+          const confirmed = parseInt(state.confirmed);
+          statistic.total += confirmed;
+          if (confirmed > statistic.maxConfirmed) {
+            statistic.maxConfirmed = confirmed;
+          }
 
-        acc[state.state] = state.confirmed;
-        return acc;
-      }, {});
+          acc[state.state] = state.confirmed;
+          return acc;
+        }, {});
+      } else if (chartType === 2) {
+        currentMapData = states.reduce((acc, state) => {
+          if (state.state === 'Total') {
+            return acc;
+          }
+          const confirmed =
+            (parseInt(state.confirmed) / statePopData[state.state].population) *
+            1000000;
+
+          if (confirmed > statistic.maxConfirmed) {
+            statistic.maxConfirmed = confirmed;
+          }
+
+          statistic.total = statistic.maxConfirmed;
+          acc[state.state] =
+            (state.confirmed / statePopData[state.state].population) * 1000000;
+          return acc;
+        }, {});
+      }
     } else if (currentMap.mapType === MAP_TYPES.STATE) {
       const districtWiseData = (
         stateDistrictWiseData[currentMap.name] || {districtData: {}}
@@ -71,7 +98,7 @@ function MapExplorer({
       }, {});
     }
     return [statistic, currentMapData];
-  }, [currentMap, states, stateDistrictWiseData]);
+  }, [currentMap, states, stateDistrictWiseData, chartType]);
 
   const setHoveredRegion = useCallback(
     (name, currentMap) => {
@@ -311,6 +338,7 @@ function MapExplorer({
         selectedRegion={selectedRegion}
         setSelectedRegion={setSelectedRegion}
         isCountryLoaded={isCountryLoaded}
+        type={chartType}
       />
     </div>
   );

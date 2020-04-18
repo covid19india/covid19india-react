@@ -18,6 +18,7 @@ function ChoroplethMap({
   selectedRegion,
   setSelectedRegion,
   isCountryLoaded,
+  type,
 }) {
   const choroplethMap = useRef(null);
   const choroplethLegend = useRef(null);
@@ -72,13 +73,21 @@ function ChoroplethMap({
       const margin = {left: 0.02 * widthLegend, right: 0.02 * widthLegend};
       const barWidth = widthLegend - margin.left - margin.right;
       const heightLegend = +svgLegend.attr('height');
+      let title = 'Confirmed Cases';
+
+      if (type == 1) {
+        title = 'Confirmed Cases';
+      } else {
+        title = 'Case Density Per Million';
+      }
+
       svgLegend
         .append('g')
         .style('transform', `translateX(${margin.left}px)`)
         .append(() =>
           legend({
             color: colorScale,
-            title: 'Confirmed Cases',
+            title: title,
             width: barWidth,
             height: 0.8 * heightLegend,
             ticks: 6,
@@ -164,14 +173,15 @@ function ChoroplethMap({
       });
     },
     [
-      mapData,
       mapMeta,
-      statistic.total,
       statistic.maxConfirmed,
-      changeMap,
-      setHoveredRegion,
-      setSelectedRegion,
+      statistic.total,
+      type,
       isCountryLoaded,
+      mapData,
+      setSelectedRegion,
+      setHoveredRegion,
+      changeMap,
     ]
   );
 

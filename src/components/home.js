@@ -25,6 +25,7 @@ function Home(props) {
   const [stateTestData, setStateTestData] = useState({});
   const [fetched, setFetched] = useState(false);
   const [graphOption, setGraphOption] = useState(1);
+  const [statisticOption, setStatisticOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState({});
   const [activeStateCode, setActiveStateCode] = useState('TT'); // TT -> India
@@ -154,7 +155,27 @@ function Home(props) {
                 regionHighlighted={regionHighlighted}
                 onMapHighlightChange={onMapHighlightChange}
                 isCountryLoaded={true}
+                type={statisticOption}
               />
+
+              <div className="tabs2">
+                <div
+                  className={`tab ${statisticOption === 1 ? 'focused' : ''}`}
+                  onClick={() => {
+                    setStatisticOption(1);
+                  }}
+                >
+                  <h4>Total Cases</h4>
+                </div>
+                <div
+                  className={`tab ${statisticOption === 2 ? 'focused' : ''}`}
+                  onClick={() => {
+                    setStatisticOption(2);
+                  }}
+                >
+                  <h4>Case Density Per Million</h4>
+                </div>
+              </div>
 
               <div
                 className="timeseries-header fadeInUp"
