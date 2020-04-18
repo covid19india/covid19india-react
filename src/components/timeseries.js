@@ -92,11 +92,11 @@ function TimeSeries(props) {
       // Number of x-axis ticks
       const numTicksX = width < 480 ? 4 : 7;
 
-      const xAxis = (g) =>
+      const xAxis = (g, yScale) =>
         g
           .attr('class', 'x-axis')
           .call(d3.axisBottom(xScale).ticks(numTicksX))
-          .style('transform', `translateY(${chartBottom}px)`);
+          .style('transform', `translateY(${yScale(0)}px)`);
 
       const yAxis = (g, yScale) =>
         g
@@ -109,18 +109,18 @@ function TimeSeries(props) {
       const plotTotal = chartType === 1;
       const dataTypesTotal = [
         'totalconfirmed',
+        'totalactive',
         'totalrecovered',
         'totaldeceased',
-        'totalactive',
       ];
       const dataTypesDaily = [
         'dailyconfirmed',
+        'dailyactive',
         'dailyrecovered',
         'dailydeceased',
-        'dailyactive',
       ];
 
-      const colors = ['#ff073a', '#28a745', '#6c757d', '#007bff'];
+      const colors = ['#ff073a', '#007bff', '#28a745', '#6c757d'];
 
       let yScales;
       if (plotTotal) {
@@ -181,7 +181,10 @@ function TimeSeries(props) {
           .scaleLinear()
           .clamp(true)
           .domain([
-            0,
+            Math.min(
+              0,
+              d3.min(timeseries, (d) => d.dailyactive)
+            ),
             Math.max(
               1,
               yBuffer *
@@ -198,7 +201,10 @@ function TimeSeries(props) {
             .scaleLinear()
             .clamp(true)
             .domain([
-              0,
+              Math.min(
+                0,
+                d3.min(timeseries, (d) => d[type])
+              ),
               Math.max(1, yBuffer * d3.max(timeseries, (d) => d[type])),
             ])
             .nice()
@@ -262,21 +268,11 @@ function TimeSeries(props) {
 
         const color = colors[i];
         const yScale = yScales[i];
-        // WARNING: Bad code ahead.
+
         /* X axis */
-        if (svg.select('.x-axis').empty()) {
-          svg.append('g').attr('class', 'x-axis').call(xAxis);
-        } else {
-          svg.select('.x-axis').transition(t).call(xAxis);
-        }
+        svg.select('.x-axis').transition(t).call(xAxis, yScale);
         /* Y axis */
-        if (svg.select('.y-axis').empty()) {
-          svg.append('g').call(yAxis, yScale);
-        } else {
-          svg.select('.y-axis').transition(t).call(yAxis, yScale);
-        }
-        // ^This block of code should be written in a more d3 way following the
-        //  General Update Pattern. Can't find of a way to do that within React.
+        svg.select('.y-axis').transition(t).call(yAxis, yScale);
 
         /* Path dots */
         svg
@@ -349,13 +345,14 @@ function TimeSeries(props) {
                 .append('line')
                 .attr('x1', (d) => xScale(d.date))
                 .attr('x2', (d) => xScale(d.date))
+                .attr('y1', chartBottom)
                 .attr('y2', chartBottom)
             )
             .attr('class', 'stem')
             .style('stroke', color + '99')
             .style('stroke-width', 4)
-            .attr('y1', chartBottom)
             .transition(t)
+            .attr('y1', yScale(0))
             .attr('x1', (d) => xScale(d.date))
             .attr('x2', (d) => xScale(d.date))
             .attr('y2', (d) => yScale(d[typeDaily]));
@@ -384,9 +381,9 @@ function TimeSeries(props) {
     : '';
 
   const chartKey1 = chartType === 1 ? 'totalconfirmed' : 'dailyconfirmed';
-  const chartKey2 = chartType === 1 ? 'totalrecovered' : 'dailyrecovered';
-  const chartKey3 = chartType === 1 ? 'totaldeceased' : 'dailydeceased';
-  const chartKey4 = chartType === 1 ? 'totalactive' : 'dailyactive';
+  const chartKey2 = chartType === 1 ? 'totalactive' : 'dailyactive';
+  const chartKey3 = chartType === 1 ? 'totalrecovered' : 'dailyrecovered';
+  const chartKey4 = chartType === 1 ? 'totaldeceased' : 'dailydeceased';
 
   // Function for calculate increased/decreased count for each type of data
   const currentStatusCount = (chartType) => {
@@ -413,7 +410,10 @@ function TimeSeries(props) {
               <h6>{currentStatusCount(chartKey1)}</h6>
             </div>
           </div>
-          <svg ref={svgRef1} preserveAspectRatio="xMidYMid meet" />
+          <svg ref={svgRef1} preserveAspectRatio="xMidYMid meet">
+            <g className="x-axis" />
+            <g className="y-axis" />
+          </svg>
         </div>
 
         <div className="svg-parent is-blue">
@@ -421,11 +421,14 @@ function TimeSeries(props) {
             <h5 className={`${!moving ? 'title' : ''}`}>Active</h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
-              <h2>{formatNumber(datapoint[chartKey4])}</h2>
-              <h6>{currentStatusCount(chartKey4)}</h6>
+              <h2>{formatNumber(datapoint[chartKey2])}</h2>
+              <h6>{currentStatusCount(chartKey2)}</h6>
             </div>
           </div>
-          <svg ref={svgRef4} preserveAspectRatio="xMidYMid meet" />
+          <svg ref={svgRef2} preserveAspectRatio="xMidYMid meet">
+            <g className="x-axis" />
+            <g className="y-axis" />
+          </svg>
         </div>
 
         <div className="svg-parent is-green">
@@ -433,11 +436,14 @@ function TimeSeries(props) {
             <h5 className={`${!moving ? 'title' : ''}`}>Recovered</h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
-              <h2>{formatNumber(datapoint[chartKey2])}</h2>
-              <h6>{currentStatusCount(chartKey2)}</h6>
+              <h2>{formatNumber(datapoint[chartKey3])}</h2>
+              <h6>{currentStatusCount(chartKey3)}</h6>
             </div>
           </div>
-          <svg ref={svgRef2} preserveAspectRatio="xMidYMid meet" />
+          <svg ref={svgRef3} preserveAspectRatio="xMidYMid meet">
+            <g className="x-axis" />
+            <g className="y-axis" />
+          </svg>
         </div>
 
         <div className="svg-parent is-gray">
@@ -445,11 +451,14 @@ function TimeSeries(props) {
             <h5 className={`${!moving ? 'title' : ''}`}>Deceased</h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
-              <h2>{formatNumber(datapoint[chartKey3])}</h2>
-              <h6>{currentStatusCount(chartKey3)}</h6>
+              <h2>{formatNumber(datapoint[chartKey4])}</h2>
+              <h6>{currentStatusCount(chartKey4)}</h6>
             </div>
           </div>
-          <svg ref={svgRef3} preserveAspectRatio="xMidYMid meet" />
+          <svg ref={svgRef4} preserveAspectRatio="xMidYMid meet">
+            <g className="x-axis" />
+            <g className="y-axis" />
+          </svg>
         </div>
       </div>
 
