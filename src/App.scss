@@ -471,7 +471,7 @@ h6 {
   }
 
   .MapExplorer {
-    .header, .map-stats, .back-button, .last-update, .unknown {
+    .header, .map-stats, .back-button, .last-update, .unknown, .state-page-button {
       display: none;
     }
 
@@ -1556,6 +1556,37 @@ table {
     .district-heading {
       transform: translateX(1rem);
       background: $gray-light;
+      &:hover {
+        background: $gray-light !important;
+      }
+
+      td.state-page-link {
+        background: $white;
+        padding: 0;
+        text-align: left;
+
+        div {
+          background: $orange-light;
+          color: $orange;
+          padding: 0.45rem;
+          border-radius: 5px;
+          font-size: 0.75rem;
+          float: left;
+          align-items: center;
+          &:hover {
+            background: $orange-hover;
+          }
+
+          svg {
+            width: 12px;
+            height: 12px;
+            stroke-width: 3px;
+            margin-left: 0.25rem;
+            color: $orange;
+            vertical-align: middle;
+          }
+        }
+      }
 
       td {
         font-size: 0.75rem;
@@ -1727,6 +1758,7 @@ table {
 
   .back-button {
     position: absolute;
+    top: 2rem;
     right: 0;
     background: $orange-light;
     color: $orange;
@@ -1735,6 +1767,37 @@ table {
       background: $orange-hover;
     }
   }
+
+  .state-page-button {
+    position: absolute;
+    top: -0.4rem;
+    right: 0;
+    border-radius: 5px;
+    background: $orange-light;
+    color: $orange;
+    transition: all 0.2s ease-in-out;
+    padding: 0.45rem;
+    font-size: 0.75rem;
+    float: left;
+    align-items: center;
+    &:hover {
+      background: $orange-hover;
+    }
+
+    abbr {
+      text-transform: none;
+    }
+
+    svg {
+      width: 12px;
+      height: 12px;
+      stroke-width: 3px;
+      margin-left: 0.25rem;
+      color: $orange;
+      vertical-align: middle;
+    }
+  }
+
 
   .meta {
     display: flex;
@@ -1772,7 +1835,7 @@ table {
 
     .unknown {
       position: absolute;
-      top: 3rem;
+      top: 4.3rem;
       right: 0;
       text-align: right;
       width: 5rem;
