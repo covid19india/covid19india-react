@@ -7,6 +7,7 @@ import {
 } from '../utils/common-functions';
 import {formatDistance} from 'date-fns';
 import {Tooltip} from 'react-lightweight-tooltip';
+import {Link} from 'react-router-dom';
 
 function Row(props) {
   const [state, setState] = useState(props.state);
@@ -263,6 +264,14 @@ function Row(props) {
               )}
             </div>
           </div>
+        </td>
+        <td className="state-page-link" colSpan={3}>
+          <Link to={`state/${state.statecode}`}>
+            <div>
+              <abbr>Visit state page</abbr>
+              <Icon.ArrowRightCircle />
+            </div>
+          </Link>
         </td>
       </tr>
 
