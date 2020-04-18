@@ -56,7 +56,7 @@ const validateCTS = (data = []) => {
 };
 
 export const preprocessTimeseries = (timeseries) => {
-  return validateCTS(timeseries).map((stat) => ({
+  return validateCTS(timeseries).map((stat, index) => ({
     date: new Date(stat.date + ' 2020'),
     totalconfirmed: +stat.totalconfirmed,
     totalrecovered: +stat.totalrecovered,
@@ -64,6 +64,11 @@ export const preprocessTimeseries = (timeseries) => {
     dailyconfirmed: +stat.dailyconfirmed,
     dailyrecovered: +stat.dailyrecovered,
     dailydeceased: +stat.dailydeceased,
+    // Active = Confimed - Recovered - Deceased
+    totalactive:
+      +stat.totalconfirmed - +stat.totalrecovered - +stat.totaldeceased,
+    dailyactive:
+      +stat.dailyconfirmed - +stat.dailyrecovered - +stat.dailydeceased,
   }));
 };
 
@@ -97,14 +102,27 @@ export const parseStateTimeseries = ({states_daily: data}) => {
       Object.entries(statewiseSeries).forEach(([k, v]) => {
         const stateCode = k.toLowerCase();
         const prev = v[v.length - 1] || {};
+        // Parser
+        const dailyconfirmed = +data[i][stateCode] || 0;
+        const dailyrecovered = +data[i + 1][stateCode] || 0;
+        const dailydeceased = +data[i + 2][stateCode] || 0;
+        const totalconfirmed = +data[i][stateCode] + (prev.totalconfirmed || 0);
+        const totalrecovered =
+          +data[i + 1][stateCode] + (prev.totalrecovered || 0);
+        const totaldeceased =
+          +data[i + 2][stateCode] + (prev.totaldeceased || 0);
+        // Push
         v.push({
           date: date.toDate(),
-          dailyconfirmed: +data[i][stateCode] || 0,
-          dailyrecovered: +data[i + 1][stateCode] || 0,
-          dailydeceased: +data[i + 2][stateCode] || 0,
-          totalconfirmed: +data[i][stateCode] + (prev.totalconfirmed || 0),
-          totalrecovered: +data[i + 1][stateCode] + (prev.totalrecovered || 0),
-          totaldeceased: +data[i + 2][stateCode] + (prev.totaldeceased || 0),
+          dailyconfirmed: dailyconfirmed,
+          dailyrecovered: dailyrecovered,
+          dailydeceased: dailydeceased,
+          totalconfirmed: totalconfirmed,
+          totalrecovered: totalrecovered,
+          totaldeceased: totaldeceased,
+          // Active = Confimed - Recovered - Deceased
+          totalactive: totalconfirmed - totalrecovered - totaldeceased,
+          dailyactive: dailyconfirmed - dailyrecovered - dailydeceased,
         });
       });
     }

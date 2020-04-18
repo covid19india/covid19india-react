@@ -26,7 +26,7 @@ function legend({
   let tickAdjust = (g) => {
     const ticks = g.selectAll('.tick line');
     ticks.attr('y1', marginTop + marginBottom - height);
-    d3.select(ticks.nodes()[ticks.size() - 1]).remove();
+    // d3.select(ticks.nodes()[ticks.size() - 1]).remove();
   };
   let x;
 
