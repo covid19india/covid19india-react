@@ -2184,7 +2184,12 @@ input.switch:checked::after {
     }
 
     &.is-blue {
-      h5 { color: $blue-mid; }
+      h5 {
+        color: $blue-mid;
+        &.title {
+          color: $blue;
+        }
+      }
 
       h2,
       h6 { color: $blue; }
@@ -2247,6 +2252,21 @@ input.switch:checked::after {
 
       text {
         color: $gray-mid;
+        stroke: transparent;
+      }
+    }
+
+    &.is-blue {
+      background: $blue-light;
+
+      .domain,
+      .tick,
+      line {
+        stroke: $blue;
+      }
+
+      text {
+        color: $blue-mid;
         stroke: transparent;
       }
     }
@@ -2493,7 +2513,7 @@ footer {
     display: flex;
     flex-direction: row;
     text-align: center;
-  
+
     select {
       appearance: none;
       background-color: #eee;
