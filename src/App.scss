@@ -125,6 +125,7 @@ $warning: #ffc107;
 $danger: #dc3545;
 $light: #f8f9fa;
 $dark: #343a40;
+$dark-transparent: #0000004d;
 $purple: #201aa2dd;
 $purple-light: #201aa220;
 $purple-hover: #201aa230;
@@ -217,7 +218,7 @@ h6 {
     color: inherit;
   }
 
-  .backdrop{
+  #backdrop{
     display: none;
   }
 
@@ -278,7 +279,7 @@ h6 {
     }
 
     .focused{
-      color: $gray-dark;
+      color: $pblue;
       background: $pblue-hover;
     }
 
@@ -2991,12 +2992,16 @@ footer {
     }
 }
 
-body.modal-open,
-body.scroll-disabled {
+body.modal-open {
   overflow-y: hidden;
   min-height: 100vh;
   width: calc(100% - 14.7px); //for chrome/safari
   width: -moz-calc(100% - 16px); //for firefox
+}
+
+body.scroll-disabled {
+  overflow-y: hidden;
+  min-height: 100vh;
 }
 
 .modal {
@@ -3604,6 +3609,11 @@ body.scroll-disabled {
     padding-top: 5rem;
   }
 
+  body.scroll-disabled--padding{
+    width: calc(100% - 14.7px); //for chrome/safari
+    width: -moz-calc(100% - 16px); //for firefox
+  }
+
   .Navbar {
     flex-direction: column;
     position: fixed;
@@ -3613,23 +3623,22 @@ body.scroll-disabled {
     justify-content: flex-start;
     z-index: 99999;
 
-    .backdrop {
+    .backdrop-open{
       position: fixed;
-      display: none;
-      top: 0;
-      left: 112px;
-      height: 100%;
       width: 100%;
-      background: $pblue-mid;
-      z-index: 1000;
+      height: 100%;
+      left: 97px;
+      background: $dark-transparent;
+      opacity: 1;
+      transition: opacity 0.3s linear 0s;
       cursor: pointer;
     }
 
-    .backdrop-open{
-      display: block;
-      animation-name: fadeInUp;
-      animation-duration: 0.4s;
-      animation-timing-function: cubic-bezier(0.25, .8, .25, 1);
+    .backdrop-close{
+      opacity: 0;
+      transition: opacity 0.1s linear 0s, transform 0.1s linear 0s;
+      transform: translateX(-50%);
+      -webkit-transform: translateX(-50%);
     }
 
     .navbar-left {
@@ -3727,8 +3736,7 @@ body.scroll-disabled {
     }
   }
 
-  body.modal-open,
-  body.scroll-disabled {
+  body.modal-open {
     width: 100%;
   }
 

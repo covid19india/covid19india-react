@@ -20,22 +20,46 @@ function Navbar({pages}) {
   };
 
   useEffect(() => {
-    if (expand) document.body.classList.add('scroll-disabled');
-    // stop scrolling when navbar is opened.
-    else document.body.classList.remove('scroll-disabled');
+    // give padding only when there is scrollbar
+    if (expand) {
+      if (window.innerHeight < document.body.scrollHeight) {
+        document.body.classList.add(
+          'scroll-disabled',
+          'scroll-disabled--padding'
+        );
+      } else {
+        document.body.classList.add('scroll-disabled');
+      }
+    } else {
+      if (window.innerHeight < document.body.scrollHeight) {
+        document.body.classList.remove(
+          'scroll-disabled',
+          'scroll-disabled--padding'
+        );
+      } else {
+        document.body.classList.remove('scroll-disabled');
+      }
+    }
+
     if (window.innerWidth > 769) {
       const backdrop = document.getElementById('backdrop');
-      expand
-        ? backdrop.classList.add('backdrop-open')
-        : backdrop.classList.remove('backdrop-open');
+      if (expand) {
+        backdrop.style.display = 'block';
+        backdrop.classList.add('backdrop-open');
+        backdrop.classList.remove('backdrop-close');
+      } else {
+        backdrop.classList.remove('backdrop-open');
+        backdrop.classList.add('backdrop-close');
+      }
     }
   }, [expand]);
+
   return (
     <div
       className="Navbar"
       style={{width: window.innerWidth > 769 && expand ? '6rem' : ''}}
     >
-      <div className="backdrop" id="backdrop"></div>
+      <div id="backdrop"></div>
       <div className="navbar-left">English</div>
       <div className="navbar-middle">
         <Link
