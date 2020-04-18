@@ -213,7 +213,7 @@ function MapExplorer({
       <div className="header">
         <h1>{currentMap.name} Map</h1>
         <h6>
-          {window.innerWidth <= 769 ? 'Tap' : 'Hover'} over a{' '}
+          {window.innerWidth <= 769 ? 'Tap' : 'Click'} on a{' '}
           {currentMap.mapType === MAP_TYPES.COUNTRY ? 'state/UT' : 'district'}{' '}
           for more details
         </h6>
