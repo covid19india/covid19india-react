@@ -3636,7 +3636,7 @@ body.scroll-disabled {
 
     .backdrop-close{
       opacity: 0;
-      transition: opacity 0.1s linear 0s, transform 0.1s linear 0s;
+      transition: opacity 0.1s linear 0s;
       transform: translateX(50%);
       -webkit-transform: translateX(50%);
     }
