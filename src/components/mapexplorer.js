@@ -356,15 +356,6 @@ function MapExplorer({
         ) : null}
 
         {currentMap.mapType === MAP_TYPES.STATE ? (
-          <div
-            className="button back-button"
-            onClick={() => switchMapToState('India')}
-          >
-            Back
-          </div>
-        ) : null}
-
-        {currentMap.mapType === MAP_TYPES.STATE ? (
           <Link to={`state/${currentHoveredRegion.statecode}`}>
             <div className="button state-page-button">
               <abbr>Visit state page</abbr>

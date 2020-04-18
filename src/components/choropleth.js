@@ -190,6 +190,11 @@ function ChoroplethMap({
         if (mapMeta.mapType === MAP_TYPES.COUNTRY)
           setHoveredRegion('Total', mapMeta);
       });
+      svg.on('dblclick', () => {
+        setSelectedRegion(null);
+        if (isCountryLoaded && mapMeta.mapType === MAP_TYPES.STATE)
+          changeMap('India');
+      });
     },
     [
       mapMeta,

@@ -445,7 +445,6 @@ h6 {
 
     .header,
     .map-stats,
-    .back-button,
     .last-update,
     .unknown,
     .state-page-button {
@@ -1814,10 +1813,6 @@ table {
   z-index: 10;
 }
 
-.back-button {
-  z-index: 11;
-}
-
 .anchor {
   cursor: pointer;
   position: absolute;
@@ -1913,19 +1908,6 @@ table {
 
     &.deceased {
       stroke: #6c757d;
-    }
-  }
-
-  .back-button {
-    background: $yellow-light;
-    color: $orange;
-    position: absolute;
-    right: 0;
-    top: 2.75rem;
-    transition: all .2s ease-in-out;
-
-    &:hover {
-      background: $yellow-hover;
     }
   }
 
