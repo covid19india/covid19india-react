@@ -1566,15 +1566,19 @@ table {
         text-align: left;
 
         div {
-          background: $orange-light;
+          background: $yellow-light;
           color: $orange;
           padding: 0.45rem;
           border-radius: 5px;
           font-size: 0.75rem;
           float: left;
           align-items: center;
+          transition: all 0.2s ease-in-out;
           &:hover {
-            background: $orange-hover;
+            background: $yellow-hover;
+            svg {
+              stroke: $orange;
+            }
           }
 
           svg {
@@ -1582,8 +1586,10 @@ table {
             height: 12px;
             stroke-width: 3px;
             margin-left: 0.25rem;
-            color: $orange;
+            color: $orange-mid;
             vertical-align: middle;
+            margin-bottom: 1px;
+            transition: all 0.2s ease-in-out;
           }
         }
       }
@@ -1758,30 +1764,30 @@ table {
 
   .back-button {
     position: absolute;
-    top: 2rem;
+    top: 2.75rem;
     right: 0;
-    background: $orange-light;
+    background: $yellow-light;
     color: $orange;
     transition: all 0.2s ease-in-out;
     &:hover {
-      background: $orange-hover;
+      background: $yellow-hover;
     }
   }
 
   .state-page-button {
     position: absolute;
-    top: -0.4rem;
+    top: -0.5rem;
     right: 0;
     border-radius: 5px;
-    background: $orange-light;
+    background: $yellow-light;
     color: $orange;
     transition: all 0.2s ease-in-out;
     padding: 0.45rem;
+    padding-left: 0.75rem;
     font-size: 0.75rem;
-    float: left;
-    align-items: center;
+    height: 1.5rem;
     &:hover {
-      background: $orange-hover;
+      background: $yellow-hover;
     }
 
     abbr {
@@ -1793,7 +1799,7 @@ table {
       height: 12px;
       stroke-width: 3px;
       margin-left: 0.25rem;
-      color: $orange;
+      stroke: $orange-mid;
       vertical-align: middle;
     }
   }
@@ -1835,7 +1841,7 @@ table {
 
     .unknown {
       position: absolute;
-      top: 4.3rem;
+      top: 5.5rem;
       right: 0;
       text-align: right;
       width: 5rem;
