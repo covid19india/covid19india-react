@@ -39,7 +39,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build && cp build/index.html build/404.html",
-    "test": "react-scripts test",
+    "map_test": "react-scripts test src/__tests__/mapAndApiStateNames.test.js",
+    "test": "react-scripts test --testPathIgnorePatterns=src/__tests__/mapAndApiStateNames.test.js",
     "eject": "react-scripts eject",
     "eslint": "eslint .",
     "eslint:fix": "eslint --fix .",
@@ -68,6 +69,8 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.5.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^6.8.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^6.10.1",
