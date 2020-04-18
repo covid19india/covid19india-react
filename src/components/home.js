@@ -266,18 +266,22 @@ function Home(props) {
 
                 <div className="trends-state-name">
                   <select
+                    value={activeStateCode}
                     onChange={({target}) => {
-                      onHighlightState(JSON.parse(target.value));
+                      const selectedState = target.selectedOptions[0].getAttribute(
+                        'statedata'
+                      );
+                      onHighlightState(JSON.parse(selectedState));
                     }}
                   >
                     {states.map((s) => {
                       return (
                         <option
+                          value={s.statecode}
                           key={s.statecode}
-                          value={JSON.stringify(s)}
-                          selected={s.statecode === activeStateCode}
+                          statedata={JSON.stringify(s)}
                         >
-                          {s.state === 'Total' ? 'All States' : s.state}
+                          {s.statecode === 'TT' ? 'All States' : s.state}
                         </option>
                       );
                     })}
