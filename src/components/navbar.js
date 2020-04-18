@@ -79,7 +79,6 @@ function Navbar({pages}) {
         style={{
           background: expand ? '#4c75f2' : '',
           color: expand ? 'white' : '',
-          width: expand && window.innerWidth > 769 ? '3rem' : '',
         }}
         onClick={() => {
           setExpand(!expand);
