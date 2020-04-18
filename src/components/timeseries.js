@@ -225,7 +225,21 @@ function TimeSeries(props) {
           .attr('r', 4);
       });
 
+      let firstTouch = false;
+      let windowScrollY = null;
+
       function mousemove() {
+        if (d3.event.type === 'touchmove') {
+          if (!firstTouch) {
+            firstTouch = true;
+            windowScrollY = window.scrollY;
+          } else if (
+            windowScrollY !== null &&
+            windowScrollY !== window.scrollY
+          ) {
+            return;
+          }
+        }
         const xm = d3.mouse(this)[0];
         const date = xScale.invert(xm);
         const bisectDate = d3.bisector((d) => d.date).left;
@@ -256,6 +270,7 @@ function TimeSeries(props) {
             yScale(timeseries[T - 1][type])
           );
         });
+        firstTouch = false;
       }
 
       /* Begin drawing charts */
