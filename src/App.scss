@@ -3637,8 +3637,8 @@ body.scroll-disabled {
     .backdrop-close{
       opacity: 0;
       transition: opacity 0.1s linear 0s, transform 0.1s linear 0s;
-      transform: translateX(-50%);
-      -webkit-transform: translateX(-50%);
+      transform: translateX(50%);
+      -webkit-transform: translateX(50%);
     }
 
     .navbar-left {
@@ -4151,6 +4151,14 @@ body.scroll-disabled {
       h1 {
         padding-left: 0;
       }
+    }
+  }
+
+  // for scroll in navbar in horizontal view of mobiles.
+  .Navbar{
+    .expand{
+      height: calc(100vh - 61px);
+      overflow: auto;
     }
   }
 }
