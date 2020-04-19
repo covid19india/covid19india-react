@@ -118,7 +118,7 @@ function Clusters({stateCode}) {
         width={width}
         height={height}
         graphData={networkData}
-        nodeLabel='id'
+        nodeLabel="id"
         nodeColor={(node) => (node.group === 'source' ? '#dc3545' : 'gray')}
         linkDirectionalParticleColor={() => 'red'}
         linkDirectionalParticles={1}
@@ -134,7 +134,7 @@ function Clusters({stateCode}) {
     ReactDOM.render(<NetworkGraph />, document.getElementById('clusters'));
   }, [networkData]);
 
-  return <div id='clusters'></div>;
+  return <div id="clusters"></div>;
 }
 
 export default Clusters;
