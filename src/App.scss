@@ -3742,7 +3742,8 @@ body.modal-open {
 }
 
 .cards-container {
-  padding: 4rem;
+  padding: 2rem;
+  margin-left: 5rem;
   .cards {
     display: flex;
     justify-content: space-between;
@@ -3755,33 +3756,38 @@ body.modal-open {
         box-shadow: rgba(#000, 0.3) 0 0 8px 0;
       }
       height: 30rem;
-        .charts-header {
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start;
-          .chart-title {
-            font-family: 'archia';
-            font-size: 1.5rem !important;
-            color: #6c757d;
-            font-weight: 900;
-            text-transform: uppercase;
-            padding: 20px 0 20px 0;
-          }
-
-          .chart-content {
-            height: 100%;
-            width: 100%;
-          }
-
-          .chart-note {
-           color: $gray;
-           height: 50px;
-           margin-top: 5px;
-          }
+      .charts-header {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        .chart-title {
+          font-family: 'archia';
+          font-size: 1.5rem !important;
+          color: #6c757d;
+          font-weight: 900;
+          text-transform: uppercase;
+          padding: 20px 0 20px 0;
         }
+
+        .chart-content {
+          height: 100%;
+          width: 100%;
+        }
+
+        .chart-note {
+          color: $gray;
+          height: 50px;
+          margin-top: 5px;
+        }
+      }
     }
+  }
+
+  @media (max-width: 769px) {
+    padding: 1rem;
+    margin-left: unset;
   }
 }
 
