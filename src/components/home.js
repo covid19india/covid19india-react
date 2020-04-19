@@ -9,7 +9,7 @@ import {
   preprocessTimeseries,
   parseStateTimeseries,
 } from '../utils/common-functions';
-import Fab from '@material-ui/core/Fab';
+import {Fab, Fade} from '@material-ui/core';
 import * as Icon from 'react-feather';
 
 import Table from './table';
@@ -45,11 +45,11 @@ function Home(props) {
   );
 
   const checkScrollEvent = useCallback((event) => {
-    window.pageYOffset > 20 ? setHasScrolled(true) : setHasScrolled(false);
+    window.pageYOffset > 100 ? setHasScrolled(true) : setHasScrolled(false);
   }, []);
 
   useEffect(() => {
-    window.pageYOffset > 20 ? setHasScrolled(true) : setHasScrolled(false);
+    window.pageYOffset > 100 ? setHasScrolled(true) : setHasScrolled(false);
     window.addEventListener('scroll', checkScrollEvent);
     return () => {
       window.removeEventListener('scroll', checkScrollEvent);
@@ -145,11 +145,8 @@ function Home(props) {
   // );
 
   function animateScroll() {
-    const c = document.body.scrollTop || document.documentElement.scrollTop; // For {Safari} || {Chrome, Firefox, IE and Opera}
-    if (c > 0) {
-      window.requestAnimationFrame(animateScroll);
-      window.scrollTo(0, c - c / 6); // Increase fixed constant for smoother scrolling and vice versa
-    }
+    document.body.scrollTo({top: 0, behavior: 'smooth'}); // For Safari
+    document.documentElement.scrollTo({top: 0, behavior: 'smooth'}); // For Chrome, Firefox, IE and Opera
   }
 
   return (
@@ -314,23 +311,23 @@ function Home(props) {
                 logMode={timeseriesLogMode}
               />
               <div>
-                <Fab
-                  color="inherit"
-                  aria-label="gototop"
-                  id="gototopbtn-home"
-                  onClick={animateScroll}
-                  size="small"
-                  disabled={!hasScrolled}
-                  style={{
-                    position: 'fixed',
-                    bottom: '1rem',
-                    right: '1rem',
-                    zIndex: '1000',
-                    opacity: hasScrolled ? 1 : 0,
-                  }}
-                >
-                  <Icon.Navigation2 strokeWidth="2.5" color="#4c75f2" />
-                </Fab>
+                <Fade in={hasScrolled}>
+                  <Fab
+                    color="inherit"
+                    aria-label="gototop"
+                    id="gototopbtn-home"
+                    onClick={animateScroll}
+                    size="small"
+                    style={{
+                      position: 'fixed',
+                      bottom: '1rem',
+                      right: '1rem',
+                      zIndex: '1000',
+                    }}
+                  >
+                    <Icon.Navigation2 strokeWidth="2.5" color="#4c75f2" />
+                  </Fab>
+                </Fade>
               </div>
             </React.Fragment>
           )}
