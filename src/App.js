@@ -15,6 +15,7 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
+import {useLocalStorage} from 'react-use';
 
 function App() {
   const pages = [
@@ -62,31 +63,15 @@ function App() {
     },
   ];
 
-  const [darkMode, setDarkMode] = React.useState(getInitialMode());
+  const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
 
   React.useEffect(() => {
-    localStorage.setItem('darkMode', JSON.stringify(darkMode));
-  }, [darkMode]);
-
-  function getInitialMode() {
-    const isReturningUser = 'darkMode' in localStorage;
-    const savedMode = JSON.parse(localStorage.getItem('darkMode'));
-    const userPrefersDark = getPreferredColorScheme();
-
-    if (isReturningUser) {
-      return savedMode;
-    } else if (userPrefersDark) {
-      return true;
+    if (darkMode) {
+      document.querySelector('body').classList.add('dark-mode');
     } else {
-      return false;
+      document.querySelector('body').classList.remove('dark-mode');
     }
-  }
-
-  function getPreferredColorScheme() {
-    if (!window.matchMedia) return;
-
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  }
+  }, [darkMode]);
 
   return (
     <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
