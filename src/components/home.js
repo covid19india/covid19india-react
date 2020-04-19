@@ -183,7 +183,10 @@ function Home(props) {
               </div>
             </div>
             <div className="home-left" style={{width: '31rem'}}>
-              <Scrollbars style={{height: '100vh'}}>
+              <Scrollbars
+                className="fadeInUp"
+                style={{height: '100vh', animationDelay: '2s'}}
+              >
                 {states.length ? <Level data={states[0]} /> : ''}
                 {fetched && <Minigraph timeseries={timeseries['TT']} />}
                 {fetched && (
@@ -199,7 +202,10 @@ function Home(props) {
               </Scrollbars>
             </div>
             <div className="home-right" style={{width: '31rem'}}>
-              <Scrollbars style={{height: '100vh'}}>
+              <Scrollbars
+                className="fadeInUp"
+                style={{height: '100vh', animationDelay: '2s'}}
+              >
                 {fetched && (
                   <React.Fragment>
                     <MapExplorer
@@ -313,7 +319,7 @@ function Home(props) {
         ) : (
           <>
             <div className="home-left">
-              <div className="header fadeInUp" style={{animationDelay: '1s'}}>
+              <div className="header fadeInUp" style={{animationDelay: '3s'}}>
                 <Search />
                 <div className="actions">
                   <h5>
