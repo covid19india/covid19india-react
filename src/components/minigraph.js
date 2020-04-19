@@ -25,7 +25,10 @@ function Minigraph({timeseries}) {
     const svg4 = d3.select(svgRef4.current);
 
     data.forEach((d) => {
-      d['dailyactive'] = d.dailyconfirmed - d.dailyrecovered - d.dailydeceased;
+      d['dailyactive'] =
+        d.dailyconfirmed - d.dailyrecovered - d.dailydeceased > 0
+          ? d.dailyconfirmed - d.dailyrecovered - d.dailydeceased
+          : 0;
     });
 
     const xScale = d3

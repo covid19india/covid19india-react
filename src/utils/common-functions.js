@@ -111,6 +111,15 @@ export const parseStateTimeseries = ({states_daily: data}) => {
           +data[i + 1][stateCode] + (prev.totalrecovered || 0);
         const totaldeceased =
           +data[i + 2][stateCode] + (prev.totaldeceased || 0);
+
+        // Active = Confimed - Recovered - Deceased
+
+        let totalactive = totalconfirmed - totalrecovered - totaldeceased;
+        totalactive = totalactive > 0 ? totalactive : 0;
+
+        let dailyactive = dailyconfirmed - dailyrecovered - dailydeceased;
+        dailyactive = dailyactive > 0 ? dailyactive : 0;
+
         // Push
         v.push({
           date: date.toDate(),
@@ -120,9 +129,8 @@ export const parseStateTimeseries = ({states_daily: data}) => {
           totalconfirmed: totalconfirmed,
           totalrecovered: totalrecovered,
           totaldeceased: totaldeceased,
-          // Active = Confimed - Recovered - Deceased
-          totalactive: totalconfirmed - totalrecovered - totaldeceased,
-          dailyactive: dailyconfirmed - dailyrecovered - dailydeceased,
+          totalactive: totalactive,
+          dailyactive: dailyactive,
         });
       });
     }
