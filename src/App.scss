@@ -2586,10 +2586,10 @@ footer {
     .react-date-picker.react-date-picker--closed.react-date-picker--enabled,
     .react-date-picker.react-date-picker--open.react-date-picker--enabled {
       height: 2.05rem;
-      margin: 0.188rem 0.625rem 0 0.1rem;
+      margin: 0.2rem 0.1rem;
       font-family: 'archia';
       font-weight: 900;
-      font-size: 11px;
+      font-size: 12px;
       color: #6c757d;
       background-color: #eee;
       border: 2px solid #e8e8e9;
@@ -2598,7 +2598,10 @@ footer {
       align-items: center;
       padding-inline-start: 1px;
       cursor: default;
-      padding: 0 0.5rem;
+      padding: 0.5rem;
+      input:focus, button:focus {
+        outline: none;
+      }
     }
 
     .react-date-picker, .react-date-picker *, .react-date-picker *:before, .react-date-picker *:after {
@@ -2680,6 +2683,10 @@ footer {
       padding: 0 !important;
       margin: 0 !important;
       margin-left: 1rem !important;
+      svg {
+        height: 16px;
+        width: 16px;
+      }
     }
 
     .calendar-close {
