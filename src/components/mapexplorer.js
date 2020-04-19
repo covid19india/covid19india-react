@@ -4,6 +4,7 @@ import {MAP_TYPES, MAP_META} from '../constants';
 import {formatDate, formatDateAbsolute} from '../utils/common-functions';
 import {formatDistance, format, parse} from 'date-fns';
 import {formatNumber} from '../utils/common-functions';
+import {Link} from 'react-router-dom';
 import * as Icon from 'react-feather';
 import statePopData from './StateStats.json';
 
@@ -133,11 +134,13 @@ function MapExplorer({
             recovered: 0,
           };
         }
-        setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
+        const currentHoveredRegion = getRegionFromDistrict(districtData, name);
         const panelRegion = getRegionFromState(
           states.find((state) => currentMap.name === state.state)
         );
         setPanelRegion(panelRegion);
+        currentHoveredRegion.statecode = panelRegion.statecode;
+        setCurrentHoveredRegion(currentHoveredRegion);
         if (onMapHighlightChange) onMapHighlightChange(panelRegion);
       }
     },
@@ -337,6 +340,15 @@ function MapExplorer({
           >
             Back
           </div>
+        ) : null}
+
+        {currentMap.mapType === MAP_TYPES.STATE ? (
+          <Link to={`state/${currentHoveredRegion.statecode}`}>
+            <div className="button state-page-button">
+              <abbr>Visit state page</abbr>
+              <Icon.ArrowRightCircle />
+            </div>
+          </Link>
         ) : null}
       </div>
 
