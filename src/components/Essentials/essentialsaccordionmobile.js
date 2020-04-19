@@ -6,7 +6,12 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import {makeStyles} from '@material-ui/core/styles';
-import {getFormattedLinkForAccordion, parseText} from './essentialsutls';
+import {
+  getFormattedLinkForAccordion,
+  parseText,
+  getHighlightedText,
+} from './essentialsutls';
+
 const usePanelSummaryStyles = makeStyles((theme) => ({
   content: {
     display: 'flex',
@@ -54,7 +59,7 @@ const useItemTextStyles = makeStyles((theme) => ({
   },
 }));
 
-function TableAccordion({rows}) {
+function TableAccordion({rows, searchValue}) {
   const classesPannelSummary = usePanelSummaryStyles();
   const classesPanel = usePanelStyles();
   const classesListItemText = useItemTextStyles();
@@ -107,7 +112,11 @@ function TableAccordion({rows}) {
                 <ListItem alignItems="flex-start" dense={true} divider={true}>
                   <ListItemText
                     primary="Organisation Name"
-                    secondary={row.values['nameoftheorganisation']}
+                    secondary={getHighlightedText(
+                      row.values['nameoftheorganisation'],
+                      searchValue,
+                      'mobile'
+                    )}
                     classes={{
                       primary: classesListItemText.primary,
                       secondary: classesListItemText.secondary,
@@ -124,7 +133,11 @@ function TableAccordion({rows}) {
                 <ListItem alignItems="flex-start" dense={true} divider={true}>
                   <ListItemText
                     primary="Location"
-                    secondary={row.values['city']}
+                    secondary={getHighlightedText(
+                      row.values['city'],
+                      searchValue,
+                      'mobile'
+                    )}
                     classes={{
                       primary: classesListItemText.primary,
                       secondary: classesListItemText.secondary,
@@ -134,7 +147,11 @@ function TableAccordion({rows}) {
                 <ListItem alignItems="flex-start" dense={true} divider={true}>
                   <ListItemText
                     primary="Description"
-                    secondary={row.values['descriptionandorserviceprovided']}
+                    secondary={getHighlightedText(
+                      row.values['descriptionandorserviceprovided'],
+                      searchValue,
+                      'mobile'
+                    )}
                     classes={{
                       primary: classesListItemText.primary,
                       secondary: classesListItemText.secondary,
@@ -144,7 +161,11 @@ function TableAccordion({rows}) {
                 <ListItem alignItems="flex-start" dense={true} divider={true}>
                   <ListItemText
                     primary="Service"
-                    secondary={row.values['category']}
+                    secondary={getHighlightedText(
+                      row.values['category'],
+                      searchValue,
+                      'mobile'
+                    )}
                     classes={{
                       primary: classesListItemText.primary,
                       secondary: classesListItemText.secondary,

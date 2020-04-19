@@ -2,15 +2,14 @@ import React from 'react';
 export const getNumbersLink = (initialValue) => {
   // const phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
   const numbf = initialValue.split(',');
-  // console.log('numbers are', '' + numbf.length);
-
-  const numbg = /^\d{5,12}$/g;
-  const numberList = numbf.map((iv, i) => {
-    iv = iv.trim();
-    // console.log('numbr ', '' + iv);
-    return iv.replace(numbg, '<a href="tel:$&">$&</a>');
+  const numberList = numbf.map((el) => {
+    return `<a href="tel:${el}">${el}</a>`;
   });
-  // console.log('numberList ', '' + numberList);
+  // const numbg = /^\d{3,12}$/g;
+  // const numberList = numbf.map((iv, i) => {
+  //   iv = iv.trim();
+  //   return iv.replace(numbg, '<a href="tel:$&">$&</a>');
+  // });
   return {numberList};
 };
 export const getFormattedLinkForAccordion = (initialValue) => {
@@ -34,7 +33,6 @@ export const getFormattedLink = (initialValue) => {
   if (initialValue.match(noLetters) != null) {
     const formatedLink = getNumbersLink(initialValue);
     const links = JSON.parse(JSON.stringify(formatedLink));
-    // console.log('success val', ' --' + JSON.stringify(links.numberList));
     s3 = String(links.numberList).replace(/,/g, '<br>');
   } else {
     const s1 = initialValue.replace(
@@ -52,30 +50,51 @@ export const getFormattedLink = (initialValue) => {
   }
   return s3;
 };
-export const renderCell = (celli) => {
-  const value = celli.cell.value;
-  // console.log(celli);
-  let renderedvalue = '';
-  const link = celli.row.allCells[5].value.split(',')[0];
 
-  if (celli.column.id === 'contact') renderedvalue = getFormattedLink(value);
-  else if (celli.column.id === 'phonenumber') {
-    // renderedvalue = String(JSON.parse(JSON.stringify(getNumbersLink(value))).numberList).replace(/,/g, '<br>');
-    renderedvalue = getFormattedLink(value);
-  } else if (celli.column.id === 'nameoftheorganisation') {
-    if (link !== '')
-      renderedvalue = `<a href=${link} target="_blank">${value}</a>`;
-    else renderedvalue = value;
-  } else renderedvalue = value;
+const customJoinHighlight = (list, joinVals) => {
+  let result = '';
+  let i = 0;
+  for (i = 0; i < list.length - 1; i++) {
+    result +=
+      list[i] +
+      '<span style="background-color: yellow">' +
+      joinVals[i] +
+      '</span>';
+  }
+  result += list[i];
+  return result;
+};
 
-  return (
-    <div
-      className="tablecelldata"
-      dangerouslySetInnerHTML={{
-        __html: renderedvalue,
-      }}
-    ></div>
-  );
+const customJoinHighlightMobile = (list, joinVals) => {
+  const result = [];
+  let i = 0;
+  for (i = 0; i < list.length - 1; i++) {
+    result.push(<span key={i}>{list[i]}</span>);
+    result.push(<span style={{backgroundColor: 'yellow'}}>{joinVals[i]}</span>);
+  }
+  result.push(<span key={i}>{list[i]}</span>);
+  return result;
+};
+
+export const getHighlightedText = (text, searchValue, type) => {
+  // uses searchValue state!!
+  if (searchValue === '') {
+    return text;
+  }
+
+  const regexObject = new RegExp(searchValue, 'gi');
+
+  const parts = text.split(regexObject);
+  if (parts.length === 1) {
+    return text;
+  } else {
+    const matches = [...text.matchAll(regexObject)];
+    if (type === 'desktop') {
+      return customJoinHighlight(parts, matches);
+    } else {
+      return customJoinHighlightMobile(parts, matches);
+    }
+  }
 };
 
 // searchbar stuff
@@ -83,18 +102,19 @@ export const renderCell = (celli) => {
 export const getSuggestions = (value, resources) => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
-  // console.log(resources);
   return inputLength === 0
     ? resources
     : resources.filter(
         (resource) =>
           resource.category.toLowerCase().includes(inputValue.toLowerCase()) ||
+          resource.city.toLowerCase().includes(inputValue.toLowerCase()) ||
           resource.descriptionandorserviceprovided
             .toLowerCase()
             .includes(inputValue.toLowerCase()) ||
           resource.nameoftheorganisation
             .toLowerCase()
-            .includes(inputValue.toLowerCase())
+            .includes(inputValue.toLowerCase()) ||
+          resource.state.toLowerCase().includes(inputValue.toLowerCase())
       );
 };
 

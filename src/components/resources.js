@@ -25,7 +25,6 @@ function Resources(props) {
   const checkForResizeEvent = useCallback((event) => {
     if (window.innerWidth > 639) setIsDesktop(true);
     else setIsDesktop(false);
-    // console.log(isDesktop);
   }, []);
 
   useEffect(() => {
@@ -42,13 +41,9 @@ function Resources(props) {
       const [response] = await Promise.all([
         axios.get('https://api.covid19india.org/resources/resources.json'),
       ]);
-      // console.log(response)
-      // console.log("Column names are")
-      // console.log(columns)
       // setData(response.data.resources);
       const hashmap = {};
       response.data.resources.forEach((x) => {
-        // console.log(x)
         if (typeof hashmap[x['state']] === 'undefined')
           hashmap[x['state']] = {};
         if (typeof hashmap[x['state']][x['city']] === 'undefined')
@@ -65,9 +60,7 @@ function Resources(props) {
       // setIndianState(Object.keys()[0]);
 
       setFetched(true);
-      // console.log(resourcedict);
     } catch (err) {
-      // console.log(err);
     }
   };
 
@@ -172,7 +165,7 @@ function Resources(props) {
             });
           });
         });
-        return array.sort().map((x, i) => (
+        return array.map((x, i) => (
           <option
             key={i}
             value={x}
@@ -194,7 +187,7 @@ function Resources(props) {
               if (array.indexOf(x) === -1) array.push(x);
             });
           });
-          return array.sort().map((x, i) => (
+          return array.map((x, i) => (
             <option
               key={i}
               value={x}
@@ -231,11 +224,8 @@ function Resources(props) {
   };
 
   const filterTable = function () {
-    // console.log('Search Button Pressed');
-    // console.log(`Filters are: ${indianstate} ---> ${city} ----> ${category}`);
     let a = [];
     if (category === 'all') {
-      // console.log("All category selected");
       if (city === 'all') {
         if (indianstate === 'all') {
           Object.values(resourcedict).forEach((state) => {
@@ -258,8 +248,6 @@ function Resources(props) {
         });
       }
     } else {
-      // console.log(`Category chosen ${category}`);
-      // a = resourcedict[indianstate][city][category];
 
       if (indianstate === 'all' && city === 'all') {
         Object.values(resourcedict).forEach((state) => {
@@ -292,12 +280,9 @@ function Resources(props) {
         );
       }
     } catch (err) {
-      // console.log('No PAN India row found');
     }
     setData(a);
     setPartData(a.slice(0, 30));
-    // console.log(resourcedict[indianstate][city][category]);
-    // console.log(data);
     setShowTable(true);
   };
 
@@ -325,7 +310,6 @@ function Resources(props) {
   };
   const changeCategory = function (changedcategoryevent) {
     setCategory(changedcategoryevent.target.value);
-    // console.log(changedcategoryevent.target.value);
   };
   const appendData = function () {
     const tempArr = partData.concat(
@@ -369,7 +353,7 @@ function Resources(props) {
           url: 'https://www.covid19india.org/essentials',
         })
         .then()
-        .catch((error) => console.log(error));
+        .catch((error) => {});
     } else {
       openSharingLink(message);
     }

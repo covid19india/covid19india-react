@@ -1,46 +1,53 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 
-function Navbar(props) {
-  const [menuVisible, setMenuVisible] = useState(false);
+const navLinkProps = (path, animationDelay) => ({
+  className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
+  style: {
+    animationDelay: `${animationDelay}s`,
+  },
+});
 
-  // HTML Properties for each of the links in UI
-  const navLinkProps = (path, animationDelay) => ({
-    className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
-    style: {
-      animationDelay: `${animationDelay}s`,
-    },
-  });
+function Navbar({pages}) {
+  const [expand, setExpand] = useState(false);
 
-  if (window.location.pathname !== '/summary') {
-    return (
+  return (
+    <div
+      className="Navbar"
+      style={{width: window.innerWidth > 769 && expand ? '6rem' : ''}}
+    >
+      <div className="navbar-left">English</div>
+      <div className="navbar-middle">
+        <Link to="/">
+          Covid19<span>India</span>
+        </Link>
+      </div>
       <div
-        className="Navbar"
+        className="navbar-right"
         style={{
-          animationDelay: '0.5s',
-          transition: 'all 0.3s ease-in-out',
+          background: expand ? '#4c75f2' : '',
+          color: expand ? 'white' : '',
+        }}
+        onClick={() => {
+          setExpand(!expand);
         }}
       >
-        <Link to="/">
-          <img
-            className="fadeInUp logo"
-            alt="India COVID-19 Tracker"
-            src="/icon.png"
-            style={{
-              animationDelay: '0.0s',
-              transition: 'all 0.3s ease-in-out',
-            }}
-          />
-        </Link>
-
-        <div className="navbar-left">
-          <div className={`navbar-menu ${!menuVisible ? 'hidden' : ''}`}>
-            {props.pages.map((page, i) => {
+        {expand ? 'Close' : 'Menu'}
+      </div>
+      {expand && (
+        <div
+          className="expand"
+          style={{left: window.innerWidth > 769 && expand ? '6rem' : ''}}
+        >
+          {pages.map((page, i) => {
+            if (page.showInNavbar === true) {
               return (
                 <Link
-                  onClick={() => setMenuVisible(false)}
                   to={page.pageLink}
                   key={i}
+                  onClick={() => {
+                    setExpand(false);
+                  }}
                 >
                   <span
                     {...navLinkProps(
@@ -52,27 +59,19 @@ function Navbar(props) {
                   </span>
                 </Link>
               );
-            })}
-          </div>
-        </div>
-
-        <div className="navbar-right">
+            }
+            return null;
+          })}
           <div
-            className="navbar-toggle"
-            onClick={() => {
-              setMenuVisible(!menuVisible);
-            }}
+            className="expand-bottom fadeInUp"
+            style={{animationDelay: '1s'}}
           >
-            <div></div>
-            <div></div>
-            <div></div>
+            <h5>A crowdsourced initiative.</h5>
           </div>
         </div>
-      </div>
-    );
-  } else {
-    return <div></div>;
-  }
+      )}
+    </div>
+  );
 }
 
 export default Navbar;
