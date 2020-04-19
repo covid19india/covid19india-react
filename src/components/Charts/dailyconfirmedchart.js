@@ -33,9 +33,7 @@ function DailyConfirmedChart(props) {
   props.timeseries.forEach((data, index) => {
     if (index >= 31) {
       dates.push(moment(data.date.trim(), 'DD MMM').format('DD MMM'));
-      confirmed.push(
-        data.dailyconfirmed - data.dailyrecovered - data.dailydeceased
-      );
+      confirmed.push(data.dailyconfirmed);
       recovered.push(data.dailyrecovered);
       deceased.push(data.dailydeceased);
     }
@@ -45,19 +43,28 @@ function DailyConfirmedChart(props) {
     labels: dates,
     datasets: [
       {
+        data: confirmed,
+        label: 'New Cases',
+        borderWidth: 1,
+        borderColor: '#007bff',
+        fill: true,
+        backgroundColor: 'rgba(0,123,255,0.8)',
+      },
+      {
         data: recovered,
         label: 'Recovered',
-        backgroundColor: '#28a745',
+        borderWidth: 1,
+        borderColor: '#28a745',
+        fill: true,
+        backgroundColor: 'rgba(40,167,69,0.8)',
       },
       {
         data: deceased,
         label: 'Deceased',
-        backgroundColor: '#6c757d',
-      },
-      {
-        data: confirmed,
-        label: 'Active',
-        backgroundColor: '#ff073a',
+        borderWidth: 1,
+        borderColor: '#404a54',
+        fill: true,
+        backgroundColor: 'rgba(64,74,84,0.9)',
       },
     ],
   };
@@ -70,13 +77,13 @@ function DailyConfirmedChart(props) {
     events: ['mousemove', 'mouseout', 'touchstart', 'touchmove', 'touchend'],
     maintainAspectRatio: false,
     legend: {
-      display: false,
+      display: true,
     },
     layout: {
       padding: {
         left: 20,
         right: 20,
-        top: 20,
+        top: 0,
         bottom: 20,
       },
     },
