@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {format, parse} from 'date-fns';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState, useCallback} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import * as Icon from 'react-feather';
 
@@ -79,6 +79,15 @@ function State(props) {
     }
   };
 
+  const setType = useCallback((type, mapType) => {
+    /* setStatisticOption(type);
+    if (mapType === MAP_TYPES.COUNTRY) {
+      setDensityEnabled(true);
+    } else {
+      setDensityEnabled(false);
+    }*/
+  }, []);
+
   const testObjLast = testData[testData.length - 1];
 
   return (
@@ -139,6 +148,7 @@ function State(props) {
                   stateDistrictWiseData={districtData}
                   stateTestData={testData}
                   isCountryLoaded={false}
+                  setType={setType}
                 />
               }
             </React.Fragment>
