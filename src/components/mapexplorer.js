@@ -53,7 +53,7 @@ function MapExplorer({
 
     if (currentMap.mapType === MAP_TYPES.COUNTRY) {
       if (chartType === 1) {
-        setType(1);
+        setType(1, MAP_TYPES.COUNTRY);
         currentMapData = states.reduce((acc, state) => {
           if (state.state === 'Total') {
             return acc;
@@ -68,7 +68,7 @@ function MapExplorer({
           return acc;
         }, {});
       } else if (chartType === 2) {
-        setType(2);
+        setType(2, MAP_TYPES.COUNTRY);
         currentMapData = states.reduce((acc, state) => {
           if (state.state === 'Total') {
             return acc;
@@ -88,7 +88,7 @@ function MapExplorer({
         }, {});
       }
     } else if (currentMap.mapType === MAP_TYPES.STATE) {
-      setType(1);
+      setType(1, MAP_TYPES.STATE);
       const districtWiseData = (
         stateDistrictWiseData[currentMap.name] || {districtData: {}}
       ).districtData;

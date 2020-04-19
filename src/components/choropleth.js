@@ -75,7 +75,7 @@ function ChoroplethMap({
       const heightLegend = +svgLegend.attr('height');
       let title = 'Confirmed Cases';
 
-      if (type == 1) {
+      if (type === 1) {
         title = 'Confirmed Cases';
       } else {
         title = 'Case Density Per Million';

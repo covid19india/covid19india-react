@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import axios from 'axios';
 
-import {MAP_META} from '../constants';
+import {MAP_META, MAP_TYPES} from '../constants';
 import {
   formatDate,
   formatDateAbsolute,
@@ -35,6 +35,7 @@ function Home(props) {
   const [showUpdates, setShowUpdates] = useState(false);
   const [seenUpdates, setSeenUpdates] = useState(false);
   const [newUpdate, setNewUpdate] = useState(true);
+  const [densityEnabled, setDensityEnabled] = useState(true);
 
   useEffect(() => {
     // this if block is for checking if user opened a page for first time.
@@ -116,8 +117,13 @@ function Home(props) {
     setActiveStateCode(statecode);
   }, []);
 
-  const setType = useCallback((type) => {
+  const setType = useCallback((type, mapType) => {
     setStatisticOption(type);
+    if (mapType === MAP_TYPES.COUNTRY) {
+      setDensityEnabled(true);
+    } else {
+      setDensityEnabled(false);
+    }
   }, []);
 
   const refs = [useRef(), useRef(), useRef()];
@@ -215,7 +221,13 @@ function Home(props) {
                   <h4>Total Cases</h4>
                 </div>
                 <div
-                  className={`tab ${statisticOption === 2 ? 'focused' : ''}`}
+                  className={`tab ${
+                    densityEnabled
+                      ? statisticOption === 2
+                        ? 'focused'
+                        : ''
+                      : 'disabled'
+                  }`}
                   onClick={() => {
                     setStatisticOption(2);
                   }}
