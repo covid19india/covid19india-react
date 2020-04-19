@@ -1,20 +1,10 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import ResourceTable from './resourcetable';
 import axios from 'axios';
-<<<<<<< HEAD
 import Fab from '@material-ui/core/Fab';
-import NavigationOutlinedIcon from '@material-ui/icons/NavigationOutlined';
+import * as Icon from 'react-feather';
 import FiltersMobile from './Essentials/essentialsfiltersmobile';
 import FiltersDesktop from './Essentials/essentialsfiltersdesktop';
-=======
-import FormControl from '@material-ui/core/FormControl';
-import Popover from '@material-ui/core/Popover';
-import Select from '@material-ui/core/Select';
-import {makeStyles} from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import * as Icon from 'react-feather';
-import Fab from '@material-ui/core/Fab';
->>>>>>>  changes in search bar positions, used feather icons,added loader gif for infinite scroll
 
 function Resources(props) {
   const [data, setData] = useState([]);
@@ -70,8 +60,7 @@ function Resources(props) {
       // setIndianState(Object.keys()[0]);
 
       setFetched(true);
-    } catch (err) {
-    }
+    } catch (err) {}
   };
 
   const handleDisclaimerClick = (event) => {
@@ -258,7 +247,6 @@ function Resources(props) {
         });
       }
     } else {
-
       if (indianstate === 'all' && city === 'all') {
         Object.values(resourcedict).forEach((state) => {
           Object.values(state).forEach((citydata) => {
@@ -289,8 +277,7 @@ function Resources(props) {
           }
         );
       }
-    } catch (err) {
-    }
+    } catch (err) {}
     setData(a);
     setPartData(a.slice(0, 30));
     setShowTable(true);
@@ -375,7 +362,6 @@ function Resources(props) {
           <h3>Service Before Self</h3>
         </div>
         {!isDesktop && (
-<<<<<<< HEAD
           <FiltersMobile
             handleDisclaimerClick={handleDisclaimerClick}
             popoverid={id}
@@ -414,404 +400,6 @@ function Resources(props) {
             filterTable={filterTable}
             openSharingTray={openSharingTray}
           />
-=======
-          <React.Fragment>
-            <div
-              className="disclaimercontainer"
-              style={{
-                display: 'flex',
-                flexDirection: 'row-reverse',
-                width: '100%',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <div
-                className="button is-purple mobile-disclaimer-button"
-                style={{
-                  margin: '0.2rem',
-                  padding: '0.5rem',
-                  alignItems: 'center',
-                }}
-                onClick={handleDisclaimerClick}
-              >
-                Disclaimer
-                <Icon.AlertCircle htmlColor="#6c757d" fontSize="0.2rem" />
-              </div>
-              <Popover
-                id={id}
-                open={isDisclaimerOpen}
-                classes={{root: classesPopOver.root}}
-                anchorEl={anchorEl}
-                onClose={handleDisclaimerClose}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-              >
-                <h6
-                  style={{
-                    paddingLeft: '0.5rem',
-                    color: '#343a40',
-                    margin: '0.3rem 0rem',
-                  }}
-                >
-                  <p>
-                    We are a community sourced listing platform and are not
-                    associated with any of the organisations listed below.
-                  </p>
-                  <p>
-                    Although we verify all our listings, we request you to
-                    follow all the guidelines and take necessary precautions.
-                  </p>
-                  <p>
-                    We encourage you to report any error or suspicious activity
-                    so we can take immediate action.
-                  </p>
-                </h6>
-              </Popover>
-              <a
-                href="https://docs.google.com/forms/d/e/1FAIpQLSfquevp7_rdgdEoDgTdimWwTXO3B9TjFEAm3DbrMDXxCiuwuA/viewform"
-                className="button add-entry is-purple"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{margin: '0.2rem 0.2rem', padding: '0.5rem 0.5rem'}}
-              >
-                <span>Add</span>
-              </a>
-              <a
-                href="https://forms.gle/AG5hmYxyhto3NjU46"
-                className="button add-entry is-purple"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{margin: '0.2rem 0.2rem', padding: '0.5rem 0.5rem'}}
-              >
-                <span>Feedback</span>
-              </a>
-            </div>
-            <div className="resourcefilters">
-              <FormControl
-                variant="outlined"
-                size="small"
-                className="resourcefilterMobile"
-                classes={{root: classesFormControl.root}}
-              >
-                <InputLabel
-                  id="demo-simple-select-outlined-label"
-                  classes={{root: classesInputLabel.root}}
-                >
-                  State/UT
-                </InputLabel>
-                <Select
-                  native
-                  labelId="demo-simple-select-outlined-label"
-                  id="stateselect"
-                  value={indianstate}
-                  onChange={changeIndianState}
-                  defaultValue="all"
-                  label="State/UT"
-                  classes={{root: classesMenuItem.root}}
-                >
-                  <option value="all" classes={{root: classesMenuItem.root}}>
-                    All states
-                  </option>
-                  {getIndianStateOptions()}
-                </Select>
-              </FormControl>
-              <FormControl
-                variant="outlined"
-                size="small"
-                className="resourcefilterMobile"
-                classes={{root: classesFormControl.root}}
-              >
-                <InputLabel
-                  id="demo-simple-select-outlined-label"
-                  classes={{root: classesInputLabel.root}}
-                >
-                  City
-                </InputLabel>
-                <Select
-                  native
-                  labelId="demo-simple-select-outlined-label"
-                  id="cityselect1"
-                  value={city}
-                  onChange={changeCity}
-                  defaultValue="all"
-                  label="City"
-                  classes={{root: classesMenuItem.root}}
-                >
-                  <option value="all" classes={{root: classesMenuItem.root}}>
-                    All Cities
-                  </option>
-                  {getCityOptions()}
-                </Select>
-              </FormControl>
-              <FormControl
-                variant="outlined"
-                size="small"
-                className="resourcefilterMobile"
-                classes={{root: classesFormControl.root}}
-              >
-                <InputLabel
-                  id="demo-simple-select-outlined-label"
-                  classes={{root: classesInputLabel.root}}
-                >
-                  Services
-                </InputLabel>
-                <Select
-                  native
-                  labelId="demo-simple-select-outlined-label"
-                  id="categoryselect"
-                  value={category}
-                  onChange={changeCategory}
-                  defaultValue="all"
-                  label="Services"
-                  classes={{root: classesMenuItem.root}}
-                >
-                  <option value="all" classes={{root: classesMenuItem.root}}>
-                    All Categories
-                  </option>
-                  {getCategoryOptions()}
-                </Select>
-              </FormControl>
-
-              <div
-                className="search-share"
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  width: '100%',
-                }}
-              >
-                <button
-                  className="button is-purple"
-                  disabled={!indianstate}
-                  onClick={filterTable}
-                  style={{
-                    margin: '0.2rem 0.2rem',
-                    padding: '0.5rem 0.5rem',
-                    width: '50%',
-                    justifyContent: 'center',
-                  }}
-                >
-                  Search
-                </button>
-                <button
-                  onClick={openSharingTray}
-                  className="button add-entry is-purple"
-                  style={{
-                    margin: '0.2rem 0.2rem',
-                    padding: '0.5rem 0.5rem',
-                    width: '50%',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <span>Share</span>
-                </button>
-              </div>
-            </div>
-          </React.Fragment>
-        )}
-        {isDesktop && (
-          <React.Fragment>
-            <div
-              className="disclaimercontainer"
-              style={{
-                display: 'flex',
-                flexDirection: 'row-reverse',
-                width: '100%',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <div
-                className="button disclaimer-button"
-                style={{
-                  margin: '0rem',
-                  padding: '0.3rem',
-                  alignItems: 'center',
-                  justifyContent: 'space-around',
-                }}
-                onClick={handleDisclaimerClick}
-              >
-                Disclaimer
-                <Icon.AlertCircle htmlColor="#6c757d" fontSize="small" />
-              </div>
-              <Popover
-                id={id}
-                open={isDisclaimerOpen}
-                classes={{root: classesPopOver.root}}
-                anchorEl={anchorEl}
-                onClose={handleDisclaimerClose}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-              >
-                <h6
-                  style={{
-                    paddingLeft: '0.5rem',
-                    color: '#343a40',
-                    margin: '0.3rem 0rem',
-                  }}
-                >
-                  <p>
-                    We are a community sourced listing platform and are not
-                    associated with any of the organisations listed below.
-                  </p>
-                  <p>
-                    Although we verify all our listings, we request you to
-                    follow all the guidelines and take necessary precautions.
-                  </p>
-                  <p>
-                    We encourage you to report any error or suspicious activity
-                    so we can take immediate action.
-                  </p>
-                </h6>
-              </Popover>
-            </div>
-            <div className="resourcefilters">
-              <FormControl
-                variant="outlined"
-                size="small"
-                className="resourcefilterMobile"
-                classes={{root: classesFormControl.root}}
-              >
-                <InputLabel
-                  id="demo-simple-select-outlined-label"
-                  classes={{root: classesInputLabel.root}}
-                >
-                  State/UT
-                </InputLabel>
-                <Select
-                  native
-                  labelId="demo-simple-select-outlined-label"
-                  id="stateselect"
-                  value={indianstate}
-                  onChange={changeIndianState}
-                  defaultValue="all"
-                  label="State/UT"
-                  classes={{root: classesMenuItem.root}}
-                >
-                  <option value="all" classes={{root: classesMenuItem.root}}>
-                    All states
-                  </option>
-                  {getIndianStateOptions()}
-                </Select>
-              </FormControl>
-              <FormControl
-                variant="outlined"
-                size="small"
-                className="resourcefilterMobile"
-                classes={{root: classesFormControl.root}}
-              >
-                <InputLabel
-                  id="demo-simple-select-outlined-label"
-                  classes={{root: classesInputLabel.root}}
-                >
-                  City
-                </InputLabel>
-                <Select
-                  native
-                  labelId="demo-simple-select-outlined-label"
-                  id="cityselect1"
-                  value={city}
-                  onChange={changeCity}
-                  defaultValue="all"
-                  label="City"
-                  classes={{root: classesMenuItem.root}}
-                >
-                  <option value="all" classes={{root: classesMenuItem.root}}>
-                    All cities
-                  </option>
-                  {getCityOptions()}
-                </Select>
-              </FormControl>
-              <FormControl
-                variant="outlined"
-                size="small"
-                className="resourcefilterMobile"
-                classes={{root: classesFormControl.root}}
-              >
-                <InputLabel
-                  id="demo-simple-select-outlined-label"
-                  classes={{root: classesInputLabel.root}}
-                >
-                  Services
-                </InputLabel>
-                <Select
-                  native
-                  labelId="demo-simple-select-outlined-label"
-                  id="categoryselect"
-                  value={category}
-                  onChange={changeCategory}
-                  defaultValue="all"
-                  label="Services"
-                  classes={{root: classesMenuItem.root}}
-                >
-                  <option value="all" classes={{root: classesMenuItem.root}}>
-                    All categories
-                  </option>
-                  {getCategoryOptions()}
-                </Select>
-              </FormControl>
-              <button
-                className="button is-purple"
-                disabled={!indianstate}
-                onClick={filterTable}
-                style={!indianstate ? {pointerEvents: 'none'} : null}
-              >
-                Search
-              </button>
-            </div>
-            <div
-              className="misclinkscontainer"
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                width: '100%',
-                justifyContent: 'center',
-                marginTop: '0.2rem',
-                marginBottom: '0.6rem',
-              }}
-            >
-              <a
-                href="https://docs.google.com/forms/d/e/1FAIpQLSfquevp7_rdgdEoDgTdimWwTXO3B9TjFEAm3DbrMDXxCiuwuA/viewform"
-                className="button add-entry is-purple"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{margin: '0rem 0.2rem', padding: '0.1rem 0.5rem'}}
-              >
-                <span>Add Entry</span>
-              </a>
-              <a
-                href="https://forms.gle/AG5hmYxyhto3NjU46"
-                className="button add-entry is-purple"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{margin: '0rem 0.2rem', padding: '0.1rem 0.5rem'}}
-              >
-                <span>Feedback</span>
-              </a>
-              <button
-                onClick={openSharingTray}
-                className="button add-entry is-purple"
-                style={{margin: '0rem 0.2rem', padding: '0.4rem'}}
-              >
-                <span>Share</span>
-              </button>
-            </div>
-          </React.Fragment>
->>>>>>>  changes in search bar positions, used feather icons,added loader gif for infinite scroll
         )}
       </div>
       {showTable && (

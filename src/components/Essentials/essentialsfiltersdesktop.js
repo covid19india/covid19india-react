@@ -4,7 +4,8 @@ import Popover from '@material-ui/core/Popover';
 import Select from '@material-ui/core/Select';
 import {makeStyles} from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
-import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
+import * as Icon from 'react-feather';
+
 const useFormControlStyles = makeStyles((isDesktop) => {
   if (isDesktop === true)
     return {
@@ -73,7 +74,7 @@ function FiltersDesktop(props) {
           onClick={props.handleDisclaimerClick}
         >
           Disclaimer
-          <ErrorOutlineOutlinedIcon htmlColor="#6c757d" fontSize="small" />
+          <Icon.AlertCircle htmlColor="#6c757d" fontSize="0.2rem" />
         </div>
         <Popover
           id={props.disclaimerid}
