@@ -9,6 +9,7 @@ import {
   preprocessTimeseries,
   parseStateTimeseries,
 } from '../utils/common-functions';
+import Fab from '@material-ui/core/Fab';
 import * as Icon from 'react-feather';
 
 import Table from './table';
@@ -33,6 +34,7 @@ function Home(props) {
   const [showUpdates, setShowUpdates] = useState(false);
   const [seenUpdates, setSeenUpdates] = useState(false);
   const [newUpdate, setNewUpdate] = useState(true);
+  const [hasScrolled, setHasScrolled] = useState(false);
   const [timeseriesMode, setTimeseriesMode] = useLocalStorage(
     'timeseriesMode',
     true
@@ -41,6 +43,18 @@ function Home(props) {
     'timeseriesLogMode',
     false
   );
+
+  const checkScrollEvent = useCallback((event) => {
+    window.pageYOffset > 20 ? setHasScrolled(true) : setHasScrolled(false);
+  }, []);
+
+  useEffect(() => {
+    window.pageYOffset > 20 ? setHasScrolled(true) : setHasScrolled(false);
+    window.addEventListener('scroll', checkScrollEvent);
+    return () => {
+      window.removeEventListener('scroll', checkScrollEvent);
+    };
+  }, [hasScrolled, checkScrollEvent]);
 
   useEffect(() => {
     // this if block is for checking if user opened a page for first time.
@@ -129,6 +143,14 @@ function Home(props) {
   //     behavior: 'smooth',
   //   })
   // );
+
+  function animateScroll() {
+    const c = document.body.scrollTop || document.documentElement.scrollTop; // For {Safari} || {Chrome, Firefox, IE and Opera}
+    if (c > 0) {
+      window.requestAnimationFrame(animateScroll);
+      window.scrollTo(0, c - c / 6); // Increase fixed constant for smoother scrolling and vice versa
+    }
+  }
 
   return (
     <React.Fragment>
@@ -291,6 +313,25 @@ function Home(props) {
                 mode={timeseriesMode}
                 logMode={timeseriesLogMode}
               />
+              <div>
+                <Fab
+                  color="inherit"
+                  aria-label="gototop"
+                  id="gototopbtn-home"
+                  onClick={animateScroll}
+                  size="small"
+                  disabled={!hasScrolled}
+                  style={{
+                    position: 'fixed',
+                    bottom: '1rem',
+                    right: '1rem',
+                    zIndex: '1000',
+                    opacity: hasScrolled ? 1 : 0,
+                  }}
+                >
+                  <Icon.Navigation2 strokeWidth="2.5" color="#4c75f2" />
+                </Fab>
+              </div>
             </React.Fragment>
           )}
         </div>
