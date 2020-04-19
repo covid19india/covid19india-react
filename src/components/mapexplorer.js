@@ -4,6 +4,7 @@ import {MAP_TYPES, MAP_META} from '../constants';
 import {formatDate, formatDateAbsolute} from '../utils/common-functions';
 import {formatDistance, format, parse} from 'date-fns';
 import {formatNumber} from '../utils/common-functions';
+import {Link} from 'react-router-dom';
 import * as Icon from 'react-feather';
 
 const getRegionFromState = (state) => {
@@ -95,11 +96,13 @@ function MapExplorer({
             recovered: 0,
           };
         }
-        setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
+        const currentHoveredRegion = getRegionFromDistrict(districtData, name);
         const panelRegion = getRegionFromState(
           states.find((state) => currentMap.name === state.state)
         );
         setPanelRegion(panelRegion);
+        currentHoveredRegion.statecode = panelRegion.statecode;
+        setCurrentHoveredRegion(currentHoveredRegion);
         if (onMapHighlightChange) onMapHighlightChange(panelRegion);
       }
     },
@@ -181,7 +184,7 @@ function MapExplorer({
           <h5>{window.innerWidth <= 769 ? 'Cnfmd' : 'Confirmed'}</h5>
           <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.confirmed)}</h1>
-            <h6>{}</h6>
+            <h6>{`+${formatNumber(panelRegion.deltaconfirmed)}`}</h6>
           </div>
         </div>
 
@@ -192,7 +195,7 @@ function MapExplorer({
           <h5>{window.innerWidth <= 769 ? 'Actv' : 'Active'}</h5>
           <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.active)}</h1>
-            <h6>{}</h6>
+            <h6>{` `}</h6>
           </div>
         </div>
 
@@ -203,7 +206,7 @@ function MapExplorer({
           <h5>{window.innerWidth <= 769 ? 'Rcvrd' : 'Recovered'}</h5>
           <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.recovered)}</h1>
-            <h6>{}</h6>
+            <h6>{`+${formatNumber(panelRegion.deltarecovered)}`}</h6>
           </div>
         </div>
 
@@ -214,7 +217,7 @@ function MapExplorer({
           <h5>{window.innerWidth <= 769 ? 'Dcsd' : 'Deceased'}</h5>
           <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.deaths)}</h1>
-            <h6>{}</h6>
+            <h6>{`+${formatNumber(panelRegion.deltadeaths)}`}</h6>
           </div>
         </div>
 
@@ -225,9 +228,7 @@ function MapExplorer({
           >
             <h5>{window.innerWidth <= 769 ? 'Tested' : 'Tested'}</h5>
             <div className="stats-bottom">
-              <h1>
-                {formatNumber(testObj?.totaltested, window.innerWidth <= 769)}
-              </h1>
+              <h1>{formatNumber(testObj?.totaltested)}</h1>
             </div>
             <h6 className="timestamp">
               {!isNaN(parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()))
@@ -301,6 +302,15 @@ function MapExplorer({
           >
             Back
           </div>
+        ) : null}
+
+        {currentMap.mapType === MAP_TYPES.STATE ? (
+          <Link to={`state/${currentHoveredRegion.statecode}`}>
+            <div className="button state-page-button">
+              <abbr>Visit state page</abbr>
+              <Icon.ArrowRightCircle />
+            </div>
+          </Link>
         ) : null}
       </div>
 

@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as d3 from 'd3';
 import ForceGraph2D from 'react-force-graph-2d';
 import React, {useEffect, useRef, useState} from 'react';
+import ReactDOM from 'react-dom';
 
 function Clusters({stateCode}) {
   const [fetched, setFetched] = useState(false);
@@ -129,7 +130,11 @@ function Clusters({stateCode}) {
     );
   };
 
-  return <div id="clusters">{fetched ? <NetworkGraph /> : ''}</div>;
+  useEffect(() => {
+    ReactDOM.render(<NetworkGraph />, document.getElementById('clusters'));
+  }, [networkData]);
+
+  return <div id="clusters"></div>;
 }
 
 export default Clusters;

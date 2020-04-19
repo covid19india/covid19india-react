@@ -471,7 +471,7 @@ h6 {
   }
 
   .MapExplorer {
-    .header, .map-stats, .back-button, .last-update, .unknown {
+    .header, .map-stats, .back-button, .last-update, .unknown, .state-page-button {
       display: none;
     }
 
@@ -625,13 +625,6 @@ h6 {
         .deltas {
           margin-right: 0.25rem;
           font-size: 11px !important;
-
-          svg {
-            width: 9px;
-            height: 9px;
-            stroke-width: 3;
-            vertical-align: -0.25px;
-          }
         }
       }
 
@@ -1563,6 +1556,43 @@ table {
     .district-heading {
       transform: translateX(1rem);
       background: $gray-light;
+      &:hover {
+        background: $gray-light !important;
+      }
+
+      td.state-page-link {
+        background: $white;
+        padding: 0;
+        text-align: left;
+
+        div {
+          background: $yellow-light;
+          color: $orange;
+          padding: 0.45rem;
+          border-radius: 5px;
+          font-size: 0.75rem;
+          float: left;
+          align-items: center;
+          transition: all 0.2s ease-in-out;
+          &:hover {
+            background: $yellow-hover;
+            svg {
+              stroke: $orange;
+            }
+          }
+
+          svg {
+            width: 12px;
+            height: 12px;
+            stroke-width: 3px;
+            margin-left: 0.25rem;
+            color: $orange-mid;
+            vertical-align: middle;
+            margin-bottom: 1px;
+            transition: all 0.2s ease-in-out;
+          }
+        }
+      }
 
       td {
         font-size: 0.75rem;
@@ -1619,7 +1649,32 @@ table {
 
 	.table__title-wrapper {
 		position: relative;
+    & > * {
+      align-self: center;
+    }
+
+    .actual__title-wrapper {
+      svg {
+        width: 12px;
+        height: 12px;
+        stroke-width: 3;
+        vertical-align: -1.5px;
+        padding-left: 2px;
+        color: $gray-mid;
+      }
+    }
 	}
+
+  .unknown {
+    svg {
+      width: 12px;
+      height: 12px;
+      stroke-width: 3;
+      vertical-align: -1.5px;
+      padding-left: 2px;
+      color: $gray-mid;
+    }
+  }
 
   .dropdown {
     position: absolute;
@@ -1709,14 +1764,46 @@ table {
 
   .back-button {
     position: absolute;
+    top: 2.75rem;
     right: 0;
-    background: $orange-light;
+    background: $yellow-light;
     color: $orange;
     transition: all 0.2s ease-in-out;
     &:hover {
-      background: $orange-hover;
+      background: $yellow-hover;
     }
   }
+
+  .state-page-button {
+    position: absolute;
+    top: -0.5rem;
+    right: 0;
+    border-radius: 5px;
+    background: $yellow-light;
+    color: $orange;
+    transition: all 0.2s ease-in-out;
+    padding: 0.45rem;
+    padding-left: 0.75rem;
+    font-size: 0.75rem;
+    height: 1.5rem;
+    &:hover {
+      background: $yellow-hover;
+    }
+
+    abbr {
+      text-transform: none;
+    }
+
+    svg {
+      width: 12px;
+      height: 12px;
+      stroke-width: 3px;
+      margin-left: 0.25rem;
+      stroke: $orange-mid;
+      vertical-align: middle;
+    }
+  }
+
 
   .meta {
     display: flex;
@@ -1754,7 +1841,9 @@ table {
 
     .unknown {
       position: absolute;
-      top: 6rem;
+      top: 5.5rem;
+      right: 0;
+      text-align: right;
       width: 5rem;
       font-weight: 600;
       font-weight: 0.75rem;
@@ -1796,11 +1885,12 @@ table {
 
       .stats-bottom {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
 
         h6 {
           margin-top: auto;
           margin-bottom: 0.25rem;
+          font-weight: 900;
         }
       }
 
@@ -2080,7 +2170,7 @@ input.switch:checked::after {
     font-weight: 900;
     margin-top: 1rem;
     padding: 0.5rem;
-    text-transform: uppercase;
+    margin-left: -1px;
     width: auto;
     color: $gray;
 
@@ -2163,7 +2253,12 @@ input.switch:checked::after {
     }
 
     &.is-blue {
-      h5 { color: $blue-mid; }
+      h5 {
+        color: $blue-mid;
+        &.title {
+          color: $blue;
+        }
+      }
 
       h2,
       h6 { color: $blue; }
@@ -2226,6 +2321,21 @@ input.switch:checked::after {
 
       text {
         color: $gray-mid;
+        stroke: transparent;
+      }
+    }
+
+    &.is-blue {
+      background: $blue-light;
+
+      .domain,
+      .tick,
+      line {
+        stroke: $blue;
+      }
+
+      text {
+        color: $blue-mid;
         stroke: transparent;
       }
     }
@@ -2468,6 +2578,138 @@ footer {
   margin-left: auto;
   margin-right: auto;
 
+  .select{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+
+    .react-date-picker.react-date-picker--closed.react-date-picker--enabled,
+    .react-date-picker.react-date-picker--open.react-date-picker--enabled {
+      height: 2.05rem;
+      margin: 0.188rem 0.625rem 0 0.1rem;
+      font-family: 'archia';
+      font-weight: 900;
+      font-size: 11px;
+      color: #6c757d;
+      background-color: #eee;
+      border: 2px solid #e8e8e9;
+      border-radius: 4px;
+      width: auto;
+      align-items: center;
+      padding-inline-start: 1px;
+      cursor: default;
+      padding: 0 0.5rem;
+    }
+
+    .react-date-picker, .react-date-picker *, .react-date-picker *:before, .react-date-picker *:after {
+      border: 0;
+    }
+
+    .react-calendar button {
+      padding: 1rem;
+      border-radius: 5px;
+      transition: all 0.1s ease-in-out;
+      font-family: 'archia';
+      &:disabled {
+        border-radius: 0 !important;
+        color: $gray-mid;
+        cursor: not-allowed;
+      }
+    }
+
+    .react-date-picker__inputGroup__input:invalid {
+      background: transparent;
+    }
+
+    .react-date-picker__wrapper {
+      border: unset;
+      svg {
+        stroke: $gray-mid;
+        &:hover {
+          stroke: $gray;
+        }
+      }
+    }
+
+    .react-calendar__tile--active {
+      background: $pblue-light;
+      color: $pblue !important;
+      &:hover {
+        background: $pblue-hover;
+        color: $pblue !important;
+      }
+    }
+
+    .react-calendar__month-view__weekdays__weekday {
+      font-family: 'archia';
+      margin-bottom: 0.5rem;
+    }
+
+    .react-calendar__month-view__days__day--weekend, .react-calendar__month-view__days__day {
+      color: $gray;
+    }
+
+    .react-date-picker__calendar {
+      top: 3.5rem !important;
+    }
+
+    .react-calendar {
+      background: $gray-light-opaque;
+      border: 2px solid $gray-light;
+      border-radius: 5px;
+    }
+
+    .react-calendar__navigation__label {
+      color: $gray !important;
+    }
+
+    .react-calendar__navigation__arrow {
+      color: $gray;
+    }
+
+    .react-date-picker__inputGroup > * {
+      color: $gray !important;
+    }
+
+    .react-date-picker__clear-button {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .react-date-picker__calendar-button {
+      padding: 0 !important;
+      margin: 0 !important;
+      margin-left: 1rem !important;
+    }
+
+    .calendar-close {
+      width: 12px;
+      stroke-width: 3;
+    }
+
+    select {
+      appearance: none;
+      background-color: #eee;
+      background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
+        linear-gradient(135deg, #808080 50%, transparent 50%);
+      background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+      border: 2px solid #e8e8e9;
+      border-radius: 4px;
+      font-family: 'archia';
+      font-weight: 900;
+      margin: 0.2rem 0.1rem;
+      padding: 0.5rem;
+      width: 130px;
+      color: $gray;
+      cursor: pointer;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
   .reminder {
     align-self: center !important;
     font-family: 'archia';
@@ -2520,6 +2762,10 @@ footer {
   .patientdb-wrapper {
     padding-left: 5rem;
     padding-right: 5rem;
+  }
+
+  .legend {
+    z-index: unset;
   }
 }
 
@@ -3136,17 +3382,11 @@ body.modal-open {
   }
 }
 
-select {
-  width: 7rem;
-  margin-right: 0.25rem;
-  cursor: pointer;
-}
-
 .filters {
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  padding: 1rem;
+  padding: 0.5rem;
   background: #fff !important;
   z-index: 101;
   font-family: archia;
@@ -3503,6 +3743,7 @@ select {
 
 .cards-container {
   padding: 2rem;
+  margin-left: 5rem;
   .cards {
     display: flex;
     justify-content: space-between;
@@ -3518,33 +3759,38 @@ select {
              -8px -8px 20px #f0f0f0e0;
       }
       height: 30rem;
-        .charts-header {
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start;
-          .chart-title {
-            font-family: 'archia';
-            font-size: 1.5rem !important;
-            color: #6c757d;
-            font-weight: 900;
-            text-transform: uppercase;
-            padding: 20px 0 20px 0;
-          }
-
-          .chart-content {
-            height: 100%;
-            width: 100%;
-          }
-
-          .chart-note {
-           color: $gray;
-           height: 50px;
-           margin-top: 5px;
-          }
+      .charts-header {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        .chart-title {
+          font-family: 'archia';
+          font-size: 1.5rem !important;
+          color: #6c757d;
+          font-weight: 900;
+          text-transform: uppercase;
+          padding: 20px 0 20px 0;
         }
+
+        .chart-content {
+          height: 100%;
+          width: 100%;
+        }
+
+        .chart-note {
+          color: $gray;
+          height: 50px;
+          margin-top: 5px;
+        }
+      }
     }
+  }
+
+  @media (max-width: 769px) {
+    padding: 1rem;
+    margin-left: unset;
   }
 }
 
@@ -3760,8 +4006,9 @@ select {
     }
 
     .filters {
-      height: 7rem;
+      height: auto;
       justify-content: center;
+      padding: 0.2rem;
     }
   }
 
@@ -3792,11 +4039,6 @@ select {
       justify-content: center;
       width: 100%;
     }
-  }
-
-  select {
-    margin-left: 2px;
-    margin-right: 2px;
   }
 
   &.nationality {
@@ -4078,6 +4320,12 @@ select {
         padding-left: 0;
       }
     }
+  }
+
+
+  .PatientsDB .select .react-date-picker__calendar {
+    position: fixed;
+    top: 2.3rem !important;
   }
 }
 
