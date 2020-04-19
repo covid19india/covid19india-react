@@ -16,12 +16,14 @@ function Resources(props) {
   const [resourcedict, setResourceDict] = useState({});
   const [showTable, setShowTable] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   useEffect(() => {
     if (fetched === false) {
       getResources();
     }
   }, [fetched, data, resourcedict]);
+
   const checkForResizeEvent = useCallback((event) => {
     if (window.innerWidth > 639) setIsDesktop(true);
     else setIsDesktop(false);
@@ -35,6 +37,18 @@ function Resources(props) {
       window.removeEventListener('resize', checkForResizeEvent);
     };
   }, [isDesktop, checkForResizeEvent]);
+
+  const checkScrollEvent = useCallback((event) => {
+    window.pageYOffset > 20 ? setHasScrolled(true) : setHasScrolled(false);
+  }, []);
+
+  useEffect(() => {
+    window.pageYOffset > 20 ? setHasScrolled(true) : setHasScrolled(false);
+    window.addEventListener('scroll', checkScrollEvent);
+    return () => {
+      window.removeEventListener('scroll', checkScrollEvent);
+    };
+  }, [hasScrolled, checkScrollEvent]);
 
   const getResources = async () => {
     try {
@@ -60,8 +74,7 @@ function Resources(props) {
       // setIndianState(Object.keys()[0]);
 
       setFetched(true);
-    } catch (err) {
-    }
+    } catch (err) {}
   };
 
   const handleDisclaimerClick = (event) => {
@@ -74,9 +87,13 @@ function Resources(props) {
 
   const isDisclaimerOpen = Boolean(anchorEl);
   const id = isDisclaimerOpen ? 'simple-popover' : undefined;
+
   function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    const c = document.body.scrollTop || document.documentElement.scrollTop; // For {Safari} || {Chrome, Firefox, IE and Opera}
+    if (c > 0) {
+      window.requestAnimationFrame(topFunction);
+      window.scrollTo(0, c - c / 6); // Increase fixed constant for smoother scrolling and vice versa
+    }
   }
 
   const memocols = React.useMemo(
@@ -248,7 +265,6 @@ function Resources(props) {
         });
       }
     } else {
-
       if (indianstate === 'all' && city === 'all') {
         Object.values(resourcedict).forEach((state) => {
           Object.values(state).forEach((citydata) => {
@@ -279,8 +295,7 @@ function Resources(props) {
           }
         );
       }
-    } catch (err) {
-    }
+    } catch (err) {}
     setData(a);
     setPartData(a.slice(0, 30));
     setShowTable(true);
@@ -424,11 +439,13 @@ function Resources(props) {
               id="gototopbtn"
               onClick={topFunction}
               size="small"
+              disabled={!hasScrolled}
               style={{
                 position: 'fixed',
                 bottom: '1rem',
                 right: '1rem',
                 zIndex: '1000',
+                opacity: hasScrolled ? 1 : 0,
               }}
             >
               <NavigationOutlinedIcon htmlColor="#201aa299" />
