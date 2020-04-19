@@ -134,8 +134,14 @@ function Home(props) {
 
   return (
     <React.Fragment>
-      <div className="Home">
-        {window.innerWidth > 769 ? (
+      <div
+        className="Home"
+        style={{
+          paddingTop:
+            window.innerWidth < 1200 && window.innerWidth > 769 ? '5rem' : '0',
+        }}
+      >
+        {window.innerWidth > 1200 ? (
           <>
             <div
               style={{
@@ -190,10 +196,18 @@ function Home(props) {
                 {showUpdates && <Updates />}
               </div>
             </div>
-            <div className="home-left" style={{width: '31rem'}}>
+            <div
+              className="home-left"
+              style={{
+                width: '32rem',
+              }}
+            >
               <Scrollbars
                 className="fadeInUp"
-                style={{height: '100vh', animationDelay: '2s'}}
+                style={{
+                  height: '100vh',
+                  animationDelay: '2s',
+                }}
               >
                 {states.length ? <Level data={states[0]} /> : ''}
                 {fetched && <Minigraph timeseries={timeseries['TT']} />}

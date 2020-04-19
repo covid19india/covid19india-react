@@ -107,7 +107,7 @@ function Table(props) {
         <h5
           className="table-fineprint fadeInUp"
           style={
-            window.innerWidth > 769
+            window.innerWidth > 1200
               ? {animationDelay: '1.5s', textAlign: 'center'}
               : {animationDelay: '1.5s'}
           }
@@ -117,7 +117,14 @@ function Table(props) {
             know more!
           </Link>
         </h5>
-        <table className="table fadeInUp" style={{animationDelay: '1.8s'}}>
+        <table
+          className="table fadeInUp"
+          style={
+            window.innerWidth > 1200
+              ? {animationDelay: '1.8s', margin: 'auto'}
+              : {animationDelay: '1.8s'}
+          }
+        >
           <thead>
             <tr>
               <th
@@ -295,7 +302,7 @@ function Table(props) {
         <h5
           className="table-fineprint fadeInUp"
           style={
-            window.innerWidth > 769
+            window.innerWidth > 1200
               ? {animationDelay: '1s', textAlign: 'center'}
               : {animationDelay: '1s'}
           }
