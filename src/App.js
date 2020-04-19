@@ -76,7 +76,7 @@ function App() {
             <AnimatedSwitch
               atEnter={{opacity: 0}}
               atLeave={{opacity: 0}}
-              atActive={{opacity: 1}}
+              atActive={{opacity: 5}}
               className="switch-wrapper"
               location={location}
             >

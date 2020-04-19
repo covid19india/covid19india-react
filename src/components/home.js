@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
+import {useLocalStorage} from 'react-use';
 import axios from 'axios';
 
 import {MAP_META} from '../constants';
@@ -28,14 +29,49 @@ function Home(props) {
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState({});
   const [activeStateCode, setActiveStateCode] = useState('TT'); // TT -> India
-  const [timeseriesMode, setTimeseriesMode] = useState(true);
-  const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
   const [showUpdates, setShowUpdates] = useState(false);
+  const [seenUpdates, setSeenUpdates] = useState(false);
+  const [newUpdate, setNewUpdate] = useState(true);
+  const [timeseriesMode, setTimeseriesMode] = useLocalStorage(
+    'timeseriesMode',
+    true
+  );
+  const [timeseriesLogMode, setTimeseriesLogMode] = useLocalStorage(
+    'timeseriesLogMode',
+    false
+  );
 
   useEffect(() => {
+    // this if block is for checking if user opened a page for first time.
+    if (localStorage.getItem('anyNewUpdate') === null) {
+      localStorage.setItem('anyNewUpdate', true);
+    } else {
+      setSeenUpdates(true);
+      setNewUpdate(localStorage.getItem('anyNewUpdate') === 'false');
+    }
     if (fetched === false) {
       getStates();
+      axios
+        .get('https://api.covid19india.org/updatelog/log.json')
+        .then((response) => {
+          const currentTimestamp = response.data
+            .slice()
+            .reverse()[0]
+            .timestamp.toString();
+          // Sets and Updates the data in the local storage.
+          if (localStorage.getItem('currentItem') !== null) {
+            if (localStorage.getItem('currentItem') !== currentTimestamp) {
+              localStorage.setItem('currentItem', currentTimestamp);
+              localStorage.setItem('anyNewUpdate', true);
+            }
+          } else {
+            localStorage.setItem('currentItem', currentTimestamp);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [fetched]);
 
@@ -111,9 +147,22 @@ function Home(props) {
                   <Icon.Bell
                     onClick={() => {
                       setShowUpdates(!showUpdates);
+                      localStorage.setItem('anyNewUpdate', false);
+                      setSeenUpdates(true);
+                      setNewUpdate(
+                        localStorage.getItem('anyNewUpdate') === 'false'
+                      );
                     }}
                   />
-                  <div className="indicator"></div>
+                  {seenUpdates ? (
+                    !newUpdate ? (
+                      <div className="indicator"></div>
+                    ) : (
+                      ''
+                    )
+                  ) : (
+                    <div className="indicator"></div>
+                  )}
                 </div>
               )}
               {showUpdates && (

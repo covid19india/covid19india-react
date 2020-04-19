@@ -23,10 +23,10 @@ function Updates(props) {
 
   return (
     <React.Fragment>
-      <div className="updates-header">
-        <h2>{format(currentDate, 'd MMM')}</h2>
-      </div>
       <div className="updates">
+        <div className="updates-header">
+          <h2>{format(currentDate, 'd MMM')}</h2>
+        </div>
         {updates
           .slice(-5)
           .reverse()
