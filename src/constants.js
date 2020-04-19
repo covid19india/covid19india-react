@@ -1068,7 +1068,7 @@ export const DISTRICTS_ARRAY = [
     state: 'Goa',
   },
   {
-    district: 'Ahmadabad',
+    district: 'Ahmedabad',
     othernamesspellings: '',
     state: 'Gujarat',
   },
