@@ -16,20 +16,12 @@ function Navbar({pages, darkMode, setDarkMode}) {
   useLockBodyScroll(expand);
 
   return (
-    <div
-      className={`Navbar ${darkMode ? 'dark-mode' : ''}`}
-      style={{width: window.innerWidth > 769 && expand ? '6rem' : ''}}
-    >
-      <div className="navbar-left">
-        {darkMode ? (
-          <IconButton onClick={() => setDarkMode((prevMode) => !prevMode)}>
-            <Brightness7 style={{fill: '#ffeb3b'}} />
-          </IconButton>
-        ) : (
-          <IconButton onClick={() => setDarkMode((prevMode) => !prevMode)}>
-            <Brightness4 style={{fill: '#bdbdbd'}} />
-          </IconButton>
-        )}
+    <div className="Navbar">
+      <div
+        className="navbar-left"
+        onClick={() => setDarkMode((prevMode) => !prevMode)}
+      >
+        {darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
       </div>
       <div className="navbar-middle">
         <Link to="/">

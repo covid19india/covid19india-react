@@ -143,12 +143,6 @@ body {
   -webkit-touch-callout: none;
 }
 
-.dark-mode {
-  background: #161625 !important;
-  color: #bdbdbd;
-  transition: background-color 0.25s ease-out;
-}
-
 h1 {
   font-family: 'archia';
   font-size: 24px !important;
@@ -190,6 +184,7 @@ h6 {
 }
 
 .switch-wrapper > div {
+  transition: all 0.25s ease-in-out;
   position: absolute;
   width: 100%;
 }
@@ -213,6 +208,7 @@ h6 {
   flex-direction: row;
   justify-content: space-between;
   height: 3.9rem;
+  padding-bottom: 1rem;
   & > * {
     align-self: center;
   }
@@ -249,7 +245,7 @@ h6 {
     font-size: 12px;
     color: $gray;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: all 0s ease-in-out;
     width: 2rem;
     &:hover {
       background: $pblue;
@@ -277,6 +273,7 @@ h6 {
       &:hover {
         background: $gray-hover;
       }
+
       span.focused {
         background: $pblue-light;
         color: $pblue;
@@ -631,8 +628,6 @@ h6 {
           background: #fff !important;
         }
       }
-
-       tr:nth-child(even) {background-color: $purple-light;}
 
       td {
         // padding: 0.25rem;
@@ -3913,6 +3908,7 @@ body.modal-open {
       &:hover {
         background: $gray-light-opaque !important;
       }
+
       & > span {
         display: flex;
         flex-direction: row;
@@ -3932,7 +3928,7 @@ body.modal-open {
       top: 0;
       background: $gray-light-opaque;
       padding-top: 5.5rem;
-      padding-left: 0rem;
+      padding-left: 0;
       border-right: solid 2px $gray-light-opaque;
       z-index: -1 !important;
       & > * {
@@ -4414,6 +4410,172 @@ body.modal-open {
   .PatientsDB .select .react-date-picker__calendar {
     position: fixed;
     top: 2.3rem !important;
+  }
+}
+
+/* Dark Mode */
+.dark-mode {
+  background: #161625 !important;
+  color: #bdbdbd;
+  transition: background-color 0.2s ease-out !important;
+
+  .switch-wrapper > div {
+    background: #161625 !important;
+  }
+
+  .Navbar, .expand {
+    background: #161625 !important;
+    .navbar-middle {
+      color: #bdbdbd;
+    }
+
+    .navbar-right {
+      background: #161625 !important;
+    }
+    border-right: 0;
+  }
+
+  table {
+    th {
+      background: #1e1e30 !important;
+    }
+
+    .is-odd {
+      background: #1e1e30 !important;
+    }
+
+    .state-page-link {
+      background: #161625 !important;
+    }
+
+    .heading-content {
+      color: #bdbdbd !important;
+    }
+
+    .spacer {
+      background: #161625 !important;
+    }
+  }
+
+  .Search {
+    input {
+      background: #1e1e30 !important;
+    }
+  }
+
+  .State {
+    .header-right {
+      h5 {
+        color: #9673b9bb !important;
+      }
+
+      h2 {
+        color: #9673b9 !important;
+      }
+
+      a {
+        background: #40008050 !important;
+      }
+    }
+  }
+
+  .MapExplorer {
+    #chart,
+    #legend {
+      filter: invert(1) hue-rotate(150deg);
+    }
+
+    .legend {
+      background: #161625 !important;
+    }
+
+    .stats {
+      &.is-purple {
+        background: #40008050 !important;
+        h1 {
+          color: #9673b9 !important;
+        }
+
+        h5, h6 {
+          color: #9673b9bb !important;
+        }
+
+        svg {
+          stroke: #9673b9 !important;
+        }
+      }
+    }
+  }
+
+  .tab {
+    &.focused {
+      background: #1e1e30 !important;
+      color: #bdbdbd !important;
+    }
+  }
+
+  .pills { 
+    button {
+      &.selected {
+        background: #{$yellow}50;
+      }
+    }
+  }
+
+  select {
+    background: #1e1e30 !important;
+    border-color: #1e1e30 !important;
+  }
+
+  input.switch {
+      background-color: #161625 !important;
+      border: 2px solid $gray-mid !important;
+    }
+
+    input.switch::after {
+      background-color: #cfcfcf !important;
+    }
+
+    input.switch:checked {
+      background-color: #161625 !important;
+    }
+
+    input.switch:checked::after {
+      background-color: #cfcfcf !important;
+    }
+
+  .button {
+    &.github {
+      color: #bdbdbd !important;
+      svg {
+        stroke: #bdbdbd !important;
+      }
+    }
+  }
+
+  .FAQ {
+    .question {
+      color: $gray !important;
+    }
+  }
+
+  .PatientsDB {
+    .filters {
+      background: #1e1e30 !important;
+      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 #1e1e30;
+    }
+
+    .legend {
+      background: #1e1e30 !important;
+    }
+
+    .modal-content {
+      background: #1e1e30 !important;
+    }
+
+    .modal {
+      background: #1e1e30bb !important;
+    }
   }
 }
 

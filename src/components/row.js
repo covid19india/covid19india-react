@@ -113,7 +113,9 @@ function Row(props) {
   return (
     <React.Fragment>
       <tr
-        className={props.total ? 'state is-total' : 'state'}
+        className={`state ${props.total ? 'is-total' : ''} ${
+          props.index % 2 === 0 ? 'is-odd' : ''
+        }`}
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
         onClick={!props.total ? handleReveal : null}
@@ -281,7 +283,7 @@ function Row(props) {
               return (
                 <tr
                   key={index}
-                  className={`district`}
+                  className={`district ${index % 2 === 0 ? 'is-odd' : ''}`}
                   style={{
                     display: props.reveal && !props.total ? '' : 'none',
                     background: index % 2 === 0 ? '#f8f9fa' : '',
