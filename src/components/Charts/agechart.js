@@ -66,6 +66,9 @@ function AgeChart(props) {
     events: ['mousemove', 'mouseout', 'touchstart', 'touchmove', 'touchend'],
     responsive: true,
     maintainAspectRatio: false,
+    tooltips: {
+      mode: 'index',
+    },
     legend: {
       display: false,
     },
