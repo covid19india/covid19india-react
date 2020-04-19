@@ -106,7 +106,11 @@ function Table(props) {
       <React.Fragment>
         <h5
           className="table-fineprint fadeInUp"
-          style={{animationDelay: '1.5s'}}
+          style={
+            window.innerWidth > 769
+              ? {animationDelay: '1.5s', textAlign: 'center'}
+              : {animationDelay: '1.5s'}
+          }
         >
           Compiled from State Govt. numbers,{' '}
           <Link to="/faq" style={{color: '#6c757d'}}>
@@ -288,7 +292,14 @@ function Table(props) {
             )}
           </tbody>
         </table>
-        <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1s'}}>
+        <h5
+          className="table-fineprint fadeInUp"
+          style={
+            window.innerWidth > 769
+              ? {animationDelay: '1s', textAlign: 'center'}
+              : {animationDelay: '1s'}
+          }
+        >
           {count} States/UTS Affected
         </h5>
       </React.Fragment>

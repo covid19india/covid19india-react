@@ -24,6 +24,7 @@
     "react": "^16.13.1",
     "react-autosuggest": "^10.0.0",
     "react-chartjs-2": "^2.9.0",
+    "react-custom-scrollbars": "^4.2.1",
     "react-date-picker": "^8.0.1",
     "react-dom": "^16.13.1",
     "react-feather": "^2.0.3",

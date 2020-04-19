@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
-import {useLocalStorage} from 'react-use';
 import axios from 'axios';
 
 import {MAP_META} from '../constants';
@@ -10,6 +9,7 @@ import {
   parseStateTimeseries,
 } from '../utils/common-functions';
 import * as Icon from 'react-feather';
+import {Scrollbars} from 'react-custom-scrollbars';
 
 import Table from './table';
 import Level from './level';
@@ -29,18 +29,12 @@ function Home(props) {
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState({});
   const [activeStateCode, setActiveStateCode] = useState('TT'); // TT -> India
+  const [timeseriesMode, setTimeseriesMode] = useState(true);
+  const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
   const [showUpdates, setShowUpdates] = useState(false);
   const [seenUpdates, setSeenUpdates] = useState(false);
   const [newUpdate, setNewUpdate] = useState(true);
-  const [timeseriesMode, setTimeseriesMode] = useLocalStorage(
-    'timeseriesMode',
-    true
-  );
-  const [timeseriesLogMode, setTimeseriesLogMode] = useLocalStorage(
-    'timeseriesLogMode',
-    false
-  );
 
   useEffect(() => {
     // this if block is for checking if user opened a page for first time.
@@ -133,167 +127,354 @@ function Home(props) {
   return (
     <React.Fragment>
       <div className="Home">
-        <div className="home-left">
-          <div className="header fadeInUp" style={{animationDelay: '1s'}}>
-            <Search />
-            <div className="actions">
-              <h5>
-                {isNaN(Date.parse(formatDate(lastUpdated)))
-                  ? ''
-                  : formatDateAbsolute(lastUpdated)}
-              </h5>
-              {!showUpdates && (
-                <div className="bell-icon">
-                  <Icon.Bell
-                    onClick={() => {
-                      setShowUpdates(!showUpdates);
-                      localStorage.setItem('anyNewUpdate', false);
-                      setSeenUpdates(true);
-                      setNewUpdate(
-                        localStorage.getItem('anyNewUpdate') === 'false'
-                      );
-                    }}
-                  />
-                  {seenUpdates ? (
-                    !newUpdate ? (
-                      <div className="indicator"></div>
-                    ) : (
-                      ''
-                    )
-                  ) : (
-                    <div className="indicator"></div>
+        {window.innerWidth > 769 ? (
+          <>
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                margin: '2rem 0',
+              }}
+            >
+              <div
+                className="header fadeInUp"
+                style={{animationDelay: '1s', width: '31rem'}}
+              >
+                <Search />
+                <div className="actions">
+                  <h5>
+                    {isNaN(Date.parse(formatDate(lastUpdated)))
+                      ? ''
+                      : formatDateAbsolute(lastUpdated)}
+                  </h5>
+                  {!showUpdates && (
+                    <div className="bell-icon">
+                      <Icon.Bell
+                        onClick={() => {
+                          setShowUpdates(!showUpdates);
+                          localStorage.setItem('anyNewUpdate', false);
+                          setSeenUpdates(true);
+                          setNewUpdate(
+                            localStorage.getItem('anyNewUpdate') === 'false'
+                          );
+                        }}
+                      />
+                      {seenUpdates ? (
+                        !newUpdate ? (
+                          <div className="indicator"></div>
+                        ) : (
+                          ''
+                        )
+                      ) : (
+                        <div className="indicator"></div>
+                      )}
+                    </div>
+                  )}
+                  {showUpdates && (
+                    <Icon.BellOff
+                      onClick={() => {
+                        setShowUpdates(!showUpdates);
+                      }}
+                    />
                   )}
                 </div>
-              )}
-              {showUpdates && (
-                <Icon.BellOff
-                  onClick={() => {
-                    setShowUpdates(!showUpdates);
-                  }}
-                />
-              )}
+                {showUpdates && <Updates />}
+              </div>
             </div>
-          </div>
-
-          {showUpdates && <Updates />}
-
-          {states.length ? <Level data={states[0]} /> : ''}
-          {fetched && <Minigraph timeseries={timeseries['TT']} />}
-          {fetched && (
-            <Table
-              forwardRef={refs[0]}
-              states={states}
-              summary={false}
-              stateDistrictWiseData={stateDistrictWiseData}
-              onHighlightState={onHighlightState}
-              onHighlightDistrict={onHighlightDistrict}
-            />
-          )}
-        </div>
-
-        <div className="home-right">
-          {fetched && (
-            <React.Fragment>
-              <MapExplorer
-                forwardRef={refs[1]}
-                mapMeta={MAP_META.India}
-                states={states}
-                stateDistrictWiseData={stateDistrictWiseData}
-                stateTestData={stateTestData}
-                regionHighlighted={regionHighlighted}
-                onMapHighlightChange={onMapHighlightChange}
-                isCountryLoaded={true}
-              />
-
-              <div
-                className="timeseries-header fadeInUp"
-                style={{animationDelay: '2.5s'}}
-                ref={refs[2]}
-              >
-                <h1>Spread Trends</h1>
-                <div className="tabs">
-                  <div
-                    className={`tab ${graphOption === 1 ? 'focused' : ''}`}
-                    onClick={() => {
-                      setGraphOption(1);
-                    }}
-                  >
-                    <h4>Cumulative</h4>
-                  </div>
-                  <div
-                    className={`tab ${graphOption === 2 ? 'focused' : ''}`}
-                    onClick={() => {
-                      setGraphOption(2);
-                    }}
-                  >
-                    <h4>Daily</h4>
-                  </div>
-                </div>
-
-                <div className="scale-modes">
-                  <label className="main">Scale Modes</label>
-                  <div className="timeseries-mode">
-                    <label htmlFor="timeseries-mode">Uniform</label>
-                    <input
-                      id="timeseries-mode"
-                      type="checkbox"
-                      checked={timeseriesMode}
-                      className="switch"
-                      aria-label="Checked by default to scale uniformly."
-                      onChange={(event) => {
-                        setTimeseriesMode(!timeseriesMode);
-                      }}
+            <div className="home-left" style={{width: '31rem'}}>
+              <Scrollbars style={{height: '100vh'}}>
+                {states.length ? <Level data={states[0]} /> : ''}
+                {fetched && <Minigraph timeseries={timeseries['TT']} />}
+                {fetched && (
+                  <Table
+                    forwardRef={refs[0]}
+                    states={states}
+                    summary={false}
+                    stateDistrictWiseData={stateDistrictWiseData}
+                    onHighlightState={onHighlightState}
+                    onHighlightDistrict={onHighlightDistrict}
+                  />
+                )}
+              </Scrollbars>
+            </div>
+            <div className="home-right" style={{width: '31rem'}}>
+              <Scrollbars style={{height: '100vh'}}>
+                {fetched && (
+                  <React.Fragment>
+                    <MapExplorer
+                      forwardRef={refs[1]}
+                      mapMeta={MAP_META.India}
+                      states={states}
+                      stateDistrictWiseData={stateDistrictWiseData}
+                      stateTestData={stateTestData}
+                      regionHighlighted={regionHighlighted}
+                      onMapHighlightChange={onMapHighlightChange}
+                      isCountryLoaded={true}
                     />
-                  </div>
-                  <div
-                    className={`timeseries-logmode ${
-                      graphOption !== 1 ? 'disabled' : ''
-                    }`}
-                  >
-                    <label htmlFor="timeseries-logmode">Logarithmic</label>
-                    <input
-                      id="timeseries-logmode"
-                      type="checkbox"
-                      checked={graphOption === 1 && timeseriesLogMode}
-                      className="switch"
-                      disabled={graphOption !== 1}
-                      onChange={(event) => {
-                        setTimeseriesLogMode(!timeseriesLogMode);
-                      }}
-                    />
-                  </div>
-                </div>
 
-                <div className="trends-state-name">
-                  <select
-                    onChange={({target}) => {
-                      onHighlightState(JSON.parse(target.value));
-                    }}
-                  >
-                    {states.map((s) => {
-                      return (
-                        <option
-                          key={s.statecode}
-                          value={JSON.stringify(s)}
-                          selected={s.statecode === activeStateCode}
+                    <div
+                      className="timeseries-header fadeInUp"
+                      style={{animationDelay: '2.5s'}}
+                      ref={refs[2]}
+                    >
+                      <h1>Spread Trends</h1>
+                      <div className="tabs">
+                        <div
+                          className={`tab ${
+                            graphOption === 1 ? 'focused' : ''
+                          }`}
+                          onClick={() => {
+                            setGraphOption(1);
+                          }}
                         >
-                          {s.state === 'Total' ? 'All States' : s.state}
-                        </option>
-                      );
-                    })}
-                  </select>
+                          <h4>Cumulative</h4>
+                        </div>
+                        <div
+                          className={`tab ${
+                            graphOption === 2 ? 'focused' : ''
+                          }`}
+                          onClick={() => {
+                            setGraphOption(2);
+                          }}
+                        >
+                          <h4>Daily</h4>
+                        </div>
+                      </div>
+
+                      <div className="scale-modes">
+                        <label className="main">Scale Modes</label>
+                        <div className="timeseries-mode">
+                          <label htmlFor="timeseries-mode">Uniform</label>
+                          <input
+                            id="timeseries-mode"
+                            type="checkbox"
+                            checked={timeseriesMode}
+                            className="switch"
+                            aria-label="Checked by default to scale uniformly."
+                            onChange={(event) => {
+                              setTimeseriesMode(!timeseriesMode);
+                            }}
+                          />
+                        </div>
+                        <div
+                          className={`timeseries-logmode ${
+                            graphOption !== 1 ? 'disabled' : ''
+                          }`}
+                        >
+                          <label htmlFor="timeseries-logmode">
+                            Logarithmic
+                          </label>
+                          <input
+                            id="timeseries-logmode"
+                            type="checkbox"
+                            checked={graphOption === 1 && timeseriesLogMode}
+                            className="switch"
+                            disabled={graphOption !== 1}
+                            onChange={(event) => {
+                              setTimeseriesLogMode(!timeseriesLogMode);
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="trends-state-name">
+                        <select
+                          onChange={({target}) => {
+                            onHighlightState(JSON.parse(target.value));
+                          }}
+                        >
+                          {states.map((s) => {
+                            return (
+                              <option
+                                key={s.statecode}
+                                value={JSON.stringify(s)}
+                                selected={s.statecode === activeStateCode}
+                              >
+                                {s.state === 'Total' ? 'All States' : s.state}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
+
+                    <TimeSeries
+                      timeseries={timeseries[activeStateCode]}
+                      type={graphOption}
+                      mode={timeseriesMode}
+                      logMode={timeseriesLogMode}
+                    />
+                  </React.Fragment>
+                )}
+              </Scrollbars>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="home-left">
+              <div className="header fadeInUp" style={{animationDelay: '1s'}}>
+                <Search />
+                <div className="actions">
+                  <h5>
+                    {isNaN(Date.parse(formatDate(lastUpdated)))
+                      ? ''
+                      : formatDateAbsolute(lastUpdated)}
+                  </h5>
+                  {!showUpdates && (
+                    <div className="bell-icon">
+                      <Icon.Bell
+                        onClick={() => {
+                          setShowUpdates(!showUpdates);
+                          localStorage.setItem('anyNewUpdate', false);
+                          setSeenUpdates(true);
+                          setNewUpdate(
+                            localStorage.getItem('anyNewUpdate') === 'false'
+                          );
+                        }}
+                      />
+                      {seenUpdates ? (
+                        !newUpdate ? (
+                          <div className="indicator"></div>
+                        ) : (
+                          ''
+                        )
+                      ) : (
+                        <div className="indicator"></div>
+                      )}
+                    </div>
+                  )}
+                  {showUpdates && (
+                    <Icon.BellOff
+                      onClick={() => {
+                        setShowUpdates(!showUpdates);
+                      }}
+                    />
+                  )}
                 </div>
               </div>
 
-              <TimeSeries
-                timeseries={timeseries[activeStateCode]}
-                type={graphOption}
-                mode={timeseriesMode}
-                logMode={timeseriesLogMode}
-              />
-            </React.Fragment>
-          )}
-        </div>
+              {showUpdates && <Updates />}
+
+              {states.length ? <Level data={states[0]} /> : ''}
+              {fetched && <Minigraph timeseries={timeseries['TT']} />}
+              {fetched && (
+                <Table
+                  forwardRef={refs[0]}
+                  states={states}
+                  summary={false}
+                  stateDistrictWiseData={stateDistrictWiseData}
+                  onHighlightState={onHighlightState}
+                  onHighlightDistrict={onHighlightDistrict}
+                />
+              )}
+            </div>
+
+            <div className="home-right">
+              {fetched && (
+                <React.Fragment>
+                  <MapExplorer
+                    forwardRef={refs[1]}
+                    mapMeta={MAP_META.India}
+                    states={states}
+                    stateDistrictWiseData={stateDistrictWiseData}
+                    stateTestData={stateTestData}
+                    regionHighlighted={regionHighlighted}
+                    onMapHighlightChange={onMapHighlightChange}
+                    isCountryLoaded={true}
+                  />
+
+                  <div
+                    className="timeseries-header fadeInUp"
+                    style={{animationDelay: '2.5s'}}
+                    ref={refs[2]}
+                  >
+                    <h1>Spread Trends</h1>
+                    <div className="tabs">
+                      <div
+                        className={`tab ${graphOption === 1 ? 'focused' : ''}`}
+                        onClick={() => {
+                          setGraphOption(1);
+                        }}
+                      >
+                        <h4>Cumulative</h4>
+                      </div>
+                      <div
+                        className={`tab ${graphOption === 2 ? 'focused' : ''}`}
+                        onClick={() => {
+                          setGraphOption(2);
+                        }}
+                      >
+                        <h4>Daily</h4>
+                      </div>
+                    </div>
+
+                    <div className="scale-modes">
+                      <label className="main">Scale Modes</label>
+                      <div className="timeseries-mode">
+                        <label htmlFor="timeseries-mode">Uniform</label>
+                        <input
+                          id="timeseries-mode"
+                          type="checkbox"
+                          checked={timeseriesMode}
+                          className="switch"
+                          aria-label="Checked by default to scale uniformly."
+                          onChange={(event) => {
+                            setTimeseriesMode(!timeseriesMode);
+                          }}
+                        />
+                      </div>
+                      <div
+                        className={`timeseries-logmode ${
+                          graphOption !== 1 ? 'disabled' : ''
+                        }`}
+                      >
+                        <label htmlFor="timeseries-logmode">Logarithmic</label>
+                        <input
+                          id="timeseries-logmode"
+                          type="checkbox"
+                          checked={graphOption === 1 && timeseriesLogMode}
+                          className="switch"
+                          disabled={graphOption !== 1}
+                          onChange={(event) => {
+                            setTimeseriesLogMode(!timeseriesLogMode);
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="trends-state-name">
+                      <select
+                        onChange={({target}) => {
+                          onHighlightState(JSON.parse(target.value));
+                        }}
+                      >
+                        {states.map((s) => {
+                          return (
+                            <option
+                              key={s.statecode}
+                              value={JSON.stringify(s)}
+                              selected={s.statecode === activeStateCode}
+                            >
+                              {s.state === 'Total' ? 'All States' : s.state}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
+                  </div>
+
+                  <TimeSeries
+                    timeseries={timeseries[activeStateCode]}
+                    type={graphOption}
+                    mode={timeseriesMode}
+                    logMode={timeseriesLogMode}
+                  />
+                </React.Fragment>
+              )}
+            </div>
+          </>
+        )}
       </div>
       <Footer />
     </React.Fragment>
