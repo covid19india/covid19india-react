@@ -14,6 +14,7 @@ import {
   renderSuggestion,
 } from './Essentials/essentialsutls';
 import TableAccordion from './Essentials/essentialsaccordionmobile';
+
 function ResourceTable({
   columns,
   data,
@@ -183,7 +184,6 @@ function ResourceTable({
               <tbody {...getTableBodyProps()}>
                 {rows.map((row, i) => {
                   prepareRow(row);
-                  console.log(row);
                   return (
                     <tr key={row.id} {...row.getRowProps()}>
                       {row.cells.map((cell, cellindex) => {
