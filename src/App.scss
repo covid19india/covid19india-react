@@ -481,7 +481,7 @@ h6 {
   }
 
   .MapExplorer {
-    .header, .map-stats, .back-button, .last-update, .unknown {
+    .header, .map-stats, .back-button, .last-update, .unknown, .state-page-button {
       display: none;
     }
 
@@ -1566,6 +1566,43 @@ table {
     .district-heading {
       transform: translateX(1rem);
       background: $gray-light;
+      &:hover {
+        background: $gray-light !important;
+      }
+
+      td.state-page-link {
+        background: $white;
+        padding: 0;
+        text-align: left;
+
+        div {
+          background: $yellow-light;
+          color: $orange;
+          padding: 0.45rem;
+          border-radius: 5px;
+          font-size: 0.75rem;
+          float: left;
+          align-items: center;
+          transition: all 0.2s ease-in-out;
+          &:hover {
+            background: $yellow-hover;
+            svg {
+              stroke: $orange;
+            }
+          }
+
+          svg {
+            width: 12px;
+            height: 12px;
+            stroke-width: 3px;
+            margin-left: 0.25rem;
+            color: $orange-mid;
+            vertical-align: middle;
+            margin-bottom: 1px;
+            transition: all 0.2s ease-in-out;
+          }
+        }
+      }
 
       td {
         font-size: 0.75rem;
@@ -1737,14 +1774,46 @@ table {
 
   .back-button {
     position: absolute;
+    top: 2.75rem;
     right: 0;
-    background: $orange-light;
+    background: $yellow-light;
     color: $orange;
     transition: all 0.2s ease-in-out;
     &:hover {
-      background: $orange-hover;
+      background: $yellow-hover;
     }
   }
+
+  .state-page-button {
+    position: absolute;
+    top: -0.5rem;
+    right: 0;
+    border-radius: 5px;
+    background: $yellow-light;
+    color: $orange;
+    transition: all 0.2s ease-in-out;
+    padding: 0.45rem;
+    padding-left: 0.75rem;
+    font-size: 0.75rem;
+    height: 1.5rem;
+    &:hover {
+      background: $yellow-hover;
+    }
+
+    abbr {
+      text-transform: none;
+    }
+
+    svg {
+      width: 12px;
+      height: 12px;
+      stroke-width: 3px;
+      margin-left: 0.25rem;
+      stroke: $orange-mid;
+      vertical-align: middle;
+    }
+  }
+
 
   .meta {
     display: flex;
@@ -1782,7 +1851,7 @@ table {
 
     .unknown {
       position: absolute;
-      top: 3rem;
+      top: 5.5rem;
       right: 0;
       text-align: right;
       width: 5rem;
@@ -2194,7 +2263,12 @@ input.switch:checked::after {
     }
 
     &.is-blue {
-      h5 { color: $blue-mid; }
+      h5 {
+        color: $blue-mid;
+        &.title {
+          color: $blue;
+        }
+      }
 
       h2,
       h6 { color: $blue; }
@@ -2257,6 +2331,21 @@ input.switch:checked::after {
 
       text {
         color: $gray-mid;
+        stroke: transparent;
+      }
+    }
+
+    &.is-blue {
+      background: $blue-light;
+
+      .domain,
+      .tick,
+      line {
+        stroke: $blue;
+      }
+
+      text {
+        color: $blue-mid;
         stroke: transparent;
       }
     }
@@ -2503,7 +2592,7 @@ footer {
     display: flex;
     flex-direction: row;
     text-align: center;
-  
+
     select {
       appearance: none;
       background-color: #eee;

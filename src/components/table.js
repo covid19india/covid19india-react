@@ -108,7 +108,10 @@ function Table(props) {
           className="table-fineprint fadeInUp"
           style={{animationDelay: '1.5s'}}
         >
-          Compiled from State Govt. numbers, <Link to="/faq">know more!</Link>
+          Compiled from State Govt. numbers,{' '}
+          <Link to="/faq" style={{color: '#6c757d'}}>
+            know more!
+          </Link>
         </h5>
         <table className="table fadeInUp" style={{animationDelay: '1.8s'}}>
           <thead>
