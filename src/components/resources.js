@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import ResourceTable from './resourcetable';
 import axios from 'axios';
-import Fab from '@material-ui/core/Fab';
+import {Fab, Fade} from '@material-ui/core';
 import * as Icon from 'react-feather';
 import FiltersMobile from './Essentials/essentialsfiltersmobile';
 import FiltersDesktop from './Essentials/essentialsfiltersdesktop';
@@ -39,11 +39,11 @@ function Resources(props) {
   }, [isDesktop, checkForResizeEvent]);
 
   const checkScrollEvent = useCallback((event) => {
-    window.pageYOffset > 20 ? setHasScrolled(true) : setHasScrolled(false);
+    window.pageYOffset > 100 ? setHasScrolled(true) : setHasScrolled(false);
   }, []);
 
   useEffect(() => {
-    window.pageYOffset > 20 ? setHasScrolled(true) : setHasScrolled(false);
+    window.pageYOffset > 100 ? setHasScrolled(true) : setHasScrolled(false);
     window.addEventListener('scroll', checkScrollEvent);
     return () => {
       window.removeEventListener('scroll', checkScrollEvent);
@@ -88,12 +88,9 @@ function Resources(props) {
   const isDisclaimerOpen = Boolean(anchorEl);
   const id = isDisclaimerOpen ? 'simple-popover' : undefined;
 
-  function topFunction() {
-    const c = document.body.scrollTop || document.documentElement.scrollTop; // For {Safari} || {Chrome, Firefox, IE and Opera}
-    if (c > 0) {
-      window.requestAnimationFrame(topFunction);
-      window.scrollTo(0, c - c / 6); // Increase fixed constant for smoother scrolling and vice versa
-    }
+  function animateScroll() {
+    document.body.scrollTo({top: 0, behavior: 'smooth'}); // For Safari
+    document.documentElement.scrollTo({top: 0, behavior: 'smooth'}); // For Chrome, Firefox, IE and Opera
   }
 
   const memocols = React.useMemo(
@@ -374,7 +371,7 @@ function Resources(props) {
     }
   };
   return (
-    <div className="Resources">
+    <div className="Resources" id="top-elem">
       <div className="filtersection">
         <div className="filtertitle">
           <h3>Service Before Self</h3>
@@ -433,23 +430,23 @@ function Resources(props) {
             indianstate={indianstate}
           />
           <div>
-            <Fab
-              color="inherit"
-              aria-label="gototop"
-              id="gototopbtn"
-              onClick={topFunction}
-              size="small"
-              disabled={!hasScrolled}
-              style={{
-                position: 'fixed',
-                bottom: '1rem',
-                right: '1rem',
-                zIndex: '1000',
-                opacity: hasScrolled ? 1 : 0,
-              }}
-            >
-              <Icon.Navigation2 strokeWidth="2.5" color="#4c75f2" />
-            </Fab>
+            <Fade in={hasScrolled}>
+              <Fab
+                color="inherit"
+                aria-label="gototop"
+                id="gototopbtn"
+                onClick={animateScroll}
+                size="small"
+                style={{
+                  position: 'fixed',
+                  bottom: '1rem',
+                  right: '1rem',
+                  zIndex: '1000',
+                }}
+              >
+                <Icon.Navigation2 strokeWidth="2.5" color="#4c75f2" />
+              </Fab>
+            </Fade>
           </div>
         </React.Fragment>
       )}
