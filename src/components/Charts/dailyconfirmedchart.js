@@ -52,12 +52,12 @@ function DailyConfirmedChart(props) {
       {
         data: deceased,
         label: 'Deceased',
-        backgroundColor: '#6c757d',
+        backgroundColor: '#ff073a',
       },
       {
         data: confirmed,
         label: 'Active',
-        backgroundColor: '#ff073a',
+        backgroundColor: '#6c757d',
       },
     ],
   };
