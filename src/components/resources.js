@@ -2,7 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import ResourceTable from './resourcetable';
 import axios from 'axios';
 import Fab from '@material-ui/core/Fab';
-import NavigationOutlinedIcon from '@material-ui/icons/NavigationOutlined';
+import * as Icon from 'react-feather';
 import FiltersMobile from './Essentials/essentialsfiltersmobile';
 import FiltersDesktop from './Essentials/essentialsfiltersdesktop';
 
@@ -448,7 +448,7 @@ function Resources(props) {
                 opacity: hasScrolled ? 1 : 0,
               }}
             >
-              <NavigationOutlinedIcon htmlColor="#201aa299" />
+              <Icon.Navigation2 strokeWidth="2.5" color="#4c75f2" />
             </Fab>
           </div>
         </React.Fragment>
