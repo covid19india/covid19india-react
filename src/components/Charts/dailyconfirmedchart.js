@@ -57,7 +57,7 @@ function DailyConfirmedChart(props) {
       {
         data: confirmed,
         label: 'Active',
-        backgroundColor: '#6c757d',
+        backgroundColor: '#E3A926',
       },
     ],
   };
