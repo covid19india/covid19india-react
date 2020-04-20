@@ -112,8 +112,9 @@ function PatientDB(props) {
               onChange={(event) => {
                 handleFilters('detectedstate', event.target.value);
               }}
+              defaultValue={filters.detectedstate}
             >
-              <option value="" disabled selected>
+              <option value="" disabled>
                 Select State
               </option>
               {getSortedValues(patients, 'detectedstate').map(
@@ -135,8 +136,9 @@ function PatientDB(props) {
               onChange={(event) => {
                 handleFilters('detecteddistrict', event.target.value);
               }}
+              defaultValue={filters.detecteddistrict}
             >
-              <option value="" disabled selected>
+              <option value="" disabled>
                 Select District
               </option>
               {getSortedValues(
@@ -161,8 +163,9 @@ function PatientDB(props) {
               onChange={(event) => {
                 handleFilters('detectedcity', event.target.value);
               }}
+              defaultValue={filters.detectedcity}
             >
-              <option value="" disabled selected>
+              <option value="" disabled>
                 Select City
               </option>
               {getSortedValues(
@@ -188,8 +191,9 @@ function PatientDB(props) {
               onChange={(event) => {
                 handleFilters('detectedcity', event.target.value);
               }}
+              defaultValue={filters.detectedcity}
             >
-              <option value="" disabled selected>
+              <option value="" disabled>
                 Select City
               </option>
               {getSortedValues(
@@ -215,12 +219,13 @@ function PatientDB(props) {
               maxDate={subDays(new Date(), 1)}
               format="dd/MM/y"
               calendarIcon={<Icon.Calendar />}
-              clearIcon={<Icon.XCircle className={'calendar-close'} />}
               inputProps={
                 (onkeydown = (e) => {
                   e.preventDefault();
                 })
               }
+              clearIcon={<Icon.XCircle size={16} />}
+              className={'calendar-close'}
               onChange={(date) => {
                 setFilterDate(date);
                 const fomattedDate = !!date ? format(date, 'dd/MM/yyyy') : '';
@@ -301,10 +306,11 @@ function PatientDB(props) {
               onChange={(event) => {
                 setColorMode(event.target.value);
               }}
+              defaultValue={colorMode}
             >
-              <option value="" disabled selected>
+              {/* <option value="" disabled>
                 Color modes
-              </option>
+              </option> */}
               <option value="genders">Genders</option>
               <option value="transmission">Transmission</option>
               <option value="nationality">Nationality</option>
