@@ -2739,16 +2739,19 @@ footer {
     .react-date-picker__calendar-button {
       padding: 0 !important;
       margin: 0 !important;
-      margin-left: 0.5rem !important;
+      margin-left: 0.25rem !important;
       svg {
         height: 16px;
         width: 16px;
+        stroke-width: 3px;
       }
     }
 
-    .calendar-close {
-      width: 12px;
-      stroke-width: 3;
+    .react-date-picker__clear-button {
+      svg {
+        width: 16px;
+        stroke-width: 3px;
+      }
     }
 
     select {
@@ -2840,6 +2843,25 @@ footer {
   .patientdb-wrapper {
     padding-left: 5rem;
     padding-right: 5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    .no-result {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 20rem;
+      align-self: center;
+      h5 {
+        color: $gray;
+        text-align: center;
+        font-weight: 600;
+        span {
+          font-weight: 900;
+          color: $pblue !important;
+        }
+      }
+    }
   }
 
   .legend {
