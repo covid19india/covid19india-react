@@ -27,7 +27,7 @@ function PatientDB(props) {
   const {pathname} = useLocation();
   const [colorMode, setColorMode] = useState('genders');
   const [scaleMode, setScaleMode] = useState(false);
-  const [filterDate, setFilterDate] = useState(null);
+  const [filterDate, setFilterDate] = useState(subDays(new Date(), 1));
   const [showReminder, setShowReminder] = useLocalStorage('showReminder', true);
   const [filters, setFilters] = useState({
     detectedstate: '',
@@ -52,6 +52,13 @@ function PatientDB(props) {
       console.log(err);
     }
   });
+
+  useEffect(() => {
+    const datePickers = document.querySelectorAll(
+      '.react-date-picker__inputGroup input'
+    );
+    datePickers.forEach((el) => el.setAttribute('readOnly', true));
+  }, []);
 
   const handleFilters = (label, value) => {
     setFilters((f) => {
@@ -209,6 +216,11 @@ function PatientDB(props) {
               format="dd/MM/y"
               calendarIcon={<Icon.Calendar />}
               clearIcon={<Icon.XCircle className={'calendar-close'} />}
+              inputProps={
+                (onkeydown = (e) => {
+                  e.preventDefault();
+                })
+              }
               onChange={(date) => {
                 setFilterDate(date);
                 const fomattedDate = !!date ? format(date, 'dd/MM/yyyy') : '';
