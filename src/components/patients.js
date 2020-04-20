@@ -128,6 +128,8 @@ function Patients(props) {
         setPatient={setPatient}
         expand={props.expand}
         applyClass={getClassNameFn(props.colorMode)}
+        patientGender={props.patientGenderForFilter}
+        colorMode={props.colorMode}
       />
 
       {modal && (

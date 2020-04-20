@@ -20,24 +20,88 @@ function PatientsView(props) {
                   key={index}
                   className={`day ${props.summary ? 'summary' : ''}`}
                 >
-                  {logs[day]
-                    .slice(props.summary ? -40 : 0)
-                    .map((patient, indexTwo) => {
-                      return (
-                        <div
-                          key={indexTwo}
-                          className={props.applyClass(patient)}
-                          onClick={() => {
-                            props.setModal(true);
-                            props.setPatient(patient);
-                          }}
-                        >
-                          <h3>
-                            {props.expand ? `P${patient.patientnumber}` : ''}
-                          </h3>
-                        </div>
-                      );
-                    })}
+                  {props.colorMode === 'genders' &&
+                    props.patientGender === 'default' &&
+                    logs[day]
+                      .slice(props.summary ? -40 : 0)
+                      .map((patient, indexTwo) => {
+                        console.log(patient);
+                        return (
+                          <div
+                            key={indexTwo}
+                            className={props.applyClass(patient)}
+                            onClick={() => {
+                              props.setModal(true);
+                              props.setPatient(patient);
+                            }}
+                          >
+                            <h3>
+                              {props.expand ? `P${patient.patientnumber}` : ''}
+                            </h3>
+                          </div>
+                        );
+                      })}
+                  {props.colorMode === 'genders' &&
+                    logs[day]
+                      .slice(props.summary ? -40 : 0)
+                      .filter(
+                        (patient) => patient.gender === props.patientGender
+                      )
+                      .map((patient, indexTwo) => {
+                        console.log(patient);
+                        return (
+                          <div
+                            key={indexTwo}
+                            className={props.applyClass(patient)}
+                            onClick={() => {
+                              props.setModal(true);
+                              props.setPatient(patient);
+                            }}
+                          >
+                            <h3>
+                              {props.expand ? `P${patient.patientnumber}` : ''}
+                            </h3>
+                          </div>
+                        );
+                      })}
+                  {props.colorMode === 'transmission' &&
+                    logs[day]
+                      .slice(props.summary ? -40 : 0)
+                      .map((patient, indexTwo) => {
+                        return (
+                          <div
+                            key={indexTwo}
+                            className={props.applyClass(patient)}
+                            onClick={() => {
+                              props.setModal(true);
+                              props.setPatient(patient);
+                            }}
+                          >
+                            <h3>
+                              {props.expand ? `P${patient.patientnumber}` : ''}
+                            </h3>
+                          </div>
+                        );
+                      })}
+                  {props.colorMode === 'nationality' &&
+                    logs[day]
+                      .slice(props.summary ? -40 : 0)
+                      .map((patient, indexTwo) => {
+                        return (
+                          <div
+                            key={indexTwo}
+                            className={props.applyClass(patient)}
+                            onClick={() => {
+                              props.setModal(true);
+                              props.setPatient(patient);
+                            }}
+                          >
+                            <h3>
+                              {props.expand ? `P${patient.patientnumber}` : ''}
+                            </h3>
+                          </div>
+                        );
+                      })}
                 </div>
               </React.Fragment>
             );

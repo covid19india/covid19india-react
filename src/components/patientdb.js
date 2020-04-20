@@ -20,6 +20,7 @@ function filterByObject(obj, filters) {
 
 function PatientDB(props) {
   const [fetched, setFetched] = useState(false);
+  const [patientGender, setPatientGender] = useState('default');
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [error, setError] = useState('');
@@ -247,11 +248,29 @@ function PatientDB(props) {
           {colorMode === 'genders' && (
             <div className="legend-left">
               <div className="circle is-female"></div>
-              <h5 className="is-female">Female</h5>
+              <h5
+                className="is-female"
+                style={{cursor: 'pointer'}}
+                onClick={() => setPatientGender('F')}
+              >
+                <u>Female</u>
+              </h5>
               <div className="circle is-male"></div>
-              <h5 className="is-male">Male</h5>
+              <h5
+                className="is-male"
+                style={{cursor: 'pointer'}}
+                onClick={() => setPatientGender('M')}
+              >
+                <u>Male</u>
+              </h5>
               <div className="circle"></div>
-              <h5 className="">Unknown</h5>
+              <h5
+                className=""
+                style={{cursor: 'pointer'}}
+                onClick={() => setPatientGender('')}
+              >
+                <u>Unknown</u>
+              </h5>
             </div>
           )}
 
@@ -294,11 +313,9 @@ function PatientDB(props) {
               style={{animationDelay: '0.4s'}}
               onChange={(event) => {
                 setColorMode(event.target.value);
+                setPatientGender('default');
               }}
             >
-              <option value="" disabled selected>
-                Color modes
-              </option>
               <option value="genders">Genders</option>
               <option value="transmission">Transmission</option>
               <option value="nationality">Nationality</option>
@@ -349,6 +366,7 @@ function PatientDB(props) {
           patients={filteredPatients}
           colorMode={colorMode}
           expand={scaleMode}
+          patientGenderForFilter={patientGender}
         />
       </div>
       <DownloadBlock patients={patients} />
