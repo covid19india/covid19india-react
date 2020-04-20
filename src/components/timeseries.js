@@ -416,7 +416,10 @@ function TimeSeries(props) {
           </svg>
         </div>
 
-        <div className="svg-parent is-blue">
+        <div
+          className="svg-parent is-blue"
+          style={{display: chartType === 1 ? '' : 'none'}}
+        >
           <div className="stats is-blue">
             <h5 className={`${!moving ? 'title' : ''}`}>Active</h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
