@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
+import {useLocalStorage} from 'react-use';
 import axios from 'axios';
 
 import {MAP_META} from '../constants';
@@ -28,12 +29,18 @@ function Home(props) {
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState({});
   const [activeStateCode, setActiveStateCode] = useState('TT'); // TT -> India
-  const [timeseriesMode, setTimeseriesMode] = useState(true);
-  const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
   const [showUpdates, setShowUpdates] = useState(false);
   const [seenUpdates, setSeenUpdates] = useState(false);
   const [newUpdate, setNewUpdate] = useState(true);
+  const [timeseriesMode, setTimeseriesMode] = useLocalStorage(
+    'timeseriesMode',
+    true
+  );
+  const [timeseriesLogMode, setTimeseriesLogMode] = useLocalStorage(
+    'timeseriesLogMode',
+    false
+  );
 
   useEffect(() => {
     // this if block is for checking if user opened a page for first time.
@@ -259,18 +266,22 @@ function Home(props) {
 
                 <div className="trends-state-name">
                   <select
+                    value={activeStateCode}
                     onChange={({target}) => {
-                      onHighlightState(JSON.parse(target.value));
+                      const selectedState = target.selectedOptions[0].getAttribute(
+                        'statedata'
+                      );
+                      onHighlightState(JSON.parse(selectedState));
                     }}
                   >
                     {states.map((s) => {
                       return (
                         <option
+                          value={s.statecode}
                           key={s.statecode}
-                          value={JSON.stringify(s)}
-                          selected={s.statecode === activeStateCode}
+                          statedata={JSON.stringify(s)}
                         >
-                          {s.state === 'Total' ? 'All States' : s.state}
+                          {s.statecode === 'TT' ? 'All States' : s.state}
                         </option>
                       );
                     })}
