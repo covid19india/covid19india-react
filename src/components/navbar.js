@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 
 const navLinkProps = (path, animationDelay) => ({
@@ -10,6 +10,12 @@ const navLinkProps = (path, animationDelay) => ({
 
 function Navbar({pages}) {
   const [expand, setExpand] = useState(false);
+
+  useEffect(() => {
+    const body = document.body;
+    if (window.innerWidth <= 769) body.classList.toggle('noscroll', expand);
+    else body.classList.toggle('noscroll', false);
+  }, [expand]);
 
   return (
     <div
