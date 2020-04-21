@@ -2,8 +2,8 @@ import React, {useState, useEffect, useRef} from 'react';
 import {useTable} from 'react-table';
 import Autosuggest from 'react-autosuggest';
 import TextField from '@material-ui/core/TextField';
-import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import * as Icon from 'react-feather';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {
   // renderCell,
@@ -116,7 +116,7 @@ function ResourceTable({
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <SearchOutlinedIcon style={{fontSize: '0.7rem'}} />
+            <Icon.Search size="0.9em" />
           </InputAdornment>
         ),
       }}
@@ -153,7 +153,14 @@ function ResourceTable({
         dataLength={suggestions.length}
         hasMore={suggestions.length < totalCount}
         next={onScrollUpdate}
-        loader={<h4>Fetching more information, please wait.</h4>}
+        loader={
+          <h3 style={{textAlign: 'center'}}>
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/d/dd/Loading-gif-builder-comwrap.gif"
+              alt="Loading data"
+            />
+          </h3>
+        }
         style={
           isDesktop
             ? {width: '100%', overflow: 'none'}
