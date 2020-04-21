@@ -14,6 +14,12 @@
 npm i && npm start
 ```
 
+## Online one-click setup for contributing
+
+Contribute to covid19india.org using a fully featured online development environment that will automatically: clone the repo, install the dependencies and start the webserver.
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referr
+
 ## Maintainers
 
 - [jeremyphilemon](https://github.com/jeremyphilemon)
