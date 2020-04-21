@@ -3,6 +3,10 @@ import {Link} from 'react-router-dom';
 
 import Row from './row';
 
+const isEqual = () => {
+  return true; // The contents of the table almost never change.
+};
+
 function Table(props) {
   const [states, setStates] = useState(props.states);
   const [revealedStates, setRevealedStates] = useState({});
@@ -298,4 +302,4 @@ function Table(props) {
   }
 }
 
-export default Table;
+export default React.memo(Table, isEqual);

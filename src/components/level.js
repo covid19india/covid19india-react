@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
+import {useEffectOnce} from 'react-use';
 import {formatNumber} from '../utils/common-functions';
 
 function Level(props) {
   const [data, setData] = useState(props.data);
 
-  useEffect(() => {
+  useEffectOnce(() => {
     setData({
       active: +props.data.active,
       confirmed: +props.data.confirmed,
@@ -14,7 +15,7 @@ function Level(props) {
       deltadeaths: +props.data.deltadeaths,
       deltarecovered: +props.data.deltarecovered,
     });
-  }, [props.data]);
+  });
 
   return (
     <div className="Level">
@@ -84,4 +85,4 @@ function Level(props) {
   );
 }
 
-export default Level;
+export default React.memo(Level);

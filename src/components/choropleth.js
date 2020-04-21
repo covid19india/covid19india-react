@@ -107,8 +107,8 @@ function ChoroplethMap({
         })
         .attr('d', path)
         .attr('pointer-events', 'all')
-        .on('mouseover', (d) => {
-          handleMouseover(d.properties[propertyField]);
+        .on('mouseenter', (d) => {
+          handleMouseEnter(d.properties[propertyField]);
         })
         .on('mouseleave', (d) => {
           if (onceTouchedRegion === d) onceTouchedRegion = null;
@@ -141,7 +141,7 @@ function ChoroplethMap({
           path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName]))
         );
 
-      const handleMouseover = (name) => {
+      const handleMouseEnter = (name) => {
         try {
           setSelectedRegion(name);
           setHoveredRegion(name, mapMeta);

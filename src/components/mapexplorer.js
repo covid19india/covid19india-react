@@ -22,7 +22,6 @@ const getRegionFromDistrict = (districtData, name) => {
 };
 
 function MapExplorer({
-  forwardRef,
   mapMeta,
   states,
   stateDistrictWiseData,
@@ -165,11 +164,7 @@ function MapExplorer({
   }, [panelRegion, stateTestData, testObj]);
 
   return (
-    <div
-      className="MapExplorer fadeInUp"
-      style={{animationDelay: '1.5s'}}
-      ref={forwardRef}
-    >
+    <div className="MapExplorer fadeInUp" style={{animationDelay: '1.5s'}}>
       <div className="header">
         <h1>{currentMap.name} Map</h1>
         <h6>

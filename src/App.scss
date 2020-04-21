@@ -333,6 +333,7 @@ h6 {
 
       h1 {
         color: $brick;
+        max-width: 20rem;
       }
 
       h5 {
@@ -342,6 +343,7 @@ h6 {
     }
 
     .header-right {
+      margin-top: .1rem;
       text-align: right;
       display: flex;
       flex-direction: column;
@@ -1464,7 +1466,6 @@ table {
     color: $gray;
 
     tr {
-      transition: background 0.1s ease-in-out;
       cursor: pointer;
 
       &:hover {
@@ -1980,7 +1981,7 @@ table {
 
   .tab {
     min-width: 5rem;
-    height: 3rem;
+    height: 3.25rem;
     background: $gray-light;
     padding-left: 1rem;
     padding-right: 1rem;
