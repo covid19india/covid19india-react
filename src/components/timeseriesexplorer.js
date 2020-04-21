@@ -1,8 +1,8 @@
-import React from 'react';
-import {useLocalStorage} from 'react-use';
-import * as Icon from 'react-feather';
-
 import TimeSeries from './timeseries';
+
+import React from 'react';
+import * as Icon from 'react-feather';
+import {useLocalStorage} from 'react-use';
 
 function TimeSeriesExplorer({
   timeseries,
@@ -37,14 +37,16 @@ function TimeSeriesExplorer({
         className="timeseries-header fadeInUp"
         style={{animationDelay: '2.5s'}}
       >
-        <div
-          className={`anchor ${anchor === 'timeseries' ? 'stickied' : ''}`}
-          onClick={() => {
-            setAnchor(anchor === 'timeseries' ? null : 'timeseries');
-          }}
-        >
-          <Icon.Anchor />
-        </div>
+        {window.innerWidth > 769 && (
+          <div
+            className={`anchor ${anchor === 'timeseries' ? 'stickied' : ''}`}
+            onClick={() => {
+              setAnchor(anchor === 'timeseries' ? null : 'timeseries');
+            }}
+          >
+            <Icon.Anchor />
+          </div>
+        )}
 
         <h1>Spread Trends</h1>
         <div className="tabs">

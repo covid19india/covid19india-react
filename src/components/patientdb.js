@@ -1,12 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import {useLocation} from 'react-router-dom';
+import DownloadBlock from './downloadblock';
+import Footer from './footer';
+import Patients from './patients';
+
 import axios from 'axios';
 import {format, subDays} from 'date-fns';
+import React, {useState, useEffect} from 'react';
 import DatePicker from 'react-date-picker';
 import * as Icon from 'react-feather';
-
-import Patients from './patients';
-import DownloadBlock from './downloadblock';
+import {useLocation} from 'react-router-dom';
+import {useEffectOnce, useLocalStorage} from 'react-use';
 
 function filterByObject(obj, filters) {
   const keys = Object.keys(filters);
@@ -22,11 +24,11 @@ function PatientDB(props) {
   const [fetched, setFetched] = useState(false);
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
-  const [error, setError] = useState('');
   const {pathname} = useLocation();
   const [colorMode, setColorMode] = useState('genders');
   const [scaleMode, setScaleMode] = useState(false);
   const [filterDate, setFilterDate] = useState(null);
+  const [showReminder, setShowReminder] = useLocalStorage('showReminder', true);
   const [filters, setFilters] = useState({
     detectedstate: '',
     detecteddistrict: '',
@@ -38,24 +40,18 @@ function PatientDB(props) {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  useEffect(() => {
-    async function fetchRawData() {
-      const response = await axios.get(
-        'https://api.covid19india.org/raw_data.json'
-      );
-      if (response.data) {
-        setPatients(response.data.raw_data.reverse());
-        setFetched(true);
-      } else {
-        setError("Couldn't fetch patient data. Try again after sometime.");
-        console.log(response);
-      }
+  useEffectOnce(() => {
+    try {
+      axios
+        .get('https://api.covid19india.org/raw_data.json')
+        .then((response) => {
+          setPatients(response.data.raw_data.reverse());
+          setFetched(true);
+        });
+    } catch (err) {
+      console.log(err);
     }
-
-    if (!fetched) {
-      fetchRawData();
-    }
-  }, [fetched]);
+  });
 
   const handleFilters = (label, value) => {
     setFilters((f) => {
@@ -100,9 +96,7 @@ function PatientDB(props) {
 
   return (
     <div className="PatientsDB">
-      {error ? <div className="alert alert-danger">{error}</div> : ''}
-
-      <div className="filters fadeInUp" style={{animationDelay: '0.5s'}}>
+      <div className="filters fadeInUp" style={{animationDelay: '0.2s'}}>
         <div className="filters-left">
           <div className="select">
             <select
@@ -214,7 +208,7 @@ function PatientDB(props) {
               maxDate={subDays(new Date(), 1)}
               format="dd/MM/y"
               calendarIcon={<Icon.Calendar />}
-              clearIcon={<Icon.XCircle class={'calendar-close'} />}
+              clearIcon={<Icon.XCircle className={'calendar-close'} />}
               onChange={(date) => {
                 setFilterDate(date);
                 const fomattedDate = !!date ? format(date, 'dd/MM/yyyy') : '';
@@ -262,7 +256,7 @@ function PatientDB(props) {
               <div className="circle is-imported"></div>
               <h5 className="is-imported">Imported</h5>
               <div className="circle"></div>
-              <h5 className="">TBD</h5>
+              <h5 className="">Unknown</h5>
             </div>
           )}
 
@@ -311,7 +305,6 @@ function PatientDB(props) {
       <div className="header fadeInUp" style={{animationDelay: '0.3s'}}>
         <div>
           <h1>Demographics</h1>
-          {/* <h3>No. of Patients: {patients.length}</h3>*/}
 
           <div className="deep-dive">
             <h5>Expand</h5>
@@ -327,11 +320,19 @@ function PatientDB(props) {
         </div>
         <h6 className="disclaimer">
           Some of the data provided might be missing/unknown as the details have
-          not been shared by the state/central governments.
+          not been shared by the state/central governments
         </h6>
       </div>
 
-      <div className="reminder fadeInUp" style={{animationDelay: '1s'}}>
+      <div
+        className="reminder fadeInUp"
+        style={{animationDelay: '1s', display: showReminder ? '' : 'none'}}
+      >
+        <Icon.XCircle
+          onClick={() => {
+            setShowReminder(false);
+          }}
+        />
         <p>
           It is important that we do not think of these as just tiny boxes,
           numbers, or just another part of statistics - among these are our
@@ -344,14 +345,18 @@ function PatientDB(props) {
         </p>
       </div>
 
-      <div className="patientdb-wrapper">
-        <Patients
-          patients={filteredPatients}
-          colorMode={colorMode}
-          expand={scaleMode}
-        />
-      </div>
+      {fetched && (
+        <div className="patientdb-wrapper">
+          <Patients
+            patients={filteredPatients}
+            colorMode={colorMode}
+            expand={scaleMode}
+          />
+        </div>
+      )}
+
       <DownloadBlock patients={patients} />
+      <Footer />
     </div>
   );
 }

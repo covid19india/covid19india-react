@@ -1,11 +1,16 @@
-import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ChoroplethMap from './choropleth';
+
 import {MAP_TYPES, MAP_META} from '../constants';
-import {formatDate, formatDateAbsolute} from '../utils/common-functions';
+import {
+  formatDate,
+  formatDateAbsolute,
+  formatNumber,
+} from '../utils/commonfunctions';
+
 import {formatDistance, format, parse} from 'date-fns';
-import {formatNumber} from '../utils/common-functions';
-import {Link} from 'react-router-dom';
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import * as Icon from 'react-feather';
+import {Link} from 'react-router-dom';
 
 const getRegionFromState = (state) => {
   if (!state) return;
@@ -175,14 +180,16 @@ function MapExplorer({
         display: anchor === 'timeseries' ? 'none' : '',
       }}
     >
-      <div
-        className={`anchor ${anchor === 'mapexplorer' ? 'stickied' : ''}`}
-        onClick={() => {
-          setAnchor(anchor === 'mapexplorer' ? null : 'mapexplorer');
-        }}
-      >
-        <Icon.Anchor />
-      </div>
+      {window.innerWidth > 769 && (
+        <div
+          className={`anchor ${anchor === 'mapexplorer' ? 'stickied' : ''}`}
+          onClick={() => {
+            setAnchor(anchor === 'mapexplorer' ? null : 'mapexplorer');
+          }}
+        >
+          <Icon.Anchor />
+        </div>
+      )}
       <div className="header">
         <h1>{currentMap.name} Map</h1>
         <h6>
@@ -341,4 +348,4 @@ function MapExplorer({
   );
 }
 
-export default MapExplorer;
+export default React.memo(MapExplorer);
