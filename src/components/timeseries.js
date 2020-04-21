@@ -410,11 +410,8 @@ function TimeSeries(props) {
   };
 
   return (
-    <div
-      className="TimeSeries-Parent fadeInUp"
-      style={{animationDelay: '2.7s'}}
-    >
-      <div className="timeseries">
+    <React.Fragment>
+      <div className="TimeSeries fadeInUp" style={{animationDelay: '2.7s'}}>
         <div className="svg-parent" ref={wrapperRef}>
           <div className="stats">
             <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
@@ -505,7 +502,7 @@ function TimeSeries(props) {
           2 Weeks
         </button>
       </div>
-    </div>
+    </React.Fragment>
   );
 }
 

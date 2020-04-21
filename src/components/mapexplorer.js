@@ -29,6 +29,8 @@ function MapExplorer({
   regionHighlighted,
   onMapHighlightChange,
   isCountryLoaded,
+  anchor,
+  setAnchor,
 }) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [panelRegion, setPanelRegion] = useState(getRegionFromState(states[0]));
@@ -164,7 +166,23 @@ function MapExplorer({
   }, [panelRegion, stateTestData, testObj]);
 
   return (
-    <div className="MapExplorer fadeInUp" style={{animationDelay: '1.5s'}}>
+    <div
+      className={`MapExplorer fadeInUp ${
+        anchor === 'mapexplorer' ? 'stickied' : ''
+      }`}
+      style={{
+        animationDelay: '1.5s',
+        display: anchor === 'timeseries' ? 'none' : '',
+      }}
+    >
+      <div
+        className={`anchor ${anchor === 'mapexplorer' ? 'stickied' : ''}`}
+        onClick={() => {
+          setAnchor(anchor === 'mapexplorer' ? null : 'mapexplorer');
+        }}
+      >
+        <Icon.Anchor />
+      </div>
       <div className="header">
         <h1>{currentMap.name} Map</h1>
         <h6>

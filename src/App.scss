@@ -1715,11 +1715,40 @@ table {
   stroke-width: 2;
 }
 
+.anchor {
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+  transform: rotate(45deg);
+  transition: all 0.1s ease-in-out;
+  svg {
+    width: 16px;
+    stroke: $gray-mid;
+    stroke-width: 3;
+    &:hover {
+      stroke: $gray;
+    }
+  }
+
+  &.stickied {
+    transform: rotate(0deg);
+    svg {
+      stroke: $gray;
+    }
+  }
+}
+
 .MapExplorer {
   display: flex;
   flex-direction: column;
   align-self: center;
   width: 30rem;
+
+  &.stickied {
+    position: -webkit-sticky;
+    position: sticky !important;
+    top: 0;
+  }
 
   .header {
     display: flex;
@@ -2004,10 +2033,18 @@ table {
   }
 }
 
-.TimeSeries-Parent {
-  display: flex;
-  flex-direction: column;
+.TimeSeriesExplorer {
   width: 30rem;
+  align-self: center;
+  &.stickied {
+    position: -webkit-sticky;
+    position: sticky !important;
+    top: -6.5rem;
+  }
+}
+
+.TimeSeries {
+  width: 100%;
   align-self: center;
 }
 
@@ -2020,7 +2057,7 @@ table {
     color: $gray;
   }
 
-  width: 30rem;
+  width: 100%;
   align-self: center;
   margin-top: 3rem;
 
@@ -2181,7 +2218,7 @@ input.switch:checked::after {
   }
 }
 
-.timeseries,
+.TimeSeries,
 .Minigraph {
   display: flex;
   flex-direction: column;
@@ -3418,7 +3455,7 @@ body.modal-open {
 .pills {
   display: flex;
   flex-direction: row;
-  align-self: flex-end;
+  justify-content: flex-end;
   > button {
     border: 2px $yellow-light solid;
     border-top: 0;
@@ -3867,12 +3904,10 @@ body.modal-open {
 }
 
 @media (max-width: 769px) {
-  .TimeSeries,
   table,
   .header,
   .Level,
-  .timeseries-header,
-  .TimeSeries-Parent,
+  .TimeSeriesExplorer,
   .Links,
   .Minigraph,
   .Summary,
@@ -3916,7 +3951,7 @@ body.modal-open {
     width: calc(100% - 2rem);
   }
 
-  .timeseries {
+  .TimeSeries {
     .svg-parent {
       width: 100%;
     }
