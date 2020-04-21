@@ -12,7 +12,7 @@
 
 ## Setup
 
-```
+```bash
 npm i && npm start
 ```
 

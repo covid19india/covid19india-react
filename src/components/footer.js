@@ -3,25 +3,25 @@ import * as Icon from 'react-feather';
 
 function Footer(props) {
   return (
-    <footer className="fadeInUp" style={{animationDelay: '2s'}}>
-      <h5>We stand with everyone fighting on the frontlines</h5>
-      <div className="link">
-        <a
-          href="https://github.com/covid19india"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          covid19india
-        </a>
+    <footer className="fadeInUp" style={{ animationDelay: '2s' }}>
+      < div className = "link" >
+      <h2><a
+      href = "https://covid19india.org"
+      target = "_blank"
+      rel = "noopener noreferrer" >
+        covid-19 India 
+        </a></h2>
       </div>
+      <h3>We stand with everyone fighting on the frontlines !</h3>
       <a
         href="https://github.com/covid19india/covid19india-react"
         className="button github"
         target="_blank"
         rel="noopener noreferrer"
       >
+        
+        <span> Open Sourced on GitHub  </span>
         <Icon.GitHub />
-        <span>Open Sourced on GitHub</span>
       </a>
       <a
         className="button excel"
@@ -29,8 +29,9 @@ function Footer(props) {
         target="_blank"
         rel="noopener noreferrer"
       >
+        
+        <span> Crowdsourced Patient Database  </span>
         <Icon.Database />
-        <span>Crowdsourced Patient Database&nbsp;</span>
       </a>
       <a
         href="https://twitter.com/covid19indiaorg"
@@ -39,8 +40,9 @@ function Footer(props) {
         className="button twitter"
         style={{justifyContent: 'center'}}
       >
-        <Icon.Twitter />
-        <span>View updates on Twitter</span>
+        
+        <span>View updates on Twitter </span>
+        < Icon.Twitter / >
       </a>
       <a
         href="https://bit.ly/covid19crowd"
@@ -48,8 +50,9 @@ function Footer(props) {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <Icon.MessageCircle />
-        <span>Join Telegram to Collaborate!</span>
+        
+        <span>Join Telegram to Collaborate! </span>
+        < Icon.MessageCircle / >
       </a>
     </footer>
   );

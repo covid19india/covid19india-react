@@ -117,7 +117,7 @@ function Search(props) {
 
   return (
     <div className="Search">
-      <label>Search your city, resources, etc</label>
+      <label>Search your city, districts, resources, etc.</label>
       <div className="line"></div>
       <input
         type="text"

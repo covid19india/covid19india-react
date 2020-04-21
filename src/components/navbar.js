@@ -16,10 +16,12 @@ function Navbar({pages}) {
       className="Navbar"
       style={{width: window.innerWidth > 769 && expand ? '6rem' : ''}}
     >
-      <div className="navbar-left">English</div>
+      <div className="navbar-left">
+        <h6> An Open crowdsourced initiative. </h6>
+      </div>
       <div className="navbar-middle">
         <Link to="/">
-          Covid19<span>India</span>
+          <h5> Covid19 < span > India </span></h5>
         </Link>
       </div>
       <div
@@ -66,7 +68,7 @@ function Navbar({pages}) {
             className="expand-bottom fadeInUp"
             style={{animationDelay: '1s'}}
           >
-            <h5>A crowdsourced initiative.</h5>
+            
           </div>
         </div>
       )}
