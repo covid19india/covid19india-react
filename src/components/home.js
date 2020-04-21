@@ -1,70 +1,64 @@
-import React, {useState, useCallback} from 'react';
-import {useEffectOnce} from 'react-use';
-import * as Icon from 'react-feather';
-import axios from 'axios';
+import Footer from './footer';
+import Level from './level';
+import MapExplorer from './mapexplorer';
+import Minigraph from './minigraph';
+import Search from './search';
+import Table from './table';
+import TimeSeriesExplorer from './timeseriesexplorer';
+import Updates from './updates';
 
 import {MAP_META} from '../constants';
-
 import {
   formatDate,
   formatDateAbsolute,
   preprocessTimeseries,
   parseStateTimeseries,
-} from '../utils/common-functions';
+} from '../utils/commonfunctions';
 
-import Table from './table';
-import Level from './level';
-import MapExplorer from './mapexplorer';
-import TimeSeriesExplorer from './timeseriesexplorer';
-import Minigraph from './minigraph';
-import Updates from './updates';
-import Search from './search';
-import Footer from './footer';
+import axios from 'axios';
+import React, {useState, useCallback} from 'react';
+import * as Icon from 'react-feather';
+import {useEffectOnce, useLocalStorage, useFavicon} from 'react-use';
 
 function Home(props) {
   const [states, setStates] = useState([]);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
   const [stateTestData, setStateTestData] = useState({});
-  const [fetched, setFetched] = useState(false);
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState({});
+  const [fetched, setFetched] = useState(false);
   const [activeStateCode, setActiveStateCode] = useState('TT');
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
   const [showUpdates, setShowUpdates] = useState(false);
-  const [seenUpdates, setSeenUpdates] = useState(false);
-  const [newUpdate, setNewUpdate] = useState(true);
   const [anchor, setAnchor] = useState(null);
+  const [lastViewedLog, setLastViewedLog] = useLocalStorage(
+    'lastViewedLog',
+    null
+  );
+  const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
+
+  useFavicon(newUpdate ? '/icon_update.png' : '/favicon.ico');
 
   useEffectOnce(() => {
-    /* if (localStorage.getItem('anyNewUpdate') === null) {
-      localStorage.setItem('anyNewUpdate', true);
-    } else {
-      setSeenUpdates(true);
-      setNewUpdate(localStorage.getItem('anyNewUpdate') === 'false');
-    }*/
-
     getStates();
-    /* axios
-        .get('https://api.covid19india.org/updatelog/log.json')
-        .then((response) => {
-          const currentTimestamp = response.data
-            .slice()
-            .reverse()[0]
-            .timestamp.toString();
-          // Sets and Updates the data in the local storage.
-          if (localStorage.getItem('currentItem') !== null) {
-            if (localStorage.getItem('currentItem') !== currentTimestamp) {
-              localStorage.setItem('currentItem', currentTimestamp);
-              localStorage.setItem('anyNewUpdate', true);
-            }
-          } else {
-            localStorage.setItem('currentItem', currentTimestamp);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-        */
+  });
+
+  useEffectOnce(() => {
+    axios
+      .get('https://api.covid19india.org/updatelog/log.json')
+      .then((response) => {
+        const lastTimestamp = response.data
+          .slice()
+          .reverse()[0]
+          .timestamp.toString();
+        if (lastTimestamp !== lastViewedLog) {
+          setNewUpdate(true);
+          setLastViewedLog(lastTimestamp);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 
   const getStates = async () => {
@@ -82,22 +76,23 @@ function Home(props) {
       ]);
 
       setStates(data.statewise);
+
       const ts = parseStateTimeseries(statesDailyResponse);
       ts['TT'] = preprocessTimeseries(data.cases_time_series);
       setTimeseries(ts);
+
       setLastUpdated(data.statewise[0].lastupdatedtime);
 
       const testData = stateTestData.states_tested_data.reverse();
       const totalTest = data.tested[data.tested.length - 1];
-
       testData.push({
         updatedon: totalTest.updatetimestamp.split(' ')[0],
         totaltested: totalTest.totalindividualstested,
         source: totalTest.source,
         state: 'Total',
       });
-
       setStateTestData(testData);
+
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
       setFetched(true);
     } catch (err) {
@@ -138,23 +133,11 @@ function Home(props) {
                     <Icon.Bell
                       onClick={() => {
                         setShowUpdates(!showUpdates);
-                        localStorage.setItem('anyNewUpdate', false);
-                        setSeenUpdates(true);
-                        setNewUpdate(
-                          localStorage.getItem('anyNewUpdate') === 'false'
-                        );
+                        setNewUpdate(false);
                       }}
                     />
                   )}
-                  {seenUpdates ? (
-                    !newUpdate ? (
-                      <div className="indicator"></div>
-                    ) : (
-                      ''
-                    )
-                  ) : (
-                    <div className="indicator"></div>
-                  )}
+                  {newUpdate && <div className="indicator"></div>}
                 </div>
               )}
               {showUpdates && (

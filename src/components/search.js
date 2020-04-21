@@ -1,12 +1,13 @@
-import React, {useState, useCallback, useRef} from 'react';
-import * as Icon from 'react-feather';
-import {Link} from 'react-router-dom';
 import {
   STATE_CODES_ARRAY,
   DISTRICTS_ARRAY,
   STATE_CODES_REVERSE,
 } from '../constants';
+
 import Bloodhound from 'corejs-typeahead';
+import React, {useState, useCallback, useRef} from 'react';
+import * as Icon from 'react-feather';
+import {Link} from 'react-router-dom';
 
 const engine = new Bloodhound({
   initialize: true,
@@ -119,6 +120,7 @@ function Search(props) {
     <div className="Search">
       <label>Search your city, resources, etc</label>
       <div className="line"></div>
+
       <input
         type="text"
         value={searchValue}
@@ -134,9 +136,11 @@ function Search(props) {
           handleSearch(event.target.value.toLowerCase());
         }}
       />
+
       <div className={`search-button`}>
         <Icon.Search />
       </div>
+
       {results.length > 0 && (
         <div
           className={`close-button`}
@@ -148,6 +152,7 @@ function Search(props) {
           <Icon.X />
         </div>
       )}
+
       {results.length > 0 && (
         <div className="results">
           {results.map((result, index) => {
@@ -197,6 +202,7 @@ function Search(props) {
           })}
         </div>
       )}
+
       {expand && (
         <div className="expanded">
           <div className="expanded-left">
@@ -361,4 +367,4 @@ function Search(props) {
   );
 }
 
-export default Search;
+export default React.memo(Search);

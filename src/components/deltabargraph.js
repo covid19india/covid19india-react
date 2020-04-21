@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
 import * as d3 from 'd3';
+import React, {useEffect, useRef, useState} from 'react';
 
 function DeltaBarGraph({timeseries, arrayKey}) {
   const [data, setData] = useState([]);
@@ -109,7 +109,7 @@ function DeltaBarGraph({timeseries, arrayKey}) {
   );
 }
 
-export default DeltaBarGraph;
+export default React.memo(DeltaBarGraph);
 
 function roundedBar(x, y, w, h, r, f) {
   if (!h) return;

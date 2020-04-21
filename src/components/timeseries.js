@@ -1,10 +1,9 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import {sliceTimeseriesFromEnd, formatNumber} from '../utils/commonfunctions';
+import {useResizeObserver} from '../utils/hooks';
+
 import * as d3 from 'd3';
 import moment from 'moment';
-
-import {sliceTimeseriesFromEnd} from '../utils/common-functions';
-import {useResizeObserver} from '../utils/hooks';
-import {formatNumber} from '../utils/common-functions';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 
 function TimeSeries(props) {
   const [lastDaysCount, setLastDaysCount] = useState(

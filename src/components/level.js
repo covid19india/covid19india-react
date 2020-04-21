@@ -1,6 +1,7 @@
+import {formatNumber} from '../utils/commonfunctions';
+
 import React, {useState} from 'react';
 import {useEffectOnce} from 'react-use';
-import {formatNumber} from '../utils/common-functions';
 
 function Level(props) {
   const [data, setData] = useState(props.data);
@@ -42,7 +43,6 @@ function Level(props) {
       >
         <h5 className="heading">Active</h5>
         <h4>&nbsp;</h4>
-        {/* <h4>[{props.deltas ? props.deltas.confirmeddelta-(props.deltas.recovereddelta+props.deltas.deceaseddelta) >=0 ? '+'+(props.deltas.confirmeddelta-(props.deltas.recovereddelta+props.deltas.deceaseddelta)).toString() : '+0' : ''}]</h4>*/}
         <h1 className="title has-text-info">{formatNumber(data.active)}</h1>
       </div>
 

@@ -207,7 +207,6 @@ h6 {
   flex-direction: row;
   justify-content: space-between;
   height: 3.9rem;
-  margin-bottom: 1rem;
   & > * {
     align-self: center;
   }
@@ -263,6 +262,7 @@ h6 {
     top: 3.85rem;
     background: $gray-light-opaque;
     z-index: 9999;
+    transform: none;
     & > * {
       padding: 1.5rem;
       border-top: 1px solid $gray-light;
@@ -270,6 +270,11 @@ h6 {
       transition: all 0.15s ease-in-out;
       &:hover {
         background: $gray-hover;
+      }
+      span.focused {
+        background: $pblue-light;
+        color: $pblue;
+        padding: .25rem;
       }
     }
 
@@ -288,7 +293,7 @@ h6 {
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
-  margin-left: 5rem;
+  margin-left: 10rem;
   margin-right: 5rem;
 
   .home-left,
@@ -314,7 +319,7 @@ h6 {
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
-  margin-left: 5rem;
+  margin-left: 10rem;
   margin-right: 5rem;
   .header {
     width: calc(100% - 3rem);
@@ -474,6 +479,10 @@ h6 {
 
   .MapExplorer {
     .header, .map-stats, .back-button, .last-update, .unknown, .state-page-button {
+      display: none;
+    }
+
+    .anchor {
       display: none;
     }
 
@@ -2211,6 +2220,7 @@ input.switch:checked::after {
     margin-left: -1px;
     width: auto;
     color: $gray;
+    cursor: pointer;
 
     &:focus {
       outline: none;
@@ -2720,7 +2730,7 @@ footer {
     .react-date-picker__calendar-button {
       padding: 0 !important;
       margin: 0 !important;
-      margin-left: 1rem !important;
+      margin-left: 0.5rem !important;
       svg {
         height: 16px;
         width: 16px;
@@ -2768,16 +2778,31 @@ footer {
     padding-right: 1rem;
     width: 30rem;
     line-height: 23px;
+    background: $pblue-light;
+    border-radius: 5px;
+    padding-top: 1rem;
+    svg {
+      position: absolute;
+      right: 0;
+      top: -.25rem;
+      padding: 0.5rem;
+      width: 16px;
+      stroke-width: 3px;
+      stroke: $pblue-mid;
+      cursor: pointer;
+      &:hover {
+        stroke: $pblue;
+      }
+    }
   }
 
   .header {
     margin-top: 1.75rem;
-    align-self: flex-start;
+    align-self: center;
     display: flex;
     flex-direction: row;
-    width: calc(100% - 10.5rem);
     justify-content: space-between;
-    margin-left: 5.25rem;
+    width: calc(100% - 10rem);
     h1 {
       color: $pblue;
     }
@@ -2793,7 +2818,6 @@ footer {
       margin-bottom: 1rem;
       width: 10rem;
       text-align: right;
-      text-transform: unset;
     }
 
     .deep-dive {
@@ -3197,8 +3221,11 @@ footer {
     }
 
     a {
-     text-decoration: none !important;
-     color: $orange-mid;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      text-decoration: none !important;
+      color: $orange-mid;
     }
 
     .button {
@@ -3206,11 +3233,9 @@ footer {
       flex-direction: row;
       justify-content: center;
       & > * {
-        align-self: center;
+        align-self: center !important;
       }
       background: $orange-light;
-      height: 3rem;
-      width: 10rem;
       text-align: center;
       &:hover {
         background: $orange-hover;
@@ -3874,24 +3899,41 @@ body.modal-open {
 
     .navbar-right {
       order: 2;
+      display: flex;
+      flex-direction: column;
+      padding-top: 0;
+      padding-bottom: 0;
+      background: $gray-light-opaque;
       &:hover {
-        margin-left: 1rem;
+        background: $gray-light-opaque !important;
+      }
+      & > span {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+        height: 1.5rem;
+        svg {
+          stroke: $gray;
+        }
       }
     }
 
     .expand {
       flex-direction: column;
-      width: 10rem;
-      left: 5rem;
+      width: 15rem;
       top: 0;
       background: $gray-light-opaque;
-      padding-top: 5.25rem;
-      padding-left: 1rem;
+      padding-top: 5.5rem;
+      padding-left: 0rem;
+      border-right: solid 2px $gray-light-opaque;
+      z-index: -1 !important;
       & > * {
         height: 1.5rem;
         border: 0;
         border-left: 1px solid $gray-light;
-        width: 7rem;
+        width: 12rem;
         color: $gray;
         font-weight: 600;
       }
@@ -4046,7 +4088,7 @@ body.modal-open {
     .filters {
       height: auto;
       justify-content: center;
-      padding: 0.2rem;
+      padding: 0.5rem;
     }
   }
 
@@ -4081,10 +4123,6 @@ body.modal-open {
 
   &.nationality {
     margin-bottom: 0.5rem;
-  }
-
-  &.genders {
-    margin-top: 0.5rem;
   }
 
   .Resources {
@@ -4342,6 +4380,12 @@ body.modal-open {
     h5{
       margin-top: 0;
       margin-bottom: 0.1rem;
+    }
+  }
+
+  .Navbar {
+    .expand {
+      transform: none !important;
     }
   }
 

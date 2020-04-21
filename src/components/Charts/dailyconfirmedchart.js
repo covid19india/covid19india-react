@@ -1,6 +1,6 @@
+import moment from 'moment';
 import React from 'react';
 import {Bar, defaults} from 'react-chartjs-2';
-import moment from 'moment';
 
 function DailyConfirmedChart(props) {
   const dates = [];

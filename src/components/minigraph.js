@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as d3 from 'd3';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 
 function Minigraph({timeseries}) {
   const [timeSeriesData, setTimeSeriesData] = useState([]);

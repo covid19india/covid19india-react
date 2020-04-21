@@ -1,3 +1,13 @@
+import './App.scss';
+
+import DeepDive from './components/deepdive';
+import FAQ from './components/faq';
+import Home from './components/home';
+import Navbar from './components/navbar';
+import PatientDB from './components/patientdb';
+import Resources from './components/resources';
+import State from './components/state';
+
 import React from 'react';
 import {
   BrowserRouter as Router,
@@ -5,17 +15,6 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
-
-import './App.scss';
-
-import Home from './components/home';
-import Navbar from './components/navbar';
-import Links from './components/links';
-import FAQ from './components/faq';
-import PatientDB from './components/patientdb';
-import DeepDive from './components/deepdive';
-import Resources from './components/resources';
-import State from './components/state';
 
 function App() {
   const pages = [
@@ -41,31 +40,24 @@ function App() {
       showInNavbar: true,
     },
     {
-      pageLink: '/links',
-      view: Links,
-      displayName: 'Helpful Links',
-      animationDelayForNavbar: 0.5,
-      showInNavbar: true,
-    },
-    {
       pageLink: '/essentials',
       view: Resources,
       displayName: 'Essentials',
-      animationDelayForNavbar: 0.6,
+      animationDelayForNavbar: 0.5,
       showInNavbar: true,
     },
     {
       pageLink: '/faq',
       view: FAQ,
       displayName: 'FAQ',
-      animationDelayForNavbar: 0.7,
+      animationDelayForNavbar: 0.6,
       showInNavbar: true,
     },
     {
       pageLink: '/state/:stateCode',
       view: State,
       displayName: 'State',
-      animationDelayForNavbar: 0.8,
+      animationDelayForNavbar: 0.7,
       showInNavbar: false,
     },
   ];
@@ -78,13 +70,13 @@ function App() {
             <div className="Almighty-Router">
               <Navbar pages={pages} />
               <Switch location={location}>
-                {pages.map((page, i) => {
+                {pages.map((page, index) => {
                   return (
                     <Route
                       exact
                       path={page.pageLink}
                       component={page.view}
-                      key={i}
+                      key={index}
                     />
                   );
                 })}
