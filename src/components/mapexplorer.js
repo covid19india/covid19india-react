@@ -313,6 +313,20 @@ function MapExplorer({
           </div>
         )}
 
+        {currentMap.mapType === MAP_TYPES.COUNTRY &&
+        type === 2 &&
+        currentHoveredRegion.name !== 'Total' ? (
+          <h1 className="district-confirmed">
+            {currentMapData[currentHoveredRegion.name]
+              ? Math.round(currentMapData[currentHoveredRegion.name])
+              : 0}
+            <br />
+            <span style={{fontSize: '0.75rem', fontWeight: 600}}>
+              {type === 1 ? 'confirmed cases' : 'cases per million'}
+            </span>
+          </h1>
+        ) : null}
+
         {currentMap.mapType === MAP_TYPES.STATE &&
         currentHoveredRegion.name !== currentMap.name ? (
           <h1 className="district-confirmed">
