@@ -1,4 +1,6 @@
-# covid19india.org
+# [covid19india.org](https://covid19india.org)
+### We are Open Source Group Working For The Welfare Of India
+### Please contribute to us
 
 <p align="center">
 <img src="https://lh3.googleusercontent.com/qsMx1mwj0beTKis5j6tAE5U27l1iAhZUarv6_rJMoeIc6bhQilShYnQfZZtfuAb39MXP-P3ZG_EZMV_TKNl3AdM8dMBGh0KP=s2560" width="100%">
@@ -17,6 +19,7 @@ npm i && npm start
 ## Maintainers
 
 - [jeremyphilemon](https://github.com/jeremyphilemon)
+- [janaSunrise](https://github.com/janaSunrise)
 
 ## Contribution
 
