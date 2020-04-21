@@ -90,13 +90,18 @@ function Search(props) {
           contact: result.phonenumber,
         };
         results.push(essentialsObj);
-        return null;
       });
+      setResults([...results]);
+    };
+
+    const essentialsAsync = (datums) => {
+      // to handle async remote call
+      essentialsEngine.search(searchInput, essentialsSync);
     };
 
     engine.search(searchInput, sync);
     districtEngine.search(searchInput, districtSync);
-    essentialsEngine.search(searchInput, essentialsSync);
+    essentialsEngine.search(searchInput, essentialsSync, essentialsAsync);
     setResults(results);
   }, []);
 
