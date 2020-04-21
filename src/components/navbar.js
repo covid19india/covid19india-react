@@ -27,9 +27,12 @@ function Navbar({pages}) {
 
       <div
         className="navbar-right"
+        onClick={() => {
+          setExpand(!expand);
+        }}
         onMouseEnter={() => {
-          setExpand(true);
           if (window.innerWidth > 769) {
+            setExpand(true);
             anime({
               targets: '.navbar-right path',
               strokeDashoffset: [anime.setDashoffset, 0],
