@@ -95,7 +95,7 @@ function Search(props) {
     };
 
     const essentialsAsync = (datums) => {
-      // to handle async remote call
+      // to handle async remote call on initial launch
       essentialsEngine.search(searchInput, essentialsSync);
     };
 
