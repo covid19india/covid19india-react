@@ -1,5 +1,6 @@
 import React from 'react';
 import {useLocalStorage} from 'react-use';
+import * as Icon from 'react-feather';
 
 import TimeSeries from './timeseries';
 
@@ -8,6 +9,8 @@ function TimeSeriesExplorer({
   activeStateCode,
   onHighlightState,
   states,
+  anchor,
+  setAnchor,
 }) {
   const [graphOption, setGraphOption] = useLocalStorage(
     'timeseriesGraphOption',
@@ -24,11 +27,25 @@ function TimeSeriesExplorer({
   );
 
   return (
-    <React.Fragment>
+    <div
+      className={`TimeSeriesExplorer ${
+        anchor === 'timeseries' ? 'stickied' : ''
+      }`}
+      style={{display: anchor === 'mapexplorer' ? 'none' : ''}}
+    >
       <div
         className="timeseries-header fadeInUp"
         style={{animationDelay: '2.5s'}}
       >
+        <div
+          className={`anchor ${anchor === 'timeseries' ? 'stickied' : ''}`}
+          onClick={() => {
+            setAnchor(anchor === 'timeseries' ? null : 'timeseries');
+          }}
+        >
+          <Icon.Anchor />
+        </div>
+
         <h1>Spread Trends</h1>
         <div className="tabs">
           <div
@@ -115,7 +132,7 @@ function TimeSeriesExplorer({
         mode={timeseriesMode}
         logMode={timeseriesLogMode}
       />
-    </React.Fragment>
+    </div>
   );
 }
 

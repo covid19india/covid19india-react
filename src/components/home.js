@@ -33,6 +33,7 @@ function Home(props) {
   const [showUpdates, setShowUpdates] = useState(false);
   const [seenUpdates, setSeenUpdates] = useState(false);
   const [newUpdate, setNewUpdate] = useState(true);
+  const [anchor, setAnchor] = useState(null);
 
   useEffectOnce(() => {
     /* if (localStorage.getItem('anyNewUpdate') === null) {
@@ -192,6 +193,8 @@ function Home(props) {
                 regionHighlighted={regionHighlighted}
                 onMapHighlightChange={onMapHighlightChange}
                 isCountryLoaded={true}
+                anchor={anchor}
+                setAnchor={setAnchor}
               />
 
               {fetched && (
@@ -200,6 +203,8 @@ function Home(props) {
                   activeStateCode={activeStateCode}
                   onHighlightState={onHighlightState}
                   states={states}
+                  anchor={anchor}
+                  setAnchor={setAnchor}
                 />
               )}
             </React.Fragment>
