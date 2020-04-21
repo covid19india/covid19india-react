@@ -1,7 +1,8 @@
+import {getStateName} from '../../utils/commonfunctions';
+
+import moment from 'moment';
 import React from 'react';
 import {Line, defaults} from 'react-chartjs-2';
-import moment from 'moment';
-import {getStateName} from '../../utils/common-functions';
 function AllStatesChart(props) {
   const dates = [];
   const chartReference = React.createRef();

@@ -1,6 +1,7 @@
-import React from 'react';
 import Row from '../../components/row';
+
 import {shallow} from 'enzyme';
+import React from 'react';
 
 const state = {
   active: '1',

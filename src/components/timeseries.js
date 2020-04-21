@@ -1,10 +1,9 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import {sliceTimeseriesFromEnd, formatNumber} from '../utils/commonfunctions';
+import {useResizeObserver} from '../utils/hooks';
+
 import * as d3 from 'd3';
 import moment from 'moment';
-
-import {sliceTimeseriesFromEnd} from '../utils/common-functions';
-import {useResizeObserver} from '../utils/hooks';
-import {formatNumber} from '../utils/common-functions';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 
 function TimeSeries(props) {
   const [lastDaysCount, setLastDaysCount] = useState(
@@ -16,6 +15,7 @@ function TimeSeries(props) {
   const [mode, setMode] = useState(props.mode);
   const [logMode, setLogMode] = useState(props.logMode);
   const [chartType, setChartType] = useState(props.type);
+  const [stateCode] = useState(props.stateCode);
   const [moving, setMoving] = useState(false);
 
   const svgRef1 = useRef();
@@ -42,7 +42,7 @@ function TimeSeries(props) {
 
   useEffect(() => {
     transformTimeSeries(props.timeseries);
-  }, [props.timeseries, lastDaysCount, transformTimeSeries]);
+  }, [stateCode, lastDaysCount, transformTimeSeries, props.timeseries]);
 
   useEffect(() => {
     setMode(props.mode);
@@ -409,11 +409,8 @@ function TimeSeries(props) {
   };
 
   return (
-    <div
-      className="TimeSeries-Parent fadeInUp"
-      style={{animationDelay: '2.7s'}}
-    >
-      <div className="timeseries">
+    <React.Fragment>
+      <div className="TimeSeries fadeInUp" style={{animationDelay: '2.7s'}}>
         <div className="svg-parent" ref={wrapperRef}>
           <div className="stats">
             <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
@@ -504,8 +501,8 @@ function TimeSeries(props) {
           2 Weeks
         </button>
       </div>
-    </div>
+    </React.Fragment>
   );
 }
 
-export default TimeSeries;
+export default React.memo(TimeSeries);

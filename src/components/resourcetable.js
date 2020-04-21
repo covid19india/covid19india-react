@@ -1,17 +1,17 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import {useTable} from 'react-table';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import Autosuggest from 'react-autosuggest';
+import {makeStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import React, {useState, useEffect, useRef} from 'react';
+import Autosuggest from 'react-autosuggest';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import {useTable} from 'react-table';
 
 const usePanelSummaryStyles = makeStyles((theme) => ({
   content: {

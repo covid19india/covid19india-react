@@ -1,5 +1,6 @@
-import moment from 'moment';
 import {STATE_CODES} from '../constants';
+
+import moment from 'moment';
 
 const months = {
   '01': 'Jan',

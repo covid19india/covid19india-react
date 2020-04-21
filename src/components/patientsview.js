@@ -1,13 +1,18 @@
-import React from 'react';
 import {format} from 'date-fns';
+import React from 'react';
 
-function PatientsView(props) {
-  const logs = props.logs;
-
+function PatientsView({
+  logs,
+  summary,
+  setModal,
+  setPatient,
+  expand,
+  applyClass,
+}) {
   return (
     <div className="Patients fadeInUp" style={{animationDelay: '1s'}}>
       {Object.keys(logs)
-        .slice(props.summary ? -1 : 0)
+        .slice(summary ? -1 : 0)
         .map((day, index) => {
           if (day !== 'Invalid Date') {
             return (
@@ -16,25 +21,20 @@ function PatientsView(props) {
                   {format(new Date(day), 'dd MMM, yyyy')}{' '}
                   {'(' + logs[day].length + ')'}
                 </h5>
-                <div
-                  key={index}
-                  className={`day ${props.summary ? 'summary' : ''}`}
-                >
+                <div key={index} className={`day ${summary ? 'summary' : ''}`}>
                   {logs[day]
-                    .slice(props.summary ? -40 : 0)
+                    .slice(summary ? -40 : 0)
                     .map((patient, indexTwo) => {
                       return (
                         <div
                           key={indexTwo}
-                          className={props.applyClass(patient)}
+                          className={applyClass(patient)}
                           onClick={() => {
-                            props.setModal(true);
-                            props.setPatient(patient);
+                            setModal(true);
+                            setPatient(patient);
                           }}
                         >
-                          <h3>
-                            {props.expand ? `P${patient.patientnumber}` : ''}
-                          </h3>
+                          <h3>{expand ? `P${patient.patientnumber}` : ''}</h3>
                         </div>
                       );
                     })}
