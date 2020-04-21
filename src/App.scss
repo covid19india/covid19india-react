@@ -4065,8 +4065,10 @@ body.modal-open {
     }
 
     .reminder {
-      width: calc(100% - 2rem);
-      padding: 0;
+      width: calc(100% - 4rem);
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+
     }
 
     .Patients {
