@@ -102,7 +102,6 @@ function Search(props) {
     engine.search(searchInput, sync);
     districtEngine.search(searchInput, districtSync);
     essentialsEngine.search(searchInput, essentialsSync, essentialsAsync);
-    setResults(results);
   }, []);
 
   function setNativeValue(element, value) {
