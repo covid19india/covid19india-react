@@ -362,4 +362,4 @@ function Row(props) {
   );
 }
 
-export default Row;
+export default React.memo(Row);

@@ -165,4 +165,4 @@ function Minigraph({timeseries}) {
   );
 }
 
-export default Minigraph;
+export default React.memo(Minigraph);
