@@ -132,3 +132,49 @@ export const parseStateTimeseries = ({states_daily: data}) => {
 
   return statewiseSeries;
 };
+
+export const parseStateTestTimeseries = (data) => {
+  const stateCodeMap = Object.keys(STATE_CODES).reduce((ret, sc) => {
+    ret[STATE_CODES[sc]] = sc;
+    return ret;
+  }, {});
+
+  const testTimseries = Object.keys(STATE_CODES).reduce((ret, sc) => {
+    ret[sc] = [];
+    return ret;
+  }, {});
+
+  const today = moment();
+  data.forEach((d) => {
+    const date = moment(d.updatedon, 'DD/MM/YYYY');
+    // Skip extra data
+    const totaltested = +d.totaltested;
+    if (date.isBefore(today, 'Date') && totaltested) {
+      const stateCode = stateCodeMap[d.state];
+      // Parser
+      // const dailytested = +data[i][stateCode] || 0;
+      testTimseries[stateCode].push({
+        date: date.toDate(),
+        totaltested: totaltested,
+      });
+    }
+  });
+  return testTimseries;
+};
+
+export const parseTotalTestTimeseries = (data) => {
+  const testTimseries = [];
+  const today = moment();
+  data.forEach((d) => {
+    const date = moment(d.updatetimestamp.split(' ')[0], 'DD/MM/YYYY');
+    // Skip extra data
+    const totaltested = +d.totalindividualstested;
+    if (date.isBefore(today, 'Date') && totaltested) {
+      testTimseries.push({
+        date: date.toDate(),
+        totaltested: totaltested,
+      });
+    }
+  });
+  return testTimseries;
+};
