@@ -20,6 +20,7 @@ function ChoroplethMap({
   selectedRegion,
   setSelectedRegion,
   isCountryLoaded,
+  mapOption,
 }) {
   const choroplethMap = useRef(null);
   const choroplethLegend = useRef(null);
@@ -65,23 +66,41 @@ function ChoroplethMap({
       /* Legend */
       const svgLegend = d3.select(choroplethLegend.current);
       svgLegend.selectAll('*').remove();
-      const redInterpolator = (t) => d3.interpolateReds(t * 0.85);
+      const colorInterpolator = (t) => {
+        switch (mapOption) {
+          case 'confirmed':
+            return d3.interpolateReds(t * 0.85);
+          case 'active':
+            return d3.interpolateBlues(t * 0.85);
+          case 'recovered':
+            return d3.interpolateGreens(t * 0.85);
+          case 'deaths':
+            return d3.interpolateGreys(t * 0.85);
+          default:
+            return;
+        }
+      };
       const colorScale = d3.scaleSequential(
-        [0, statistic.maxConfirmed],
-        redInterpolator
+        [0, statistic[mapOption].max],
+        colorInterpolator
       );
       // Colorbar
       const widthLegend = parseInt(svgLegend.style('width'));
       const margin = {left: 0.02 * widthLegend, right: 0.02 * widthLegend};
       const barWidth = widthLegend - margin.left - margin.right;
       const heightLegend = +svgLegend.attr('height');
+      let legendTitle =
+        mapOption !== 'deaths'
+          ? mapOption.charAt(0).toUpperCase() + mapOption.slice(1)
+          : 'Deceased';
+      legendTitle += ' Cases';
       svgLegend
         .append('g')
         .style('transform', `translateX(${margin.left}px)`)
         .append(() =>
           legend({
             color: colorScale,
-            title: 'Confirmed Cases',
+            title: legendTitle,
             width: barWidth,
             height: 0.8 * heightLegend,
             ticks: 6,
@@ -104,7 +123,8 @@ function ChoroplethMap({
         .join('path')
         .attr('class', 'path-region')
         .attr('fill', function (d) {
-          const n = parseInt(mapData[d.properties[propertyField]]) || 0;
+          const region = d.properties[propertyField];
+          const n = mapData[region] ? mapData[region][mapOption] : 0;
           const color = n === 0 ? '#ffffff' : colorScale(n);
           return color;
         })
@@ -124,13 +144,16 @@ function ChoroplethMap({
         .style('cursor', 'pointer')
         .append('title')
         .text(function (d) {
-          const value = mapData[d.properties[propertyField]] || 0;
+          const region = d.properties[propertyField];
+          const value = mapData[region] ? mapData[region][mapOption] : 0;
           return (
             Number(
-              parseFloat(100 * (value / (statistic.total || 0.001))).toFixed(2)
+              parseFloat(
+                100 * (value / (statistic[mapOption].total || 0.001))
+              ).toFixed(2)
             ).toString() +
             '% from ' +
-            toTitleCase(d.properties[propertyField])
+            toTitleCase(region)
           );
         });
 
@@ -169,12 +192,12 @@ function ChoroplethMap({
     [
       mapData,
       mapMeta,
-      statistic.total,
-      statistic.maxConfirmed,
+      statistic,
       changeMap,
       setHoveredRegion,
       setSelectedRegion,
       isCountryLoaded,
+      mapOption,
     ]
   );
 

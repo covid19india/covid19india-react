@@ -264,7 +264,7 @@ function MapExplorer({
           <div
             className="stats-bottom"
             onClick={() => {
-              setMapOption('deceased');
+              setMapOption('deaths');
             }}
           >
             <h1>{formatNumber(panelRegion.deaths)}</h1>
