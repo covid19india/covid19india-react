@@ -1,4 +1,5 @@
 import ChoroplethMap from './choropleth';
+import statePopData from './StateStats.json';
 
 import {MAP_TYPES, MAP_META} from '../constants';
 import {
@@ -10,8 +11,6 @@ import {
 import {formatDistance, format, parse} from 'date-fns';
 import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import * as Icon from 'react-feather';
-
-import statePopData from './StateStats.json';
 import {Link} from 'react-router-dom';
 
 const getRegionFromState = (state) => {
@@ -36,8 +35,6 @@ function MapExplorer({
   regionHighlighted,
   onMapHighlightChange,
   isCountryLoaded,
-  type,
-  setType,
   anchor,
   setAnchor,
 }) {
@@ -48,19 +45,14 @@ function MapExplorer({
   );
   const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta);
-  const [chartType, setChartType] = useState(type);
-
-  useEffect(() => {
-    setChartType(type);
-  }, [type]);
+  const [statisticOption, setStatisticOption] = useState(1);
 
   const [statistic, currentMapData] = useMemo(() => {
     const statistic = {total: 0, maxConfirmed: 0};
     let currentMapData = {};
 
     if (currentMap.mapType === MAP_TYPES.COUNTRY) {
-      if (chartType === 1) {
-        setType(1, MAP_TYPES.COUNTRY);
+      if (statisticOption === 1) {
         currentMapData = states.reduce((acc, state) => {
           if (state.state === 'Total') {
             return acc;
@@ -74,8 +66,7 @@ function MapExplorer({
           acc[state.state] = state.confirmed;
           return acc;
         }, {});
-      } else if (chartType === 2) {
-        setType(2, MAP_TYPES.COUNTRY);
+      } else if (statisticOption === 2) {
         currentMapData = states.reduce((acc, state) => {
           if (state.state === 'Total') {
             return acc;
@@ -95,7 +86,6 @@ function MapExplorer({
         }, {});
       }
     } else if (currentMap.mapType === MAP_TYPES.STATE) {
-      setType(1, MAP_TYPES.STATE);
       const districtWiseData = (
         stateDistrictWiseData[currentMap.name] || {districtData: {}}
       ).districtData;
@@ -113,8 +103,7 @@ function MapExplorer({
   }, [
     currentMap.mapType,
     currentMap.name,
-    chartType,
-    setType,
+    statisticOption,
     states,
     stateDistrictWiseData,
   ]);
@@ -335,7 +324,7 @@ function MapExplorer({
         )}
 
         {currentMap.mapType === MAP_TYPES.COUNTRY &&
-        type === 2 &&
+        statisticOption === 2 &&
         currentHoveredRegion.name !== 'Total' ? (
           <h1 className="district-confirmed">
             {currentMapData[currentHoveredRegion.name]
@@ -343,7 +332,7 @@ function MapExplorer({
               : 0}
             <br />
             <span style={{fontSize: '0.75rem', fontWeight: 600}}>
-              {type === 1 ? 'confirmed cases' : 'cases per million'}
+              {statisticOption === 1 ? 'confirmed cases' : 'cases per million'}
             </span>
           </h1>
         ) : null}
@@ -396,8 +385,33 @@ function MapExplorer({
         selectedRegion={selectedRegion}
         setSelectedRegion={setSelectedRegion}
         isCountryLoaded={isCountryLoaded}
-        type={chartType}
+        type={statisticOption}
       />
+
+      <div className="tabs2">
+        <div
+          className={`tab ${statisticOption === 1 ? 'focused' : ''}`}
+          onClick={() => {
+            setStatisticOption(1);
+          }}
+        >
+          <h4>Total Cases</h4>
+        </div>
+        <div
+          className={`tab ${
+            currentMap.mapType === MAP_TYPES.COUNTRY
+              ? statisticOption === 2
+                ? 'focused'
+                : ''
+              : 'disabled'
+          }`}
+          onClick={() => {
+            setStatisticOption(2);
+          }}
+        >
+          <h4>Case Density Per Million</h4>
+        </div>
+      </div>
     </div>
   );
 }

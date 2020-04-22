@@ -7,7 +7,7 @@ import Table from './table';
 import TimeSeriesExplorer from './timeseriesexplorer';
 import Updates from './updates';
 
-import {MAP_META, MAP_TYPES} from '../constants';
+import {MAP_META} from '../constants';
 import {
   formatDate,
   formatDateAbsolute,
@@ -24,8 +24,6 @@ function Home(props) {
   const [states, setStates] = useState([]);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
   const [stateTestData, setStateTestData] = useState({});
-  //const [graphOption, setGraphOption] = useState(1);
-  const [statisticOption, setStatisticOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState({});
   const [fetched, setFetched] = useState(false);
@@ -38,8 +36,6 @@ function Home(props) {
     null
   );
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
-  //const [seenUpdates, setSeenUpdates] = useState(false);
-  const [densityEnabled, setDensityEnabled] = useState(true);
 
   useFavicon(newUpdate ? '/icon_update.png' : '/favicon.ico');
 
@@ -118,14 +114,14 @@ function Home(props) {
     setActiveStateCode(statecode);
   }, []);
 
-  const setType = useCallback((type, mapType) => {
+  /* const setType = useCallback((type, mapType) => {
     setStatisticOption(type);
     if (mapType === MAP_TYPES.COUNTRY) {
       setDensityEnabled(true);
     } else {
       setDensityEnabled(false);
     }
-  }, []);
+  }, []);*/
 
   // const refs = [useRef(), useRef(), useRef()];
   // const scrollHandlers = refs.map((ref) => () =>
@@ -197,36 +193,9 @@ function Home(props) {
                 regionHighlighted={regionHighlighted}
                 onMapHighlightChange={onMapHighlightChange}
                 isCountryLoaded={true}
-                type={statisticOption}
-                setType={setType}
                 anchor={anchor}
-                setAnchor={setAnchor}            
+                setAnchor={setAnchor}
               />
-                              
-              <div className="tabs2">
-                <div
-                  className={`tab ${statisticOption === 1 ? 'focused' : ''}`}
-                  onClick={() => {
-                    setStatisticOption(1);
-                  }}
-                >
-                  <h4>Total Cases</h4>
-                </div>
-                <div
-                  className={`tab ${
-                    densityEnabled
-                      ? statisticOption === 2
-                        ? 'focused'
-                        : ''
-                      : 'disabled'
-                  }`}
-                  onClick={() => {
-                    setStatisticOption(2);
-                  }}
-                >
-                  <h4>Case Density Per Million</h4>
-                </div>
-              </div>
 
               {fetched && (
                 <TimeSeriesExplorer
