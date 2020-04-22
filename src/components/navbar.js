@@ -55,19 +55,30 @@ function Navbar({pages, darkMode, setDarkMode}) {
         {window.innerWidth > 769 && (
           <React.Fragment>
             <span>
-              <Icon.Home />
+              <Link to="/">
+                <Icon.Home />
+              </Link>
             </span>
             <span>
-              <Icon.Users />
+              <Link to="/demographics">
+                <Icon.Users />
+              </Link>
+            </span>
+
+            <span>
+              <Link to="/deepdive">
+                <Icon.BarChart2 />
+              </Link>
             </span>
             <span>
-              <Icon.BarChart2 />
+              <Link to="/essentials">
+                <Icon.Package />
+              </Link>
             </span>
             <span>
-              <Icon.Package />
-            </span>
-            <span>
-              <Icon.HelpCircle />
+              <Link to="/faq">
+                <Icon.HelpCircle />
+              </Link>
             </span>
           </React.Fragment>
         )}

@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-thin-webfont.eot');
-  src:
-    url('fonts/Archia/archia-thin-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-thin-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-thin-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-thin-webfont.woff') format('woff'),
     url('fonts/Archia/archia-thin-webfont.ttf') format('truetype');
@@ -13,8 +13,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-light-webfont.eot');
-  src:
-    url('fonts/Archia/archia-light-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-light-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-light-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-light-webfont.woff') format('woff'),
     url('fonts/Archia/archia-light-webfont.ttf') format('truetype');
@@ -25,8 +25,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-regular-webfont.eot');
-  src:
-    url('fonts/Archia/archia-regular-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-regular-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-regular-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-regular-webfont.woff') format('woff'),
     url('fonts/Archia/archia-regular-webfont.ttf') format('truetype');
@@ -37,8 +37,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-medium-webfont.eot');
-  src:
-    url('fonts/Archia/archia-medium-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-medium-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-medium-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-medium-webfont.woff') format('woff'),
     url('fonts/Archia/archia-medium-webfont.ttf') format('truetype');
@@ -49,8 +49,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-semibold-webfont.eot');
-  src:
-    url('fonts/Archia/archia-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-semibold-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-semibold-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-semibold-webfont.woff') format('woff'),
     url('fonts/Archia/archia-semibold-webfont.ttf') format('truetype');
@@ -61,8 +61,8 @@
 @font-face {
   font-family: 'Archia';
   src: url('fonts/Archia/archia-bold-webfont.eot');
-  src:
-    url('fonts/Archia/archia-bold-webfont.eot?#iefix') format('embedded-opentype'),
+  src: url('fonts/Archia/archia-bold-webfont.eot?#iefix')
+      format('embedded-opentype'),
     url('fonts/Archia/archia-bold-webfont.woff2') format('woff2'),
     url('fonts/Archia/archia-bold-webfont.woff') format('woff'),
     url('fonts/Archia/archia-bold-webfont.ttf') format('truetype');
@@ -245,7 +245,7 @@ h6 {
     font-size: 12px;
     color: $gray;
     cursor: pointer;
-    transition: all 0s ease-in-out;
+    //transition: all 0s ease-in-out;
     width: 2rem;
     &:hover {
       background: $pblue;
@@ -277,7 +277,7 @@ h6 {
       span.focused {
         background: $pblue-light;
         color: $pblue;
-        padding: .25rem;
+        padding: 0.25rem;
       }
     }
 
@@ -335,7 +335,8 @@ h6 {
     }
 
     .header-left {
-      h1, h5 {
+      h1,
+      h5 {
         margin: 0;
       }
 
@@ -351,12 +352,13 @@ h6 {
     }
 
     .header-right {
-      margin-top: .1rem;
+      margin-top: 0.1rem;
       text-align: right;
       display: flex;
       flex-direction: column;
       color: $purple-mid;
-      h2, h5 {
+      h2,
+      h5 {
         margin: 0;
         font-weight: 600;
       }
@@ -373,7 +375,7 @@ h6 {
         background: $purple-light;
         transition: all 0.2s ease-in-out;
         &:hover {
-          background: $purple-hover
+          background: $purple-hover;
         }
       }
     }
@@ -436,7 +438,8 @@ h6 {
     align-self: center;
     margin-top: 3rem;
     margin-bottom: 3rem;
-    .unknown, .sources {
+    .unknown,
+    .sources {
       display: flex;
       flex-direction: row;
       width: 6rem;
@@ -472,16 +475,25 @@ h6 {
     }
   }
 
-  .district-bar, .to-essentials {
+  .district-bar,
+  .to-essentials {
     width: 100%;
   }
 
-  .Minigraph, .Level, .MapExplorer, .meta-secondary {
+  .Minigraph,
+  .Level,
+  .MapExplorer,
+  .meta-secondary {
     width: calc(100% - 3rem);
   }
 
   .MapExplorer {
-    .header, .map-stats, .back-button, .last-update, .unknown, .state-page-button {
+    .header,
+    .map-stats,
+    .back-button,
+    .last-update,
+    .unknown,
+    .state-page-button {
       display: none;
     }
 
@@ -545,7 +557,7 @@ h6 {
     margin-right: 2.5rem;
   }
 
-  .tableandcontrols{
+  .tableandcontrols {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -646,15 +658,15 @@ h6 {
         word-wrap: break-word;
       }
 
-      .state-last-update{
+      .state-last-update {
         background: transparent;
         transform: translateX(1rem);
-        &:hover{
+        &:hover {
           background: #fff !important;
         }
 
-        td{
-          .last-update{
+        td {
+          .last-update {
             text-align: left;
             display: flex;
             flex-direction: row;
@@ -745,8 +757,6 @@ h6 {
       }
     }
   }
-
-
 }
 
 .filtersection {
@@ -761,7 +771,6 @@ h6 {
   animation-name: fadeInUp;
   animation-duration: 1s;
   animation-timing-function: ease-in;
-
 }
 
 .resourcefilters {
@@ -775,7 +784,6 @@ h6 {
 }
 
 .resourcefilter {
-
   display: flex;
   flex-direction: column;
   // min-width: 30%;
@@ -796,7 +804,6 @@ h6 {
     // background-color: $purple-light-opaque;
     // border-radius: 10px;
   }
-
 }
 
 .searchbar {
@@ -809,7 +816,6 @@ h6 {
   width: 100%;
 
   .react-autosuggest__input {
-
     #outlined-number-label {
       font-family: 'archia';
       font-size: 0.7rem;
@@ -828,10 +834,9 @@ h6 {
   .react-autosuggest__suggestions-container {
     display: none;
   }
-
 }
 
-.pagination{
+.pagination {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -848,13 +853,13 @@ h6 {
     // margin-top
   }
 
-  select{
+  select {
     // height: 2.2 rem;
     // margin-top: 0.7rem;
     margin: 0.7rem 0.7rem 0.2rem 0.1rem;
   }
 
-  input{
+  input {
     // max-height: fit-content;
     // height: 0.5rem;
     width: 100px;
@@ -915,8 +920,8 @@ h6 {
   input {
     height: 2rem;
     width: calc(100% - 4rem);
-    box-shadow: 0 10px 35px rgba(0,0,0,.1);
-    -webkit-box-shadow: 0 10px 35px rgba(0,0,0,.1);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
     border: 0;
     outline: none;
     padding: 1rem;
@@ -986,7 +991,8 @@ h6 {
       flex: 1;
     }
 
-    h4, h3 {
+    h4,
+    h3 {
       margin: 0;
       font-weight: 600;
       color: $gray;
@@ -1007,7 +1013,8 @@ h6 {
       text-decoration: none !important;
     }
 
-    .result, .essential-result {
+    .result,
+    .essential-result {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -1347,27 +1354,47 @@ h6 {
   }
 
   .is-cherry {
-    h1, h5 { color: $cherry; }
+    h1,
+    h5 {
+      color: $cherry;
+    }
 
-    h4 {color: $cherry-mid;}
+    h4 {
+      color: $cherry-mid;
+    }
   }
 
   .is-blue {
-    h1, h5 { color: $blue; }
+    h1,
+    h5 {
+      color: $blue;
+    }
 
-    h4 {color: $blue-mid;}
+    h4 {
+      color: $blue-mid;
+    }
   }
 
   .is-green {
-    h1, h5 { color: $green; }
+    h1,
+    h5 {
+      color: $green;
+    }
 
-    h4 {color: $green-mid;}
+    h4 {
+      color: $green-mid;
+    }
   }
 
   .is-gray {
-    h1, h5 { color: $gray; }
+    h1,
+    h5 {
+      color: $gray;
+    }
 
-    h4 {color: $gray-mid;}
+    h4 {
+      color: $gray-mid;
+    }
   }
 }
 
@@ -1482,7 +1509,7 @@ table {
         background: $gray-hover !important;
 
         .dropdown {
-            background: $gray-hover;
+          background: $gray-hover;
         }
       }
 
@@ -1504,7 +1531,7 @@ table {
       text-align: right;
       .deltas {
         display: inline-block;
-		    font-size: 11px !important;
+        font-size: 11px !important;
 
         svg {
           width: 9px;
@@ -1541,16 +1568,16 @@ table {
       word-wrap: break-word;
     }
 
-    .state-last-update{
+    .state-last-update {
       background: transparent;
       transform: translateX(1rem);
       color: $green !important;
-      &:hover{
+      &:hover {
         background: #fff !important;
       }
 
-      td{
-        .last-update{
+      td {
+        .last-update {
           text-align: left;
           display: flex;
           flex-direction: row;
@@ -1658,8 +1685,8 @@ table {
     }
   }
 
-	.table__title-wrapper {
-		position: relative;
+  .table__title-wrapper {
+    position: relative;
     & > * {
       align-self: center;
     }
@@ -1674,7 +1701,7 @@ table {
         color: $gray-mid;
       }
     }
-	}
+  }
 
   .unknown {
     svg {
@@ -1765,7 +1792,8 @@ table {
     flex-direction: column;
     color: $gray;
     align-self: flex-start;
-    h1, h6 {
+    h1,
+    h6 {
       margin: 0;
     }
 
@@ -1844,14 +1872,13 @@ table {
     }
   }
 
-
   .meta {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     height: 1rem;
 
-    .district-last-update{
+    .district-last-update {
       position: absolute;
       right: 0;
       bottom: 0;
@@ -1943,33 +1970,49 @@ table {
       &.is-green {
         background: $green-light;
         h5,
-        h6 { color: $green-mid; }
+        h6 {
+          color: $green-mid;
+        }
 
-        h1 { color: $green; }
+        h1 {
+          color: $green;
+        }
       }
 
       &.is-blue {
         background: $blue-light;
         h5,
-        h6 { color: $blue-mid; }
+        h6 {
+          color: $blue-mid;
+        }
 
-        h1 { color: $blue; }
+        h1 {
+          color: $blue;
+        }
       }
 
       &.is-gray {
         background: $gray-light;
         h5,
-        h6 { color: $gray-mid; }
+        h6 {
+          color: $gray-mid;
+        }
 
-        h1 { color: $gray; }
+        h1 {
+          color: $gray;
+        }
       }
 
       &.is-yellow {
         background: $warning;
         h5,
-        h6 { color: $white; }
+        h6 {
+          color: $white;
+        }
 
-        h1 { color: $white; }
+        h1 {
+          color: $white;
+        }
       }
 
       &.is-purple {
@@ -1984,7 +2027,9 @@ table {
           }
         }
 
-        h1 { color: $purple; }
+        h1 {
+          color: $purple;
+        }
 
         svg {
           position: absolute;
@@ -2071,7 +2116,7 @@ table {
   align-self: center;
   margin-top: 3rem;
 
-  .scale-modes{
+  .scale-modes {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
@@ -2100,7 +2145,8 @@ table {
     }
   }
 
-  .timeseries-mode, .timeseries-logmode {
+  .timeseries-mode,
+  .timeseries-logmode {
     margin-left: 1rem;
     display: flex;
     flex-direction: row;
@@ -2119,7 +2165,7 @@ table {
     }
 
     input.switch::after {
-      content: "";
+      content: '';
       position: absolute;
       top: 0;
       left: 0;
@@ -2139,13 +2185,12 @@ table {
       background-color: $light;
     }
 
-    label{
+    label {
       font-size: 0.75rem;
       margin-right: 0.2rem;
       padding-bottom: 0;
       color: $gray;
     }
-
   }
 }
 
@@ -2176,7 +2221,7 @@ input.switch {
 }
 
 input.switch::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -2206,8 +2251,7 @@ input.switch:checked::after {
   select {
     appearance: none;
     background-color: #eee;
-    background-image:
-      linear-gradient(45deg, transparent 50%, #808080 50%),
+    background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
       linear-gradient(135deg, #808080 50%, transparent 50%);
     background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
     background-size: 5px 5px, 5px 5px;
@@ -2287,7 +2331,9 @@ input.switch:checked::after {
       }
 
       h2,
-      h6 { color: $green; }
+      h6 {
+        color: $green;
+      }
     }
 
     &.is-gray {
@@ -2299,7 +2345,9 @@ input.switch:checked::after {
       }
 
       h2,
-      h6 { color: $gray; }
+      h6 {
+        color: $gray;
+      }
     }
 
     &.is-blue {
@@ -2311,7 +2359,9 @@ input.switch:checked::after {
       }
 
       h2,
-      h6 { color: $blue; }
+      h6 {
+        color: $blue;
+      }
     }
   }
 
@@ -2498,7 +2548,12 @@ footer {
     text-align: center;
   }
 
-  h5 { margin: 0; margin-top: 1rem; margin-bottom: 0.5rem; color: $gray; }
+  h5 {
+    margin: 0;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: $gray;
+  }
 
   img {
     width: 2rem;
@@ -2628,7 +2683,7 @@ footer {
   margin-left: auto;
   margin-right: auto;
 
-  .select{
+  .select {
     display: flex;
     flex-direction: row;
     text-align: center;
@@ -2649,12 +2704,16 @@ footer {
       padding-inline-start: 1px;
       cursor: default;
       padding: 0.5rem;
-      input:focus, button:focus {
+      input:focus,
+      button:focus {
         outline: none;
       }
     }
 
-    .react-date-picker, .react-date-picker *, .react-date-picker *:before, .react-date-picker *:after {
+    .react-date-picker,
+    .react-date-picker *,
+    .react-date-picker *:before,
+    .react-date-picker *:after {
       border: 0;
     }
 
@@ -2698,7 +2757,8 @@ footer {
       margin-bottom: 0.5rem;
     }
 
-    .react-calendar__month-view__days__day--weekend, .react-calendar__month-view__days__day {
+    .react-calendar__month-view__days__day--weekend,
+    .react-calendar__month-view__days__day {
       color: $gray;
     }
 
@@ -2786,7 +2846,7 @@ footer {
     svg {
       position: absolute;
       right: 0;
-      top: -.25rem;
+      top: -0.25rem;
       padding: 0.5rem;
       width: 16px;
       stroke-width: 3px;
@@ -2826,7 +2886,11 @@ footer {
       align-self: flex-start;
       display: flex;
       flex-direction: row;
-      h5 {margin: 0; margin-right: 1rem; color: $gray;}
+      h5 {
+        margin: 0;
+        margin-right: 1rem;
+        color: $gray;
+      }
     }
   }
 
@@ -2891,7 +2955,7 @@ footer {
       width: 1rem;
       background: $gray-hover;
       &:hover {
-        background: $gray-mid
+        background: $gray-mid;
       }
 
       &.is-femme {
@@ -2921,7 +2985,6 @@ footer {
         background: $pink-hover;
       }
     }
-
 
     &.is-male {
       background: $pblue-light;
@@ -3130,7 +3193,6 @@ footer {
     &.age90-99 {
       background: #6495ed;
     }
-
   }
 
   /*
@@ -3217,37 +3279,37 @@ footer {
 .DownloadBlock {
   margin-top: 7rem;
   align-self: center;
-    code {
-      font-family: 'archia';
-      color: $orange-mid;
-    }
+  code {
+    font-family: 'archia';
+    color: $orange-mid;
+  }
 
-    a {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      text-decoration: none !important;
-      color: $orange-mid;
-    }
+  a {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-decoration: none !important;
+    color: $orange-mid;
+  }
 
-    .button {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      & > * {
-        align-self: center !important;
-      }
-      background: $orange-light;
-      text-align: center;
-      &:hover {
-        background: $orange-hover;
-      }
+  .button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    & > * {
+      align-self: center !important;
     }
+    background: $orange-light;
+    text-align: center;
+    &:hover {
+      background: $orange-hover;
+    }
+  }
 
-    svg {
-      stroke: $orange-mid;
-      stroke-width: 3;
-    }
+  svg {
+    stroke: $orange-mid;
+    stroke-width: 3;
+  }
 }
 
 body.modal-open {
@@ -3299,7 +3361,8 @@ body.modal-open {
       color: $pblue;
     }
 
-    h5, h3 {
+    h5,
+    h3 {
       margin: 0;
       font-weight: 900;
     }
@@ -3385,7 +3448,7 @@ body.modal-open {
 
   .summary {
     flex-direction: row-reverse;
-    flex-wrap: wrap-reverse
+    flex-wrap: wrap-reverse;
   }
 
   .patients-summary-wrapper {
@@ -3466,7 +3529,7 @@ body.modal-open {
   flex-direction: row;
   flex-wrap: wrap;
   border-radius: 5px;
-  box-shadow: 0 2px 6px 0 rgba(0,0,0,.12),inset 0 -1px 0 0 #dadce0;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 #dadce0;
   justify-content: space-between;
 
   & > * {
@@ -3614,7 +3677,7 @@ body.modal-open {
 
     &.is-it {
       background: url('/flags/italy.png');
-    background-size: cover !important;
+      background-size: cover !important;
     }
 
     &.is-ca {
@@ -3661,7 +3724,8 @@ body.modal-open {
       background: $gray-hover;
     }
 
-    h5, h4 {
+    h5,
+    h4 {
       margin: 0;
     }
 
@@ -3752,7 +3816,8 @@ body.modal-open {
       font-family: 'archia';
       margin-top: 0.15rem;
       margin-bottom: 0.15rem;
-      h2, h5 {
+      h2,
+      h5 {
         margin: 0;
         color: $gray;
         font-weight: 600;
@@ -3774,7 +3839,10 @@ body.modal-open {
       .delta {
         display: flex;
         flex-direction: row;
-        h6 {margin: 0; color: $red-mid;}
+        h6 {
+          margin: 0;
+          color: $red-mid;
+        }
         margin-left: 0.5rem;
         margin-top: 4px;
         svg {
@@ -3807,7 +3875,7 @@ body.modal-open {
   }
 }
 
-@media(max-width: 400px){
+@media (max-width: 400px) {
   .PatientsDB .modal .modal-content .meta {
     height: 25rem !important;
   }
@@ -3864,7 +3932,8 @@ body.modal-open {
 }
 
 @media (min-width: 769px) {
-  .Home, .State {
+  .Home,
+  .State {
     padding-top: 5rem;
   }
 
@@ -3958,14 +4027,14 @@ body.modal-open {
   .Summary,
   .FAQ,
   .MapExplorer,
-  .patients-summary
-  .filters,
+  .patients-summary .filters,
   .updates,
   .updates-header {
     width: calc(100% - 2rem);
   }
 
-  .Home, .State {
+  .Home,
+  .State {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -3973,7 +4042,9 @@ body.modal-open {
     margin-right: 0;
 
     .home-left,
-    .home-right, .state-left, .state-right {
+    .home-right,
+    .state-left,
+    .state-right {
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -4054,11 +4125,10 @@ body.modal-open {
     }
   }
 
-
   .PatientsDB {
     width: 100%;
 
-    .header{
+    .header {
       width: calc(100% - 2rem);
       margin: 0;
       padding-left: 1rem;
@@ -4069,7 +4139,6 @@ body.modal-open {
       width: calc(100% - 4rem);
       padding-top: 1rem;
       padding-bottom: 1rem;
-
     }
 
     .Patients {
@@ -4210,7 +4279,9 @@ body.modal-open {
           }
         }
 
-        tr:nth-child(even) {background-color: $purple-light;}
+        tr:nth-child(even) {
+          background-color: $purple-light;
+        }
 
         td {
           // padding: 0.25rem;
@@ -4236,15 +4307,15 @@ body.modal-open {
           word-wrap: break-word;
         }
 
-        .state-last-update{
+        .state-last-update {
           background: transparent;
           transform: translateX(1rem);
-          &:hover{
+          &:hover {
             background: #fff !important;
           }
 
-          td{
-            .last-update{
+          td {
+            .last-update {
               text-align: left;
               display: flex;
               flex-direction: row;
@@ -4342,7 +4413,6 @@ body.modal-open {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
   }
 
   .resourcefilter {
@@ -4364,25 +4434,25 @@ body.modal-open {
     animation-timing-function: ease-in;
   }
 
-  .pagination{
+  .pagination {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    .select{
+    .select {
       // height: max-content;
       margin-top: 0.4rem;
       margin-right: 0;
       // min-width: 9rem;
     }
 
-    input{
+    input {
       // min-width: 8rem;
       // height: max-content;
       margin: 0.1rem 0.1rem 0.1rem 0.1rem;
     }
 
-    h5{
+    h5 {
       margin-top: 0;
       margin-bottom: 0.1rem;
     }
@@ -4401,14 +4471,15 @@ body.modal-open {
   }
 
   .State {
-    .district-bar, .to-essentials, .Clusters {
+    .district-bar,
+    .to-essentials,
+    .Clusters {
       width: calc(100% - 3rem);
       h1 {
         padding-left: 0;
       }
     }
   }
-
 
   .PatientsDB .select .react-date-picker__calendar {
     position: fixed;
@@ -4426,7 +4497,8 @@ body.modal-open {
     background: #161625 !important;
   }
 
-  .Navbar, .expand {
+  .Navbar,
+  .expand {
     background: #161625 !important;
     .navbar-middle {
       color: #bdbdbd;
@@ -4499,7 +4571,8 @@ body.modal-open {
           color: #9673b9 !important;
         }
 
-        h5, h6 {
+        h5,
+        h6 {
           color: #9673b9bb !important;
         }
 
@@ -4517,7 +4590,7 @@ body.modal-open {
     }
   }
 
-  .pills { 
+  .pills {
     button {
       &.selected {
         background: #{$yellow}50;
@@ -4531,21 +4604,21 @@ body.modal-open {
   }
 
   input.switch {
-      background-color: #161625 !important;
-      border: 2px solid $gray-mid !important;
-    }
+    background-color: #161625 !important;
+    border: 2px solid $gray-mid !important;
+  }
 
-    input.switch::after {
-      background-color: #cfcfcf !important;
-    }
+  input.switch::after {
+    background-color: #cfcfcf !important;
+  }
 
-    input.switch:checked {
-      background-color: #161625 !important;
-    }
+  input.switch:checked {
+    background-color: #161625 !important;
+  }
 
-    input.switch:checked::after {
-      background-color: #cfcfcf !important;
-    }
+  input.switch:checked::after {
+    background-color: #cfcfcf !important;
+  }
 
   .button {
     &.github {
@@ -4645,11 +4718,10 @@ body.modal-open {
 }
 
 .height-22 {
-	height: 22px;
+  height: 22px;
 }
 
 .disclaimercontainer {
-
   svg {
     margin-left: 2px;
   }
