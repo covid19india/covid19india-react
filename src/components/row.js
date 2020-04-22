@@ -1,5 +1,3 @@
-import Tooltip from './tooltip';
-
 import {
   formatDate,
   formatDateAbsolute,
@@ -9,6 +7,7 @@ import {
 import {formatDistance} from 'date-fns';
 import React, {useState, useEffect, useCallback} from 'react';
 import * as Icon from 'react-feather';
+import {Tooltip} from 'react-lightweight-tooltip';
 import {Link} from 'react-router-dom';
 
 function Row(props) {
@@ -35,7 +34,17 @@ function Row(props) {
 
   const tooltipStyles = {
     tooltip: {
+      background: '#000',
+      borderRadius: '10px',
+      fontSize: '.8em',
       left: '250%',
+      opacity: 0.65,
+    },
+    wrapper: {
+      cursor: 'cursor',
+      display: 'inline-block',
+      position: 'relative',
+      textAlign: 'center',
     },
     arrow: {
       left: '37%',
@@ -97,19 +106,6 @@ function Row(props) {
     localStorage.setItem('district.isAscending', isAscending);
   };
 
-  const getTooltipStyles = (index) => {
-    const tooltip = document.getElementById('tooltip-' + index);
-    if (tooltip !== null) {
-      const tooltipLeft = tooltip.getBoundingClientRect().left;
-      const tooltipContentLeft = tooltipLeft - 70;
-      if (tooltipContentLeft < 2) {
-        tooltipStyles.tooltip.marginLeft = -tooltipContentLeft + 2 + 'px';
-        tooltipStyles.arrow.marginLeft = tooltipLeft - 77 + 'px';
-      }
-    }
-    return tooltipStyles;
-  };
-
   useEffect(() => {
     sortDistricts(districts);
   }, [districts, sortData, sortDistricts]);
@@ -141,10 +137,10 @@ function Row(props) {
             <span className="actual__title-wrapper">
               {state.state}
               {state.statenotes && (
-                <span onClick={handleTooltip} id={'tooltip-' + props.index}>
+                <span onClick={handleTooltip}>
                   <Tooltip
                     content={[`${state.statenotes}`]}
-                    styles={getTooltipStyles(props.index)}
+                    styles={tooltipStyles}
                   >
                     <Icon.Info />
                   </Tooltip>
