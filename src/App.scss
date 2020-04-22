@@ -3973,6 +3973,16 @@ body.modal-open {
   .PatientsDB {
     margin-left: 5rem;
   }
+
+  .dark-mode {
+    .Navbar, .expand {
+      background: #1e1e30 !important;
+    }
+
+    .navbar-right {
+      background: #1e1e30 !important;
+    }
+  }
 }
 
 @media (max-width: 769px) {
@@ -4462,16 +4472,27 @@ body.modal-open {
     background: #161625 !important;
   }
 
+  .expand {
+    background: #1e1e30 !important;
+  }
+
   .Navbar, .expand {
-    background: #161625 !important;
+    border-right: 0;
+
     .navbar-middle {
       color: #bdbdbd;
     }
 
     .navbar-right {
-      background: #161625 !important;
+      background: #1e1e30 !important;
+      & > span {
+        display: none;
+      }
+
+      & > span:first-child {
+        display: initial;
+      }
     }
-    border-right: 0;
   }
 
   table {
