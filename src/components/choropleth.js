@@ -74,14 +74,14 @@ function ChoroplethMap({
             return d3.interpolateBlues(t * 0.85);
           case 'recovered':
             return d3.interpolateGreens(t * 0.85);
-          case 'deaths':
+          case 'deceased':
             return d3.interpolateGreys(t * 0.85);
           default:
             return;
         }
       };
       const colorScale = d3.scaleSequential(
-        [0, statistic[mapOption].max],
+        [0, Math.max(1, statistic[mapOption].max)],
         colorInterpolator
       );
       // Colorbar
@@ -89,18 +89,14 @@ function ChoroplethMap({
       const margin = {left: 0.02 * widthLegend, right: 0.02 * widthLegend};
       const barWidth = widthLegend - margin.left - margin.right;
       const heightLegend = +svgLegend.attr('height');
-      let legendTitle =
-        mapOption !== 'deaths'
-          ? mapOption.charAt(0).toUpperCase() + mapOption.slice(1)
-          : 'Deceased';
-      legendTitle += ' Cases';
       svgLegend
         .append('g')
         .style('transform', `translateX(${margin.left}px)`)
         .append(() =>
           legend({
             color: colorScale,
-            title: legendTitle,
+            title:
+              mapOption.charAt(0).toUpperCase() + mapOption.slice(1) + ' Cases',
             width: barWidth,
             height: 0.8 * heightLegend,
             ticks: 6,

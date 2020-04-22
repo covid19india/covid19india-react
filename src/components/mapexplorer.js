@@ -48,7 +48,7 @@ function MapExplorer({
   const [mapOption, setMapOption] = useState('confirmed');
 
   const [statistic, currentMapData] = useMemo(() => {
-    const dataTypes = ['confirmed', 'active', 'recovered', 'deaths'];
+    const dataTypes = ['confirmed', 'active', 'recovered', 'deceased'];
     const statistic = dataTypes.reduce((acc, dtype) => {
       acc[dtype] = {total: 0, max: 0};
       return acc;
@@ -62,7 +62,9 @@ function MapExplorer({
         }
         acc[state.state] = {};
         dataTypes.forEach((dtype) => {
-          const typeCount = parseInt(state[dtype]);
+          const typeCount = parseInt(
+            state[dtype !== 'deceased' ? dtype : 'deaths']
+          );
           statistic[dtype].total += typeCount;
           if (typeCount > statistic[dtype].max) {
             statistic[dtype].max = typeCount;
@@ -215,9 +217,7 @@ function MapExplorer({
           <h5>{window.innerWidth <= 769 ? 'Cnfmd' : 'Confirmed'}</h5>
           <div
             className="stats-bottom"
-            onClick={() => {
-              setMapOption('confirmed');
-            }}
+            onClick={() => setMapOption('confirmed')}
           >
             <h1>{formatNumber(panelRegion.confirmed)}</h1>
             <h6>{`+${formatNumber(panelRegion.deltaconfirmed)}`}</h6>
@@ -229,12 +229,7 @@ function MapExplorer({
           style={{animationDelay: '2.1s'}}
         >
           <h5>{window.innerWidth <= 769 ? 'Actv' : 'Active'}</h5>
-          <div
-            className="stats-bottom"
-            onClick={() => {
-              setMapOption('active');
-            }}
-          >
+          <div className="stats-bottom" onClick={() => setMapOption('active')}>
             <h1>{formatNumber(panelRegion.active)}</h1>
             <h6>{` `}</h6>
           </div>
@@ -247,9 +242,7 @@ function MapExplorer({
           <h5>{window.innerWidth <= 769 ? 'Rcvrd' : 'Recovered'}</h5>
           <div
             className="stats-bottom"
-            onClick={() => {
-              setMapOption('recovered');
-            }}
+            onClick={() => setMapOption('recovered')}
           >
             <h1>{formatNumber(panelRegion.recovered)}</h1>
             <h6>{`+${formatNumber(panelRegion.deltarecovered)}`}</h6>
@@ -263,9 +256,7 @@ function MapExplorer({
           <h5>{window.innerWidth <= 769 ? 'Dcsd' : 'Deceased'}</h5>
           <div
             className="stats-bottom"
-            onClick={() => {
-              setMapOption('deaths');
-            }}
+            onClick={() => setMapOption('deceased')}
           >
             <h1>{formatNumber(panelRegion.deaths)}</h1>
             <h6>{`+${formatNumber(panelRegion.deltadeaths)}`}</h6>
@@ -330,11 +321,11 @@ function MapExplorer({
         currentHoveredRegion.name !== currentMap.name ? (
           <h1 className="district-confirmed">
             {currentMapData[currentHoveredRegion.name]
-              ? currentMapData[currentHoveredRegion.name]
+              ? currentMapData[currentHoveredRegion.name][mapOption]
               : 0}
             <br />
             <span style={{fontSize: '0.75rem', fontWeight: 600}}>
-              confirmed
+              {mapOption}
             </span>
           </h1>
         ) : null}
