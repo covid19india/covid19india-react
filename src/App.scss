@@ -4438,6 +4438,16 @@ body.modal-open {
     .expand {
       transform: none !important;
     }
+
+    .navbar-right {
+      & > span {
+        display: none;
+      }
+
+      & > span:first-child {
+        display: initial;
+      }
+    }
   }
 
   .Search {
@@ -4485,13 +4495,6 @@ body.modal-open {
 
     .navbar-right {
       background: #1e1e30 !important;
-      & > span {
-        display: none;
-      }
-
-      & > span:first-child {
-        display: initial;
-      }
     }
   }
 
