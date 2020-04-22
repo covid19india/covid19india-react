@@ -5,12 +5,14 @@ import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
 import TimeSeries from './timeseries';
+import TimeSeriesTesting from './timeseriestesting';
 
 import {MAP_META, STATE_CODES} from '../constants';
 import {
   formatDateAbsolute,
   formatNumber,
   parseStateTimeseries,
+  parseStateTestTimeseries,
 } from '../utils/commonfunctions';
 
 import anime from 'animejs';
@@ -39,6 +41,7 @@ function State(props) {
   const [stateName] = useState(STATE_CODES[stateCode]);
   const [mapOption, setMapOption] = useState('confirmed');
   const [mapSwitcher, {width}] = useMeasure();
+  const [testTimeseries, setTestTimeseries] = useState({});
 
   useEffectOnce(() => {
     getState(stateCode);
@@ -59,22 +62,29 @@ function State(props) {
         axios.get('https://api.covid19india.org/state_test_data.json'),
         axios.get('https://api.covid19india.org/sources_list.json'),
       ]);
+      const name = STATE_CODES[code];
+
       const states = dataResponse.statewise;
       setStateData(states.find((s) => s.statecode === code));
       const ts = parseStateTimeseries(statesDailyResponse)[code];
       setTimeseries(ts);
-      const statesTests = stateTestResponse.states_tested_data;
-      const name = STATE_CODES[code];
-      setTestData(
-        statesTests.filter(
-          (obj) => obj.state === name && obj.totaltested !== ''
-        )
-      );
       setDistrictData({
         [name]: stateDistrictWiseResponse[name],
       });
       const sourceList = sourcesResponse.sources_list;
       setSources(sourceList.filter((state) => state.statecode === code));
+
+      const statesTests = stateTestResponse.states_tested_data;
+      setTestData(
+        statesTests.filter(
+          (obj) => obj.state === name && obj.totaltested !== ''
+        )
+      );
+      const testTs = parseStateTestTimeseries(
+        stateTestResponse.states_tested_data
+      )[code];
+      setTestTimeseries(testTs);
+
       setFetched(true);
       anime({
         targets: '.highlight',
@@ -400,7 +410,9 @@ function State(props) {
           </div>
         </div>
 
-        <div className="state-right"></div>
+        <div className="state-right">
+          <TimeSeriesTesting timeseries={testTimeseries} />
+        </div>
       </div>
       <Footer />
     </React.Fragment>
