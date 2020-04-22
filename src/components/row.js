@@ -1,12 +1,14 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import * as Icon from 'react-feather';
 import {
   formatDate,
   formatDateAbsolute,
   formatNumber,
-} from '../utils/common-functions';
+} from '../utils/commonfunctions';
+
 import {formatDistance} from 'date-fns';
+import React, {useState, useEffect, useCallback} from 'react';
+import * as Icon from 'react-feather';
 import {Tooltip} from 'react-lightweight-tooltip';
+import {Link} from 'react-router-dom';
 
 function Row(props) {
   const [state, setState] = useState(props.state);
@@ -30,8 +32,31 @@ function Row(props) {
     setSortedDistricts(props.districts);
   }, [props.districts]);
 
+  const tooltipStyles = {
+    tooltip: {
+      background: '#000',
+      borderRadius: '10px',
+      fontSize: '.8em',
+      left: '250%',
+      opacity: 0.65,
+    },
+    wrapper: {
+      cursor: 'cursor',
+      display: 'inline-block',
+      position: 'relative',
+      textAlign: 'center',
+    },
+    arrow: {
+      left: '37%',
+    },
+  };
+
   const handleReveal = () => {
     props.handleReveal(props.state.state);
+  };
+
+  const handleTooltip = (e) => {
+    e.stopPropagation();
   };
 
   const sortDistricts = useCallback(
@@ -88,10 +113,11 @@ function Row(props) {
   return (
     <React.Fragment>
       <tr
-        className={props.total ? 'state is-total' : 'state'}
+        className={`state ${props.total ? 'is-total' : ''} ${
+          props.index % 2 === 0 ? 'is-odd' : ''
+        }`}
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
-        /* onTouchStart={() => props.onHighlightState?.(state, props.index)}*/
         onClick={!props.total ? handleReveal : null}
         style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
       >
@@ -111,27 +137,14 @@ function Row(props) {
             <span className="actual__title-wrapper">
               {state.state}
               {state.statenotes && (
-                <Tooltip
-                  content={[`${state.statenotes}`]}
-                  styles={{
-                    tooltip: {
-                      background: '#000',
-                      borderRadius: '5px',
-                      fontSize: '1rem',
-                      left: '250%',
-                      opacity: 1,
-                      padding: '0.5rem',
-                    },
-                    wrapper: {
-                      cursor: 'cursor',
-                      display: 'inline-block',
-                      position: 'relative',
-                      textAlign: 'center',
-                    },
-                  }}
-                >
-                  <Icon.Info />
-                </Tooltip>
+                <span onClick={handleTooltip}>
+                  <Tooltip
+                    content={[`${state.statenotes}`]}
+                    styles={tooltipStyles}
+                  >
+                    <Icon.Info />
+                  </Tooltip>
+                </span>
               )}
             </span>
           </div>
@@ -150,10 +163,6 @@ function Row(props) {
         <td
           style={{color: parseInt(state.active) === 0 ? '#B5B5B5' : 'inherit'}}
         >
-          {/* <span className="deltas" style={{color: '#007bff'}}>
-            {!state.delta.active==0 && <Icon.ArrowUp/>}
-            {state.delta.active>0 ? `${state.delta.active}` : ''}
-          </span>*/}
           {parseInt(state.active) === 0 ? '-' : formatNumber(state.active)}
         </td>
         <td
@@ -256,6 +265,14 @@ function Row(props) {
             </div>
           </div>
         </td>
+        <td className="state-page-link" colSpan={3}>
+          <Link to={`state/${state.statecode}`}>
+            <div>
+              <abbr>Visit state page</abbr>
+              <Icon.ArrowRightCircle />
+            </div>
+          </Link>
+        </td>
       </tr>
 
       {sortedDistricts &&
@@ -266,7 +283,7 @@ function Row(props) {
               return (
                 <tr
                   key={index}
-                  className={`district`}
+                  className={`district ${index % 2 === 0 ? 'is-odd' : ''}`}
                   style={{
                     display: props.reveal && !props.total ? '' : 'none',
                     background: index % 2 === 0 ? '#f8f9fa' : '',
@@ -275,9 +292,6 @@ function Row(props) {
                     props.onHighlightDistrict?.(district, state, props.index)
                   }
                   onMouseLeave={() => props.onHighlightDistrict?.()}
-                  /* onTouchStart={() =>
-                    props.onHighlightDistrict?.(district, state, props.index)
-                  }*/
                 >
                   <td style={{fontWeight: 600}}>{district}</td>
                   <td>
@@ -309,22 +323,7 @@ function Row(props) {
               Unknown
               <Tooltip
                 content={['Awaiting patient-level details from State Bulletin']}
-                styles={{
-                  tooltip: {
-                    background: '#000',
-                    borderRadius: '5px',
-                    fontSize: '1rem',
-                    left: '250%',
-                    opacity: 1,
-                    padding: '0.5rem',
-                  },
-                  wrapper: {
-                    cursor: 'cursor',
-                    display: 'inline-block',
-                    position: 'relative',
-                    textAlign: 'center',
-                  },
-                }}
+                styles={tooltipStyles}
               >
                 <Icon.Info />
               </Tooltip>
@@ -358,4 +357,4 @@ function Row(props) {
   );
 }
 
-export default Row;
+export default React.memo(Row);

@@ -16,5 +16,5 @@ Two kinds of issues can be raised in this project:
 - When a new issue is created, "Status: Review Needed" and "Type:Bug or Type:Enhancement" label is automatically added to it.
 - Mods periodically check "Status:Review Needed" and add appropriate Priority and Status labels. If the issue is clear, set the status label as "Label: Available"
 - People looking to contribute, filter issues by ["Status:Available"](https://github.com/covid19india/covid19india-react/issues?q=is%3Aissue+is%3Aopen+label%3A%22Status%3A+Available%22) and comment on the issue that they would like to be assigned to work on it.
-- Mods change the status label to "Status:Accepted" and assign the issue to the contributor.
+- Mods change the status label to "Status: Claimed" and assign the issue to the contributor.
 - Contributor change the label to "Status: In Progress" and finally submit the pull request.

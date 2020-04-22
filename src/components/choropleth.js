@@ -1,8 +1,10 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import * as d3 from 'd3';
-import * as topojson from 'topojson';
-import {MAP_TYPES} from '../constants';
 import legend from './legend';
+
+import {MAP_TYPES} from '../constants';
+
+import * as d3 from 'd3';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import * as topojson from 'topojson';
 
 const propertyFieldMap = {
   country: 'st_nm',
@@ -36,7 +38,8 @@ function ChoroplethMap({
       );
 
       const projection = d3.geoMercator();
-      // Set size of map
+
+      // Set size of the map
       let path;
       let width;
       let height;
@@ -59,21 +62,14 @@ function ChoroplethMap({
       projection.fitSize([width, height], topology);
       path = d3.geoPath(projection);
 
-      /* LEGEND */
-      const domainMax = Math.max(3, statistic.maxConfirmed);
-      const steps = Math.min(6, domainMax);
-      const domainMin = Math.max(2, Math.floor(statistic.maxConfirmed / steps));
-      const domain = Array.from(
-        {length: steps},
-        (e, i) => domainMin + i * Math.floor(domainMax / steps)
-      );
-
+      /* Legend */
       const svgLegend = d3.select(choroplethLegend.current);
       svgLegend.selectAll('*').remove();
-      const colorScale = d3
-        .scaleThreshold()
-        .domain(domain)
-        .range(d3.schemeReds[steps]);
+      const redInterpolator = (t) => d3.interpolateReds(t * 0.85);
+      const colorScale = d3.scaleSequential(
+        [0, statistic.maxConfirmed],
+        redInterpolator
+      );
       // Colorbar
       const widthLegend = parseInt(svgLegend.style('width'));
       const margin = {left: 0.02 * widthLegend, right: 0.02 * widthLegend};
@@ -88,11 +84,17 @@ function ChoroplethMap({
             title: 'Confirmed Cases',
             width: barWidth,
             height: 0.8 * heightLegend,
+            ticks: 6,
+            tickFormat: function (d, i, n) {
+              if (!Number.isInteger(d)) return;
+              if (i === n.length - 1) return d + '+';
+              return d;
+            },
           })
         );
       svgLegend.attr('viewBox', `0 0 ${widthLegend} ${heightLegend}`);
 
-      /* DRAW MAP */
+      /* Draw map */
       let onceTouchedRegion = null;
       const g = svg.append('g').attr('class', mapMeta.graphObjectName);
       g.append('g')
@@ -108,8 +110,8 @@ function ChoroplethMap({
         })
         .attr('d', path)
         .attr('pointer-events', 'all')
-        .on('mouseover', (d) => {
-          handleMouseover(d.properties[propertyField]);
+        .on('mouseenter', (d) => {
+          handleMouseEnter(d.properties[propertyField]);
         })
         .on('mouseleave', (d) => {
           if (onceTouchedRegion === d) onceTouchedRegion = null;
@@ -142,7 +144,7 @@ function ChoroplethMap({
           path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName]))
         );
 
-      const handleMouseover = (name) => {
+      const handleMouseEnter = (name) => {
         try {
           setSelectedRegion(name);
           setHoveredRegion(name, mapMeta);
@@ -237,4 +239,4 @@ function ChoroplethMap({
   );
 }
 
-export default ChoroplethMap;
+export default React.memo(ChoroplethMap);

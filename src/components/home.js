@@ -1,5 +1,11 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
-import axios from 'axios';
+import Footer from './footer';
+import Level from './level';
+import MapExplorer from './mapexplorer';
+import Minigraph from './minigraph';
+import Search from './search';
+import Table from './table';
+import TimeSeriesExplorer from './timeseriesexplorer';
+import Updates from './updates';
 
 import {MAP_META} from '../constants';
 import {
@@ -7,37 +13,53 @@ import {
   formatDateAbsolute,
   preprocessTimeseries,
   parseStateTimeseries,
-} from '../utils/common-functions';
-import * as Icon from 'react-feather';
+} from '../utils/commonfunctions';
 
-import Table from './table';
-import Level from './level';
-import MapExplorer from './mapexplorer';
-import TimeSeries from './timeseries';
-import Minigraph from './minigraph';
-import Updates from './updates';
-import Search from './search';
-import Footer from './footer';
+import axios from 'axios';
+import React, {useState, useCallback} from 'react';
+import * as Icon from 'react-feather';
+import {useEffectOnce, useLocalStorage, useFavicon} from 'react-use';
 
 function Home(props) {
   const [states, setStates] = useState([]);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
   const [stateTestData, setStateTestData] = useState({});
-  const [fetched, setFetched] = useState(false);
-  const [graphOption, setGraphOption] = useState(1);
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState({});
-  const [activeStateCode, setActiveStateCode] = useState('TT'); // TT -> India
-  const [timeseriesMode, setTimeseriesMode] = useState(true);
-  const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
+  const [fetched, setFetched] = useState(false);
+  const [activeStateCode, setActiveStateCode] = useState('TT');
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
   const [showUpdates, setShowUpdates] = useState(false);
+  const [anchor, setAnchor] = useState(null);
+  const [lastViewedLog, setLastViewedLog] = useLocalStorage(
+    'lastViewedLog',
+    null
+  );
+  const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
 
-  useEffect(() => {
-    if (fetched === false) {
-      getStates();
-    }
-  }, [fetched]);
+  useFavicon(newUpdate ? '/icon_update.png' : '/favicon.ico');
+
+  useEffectOnce(() => {
+    getStates();
+  });
+
+  useEffectOnce(() => {
+    axios
+      .get('https://api.covid19india.org/updatelog/log.json')
+      .then((response) => {
+        const lastTimestamp = response.data
+          .slice()
+          .reverse()[0]
+          .timestamp.toString();
+        if (lastTimestamp !== lastViewedLog) {
+          setNewUpdate(true);
+          setLastViewedLog(lastTimestamp);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 
   const getStates = async () => {
     try {
@@ -52,20 +74,25 @@ function Home(props) {
         axios.get('https://api.covid19india.org/states_daily.json'),
         axios.get('https://api.covid19india.org/state_test_data.json'),
       ]);
+
       setStates(data.statewise);
+
       const ts = parseStateTimeseries(statesDailyResponse);
-      ts['TT'] = preprocessTimeseries(data.cases_time_series); // TT -> India
+      ts['TT'] = preprocessTimeseries(data.cases_time_series);
       setTimeseries(ts);
+
       setLastUpdated(data.statewise[0].lastupdatedtime);
+
       const testData = stateTestData.states_tested_data.reverse();
       const totalTest = data.tested[data.tested.length - 1];
       testData.push({
         updatedon: totalTest.updatetimestamp.split(' ')[0],
         totaltested: totalTest.totalindividualstested,
         source: totalTest.source,
-        state: 'Total', // India
+        state: 'Total',
       });
       setStateTestData(testData);
+
       setStateDistrictWiseData(stateDistrictWiseResponse.data);
       setFetched(true);
     } catch (err) {
@@ -77,6 +104,7 @@ function Home(props) {
     if (!state && !index) return setRegionHighlighted(null);
     setRegionHighlighted({state, index});
   };
+
   const onHighlightDistrict = (district, state, index) => {
     if (!state && !index && !district) return setRegionHighlighted(null);
     setRegionHighlighted({district, state, index});
@@ -86,20 +114,13 @@ function Home(props) {
     setActiveStateCode(statecode);
   }, []);
 
-  const refs = [useRef(), useRef(), useRef()];
-  // const scrollHandlers = refs.map((ref) => () =>
-  //   window.scrollTo({
-  //     top: ref.current.offsetTop,
-  //     behavior: 'smooth',
-  //   })
-  // );
-
   return (
     <React.Fragment>
       <div className="Home">
         <div className="home-left">
           <div className="header fadeInUp" style={{animationDelay: '1s'}}>
-            <Search />
+            {fetched && <Search />}
+
             <div className="actions">
               <h5>
                 {isNaN(Date.parse(formatDate(lastUpdated)))
@@ -108,12 +129,15 @@ function Home(props) {
               </h5>
               {!showUpdates && (
                 <div className="bell-icon">
-                  <Icon.Bell
-                    onClick={() => {
-                      setShowUpdates(!showUpdates);
-                    }}
-                  />
-                  <div className="indicator"></div>
+                  {fetched && (
+                    <Icon.Bell
+                      onClick={() => {
+                        setShowUpdates(!showUpdates);
+                        setNewUpdate(false);
+                      }}
+                    />
+                  )}
+                  {newUpdate && <div className="indicator"></div>}
                 </div>
               )}
               {showUpdates && (
@@ -128,11 +152,10 @@ function Home(props) {
 
           {showUpdates && <Updates />}
 
-          {states.length ? <Level data={states[0]} /> : ''}
+          {fetched && <Level data={states[0]} />}
           {fetched && <Minigraph timeseries={timeseries['TT']} />}
           {fetched && (
             <Table
-              forwardRef={refs[0]}
               states={states}
               summary={false}
               stateDistrictWiseData={stateDistrictWiseData}
@@ -146,7 +169,6 @@ function Home(props) {
           {fetched && (
             <React.Fragment>
               <MapExplorer
-                forwardRef={refs[1]}
                 mapMeta={MAP_META.India}
                 states={states}
                 stateDistrictWiseData={stateDistrictWiseData}
@@ -154,101 +176,27 @@ function Home(props) {
                 regionHighlighted={regionHighlighted}
                 onMapHighlightChange={onMapHighlightChange}
                 isCountryLoaded={true}
+                anchor={anchor}
+                setAnchor={setAnchor}
               />
 
-              <div
-                className="timeseries-header fadeInUp"
-                style={{animationDelay: '2.5s'}}
-                ref={refs[2]}
-              >
-                <h1>Spread Trends</h1>
-                <div className="tabs">
-                  <div
-                    className={`tab ${graphOption === 1 ? 'focused' : ''}`}
-                    onClick={() => {
-                      setGraphOption(1);
-                    }}
-                  >
-                    <h4>Cumulative</h4>
-                  </div>
-                  <div
-                    className={`tab ${graphOption === 2 ? 'focused' : ''}`}
-                    onClick={() => {
-                      setGraphOption(2);
-                    }}
-                  >
-                    <h4>Daily</h4>
-                  </div>
-                </div>
-
-                <div className="scale-modes">
-                  <label className="main">Scale Modes</label>
-                  <div className="timeseries-mode">
-                    <label htmlFor="timeseries-mode">Uniform</label>
-                    <input
-                      id="timeseries-mode"
-                      type="checkbox"
-                      checked={timeseriesMode}
-                      className="switch"
-                      aria-label="Checked by default to scale uniformly."
-                      onChange={(event) => {
-                        setTimeseriesMode(!timeseriesMode);
-                      }}
-                    />
-                  </div>
-                  <div
-                    className={`timeseries-logmode ${
-                      graphOption !== 1 ? 'disabled' : ''
-                    }`}
-                  >
-                    <label htmlFor="timeseries-logmode">Logarithmic</label>
-                    <input
-                      id="timeseries-logmode"
-                      type="checkbox"
-                      checked={graphOption === 1 && timeseriesLogMode}
-                      className="switch"
-                      disabled={graphOption !== 1}
-                      onChange={(event) => {
-                        setTimeseriesLogMode(!timeseriesLogMode);
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div className="trends-state-name">
-                  <select
-                    onChange={({target}) => {
-                      onHighlightState(JSON.parse(target.value));
-                    }}
-                  >
-                    {states.map((s) => {
-                      return (
-                        <option
-                          key={s.statecode}
-                          value={JSON.stringify(s)}
-                          selected={s.statecode === activeStateCode}
-                        >
-                          {s.state === 'Total' ? 'All States' : s.state}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-              </div>
-
-              <TimeSeries
-                timeseries={timeseries[activeStateCode]}
-                type={graphOption}
-                mode={timeseriesMode}
-                logMode={timeseriesLogMode}
-              />
+              {fetched && (
+                <TimeSeriesExplorer
+                  timeseries={timeseries}
+                  activeStateCode={activeStateCode}
+                  onHighlightState={onHighlightState}
+                  states={states}
+                  anchor={anchor}
+                  setAnchor={setAnchor}
+                />
+              )}
             </React.Fragment>
           )}
         </div>
       </div>
-      <Footer />
+      {fetched && <Footer />}
     </React.Fragment>
   );
 }
 
-export default Home;
+export default React.memo(Home);

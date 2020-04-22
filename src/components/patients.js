@@ -1,7 +1,9 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {parse} from 'date-fns';
-import * as Icon from 'react-feather';
 import PatientsView from './patientsview';
+
+import {parse} from 'date-fns';
+import React, {useState, useEffect, useCallback} from 'react';
+import * as Icon from 'react-feather';
+import {useLockBodyScroll} from 'react-use';
 
 function Patients(props) {
   const [patients, setPatients] = useState(props.patients);
@@ -9,7 +11,8 @@ function Patients(props) {
   const [logs, setLogs] = useState({});
   const [modal, setModal] = useState(false);
 
-  // When the user clicks anywhere outside of the modal, close modal
+  useLockBodyScroll(modal);
+
   window.onclick = function (event) {
     const modal = document.getElementById('modal');
     if (event.target === modal) {
@@ -20,11 +23,6 @@ function Patients(props) {
   useEffect(() => {
     setPatients(props.patients);
   }, [props.patients]);
-
-  useEffect(() => {
-    if (modal) document.body.classList.add('modal-open');
-    else document.body.classList.remove('modal-open'); // to remove modal-open class from body
-  }, [modal]);
 
   const parseByDate = useCallback((patients) => {
     const log = {};
