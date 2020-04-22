@@ -36,9 +36,10 @@ function Row(props) {
     tooltip: {
       background: '#000',
       borderRadius: '10px',
-      fontSize: '.8em',
+      fontSize: window.innerWidth > 769 ? '1em' : '0.8em',
       left: '250%',
       opacity: 0.65,
+      display: 'none',
     },
     wrapper: {
       cursor: 'cursor',
@@ -57,6 +58,17 @@ function Row(props) {
 
   const handleTooltip = (e) => {
     e.stopPropagation();
+    const tooltipDiv = e.currentTarget || null;
+    if (tooltipDiv !== null) {
+      const tooltipContentLeft = tooltipDiv.getBoundingClientRect().left - 70;
+      const tooltipContenDiv = tooltipDiv.firstChild.children[1] || null;
+      if (tooltipContenDiv !== null && tooltipContentLeft < 2) {
+        tooltipContenDiv.style.marginLeft = -tooltipContentLeft + 2 + 'px';
+        tooltipContenDiv.children[1].style.marginLeft =
+          tooltipContentLeft - 7 + 'px';
+      }
+      tooltipContenDiv.style.display = 'block';
+    }
   };
 
   const sortDistricts = useCallback(
