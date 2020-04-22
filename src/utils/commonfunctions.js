@@ -66,10 +66,14 @@ export const preprocessTimeseries = (timeseries) => {
     dailyrecovered: +stat.dailyrecovered,
     dailydeceased: +stat.dailydeceased,
     // Active = Confimed - Recovered - Deceased
-    totalactive:
-      +stat.totalconfirmed - +stat.totalrecovered - +stat.totaldeceased,
-    dailyactive:
-      +stat.dailyconfirmed - +stat.dailyrecovered - +stat.dailydeceased,
+    totalactive: Math.max(
+      0,
+      +stat.totalconfirmed - +stat.totalrecovered - +stat.totaldeceased
+    ),
+    dailyactive: Math.max(
+      0,
+      +stat.dailyconfirmed - +stat.dailyrecovered - +stat.dailydeceased
+    ),
   }));
 };
 
@@ -122,8 +126,14 @@ export const parseStateTimeseries = ({states_daily: data}) => {
           totalrecovered: totalrecovered,
           totaldeceased: totaldeceased,
           // Active = Confimed - Recovered - Deceased
-          totalactive: totalconfirmed - totalrecovered - totaldeceased,
-          dailyactive: dailyconfirmed - dailyrecovered - dailydeceased,
+          totalactive: Math.max(
+            0,
+            totalconfirmed - totalrecovered - totaldeceased
+          ),
+          dailyactive: Math.max(
+            0,
+            dailyconfirmed - dailyrecovered - dailydeceased
+          ),
         });
       });
     }
