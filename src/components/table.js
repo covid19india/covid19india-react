@@ -261,7 +261,7 @@ function Table(props) {
               if (index !== 0 && state.confirmed > 0) {
                 return (
                   <Row
-                    key={index}
+                    key={state.state}
                     index={index}
                     state={state}
                     total={false}

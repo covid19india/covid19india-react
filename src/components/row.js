@@ -14,6 +14,7 @@ function Row(props) {
   const [state, setState] = useState(props.state);
   const [districts, setDistricts] = useState(props.districts);
   const [sortedDistricts, setSortedDistricts] = useState(props.districts);
+  const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useState({
     sortColumn: localStorage.getItem('district.sortColumn')
       ? localStorage.getItem('district.sortColumn')
@@ -53,6 +54,7 @@ function Row(props) {
 
   const handleReveal = () => {
     props.handleReveal(props.state.state);
+    setShowDistricts(!showDistricts);
   };
 
   const handleTooltip = (e) => {
@@ -125,9 +127,10 @@ function Row(props) {
           <div className="table__title-wrapper">
             <span
               className={`dropdown ${
-                props.reveal ? 'rotateRightDown' : 'rotateDownRight'
+                props.reveal && showDistricts
+                  ? 'rotateRightDown'
+                  : 'rotateDownRight'
               }`}
-              style={{display: !props.total ? '' : 'none'}}
               onClick={() => {
                 handleReveal();
               }}
@@ -193,89 +196,88 @@ function Row(props) {
         </td>
       </tr>
 
-      <tr
-        className={'state-last-update'}
-        style={{display: props.reveal && !props.total ? '' : 'none'}}
-      >
-        <td colSpan={2}>
-          <div className="last-update">
-            <h6>Last updated&nbsp;</h6>
-            <h6
-              title={
-                isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
-                  ? ''
-                  : formatDateAbsolute(props.state.lastupdatedtime)
-              }
-            >
-              {isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
-                ? ''
-                : `${formatDistance(
-                    new Date(formatDate(props.state.lastupdatedtime)),
-                    new Date()
-                  )} ago`}
-            </h6>
-          </div>
-        </td>
-      </tr>
+      {showDistricts && (
+        <React.Fragment>
+          <tr className={'state-last-update'}>
+            <td colSpan={2}>
+              <div className="last-update">
+                <h6>Last updated&nbsp;</h6>
+                <h6
+                  title={
+                    isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
+                      ? ''
+                      : formatDateAbsolute(props.state.lastupdatedtime)
+                  }
+                >
+                  {isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
+                    ? ''
+                    : `${formatDistance(
+                        new Date(formatDate(props.state.lastupdatedtime)),
+                        new Date()
+                      )} ago`}
+                </h6>
+              </div>
+            </td>
+          </tr>
 
-      <tr
-        className={`district-heading`}
-        style={{display: props.reveal && !props.total ? '' : 'none'}}
-      >
-        <td onClick={(e) => handleSort('district')}>
-          <div className="heading-content">
-            <abbr title="District">District</abbr>
-            <div
-              style={{
-                display:
-                  sortData.sortColumn === 'district' ? 'initial' : 'none',
-              }}
-            >
-              {sortData.isAscending ? (
-                <div className="arrow-up" />
-              ) : (
-                <div className="arrow-down" />
-              )}
-            </div>
-          </div>
-        </td>
-        <td onClick={(e) => handleSort('confirmed')}>
-          <div className="heading-content">
-            <abbr
-              className={`${window.innerWidth <= 769 ? 'is-cherry' : ''}`}
-              title="Confirmed"
-            >
-              {window.innerWidth <= 769
-                ? window.innerWidth <= 375
-                  ? 'C'
-                  : 'Cnfmd'
-                : 'Confirmed'}
-            </abbr>
-            <div
-              style={{
-                display:
-                  sortData.sortColumn === 'confirmed' ? 'initial' : 'none',
-              }}
-            >
-              {sortData.isAscending ? (
-                <div className="arrow-up" />
-              ) : (
-                <div className="arrow-down" />
-              )}
-            </div>
-          </div>
-        </td>
-        <td className="state-page-link" colSpan={3}>
-          <Link to={`state/${state.statecode}`}>
-            <div>
-              <abbr>Visit state page</abbr>
-              <Icon.ArrowRightCircle />
-            </div>
-          </Link>
-        </td>
-      </tr>
+          <tr className={`district-heading`}>
+            <td onClick={(e) => handleSort('district')}>
+              <div className="heading-content">
+                <abbr title="District">District</abbr>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'district' ? 'initial' : 'none',
+                  }}
+                >
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
+                </div>
+              </div>
+            </td>
+            <td onClick={(e) => handleSort('confirmed')}>
+              <div className="heading-content">
+                <abbr
+                  className={`${window.innerWidth <= 769 ? 'is-cherry' : ''}`}
+                  title="Confirmed"
+                >
+                  {window.innerWidth <= 769
+                    ? window.innerWidth <= 375
+                      ? 'C'
+                      : 'Cnfmd'
+                    : 'Confirmed'}
+                </abbr>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'confirmed' ? 'initial' : 'none',
+                  }}
+                >
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
+                </div>
+              </div>
+            </td>
+            <td className="state-page-link" colSpan={3}>
+              <Link to={`state/${state.statecode}`}>
+                <div>
+                  <abbr>Visit state page</abbr>
+                  <Icon.ArrowRightCircle />
+                </div>
+              </Link>
+            </td>
+          </tr>
+        </React.Fragment>
+      )}
 
       {sortedDistricts &&
+        showDistricts &&
         Object.keys(sortedDistricts)
           .filter((district) => district.toLowerCase() !== 'unknown')
           .map((district, index) => {
@@ -285,7 +287,6 @@ function Row(props) {
                   key={index}
                   className={`district ${index % 2 === 0 ? 'is-odd' : ''}`}
                   style={{
-                    display: props.reveal && !props.total ? '' : 'none',
                     background: index % 2 === 0 ? '#f8f9fa' : '',
                   }}
                   onMouseEnter={() =>
@@ -313,12 +314,9 @@ function Row(props) {
             return null;
           })}
 
-      {sortedDistricts?.Unknown && (
+      {sortedDistricts?.Unknown && showDistricts && (
         <React.Fragment>
-          <tr
-            className={`district`}
-            style={{display: props.reveal && !props.total ? '' : 'none'}}
-          >
+          <tr className={`district`}>
             <td className="unknown" style={{fontWeight: 600}}>
               Unknown
               <Tooltip
