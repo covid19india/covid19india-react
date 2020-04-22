@@ -114,23 +114,6 @@ function Home(props) {
     setActiveStateCode(statecode);
   }, []);
 
-  /* const setType = useCallback((type, mapType) => {
-    setStatisticOption(type);
-    if (mapType === MAP_TYPES.COUNTRY) {
-      setDensityEnabled(true);
-    } else {
-      setDensityEnabled(false);
-    }
-  }, []);*/
-
-  // const refs = [useRef(), useRef(), useRef()];
-  // const scrollHandlers = refs.map((ref) => () =>
-  //   window.scrollTo({
-  //     top: ref.current.offsetTop,
-  //     behavior: 'smooth',
-  //   })
-  // );
-
   return (
     <React.Fragment>
       <div className="Home">
