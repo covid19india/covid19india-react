@@ -136,6 +136,13 @@ $pink-hover: #ffa8cb30;
 $pink-mid: #ffa8cb99;
 $brick: #e23028;
 
+// Dark mode variables
+$dark-m-gray: #161625;
+$dark-mid-subtext: #bdb8ae;
+$dark-m-white: #e1e1e1;
+$dark-m-purple: #7ba1ea;
+$dark-m-blue: #3391ff;
+
 body {
   padding: 0;
   margin: 0;
@@ -184,6 +191,7 @@ h6 {
 }
 
 .switch-wrapper > div {
+  transition: all 0.25s ease-in-out;
   position: absolute;
   width: 100%;
 }
@@ -207,6 +215,7 @@ h6 {
   flex-direction: row;
   justify-content: space-between;
   height: 3.9rem;
+  padding-bottom: 1rem;
   & > * {
     align-self: center;
   }
@@ -243,7 +252,7 @@ h6 {
     font-size: 12px;
     color: $gray;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: all 0s ease-in-out;
     width: 2rem;
     &:hover {
       background: $pblue;
@@ -271,6 +280,7 @@ h6 {
       &:hover {
         background: $gray-hover;
       }
+
       span.focused {
         background: $pblue-light;
         color: $pblue;
@@ -625,8 +635,6 @@ h6 {
           background: #fff !important;
         }
       }
-
-       tr:nth-child(even) {background-color: $purple-light;}
 
       td {
         // padding: 0.25rem;
@@ -2244,6 +2252,7 @@ input.switch:checked::after {
     border-radius: 3px;
     display: flex;
     flex-direction: column;
+    z-index: -1;
 
     h2,
     h5,
@@ -2730,16 +2739,19 @@ footer {
     .react-date-picker__calendar-button {
       padding: 0 !important;
       margin: 0 !important;
-      margin-left: 0.5rem !important;
+      margin-left: 0.25rem !important;
       svg {
         height: 16px;
         width: 16px;
+        stroke-width: 3px;
       }
     }
 
-    .calendar-close {
-      width: 12px;
-      stroke-width: 3;
+    .react-date-picker__clear-button {
+      svg {
+        width: 16px;
+        stroke-width: 3px;
+      }
     }
 
     select {
@@ -2831,6 +2843,25 @@ footer {
   .patientdb-wrapper {
     padding-left: 5rem;
     padding-right: 5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    .no-result {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 20rem;
+      align-self: center;
+      h5 {
+        color: $gray;
+        text-align: center;
+        font-weight: 600;
+        span {
+          font-weight: 900;
+          color: $pblue !important;
+        }
+      }
+    }
   }
 
   .legend {
@@ -3821,10 +3852,6 @@ body.modal-open {
     .card {
       margin-bottom: 2em;
       flex: 0 1 calc(33% - 1em);
-      box-shadow: rgba(#000, 0.2) 0 0 8px 0;
-      &:hover {
-        box-shadow: rgba(#000, 0.3) 0 0 8px 0;
-      }
       height: 30rem;
       .charts-header {
         height: 100%;
@@ -3847,6 +3874,8 @@ body.modal-open {
         }
 
         .chart-note {
+          font-family: 'archia';
+          font-size: 0.8rem;
           color: $gray;
           height: 50px;
           margin-top: 5px;
@@ -3907,6 +3936,7 @@ body.modal-open {
       &:hover {
         background: $gray-light-opaque !important;
       }
+
       & > span {
         display: flex;
         flex-direction: row;
@@ -3926,7 +3956,7 @@ body.modal-open {
       top: 0;
       background: $gray-light-opaque;
       padding-top: 5.5rem;
-      padding-left: 0rem;
+      padding-left: 0;
       border-right: solid 2px $gray-light-opaque;
       z-index: -1 !important;
       & > * {
@@ -3942,6 +3972,16 @@ body.modal-open {
 
   .PatientsDB {
     margin-left: 5rem;
+  }
+
+  .dark-mode {
+    .Navbar, .expand {
+      background: #1e1e30 !important;
+    }
+
+    .navbar-right {
+      background: #1e1e30 !important;
+    }
   }
 }
 
@@ -4043,11 +4083,20 @@ body.modal-open {
   }
 
   .cards-container {
-    padding: 1rem;
+    padding: 0.5rem;
     .cards {
       .card {
-        flex: 0 1 calc(100%);
+        margin-bottom: 0;
+        height: 25rem;
       }
+
+      .chart-title {
+        padding: 20px 0 10px 0;
+      }
+
+      .card-big {
+         height: 30rem;
+       }
     }
   }
 
@@ -4063,8 +4112,10 @@ body.modal-open {
     }
 
     .reminder {
-      width: calc(100% - 2rem);
-      padding: 0;
+      width: calc(100% - 4rem);
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+
     }
 
     .Patients {
@@ -4409,6 +4460,284 @@ body.modal-open {
     position: fixed;
     top: 2.3rem !important;
   }
+}
+
+/* Dark Mode */
+.dark-mode {
+  background: #161625 !important;
+  color: #bdbdbd;
+  transition: background-color 0.2s ease-out !important;
+
+  .switch-wrapper > div {
+    background: #161625 !important;
+  }
+
+  .expand {
+    background: #1e1e30 !important;
+  }
+
+  .Navbar, .expand {
+    border-right: 0;
+
+    .navbar-middle {
+      color: #bdbdbd;
+    }
+
+    .navbar-right {
+      background: #1e1e30 !important;
+      & > span {
+        display: none;
+      }
+
+      & > span:first-child {
+        display: initial;
+      }
+    }
+  }
+
+  table {
+    th {
+      background: #1e1e30 !important;
+    }
+
+    .is-odd {
+      background: #1e1e30 !important;
+    }
+
+    .state-page-link {
+      background: #161625 !important;
+    }
+
+    .heading-content {
+      color: #bdbdbd !important;
+    }
+
+    .spacer {
+      background: #161625 !important;
+    }
+  }
+
+  .Search {
+    input {
+      background: #1e1e30 !important;
+    }
+  }
+
+  .State {
+    .header-right {
+      h5 {
+        color: #9673b9bb !important;
+      }
+
+      h2 {
+        color: #9673b9 !important;
+      }
+
+      a {
+        background: #40008050 !important;
+      }
+    }
+  }
+
+  .MapExplorer {
+    #chart,
+    #legend {
+      filter: invert(1) hue-rotate(150deg);
+    }
+
+    .legend {
+      background: #161625 !important;
+    }
+
+    .stats {
+      &.is-purple {
+        background: #40008050 !important;
+        h1 {
+          color: #9673b9 !important;
+        }
+
+        h5, h6 {
+          color: #9673b9bb !important;
+        }
+
+        svg {
+          stroke: #9673b9 !important;
+        }
+      }
+    }
+  }
+
+  .tab {
+    &.focused {
+      background: #1e1e30 !important;
+      color: #bdbdbd !important;
+    }
+  }
+
+  .pills { 
+    button {
+      &.selected {
+        background: #{$yellow}50;
+      }
+    }
+  }
+
+  select {
+    background: #1e1e30 !important;
+    border-color: #1e1e30 !important;
+  }
+
+  input.switch {
+      background-color: #161625 !important;
+      border: 2px solid $gray-mid !important;
+    }
+
+    input.switch::after {
+      background-color: #cfcfcf !important;
+    }
+
+    input.switch:checked {
+      background-color: #161625 !important;
+    }
+
+    input.switch:checked::after {
+      background-color: #cfcfcf !important;
+    }
+
+  .button {
+    &.github {
+      color: #bdbdbd !important;
+      svg {
+        stroke: #bdbdbd !important;
+      }
+    }
+  }
+
+  .FAQ {
+    .question {
+      color: $gray !important;
+    }
+  }
+
+  .Resources {
+	  
+    .filtersection {
+      .disclaimercontainer {
+        .mobile-disclaimer-button {
+          background-color: $dark-m-white;
+          color: #808080;
+        }
+
+        .disclaimer-button {
+          color: $dark-mid-subtext;
+          background: none;
+		}
+		
+		.MuiSvgIcon-root {
+			fill: $dark-m-white;
+		}
+      }
+
+      .resourcefilters {
+        .MuiFormLabel-root {
+          color: rgba(232, 230, 227, 0.54);
+		}
+		
+		
+
+        .MuiInputBase-root {
+          color: rgba(232, 230, 227, 0.87);
+		}
+		
+		.MuiSelect-icon {
+			color: $dark-m-white;
+		}
+		
+
+		.MuiOutlinedInput-notchedOutline {
+			border-color: $dark-m-white;
+		}
+
+        .button.is-purple {
+          color: $dark-m-purple;
+          background-color: rgba(31, 25, 158, 0.13);
+          background-image: none;
+        }
+
+        div.MuiFormControl-root:nth-child(1) {
+          .MuiOutlinedInput-root {
+            position: relative;
+            /* border-radius: 23px; */
+            border-color: #dbd3d3;
+            border-width: 25px !important;
+          }
+        }
+
+        .MuiSelect-select:not([multiple]) option,
+        .MuiSelect-select:not([multiple]) optgroup {
+          background-color: $dark-m-gray;
+        }
+      }
+
+      .misclinkscontainer {
+        .button.is-purple {
+          color: $dark-m-purple;
+          background-color: rgba(31, 25, 158, 0.13);
+          background-image: none;
+        }
+      }
+    }
+
+    input.MuiInputBase-input{
+      color: $dark-m-white;
+    }
+
+	.searchbar {
+		.MuiFormLabel-root {
+			color: rgba(232, 230, 227, 0.54);
+		}
+
+		.MuiOutlinedInput-notchedOutline {
+			border-color: $dark-m-white;
+		}
+
+		.MuiSvgIcon-root {
+			fill: $white;
+		}
+	}
+
+    .tableandcontrols {
+      a {
+        color: $dark-m-blue;
+	  }
+	  
+	  table thead {
+		color: rgb(210, 207, 200);
+	  }
+
+    }
+
+}
+
+  .PatientsDB {
+    .filters {
+      background: #1e1e30 !important;
+      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 #1e1e30;
+    }
+
+    .legend {
+      background: #1e1e30 !important;
+    }
+
+    .modal-content {
+      background: #1e1e30 !important;
+    }
+
+    .modal {
+      background: #1e1e30bb !important;
+    }
+  }
+
 }
 
 /* Animation Support */

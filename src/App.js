@@ -15,6 +15,7 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
+import {useLocalStorage} from 'react-use';
 
 function App() {
   const pages = [
@@ -62,13 +63,27 @@ function App() {
     },
   ];
 
+  const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
+
+  React.useEffect(() => {
+    if (darkMode) {
+      document.querySelector('body').classList.add('dark-mode');
+    } else {
+      document.querySelector('body').classList.remove('dark-mode');
+    }
+  }, [darkMode]);
+
   return (
-    <div className="App">
+    <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
       <Router>
         <Route
           render={({location}) => (
             <div className="Almighty-Router">
-              <Navbar pages={pages} />
+              <Navbar
+                pages={pages}
+                darkMode={darkMode}
+                setDarkMode={setDarkMode}
+              />
               <Switch location={location}>
                 {pages.map((page, index) => {
                   return (
