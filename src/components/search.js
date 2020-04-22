@@ -91,14 +91,18 @@ function Search(props) {
           contact: result.phonenumber,
         };
         results.push(essentialsObj);
-        return null;
       });
+      setResults([...results]);
+    };
+
+    const essentialsAsync = (datums) => {
+      // to handle async remote call on initial launch
+      essentialsEngine.search(searchInput, essentialsSync);
     };
 
     engine.search(searchInput, sync);
     districtEngine.search(searchInput, districtSync);
-    essentialsEngine.search(searchInput, essentialsSync);
-    setResults(results);
+    essentialsEngine.search(searchInput, essentialsSync, essentialsAsync);
   }, []);
 
   function setNativeValue(element, value) {
