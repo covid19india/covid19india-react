@@ -533,7 +533,7 @@ h6 {
   justify-content: center;
   flex-wrap: wrap;
   margin-left: 7rem;
-  margin-right: 7rem;
+  margin-right: 5rem;
 
   .resource-left,
   .resource-right {
@@ -1511,7 +1511,7 @@ table {
       text-align: right;
       .deltas {
         display: inline-block;
-		    font-size: 11px !important;
+        font-size: 11px !important;
 
         svg {
           width: 9px;
@@ -1665,8 +1665,8 @@ table {
     }
   }
 
-	.table__title-wrapper {
-		position: relative;
+  .table__title-wrapper {
+    position: relative;
     & > * {
       align-self: center;
     }
@@ -1681,7 +1681,7 @@ table {
         color: $gray-mid;
       }
     }
-	}
+  }
 
   .unknown {
     svg {
@@ -4620,7 +4620,7 @@ body.modal-open {
   }
 
   .Resources {
-	  
+    
     .filtersection {
       .disclaimercontainer {
         .mobile-disclaimer-button {
@@ -4631,32 +4631,32 @@ body.modal-open {
         .disclaimer-button {
           color: $dark-mid-subtext;
           background: none;
-		}
-		
-		.MuiSvgIcon-root {
-			fill: $dark-m-white;
-		}
+    }
+    
+    .MuiSvgIcon-root {
+      fill: $dark-m-white;
+    }
       }
 
       .resourcefilters {
         .MuiFormLabel-root {
           color: rgba(232, 230, 227, 0.54);
-		}
-		
-		
+    }
+    
+    
 
         .MuiInputBase-root {
           color: rgba(232, 230, 227, 0.87);
-		}
-		
-		.MuiSelect-icon {
-			color: $dark-m-white;
-		}
-		
+    }
+    
+    .MuiSelect-icon {
+      color: $dark-m-white;
+    }
+    
 
-		.MuiOutlinedInput-notchedOutline {
-			border-color: $dark-m-white;
-		}
+    .MuiOutlinedInput-notchedOutline {
+      border-color: $dark-m-white;
+    }
 
         .button.is-purple {
           color: $dark-m-purple;
@@ -4692,28 +4692,28 @@ body.modal-open {
       color: $dark-m-white;
     }
 
-	.searchbar {
-		.MuiFormLabel-root {
-			color: rgba(232, 230, 227, 0.54);
-		}
+  .searchbar {
+    .MuiFormLabel-root {
+      color: rgba(232, 230, 227, 0.54);
+    }
 
-		.MuiOutlinedInput-notchedOutline {
-			border-color: $dark-m-white;
-		}
+    .MuiOutlinedInput-notchedOutline {
+      border-color: $dark-m-white;
+    }
 
-		.MuiSvgIcon-root {
-			fill: $white;
-		}
-	}
+    .MuiSvgIcon-root {
+      fill: $white;
+    }
+  }
 
     .tableandcontrols {
       a {
         color: $dark-m-blue;
-	  }
-	  
-	  table thead {
-		color: rgb(210, 207, 200);
-	  }
+    }
+    
+    table thead {
+    color: rgb(210, 207, 200);
+    }
 
     }
 
@@ -4803,7 +4803,7 @@ body.modal-open {
 }
 
 .height-22 {
-	height: 22px;
+  height: 22px;
 }
 
 .disclaimercontainer {
