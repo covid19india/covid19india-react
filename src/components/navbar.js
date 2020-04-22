@@ -24,7 +24,12 @@ function Navbar({pages, darkMode, setDarkMode}) {
         {darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
       </div>
       <div className="navbar-middle">
-        <Link to="/">
+        <Link
+          to="/"
+          onClick={() => {
+            setExpand(false);
+          }}
+        >
           Covid19<span>India</span>
         </Link>
       </div>
