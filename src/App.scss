@@ -4667,6 +4667,10 @@ body.modal-open {
       }
     }
 
+    input.MuiInputBase-input{
+      color: $dark-m-white;
+    }
+
 	.searchbar {
 		.MuiFormLabel-root {
 			color: rgba(232, 230, 227, 0.54);
