@@ -32,7 +32,7 @@ function MobilityChart(props) {
     : [];
 
   reversedPropsArray.forEach((dataPoint, index) => {
-    if (index >= props.data.length - datapointToShow) {
+    if (index >= reversedPropsArray.length - datapointToShow) {
       dates.push(moment(dataPoint.date).format('DD MMM'));
       values.push(dataPoint.value);
     }
