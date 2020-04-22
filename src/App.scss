@@ -2245,6 +2245,7 @@ input.switch:checked::after {
     border-radius: 3px;
     display: flex;
     flex-direction: column;
+    z-index: -1;
 
     h2,
     h5,
