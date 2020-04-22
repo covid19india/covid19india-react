@@ -20,13 +20,19 @@ function MobilityChart(props) {
   defaults.global.legend.position = 'bottom';
   defaults.global.hover.intersect = false;
 
-  const datapointToShow = 30;
+  const datapointToShow = 20;
   const dates = [];
   const values = [];
-  const reversedPropsArray = props.data ? props.data.reverse() : [];
+  const reversedPropsArray = props.data
+    ? props.data[0]
+      ? moment(props.data[0].date) > moment(props.data[1].date)
+        ? props.data.reverse()
+        : props.data
+      : []
+    : [];
 
   reversedPropsArray.forEach((dataPoint, index) => {
-    if (index >= reversedPropsArray.length - datapointToShow) {
+    if (index >= props.data.length - datapointToShow) {
       dates.push(moment(dataPoint.date).format('DD MMM'));
       values.push(dataPoint.value);
     }
