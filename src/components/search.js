@@ -91,6 +91,7 @@ function Search(props) {
           contact: result.phonenumber,
         };
         results.push(essentialsObj);
+        return null;
       });
       setResults([...results]);
     };
