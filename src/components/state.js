@@ -5,12 +5,12 @@ import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
 import TimeSeries from './timeseries';
-import TimeSeriesTesting from './timeseriestesting';
 
 import {MAP_META, STATE_CODES} from '../constants';
 import {
   formatDateAbsolute,
   formatNumber,
+  mergeTimeseries,
   parseStateTimeseries,
   parseStateTestTimeseries,
 } from '../utils/commonfunctions';
@@ -41,7 +41,6 @@ function State(props) {
   const [stateName] = useState(STATE_CODES[stateCode]);
   const [mapOption, setMapOption] = useState('confirmed');
   const [mapSwitcher, {width}] = useMeasure();
-  const [testTimeseries, setTestTimeseries] = useState({});
 
   useEffectOnce(() => {
     getState(stateCode);
@@ -66,8 +65,15 @@ function State(props) {
 
       const states = dataResponse.statewise;
       setStateData(states.find((s) => s.statecode === code));
+      // Timeseries
       const ts = parseStateTimeseries(statesDailyResponse)[code];
-      setTimeseries(ts);
+      const testTs = parseStateTestTimeseries(
+        stateTestResponse.states_tested_data
+      )[code];
+      // Merge
+      const tsMerged = mergeTimeseries({[code]: ts}, {[code]: testTs});
+      setTimeseries(tsMerged[code]);
+      // District data
       setDistrictData({
         [name]: stateDistrictWiseResponse[name],
       });
@@ -80,11 +86,6 @@ function State(props) {
           (obj) => obj.state === name && obj.totaltested !== ''
         )
       );
-      const testTs = parseStateTestTimeseries(
-        stateTestResponse.states_tested_data
-      )[code];
-      setTestTimeseries(testTs);
-
       setFetched(true);
       anime({
         targets: '.highlight',
@@ -410,9 +411,7 @@ function State(props) {
           </div>
         </div>
 
-        <div className="state-right">
-          <TimeSeriesTesting timeseries={testTimeseries} />
-        </div>
+        <div className="state-right"></div>
       </div>
       <Footer />
     </React.Fragment>

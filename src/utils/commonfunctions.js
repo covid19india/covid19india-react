@@ -147,12 +147,9 @@ export const parseStateTestTimeseries = (data) => {
   const today = moment();
   data.forEach((d) => {
     const date = moment(d.updatedon, 'DD/MM/YYYY');
-    // Skip extra data
     const totaltested = +d.totaltested;
     if (date.isBefore(today, 'Date') && totaltested) {
       const stateCode = stateCodeMap[d.state];
-      // Parser
-      // const dailytested = +data[i][stateCode] || 0;
       testTimseries[stateCode].push({
         date: date.toDate(),
         totaltested: totaltested,
@@ -167,7 +164,6 @@ export const parseTotalTestTimeseries = (data) => {
   const today = moment();
   data.forEach((d) => {
     const date = moment(d.updatetimestamp.split(' ')[0], 'DD/MM/YYYY');
-    // Skip extra data
     const totaltested = +d.totalindividualstested;
     if (date.isBefore(today, 'Date') && totaltested) {
       testTimseries.push({
@@ -177,4 +173,22 @@ export const parseTotalTestTimeseries = (data) => {
     }
   });
   return testTimseries;
+};
+
+export const mergeTimeseries = (ts1, ts2) => {
+  const tsRet = Object.assign({}, ts1);
+  for (const state in ts1) {
+    if (ts1.hasOwnProperty(state)) {
+      tsRet[state] = ts1[state].map((d1) => {
+        const testData = ts2[state].find((d2) =>
+          moment(d1.date).isSame(moment(d2.date), 'day')
+        );
+        return {
+          totaltested: testData?.totaltested,
+          ...d1,
+        };
+      });
+    }
+  }
+  return tsRet;
 };
