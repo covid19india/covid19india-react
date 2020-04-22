@@ -136,6 +136,13 @@ $pink-hover: #ffa8cb30;
 $pink-mid: #ffa8cb99;
 $brick: #e23028;
 
+// Dark mode variables
+$dark-m-gray: #161625;
+$dark-mid-subtext: #bdb8ae;
+$dark-m-white: #e1e1e1;
+$dark-m-purple: #7ba1ea;
+$dark-m-blue: #3391ff;
+
 body {
   padding: 0;
   margin: 0;
@@ -4562,6 +4569,102 @@ body.modal-open {
     }
   }
 
+  .Resources {
+	  
+    .filtersection {
+      .disclaimercontainer {
+        .mobile-disclaimer-button {
+          background-color: $dark-m-white;
+          color: #808080;
+        }
+
+        .disclaimer-button {
+          color: $dark-mid-subtext;
+          background: none;
+		}
+		
+		.MuiSvgIcon-root {
+			fill: $dark-m-white;
+		}
+      }
+
+      .resourcefilters {
+        .MuiFormLabel-root {
+          color: rgba(232, 230, 227, 0.54);
+		}
+		
+		
+
+        .MuiInputBase-root {
+          color: rgba(232, 230, 227, 0.87);
+		}
+		
+		.MuiSelect-icon {
+			color: $dark-m-white;
+		}
+		
+
+		.MuiOutlinedInput-notchedOutline {
+			border-color: $dark-m-white;
+		}
+
+        .button.is-purple {
+          color: $dark-m-purple;
+          background-color: rgba(31, 25, 158, 0.13);
+          background-image: none;
+        }
+
+        div.MuiFormControl-root:nth-child(1) {
+          .MuiOutlinedInput-root {
+            position: relative;
+            /* border-radius: 23px; */
+            border-color: #dbd3d3;
+            border-width: 25px !important;
+          }
+        }
+
+        .MuiSelect-select:not([multiple]) option,
+        .MuiSelect-select:not([multiple]) optgroup {
+          background-color: $dark-m-gray;
+        }
+      }
+
+      .misclinkscontainer {
+        .button.is-purple {
+          color: $dark-m-purple;
+          background-color: rgba(31, 25, 158, 0.13);
+          background-image: none;
+        }
+      }
+    }
+
+	.searchbar {
+		.MuiFormLabel-root {
+			color: rgba(232, 230, 227, 0.54);
+		}
+
+		.MuiOutlinedInput-notchedOutline {
+			border-color: $dark-m-white;
+		}
+
+		.MuiSvgIcon-root {
+			fill: $white;
+		}
+	}
+
+    .tableandcontrols {
+      a {
+        color: $dark-m-blue;
+	  }
+	  
+	  table thead {
+		color: rgb(210, 207, 200);
+	  }
+
+    }
+
+}
+
   .PatientsDB {
     .filters {
       background: #1e1e30 !important;
@@ -4580,6 +4683,7 @@ body.modal-open {
       background: #1e1e30bb !important;
     }
   }
+
 }
 
 /* Animation Support */
