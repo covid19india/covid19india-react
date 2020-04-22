@@ -45,8 +45,14 @@ function MapExplorer({
   const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta);
 
+  const [mapOption, setMapOption] = useState('confirmed');
+
   const [statistic, currentMapData] = useMemo(() => {
-    const statistic = {total: 0, maxConfirmed: 0};
+    const dataTypes = ['confirmed', 'active', 'recovered', 'deaths'];
+    const statistic = dataTypes.reduce((acc, dtype) => {
+      acc[dtype] = {total: 0, max: 0};
+      return acc;
+    }, {});
     let currentMapData = {};
 
     if (currentMap.mapType === MAP_TYPES.COUNTRY) {
@@ -54,13 +60,15 @@ function MapExplorer({
         if (state.state === 'Total') {
           return acc;
         }
-        const confirmed = parseInt(state.confirmed);
-        statistic.total += confirmed;
-        if (confirmed > statistic.maxConfirmed) {
-          statistic.maxConfirmed = confirmed;
-        }
-
-        acc[state.state] = state.confirmed;
+        acc[state.state] = {};
+        dataTypes.forEach((dtype) => {
+          const typeCount = parseInt(state[dtype]);
+          statistic[dtype].total += typeCount;
+          if (typeCount > statistic[dtype].max) {
+            statistic[dtype].max = typeCount;
+          }
+          acc[state.state][dtype] = typeCount;
+        });
         return acc;
       }, {});
     } else if (currentMap.mapType === MAP_TYPES.STATE) {
@@ -68,12 +76,15 @@ function MapExplorer({
         stateDistrictWiseData[currentMap.name] || {districtData: {}}
       ).districtData;
       currentMapData = Object.keys(districtWiseData).reduce((acc, district) => {
-        const confirmed = parseInt(districtWiseData[district].confirmed);
-        statistic.total += confirmed;
-        if (confirmed > statistic.maxConfirmed) {
-          statistic.maxConfirmed = confirmed;
-        }
-        acc[district] = districtWiseData[district].confirmed;
+        acc[district] = {};
+        dataTypes.forEach((dtype) => {
+          const typeCount = parseInt(districtWiseData[district][dtype]);
+          statistic[dtype].total += typeCount;
+          if (typeCount > statistic[dtype].max) {
+            statistic[dtype].max = typeCount;
+          }
+          acc[district][dtype] = typeCount;
+        });
         return acc;
       }, {});
     }
@@ -98,8 +109,8 @@ function MapExplorer({
           districtData = {
             confirmed: 0,
             active: 0,
-            deaths: 0,
             recovered: 0,
+            deaths: 0,
           };
         }
         const currentHoveredRegion = getRegionFromDistrict(districtData, name);
@@ -202,7 +213,12 @@ function MapExplorer({
       <div className="map-stats">
         <div className="stats fadeInUp" style={{animationDelay: '2s'}}>
           <h5>{window.innerWidth <= 769 ? 'Cnfmd' : 'Confirmed'}</h5>
-          <div className="stats-bottom">
+          <div
+            className="stats-bottom"
+            onClick={() => {
+              setMapOption('confirmed');
+            }}
+          >
             <h1>{formatNumber(panelRegion.confirmed)}</h1>
             <h6>{`+${formatNumber(panelRegion.deltaconfirmed)}`}</h6>
           </div>
@@ -213,7 +229,12 @@ function MapExplorer({
           style={{animationDelay: '2.1s'}}
         >
           <h5>{window.innerWidth <= 769 ? 'Actv' : 'Active'}</h5>
-          <div className="stats-bottom">
+          <div
+            className="stats-bottom"
+            onClick={() => {
+              setMapOption('active');
+            }}
+          >
             <h1>{formatNumber(panelRegion.active)}</h1>
             <h6>{` `}</h6>
           </div>
@@ -224,7 +245,12 @@ function MapExplorer({
           style={{animationDelay: '2.2s'}}
         >
           <h5>{window.innerWidth <= 769 ? 'Rcvrd' : 'Recovered'}</h5>
-          <div className="stats-bottom">
+          <div
+            className="stats-bottom"
+            onClick={() => {
+              setMapOption('recovered');
+            }}
+          >
             <h1>{formatNumber(panelRegion.recovered)}</h1>
             <h6>{`+${formatNumber(panelRegion.deltarecovered)}`}</h6>
           </div>
@@ -235,7 +261,12 @@ function MapExplorer({
           style={{animationDelay: '2.3s'}}
         >
           <h5>{window.innerWidth <= 769 ? 'Dcsd' : 'Deceased'}</h5>
-          <div className="stats-bottom">
+          <div
+            className="stats-bottom"
+            onClick={() => {
+              setMapOption('deceased');
+            }}
+          >
             <h1>{formatNumber(panelRegion.deaths)}</h1>
             <h6>{`+${formatNumber(panelRegion.deltadeaths)}`}</h6>
           </div>
@@ -343,6 +374,7 @@ function MapExplorer({
         selectedRegion={selectedRegion}
         setSelectedRegion={setSelectedRegion}
         isCountryLoaded={isCountryLoaded}
+        mapOption={mapOption}
       />
     </div>
   );
