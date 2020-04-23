@@ -341,9 +341,10 @@ function MapExplorer({
         ) : null}
 
         {currentMap.mapType === MAP_TYPES.STATE &&
-        currentMapData.Unknown > 0 ? (
+        currentMapData.Unknown &&
+        currentMapData.Unknown[mapOption] > 0 ? (
           <h4 className="unknown">
-            Districts unknown for {currentMapData.Unknown} people
+            Districts unknown for {currentMapData.Unknown[mapOption]} people
           </h4>
         ) : null}
 

@@ -1855,6 +1855,7 @@ table {
   .map-hover {
     stroke: #ff073a;
     stroke-width: 2;
+
     &.active {
       stroke: #007bff;
     }
@@ -1930,6 +1931,7 @@ table {
       font-weight: 900;
       margin: 0;
       word-wrap: break-word;
+
       &.active {
         color: $blue;
       }
@@ -1956,6 +1958,7 @@ table {
       position: absolute;
       top: 3rem;
       width: 5rem;
+
       &.active {
         color: $blue;
       }
@@ -1983,11 +1986,11 @@ table {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    height: 3.5rem;
     margin-bottom: 1rem;
     position: relative;
     width: 100%;
     z-index: 10;
-    height: 3.5rem;
 
     h1,
     h5,
@@ -2005,17 +2008,17 @@ table {
       background: $cherry-light;
       border-radius: 5px;
       color: $cherry-mid;
+      cursor: pointer;
       display: flex;
+      flex: 1;
       flex-direction: column;
+      height: 3rem;
+      margin-bottom: .5rem;
       margin-left: .25rem;
       margin-right: .25rem;
-      margin-bottom: .5rem;
-      flex: 1;
       padding: .25rem;
       position: relative;
-      cursor: pointer;
-      height: 3rem;
-      transition: all 0.1s ease-in-out;
+      transition: all .1s ease-in-out;
 
       .stats-bottom {
         display: flex;
@@ -2122,8 +2125,8 @@ table {
 
       &.focused {
         margin-top: -.5rem;
-        padding-top: .75rem;
         padding-bottom: .75rem;
+        padding-top: .75rem;
       }
 
       &:first-child {
