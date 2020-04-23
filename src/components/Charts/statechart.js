@@ -24,15 +24,19 @@ function StateChart(props) {
   const stateNames = [];
   const stateCases = [];
   let otherStateCases = 0;
+  let totalCases = 0;
   if (!props.data || props.data.length === 0) {
     return <div></div>;
   }
 
   props.data.forEach((state, index) => {
+    if (index === 0) {
+      totalCases = state.confirmed;
+    }
     if (index === 0 || state.confirmed <= 0) {
       return;
     }
-    if (index <= 15) {
+    if (index <= 10) {
       stateNames.push(state.state);
       stateCases.push(state.confirmed);
     } else {
@@ -48,22 +52,17 @@ function StateChart(props) {
       {
         data: stateCases,
         backgroundColor: [
-          '#ff7272',
-          '#ffb385',
-          '#fae7cb',
-          '#ffd31d',
-          '#00a8cc',
-          '#005082',
-          '#000839',
-          '#ffa41b',
-          '#f1e7b6',
-          '#400082',
-          '#fe346e',
-          '#5a3f11',
-          '#9c5518',
-          '#f67575',
-          '#d4f8e8',
-          '#1eb2a6',
+          '#718af0',
+          '#7dd6fa',
+          '#59b3aa',
+          '#9bc26b',
+          '#e5d22f',
+          '#ffb041',
+          '#ff8a66',
+          '#db6b8f',
+          '#bd66cc',
+          '#8e8e8e',
+          '#ded3de',
         ],
       },
     ],
@@ -81,7 +80,7 @@ function StateChart(props) {
       },
     },
     legend: {
-      display: false,
+      display: true,
     },
     responsive: true,
     maintainAspectRatio: false,
@@ -110,6 +109,7 @@ function StateChart(props) {
       <div className="chart-content doughnut">
         <Doughnut data={chartData} options={chartOptions} />
       </div>
+      <div className="chart-note">Total confirmed: {totalCases} patients</div>
     </div>
   );
 }

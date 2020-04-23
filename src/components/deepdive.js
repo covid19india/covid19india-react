@@ -4,6 +4,7 @@ import DailyConfirmedChart from './Charts/dailyconfirmedchart';
 import GenderChart from './Charts/genderchart';
 import GrowthTrendChart from './Charts/growthtrendchart';
 import NationalityChart from './Charts/nationalitychart';
+import StateChart from './Charts/statechart';
 import TotalConfirmedChart from './Charts/totalconfirmedchart';
 
 import axios from 'axios';
@@ -14,6 +15,7 @@ function DeepDive() {
   const [timeseries, setTimeseries] = useState([]);
   const [rawData, setRawData] = useState([]);
   const [statesTimeSeries, setStatesTimeSeries] = useState([]);
+  const [statewise, setStateWise] = useState([]);
 
   useEffect(() => {
     if (fetched === false) {
@@ -35,6 +37,7 @@ function DeepDive() {
       setTimeseries(response.data.cases_time_series);
       setStatesTimeSeries(stateDailyResponse.data.states_daily);
       setRawData(rawDataResponse.data.raw_data);
+      setStateWise(response.data.statewise);
       setFetched(true);
     } catch (err) {
       console.log(err);
@@ -79,6 +82,10 @@ function DeepDive() {
 
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
           <NationalityChart title="Patients by  Nationality" data={rawData} />
+        </div>
+
+        <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
+          <StateChart title="State Wise Distribution" data={statewise} />
         </div>
       </section>
     </div>
