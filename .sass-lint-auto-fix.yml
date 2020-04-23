@@ -1,0 +1,30 @@
+# This file is used by `sass-lint-auto-fix`
+files:
+  include: '**/*.s+(a|c)ss'
+  ignore:
+    - node_modules/**
+syntax:
+  include:
+    - scss
+    - sass
+resolvers:
+  property-sort-order: 1
+  attribute-quotes: 1
+  border-zero: 1
+  no-color-keywords: 1
+  no-css-comments: 0
+  no-important: 0
+  no-trailing-zero: 1
+  space-after-bang: 1
+  space-before-bang: 1
+  space-after-colon: 1
+  space-before-colon: 1
+  hex-length: 1
+  empty-line-between-blocks: 1
+  url-quotes: 1
+  zero-unit: 1
+  hex-notation: 1
+  indentation: 1
+  final-newline: 1
+options:
+  optOut: true

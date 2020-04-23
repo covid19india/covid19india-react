@@ -1,88 +1,106 @@
+import './App.scss';
+
+import DeepDive from './components/deepdive';
+import FAQ from './components/faq';
+import Home from './components/home';
+import Navbar from './components/navbar';
+import PatientDB from './components/patientdb';
+import Resources from './components/resources';
+import State from './components/state';
+
 import React from 'react';
 import {
   BrowserRouter as Router,
-  Switch,
   Route,
   Redirect,
+  Switch,
 } from 'react-router-dom';
-import * as Icon from 'react-feather';
-
-import './App.scss';
-import Home from './components/home';
-import Navbar from './components/navbar';
-import Links from './components/links';
-import Summary from './components/summary';
-import Cluster from './components/cluster';
-import FAQ from './components/faq';
-import Banner from './components/banner';
-
-const history = require('history').createBrowserHistory;
+import {useLocalStorage} from 'react-use';
 
 function App() {
+  const pages = [
+    {
+      pageLink: '/',
+      view: Home,
+      displayName: 'Home',
+      animationDelayForNavbar: 0.2,
+      showInNavbar: true,
+    },
+    {
+      pageLink: '/demographics',
+      view: PatientDB,
+      displayName: 'Demographics',
+      animationDelayForNavbar: 0.3,
+      showInNavbar: true,
+    },
+    {
+      pageLink: '/deepdive',
+      view: DeepDive,
+      displayName: 'Deep Dive',
+      animationDelayForNavbar: 0.4,
+      showInNavbar: true,
+    },
+    {
+      pageLink: '/essentials',
+      view: Resources,
+      displayName: 'Essentials',
+      animationDelayForNavbar: 0.5,
+      showInNavbar: true,
+    },
+    {
+      pageLink: '/faq',
+      view: FAQ,
+      displayName: 'FAQ',
+      animationDelayForNavbar: 0.6,
+      showInNavbar: true,
+    },
+    {
+      pageLink: '/state/:stateCode',
+      view: State,
+      displayName: 'State',
+      animationDelayForNavbar: 0.7,
+      showInNavbar: false,
+    },
+  ];
+
+  const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
+
+  React.useEffect(() => {
+    if (darkMode) {
+      document.querySelector('body').classList.add('dark-mode');
+    } else {
+      document.querySelector('body').classList.remove('dark-mode');
+    }
+  }, [darkMode]);
+
   return (
-    <div className="App">
-      <Router history={history}>
+    <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
+      <Router>
         <Route
           render={({location}) => (
             <div className="Almighty-Router">
-              <Navbar />
-              <Banner />
-              <Route exact path="/" render={() => <Redirect to="/" />} />
+              <Navbar
+                pages={pages}
+                darkMode={darkMode}
+                setDarkMode={setDarkMode}
+              />
               <Switch location={location}>
-                <Route exact path="/" render={(props) => <Home {...props} />} />
-                <Route
-                  exact
-                  path="/links"
-                  render={(props) => <Links {...props} />}
-                />
-                <Route
-                  exact
-                  path="/summary"
-                  render={(props) => <Summary {...props} />}
-                />
-                <Route
-                  exact
-                  path="/clusters"
-                  render={(props) => <Cluster {...props} />}
-                />
-                <Route
-                  exact
-                  path="/faq"
-                  render={(props) => <FAQ {...props} />}
-                />
+                {pages.map((page, index) => {
+                  return (
+                    <Route
+                      exact
+                      path={page.pageLink}
+                      component={page.view}
+                      key={index}
+                    />
+                  );
+                })}
+                <Redirect to="/" />
               </Switch>
             </div>
           )}
         />
       </Router>
-      <footer className="fadeInUp" style={{animationDelay: '2s'}}>
-        <img
-          src="/icon.png"
-          alt="https://www.covid19india.org | Coronavirus cases live dashboard"
-        />
-        <h5>We stand with everyone fighting on the frontlines</h5>
-        <div className="link">
-          <a href="https://github.com/covid19india">covid19india</a>
-        </div>
-        <div id="footerButtons">
-          <a
-            className="button"
-            href="https://bit.ly/patientdb"
-            target="_noblank"
-          >
-            <Icon.Database />
-            <span>Crowdsourced Patient Database&nbsp;</span>
-          </a>
-          <a
-            href="https://bit.ly/covid19crowd"
-            className="button telegram"
-            target="_noblank"
-          >
-            <Icon.MessageCircle />
-            <span>Join Telegram to Collaborate!</span>
-          </a>
-        </div>
-      </footer>
     </div>
   );
 }

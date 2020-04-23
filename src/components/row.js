@@ -1,9 +1,20 @@
-import React, {useState, useEffect} from 'react';
+import {
+  formatDate,
+  formatDateAbsolute,
+  formatNumber,
+} from '../utils/commonfunctions';
+
+import {formatDistance} from 'date-fns';
+import React, {useState, useEffect, useCallback} from 'react';
 import * as Icon from 'react-feather';
+import {Tooltip} from 'react-lightweight-tooltip';
+import {Link} from 'react-router-dom';
 
 function Row(props) {
   const [state, setState] = useState(props.state);
   const [districts, setDistricts] = useState(props.districts);
+  const [sortedDistricts, setSortedDistricts] = useState(props.districts);
+  const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useState({
     sortColumn: localStorage.getItem('district.sortColumn')
       ? localStorage.getItem('district.sortColumn')
@@ -13,51 +24,76 @@ function Row(props) {
       : false,
   });
 
-  let sortedDistricts = {};
-
   useEffect(() => {
     setState(props.state);
   }, [props.state]);
 
   useEffect(() => {
     setDistricts(props.districts);
+    setSortedDistricts(props.districts);
   }, [props.districts]);
 
-  useEffect(() => {
-    sort(districts);
-  }, [districts]);
+  const tooltipStyles = {
+    tooltip: {
+      background: '#000',
+      borderRadius: '10px',
+      fontSize: '.8em',
+      left: '250%',
+      opacity: 0.65,
+    },
+    wrapper: {
+      cursor: 'cursor',
+      display: 'inline-block',
+      position: 'relative',
+      textAlign: 'center',
+    },
+    arrow: {
+      left: '37%',
+    },
+  };
 
   const handleReveal = () => {
     props.handleReveal(props.state.state);
+    setShowDistricts(!showDistricts);
   };
 
-  const sort = (aDistricts) => {
-    sortedDistricts = {};
-    if (aDistricts) {
-      Object.keys(aDistricts)
-        .sort((district1, district2) => {
-          const sortColumn = sortData.sortColumn;
-          const value1 =
-            sortColumn === 'district'
-              ? district1
-              : parseInt(aDistricts[district1].confirmed);
-          const value2 =
-            sortColumn === 'district'
-              ? district2
-              : parseInt(aDistricts[district2].confirmed);
-          const comparisonValue =
-            value1 > value2
-              ? 1
-              : value1 === value2 && district1 > district2
-              ? 1
-              : -1;
-          return sortData.isAscending ? comparisonValue : comparisonValue * -1;
-        })
-        .forEach((key) => {
-          sortedDistricts[key] = aDistricts[key];
-        });
-    }
+  const handleTooltip = (e) => {
+    e.stopPropagation();
   };
+
+  const sortDistricts = useCallback(
+    (aDistricts) => {
+      const sorted = {};
+      if (aDistricts) {
+        Object.keys(aDistricts)
+          .sort((district1, district2) => {
+            const sortColumn = sortData.sortColumn;
+            const value1 =
+              sortColumn === 'district'
+                ? district1
+                : parseInt(aDistricts[district1].confirmed);
+            const value2 =
+              sortColumn === 'district'
+                ? district2
+                : parseInt(aDistricts[district2].confirmed);
+            const comparisonValue =
+              value1 > value2
+                ? 1
+                : value1 === value2 && district1 > district2
+                ? 1
+                : -1;
+            return sortData.isAscending
+              ? comparisonValue
+              : comparisonValue * -1;
+          })
+          .forEach((key) => {
+            sorted[key] = aDistricts[key];
+          });
+        setSortedDistricts(sorted);
+      }
+    },
+    [sortData.isAscending, sortData.sortColumn]
+  );
 
   const handleSort = (column) => {
     const isAscending =
@@ -72,142 +108,239 @@ function Row(props) {
     localStorage.setItem('district.isAscending', isAscending);
   };
 
-  sort(districts);
+  useEffect(() => {
+    sortDistricts(districts);
+  }, [districts, sortData, sortDistricts]);
 
   return (
     <React.Fragment>
-      <span
-        className={`dropdown ${
-          props.reveal ? 'rotateRightDown' : 'rotateDownRight'
-        }`}
-        style={{display: !props.total ? '' : 'none'}}
-        onClick={() => {
-          handleReveal();
-        }}
-      >
-        <Icon.ChevronDown />
-      </span>
       <tr
-        className={props.total ? 'state is-total' : 'state'}
+        className={`state ${props.total ? 'is-total' : ''} ${
+          props.index % 2 === 0 ? 'is-odd' : ''
+        }`}
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
-        touchstart={() => props.onHighlightState?.(state, props.index)}
-        onClick={() => {
-          handleReveal();
-        }}
+        onClick={!props.total ? handleReveal : null}
+        style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
       >
-        <td style={{fontWeight: 600}}>{state.state}</td>
+        <td style={{fontWeight: 600}}>
+          <div className="table__title-wrapper">
+            <span
+              className={`dropdown ${
+                props.reveal && showDistricts
+                  ? 'rotateRightDown'
+                  : 'rotateDownRight'
+              }`}
+              onClick={() => {
+                handleReveal();
+              }}
+            >
+              <Icon.ChevronDown />
+            </span>
+            <span className="actual__title-wrapper">
+              {state.state}
+              {state.statenotes && (
+                <span onClick={handleTooltip}>
+                  <Tooltip
+                    content={[`${state.statenotes}`]}
+                    styles={tooltipStyles}
+                  >
+                    <Icon.Info />
+                  </Tooltip>
+                </span>
+              )}
+            </span>
+          </div>
+        </td>
         <td>
           <span className="deltas" style={{color: '#ff073a'}}>
-            {!state.delta.confirmed == 0 && <Icon.ArrowUp />}
-            {state.delta.confirmed > 0 ? `${state.delta.confirmed}` : ''}
+            {state.deltaconfirmed > 0 && <Icon.ArrowUp />}
+            {state.deltaconfirmed > 0 ? `${state.deltaconfirmed}` : ''}
           </span>
-          {parseInt(state.confirmed) === 0 ? '-' : state.confirmed}
+          <span className="table__count-text">
+            {parseInt(state.confirmed) === 0
+              ? '-'
+              : formatNumber(state.confirmed)}
+          </span>
         </td>
         <td
           style={{color: parseInt(state.active) === 0 ? '#B5B5B5' : 'inherit'}}
         >
-          {/* <span className="deltas" style={{color: '#007bff'}}>
-            {!state.delta.active==0 && <Icon.ArrowUp/>}
-            {state.delta.active>0 ? `${state.delta.active}` : ''}
-          </span>*/}
-          {parseInt(state.active) === 0 ? '-' : state.active}
+          {parseInt(state.active) === 0 ? '-' : formatNumber(state.active)}
         </td>
         <td
           style={{
             color: parseInt(state.recovered) === 0 ? '#B5B5B5' : 'inherit',
           }}
         >
-          {/* <span className="deltas" style={{color: '#28a745'}}>
-            {!state.delta.recovered==0 && <Icon.ArrowUp/>}
-            {state.delta.recovered > 0 ? `${state.delta.recovered}` : ''}
-          </span>*/}
-          {parseInt(state.recovered) === 0 ? '-' : state.recovered}
+          <span className="deltas" style={{color: '#28a745'}}>
+            {state.deltarecovered > 0 && <Icon.ArrowUp />}
+            {state.deltarecovered > 0 ? `${state.deltarecovered}` : ''}
+          </span>
+          <span className="table__count-text">
+            {parseInt(state.recovered) === 0
+              ? '-'
+              : formatNumber(state.recovered)}
+          </span>
         </td>
         <td
           style={{color: parseInt(state.deaths) === 0 ? '#B5B5B5' : 'inherit'}}
         >
-          {/* <span className="deltas" style={{color: '#6c757d'}}>
-            {!state.delta.deaths==0 && <Icon.ArrowUp/>}
-            {state.delta.deaths>0 ? `${state.delta.deaths}` : ''}
-          </span>*/}
-          {parseInt(state.deaths) === 0 ? '-' : state.deaths}
+          <span className="deltas" style={{color: '#6c757d'}}>
+            {state.deltadeaths > 0 && <Icon.ArrowUp />}
+            {state.deltadeaths > 0 ? `${state.deltadeaths}` : ''}
+          </span>
+          <span className="table__count-text">
+            {parseInt(state.deaths) === 0 ? '-' : formatNumber(state.deaths)}
+          </span>
         </td>
       </tr>
 
-      <tr
-        className={`spacer`}
-        style={{display: props.reveal && !props.total ? '' : 'none'}}
-      >
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+      {showDistricts && (
+        <React.Fragment>
+          <tr className={'state-last-update'}>
+            <td colSpan={2}>
+              <div className="last-update">
+                <h6>Last updated&nbsp;</h6>
+                <h6
+                  title={
+                    isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
+                      ? ''
+                      : formatDateAbsolute(props.state.lastupdatedtime)
+                  }
+                >
+                  {isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
+                    ? ''
+                    : `${formatDistance(
+                        new Date(formatDate(props.state.lastupdatedtime)),
+                        new Date()
+                      )} ago`}
+                </h6>
+              </div>
+            </td>
+          </tr>
 
-      <tr
-        className={`district-heading`}
-        style={{display: props.reveal && !props.total ? '' : 'none'}}
-      >
-        <td onClick={(e) => handleSort('district')}>
-          <div className="heading-content">
-            <abbr title="District">District</abbr>
-            <div
-              style={{
-                display:
-                  sortData.sortColumn === 'district' ? 'initial' : 'none',
-              }}
-            >
-              {sortData.isAscending ? <Icon.ArrowUp /> : <Icon.ArrowDown />}
-            </div>
-          </div>
-        </td>
-        <td onClick={(e) => handleSort('confirmed')}>
-          <div className="heading-content">
-            <abbr
-              className={`${window.innerWidth <= 769 ? 'is-cherry' : ''}`}
-              title="Confirmed"
-            >
-              {window.innerWidth <= 769
-                ? window.innerWidth <= 375
-                  ? 'C'
-                  : 'Cnfmd'
-                : 'Confirmed'}
-            </abbr>
-            <div
-              style={{
-                display:
-                  sortData.sortColumn === 'confirmed' ? 'initial' : 'none',
-              }}
-            >
-              {sortData.isAscending ? <Icon.ArrowUp /> : <Icon.ArrowDown />}
-            </div>
-          </div>
-        </td>
-      </tr>
+          <tr className={`district-heading`}>
+            <td onClick={(e) => handleSort('district')}>
+              <div className="heading-content">
+                <abbr title="District">District</abbr>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'district' ? 'initial' : 'none',
+                  }}
+                >
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
+                </div>
+              </div>
+            </td>
+            <td onClick={(e) => handleSort('confirmed')}>
+              <div className="heading-content">
+                <abbr
+                  className={`${window.innerWidth <= 769 ? 'is-cherry' : ''}`}
+                  title="Confirmed"
+                >
+                  {window.innerWidth <= 769
+                    ? window.innerWidth <= 375
+                      ? 'C'
+                      : 'Cnfmd'
+                    : 'Confirmed'}
+                </abbr>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'confirmed' ? 'initial' : 'none',
+                  }}
+                >
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
+                </div>
+              </div>
+            </td>
+            <td className="state-page-link" colSpan={3}>
+              <Link to={`state/${state.statecode}`}>
+                <div>
+                  <abbr>Visit state page</abbr>
+                  <Icon.ArrowRightCircle />
+                </div>
+              </Link>
+            </td>
+          </tr>
+        </React.Fragment>
+      )}
 
-      {Object.keys(sortedDistricts).map((district, index) => {
-        if (district.toLowerCase() !== 'unknown') {
-          return (
-            <tr
-              key={index}
-              className={`district`}
-              style={{display: props.reveal && !props.total ? '' : 'none'}}
-            >
-              <td style={{fontWeight: 600}}>{district}</td>
-              <td>{sortedDistricts[district].confirmed}</td>
-            </tr>
-          );
-        }
-      })}
+      {sortedDistricts &&
+        showDistricts &&
+        Object.keys(sortedDistricts)
+          .filter((district) => district.toLowerCase() !== 'unknown')
+          .map((district, index) => {
+            if (district.toLowerCase() !== 'unknown') {
+              return (
+                <tr
+                  key={index}
+                  className={`district ${index % 2 === 0 ? 'is-odd' : ''}`}
+                  style={{
+                    background: index % 2 === 0 ? '#f8f9fa' : '',
+                  }}
+                  onMouseEnter={() =>
+                    props.onHighlightDistrict?.(district, state, props.index)
+                  }
+                  onMouseLeave={() => props.onHighlightDistrict?.()}
+                >
+                  <td style={{fontWeight: 600}}>{district}</td>
+                  <td>
+                    <span className="deltas" style={{color: '#ff073a'}}>
+                      {sortedDistricts[district].delta.confirmed > 0 && (
+                        <Icon.ArrowUp />
+                      )}
+                      {sortedDistricts[district].delta.confirmed > 0
+                        ? `${sortedDistricts[district].delta.confirmed}`
+                        : ''}
+                    </span>
+                    <span className="table__count-text">
+                      {formatNumber(sortedDistricts[district].confirmed)}
+                    </span>
+                  </td>
+                </tr>
+              );
+            }
+            return null;
+          })}
 
-      {sortedDistricts?.Unknown && (
-        <tr
-          className={`district`}
-          style={{display: props.reveal && !props.total ? '' : 'none'}}
-        >
-          <td style={{fontWeight: 600}}>Unknown</td>
-          <td>{sortedDistricts['Unknown'].confirmed}</td>
-        </tr>
+      {sortedDistricts?.Unknown && showDistricts && (
+        <React.Fragment>
+          <tr className={`district`}>
+            <td className="unknown" style={{fontWeight: 600}}>
+              Unknown
+              <Tooltip
+                content={['Awaiting patient-level details from State Bulletin']}
+                styles={tooltipStyles}
+              >
+                <Icon.Info />
+              </Tooltip>
+            </td>
+            <td>
+              <span className="deltas" style={{color: '#ff073a'}}>
+                {sortedDistricts['Unknown'].delta.confirmed > 0 && (
+                  <Icon.ArrowUp />
+                )}
+                {sortedDistricts['Unknown'].delta.confirmed > 0
+                  ? `${sortedDistricts['Unknown'].delta.confirmed}`
+                  : ''}
+              </span>
+              <span className="table__count-text">
+                {formatNumber(sortedDistricts['Unknown'].confirmed)}
+              </span>
+            </td>
+          </tr>
+        </React.Fragment>
       )}
 
       <tr
@@ -222,4 +355,4 @@ function Row(props) {
   );
 }
 
-export default Row;
+export default React.memo(Row);
