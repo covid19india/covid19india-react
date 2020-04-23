@@ -815,23 +815,11 @@ h6 {
   width: 100%;
 
 
-  .react-autosuggest__input {
-    #outlined-number-label {
-      font-family: 'archia';
-      font-size: .7rem;
-      text-transform: uppercase;
-    }
-
-    #outlined-number {
-      font-family: 'archia';
-      font-size: .7rem !important;
-      font-weight: 400;
-      height: .1rem;
-    }
-  }
-
-  .react-autosuggest__suggestions-container {
-    display: none;
+  #input-field-searchbar {
+    font-family: 'archia';
+    font-size: .7rem !important;
+    font-weight: 400;
+    height: .1rem;
   }
 }
 
