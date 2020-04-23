@@ -304,24 +304,24 @@ function MapExplorer({
               backgroundImage:
                 'linear-gradient(45deg, transparent 50%, #808080 50%), linear-gradient(135deg, #808080 50%, transparent 50%)',
               backgroundPosition: 'calc(100% - 13px) 50%, calc(100% - 8px) 50%',
-              backgroundSize: '5px 5px, 5px 5px',
+              backgroundSize: '4px 4px, 4px 4px',
               backgroundRepeat: 'no-repeat',
               border: '2px solid #e8e8e9',
               borderRadius: '4px',
               fontFamily: 'archia',
               fontWeight: '900',
               margin: '0.2rem 0.1rem',
-              padding: '0.5rem',
-              width: '130px',
+              padding: '0.3rem',
+              width: '80px',
               color: '#6c757d',
               cursor: 'pointer',
             }}
           >
             <option value="confirmed" selected>
-              Confirmed
+              Cnfmd
             </option>
-            <option value="active">Active</option>
-            <option value="deceased">Deceased</option>
+            <option value="active">Actv</option>
+            <option value="deceased">Dcsd</option>
           </select>
         </div>
         {lastupdatedtime && (
