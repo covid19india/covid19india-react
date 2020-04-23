@@ -200,14 +200,14 @@ function ChoroplethMap({
       });
     },
     [
-      mapData,
       mapMeta,
       statistic,
-      changeMap,
-      setHoveredRegion,
-      setSelectedRegion,
-      isCountryLoaded,
       mapOption,
+      isCountryLoaded,
+      mapData,
+      setSelectedRegion,
+      setHoveredRegion,
+      changeMap,
     ]
   );
 

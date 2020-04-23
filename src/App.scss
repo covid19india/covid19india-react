@@ -429,11 +429,15 @@ h6 {
     width: 100%;
   }
 
-  .Minigraph,
-  .Level,
   .MapExplorer,
   .meta-secondary {
     width: calc(100% - 3rem);
+  }
+
+  .Minigraph {
+    .svg-parent {
+      width: calc(25%) !important;
+    }
   }
 
   .MapExplorer {
@@ -1357,17 +1361,9 @@ h6 {
   .clickable {
     border-radius: 5px;
     cursor: pointer;
-    height: 10.5rem;
-    width: 7rem;
+    height: 12rem;
+    width: calc(25%);
     z-index: 10;
-
-    &:first-child {
-      margin-left: .5rem;
-    }
-
-    &:last-child {
-      margin-right: .5rem;
-    }
   }
 }
 
@@ -1382,17 +1378,10 @@ h6 {
   .level-item {
     display: flex;
     flex-direction: column;
+    width: calc(25%);
 
     & > * {
       align-self: center;
-    }
-
-    &:first-child {
-      margin-left: .5rem;
-    }
-
-    &:last-child {
-      margin-right: .5rem;
     }
   }
 
@@ -2233,6 +2222,11 @@ table {
 .TimeSeries {
   align-self: center;
   width: 100%;
+
+  .svg-parent {
+    height: 10rem;
+    margin-bottom: 1rem;
+  }
 }
 
 .timeseries-header {
@@ -2379,7 +2373,6 @@ input {
   margin-top: 1rem;
   width: 100%;
 
-
   .stats {
     border-radius: 3px;
     display: flex;
@@ -2475,8 +2468,6 @@ input {
     background: $cherry-light;
     border-radius: 5px;
     display: flex;
-    height: 10rem;
-    margin-bottom: 1rem;
     position: relative;
     width: 30rem;
 
@@ -2554,13 +2545,13 @@ input {
   flex-direction: row;
   justify-content: space-between;
   margin: 0;
-  margin-bottom: -3rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
   width: 30rem;
 
   .svg-parent {
     background: transparent !important;
-    height: 7rem;
-    width: 5rem;
+    width: calc(25%);
   }
 
   .tooltip {
@@ -4210,6 +4201,12 @@ footer {
   .TimeSeries {
     .svg-parent {
       width: 100%;
+    }
+  }
+
+  .Minigraph {
+    .svg-parent {
+      padding: 0;
     }
   }
 

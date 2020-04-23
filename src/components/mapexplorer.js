@@ -11,6 +11,7 @@ import {formatDistance, format, parse} from 'date-fns';
 import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
+import {useLocalStorage} from 'react-use';
 
 const getRegionFromState = (state) => {
   if (!state) return;
@@ -45,8 +46,7 @@ function MapExplorer({
   );
   const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta);
-
-  const [mapOption, setMapOption] = useState('confirmed');
+  const [mapOption, setMapOption] = useLocalStorage('mapOption', 'active');
 
   const [statistic, currentMapData] = useMemo(() => {
     const dataTypes = ['confirmed', 'active', 'recovered', 'deceased'];
@@ -128,10 +128,6 @@ function MapExplorer({
     },
     [states, stateDistrictWiseData, onMapHighlightChange]
   );
-
-  useEffect(() => {
-    if (mapOptionProp) setMapOption(mapOptionProp);
-  }, [mapOptionProp]);
 
   useEffect(() => {
     if (regionHighlighted === undefined || regionHighlighted === null) return;
@@ -372,17 +368,19 @@ function MapExplorer({
         ) : null}
       </div>
 
-      <ChoroplethMap
-        statistic={statistic}
-        mapMeta={currentMap}
-        mapData={currentMapData}
-        setHoveredRegion={setHoveredRegion}
-        changeMap={switchMapToState}
-        selectedRegion={selectedRegion}
-        setSelectedRegion={setSelectedRegion}
-        isCountryLoaded={isCountryLoaded}
-        mapOption={mapOption}
-      />
+      {mapOption && (
+        <ChoroplethMap
+          statistic={statistic}
+          mapMeta={currentMap}
+          mapData={currentMapData}
+          setHoveredRegion={setHoveredRegion}
+          changeMap={switchMapToState}
+          selectedRegion={selectedRegion}
+          setSelectedRegion={setSelectedRegion}
+          isCountryLoaded={isCountryLoaded}
+          mapOption={mapOptionProp || mapOption}
+        />
+      )}
     </div>
   );
 }
