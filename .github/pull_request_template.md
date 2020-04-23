@@ -1,9 +1,6 @@
 **Description of PR**
 
-**Type of PR**
-
-- [ ] Bugfix
-- [ ] New feature
+A brief description of what changes your PR introduces. The better this description, the quicker we can review, exchange feedback, and merge!
 
 **Relevant Issues**  
 Fixes #...
@@ -16,3 +13,5 @@ Fixes #...
 - [ ] Tested on phone
 
 **Screenshots**
+
+Add relevant screenshots here
