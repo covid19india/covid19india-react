@@ -171,7 +171,7 @@ function ChoroplethMap({
           }`
         )
         .attr('fill', 'none')
-        .attr('stroke-width', 2)
+        .attr('stroke-width', width / 200)
         .attr(
           'd',
           path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName]))
