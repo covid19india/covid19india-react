@@ -7,8 +7,8 @@ import {
 import {formatDistance} from 'date-fns';
 import React, {useState, useEffect, useCallback} from 'react';
 import * as Icon from 'react-feather';
-import {Tooltip} from 'react-lightweight-tooltip';
 import {Link} from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
 
 function Row(props) {
   const [state, setState] = useState(props.state);
@@ -32,25 +32,6 @@ function Row(props) {
     setDistricts(props.districts);
     setSortedDistricts(props.districts);
   }, [props.districts]);
-
-  const tooltipStyles = {
-    tooltip: {
-      background: '#000',
-      borderRadius: '10px',
-      fontSize: '.8em',
-      left: '250%',
-      opacity: 0.65,
-    },
-    wrapper: {
-      cursor: 'cursor',
-      display: 'inline-block',
-      position: 'relative',
-      textAlign: 'center',
-    },
-    arrow: {
-      left: '37%',
-    },
-  };
 
   const handleReveal = () => {
     props.handleReveal(props.state.state);
@@ -141,12 +122,21 @@ function Row(props) {
               {state.state}
               {state.statenotes && (
                 <span onClick={handleTooltip}>
-                  <Tooltip
-                    content={[`${state.statenotes}`]}
-                    styles={tooltipStyles}
+                  <span
+                    data-tip={[`${state.statenotes}`]}
+                    data-event="touchstart mouseover"
+                    data-event-off="mouseleave"
                   >
                     <Icon.Info />
-                  </Tooltip>
+                  </span>
+                  <ReactTooltip
+                    place="right"
+                    type="dark"
+                    effect="solid"
+                    multiline={true}
+                    scrollHide={true}
+                    globalEventOff="click"
+                  />
                 </span>
               )}
             </span>
@@ -319,12 +309,27 @@ function Row(props) {
           <tr className={`district`}>
             <td className="unknown" style={{fontWeight: 600}}>
               Unknown
-              <Tooltip
-                content={['Awaiting patient-level details from State Bulletin']}
-                styles={tooltipStyles}
-              >
-                <Icon.Info />
-              </Tooltip>
+              <span onClick={handleTooltip}>
+                <span
+                  data-for="unknown"
+                  data-tip={[
+                    'Awaiting patient-level details from State Bulletin',
+                  ]}
+                  data-event="touchstart mouseover"
+                  data-event-off="mouseleave"
+                >
+                  <Icon.Info />
+                </span>
+                <ReactTooltip
+                  id="unknown"
+                  place="right"
+                  type="dark"
+                  effect="solid"
+                  multiline={true}
+                  scrollHide={true}
+                  globalEventOff="click"
+                />
+              </span>
             </td>
             <td>
               <span className="deltas" style={{color: '#ff073a'}}>
