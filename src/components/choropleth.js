@@ -1,6 +1,7 @@
 import legend from './legend';
 
 import {MAP_TYPES} from '../constants';
+import {formatNumber} from '../utils/commonfunctions';
 
 import * as d3 from 'd3';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
@@ -102,8 +103,8 @@ function ChoroplethMap({
             ticks: 6,
             tickFormat: function (d, i, n) {
               if (!Number.isInteger(d)) return;
-              if (i === n.length - 1) return d + '+';
-              return d;
+              if (i === n.length - 1) return formatNumber(d) + '+';
+              return formatNumber(d);
             },
           })
         );
