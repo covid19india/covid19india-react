@@ -37,8 +37,8 @@ function Row(props) {
     tooltip: {
       background: '#000',
       borderRadius: '10px',
+      transform: 'translateX(-15px)',
       fontSize: '.8em',
-      left: '250%',
       opacity: 0.65,
     },
     wrapper: {
@@ -46,9 +46,10 @@ function Row(props) {
       display: 'inline-block',
       position: 'relative',
       textAlign: 'center',
+      zIndex: 9999,
     },
     arrow: {
-      left: '37%',
+      left: '8%',
     },
   };
 
