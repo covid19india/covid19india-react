@@ -117,7 +117,7 @@ function ChoroplethMap({
         .selectAll('path')
         .data(topology.features)
         .join('path')
-        .attr('class', 'path-region')
+        .attr('class', `path-region ${mapOption}`)
         .attr('fill', function (d) {
           const region = d.properties[propertyField];
           const n = mapData[region] ? mapData[region][mapOption] : 0;
@@ -228,10 +228,10 @@ function ChoroplethMap({
     })();
   }, [mapMeta.geoDataFile, statistic, ready]);
 
-  const highlightRegionInMap = useCallback(
-    (name) => {
+  useEffect(() => {
+    const highlightRegionInMap = (name) => {
       const paths = d3.selectAll('.path-region');
-      paths.classed(`map-hover ${mapOption}`, (d, i, nodes) => {
+      paths.classed('map-hover', (d, i, nodes) => {
         const propertyField =
           'district' in d.properties
             ? propertyFieldMap['state']
@@ -242,13 +242,9 @@ function ChoroplethMap({
         }
         return false;
       });
-    },
-    [mapOption]
-  );
-
-  useEffect(() => {
+    };
     highlightRegionInMap(selectedRegion);
-  }, [svgRenderCount, selectedRegion, highlightRegionInMap]);
+  }, [svgRenderCount, selectedRegion]);
 
   return (
     <div>
