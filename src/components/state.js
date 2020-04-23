@@ -3,6 +3,7 @@ import {format, parse} from 'date-fns';
 import React, {useEffect, useRef, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import * as Icon from 'react-feather';
+import StateConfirmedCases from './Charts/stateconfirmedcases';
 
 import {
   formatDateAbsolute,
@@ -35,6 +36,7 @@ function State(props) {
   const [sources, setSources] = useState({});
   const [districtData, setDistrictData] = useState({});
   const [stateName] = useState(STATE_CODES[stateCode]);
+  const [rawData, setRawData] = useState([]);
 
   useEffect(() => {
     if (fetched === false) {
@@ -50,14 +52,17 @@ function State(props) {
         {data: statesDailyResponse},
         {data: stateTestResponse},
         {data: sourcesResponse},
+        rawData,
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
         axios.get('https://api.covid19india.org/states_daily.json'),
         axios.get('https://api.covid19india.org/state_test_data.json'),
         axios.get('https://api.covid19india.org/sources_list.json'),
+        axios.get('https://api.covid19india.org/raw_data.json'),
       ]);
       const states = dataResponse.statewise;
+      setRawData(rawData.data.raw_data);
       setStateData(states.find((s) => s.statecode === code));
       const ts = parseStateTimeseries(statesDailyResponse)[code];
       setTimeseries(ts);
@@ -177,6 +182,11 @@ function State(props) {
               </div>
             </div>
           )}
+
+          <div className="card fadeInUp" style={{animationDelay: '1.2s'}}>
+            <h1>Confirmed Cases - Source</h1>
+            <StateConfirmedCases title="" data={stateCode} rawData={rawData} />
+          </div>
         </div>
 
         <div className="state-right">
