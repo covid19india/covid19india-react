@@ -1771,11 +1771,6 @@ table {
   z-index: 11;
 }
 
-.map-hover {
-  stroke: #ff073a;
-  stroke-width: 2;
-}
-
 .anchor {
   cursor: pointer;
   position: absolute;
@@ -1855,6 +1850,22 @@ table {
   .legend {
     margin-top: 1em;
     width: 100%;
+  }
+
+  .map-hover {
+    stroke: #ff073a;
+    stroke-width: 2;
+    &.active {
+      stroke: #007bff;
+    }
+
+    &.recovered {
+      stroke: #28a745;
+    }
+
+    &.deceased {
+      stroke: #6c757d;
+    }
   }
 
   .back-button {
@@ -1953,6 +1964,8 @@ table {
     margin-bottom: 1rem;
     position: relative;
     width: 100%;
+    z-index: 10;
+    height: 3.5rem;
 
     h1,
     h5,
@@ -1971,14 +1984,16 @@ table {
       border-radius: 5px;
       color: $cherry-mid;
       display: flex;
-      flex: 1;
       flex-direction: column;
-      margin-bottom: .5rem;
       margin-left: .25rem;
       margin-right: .25rem;
+      margin-bottom: .5rem;
+      flex: 1;
       padding: .25rem;
       position: relative;
-
+      cursor: pointer;
+      height: 3rem;
+      transition: all 0.1s ease-in-out;
 
       .stats-bottom {
         display: flex;
@@ -2081,6 +2096,12 @@ table {
             stroke: $purple;
           }
         }
+      }
+
+      &.focused {
+        margin-top: -.5rem;
+        padding-top: .75rem;
+        padding-bottom: .75rem;
       }
 
       &:first-child {

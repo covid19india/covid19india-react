@@ -45,7 +45,7 @@ function MapExplorer({
   const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta);
 
-  const [mapOption, setMapOption] = useState('confirmed');
+  const [mapOption, setMapOption] = useState('recovered');
 
   const [statistic, currentMapData] = useMemo(() => {
     const dataTypes = ['confirmed', 'active', 'recovered', 'deceased'];
@@ -213,51 +213,57 @@ function MapExplorer({
       </div>
 
       <div className="map-stats">
-        <div className="stats fadeInUp" style={{animationDelay: '2s'}}>
+        <div
+          className={`stats fadeInUp ${
+            mapOption === 'confirmed' ? 'focused' : ''
+          }`}
+          style={{animationDelay: '2s'}}
+          onClick={() => setMapOption('confirmed')}
+        >
           <h5>{window.innerWidth <= 769 ? 'Cnfmd' : 'Confirmed'}</h5>
-          <div
-            className="stats-bottom"
-            onClick={() => setMapOption('confirmed')}
-          >
+          <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.confirmed)}</h1>
             <h6>{`+${formatNumber(panelRegion.deltaconfirmed)}`}</h6>
           </div>
         </div>
 
         <div
-          className="stats is-blue fadeInUp"
+          className={`stats is-blue fadeInUp ${
+            mapOption === 'active' ? 'focused' : ''
+          }`}
           style={{animationDelay: '2.1s'}}
+          onClick={() => setMapOption('active')}
         >
           <h5>{window.innerWidth <= 769 ? 'Actv' : 'Active'}</h5>
-          <div className="stats-bottom" onClick={() => setMapOption('active')}>
+          <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.active)}</h1>
             <h6>{` `}</h6>
           </div>
         </div>
 
         <div
-          className="stats is-green fadeInUp"
+          className={`stats is-green fadeInUp ${
+            mapOption === 'recovered' ? 'focused' : ''
+          }`}
           style={{animationDelay: '2.2s'}}
+          onClick={() => setMapOption('recovered')}
         >
           <h5>{window.innerWidth <= 769 ? 'Rcvrd' : 'Recovered'}</h5>
-          <div
-            className="stats-bottom"
-            onClick={() => setMapOption('recovered')}
-          >
+          <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.recovered)}</h1>
             <h6>{`+${formatNumber(panelRegion.deltarecovered)}`}</h6>
           </div>
         </div>
 
         <div
-          className="stats is-gray fadeInUp"
+          className={`stats is-gray fadeInUp ${
+            mapOption === 'deceased' ? 'focused' : ''
+          }`}
           style={{animationDelay: '2.3s'}}
+          onClick={() => setMapOption('deceased')}
         >
           <h5>{window.innerWidth <= 769 ? 'Dcsd' : 'Deceased'}</h5>
-          <div
-            className="stats-bottom"
-            onClick={() => setMapOption('deceased')}
-          >
+          <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.deaths)}</h1>
             <h6>{`+${formatNumber(panelRegion.deltadeaths)}`}</h6>
           </div>

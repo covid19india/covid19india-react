@@ -155,7 +155,20 @@ function ChoroplethMap({
 
       g.append('path')
         .attr('class', 'borders')
-        .attr('stroke', '#ff073a20')
+        .attr(
+          'stroke',
+          `${
+            mapOption === 'confirmed'
+              ? '#ff073a20'
+              : mapOption === 'active'
+              ? '#007bff20'
+              : mapOption === 'recovered'
+              ? '#28a74520'
+              : mapOption === 'deceased'
+              ? '#6c757d20'
+              : ''
+          }`
+        )
         .attr('fill', 'none')
         .attr('stroke-width', 2)
         .attr(
@@ -215,24 +228,27 @@ function ChoroplethMap({
     })();
   }, [mapMeta.geoDataFile, statistic, ready]);
 
-  const highlightRegionInMap = (name) => {
-    const paths = d3.selectAll('.path-region');
-    paths.classed('map-hover', (d, i, nodes) => {
-      const propertyField =
-        'district' in d.properties
-          ? propertyFieldMap['state']
-          : propertyFieldMap['country'];
-      if (name === d.properties[propertyField]) {
-        nodes[i].parentNode.appendChild(nodes[i]);
-        return true;
-      }
-      return false;
-    });
-  };
+  const highlightRegionInMap = useCallback(
+    (name) => {
+      const paths = d3.selectAll('.path-region');
+      paths.classed(`map-hover ${mapOption}`, (d, i, nodes) => {
+        const propertyField =
+          'district' in d.properties
+            ? propertyFieldMap['state']
+            : propertyFieldMap['country'];
+        if (name === d.properties[propertyField]) {
+          nodes[i].parentNode.appendChild(nodes[i]);
+          return true;
+        }
+        return false;
+      });
+    },
+    [mapOption]
+  );
 
   useEffect(() => {
     highlightRegionInMap(selectedRegion);
-  }, [svgRenderCount, selectedRegion]);
+  }, [svgRenderCount, selectedRegion, highlightRegionInMap]);
 
   return (
     <div>
