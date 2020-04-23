@@ -139,14 +139,14 @@ function TimeSeries(props) {
         dataTypesTotal.forEach((type) => {
           uniformScaleMin = Math.min(
             uniformScaleMin,
-            d3.min(timeseries, (d) => d[type])
+            d3.min(timeseries, (d) => (isNaN(d[type]) ? 0 : d[type]))
           );
         });
         let uniformScaleMax = 0;
         dataTypesTotal.forEach((type) => {
           uniformScaleMax = Math.max(
             uniformScaleMax,
-            d3.max(timeseries, (d) => d[type])
+            d3.max(timeseries, (d) => (isNaN(d[type]) ? 0 : d[type]))
           );
         });
         const yScaleUniformLinear = d3
