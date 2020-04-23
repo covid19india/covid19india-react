@@ -4544,6 +4544,8 @@ footer {
 
   .Navbar {
     .expand {
+      height: calc(100vh - 3.9rem);
+      overflow: auto;
       transform: none !important;
     }
 
