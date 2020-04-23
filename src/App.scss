@@ -1,75 +1,3 @@
-@font-face {
-  font-family: 'Archia';
-  src: url('fonts/Archia/archia-thin-webfont.eot');
-  src:
-    url('fonts/Archia/archia-thin-webfont.eot?#iefix') format('embedded-opentype'),
-    url('fonts/Archia/archia-thin-webfont.woff2') format('woff2'),
-    url('fonts/Archia/archia-thin-webfont.woff') format('woff'),
-    url('fonts/Archia/archia-thin-webfont.ttf') format('truetype');
-  font-weight: 100;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Archia';
-  src: url('fonts/Archia/archia-light-webfont.eot');
-  src:
-    url('fonts/Archia/archia-light-webfont.eot?#iefix') format('embedded-opentype'),
-    url('fonts/Archia/archia-light-webfont.woff2') format('woff2'),
-    url('fonts/Archia/archia-light-webfont.woff') format('woff'),
-    url('fonts/Archia/archia-light-webfont.ttf') format('truetype');
-  font-weight: 200;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Archia';
-  src: url('fonts/Archia/archia-regular-webfont.eot');
-  src:
-    url('fonts/Archia/archia-regular-webfont.eot?#iefix') format('embedded-opentype'),
-    url('fonts/Archia/archia-regular-webfont.woff2') format('woff2'),
-    url('fonts/Archia/archia-regular-webfont.woff') format('woff'),
-    url('fonts/Archia/archia-regular-webfont.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Archia';
-  src: url('fonts/Archia/archia-medium-webfont.eot');
-  src:
-    url('fonts/Archia/archia-medium-webfont.eot?#iefix') format('embedded-opentype'),
-    url('fonts/Archia/archia-medium-webfont.woff2') format('woff2'),
-    url('fonts/Archia/archia-medium-webfont.woff') format('woff'),
-    url('fonts/Archia/archia-medium-webfont.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Archia';
-  src: url('fonts/Archia/archia-semibold-webfont.eot');
-  src:
-    url('fonts/Archia/archia-semibold-webfont.eot?#iefix') format('embedded-opentype'),
-    url('fonts/Archia/archia-semibold-webfont.woff2') format('woff2'),
-    url('fonts/Archia/archia-semibold-webfont.woff') format('woff'),
-    url('fonts/Archia/archia-semibold-webfont.ttf') format('truetype');
-  font-weight: 600;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Archia';
-  src: url('fonts/Archia/archia-bold-webfont.eot');
-  src:
-    url('fonts/Archia/archia-bold-webfont.eot?#iefix') format('embedded-opentype'),
-    url('fonts/Archia/archia-bold-webfont.woff2') format('woff2'),
-    url('fonts/Archia/archia-bold-webfont.woff') format('woff'),
-    url('fonts/Archia/archia-bold-webfont.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-}
-
 /* Color Pallete */
 
 $blue: #007bff;
@@ -532,8 +460,8 @@ h6 {
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
-  margin-left: 7rem;
-  margin-right: 7rem;
+  margin-left: 5.5rem;
+  margin-right: 5.5rem;
 
   .resource-left,
   .resource-right {
@@ -552,10 +480,11 @@ h6 {
     margin-right: 2.5rem;
   }
 
-  .tableandcontrols{
+  .tableandaccordions{
     display: flex;
     flex-direction: column;
     width: 100%;
+    align-items: center;
   }
 
   table {
@@ -566,6 +495,9 @@ h6 {
     text-transform: none;
     border-spacing: 3px 2px;
     border-collapse: separate;
+    table-layout: fixed;
+    // animation-name: fadeInOut;
+    // animation-duration: 2s;
 
     thead {
       background: $purple-light;
@@ -579,9 +511,12 @@ h6 {
         border-radius: 5px;
         transition: all 0.1s ease-in-out;
         z-index: 99;
+        &.descriptionCol{
+          width: 50%;
+        }
 
         &.sticky {
-          top: 4px;
+          top: 0;
           background: $gray-opaque;
         }
 
@@ -811,8 +746,8 @@ h6 {
   font-size: 0.7rem !important;
   font-weight: 400;
   text-align: center;
-  margin-top: 0.2rem;
-  margin-bottom: 0.1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   width: 100%;
 
   .react-autosuggest__input {
@@ -1511,7 +1446,7 @@ table {
       text-align: right;
       .deltas {
         display: inline-block;
-		    font-size: 11px !important;
+        font-size: 11px !important;
 
         svg {
           width: 9px;
@@ -1665,8 +1600,8 @@ table {
     }
   }
 
-	.table__title-wrapper {
-		position: relative;
+  .table__title-wrapper {
+    position: relative;
     & > * {
       align-self: center;
     }
@@ -1681,7 +1616,7 @@ table {
         color: $gray-mid;
       }
     }
-	}
+  }
 
   .unknown {
     svg {
@@ -4088,6 +4023,7 @@ body.modal-open {
       .card {
         margin-bottom: 0;
         height: 25rem;
+        flex: 0 1 100%;
       }
 
       .chart-title {
@@ -4438,6 +4374,16 @@ body.modal-open {
     .expand {
       transform: none !important;
     }
+
+    .navbar-right {
+      & > span {
+        display: none;
+      }
+
+      & > span:first-child {
+        display: initial;
+      }
+    }
   }
 
   .Search {
@@ -4485,13 +4431,6 @@ body.modal-open {
 
     .navbar-right {
       background: #1e1e30 !important;
-      & > span {
-        display: none;
-      }
-
-      & > span:first-child {
-        display: initial;
-      }
     }
   }
 
@@ -4620,7 +4559,7 @@ body.modal-open {
   }
 
   .Resources {
-	  
+    
     .filtersection {
       .disclaimercontainer {
         .mobile-disclaimer-button {
@@ -4631,32 +4570,32 @@ body.modal-open {
         .disclaimer-button {
           color: $dark-mid-subtext;
           background: none;
-		}
-		
-		.MuiSvgIcon-root {
-			fill: $dark-m-white;
-		}
+    }
+    
+    .MuiSvgIcon-root {
+      fill: $dark-m-white;
+    }
       }
 
       .resourcefilters {
         .MuiFormLabel-root {
           color: rgba(232, 230, 227, 0.54);
-		}
-		
-		
+    }
+    
+    
 
         .MuiInputBase-root {
           color: rgba(232, 230, 227, 0.87);
-		}
-		
-		.MuiSelect-icon {
-			color: $dark-m-white;
-		}
-		
+    }
+    
+    .MuiSelect-icon {
+      color: $dark-m-white;
+    }
+    
 
-		.MuiOutlinedInput-notchedOutline {
-			border-color: $dark-m-white;
-		}
+    .MuiOutlinedInput-notchedOutline {
+      border-color: $dark-m-white;
+    }
 
         .button.is-purple {
           color: $dark-m-purple;
@@ -4692,28 +4631,28 @@ body.modal-open {
       color: $dark-m-white;
     }
 
-	.searchbar {
-		.MuiFormLabel-root {
-			color: rgba(232, 230, 227, 0.54);
-		}
+  .searchbar {
+    .MuiFormLabel-root {
+      color: rgba(232, 230, 227, 0.54);
+    }
 
-		.MuiOutlinedInput-notchedOutline {
-			border-color: $dark-m-white;
-		}
+    .MuiOutlinedInput-notchedOutline {
+      border-color: $dark-m-white;
+    }
 
-		.MuiSvgIcon-root {
-			fill: $white;
-		}
-	}
+    .MuiSvgIcon-root {
+      fill: $white;
+    }
+  }
 
     .tableandcontrols {
       a {
         color: $dark-m-blue;
-	  }
-	  
-	  table thead {
-		color: rgb(210, 207, 200);
-	  }
+    }
+    
+    table thead {
+    color: rgb(210, 207, 200);
+    }
 
     }
 
@@ -4803,7 +4742,7 @@ body.modal-open {
 }
 
 .height-22 {
-	height: 22px;
+  height: 22px;
 }
 
 .disclaimercontainer {
