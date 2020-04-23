@@ -36,6 +36,7 @@ function MapExplorer({
   isCountryLoaded,
   anchor,
   setAnchor,
+  mapOptionProp,
 }) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [panelRegion, setPanelRegion] = useState(getRegionFromState(states[0]));
@@ -127,6 +128,10 @@ function MapExplorer({
     },
     [states, stateDistrictWiseData, onMapHighlightChange]
   );
+
+  useEffect(() => {
+    if (mapOptionProp) setMapOption(mapOptionProp);
+  }, [mapOptionProp]);
 
   useEffect(() => {
     if (regionHighlighted === undefined || regionHighlighted === null) return;

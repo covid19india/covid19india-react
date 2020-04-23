@@ -198,7 +198,7 @@ function State(props) {
                   stateDistrictWiseData={districtData}
                   stateTestData={testData}
                   isCountryLoaded={false}
-                  mapOption={mapOption}
+                  mapOptionProp={mapOption}
                 />
               }
             </React.Fragment>
