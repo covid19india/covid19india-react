@@ -45,7 +45,7 @@ function MapExplorer({
   const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta);
 
-  const [mapOption, setMapOption] = useState('recovered');
+  const [mapOption, setMapOption] = useState('confirmed');
 
   const [statistic, currentMapData] = useMemo(() => {
     const dataTypes = ['confirmed', 'active', 'recovered', 'deceased'];
@@ -296,7 +296,9 @@ function MapExplorer({
       </div>
 
       <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
-        <h2>{name}</h2>
+        <h2 className={`${mapOption !== 'confirmed' ? mapOption : ''}`}>
+          {name}
+        </h2>
         {lastupdatedtime && (
           <div
             className={`last-update ${
@@ -325,7 +327,9 @@ function MapExplorer({
 
         {currentMap.mapType === MAP_TYPES.STATE &&
         currentHoveredRegion.name !== currentMap.name ? (
-          <h1 className="district-confirmed">
+          <h1
+            className={`district ${mapOption !== 'confirmed' ? mapOption : ''}`}
+          >
             {currentMapData[currentHoveredRegion.name]
               ? currentMapData[currentHoveredRegion.name][mapOption]
               : 0}

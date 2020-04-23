@@ -1930,6 +1930,17 @@ table {
       font-weight: 900;
       margin: 0;
       word-wrap: break-word;
+      &.active {
+        color: $blue;
+      }
+
+      &.recovered {
+        color: $green;
+      }
+
+      &.deceased {
+        color: $gray;
+      }
     }
 
     h4 {
@@ -1938,13 +1949,24 @@ table {
       word-wrap: break-word;
     }
 
-    .district-confirmed {
+    .district {
       color: #e23028;
       line-height: 15px;
       margin: 0;
       position: absolute;
       top: 3rem;
       width: 5rem;
+      &.active {
+        color: $blue;
+      }
+
+      &.recovered {
+        color: $green;
+      }
+
+      &.deceased {
+        color: $gray;
+      }
     }
 
     .unknown {
