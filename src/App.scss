@@ -3730,6 +3730,9 @@ footer {
 }
 
 .updates {
+  animation-duration: 1s;
+  animation-name: fadeInUp;
+  animation-timing-function: ease-in;
   align-self: center;
   display: flex;
   flex-direction: column;
