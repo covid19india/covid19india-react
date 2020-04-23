@@ -30,6 +30,18 @@ function Updates(props) {
         .reverse()
         .map(function (activity, index) {
           activity.update = activity.update.replace('\n', '<br/>');
+          activity.update = activity.update.replace(
+            'recovery',
+            "<span style='color:#28a745'> recovery </span>"
+          );
+          activity.update = activity.update.replace(
+            'recoveries',
+            "<span style='color:#28a745'> recoveries </span>"
+          );
+          activity.update = activity.update.replace(
+            'new cases',
+            "<span style='color:#dc3545'> new cases </span>"
+          );
           const activityDate = new Date(activity.timestamp * 1000);
           const addHeader = () => {
             currentDate = activityDate;
