@@ -18,6 +18,7 @@ function ChoroplethMap({
   selectedRegion,
   setSelectedRegion,
   isCountryLoaded,
+  type,
 }) {
   const choroplethMap = useRef(null);
   const choroplethLegend = useRef(null);
@@ -63,32 +64,80 @@ function ChoroplethMap({
       const svgLegend = d3.select(choroplethLegend.current);
       svgLegend.selectAll('*').remove();
       const redInterpolator = (t) => d3.interpolateReds(t * 0.85);
+      const blueInterpolator = (t) => d3.interpolateBlues(t * 0.85);
+      const greyInterpolator = (t) => d3.interpolateGreys(t * 0.85);
       const colorScale = d3.scaleSequential(
         [0, statistic.maxConfirmed],
         redInterpolator
+      );
+      const colorScaleblue = d3.scaleSequential(
+        [0, statistic.maxConfirmed],
+        blueInterpolator
+      );
+      const colorScalegrey = d3.scaleSequential(
+        [0, statistic.maxConfirmed],
+        greyInterpolator
       );
       // Colorbar
       const widthLegend = parseInt(svgLegend.style('width'));
       const margin = {left: 0.02 * widthLegend, right: 0.02 * widthLegend};
       const barWidth = widthLegend - margin.left - margin.right;
       const heightLegend = +svgLegend.attr('height');
-      svgLegend
-        .append('g')
-        .style('transform', `translateX(${margin.left}px)`)
-        .append(() =>
-          legend({
-            color: colorScale,
-            title: 'Confirmed Cases',
-            width: barWidth,
-            height: 0.8 * heightLegend,
-            ticks: 6,
-            tickFormat: function (d, i, n) {
-              if (!Number.isInteger(d)) return;
-              if (i === n.length - 1) return d + '+';
-              return d;
-            },
-          })
-        );
+      if (type === 'confirmed') {
+        svgLegend
+          .append('g')
+          .style('transform', `translateX(${margin.left}px)`)
+          .append(() =>
+            legend({
+              color: colorScale,
+              title: 'Confirmed Cases',
+              width: barWidth,
+              height: 0.8 * heightLegend,
+              ticks: 6,
+              tickFormat: function (d, i, n) {
+                if (!Number.isInteger(d)) return;
+                if (i === n.length - 1) return d + '+';
+                return d;
+              },
+            })
+          );
+      } else if (type === 'active') {
+        svgLegend
+          .append('g')
+          .style('transform', `translateX(${margin.left}px)`)
+          .append(() =>
+            legend({
+              color: colorScaleblue,
+              title: 'Active Cases',
+              width: barWidth,
+              height: 0.8 * heightLegend,
+              ticks: 6,
+              tickFormat: function (d, i, n) {
+                if (!Number.isInteger(d)) return;
+                if (i === n.length - 1) return d + '+';
+                return d;
+              },
+            })
+          );
+      } else if (type === 'deceased') {
+        svgLegend
+          .append('g')
+          .style('transform', `translateX(${margin.left}px)`)
+          .append(() =>
+            legend({
+              color: colorScalegrey,
+              title: 'Deceased Cases',
+              width: barWidth,
+              height: 0.8 * heightLegend,
+              ticks: 6,
+              tickFormat: function (d, i, n) {
+                if (!Number.isInteger(d)) return;
+                if (i === n.length - 1) return d + '+';
+                return d;
+              },
+            })
+          );
+      }
       svgLegend.attr('viewBox', `0 0 ${widthLegend} ${heightLegend}`);
 
       /* DRAW MAP */
@@ -102,8 +151,16 @@ function ChoroplethMap({
         .attr('class', 'path-region')
         .attr('fill', function (d) {
           const n = parseInt(mapData[d.properties[propertyField]]) || 0;
-          const color = n === 0 ? '#ffffff' : colorScale(n);
-          return color;
+          if (type === 'confirmed') {
+            const color = n === 0 ? '#ffffff' : colorScale(n);
+            return color;
+          } else if (type === 'active') {
+            const color = n === 0 ? '#ffffff' : colorScaleblue(n);
+            return color;
+          } else if (type === 'deceased') {
+            const color = n === 0 ? '#ffffff' : colorScalegrey(n);
+            return color;
+          }
         })
         .attr('d', path)
         .attr('pointer-events', 'all')
@@ -172,6 +229,7 @@ function ChoroplethMap({
       setHoveredRegion,
       setSelectedRegion,
       isCountryLoaded,
+      type,
     ]
   );
 

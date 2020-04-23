@@ -37,6 +37,7 @@ function MapExplorer({
     getRegionFromState(states[0])
   );
   const [testObj, setTestObj] = useState({});
+  const [type, setType] = useState('confirmed');
   const [currentMap, setCurrentMap] = useState(mapMeta);
 
   const [statistic, currentMapData] = useMemo(() => {
@@ -48,31 +49,67 @@ function MapExplorer({
         if (state.state === 'Total') {
           return acc;
         }
-        const confirmed = parseInt(state.confirmed);
-        statistic.total += confirmed;
-        if (confirmed > statistic.maxConfirmed) {
-          statistic.maxConfirmed = confirmed;
+        if (type === 'confirmed') {
+          const confirmed = parseInt(state.confirmed);
+          statistic.total += confirmed;
+          if (confirmed > statistic.maxConfirmed) {
+            statistic.maxConfirmed = confirmed;
+          }
+          acc[state.state] = state.confirmed;
+          console.log('confirmed', acc);
+          return acc;
+        } else if (type === 'active') {
+          const confirmed = parseInt(state.active);
+          statistic.total += confirmed;
+          if (confirmed > statistic.maxConfirmed) {
+            statistic.maxConfirmed = confirmed;
+          }
+          acc[state.state] = state.active;
+          return acc;
+        } else if (type === 'deceased') {
+          const confirmed = parseInt(state.deaths);
+          statistic.total += confirmed;
+          if (confirmed > statistic.maxConfirmed) {
+            statistic.maxConfirmed = confirmed;
+          }
+          acc[state.state] = state.deaths;
+          return acc;
         }
-
-        acc[state.state] = state.confirmed;
-        return acc;
       }, {});
     } else if (currentMap.mapType === MAP_TYPES.STATE) {
       const districtWiseData = (
         stateDistrictWiseData[currentMap.name] || {districtData: {}}
       ).districtData;
       currentMapData = Object.keys(districtWiseData).reduce((acc, district) => {
-        const confirmed = parseInt(districtWiseData[district].confirmed);
-        statistic.total += confirmed;
-        if (confirmed > statistic.maxConfirmed) {
-          statistic.maxConfirmed = confirmed;
+        if (type === 'confirmed') {
+          const confirmed = parseInt(districtWiseData[district].confirmed);
+          statistic.total += confirmed;
+          if (confirmed > statistic.maxConfirmed) {
+            statistic.maxConfirmed = confirmed;
+          }
+          acc[district] = districtWiseData[district].confirmed;
+          return acc;
+        } else if (type === 'active') {
+          const confirmed = parseInt(districtWiseData[district].active);
+          statistic.total += confirmed;
+          if (confirmed > statistic.maxConfirmed) {
+            statistic.maxConfirmed = confirmed;
+          }
+          acc[district] = districtWiseData[district].active;
+          return acc;
+        } else if (type === 'deceased') {
+          const confirmed = parseInt(districtWiseData[district].deceased);
+          statistic.total += confirmed;
+          if (confirmed > statistic.maxConfirmed) {
+            statistic.maxConfirmed = confirmed;
+          }
+          acc[district] = districtWiseData[district].deceased;
+          return acc;
         }
-        acc[district] = districtWiseData[district].confirmed;
-        return acc;
       }, {});
     }
     return [statistic, currentMapData];
-  }, [currentMap, states, stateDistrictWiseData]);
+  }, [currentMap, states, stateDistrictWiseData, type]);
 
   const setHoveredRegion = useCallback(
     (name, currentMap) => {
@@ -164,6 +201,11 @@ function MapExplorer({
     );
   }, [panelRegion, stateTestData, testObj]);
 
+  const updatetype = (value) => {
+    console.log(value);
+    setType(value);
+  };
+
   return (
     <div
       className="MapExplorer fadeInUp"
@@ -249,6 +291,39 @@ function MapExplorer({
 
       <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
         <h2>{name}</h2>
+        <div
+          className="select"
+          onChange={(event) => {
+            updatetype(event.target.value);
+          }}
+        >
+          <select
+            style={{
+              animationDelay: '0.4s',
+              backgroundColor: '#eee',
+              backgroundImage:
+                'linear-gradient(45deg, transparent 50%, #808080 50%), linear-gradient(135deg, #808080 50%, transparent 50%)',
+              backgroundPosition: 'calc(100% - 13px) 50%, calc(100% - 8px) 50%',
+              backgroundSize: '5px 5px, 5px 5px',
+              backgroundRepeat: 'no-repeat',
+              border: '2px solid #e8e8e9',
+              borderRadius: '4px',
+              fontFamily: 'archia',
+              fontWeight: '900',
+              margin: '0.2rem 0.1rem',
+              padding: '0.5rem',
+              width: '130px',
+              color: '#6c757d',
+              cursor: 'pointer',
+            }}
+          >
+            <option value="confirmed" selected>
+              Confirmed
+            </option>
+            <option value="active">Active</option>
+            <option value="deceased">Deceased</option>
+          </select>
+        </div>
         {lastupdatedtime && (
           <div
             className={`last-update ${
@@ -282,9 +357,7 @@ function MapExplorer({
               ? currentMapData[currentHoveredRegion.name]
               : 0}
             <br />
-            <span style={{fontSize: '0.75rem', fontWeight: 600}}>
-              confirmed
-            </span>
+            <span style={{fontSize: '0.75rem', fontWeight: 600}}>{type}</span>
           </h1>
         ) : null}
 
@@ -323,6 +396,7 @@ function MapExplorer({
         selectedRegion={selectedRegion}
         setSelectedRegion={setSelectedRegion}
         isCountryLoaded={isCountryLoaded}
+        type={type}
       />
     </div>
   );
