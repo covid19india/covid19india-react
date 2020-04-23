@@ -25,10 +25,10 @@
     "react-feather": "^2.0.3",
     "react-force-graph-2d": "^1.15.1",
     "react-infinite-scroll-component": "^5.0.4",
-    "react-lightweight-tooltip": "1.0.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "react-table": "^7.0.4",
+    "react-tooltip": "^4.2.5",
     "react-use": "^14.1.1",
     "topojson": "^3.0.2"
   },
