@@ -11,6 +11,12 @@ const navLinkProps = (path, animationDelay) => ({
   },
 });
 
+const activeNavIcon = (path) => ({
+  style: {
+    stroke: window.location.pathname === path ? '#4c75f2' : '',
+  },
+});
+
 function Navbar({pages, darkMode, setDarkMode}) {
   const [expand, setExpand] = useState(false);
   useLockBodyScroll(expand);
@@ -61,27 +67,27 @@ function Navbar({pages, darkMode, setDarkMode}) {
           <React.Fragment>
             <span>
               <Link to="/">
-                <Icon.Home />
+                <Icon.Home {...activeNavIcon('/')} />
               </Link>
             </span>
             <span>
               <Link to="/demographics">
-                <Icon.Users />
+                <Icon.Users {...activeNavIcon('/demographics')} />
               </Link>
             </span>
             <span>
               <Link to="/deepdive">
-                <Icon.BarChart2 />
+                <Icon.BarChart2 {...activeNavIcon('/deepdive')} />
               </Link>
             </span>
             <span>
               <Link to="/essentials">
-                <Icon.Package />
+                <Icon.Package {...activeNavIcon('/essentials')} />
               </Link>
             </span>
             <span>
               <Link to="/faq">
-                <Icon.HelpCircle />
+                <Icon.HelpCircle {...activeNavIcon('/faq')} />
               </Link>
             </span>
           </React.Fragment>
