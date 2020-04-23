@@ -437,6 +437,8 @@ h6 {
   }
 
   .MapExplorer {
+    margin-top: 2rem;
+
     .header,
     .map-stats,
     .back-button,
@@ -1320,6 +1322,52 @@ h6 {
 
   &:hover {
     background: #33a66750;
+  }
+}
+
+.map-switcher {
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: absolute;
+  top: 13rem;
+  width: 30rem;
+
+  .highlight {
+    background: $cherry-light;
+    position: absolute;
+    width: calc(25%) !important;
+    z-index: -1;
+
+    &.active {
+      background: $blue-light;
+    }
+
+    &.recovered {
+      background: $green-light;
+    }
+
+    &.deceased {
+      background: $gray-light;
+    }
+  }
+
+  .highlight,
+  .clickable {
+    border-radius: 5px;
+    cursor: pointer;
+    height: 10.5rem;
+    width: 7rem;
+    z-index: 10;
+
+    &:first-child {
+      margin-left: .5rem;
+    }
+
+    &:last-child {
+      margin-right: .5rem;
+    }
   }
 }
 
@@ -4124,6 +4172,7 @@ footer {
   .MapExplorer,
   .filters,
   .updates,
+  .map-switcher,
   .updates-header {
     width: calc(100% - 2rem);
   }

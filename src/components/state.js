@@ -13,11 +13,13 @@ import {
   parseStateTimeseries,
 } from '../utils/commonfunctions';
 
+import anime from 'animejs';
 import axios from 'axios';
 import {format, parse} from 'date-fns';
 import React, {useEffect, useRef, useState} from 'react';
 import * as Icon from 'react-feather';
 import {Link, useParams} from 'react-router-dom';
+import {useMeasure} from 'react-use';
 
 function State(props) {
   const mapRef = useRef();
@@ -35,6 +37,8 @@ function State(props) {
   const [sources, setSources] = useState({});
   const [districtData, setDistrictData] = useState({});
   const [stateName] = useState(STATE_CODES[stateCode]);
+  const [mapOption, setMapOption] = useState('confirmed');
+  const [mapSwitcher, {width}] = useMeasure();
 
   useEffect(() => {
     if (fetched === false) {
@@ -129,6 +133,59 @@ function State(props) {
             </div>
           </div>
 
+          {fetched && (
+            <div className="map-switcher" ref={mapSwitcher}>
+              <div
+                className={`highlight ${mapOption}`}
+                style={{transform: `translateX(${width * -0.01}px)`}}
+              ></div>
+              <div
+                className="clickable"
+                onClick={() => {
+                  setMapOption('confirmed');
+                  anime({
+                    targets: '.highlight',
+                    translateX: `${width * -0.01}px`,
+                    easing: 'spring(1, 80, 90, 10)',
+                  });
+                }}
+              ></div>
+              <div
+                className="clickable"
+                onClick={() => {
+                  setMapOption('active');
+                  anime({
+                    targets: '.highlight',
+                    translateX: `${width * 0.23}px`,
+                    easing: 'spring(1, 80, 90, 10)',
+                  });
+                }}
+              ></div>
+              <div
+                className="clickable"
+                onClick={() => {
+                  setMapOption('recovered');
+                  anime({
+                    targets: '.highlight',
+                    translateX: `${width * 0.47}px`,
+                    easing: 'spring(1, 80, 90, 10)',
+                  });
+                }}
+              ></div>
+              <div
+                className="clickable"
+                onClick={() => {
+                  setMapOption('deceased');
+                  anime({
+                    targets: '.highlight',
+                    translateX: `${width * 0.73}px`,
+                    easing: 'spring(1, 80, 90, 10)',
+                  });
+                }}
+              ></div>
+            </div>
+          )}
+
           {fetched && <Level data={stateData} />}
           {fetched && <Minigraph timeseries={timeseries} />}
           {fetched && (
@@ -141,6 +198,7 @@ function State(props) {
                   stateDistrictWiseData={districtData}
                   stateTestData={testData}
                   isCountryLoaded={false}
+                  mapOption={mapOption}
                 />
               }
             </React.Fragment>
