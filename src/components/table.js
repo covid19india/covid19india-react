@@ -119,7 +119,7 @@ function Table(props) {
         </h5>
         <table className="table fadeInUp" style={{animationDelay: '1.8s'}}>
           <thead>
-            <tr>
+            <tr id="table-head-sticky-row">
               <th
                 className="sticky state-heading"
                 onClick={(e) => handleSort(e, props)}

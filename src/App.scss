@@ -4111,6 +4111,16 @@ footer {
     }
   }
 
+  .Home {
+    .home-left {
+      #table-head-sticky-row {
+        th {
+          transition: top .3s ease-in-out;
+        }
+      }
+    }
+  }
+
   .MapExplorer {
     .header {
       margin-top: 2rem;
@@ -4175,8 +4185,7 @@ footer {
   }
 
   .cards-container {
-    padding: .5rem;
-
+    padding: 4.5rem .5rem .5rem;
 
     .cards {
       .card {
@@ -4241,7 +4250,9 @@ footer {
     .filters {
       height: auto;
       justify-content: center;
-      padding: .5rem;
+      padding: 4.5rem .5rem .5rem;
+      transition: padding-top .3s ease-in-out;
+      width: calc(100% - 1rem);
     }
   }
 
@@ -4543,6 +4554,14 @@ footer {
   }
 
   .Navbar {
+    background-color: $white;
+    padding-bottom: 0;
+    position: fixed;
+    top: 0;
+    transition: top .3s ease-in-out;
+    width: 100%;
+    z-index: 999;
+
     .expand {
       height: calc(100vh - 3.9rem);
       overflow: auto;
@@ -4558,6 +4577,14 @@ footer {
         }
       }
     }
+  }
+
+  .Home,
+  .State,
+  .Resources,
+  .FAQ,
+  .Links {
+    padding-top: 4.5rem;
   }
 
   .Search {
@@ -4593,6 +4620,10 @@ footer {
 
   .expand {
     background: #1e1e30 !important;
+  }
+
+  .Navbar {
+    background-color: #161625;
   }
 
   .Navbar,

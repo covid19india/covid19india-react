@@ -18,11 +18,40 @@ const activeNavIcon = (path) => ({
 });
 
 function Navbar({pages, darkMode, setDarkMode}) {
+  if (window.innerWidth < 769) {
+    let prevScrollpos = window.pageYOffset;
+    window.onscroll = function () {
+      const currentScrollPos = window.pageYOffset;
+      const patientsDbFilter = document.querySelector('.PatientsDB .filters');
+      const HomeTableThead = this.document.querySelectorAll(
+        '.Home #table-head-sticky-row th'
+      );
+      const navbar = document.getElementById('navbar');
+      if (prevScrollpos > currentScrollPos) {
+        navbar.style.top = '0';
+        if (patientsDbFilter) {
+          patientsDbFilter.style.paddingTop = '4.5rem';
+        }
+        if (HomeTableThead != null) {
+          HomeTableThead.forEach((head) => (head.style.top = '4.5rem'));
+        }
+      } else {
+        navbar.style.top = '-5rem';
+        if (patientsDbFilter) {
+          patientsDbFilter.style.paddingTop = '0.5rem';
+        }
+        if (HomeTableThead != null) {
+          HomeTableThead.forEach((head) => (head.style.top = '0.5rem'));
+        }
+      }
+      prevScrollpos = currentScrollPos;
+    };
+  }
   const [expand, setExpand] = useState(false);
   useLockBodyScroll(expand);
 
   return (
-    <div className="Navbar">
+    <div className="Navbar" id="navbar">
       <div
         className="navbar-left"
         onClick={() => setDarkMode((prevMode) => !prevMode)}
