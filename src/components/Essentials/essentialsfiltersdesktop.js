@@ -35,7 +35,7 @@ const useInputLabelStyles = makeStyles(() => ({
 const useMenuItemStyles = makeStyles(() => ({
   root: {
     fontFamily: 'archia',
-    fontSize: '11px !important',
+    fontSize: '11.5px !important',
     fontWeight: 600,
     textTransform: 'uppercase',
   },
