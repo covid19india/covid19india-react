@@ -393,7 +393,7 @@ function MapExplorer({
         <div className="disclaimer">
           <Icon.AlertCircle />
           <div>
-            District-wise recovered/deceased numbers are under reconcilation
+            District-wise recovered/deceased numbers are under reconciliation
           </div>
         </div>
       ) : (
