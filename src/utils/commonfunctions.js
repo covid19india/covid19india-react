@@ -69,7 +69,7 @@ export const preprocessTimeseries = (timeseries) => {
     totalactive:
       +stat.totalconfirmed - +stat.totalrecovered - +stat.totaldeceased,
     dailyactive:
-      +stat.dailyconfirmed - +stat.dailyrecovered - +stat.dailydeceased,
+      +stat.totalconfirmed - +stat.totalrecovered - +stat.totaldeceased,
   }));
 };
 
