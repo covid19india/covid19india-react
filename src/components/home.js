@@ -29,6 +29,11 @@ function Home(props) {
   const [fetched, setFetched] = useState(false);
   const [activeStateCode, setActiveStateCode] = useState('TT');
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
+  const [rowHighlighted, setRowHighlighted] = useState({
+    statecode: undefined,
+    isDistrict: false,
+    districtName: undefined,
+  });
   const [showUpdates, setShowUpdates] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [lastViewedLog, setLastViewedLog] = useLocalStorage(
@@ -110,8 +115,20 @@ function Home(props) {
     setRegionHighlighted({district, state, index});
   };
 
-  const onMapHighlightChange = useCallback(({statecode}) => {
-    setActiveStateCode(statecode);
+  const onMapHighlightChange = useCallback((region) => {
+    setActiveStateCode(region.statecode);
+    if ('districtName' in region)
+      setRowHighlighted({
+        statecode: region.statecode,
+        isDistrict: true,
+        districtName: region.districtName,
+      });
+    else
+      setRowHighlighted({
+        statecode: region.statecode,
+        isDistrict: false,
+        districtName: undefined,
+      });
   }, []);
 
   return (
@@ -159,6 +176,7 @@ function Home(props) {
               states={states}
               summary={false}
               stateDistrictWiseData={stateDistrictWiseData}
+              rowHighlighted={rowHighlighted}
               onHighlightState={onHighlightState}
               onHighlightDistrict={onHighlightDistrict}
             />
