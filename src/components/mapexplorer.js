@@ -387,6 +387,18 @@ function MapExplorer({
           mapOption={mapOption}
         />
       )}
+
+      {currentMapData?.Unknown?.recovered ||
+      currentMapData?.Unknown?.deceased ? (
+        <div className="disclaimer">
+          <Icon.AlertCircle />
+          <div>
+            District-wise recovered/deceased numbers are under reconcilation
+          </div>
+        </div>
+      ) : (
+        ''
+      )}
     </div>
   );
 }

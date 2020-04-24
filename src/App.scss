@@ -2185,6 +2185,26 @@ table {
       }
     }
   }
+
+  .disclaimer {
+    background: $gray-light;
+    border-radius: 5px;
+    color: $gray;
+    display: flex;
+    flex-direction: row;
+    font-family: 'archia';
+    font-size: 11px;
+    padding: .5rem;
+    width: 14rem;
+
+    svg {
+      color: $gray;
+      margin-right: .25rem;
+      margin-top: -.35rem;
+      stroke-width: 2px;
+      width: 20px !important;
+    }
+  }
 }
 
 .tabs {
