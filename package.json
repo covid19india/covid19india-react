@@ -25,10 +25,10 @@
     "react-feather": "^2.0.3",
     "react-force-graph-2d": "^1.15.1",
     "react-infinite-scroll-component": "^5.0.4",
-    "react-lightweight-tooltip": "1.0.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "react-table": "^7.0.4",
+    "react-tooltip": "^4.2.5",
     "react-use": "^14.1.1",
     "topojson": "^3.0.2"
   },
@@ -39,9 +39,10 @@
     "test": "react-scripts test --testPathIgnorePatterns=src/__tests__/mapAndApiStateNames.test.js",
     "eject": "react-scripts eject",
     "eslint": "eslint .",
-    "eslint:fix": "eslint --fix .",
-    "format": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|css|md|vue)\"",
-    "scsslint": "sass-lint-auto-fix"
+    "eslint:fix": "eslint --fix --max-warnings=0",
+    "format": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|md)\"",
+    "scss-lint": "sass-lint 'src/**/*.scss' -v -f table --max-warnings 0",
+    "scss-lint:fix": "sass-lint-auto-fix 'src/**/*.scss' -d -h -c '.sass-lint-auto-fix.yml'"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -53,14 +54,15 @@
   },
   "lint-staged": {
     "*.+(js|jsx)": [
-      "eslint --fix --max-warnings=0",
-      "prettier --write"
+      "npm run eslint:fix",
+      "prettier --write \"**/*.+(js|jsx)\""
     ],
-    "*.+(json|yml|yaml|md|vue)": [
-      "prettier --write"
+    "*.+(json|yml|yaml|md)": [
+      "prettier --write \"**/*.+(json|yml|yaml|md)\""
     ],
     "*.+(css|scss)": [
-      "sass-lint-auto-fix"
+      "npm run scss-lint:fix",
+      "npm run scss-lint"
     ]
   },
   "devDependencies": {
