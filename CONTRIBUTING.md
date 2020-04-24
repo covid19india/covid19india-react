@@ -9,7 +9,7 @@ Always submit a PR against a "Claimed Issue" that's been assigned to you. If an 
 ## Process Flow
 
 - When a new issue is created, "Status: Review Needed" and "Type: Bug or Type: Enhancement" label is automatically added to it.
-- Mods periodically check "Status:Review Needed" and add appropriate Priority and Status labels. If the issue is clear, set the status label as "Label: Available".
+- Mods periodically check "Status: Review Needed" and add appropriate Priority and Status labels. If the issue is clear, set the status label as "Status: Available".
 
 <p align="center">
   <img src="https://storage.googleapis.com/jrmyphlmn/images/github/label%20change.png" width="50%">
