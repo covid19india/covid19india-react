@@ -11,6 +11,7 @@ import * as topojson from 'topojson';
 const propertyFieldMap = {
   country: 'st_nm',
   state: 'district',
+  countryFull: 'district',
 };
 
 function ChoroplethMap({
@@ -120,6 +121,8 @@ function ChoroplethMap({
         })
       );
 
+      console.log(mapData, statistic);
+
       /* Draw map */
       const t = svg.transition().duration(500);
       let onceTouchedRegion = null;
@@ -151,13 +154,24 @@ function ChoroplethMap({
         .attr('pointer-events', 'none');
 
       regionSelection.append('title').text(function (d) {
-        const region = d.properties[propertyField];
-        const value = mapData[region] ? mapData[region][mapOption] : 0;
         if (statisticOption === MAP_STATISTICS.TOTAL) {
+          let n;
+          let region;
+          if (mapMeta.mapType === MAP_TYPES.COUNTRY_FULL) {
+            const state = d.properties.st_nm;
+            region = d.properties[propertyField];
+            n =
+              mapData[state] && mapData[state][region]
+                ? mapData[state][region][mapOption]
+                : 0;
+          } else {
+            region = d.properties[propertyField];
+            n = mapData[region] ? mapData[region][mapOption] : 0;
+          }
           return (
             Number(
               parseFloat(
-                100 * (value / (statistic[mapOption].total || 0.001))
+                100 * (n / (statistic[mapOption].total || 0.001))
               ).toFixed(2)
             ).toString() +
             '% from ' +
@@ -169,8 +183,18 @@ function ChoroplethMap({
       regionSelection
         .transition(t)
         .attr('fill', function (d) {
-          const region = d.properties[propertyField];
-          const n = mapData[region] ? mapData[region][mapOption] : 0;
+          let n;
+          if (mapMeta.mapType === MAP_TYPES.COUNTRY_FULL) {
+            const state = d.properties.st_nm;
+            const district = d.properties[propertyField];
+            n =
+              mapData[state] && mapData[state][district]
+                ? mapData[state][district][mapOption]
+                : 0;
+          } else {
+            const region = d.properties[propertyField];
+            n = mapData[region] ? mapData[region][mapOption] : 0;
+          }
           const color = n === 0 ? '#ffffff' : colorScale(n);
           return color;
         })
@@ -220,7 +244,29 @@ function ChoroplethMap({
               ? '#6c757d30'
               : ''
           }`
-        );
+          )
+
+      if (mapMeta.mapType === MAP_TYPES.COUNTRY_FULL) {
+        svg.append('path')
+          .attr('class', 'borders')
+          .attr(
+            'stroke',
+            `${
+              mapOption === 'confirmed'
+                ? '#ff073a40'
+                : mapOption === 'active'
+                ? '#007bff40'
+                : mapOption === 'recovered'
+                ? '#28a74540'
+                : mapOption === 'deceased'
+                ? '#6c757d40'
+                : ''
+            }`
+          )
+          .attr('fill', 'none')
+          .attr('stroke-width', width / 300)
+          .attr('d', path(topojson.mesh(geoData, geoData.objects.states)));
+      }
 
       const handleMouseEnter = (name) => {
         try {

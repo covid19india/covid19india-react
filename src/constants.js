@@ -14,6 +14,7 @@ export const DISTRICT_ROW_STATISTICS = [
 export const MAP_TYPES = {
   COUNTRY: 'country',
   STATE: 'state',
+  COUNTRY_FULL: 'countryFull',
 };
 
 export const MAP_STATISTICS = {
@@ -29,6 +30,12 @@ export const MAP_META = {
     geoDataFile: `${MAPS_DIR}/india.json`,
     mapType: MAP_TYPES.COUNTRY,
     graphObjectName: 'india',
+  },
+  IndiaFull: {
+    name: 'IndiaFull',
+    geoDataFile: `${MAPS_DIR}/india_full.json`,
+    mapType: MAP_TYPES.COUNTRY_FULL,
+    graphObjectName: 'india-districts-2019-734',
   },
   'Andaman and Nicobar Islands': {
     name: 'Andaman and Nicobar Islands',

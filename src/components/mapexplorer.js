@@ -109,7 +109,26 @@ function MapExplorer({
         return acc;
       }, {});
       currentMapData[currentMap.name] = states.find(
-        (state) => currentMap.name === state.state
+        (state) => currentMap.name === state.state);
+    } else if (currentMap.mapType === MAP_TYPES.COUNTRY_FULL) {
+      currentMapData = Object.keys(districts).reduce(
+        (acc1, state) => {
+          const districtData = districts[state].districtData;
+          acc1[state] = Object.keys(districtData).reduce((acc2, district) => {
+            acc2[district] = {};
+            dataTypes.forEach((dtype) => {
+              const typeCount = parseInt(districtData[district][dtype]);
+              statistic[dtype].total += typeCount;
+              if (typeCount > statistic[dtype].max) {
+                statistic[dtype].max = typeCount;
+              }
+              acc2[district][dtype] = typeCount;
+            });
+            return acc2;
+          }, {});
+          return acc1;
+        },
+        {}
       );
     }
     return [statistic, currentMapData];
