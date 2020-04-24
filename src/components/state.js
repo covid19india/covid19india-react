@@ -4,9 +4,10 @@ import Footer from './footer';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
+import StateMeta from './statemeta';
 import TimeSeriesExplorer from './timeseriesexplorer';
 
-import {MAP_META, STATE_CODES} from '../constants';
+import {MAP_META, STATE_CODES, POPULATION} from '../constants';
 import {
   formatDateAbsolute,
   formatNumber,
@@ -114,6 +115,7 @@ function State(props) {
   };
 
   const testObjLast = testData[testData.length - 1];
+  const population = POPULATION[stateName].population;
 
   function toggleShowAllDistricts() {
     setShowAllDistricts(!showAllDistricts);
@@ -315,6 +317,15 @@ function State(props) {
                   </div>
                 </div>
               </div>
+            )}
+
+            {fetched && (
+              <StateMeta
+                stateData={stateData}
+                lastTestObject={testObjLast}
+                population={population}
+                lastSevenDaysData={timeseries.slice(-7)}
+              />
             )}
           </div>
 
