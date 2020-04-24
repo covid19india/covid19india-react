@@ -4790,10 +4790,28 @@ footer {
     }
   }
 
-  select {
-    background: #1e1e30 !important;
-    border-color: #1e1e30 !important;
-  }
+    select {
+      appearance: none;
+      background-color: #eee;
+
+      background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
+      linear-gradient(135deg, #808080 50%, transparent 50%);
+      background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+      background-repeat: no-repeat;
+      background-size: 5px 5px, 5px 5px;
+      border: 2px solid #e8e8e9;
+      border-radius: 4px;
+      color: $gray;
+      cursor: pointer;
+      font-family: 'archia';
+      font-weight: 900;
+      margin: .2rem .1rem;
+      padding: .5rem;
+      width: 130px;
+      &:focus {
+        outline: none;
+      }
+    }
 
   input {
     &.switch {
