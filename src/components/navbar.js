@@ -33,7 +33,7 @@ function Navbar({pages, darkMode, setDarkMode}) {
           patientsDbFilter.style.paddingTop = '4.5rem';
         }
         if (HomeTableThead != null) {
-          HomeTableThead.forEach((head) => (head.style.top = '4.5rem'));
+          HomeTableThead.forEach((head) => (head.style.top = '4.3rem'));
         }
       } else {
         navbar.style.top = '-5rem';
