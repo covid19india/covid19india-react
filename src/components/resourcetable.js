@@ -4,14 +4,12 @@ import {
   getHighlightedText,
   getFormattedLink,
   getSuggestions,
-  getSuggestionValue,
-  renderSuggestion,
 } from './Essentials/essentialsutls';
 
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import React, {useState, useEffect, useRef} from 'react';
-import Autosuggest from 'react-autosuggest';
+// import Autosuggest from 'react-autosuggest';
 import * as Icon from 'react-feather';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useTable} from 'react-table';
@@ -83,47 +81,21 @@ function ResourceTable({
   }, [searchValue, data, category, indianstate, city]);
 
   useEffect(() => {
-    if (suggestions.length === 0 && suggestions.length < totalCount) {
+    if (suggestions.length < 7 && totalCount > suggestions.length) {
       onScrollUpdate();
     }
   }, [suggestions, totalCount, onScrollUpdate]);
 
-  const onChange = (event, {newValue}) => {
-    setSearchValue(newValue);
-  };
+  setInterval(checkAutosuggestChange, 2000);
 
-  // const onSuggestionsFetchRequested = ({value}) => {
-  //   setSuggestions(getSuggestions(value, data));
-  // };
-
-  const inputProps = {
-    placeholder: '',
-    value: searchValue,
-    onChange: onChange,
-  };
-
-  const renderInputComponent = (inputProps) => (
-    <TextField
-      id="outlined-number"
-      label="Search keyword"
-      fullWidth={true}
-      InputLabelProps={{
-        shrink: true,
-      }}
-      style={{
-        width: '100%',
-      }}
-      variant="outlined"
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position="start">
-            <Icon.Search size="0.9em" />
-          </InputAdornment>
-        ),
-      }}
-      {...inputProps}
-    />
-  );
+  function checkAutosuggestChange() {
+    try {
+      const newVal = document.getElementById('input-field-searchbar').value;
+      if (newVal !== searchValue) {
+        setSearchValue(newVal);
+      }
+    } catch {}
+  }
 
   // Use the state and functions returned from useTable to build your UI
   const {
@@ -140,14 +112,24 @@ function ResourceTable({
   return (
     <React.Fragment>
       <div className="searchbar">
-        <Autosuggest
-          suggestions={suggestions}
-          onSuggestionsFetchRequested={() => {}}
-          getSuggestionValue={getSuggestionValue}
-          renderSuggestion={renderSuggestion}
-          inputProps={inputProps}
-          alwaysRenderSuggestions={true}
-          renderInputComponent={renderInputComponent}
+        <TextField
+          id="input-field-searchbar"
+          label="Search keyword"
+          fullWidth={true}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          style={{
+            width: '100%',
+          }}
+          variant="outlined"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Icon.Search size="0.9em" />
+              </InputAdornment>
+            ),
+          }}
         />
       </div>
       <InfiniteScroll
