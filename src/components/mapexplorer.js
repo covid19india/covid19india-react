@@ -130,6 +130,10 @@ function MapExplorer({
   );
 
   useEffect(() => {
+    if (mapOptionProp) setMapOption(mapOptionProp);
+  }, [mapOptionProp, setMapOption]);
+
+  useEffect(() => {
     if (regionHighlighted === undefined || regionHighlighted === null) return;
 
     const isState = !('district' in regionHighlighted);
@@ -161,7 +165,9 @@ function MapExplorer({
       if (newMap.mapType === MAP_TYPES.COUNTRY) {
         setHoveredRegion(states[0].state, newMap);
       } else if (newMap.mapType === MAP_TYPES.STATE) {
-        const {districtData} = stateDistrictWiseData[name] || {};
+        const {districtData} = stateDistrictWiseData[name] || {
+          districtData: {},
+        };
         const topDistrict = Object.keys(districtData)
           .filter((name) => name !== 'Unknown')
           .sort((a, b) => {
@@ -378,7 +384,7 @@ function MapExplorer({
           selectedRegion={selectedRegion}
           setSelectedRegion={setSelectedRegion}
           isCountryLoaded={isCountryLoaded}
-          mapOption={mapOptionProp || mapOption}
+          mapOption={mapOption}
         />
       )}
     </div>
