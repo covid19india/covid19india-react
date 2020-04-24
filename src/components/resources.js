@@ -99,22 +99,27 @@ function Resources(props) {
       {
         Header: 'City',
         accessor: 'city',
+        defaultCanSort: true,
       },
       {
         Header: 'Category',
         accessor: 'category',
+        defaultCanSort: true,
       },
       {
         Header: 'Organisation',
         accessor: 'nameoftheorganisation',
+        defaultCanSort: true,
       },
       {
         Header: 'Description',
         accessor: 'descriptionandorserviceprovided',
+        disableSortBy: false,
       },
       {
         Header: 'Phone',
         accessor: 'phonenumber',
+        disableSortBy: false,
       },
       {
         Header: 'Source',

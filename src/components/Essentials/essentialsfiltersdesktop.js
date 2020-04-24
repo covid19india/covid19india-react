@@ -74,7 +74,7 @@ function FiltersDesktop(props) {
           onClick={props.handleDisclaimerClick}
         >
           Disclaimer
-          <Icon.AlertCircle htmlColor="#6c757d" fontSize="0.2rem" />
+          <Icon.AlertCircle color="#6c757d" fontSize="0.2rem" />
         </div>
         <Popover
           id={props.disclaimerid}

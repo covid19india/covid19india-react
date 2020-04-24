@@ -12,7 +12,7 @@ import React, {useState, useEffect, useRef} from 'react';
 // import Autosuggest from 'react-autosuggest';
 import * as Icon from 'react-feather';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import {useTable} from 'react-table';
+import {useTable, useSortBy} from 'react-table';
 
 function ResourceTable({
   columns,
@@ -104,11 +104,23 @@ function ResourceTable({
     headerGroups,
     prepareRow,
     rows,
-  } = useTable({
-    columns,
-    data: suggestions,
-    initialState: {hiddenColumns: 'contact'},
-  });
+  } = useTable(
+    {
+      columns,
+      data: suggestions,
+      disableSortRemove: true,
+      initialState: {
+        hiddenColumns: 'contact',
+        sortBy: [
+          {
+            id: 'city',
+            desc: false,
+          },
+        ],
+      },
+    },
+    useSortBy
+  );
   return (
     <React.Fragment>
       <div className="searchbar">
@@ -162,10 +174,25 @@ function ResourceTable({
                     {headerGroup.headers.map((column, i) => (
                       <th
                         key={column.id}
-                        {...column.getHeaderProps()}
+                        {...column.getHeaderProps(
+                          column.getSortByToggleProps()
+                        )}
                         className={i === 3 ? 'descriptionCol sticky' : 'sticky'}
                       >
-                        {column.render('Header')}
+                        <div className="heading-content">
+                          <abbr>{column.render('Header')}</abbr>
+                          <div>
+                            {column.isSorted ? (
+                              column.isSortedDesc ? (
+                                <div className="arrow-down" />
+                              ) : (
+                                <div className="arrow-up" />
+                              )
+                            ) : (
+                              ''
+                            )}
+                          </div>
+                        </div>
                       </th>
                     ))}
                   </tr>
