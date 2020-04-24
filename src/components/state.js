@@ -13,11 +13,13 @@ import {
   parseStateTimeseries,
 } from '../utils/commonfunctions';
 
+import anime from 'animejs';
 import axios from 'axios';
 import {format, parse} from 'date-fns';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import * as Icon from 'react-feather';
 import {Link, useParams} from 'react-router-dom';
+import {useMeasure, useEffectOnce} from 'react-use';
 
 function State(props) {
   const mapRef = useRef();
@@ -35,12 +37,12 @@ function State(props) {
   const [sources, setSources] = useState({});
   const [districtData, setDistrictData] = useState({});
   const [stateName] = useState(STATE_CODES[stateCode]);
+  const [mapOption, setMapOption] = useState('confirmed');
+  const [mapSwitcher, {width}] = useMeasure();
 
-  useEffect(() => {
-    if (fetched === false) {
-      getState(stateCode);
-    }
-  }, [fetched, stateCode]);
+  useEffectOnce(() => {
+    getState(stateCode);
+  });
 
   const getState = async (code) => {
     try {
@@ -74,6 +76,23 @@ function State(props) {
       const sourceList = sourcesResponse.sources_list;
       setSources(sourceList.filter((state) => state.statecode === code));
       setFetched(true);
+      anime({
+        targets: '.highlight',
+        duration: 200,
+        delay: 3000,
+        translateX:
+          mapOption === 'confirmed'
+            ? `${width * 0}px`
+            : mapOption === 'active'
+            ? `${width * 0.25}px`
+            : mapOption === 'recovered'
+            ? `${width * 0.5}px`
+            : mapOption === 'deceased'
+            ? `${width * 0.75}px`
+            : '0px',
+        easing: 'spring(1, 80, 90, 10)',
+        opacity: 1,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -129,6 +148,62 @@ function State(props) {
             </div>
           </div>
 
+          {fetched && (
+            <div className="map-switcher" ref={mapSwitcher}>
+              <div
+                className={`highlight ${mapOption}`}
+                style={{
+                  transform: `translateX(${width * 0}px)`,
+                  opacity: 0,
+                }}
+              ></div>
+              <div
+                className="clickable"
+                onClick={() => {
+                  setMapOption('confirmed');
+                  anime({
+                    targets: '.highlight',
+                    translateX: `${width * 0}px`,
+                    easing: 'spring(1, 80, 90, 10)',
+                  });
+                }}
+              ></div>
+              <div
+                className="clickable"
+                onClick={() => {
+                  setMapOption('active');
+                  anime({
+                    targets: '.highlight',
+                    translateX: `${width * 0.25}px`,
+                    easing: 'spring(1, 80, 90, 10)',
+                  });
+                }}
+              ></div>
+              <div
+                className="clickable"
+                onClick={() => {
+                  setMapOption('recovered');
+                  anime({
+                    targets: '.highlight',
+                    translateX: `${width * 0.5}px`,
+                    easing: 'spring(1, 80, 90, 10)',
+                  });
+                }}
+              ></div>
+              <div
+                className="clickable"
+                onClick={() => {
+                  setMapOption('deceased');
+                  anime({
+                    targets: '.highlight',
+                    translateX: `${width * 0.75}px`,
+                    easing: 'spring(1, 80, 90, 10)',
+                  });
+                }}
+              ></div>
+            </div>
+          )}
+
           {fetched && <Level data={stateData} />}
           {fetched && <Minigraph timeseries={timeseries} />}
           {fetched && (
@@ -141,6 +216,7 @@ function State(props) {
                   stateDistrictWiseData={districtData}
                   stateTestData={testData}
                   isCountryLoaded={false}
+                  mapOptionProp={mapOption}
                 />
               }
             </React.Fragment>
@@ -162,11 +238,11 @@ function State(props) {
                 <div className="sources-right">
                   Data collected from sources{' '}
                   {sources.length > 0
-                    ? Object.keys(sources[0]).map((key) => {
+                    ? Object.keys(sources[0]).map((key, index) => {
                         if (key.match('source') && sources[0][key] !== '') {
                           const num = key.match(/\d+/);
                           return (
-                            <React.Fragment>
+                            <React.Fragment key={index}>
                               {num > 1 ? ',' : ''}
                               <a href={sources[0][key]}>{num}</a>
                             </React.Fragment>
