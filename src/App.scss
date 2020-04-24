@@ -1716,6 +1716,11 @@ table {
     }
 
     .actual__title-wrapper {
+      .__react_component_tooltip {
+        font-size: .8em;
+        max-width: 200px;
+      }
+
       svg {
         color: $gray-mid;
         height: 12px;
@@ -1728,6 +1733,11 @@ table {
   }
 
   .unknown {
+    .__react_component_tooltip {
+      font-size: .8em;
+      max-width: 200px;
+    }
+
     svg {
       color: $gray-mid;
       height: 12px;
