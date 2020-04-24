@@ -51,7 +51,7 @@ const State = lazy(() =>
 const Resources = lazy(() =>
   import(
     /* webpackChunkName: "Resources" */
-    './components/resourcs'
+    './components/resources'
   )
 );
 
