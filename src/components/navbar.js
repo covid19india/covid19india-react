@@ -27,21 +27,26 @@ function Navbar({pages, darkMode, setDarkMode}) {
         '.Home #table-head-sticky-row th'
       );
       const navbar = document.getElementById('navbar');
+      if (currentScrollPos > 30) {
+        navbar.classList.add('Navbar-box-shadow');
+      } else {
+        navbar.classList.remove('Navbar-box-shadow');
+      }
       if (prevScrollpos > currentScrollPos) {
         navbar.style.top = '0';
         if (patientsDbFilter) {
           patientsDbFilter.style.paddingTop = '4.5rem';
         }
-        if (HomeTableThead != null) {
-          HomeTableThead.forEach((head) => (head.style.top = '4.3rem'));
+        if (HomeTableThead.length) {
+          HomeTableThead.forEach((head) => (head.style.top = '4.2rem'));
         }
       } else {
         navbar.style.top = '-5rem';
         if (patientsDbFilter) {
           patientsDbFilter.style.paddingTop = '0.5rem';
         }
-        if (HomeTableThead != null) {
-          HomeTableThead.forEach((head) => (head.style.top = '0.5rem'));
+        if (HomeTableThead.length) {
+          HomeTableThead.forEach((head) => (head.style.top = '0.25rem'));
         }
       }
       prevScrollpos = currentScrollPos;
