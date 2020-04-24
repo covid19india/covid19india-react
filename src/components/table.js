@@ -3,8 +3,11 @@ import Row from './row';
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 
-const isEqual = () => {
-  return true;
+const isEqual = (prevProps, currProps) => {
+  return (
+    JSON.stringify(prevProps.rowHighlighted) ===
+    JSON.stringify(currProps.rowHighlighted)
+  );
 };
 
 function Table(props) {
@@ -270,6 +273,16 @@ function Table(props) {
                       state.state in districts
                         ? districts[state.state].districtData
                         : []
+                    }
+                    isHighlighted={
+                      !props.rowHighlighted.isDistrict &&
+                      props.rowHighlighted.statecode === state.statecode
+                    }
+                    highlightedDistrict={
+                      props.rowHighlighted.isDistrict &&
+                      props.rowHighlighted.statecode === state.statecode
+                        ? props.rowHighlighted.districtName
+                        : null
                     }
                     onHighlightState={props.onHighlightState}
                     onHighlightDistrict={props.onHighlightDistrict}
