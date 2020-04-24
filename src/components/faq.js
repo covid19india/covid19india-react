@@ -19,7 +19,7 @@ function FAQ(props) {
         setFaq(response.data['faq']);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   };
 
