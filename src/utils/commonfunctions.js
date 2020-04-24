@@ -69,7 +69,7 @@ export const preprocessTimeseries = (timeseries) => {
     totalactive:
       +stat.totalconfirmed - +stat.totalrecovered - +stat.totaldeceased,
     dailyactive:
-      +stat.dailyconfirmed - +stat.dailyrecovered - +stat.dailydeceased,
+      +stat.totalconfirmed - +stat.totalrecovered - +stat.totaldeceased,
   }));
 };
 
@@ -123,7 +123,7 @@ export const parseStateTimeseries = ({states_daily: data}) => {
           totaldeceased: totaldeceased,
           // Active = Confimed - Recovered - Deceased
           totalactive: totalconfirmed - totalrecovered - totaldeceased,
-          dailyactive: dailyconfirmed - dailyrecovered - dailydeceased,
+          dailyactive: totalconfirmed - totalrecovered - totaldeceased,
         });
       });
     }
