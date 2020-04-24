@@ -1,5 +1,6 @@
 import {defaultOptions, xAxisDefaults, yAxisDefaults} from './chart-defaults';
 
+import {colorCodes} from '../../constants';
 import {getStateName} from '../../utils/commonfunctions';
 
 import deepmerge from 'deepmerge';
@@ -9,6 +10,8 @@ import {Line} from 'react-chartjs-2';
 
 function AllStatesChart(props) {
   const dates = [];
+  const [chartFilter, setChartFilter] = React.useState('top-10');
+
   const chartReference = React.createRef();
 
   if (!props.data || props.data.length === 0) {
@@ -49,19 +52,6 @@ function AllStatesChart(props) {
     })
   );
 
-  const colors = [
-    '#718af0',
-    '#7dd6fa',
-    '#59b3aa',
-    '#9bc26b',
-    '#e5d22f',
-    '#ffb041',
-    '#ff8a66',
-    '#db6b8f',
-    '#bd66cc',
-    '#8e8e8e',
-  ];
-
   let index = 0;
   const datasets = [];
   sortedMap.forEach((data, key) => {
@@ -69,17 +59,13 @@ function AllStatesChart(props) {
       return;
     }
 
-    if (index >= 10) {
-      return;
-    }
-
     datasets.push({
       borderWidth: 2,
       data: statesData.get(key),
       borderCapStyle: 'round',
-      pointBackgroundColor: colors[index],
+      pointBackgroundColor: colorCodes[index],
       label: getStateName(key),
-      borderColor: colors[index],
+      borderColor: colorCodes[index],
       pointHoverRadius: 0.5,
     });
 
@@ -88,7 +74,12 @@ function AllStatesChart(props) {
 
   const dataset = {
     labels: dates,
-    datasets: datasets,
+    datasets:
+      chartFilter === 'top-10'
+        ? datasets.splice(0, 10)
+        : chartFilter === '10-20'
+        ? datasets.splice(10, 10)
+        : datasets.splice(20, datasets.length),
   };
 
   const options = deepmerge(defaultOptions, {
@@ -164,6 +155,10 @@ function AllStatesChart(props) {
     ci.update();
   }
 
+  function handleFilterChange(value) {
+    setChartFilter(value);
+  }
+
   return (
     <div className="charts-header">
       <div className="chart-title">{props.title}</div>
@@ -171,7 +166,39 @@ function AllStatesChart(props) {
         <Line data={dataset} options={options} ref={chartReference} />
       </div>
       <div className="chart-note" style={{marginTop: '0px', height: '30px'}}>
-        <button onClick={toggleSelection}>Toggle Selection</button>
+        <input
+          type="radio"
+          id="top-10"
+          name="chartFilter"
+          checked={chartFilter === 'top-10'}
+          value="top-10"
+          onClick={() => handleFilterChange('top-10')}
+          style={{margin: '8px'}}
+        />
+        <label htmlFor="top-10">Top 10</label>{' '}
+        <input
+          type="radio"
+          id="10-20"
+          name="chartFilter"
+          checked={chartFilter === '10-20'}
+          value="10-20"
+          onClick={() => handleFilterChange('10-20')}
+          style={{margin: '8px'}}
+        />
+        <label htmlFor="10-20">10 - 20 </label>
+        <input
+          type="radio"
+          id="20-37"
+          name="chartFilter"
+          checked={chartFilter === '20-37'}
+          value="20-37"
+          onClick={() => handleFilterChange('20-37')}
+          style={{margin: '8px'}}
+        />
+        <label htmlFor="20-37">20 - 37 </label>
+        <button onClick={toggleSelection} style={{margin: '8px'}}>
+          Toggle Selection
+        </button>
       </div>
     </div>
   );
