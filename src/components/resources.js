@@ -1,11 +1,22 @@
-import FiltersDesktop from './Essentials/essentialsfiltersdesktop';
-import FiltersMobile from './Essentials/essentialsfiltersmobile';
 import ResourceTable from './resourcetable';
 
 import {Fab, Fade} from '@material-ui/core';
 import axios from 'axios';
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useCallback, lazy} from 'react';
 import * as Icon from 'react-feather';
+
+const FiltersDesktop = lazy(() =>
+  import(
+    /* webpackChunkName: "Resource.DesktopFilters" */
+    './Essentials/essentialsfiltersdesktop'
+  )
+);
+const FiltersMobile = lazy(() =>
+  import(
+    /* webpackChunkName: "Resource.MobileFilters" */
+    './Essentials/essentialsfiltersmobile'
+  )
+);
 
 function Resources(props) {
   const [data, setData] = useState([]);
