@@ -4790,29 +4790,7 @@ footer {
     }
   }
 
-    select {
-      appearance: none;
-      background-color: #eee;
-
-      background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
-      linear-gradient(135deg, #808080 50%, transparent 50%);
-      background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
-      background-repeat: no-repeat;
-      background-size: 5px 5px, 5px 5px;
-      border: 2px solid #e8e8e9;
-      border-radius: 4px;
-      color: $gray;
-      cursor: pointer;
-      font-family: 'archia';
-      font-weight: 900;
-      margin: .2rem .1rem;
-      padding: .5rem;
-      width: 130px;
-      &:focus {
-        outline: none;
-      }
-    }
-
+  
   input {
     &.switch {
       background-color: #161625 !important;
@@ -4958,6 +4936,149 @@ footer {
   }
 
   .PatientsDB {
+    select {
+      appearance: none;
+      background-color:$dark-m-gray ;
+
+      background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
+      linear-gradient(135deg, #808080 50%, transparent 50%);
+      background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+      background-repeat: no-repeat;
+      background-size: 5px 5px, 5px 5px;
+      border: 2px solid blueviolet;
+      border-radius: 4px;
+      color: $dark-m-purple;
+      cursor: pointer;
+      font-family: 'archia';
+      font-weight: 900;
+      margin: .2rem .1rem;
+      padding: .5rem;
+      width: 130px;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .react-date-picker {
+      align-items: center;
+      background-color: $dark-m-gray;
+      border: 2px solid blueviolet !important;
+      border-radius: 4px;
+      color:$gray-dark;
+      cursor: default;
+      font-family: 'archia';
+      font-size: 12px;
+      font-weight: 900;
+      height: 2.05rem;
+      margin: .2rem .1rem;
+      padding: .5rem;
+      padding-inline-start: 1px;
+      width: auto;
+
+      input,
+      button {
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+
+    .react-calendar {
+      background: $dark-m-gray;
+      border: 2px solid $dark-m-purple;
+      border-radius: 5px;
+
+      button {
+        border-radius: 5px;
+        font-family: 'archia';
+        padding: 1rem;
+        transition: all .1s ease-in-out;
+
+        &:disabled {
+          background: $dark-m-gray;
+          border-radius: 0 !important;
+          color: $dark-m-purple;
+          cursor: not-allowed;
+        }
+      }
+    }
+    .react-date-picker__inputGroup__input {
+      &:invalid {
+        background: transparent;
+      }
+    }
+
+    .react-date-picker__wrapper {
+      border: unset;
+
+      svg {
+        stroke:$dark-m-purple;
+
+        &:hover {
+          stroke: $red;
+        }
+      }
+    }
+
+    .react-calendar__tile--active {
+      background: $dark-mid-subtext;
+      color: $dark-m-gray !important;
+
+      &:hover {
+        background: whitesmoke;
+        color: $dark-m-gray !important;
+      }
+    }
+
+    .react-calendar__month-view__weekdays__weekday {
+      font-family: 'archia';
+      margin-bottom: .5rem;
+    }
+
+    .react-calendar__month-view__days__day--weekend,
+    .react-calendar__month-view__days__day {
+      color: $pblue;
+    }
+
+    .react-date-picker__calendar {
+      top: 3.5rem !important;
+    }
+
+    .react-calendar__navigation__label {
+      color: $dark-m-purple !important;
+    }
+
+    .react-calendar__navigation__arrow {
+      color: $dark-m-purple
+    }
+
+    .react-date-picker__inputGroup > * {
+      color: $dark-m-purple !important;
+    }
+
+    .react-date-picker__clear-button {
+      margin: 0 !important;
+      padding: 0 !important;
+
+      svg {
+        stroke-width: 3px;
+        width: 16px;
+      }
+    }
+
+    .react-date-picker__calendar-button {
+      margin: 0 !important;
+      margin-left: .25rem !important;
+      padding: 0 !important;
+
+      svg {
+        height: 16px;
+        stroke-width: 3px;
+        width: 16px;
+      }
+    }
+
     .filters {
       background: #1e1e30 !important;
       box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .12), inset 0 -1px 0 0 #1e1e30;
