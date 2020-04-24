@@ -38,6 +38,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Thank you @'+process.env.username+' for claiming this issue! 🎉 \n\n'+
-                    +'Please reference this issue when you submit your PR!'
+              body: 'Thank you @'+process.env.username+' for claiming this issue! 🎉 \n\nPlease reference this issue when you submit your PR!'
             })
