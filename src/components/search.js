@@ -107,7 +107,7 @@ function Search(props) {
     essentialsEngine.search(searchInput, essentialsSync, essentialsAsync);
   }, []);
 
-  // By using debounce you make network call only when user waits after typing some input.
+  // By using debounce you make network call only when user stops after typing some input.
   // In this way it also avoids extra network calls.
   const debouncedSearchTerm = useDebounce(searchValue, 700);
   useEffect(() => {
