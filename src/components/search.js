@@ -109,7 +109,7 @@ function Search(props) {
 
   // By using debounce you make network call only when user stops after typing some input.
   // In this way it also avoids extra network calls.
-  const debouncedSearchTerm = useDebounce(searchValue, 700);
+  const debouncedSearchTerm = useDebounce(searchValue, 800);
   useEffect(() => {
     // Make sure we have a value (user has entered something in input)
     if (debouncedSearchTerm) {
