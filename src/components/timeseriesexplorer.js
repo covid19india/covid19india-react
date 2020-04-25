@@ -2,6 +2,7 @@ import TimeSeries from './timeseries';
 
 import React from 'react';
 import * as Icon from 'react-feather';
+import ReactTooltip from 'react-tooltip';
 import {useLocalStorage} from 'react-use';
 
 function TimeSeriesExplorer({
@@ -69,9 +70,23 @@ function TimeSeriesExplorer({
         </div>
 
         <div className="scale-modes">
+          <ReactTooltip id="timeseries" place="bottom" globalEventOff="click" />
           <label className="main">Scale Modes</label>
           <div className="timeseries-mode">
-            <label htmlFor="timeseries-mode">Uniform</label>
+            <label
+              htmlFor="timeseries-mode"
+              data-tip={
+                timeseriesMode
+                  ? 'Turn off to make Y-axes adjust to their own highest ranges'
+                  : 'Turn on to make Y-axes in below graphs match the same range'
+              }
+              data-for="timeseries"
+              data-border="true"
+              data-event="touchstart mouseover"
+              data-event-off="mouseleave"
+            >
+              Uniform
+            </label>
             <input
               id="timeseries-mode"
               type="checkbox"
@@ -88,7 +103,20 @@ function TimeSeriesExplorer({
               graphOption !== 1 ? 'disabled' : ''
             }`}
           >
-            <label htmlFor="timeseries-logmode">Logarithmic</label>
+            <label
+              htmlFor="timeseries-logmode"
+              data-tip={
+                timeseriesLogMode
+                  ? 'Turn off to make the Y-axes steps double linearly'
+                  : 'Turn on to make the Y-axes steps jump with exponents of 10'
+              }
+              data-for="timeseries"
+              data-border="true"
+              data-event="touchstart mouseover"
+              data-event-off="mouseleave"
+            >
+              Logarithmic
+            </label>
             <input
               id="timeseries-logmode"
               type="checkbox"
