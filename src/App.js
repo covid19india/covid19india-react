@@ -66,6 +66,48 @@ function App() {
 
   const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
 
+  if (window.innerWidth < 769) {
+    let prevScrollpos = window.pageYOffset;
+    let scrolling = false;
+    window.onscroll = function () {
+      scrolling = true;
+    };
+    setInterval(() => {
+      if (scrolling) {
+        const currentScrollPos = window.pageYOffset;
+        const patientsDbFilter = document.querySelector('.PatientsDB .filters');
+        const HomeTableThead = document.querySelectorAll(
+          '.Home #table-head-sticky-row th'
+        );
+        const navbar = document.getElementById('navbar');
+        if (currentScrollPos > 30) {
+          navbar.classList.add('Navbar-box-shadow');
+        } else {
+          navbar.classList.remove('Navbar-box-shadow');
+        }
+        if (prevScrollpos > currentScrollPos) {
+          navbar.style.top = '0';
+          if (patientsDbFilter) {
+            patientsDbFilter.style.paddingTop = '4.5rem';
+          }
+          if (HomeTableThead.length) {
+            HomeTableThead.forEach((head) => (head.style.top = '4.2rem'));
+          }
+        } else {
+          navbar.style.top = '-5rem';
+          if (patientsDbFilter) {
+            patientsDbFilter.style.paddingTop = '0.5rem';
+          }
+          if (HomeTableThead.length) {
+            HomeTableThead.forEach((head) => (head.style.top = '0.25rem'));
+          }
+        }
+        prevScrollpos = currentScrollPos;
+        scrolling = false;
+      }
+    }, 250);
+  }
+
   React.useEffect(() => {
     if (darkMode) {
       document.querySelector('body').classList.add('dark-mode');
