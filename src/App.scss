@@ -2482,6 +2482,18 @@ input {
         color: $blue;
       }
     }
+
+    &.is-purple {
+      h5 {
+        color: $purple-mid;
+        &.title {
+          color: $purple;
+        }
+      }
+
+      h2,
+      h6 { color: $purple; }
+    }
   }
 
   .svg-parent {
@@ -2554,6 +2566,21 @@ input {
 
       text {
         color: $blue-mid;
+        stroke: transparent;
+      }
+    }
+
+    &.is-purple {
+      background: $purple-light;
+
+      .domain,
+      .tick,
+      line {
+        stroke: $purple;
+      }
+
+      text {
+        color: $purple-mid;
         stroke: transparent;
       }
     }

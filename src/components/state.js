@@ -10,7 +10,9 @@ import {MAP_META, STATE_CODES} from '../constants';
 import {
   formatDateAbsolute,
   formatNumber,
+  mergeTimeseries,
   parseStateTimeseries,
+  parseStateTestTimeseries,
 } from '../utils/commonfunctions';
 
 import anime from 'animejs';
@@ -59,22 +61,31 @@ function State(props) {
         axios.get('https://api.covid19india.org/state_test_data.json'),
         axios.get('https://api.covid19india.org/sources_list.json'),
       ]);
+      const name = STATE_CODES[code];
+
       const states = dataResponse.statewise;
       setStateData(states.find((s) => s.statecode === code));
+      // Timeseries
       const ts = parseStateTimeseries(statesDailyResponse)[code];
-      setTimeseries(ts);
-      const statesTests = stateTestResponse.states_tested_data;
-      const name = STATE_CODES[code];
-      setTestData(
-        statesTests.filter(
-          (obj) => obj.state === name && obj.totaltested !== ''
-        )
-      );
+      const testTs = parseStateTestTimeseries(
+        stateTestResponse.states_tested_data
+      )[code];
+      // Merge
+      const tsMerged = mergeTimeseries({[code]: ts}, {[code]: testTs});
+      setTimeseries(tsMerged[code]);
+      // District data
       setDistrictData({
         [name]: stateDistrictWiseResponse[name],
       });
       const sourceList = sourcesResponse.sources_list;
       setSources(sourceList.filter((state) => state.statecode === code));
+
+      const statesTests = stateTestResponse.states_tested_data;
+      setTestData(
+        statesTests.filter(
+          (obj) => obj.state === name && obj.totaltested !== ''
+        )
+      );
       setFetched(true);
       anime({
         targets: '.highlight',
