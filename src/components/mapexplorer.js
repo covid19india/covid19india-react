@@ -1,11 +1,7 @@
 import ChoroplethMap from './choropleth';
 
 import {MAP_TYPES, MAP_META} from '../constants';
-import {
-  formatDate,
-  formatDateAbsolute,
-  formatNumber,
-} from '../utils/commonfunctions';
+import {formatDate, formatNumber} from '../utils/commonfunctions';
 
 import {formatDistance, format, parse} from 'date-fns';
 import React, {useState, useEffect, useMemo, useCallback} from 'react';
@@ -181,8 +177,6 @@ function MapExplorer({
     [setHoveredRegion, stateDistrictWiseData, states]
   );
 
-  const {name, lastupdatedtime} = currentHoveredRegion;
-
   useEffect(() => {
     setTestObj(
       stateTestData.find(
@@ -305,28 +299,18 @@ function MapExplorer({
 
       <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
         <h2 className={`${mapOption !== 'confirmed' ? mapOption : ''}`}>
-          {name}
+          {currentHoveredRegion.name}
         </h2>
-        {lastupdatedtime && (
-          <div
-            className={`last-update ${
-              currentMap.mapType === MAP_TYPES.STATE
-                ? 'district-last-update'
-                : 'state-last-update'
-            }`}
-          >
+        {currentHoveredRegion.lastupdatedtime && (
+          <div className="last-update">
             <h6>Last updated</h6>
-            <h3
-              title={
-                isNaN(Date.parse(formatDate(lastupdatedtime)))
-                  ? ''
-                  : formatDateAbsolute(lastupdatedtime)
-              }
-            >
-              {isNaN(Date.parse(formatDate(lastupdatedtime)))
+            <h3>
+              {isNaN(
+                Date.parse(formatDate(currentHoveredRegion.lastupdatedtime))
+              )
                 ? ''
                 : formatDistance(
-                    new Date(formatDate(lastupdatedtime)),
+                    new Date(formatDate(currentHoveredRegion.lastupdatedtime)),
                     new Date()
                   ) + ' ago'}
             </h3>
