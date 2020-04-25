@@ -10,15 +10,19 @@ import {MAP_META, STATE_CODES} from '../constants';
 import {
   formatDateAbsolute,
   formatNumber,
+  mergeTimeseries,
   parseStateTimeseries,
+  parseStateTestTimeseries,
 } from '../utils/commonfunctions';
 
+import {Breadcrumb, Dropdown} from '@primer/components';
 import anime from 'animejs';
 import axios from 'axios';
 import {format, parse} from 'date-fns';
 import React, {useRef, useState} from 'react';
 import * as Icon from 'react-feather';
 import {Link, useParams} from 'react-router-dom';
+import {useLocalStorage} from 'react-use';
 import {useMeasure, useEffectOnce} from 'react-use';
 
 function State(props) {
@@ -26,12 +30,18 @@ function State(props) {
   const tsRef = useRef();
 
   const {stateCode} = useParams();
-
+  const [allStateData, setAllStateData] = useState({});
   const [fetched, setFetched] = useState(false);
   const [timeseries, setTimeseries] = useState({});
   const [graphOption, setGraphOption] = useState(1);
-  const [timeseriesMode, setTimeseriesMode] = useState(true);
-  const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
+  const [timeseriesMode, setTimeseriesMode] = useLocalStorage(
+    'timeseriesMode',
+    true
+  );
+  const [timeseriesLogMode, setTimeseriesLogMode] = useLocalStorage(
+    'timeseriesLogMode',
+    false
+  );
   const [stateData, setStateData] = useState({});
   const [testData, setTestData] = useState({});
   const [sources, setSources] = useState({});
@@ -39,6 +49,7 @@ function State(props) {
   const [stateName] = useState(STATE_CODES[stateCode]);
   const [mapOption, setMapOption] = useState('confirmed');
   const [mapSwitcher, {width}] = useMeasure();
+  const [showAllDistricts, setShowAllDistricts] = useState(false);
 
   useEffectOnce(() => {
     getState(stateCode);
@@ -59,22 +70,36 @@ function State(props) {
         axios.get('https://api.covid19india.org/state_test_data.json'),
         axios.get('https://api.covid19india.org/sources_list.json'),
       ]);
-      const states = dataResponse.statewise;
-      setStateData(states.find((s) => s.statecode === code));
-      const ts = parseStateTimeseries(statesDailyResponse)[code];
-      setTimeseries(ts);
-      const statesTests = stateTestResponse.states_tested_data;
       const name = STATE_CODES[code];
-      setTestData(
-        statesTests.filter(
-          (obj) => obj.state === name && obj.totaltested !== ''
+
+      const states = dataResponse.statewise;
+      setAllStateData(
+        states.filter(
+          (state) => state.statecode !== code && STATE_CODES[state.statecode]
         )
       );
+      setStateData(states.find((s) => s.statecode === code));
+      // Timeseries
+      const ts = parseStateTimeseries(statesDailyResponse)[code];
+      const testTs = parseStateTestTimeseries(
+        stateTestResponse.states_tested_data
+      )[code];
+      // Merge
+      const tsMerged = mergeTimeseries({[code]: ts}, {[code]: testTs});
+      setTimeseries(tsMerged[code]);
+      // District data
       setDistrictData({
         [name]: stateDistrictWiseResponse[name],
       });
       const sourceList = sourcesResponse.sources_list;
       setSources(sourceList.filter((state) => state.statecode === code));
+
+      const statesTests = stateTestResponse.states_tested_data;
+      setTestData(
+        statesTests.filter(
+          (obj) => obj.state === name && obj.totaltested !== ''
+        )
+      );
       setFetched(true);
       anime({
         targets: '.highlight',
@@ -100,13 +125,37 @@ function State(props) {
 
   const testObjLast = testData[testData.length - 1];
 
+  function toggleShowAllDistricts() {
+    setShowAllDistricts(!showAllDistricts);
+  }
+
   return (
     <React.Fragment>
       <div className="State">
         <div className="state-left">
-          <div className="breadcrumb fadeInUp">
-            <Link to="/">Home</Link>/
-            <Link to={`${stateCode}`}>{stateName}</Link>
+          <div className="breadcrumb">
+            <Breadcrumb>
+              <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+              <Dropdown direction="w">
+                <summary>
+                  <Breadcrumb.Item href={`${stateCode}`} selected>
+                    {stateName}
+                  </Breadcrumb.Item>
+                  <Dropdown.Caret className="caret" />
+                </summary>
+                {fetched && (
+                  <Dropdown.Menu direction="se">
+                    {allStateData.map((state) => (
+                      <Dropdown.Item key={state.statecode} className="item">
+                        <Link to={`${state.statecode}`}>
+                          {STATE_CODES[state.statecode]}
+                        </Link>
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                )}
+              </Dropdown>
+            </Breadcrumb>
           </div>
 
           <div className="header">
@@ -260,13 +309,18 @@ function State(props) {
         <div className="state-right">
           {fetched && (
             <React.Fragment>
-              <div className="district-bar">
+              <div
+                className="district-bar"
+                style={!showAllDistricts ? {display: 'flex'} : {}}
+              >
                 <div
                   className="district-bar-left fadeInUp"
                   style={{animationDelay: '0.6s'}}
                 >
                   <h2>Top districts</h2>
-                  <div className="districts">
+                  <div
+                    className={`districts ${showAllDistricts ? 'is-grid' : ''}`}
+                  >
                     {districtData[stateName]
                       ? Object.keys(districtData[stateName].districtData)
                           .filter((d) => d !== 'Unknown')
@@ -276,7 +330,7 @@ function State(props) {
                                 .confirmed -
                               districtData[stateName].districtData[a].confirmed
                           )
-                          .slice(0, 6)
+                          .slice(0, showAllDistricts ? undefined : 5)
                           .map((district, index) => {
                             return (
                               <div key={index} className="district">
@@ -303,6 +357,9 @@ function State(props) {
                           })
                       : ''}
                   </div>
+                  <button className="button" onClick={toggleShowAllDistricts}>
+                    {showAllDistricts ? `View less` : `View all`}
+                  </button>
                 </div>
                 <div className="district-bar-right">
                   {

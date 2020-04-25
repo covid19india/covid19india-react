@@ -132,3 +132,63 @@ export const parseStateTimeseries = ({states_daily: data}) => {
 
   return statewiseSeries;
 };
+
+export const parseStateTestTimeseries = (data) => {
+  const stateCodeMap = Object.keys(STATE_CODES).reduce((ret, sc) => {
+    ret[STATE_CODES[sc]] = sc;
+    return ret;
+  }, {});
+
+  const testTimseries = Object.keys(STATE_CODES).reduce((ret, sc) => {
+    ret[sc] = [];
+    return ret;
+  }, {});
+
+  const today = moment();
+  data.forEach((d) => {
+    const date = moment(d.updatedon, 'DD/MM/YYYY');
+    const totaltested = +d.totaltested;
+    if (date.isBefore(today, 'Date') && totaltested) {
+      const stateCode = stateCodeMap[d.state];
+      testTimseries[stateCode].push({
+        date: date.toDate(),
+        totaltested: totaltested,
+      });
+    }
+  });
+  return testTimseries;
+};
+
+export const parseTotalTestTimeseries = (data) => {
+  const testTimseries = [];
+  const today = moment();
+  data.forEach((d) => {
+    const date = moment(d.updatetimestamp.split(' ')[0], 'DD/MM/YYYY');
+    const totaltested = +d.totalindividualstested;
+    if (date.isBefore(today, 'Date') && totaltested) {
+      testTimseries.push({
+        date: date.toDate(),
+        totaltested: totaltested,
+      });
+    }
+  });
+  return testTimseries;
+};
+
+export const mergeTimeseries = (ts1, ts2) => {
+  const tsRet = Object.assign({}, ts1);
+  for (const state in ts1) {
+    if (ts1.hasOwnProperty(state)) {
+      tsRet[state] = ts1[state].map((d1) => {
+        const testData = ts2[state].find((d2) =>
+          moment(d1.date).isSame(moment(d2.date), 'day')
+        );
+        return {
+          totaltested: testData?.totaltested,
+          ...d1,
+        };
+      });
+    }
+  }
+  return tsRet;
+};
