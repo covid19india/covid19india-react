@@ -2595,45 +2595,51 @@ input {
     &.is-gray {
       background: $gray-light;
 
-      .domain,
-      .tick,
-      line {
-        stroke: $gray;
-      }
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $gray;
+        }
 
-      text {
-        color: $gray-mid;
-        stroke: transparent;
+        text {
+          color: $gray-mid;
+          stroke: transparent;
+        }
       }
     }
 
     &.is-blue {
       background: $blue-light;
 
-      .domain,
-      .tick,
-      line {
-        stroke: $blue;
-      }
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $blue;
+        }
 
-      text {
-        color: $blue-mid;
-        stroke: transparent;
+        text {
+          color: $blue-mid;
+          stroke: transparent;
+        }
       }
     }
 
     &.is-purple {
       background: $purple-light;
 
-      .domain,
-      .tick,
-      line {
-        stroke: $purple;
-      }
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $purple;
+        }
 
-      text {
-        color: $purple-mid;
-        stroke: transparent;
+        text {
+          color: $purple-mid;
+          stroke: transparent;
+        }
       }
     }
   }
@@ -4911,6 +4917,57 @@ footer {
       }
     }
   }
+
+  .TimeSeries,
+  .Minigraph {
+    .stats {
+      &.is-purple {
+        h5 {
+          color: #9673b9bb !important;
+
+          &.title {
+            color: #9673b9 !important;
+          }
+        }
+
+        h2,
+        h6 {
+          color: #9673b9bb !important;
+        }
+      }
+    }
+
+    .svg-parent {
+      &.is-purple {
+        background: #40008050 !important;
+
+        svg {
+          .dot,
+          .focus,
+          .domain,
+          .tick,
+          line {
+            stroke: #9673b9 !important;
+          }
+
+          .dot,
+          .focus {
+            fill: #9673b9 !important;
+          }
+
+          .trend {
+            stroke: #9673b999 !important;
+          }
+
+          text {
+            color: #9673b9bb !important;
+            stroke: transparent;
+          }
+        }
+      }
+    }
+  }
+
 
   .tab {
     &.focused {
