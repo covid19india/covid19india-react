@@ -98,7 +98,7 @@ function Row(props) {
       <tr
         className={`state ${props.total ? 'is-total' : ''} ${
           props.index % 2 === 0 ? 'is-odd' : ''
-        }`}
+        } ${props.isHighlighted ? 'is-highlighted' : ''}`}
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
         onClick={!props.total ? handleReveal : null}
@@ -275,7 +275,11 @@ function Row(props) {
               return (
                 <tr
                   key={index}
-                  className={`district ${index % 2 === 0 ? 'is-odd' : ''}`}
+                  className={`district ${index % 2 === 0 ? 'is-odd' : ''} ${
+                    props.highlightedDistrict === district
+                      ? 'is-highlighted'
+                      : ''
+                  }`}
                   style={{
                     background: index % 2 === 0 ? '#f8f9fa' : '',
                   }}
@@ -284,7 +288,19 @@ function Row(props) {
                   }
                   onMouseLeave={() => props.onHighlightDistrict?.()}
                 >
-                  <td style={{fontWeight: 600}}>{district}</td>
+                  <td className="unknown" style={{fontWeight: 600}}>
+                    {district}
+                    <span onClick={handleTooltip}>
+                      <span
+                        data-for="unknown"
+                        data-tip={[[sortedDistricts[district].notes]]}
+                        data-event="touchstart mouseover"
+                        data-event-off="mouseleave"
+                      >
+                        {sortedDistricts[district].notes && <Icon.Info />}
+                      </span>
+                    </span>
+                  </td>
                   <td>
                     <span className="deltas" style={{color: '#ff073a'}}>
                       {sortedDistricts[district].delta.confirmed > 0 && (
@@ -312,23 +328,14 @@ function Row(props) {
               <span onClick={handleTooltip}>
                 <span
                   data-for="unknown"
-                  data-tip={[
-                    'Awaiting patient-level details from State Bulletin',
-                  ]}
+                  data-tip={
+                    'Awaiting patient-level details from State Bulletin'
+                  }
                   data-event="touchstart mouseover"
                   data-event-off="mouseleave"
                 >
                   <Icon.Info />
                 </span>
-                <ReactTooltip
-                  id="unknown"
-                  place="right"
-                  type="dark"
-                  effect="solid"
-                  multiline={true}
-                  scrollHide={true}
-                  globalEventOff="click"
-                />
               </span>
             </td>
             <td>
@@ -342,6 +349,26 @@ function Row(props) {
               </span>
               <span className="table__count-text">
                 {formatNumber(sortedDistricts['Unknown'].confirmed)}
+              </span>
+            </td>
+          </tr>
+        </React.Fragment>
+      )}
+
+      {showDistricts && (
+        <React.Fragment>
+          <tr>
+            <td colSpan={2}>
+              <span className="unknown">
+                <ReactTooltip
+                  id="unknown"
+                  place="right"
+                  type="dark"
+                  effect="solid"
+                  multiline={true}
+                  scrollHide={true}
+                  globalEventOff="click"
+                />
               </span>
             </td>
           </tr>

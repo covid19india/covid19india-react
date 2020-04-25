@@ -387,9 +387,12 @@ function TimeSeries(props) {
     }
   }, [timeseries, graphData]);
 
-  const focusDate = moment(datapoint.date);
+  const focusDate = moment(datapoint.date).utcOffset('+05:30');
   let dateStr = focusDate.format('DD MMMM');
-  dateStr += focusDate.isSame(moment().subtract(1, 'days'), 'day')
+  dateStr += focusDate.isSame(
+    moment().utcOffset('+05:30').subtract(1, 'days'),
+    'day'
+  )
     ? ' Yesterday'
     : '';
 

@@ -146,7 +146,7 @@ function Search(props) {
         <Icon.Search />
       </div>
 
-      {results.length > 0 && (
+      {searchValue.length > 0 && (
         <div
           className={`close-button`}
           onClick={() => {

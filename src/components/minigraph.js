@@ -15,7 +15,7 @@ function Minigraph({timeseries}) {
   const graphData = useCallback((data) => {
     if (data.length <= 1) return 0;
 
-    const margin = {top: 0, right: 10, bottom: 30, left: 0};
+    const margin = {top: 10, right: 5, bottom: 20, left: 5};
     const chartRight = 100 - margin.right;
     const chartBottom = 100 - margin.bottom;
 
@@ -62,7 +62,7 @@ function Minigraph({timeseries}) {
         .datum(data)
         .attr('fill', 'none')
         .attr('stroke', color + '99')
-        .attr('stroke-width', 3)
+        .attr('stroke-width', 2.5)
         .attr('cursor', 'pointer')
         .attr(
           'd',
@@ -117,8 +117,8 @@ function Minigraph({timeseries}) {
         <svg
           ref={svgRef1}
           width="100"
-          height="100"
-          viewBox="0 0 100 100"
+          height="75"
+          viewBox="0 0 100 75"
           preserveAspectRatio="xMidYMid meet"
         />
       </div>
@@ -130,8 +130,8 @@ function Minigraph({timeseries}) {
         <svg
           ref={svgRef2}
           width="100"
-          height="100"
-          viewBox="0 0 100 100"
+          height="75"
+          viewBox="0 0 100 75"
           preserveAspectRatio="xMidYMid meet"
         />
       </div>
@@ -143,8 +143,8 @@ function Minigraph({timeseries}) {
         <svg
           ref={svgRef3}
           width="100"
-          height="100"
-          viewBox="0 0 100 100"
+          height="75"
+          viewBox="0 0 100 75"
           preserveAspectRatio="xMidYMid meet"
         />
       </div>
@@ -156,8 +156,8 @@ function Minigraph({timeseries}) {
         <svg
           ref={svgRef4}
           width="100"
-          height="100"
-          viewBox="0 0 100 100"
+          height="75"
+          viewBox="0 0 100 75"
           preserveAspectRatio="xMidYMid meet"
         />
       </div>

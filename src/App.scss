@@ -429,14 +429,20 @@ h6 {
     width: 100%;
   }
 
-  .Minigraph,
-  .Level,
   .MapExplorer,
   .meta-secondary {
     width: calc(100% - 3rem);
   }
 
+  .Minigraph {
+    .svg-parent {
+      width: calc(25%) !important;
+    }
+  }
+
   .MapExplorer {
+    margin-top: 2rem;
+
     .header,
     .map-stats,
     .back-button,
@@ -809,23 +815,11 @@ h6 {
   width: 100%;
 
 
-  .react-autosuggest__input {
-    #outlined-number-label {
-      font-family: 'archia';
-      font-size: .7rem;
-      text-transform: uppercase;
-    }
-
-    #outlined-number {
-      font-family: 'archia';
-      font-size: .7rem !important;
-      font-weight: 400;
-      height: .1rem;
-    }
-  }
-
-  .react-autosuggest__suggestions-container {
-    display: none;
+  #input-field-searchbar {
+    font-family: 'archia';
+    font-size: .7rem !important;
+    font-weight: 400;
+    height: .1rem;
   }
 }
 
@@ -1323,6 +1317,44 @@ h6 {
   }
 }
 
+.map-switcher {
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: absolute;
+  top: 13rem;
+  width: 30rem;
+
+  .highlight {
+    background: $cherry-light;
+    position: absolute;
+    width: calc(25%) !important;
+    z-index: -1;
+
+    &.active {
+      background: $blue-light;
+    }
+
+    &.recovered {
+      background: $green-light;
+    }
+
+    &.deceased {
+      background: $gray-light;
+    }
+  }
+
+  .highlight,
+  .clickable {
+    border-radius: 5px;
+    cursor: pointer;
+    height: 12rem;
+    width: calc(25%);
+    z-index: 10;
+  }
+}
+
 .Level {
   align-self: center;
   display: flex;
@@ -1334,17 +1366,10 @@ h6 {
   .level-item {
     display: flex;
     flex-direction: column;
+    width: calc(25%);
 
     & > * {
       align-self: center;
-    }
-
-    &:first-child {
-      margin-left: .5rem;
-    }
-
-    &:last-child {
-      margin-right: .5rem;
     }
   }
 
@@ -1520,9 +1545,12 @@ table {
     tr {
       cursor: pointer;
 
+      &.is-highlighted {
+        background: $gray-hover !important;
+      }
+
       &:hover {
         background: $gray-hover !important;
-
 
         .dropdown {
           background: $gray-hover;
@@ -1781,11 +1809,6 @@ table {
   z-index: 11;
 }
 
-.map-hover {
-  stroke: #ff073a;
-  stroke-width: 2;
-}
-
 .anchor {
   cursor: pointer;
   position: absolute;
@@ -1867,6 +1890,23 @@ table {
     width: 100%;
   }
 
+  .map-hover {
+    stroke: #ff073a;
+    stroke-width: 2;
+
+    &.active {
+      stroke: #007bff;
+    }
+
+    &.recovered {
+      stroke: #28a745;
+    }
+
+    &.deceased {
+      stroke: #6c757d;
+    }
+  }
+
   .back-button {
     background: $yellow-light;
     color: $orange;
@@ -1917,18 +1957,23 @@ table {
     height: 1rem;
     justify-content: space-between;
 
-
-    .district-last-update {
-      bottom: 0;
-      position: absolute;
-      right: 0;
-    }
-
     h2 {
       color: #e23028;
       font-weight: 900;
       margin: 0;
       word-wrap: break-word;
+
+      &.active {
+        color: $blue;
+      }
+
+      &.recovered {
+        color: $green;
+      }
+
+      &.deceased {
+        color: $gray;
+      }
     }
 
     h4 {
@@ -1937,13 +1982,25 @@ table {
       word-wrap: break-word;
     }
 
-    .district-confirmed {
+    .district {
       color: #e23028;
       line-height: 15px;
       margin: 0;
       position: absolute;
       top: 3rem;
       width: 5rem;
+
+      &.active {
+        color: $blue;
+      }
+
+      &.recovered {
+        color: $green;
+      }
+
+      &.deceased {
+        color: $gray;
+      }
     }
 
     .unknown {
@@ -1963,6 +2020,7 @@ table {
     margin-bottom: 1rem;
     position: relative;
     width: 100%;
+    z-index: 10;
 
     h1,
     h5,
@@ -1980,15 +2038,17 @@ table {
       background: $cherry-light;
       border-radius: 5px;
       color: $cherry-mid;
+      cursor: pointer;
       display: flex;
       flex: 1;
       flex-direction: column;
-      margin-bottom: .5rem;
+      height: 3rem;
+      margin-bottom: 1rem;
       margin-left: .25rem;
       margin-right: .25rem;
       padding: .25rem;
       position: relative;
-
+      transition: all .1s ease-in-out;
 
       .stats-bottom {
         display: flex;
@@ -2093,6 +2153,13 @@ table {
         }
       }
 
+      &.focused {
+        margin-bottom: .5rem;
+        margin-top: -.5rem;
+        padding-bottom: .75rem;
+        padding-top: .75rem;
+      }
+
       &:first-child {
         margin-left: 0;
       }
@@ -2100,6 +2167,33 @@ table {
       &:last-child {
         margin-right: 0;
       }
+    }
+  }
+
+  .disclaimer {
+    backdrop-filter: saturate(180%) blur(20px);
+    background: $gray-light;
+    border-radius: 5px;
+    bottom: 50%;
+    color: $gray-dark;
+    display: flex;
+    flex-direction: row;
+    font-family: 'archia';
+    font-size: 12px;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    padding: .5rem;
+    position: absolute;
+    right: 0;
+    width: 14rem;
+    z-index: 99;
+
+    svg {
+      margin-right: .25rem;
+      margin-top: -.9rem;
+      stroke-width: 2px;
+      width: 20px !important;
     }
   }
 }
@@ -2149,6 +2243,11 @@ table {
 .TimeSeries {
   align-self: center;
   width: 100%;
+
+  .svg-parent {
+    height: 10rem;
+    margin-bottom: 1rem;
+  }
 }
 
 .timeseries-header {
@@ -2295,7 +2394,6 @@ input {
   margin-top: 1rem;
   width: 100%;
 
-
   .stats {
     border-radius: 3px;
     display: flex;
@@ -2391,8 +2489,6 @@ input {
     background: $cherry-light;
     border-radius: 5px;
     display: flex;
-    height: 10rem;
-    margin-bottom: 1rem;
     position: relative;
     width: 30rem;
 
@@ -2470,13 +2566,13 @@ input {
   flex-direction: row;
   justify-content: space-between;
   margin: 0;
-  margin-bottom: -3rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
   width: 30rem;
 
   .svg-parent {
     background: transparent !important;
-    height: 7rem;
-    width: 5rem;
+    width: calc(25%);
   }
 
   .tooltip {
@@ -4088,6 +4184,7 @@ footer {
   .MapExplorer,
   .filters,
   .updates,
+  .map-switcher,
   .updates-header {
     width: calc(100% - 2rem);
   }
@@ -4125,6 +4222,12 @@ footer {
   .TimeSeries {
     .svg-parent {
       width: 100%;
+    }
+  }
+
+  .Minigraph {
+    .svg-parent {
+      padding: 0;
     }
   }
 
