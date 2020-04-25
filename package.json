@@ -42,7 +42,7 @@
     "eject": "react-scripts eject",
     "eslint": "eslint .",
     "eslint:fix": "eslint --fix --max-warnings=0",
-    "format": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|md)\"",
+    "format": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|md|html)\"",
     "scss-lint": "sass-lint 'src/**/*.scss' -v -f table --max-warnings 0",
     "scss-lint:fix": "sass-lint-auto-fix 'src/**/*.scss' -d -h -c '.sass-lint-auto-fix.yml'"
   },
