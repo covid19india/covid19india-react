@@ -147,7 +147,6 @@ function Search(props) {
         }}
         onChange={(event) => {
           setSearchValue(event.target.value);
-          handleSearch(event.target.value.toLowerCase());
         }}
       />
 
