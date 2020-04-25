@@ -2178,20 +2178,27 @@ table {
   }
 
   .disclaimer {
+    backdrop-filter: saturate(180%) blur(20px);
     background: $gray-light;
     border-radius: 5px;
-    color: $gray;
+    bottom: 50%;
+    color: $gray-dark;
     display: flex;
     flex-direction: row;
     font-family: 'archia';
-    font-size: 11px;
+    font-size: 12px;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
     padding: .5rem;
+    position: absolute;
+    right: 0;
     width: 14rem;
+    z-index: 99;
 
     svg {
-      color: $gray;
       margin-right: .25rem;
-      margin-top: -.35rem;
+      margin-top: -.9rem;
       stroke-width: 2px;
       width: 20px !important;
     }

@@ -5,6 +5,7 @@ import {formatNumber} from '../utils/commonfunctions';
 
 import * as d3 from 'd3';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
+import * as Icon from 'react-feather';
 import * as topojson from 'topojson';
 
 const propertyFieldMap = {
@@ -255,6 +256,15 @@ function ChoroplethMap({
           preserveAspectRatio="xMidYMid meet"
           ref={choroplethMap}
         ></svg>
+        {(mapOption === 'recovered' && mapData?.Unknown?.recovered) ||
+        (mapOption === 'deceased' && mapData?.Unknown?.deceased) ? (
+          <div className="disclaimer">
+            <Icon.AlertCircle />
+            {`District-wise ${mapOption} numbers are under reconciliation`}
+          </div>
+        ) : (
+          ''
+        )}
       </div>
       <div
         className="svg-parent legend fadeInUp"
