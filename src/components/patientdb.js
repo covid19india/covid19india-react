@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 import axios from 'axios';
 import {format, parse, subDays} from 'date-fns';
+import StateConfirmedCases from './Charts/stateconfirmedcases';
 
 import Patients from './patients';
 import DownloadBlock from './downloadblock';
@@ -28,6 +29,7 @@ function PatientDB(props) {
     detectedstate: '',
     detecteddistrict: '',
     detectedcity: '',
+    typeoftransmission: '',
     dateannounced: format(subDays(new Date(), 1), 'dd/MM/yyyy'),
   });
 
@@ -357,6 +359,11 @@ function PatientDB(props) {
       </div>
 
       <div className="patientdb-wrapper">
+        {colorMode === 'transmission' && (
+          <div className="fadeInUp" style={{animationDelay: '1.2s'}}>
+            <StateConfirmedCases title="" patients={filteredPatients} />
+          </div>
+        )}
         <Patients
           patients={filteredPatients}
           colorMode={colorMode}

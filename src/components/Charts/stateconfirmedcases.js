@@ -23,29 +23,42 @@ function StateConfirmedCases(props) {
   let unknown = 0;
   let Imported = 0;
   let Local = 0;
-  let state = '';
 
-  props.rawData.forEach((patient) => {
-    if (props.data === 'TT') {
-      state = 'All States';
-      if (patient.typeoftransmission == 'Imported') {
-        Imported++;
-      } else if (patient.typeoftransmission == 'Local') {
-        Local++;
-      } else {
-        unknown++;
+  if (props.rawData) {
+    props.rawData.forEach((patient) => {
+      if (props.data === 'TT') {
+        if (patient.typeoftransmission == 'Imported') {
+          Imported++;
+        } else if (patient.typeoftransmission == 'Local') {
+          Local++;
+        } else {
+          unknown++;
+        }
+      } else if (patient.statecode.toUpperCase() === props.data) {
+        if (patient.typeoftransmission == 'Imported') {
+          Imported++;
+        } else if (patient.typeoftransmission == 'Local') {
+          Local++;
+        } else {
+          unknown++;
+        }
       }
-    } else if (patient.statecode.toUpperCase() === props.data) {
-      state = patient.detectedstate;
-      if (patient.typeoftransmission == 'Imported') {
+    });
+  }
+
+  if (props.patients) {
+    for (let i = 0; i < props.patients.length; i++) {
+      if (props.patients[i].typeoftransmission === 'Imported') {
         Imported++;
-      } else if (patient.typeoftransmission == 'Local') {
+      } else if (props.patients[i].typeoftransmission === 'Local') {
         Local++;
-      } else {
+      } else if (props.patients[i].typeoftransmission === 'Unknown') {
+        unknown++;
+      } else if (props.patients[i].typeoftransmission === '') {
         unknown++;
       }
     }
-  });
+  }
 
   const data = [Imported, Local, unknown];
 
@@ -69,7 +82,7 @@ function StateConfirmedCases(props) {
         hoverBackgroundColor: ['#ff7272', '#f1e7b6', '#9c5518'],
       },
     ],
-    labels: ['Travel History', 'Local', 'Awaiting details'],
+    labels: ['Imported', 'Local', 'TBD'],
   };
 
   const chartOptions = {
@@ -85,8 +98,7 @@ function StateConfirmedCases(props) {
       display: true,
     },
     responsive: true,
-    percentageInnerCutout: 70,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     tooltips: {
       mode: 'point',
       events: ['mousemove', 'mouseout', 'touchstart', 'touchmove', 'touchend'],
@@ -110,9 +122,6 @@ function StateConfirmedCases(props) {
 
   return (
     <div className="charts-header">
-      <div className="chart-title">
-        <h2>{state}</h2>
-      </div>
       <div className="chart-content doughnut">
         <Doughnut data={chartData} options={chartOptions} />
       </div>

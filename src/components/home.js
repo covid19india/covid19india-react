@@ -18,11 +18,9 @@ import Minigraph from './minigraph';
 import Updates from './updates';
 import Search from './search';
 import Footer from './footer';
-import StateConfirmedCases from './Charts/stateconfirmedcases';
 
 function Home(props) {
   const [states, setStates] = useState([]);
-  const [rawData, setRawData] = useState([]);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
   const [stateTestData, setStateTestData] = useState({});
   const [fetched, setFetched] = useState(false);
@@ -77,16 +75,13 @@ function Home(props) {
         stateDistrictWiseResponse,
         {data: statesDailyResponse},
         {data: stateTestData},
-        rawDataResponse,
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
         axios.get('https://api.covid19india.org/states_daily.json'),
         axios.get('https://api.covid19india.org/state_test_data.json'),
-        axios.get('https://api.covid19india.org/raw_data.json'),
       ]);
       setStates(data.statewise);
-      setRawData(rawDataResponse.data.raw_data);
       const ts = parseStateTimeseries(statesDailyResponse);
       ts['TT'] = preprocessTimeseries(data.cases_time_series); // TT -> India
       setTimeseries(ts);
@@ -187,15 +182,6 @@ function Home(props) {
               onHighlightDistrict={onHighlightDistrict}
             />
           )}
-
-          <div className="card fadeInUp" style={{animationDelay: '1.2s'}}>
-            <h3>Confirmed Cases - Source</h3>
-            <StateConfirmedCases
-              title=""
-              data={activeStateCode}
-              rawData={rawData}
-            />
-          </div>
         </div>
 
         <div className="home-right">
