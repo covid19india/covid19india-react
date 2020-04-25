@@ -190,6 +190,10 @@ function ChoroplethMap({
       function handleClick(d) {
         d3.event.stopPropagation();
         if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE) return;
+        // Disable pointer events till the new map is rendered
+        svg.attr('pointer-events', 'none');
+        g.selectAll('.path-region').attr('pointer-events', 'none');
+        // Switch map
         changeMap(d.properties[propertyField]);
       }
 
