@@ -19,6 +19,7 @@ import {format, parse} from 'date-fns';
 import React, {useRef, useState} from 'react';
 import * as Icon from 'react-feather';
 import {Link, useParams} from 'react-router-dom';
+import {useLocalStorage} from 'react-use';
 import {useMeasure, useEffectOnce} from 'react-use';
 
 function State(props) {
@@ -30,8 +31,14 @@ function State(props) {
   const [fetched, setFetched] = useState(false);
   const [timeseries, setTimeseries] = useState({});
   const [graphOption, setGraphOption] = useState(1);
-  const [timeseriesMode, setTimeseriesMode] = useState(true);
-  const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
+  const [timeseriesMode, setTimeseriesMode] = useLocalStorage(
+    'timeseriesMode',
+    true
+  );
+  const [timeseriesLogMode, setTimeseriesLogMode] = useLocalStorage(
+    'timeseriesLogMode',
+    false
+  );
   const [stateData, setStateData] = useState({});
   const [testData, setTestData] = useState({});
   const [sources, setSources] = useState({});
