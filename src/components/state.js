@@ -48,6 +48,7 @@ function State(props) {
   const [stateName] = useState(STATE_CODES[stateCode]);
   const [mapOption, setMapOption] = useState('confirmed');
   const [mapSwitcher, {width}] = useMeasure();
+  const [showAllDistricts, setShowAllDistricts] = useState(false);
 
   useEffectOnce(() => {
     getState(stateCode);
@@ -117,6 +118,10 @@ function State(props) {
   };
 
   const testObjLast = testData[testData.length - 1];
+
+  function toggleShowAllDistricts() {
+    setShowAllDistricts(!showAllDistricts);
+  }
 
   return (
     <React.Fragment>
@@ -278,13 +283,18 @@ function State(props) {
         <div className="state-right">
           {fetched && (
             <React.Fragment>
-              <div className="district-bar">
+              <div
+                className="district-bar"
+                style={!showAllDistricts ? {display: 'flex'} : {}}
+              >
                 <div
                   className="district-bar-left fadeInUp"
                   style={{animationDelay: '0.6s'}}
                 >
                   <h2>Top districts</h2>
-                  <div className="districts">
+                  <div
+                    className={`districts ${showAllDistricts ? 'is-grid' : ''}`}
+                  >
                     {districtData[stateName]
                       ? Object.keys(districtData[stateName].districtData)
                           .filter((d) => d !== 'Unknown')
@@ -294,7 +304,7 @@ function State(props) {
                                 .confirmed -
                               districtData[stateName].districtData[a].confirmed
                           )
-                          .slice(0, 6)
+                          .slice(0, showAllDistricts ? undefined : 5)
                           .map((district, index) => {
                             return (
                               <div key={index} className="district">
@@ -321,6 +331,9 @@ function State(props) {
                           })
                       : ''}
                   </div>
+                  <button className="button" onClick={toggleShowAllDistricts}>
+                    {showAllDistricts ? `View less` : `View all`}
+                  </button>
                 </div>
                 <div className="district-bar-right">
                   {

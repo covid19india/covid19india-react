@@ -2486,13 +2486,16 @@ input {
     &.is-purple {
       h5 {
         color: $purple-mid;
+
         &.title {
           color: $purple;
         }
       }
 
       h2,
-      h6 { color: $purple; }
+      h6 {
+        color: $purple;
+      }
     }
   }
 
@@ -3949,7 +3952,6 @@ footer {
 
 .district-bar {
   align-self: center;
-  display: flex;
   flex-direction: row;
   justify-content: space-between;
 
@@ -3964,22 +3966,46 @@ footer {
     flex-direction: column;
     margin-right: 1rem;
     width: 10rem;
+
+    .button {
+      background: $gray-light;
+      color: $gray;
+      height: 2.5rem;
+      justify-content: center;
+      margin-top: .75rem;
+      width: 5rem;
+
+      &:hover {
+        background: $gray-hover;
+      }
+    }
   }
 
   .districts {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 15rem;
     width: 100%;
 
+    &.is-grid {
+      display: grid;
+      grid-auto-flow: column;
+      grid-gap: .5rem;
+      grid-template-rows: repeat(auto-fit, 2rem);
+      max-height: 20rem;
+      overflow-x: scroll;
+      overflow-y: none;
+      padding-bottom: .5rem;
+      width: 30rem;
+    }
 
     .district {
       display: flex;
       flex-direction: row;
       font-family: 'archia';
-      margin-bottom: .15rem;
-      margin-top: .15rem;
+      height: 2.5rem;
+      justify-content: flex-start;
+      margin-right: 1rem;
 
       h2,
       h5 {
@@ -3989,9 +4015,11 @@ footer {
       }
 
       h5 {
-        display: table;
+        display: inline-block !important;
+        flex: 0 1;
         margin-left: .5rem;
         margin-top: .15rem;
+        width: auto !important;
       }
 
       & > * {
