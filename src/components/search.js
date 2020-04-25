@@ -3,9 +3,10 @@ import {
   DISTRICTS_ARRAY,
   STATE_CODES_REVERSE,
 } from '../constants';
+import useDebounce from '../utils/hooks';
 
 import Bloodhound from 'corejs-typeahead';
-import React, {useState, useCallback, useRef} from 'react';
+import React, {useState, useCallback, useRef, useEffect} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
 
@@ -105,6 +106,14 @@ function Search(props) {
     districtEngine.search(searchInput, districtSync);
     essentialsEngine.search(searchInput, essentialsSync, essentialsAsync);
   }, []);
+
+  const debouncedSearchTerm = useDebounce(searchValue, 800);
+  useEffect(() => {
+    // Make sure we have a value (user has entered something in input)
+    if (debouncedSearchTerm) {
+      handleSearch(debouncedSearchTerm.toLowerCase());
+    }
+  }, [debouncedSearchTerm, handleSearch]);
 
   function setNativeValue(element, value) {
     const valueSetter = Object.getOwnPropertyDescriptor(element, 'value').set;
