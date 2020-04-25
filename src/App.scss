@@ -2935,7 +2935,7 @@ footer {
       font-family: 'archia';
       font-size: 12px;
       font-weight: 900;
-      height: 2.05rem;
+      height: 2.19rem;
       margin: .2rem .1rem;
       padding: .5rem;
       padding-inline-start: 1px;
@@ -5010,9 +5010,17 @@ footer {
     }
   }
 
-  select {
-    background: #1e1e30 !important;
-    border-color: #1e1e30 !important;
+  .trends-state-name,
+  .select {
+    select {
+      background: #1e1e30;
+      background-image: linear-gradient(45deg, transparent 50%, $gray 50%),
+      linear-gradient(135deg, $gray 50%, transparent 50%);
+      background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+      background-repeat: no-repeat;
+      background-size: 5px 5px, 5px 5px;
+      border-color: #9494941a;
+    }
   }
 
   input {
@@ -5167,6 +5175,11 @@ footer {
 
     .legend {
       background: #1e1e30 !important;
+    }
+
+    .react-date-picker {
+      background: #1e1e30;
+      border-color: #9494941a !important;
     }
 
     .modal-content {
