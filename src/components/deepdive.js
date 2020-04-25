@@ -1,6 +1,7 @@
 import AgeChart from './Charts/agechart';
 import AllStatesChart from './Charts/allstates';
 import DailyConfirmedChart from './Charts/dailyconfirmedchart';
+import DeceasedChart from './Charts/deceasedchart';
 import GenderChart from './Charts/genderchart';
 import GrowthTrendChart from './Charts/growthtrendchart';
 import NationalityChart from './Charts/nationalitychart';
@@ -14,6 +15,7 @@ function DeepDive() {
   const [timeseries, setTimeseries] = useState([]);
   const [rawData, setRawData] = useState([]);
   const [statesTimeSeries, setStatesTimeSeries] = useState([]);
+  const [deathRecoveries, setdeathRecoveries] = useState([]);
 
   useEffect(() => {
     if (fetched === false) {
@@ -27,14 +29,17 @@ function DeepDive() {
         response,
         rawDataResponse,
         stateDailyResponse,
+        deathRecoveriesResponse,
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/raw_data.json'),
         axios.get('https://api.covid19india.org/states_daily.json'),
+        axios.get('https://api.covid19india.org/deaths_recoveries.json'),
       ]);
       setTimeseries(response.data.cases_time_series);
       setStatesTimeSeries(stateDailyResponse.data.states_daily);
       setRawData(rawDataResponse.data.raw_data);
+      setdeathRecoveries(deathRecoveriesResponse.data.deaths_recoveries);
       setFetched(true);
     } catch (err) {
       console.log(err);
@@ -79,6 +84,10 @@ function DeepDive() {
 
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
           <NationalityChart title="Patients by  Nationality" data={rawData} />
+        </div>
+
+        <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
+          <DeceasedChart title="Deceased Cases By Age" data={deathRecoveries} />
         </div>
       </section>
     </div>
