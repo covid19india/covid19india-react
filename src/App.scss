@@ -470,14 +470,41 @@ h6 {
 }
 
 .breadcrumb {
+  cursor: pointer;
   display: flex;
   flex-direction: row;
   font-family: 'archia';
   font-size: .75rem;
   padding-left: 1.5rem;
 
+  ul {
+    background: $light;
+    border: 2px solid $gray-light;
+    box-shadow: none;
+    max-height: 20rem;
+    overflow-y: scroll;
+  }
+
+  .item {
+    a {
+      color: $gray;
+      width: 100%;
+    }
+
+    &:hover {
+      background: $gray-hover;
+
+      a {
+        background: transparent;
+        color: $gray;
+      }
+    }
+  }
+
   a {
     color: $gray;
+    font-family: 'archia';
+    font-size: .75rem;
     margin-right: .25rem;
     text-decoration: none;
     transition: all .2s ease-in-out;
@@ -488,6 +515,28 @@ h6 {
 
     &:hover {
       background: $gray-hover;
+      text-decoration: none;
+    }
+
+    &.selected {
+      background: $gray-light;
+      color: $gray;
+    }
+  }
+
+  .caret {
+    color: $gray;
+    margin-left: 0;
+    transition: all .1s ease-in-out;
+
+    &:hover {
+      color: $gray-dark;
+    }
+  }
+
+  summary {
+    &:focus {
+      outline: none;
     }
   }
 }
@@ -4807,6 +4856,28 @@ footer {
 
       a {
         background: #40008050 !important;
+      }
+    }
+
+    .breadcrumb {
+      ul {
+        background: #1e1e30 !important;
+
+        &::after {
+          border-bottom-color: #1e1e30 !important;
+        }
+
+        li {
+
+          a {
+            color: $gray !important;
+
+            &:hover {
+              color: $white !important;
+            }
+          }
+
+        }
       }
     }
   }

@@ -92,7 +92,9 @@ function App() {
                     <Route
                       exact
                       path={page.pageLink}
-                      component={page.view}
+                      render={({match}) => (
+                        <page.view key={match.params.stateCode || index} />
+                      )}
                       key={index}
                     />
                   );
