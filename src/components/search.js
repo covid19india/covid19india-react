@@ -3,12 +3,12 @@ import {
   DISTRICTS_ARRAY,
   STATE_CODES_REVERSE,
 } from '../constants';
-import {useDebounce} from '../utils/hooks';
 
 import Bloodhound from 'corejs-typeahead';
-import React, {useState, useCallback, useRef, useEffect} from 'react';
+import React, {useState, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
+import {useDebounce} from 'react-use';
 
 const engine = new Bloodhound({
   initialize: true,
@@ -107,17 +107,17 @@ function Search(props) {
     essentialsEngine.search(searchInput, essentialsSync, essentialsAsync);
   }, []);
 
-  // By using debounce you make network call only when user stops after typing some input.
-  // In this way it also avoids extra network calls.
-  const debouncedSearchTerm = useDebounce(searchValue, 800);
-  useEffect(() => {
-    // Make sure we have a value (user has entered something in input)
-    if (debouncedSearchTerm) {
-      handleSearch(debouncedSearchTerm.toLowerCase());
-    } else {
-      setResults([]);
-    }
-  }, [debouncedSearchTerm, handleSearch]);
+  useDebounce(
+    () => {
+      if (searchValue) {
+        handleSearch(searchValue.toLowerCase());
+      } else {
+        setResults([]);
+      }
+    },
+    800,
+    [searchValue]
+  );
 
   function setNativeValue(element, value) {
     const valueSetter = Object.getOwnPropertyDescriptor(element, 'value').set;
