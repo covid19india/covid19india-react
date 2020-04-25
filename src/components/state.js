@@ -15,6 +15,7 @@ import {
   parseStateTestTimeseries,
 } from '../utils/commonfunctions';
 
+import {Breadcrumb, Dropdown} from '@primer/components';
 import anime from 'animejs';
 import axios from 'axios';
 import {format, parse} from 'date-fns';
@@ -29,7 +30,7 @@ function State(props) {
   const tsRef = useRef();
 
   const {stateCode} = useParams();
-
+  const [allStateData, setAllStateData] = useState({});
   const [fetched, setFetched] = useState(false);
   const [timeseries, setTimeseries] = useState({});
   const [graphOption, setGraphOption] = useState(1);
@@ -72,6 +73,11 @@ function State(props) {
       const name = STATE_CODES[code];
 
       const states = dataResponse.statewise;
+      setAllStateData(
+        states.filter(
+          (state) => state.statecode !== code && STATE_CODES[state.statecode]
+        )
+      );
       setStateData(states.find((s) => s.statecode === code));
       // Timeseries
       const ts = parseStateTimeseries(statesDailyResponse)[code];
@@ -127,9 +133,29 @@ function State(props) {
     <React.Fragment>
       <div className="State">
         <div className="state-left">
-          <div className="breadcrumb fadeInUp">
-            <Link to="/">Home</Link>/
-            <Link to={`${stateCode}`}>{stateName}</Link>
+          <div className="breadcrumb">
+            <Breadcrumb>
+              <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+              <Dropdown direction="w">
+                <summary>
+                  <Breadcrumb.Item href={`${stateCode}`} selected>
+                    {stateName}
+                  </Breadcrumb.Item>
+                  <Dropdown.Caret className="caret" />
+                </summary>
+                {fetched && (
+                  <Dropdown.Menu direction="se">
+                    {allStateData.map((state) => (
+                      <Dropdown.Item key={state.statecode} className="item">
+                        <Link to={`${state.statecode}`}>
+                          {STATE_CODES[state.statecode]}
+                        </Link>
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                )}
+              </Dropdown>
+            </Breadcrumb>
           </div>
 
           <div className="header">
