@@ -15,7 +15,6 @@ Always submit a PR against a "Claimed Issue" that's been assigned to you. If an 
   <img src="https://storage.googleapis.com/jrmyphlmn/images/github/label%20change.png" width="50%">
 </p>
 
-
 - People looking to contribute, filter issues by ["Status:Available"](https://github.com/covid19india/covid19india-react/issues?q=is%3Aissue+is%3Aopen+label%3A%22Status%3A+Available%22) and comment "/claim" on the issue they would like to be assigned to work on.
 
 <p align="center">
@@ -30,19 +29,21 @@ Always submit a PR against a "Claimed Issue" that's been assigned to you. If an 
 - Finally submit the pull request.
 
 ## Formatting
+
 Format your PR titles likewise:
 
 > [Tag]: Describe change in present tense
 
-Tag can be: 
+Tag can be:
 
-* Feat     (new feature)
-* Fix      (bug fix)
-* Refactor (refactoring code)
-* Style    (formatting, no code change)
-* Doc      (changes to documentation)
-* Test     (adding or refactoring tests; no production code change)
+- Feat (new feature)
+- Fix (bug fix)
+- Refactor (refactoring code)
+- Style (formatting, no code change)
+- Doc (changes to documentation)
+- Test (adding or refactoring tests; no production code change)
 
- Remember to:
-   * Capitalize the subject line
-   * Use the imperative mood in the subject line
+Remember to:
+
+- Capitalize the subject line
+- Use the imperative mood in the subject line

@@ -1,12 +1,12 @@
-on: 
+on:
   issue_comment:
     types: [created]
 name: Claim Issue
 jobs:
   assign:
     name: Update labels and Assign
-    if: github.event.issue.pull_request == '' 
-      && contains(github.event.comment.body, '/claim') 
+    if: github.event.issue.pull_request == ''
+      && contains(github.event.comment.body, '/claim')
       && contains(toJson(github.event.issue.labels), 'Available')
     runs-on: ubuntu-latest
     steps:
