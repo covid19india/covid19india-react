@@ -3,7 +3,7 @@ import {
   DISTRICTS_ARRAY,
   STATE_CODES_REVERSE,
 } from '../constants';
-import useDebounce from '../utils/hooks';
+import {useDebounce} from '../utils/hooks';
 
 import Bloodhound from 'corejs-typeahead';
 import React, {useState, useCallback, useRef, useEffect} from 'react';
