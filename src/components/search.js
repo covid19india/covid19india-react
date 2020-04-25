@@ -112,6 +112,8 @@ function Search(props) {
     // Make sure we have a value (user has entered something in input)
     if (debouncedSearchTerm) {
       handleSearch(debouncedSearchTerm.toLowerCase());
+    } else {
+      setResults([]);
     }
   }, [debouncedSearchTerm, handleSearch]);
 
