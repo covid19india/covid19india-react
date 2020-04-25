@@ -1,76 +1,4 @@
-@font-face {
-  font-family: 'Archia';
-  src: url('fonts/Archia/archia-thin-webfont.eot');
-  src:
-    url('fonts/Archia/archia-thin-webfont.eot?#iefix') format('embedded-opentype'),
-    url('fonts/Archia/archia-thin-webfont.woff2') format('woff2'),
-    url('fonts/Archia/archia-thin-webfont.woff') format('woff'),
-    url('fonts/Archia/archia-thin-webfont.ttf') format('truetype');
-  font-weight: 100;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Archia';
-  src: url('fonts/Archia/archia-light-webfont.eot');
-  src:
-    url('fonts/Archia/archia-light-webfont.eot?#iefix') format('embedded-opentype'),
-    url('fonts/Archia/archia-light-webfont.woff2') format('woff2'),
-    url('fonts/Archia/archia-light-webfont.woff') format('woff'),
-    url('fonts/Archia/archia-light-webfont.ttf') format('truetype');
-  font-weight: 200;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Archia';
-  src: url('fonts/Archia/archia-regular-webfont.eot');
-  src:
-    url('fonts/Archia/archia-regular-webfont.eot?#iefix') format('embedded-opentype'),
-    url('fonts/Archia/archia-regular-webfont.woff2') format('woff2'),
-    url('fonts/Archia/archia-regular-webfont.woff') format('woff'),
-    url('fonts/Archia/archia-regular-webfont.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Archia';
-  src: url('fonts/Archia/archia-medium-webfont.eot');
-  src:
-    url('fonts/Archia/archia-medium-webfont.eot?#iefix') format('embedded-opentype'),
-    url('fonts/Archia/archia-medium-webfont.woff2') format('woff2'),
-    url('fonts/Archia/archia-medium-webfont.woff') format('woff'),
-    url('fonts/Archia/archia-medium-webfont.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Archia';
-  src: url('fonts/Archia/archia-semibold-webfont.eot');
-  src:
-    url('fonts/Archia/archia-semibold-webfont.eot?#iefix') format('embedded-opentype'),
-    url('fonts/Archia/archia-semibold-webfont.woff2') format('woff2'),
-    url('fonts/Archia/archia-semibold-webfont.woff') format('woff'),
-    url('fonts/Archia/archia-semibold-webfont.ttf') format('truetype');
-  font-weight: 600;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Archia';
-  src: url('fonts/Archia/archia-bold-webfont.eot');
-  src:
-    url('fonts/Archia/archia-bold-webfont.eot?#iefix') format('embedded-opentype'),
-    url('fonts/Archia/archia-bold-webfont.woff2') format('woff2'),
-    url('fonts/Archia/archia-bold-webfont.woff') format('woff'),
-    url('fonts/Archia/archia-bold-webfont.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-}
-
-/* Color Pallete */
+// Color Pallete
 
 $blue: #007bff;
 $blue-light: #007bff10;
@@ -134,106 +62,183 @@ $pink: #fb5581;
 $pink-light: #ffa8cb10;
 $pink-hover: #ffa8cb30;
 $pink-mid: #ffa8cb99;
-
-@mixin navbarReveal($color) {
-  $animation-name: unique-id() !global;
-
-  animation-name: $animation-name;
-  animation-duration: 0.75s;
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: both;
-
-  @keyframes #{$animation-name} {
-
-    0% {
-      background: transparent;
-    }
-
-    100% {
-      background: $color;
-    }
-  }
-}
-
-@mixin levelColor($color) {
-  .is-#{$color} {
-
-    h1 { color: $color; }
-
-    h4,
-    h5 { color: #{$color}-mid; }
-  }
-}
+$brick: #e23028;
+// Dark mode variables
+$dark-m-gray: #161625;
+$dark-mid-subtext: #bdb8ae;
+$dark-m-white: #e1e1e1;
+$dark-m-purple: #7ba1ea;
+$dark-m-blue: #3391ff;
 
 body {
-  padding: 0;
-  margin: 0;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
+  margin: 0;
+  padding: 0;
 }
 
 h1 {
   font-family: 'archia';
   font-size: 24px !important;
   font-weight: 900;
-  text-transform: uppercase;
 }
 
 h2 {
   font-family: 'archia';
   font-size: 18px !important;
   font-weight: 400;
-  text-transform: uppercase;
 }
 
 h3 {
   font-family: 'archia';
   font-size: 14px !important;
   font-weight: 400;
-  text-transform: uppercase;
 }
 
 h4 {
   font-family: 'archia';
   font-size: 13px !important;
   font-weight: 900;
-  text-transform: uppercase;
 }
 
 h5 {
   font-family: 'archia';
   font-size: 12px !important;
   font-weight: 900;
-  text-transform: uppercase;
 }
 
 h6 {
   font-family: 'archia';
   font-size: 11px !important;
   font-weight: 600;
-  text-transform: uppercase;
+}
+
+.switch-wrapper {
+  position: relative;
+}
+
+.switch-wrapper > div {
+  position: absolute;
+  transition: all .25s ease-in-out;
+  width: 100%;
 }
 
 .arrow-up {
+  border-bottom: 5px solid $gray-mid;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-bottom: 5px solid $gray-mid;
-  margin-left: 0.25rem;
+  margin-left: .25rem;
 }
 
 .arrow-down {
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   border-top: 5px solid $gray-mid;
-  margin-left: 0.25rem;
+  margin-left: .25rem;
+}
+
+.Navbar {
+  display: flex;
+  flex-direction: row;
+  height: 3.9rem;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+
+  & > * {
+    align-self: center;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .navbar-left {
+    color: $gray;
+    cursor: pointer;
+    font-family: 'archia';
+    font-size: 12px;
+    font-weight: 600;
+    padding: 1.5rem;
+  }
+
+  .navbar-middle {
+    color: $gray;
+    font-family: 'archia';
+    font-size: 18px;
+    font-weight: 900;
+    text-transform: uppercase;
+
+    span {
+      color: $pblue;
+    }
+  }
+
+  .navbar-right {
+    color: $gray;
+    cursor: pointer;
+    font-family: 'archia';
+    font-size: 12px;
+    font-weight: 600;
+    padding: 1.5rem;
+    transition: all 0s ease-in-out;
+    width: 2rem;
+
+    &:hover {
+      background: $pblue;
+      color: #fff;
+    }
+  }
+
+  .expand {
+    background: $gray-light-opaque;
+    color: $gray;
+    display: flex;
+    flex-direction: column;
+    font-family: 'archia';
+    height: 100vh;
+    position: absolute;
+    top: 3.85rem;
+    transform: none;
+    width: 100vw;
+    z-index: 9999;
+
+    & > * {
+      border-bottom: 1px solid $gray-light;
+      border-top: 1px solid $gray-light;
+      padding: 1.5rem;
+      transition: all .15s ease-in-out;
+
+      &:hover {
+        background: $gray-hover;
+      }
+
+      span {
+        &.focused {
+          background: $pblue-light;
+          color: $pblue;
+          padding: .25rem;
+        }
+      }
+    }
+
+    .expand-bottom {
+      align-self: flex-start;
+      border: 0;
+
+      &:hover {
+        background: none;
+      }
+    }
+  }
 }
 
 .Home {
   display: flex;
   flex-direction: row;
-  justify-content: center;
   flex-wrap: wrap;
-  margin-left: 5rem;
+  justify-content: center;
+  margin-left: 10rem;
   margin-right: 5rem;
 
   .home-left,
@@ -244,8 +249,8 @@ h6 {
   }
 
   .home-left {
-    margin-right: 2.5rem;
     margin-left: 2.5rem;
+    margin-right: 2.5rem;
   }
 
   .home-right {
@@ -254,13 +259,276 @@ h6 {
   }
 }
 
+.State {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-left: 10rem;
+  margin-right: 5rem;
+
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    width: calc(100% - 3rem);
+
+    & > * {
+      align-self: flex-start;
+    }
+
+    .header-left {
+      h1,
+      h5 {
+        margin: 0;
+      }
+
+      h1 {
+        color: $brick;
+        max-width: 20rem;
+      }
+
+      h5 {
+        color: $gray;
+        font-weight: 600;
+      }
+    }
+
+    .header-right {
+      color: $purple-mid;
+      display: flex;
+      flex-direction: column;
+      margin-top: .1rem;
+      text-align: right;
+
+      h2,
+      h5 {
+        font-weight: 600;
+        margin: 0;
+      }
+
+      h2 {
+        color: $purple;
+        font-weight: 900;
+        margin-bottom: 1rem;
+      }
+
+      a {
+        background: $purple-light;
+        color: inherit;
+        text-decoration: none;
+        transition: all .2s ease-in-out;
+
+        &:hover {
+          background: $purple-hover;
+        }
+      }
+    }
+  }
+
+  .state-left,
+  .state-right {
+    display: flex;
+    flex-direction: column;
+    width: 30rem;
+  }
+
+  .state-left {
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+  }
+
+  .state-right {
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .to-essentials {
+    align-self: center;
+    background: $gray-light;
+    border-radius: 5px;
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+    padding: .5rem;
+    transition: all .2s ease-in-out;
+
+    &:hover {
+      background: $gray-hover;
+    }
+
+    h2 {
+      color: $gray-mid;
+      font-weight: 600;
+    }
+
+    svg {
+      color: $gray-mid;
+      margin-bottom: 2px;
+      margin-left: 1rem;
+    }
+
+    & > * {
+      align-self: center;
+    }
+  }
+
+  .meta-secondary {
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 3rem;
+    margin-top: 3rem;
+
+    .unknown,
+    .sources {
+      background: $gray-light;
+      border-radius: 5px;
+      color: $gray;
+      display: flex;
+      flex-direction: row;
+      font-family: 'archia';
+      font-size: 10px;
+      margin-right: .5rem;
+      padding: .5rem;
+      width: 6rem;
+
+      svg {
+        color: $gray-mid;
+        margin-right: .25rem;
+        margin-top: -.25rem;
+        stroke-width: 2px;
+        width: 36px !important;
+      }
+    }
+
+    .sources-right {
+      width: 10rem;
+
+      a {
+        background: $gray-light;
+        color: $gray;
+        padding-left: .1rem;
+        padding-right: .1rem;
+
+        &:hover {
+          background: $gray-hover;
+        }
+      }
+    }
+  }
+
+  .district-bar,
+  .to-essentials {
+    width: 100%;
+  }
+
+  .MapExplorer,
+  .meta-secondary {
+    width: calc(100% - 3rem);
+  }
+
+  .Minigraph {
+    .svg-parent {
+      width: calc(25%) !important;
+    }
+  }
+
+  .MapExplorer {
+    margin-top: 2rem;
+
+    .header,
+    .map-stats,
+    .back-button,
+    .last-update,
+    .unknown,
+    .state-page-button {
+      display: none;
+    }
+
+    .anchor {
+      display: none;
+    }
+
+    .svg-parent {
+      &:not(.legend) {
+        height: 400px;
+        width: 100%;
+
+        svg {
+          height: 100%;
+        }
+      }
+    }
+  }
+}
+
+.breadcrumb {
+  display: flex;
+  flex-direction: row;
+  font-family: 'archia';
+  font-size: .75rem;
+  padding-left: 1.5rem;
+
+  a {
+    color: $gray;
+    margin-right: .25rem;
+    text-decoration: none;
+    transition: all .2s ease-in-out;
+
+    &:not(:first-child) {
+      margin-left: .25rem;
+    }
+
+    &:hover {
+      background: $gray-hover;
+    }
+  }
+}
+
+.height-22 {
+  height: 22px;
+}
+
+.disclaimercontainer {
+  svg {
+    margin-left: 2px;
+  }
+
+  .mobile-disclaimer-button {
+    background-color: #fff;
+    color: #808080;
+    font-size: xx-small;
+    justify-content: center;
+
+
+    svg {
+      font-size: .75rem;
+    }
+  }
+
+  .disclaimer-button {
+    background: none;
+    color: $gray-mid;
+    font-size: .7rem;
+    font-weight: 500;
+    text-transform: none;
+  }
+}
+
 .Resources {
   display: flex;
   flex-direction: row;
-  justify-content: center;
   flex-wrap: wrap;
-  margin-left: 2rem;
-  margin-right: 2rem;
+  justify-content: center;
+  margin-left: 5.5rem;
+  margin-right: 5.5rem;
 
   .resource-left,
   .resource-right {
@@ -270,8 +538,8 @@ h6 {
   }
 
   .resource-left {
-    margin-right: 2.5rem;
     margin-left: 2.5rem;
+    margin-right: 2.5rem;
   }
 
   .resource-right {
@@ -279,39 +547,43 @@ h6 {
     margin-right: 2.5rem;
   }
 
-  .tableandcontrols{
+  .tableandaccordions {
+    align-items: center;
     display: flex;
     flex-direction: column;
     width: 100%;
   }
 
   table {
-    position: relative;
-    width: 100%;
     align-self: center;
-    font-family: 'archia';
-    text-transform: none;
-    border-spacing: 3px 2px;
     border-collapse: separate;
-    // animation-name: fadeInOut;
-    // animation-duration: 2s;
+    border-spacing: 3px 2px;
+    font-family: 'archia';
+    position: relative;
+    table-layout: fixed;
+    text-transform: none;
+    width: 100%;
 
     thead {
       background: $purple-light;
       color: $gray-dark;
+      font-size: .9rem;
       text-align: center;
-      font-size: 0.9rem;
 
       th {
-        padding: 0.5rem;
-        cursor: pointer;
         border-radius: 5px;
-        transition: all 0.1s ease-in-out;
+        cursor: pointer;
+        padding: .5rem;
+        transition: all .1s ease-in-out;
         z-index: 99;
 
+        &.descriptionCol {
+          width: 50%;
+        }
+
         &.sticky {
-          top: 4px;
           background: $gray-opaque;
+          top: 0;
         }
 
         &:hover {
@@ -319,25 +591,25 @@ h6 {
         }
 
         .heading-content {
+          align-items: center;
           display: flex;
+          flex-direction: row;
+          height: .9rem;
           justify-content: space-between;
           position: relative;
-          flex-direction: row;
-          height: 0.9rem;
-          align-items: center;
 
           abbr {
             text-align: right;
           }
 
           svg {
-            width: 10px;
+            color: $gray-mid;
             margin: 0;
+            margin-left: .25rem;
+            margin-top: .15rem;
             right: 0;
             stroke-width: 4px;
-            margin-top: 0.15rem;
-            margin-left: 0.25rem;
-            color: $gray-mid;
+            width: 10px;
           }
         }
       }
@@ -345,107 +617,98 @@ h6 {
 
     tbody {
       color: $gray;
+      max-width: 10rem;
 
       tr {
-        transition: background 0.1s ease-in-out;
-        // cursor: pointer;
+        transition: background .1s ease-in-out;
 
         &:hover {
           background: $gray-hover !important;
         }
 
         &.divider {
-          height: 0.5rem;
           background: #6c757d10 !important;
+          height: .5rem;
         }
 
         &.spacer {
-          height: 0.5rem;
           background: #fff !important;
+          height: .5rem;
         }
       }
-
-       tr:nth-child(even) {background-color: $purple-light;}
 
       td {
-        // padding: 0.25rem;
-        font-size: 0.7rem;
         border-radius: 5px;
+        font-size: .7rem;
         text-align: left;
-        .deltas {
-          margin-right: 0.25rem;
-          font-size: 11px !important;
 
-          svg {
-            width: 9px;
-            height: 9px;
-            stroke-width: 3;
-            vertical-align: -0.25px;
-          }
+        &:first-child {
+          max-width: 7.5rem;
+          text-align: left;
+          word-wrap: break-word;
+        }
+
+        .deltas {
+          font-size: 11px !important;
+          margin-right: .25rem;
         }
       }
 
-      td:first-child {
-        text-align: left;
-        max-width: 7.5rem;
-        word-wrap: break-word;
-      }
-
-      .state-last-update{
+      .state-last-update {
         background: transparent;
         transform: translateX(1rem);
-        &:hover{
+
+        &:hover {
           background: #fff !important;
         }
 
-        td{
-          .last-update{
-            text-align: left;
+        td {
+          .last-update {
+            align-items: baseline;
             display: flex;
             flex-direction: row;
-            align-items: baseline;
+            text-align: left;
             width: 100%;
           }
         }
       }
 
       .district-heading {
-        transform: translateX(1rem);
         background: $gray-light;
+        transform: translateX(1rem);
 
         td {
-          font-size: 0.75rem;
-          font-weight: 900;
-          padding: 0.45rem;
-          color: $gray-dark;
           background: $gray-light;
+          color: $gray-dark;
+          font-size: .75rem;
+          font-weight: 900;
+          padding: .45rem;
+
 
           .heading-content {
+            align-items: center;
             display: flex;
+            flex-direction: row;
+            height: .9rem;
             justify-content: space-between;
             position: relative;
-            flex-direction: row;
-            height: 0.9rem;
-            align-items: center;
 
             abbr {
               text-align: right;
             }
 
             svg {
-              width: 10px;
+              color: $gray-mid;
               margin: 0;
+              margin-left: .25rem;
+              margin-top: .15rem;
               right: 0;
               stroke-width: 4px;
-              margin-left: 0.25rem;
-              margin-top: 0.15rem;
-              color: $gray-mid;
+              width: 10px;
             }
           }
         }
       }
-
-      max-width: 10rem;
 
       .district {
         transform: translateX(1rem);
@@ -453,11 +716,11 @@ h6 {
     }
 
     .affected-count {
-      position: absolute;
-      margin: 0;
-      top: -1rem;
       color: $gray-mid;
+      margin: 0;
+      position: absolute;
       right: 0;
+      top: -1rem;
     }
 
     .is-total {
@@ -467,143 +730,123 @@ h6 {
     }
 
     .dropdown {
-      position: absolute;
-      left: -0.75rem;
       background: $gray-light;
       border-radius: 50%;
-      width: 13px;
-      height: 13px;
-      margin-top: 0.5rem;
       cursor: pointer;
-      transition: background 0.2s ease-in-out;
+      height: 13px;
+      left: -.75rem;
+      margin-top: .5rem;
+      position: absolute;
+      transition: background .2s ease-in-out;
+      width: 13px;
 
       &:hover {
         background: $gray-hover;
       }
 
       svg {
-        position: absolute;
-        top: -0.35rem;
         left: 1px;
-        width: 11px;
+        position: absolute;
         stroke-width: 3;
+        top: -.35rem;
+        width: 11px;
       }
     }
   }
-
-
 }
 
 .filtersection {
+  animation-duration: 1s;
+  animation-name: fadeInUp;
+  animation-timing-function: ease-in;
   display: flex;
   flex-direction: column;
-  width: 80%;
   margin-bottom: 1rem;
+  width: 80%;
+
+
   .filtertitle {
     align-self: center;
     color: $cherry;
   }
-  animation-name: fadeInUp;
-  animation-duration: 1s;
-  animation-timing-function: ease-in;
-
 }
 
 .resourcefilters {
+  align-items: center;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+
+
   .button {
-    padding: 0.4rem;
+    padding: .4rem;
   }
 }
 
 .resourcefilter {
-
+  align-items: center;
   display: flex;
   flex-direction: column;
-  // min-width: 30%;
+  justify-content: space-around;
   margin-left: 1rem;
   margin-right: 1rem;
-  justify-content: space-around;
-  align-items: center;
+
+
   .filterlabel {
+    color: $indigo;
     font-family: 'archia';
     font-size: 11px !important;
     font-weight: 600;
     text-transform: uppercase;
-    color: $indigo;
   }
 
   select {
     width: 100%;
-    // background-color: $purple-light-opaque;
-    // border-radius: 10px;
   }
-
 }
 
 .searchbar {
   font-family: 'archia';
-  font-size: 0.7rem !important;
+  font-size: .7rem !important;
   font-weight: 400;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
   text-align: center;
-  margin-top: 0.2rem;
-  margin-bottom: 0.1rem;
   width: 100%;
 
-  .react-autosuggest__input {
 
-    #outlined-number-label {
-      font-family: 'archia';
-      font-size: 0.7rem;
-      text-transform: uppercase;
-    }
-
-    #outlined-number {
-      font-family: 'archia';
-      font-size: 0.7rem !important;
-      font-weight: 400;    
-      font-family: 'archia';  
-      height: 0.1rem;
-    }
+  #input-field-searchbar {
+    font-family: 'archia';
+    font-size: .7rem !important;
+    font-weight: 400;
+    height: .1rem;
   }
-
-  .react-autosuggest__suggestions-container {
-    display: none;
-  }
-
 }
 
-.pagination{
+.pagination {
   display: flex;
   flex-direction: row;
   justify-content: center;
+
+
   .button {
-    margin-left: 0.7rem;
-    margin-right: 0.7rem;
-    margin-top: 0.7rem;
-    height: 70%;
-    width: 3rem;
-    padding-left: 1.1rem;
-    // text-align: center;
-    justify-content: space-between;
     align-items: center;
-    // margin-top
+    height: 70%;
+    justify-content: space-between;
+    margin-left: .7rem;
+    margin-right: .7rem;
+    margin-top: .7rem;
+    padding-left: 1.1rem;
+    width: 3rem;
   }
 
-  select{
-    // height: 2.2 rem;
-    // margin-top: 0.7rem;
-    margin: 0.7rem 0.7rem 0.2rem 0.1rem;
+  select {
+    margin: .7rem .7rem .2rem .1rem;
   }
 
-  input{
-    // max-height: fit-content;
-    // height: 0.5rem;
+  input {
+    margin: .7rem .7rem .2rem;
     width: 100px;
-    margin: 0.7rem 0.7rem 0.2rem 0.7rem;
   }
 }
 
@@ -614,116 +857,359 @@ h6 {
 }
 
 .Banner {
+  background: $purple-light;
+  color: $purple;
   display: flex;
   flex-direction: row;
+  font-family: 'Archia';
+  font-size: .8rem;
+  font-weight: 600;
   justify-content: center;
   line-height: 20px;
-  font-family: 'Archia';
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: $purple;
-  background: $purple-light;
+
 
   .snippet {
     align-self: center;
-    width: calc(100% - 10rem);
-    word-wrap: break-word;
+    cursor: pointer;
     padding: 1.5rem;
     text-align: center;
-    cursor: pointer;
+    width: calc(100% - 10rem);
+    word-wrap: break-word;
   }
 }
 
-.Navbar {
+.Search {
   display: flex;
-  flex-direction: row;
-  height: 4.5rem;
-  justify-content: space-around;
-  text-transform: uppercase;
-  font-weight: 900;
-  align-items: center;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  position: relative;
+  width: 100%;
 
-  @include navbarReveal($gray-light);
+  & > * {
+    align-self: center;
+  }
 
-  .navbar-left {
-    margin-left: 2rem;
-    flex: 1;
+  label {
+    color: $gray;
+    font-family: 'archia';
+    font-size: .75rem;
+    margin-bottom: 1rem;
+  }
+
+  .line {
+    background: $gray-light;
+    height: 1rem;
+    width: 2px;
+  }
+
+  input {
+    -webkit-box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
+    background: #fff;
+    border: 0;
+    border-radius: 5px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
+    color: $gray;
+    font-family: 'archia';
+    font-size: 1rem;
+    height: 2rem;
+    outline: none;
+    padding: 1rem;
+    padding-left: 3rem;
+    transition: all .2s ease-in-out;
+    width: calc(100% - 4rem);
+  }
+
+  .search-button {
+    svg {
+      color: $gray-mid;
+      left: .75rem;
+      position: absolute;
+      top: 4.15rem;
+      transition: all .2s ease-in-out;
+    }
+
+    &.is-expand {
+      svg {
+        left: .5rem;
+      }
+    }
+  }
+
+  .close-button {
+    background: $gray-light !important;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    height: 20px;
+    justify-content: center;
+    position: absolute;
+    right: 1rem;
+    top: 4.15rem;
+    transition: all .2s ease-in-out;
+    width: 20px;
+
+    &:hover {
+      background: $gray-hover !important;
+    }
+
+    &.is-expand {
+      right: .75rem;
+    }
+
+    svg {
+      align-self: center;
+      position: absolute;
+      stroke: $gray-mid;
+      stroke-width: 3;
+      width: 12px;
+    }
+  }
+
+  .expanded {
+    display: flex;
+    flex-direction: row;
+    margin-top: 2rem;
+    padding: 1rem;
+    padding-bottom: 0;
+    width: calc(100% - 4rem);
+
+    & > * {
+      flex: 1;
+    }
+
+    h4,
+    h3 {
+      color: $gray;
+      font-weight: 600;
+      margin: 0;
+      margin-bottom: .5rem;
+    }
+
+    h3 {
+      color: $pblue;
+      margin-bottom: .75rem;
+    }
+  }
+
+  .results {
+    padding: 1rem;
+    padding-bottom: 0;
+    width: calc(100% - 2rem);
 
     a {
-      display: inline-block;
-      font-size: 14px;
-      font-family: 'Archia';
-      text-decoration: none;
-      margin-right: 2rem;
-      color: $gray-mid;
+      text-decoration: none !important;
+    }
 
-      span {
-        display: inline-block;
-        transition: color 0.2s ease-in-out;
+    .result,
+    .essential-result {
+      align-self: flex-start;
+      border-bottom: 2px solid $gray-light;
+      color: $gray;
+      cursor: pointer;
+      display: flex;
+      flex-direction: row;
+      font-family: 'archia';
+      font-size: .9rem;
+      justify-content: space-between;
+      padding: 1rem;
+      transition: all .2s ease-in-out;
 
-        &:hover {
-          color: $gray;
+      &:hover {
+        background: $gray-light;
+      }
+
+      & > * {
+        align-self: center;
+      }
+
+      .result-name {
+        max-width: 15rem;
+      }
+
+      .result-type {
+        background: $yellow-light;
+        border-radius: 2px;
+        color: $orange;
+        font-size: .75rem;
+        padding: .25rem;
+      }
+    }
+
+    .essential-result {
+      display: flex;
+      flex-direction: column;
+
+
+      .result-top {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+
+
+        .result-top-left {
+          display: flex;
+          flex-direction: column;
+
+
+          .result-location {
+            display: flex;
+            flex-direction: row;
+            font-size: .75rem;
+          }
+        }
+      }
+
+      .result-category {
+        align-self: flex-start;
+        background: $pink-light;
+        border-radius: 2px;
+        color: $pink;
+        display: flex;
+        flex-direction: row;
+        font-size: .75rem;
+        height: 1rem;
+        padding: .25rem;
+        text-align: right;
+
+        & > * {
+          align-self: center;
+        }
+
+        svg {
+          margin-left: .25rem;
+          stroke-width: 3px;
+          width: 12px;
+        }
+      }
+
+      .result-description {
+        align-self: flex-start;
+        font-size: .75rem;
+        margin-top: 1rem;
+      }
+
+      .result-contact {
+        align-self: flex-start;
+        background: $gray-light;
+        border-radius: 2px;
+        display: flex;
+        flex-direction: row;
+        font-size: .75rem;
+        height: 1rem;
+        margin-top: .5rem;
+        padding: .25rem;
+        text-align: right;
+
+        & > * {
+          align-self: center;
+        }
+
+        svg {
+          margin-right: .25rem;
+          stroke: $gray-mid;
+          stroke-width: 3px;
+          width: 12px;
         }
       }
     }
   }
 
-  .focused {
-    color: $gray;
-  }
+  .suggestions {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1rem;
 
-  img {
-    width: 3rem;
-    height: 3rem;
-    margin-left: 5rem;
-    cursor: pointer;
+
+    .suggestion {
+      color: $gray-mid;
+      display: flex;
+      flex-direction: row;
+      font-family: 'archia';
+
+      div {
+        padding-top: 1px;
+      }
+
+      h4 {
+        cursor: pointer;
+        margin-left: .25rem;
+        word-wrap: wrap;
+
+        &:hover {
+          text-decoration: underline;
+          text-decoration-thickness: 2px;
+        }
+      }
+    }
   }
 }
 
 .header {
-  position: relative;
+  align-self: center;
   display: flex;
   flex-direction: column;
-  width: 30rem;
-  align-self: center;
-  justify-content: space-between;
-  padding-top: 2rem;
-  margin-bottom: 1rem;
+  width: 100%;
 
-  h1,
-  h6 {
-    margin: 0;
+  & > * {
+    align-self: center;
   }
 
-  h1 {
-    color: $gray-dark;
-  }
-
-  .header-mid {
+  .actions {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-
-    .titles {
-      h6 {
-        margin-top: 0.25rem;
-        color: $gray;
-      }
-    }
+    justify-content: space-around;
+    padding: 1rem;
 
     & > * {
       align-self: center;
+      margin-left: .5rem;
+      margin-right: .5rem;
+    }
+
+    h5 {
+      color: $gray;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    svg {
+      color: $gray-mid;
+      cursor: pointer;
+      stroke-width: 3;
+      width: 16px;
+
+      &:hover {
+        stroke: $gray;
+      }
+    }
+
+    .bell-icon {
+      height: 24px;
+      position: relative;
+
+
+      .indicator {
+        background: $pblue;
+        border-radius: 50%;
+        height: 7px;
+        position: absolute;
+        right: -3px;
+        top: -3px;
+        width: 7px;
+      }
     }
   }
 }
 
 .last-update {
+  align-self: center;
   display: flex;
   flex-direction: column;
-  align-self: center;
-  text-align: right;
   margin-bottom: auto;
-  margin-top: 0.25rem;
+  margin-top: .25rem;
+  text-align: right;
 
   h6 {
     color: $green-mid;
@@ -742,32 +1228,33 @@ h6 {
 }
 
 .button {
-  display: flex;
-  flex-direction: row;
-  padding: 0.5rem;
-  border: 0;
-  font-family: 'archia';
-  text-transform: uppercase;
   background: $blue-light;
+  border: 0;
+  border-radius: 5px;
   color: $blue-mid;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  font-family: 'archia';
+  font-size: .75rem;
   font-weight: 900;
-  border-radius: 5px;
-  transition: background 0.2s ease-in-out;
-  margin-bottom: 0.5rem;
-  margin-top: 0.25rem;
+  margin-bottom: .5rem;
+  margin-top: .25rem;
   outline: none;
-  font-size: 0.75rem;
+  padding: .5rem;
   text-decoration: none;
+  text-transform: uppercase;
+  transition: background .2s ease-in-out;
 
   svg {
-    width: 20px;
+    padding-right: 6px;
     stroke-width: 2px;
+    width: 20px;
   }
 
   &.is-purple {
-    color: $purple-mid;
     background: $purple-light;
+    color: $purple-mid;
 
     &:hover {
       background: $purple-hover;
@@ -775,8 +1262,8 @@ h6 {
   }
 
   &.is-green {
-    color: $green-mid;
     background: $green-light;
+    color: $green-mid;
 
     &:hover {
       background: $green-hover;
@@ -793,11 +1280,11 @@ h6 {
 }
 
 .telegram {
-  width: 15.5rem;
   background: $gray-light !important;
   color: #08c !important;
-  padding-left: 0.65rem;
   justify-content: center;
+  padding-left: .65rem;
+  width: 15.5rem;
 
   &:hover {
     background: $gray-hover !important;
@@ -805,12 +1292,12 @@ h6 {
 }
 
 .github {
-  width: 15.5rem;
   background: #000 !important;
   color: #fff !important;
-  padding-left: 0.65rem;
   justify-content: center;
-  transition: all 0.2s ease-in-out;
+  padding-left: .65rem;
+  transition: all .2s ease-in-out;
+  width: 15.5rem;
 
   &:hover {
     background: $gray-dark !important;
@@ -822,35 +1309,67 @@ h6 {
 }
 
 .excel {
-  color: #33a667;
   background: #33a66730;
+  color: #33a667;
 
   &:hover {
     background: #33a66750;
   }
 }
 
-.Level {
+.map-switcher {
+  align-self: center;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-self: center;
+  position: absolute;
+  top: 13rem;
   width: 30rem;
+
+  .highlight {
+    background: $cherry-light;
+    position: absolute;
+    width: calc(25%) !important;
+    z-index: -1;
+
+    &.active {
+      background: $blue-light;
+    }
+
+    &.recovered {
+      background: $green-light;
+    }
+
+    &.deceased {
+      background: $gray-light;
+    }
+  }
+
+  .highlight,
+  .clickable {
+    border-radius: 5px;
+    cursor: pointer;
+    height: 12rem;
+    width: calc(25%);
+    z-index: 10;
+  }
+}
+
+.Level {
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 30rem;
+
 
   .level-item {
     display: flex;
     flex-direction: column;
+    width: calc(25%);
 
     & > * {
       align-self: center;
-    }
-
-    &:first-child {
-      margin-left: 0.5rem;
-    }
-
-    &:last-child {
-      margin-right: 0.5rem;
     }
   }
 
@@ -864,35 +1383,55 @@ h6 {
   }
 
   h4 {
-    margin-bottom: -0.5rem;
+    margin-bottom: -.5rem;
+  }
+
+  h5 {
+    font-weight: 600;
   }
 
   .is-cherry {
-    h1 { color: $cherry; }
+    h1,
+    h5 {
+      color: $cherry;
+    }
 
-    h4,
-    h5 { color: $cherry-mid; }
+    h4 {
+      color: $cherry-mid;
+    }
   }
 
   .is-blue {
-    h1 { color: $blue; }
+    h1,
+    h5 {
+      color: $blue;
+    }
 
-    h4,
-    h5 { color: $blue-mid; }
+    h4 {
+      color: $blue-mid;
+    }
   }
 
   .is-green {
-    h1 { color: $green; }
+    h1,
+    h5 {
+      color: $green;
+    }
 
-    h4,
-    h5 { color: $green-mid; }
+    h4 {
+      color: $green-mid;
+    }
   }
 
   .is-gray {
-    h1 { color: $gray; }
+    h1,
+    h5 {
+      color: $gray;
+    }
 
-    h4,
-    h5 { color: $gray-mid; }
+    h4 {
+      color: $gray-mid;
+    }
   }
 }
 
@@ -917,16 +1456,19 @@ abbr {
 }
 
 .table-fineprint {
-  text-align: right;
-  margin: 0 0 0 0;
   color: $gray-mid;
-  margin-bottom: 0.25rem;
-  margin-right: 0.25rem;
+  font-weight: 600;
+  margin: 0;
+  margin-bottom: .25rem;
+  margin-right: .25rem;
+  text-align: right;
+
   a {
-    text-decoration: none;
-    color: inherit;
     border-bottom: 2px solid $gray-hover;
-    transition: all 0.2s ease-in-out;
+    color: inherit;
+    text-decoration: none;
+    transition: all .2s ease-in-out;
+
     &:hover {
       background: $gray-hover;
     }
@@ -937,31 +1479,34 @@ abbr {
   position: sticky;
 }
 
+.Table {
+  margin-bottom: 1rem;
+}
+
 table {
+  align-self: center;
+  border-collapse: separate;
+  border-spacing: 3px 4px;
+  font-family: 'archia';
   position: relative;
   width: 30rem;
-  align-self: center;
-  font-family: 'archia';
-  text-transform: uppercase;
-  border-spacing: 3px 4px;
-  border-collapse: separate;
 
   thead {
     background: $gray-light;
-    color: $gray-dark;
+    color: $gray;
+    font-size: .75rem;
     text-align: left;
-    font-size: 0.75rem;
 
     th {
-      padding: 0.5rem;
-      cursor: pointer;
       border-radius: 5px;
-      transition: all 0.1s ease-in-out;
+      cursor: pointer;
+      padding: .5rem;
+      transition: all .1s ease-in-out;
       z-index: 99;
 
       &.sticky {
-        top: 4px;
         background: $gray-opaque;
+        top: 4px;
       }
 
       &:hover {
@@ -969,25 +1514,25 @@ table {
       }
 
       .heading-content {
+        align-items: center;
         display: flex;
+        flex-direction: row;
+        height: .9rem;
         justify-content: space-between;
         position: relative;
-        flex-direction: row;
-        height: 0.9rem;
-        align-items: center;
 
         abbr {
           text-align: right;
         }
 
         svg {
-          width: 10px;
+          color: $gray-mid;
           margin: 0;
+          margin-left: .25rem;
+          margin-top: .15rem;
           right: 0;
           stroke-width: 4px;
-          margin-top: 0.15rem;
-          margin-left: 0.25rem;
-          color: $gray-mid;
+          width: 10px;
         }
       }
     }
@@ -995,57 +1540,70 @@ table {
 
   tbody {
     color: $gray;
+    max-width: 10rem;
 
     tr {
-      transition: background 0.1s ease-in-out;
       cursor: pointer;
+
+      &.is-highlighted {
+        background: $gray-hover !important;
+      }
 
       &:hover {
         background: $gray-hover !important;
 
         .dropdown {
-            background: $gray-hover;
+          background: $gray-hover;
         }
       }
 
       &.divider {
-        height: 0.5rem;
         background: #6c757d10 !important;
+        height: .5rem;
       }
 
       &.spacer {
-        height: 0.5rem;
         background: #fff !important;
+        height: .5rem;
       }
     }
 
     td {
-      padding: 0.25rem;
-      font-size: 0.9rem;
       border-radius: 5px;
+      font-size: .9rem;
+      padding: .25rem;
       text-align: right;
+
+      &:first-child {
+        max-width: 7.5rem;
+        text-align: left;
+        word-wrap: break-word;
+      }
+
       .deltas {
         display: inline-block;
-		    font-size: 11px !important;
+        font-size: 11px !important;
 
         svg {
-          width: 9px;
           height: 9px;
           stroke-width: 3;
-          vertical-align: -0.25px;
+          vertical-align: -.25px;
+          width: 9px;
         }
       }
 
       a {
         height: 1px;
+
         svg {
-          width: 12px;
-          stroke-width: 3px;
           align-self: center;
           color: $gray-mid;
-          transition: all 0.2s ease-in-out;
-          vertical-align: -0.435rem;
           margin-left: 2px;
+          stroke-width: 3px;
+          transition: all .2s ease-in-out;
+          vertical-align: -.435rem;
+          width: 12px;
+
           &:hover {
             stroke: $gray;
           }
@@ -1054,70 +1612,110 @@ table {
     }
 
     .table__count-text {
-      margin-left: 0.25rem;
+      margin-left: .25rem;
     }
 
-    td:first-child {
-      text-align: left;
-      max-width: 7.5rem;
-      word-wrap: break-word;
-    }
-
-    .state-last-update{
+    .state-last-update {
       background: transparent;
+      color: $green !important;
       transform: translateX(1rem);
-      &:hover{
+
+      &:hover {
         background: #fff !important;
       }
 
-      td{
-        .last-update{
-          text-align: left;
+      td {
+        .last-update {
+          align-items: baseline;
           display: flex;
           flex-direction: row;
-          align-items: baseline;
+          text-align: left;
           width: 100%;
+
+          h6 {
+            color: $green !important;
+            font-weight: 600;
+          }
         }
       }
     }
 
     .district-heading {
-      transform: translateX(1rem);
       background: $gray-light;
+      transform: translateX(1rem);
+
+      &:hover {
+        background: $gray-light !important;
+      }
 
       td {
-        font-size: 0.75rem;
-        font-weight: 900;
-        padding: 0.45rem;
-        color: $gray-dark;
         background: $gray-light;
+        color: $gray-dark;
+        font-size: .75rem;
+        font-weight: 900;
+        padding: .45rem;
 
         .heading-content {
+          align-items: center;
           display: flex;
+          flex-direction: row;
+          height: .9rem;
           justify-content: space-between;
           position: relative;
-          flex-direction: row;
-          height: 0.9rem;
-          align-items: center;
 
           abbr {
             text-align: right;
           }
 
           svg {
-            width: 10px;
+            color: $gray-mid;
             margin: 0;
+            margin-left: .25rem;
+            margin-top: .15rem;
             right: 0;
             stroke-width: 4px;
-            margin-left: 0.25rem;
-            margin-top: 0.15rem;
-            color: $gray-mid;
+            width: 10px;
+          }
+        }
+
+        &.state-page-link {
+          background: $white;
+          padding: 0;
+          text-align: left;
+
+          div {
+            align-items: center;
+            background: $yellow-light;
+            border-radius: 5px;
+            color: $orange;
+            float: left;
+            font-size: .75rem;
+            padding: .45rem;
+            transition: all .2s ease-in-out;
+
+            &:hover {
+              background: $yellow-hover;
+
+              svg {
+                stroke: $orange;
+              }
+            }
+
+            svg {
+              color: $orange-mid;
+              height: 12px;
+              margin-bottom: 1px;
+              margin-left: .25rem;
+              stroke-width: 3px;
+              transition: all .2s ease-in-out;
+              vertical-align: middle;
+              width: 12px;
+            }
           }
         }
       }
     }
 
-    max-width: 10rem;
 
     .district {
       transform: translateX(1rem);
@@ -1125,11 +1723,11 @@ table {
   }
 
   .affected-count {
-    position: absolute;
-    margin: 0;
-    top: -1rem;
     color: $gray-mid;
+    margin: 0;
+    position: absolute;
     right: 0;
+    top: -1rem;
   }
 
   .is-total {
@@ -1138,31 +1736,67 @@ table {
     }
   }
 
-	.table__title-wrapper {
-		position: relative;
-	}
+  .table__title-wrapper {
+    position: relative;
+
+    & > * {
+      align-self: center;
+    }
+
+    .actual__title-wrapper {
+      .__react_component_tooltip {
+        font-size: .8em;
+        max-width: 200px;
+      }
+
+      svg {
+        color: $gray-mid;
+        height: 12px;
+        padding-left: 2px;
+        stroke-width: 3;
+        vertical-align: -1.5px;
+        width: 12px;
+      }
+    }
+  }
+
+  .unknown {
+    .__react_component_tooltip {
+      font-size: .8em;
+      max-width: 200px;
+    }
+
+    svg {
+      color: $gray-mid;
+      height: 12px;
+      padding-left: 2px;
+      stroke-width: 3;
+      vertical-align: -1.5px;
+      width: 12px;
+    }
+  }
 
   .dropdown {
-    position: absolute;
-    left: -1.25rem;
-    top: 0.125rem;
     background: $gray-light;
     border-radius: 50%;
-    width: 13px;
-    height: 13px;
     cursor: pointer;
-    transition: background 0.2s ease-in-out;
+    height: 13px;
+    left: -1.25rem;
+    position: absolute;
+    top: .125rem;
+    transition: background .2s ease-in-out;
+    width: 13px;
 
     &:hover {
       background: $gray-hover;
     }
 
     svg {
-      position: absolute;
-      top: -0.35rem;
       left: 1px;
-      width: 11px;
+      position: absolute;
       stroke-width: 3;
+      top: -.35rem;
+      width: 11px;
     }
   }
 }
@@ -1175,98 +1809,213 @@ table {
   z-index: 11;
 }
 
-.map-default {
-  stroke: none;
-}
+.anchor {
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  transform: rotate(45deg);
+  transition: all .1s ease-in-out;
 
-.map-hover {
-  stroke: #ff073a;
-  stroke-width: 2;
+  svg {
+    stroke: $gray-mid;
+    stroke-width: 3;
+    width: 16px;
+
+    &:hover {
+      stroke: $gray;
+    }
+  }
+
+  &.stickied {
+    transform: rotate(0deg);
+
+    svg {
+      stroke: $gray;
+    }
+  }
 }
 
 .MapExplorer {
+  align-self: center;
   display: flex;
   flex-direction: column;
-  align-self: center;
   width: 30rem;
 
+  &.stickied {
+    position: sticky !important;
+    top: 0;
+  }
+
   .header {
+    align-self: flex-start;
+    color: $gray;
     display: flex;
     flex-direction: column;
-    color: $gray;
-    margin-bottom: 2.5rem;
-    align-self: flex-start;
-    h1 {
-      margin-bottom: 0.25rem;
+
+    h1,
+    h6 {
+      margin: 0;
+    }
+
+    h6 {
+      margin-bottom: 2rem;
+      margin-top: .75rem;
     }
   }
 
   .svg-parent {
     display: flex;
     flex-direction: row;
-    width: 100%;
-    margin-top: 1rem;
+    margin: auto;
+    margin-top: 4rem;
+    overflow: hidden;
+    width: 90%;
 
     svg {
       align-self: center;
+      width: 100%;
 
       text {
-        text-transform: uppercase;
-        text-align: right;
-        font-family: 'archia';
-        font-weight: 600;
         fill: $gray;
+        font-family: 'archia';
         font-size: 10px;
+        font-weight: 600;
+        text-align: right;
       }
     }
   }
 
+  .legend {
+    margin-top: 1em;
+    width: 100%;
+  }
+
+  .map-hover {
+    stroke: #ff073a;
+    stroke-width: 2;
+
+    &.active {
+      stroke: #007bff;
+    }
+
+    &.recovered {
+      stroke: #28a745;
+    }
+
+    &.deceased {
+      stroke: #6c757d;
+    }
+  }
+
   .back-button {
+    background: $yellow-light;
+    color: $orange;
     position: absolute;
     right: 0;
-    background: $orange-light;
-    color: $orange;
-    transition: all 0.2s ease-in-out;
+    top: 2.75rem;
+    transition: all .2s ease-in-out;
+
     &:hover {
-      background: $orange-hover;
+      background: $yellow-hover;
+    }
+  }
+
+  .state-page-button {
+    background: $yellow-light;
+    border-radius: 5px;
+    color: $orange;
+    font-size: .75rem;
+    height: 1.5rem;
+    padding: .45rem;
+    padding-left: .75rem;
+    position: absolute;
+    right: 0;
+    top: -.5rem;
+    transition: all .2s ease-in-out;
+
+    &:hover {
+      background: $yellow-hover;
+    }
+
+    abbr {
+      text-transform: none;
+    }
+
+    svg {
+      height: 12px;
+      margin-left: .25rem;
+      stroke: $orange-mid;
+      stroke-width: 3px;
+      vertical-align: middle;
+      width: 12px;
     }
   }
 
   .meta {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     height: 1rem;
+    justify-content: space-between;
 
-    .district-last-update{
+
+    .district-last-update {
+      bottom: 0;
       position: absolute;
       right: 0;
-      bottom: 0;
     }
 
     h2 {
-      margin: 0;
       color: #e23028;
-      word-wrap: break-word;
       font-weight: 900;
+      margin: 0;
+      word-wrap: break-word;
+
+      &.active {
+        color: $blue;
+      }
+
+      &.recovered {
+        color: $green;
+      }
+
+      &.deceased {
+        color: $gray;
+      }
     }
 
     h4 {
-      margin: 0;
       color: $gray-mid;
+      margin: 0;
       word-wrap: break-word;
     }
 
-    .district-confirmed {
+    .district {
       color: #e23028;
+      line-height: 15px;
+      margin: 0;
       position: absolute;
       top: 3rem;
       width: 5rem;
+
+      &.active {
+        color: $blue;
+      }
+
+      &.recovered {
+        color: $green;
+      }
+
+      &.deceased {
+        color: $gray;
+      }
     }
 
     .unknown {
+      font-weight: 600;
       position: absolute;
-      top: 5rem;
+      right: 0;
+      text-align: right;
+      top: 5.5rem;
       width: 5rem;
     }
   }
@@ -1274,9 +2023,11 @@ table {
   .map-stats {
     display: flex;
     flex-direction: row;
-    width: 100%;
-    height: 5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
     position: relative;
+    width: 100%;
+    z-index: 10;
 
     h1,
     h5,
@@ -1292,90 +2043,128 @@ table {
 
     .stats {
       background: $cherry-light;
-      position: relative;
-      color: $cherry;
       border-radius: 5px;
+      color: $cherry-mid;
+      cursor: pointer;
       display: flex;
-      flex-direction: column;
-      margin-left: 0.25rem;
-      margin-right: 0.25rem;
-      margin-bottom: 0.5rem;
       flex: 1;
-      padding: 0.25rem;
+      flex-direction: column;
+      height: 3rem;
+      margin-bottom: 1rem;
+      margin-left: .25rem;
+      margin-right: .25rem;
+      padding: .25rem;
+      position: relative;
+      transition: all .1s ease-in-out;
 
       .stats-bottom {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
 
         h6 {
+          font-weight: 900;
+          margin-bottom: .25rem;
           margin-top: auto;
-          margin-bottom: 0.25rem;
         }
       }
 
       h1 {
+        color: $cherry;
+        font-size: 1em !important;
         font-weight: 600;
       }
 
       &.is-green {
         background: $green-light;
-        h5,
-        h6 { color: $green-mid; }
 
-        h1 { color: $green; }
+        h5,
+        h6 {
+          color: $green-mid;
+        }
+
+        h1 {
+          color: $green;
+        }
       }
 
       &.is-blue {
         background: $blue-light;
-        h5,
-        h6 { color: $blue-mid; }
 
-        h1 { color: $blue; }
+        h5,
+        h6 {
+          color: $blue-mid;
+        }
+
+        h1 {
+          color: $blue;
+        }
       }
 
       &.is-gray {
         background: $gray-light;
-        h5,
-        h6 { color: $gray-mid; }
 
-        h1 { color: $gray; }
+        h5,
+        h6 {
+          color: $gray-mid;
+        }
+
+        h1 {
+          color: $gray;
+        }
       }
 
       &.is-yellow {
         background: $warning;
-        h5,
-        h6 { color: $white; }
 
-        h1 { color: $white; }
+        h5,
+        h6 {
+          color: $white;
+        }
+
+        h1 {
+          color: $white;
+        }
       }
 
       &.is-purple {
         background: $purple-light;
         padding-right: 1rem;
+
         h5,
         h6 {
           color: $purple-mid;
+
           &.timestamp {
-            margin: 0;
             font-weight: 900;
+            margin: 0;
           }
         }
 
-        h1 { color: $purple; }
+        h1 {
+          color: $purple;
+        }
 
         svg {
-          position: absolute;
-          right: 0.35rem;
-          top: 0;
-          stroke-width: 3;
-          width: 12px;
-          stroke: $purple-mid;
           cursor: pointer;
-          transition: stroke 0.2s ease-in-out;
+          position: absolute;
+          right: .35rem;
+          stroke: $purple-mid;
+          stroke-width: 3;
+          top: 0;
+          transition: stroke .2s ease-in-out;
+          width: 12px;
+
           &:hover {
             stroke: $purple;
           }
         }
+      }
+
+      &.focused {
+        margin-bottom: .5rem;
+        margin-top: -.5rem;
+        padding-bottom: .75rem;
+        padding-top: .75rem;
       }
 
       &:first-child {
@@ -1387,72 +2176,118 @@ table {
       }
     }
   }
+
+  .disclaimer {
+    background: $gray-light;
+    border-radius: 5px;
+    color: $gray;
+    display: flex;
+    flex-direction: row;
+    font-family: 'archia';
+    font-size: 11px;
+    padding: .5rem;
+    width: 14rem;
+
+    svg {
+      color: $gray;
+      margin-right: .25rem;
+      margin-top: -.35rem;
+      stroke-width: 2px;
+      width: 20px !important;
+    }
+  }
 }
 
 .tabs {
-  position: relative;
-  z-index: 99;
   display: flex;
   flex-direction: row;
+  position: relative;
+  z-index: 99;
+
 
   .tab {
-    min-width: 5rem;
     background: $gray-light;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    color: $gray-mid;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+    color: $gray-mid;
     cursor: pointer;
+    height: 3.25rem;
+    margin-right: .25rem;
+    min-width: 5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     text-align: center;
-    margin-right: 0.25rem;
-    transition: all 0.3s ease-in-out;
+    transition: all .3s ease-in-out;
 
     &:hover {
       background: $gray-hover;
     }
 
     &.focused {
-      color: $gray;
       background: $gray-opaque;
+      color: $gray;
     }
   }
 }
 
-.TimeSeries-Parent {
-  display: flex;
-  flex-direction: column;
-  width: 30rem;
+.TimeSeriesExplorer {
   align-self: center;
+  width: 30rem;
+
+  &.stickied {
+    position: sticky !important;
+    top: -6.5rem;
+  }
+}
+
+.TimeSeries {
+  align-self: center;
+  width: 100%;
+
+  .svg-parent {
+    height: 10rem;
+    margin-bottom: 1rem;
+  }
 }
 
 .timeseries-header {
+  align-self: center;
+  margin-top: 3rem;
+  width: 100%;
+
   h1 {
-    color: $gray-dark;
+    color: $gray;
     margin: 0;
-    margin-bottom: 0.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
   }
 
-  width: 30rem;
-  align-self: center;
-  margin-top: 1rem;
-
-  .scale-modes{
-    display: flex;
-    flex-direction: row;
+  .scale-modes {
     align-items: flex-end;
     bottom: 0;
+    color: $gray;
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
     right: 0;
     z-index: 99;
-    color: $gray;
-    margin-top: 1rem;
+
     label {
-      font-family: 'archia';
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      font-weight: 900;
-      z-index: 99;
       color: $gray-mid;
+      font-family: 'archia';
+      font-size: .75rem;
+      font-weight: 900;
+      margin-right: .25rem;
+      transition: all .2s ease-in-out;
+      z-index: 99;
+    }
+
+    &:hover {
+      label {
+        &.main {
+          color: $gray;
+        }
+      }
     }
 
     & > * {
@@ -1460,102 +2295,65 @@ table {
     }
   }
 
-  .timeseries-mode, .timeseries-logmode {
-    margin-left: 1rem;
+  .timeseries-mode,
+  .timeseries-logmode {
     display: flex;
     flex-direction: row;
-    input.switch {
-      position: relative;
-      appearance: none;
-      outline: none;
-      margin: 0;
-      cursor: pointer;
-      width: 24px;
-      height: 14px;
-      background-color: #fff;
-      border: 2px solid #d9dadc;
-      border-radius: 10px;
-      transition: all 200ms ease-in-out;
-    }
-
-    input.switch::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 10px;
-      height: 10px;
-      background-color: $gray-mid;
-      border-radius: 50%;
-    }
-
-    input.switch:checked {
-      background-color: $gray-mid;
-      transition: all 200ms ease-in-out;
-    }
-
-    input.switch:checked::after {
-      left: 10px;
-      background-color: $light;
-    }
-
-    label{
-      font-size: 0.75rem;
-      margin-right: 0.2rem;
-      padding-bottom: 0;
-      color: $gray;
-    }
-
+    margin-left: 1rem;
   }
 }
 
 .disabled {
-  input.switch {
-    background: $gray-light !important;
-    border: $gray-light 2px solid !important;
-    cursor: not-allowed !important;
+  input {
+    &.switch {
+      background: $gray-light !important;
+      border: $gray-light 2px solid !important;
+      cursor: not-allowed !important;
+
+      &::after {
+        background: $gray-light !important;
+      }
+    }
   }
+}
 
-  input.switch::after {
-    background: $gray-light !important;
+input {
+  &.switch {
+    appearance: none;
+    background-color: #fff;
+    border: 2px solid #d9dadc;
+    border-radius: 10px;
+    cursor: pointer;
+    height: 14px;
+    margin: 0;
+    outline: none;
+    position: relative;
+    transition: all 300ms ease-in-out;
+    width: 24px;
+
+    &::after {
+      background-color: $gray-mid;
+      border-radius: 50%;
+      content: '';
+      height: 10px;
+      left: 0;
+      position: absolute;
+      top: 0;
+      transition: all 300ms ease-in-out;
+      width: 10px;
+    }
+
+    &:checked {
+      background-color: $gray-mid;
+      transition: all 300ms ease-in-out;
+
+      &::after {
+        background-color: $light;
+        left: 10px;
+        transition: all 300ms ease-in-out;
+      }
+    }
   }
-}
-
-input.switch {
-  position: relative;
-  appearance: none;
-  outline: none;
-  margin: 0;
-  cursor: pointer;
-  width: 24px;
-  height: 14px;
-  background-color: #fff;
-  border: 2px solid #d9dadc;
-  border-radius: 10px;
-  transition: all 300ms ease-in-out;
-}
-
-input.switch::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 10px;
-  height: 10px;
-  background-color: $gray-mid;
-  border-radius: 50%;
-  transition: all 300ms ease-in-out;
-}
-
-input.switch:checked {
-  background-color: $gray-mid;
-  transition: all 300ms ease-in-out;
-}
-
-input.switch:checked::after {
-  left: 10px;
-  background-color: $light;
-  transition: all 300ms ease-in-out;
 }
 
 .trends-state-name {
@@ -1566,21 +2364,22 @@ input.switch:checked::after {
   select {
     appearance: none;
     background-color: #eee;
-    background-image:
-      linear-gradient(45deg, transparent 50%, #808080 50%),
-      linear-gradient(135deg, #808080 50%, transparent 50%);
+
+    background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
+    linear-gradient(135deg, #808080 50%, transparent 50%);
     background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
-    background-size: 5px 5px, 5px 5px;
     background-repeat: no-repeat;
+    background-size: 5px 5px, 5px 5px;
     border: 2px solid #e8e8e9;
     border-radius: 4px;
+    color: $gray;
+    cursor: pointer;
     font-family: 'archia';
     font-weight: 900;
+    margin-left: -1px;
     margin-top: 1rem;
-    padding: 0.5rem;
-    text-transform: uppercase;
+    padding: .5rem;
     width: auto;
-    color: $gray;
 
     &:focus {
       outline: none;
@@ -1588,7 +2387,7 @@ input.switch:checked::after {
   }
 }
 
-.timeseries,
+.TimeSeries,
 .Minigraph {
   display: flex;
   flex-direction: column;
@@ -1596,25 +2395,28 @@ input.switch:checked::after {
   width: 100%;
 
   .stats {
-    padding: 0.25rem;
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
-    width: 5rem;
     border-radius: 3px;
     display: flex;
     flex-direction: column;
+    left: .5rem;
+    padding: .25rem;
+    position: absolute;
+    top: .5rem;
+    width: 5rem;
+    z-index: -1;
 
     h2,
     h5,
     h6 {
-      margin: 0;
       color: $cherry-mid;
-      transition: all 0.15s ease-in-out;
+      margin: 0;
+      transition: all .15s ease-in-out;
     }
 
-    h5.title {
-      color: $cherry;
+    h5 {
+      &.title {
+        color: $cherry;
+      }
     }
 
     h2,
@@ -1627,8 +2429,8 @@ input.switch:checked::after {
       flex-direction: row;
 
       h6 {
-        margin-bottom: 0.1rem;
-        margin-left: 0.25rem;
+        margin-bottom: .1rem;
+        margin-left: .25rem;
       }
 
       & > * {
@@ -1639,47 +2441,60 @@ input.switch:checked::after {
     &.is-green {
       h5 {
         color: $green-mid;
+
         &.title {
           color: $green;
         }
       }
 
       h2,
-      h6 { color: $green; }
+      h6 {
+        color: $green;
+      }
     }
 
     &.is-gray {
       h5 {
         color: $gray-mid;
+
         &.title {
           color: $gray;
         }
       }
 
       h2,
-      h6 { color: $gray; }
+      h6 {
+        color: $gray;
+      }
     }
 
     &.is-blue {
-      h5 { color: $blue-mid; }
+      h5 {
+        color: $blue-mid;
+
+        &.title {
+          color: $blue;
+        }
+      }
 
       h2,
-      h6 { color: $blue; }
+      h6 {
+        color: $blue;
+      }
     }
   }
 
   .svg-parent {
-    position: relative;
-    display: flex;
-    width: 30rem;
     align-self: center;
     background: $cherry-light;
     border-radius: 5px;
-    margin-bottom: 1rem;
-    height: 10rem;
+    display: flex;
+    position: relative;
+    width: 30rem;
 
     svg {
       width: 100%;
+
       .domain,
       .tick,
       line {
@@ -1688,12 +2503,11 @@ input.switch:checked::after {
       }
 
       text {
-        font-family: 'archia';
-        text-transform: uppercase;
         color: $cherry-mid;
-        stroke: transparent;
+        font-family: 'archia';
         font-size: 9px;
         font-weight: 600;
+        stroke: transparent;
       }
     }
 
@@ -1728,57 +2542,73 @@ input.switch:checked::after {
         stroke: transparent;
       }
     }
+
+    &.is-blue {
+      background: $blue-light;
+
+      .domain,
+      .tick,
+      line {
+        stroke: $blue;
+      }
+
+      text {
+        color: $blue-mid;
+        stroke: transparent;
+      }
+    }
   }
 }
 
 .Minigraph {
-  width: 30rem;
   align-self: center;
-  margin: 0;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin: 0;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  width: 30rem;
 
   .svg-parent {
-    width: 5rem;
     background: transparent !important;
-    height: 7rem;
+    width: calc(25%);
   }
-
-  margin-bottom: -3rem;
 
   .tooltip {
     position: fixed;
-    top: 0;
     right: 0;
+    top: 0;
   }
 }
 
 .floating-buttons {
+  bottom: 1rem;
   display: flex;
   flex-direction: column;
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
   padding: 0;
-  z-index: 1;
+  position: fixed;
+  right: 1rem;
   width: 3rem;
+  z-index: 1;
 
   button {
-    border-radius: 50%;
-    border: 0;
-    padding: 0.75rem;
+    backdrop-filter: saturate(180%) blur(2px);
     background: $yellow-mid;
+    border: 0;
+    border-radius: 50%;
     color: $orange;
     cursor: pointer;
-    margin: 0.25rem;
     display: flex;
     flex-direction: row;
+    margin: .25rem;
     outline: none;
-    transition: all 0.2s ease-in-out;
-    backdrop-filter: saturate(180%) blur(2px);
+    padding: .75rem;
+    transition: all .2s ease-in-out;
+
     &:hover {
       background: #ffa500;
+
       svg {
         stroke: #ffa500;
       }
@@ -1789,10 +2619,6 @@ input.switch:checked::after {
       stroke: $orange;
     }
   }
-
-  @media screen and (min-width: 1200px) {
-    display: none !important;
-  }
 }
 
 .Links {
@@ -1802,20 +2628,20 @@ input.switch:checked::after {
 }
 
 .link {
-  width: 30rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
   align-self: center;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  width: 30rem;
 
   a {
+    background: $blue-light;
+    color: $blue;
     font-family: 'archia';
-    text-transform: uppercase;
-    word-wrap: break-word;
     font-weight: 900;
     text-decoration: none;
-    color: $blue;
-    background: $blue-light;
-    transition: background 0.2s ease-in-out;
+    text-transform: uppercase;
+    transition: background .2s ease-in-out;
+    word-wrap: break-word;
 
     &:hover {
       background: $blue-hover;
@@ -1823,17 +2649,17 @@ input.switch:checked::after {
   }
 
   h3 {
-    margin-bottom: 0;
     color: $gray-dark;
     font-weight: 900;
+    margin-bottom: 0;
   }
 }
 
 footer {
   display: flex;
   flex-direction: column;
-  margin-bottom: 5rem;
   justify-content: center;
+  margin-bottom: 5rem;
   margin-top: 5rem;
 
   & > * {
@@ -1841,26 +2667,31 @@ footer {
     text-align: center;
   }
 
-  h5 { margin: 0; margin-top: 1rem; margin-bottom: 0.5rem; color: $gray; }
+  h5 {
+    color: $gray;
+    margin: 0;
+    margin-bottom: .5rem;
+    margin-top: 1rem;
+  }
 
   img {
-    width: 2rem;
     height: 2rem;
+    width: 2rem;
   }
 }
 
 .Summary {
   display: flex;
   flex-direction: column;
-  width: 600px;
   height: 600px;
-  position: relative;
   padding-left: 1rem;
   padding-right: 1rem;
+  position: relative;
+  width: 600px;
 
   img {
-    width: 2rem;
     height: 2rem;
+    width: 2rem;
   }
 
   .link {
@@ -1874,8 +2705,8 @@ footer {
   }
 
   h5 {
-    margin: 0;
     color: $gray;
+    margin: 0;
   }
 
   .Minigraph {
@@ -1884,15 +2715,16 @@ footer {
   }
 
   .summary-bottom {
+    align-self: center;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-self: center;
     width: calc(100% - 0);
 
+
     .link {
+      margin-right: -.75rem;
       width: 12rem;
-      margin-right: -0.75rem;
     }
 
     & > * {
@@ -1900,9 +2732,9 @@ footer {
     }
 
     img {
-      margin-bottom: 0.25rem;
-      margin-right: 0.25rem;
+      margin-bottom: .25rem;
       margin-left: 1rem;
+      margin-right: .25rem;
     }
 
     h5 {
@@ -1924,13 +2756,13 @@ footer {
 .FAQ {
   display: flex;
   flex-direction: column;
-  width: 100%;
   min-height: 30rem;
+  width: 100%;
 
   & > * {
     align-self: center;
-    width: 30rem;
     margin-bottom: 1.5rem;
+    width: 30rem;
   }
 
   & > *:first-child {
@@ -1938,15 +2770,15 @@ footer {
   }
 
   h2 {
-    margin: 0;
     font-weight: 600;
+    margin: 0;
     text-transform: none;
   }
 
   .question {
     color: $gray-dark;
     margin: 0;
-    margin-bottom: 0.25rem;
+    margin-bottom: .25rem;
   }
 
   .answer {
@@ -1958,6 +2790,7 @@ footer {
     background: $blue-light;
     color: $blue;
     text-decoration: none;
+
     &:hover {
       text-decoration: underline;
     }
@@ -1965,80 +2798,290 @@ footer {
 }
 
 .PatientsDB {
+  align-self: center;
   display: flex;
   flex-direction: column;
-  align-self: center;
   margin-left: auto;
   margin-right: auto;
 
+
+  .select {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+
+    .react-date-picker {
+      align-items: center;
+      background-color: #eee;
+      border: 2px solid #e8e8e9 !important;
+      border-radius: 4px;
+      color: #6c757d;
+      cursor: default;
+      font-family: 'archia';
+      font-size: 12px;
+      font-weight: 900;
+      height: 2.05rem;
+      margin: .2rem .1rem;
+      padding: .5rem;
+      padding-inline-start: 1px;
+      width: auto;
+
+      input,
+      button {
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+
+    .react-date-picker,
+    .react-date-picker *,
+    .react-date-picker *::before,
+    .react-date-picker *::after {
+      border: 0;
+    }
+
+    .react-calendar {
+      background: $gray-light-opaque;
+      border: 2px solid $gray-light;
+      border-radius: 5px;
+
+      button {
+        border-radius: 5px;
+        font-family: 'archia';
+        padding: 1rem;
+        transition: all .1s ease-in-out;
+
+        &:disabled {
+          border-radius: 0 !important;
+          color: $gray-mid;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    .react-date-picker__inputGroup__input {
+      &:invalid {
+        background: transparent;
+      }
+    }
+
+    .react-date-picker__wrapper {
+      border: unset;
+
+      svg {
+        stroke: $gray-mid;
+
+        &:hover {
+          stroke: $gray;
+        }
+      }
+    }
+
+    .react-calendar__tile--active {
+      background: $pblue-light;
+      color: $pblue !important;
+
+      &:hover {
+        background: $pblue-hover;
+        color: $pblue !important;
+      }
+    }
+
+    .react-calendar__month-view__weekdays__weekday {
+      font-family: 'archia';
+      margin-bottom: .5rem;
+    }
+
+    .react-calendar__month-view__days__day--weekend,
+    .react-calendar__month-view__days__day {
+      color: $gray;
+    }
+
+    .react-date-picker__calendar {
+      top: 3.5rem !important;
+    }
+
+    .react-calendar__navigation__label {
+      color: $gray !important;
+    }
+
+    .react-calendar__navigation__arrow {
+      color: $gray;
+    }
+
+    .react-date-picker__inputGroup > * {
+      color: $gray !important;
+    }
+
+    .react-date-picker__clear-button {
+      margin: 0 !important;
+      padding: 0 !important;
+
+      svg {
+        stroke-width: 3px;
+        width: 16px;
+      }
+    }
+
+    .react-date-picker__calendar-button {
+      margin: 0 !important;
+      margin-left: .25rem !important;
+      padding: 0 !important;
+
+      svg {
+        height: 16px;
+        stroke-width: 3px;
+        width: 16px;
+      }
+    }
+
+    select {
+      appearance: none;
+      background-color: #eee;
+
+      background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
+      linear-gradient(135deg, #808080 50%, transparent 50%);
+      background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+      background-repeat: no-repeat;
+      background-size: 5px 5px, 5px 5px;
+      border: 2px solid #e8e8e9;
+      border-radius: 4px;
+      color: $gray;
+      cursor: pointer;
+      font-family: 'archia';
+      font-weight: 900;
+      margin: .2rem .1rem;
+      padding: .5rem;
+      width: 130px;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
   .reminder {
     align-self: center !important;
-    font-family: 'archia';
+    background: $pblue-light;
+    border-radius: 5px;
     color: $pblue;
-    font-size: 0.9rem;
+    font-family: 'archia';
+    font-size: .9rem;
+    font-weight: 600;
+    line-height: 23px;
     margin-bottom: 3rem;
     margin-top: 3rem;
-    font-weight: 600;
-    text-align: center;
     padding-left: 1rem;
     padding-right: 1rem;
+    padding-top: 1rem;
+    text-align: center;
     width: 30rem;
-    line-height: 23px;
+
+    svg {
+      cursor: pointer;
+      padding: .5rem;
+      position: absolute;
+      right: 0;
+      stroke: $pblue-mid;
+      stroke-width: 3px;
+      top: -.25rem;
+      width: 16px;
+
+      &:hover {
+        stroke: $pblue;
+      }
+    }
   }
 
   .header {
-    margin-top: 1.75rem;
-    align-self: flex-start;
+    align-self: center;
     display: flex;
     flex-direction: row;
-    width: calc(100% - 10.5rem);
     justify-content: space-between;
-    margin-left: 5.25rem;
+    margin-top: 1.75rem;
+    width: calc(100% - 10rem);
+
     h1 {
       color: $pblue;
     }
 
     h3 {
-      margin-top: 0;
       color: $pblue-mid;
       font-weight: 900;
+      margin-top: 0;
     }
 
-    h6.disclaimer {
-      color: $gray-mid;
-      margin-bottom: 1rem;
-      width: 10rem;
-      text-align: right;
-      text-transform: unset;
+    h6 {
+      &.disclaimer {
+        color: $gray-mid;
+        margin-bottom: 1rem;
+        text-align: right;
+        width: 10rem;
+      }
     }
 
     .deep-dive {
       align-self: flex-start;
       display: flex;
       flex-direction: row;
-      h5 {margin: 0; margin-right: 1rem; color: $gray;}
+
+      h5 {
+        color: $gray;
+        margin: 0;
+        margin-right: 1rem;
+      }
     }
   }
 
   .patientdb-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     padding-left: 5rem;
     padding-right: 5rem;
+
+
+    .no-result {
+      align-self: center;
+      display: flex;
+      flex-direction: column;
+      height: 20rem;
+      justify-content: center;
+
+      h5 {
+        color: $gray;
+        font-weight: 600;
+        text-align: center;
+
+        span {
+          color: $pblue !important;
+          font-weight: 900;
+        }
+      }
+    }
+  }
+
+  .legend {
+    z-index: unset;
   }
 }
 
 .Patients {
+  align-self: center;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   width: 100%;
-  align-self: center;
 
   & > * {
     align-self: center;
   }
 
-  h5.daylabel {
-    color: $pblue;
+  h5 {
+    &.daylabel {
+      color: $pblue;
+    }
   }
 
   .day {
@@ -2048,16 +3091,17 @@ footer {
   }
 
   .patient-card {
-    width: 3.25rem;
-    height: 3.25rem;
     background: $gray-light;
-    margin: 0.25rem;
     border-radius: 5px;
     cursor: pointer;
     display: flex;
     flex-direction: row;
+    height: 3.25rem;
     justify-content: center;
-    transition: background 0.3s ease-in-out;
+    margin: .25rem;
+    transition: background .3s ease-in-out;
+    width: 3.25rem;
+
     & > * {
       align-self: center;
     }
@@ -2067,17 +3111,18 @@ footer {
     }
 
     h3 {
-      font-weight: 900;
       color: $gray-mid;
       font-size: 11px !important;
+      font-weight: 900;
     }
 
     &.is-small {
+      background: $gray-hover;
       height: 1rem;
       width: 1rem;
-      background: $gray-hover;
+
       &:hover {
-        background: $gray-mid
+        background: $gray-mid;
       }
 
       &.is-femme {
@@ -2099,6 +3144,7 @@ footer {
 
     &.is-femme {
       background: $pink-mid;
+
       h3 {
         color: $pink;
       }
@@ -2108,9 +3154,9 @@ footer {
       }
     }
 
-
     &.is-male {
       background: $pblue-light;
+
       h3 {
         color: $pblue;
       }
@@ -2122,6 +3168,7 @@ footer {
 
     &.is-local {
       background: $cherry-light;
+
       h3 {
         color: $cherry;
       }
@@ -2133,6 +3180,7 @@ footer {
 
     &.is-imported {
       background: $purple-light;
+
       h3 {
         color: $purple;
       }
@@ -2145,12 +3193,14 @@ footer {
     &.is-in {
       background: url('/flags/india.png');
       background-size: cover !important;
+
       h3 {
         color: transparent;
       }
 
       &:hover {
         background: $gray-light;
+
         h3 {
           color: $gray-mid;
         }
@@ -2160,12 +3210,14 @@ footer {
     &.is-uk {
       background: url('/flags/uk.png');
       background-size: cover !important;
+
       h3 {
         color: transparent;
       }
 
       &:hover {
         background: $gray-light;
+
         h3 {
           color: $gray-mid;
         }
@@ -2175,12 +3227,14 @@ footer {
     &.is-us {
       background: url('/flags/usa.png');
       background-size: cover !important;
+
       h3 {
         color: transparent;
       }
 
       &:hover {
         background: $gray-light;
+
         h3 {
           color: $gray-mid;
         }
@@ -2190,12 +3244,14 @@ footer {
     &.is-th {
       background: url('/flags/thailand.png');
       background-size: cover !important;
+
       h3 {
         color: transparent;
       }
 
       &:hover {
         background: $gray-light;
+
         h3 {
           color: $gray-mid;
         }
@@ -2205,12 +3261,14 @@ footer {
     &.is-ph {
       background: url('/flags/philippines.png');
       background-size: cover !important;
+
       h3 {
         color: transparent;
       }
 
       &:hover {
         background: $gray-light;
+
         h3 {
           color: $gray-mid;
         }
@@ -2220,12 +3278,14 @@ footer {
     &.is-it {
       background: url('/flags/italy.png');
       background-size: cover !important;
+
       h3 {
         color: transparent;
       }
 
       &:hover {
         background: $gray-light;
+
         h3 {
           color: $gray-mid;
         }
@@ -2235,12 +3295,14 @@ footer {
     &.is-ca {
       background: url('/flags/canada.png');
       background-size: cover !important;
+
       h3 {
         color: transparent;
       }
 
       &:hover {
         background: $gray-light;
+
         h3 {
           color: $gray-mid;
         }
@@ -2250,12 +3312,14 @@ footer {
     &.is-id {
       background: url('/flags/indonesia.png');
       background-size: cover !important;
+
       h3 {
         color: transparent;
       }
 
       &:hover {
         background: $gray-light;
+
         h3 {
           color: $gray-mid;
         }
@@ -2265,12 +3329,14 @@ footer {
     &.is-mm {
       background: url('/flags/myanmar.png');
       background-size: cover !important;
+
       h3 {
         color: transparent;
       }
 
       &:hover {
         background: $gray-light;
+
         h3 {
           color: $gray-mid;
         }
@@ -2316,159 +3382,79 @@ footer {
     &.age90-99 {
       background: #6495ed;
     }
-
   }
-
-  /*
-  .patient-card {
-    padding: 0.5rem;
-    display: flex;
-    flex-direction: row;
-    cursor: pointer;
-    width: 13rem;
-    background: $pblue-light;
-    margin: 0.25rem;
-    border-radius: 5px;
-    transition: all 0.2s ease-in-out;
-    justify-content: space-between;
-    h1, h2, h3, h4, h5, h6 {margin: 0;}
-
-    .patient-card-left {
-      display: flex;
-      flex-direction: column;
-      .patient-card-left-top {
-        h2 {margin-bottom: 0.25rem; font-weight: 900;}
-
-        h2, h3 {
-          color: $pblue;
-          font-weight: 600;
-        }
-
-        h6 {
-          color: $pblue-mid;
-          font-weight: 900;
-        }
-      }
-
-      .patient-card-left-bottom {
-        margin-top: 0.25rem;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        & > .patient-card-snippet {
-          display: flex;
-          flex-direction: column;
-          h6 {
-            color: $pblue-mid;
-            font-weight: 900;
-          }
-
-          h4 {
-            color: $pblue;
-          }
-        }
-      }
-    }
-
-    .patient-card-right {
-      text-align: right;
-      margin-left: 0.5rem;
-      .patient-card-right-top {
-        display: flex;
-        flex-direction: column;
-        & > * {
-          align-self: flex-end;
-        }
-
-        h5 {
-          color: $pblue;
-          margin-bottom: 0.25rem;
-          word-wrap: break-word;
-          width: 7rem;
-        }
-
-        h6 {
-          color: $pblue-mid;
-          font-weight: 900;
-        }
-      }
-    }
-
-    &:hover {
-      background: $pblue-hover;
-    }
-  }*/
 }
 
 .DownloadBlock {
-  margin-top: 7rem;
   align-self: center;
-    code {
-      font-family: 'archia';
-      color: $orange-mid;
+  margin-top: 7rem;
+
+  code {
+    color: $orange-mid;
+    font-family: 'archia';
+  }
+
+  a {
+    color: $orange-mid;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-decoration: none !important;
+  }
+
+  .button {
+    background: $orange-light;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+
+    & > * {
+      align-self: center !important;
     }
 
-    a {
-     text-decoration: none !important;
-     color: $orange-mid;
+    &:hover {
+      background: $orange-hover;
     }
+  }
 
-    .button {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      & > * {
-        align-self: center;
-      }
-      background: $orange-light;
-      height: 3rem;
-      width: 10rem;
-      text-align: center;
-      &:hover {
-        background: $orange-hover;
-      }
-    }
-
-    svg {
-      stroke: $orange-mid;
-      stroke-width: 3;
-    }
-}
-
-body.modal-open {
-  overflow-y: hidden;
-  min-height: 100vh;
-  width: calc(100% - 14.7px); //for chrome/safari
-  width: -moz-calc(100% - 16px); //for firefox
+  svg {
+    stroke: $orange-mid;
+    stroke-width: 3;
+  }
 }
 
 .modal {
-  position: fixed;
-  height: 100vh;
-  width: 100vw;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
   background: $pblue-mid;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
   z-index: 9999;
+
+
   .modal-content {
-    position: fixed;
-    padding: 1rem;
-    border-radius: 5px;
     align-self: center;
     background: #fff;
-    width: 30rem;
-    height: 30rem;
+    border-radius: 5px;
     cursor: default;
+    height: 30rem;
     overflow-y: auto;
+    padding: 1rem;
+    position: fixed;
+    width: 30rem;
+
     svg {
-      width: 20px;
       stroke: $pblue-mid;
       stroke-width: 3;
-      transition: all 0.1s ease-in-out;
+      transition: all .1s ease-in-out;
+      width: 20px;
+
       &:hover {
         stroke: $pblue;
       }
@@ -2484,14 +3470,15 @@ body.modal-open {
       color: $pblue;
     }
 
-    h5, h3 {
-      margin: 0;
+    h5,
+    h3 {
       font-weight: 900;
+      margin: 0;
     }
 
     h3 {
-      margin-bottom: 0.5rem;
       color: $pblue;
+      margin-bottom: .5rem;
     }
 
     h5 {
@@ -2503,18 +3490,22 @@ body.modal-open {
       flex-direction: column;
       flex-wrap: wrap;
       height: 10rem;
+
       & > * {
         width: 10rem;
       }
 
-      h3.contracted-from {
-        text-decoration: underline;
-        text-decoration-style: dotted;
-        cursor: pointer;
-        transition: all 0.1s ease-in-out;
-        width: 2rem;
-        &:hover {
-          background: $pblue-light;
+      h3 {
+        &.contracted-from {
+          cursor: pointer;
+          text-decoration: underline;
+          text-decoration-style: dotted;
+          transition: all .1s ease-in-out;
+          width: 2rem;
+
+          &:hover {
+            background: $pblue-light;
+          }
         }
       }
     }
@@ -2522,25 +3513,28 @@ body.modal-open {
     .modal-top {
       display: flex;
       flex-direction: row;
+
       & > {
         align-self: center;
       }
     }
 
     .notes {
-      width: 10rem;
-      margin-top: 2rem;
       margin-bottom: 2rem;
+      margin-top: 2rem;
+      width: 10rem;
     }
 
     .link {
       margin: 0;
-      margin-top: 0.25rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: .5rem;
+      margin-top: .25rem;
+
       a {
-        color: $pblue;
         background: $pblue-light;
-        transition: background 0.2s ease-in-out;
+        color: $pblue;
+        transition: background .2s ease-in-out;
+
         &:hover {
           background: $pblue-hover;
         }
@@ -2550,33 +3544,36 @@ body.modal-open {
 }
 
 .patients-summary {
-  width: 30rem;
   align-self: center;
+  width: 30rem;
+
+
   .Patients {
     min-height: 5rem;
   }
 
   h1 {
     color: $gray-dark;
-    margin-bottom: 0.25rem;
+    margin-bottom: .25rem;
   }
 
   h6 {
-    margin: 0;
-    margin-top: 0;
     color: $gray;
     font-weight: 600;
+    margin: 0;
+    margin-top: 0;
   }
 
   .summary {
     flex-direction: row-reverse;
-    flex-wrap: wrap-reverse
+    flex-wrap: wrap-reverse;
   }
 
   .patients-summary-wrapper {
     display: flex;
     flex-direction: row;
     justify-content: center;
+
     & > * {
       align-self: center;
     }
@@ -2584,11 +3581,12 @@ body.modal-open {
 
   .button {
     background: $pblue-light;
-    height: 3rem;
+    color: $pblue;
     display: flex;
     flex-direction: row;
+    height: 3rem;
     margin-top: 1rem;
-    color: $pblue;
+
     & > * {
       align-self: center;
     }
@@ -2600,9 +3598,10 @@ body.modal-open {
 
   a {
     color: inherit;
-    text-decoration: none;
-    flex-direction: row;
     display: flex;
+    flex-direction: row;
+    text-decoration: none;
+
     & > * {
       align-self: center;
     }
@@ -2620,45 +3619,39 @@ body.modal-open {
   }
 
   .legend {
-    padding: 1rem;
     justify-content: flex-start;
+    padding: 1rem;
+    padding-bottom: .25rem;
     padding-left: 0;
-    padding-bottom: 0.25rem;
   }
 }
 
 .select {
   display: flex;
   flex-direction: column;
+
   label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    font-weight: 900;
     color: $gray-mid;
-    margin-bottom: 0.25rem;
+    font-size: .75rem;
+    font-weight: 900;
+    margin-bottom: .25rem;
+    text-transform: uppercase;
   }
 }
 
-select {
-  width: 7rem;
-  margin-right: 0.25rem;
-  cursor: pointer;
-}
-
 .filters {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  padding: 1rem;
   background: #fff !important;
-  z-index: 101;
-  font-family: archia;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .12), inset 0 -1px 0 0 #dadce0;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  border-radius: 5px;
-  box-shadow: 0 2px 6px 0 rgba(0,0,0,.12),inset 0 -1px 0 0 #dadce0;
+  font-family: archia;
   justify-content: space-between;
+  padding: .5rem;
+  position: sticky;
+  top: 0;
+  z-index: 101;
 
   & > * {
     align-self: center;
@@ -2673,20 +3666,23 @@ select {
 .pills {
   display: flex;
   flex-direction: row;
-  align-self: flex-end;
+  justify-content: flex-end;
+
   > button {
-    border: 2px $yellow-light solid;
     background-color: $yellow-light;
+    border: 2px $yellow-light solid;
+    border-bottom: 0;
+    border-top: 0;
     color: $orange;
-    text-transform: uppercase;
-    text-align: center;
-    font-weight: 900;
-    transition: background 0.25s ease-in-out;
-    padding: 5px 15px;
-    font-family: 'archia';
     cursor: pointer;
+    font-family: 'archia';
+    font-weight: 900;
     margin: 0;
     outline: none;
+    padding: 10px 15px;
+    text-align: center;
+    transition: background .25s ease-in-out;
+
     &:hover {
       background: $yellow-hover;
     }
@@ -2695,31 +3691,33 @@ select {
       background-color: $yellow-mid;
     }
 
-    &:focus:not(:focus-visible) {
-      outline: none;
+    &:focus {
+      &:not(:focus-visible) {
+        outline: none;
+      }
     }
 
     &:first-of-type {
-      border-top-left-radius: 5px;
+      border: 0;
       border-bottom-left-radius: 5px;
-      border-right: 0;
+      border-top-left-radius: 5px;
     }
 
     &:last-of-type {
-      border-top-right-radius: 5px;
+      border: 0;
       border-bottom-right-radius: 5px;
-      border-left: 0;
+      border-top-right-radius: 5px;
     }
   }
 }
 
 .legend {
   background: #fff;
-  z-index: 101;
-  font-family: archia;
   display: flex;
   flex-wrap: wrap;
+  font-family: archia;
   justify-content: center;
+  z-index: 101;
 
   & > * {
     align-self: center;
@@ -2735,9 +3733,10 @@ select {
   }
 
   h5 {
-    margin: 0;
-    margin-right: 0.5rem;
     color: $gray;
+    margin: 0;
+    margin-right: .5rem;
+
     &.is-female {
       color: $pink;
     }
@@ -2756,11 +3755,12 @@ select {
   }
 
   .circle {
-    width: 0.8rem;
-    height: 0.8rem;
-    border-radius: 50%;
     background: $gray-mid;
-    margin-right: 0.25rem;
+    border-radius: 50%;
+    height: .8rem;
+    margin-right: .25rem;
+    width: .8rem;
+
     &.is-female {
       background: $pink;
     }
@@ -2804,7 +3804,7 @@ select {
 
     &.is-it {
       background: url('/flags/italy.png');
-    background-size: cover !important;
+      background-size: cover !important;
     }
 
     &.is-ca {
@@ -2825,9 +3825,10 @@ select {
 }
 
 .updates-header {
-  width: 30rem;
   align-self: center;
   color: $gray-dark;
+  width: 30rem;
+
   h2 {
     color: $pblue;
     font-weight: 900;
@@ -2835,27 +3836,33 @@ select {
 }
 
 .updates {
+  align-self: center;
   display: flex;
   flex-direction: column;
-  align-self: center;
+  margin-bottom: 1rem;
+  min-height: 22rem !important;
   width: 100%;
+
+
   .update {
     background: $gray-light;
-    margin-bottom: 0.5rem;
-    padding: 0.5rem;
     border-radius: 5px;
-    transition: all 0.2s ease-in-out;
+    margin-bottom: .5rem;
+    padding: .75rem;
+    transition: all .2s ease-in-out;
+
     &:hover {
       background: $gray-hover;
     }
 
-    h5, h4 {
+    h5,
+    h4 {
       margin: 0;
     }
 
     h5 {
       color: $gray-mid;
-      margin-bottom: 0.15rem;
+      margin-bottom: .15rem;
     }
 
     h4 {
@@ -2866,11 +3873,12 @@ select {
 
   .button {
     background: $pblue-light;
-    height: 3rem;
+    color: $pblue;
     display: flex;
     flex-direction: row;
-    color: $pblue;
+    height: 3rem;
     width: 13rem;
+
     & > * {
       align-self: center;
     }
@@ -2882,101 +3890,328 @@ select {
 
   a {
     color: inherit;
-    text-decoration: none;
-    flex-direction: row;
     display: flex;
+    flex-direction: row;
+    text-decoration: none;
+
     & > * {
       align-self: center;
     }
   }
 }
 
-@media(max-width: 400px){
-  .PatientsDB .modal .modal-content .meta {
-    height: 25rem !important;
+.DeltaBarGraph {
+  svg {
+    width: 100%;
+
+    text {
+      color: $red;
+      font-family: 'archia';
+    }
+
+    .delta {
+      fill: #dc3545;
+      font-weight: 900;
+    }
+
+    .percent {
+      fill: #dc354590;
+    }
+  }
+}
+
+.district-bar {
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  h2 {
+    color: $red;
+    font-weight: 900;
+    margin-bottom: .5rem;
+  }
+
+  .district-bar-left {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1rem;
+    width: 10rem;
+  }
+
+  .districts {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 15rem;
+    width: 100%;
+
+
+    .district {
+      display: flex;
+      flex-direction: row;
+      font-family: 'archia';
+      margin-bottom: .15rem;
+      margin-top: .15rem;
+
+      h2,
+      h5 {
+        color: $gray;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      h5 {
+        display: table;
+        margin-left: .5rem;
+        margin-top: .15rem;
+      }
+
+      & > * {
+        align-self: center;
+      }
+
+      .delta {
+        display: flex;
+        flex-direction: row;
+        margin-left: .5rem;
+        margin-top: 4px;
+
+        h6 {
+          color: $red-mid;
+          margin: 0;
+        }
+
+        svg {
+          color: $red-mid;
+          stroke-width: 4;
+          vertical-align: bottom;
+          width: 10px;
+        }
+
+        & > * {
+          align-self: center;
+        }
+      }
+    }
+  }
+}
+
+.Clusters {
+  align-self: center;
+  width: 100%;
+
+  h1 {
+    color: $red;
+    margin-bottom: 0;
+    padding-left: 1.5rem;
+    width: 100%;
+  }
+
+  canvas {
+    touch-action: auto !important;
   }
 }
 
 .cards-container {
-  padding: 4rem;
+  margin-left: 5rem;
+  padding: 2rem;
+
+
   .cards {
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
+    justify-content: space-between;
+
+
     .card {
-      margin-bottom: 2em;
       flex: 0 1 calc(33% - 1em);
-      box-shadow: rgba(#000, 0.2) 0 0 8px 0;
-      &:hover {
-        box-shadow: rgba(#000, 0.3) 0 0 8px 0;
-      }
       height: 30rem;
-        .charts-header {
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start;
-          .chart-title {
-            font-family: 'archia';
-            font-size: 1.5rem !important;
-            color: #6c757d;
-            font-weight: 900;
-            text-transform: uppercase;
-            padding: 20px 0 20px 0;
-          }
+      margin-bottom: 2em;
 
-          .chart-content {
-            height: 100%;
-            width: 100%;
-          }
 
-          .chart-note {
-           color: $gray;
-           height: 50px;
-           margin-top: 5px;
-          }
+      .charts-header {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: flex-start;
+
+
+        .chart-title {
+          color: #6c757d;
+          font-family: 'archia';
+          font-size: 1.5rem !important;
+          font-weight: 900;
+          padding: 20px 0;
+          text-transform: uppercase;
         }
+
+        .chart-content {
+          height: 100%;
+          width: 100%;
+        }
+
+        .chart-note {
+          color: $gray;
+          font-family: 'archia';
+          font-size: .8rem;
+          height: 50px;
+          margin-top: 5px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 769px) {
+    margin-left: unset;
+    padding: 1rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .Home,
+  .State {
+    padding-top: 5rem;
+  }
+
+  .Navbar {
+    background: $gray-light-opaque;
+    flex-direction: column;
+    height: 100%;
+    justify-content: flex-start;
+    min-width: 5rem;
+    position: fixed;
+    z-index: 99999;
+
+
+    .navbar-left {
+      margin-top: auto;
+      order: 3;
+      padding-left: 0;
+      padding-right: 0;
+      text-align: center;
+      transition: all .2s ease-in-out;
+      width: 5rem;
+
+      &:hover {
+        background: $gray-hover;
+      }
+    }
+
+    .navbar-middle {
+      font-size: .6rem;
+      order: 1;
+      padding-bottom: 2rem;
+      padding-top: 2rem;
+      text-align: center;
+      width: 2.9rem;
+      word-wrap: break-word;
+    }
+
+    .navbar-right {
+      background: $gray-light-opaque;
+      display: flex;
+      flex-direction: column;
+      order: 2;
+      padding-bottom: 0;
+      padding-top: 0;
+
+      &:hover {
+        background: $gray-light-opaque !important;
+      }
+
+      & > span {
+        display: flex;
+        flex-direction: row;
+        height: 1.5rem;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        margin-top: 1.5rem;
+
+        svg {
+          stroke: $gray;
+        }
+      }
+    }
+
+    .expand {
+      background: $gray-light-opaque;
+      border-right: solid 2px $gray-light-opaque;
+      flex-direction: column;
+      padding-left: 0;
+      padding-top: 5.5rem;
+      top: 0;
+      width: 15rem;
+      z-index: -1 !important;
+
+      & > * {
+        border: 0;
+        border-left: 1px solid $gray-light;
+        color: $gray;
+        font-weight: 600;
+        height: 1.5rem;
+        width: 12rem;
+      }
+    }
+  }
+
+  .PatientsDB {
+    margin-left: 5rem;
+  }
+
+  .dark-mode {
+    .Navbar,
+    .expand {
+      background: #1e1e30 !important;
+    }
+
+    .navbar-right {
+      background: #1e1e30 !important;
     }
   }
 }
 
 @media (max-width: 769px) {
-  .TimeSeries,
   table,
   .header,
   .Level,
-  .timeseries-header,
-  .TimeSeries-Parent,
+  .TimeSeriesExplorer,
   .Links,
   .Minigraph,
   .Summary,
   .FAQ,
   .MapExplorer,
-  .patients-summary
   .filters,
-  .updates, .updates-header {
+  .updates,
+  .map-switcher,
+  .updates-header {
     width: calc(100% - 2rem);
   }
 
-  .Home {
+  .Home,
+  .State {
     display: flex;
     flex-direction: column;
-    width: 100%;
     margin-left: 0;
     margin-right: 0;
+    width: 100%;
 
     .home-left,
-    .home-right {
-      width: 100%;
+    .home-right,
+    .state-left,
+    .state-right {
       display: flex;
       flex-direction: column;
       margin: 0;
+      width: 100%;
     }
   }
 
-  body.modal-open {
-    width: 100%;
+  .MapExplorer {
+    .header {
+      margin-top: 2rem;
+    }
   }
 
   .link,
@@ -2984,79 +4219,15 @@ select {
     width: calc(100% - 2rem);
   }
 
-  .Navbar {
-    position: relative;
-
-    a {
-      font-size: 0.75rem !important;
-      margin-right: 0.75rem !important;
-    }
-
-    img {
-      width: 2rem;
-      height: 2rem;
-      margin-left: 1rem;
-      margin-right: -1rem;
-      cursor: pointer;
-    }
-
-    .navbar-menu {
-      background: $gray-light-opaque;
-      border-bottom: 1px solid;
-      border-top: 1px solid;
-      border-color: $gray-hover;
-      box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 #dadce0;
-      left: 0;
-      padding: 0.5rem 0;
-      position: absolute;
-      right: 0;
-      top: 4.5rem;
-      z-index: 999;
-
-      &.hidden {
-        display: none;
-      }
-
-      a {
-        display: block;
-        padding: 0.75rem 1rem;
-      }
-    }
-
-    .navbar-toggle {
-      align-items: center;
-      background: $gray-light;
-      border-radius: 5px;
-      border: 2px solid $gray-mid;
-      color: $gray-mid;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      font-family: 'Archia';
-      font-size: 14px;
-      height: 1.25rem;
-      justify-content: center;
-      margin-right: 1rem;
-      width: 1.25rem;
-      transition: all 0.2s ease-in-out;
-
-      &:hover {
-        border-color: $gray;
-        color: $gray;
-      }
-
-      div {
-        background: currentColor;
-        margin: 1px 0;
-        width: 0.75rem;
-        height: 2px;
-      }
+  .TimeSeries {
+    .svg-parent {
+      width: 100%;
     }
   }
 
-  .timeseries {
+  .Minigraph {
     .svg-parent {
-      width: 100%;
+      padding: 0;
     }
   }
 
@@ -3072,28 +4243,31 @@ select {
     width: 10rem;
   }
 
-  a.button {
-    display: flex;
-    flex: row;
-    width: 10rem;
-    justify-content: center;
+  a {
+    &.button {
+      display: flex;
+      flex: row;
+      justify-content: center;
+      width: 10rem;
 
-    & > * {
-      align-self: center;
-    }
+      & > * {
+        align-self: center;
+      }
 
-    svg {
-      width: 38px;
+      svg {
+        width: 38px;
+      }
     }
   }
 
   .Banner {
     height: 7rem;
 
+
     .snippet {
-      width: 100%;
       margin-left: 1rem;
       margin-right: 1rem;
+      width: 100%;
     }
   }
 
@@ -3104,28 +4278,47 @@ select {
   }
 
   .cards-container {
-    padding: 1rem;
+    padding: .5rem;
+
+
     .cards {
       .card {
-        flex: 0 1 calc(100%);
+        flex: 0 1 100%;
+        height: 25rem;
+        margin-bottom: 0;
+      }
+
+      .chart-title {
+        padding: 20px 0 10px;
+      }
+
+      .card-big {
+        height: 30rem;
       }
     }
   }
 
-
   .PatientsDB {
     width: 100%;
 
-    .header{
-      width: calc(100% - 2rem);
+    .select {
+      .react-date-picker__calendar {
+        position: fixed;
+        top: 2.3rem !important;
+      }
+    }
+
+    .header {
       margin: 0;
       padding-left: 1rem;
       padding-right: 1rem;
+      width: calc(100% - 2rem);
     }
 
     .reminder {
-      width: calc(100% - 2rem);
-      padding: 0;
+      padding-bottom: 1rem;
+      padding-top: 1rem;
+      width: calc(100% - 4rem);
     }
 
     .Patients {
@@ -3135,6 +4328,8 @@ select {
     .modal {
       .modal-content {
         width: calc(100% - 5rem);
+
+
         .meta {
           height: 20rem;
         }
@@ -3147,8 +4342,9 @@ select {
     }
 
     .filters {
-      height: 7rem;
+      height: auto;
       justify-content: center;
+      padding: .5rem;
     }
   }
 
@@ -3158,9 +4354,13 @@ select {
 
   .patients-summary {
     width: calc(100% - 2rem);
+
+
     .modal {
       .modal-content {
         width: calc(100% - 5rem);
+
+
         .meta {
           height: 20rem;
         }
@@ -3171,6 +4371,8 @@ select {
   .patientdb-wrapper {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
+
+
     .Patients {
       width: 100%;
     }
@@ -3181,86 +4383,36 @@ select {
     }
   }
 
-  .Navbar {
-    justify-content: space-between;
-
-    .navbar-burger {
-      align-self: center;
-      margin-left: 1rem;
-      cursor: pointer;
-      svg {
-        color: $gray-mid;
-        &:hover {
-          stroke: $gray;
-        }
-      }
-    }
-
-    .side-navbar {
-      position: fixed;
-      height: 100vh;
-      width: 7.5rem;
-      padding-top: 5rem;
-      z-index: 100;
-      display: flex;
-      flex-direction: column;
-      padding-left: 1rem;
-      background: $white;
-      border-right: 1px solid $gray-light;
-      a {
-        font-family: 'archia';
-        text-decoration: none;
-        color: $gray;
-        margin-bottom: 1rem;
-      } svg {
-        position: absolute;
-        top: -3.5rem;
-        stroke: $gray-mid;
-        cursor: pointer;
-      }
-    }
-  }
-
-  select {
-    margin-left: 2px;
-    margin-right: 2px;
-  }
-
   &.nationality {
-    margin-bottom: 0.5rem;
-  }
-
-  &.genders {
-    margin-top: 0.5rem;
+    margin-bottom: .5rem;
   }
 
   .Resources {
     table {
-      position: relative;
-      width: 40rem;
       align-self: center;
-      font-family: 'archia';
-      text-transform: none;
-      border-spacing: 3px 2px;
       border-collapse: separate;
-      // border: 0.1rem solid rgb(151, 150, 221);
+      border-spacing: 3px 2px;
+      font-family: 'archia';
+      position: relative;
+      text-transform: none;
+      width: 40rem;
 
       thead {
         background: $purple-light;
         color: $gray-dark;
+        font-size: .7rem;
         text-align: center;
-        font-size: 0.7rem;
 
         th {
-          padding: 0.5rem;
-          cursor: pointer;
           border-radius: 5px;
-          transition: all 0.1s ease-in-out;
+          cursor: pointer;
+          padding: .5rem;
+          transition: all .1s ease-in-out;
           z-index: 99;
 
           &.sticky {
-            top: 4px;
             background: $gray-opaque;
+            top: 4px;
           }
 
           &:hover {
@@ -3268,25 +4420,25 @@ select {
           }
 
           .heading-content {
+            align-items: center;
             display: flex;
+            flex-direction: row;
+            height: .9rem;
             justify-content: space-between;
             position: relative;
-            flex-direction: row;
-            height: 0.9rem;
-            align-items: center;
 
             abbr {
               text-align: right;
             }
 
             svg {
-              width: 10px;
+              color: $gray-mid;
               margin: 0;
+              margin-left: .25rem;
+              margin-top: .15rem;
               right: 0;
               stroke-width: 4px;
-              margin-top: 0.15rem;
-              margin-left: 0.25rem;
-              color: $gray-mid;
+              width: 10px;
             }
           }
         }
@@ -3294,107 +4446,110 @@ select {
 
       tbody {
         color: $gray;
+        max-width: 10rem;
 
         tr {
-          transition: background 0.1s ease-in-out;
-          // cursor: pointer;
+          transition: background .1s ease-in-out;
 
           &:hover {
             background: $gray-hover !important;
           }
 
           &.divider {
-            height: 0.5rem;
             background: #6c757d10 !important;
+            height: .5rem;
           }
 
           &.spacer {
-            height: 0.5rem;
             background: #fff !important;
+            height: .5rem;
+          }
+
+          &:nth-child(even) {
+            background-color: $purple-light;
           }
         }
 
-        tr:nth-child(even) {background-color: $purple-light;}
-
         td {
-          // padding: 0.25rem;
-          font-size: 0.6rem;
           border-radius: 5px;
+          font-size: .6rem;
           text-align: left;
+
+          &:first-child {
+            max-width: 7.5rem;
+            text-align: left;
+            word-wrap: break-word;
+          }
+
           .deltas {
-            margin-right: 0.25rem;
             font-size: 11px !important;
+            margin-right: .25rem;
 
             svg {
-              width: 9px;
               height: 9px;
               stroke-width: 3;
-              vertical-align: -0.25px;
+              vertical-align: -.25px;
+              width: 9px;
             }
           }
         }
 
-        td:first-child {
-          text-align: left;
-          max-width: 7.5rem;
-          word-wrap: break-word;
-        }
-
-        .state-last-update{
+        .state-last-update {
           background: transparent;
           transform: translateX(1rem);
-          &:hover{
+
+          &:hover {
             background: #fff !important;
           }
 
-          td{
-            .last-update{
-              text-align: left;
+          td {
+            .last-update {
+              align-items: baseline;
               display: flex;
               flex-direction: row;
-              align-items: baseline;
+              text-align: left;
               width: 100%;
             }
           }
         }
 
         .district-heading {
-          transform: translateX(1rem);
           background: $gray-light;
+          transform: translateX(1rem);
 
           td {
-            font-size: 0.75rem;
-            font-weight: 900;
-            padding: 0.45rem;
-            color: $gray-dark;
             background: $gray-light;
+            color: $gray-dark;
+            font-size: .75rem;
+            font-weight: 900;
+            padding: .45rem;
+
 
             .heading-content {
+              align-items: center;
               display: flex;
+              flex-direction: row;
+              height: .9rem;
               justify-content: space-between;
               position: relative;
-              flex-direction: row;
-              height: 0.9rem;
-              align-items: center;
 
               abbr {
                 text-align: right;
               }
 
               svg {
-                width: 10px;
+                color: $gray-mid;
                 margin: 0;
+                margin-left: .25rem;
+                margin-top: .15rem;
                 right: 0;
                 stroke-width: 4px;
-                margin-left: 0.25rem;
-                margin-top: 0.15rem;
-                color: $gray-mid;
+                width: 10px;
               }
             }
           }
         }
 
-        max-width: 10rem;
 
         .district {
           transform: translateX(1rem);
@@ -3402,11 +4557,11 @@ select {
       }
 
       .affected-count {
-        position: absolute;
-        margin: 0;
-        top: -1rem;
         color: $gray-mid;
+        margin: 0;
+        position: absolute;
         right: 0;
+        top: -1rem;
       }
 
       .is-total {
@@ -3416,107 +4571,411 @@ select {
       }
 
       .dropdown {
-        position: absolute;
-        left: -0.75rem;
         background: $gray-light;
         border-radius: 50%;
-        width: 13px;
-        height: 13px;
-        margin-top: 0.5rem;
         cursor: pointer;
-        transition: background 0.2s ease-in-out;
+        height: 13px;
+        left: -.75rem;
+        margin-top: .5rem;
+        position: absolute;
+        transition: background .2s ease-in-out;
+        width: 13px;
 
         &:hover {
           background: $gray-hover;
         }
 
         svg {
-          position: absolute;
-          top: -0.35rem;
           left: 1px;
-          width: 11px;
+          position: absolute;
           stroke-width: 3;
+          top: -.35rem;
+          width: 11px;
+        }
+      }
+    }
+  }
+
+  .resourcefilters {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .resourcefilter {
+    margin-bottom: .4rem;
+  }
+
+  .filtersection {
+    animation-duration: 1s;
+    animation-name: fadeInUp;
+    animation-timing-function: ease-in;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: .1rem;
+    width: 100%;
+
+    .filtertitle {
+      align-self: center;
+      color: $cherry;
+      text-align: center;
+    }
+  }
+
+  .pagination {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+
+    .select {
+      margin-right: 0;
+      margin-top: .4rem;
+    }
+
+    input {
+      margin: .1rem;
+    }
+
+    h5 {
+      margin-bottom: .1rem;
+      margin-top: 0;
+    }
+  }
+
+  .Navbar {
+    .expand {
+      height: calc(100vh - 3.9rem);
+      overflow: auto;
+      transform: none !important;
+    }
+
+    .navbar-right {
+      & > span {
+        display: none;
+
+        &:first-child {
+          display: initial;
+        }
+      }
+    }
+  }
+
+  .Search {
+    .result-name {
+      max-width: 10rem !important;
+    }
+  }
+
+  .State {
+    .district-bar,
+    .to-essentials,
+    .Clusters {
+      width: calc(100% - 3rem);
+
+      h1 {
+        padding-left: 0;
+      }
+    }
+  }
+}
+
+// Dark Mode
+
+.dark-mode {
+  background: #161625 !important;
+  color: #bdbdbd;
+  transition: background-color .2s ease-out !important;
+
+
+  .switch-wrapper > div {
+    background: #161625 !important;
+  }
+
+  .expand {
+    background: #1e1e30 !important;
+  }
+
+  .Navbar,
+  .expand {
+    border-right: 0;
+
+
+    .navbar-middle {
+      color: #bdbdbd;
+    }
+
+    .navbar-right {
+      background: #1e1e30 !important;
+    }
+  }
+
+  table {
+    th {
+      background: #1e1e30 !important;
+    }
+
+    .is-odd {
+      background: #1e1e30 !important;
+    }
+
+    .state-page-link {
+      background: #161625 !important;
+    }
+
+    .heading-content {
+      color: #bdbdbd !important;
+    }
+
+    .spacer {
+      background: #161625 !important;
+    }
+  }
+
+  .Search {
+    input {
+      background: #1e1e30 !important;
+    }
+  }
+
+  .State {
+    .header-right {
+      h5 {
+        color: #9673b9bb !important;
+      }
+
+      h2 {
+        color: #9673b9 !important;
+      }
+
+      a {
+        background: #40008050 !important;
+      }
+    }
+  }
+
+  .MapExplorer {
+    #chart,
+    #legend {
+      filter: invert(1) hue-rotate(150deg);
+    }
+
+    .legend {
+      background: #161625 !important;
+    }
+
+    .stats {
+      &.is-purple {
+        background: #40008050 !important;
+
+        h1 {
+          color: #9673b9 !important;
+        }
+
+        h5,
+        h6 {
+          color: #9673b9bb !important;
+        }
+
+        svg {
+          stroke: #9673b9 !important;
+        }
+      }
+    }
+  }
+
+  .tab {
+    &.focused {
+      background: #1e1e30 !important;
+      color: #bdbdbd !important;
+    }
+  }
+
+  .pills {
+    button {
+      &.selected {
+        background: #{$yellow}50;
+      }
+    }
+  }
+
+  select {
+    background: #1e1e30 !important;
+    border-color: #1e1e30 !important;
+  }
+
+  input {
+    &.switch {
+      background-color: #161625 !important;
+      border: 2px solid $gray-mid !important;
+
+      &:checked {
+        background-color: #161625 !important;
+
+        &::after {
+          background-color: #cfcfcf !important;
+        }
+      }
+
+      &::after {
+        background-color: #cfcfcf !important;
+      }
+    }
+  }
+
+  .button {
+    &.github {
+      color: #bdbdbd !important;
+
+      svg {
+        stroke: #bdbdbd !important;
+      }
+    }
+  }
+
+  .FAQ {
+    .question {
+      color: $gray !important;
+    }
+  }
+
+  .Resources {
+    .filtersection {
+      .disclaimercontainer {
+        .mobile-disclaimer-button {
+          background-color: $dark-m-white;
+          color: #808080;
+        }
+
+        .disclaimer-button {
+          background: none;
+          color: $dark-mid-subtext;
+        }
+
+        .MuiSvgIcon-root {
+          fill: $dark-m-white;
+        }
+      }
+
+      .resourcefilters {
+        .MuiFormLabel-root {
+          color: rgba(232, 230, 227, .54);
+        }
+
+        .MuiInputBase-root {
+          color: rgba(232, 230, 227, .87);
+        }
+
+        .MuiSelect-icon {
+          color: $dark-m-white;
+        }
+
+        .MuiOutlinedInput-notchedOutline {
+          border-color: $dark-m-white;
+        }
+
+        .button {
+          &.is-purple {
+            background-color: rgba(31, 25, 158, .13);
+            background-image: none;
+            color: $dark-m-purple;
+          }
+        }
+
+        div {
+          .MuiFormControl-root {
+            &:nth-child(1) {
+              .MuiOutlinedInput-root {
+                border-color: #dbd3d3;
+                border-width: 25px !important;
+                position: relative;
+              }
+            }
+          }
+        }
+
+        .MuiSelect-select {
+          &:not([multiple]) {
+            option,
+            optgroup {
+              background-color: $dark-m-gray;
+            }
+          }
+        }
+      }
+
+      .misclinkscontainer {
+        .button {
+          &.is-purple {
+            background-color: rgba(31, 25, 158, .13);
+            background-image: none;
+            color: $dark-m-purple;
+          }
         }
       }
     }
 
-
-  }
-
-
-
-  .resourcefilters {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-  }
-
-  .resourcefilter {
-    margin-bottom: 0.4rem;
-  }
-
-  .filtersection {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin-bottom: 0.1rem;
-    .filtertitle {
-      align-self: center;
-      text-align: center;
-      color: $cherry;
-    }
-    animation-name: fadeInUp;
-    animation-duration: 1s;
-    animation-timing-function: ease-in;
-
-  }
-
-  .pagination{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    .select{
-      // height: max-content;
-      margin-top: 0.4rem;
-      margin-right: 0;
-      // min-width: 9rem;
+    input {
+      .MuiInputBase-input {
+        color: $dark-m-white;
+      }
     }
 
-    input{
-      // min-width: 8rem;
-      // height: max-content;
-      margin: 0.1rem 0.1rem 0.1rem 0.1rem;
+    .searchbar {
+      .MuiFormLabel-root {
+        color: rgba(232, 230, 227, .54);
+      }
+
+      .MuiOutlinedInput-notchedOutline {
+        border-color: $dark-m-white;
+      }
+
+      .MuiSvgIcon-root {
+        fill: $white;
+      }
     }
 
-    h5{
-      margin-top: 0;
-      margin-bottom: 0.1rem;
+    table {
+      thead {
+        color: rgb(210, 207, 200);
+      }
+    }
+
+    .tableandcontrols {
+      a {
+        color: $dark-m-blue;
+      }
     }
   }
 
-}
+  .PatientsDB {
+    .filters {
+      background: #1e1e30 !important;
+      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .12), inset 0 -1px 0 0 #1e1e30;
+    }
 
-.iframe-container {
-  width: 100%;
-  min-height: 100vh;
+    .legend {
+      background: #1e1e30 !important;
+    }
 
-  iframe {
-    width: 100vw;
-    height: 100vh;
-    border: 0;
+    .modal-content {
+      background: #1e1e30 !important;
+    }
+
+    .modal {
+      background: #1e1e30bb !important;
+    }
   }
 }
 
-
-/* Animation Support */
+// Animation Support
 
 .fadeInUp {
-  animation-name: fadeInUp;
-  animation-duration: 0.45s;
+  animation-duration: .45s;
   animation-fill-mode: both;
+  animation-name: fadeInUp;
 }
 
 @keyframes fadeInUp {
@@ -3532,9 +4991,9 @@ select {
 }
 
 .rotateDownRight {
-  animation-name: rotateDownRight;
-  animation-duration: 0.25s;
+  animation-duration: .25s;
   animation-fill-mode: both;
+  animation-name: rotateDownRight;
 }
 
 @keyframes rotateDownRight {
@@ -3544,9 +5003,9 @@ select {
 }
 
 .rotateRightDown {
-  animation-name: rotateRightDown;
-  animation-duration: 0.25s;
+  animation-duration: .25s;
   animation-fill-mode: both;
+  animation-name: rotateRightDown;
 }
 
 @keyframes rotateRightDown {
@@ -3556,9 +5015,9 @@ select {
 }
 
 .fadeOutDown {
-  animation-name: fadeOutDown;
-  animation-duration: 0.45s;
+  animation-duration: .45s;
   animation-fill-mode: both;
+  animation-name: fadeOutDown;
 }
 
 @keyframes fadeOutDown {
@@ -3570,34 +5029,5 @@ select {
   100% {
     opacity: 0;
     transform: translateY(20px);
-  }
-}
-
-.height-22 {
-	height: 22px;
-}
-
-.disclaimercontainer {
-
-  svg {
-    margin-left: 2px;
-  }
-
-  .mobile-disclaimer-button {
-    background-color: #ffffff;
-    color: #808080;
-    font-size: xx-small;
-    justify-content: center;
-    svg {
-      font-size: 0.75rem;
-    }
-  }
-
-  .disclaimer-button {
-    color: $gray-mid;
-    background: none;
-    text-transform: none;
-    font-weight: 500;
-    font-size: 0.7rem;
   }
 }

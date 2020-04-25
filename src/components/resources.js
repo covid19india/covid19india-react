@@ -1,60 +1,12 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import FiltersDesktop from './Essentials/essentialsfiltersdesktop';
+import FiltersMobile from './Essentials/essentialsfiltersmobile';
 import ResourceTable from './resourcetable';
+
+import {Fab, Fade} from '@material-ui/core';
 import axios from 'axios';
-import FormControl from '@material-ui/core/FormControl';
-import Popover from '@material-ui/core/Popover';
-import Select from '@material-ui/core/Select';
-import {makeStyles} from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
-import Fab from '@material-ui/core/Fab';
-import NavigationOutlinedIcon from '@material-ui/icons/NavigationOutlined';
+import React, {useState, useEffect, useCallback} from 'react';
+import * as Icon from 'react-feather';
 
-export const useFormControlStyles = makeStyles((isDesktop) => {
-  if (isDesktop === true)
-    return {
-      root: {
-        margin: '1rem',
-        flexGrow: '1',
-      },
-    };
-  else
-    return {
-      root: {
-        margin: '0.4rem',
-        flexGrow: '1',
-        width: '100%',
-      },
-    };
-});
-export const useInputLabelStyles = makeStyles(() => ({
-  root: {
-    fontFamily: 'archia',
-    fontSize: '11px !important',
-    fontWeight: 600,
-    textTransform: 'uppercase',
-  },
-}));
-
-export const useMenuItemStyles = makeStyles(() => ({
-  root: {
-    fontFamily: 'archia',
-    fontSize: '11px !important',
-    fontWeight: 600,
-    textTransform: 'uppercase',
-  },
-}));
-export const usePopOverStyles = makeStyles(() => ({
-  root: {
-    backgroundColor: '#201aa220',
-    zIndex: '1000',
-  },
-}));
-export const useTextInputStyles = makeStyles(() => ({
-  root: {
-    height: '0.5rem',
-  },
-}));
 function Resources(props) {
   const [data, setData] = useState([]);
   const [partData, setPartData] = useState([]);
@@ -65,20 +17,17 @@ function Resources(props) {
   const [resourcedict, setResourceDict] = useState({});
   const [showTable, setShowTable] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
-  const classesFormControl = useFormControlStyles();
-  const classesInputLabel = useInputLabelStyles();
-  const classesMenuItem = useMenuItemStyles();
-  const classesPopOver = usePopOverStyles();
+  const [hasScrolled, setHasScrolled] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   useEffect(() => {
     if (fetched === false) {
       getResources();
     }
   }, [fetched, data, resourcedict]);
+
   const checkForResizeEvent = useCallback((event) => {
     if (window.innerWidth > 639) setIsDesktop(true);
     else setIsDesktop(false);
-    // console.log(isDesktop);
   }, []);
 
   useEffect(() => {
@@ -90,18 +39,26 @@ function Resources(props) {
     };
   }, [isDesktop, checkForResizeEvent]);
 
+  const checkScrollEvent = useCallback((event) => {
+    window.pageYOffset > 100 ? setHasScrolled(true) : setHasScrolled(false);
+  }, []);
+
+  useEffect(() => {
+    window.pageYOffset > 100 ? setHasScrolled(true) : setHasScrolled(false);
+    window.addEventListener('scroll', checkScrollEvent);
+    return () => {
+      window.removeEventListener('scroll', checkScrollEvent);
+    };
+  }, [hasScrolled, checkScrollEvent]);
+
   const getResources = async () => {
     try {
       const [response] = await Promise.all([
         axios.get('https://api.covid19india.org/resources/resources.json'),
       ]);
-      // console.log(response)
-      // console.log("Column names are")
-      // console.log(columns)
       // setData(response.data.resources);
       const hashmap = {};
       response.data.resources.forEach((x) => {
-        // console.log(x)
         if (typeof hashmap[x['state']] === 'undefined')
           hashmap[x['state']] = {};
         if (typeof hashmap[x['state']][x['city']] === 'undefined')
@@ -118,10 +75,7 @@ function Resources(props) {
       // setIndianState(Object.keys()[0]);
 
       setFetched(true);
-      // console.log(resourcedict);
-    } catch (err) {
-      // console.log(err);
-    }
+    } catch (err) {}
   };
 
   const handleDisclaimerClick = (event) => {
@@ -134,9 +88,10 @@ function Resources(props) {
 
   const isDisclaimerOpen = Boolean(anchorEl);
   const id = isDisclaimerOpen ? 'simple-popover' : undefined;
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+
+  function animateScroll() {
+    document.body.scrollTo({top: 0, behavior: 'smooth'}); // For Safari
+    document.documentElement.scrollTo({top: 0, behavior: 'smooth'}); // For Chrome, Firefox, IE and Opera
   }
 
   const memocols = React.useMemo(
@@ -177,9 +132,9 @@ function Resources(props) {
       else {
         return Object.keys(resourcedict[indianstate])
           .sort()
-          .map((x) => (
+          .map((x, i) => (
             <option
-              key={x.id}
+              key={i}
               value={x}
               style={{
                 fontFamily: 'archia',
@@ -199,9 +154,9 @@ function Resources(props) {
     // let defaultOption = ['Please select']
     return Object.keys(resourcedict)
       .sort()
-      .map((x) => (
+      .map((x, i) => (
         <option
-          key={x.id}
+          key={i}
           value={x}
           style={{
             fontFamily: 'archia',
@@ -225,9 +180,9 @@ function Resources(props) {
             });
           });
         });
-        return array.map((x) => (
+        return array.sort().map((x, i) => (
           <option
-            key={x.id}
+            key={i}
             value={x}
             style={{
               fontFamily: 'archia',
@@ -247,9 +202,9 @@ function Resources(props) {
               if (array.indexOf(x) === -1) array.push(x);
             });
           });
-          return array.map((x) => (
+          return array.sort().map((x, i) => (
             <option
-              key={x.id}
+              key={i}
               value={x}
               style={{
                 fontFamily: 'archia',
@@ -264,9 +219,9 @@ function Resources(props) {
         } else {
           return Object.keys(resourcedict[indianstate][city])
             .sort()
-            .map((x) => (
+            .map((x, i) => (
               <option
-                key={x.id}
+                key={i}
                 value={x}
                 style={{
                   fontFamily: 'archia',
@@ -284,11 +239,8 @@ function Resources(props) {
   };
 
   const filterTable = function () {
-    // console.log('Search Button Pressed');
-    // console.log(`Filters are: ${indianstate} ---> ${city} ----> ${category}`);
     let a = [];
     if (category === 'all') {
-      // console.log("All category selected");
       if (city === 'all') {
         if (indianstate === 'all') {
           Object.values(resourcedict).forEach((state) => {
@@ -311,9 +263,6 @@ function Resources(props) {
         });
       }
     } else {
-      // console.log(`Category chosen ${category}`);
-      // a = resourcedict[indianstate][city][category];
-
       if (indianstate === 'all' && city === 'all') {
         Object.values(resourcedict).forEach((state) => {
           Object.values(state).forEach((citydata) => {
@@ -344,13 +293,9 @@ function Resources(props) {
           }
         );
       }
-    } catch (err) {
-      // console.log('No PAN India row found');
-    }
+    } catch (err) {}
     setData(a);
     setPartData(a.slice(0, 30));
-    // console.log(resourcedict[indianstate][city][category]);
-    // console.log(data);
     setShowTable(true);
   };
 
@@ -378,7 +323,6 @@ function Resources(props) {
   };
   const changeCategory = function (changedcategoryevent) {
     setCategory(changedcategoryevent.target.value);
-    // console.log(changedcategoryevent.target.value);
   };
   const appendData = function () {
     const tempArr = partData.concat(
@@ -422,420 +366,56 @@ function Resources(props) {
           url: 'https://www.covid19india.org/essentials',
         })
         .then()
-        .catch((error) => console.log(error));
+        .catch((error) => {});
     } else {
       openSharingLink(message);
     }
   };
   return (
-    <div className="Resources">
+    <div className="Resources" id="top-elem">
       <div className="filtersection">
         <div className="filtertitle">
           <h3>Service Before Self</h3>
         </div>
         {!isDesktop && (
-          <React.Fragment>
-            <div
-              className="disclaimercontainer"
-              style={{
-                display: 'flex',
-                flexDirection: 'row-reverse',
-                width: '100%',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <div
-                className="button is-purple mobile-disclaimer-button"
-                style={{
-                  margin: '0.2rem',
-                  padding: '0.5rem',
-                  alignItems: 'center',
-                }}
-                onClick={handleDisclaimerClick}
-              >
-                Disclaimer
-                <ErrorOutlineOutlinedIcon
-                  htmlColor="#6c757d"
-                  fontSize="0.1rem"
-                />
-              </div>
-              <Popover
-                id={id}
-                open={isDisclaimerOpen}
-                classes={{root: classesPopOver.root}}
-                anchorEl={anchorEl}
-                onClose={handleDisclaimerClose}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-              >
-                <h6
-                  style={{
-                    paddingLeft: '0.5rem',
-                    color: '#343a40',
-                    margin: '0.3rem 0rem',
-                  }}
-                >
-                  <p>
-                    We are a community sourced listing platform and are not
-                    associated with any of the organisations listed below.
-                  </p>
-                  <p>
-                    Although we verify all our listings, we request you to
-                    follow all the guidelines and take necessary precautions.
-                  </p>
-                  <p>
-                    We encourage you to report any error or suspicious activity
-                    so we can take immediate action.
-                  </p>
-                </h6>
-              </Popover>
-              <a
-                href="https://docs.google.com/forms/d/e/1FAIpQLSfquevp7_rdgdEoDgTdimWwTXO3B9TjFEAm3DbrMDXxCiuwuA/viewform"
-                className="button add-entry is-purple"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{margin: '0.2rem 0.2rem', padding: '0.5rem 0.5rem'}}
-              >
-                <span>Add</span>
-              </a>
-              <a
-                href="https://forms.gle/AG5hmYxyhto3NjU46"
-                className="button add-entry is-purple"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{margin: '0.2rem 0.2rem', padding: '0.5rem 0.5rem'}}
-              >
-                <span>Feedback</span>
-              </a>
-            </div>
-            <div className="resourcefilters">
-              <FormControl
-                variant="outlined"
-                size="small"
-                className="resourcefilterMobile"
-                classes={{root: classesFormControl.root}}
-              >
-                <InputLabel
-                  id="demo-simple-select-outlined-label"
-                  classes={{root: classesInputLabel.root}}
-                >
-                  State/UT
-                </InputLabel>
-                <Select
-                  native
-                  labelId="demo-simple-select-outlined-label"
-                  id="stateselect"
-                  value={indianstate}
-                  onChange={changeIndianState}
-                  defaultValue="all"
-                  label="State/UT"
-                  classes={{root: classesMenuItem.root}}
-                >
-                  <option value="all" classes={{root: classesMenuItem.root}}>
-                    All states
-                  </option>
-                  {getIndianStateOptions()}
-                </Select>
-              </FormControl>
-              <FormControl
-                variant="outlined"
-                size="small"
-                className="resourcefilterMobile"
-                classes={{root: classesFormControl.root}}
-              >
-                <InputLabel
-                  id="demo-simple-select-outlined-label"
-                  classes={{root: classesInputLabel.root}}
-                >
-                  City
-                </InputLabel>
-                <Select
-                  native
-                  labelId="demo-simple-select-outlined-label"
-                  id="cityselect1"
-                  value={city}
-                  onChange={changeCity}
-                  defaultValue="all"
-                  label="City"
-                  classes={{root: classesMenuItem.root}}
-                >
-                  <option value="all" classes={{root: classesMenuItem.root}}>
-                    All Cities
-                  </option>
-                  {getCityOptions()}
-                </Select>
-              </FormControl>
-              <FormControl
-                variant="outlined"
-                size="small"
-                className="resourcefilterMobile"
-                classes={{root: classesFormControl.root}}
-              >
-                <InputLabel
-                  id="demo-simple-select-outlined-label"
-                  classes={{root: classesInputLabel.root}}
-                >
-                  Services
-                </InputLabel>
-                <Select
-                  native
-                  labelId="demo-simple-select-outlined-label"
-                  id="categoryselect"
-                  value={category}
-                  onChange={changeCategory}
-                  defaultValue="all"
-                  label="Services"
-                  classes={{root: classesMenuItem.root}}
-                >
-                  <option value="all" classes={{root: classesMenuItem.root}}>
-                    All Categories
-                  </option>
-                  {getCategoryOptions()}
-                </Select>
-              </FormControl>
-
-              <div
-                className="search-share"
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  width: '100%',
-                }}
-              >
-                <button
-                  className="button is-purple"
-                  disabled={!indianstate}
-                  onClick={filterTable}
-                  style={{
-                    margin: '0.2rem 0.2rem',
-                    padding: '0.5rem 0.5rem',
-                    width: '50%',
-                    justifyContent: 'center',
-                  }}
-                >
-                  Search
-                </button>
-                <button
-                  onClick={openSharingTray}
-                  className="button add-entry is-purple"
-                  style={{
-                    margin: '0.2rem 0.2rem',
-                    padding: '0.5rem 0.5rem',
-                    width: '50%',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <span>Share</span>
-                </button>
-              </div>
-            </div>
-          </React.Fragment>
+          <FiltersMobile
+            handleDisclaimerClick={handleDisclaimerClick}
+            popoverid={id}
+            isDisclaimerOpen={isDisclaimerOpen}
+            anchorEl={anchorEl}
+            handleDisclaimerClose={handleDisclaimerClose}
+            indianstate={indianstate}
+            changeIndianState={changeIndianState}
+            stateoptions={getIndianStateOptions()}
+            city={city}
+            changeCity={changeCity}
+            cityoptions={getCityOptions()}
+            category={category}
+            changeCategory={changeCategory}
+            servicesoptions={getCategoryOptions()}
+            filterTable={filterTable}
+            openSharingTray={openSharingTray}
+          />
         )}
         {isDesktop && (
-          <React.Fragment>
-            <div
-              className="disclaimercontainer"
-              style={{
-                display: 'flex',
-                flexDirection: 'row-reverse',
-                width: '100%',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <div
-                className="button disclaimer-button"
-                style={{
-                  margin: '0rem',
-                  padding: '0.3rem',
-                  alignItems: 'center',
-                  justifyContent: 'space-around',
-                }}
-                onClick={handleDisclaimerClick}
-              >
-                Disclaimer
-                <ErrorOutlineOutlinedIcon
-                  htmlColor="#6c757d"
-                  fontSize="small"
-                />
-              </div>
-              <Popover
-                id={id}
-                open={isDisclaimerOpen}
-                classes={{root: classesPopOver.root}}
-                anchorEl={anchorEl}
-                onClose={handleDisclaimerClose}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-              >
-                <h6
-                  style={{
-                    paddingLeft: '0.5rem',
-                    color: '#343a40',
-                    margin: '0.3rem 0rem',
-                  }}
-                >
-                  <p>
-                    We are a community sourced listing platform and are not
-                    associated with any of the organisations listed below.
-                  </p>
-                  <p>
-                    Although we verify all our listings, we request you to
-                    follow all the guidelines and take necessary precautions.
-                  </p>
-                  <p>
-                    We encourage you to report any error or suspicious activity
-                    so we can take immediate action.
-                  </p>
-                </h6>
-              </Popover>
-            </div>
-            <div className="resourcefilters">
-              <FormControl
-                variant="outlined"
-                size="small"
-                className="resourcefilterMobile"
-                classes={{root: classesFormControl.root}}
-              >
-                <InputLabel
-                  id="demo-simple-select-outlined-label"
-                  classes={{root: classesInputLabel.root}}
-                >
-                  State/UT
-                </InputLabel>
-                <Select
-                  native
-                  labelId="demo-simple-select-outlined-label"
-                  id="stateselect"
-                  value={indianstate}
-                  onChange={changeIndianState}
-                  defaultValue="all"
-                  label="State/UT"
-                  classes={{root: classesMenuItem.root}}
-                >
-                  <option value="all" classes={{root: classesMenuItem.root}}>
-                    All states
-                  </option>
-                  {getIndianStateOptions()}
-                </Select>
-              </FormControl>
-              <FormControl
-                variant="outlined"
-                size="small"
-                className="resourcefilterMobile"
-                classes={{root: classesFormControl.root}}
-              >
-                <InputLabel
-                  id="demo-simple-select-outlined-label"
-                  classes={{root: classesInputLabel.root}}
-                >
-                  City
-                </InputLabel>
-                <Select
-                  native
-                  labelId="demo-simple-select-outlined-label"
-                  id="cityselect1"
-                  value={city}
-                  onChange={changeCity}
-                  defaultValue="all"
-                  label="City"
-                  classes={{root: classesMenuItem.root}}
-                >
-                  <option value="all" classes={{root: classesMenuItem.root}}>
-                    All cities
-                  </option>
-                  {getCityOptions()}
-                </Select>
-              </FormControl>
-              <FormControl
-                variant="outlined"
-                size="small"
-                className="resourcefilterMobile"
-                classes={{root: classesFormControl.root}}
-              >
-                <InputLabel
-                  id="demo-simple-select-outlined-label"
-                  classes={{root: classesInputLabel.root}}
-                >
-                  Services
-                </InputLabel>
-                <Select
-                  native
-                  labelId="demo-simple-select-outlined-label"
-                  id="categoryselect"
-                  value={category}
-                  onChange={changeCategory}
-                  defaultValue="all"
-                  label="Services"
-                  classes={{root: classesMenuItem.root}}
-                >
-                  <option value="all" classes={{root: classesMenuItem.root}}>
-                    All categories
-                  </option>
-                  {getCategoryOptions()}
-                </Select>
-              </FormControl>
-              <button
-                className="button is-purple"
-                disabled={!indianstate}
-                onClick={filterTable}
-                style={!indianstate ? {pointerEvents: 'none'} : null}
-              >
-                Search
-              </button>
-            </div>
-            <div
-              className="misclinkscontainer"
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                width: '100%',
-                justifyContent: 'center',
-                marginTop: '0.2rem',
-                marginBottom: '0.6rem',
-              }}
-            >
-              <a
-                href="https://docs.google.com/forms/d/e/1FAIpQLSfquevp7_rdgdEoDgTdimWwTXO3B9TjFEAm3DbrMDXxCiuwuA/viewform"
-                className="button add-entry is-purple"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{margin: '0rem 0.2rem', padding: '0.1rem 0.5rem'}}
-              >
-                <span>Add Entry</span>
-              </a>
-              <a
-                href="https://forms.gle/AG5hmYxyhto3NjU46"
-                className="button add-entry is-purple"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{margin: '0rem 0.2rem', padding: '0.1rem 0.5rem'}}
-              >
-                <span>Feedback</span>
-              </a>
-              <button
-                onClick={openSharingTray}
-                className="button add-entry is-purple"
-                style={{margin: '0rem 0.2rem', padding: '0.4rem'}}
-              >
-                <span>Share</span>
-              </button>
-            </div>
-          </React.Fragment>
+          <FiltersDesktop
+            handleDisclaimerClick={handleDisclaimerClick}
+            popoverid={id}
+            isDisclaimerOpen={isDisclaimerOpen}
+            anchorEl={anchorEl}
+            handleDisclaimerClose={handleDisclaimerClose}
+            indianstate={indianstate}
+            changeIndianState={changeIndianState}
+            stateoptions={getIndianStateOptions()}
+            city={city}
+            changeCity={changeCity}
+            cityoptions={getCityOptions()}
+            category={category}
+            changeCategory={changeCategory}
+            servicesoptions={getCategoryOptions()}
+            filterTable={filterTable}
+            openSharingTray={openSharingTray}
+          />
         )}
       </div>
       {showTable && (
@@ -851,21 +431,23 @@ function Resources(props) {
             indianstate={indianstate}
           />
           <div>
-            <Fab
-              color="inherit"
-              aria-label="gototop"
-              id="gototopbtn"
-              onClick={topFunction}
-              size="small"
-              style={{
-                position: 'fixed',
-                bottom: '1rem',
-                right: '1rem',
-                zIndex: '1000',
-              }}
-            >
-              <NavigationOutlinedIcon htmlColor="#201aa299" />
-            </Fab>
+            <Fade in={hasScrolled}>
+              <Fab
+                color="inherit"
+                aria-label="gototop"
+                id="gototopbtn"
+                onClick={animateScroll}
+                size="small"
+                style={{
+                  position: 'fixed',
+                  bottom: '1rem',
+                  right: '1rem',
+                  zIndex: '1000',
+                }}
+              >
+                <Icon.Navigation2 strokeWidth="2.5" color="#4c75f2" />
+              </Fab>
+            </Fade>
           </div>
         </React.Fragment>
       )}

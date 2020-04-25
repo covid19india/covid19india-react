@@ -1,31 +1,20 @@
-import React from 'react';
-import {render} from '@testing-library/react';
 import Level from '../../components/level';
 
-const states = [
-  {
-    deltaconfirmed: '10',
-    deltadeaths: '3',
-    deltarecovered: '5',
-  },
-  {
-    active: '75',
-    confirmed: '83',
-    deaths: '3',
-    recovered: '5',
-    state: 'Karnataka',
-  },
-  {
-    active: '5',
-    confirmed: '3',
-    deaths: '1',
-    recovered: '2',
-    state: 'Gujarat',
-  },
-];
+import {render} from '@testing-library/react';
+import React from 'react';
+
+const state = {
+  active: '80',
+  confirmed: '86',
+  recovered: '7',
+  deaths: '4',
+  deltaconfirmed: '10',
+  deltadeaths: '3',
+  deltarecovered: '5',
+};
 
 test('Level renders total state data', () => {
-  const {container} = render(<Level data={states} />);
+  const {container} = render(<Level data={state} />);
 
   expect(container).toHaveTextContent(
     'Confirmed[+10]86 Active 80Recovered[+5]7 Deceased[+3]4'
