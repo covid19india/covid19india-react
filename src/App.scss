@@ -2119,8 +2119,8 @@ input.switch {
   outline: none;
   margin: 0;
   cursor: pointer;
-  width: 24px;
-  height: 14px;
+  width: 40px;
+  height: 19px;
   background-color: #fff;
   border: 2px solid #d9dadc;
   border-radius: 10px;
@@ -2132,9 +2132,9 @@ input.switch::after {
   position: absolute;
   top: 0;
   left: 0;
-  width: 10px;
-  height: 10px;
-  background-color: $gray-mid;
+  width: 15px;
+  height: 15px;
+  background-color: #4169e1;
   border-radius: 50%;
   transition: all 300ms ease-in-out;
 }
@@ -2145,7 +2145,7 @@ input.switch:checked {
 }
 
 input.switch:checked::after {
-  left: 10px;
+  left: 20px;
   background-color: $light;
   transition: all 300ms ease-in-out;
 }
@@ -4301,3 +4301,4 @@ body.modal-open {
   color: #dc3545;
 
 }
+

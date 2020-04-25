@@ -196,8 +196,14 @@ function AllStatesChart(props) {
       <div className="chart-content">
         <Line data={dataset} options={options} ref={chartReference} />
       </div>
-      <div className="chart-note" style={{marginTop: '0px', height: '30px'}}>
-        <button onClick={toggleSelection}>Toggle Selection</button>
+
+      <div style={{marginTop: '10px', height: '60px'}}>
+        <input
+          type="checkbox"
+          className="switch"
+          aria-label="Unchecked by default to scale uniformly."
+          onChange={toggleSelection}
+        />
       </div>
     </div>
   );
