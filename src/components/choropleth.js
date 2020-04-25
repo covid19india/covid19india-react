@@ -172,7 +172,7 @@ function ChoroplethMap({
           }`
         )
         .attr('fill', 'none')
-        .attr('stroke-width', width / 200)
+        .attr('stroke-width', width / 250)
         .attr(
           'd',
           path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName]))
@@ -198,10 +198,11 @@ function ChoroplethMap({
       }
 
       // Reset on tapping outside map
-      svg.on('click', () => {
-        setSelectedRegion(null);
-        if (mapMeta.mapType === MAP_TYPES.COUNTRY)
+      svg.attr('pointer-events', 'auto').on('click', () => {
+        if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
+          setSelectedRegion(null);
           setHoveredRegion('Total', mapMeta);
+        }
       });
     },
     [
