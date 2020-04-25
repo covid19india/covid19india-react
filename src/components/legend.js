@@ -1,4 +1,5 @@
 /* Source: https://observablehq.com/@d3/color-legend */
+
 import * as d3 from 'd3';
 
 function legend({

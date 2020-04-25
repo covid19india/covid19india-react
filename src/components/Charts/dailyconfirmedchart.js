@@ -1,6 +1,14 @@
+import {
+  defaultOptions,
+  xAxisDefaults,
+  yAxisDefaults,
+  formatNumber,
+} from './chart-defaults';
+
+import deepmerge from 'deepmerge';
+import moment from 'moment';
 import React from 'react';
 import {Bar, defaults} from 'react-chartjs-2';
-import moment from 'moment';
 
 function DailyConfirmedChart(props) {
   const dates = [];
@@ -8,34 +16,16 @@ function DailyConfirmedChart(props) {
   const recovered = [];
   const deceased = [];
 
-  defaults.global.elements.line.fill = false;
-  defaults.global.tooltips.intersect = false;
-  defaults.global.tooltips.mode = 'nearest';
-  defaults.global.tooltips.position = 'average';
-  defaults.global.tooltips.backgroundColor = 'rgba(255, 255, 255, 0.6)';
-  defaults.global.tooltips.displayColors = false;
-  defaults.global.tooltips.borderColor = '#c62828';
-  defaults.global.tooltips.borderWidth = 1;
-  defaults.global.tooltips.titleFontColor = '#000';
-  defaults.global.tooltips.bodyFontColor = '#000';
-  defaults.global.tooltips.caretPadding = 4;
-  defaults.global.tooltips.intersect = false;
-  defaults.global.tooltips.mode = 'nearest';
-  defaults.global.tooltips.position = 'nearest';
-  defaults.global.legend.display = true;
-  defaults.global.legend.position = 'bottom';
-  defaults.global.hover.intersect = false;
-
   if (!props.timeseries || props.timeseries.length === 0) {
     return <div></div>;
   }
 
   props.timeseries.forEach((data, index) => {
     if (index >= 31) {
-      dates.push(moment(data.date.trim(), 'DD MMM').format('DD MMM'));
-      confirmed.push(
-        data.dailyconfirmed - data.dailyrecovered - data.dailydeceased
+      dates.push(
+        moment(data.date.trim(), 'DD MMM').utcOffset('+05:30').format('DD MMM')
       );
+      confirmed.push(data.dailyconfirmed);
       recovered.push(data.dailyrecovered);
       deceased.push(data.dailydeceased);
     }
@@ -47,7 +37,7 @@ function DailyConfirmedChart(props) {
       {
         data: recovered,
         label: 'Recovered',
-        backgroundColor: '#28a745',
+        backgroundColor: '#7ebf80',
       },
       {
         data: deceased,
@@ -56,46 +46,46 @@ function DailyConfirmedChart(props) {
       },
       {
         data: confirmed,
-        label: 'Active',
-        backgroundColor: '#ff073a',
+        label: 'Confirmed',
+        backgroundColor: '#ff6862',
       },
     ],
   };
 
-  const options = {
-    responsive: true,
+  const options = deepmerge(defaultOptions, {
     tooltips: {
       mode: 'index',
     },
-    events: ['mousemove', 'mouseout', 'touchstart', 'touchmove', 'touchend'],
-    maintainAspectRatio: false,
     legend: {
-      display: false,
-    },
-    layout: {
-      padding: {
-        left: 20,
-        right: 20,
-        top: 20,
-        bottom: 20,
+      display: true,
+      reverse: true,
+      labels: {
+        usePointStyle: true, // Required to change pointstyle to 'rectRounded' from 'circle'
+        generateLabels: (chart) => {
+          const labels = defaults.global.legend.labels.generateLabels(chart);
+          labels.forEach((label) => {
+            label.pointStyle = 'rectRounded';
+          });
+          return labels;
+        },
       },
     },
     scales: {
       xAxes: [
-        {
+        deepmerge(xAxisDefaults, {
           stacked: true,
-          gridLines: {
-            color: 'rgba(0, 0, 0, 0)',
-          },
-        },
+        }),
       ],
       yAxes: [
-        {
+        deepmerge(yAxisDefaults, {
           stacked: true,
-        },
+          ticks: {
+            callback: (value) => formatNumber(value),
+          },
+        }),
       ],
     },
-  };
+  });
 
   return (
     <div className="charts-header">

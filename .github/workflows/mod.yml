@@ -1,0 +1,49 @@
+on:
+  issue_comment:
+    types: [created]
+name: Mod
+
+jobs:
+  moderate:
+    runs-on: ubuntu-latest
+    name: Make issue Available
+    if: github.event.issue.pull_request == ''
+      && contains(github.event.comment.body, '/available')
+      && contains(toJson(github.event.issue.labels), 'Review Needed')
+    steps:
+      - uses: actions/github-script@0.9.0
+        with:
+          github-token: ${{secrets.jun_token}}
+          script: |
+            const { data } = await github.teams.getMembershipInOrg({
+              org: "covid19india",
+              team_slug: "mods",
+              username: context.payload.sender.login,
+            });
+            console.log(data);
+            console.log("User team state: "+data.state);
+            if(data.state != "active"){
+              return;
+            }
+      - uses: actions/github-script@0.9.0
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            await github.issues.removeLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'Status: Review Needed'
+              })
+            await github.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['Status: Available']
+              })
+            await github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'This issue is available for contribution.\n\nPlease reply "/claim" (without quotes) if you wish to work on this issue.'
+            })

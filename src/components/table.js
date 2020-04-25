@@ -1,7 +1,14 @@
+import Row from './row';
+
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 
-import Row from './row';
+const isEqual = (prevProps, currProps) => {
+  return (
+    JSON.stringify(prevProps.rowHighlighted) ===
+    JSON.stringify(currProps.rowHighlighted)
+  );
+};
 
 function Table(props) {
   const [states, setStates] = useState(props.states);
@@ -257,7 +264,7 @@ function Table(props) {
               if (index !== 0 && state.confirmed > 0) {
                 return (
                   <Row
-                    key={index}
+                    key={state.state}
                     index={index}
                     state={state}
                     total={false}
@@ -266,6 +273,16 @@ function Table(props) {
                       state.state in districts
                         ? districts[state.state].districtData
                         : []
+                    }
+                    isHighlighted={
+                      !props.rowHighlighted.isDistrict &&
+                      props.rowHighlighted.statecode === state.statecode
+                    }
+                    highlightedDistrict={
+                      props.rowHighlighted.isDistrict &&
+                      props.rowHighlighted.statecode === state.statecode
+                        ? props.rowHighlighted.districtName
+                        : null
                     }
                     onHighlightState={props.onHighlightState}
                     onHighlightDistrict={props.onHighlightDistrict}
@@ -298,4 +315,4 @@ function Table(props) {
   }
 }
 
-export default Table;
+export default React.memo(Table, isEqual);

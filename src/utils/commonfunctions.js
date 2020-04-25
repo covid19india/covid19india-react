@@ -1,5 +1,6 @@
-import moment from 'moment';
 import {STATE_CODES} from '../constants';
+
+import moment from 'moment';
 
 const months = {
   '01': 'Jan',
@@ -36,8 +37,6 @@ export const formatDateAbsolute = (unformattedDate) => {
 };
 
 const validateCTS = (data = []) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
   const dataTypes = [
     'dailyconfirmed',
     'dailydeceased',
@@ -50,8 +49,11 @@ const validateCTS = (data = []) => {
     .filter((d) => dataTypes.every((dt) => d[dt]) && d.date)
     .filter((d) => dataTypes.every((dt) => Number(d[dt]) >= 0))
     .filter((d) => {
-      const year = today.getFullYear();
-      return new Date(d.date + year) < today;
+      // Skip data from the current day
+      const today = moment().utcOffset('+05:30');
+      return moment(d.date, 'DD MMMM')
+        .utcOffset('+05:30')
+        .isBefore(today, 'day');
     });
 };
 
@@ -94,11 +96,11 @@ export const parseStateTimeseries = ({states_daily: data}) => {
     return a;
   }, {});
 
-  const today = moment();
+  const today = moment().utcOffset('+05:30');
   for (let i = 0; i < data.length; i += 3) {
-    const date = moment(data[i].date, 'DD-MMM-YY');
+    const date = moment(data[i].date, 'DD-MMM-YY').utcOffset('+05:30');
     // Skip data from the current day
-    if (date.isBefore(today, 'Date')) {
+    if (date.isBefore(today, 'day')) {
       Object.entries(statewiseSeries).forEach(([k, v]) => {
         const stateCode = k.toLowerCase();
         const prev = v[v.length - 1] || {};
