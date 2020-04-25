@@ -5051,7 +5051,7 @@ footer {
       border: 2px solid $gray-mid !important;
 
       &:checked {
-        background-color: #161625 !important;
+        background-color: #6c757d99 !important;
 
         &::after {
           background-color: #cfcfcf !important;
@@ -5060,6 +5060,20 @@ footer {
 
       &::after {
         background-color: #cfcfcf !important;
+      }
+    }
+  }
+
+  .disabled {
+    input {
+      &.switch {
+        background: $dark !important;
+        border: $gray-light 2px solid !important;
+        opacity: .7;
+
+        &::after {
+          background: $gray !important;
+        }
       }
     }
   }
