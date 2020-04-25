@@ -106,18 +106,17 @@ function Row(props) {
       >
         <td style={{fontWeight: 600}}>
           <div className="table__title-wrapper">
-            <span
-              className={`dropdown ${
-                props.reveal && showDistricts
-                  ? 'rotateRightDown'
-                  : 'rotateDownRight'
-              }`}
-              onClick={() => {
-                handleReveal();
-              }}
-            >
-              <Icon.ChevronDown />
-            </span>
+            {!props.total && (
+              <span
+                className={`dropdown ${
+                  props.reveal && showDistricts
+                    ? 'rotateRightDown'
+                    : 'rotateDownRight'
+                }`}
+              >
+                <Icon.ChevronDown />
+              </span>
+            )}
             <span className="actual__title-wrapper">
               {state.state}
               {state.statenotes && (
