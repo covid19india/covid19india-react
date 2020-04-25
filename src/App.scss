@@ -4885,7 +4885,7 @@ footer {
   .MapExplorer {
     #chart,
     #legend {
-      filter: invert(1) hue-rotate(150deg);
+      filter: invert(1) hue-rotate(180deg) url('#white-balance');
     }
 
     .legend {
