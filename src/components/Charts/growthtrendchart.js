@@ -1,3 +1,5 @@
+import ModalWrapper from './modal-wrapper';
+
 import {getStateName} from '../../utils/commonfunctions';
 
 import moment from 'moment';
@@ -198,12 +200,15 @@ function GrowthTrendChart(props) {
     },
   };
 
+  const getChart = () => {
+    return <Line data={dataset} options={options} />;
+  };
+
   return (
     <div className="charts-header">
+      <ModalWrapper content={getChart()} title={props.title} footer={''} />
       <div className="chart-title">{props.title}</div>
-      <div className="chart-content">
-        <Line data={dataset} options={options} />
-      </div>
+      <div className="chart-content">{getChart()}</div>
     </div>
   );
 }

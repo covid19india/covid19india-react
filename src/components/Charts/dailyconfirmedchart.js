@@ -4,6 +4,7 @@ import {
   yAxisDefaults,
   formatNumber,
 } from './chart-defaults';
+import ModalWrapper from './modal-wrapper';
 
 import deepmerge from 'deepmerge';
 import moment from 'moment';
@@ -87,12 +88,15 @@ function DailyConfirmedChart(props) {
     },
   });
 
+  const getChart = () => {
+    return <Bar data={barDataSet} options={options} />;
+  };
+
   return (
     <div className="charts-header">
+      <ModalWrapper content={getChart()} title={props.title} footer={''} />
       <div className="chart-title">{props.title}</div>
-      <div className="chart-content">
-        <Bar data={barDataSet} options={options} />
-      </div>
+      <div className="chart-content">{getChart()}</div>
     </div>
   );
 }

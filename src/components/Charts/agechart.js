@@ -1,4 +1,5 @@
 import {defaultOptions, xAxisDefaults, formatNumber} from './chart-defaults';
+import ModalWrapper from './modal-wrapper';
 
 import deepmerge from 'deepmerge';
 import React from 'react';
@@ -69,15 +70,24 @@ function AgeChart(props) {
 
   const sampleSize = ages.reduce((a, b) => a + b, 0);
 
+  const getChart = () => {
+    return <Bar data={chartData} options={chartOptions} />;
+  };
+
+  const getNote = () => {
+    return `Sample Size: ${formatNumber(sampleSize)} patients`;
+  };
+
   return (
     <div className="charts-header">
+      <ModalWrapper
+        content={getChart()}
+        title={props.title}
+        footer={getNote()}
+      />
       <div className="chart-title">{props.title}</div>
-      <div className="chart-content doughnut">
-        <Bar data={chartData} options={chartOptions} />
-      </div>
-      <div className="chart-note">
-        Sample Size: {formatNumber(sampleSize)} patients
-      </div>
+      <div className="chart-content doughnut">{getChart()}</div>
+      <div className="chart-note">{getNote()}</div>
     </div>
   );
 }

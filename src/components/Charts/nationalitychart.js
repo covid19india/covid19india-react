@@ -1,4 +1,5 @@
 import {formatNumber} from './chart-defaults';
+import ModalWrapper from './modal-wrapper';
 
 import React from 'react';
 import {Doughnut} from 'react-chartjs-2';
@@ -89,15 +90,24 @@ function NationalityChart(props) {
 
   const sampleSize = data.reduce((a, b) => a + b, 0);
 
+  const getChart = () => {
+    return <Doughnut data={chartData} options={chartOptions} />;
+  };
+
+  const getNote = () => {
+    return `Sample size: ${formatNumber(sampleSize)} patients`;
+  };
+
   return (
     <div className="charts-header">
+      <ModalWrapper
+        content={getChart()}
+        title={props.title}
+        footer={getNote()}
+      />
       <div className="chart-title">{props.title}</div>
-      <div className="chart-content doughnut">
-        <Doughnut data={chartData} options={chartOptions} />
-      </div>
-      <div className="chart-note">
-        Sample size: {formatNumber(sampleSize)} patients
-      </div>
+      <div className="chart-content doughnut">{getChart()}</div>
+      <div className="chart-note">{getNote()}</div>
     </div>
   );
 }

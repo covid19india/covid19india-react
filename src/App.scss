@@ -5226,3 +5226,30 @@ footer {
     transform: translateY(20px);
   }
 }
+
+.wp-chart {
+  width: 600px;
+  height: 400px;
+}
+
+.wp-title {
+  text-align: center;
+  color: #6c757d;
+  font-family: 'archia';
+  font-size: 1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.wp-footer {
+  text-align: center;
+  color: #6c757d;
+  font-family: 'archia';
+  font-size: .8rem;
+  margin-top: 5px;
+}
+
+.dark-mode .ReactModal__Content {
+  background: #161625 !important;
+}

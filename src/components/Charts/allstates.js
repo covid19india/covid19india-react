@@ -1,4 +1,5 @@
 import {defaultOptions, xAxisDefaults, yAxisDefaults} from './chart-defaults';
+import ModalWrapper from './modal-wrapper';
 
 import {getStateName} from '../../utils/commonfunctions';
 
@@ -164,14 +165,25 @@ function AllStatesChart(props) {
     ci.update();
   }
 
+  const getChart = () => {
+    return <Line data={dataset} options={options} ref={chartReference} />;
+  };
+
+  const getNote = () => {
+    return <button onClick={toggleSelection}>Toggle Selection</button>;
+  };
+
   return (
     <div className="charts-header">
+      <ModalWrapper
+        content={getChart()}
+        title={props.title}
+        footer={getNote()}
+      />
       <div className="chart-title">{props.title}</div>
-      <div className="chart-content">
-        <Line data={dataset} options={options} ref={chartReference} />
-      </div>
+      <div className="chart-content">{getChart()}</div>
       <div className="chart-note" style={{marginTop: '0px', height: '30px'}}>
-        <button onClick={toggleSelection}>Toggle Selection</button>
+        {getNote()}
       </div>
     </div>
   );

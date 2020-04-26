@@ -1,4 +1,5 @@
 import {defaultOptions, formatNumber} from './chart-defaults';
+import ModalWrapper from './modal-wrapper';
 
 import deepmerge from 'deepmerge';
 import React from 'react';
@@ -53,15 +54,24 @@ function GenderChart(props) {
     },
   });
 
+  const getChart = () => {
+    return <Doughnut data={chartData} options={chartOptions} />;
+  };
+
+  const getNote = () => {
+    return `Sample size: ${formatNumber(male + female)} patients`;
+  };
+
   return (
     <div className="charts-header">
+      <ModalWrapper
+        content={getChart()}
+        title={props.title}
+        footer={getNote()}
+      />
       <div className="chart-title">{props.title}</div>
-      <div className="chart-content doughnut">
-        <Doughnut data={chartData} options={chartOptions} />
-      </div>
-      <div className="chart-note">
-        Sample size: {formatNumber(male + female)} patients
-      </div>
+      <div className="chart-content doughnut">{getChart()}</div>
+      <div className="chart-note">{getNote()}</div>
     </div>
   );
 }

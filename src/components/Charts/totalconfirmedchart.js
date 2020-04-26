@@ -1,4 +1,5 @@
 import {defaultOptions, xAxisDefaults, yAxisDefaults} from './chart-defaults';
+import ModalWrapper from './modal-wrapper';
 
 import deepmerge from 'deepmerge';
 import moment from 'moment';
@@ -125,12 +126,15 @@ function TotalConfirmedChart(props) {
     ];
   }
 
+  const getChart = () => {
+    return <Line data={dataset} options={options} />;
+  };
+
   return (
     <div className="charts-header">
+      <ModalWrapper content={getChart()} title={props.title} footer={''} />
       <div className="chart-title">{props.title}</div>
-      <div className="chart-content">
-        <Line data={dataset} options={options} />
-      </div>
+      <div className="chart-content">{getChart()}</div>
     </div>
   );
 }
