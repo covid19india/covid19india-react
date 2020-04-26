@@ -6,7 +6,6 @@ import {useLocalStorage} from 'react-use';
 
 function TimeSeriesExplorer({
   timeseries,
-  stateTimeSeries,
   activeStateCode,
   onHighlightState,
   states,
@@ -38,7 +37,7 @@ function TimeSeriesExplorer({
         className="timeseries-header fadeInUp"
         style={{animationDelay: '2.5s'}}
       >
-        {window.innerWidth > 769 && timeseries && (
+        {window.innerWidth > 769 && anchor !== undefined && (
           <div
             className={`anchor ${anchor === 'timeseries' ? 'stickied' : ''}`}
             onClick={() => {
@@ -131,12 +130,7 @@ function TimeSeriesExplorer({
       </div>
 
       <TimeSeries
-        timeseries={
-          timeseries && activeStateCode
-            ? timeseries[activeStateCode]
-            : stateTimeSeries
-        }
-        stateCode={activeStateCode}
+        timeseries={timeseries}
         type={graphOption}
         mode={timeseriesMode}
         logMode={timeseriesLogMode}

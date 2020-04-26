@@ -15,7 +15,6 @@ function TimeSeries(props) {
   const [mode, setMode] = useState(props.mode);
   const [logMode, setLogMode] = useState(props.logMode);
   const [chartType, setChartType] = useState(props.type);
-  const [stateCode] = useState(props.stateCode);
   const [moving, setMoving] = useState(false);
 
   const svgRef1 = useRef();
@@ -43,7 +42,7 @@ function TimeSeries(props) {
 
   useEffect(() => {
     transformTimeSeries(props.timeseries);
-  }, [stateCode, lastDaysCount, transformTimeSeries, props.timeseries]);
+  }, [lastDaysCount, transformTimeSeries, props.timeseries]);
 
   useEffect(() => {
     setMode(props.mode);
