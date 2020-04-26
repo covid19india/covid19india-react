@@ -4040,14 +4040,15 @@ footer {
     display: flex;
     flex-direction: column;
     margin-right: 1rem;
-    width: 10rem;
 
     .button {
       background: $gray-light;
       color: $gray;
+      font-weight: 600;
       height: 2.5rem;
       justify-content: center;
       margin-top: .75rem;
+      text-transform: unset;
       width: 5rem;
 
       &:hover {
@@ -4066,12 +4067,7 @@ footer {
       display: grid;
       grid-auto-flow: column;
       grid-gap: .5rem;
-      grid-template-rows: repeat(auto-fit, 2rem);
-      max-height: 20rem;
-      overflow-x: scroll;
-      overflow-y: none;
       padding-bottom: .5rem;
-      width: 30rem;
     }
 
     .district {
