@@ -973,8 +973,13 @@ h6 {
   }
 
   input {
-    -webkit-box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
     background: #fff;
+    height: 2rem;
+    width: calc(100% - 4rem);
+    box-shadow: 0 10px 35px rgba(0,0,0,.1);
+    -webkit-appearance: none !important;
+    -webkit-box-shadow: 0 10px 35px rgba(0,0,0,.1);
+    -moz-box-shadow: 0 10px 35px rgba(0,0,0,.1);
     border: 0;
     border-radius: 5px;
     box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
