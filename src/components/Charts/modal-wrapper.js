@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
+import {isBrowser, isTablet} from 'react-device-detect';
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
 function ModalWrapper(props) {
   const [open, setOpen] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
+  const [visibility, setVisibility] = useState(false);
   const content = props.content;
   const title = props.title;
   const footer = props.footer;
@@ -22,8 +23,9 @@ function ModalWrapper(props) {
   };
 
   useEffect(() => {
-    if (window.innerWidth > 639) setIsDesktop(true);
-    else setIsDesktop(false);
+    if (isBrowser || isTablet) {
+      setVisibility(true);
+    }
   }, [props]);
 
   const openModal = () => {
@@ -35,7 +37,7 @@ function ModalWrapper(props) {
   };
 
   return (
-    isDesktop && (
+    visibility && (
       <div className="modal-wrapper">
         <div className="wp-action">
           <button onClick={openModal}>Expand</button>
