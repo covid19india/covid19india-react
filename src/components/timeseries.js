@@ -418,12 +418,6 @@ function TimeSeries(props) {
 
   const focusDate = moment(datapoint.date).utcOffset('+05:30');
   const dateStr = focusDate.format('DD MMMM');
-  const isYesterday = focusDate.isSame(
-    moment().utcOffset('+05:30').subtract(1, 'days'),
-    'day'
-  )
-    ? 'Yesterday'
-    : '';
 
   const chartKey1 = chartType === 1 ? 'totalconfirmed' : 'dailyconfirmed';
   const chartKey2 = chartType === 1 ? 'totalactive' : 'dailyactive';
@@ -445,11 +439,6 @@ function TimeSeries(props) {
       <div className="TimeSeries fadeInUp" style={{animationDelay: '2.7s'}}>
         <div className="svg-parent" ref={wrapperRef}>
           <div className="stats">
-            <h5
-              className={`yesterday ${lastDaysCount === 14 ? 'fourteen' : ''}`}
-            >
-              {isYesterday}
-            </h5>
             <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
@@ -466,11 +455,6 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-blue">
           <div className="stats is-blue">
-            <h5
-              className={`yesterday ${lastDaysCount === 14 ? 'fourteen' : ''}`}
-            >
-              {isYesterday}
-            </h5>
             <h5 className={`${!moving ? 'title' : ''}`}>Active</h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
@@ -487,11 +471,6 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-green">
           <div className="stats is-green">
-            <h5
-              className={`yesterday ${lastDaysCount === 14 ? 'fourteen' : ''}`}
-            >
-              {isYesterday}
-            </h5>
             <h5 className={`${!moving ? 'title' : ''}`}>Recovered</h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
@@ -508,11 +487,6 @@ function TimeSeries(props) {
 
         <div className="svg-parent is-gray">
           <div className="stats is-gray">
-            <h5
-              className={`yesterday ${lastDaysCount === 14 ? 'fourteen' : ''}`}
-            >
-              {isYesterday}
-            </h5>
             <h5 className={`${!moving ? 'title' : ''}`}>Deceased</h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
