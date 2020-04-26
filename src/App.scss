@@ -429,6 +429,38 @@ h6 {
     width: 100%;
   }
 
+  .district-bar-right {
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    .happy-sign {
+      align-items: center;
+      background: $green-light;
+      border-radius: 5px;
+      display: flex;
+      flex-direction: row;
+      max-width: 115px;
+      padding-right: 20px;
+      position: absolute;
+      text-align: left;
+      top: 15px;
+
+      h5 {
+        color: $green;
+      }
+
+      div {
+        color: $green;
+        display: flex;
+
+        &.smile-icon {
+          padding: 0 15px 0 20px;
+        }
+      }
+    }
+  }
+
   .MapExplorer,
   .meta-secondary {
     width: calc(100% - 3rem);
