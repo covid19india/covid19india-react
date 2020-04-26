@@ -1,7 +1,7 @@
 import {STATE_CODES} from '../constants';
 
 import {parse, isBefore, isSameDay, startOfDay} from 'date-fns';
-import {toDate} from 'date-fns-tz';
+import {utcToZonedTime} from 'date-fns-tz';
 
 const months = {
   '01': 'Jan',
@@ -23,7 +23,7 @@ export const getStateName = (code) => {
 };
 
 export const getIndiaDay = () => {
-  return startOfDay(toDate(new Date(), {timeZone: 'Asia/Kolkata'}));
+  return startOfDay(utcToZonedTime(new Date(), 'Asia/Kolkata'));
 };
 
 export const formatDate = (unformattedDate) => {
