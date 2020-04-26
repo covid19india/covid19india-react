@@ -43,7 +43,8 @@
     "eslint": "eslint .",
     "eslint:fix": "eslint --fix --max-warnings=0",
     "format": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|md)\"",
-    "stylelint": "stylelint src/**/*.scss --fix -f verbose"
+    "stylelint": "stylelint src/**/*.scss -f verbose",
+    "stylelint:fix": "stylelint src/**/*.scss --fix -f verbose"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -62,7 +63,7 @@
       "prettier --write \"**/*.+(json|yml|yaml|md)\""
     ],
     "*.+(css|scss)": [
-      "npm run stylelint"
+      "npm run stylelint:fix"
     ]
   },
   "devDependencies": {

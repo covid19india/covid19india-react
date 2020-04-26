@@ -26,6 +26,10 @@ jobs:
             ${{ runner.os }}-
       - name: Install packages
         run: npm ci
+      - name: Check for linting errors
+        run: |
+          npm run eslint
+          npm run stylelint
       - name: Run Test Suite
         run: npm test
         env:
