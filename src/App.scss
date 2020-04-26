@@ -973,13 +973,10 @@ h6 {
   }
 
   input {
-    background: #fff;
-    height: 2rem;
-    width: calc(100% - 4rem);
-    box-shadow: 0 10px 35px rgba(0,0,0,.1);
+    -moz-box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
     -webkit-appearance: none !important;
-    -webkit-box-shadow: 0 10px 35px rgba(0,0,0,.1);
-    -moz-box-shadow: 0 10px 35px rgba(0,0,0,.1);
+    -webkit-box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
+    background: #fff;
     border: 0;
     border-radius: 5px;
     box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
@@ -2245,6 +2242,11 @@ table {
     }
   }
 
+  #chart,
+  #legend {
+    filter: saturate(1.5);
+  }
+
   .disclaimer {
     backdrop-filter: saturate(180%) blur(20px);
     background: $gray-light;
@@ -2313,6 +2315,23 @@ table {
     position: sticky !important;
     top: -6.5rem;
   }
+
+  .alert {
+    margin-bottom: .5rem;
+    margin-left: auto;
+    margin-right: 0;
+    margin-top: .5rem;
+    width: 16rem;
+
+    svg {
+      margin-top: -.4rem;
+      width: 14px !important;
+    }
+
+    .alert-right {
+      width: 16rem;
+    }
+  }
 }
 
 .TimeSeries {
@@ -2322,11 +2341,6 @@ table {
   .svg-parent {
     height: 10rem;
     margin-bottom: 1rem;
-  }
-
-  .alert {
-    position: absolute;
-    bottom: -4rem;
   }
 }
 
@@ -4345,6 +4359,10 @@ footer {
   }
 
   .MapExplorer {
+    .svg-parent {
+      width: 100%;
+    }
+
     .header {
       margin-top: 2rem;
     }
@@ -4917,7 +4935,7 @@ footer {
   .MapExplorer {
     #chart,
     #legend {
-      filter: invert(1) hue-rotate(180deg) url('#white-balance');
+      filter: invert(1) hue-rotate(180deg) saturate(1.5) url('#balance-color');
     }
 
     .legend {
@@ -4941,6 +4959,10 @@ footer {
           stroke: #9673b9 !important;
         }
       }
+    }
+
+    .disclaimer {
+      color: $gray-light-opaque;
     }
   }
 
@@ -5188,6 +5210,12 @@ footer {
 
     .modal {
       background: #1e1e30bb !important;
+    }
+  }
+
+  .Clusters {
+    canvas {
+      filter: invert(1) hue-rotate(180deg) saturate(5);
     }
   }
 }

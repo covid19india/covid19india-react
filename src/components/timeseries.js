@@ -509,12 +509,6 @@ function TimeSeries(props) {
             </svg>
           </div>
         )}
-        <div className="alert is-purple">
-          <Icon.AlertOctagon />
-          <div className="alert-right">
-            Tested chart is independent of uniform scaling
-          </div>
-        </div>
       </div>
 
       <div className="pills">
@@ -541,6 +535,13 @@ function TimeSeries(props) {
         >
           2 Weeks
         </button>
+      </div>
+
+      <div className="alert is-purple">
+        <Icon.AlertOctagon />
+        <div className="alert-right">
+          Tested chart is independent of uniform scaling
+        </div>
       </div>
     </React.Fragment>
   );

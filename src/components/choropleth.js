@@ -161,13 +161,13 @@ function ChoroplethMap({
           'stroke',
           `${
             mapOption === 'confirmed'
-              ? '#ff073a20'
+              ? '#ff073a30'
               : mapOption === 'active'
-              ? '#007bff20'
+              ? '#007bff30'
               : mapOption === 'recovered'
-              ? '#28a74520'
+              ? '#28a74530'
               : mapOption === 'deceased'
-              ? '#6c757d20'
+              ? '#6c757d30'
               : ''
           }`
         )
@@ -284,7 +284,7 @@ function ChoroplethMap({
       </div>
       <svg style={{position: 'absolute', height: 0}}>
         <defs>
-          <filter id="white-balance" colorInterpolationFilters="sRGB">
+          <filter id="balance-color" colorInterpolationFilters="sRGB">
             <feColorMatrix
               type="matrix"
               values="0.91372549 0 0 0 0.08627451 0 0.91372549 0 0 0.08627451 0 0 0.854901961 0 0.145098039 0 0 0 1 0"
