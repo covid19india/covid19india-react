@@ -2451,8 +2451,20 @@ input {
     padding: .25rem;
     position: absolute;
     top: .5rem;
-    width: 5rem;
+    width: calc(100% - 3.5rem);
     z-index: -1;
+
+    .yesterday {
+      font-family: 'archia';
+      font-size: .1rem !important;
+      position: absolute;
+      right: 0;
+      top: .25rem;
+
+      &.fourteen {
+        right: 1rem;
+      }
+    }
 
     h2,
     h5,
@@ -4932,7 +4944,7 @@ footer {
 
         h2,
         h6 {
-          color: #9673b9bb !important;
+          color: #9673b9 !important;
         }
       }
     }
