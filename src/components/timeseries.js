@@ -68,7 +68,8 @@ function TimeSeries(props) {
       const chartBottom = height - margin.bottom;
 
       const T = timeseries.length;
-      const yBuffer = 1.2;
+      const yBufferTop = 1.2;
+      const yBufferBottom = 1.1;
 
       setDatapoint(timeseries[T - 1]);
       setIndex(T - 1);
@@ -151,7 +152,7 @@ function TimeSeries(props) {
         const yScaleUniformLinear = d3
           .scaleLinear()
           .clamp(true)
-          .domain([uniformScaleMin, Math.max(1, yBuffer * uniformScaleMax)])
+          .domain([uniformScaleMin, Math.max(1, yBufferTop * uniformScaleMax)])
           .nice()
           .range([chartBottom, margin.top]);
 
@@ -160,7 +161,7 @@ function TimeSeries(props) {
           .clamp(true)
           .domain([
             Math.max(1, uniformScaleMin),
-            Math.max(1, yBuffer * uniformScaleMax),
+            Math.max(1, yBufferTop * uniformScaleMax),
           ])
           .nice()
           .range([chartBottom, margin.top]);
@@ -171,7 +172,7 @@ function TimeSeries(props) {
             .clamp(true)
             .domain([
               d3.min(timeseries, (d) => d[type]),
-              Math.max(1, yBuffer * d3.max(timeseries, (d) => d[type])),
+              Math.max(1, yBufferTop * d3.max(timeseries, (d) => d[type])),
             ])
             .nice()
             .range([chartBottom, margin.top]);
@@ -183,7 +184,7 @@ function TimeSeries(props) {
                 1,
                 d3.min(timeseries, (d) => d[type])
               ),
-              Math.max(1, yBuffer * d3.max(timeseries, (d) => d[type])),
+              Math.max(1, yBufferTop * d3.max(timeseries, (d) => d[type])),
             ])
             .nice()
             .range([chartBottom, margin.top]);
@@ -195,14 +196,14 @@ function TimeSeries(props) {
           .scaleLinear()
           .clamp(true)
           .domain([
-            yBuffer *
+            yBufferBottom *
               Math.min(
                 0,
                 d3.min(timeseries, (d) => d.dailyactive)
               ),
             Math.max(
               1,
-              yBuffer *
+              yBufferTop *
                 d3.max(timeseries, (d) =>
                   Math.max(d.dailyconfirmed, d.dailyrecovered, d.dailydeceased)
                 )
@@ -216,12 +217,12 @@ function TimeSeries(props) {
             .scaleLinear()
             .clamp(true)
             .domain([
-              yBuffer *
+              yBufferBottom *
                 Math.min(
                   0,
                   d3.min(timeseries, (d) => d[type])
                 ),
-              Math.max(1, yBuffer * d3.max(timeseries, (d) => d[type])),
+              Math.max(1, yBufferTop * d3.max(timeseries, (d) => d[type])),
             ])
             .nice()
             .range([chartBottom, margin.top]);
@@ -421,8 +422,8 @@ function TimeSeries(props) {
     moment().utcOffset('+05:30').subtract(1, 'days'),
     'day'
   )
-    ? true
-    : false;
+    ? 'Yesterday'
+    : '';
 
   const chartKey1 = chartType === 1 ? 'totalconfirmed' : 'dailyconfirmed';
   const chartKey2 = chartType === 1 ? 'totalactive' : 'dailyactive';
@@ -447,7 +448,7 @@ function TimeSeries(props) {
             <h5
               className={`yesterday ${lastDaysCount === 14 ? 'fourteen' : ''}`}
             >
-              {isYesterday ? 'Yesterday' : ''}
+              {isYesterday}
             </h5>
             <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
@@ -468,7 +469,7 @@ function TimeSeries(props) {
             <h5
               className={`yesterday ${lastDaysCount === 14 ? 'fourteen' : ''}`}
             >
-              {isYesterday ? 'Yesterday' : ''}
+              {isYesterday}
             </h5>
             <h5 className={`${!moving ? 'title' : ''}`}>Active</h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
@@ -489,7 +490,7 @@ function TimeSeries(props) {
             <h5
               className={`yesterday ${lastDaysCount === 14 ? 'fourteen' : ''}`}
             >
-              {isYesterday ? 'Yesterday' : ''}
+              {isYesterday}
             </h5>
             <h5 className={`${!moving ? 'title' : ''}`}>Recovered</h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
@@ -510,7 +511,7 @@ function TimeSeries(props) {
             <h5
               className={`yesterday ${lastDaysCount === 14 ? 'fourteen' : ''}`}
             >
-              {isYesterday ? 'Yesterday' : ''}
+              {isYesterday}
             </h5>
             <h5 className={`${!moving ? 'title' : ''}`}>Deceased</h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
