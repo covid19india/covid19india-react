@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@0.9.0
-        env:
-          username: ${{ github.actor }}
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -32,11 +30,11 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              assignees: [process.env.username]
+              assignees: [context.payload.sender.login]
               })
             await github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Thank you @'+process.env.username+' for claiming this issue! 🎉 \n\nPlease reference this issue when you submit your Pull Request and make sure you follow the [contributing guidelines](https://github.com/covid19india/covid19india-react/blob/master/CONTRIBUTING.md).'
+              body: 'Thank you @'+context.payload.sender.login+' for claiming this issue! 🎉 \n\nPlease reference this issue when you submit your Pull Request and make sure you follow the [contributing guidelines](https://github.com/covid19india/covid19india-react/blob/master/CONTRIBUTING.md).'
             })

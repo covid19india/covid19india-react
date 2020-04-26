@@ -208,7 +208,7 @@ function Home(props) {
 
               {fetched && (
                 <TimeSeriesExplorer
-                  timeseries={timeseries}
+                  timeseries={timeseries[activeStateCode]}
                   activeStateCode={activeStateCode}
                   onHighlightState={onHighlightState}
                   states={states}
