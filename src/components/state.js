@@ -10,37 +10,50 @@ import {MAP_META, STATE_CODES} from '../constants';
 import {
   formatDateAbsolute,
   formatNumber,
+  mergeTimeseries,
   parseStateTimeseries,
+  parseStateTestTimeseries,
 } from '../utils/commonfunctions';
 
+import {Breadcrumb, Dropdown} from '@primer/components';
+import anime from 'animejs';
 import axios from 'axios';
 import {format, parse} from 'date-fns';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import * as Icon from 'react-feather';
 import {Link, useParams} from 'react-router-dom';
+import {useLocalStorage} from 'react-use';
+import {useMeasure, useEffectOnce} from 'react-use';
 
 function State(props) {
   const mapRef = useRef();
   const tsRef = useRef();
 
   const {stateCode} = useParams();
-
+  const [allStateData, setAllStateData] = useState({});
   const [fetched, setFetched] = useState(false);
   const [timeseries, setTimeseries] = useState({});
   const [graphOption, setGraphOption] = useState(1);
-  const [timeseriesMode, setTimeseriesMode] = useState(true);
-  const [timeseriesLogMode, setTimeseriesLogMode] = useState(false);
+  const [timeseriesMode, setTimeseriesMode] = useLocalStorage(
+    'timeseriesMode',
+    true
+  );
+  const [timeseriesLogMode, setTimeseriesLogMode] = useLocalStorage(
+    'timeseriesLogMode',
+    false
+  );
   const [stateData, setStateData] = useState({});
   const [testData, setTestData] = useState({});
   const [sources, setSources] = useState({});
   const [districtData, setDistrictData] = useState({});
   const [stateName] = useState(STATE_CODES[stateCode]);
+  const [mapOption, setMapOption] = useState('confirmed');
+  const [mapSwitcher, {width}] = useMeasure();
+  const [showAllDistricts, setShowAllDistricts] = useState(false);
 
-  useEffect(() => {
-    if (fetched === false) {
-      getState(stateCode);
-    }
-  }, [fetched, stateCode]);
+  useEffectOnce(() => {
+    getState(stateCode);
+  });
 
   const getState = async (code) => {
     try {
@@ -57,23 +70,54 @@ function State(props) {
         axios.get('https://api.covid19india.org/state_test_data.json'),
         axios.get('https://api.covid19india.org/sources_list.json'),
       ]);
-      const states = dataResponse.statewise;
-      setStateData(states.find((s) => s.statecode === code));
-      const ts = parseStateTimeseries(statesDailyResponse)[code];
-      setTimeseries(ts);
-      const statesTests = stateTestResponse.states_tested_data;
       const name = STATE_CODES[code];
-      setTestData(
-        statesTests.filter(
-          (obj) => obj.state === name && obj.totaltested !== ''
+
+      const states = dataResponse.statewise;
+      setAllStateData(
+        states.filter(
+          (state) => state.statecode !== code && STATE_CODES[state.statecode]
         )
       );
+      setStateData(states.find((s) => s.statecode === code));
+      // Timeseries
+      const ts = parseStateTimeseries(statesDailyResponse)[code];
+      const testTs = parseStateTestTimeseries(
+        stateTestResponse.states_tested_data
+      )[code];
+      // Merge
+      const tsMerged = mergeTimeseries({[code]: ts}, {[code]: testTs});
+      setTimeseries(tsMerged[code]);
+      // District data
       setDistrictData({
         [name]: stateDistrictWiseResponse[name],
       });
       const sourceList = sourcesResponse.sources_list;
       setSources(sourceList.filter((state) => state.statecode === code));
+
+      const statesTests = stateTestResponse.states_tested_data;
+      setTestData(
+        statesTests.filter(
+          (obj) => obj.state === name && obj.totaltested !== ''
+        )
+      );
       setFetched(true);
+      anime({
+        targets: '.highlight',
+        duration: 200,
+        delay: 3000,
+        translateX:
+          mapOption === 'confirmed'
+            ? `${width * 0}px`
+            : mapOption === 'active'
+            ? `${width * 0.25}px`
+            : mapOption === 'recovered'
+            ? `${width * 0.5}px`
+            : mapOption === 'deceased'
+            ? `${width * 0.75}px`
+            : '0px',
+        easing: 'spring(1, 80, 90, 10)',
+        opacity: 1,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -81,13 +125,37 @@ function State(props) {
 
   const testObjLast = testData[testData.length - 1];
 
+  function toggleShowAllDistricts() {
+    setShowAllDistricts(!showAllDistricts);
+  }
+
   return (
     <React.Fragment>
       <div className="State">
         <div className="state-left">
-          <div className="breadcrumb fadeInUp">
-            <Link to="/">Home</Link>/
-            <Link to={`${stateCode}`}>{stateName}</Link>
+          <div className="breadcrumb">
+            <Breadcrumb>
+              <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+              <Dropdown direction="w">
+                <summary>
+                  <Breadcrumb.Item href={`${stateCode}`} selected>
+                    {stateName}
+                  </Breadcrumb.Item>
+                  <Dropdown.Caret className="caret" />
+                </summary>
+                {fetched && (
+                  <Dropdown.Menu direction="se">
+                    {allStateData.map((state) => (
+                      <Dropdown.Item key={state.statecode} className="item">
+                        <Link to={`${state.statecode}`}>
+                          {STATE_CODES[state.statecode]}
+                        </Link>
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                )}
+              </Dropdown>
+            </Breadcrumb>
           </div>
 
           <div className="header">
@@ -129,6 +197,62 @@ function State(props) {
             </div>
           </div>
 
+          {fetched && (
+            <div className="map-switcher" ref={mapSwitcher}>
+              <div
+                className={`highlight ${mapOption}`}
+                style={{
+                  transform: `translateX(${width * 0}px)`,
+                  opacity: 0,
+                }}
+              ></div>
+              <div
+                className="clickable"
+                onClick={() => {
+                  setMapOption('confirmed');
+                  anime({
+                    targets: '.highlight',
+                    translateX: `${width * 0}px`,
+                    easing: 'spring(1, 80, 90, 10)',
+                  });
+                }}
+              ></div>
+              <div
+                className="clickable"
+                onClick={() => {
+                  setMapOption('active');
+                  anime({
+                    targets: '.highlight',
+                    translateX: `${width * 0.25}px`,
+                    easing: 'spring(1, 80, 90, 10)',
+                  });
+                }}
+              ></div>
+              <div
+                className="clickable"
+                onClick={() => {
+                  setMapOption('recovered');
+                  anime({
+                    targets: '.highlight',
+                    translateX: `${width * 0.5}px`,
+                    easing: 'spring(1, 80, 90, 10)',
+                  });
+                }}
+              ></div>
+              <div
+                className="clickable"
+                onClick={() => {
+                  setMapOption('deceased');
+                  anime({
+                    targets: '.highlight',
+                    translateX: `${width * 0.75}px`,
+                    easing: 'spring(1, 80, 90, 10)',
+                  });
+                }}
+              ></div>
+            </div>
+          )}
+
           {fetched && <Level data={stateData} />}
           {fetched && <Minigraph timeseries={timeseries} />}
           {fetched && (
@@ -141,6 +265,7 @@ function State(props) {
                   stateDistrictWiseData={districtData}
                   stateTestData={testData}
                   isCountryLoaded={false}
+                  mapOptionProp={mapOption}
                 />
               }
             </React.Fragment>
@@ -162,11 +287,11 @@ function State(props) {
                 <div className="sources-right">
                   Data collected from sources{' '}
                   {sources.length > 0
-                    ? Object.keys(sources[0]).map((key) => {
+                    ? Object.keys(sources[0]).map((key, index) => {
                         if (key.match('source') && sources[0][key] !== '') {
                           const num = key.match(/\d+/);
                           return (
-                            <React.Fragment>
+                            <React.Fragment key={index}>
                               {num > 1 ? ',' : ''}
                               <a href={sources[0][key]}>{num}</a>
                             </React.Fragment>
@@ -184,13 +309,18 @@ function State(props) {
         <div className="state-right">
           {fetched && (
             <React.Fragment>
-              <div className="district-bar">
+              <div
+                className="district-bar"
+                style={!showAllDistricts ? {display: 'flex'} : {}}
+              >
                 <div
                   className="district-bar-left fadeInUp"
                   style={{animationDelay: '0.6s'}}
                 >
                   <h2>Top districts</h2>
-                  <div className="districts">
+                  <div
+                    className={`districts ${showAllDistricts ? 'is-grid' : ''}`}
+                  >
                     {districtData[stateName]
                       ? Object.keys(districtData[stateName].districtData)
                           .filter((d) => d !== 'Unknown')
@@ -200,7 +330,7 @@ function State(props) {
                                 .confirmed -
                               districtData[stateName].districtData[a].confirmed
                           )
-                          .slice(0, 6)
+                          .slice(0, showAllDistricts ? undefined : 5)
                           .map((district, index) => {
                             return (
                               <div key={index} className="district">
@@ -227,6 +357,9 @@ function State(props) {
                           })
                       : ''}
                   </div>
+                  <button className="button" onClick={toggleShowAllDistricts}>
+                    {showAllDistricts ? `View less` : `View all`}
+                  </button>
                 </div>
                 <div className="district-bar-right">
                   {
@@ -250,69 +383,71 @@ function State(props) {
                 </Link>
               )}
 
-              <div
-                className="timeseries-header fadeInUp"
-                style={{animationDelay: '2.5s'}}
-                ref={tsRef}
-              >
-                <div className="tabs">
-                  <div
-                    className={`tab ${graphOption === 1 ? 'focused' : ''}`}
-                    onClick={() => {
-                      setGraphOption(1);
-                    }}
-                  >
-                    <h4>Cumulative</h4>
+              <div className="TimeSeriesExplorer">
+                <div
+                  className="timeseries-header fadeInUp"
+                  style={{animationDelay: '2.5s'}}
+                  ref={tsRef}
+                >
+                  <div className="tabs">
+                    <div
+                      className={`tab ${graphOption === 1 ? 'focused' : ''}`}
+                      onClick={() => {
+                        setGraphOption(1);
+                      }}
+                    >
+                      <h4>Cumulative</h4>
+                    </div>
+                    <div
+                      className={`tab ${graphOption === 2 ? 'focused' : ''}`}
+                      onClick={() => {
+                        setGraphOption(2);
+                      }}
+                    >
+                      <h4>Daily</h4>
+                    </div>
                   </div>
-                  <div
-                    className={`tab ${graphOption === 2 ? 'focused' : ''}`}
-                    onClick={() => {
-                      setGraphOption(2);
-                    }}
-                  >
-                    <h4>Daily</h4>
+
+                  <div className="scale-modes">
+                    <label className="main">Scale Modes</label>
+                    <div className="timeseries-mode">
+                      <label htmlFor="timeseries-mode">Uniform</label>
+                      <input
+                        type="checkbox"
+                        checked={timeseriesMode}
+                        className="switch"
+                        aria-label="Checked by default to scale uniformly."
+                        onChange={(event) => {
+                          setTimeseriesMode(!timeseriesMode);
+                        }}
+                      />
+                    </div>
+                    <div
+                      className={`timeseries-logmode ${
+                        graphOption !== 1 ? 'disabled' : ''
+                      }`}
+                    >
+                      <label htmlFor="timeseries-logmode">Logarithmic</label>
+                      <input
+                        type="checkbox"
+                        checked={graphOption === 1 && timeseriesLogMode}
+                        className="switch"
+                        disabled={graphOption !== 1}
+                        onChange={(event) => {
+                          setTimeseriesLogMode(!timeseriesLogMode);
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <div className="scale-modes">
-                  <label className="main">Scale Modes</label>
-                  <div className="timeseries-mode">
-                    <label htmlFor="timeseries-mode">Uniform</label>
-                    <input
-                      type="checkbox"
-                      checked={timeseriesMode}
-                      className="switch"
-                      aria-label="Checked by default to scale uniformly."
-                      onChange={(event) => {
-                        setTimeseriesMode(!timeseriesMode);
-                      }}
-                    />
-                  </div>
-                  <div
-                    className={`timeseries-logmode ${
-                      graphOption !== 1 ? 'disabled' : ''
-                    }`}
-                  >
-                    <label htmlFor="timeseries-logmode">Logarithmic</label>
-                    <input
-                      type="checkbox"
-                      checked={graphOption === 1 && timeseriesLogMode}
-                      className="switch"
-                      disabled={graphOption !== 1}
-                      onChange={(event) => {
-                        setTimeseriesLogMode(!timeseriesLogMode);
-                      }}
-                    />
-                  </div>
-                </div>
+                <TimeSeries
+                  timeseries={timeseries}
+                  type={graphOption}
+                  mode={timeseriesMode}
+                  logMode={timeseriesLogMode}
+                />
               </div>
-
-              <TimeSeries
-                timeseries={timeseries}
-                type={graphOption}
-                mode={timeseriesMode}
-                logMode={timeseriesLogMode}
-              />
             </React.Fragment>
           )}
         </div>

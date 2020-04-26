@@ -109,7 +109,9 @@ function DeltaBarGraph({timeseries, arrayKey}) {
   );
 }
 
-export default React.memo(DeltaBarGraph);
+export default React.memo(DeltaBarGraph, () => {
+  return true;
+});
 
 function roundedBar(x, y, w, h, r, f) {
   if (!h) return;

@@ -29,6 +29,8 @@ function PatientDB(props) {
   const [scaleMode, setScaleMode] = useState(false);
   const [filterDate, setFilterDate] = useState(subDays(new Date(), 1));
   const [showReminder, setShowReminder] = useLocalStorage('showReminder', true);
+  const [message, setMessage] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     detectedstate: '',
     detecteddistrict: '',
@@ -91,7 +93,13 @@ function PatientDB(props) {
   };
 
   useEffect(() => {
-    setFilteredPatients(filterByObject(patients, filters));
+    if (filterByObject(patients, filters).length > 0) {
+      setFilteredPatients(filterByObject(patients, filters));
+      setMessage(false);
+      setLoading(false);
+    } else {
+      setMessage(true);
+    }
   }, [patients, filters]);
 
   function getSortedValues(obj, key) {
@@ -224,8 +232,7 @@ function PatientDB(props) {
                   e.preventDefault();
                 })
               }
-              clearIcon={<Icon.XCircle size={16} />}
-              className={'calendar-close'}
+              clearIcon={<Icon.XCircle />}
               onChange={(date) => {
                 setFilterDate(date);
                 const fomattedDate = !!date ? format(date, 'dd/MM/yyyy') : '';
@@ -365,11 +372,31 @@ function PatientDB(props) {
 
       {fetched && (
         <div className="patientdb-wrapper">
-          <Patients
-            patients={filteredPatients}
-            colorMode={colorMode}
-            expand={scaleMode}
-          />
+          {loading ? (
+            ' '
+          ) : message ? (
+            <div className="no-result">
+              <h5>
+                There were no new cases in
+                <span>
+                  {filters.detectedcity.length > 0
+                    ? ` ${filters.detectedcity}, `
+                    : ''}
+                  {filters.detecteddistrict.length > 0
+                    ? ` ${filters.detecteddistrict}, `
+                    : ''}
+                  {' ' + filters.detectedstate}
+                </span>{' '}
+                on <span>{filters.dateannounced}.</span>
+              </h5>
+            </div>
+          ) : (
+            <Patients
+              patients={filteredPatients}
+              colorMode={colorMode}
+              expand={scaleMode}
+            />
+          )}
         </div>
       )}
 

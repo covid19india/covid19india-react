@@ -11,6 +11,12 @@ const navLinkProps = (path, animationDelay) => ({
   },
 });
 
+const activeNavIcon = (path) => ({
+  style: {
+    stroke: window.location.pathname === path ? '#4c75f2' : '',
+  },
+});
+
 function Navbar({pages, darkMode, setDarkMode}) {
   const [expand, setExpand] = useState(false);
   useLockBodyScroll(expand);
@@ -24,7 +30,12 @@ function Navbar({pages, darkMode, setDarkMode}) {
         {darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
       </div>
       <div className="navbar-middle">
-        <Link to="/">
+        <Link
+          to="/"
+          onClick={() => {
+            setExpand(false);
+          }}
+        >
           Covid19<span>India</span>
         </Link>
       </div>
@@ -55,19 +66,29 @@ function Navbar({pages, darkMode, setDarkMode}) {
         {window.innerWidth > 769 && (
           <React.Fragment>
             <span>
-              <Icon.Home />
+              <Link to="/">
+                <Icon.Home {...activeNavIcon('/')} />
+              </Link>
             </span>
             <span>
-              <Icon.Users />
+              <Link to="/demographics">
+                <Icon.Users {...activeNavIcon('/demographics')} />
+              </Link>
             </span>
             <span>
-              <Icon.BarChart2 />
+              <Link to="/deepdive">
+                <Icon.BarChart2 {...activeNavIcon('/deepdive')} />
+              </Link>
             </span>
             <span>
-              <Icon.Package />
+              <Link to="/essentials">
+                <Icon.Package {...activeNavIcon('/essentials')} />
+              </Link>
             </span>
             <span>
-              <Icon.HelpCircle />
+              <Link to="/faq">
+                <Icon.HelpCircle {...activeNavIcon('/faq')} />
+              </Link>
             </span>
           </React.Fragment>
         )}

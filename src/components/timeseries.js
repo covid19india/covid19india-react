@@ -22,6 +22,7 @@ function TimeSeries(props) {
   const svgRef2 = useRef();
   const svgRef3 = useRef();
   const svgRef4 = useRef();
+  const svgRef5 = useRef();
 
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
@@ -77,6 +78,7 @@ function TimeSeries(props) {
       const svg2 = d3.select(svgRef2.current);
       const svg3 = d3.select(svgRef3.current);
       const svg4 = d3.select(svgRef4.current);
+      const svg5 = d3.select(svgRef5.current);
 
       const dateMin = new Date(timeseries[0]['date']);
       dateMin.setDate(dateMin.getDate() - 1);
@@ -93,10 +95,7 @@ function TimeSeries(props) {
       const numTicksX = width < 480 ? 4 : 7;
 
       const xAxis = (g) =>
-        g
-          .attr('class', 'x-axis')
-          .call(d3.axisBottom(xScale).ticks(numTicksX))
-          .style('transform', `translateY(${chartBottom}px)`);
+        g.attr('class', 'x-axis').call(d3.axisBottom(xScale).ticks(numTicksX));
 
       const xAxis2 = (g, yScale) => {
         g.attr('class', 'x-axis2')
@@ -111,17 +110,16 @@ function TimeSeries(props) {
       const yAxis = (g, yScale) =>
         g
           .attr('class', 'y-axis')
-          .call(d3.axisRight(yScale).ticks(4, '0~s').tickPadding(5))
-          .style('transform', `translateX(${chartRight}px)`);
+          .call(d3.axisRight(yScale).ticks(4, '0~s').tickPadding(5));
 
       // Arrays of objects
-      const svgArray = [svg1, svg2, svg3, svg4];
       const plotTotal = chartType === 1;
       const dataTypesTotal = [
         'totalconfirmed',
         'totalactive',
         'totalrecovered',
         'totaldeceased',
+        'totaltested',
       ];
       const dataTypesDaily = [
         'dailyconfirmed',
@@ -130,7 +128,10 @@ function TimeSeries(props) {
         'dailydeceased',
       ];
 
-      const colors = ['#ff073a', '#007bff', '#28a745', '#6c757d'];
+      const colors = ['#ff073a', '#007bff', '#28a745', '#6c757d', '#201aa2'];
+
+      const svgArray = [svg1, svg2, svg3, svg4];
+      if (plotTotal) svgArray.push(svg5);
 
       let yScales;
       if (plotTotal) {
@@ -138,16 +139,20 @@ function TimeSeries(props) {
         dataTypesTotal.forEach((type) => {
           uniformScaleMin = Math.min(
             uniformScaleMin,
-            d3.min(timeseries, (d) => d[type])
+            d3.min(timeseries, (d) => (isNaN(d[type]) ? 0 : d[type]))
+          );
+        });
+        let uniformScaleMax = 0;
+        dataTypesTotal.forEach((type) => {
+          uniformScaleMax = Math.max(
+            uniformScaleMax,
+            d3.max(timeseries, (d) => (isNaN(d[type]) ? 0 : d[type]))
           );
         });
         const yScaleUniformLinear = d3
           .scaleLinear()
           .clamp(true)
-          .domain([
-            uniformScaleMin,
-            Math.max(1, yBuffer * d3.max(timeseries, (d) => d.totalconfirmed)),
-          ])
+          .domain([uniformScaleMin, Math.max(1, yBuffer * uniformScaleMax)])
           .nice()
           .range([chartBottom, margin.top]);
 
@@ -156,7 +161,7 @@ function TimeSeries(props) {
           .clamp(true)
           .domain([
             Math.max(1, uniformScaleMin),
-            Math.max(1, yBuffer * d3.max(timeseries, (d) => d.totalconfirmed)),
+            Math.max(1, yBuffer * uniformScaleMax),
           ])
           .nice()
           .range([chartBottom, margin.top]);
@@ -230,7 +235,9 @@ function TimeSeries(props) {
         return svg
           .selectAll('.focus')
           .data([timeseries[T - 1]], (d) => d.date)
-          .join('circle')
+          .join((enter) =>
+            enter.append('circle').attr('cx', (d) => xScale(d.date))
+          )
           .attr('class', 'focus')
           .attr('fill', colors[i])
           .attr('stroke', colors[i])
@@ -251,7 +258,11 @@ function TimeSeries(props) {
           focus.forEach((f, j) => {
             const yScale = yScales[j];
             const type = plotTotal ? dataTypesTotal[j] : dataTypesDaily[j];
-            f.attr('cx', xScale(d.date)).attr('cy', yScale(d[type]));
+            if (!isNaN(d[type]))
+              f.attr('cx', xScale(d.date))
+                .attr('cy', yScale(d[type]))
+                .attr('opacity', 1);
+            else f.attr('opacity', 0);
           });
         }
       }
@@ -263,10 +274,11 @@ function TimeSeries(props) {
         focus.forEach((f, j) => {
           const yScale = yScales[j];
           const type = plotTotal ? dataTypesTotal[j] : dataTypesDaily[j];
-          f.attr('cx', xScale(timeseries[T - 1].date)).attr(
-            'cy',
-            yScale(timeseries[T - 1][type])
-          );
+          if (!isNaN(timeseries[T - 1][type]))
+            f.attr('cx', xScale(timeseries[T - 1].date))
+              .attr('cy', yScale(timeseries[T - 1][type]))
+              .attr('opacity', 1);
+          else f.attr('opacity', 0);
         });
       }
 
@@ -278,20 +290,34 @@ function TimeSeries(props) {
         const typeDaily = dataTypesDaily[i];
         const type = plotTotal ? typeTotal : typeDaily;
 
+        const filteredTimeseries = timeseries.filter((d) => !isNaN(d[type]));
         const color = colors[i];
         const yScale = yScales[i];
 
         /* X axis */
-        svg.select('.x-axis').transition(t).call(xAxis);
+        svg
+          .select('.x-axis')
+          .style('transform', `translateY(${chartBottom}px)`)
+          .transition(t)
+          .call(xAxis);
         svg.select('.x-axis2').transition(t).call(xAxis2, yScale);
         /* Y axis */
-        svg.select('.y-axis').transition(t).call(yAxis, yScale);
+        svg
+          .select('.y-axis')
+          .style('transform', `translateX(${chartRight}px)`)
+          .transition(t)
+          .call(yAxis, yScale);
 
         /* Path dots */
         svg
           .selectAll('.dot')
-          .data(timeseries, (d) => d.date)
-          .join((enter) => enter.append('circle').attr('cy', chartBottom))
+          .data(filteredTimeseries, (d) => d.date)
+          .join((enter) =>
+            enter
+              .append('circle')
+              .attr('cx', (d) => xScale(d.date))
+              .attr('cy', chartBottom)
+          )
           .attr('class', 'dot')
           .attr('fill', color)
           .attr('stroke', color)
@@ -300,17 +326,20 @@ function TimeSeries(props) {
           .attr('cx', (d) => xScale(d.date))
           .attr('cy', (d) => yScale(d[type]));
 
-        focus[i]
-          .transition(t)
-          .attr('cx', (d) => xScale(d.date))
-          .attr('cy', (d) => yScale(d[type]));
+        if (!isNaN(timeseries[T - 1][type]))
+          focus[i]
+            .transition(t)
+            .attr('cx', (d) => xScale(d.date))
+            .attr('cy', (d) => yScale(d[type]))
+            .attr('opacity', 1);
+        else focus[i].transition(t).attr('opacity', 0);
 
         if (plotTotal) {
           /* TOTAL TRENDS */
           svg.selectAll('.stem').remove();
           const path = svg
             .selectAll('.trend')
-            .data([[...timeseries].reverse()])
+            .data([[...filteredTimeseries].reverse()])
             .join('path')
             .attr('class', 'trend')
             .attr('fill', 'none')
@@ -387,9 +416,12 @@ function TimeSeries(props) {
     }
   }, [timeseries, graphData]);
 
-  const focusDate = moment(datapoint.date);
+  const focusDate = moment(datapoint.date).utcOffset('+05:30');
   let dateStr = focusDate.format('DD MMMM');
-  dateStr += focusDate.isSame(moment().subtract(1, 'days'), 'day')
+  dateStr += focusDate.isSame(
+    moment().utcOffset('+05:30').subtract(1, 'days'),
+    'day'
+  )
     ? ' Yesterday'
     : '';
 
@@ -474,6 +506,22 @@ function TimeSeries(props) {
             <g className="y-axis" />
           </svg>
         </div>
+
+        {chartType === 1 && (
+          <div className="svg-parent is-purple">
+            <div className="stats is-purple">
+              <h5 className={`${!moving ? 'title' : ''}`}>Tested</h5>
+              <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
+              <div className="stats-bottom">
+                <h2>{formatNumber(datapoint.totaltested)}</h2>
+              </div>
+            </div>
+            <svg ref={svgRef5} preserveAspectRatio="xMidYMid meet">
+              <g className="x-axis" />
+              <g className="y-axis" />
+            </svg>
+          </div>
+        )}
       </div>
 
       <div className="pills">
