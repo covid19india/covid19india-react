@@ -11,8 +11,11 @@ import {MAP_META} from '../constants';
 import {
   formatDate,
   formatDateAbsolute,
+  mergeTimeseries,
   preprocessTimeseries,
   parseStateTimeseries,
+  parseStateTestTimeseries,
+  parseTotalTestTimeseries,
 } from '../utils/commonfunctions';
 
 import axios from 'axios';
@@ -84,11 +87,16 @@ function Home(props) {
 
       const ts = parseStateTimeseries(statesDailyResponse);
       ts['TT'] = preprocessTimeseries(data.cases_time_series);
-      setTimeseries(ts);
+      // Testing data timeseries
+      const testTs = parseStateTestTimeseries(stateTestData.states_tested_data);
+      testTs['TT'] = parseTotalTestTimeseries(data.tested);
+      // Merge
+      const tsMerged = mergeTimeseries(ts, testTs);
+      setTimeseries(tsMerged);
 
       setLastUpdated(data.statewise[0].lastupdatedtime);
 
-      const testData = stateTestData.states_tested_data.reverse();
+      const testData = [...stateTestData.states_tested_data].reverse();
       const totalTest = data.tested[data.tested.length - 1];
       testData.push({
         updatedon: totalTest.updatetimestamp.split(' ')[0],
@@ -200,7 +208,7 @@ function Home(props) {
 
               {fetched && (
                 <TimeSeriesExplorer
-                  timeseries={timeseries}
+                  timeseries={timeseries[activeStateCode]}
                   activeStateCode={activeStateCode}
                   onHighlightState={onHighlightState}
                   states={states}

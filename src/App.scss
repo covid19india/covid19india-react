@@ -470,14 +470,41 @@ h6 {
 }
 
 .breadcrumb {
+  cursor: pointer;
   display: flex;
   flex-direction: row;
   font-family: 'archia';
   font-size: .75rem;
   padding-left: 1.5rem;
 
+  ul {
+    background: $light;
+    border: 2px solid $gray-light;
+    box-shadow: none;
+    max-height: 20rem;
+    overflow-y: scroll;
+  }
+
+  .item {
+    a {
+      color: $gray;
+      width: 100%;
+    }
+
+    &:hover {
+      background: $gray-hover;
+
+      a {
+        background: transparent;
+        color: $gray;
+      }
+    }
+  }
+
   a {
     color: $gray;
+    font-family: 'archia';
+    font-size: .75rem;
     margin-right: .25rem;
     text-decoration: none;
     transition: all .2s ease-in-out;
@@ -488,6 +515,28 @@ h6 {
 
     &:hover {
       background: $gray-hover;
+      text-decoration: none;
+    }
+
+    &.selected {
+      background: $gray-light;
+      color: $gray;
+    }
+  }
+
+  .caret {
+    color: $gray;
+    margin-left: 0;
+    transition: all .1s ease-in-out;
+
+    &:hover {
+      color: $gray-dark;
+    }
+  }
+
+  summary {
+    &:focus {
+      outline: none;
     }
   }
 }
@@ -2402,8 +2451,20 @@ input {
     padding: .25rem;
     position: absolute;
     top: .5rem;
-    width: 5rem;
+    width: calc(100% - 3.5rem);
     z-index: -1;
+
+    .yesterday {
+      font-family: 'archia';
+      font-size: .1rem !important;
+      position: absolute;
+      right: 0;
+      top: .25rem;
+
+      &.fourteen {
+        right: 1rem;
+      }
+    }
 
     h2,
     h5,
@@ -2482,6 +2543,21 @@ input {
         color: $blue;
       }
     }
+
+    &.is-purple {
+      h5 {
+        color: $purple-mid;
+
+        &.title {
+          color: $purple;
+        }
+      }
+
+      h2,
+      h6 {
+        color: $purple;
+      }
+    }
   }
 
   .svg-parent {
@@ -2531,30 +2607,51 @@ input {
     &.is-gray {
       background: $gray-light;
 
-      .domain,
-      .tick,
-      line {
-        stroke: $gray;
-      }
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $gray;
+        }
 
-      text {
-        color: $gray-mid;
-        stroke: transparent;
+        text {
+          color: $gray-mid;
+          stroke: transparent;
+        }
       }
     }
 
     &.is-blue {
       background: $blue-light;
 
-      .domain,
-      .tick,
-      line {
-        stroke: $blue;
-      }
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $blue;
+        }
 
-      text {
-        color: $blue-mid;
-        stroke: transparent;
+        text {
+          color: $blue-mid;
+          stroke: transparent;
+        }
+      }
+    }
+
+    &.is-purple {
+      background: $purple-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $purple;
+        }
+
+        text {
+          color: $purple-mid;
+          stroke: transparent;
+        }
       }
     }
   }
@@ -3922,7 +4019,6 @@ footer {
 
 .district-bar {
   align-self: center;
-  display: flex;
   flex-direction: row;
   justify-content: space-between;
 
@@ -3937,22 +4033,46 @@ footer {
     flex-direction: column;
     margin-right: 1rem;
     width: 10rem;
+
+    .button {
+      background: $gray-light;
+      color: $gray;
+      height: 2.5rem;
+      justify-content: center;
+      margin-top: .75rem;
+      width: 5rem;
+
+      &:hover {
+        background: $gray-hover;
+      }
+    }
   }
 
   .districts {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 15rem;
     width: 100%;
 
+    &.is-grid {
+      display: grid;
+      grid-auto-flow: column;
+      grid-gap: .5rem;
+      grid-template-rows: repeat(auto-fit, 2rem);
+      max-height: 20rem;
+      overflow-x: scroll;
+      overflow-y: none;
+      padding-bottom: .5rem;
+      width: 30rem;
+    }
 
     .district {
       display: flex;
       flex-direction: row;
       font-family: 'archia';
-      margin-bottom: .15rem;
-      margin-top: .15rem;
+      height: 2.5rem;
+      justify-content: flex-start;
+      margin-right: 1rem;
 
       h2,
       h5 {
@@ -3962,9 +4082,11 @@ footer {
       }
 
       h5 {
-        display: table;
+        display: inline-block !important;
+        flex: 0 1;
         margin-left: .5rem;
         margin-top: .15rem;
+        width: auto !important;
       }
 
       & > * {
@@ -4754,12 +4876,34 @@ footer {
         background: #40008050 !important;
       }
     }
+
+    .breadcrumb {
+      ul {
+        background: #1e1e30 !important;
+
+        &::after {
+          border-bottom-color: #1e1e30 !important;
+        }
+
+        li {
+
+          a {
+            color: $gray !important;
+
+            &:hover {
+              color: $white !important;
+            }
+          }
+
+        }
+      }
+    }
   }
 
   .MapExplorer {
     #chart,
     #legend {
-      filter: invert(1) hue-rotate(150deg);
+      filter: invert(1) hue-rotate(180deg) url('#white-balance');
     }
 
     .legend {
@@ -4785,6 +4929,57 @@ footer {
       }
     }
   }
+
+  .TimeSeries,
+  .Minigraph {
+    .stats {
+      &.is-purple {
+        h5 {
+          color: #9673b9bb !important;
+
+          &.title {
+            color: #9673b9 !important;
+          }
+        }
+
+        h2,
+        h6 {
+          color: #9673b9 !important;
+        }
+      }
+    }
+
+    .svg-parent {
+      &.is-purple {
+        background: #40008050 !important;
+
+        svg {
+          .dot,
+          .focus,
+          .domain,
+          .tick,
+          line {
+            stroke: #9673b9 !important;
+          }
+
+          .dot,
+          .focus {
+            fill: #9673b9 !important;
+          }
+
+          .trend {
+            stroke: #9673b999 !important;
+          }
+
+          text {
+            color: #9673b9bb !important;
+            stroke: transparent;
+          }
+        }
+      }
+    }
+  }
+
 
   .tab {
     &.focused {

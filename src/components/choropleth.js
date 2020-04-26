@@ -282,6 +282,16 @@ function ChoroplethMap({
           ref={choroplethLegend}
         ></svg>
       </div>
+      <svg style={{position: 'absolute', height: 0}}>
+        <defs>
+          <filter id="white-balance" colorInterpolationFilters="sRGB">
+            <feColorMatrix
+              type="matrix"
+              values="0.91372549 0 0 0 0.08627451 0 0.91372549 0 0 0.08627451 0 0 0.854901961 0 0.145098039 0 0 0 1 0"
+            />
+          </filter>
+        </defs>
+      </svg>
     </div>
   );
 }
