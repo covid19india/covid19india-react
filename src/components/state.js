@@ -4,7 +4,7 @@ import Footer from './footer';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
-import TimeSeries from './timeseries';
+import TimeSeriesExplorer from './timeseriesexplorer';
 
 import {MAP_META, STATE_CODES} from '../constants';
 import {
@@ -22,26 +22,15 @@ import {format, parse} from 'date-fns';
 import React, {useRef, useState} from 'react';
 import * as Icon from 'react-feather';
 import {Link, useParams} from 'react-router-dom';
-import {useLocalStorage} from 'react-use';
 import {useMeasure, useEffectOnce} from 'react-use';
 
 function State(props) {
   const mapRef = useRef();
-  const tsRef = useRef();
 
   const {stateCode} = useParams();
   const [allStateData, setAllStateData] = useState({});
   const [fetched, setFetched] = useState(false);
   const [timeseries, setTimeseries] = useState({});
-  const [graphOption, setGraphOption] = useState(1);
-  const [timeseriesMode, setTimeseriesMode] = useLocalStorage(
-    'timeseriesMode',
-    true
-  );
-  const [timeseriesLogMode, setTimeseriesLogMode] = useLocalStorage(
-    'timeseriesLogMode',
-    false
-  );
   const [stateData, setStateData] = useState({});
   const [testData, setTestData] = useState({});
   const [sources, setSources] = useState({});
@@ -384,69 +373,7 @@ function State(props) {
               )}
 
               <div className="TimeSeriesExplorer">
-                <div
-                  className="timeseries-header fadeInUp"
-                  style={{animationDelay: '2.5s'}}
-                  ref={tsRef}
-                >
-                  <div className="tabs">
-                    <div
-                      className={`tab ${graphOption === 1 ? 'focused' : ''}`}
-                      onClick={() => {
-                        setGraphOption(1);
-                      }}
-                    >
-                      <h4>Cumulative</h4>
-                    </div>
-                    <div
-                      className={`tab ${graphOption === 2 ? 'focused' : ''}`}
-                      onClick={() => {
-                        setGraphOption(2);
-                      }}
-                    >
-                      <h4>Daily</h4>
-                    </div>
-                  </div>
-
-                  <div className="scale-modes">
-                    <label className="main">Scale Modes</label>
-                    <div className="timeseries-mode">
-                      <label htmlFor="timeseries-mode">Uniform</label>
-                      <input
-                        type="checkbox"
-                        checked={timeseriesMode}
-                        className="switch"
-                        aria-label="Checked by default to scale uniformly."
-                        onChange={(event) => {
-                          setTimeseriesMode(!timeseriesMode);
-                        }}
-                      />
-                    </div>
-                    <div
-                      className={`timeseries-logmode ${
-                        graphOption !== 1 ? 'disabled' : ''
-                      }`}
-                    >
-                      <label htmlFor="timeseries-logmode">Logarithmic</label>
-                      <input
-                        type="checkbox"
-                        checked={graphOption === 1 && timeseriesLogMode}
-                        className="switch"
-                        disabled={graphOption !== 1}
-                        onChange={(event) => {
-                          setTimeseriesLogMode(!timeseriesLogMode);
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <TimeSeries
-                  timeseries={timeseries}
-                  type={graphOption}
-                  mode={timeseriesMode}
-                  logMode={timeseriesLogMode}
-                />
+                <TimeSeriesExplorer timeseries={timeseries} />
               </div>
             </React.Fragment>
           )}
