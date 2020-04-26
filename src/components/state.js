@@ -118,6 +118,17 @@ function State(props) {
     setShowAllDistricts(!showAllDistricts);
   }
 
+  const getGridRowCount = () => {
+    const gridColumnCount = window.innerWidth >= 540 ? 3 : 2;
+    const districtCount =
+      (districtData[stateName] &&
+        Object.keys(districtData[stateName].districtData).length) ||
+      0;
+    const gridRowCount = Math.ceil(districtCount / gridColumnCount);
+    return gridRowCount;
+  };
+  const gridRowCount = getGridRowCount();
+
   return (
     <React.Fragment>
       <div className="State">
@@ -309,6 +320,11 @@ function State(props) {
                   <h2>Top districts</h2>
                   <div
                     className={`districts ${showAllDistricts ? 'is-grid' : ''}`}
+                    style={
+                      showAllDistricts
+                        ? {gridTemplateRows: `repeat(${gridRowCount}, 2rem)`}
+                        : {}
+                    }
                   >
                     {districtData[stateName]
                       ? Object.keys(districtData[stateName].districtData)
