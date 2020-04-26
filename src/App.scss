@@ -259,6 +259,51 @@ h6 {
   }
 }
 
+.alert {
+  background: $gray-light;
+  border-radius: 5px;
+  color: $gray;
+  display: flex;
+  flex-direction: row;
+  font-family: 'archia';
+  font-size: 10px;
+  margin-right: .5rem;
+  padding: .5rem;
+  width: 6rem;
+
+  svg {
+    color: $gray-mid;
+    margin-right: .25rem;
+    margin-top: -.25rem;
+    stroke-width: 2px;
+    width: 36px !important;
+  }
+
+  .alert-right {
+    width: 10rem;
+
+    a {
+      background: $gray-light;
+      color: $gray;
+      padding-left: .1rem;
+      padding-right: .1rem;
+
+      &:hover {
+        background: $gray-hover;
+      }
+    }
+  }
+
+  &.is-green {
+    background: $green-light;
+    color: $green;
+
+    svg {
+      stroke: $green-mid;
+    }
+  }
+}
+
 .State {
   display: flex;
   flex-direction: row;
@@ -385,48 +430,24 @@ h6 {
     flex-direction: row;
     margin-bottom: 3rem;
     margin-top: 3rem;
-
-    .unknown,
-    .sources {
-      background: $gray-light;
-      border-radius: 5px;
-      color: $gray;
-      display: flex;
-      flex-direction: row;
-      font-family: 'archia';
-      font-size: 10px;
-      margin-right: .5rem;
-      padding: .5rem;
-      width: 6rem;
-
-      svg {
-        color: $gray-mid;
-        margin-right: .25rem;
-        margin-top: -.25rem;
-        stroke-width: 2px;
-        width: 36px !important;
-      }
-    }
-
-    .sources-right {
-      width: 10rem;
-
-      a {
-        background: $gray-light;
-        color: $gray;
-        padding-left: .1rem;
-        padding-right: .1rem;
-
-        &:hover {
-          background: $gray-hover;
-        }
-      }
-    }
   }
 
   .district-bar,
   .to-essentials {
     width: 100%;
+  }
+
+  .district-bar-right {
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    .happy-sign {
+      display: flex;
+      flex-direction: row;
+      position: absolute;
+      top: 4rem;
+    }
   }
 
   .MapExplorer,
@@ -470,14 +491,41 @@ h6 {
 }
 
 .breadcrumb {
+  cursor: pointer;
   display: flex;
   flex-direction: row;
   font-family: 'archia';
   font-size: .75rem;
   padding-left: 1.5rem;
 
+  ul {
+    background: $light;
+    border: 2px solid $gray-light;
+    box-shadow: none;
+    max-height: 20rem;
+    overflow-y: scroll;
+  }
+
+  .item {
+    a {
+      color: $gray;
+      width: 100%;
+    }
+
+    &:hover {
+      background: $gray-hover;
+
+      a {
+        background: transparent;
+        color: $gray;
+      }
+    }
+  }
+
   a {
     color: $gray;
+    font-family: 'archia';
+    font-size: .75rem;
     margin-right: .25rem;
     text-decoration: none;
     transition: all .2s ease-in-out;
@@ -488,6 +536,28 @@ h6 {
 
     &:hover {
       background: $gray-hover;
+      text-decoration: none;
+    }
+
+    &.selected {
+      background: $gray-light;
+      color: $gray;
+    }
+  }
+
+  .caret {
+    color: $gray;
+    margin-left: 0;
+    transition: all .1s ease-in-out;
+
+    &:hover {
+      color: $gray-dark;
+    }
+  }
+
+  summary {
+    &:focus {
+      outline: none;
     }
   }
 }
@@ -903,8 +973,13 @@ h6 {
   }
 
   input {
-    -webkit-box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
     background: #fff;
+    height: 2rem;
+    width: calc(100% - 4rem);
+    box-shadow: 0 10px 35px rgba(0,0,0,.1);
+    -webkit-appearance: none !important;
+    -webkit-box-shadow: 0 10px 35px rgba(0,0,0,.1);
+    -moz-box-shadow: 0 10px 35px rgba(0,0,0,.1);
     border: 0;
     border-radius: 5px;
     box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
@@ -1545,9 +1620,12 @@ table {
     tr {
       cursor: pointer;
 
+      &.is-highlighted {
+        background: $gray-hover !important;
+      }
+
       &:hover {
         background: $gray-hover !important;
-
 
         .dropdown {
           background: $gray-hover;
@@ -1954,13 +2032,6 @@ table {
     height: 1rem;
     justify-content: space-between;
 
-
-    .district-last-update {
-      bottom: 0;
-      position: absolute;
-      right: 0;
-    }
-
     h2 {
       color: #e23028;
       font-weight: 900;
@@ -2175,20 +2246,27 @@ table {
   }
 
   .disclaimer {
+    backdrop-filter: saturate(180%) blur(20px);
     background: $gray-light;
     border-radius: 5px;
-    color: $gray;
+    bottom: 50%;
+    color: $gray-dark;
     display: flex;
     flex-direction: row;
     font-family: 'archia';
-    font-size: 11px;
+    font-size: 12px;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
     padding: .5rem;
+    position: absolute;
+    right: 0;
     width: 14rem;
+    z-index: 99;
 
     svg {
-      color: $gray;
       margin-right: .25rem;
-      margin-top: -.35rem;
+      margin-top: -.9rem;
       stroke-width: 2px;
       width: 20px !important;
     }
@@ -2244,6 +2322,11 @@ table {
   .svg-parent {
     height: 10rem;
     margin-bottom: 1rem;
+  }
+
+  .alert {
+    position: absolute;
+    bottom: -4rem;
   }
 }
 
@@ -2399,7 +2482,6 @@ input {
     padding: .25rem;
     position: absolute;
     top: .5rem;
-    width: 5rem;
     z-index: -1;
 
     h2,
@@ -2479,6 +2561,21 @@ input {
         color: $blue;
       }
     }
+
+    &.is-purple {
+      h5 {
+        color: $purple-mid;
+
+        &.title {
+          color: $purple;
+        }
+      }
+
+      h2,
+      h6 {
+        color: $purple;
+      }
+    }
   }
 
   .svg-parent {
@@ -2528,30 +2625,51 @@ input {
     &.is-gray {
       background: $gray-light;
 
-      .domain,
-      .tick,
-      line {
-        stroke: $gray;
-      }
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $gray;
+        }
 
-      text {
-        color: $gray-mid;
-        stroke: transparent;
+        text {
+          color: $gray-mid;
+          stroke: transparent;
+        }
       }
     }
 
     &.is-blue {
       background: $blue-light;
 
-      .domain,
-      .tick,
-      line {
-        stroke: $blue;
-      }
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $blue;
+        }
 
-      text {
-        color: $blue-mid;
-        stroke: transparent;
+        text {
+          color: $blue-mid;
+          stroke: transparent;
+        }
+      }
+    }
+
+    &.is-purple {
+      background: $purple-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $purple;
+        }
+
+        text {
+          color: $purple-mid;
+          stroke: transparent;
+        }
       }
     }
   }
@@ -3919,7 +4037,6 @@ footer {
 
 .district-bar {
   align-self: center;
-  display: flex;
   flex-direction: row;
   justify-content: space-between;
 
@@ -3933,23 +4050,43 @@ footer {
     display: flex;
     flex-direction: column;
     margin-right: 1rem;
-    width: 10rem;
+
+    .button {
+      background: $gray-light;
+      color: $gray;
+      font-weight: 600;
+      height: 2.5rem;
+      justify-content: center;
+      margin-top: .75rem;
+      text-transform: unset;
+      width: 5rem;
+
+      &:hover {
+        background: $gray-hover;
+      }
+    }
   }
 
   .districts {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 15rem;
     width: 100%;
 
+    &.is-grid {
+      display: grid;
+      grid-auto-flow: column;
+      grid-gap: .5rem;
+      padding-bottom: .5rem;
+    }
 
     .district {
       display: flex;
       flex-direction: row;
       font-family: 'archia';
-      margin-bottom: .15rem;
-      margin-top: .15rem;
+      height: 2.5rem;
+      justify-content: flex-start;
+      margin-right: 1rem;
 
       h2,
       h5 {
@@ -3959,9 +4096,11 @@ footer {
       }
 
       h5 {
-        display: table;
+        display: inline-block !important;
+        flex: 0 1;
         margin-left: .5rem;
         margin-top: .15rem;
+        width: auto !important;
       }
 
       & > * {
@@ -4751,12 +4890,34 @@ footer {
         background: #40008050 !important;
       }
     }
+
+    .breadcrumb {
+      ul {
+        background: #1e1e30 !important;
+
+        &::after {
+          border-bottom-color: #1e1e30 !important;
+        }
+
+        li {
+
+          a {
+            color: $gray !important;
+
+            &:hover {
+              color: $white !important;
+            }
+          }
+
+        }
+      }
+    }
   }
 
   .MapExplorer {
     #chart,
     #legend {
-      filter: invert(1) hue-rotate(150deg);
+      filter: invert(1) hue-rotate(180deg) url('#white-balance');
     }
 
     .legend {
@@ -4782,6 +4943,57 @@ footer {
       }
     }
   }
+
+  .TimeSeries,
+  .Minigraph {
+    .stats {
+      &.is-purple {
+        h5 {
+          color: #9673b9bb !important;
+
+          &.title {
+            color: #9673b9 !important;
+          }
+        }
+
+        h2,
+        h6 {
+          color: #9673b9 !important;
+        }
+      }
+    }
+
+    .svg-parent {
+      &.is-purple {
+        background: #40008050 !important;
+
+        svg {
+          .dot,
+          .focus,
+          .domain,
+          .tick,
+          line {
+            stroke: #9673b9 !important;
+          }
+
+          .dot,
+          .focus {
+            fill: #9673b9 !important;
+          }
+
+          .trend {
+            stroke: #9673b999 !important;
+          }
+
+          text {
+            color: #9673b9bb !important;
+            stroke: transparent;
+          }
+        }
+      }
+    }
+  }
+
 
   .tab {
     &.focused {

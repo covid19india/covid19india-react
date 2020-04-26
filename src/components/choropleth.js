@@ -5,6 +5,7 @@ import {formatNumber} from '../utils/commonfunctions';
 
 import * as d3 from 'd3';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
+import * as Icon from 'react-feather';
 import * as topojson from 'topojson';
 
 const propertyFieldMap = {
@@ -171,7 +172,7 @@ function ChoroplethMap({
           }`
         )
         .attr('fill', 'none')
-        .attr('stroke-width', width / 200)
+        .attr('stroke-width', width / 250)
         .attr(
           'd',
           path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName]))
@@ -189,14 +190,19 @@ function ChoroplethMap({
       function handleClick(d) {
         d3.event.stopPropagation();
         if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE) return;
+        // Disable pointer events till the new map is rendered
+        svg.attr('pointer-events', 'none');
+        g.selectAll('.path-region').attr('pointer-events', 'none');
+        // Switch map
         changeMap(d.properties[propertyField]);
       }
 
       // Reset on tapping outside map
-      svg.on('click', () => {
-        setSelectedRegion(null);
-        if (mapMeta.mapType === MAP_TYPES.COUNTRY)
+      svg.attr('pointer-events', 'auto').on('click', () => {
+        if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
+          setSelectedRegion(null);
           setHoveredRegion('Total', mapMeta);
+        }
       });
     },
     [
@@ -255,6 +261,15 @@ function ChoroplethMap({
           preserveAspectRatio="xMidYMid meet"
           ref={choroplethMap}
         ></svg>
+        {(mapOption === 'recovered' && mapData?.Unknown?.recovered) ||
+        (mapOption === 'deceased' && mapData?.Unknown?.deceased) ? (
+          <div className="disclaimer">
+            <Icon.AlertCircle />
+            {`District-wise ${mapOption} numbers are under reconciliation`}
+          </div>
+        ) : (
+          ''
+        )}
       </div>
       <div
         className="svg-parent legend fadeInUp"
@@ -267,6 +282,16 @@ function ChoroplethMap({
           ref={choroplethLegend}
         ></svg>
       </div>
+      <svg style={{position: 'absolute', height: 0}}>
+        <defs>
+          <filter id="white-balance" colorInterpolationFilters="sRGB">
+            <feColorMatrix
+              type="matrix"
+              values="0.91372549 0 0 0 0.08627451 0 0.91372549 0 0 0.08627451 0 0 0.854901961 0 0.145098039 0 0 0 1 0"
+            />
+          </filter>
+        </defs>
+      </svg>
     </div>
   );
 }

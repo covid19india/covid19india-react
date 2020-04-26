@@ -13,6 +13,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import * as Icon from 'react-feather';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useTable, useSortBy} from 'react-table';
+import {useDebounce} from 'react-use';
 
 function ResourceTable({
   columns,
@@ -80,22 +81,23 @@ function ResourceTable({
     }
   }, [searchValue, data, category, indianstate, city]);
 
-  useEffect(() => {
-    if (suggestions.length < 7 && totalCount > suggestions.length) {
-      onScrollUpdate();
-    }
-  }, [suggestions, totalCount, onScrollUpdate]);
-
-  setInterval(checkAutosuggestChange, 2000);
-
-  function checkAutosuggestChange() {
-    try {
-      const newVal = document.getElementById('input-field-searchbar').value;
-      if (newVal !== searchValue) {
-        setSearchValue(newVal);
+  // Debounce to throttle user search input
+  useDebounce(
+    () => {
+      if (searchValue) {
+        setSearchValue(searchValue);
       }
-    } catch {}
-  }
+      if (
+        suggestions.length < 7 &&
+        totalCount > suggestions.length &&
+        suggestions.length
+      ) {
+        onScrollUpdate();
+      }
+    },
+    800,
+    [searchValue, suggestions, totalCount, onScrollUpdate]
+  );
 
   // Use the state and functions returned from useTable to build your UI
   const {
@@ -142,11 +144,14 @@ function ResourceTable({
               </InputAdornment>
             ),
           }}
+          onChange={(event) => {
+            setSearchValue(event.target.value);
+          }}
         />
       </div>
       <InfiniteScroll
         dataLength={suggestions.length}
-        hasMore={suggestions.length < totalCount}
+        hasMore={suggestions.length < totalCount && suggestions.length}
         next={onScrollUpdate}
         loader={
           <h3 style={{textAlign: 'center'}}>
@@ -160,6 +165,13 @@ function ResourceTable({
           isDesktop
             ? {width: '100%', overflow: 'none'}
             : {width: '100%', overflow: 'none', maxWidth: '300px'}
+        }
+        endMessage={
+          <div>
+            {!suggestions.length && (
+              <h3 style={{textAlign: 'center'}}>No Results Found</h3>
+            )}
+          </div>
         }
       >
         <div className="tableandaccordions">
