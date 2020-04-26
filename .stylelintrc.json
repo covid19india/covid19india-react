@@ -1,0 +1,21 @@
+{
+  "extends": ["stylelint-config-standard", "stylelint-config-sass-guidelines"],
+  "rules": {
+    "no-descending-specificity": null,
+    "selector-class-pattern": null,
+    "selector-no-qualifying-type": null,
+    "max-nesting-depth": [
+      5,
+      {
+        "severity": "warning"
+      }
+    ],
+    "selector-max-compound-selectors": [
+      5,
+      {
+        "severity": "warning"
+      }
+    ],
+    "number-leading-zero": "never"
+  }
+}

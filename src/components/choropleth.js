@@ -258,6 +258,7 @@ function ChoroplethMap({
       <div className="svg-parent fadeInUp" style={{animationDelay: '2.5s'}}>
         <svg
           id="chart"
+          className="chart"
           preserveAspectRatio="xMidYMid meet"
           ref={choroplethMap}
         ></svg>
@@ -277,6 +278,7 @@ function ChoroplethMap({
       >
         <svg
           id="legend"
+          className="legend"
           height="65"
           preserveAspectRatio="xMidYMid meet"
           ref={choroplethLegend}

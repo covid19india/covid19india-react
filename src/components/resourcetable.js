@@ -116,6 +116,7 @@ function ResourceTable({
       <div className="searchbar">
         <TextField
           id="input-field-searchbar"
+          className="input-field-searchbar"
           label="Search keyword"
           fullWidth={true}
           InputLabelProps={{

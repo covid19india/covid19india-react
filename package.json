@@ -43,8 +43,7 @@
     "eslint": "eslint .",
     "eslint:fix": "eslint --fix --max-warnings=0",
     "format": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|md)\"",
-    "scss-lint": "sass-lint 'src/**/*.scss' -v -f table --max-warnings 0",
-    "scss-lint:fix": "sass-lint-auto-fix 'src/**/*.scss' -d -h -c '.sass-lint-auto-fix.yml'"
+    "stylelint": "stylelint src/**/*.scss --fix -f verbose"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -63,8 +62,7 @@
       "prettier --write \"**/*.+(json|yml|yaml|md)\""
     ],
     "*.+(css|scss)": [
-      "npm run scss-lint:fix",
-      "npm run scss-lint"
+      "npm run stylelint"
     ]
   },
   "devDependencies": {
@@ -79,8 +77,9 @@
     "husky": "^4.2.3",
     "lint-staged": "^10.0.9",
     "prettier": "^2.0.2",
-    "sass-lint": "^1.13.1",
-    "sass-lint-auto-fix": "^0.21.0"
+    "stylelint": "^13.3.3",
+    "stylelint-config-sass-guidelines": "^7.0.0",
+    "stylelint-config-standard": "^20.0.0"
   },
   "browserslist": {
     "production": [

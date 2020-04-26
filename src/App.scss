@@ -71,44 +71,44 @@ $dark-m-purple: #7ba1ea;
 $dark-m-blue: #3391ff;
 
 body {
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
 h1 {
-  font-family: 'archia';
+  font-family: 'archia', sans-serif;
   font-size: 24px !important;
   font-weight: 900;
 }
 
 h2 {
-  font-family: 'archia';
+  font-family: 'archia', sans-serif;
   font-size: 18px !important;
   font-weight: 400;
 }
 
 h3 {
-  font-family: 'archia';
+  font-family: 'archia', sans-serif;
   font-size: 14px !important;
   font-weight: 400;
 }
 
 h4 {
-  font-family: 'archia';
+  font-family: 'archia', sans-serif;
   font-size: 13px !important;
   font-weight: 900;
 }
 
 h5 {
-  font-family: 'archia';
+  font-family: 'archia', sans-serif;
   font-size: 12px !important;
   font-weight: 900;
 }
 
 h6 {
-  font-family: 'archia';
+  font-family: 'archia', sans-serif;
   font-size: 11px !important;
   font-weight: 600;
 }
@@ -144,7 +144,7 @@ h6 {
   justify-content: space-between;
   padding-bottom: 1rem;
 
-  & > * {
+  > * {
     align-self: center;
   }
 
@@ -156,7 +156,7 @@ h6 {
   .navbar-left {
     color: $gray;
     cursor: pointer;
-    font-family: 'archia';
+    font-family: 'archia', sans-serif;
     font-size: 12px;
     font-weight: 600;
     padding: 1.5rem;
@@ -164,7 +164,7 @@ h6 {
 
   .navbar-middle {
     color: $gray;
-    font-family: 'archia';
+    font-family: 'archia', sans-serif;
     font-size: 18px;
     font-weight: 900;
     text-transform: uppercase;
@@ -177,7 +177,7 @@ h6 {
   .navbar-right {
     color: $gray;
     cursor: pointer;
-    font-family: 'archia';
+    font-family: 'archia', sans-serif;
     font-size: 12px;
     font-weight: 600;
     padding: 1.5rem;
@@ -195,7 +195,7 @@ h6 {
     color: $gray;
     display: flex;
     flex-direction: column;
-    font-family: 'archia';
+    font-family: 'archia', sans-serif;
     height: 100vh;
     position: absolute;
     top: 3.85rem;
@@ -203,7 +203,7 @@ h6 {
     width: 100vw;
     z-index: 9999;
 
-    & > * {
+    > * {
       border-bottom: 1px solid $gray-light;
       border-top: 1px solid $gray-light;
       padding: 1.5rem;
@@ -267,7 +267,6 @@ h6 {
   margin-left: 10rem;
   margin-right: 5rem;
 
-
   .header {
     display: flex;
     flex-direction: row;
@@ -275,7 +274,7 @@ h6 {
     margin-top: 1.5rem;
     width: calc(100% - 3rem);
 
-    & > * {
+    > * {
       align-self: flex-start;
     }
 
@@ -374,7 +373,7 @@ h6 {
       margin-left: 1rem;
     }
 
-    & > * {
+    > * {
       align-self: center;
     }
   }
@@ -393,7 +392,7 @@ h6 {
       color: $gray;
       display: flex;
       flex-direction: row;
-      font-family: 'archia';
+      font-family: 'archia', sans-serif;
       font-size: 10px;
       margin-right: .5rem;
       padding: .5rem;
@@ -473,7 +472,7 @@ h6 {
   cursor: pointer;
   display: flex;
   flex-direction: row;
-  font-family: 'archia';
+  font-family: 'archia', sans-serif;
   font-size: .75rem;
   padding-left: 1.5rem;
 
@@ -503,7 +502,7 @@ h6 {
 
   a {
     color: $gray;
-    font-family: 'archia';
+    font-family: 'archia', sans-serif;
     font-size: .75rem;
     margin-right: .25rem;
     text-decoration: none;
@@ -556,7 +555,6 @@ h6 {
     font-size: xx-small;
     justify-content: center;
 
-
     svg {
       font-size: .75rem;
     }
@@ -607,7 +605,7 @@ h6 {
     align-self: center;
     border-collapse: separate;
     border-spacing: 3px 2px;
-    font-family: 'archia';
+    font-family: 'archia', sans-serif;
     position: relative;
     table-layout: fixed;
     text-transform: none;
@@ -733,7 +731,6 @@ h6 {
           font-weight: 900;
           padding: .45rem;
 
-
           .heading-content {
             align-items: center;
             display: flex;
@@ -813,7 +810,6 @@ h6 {
   margin-bottom: 1rem;
   width: 80%;
 
-
   .filtertitle {
     align-self: center;
     color: $cherry;
@@ -825,7 +821,6 @@ h6 {
   display: flex;
   flex-direction: row;
   justify-content: center;
-
 
   .button {
     padding: .4rem;
@@ -840,10 +835,9 @@ h6 {
   margin-left: 1rem;
   margin-right: 1rem;
 
-
   .filterlabel {
     color: $indigo;
-    font-family: 'archia';
+    font-family: 'archia', sans-serif;
     font-size: 11px !important;
     font-weight: 600;
     text-transform: uppercase;
@@ -855,7 +849,7 @@ h6 {
 }
 
 .searchbar {
-  font-family: 'archia';
+  font-family: 'archia', sans-serif;
   font-size: .7rem !important;
   font-weight: 400;
   margin-bottom: 1rem;
@@ -863,9 +857,8 @@ h6 {
   text-align: center;
   width: 100%;
 
-
-  #input-field-searchbar {
-    font-family: 'archia';
+  .input-field-searchbar {
+    font-family: 'archia', sans-serif;
     font-size: .7rem !important;
     font-weight: 400;
     height: .1rem;
@@ -876,7 +869,6 @@ h6 {
   display: flex;
   flex-direction: row;
   justify-content: center;
-
 
   .button {
     align-items: center;
@@ -910,12 +902,11 @@ h6 {
   color: $purple;
   display: flex;
   flex-direction: row;
-  font-family: 'Archia';
+  font-family: 'Archia', sans-serif;
   font-size: .8rem;
   font-weight: 600;
   justify-content: center;
   line-height: 20px;
-
 
   .snippet {
     align-self: center;
@@ -934,13 +925,13 @@ h6 {
   position: relative;
   width: 100%;
 
-  & > * {
+  > * {
     align-self: center;
   }
 
   label {
     color: $gray;
-    font-family: 'archia';
+    font-family: 'archia', sans-serif;
     font-size: .75rem;
     margin-bottom: 1rem;
   }
@@ -952,13 +943,12 @@ h6 {
   }
 
   input {
-    -webkit-box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
     background: #fff;
     border: 0;
     border-radius: 5px;
     box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
     color: $gray;
-    font-family: 'archia';
+    font-family: 'archia', sans-serif;
     font-size: 1rem;
     height: 2rem;
     outline: none;
@@ -1023,7 +1013,7 @@ h6 {
     padding-bottom: 0;
     width: calc(100% - 4rem);
 
-    & > * {
+    > * {
       flex: 1;
     }
 
@@ -1058,7 +1048,7 @@ h6 {
       cursor: pointer;
       display: flex;
       flex-direction: row;
-      font-family: 'archia';
+      font-family: 'archia', sans-serif;
       font-size: .9rem;
       justify-content: space-between;
       padding: 1rem;
@@ -1068,7 +1058,7 @@ h6 {
         background: $gray-light;
       }
 
-      & > * {
+      > * {
         align-self: center;
       }
 
@@ -1089,18 +1079,15 @@ h6 {
       display: flex;
       flex-direction: column;
 
-
       .result-top {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         width: 100%;
 
-
         .result-top-left {
           display: flex;
           flex-direction: column;
-
 
           .result-location {
             display: flex;
@@ -1122,7 +1109,7 @@ h6 {
         padding: .25rem;
         text-align: right;
 
-        & > * {
+        > * {
           align-self: center;
         }
 
@@ -1151,7 +1138,7 @@ h6 {
         padding: .25rem;
         text-align: right;
 
-        & > * {
+        > * {
           align-self: center;
         }
 
@@ -1170,12 +1157,11 @@ h6 {
     flex-direction: column;
     margin-right: 1rem;
 
-
     .suggestion {
       color: $gray-mid;
       display: flex;
       flex-direction: row;
-      font-family: 'archia';
+      font-family: 'archia', sans-serif;
 
       div {
         padding-top: 1px;
@@ -1201,7 +1187,7 @@ h6 {
   flex-direction: column;
   width: 100%;
 
-  & > * {
+  > * {
     align-self: center;
   }
 
@@ -1211,7 +1197,7 @@ h6 {
     justify-content: space-around;
     padding: 1rem;
 
-    & > * {
+    > * {
       align-self: center;
       margin-left: .5rem;
       margin-right: .5rem;
@@ -1237,7 +1223,6 @@ h6 {
     .bell-icon {
       height: 24px;
       position: relative;
-
 
       .indicator {
         background: $pblue;
@@ -1284,7 +1269,7 @@ h6 {
   cursor: pointer;
   display: flex;
   flex-direction: row;
-  font-family: 'archia';
+  font-family: 'archia', sans-serif;
   font-size: .75rem;
   font-weight: 900;
   margin-bottom: .5rem;
@@ -1323,7 +1308,7 @@ h6 {
     background: $blue-hover;
   }
 
-  & > * {
+  > * {
     align-self: center;
   }
 }
@@ -1411,13 +1396,12 @@ h6 {
   justify-content: space-between;
   width: 30rem;
 
-
   .level-item {
     display: flex;
     flex-direction: column;
     width: calc(25%);
 
-    & > * {
+    > * {
       align-self: center;
     }
   }
@@ -1536,7 +1520,7 @@ table {
   align-self: center;
   border-collapse: separate;
   border-spacing: 3px 4px;
-  font-family: 'archia';
+  font-family: 'archia', sans-serif;
   position: relative;
   width: 30rem;
 
@@ -1765,7 +1749,6 @@ table {
       }
     }
 
-
     .district {
       transform: translateX(1rem);
     }
@@ -1788,7 +1771,7 @@ table {
   .table__title-wrapper {
     position: relative;
 
-    & > * {
+    > * {
       align-self: center;
     }
 
@@ -1850,7 +1833,7 @@ table {
   }
 }
 
-#chart {
+.chart {
   z-index: 10;
 }
 
@@ -1926,7 +1909,7 @@ table {
 
       text {
         fill: $gray;
-        font-family: 'archia';
+        font-family: 'archia', sans-serif;
         font-size: 10px;
         font-weight: 600;
         text-align: right;
@@ -2227,7 +2210,7 @@ table {
     color: $gray-dark;
     display: flex;
     flex-direction: row;
-    font-family: 'archia';
+    font-family: 'archia', sans-serif;
     font-size: 12px;
     left: 0;
     margin-left: auto;
@@ -2252,7 +2235,6 @@ table {
   flex-direction: row;
   position: relative;
   z-index: 99;
-
 
   .tab {
     background: $gray-light;
@@ -2323,7 +2305,7 @@ table {
 
     label {
       color: $gray-mid;
-      font-family: 'archia';
+      font-family: 'archia', sans-serif;
       font-size: .75rem;
       font-weight: 900;
       margin-right: .25rem;
@@ -2339,7 +2321,7 @@ table {
       }
     }
 
-    & > * {
+    > * {
       align-self: center;
     }
   }
@@ -2413,9 +2395,9 @@ input {
   select {
     appearance: none;
     background-color: #eee;
-
-    background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
-    linear-gradient(135deg, #808080 50%, transparent 50%);
+    background-image:
+      linear-gradient(45deg, transparent 50%, #808080 50%),
+      linear-gradient(135deg, #808080 50%, transparent 50%);
     background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
     background-repeat: no-repeat;
     background-size: 5px 5px, 5px 5px;
@@ -2423,7 +2405,7 @@ input {
     border-radius: 4px;
     color: $gray;
     cursor: pointer;
-    font-family: 'archia';
+    font-family: 'archia', sans-serif;
     font-weight: 900;
     margin-left: -1px;
     margin-top: 1rem;
@@ -2482,7 +2464,7 @@ input {
         margin-left: .25rem;
       }
 
-      & > * {
+      > * {
         margin-top: auto;
       }
     }
@@ -2568,7 +2550,7 @@ input {
 
       text {
         color: $cherry-mid;
-        font-family: 'archia';
+        font-family: 'archia', sans-serif;
         font-size: 9px;
         font-weight: 600;
         stroke: transparent;
@@ -2721,7 +2703,7 @@ input {
   a {
     background: $blue-light;
     color: $blue;
-    font-family: 'archia';
+    font-family: 'archia', sans-serif;
     font-weight: 900;
     text-decoration: none;
     text-transform: uppercase;
@@ -2747,7 +2729,7 @@ footer {
   margin-bottom: 5rem;
   margin-top: 5rem;
 
-  & > * {
+  > * {
     align-self: center;
     text-align: center;
   }
@@ -2804,15 +2786,14 @@ footer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: calc(100% - 0);
-
+    width: 100%;
 
     .link {
       margin-right: -.75rem;
       width: 12rem;
     }
 
-    & > * {
+    > * {
       align-self: center;
     }
 
@@ -2832,7 +2813,7 @@ footer {
     flex-direction: row;
     justify-content: space-around;
 
-    & > * {
+    > * {
       align-self: center;
     }
   }
@@ -2844,13 +2825,13 @@ footer {
   min-height: 30rem;
   width: 100%;
 
-  & > * {
+  > * {
     align-self: center;
     margin-bottom: 1.5rem;
     width: 30rem;
   }
 
-  & > *:first-child {
+  > *:first-child {
     margin-top: 2rem;
   }
 
@@ -2889,7 +2870,6 @@ footer {
   margin-left: auto;
   margin-right: auto;
 
-
   .select {
     display: flex;
     flex-direction: row;
@@ -2902,7 +2882,7 @@ footer {
       border-radius: 4px;
       color: #6c757d;
       cursor: default;
-      font-family: 'archia';
+      font-family: 'archia', sans-serif;
       font-size: 12px;
       font-weight: 900;
       height: 2.05rem;
@@ -2933,7 +2913,7 @@ footer {
 
       button {
         border-radius: 5px;
-        font-family: 'archia';
+        font-family: 'archia', sans-serif;
         padding: 1rem;
         transition: all .1s ease-in-out;
 
@@ -2974,7 +2954,7 @@ footer {
     }
 
     .react-calendar__month-view__weekdays__weekday {
-      font-family: 'archia';
+      font-family: 'archia', sans-serif;
       margin-bottom: .5rem;
     }
 
@@ -3024,9 +3004,9 @@ footer {
     select {
       appearance: none;
       background-color: #eee;
-
-      background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
-      linear-gradient(135deg, #808080 50%, transparent 50%);
+      background-image:
+        linear-gradient(45deg, transparent 50%, #808080 50%),
+        linear-gradient(135deg, #808080 50%, transparent 50%);
       background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
       background-repeat: no-repeat;
       background-size: 5px 5px, 5px 5px;
@@ -3034,7 +3014,7 @@ footer {
       border-radius: 4px;
       color: $gray;
       cursor: pointer;
-      font-family: 'archia';
+      font-family: 'archia', sans-serif;
       font-weight: 900;
       margin: .2rem .1rem;
       padding: .5rem;
@@ -3051,7 +3031,7 @@ footer {
     background: $pblue-light;
     border-radius: 5px;
     color: $pblue;
-    font-family: 'archia';
+    font-family: 'archia', sans-serif;
     font-size: .9rem;
     font-weight: 600;
     line-height: 23px;
@@ -3126,7 +3106,6 @@ footer {
     padding-left: 5rem;
     padding-right: 5rem;
 
-
     .no-result {
       align-self: center;
       display: flex;
@@ -3159,7 +3138,7 @@ footer {
   flex-wrap: wrap;
   width: 100%;
 
-  & > * {
+  > * {
     align-self: center;
   }
 
@@ -3187,7 +3166,7 @@ footer {
     transition: background .3s ease-in-out;
     width: 3.25rem;
 
-    & > * {
+    > * {
       align-self: center;
     }
 
@@ -3476,7 +3455,7 @@ footer {
 
   code {
     color: $orange-mid;
-    font-family: 'archia';
+    font-family: 'archia', sans-serif;
   }
 
   a {
@@ -3494,7 +3473,7 @@ footer {
     justify-content: center;
     text-align: center;
 
-    & > * {
+    > * {
       align-self: center !important;
     }
 
@@ -3521,7 +3500,6 @@ footer {
   top: 0;
   width: 100vw;
   z-index: 9999;
-
 
   .modal-content {
     align-self: center;
@@ -3576,7 +3554,7 @@ footer {
       flex-wrap: wrap;
       height: 10rem;
 
-      & > * {
+      > * {
         width: 10rem;
       }
 
@@ -3599,7 +3577,7 @@ footer {
       display: flex;
       flex-direction: row;
 
-      & > {
+      > {
         align-self: center;
       }
     }
@@ -3632,7 +3610,6 @@ footer {
   align-self: center;
   width: 30rem;
 
-
   .Patients {
     min-height: 5rem;
   }
@@ -3659,7 +3636,7 @@ footer {
     flex-direction: row;
     justify-content: center;
 
-    & > * {
+    > * {
       align-self: center;
     }
   }
@@ -3672,7 +3649,7 @@ footer {
     height: 3rem;
     margin-top: 1rem;
 
-    & > * {
+    > * {
       align-self: center;
     }
 
@@ -3687,7 +3664,7 @@ footer {
     flex-direction: row;
     text-decoration: none;
 
-    & > * {
+    > * {
       align-self: center;
     }
   }
@@ -3731,14 +3708,14 @@ footer {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  font-family: archia;
+  font-family: 'archia', sans-serif;
   justify-content: space-between;
   padding: .5rem;
   position: sticky;
   top: 0;
   z-index: 101;
 
-  & > * {
+  > * {
     align-self: center;
   }
 
@@ -3760,7 +3737,7 @@ footer {
     border-top: 0;
     color: $orange;
     cursor: pointer;
-    font-family: 'archia';
+    font-family: 'archia', sans-serif;
     font-weight: 900;
     margin: 0;
     outline: none;
@@ -3800,11 +3777,11 @@ footer {
   background: #fff;
   display: flex;
   flex-wrap: wrap;
-  font-family: archia;
+  font-family: 'archia', sans-serif;
   justify-content: center;
   z-index: 101;
 
-  & > * {
+  > * {
     align-self: center;
   }
 
@@ -3928,7 +3905,6 @@ footer {
   min-height: 22rem !important;
   width: 100%;
 
-
   .update {
     background: $gray-light;
     border-radius: 5px;
@@ -3964,7 +3940,7 @@ footer {
     height: 3rem;
     width: 13rem;
 
-    & > * {
+    > * {
       align-self: center;
     }
 
@@ -3979,7 +3955,7 @@ footer {
     flex-direction: row;
     text-decoration: none;
 
-    & > * {
+    > * {
       align-self: center;
     }
   }
@@ -3991,7 +3967,7 @@ footer {
 
     text {
       color: $red;
-      font-family: 'archia';
+      font-family: 'archia', sans-serif;
     }
 
     .delta {
@@ -4057,7 +4033,7 @@ footer {
     .district {
       display: flex;
       flex-direction: row;
-      font-family: 'archia';
+      font-family: 'archia', sans-serif;
       height: 2.5rem;
       justify-content: flex-start;
       margin-right: 1rem;
@@ -4077,7 +4053,7 @@ footer {
         width: auto !important;
       }
 
-      & > * {
+      > * {
         align-self: center;
       }
 
@@ -4099,7 +4075,7 @@ footer {
           width: 10px;
         }
 
-        & > * {
+        > * {
           align-self: center;
         }
       }
@@ -4127,18 +4103,15 @@ footer {
   margin-left: 5rem;
   padding: 2rem;
 
-
   .cards {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 
-
     .card {
       flex: 0 1 calc(33% - 1em);
       height: 30rem;
       margin-bottom: 2em;
-
 
       .charts-header {
         align-items: center;
@@ -4147,10 +4120,9 @@ footer {
         height: 100%;
         justify-content: flex-start;
 
-
         .chart-title {
           color: #6c757d;
-          font-family: 'archia';
+          font-family: 'archia', sans-serif;
           font-size: 1.5rem !important;
           font-weight: 900;
           padding: 20px 0;
@@ -4164,7 +4136,7 @@ footer {
 
         .chart-note {
           color: $gray;
-          font-family: 'archia';
+          font-family: 'archia', sans-serif;
           font-size: .8rem;
           height: 50px;
           margin-top: 5px;
@@ -4193,7 +4165,6 @@ footer {
     min-width: 5rem;
     position: fixed;
     z-index: 99999;
-
 
     .navbar-left {
       margin-top: auto;
@@ -4231,7 +4202,7 @@ footer {
         background: $gray-light-opaque !important;
       }
 
-      & > span {
+      > span {
         display: flex;
         flex-direction: row;
         height: 1.5rem;
@@ -4255,7 +4226,7 @@ footer {
       width: 15rem;
       z-index: -1 !important;
 
-      & > * {
+      > * {
         border: 0;
         border-left: 1px solid $gray-light;
         color: $gray;
@@ -4360,7 +4331,7 @@ footer {
       justify-content: center;
       width: 10rem;
 
-      & > * {
+      > * {
         align-self: center;
       }
 
@@ -4372,7 +4343,6 @@ footer {
 
   .Banner {
     height: 7rem;
-
 
     .snippet {
       margin-left: 1rem;
@@ -4389,7 +4359,6 @@ footer {
 
   .cards-container {
     padding: .5rem;
-
 
     .cards {
       .card {
@@ -4439,7 +4408,6 @@ footer {
       .modal-content {
         width: calc(100% - 5rem);
 
-
         .meta {
           height: 20rem;
         }
@@ -4465,11 +4433,9 @@ footer {
   .patients-summary {
     width: calc(100% - 2rem);
 
-
     .modal {
       .modal-content {
         width: calc(100% - 5rem);
-
 
         .meta {
           height: 20rem;
@@ -4481,7 +4447,6 @@ footer {
   .patientdb-wrapper {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
-
 
     .Patients {
       width: 100%;
@@ -4502,7 +4467,7 @@ footer {
       align-self: center;
       border-collapse: separate;
       border-spacing: 3px 2px;
-      font-family: 'archia';
+      font-family: 'archia', sans-serif;
       position: relative;
       text-transform: none;
       width: 40rem;
@@ -4634,7 +4599,6 @@ footer {
             font-weight: 900;
             padding: .45rem;
 
-
             .heading-content {
               align-items: center;
               display: flex;
@@ -4659,7 +4623,6 @@ footer {
             }
           }
         }
-
 
         .district {
           transform: translateX(1rem);
@@ -4739,7 +4702,6 @@ footer {
     flex-direction: column;
     justify-content: center;
 
-
     .select {
       margin-right: 0;
       margin-top: .4rem;
@@ -4763,7 +4725,7 @@ footer {
     }
 
     .navbar-right {
-      & > span {
+      > span {
         display: none;
 
         &:first-child {
@@ -4799,7 +4761,6 @@ footer {
   color: #bdbdbd;
   transition: background-color .2s ease-out !important;
 
-
   .switch-wrapper > div {
     background: #161625 !important;
   }
@@ -4811,7 +4772,6 @@ footer {
   .Navbar,
   .expand {
     border-right: 0;
-
 
     .navbar-middle {
       color: #bdbdbd;
@@ -4874,7 +4834,6 @@ footer {
         }
 
         li {
-
           a {
             color: $gray !important;
 
@@ -4882,15 +4841,14 @@ footer {
               color: $white !important;
             }
           }
-
         }
       }
     }
   }
 
   .MapExplorer {
-    #chart,
-    #legend {
+    .chart,
+    .legend {
       filter: invert(1) hue-rotate(180deg) url('#white-balance');
     }
 
@@ -4967,7 +4925,6 @@ footer {
       }
     }
   }
-
 
   .tab {
     &.focused {
