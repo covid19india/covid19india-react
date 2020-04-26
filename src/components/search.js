@@ -8,6 +8,7 @@ import Bloodhound from 'corejs-typeahead';
 import React, {useState, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
+import {useDebounce} from 'react-use';
 
 const engine = new Bloodhound({
   initialize: true,
@@ -106,6 +107,18 @@ function Search(props) {
     essentialsEngine.search(searchInput, essentialsSync, essentialsAsync);
   }, []);
 
+  useDebounce(
+    () => {
+      if (searchValue) {
+        handleSearch(searchValue.toLowerCase());
+      } else {
+        setResults([]);
+      }
+    },
+    800,
+    [searchValue]
+  );
+
   function setNativeValue(element, value) {
     const valueSetter = Object.getOwnPropertyDescriptor(element, 'value').set;
     const prototype = Object.getPrototypeOf(element);
@@ -138,7 +151,6 @@ function Search(props) {
         }}
         onChange={(event) => {
           setSearchValue(event.target.value);
-          handleSearch(event.target.value.toLowerCase());
         }}
       />
 
@@ -146,7 +158,7 @@ function Search(props) {
         <Icon.Search />
       </div>
 
-      {results.length > 0 && (
+      {searchValue.length > 0 && (
         <div
           className={`close-button`}
           onClick={() => {

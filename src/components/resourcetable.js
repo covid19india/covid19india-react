@@ -4,17 +4,16 @@ import {
   getHighlightedText,
   getFormattedLink,
   getSuggestions,
-  getSuggestionValue,
-  renderSuggestion,
 } from './Essentials/essentialsutls';
 
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import React, {useState, useEffect, useRef} from 'react';
-import Autosuggest from 'react-autosuggest';
+// import Autosuggest from 'react-autosuggest';
 import * as Icon from 'react-feather';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useTable} from 'react-table';
+import {useDebounce} from 'react-use';
 
 function ResourceTable({
   columns,
@@ -82,47 +81,22 @@ function ResourceTable({
     }
   }, [searchValue, data, category, indianstate, city]);
 
-  useEffect(() => {
-    if (suggestions.length === 0 && suggestions.length < totalCount) {
-      onScrollUpdate();
-    }
-  }, [suggestions, totalCount, onScrollUpdate]);
-
-  const onChange = (event, {newValue}) => {
-    setSearchValue(newValue);
-  };
-
-  // const onSuggestionsFetchRequested = ({value}) => {
-  //   setSuggestions(getSuggestions(value, data));
-  // };
-
-  const inputProps = {
-    placeholder: '',
-    value: searchValue,
-    onChange: onChange,
-  };
-
-  const renderInputComponent = (inputProps) => (
-    <TextField
-      id="outlined-number"
-      label="Search keyword"
-      fullWidth={true}
-      InputLabelProps={{
-        shrink: true,
-      }}
-      style={{
-        width: '100%',
-      }}
-      variant="outlined"
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position="start">
-            <Icon.Search size="0.9em" />
-          </InputAdornment>
-        ),
-      }}
-      {...inputProps}
-    />
+  // Debounce to throttle user search input
+  useDebounce(
+    () => {
+      if (searchValue) {
+        setSearchValue(searchValue);
+      }
+      if (
+        suggestions.length < 7 &&
+        totalCount > suggestions.length &&
+        suggestions.length
+      ) {
+        onScrollUpdate();
+      }
+    },
+    800,
+    [searchValue, suggestions, totalCount, onScrollUpdate]
   );
 
   // Use the state and functions returned from useTable to build your UI
@@ -140,19 +114,32 @@ function ResourceTable({
   return (
     <React.Fragment>
       <div className="searchbar">
-        <Autosuggest
-          suggestions={suggestions}
-          onSuggestionsFetchRequested={() => {}}
-          getSuggestionValue={getSuggestionValue}
-          renderSuggestion={renderSuggestion}
-          inputProps={inputProps}
-          alwaysRenderSuggestions={true}
-          renderInputComponent={renderInputComponent}
+        <TextField
+          id="input-field-searchbar"
+          label="Search keyword"
+          fullWidth={true}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          style={{
+            width: '100%',
+          }}
+          variant="outlined"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Icon.Search size="0.9em" />
+              </InputAdornment>
+            ),
+          }}
+          onChange={(event) => {
+            setSearchValue(event.target.value);
+          }}
         />
       </div>
       <InfiniteScroll
         dataLength={suggestions.length}
-        hasMore={suggestions.length < totalCount}
+        hasMore={suggestions.length < totalCount && suggestions.length}
         next={onScrollUpdate}
         loader={
           <h3 style={{textAlign: 'center'}}>
@@ -166,6 +153,13 @@ function ResourceTable({
           isDesktop
             ? {width: '100%', overflow: 'none'}
             : {width: '100%', overflow: 'none', maxWidth: '300px'}
+        }
+        endMessage={
+          <div>
+            {!suggestions.length && (
+              <h3 style={{textAlign: 'center'}}>No Results Found</h3>
+            )}
+          </div>
         }
       >
         <div className="tableandaccordions">

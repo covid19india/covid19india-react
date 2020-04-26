@@ -106,24 +106,23 @@ export const getSuggestions = (value, resources) => {
     ? resources
     : resources.filter(
         (resource) =>
-          resource.category.toLowerCase().includes(inputValue.toLowerCase()) ||
-          resource.city.toLowerCase().includes(inputValue.toLowerCase()) ||
+          resource.category.toLowerCase().indexOf(inputValue) !== -1 ||
+          resource.city.toLowerCase().indexOf(inputValue) !== -1 ||
           resource.descriptionandorserviceprovided
             .toLowerCase()
-            .includes(inputValue.toLowerCase()) ||
-          resource.nameoftheorganisation
-            .toLowerCase()
-            .includes(inputValue.toLowerCase()) ||
-          resource.state.toLowerCase().includes(inputValue.toLowerCase())
+            .indexOf(inputValue) !== -1 ||
+          resource.nameoftheorganisation.toLowerCase().indexOf(inputValue) !==
+            -1 ||
+          resource.state.toLowerCase().indexOf(inputValue) !== -1
       );
 };
 
-export const getSuggestionValue = (suggestion) =>
-  suggestion.nameoftheorganisation;
+// export const getSuggestionValue = (suggestion) =>
+//   suggestion.nameoftheorganisation;
 
-export const renderSuggestion = (suggestion) => (
-  <div>{suggestion.nameoftheorganisation}</div>
-);
+// export const renderSuggestion = (suggestion) => (
+//   <div>{suggestion.nameoftheorganisation}</div>
+// );
 
 export const parseText = function (text, limit) {
   if (text.length > limit) {

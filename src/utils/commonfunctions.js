@@ -37,8 +37,6 @@ export const formatDateAbsolute = (unformattedDate) => {
 };
 
 const validateCTS = (data = []) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
   const dataTypes = [
     'dailyconfirmed',
     'dailydeceased',
@@ -51,8 +49,11 @@ const validateCTS = (data = []) => {
     .filter((d) => dataTypes.every((dt) => d[dt]) && d.date)
     .filter((d) => dataTypes.every((dt) => Number(d[dt]) >= 0))
     .filter((d) => {
-      const year = today.getFullYear();
-      return new Date(d.date + year) < today;
+      // Skip data from the current day
+      const today = moment().utcOffset('+05:30');
+      return moment(d.date, 'DD MMMM')
+        .utcOffset('+05:30')
+        .isBefore(today, 'day');
     });
 };
 
@@ -95,11 +96,11 @@ export const parseStateTimeseries = ({states_daily: data}) => {
     return a;
   }, {});
 
-  const today = moment();
+  const today = moment().utcOffset('+05:30');
   for (let i = 0; i < data.length; i += 3) {
-    const date = moment(data[i].date, 'DD-MMM-YY');
+    const date = moment(data[i].date, 'DD-MMM-YY').utcOffset('+05:30');
     // Skip data from the current day
-    if (date.isBefore(today, 'Date')) {
+    if (date.isBefore(today, 'day')) {
       Object.entries(statewiseSeries).forEach(([k, v]) => {
         const stateCode = k.toLowerCase();
         const prev = v[v.length - 1] || {};
@@ -130,4 +131,64 @@ export const parseStateTimeseries = ({states_daily: data}) => {
   }
 
   return statewiseSeries;
+};
+
+export const parseStateTestTimeseries = (data) => {
+  const stateCodeMap = Object.keys(STATE_CODES).reduce((ret, sc) => {
+    ret[STATE_CODES[sc]] = sc;
+    return ret;
+  }, {});
+
+  const testTimseries = Object.keys(STATE_CODES).reduce((ret, sc) => {
+    ret[sc] = [];
+    return ret;
+  }, {});
+
+  const today = moment();
+  data.forEach((d) => {
+    const date = moment(d.updatedon, 'DD/MM/YYYY');
+    const totaltested = +d.totaltested;
+    if (date.isBefore(today, 'Date') && totaltested) {
+      const stateCode = stateCodeMap[d.state];
+      testTimseries[stateCode].push({
+        date: date.toDate(),
+        totaltested: totaltested,
+      });
+    }
+  });
+  return testTimseries;
+};
+
+export const parseTotalTestTimeseries = (data) => {
+  const testTimseries = [];
+  const today = moment();
+  data.forEach((d) => {
+    const date = moment(d.updatetimestamp.split(' ')[0], 'DD/MM/YYYY');
+    const totaltested = +d.totalindividualstested;
+    if (date.isBefore(today, 'Date') && totaltested) {
+      testTimseries.push({
+        date: date.toDate(),
+        totaltested: totaltested,
+      });
+    }
+  });
+  return testTimseries;
+};
+
+export const mergeTimeseries = (ts1, ts2) => {
+  const tsRet = Object.assign({}, ts1);
+  for (const state in ts1) {
+    if (ts1.hasOwnProperty(state)) {
+      tsRet[state] = ts1[state].map((d1) => {
+        const testData = ts2[state].find((d2) =>
+          moment(d1.date).isSame(moment(d2.date), 'day')
+        );
+        return {
+          totaltested: testData?.totaltested,
+          ...d1,
+        };
+      });
+    }
+  }
+  return tsRet;
 };

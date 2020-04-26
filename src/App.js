@@ -7,6 +7,7 @@ import Navbar from './components/navbar';
 import PatientDB from './components/patientdb';
 import Resources from './components/resources';
 import State from './components/state';
+import ScrollToTop from './utils/ScrollToTop';
 
 import React from 'react';
 import {
@@ -76,6 +77,7 @@ function App() {
   return (
     <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
       <Router>
+        <ScrollToTop />
         <Route
           render={({location}) => (
             <div className="Almighty-Router">
@@ -90,7 +92,9 @@ function App() {
                     <Route
                       exact
                       path={page.pageLink}
-                      component={page.view}
+                      render={({match}) => (
+                        <page.view key={match.params.stateCode || index} />
+                      )}
                       key={index}
                     />
                   );
