@@ -259,6 +259,51 @@ h6 {
   }
 }
 
+.alert {
+  background: $gray-light;
+  border-radius: 5px;
+  color: $gray;
+  display: flex;
+  flex-direction: row;
+  font-family: 'archia';
+  font-size: 10px;
+  margin-right: .5rem;
+  padding: .5rem;
+  width: 6rem;
+
+  svg {
+    color: $gray-mid;
+    margin-right: .25rem;
+    margin-top: -.25rem;
+    stroke-width: 2px;
+    width: 36px !important;
+  }
+
+  .alert-right {
+    width: 10rem;
+
+    a {
+      background: $gray-light;
+      color: $gray;
+      padding-left: .1rem;
+      padding-right: .1rem;
+
+      &:hover {
+        background: $gray-hover;
+      }
+    }
+  }
+
+  &.is-green {
+    background: $green-light;
+    color: $green;
+
+    svg {
+      stroke: $green-mid;
+    }
+  }
+}
+
 .State {
   display: flex;
   flex-direction: row;
@@ -385,43 +430,6 @@ h6 {
     flex-direction: row;
     margin-bottom: 3rem;
     margin-top: 3rem;
-
-    .unknown,
-    .sources {
-      background: $gray-light;
-      border-radius: 5px;
-      color: $gray;
-      display: flex;
-      flex-direction: row;
-      font-family: 'archia';
-      font-size: 10px;
-      margin-right: .5rem;
-      padding: .5rem;
-      width: 6rem;
-
-      svg {
-        color: $gray-mid;
-        margin-right: .25rem;
-        margin-top: -.25rem;
-        stroke-width: 2px;
-        width: 36px !important;
-      }
-    }
-
-    .sources-right {
-      width: 10rem;
-
-      a {
-        background: $gray-light;
-        color: $gray;
-        padding-left: .1rem;
-        padding-right: .1rem;
-
-        &:hover {
-          background: $gray-hover;
-        }
-      }
-    }
   }
 
   .district-bar,
@@ -435,29 +443,10 @@ h6 {
     position: relative;
 
     .happy-sign {
-      align-items: center;
-      background: $green-light;
-      border-radius: 5px;
       display: flex;
       flex-direction: row;
-      max-width: 115px;
-      padding-right: 20px;
       position: absolute;
-      text-align: left;
-      top: 15px;
-
-      h5 {
-        color: $green;
-      }
-
-      div {
-        color: $green;
-        display: flex;
-
-        &.smile-icon {
-          padding: 0 15px 0 20px;
-        }
-      }
+      top: 4rem;
     }
   }
 

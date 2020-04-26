@@ -262,18 +262,18 @@ function State(props) {
 
           {fetched && (
             <div className="meta-secondary">
-              <div className="unknown">
+              <div className="alert">
                 <Icon.AlertCircle />
-                <div className="unknown-right">
+                <div className="alert-right">
                   Awaiting district details for{' '}
                   {districtData[stateName]?.districtData['Unknown']
                     ?.confirmed || '0'}{' '}
                   cases
                 </div>
               </div>
-              <div className="sources">
+              <div className="alert">
                 <Icon.Compass />
-                <div className="sources-right">
+                <div className="alert-right">
                   Data collected from sources{' '}
                   {sources.length > 0
                     ? Object.keys(sources[0]).map((key, index) => {
@@ -357,17 +357,13 @@ function State(props) {
                   >
                     {timeseries
                       .slice(-5)
-                      .every((day) => day.dailyconfirmed === 0) ? (
-                      <>
-                        <div className="smile-icon">
-                          <Icon.Smile />
+                      .every((day) => day.dailyconfirmed === 0) && (
+                      <div className="alert is-green">
+                        <Icon.Smile />
+                        <div className="alert-right">
+                          Now new confirmed cases the past five days
                         </div>
-                        <div className="happy-text">
-                          <h5> No new cases the past five days</h5>
-                        </div>
-                      </>
-                    ) : (
-                      ''
+                      </div>
                     )}
                   </div>
                   {
