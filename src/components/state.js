@@ -351,6 +351,25 @@ function State(props) {
                   </button>
                 </div>
                 <div className="district-bar-right">
+                  <div
+                    className="happy-sign fadeInUp"
+                    style={{animationDelay: '0.6s'}}
+                  >
+                    {timeseries
+                      .slice(-5)
+                      .every((day) => day.dailyconfirmed === 0) ? (
+                      <>
+                        <div className="smile-icon">
+                          <Icon.Smile />
+                        </div>
+                        <div className="happy-text">
+                          <h5> No new cases the past five days</h5>
+                        </div>
+                      </>
+                    ) : (
+                      ''
+                    )}
+                  </div>
                   {
                     <DeltaBarGraph
                       timeseries={timeseries.slice(-5)}
