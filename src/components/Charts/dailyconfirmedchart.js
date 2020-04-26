@@ -23,7 +23,10 @@ function DailyConfirmedChart(props) {
   props.timeseries.forEach((data, index) => {
     if (index >= 31) {
       dates.push(
-        moment(data.date.trim(), 'DD MMM').utcOffset('+05:30').format('DD MMM')
+        moment
+          .utc(data.date.trim(), 'DD MMM')
+          .utcOffset('+05:30')
+          .format('DD MMM')
       );
       confirmed.push(data.dailyconfirmed);
       recovered.push(data.dailyrecovered);

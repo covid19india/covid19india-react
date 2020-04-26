@@ -83,10 +83,8 @@ function TimeSeries(props) {
       const svg4 = d3.select(svgRef4.current);
       const svg5 = d3.select(svgRef5.current);
 
-      const dateMin = new Date(timeseries[0]['date']);
-      dateMin.setDate(dateMin.getDate() - 1);
-      const dateMax = new Date(timeseries[T - 1]['date']);
-      dateMax.setDate(dateMax.getDate() + 1);
+      const dateMin = moment(timeseries[0].date).subtract(1, 'days');
+      const dateMax = moment(timeseries[T - 1].date).add(1, 'days');
 
       const xScale = d3
         .scaleTime()
@@ -411,7 +409,7 @@ function TimeSeries(props) {
     }
   }, [timeseries, graphData]);
 
-  const focusDate = moment(datapoint.date).utcOffset('+05:30');
+  const focusDate = moment(datapoint.date);
   const dateStr = focusDate.format('DD MMMM');
 
   const chartKey1 = chartType === 1 ? 'totalconfirmed' : 'dailyconfirmed';

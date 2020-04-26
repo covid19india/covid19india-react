@@ -41,7 +41,7 @@ function GrowthTrendChart(props) {
 
     Object.keys(data).forEach((key) => {
       if (key === 'date') {
-        dates.push(moment(data.date.trim(), 'DD MMM').utcOffset('+05:30'));
+        dates.push(moment.utc(data.date.trim(), 'DD MMM').utcOffset('+05:30'));
       }
 
       if (key === 'status' || key === 'date') {

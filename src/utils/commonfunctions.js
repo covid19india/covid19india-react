@@ -50,8 +50,9 @@ const validateCTS = (data = []) => {
     .filter((d) => dataTypes.every((dt) => Number(d[dt]) >= 0))
     .filter((d) => {
       // Skip data from the current day
-      const today = moment().utcOffset('+05:30');
-      return moment(d.date, 'DD MMMM')
+      const today = moment.utc().utcOffset('+05:30');
+      return moment
+        .utc(d.date, 'DD MMMM')
         .utcOffset('+05:30')
         .isBefore(today, 'day');
     });
@@ -59,7 +60,7 @@ const validateCTS = (data = []) => {
 
 export const preprocessTimeseries = (timeseries) => {
   return validateCTS(timeseries).map((stat, index) => ({
-    date: new Date(stat.date + ' 2020'),
+    date: moment.utc(stat.date, 'DD MMMM').utcOffset('+05:30'),
     totalconfirmed: +stat.totalconfirmed,
     totalrecovered: +stat.totalrecovered,
     totaldeceased: +stat.totaldeceased,
@@ -96,9 +97,9 @@ export const parseStateTimeseries = ({states_daily: data}) => {
     return a;
   }, {});
 
-  const today = moment().utcOffset('+05:30');
+  const today = moment.utc().utcOffset('+05:30');
   for (let i = 0; i < data.length; i += 3) {
-    const date = moment(data[i].date, 'DD-MMM-YY').utcOffset('+05:30');
+    const date = moment.utc(data[i].date, 'DD-MMM-YY').utcOffset('+05:30');
     // Skip data from the current day
     if (date.isBefore(today, 'day')) {
       Object.entries(statewiseSeries).forEach(([k, v]) => {
@@ -115,7 +116,7 @@ export const parseStateTimeseries = ({states_daily: data}) => {
           +data[i + 2][stateCode] + (prev.totaldeceased || 0);
         // Push
         v.push({
-          date: date.toDate(),
+          date: date,
           dailyconfirmed: dailyconfirmed,
           dailyrecovered: dailyrecovered,
           dailydeceased: dailydeceased,
@@ -144,14 +145,14 @@ export const parseStateTestTimeseries = (data) => {
     return ret;
   }, {});
 
-  const today = moment();
+  const today = moment.utc();
   data.forEach((d) => {
-    const date = moment(d.updatedon, 'DD/MM/YYYY');
+    const date = moment.utc(d.updatedon, 'DD/MM/YYYY').utcOffset('05:30');
     const totaltested = +d.totaltested;
     if (date.isBefore(today, 'Date') && totaltested) {
       const stateCode = stateCodeMap[d.state];
       testTimseries[stateCode].push({
-        date: date.toDate(),
+        date: date,
         totaltested: totaltested,
       });
     }
@@ -161,13 +162,15 @@ export const parseStateTestTimeseries = (data) => {
 
 export const parseTotalTestTimeseries = (data) => {
   const testTimseries = [];
-  const today = moment();
+  const today = moment.utc();
   data.forEach((d) => {
-    const date = moment(d.updatetimestamp.split(' ')[0], 'DD/MM/YYYY');
+    const date = moment
+      .utc(d.updatetimestamp.split(' ')[0], 'DD/MM/YYYY')
+      .utcOffset('05:30');
     const totaltested = +d.totalsamplestested;
     if (date.isBefore(today, 'Date') && totaltested) {
       testTimseries.push({
-        date: date.toDate(),
+        date: date,
         totaltested: totaltested,
       });
     }
