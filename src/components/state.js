@@ -377,7 +377,7 @@ function State(props) {
                       <div className="alert is-green">
                         <Icon.Smile />
                         <div className="alert-right">
-                          Now new confirmed cases the past five days
+                          No new confirmed cases in the past five days
                         </div>
                       </div>
                     )}
