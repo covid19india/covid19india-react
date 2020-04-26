@@ -2323,6 +2323,11 @@ table {
     height: 10rem;
     margin-bottom: 1rem;
   }
+
+  .alert {
+    position: absolute;
+    bottom: -4rem;
+  }
 }
 
 .timeseries-header {
