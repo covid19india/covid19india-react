@@ -47,7 +47,7 @@ function TimeSeries(props) {
 
   useEffect(() => {
     setMode(props.mode);
-  }, []);
+  }, [props.mode]);
 
   useEffect(() => {
     setLogMode(props.logMode);
