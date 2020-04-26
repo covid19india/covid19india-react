@@ -4,7 +4,7 @@ import {sliceTimeseriesFromEnd, formatNumber} from '../utils/commonfunctions';
 import {useResizeObserver} from '../utils/hooks';
 
 import * as d3 from 'd3';
-import moment from 'moment';
+import {addDays, subDays, format} from 'date-fns';
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as Icon from 'react-feather';
 
@@ -83,8 +83,8 @@ function TimeSeries(props) {
       const svg4 = d3.select(svgRef4.current);
       const svg5 = d3.select(svgRef5.current);
 
-      const dateMin = moment(timeseries[0].date).subtract(1, 'days');
-      const dateMax = moment(timeseries[T - 1].date).add(1, 'days');
+      const dateMin = subDays(timeseries[0].date, 1);
+      const dateMax = addDays(timeseries[T - 1].date, 1);
 
       const xScale = d3
         .scaleTime()
@@ -409,8 +409,7 @@ function TimeSeries(props) {
     }
   }, [timeseries, graphData]);
 
-  const focusDate = moment(datapoint.date);
-  const dateStr = focusDate.format('DD MMMM');
+  const dateStr = datapoint.date ? format(datapoint.date, 'dd MMMM') : '';
 
   const chartKey1 = chartType === 1 ? 'totalconfirmed' : 'dailyconfirmed';
   const chartKey2 = chartType === 1 ? 'totalactive' : 'dailyactive';
