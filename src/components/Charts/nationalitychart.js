@@ -61,9 +61,6 @@ function NationalityChart(props) {
         bottom: 20,
       },
     },
-    legend: {
-      display: false,
-    },
     responsive: true,
     maintainAspectRatio: false,
     tooltips: {
