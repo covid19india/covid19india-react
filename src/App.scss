@@ -597,8 +597,8 @@ h6 {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin-left: 5.5rem;
-  margin-right: 5.5rem;
+  margin-left: 9rem;
+  margin-right: 4rem;
 
   .resource-left,
   .resource-right {
@@ -4575,6 +4575,8 @@ footer {
   }
 
   .Resources {
+    margin: 1rem;
+
     table {
       align-self: center;
       border-collapse: separate;
