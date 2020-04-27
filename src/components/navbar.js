@@ -2,7 +2,7 @@ import anime from 'animejs';
 import React, {useState, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
-import {useEffectOnce, useLockBodyScroll} from 'react-use';
+import {useEffectOnce, useLockBodyScroll, useWindowSize} from 'react-use';
 
 const navLinkProps = (path, animationDelay) => ({
   className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
@@ -20,6 +20,8 @@ const activeNavIcon = (path) => ({
 function Navbar({pages, darkMode, setDarkMode}) {
   const [expand, setExpand] = useState(false);
   useLockBodyScroll(expand);
+
+  const windowSize = useWindowSize();
 
   return (
     <div className="Navbar">
@@ -62,8 +64,8 @@ function Navbar({pages, darkMode, setDarkMode}) {
           }
         }}
       >
-        {window.innerWidth < 769 && <span>{expand ? 'Close' : 'Menu'}</span>}
-        {window.innerWidth > 769 && (
+        {windowSize.width < 769 && <span>{expand ? 'Close' : 'Menu'}</span>}
+        {windowSize.width > 769 && (
           <React.Fragment>
             <span>
               <Link to="/">

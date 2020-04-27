@@ -100,7 +100,7 @@ function Home(props) {
       const totalTest = data.tested[data.tested.length - 1];
       testData.push({
         updatedon: totalTest.updatetimestamp.split(' ')[0],
-        totaltested: totalTest.totalindividualstested,
+        totaltested: totalTest.totalsamplestested,
         source: totalTest.source,
         state: 'Total',
       });
@@ -208,7 +208,7 @@ function Home(props) {
 
               {fetched && (
                 <TimeSeriesExplorer
-                  timeseries={timeseries}
+                  timeseries={timeseries[activeStateCode]}
                   activeStateCode={activeStateCode}
                   onHighlightState={onHighlightState}
                   states={states}

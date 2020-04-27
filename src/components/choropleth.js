@@ -88,27 +88,24 @@ function ChoroplethMap({
       );
       // Colorbar
       const widthLegend = parseInt(svgLegend.style('width'));
-      const margin = {left: 0.02 * widthLegend, right: 0.02 * widthLegend};
-      const barWidth = widthLegend - margin.left - margin.right;
       const heightLegend = +svgLegend.attr('height');
-      svgLegend
-        .append('g')
-        .style('transform', `translateX(${margin.left}px)`)
-        .append(() =>
-          legend({
-            color: colorScale,
-            title:
-              mapOption.charAt(0).toUpperCase() + mapOption.slice(1) + ' Cases',
-            width: barWidth,
-            height: 0.8 * heightLegend,
-            ticks: 6,
-            tickFormat: function (d, i, n) {
-              if (!Number.isInteger(d)) return;
-              if (i === n.length - 1) return formatNumber(d) + '+';
-              return formatNumber(d);
-            },
-          })
-        );
+      svgLegend.append('g').append(() =>
+        legend({
+          color: colorScale,
+          title:
+            mapOption.charAt(0).toUpperCase() + mapOption.slice(1) + ' Cases',
+          width: widthLegend,
+          height: 0.8 * heightLegend,
+          ticks: 6,
+          tickFormat: function (d, i, n) {
+            if (!Number.isInteger(d)) return;
+            if (i === n.length - 1) return formatNumber(d) + '+';
+            return formatNumber(d);
+          },
+          marginLeft: 2,
+          marginRight: 20,
+        })
+      );
       svgLegend.attr('viewBox', `0 0 ${widthLegend} ${heightLegend}`);
 
       /* Draw map */
@@ -161,13 +158,13 @@ function ChoroplethMap({
           'stroke',
           `${
             mapOption === 'confirmed'
-              ? '#ff073a20'
+              ? '#ff073a30'
               : mapOption === 'active'
-              ? '#007bff20'
+              ? '#007bff30'
               : mapOption === 'recovered'
-              ? '#28a74520'
+              ? '#28a74530'
               : mapOption === 'deceased'
-              ? '#6c757d20'
+              ? '#6c757d30'
               : ''
           }`
         )
@@ -284,7 +281,7 @@ function ChoroplethMap({
       </div>
       <svg style={{position: 'absolute', height: 0}}>
         <defs>
-          <filter id="white-balance" colorInterpolationFilters="sRGB">
+          <filter id="balance-color" colorInterpolationFilters="sRGB">
             <feColorMatrix
               type="matrix"
               values="0.91372549 0 0 0 0.08627451 0 0.91372549 0 0 0.08627451 0 0 0.854901961 0 0.145098039 0 0 0 1 0"
