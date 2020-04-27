@@ -541,7 +541,7 @@ function TimeSeries(props) {
         </button>
       </div>
 
-      <div className="alert is-purple">
+      <div className="alert">
         <Icon.AlertOctagon />
         <div className="alert-right">
           Tested chart is independent of uniform scaling

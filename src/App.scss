@@ -2348,15 +2348,23 @@ table {
     margin-left: auto;
     margin-right: 0;
     margin-top: .5rem;
+    padding: .25rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
     width: 16rem;
 
+    & > * {
+      align-self: center;
+    }
+
     svg {
-      margin-top: -.4rem;
+      margin: 0 !important;
+      margin-right: .25rem !important;
       width: 14px !important;
     }
 
     .alert-right {
-      width: 16rem;
+      width: 100%;
     }
   }
 }
