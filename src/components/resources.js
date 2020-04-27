@@ -6,6 +6,7 @@ import {Fab, Fade} from '@material-ui/core';
 import axios from 'axios';
 import React, {useState, useEffect, useCallback} from 'react';
 import * as Icon from 'react-feather';
+import {Helmet} from 'react-helmet';
 
 function Resources(props) {
   const [data, setData] = useState([]);
@@ -373,6 +374,11 @@ function Resources(props) {
   };
   return (
     <div className="Resources" id="top-elem">
+      <Helmet>
+        <title>Essentials - covid19india.org</title>
+        <meta name="title" content="Essentials - covid19india.org" />
+      </Helmet>
+
       <div className="filtersection">
         <div className="filtertitle">
           <h3>Service Before Self</h3>

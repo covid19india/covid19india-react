@@ -10,6 +10,7 @@ import State from './components/state';
 import ScrollToTop from './utils/ScrollToTop';
 
 import React from 'react';
+import {Helmet} from 'react-helmet';
 import {
   BrowserRouter as Router,
   Route,
@@ -17,6 +18,15 @@ import {
   Switch,
 } from 'react-router-dom';
 import {useLocalStorage} from 'react-use';
+
+const schemaMarkup = {
+  '@context': 'http://schema.org/',
+  '@type': 'NGO',
+  name: 'Coronavirus Outbreak in India: Latest Map and Case Count',
+  alternateName: 'COVID-19 Tracker',
+  url: 'https://www.covid19india.org/',
+  image: 'https://www.covid19india.org/thumbnail.png',
+};
 
 function App() {
   const pages = [
@@ -76,6 +86,12 @@ function App() {
 
   return (
     <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(schemaMarkup)}
+        </script>
+      </Helmet>
+
       <Router>
         <ScrollToTop />
         <Route

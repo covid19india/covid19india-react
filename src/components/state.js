@@ -21,6 +21,7 @@ import axios from 'axios';
 import {format, parse} from 'date-fns';
 import React, {useRef, useState} from 'react';
 import * as Icon from 'react-feather';
+import {Helmet} from 'react-helmet';
 import {Link, useParams, Redirect} from 'react-router-dom';
 import {useMeasure, useEffectOnce} from 'react-use';
 
@@ -133,6 +134,16 @@ function State(props) {
   } else {
     return (
       <React.Fragment>
+        <Helmet>
+          <title>
+            Coronavirus Outbreak in {STATE_CODES[stateCode]} - covid19india.org
+          </title>
+          <meta
+            name="title"
+            content={`Coronavirus Outbreak in ${STATE_CODES[stateCode]}: Latest Map and Case Count`}
+          />
+        </Helmet>
+
         <div className="State">
           <div className="state-left">
             <div className="breadcrumb">
