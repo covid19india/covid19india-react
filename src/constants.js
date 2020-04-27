@@ -3,6 +3,11 @@ export const MAP_TYPES = {
   STATE: 'state',
 };
 
+export const MAP_STATISTICS = {
+  TOTAL: 0,
+  PER_MILLION: 1,
+};
+
 export const MAPS_DIR = '/maps';
 
 export const MAP_META = {
@@ -272,19 +277,56 @@ export const STATE_CODES = {
   PY: 'Puducherry',
 };
 
+const stateCodes = [];
 const reverseStateCodes = {};
 Object.keys(STATE_CODES).map((key, index) => {
   reverseStateCodes[STATE_CODES[key]] = key;
-  return null;
-});
-export const STATE_CODES_REVERSE = reverseStateCodes;
-
-const stateCodes = [];
-Object.keys(STATE_CODES).map((key, index) => {
   stateCodes.push({code: key, name: STATE_CODES[key]});
   return null;
 });
+export const STATE_CODES_REVERSE = reverseStateCodes;
 export const STATE_CODES_ARRAY = stateCodes;
+
+export const STATE_POPULATIONS = {
+  'Andaman and Nicobar Islands': 379944,
+  'Andhra Pradesh': 45449883,
+  'Arunachal Pradesh': 1382611,
+  Assam: 31169272,
+  Bihar: 103804637,
+  Chandigarh: 1054686,
+  Chhattisgarh: 25540196,
+  'Dadra and Nagar Haveli': 342853,
+  'Daman and Diu': 242911,
+  Goa: 1457723,
+  Gujarat: 60383628,
+  Haryana: 25353081,
+  'Himachal Pradesh': 6856509,
+  'Jammu and Kashmir': 12274637,
+  Jharkhand: 32966238,
+  Karnataka: 61130704,
+  Kerala: 33387677,
+  Lakshadweep: 64429,
+  'Madhya Pradesh': 72597565,
+  Maharashtra: 112372972,
+  Manipur: 2721756,
+  Meghalaya: 2964007,
+  Mizoram: 1091014,
+  Nagaland: 1980602,
+  Delhi: 16753235,
+  Odisha: 41947358,
+  Puducherry: 1244464,
+  Punjab: 27704236,
+  Rajasthan: 68621012,
+  Sikkim: 607688,
+  'Tamil Nadu': 72138958,
+  Tripura: 3671032,
+  'Uttar Pradesh': 199581477,
+  Uttarakhand: 10116752,
+  'West Bengal': 91347736,
+  Ladakh: 274289,
+  Telangana: 39215650,
+  Total: 1210854977,
+};
 
 export const DISTRICTS_ARRAY = [
   {

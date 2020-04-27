@@ -1,6 +1,6 @@
 import legend from './legend';
 
-import {MAP_TYPES} from '../constants';
+import {MAP_STATISTICS, MAP_TYPES} from '../constants';
 import {formatNumber} from '../utils/commonfunctions';
 
 import * as d3 from 'd3';
@@ -90,11 +90,15 @@ function ChoroplethMap({
       // Colorbar
       const widthLegend = parseInt(svgLegend.style('width'));
       const heightLegend = +svgLegend.attr('height');
-      const title = statisticOption === 1 ? ' Cases' : ' Cases Per Million';
       svgLegend.append('g').append(() =>
         legend({
           color: colorScale,
-          title: mapOption.charAt(0).toUpperCase() + mapOption.slice(1) + title,
+          title:
+            mapOption.charAt(0).toUpperCase() +
+            mapOption.slice(1) +
+            (statisticOption === MAP_STATISTICS.TOTAL
+              ? ' Cases'
+              : ' Cases Per Million'),
           width: widthLegend,
           height: 0.8 * heightLegend,
           ticks: 6,
@@ -142,7 +146,7 @@ function ChoroplethMap({
         .text(function (d) {
           const region = d.properties[propertyField];
           const value = mapData[region] ? mapData[region][mapOption] : 0;
-          if (statisticOption === 1) {
+          if (statisticOption === MAP_STATISTICS.TOTAL) {
             return (
               Number(
                 parseFloat(

@@ -469,6 +469,7 @@ h6 {
     .back-button,
     .last-update,
     .unknown,
+    .tabs-map,
     .state-page-button {
       display: none;
     }
@@ -2056,11 +2057,15 @@ table {
 
     .district {
       color: #e23028;
-      line-height: 15px;
-      margin: 0;
+      line-height: 0;
       position: absolute;
-      top: 2rem;
-      width: 8rem;
+      top: 1.5rem;
+      width: 10rem;
+
+      h5 {
+        font-size: .75rem;
+        font-weight: 600;
+      }
 
       &.active {
         color: $blue;
@@ -2334,7 +2339,7 @@ table {
   }
 }
 
-.tabs2 {
+.tabs-map {
   display: flex;
   flex-direction: row;
   position: relative;
