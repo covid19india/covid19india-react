@@ -104,7 +104,7 @@ function FiltersDesktop(props) {
             </p>
             <p>
               Although we verify all our listings, we request you to follow all
-              the guidelines and take necessary precautions.
+              the guidelines and take the necessary precautions.
             </p>
             <p>
               We encourage you to report any error or suspicious activity so we
