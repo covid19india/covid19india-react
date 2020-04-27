@@ -21,6 +21,7 @@ import {
 import axios from 'axios';
 import React, {useState, useCallback} from 'react';
 import * as Icon from 'react-feather';
+import {CSSTransition} from 'react-transition-group';
 import {useEffectOnce, useLocalStorage, useFavicon} from 'react-use';
 
 function Home(props) {
@@ -175,7 +176,15 @@ function Home(props) {
             </div>
           </div>
 
-          {showUpdates && <Updates />}
+          <CSSTransition
+            in={showUpdates}
+            appear={true}
+            timeout={800}
+            classNames="updates-container"
+            unmountOnExit
+          >
+            <Updates />
+          </CSSTransition>
 
           {fetched && <Level data={states[0]} />}
           {fetched && <Minigraph timeseries={timeseries['TT']} />}

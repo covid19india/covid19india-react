@@ -3997,10 +3997,32 @@ footer {
   }
 }
 
+.updates-container-enter {
+  opacity: 0;
+  transform: translateY(-15%);
+}
+
+.updates-container-enter.updates-container-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: transform 0.8s ease-in-out, opacity 0.6s ease-out;
+}
+
+.updates-container-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.updates-container-exit.updates-container-exit-active {
+  opacity: 0;
+  transform: translateY(-50%);
+  transition: transform 1.3s ease-in-out, opacity 0.4s ease-out;
+}
+.updates-container-exit-done {
+  opacity: 0;
+}
+
 .updates {
-  animation-duration: 1s;
-  animation-name: fadeInUp;
-  animation-timing-function: ease-in;
   align-self: center;
   display: flex;
   flex-direction: column;
