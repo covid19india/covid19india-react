@@ -88,27 +88,24 @@ function ChoroplethMap({
       );
       // Colorbar
       const widthLegend = parseInt(svgLegend.style('width'));
-      const margin = {left: 0.02 * widthLegend, right: 0.02 * widthLegend};
-      const barWidth = widthLegend - margin.left - margin.right;
       const heightLegend = +svgLegend.attr('height');
-      svgLegend
-        .append('g')
-        .style('transform', `translateX(${margin.left}px)`)
-        .append(() =>
-          legend({
-            color: colorScale,
-            title:
-              mapOption.charAt(0).toUpperCase() + mapOption.slice(1) + ' Cases',
-            width: barWidth,
-            height: 0.8 * heightLegend,
-            ticks: 6,
-            tickFormat: function (d, i, n) {
-              if (!Number.isInteger(d)) return;
-              if (i === n.length - 1) return formatNumber(d) + '+';
-              return formatNumber(d);
-            },
-          })
-        );
+      svgLegend.append('g').append(() =>
+        legend({
+          color: colorScale,
+          title:
+            mapOption.charAt(0).toUpperCase() + mapOption.slice(1) + ' Cases',
+          width: widthLegend,
+          height: 0.8 * heightLegend,
+          ticks: 6,
+          tickFormat: function (d, i, n) {
+            if (!Number.isInteger(d)) return;
+            if (i === n.length - 1) return formatNumber(d) + '+';
+            return formatNumber(d);
+          },
+          marginLeft: 2,
+          marginRight: 20,
+        })
+      );
       svgLegend.attr('viewBox', `0 0 ${widthLegend} ${heightLegend}`);
 
       /* Draw map */
