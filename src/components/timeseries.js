@@ -1,3 +1,5 @@
+import {testedToolTip} from './tooltips';
+
 import {sliceTimeseriesFromEnd, formatNumber} from '../utils/commonfunctions';
 import {useResizeObserver} from '../utils/hooks';
 
@@ -497,7 +499,9 @@ function TimeSeries(props) {
         {chartType === 1 && (
           <div className="svg-parent is-purple">
             <div className="stats is-purple">
-              <h5 className={`${!moving ? 'title' : ''}`}>Tested</h5>
+              <h5 className={`${!moving ? 'title' : ''}`}>
+                Tested {props.isTotal ? testedToolTip : ''}
+              </h5>
               <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
               <div className="stats-bottom">
                 <h2>{formatNumber(datapoint.totaltested)}</h2>

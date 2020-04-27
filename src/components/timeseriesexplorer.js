@@ -134,6 +134,7 @@ function TimeSeriesExplorer({
         type={graphOption}
         mode={timeseriesMode}
         logMode={timeseriesLogMode}
+        isTotal={activeStateCode === 'TT'}
       />
     </div>
   );

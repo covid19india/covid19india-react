@@ -2275,6 +2275,29 @@ table {
   }
 }
 
+.tooltip-tested {
+  pointer-events: all;
+
+  svg {
+    cursor: pointer;
+    height: .95em !important;
+    left: 0;
+    position: relative !important;
+    stroke-width: 3;
+    top: 1px;
+    width: 1em !important;
+  }
+
+  .__react_component_tooltip {
+    font-family: 'archia';
+    font-size: 11px;
+    font-weight: 600;
+    padding: .25rem;
+    text-align: center;
+    width: 200px;
+  }
+}
+
 .tabs {
   display: flex;
   flex-direction: row;
@@ -2494,9 +2517,9 @@ input {
     flex-direction: column;
     left: .5rem;
     padding: .25rem;
+    pointer-events: none;
     position: absolute;
     top: .5rem;
-    z-index: -1;
 
     h2,
     h5,
