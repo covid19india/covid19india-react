@@ -1,102 +1,152 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import anime from 'animejs';
+import React, {useState, useRef} from 'react';
+import * as Icon from 'react-feather';
+import {Link} from 'react-router-dom';
+import {useEffectOnce, useLockBodyScroll, useWindowSize} from 'react-use';
 
-function Navbar(props) {
-  const [view, setView] = useState("Home");
+const navLinkProps = (path, animationDelay) => ({
+  className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
+  style: {
+    animationDelay: `${animationDelay}s`,
+  },
+});
 
-  if (window.location.pathname !== "/summary") {
-    return (
+const activeNavIcon = (path) => ({
+  style: {
+    stroke: window.location.pathname === path ? '#4c75f2' : '',
+  },
+});
+
+function Navbar({pages, darkMode, setDarkMode}) {
+  const [expand, setExpand] = useState(false);
+  useLockBodyScroll(expand);
+
+  const windowSize = useWindowSize();
+
+  return (
+    <div className="Navbar">
       <div
-        className="Navbar"
-        style={{
-          animationDelay: "0.5s",
-          height: view === "Clusters" ? "2.5rem" : "",
-          transition: "all 0.3s ease-in-out"
+        className="navbar-left"
+        onClick={() => setDarkMode((prevMode) => !prevMode)}
+      >
+        {darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
+      </div>
+      <div className="navbar-middle">
+        <Link
+          to="/"
+          onClick={() => {
+            setExpand(false);
+          }}
+        >
+          Covid19<span>India</span>
+        </Link>
+      </div>
+
+      <div
+        className="navbar-right"
+        onClick={() => {
+          setExpand(!expand);
+        }}
+        onMouseEnter={() => {
+          if (window.innerWidth > 769) {
+            setExpand(true);
+            anime({
+              targets: '.navbar-right path',
+              strokeDashoffset: [anime.setDashoffset, 0],
+              easing: 'easeInOutSine',
+              duration: 250,
+              delay: function (el, i) {
+                return i * 250;
+              },
+              direction: 'alternate',
+              loop: false,
+            });
+          }
         }}
       >
-        <img
-          className="fadeInUp"
-          src="/icon.png"
-          style={{
-            animationDelay: "0.0s",
-            width: view === "Clusters" ? "1.5rem" : "",
-            height: view === "Clusters" ? "1.5rem" : "",
-            transition: "all 0.3s ease-in-out"
-          }}
-        />
-
-        <div className="navbar-left">
-          <Link
-            to="/"
-            onClick={() => {
-              setView("Home");
-            }}
-          >
-            <span
-              className={`fadeInUp ${view === "Home" ? "focused" : ""}`}
-              style={{ animationDelay: "0.2s" }}
-            >
-              Home
+        {windowSize.width < 769 && <span>{expand ? 'Close' : 'Menu'}</span>}
+        {windowSize.width > 769 && (
+          <React.Fragment>
+            <span>
+              <Link to="/">
+                <Icon.Home {...activeNavIcon('/')} />
+              </Link>
             </span>
-          </Link>
-
-          {/* <Link to="/updates" onClick={()=>{
-            setView('Updates');
-          }}>
-            <span className={`fadeInUp ${view==='Updates' ? 'focused' : ''}`} style={{animationDelay: '0.2s'}}>Updates</span>
-          </Link>*/}
-
-          <Link
-            to="/clusters"
-            onClick={() => {
-              setView("Clusters");
-            }}
-          >
-            <span
-              className={`fadeInUp ${view === "Network Map" ? "focused" : ""}`}
-              style={{ animationDelay: "0.3s" }}
-            >
-              Clusters
+            <span>
+              <Link to="/demographics">
+                <Icon.Users {...activeNavIcon('/demographics')} />
+              </Link>
             </span>
-          </Link>
-
-          <Link
-            to="/links"
-            onClick={() => {
-              setView("Helpful Links");
-            }}
-          >
-            <span
-              className={`fadeInUp ${
-                view === "Helpful Links" ? "focused" : ""
-              }`}
-              style={{ animationDelay: "0.4s" }}
-            >
-              Helpful Links
+            <span>
+              <Link to="/deepdive">
+                <Icon.BarChart2 {...activeNavIcon('/deepdive')} />
+              </Link>
             </span>
-          </Link>
-
-          <Link
-            to="/faq"
-            onClick={() => {
-              setView("FAQs");
-            }}
-          >
-            <span
-              className={`fadeInUp ${view === "FAQs" ? "focused" : ""}`}
-              style={{ animationDelay: "0.4s" }}
-            >
-              FAQ
+            <span>
+              <Link to="/essentials">
+                <Icon.Package {...activeNavIcon('/essentials')} />
+              </Link>
             </span>
-          </Link>
-        </div>
-
-        <div className="navbar-right"></div>
+            <span>
+              <Link to="/faq">
+                <Icon.HelpCircle {...activeNavIcon('/faq')} />
+              </Link>
+            </span>
+          </React.Fragment>
+        )}
       </div>
-    );
-  } else {
-    return <div></div>;
-  }
+
+      {expand && <Expand expand={expand} pages={pages} setExpand={setExpand} />}
+    </div>
+  );
+}
+
+function Expand({expand, pages, setExpand}) {
+  const expandElement = useRef(null);
+
+  useEffectOnce(() => {
+    anime({
+      targets: expandElement.current,
+      translateX: '10rem',
+      easing: 'easeOutExpo',
+      duration: 250,
+    });
+  });
+
+  return (
+    <div
+      className="expand"
+      ref={expandElement}
+      onMouseLeave={() => {
+        setExpand(false);
+      }}
+    >
+      {pages.map((page, i) => {
+        if (page.showInNavbar === true) {
+          return (
+            <Link
+              to={page.pageLink}
+              key={i}
+              onClick={() => {
+                setExpand(false);
+              }}
+            >
+              <span
+                {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}
+              >
+                {page.displayName}
+              </span>
+            </Link>
+          );
+        }
+        return null;
+      })}
+
+      <div className="expand-bottom fadeInUp" style={{animationDelay: '1s'}}>
+        <h5>A crowdsourced initiative.</h5>
+      </div>
+    </div>
+  );
 }
 
 export default Navbar;

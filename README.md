@@ -1,26 +1,26 @@
-# covid19india
-
 <p align="center">
-<img src="https://lh3.googleusercontent.com/c1R9ua5XDaInXNNYEVKs5NzwQ36gYCXi1VJ5kLRxGcDYmyUSJM3dnkzqaPWP_CniaHQbQSr4yQqxmsoEGvGFrWFnBRAVjI4=s2560" width="50%">
+<img src="https://lh3.googleusercontent.com/-grjTcOMyemYN_JiN3QlkZzgh61D88LNFLj2-8QaqcjLWn_MouQe9zux8ZfMH4R7SLfR-cfHYD1b84KUlPqYucP5gZWTuo2J=s2560" width="100%">
 </p>
 
 <p align="center">
-  View our <a href="https://docs.google.com/spreadsheets/d/1nzXUdaIWC84QipdVGUKTiCSc5xntBbpMpzLm6Si33zk">live patient database</a>.  If you'd like to collaborate, join the <a href="https://t.me/covid19indiaops">Telegram Group</a>.
+  View our live <a href="http://patientdb.covid19india.org/">database</a>.
  </p>
 
-
 ## Setup
-On Windows
-```
-npm i && npm run start-win
-```
-On Linux
+
 ```
 npm i && npm start
 ```
 
 ## Maintainers
-- [jeremyphilemon](https://github.com/jeremyphilemon)
 
-## Contributors
-- [s-naveen](https://github.com/jeremyphilemon/covid19-india/pulls?q=is%3Apr+author%3As-naveen+is%3Aclosed)
+- [jeremyphilemon](https://github.com/jeremyphilemon)
+- [shuklaayush](https://github.com/shuklaayush)
+- [JunaidBabu](https://github.com/JunaidBabu)
+- [sudevschiz](https://github.com/sudevschiz)
+
+## Contribution
+
+If you're new to contributing to Open Source on Github, [this guide](https://guides.github.com/activities/contributing-to-open-source/) can help you get started. Please check out the [contribution guide](CONTRIBUTING.md) for more details on how issues and pull requests work.
+
+###### This repository is just a small subset of work put together by a much larger pool of voluntary efforts contributed by generous people all around the world. Reach out to us through hello@covid19india.org
