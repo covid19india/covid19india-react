@@ -1,9 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import {useLocation} from 'react-router-dom';
-import axios from 'axios';
-
-import Patients from './patients';
 import DownloadBlock from './downloadblock';
+import Footer from './footer';
+import Patients from './patients';
+
+import axios from 'axios';
+import {format, subDays} from 'date-fns';
+import React, {useState, useEffect} from 'react';
+import DatePicker from 'react-date-picker';
+import * as Icon from 'react-feather';
+import {useLocation} from 'react-router-dom';
+import {useEffectOnce, useLocalStorage} from 'react-use';
 
 function filterByObject(obj, filters) {
   const keys = Object.keys(filters);
@@ -19,38 +24,43 @@ function PatientDB(props) {
   const [fetched, setFetched] = useState(false);
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
-  const [error, setError] = useState('');
   const {pathname} = useLocation();
+  const [colorMode, setColorMode] = useState('genders');
+  const [scaleMode, setScaleMode] = useState(false);
+  const [filterDate, setFilterDate] = useState(subDays(new Date(), 1));
+  const [showReminder, setShowReminder] = useLocalStorage('showReminder', true);
+  const [message, setMessage] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     detectedstate: '',
     detecteddistrict: '',
     detectedcity: '',
-    dateannounced: '',
+    dateannounced: format(subDays(new Date(), 1), 'dd/MM/yyyy'),
   });
-  const [colorMode, setColorMode] = useState('genders');
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  useEffect(() => {
-    async function fetchRawData() {
-      const response = await axios.get(
-        'https://api.covid19india.org/raw_data.json'
-      );
-      if (response.data) {
-        setPatients(response.data.raw_data.reverse());
-        setFetched(true);
-      } else {
-        setError("Couldn't fetch patient data. Try again after sometime.");
-        console.log(response);
-      }
+  useEffectOnce(() => {
+    try {
+      axios
+        .get('https://api.covid19india.org/raw_data.json')
+        .then((response) => {
+          setPatients(response.data.raw_data.reverse());
+          setFetched(true);
+        });
+    } catch (err) {
+      console.log(err);
     }
+  });
 
-    if (!fetched) {
-      fetchRawData();
-    }
-  }, [fetched]);
+  useEffect(() => {
+    const datePickers = document.querySelectorAll(
+      '.react-date-picker__inputGroup input'
+    );
+    datePickers.forEach((el) => el.setAttribute('readOnly', true));
+  }, []);
 
   const handleFilters = (label, value) => {
     setFilters((f) => {
@@ -83,20 +93,25 @@ function PatientDB(props) {
   };
 
   useEffect(() => {
-    setFilteredPatients(filterByObject(patients, filters));
+    if (filterByObject(patients, filters).length > 0) {
+      setFilteredPatients(filterByObject(patients, filters));
+      setMessage(false);
+      setLoading(false);
+    } else {
+      setMessage(true);
+    }
   }, [patients, filters]);
 
   function getSortedValues(obj, key) {
     const setValues = new Set(obj.map((p) => p[key]));
     if (setValues.size > 1) setValues.add('');
+    if (key === 'dateannounced') return Array.from(setValues);
     return Array.from(setValues).sort();
   }
 
   return (
     <div className="PatientsDB">
-      {error ? <div className="alert alert-danger">{error}</div> : ''}
-
-      <div className="filters fadeInUp" style={{animationDelay: '0.5s'}}>
+      <div className="filters fadeInUp" style={{animationDelay: '0.2s'}}>
         <div className="filters-left">
           <div className="select">
             <select
@@ -105,8 +120,9 @@ function PatientDB(props) {
               onChange={(event) => {
                 handleFilters('detectedstate', event.target.value);
               }}
+              defaultValue={filters.detectedstate}
             >
-              <option value="" disabled selected>
+              <option value="" disabled>
                 Select State
               </option>
               {getSortedValues(patients, 'detectedstate').map(
@@ -128,8 +144,9 @@ function PatientDB(props) {
               onChange={(event) => {
                 handleFilters('detecteddistrict', event.target.value);
               }}
+              defaultValue={filters.detecteddistrict}
             >
-              <option value="" disabled selected>
+              <option value="" disabled>
                 Select District
               </option>
               {getSortedValues(
@@ -154,8 +171,9 @@ function PatientDB(props) {
               onChange={(event) => {
                 handleFilters('detectedcity', event.target.value);
               }}
+              defaultValue={filters.detectedcity}
             >
-              <option value="" disabled selected>
+              <option value="" disabled>
                 Select City
               </option>
               {getSortedValues(
@@ -172,6 +190,55 @@ function PatientDB(props) {
                 );
               })}
             </select>
+          </div>
+
+          <div className="select">
+            <select
+              style={{animationDelay: '0.4s', display: 'none'}}
+              id="city"
+              onChange={(event) => {
+                handleFilters('detectedcity', event.target.value);
+              }}
+              defaultValue={filters.detectedcity}
+            >
+              <option value="" disabled>
+                Select City
+              </option>
+              {getSortedValues(
+                filterByObject(patients, {
+                  detectedstate: filters.detectedstate,
+                  detecteddistrict: filters.detecteddistrict,
+                }),
+                'detectedcity'
+              ).map((city, index) => {
+                return (
+                  <option key={index} value={city}>
+                    {city === '' ? 'All' : city}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+
+          <div className="select">
+            <DatePicker
+              value={filterDate}
+              minDate={new Date('30-Jan-2020')}
+              maxDate={subDays(new Date(), 1)}
+              format="dd/MM/y"
+              calendarIcon={<Icon.Calendar />}
+              inputProps={
+                (onkeydown = (e) => {
+                  e.preventDefault();
+                })
+              }
+              clearIcon={<Icon.XCircle />}
+              onChange={(date) => {
+                setFilterDate(date);
+                const fomattedDate = !!date ? format(date, 'dd/MM/yyyy') : '';
+                handleFilters('dateannounced', fomattedDate);
+              }}
+            />
           </div>
 
           {/* <div className="select">
@@ -213,7 +280,7 @@ function PatientDB(props) {
               <div className="circle is-imported"></div>
               <h5 className="is-imported">Imported</h5>
               <div className="circle"></div>
-              <h5 className="">TBD</h5>
+              <h5 className="">Unknown</h5>
             </div>
           )}
 
@@ -240,33 +307,101 @@ function PatientDB(props) {
             </div>
           )}
 
-          <div className="select">
+          <div className={`select ${colorMode}`}>
             <select
               style={{animationDelay: '0.4s'}}
               onChange={(event) => {
                 setColorMode(event.target.value);
               }}
+              defaultValue={colorMode}
             >
-              <option value="" disabled selected>
+              {/* <option value="" disabled>
                 Color modes
-              </option>
+              </option> */}
               <option value="genders">Genders</option>
               <option value="transmission">Transmission</option>
               <option value="nationality">Nationality</option>
+              {/* <option value="age">Age</option>*/}
             </select>
           </div>
         </div>
       </div>
 
       <div className="header fadeInUp" style={{animationDelay: '0.3s'}}>
-        <h1>Patients Database</h1>
-        <h3>No. of Patients: {patients.length}</h3>
+        <div>
+          <h1>Demographics</h1>
+
+          <div className="deep-dive">
+            <h5>Expand</h5>
+            <input
+              type="checkbox"
+              checked={scaleMode}
+              onChange={(event) => {
+                setScaleMode(!scaleMode);
+              }}
+              className="switch"
+            />
+          </div>
+        </div>
+        <h6 className="disclaimer">
+          Some of the data provided might be missing/unknown as the details have
+          not been shared by the state/central governments
+        </h6>
       </div>
 
-      <div className="patientdb-wrapper">
-        <Patients patients={filteredPatients} colorMode={colorMode} />
+      <div
+        className="reminder fadeInUp"
+        style={{animationDelay: '1s', display: showReminder ? '' : 'none'}}
+      >
+        <Icon.XCircle
+          onClick={() => {
+            setShowReminder(false);
+          }}
+        />
+        <p>
+          It is important that we do not think of these as just tiny boxes,
+          numbers, or just another part of statistics - among these are our
+          neighbors, our teachers, our healthcare workers, our supermarket
+          vendors, our friends, our co-workers, our children or our
+          grandparents.
+          <br />
+          <br />
+          Among these are our people.
+        </p>
       </div>
+
+      {fetched && (
+        <div className="patientdb-wrapper">
+          {loading ? (
+            ' '
+          ) : message ? (
+            <div className="no-result">
+              <h5>
+                There were no new cases in
+                <span>
+                  {filters.detectedcity.length > 0
+                    ? ` ${filters.detectedcity}, `
+                    : ''}
+                  {filters.detecteddistrict.length > 0
+                    ? ` ${filters.detecteddistrict}, `
+                    : ''}
+                  {' ' + filters.detectedstate}
+                </span>{' '}
+                on <span>{filters.dateannounced}.</span>
+              </h5>
+            </div>
+          ) : (
+            <Patients
+              patients={filteredPatients}
+              colorMode={colorMode}
+              expand={scaleMode}
+            />
+          )}
+        </div>
+      )}
+
       <DownloadBlock patients={patients} />
+      <Footer />
     </div>
   );
 }

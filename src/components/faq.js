@@ -1,11 +1,15 @@
-import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+import React, {useState, useEffect} from 'react';
 
 function FAQ(props) {
   const [faq, setFaq] = useState([]);
 
   useEffect(() => {
     getFAQs();
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, []);
 
   const getFAQs = () => {

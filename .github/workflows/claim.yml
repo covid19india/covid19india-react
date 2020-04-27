@@ -1,0 +1,40 @@
+on:
+  issue_comment:
+    types: [created]
+name: Claim Issue
+jobs:
+  assign:
+    name: Update labels and Assign
+    if: github.event.issue.pull_request == ''
+      && contains(github.event.comment.body, '/claim')
+      && contains(toJson(github.event.issue.labels), 'Available')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@0.9.0
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            await github.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['Status: Claimed']
+              })
+            await github.issues.removeLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'Status: Available'
+              })
+            await github.issues.addAssignees({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              assignees: [context.payload.sender.login]
+              })
+            await github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Thank you @'+context.payload.sender.login+' for claiming this issue! 🎉 \n\nPlease reference this issue when you submit your Pull Request and make sure you follow the [contributing guidelines](https://github.com/covid19india/covid19india-react/blob/master/CONTRIBUTING.md).'
+            })
