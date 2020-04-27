@@ -2223,6 +2223,13 @@ table {
             stroke: $purple;
           }
         }
+
+        .tooltip-tested {
+          svg {
+            bottom: .3rem;
+            top: auto;
+          }
+        }
       }
 
       &.focused {
@@ -2280,12 +2287,9 @@ table {
 
   svg {
     cursor: pointer;
-    height: .95em !important;
-    left: 0;
-    position: relative !important;
+    height: .95em;
     stroke-width: 3;
-    top: 1px;
-    width: 1em !important;
+    width: 1em;
   }
 
   .__react_component_tooltip {
@@ -2611,6 +2615,12 @@ input {
       h2,
       h6 {
         color: $purple;
+      }
+
+      .tooltip-tested {
+        svg {
+          width: 1em;
+        }
       }
     }
   }
@@ -4979,7 +4989,11 @@ footer {
         }
 
         svg {
-          stroke: #9673b9 !important;
+          stroke: #9673b9bb !important;
+
+          &:hover {
+            stroke: #9673b9 !important;
+          }
         }
       }
     }

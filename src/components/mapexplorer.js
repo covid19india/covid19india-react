@@ -276,9 +276,7 @@ function MapExplorer({
           className="stats is-purple tested fadeInUp"
           style={{animationDelay: '2.4s'}}
         >
-          <h5>
-            Tested {currentHoveredRegion.name === 'Total' ? testedToolTip : ''}
-          </h5>
+          <h5>Tested</h5>
           <div className="stats-bottom">
             <h1>{formatNumber(testObj?.totaltested)}</h1>
           </div>
@@ -295,6 +293,7 @@ function MapExplorer({
               <Icon.Link />
             </a>
           )}
+          {currentHoveredRegion.name === 'Total' ? testedToolTip : ''}
         </div>
       </div>
 
