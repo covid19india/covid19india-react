@@ -1,15 +1,21 @@
 import FiltersDesktop from './Essentials/essentialsfiltersdesktop';
 import FiltersMobile from './Essentials/essentialsfiltersmobile';
+import {getSuggestions} from './Essentials/essentialsutls';
 import ResourceTable from './resourcetable';
 
 import {Fab, Fade} from '@material-ui/core';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import React, {useState, useEffect, useCallback} from 'react';
 import * as Icon from 'react-feather';
+import {Helmet} from 'react-helmet';
+import {useDebounce} from 'react-use';
 
 function Resources(props) {
   const [data, setData] = useState([]);
   const [partData, setPartData] = useState([]);
+  const [ogData, setOgData] = useState([]);
   const [fetched, setFetched] = useState(false);
   const [city, setCity] = useState('all');
   const [category, setCategory] = useState('all');
@@ -19,6 +25,8 @@ function Resources(props) {
   const [isDesktop, setIsDesktop] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [searchValue, setSearchValue] = useState('');
+
   useEffect(() => {
     if (fetched === false) {
       getResources();
@@ -295,8 +303,13 @@ function Resources(props) {
       }
     } catch (err) {}
     setData(a);
+    setOgData(a);
     setPartData(a.slice(0, 30));
     setShowTable(true);
+    try {
+      document.getElementById('input-field-searchbar').value = '';
+    } catch {}
+    setSearchValue('');
   };
 
   const changeIndianState = function (changedstateevent) {
@@ -371,8 +384,24 @@ function Resources(props) {
       openSharingLink(message);
     }
   };
+
+  useDebounce(
+    () => {
+      const newData = getSuggestions(searchValue, ogData);
+      setData(newData);
+      setPartData(newData.slice(0, 30));
+    },
+    300,
+    [searchValue, ogData]
+  );
+
   return (
     <div className="Resources" id="top-elem">
+      <Helmet>
+        <title>Essentials - covid19india.org</title>
+        <meta name="title" content="Essentials - covid19india.org" />
+      </Helmet>
+
       <div className="filtersection">
         <div className="filtertitle">
           <h3>Service Before Self</h3>
@@ -420,15 +449,37 @@ function Resources(props) {
       </div>
       {showTable && (
         <React.Fragment>
+          <div className="searchbar">
+            <TextField
+              id="input-field-searchbar"
+              label="Search keyword"
+              fullWidth={true}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              style={{
+                width: '100%',
+              }}
+              variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Icon.Search size="0.9em" />
+                  </InputAdornment>
+                ),
+              }}
+              onChange={(event) => {
+                setInterval(setSearchValue(event.target.value));
+              }}
+            />
+          </div>
           <ResourceTable
             columns={memocols}
             data={partData}
             totalCount={data.length}
             isDesktop={isDesktop}
             onScrollUpdate={appendData}
-            city={city}
-            category={category}
-            indianstate={indianstate}
+            searchValue={searchValue}
           />
           <div>
             <Fade in={hasScrolled}>

@@ -154,7 +154,7 @@ function TimeSeries(props) {
           .clamp(true)
           .domain([
             Math.max(1, uniformScaleMin),
-            Math.max(1, yBufferTop * uniformScaleMax),
+            Math.max(10, yBufferTop * uniformScaleMax),
           ])
           .nice()
           .range([chartBottom, margin.top]);
@@ -177,7 +177,7 @@ function TimeSeries(props) {
                 1,
                 d3.min(timeseries, (d) => d[type])
               ),
-              Math.max(1, yBufferTop * d3.max(timeseries, (d) => d[type])),
+              Math.max(10, yBufferTop * d3.max(timeseries, (d) => d[type])),
             ])
             .nice()
             .range([chartBottom, margin.top]);
