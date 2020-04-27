@@ -34,6 +34,22 @@ function TimeSeries(props) {
           timeseries,
           lastDaysCount
         );
+        // DD - Doubling Data, below are the calculations for 5 and 10 days DD respectively.
+        let initialFiveDaysDD = slicedTimeseries[0].totalconfirmed;
+        let initialtenDaysDD = slicedTimeseries[0].totalconfirmed;
+        slicedTimeseries.forEach((e) => {
+          if (initialFiveDaysDD === 0 && e.totalconfirmed !== 0) {
+            initialFiveDaysDD = e.totalconfirmed;
+            initialtenDaysDD = e.totalconfirmed;
+            e.fiveDaysDD = e.totalconfirmed;
+            e.tenDaysDD = e.totalconfirmed;
+          } else {
+            e.fiveDaysDD = initialFiveDaysDD;
+            e.tenDaysDD = initialtenDaysDD;
+            initialFiveDaysDD += initialFiveDaysDD * 0.14; // @ 14% growth for 5 days
+            initialtenDaysDD += initialtenDaysDD * 0.07; // @ 7% growth for 10 days
+          }
+        });
         setIndex(slicedTimeseries.length - 1);
         setTimeseries(slicedTimeseries);
       }
@@ -139,7 +155,11 @@ function TimeSeries(props) {
         const uniformScaleMin = d3.min(timeseries, (d) =>
           Math.min(d.totalactive, d.totalrecovered, d.totaldeceased)
         );
-        const uniformScaleMax = d3.max(timeseries, (d) => d.totalconfirmed);
+        // Making Y scale flexible if doubling data is greater.
+        const uniformScaleMax = d3.max(timeseries, (d) => {
+          if (logMode) return Math.max(d.totalconfirmed, d.fiveDaysDD);
+          else return d.totalconfirmed;
+        });
         const yScaleUniformLinear = d3
           .scaleLinear()
           .clamp(true)
@@ -175,7 +195,16 @@ function TimeSeries(props) {
                 1,
                 d3.min(timeseries, (d) => d[type])
               ),
-              Math.max(1, yBufferTop * d3.max(timeseries, (d) => d[type])),
+              // Making Y scale flexible if doubling data is greater.
+              Math.max(
+                1,
+                yBufferTop *
+                  d3.max(timeseries, (d) => {
+                    if (type === 'totalconfirmed' && logMode)
+                      return Math.max(d['fiveDaysDD'], d[type]);
+                    else return d[type];
+                  })
+              ),
             ])
             .nice()
             .range([chartBottom, margin.top]);
@@ -281,6 +310,9 @@ function TimeSeries(props) {
         const t = svg.transition().duration(500);
         const typeTotal = dataTypesTotal[i];
         const typeDaily = dataTypesDaily[i];
+        const fiveDaysDD = 'fiveDaysDD';
+        const tenDaysDD = 'tenDaysDD';
+        const logmode = logMode;
         const type = plotTotal ? typeTotal : typeDaily;
 
         const filteredTimeseries = timeseries.filter((d) => !isNaN(d[type]));
@@ -330,6 +362,11 @@ function TimeSeries(props) {
         if (plotTotal) {
           /* TOTAL TRENDS */
           svg.selectAll('.stem').remove();
+          // Removing previous drawn doubling data path, ensuring it is seen when logMode is on.
+          if (!logmode) {
+            svg.selectAll('.line').remove();
+            svg.selectAll('.line1').remove();
+          }
           const path = svg
             .selectAll('.trend')
             .data([[...filteredTimeseries].reverse()])
@@ -363,6 +400,86 @@ function TimeSeries(props) {
                 .y((d) => yScale(d[typeTotal]))
                 .curve(d3.curveMonotoneX)
             );
+          // Ensuring that the path is drawn only in first graph and that too when log Mode is toggled.
+          if (svg === svg1 && logmode) {
+            // Plotting Last Dot for Five Days Doubling Graph.
+            svg
+              .selectAll('.fiveDrDot')
+              .data(filteredTimeseries.slice(-1), (d) => d.date)
+              .join((enter) =>
+                enter
+                  .append('circle')
+                  .attr('cx', (d) => xScale(d.date))
+                  .attr('cy', chartBottom)
+              )
+              .attr('class', 'dot')
+              .attr('fill', 'rgba(230,81,0 ,0.7)')
+              .attr('stroke', 'rgba(230,81,0 ,0.7)')
+              .attr('r', 4)
+              .transition(t)
+              .attr('cx', (d) => xScale(d.date))
+              .attr('cy', (d) => yScale(d[fiveDaysDD]));
+
+            // Plotting Last Dot for Ten Days Doubling Graph.
+            svg
+              .selectAll('.tenDrDot')
+              .data(filteredTimeseries.slice(-1), (d) => d.date)
+              .join((enter) =>
+                enter
+                  .append('circle')
+                  .attr('cx', (d) => xScale(d.date))
+                  .attr('cy', chartBottom)
+              )
+              .attr('class', 'dot')
+              .attr('fill', 'rgba(21,101,192 ,0.5)')
+              .attr('stroke', 'rgba(21,101,192 ,0.5)')
+              .attr('r', 4)
+              .transition(t)
+              .attr('cx', (d) => xScale(d.date))
+              .attr('cy', (d) => yScale(d[tenDaysDD]));
+
+            // Plotting Five Days Doubling Graph.
+            const path = svg
+              .selectAll('.line')
+              .data([[...timeseries].reverse()])
+              .join('path')
+              .attr('class', 'line')
+              .style('stroke', 'rgba(230,81,0 ,0.7)')
+              .attr('fill', 'none')
+              .attr('stroke-width', 2);
+            path
+              .transition(t)
+              .attr('opacity', plotTotal ? 1 : 0)
+              .attr(
+                'd',
+                d3
+                  .line()
+                  .x((d) => xScale(d.date))
+                  .y((d) => yScale(d[fiveDaysDD]))
+                  .curve(d3.curveLinear)
+              );
+
+            // Plotting Ten Days Doubling Graph.
+            const path2 = svg
+              .selectAll('.line1')
+              .data([[...timeseries].reverse()])
+              .join('path')
+              .attr('class', 'line1')
+              .style('stroke', 'rgba(21,101,192 ,0.5)')
+              .attr('fill', 'none')
+              .attr('stroke-width', 2);
+            path2
+              .transition(t)
+              .attr('opacity', plotTotal ? 1 : 0)
+              .attr(
+                'd',
+                d3
+                  .line()
+                  .x((d) => xScale(d.date))
+                  .y((d) => yScale(d[tenDaysDD]))
+                  .curve(d3.curveLinear)
+              );
+          }
           // Using d3-interpolate-path
           // .attrTween('d', function (d) {
           //   var previous = path.attr('d');
@@ -372,6 +489,8 @@ function TimeSeries(props) {
         } else {
           /* DAILY TRENDS */
           svg.selectAll('.trend').remove();
+          svg.selectAll('.line').remove();
+          svg.selectAll('.line1').remove();
           svg
             .selectAll('.stem')
             .data(timeseries, (d) => d.date)
@@ -430,7 +549,11 @@ function TimeSeries(props) {
   return (
     <React.Fragment>
       <div className="TimeSeries fadeInUp" style={{animationDelay: '2.7s'}}>
-        <div className="svg-parent" ref={wrapperRef}>
+        <div
+          className="svg-parent"
+          ref={wrapperRef}
+          style={{paddingTop: '2rem'}} // Top Padding as graph intersecting with stats in mobile view.
+        >
           <div className="stats">
             <h5 className={`${!moving ? 'title' : ''}`}>Confirmed</h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
@@ -439,6 +562,20 @@ function TimeSeries(props) {
               <h6>{currentStatusCount(chartKey1)}</h6>
             </div>
           </div>
+          {logMode && (
+            <>
+              <div className="stats" style={{left: '6rem', width: 'auto'}}>
+                <h5 style={{color: 'rgba(230,81,0 ,0.7)'}}>
+                  cases doubling @ 5 days :{' '}
+                  {formatNumber(Math.round(datapoint['fiveDaysDD']))}
+                </h5>
+                <h5 style={{color: 'rgba(21,101,192 ,0.7)'}}>
+                  cases doubling @ 10 days :{' '}
+                  {formatNumber(Math.round(datapoint['tenDaysDD']))}
+                </h5>
+              </div>
+            </>
+          )}
           <svg ref={svgRef1} preserveAspectRatio="xMidYMid meet">
             <g className="x-axis" />
             <g className="x-axis2" />
@@ -510,7 +647,6 @@ function TimeSeries(props) {
           </div>
         )}
       </div>
-
       <div className="pills">
         <button
           type="button"
@@ -535,8 +671,15 @@ function TimeSeries(props) {
         >
           2 Weeks
         </button>
-      </div>
-
+        <button
+          type="button"
+          onClick={() => setLastDaysCount(7)}
+          className={lastDaysCount === 7 ? 'selected' : ''}
+          aria-label="14 days"
+        >
+          1 Week
+        </button>
+      </div>{' '}
       <div className="alert is-purple">
         <Icon.AlertOctagon />
         <div className="alert-right">
