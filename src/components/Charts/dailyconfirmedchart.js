@@ -8,7 +8,7 @@ import {
 import deepmerge from 'deepmerge';
 import moment from 'moment';
 import React from 'react';
-import {Bar} from 'react-chartjs-2';
+import {Bar, defaults} from 'react-chartjs-2';
 
 function DailyConfirmedChart(props) {
   const dates = [];
@@ -46,7 +46,7 @@ function DailyConfirmedChart(props) {
       },
       {
         data: confirmed,
-        label: 'confirmed',
+        label: 'Confirmed',
         backgroundColor: '#ff6862',
       },
     ],
@@ -57,7 +57,18 @@ function DailyConfirmedChart(props) {
       mode: 'index',
     },
     legend: {
-      display: false,
+      display: true,
+      reverse: true,
+      labels: {
+        usePointStyle: true, // Required to change pointstyle to 'rectRounded' from 'circle'
+        generateLabels: (chart) => {
+          const labels = defaults.global.legend.labels.generateLabels(chart);
+          labels.forEach((label) => {
+            label.pointStyle = 'rectRounded';
+          });
+          return labels;
+        },
+      },
     },
     scales: {
       xAxes: [
