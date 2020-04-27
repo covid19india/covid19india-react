@@ -164,7 +164,7 @@ export const parseTotalTestTimeseries = (data) => {
   const today = moment();
   data.forEach((d) => {
     const date = moment(d.updatetimestamp.split(' ')[0], 'DD/MM/YYYY');
-    const totaltested = +d.totalindividualstested;
+    const totaltested = +d.totalsamplestested;
     if (date.isBefore(today, 'Date') && totaltested) {
       testTimseries.push({
         date: date.toDate(),
