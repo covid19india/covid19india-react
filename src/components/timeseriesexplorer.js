@@ -51,20 +51,20 @@ function TimeSeriesExplorer({
         <h1>Spread Trends</h1>
         <div className="tabs">
           <div
-            className={`tab ${graphOption === 1 ? 'focused' : ''}`}
-            onClick={() => {
-              setGraphOption(1);
-            }}
-          >
-            <h4>Cumulative</h4>
-          </div>
-          <div
             className={`tab ${graphOption === 2 ? 'focused' : ''}`}
             onClick={() => {
               setGraphOption(2);
             }}
           >
             <h4>Daily</h4>
+          </div>
+          <div
+            className={`tab ${graphOption === 1 ? 'focused' : ''}`}
+            onClick={() => {
+              setGraphOption(1);
+            }}
+          >
+            <h4>Cumulative</h4>
           </div>
         </div>
 
