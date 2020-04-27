@@ -1,4 +1,5 @@
 import ChoroplethMap from './choropleth';
+import statePopData from './StateStats.json';
 import {testedToolTip} from './tooltips';
 
 import {MAP_TYPES, MAP_META} from '../constants';
@@ -43,6 +44,7 @@ function MapExplorer({
   );
   const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta);
+  const [statisticOption, setStatisticOption] = useState(1);
   const [mapOption, setMapOption] = useLocalStorage('mapOption', 'active');
 
   const [statistic, currentMapData] = useMemo(() => {
@@ -54,24 +56,49 @@ function MapExplorer({
     let currentMapData = {};
 
     if (currentMap.mapType === MAP_TYPES.COUNTRY) {
-      currentMapData = states.reduce((acc, state) => {
-        if (state.state === 'Total') {
-          return acc;
-        }
-        acc[state.state] = {};
-        dataTypes.forEach((dtype) => {
-          const typeCount = parseInt(
-            state[dtype !== 'deceased' ? dtype : 'deaths']
-          );
-          statistic[dtype].total += typeCount;
-          if (typeCount > statistic[dtype].max) {
-            statistic[dtype].max = typeCount;
+      if (statisticOption === 1) {
+        currentMapData = states.reduce((acc, state) => {
+          if (state.state === 'Total') {
+            return acc;
           }
-          acc[state.state][dtype] = typeCount;
-        });
-        return acc;
-      }, {});
+          acc[state.state] = {};
+
+          dataTypes.forEach((dtype) => {
+            const typeCount = parseInt(
+              state[dtype !== 'deceased' ? dtype : 'deaths']
+            );
+            statistic[dtype].total += typeCount;
+            if (typeCount > statistic[dtype].max) {
+              statistic[dtype].max = typeCount;
+            }
+            acc[state.state][dtype] = typeCount;
+          });
+          return acc;
+        }, {});
+      } else if (statisticOption === 2) {
+        currentMapData = states.reduce((acc, state) => {
+          if (state.state === 'Total') {
+            return acc;
+          }
+          acc[state.state] = {};
+
+          dataTypes.forEach((dtype) => {
+            const typeCount = parseInt(
+              (parseInt(state[dtype !== 'deceased' ? dtype : 'deaths']) /
+                statePopData[state.state].population) *
+                1000000
+            );
+            statistic[dtype].total += typeCount;
+            if (typeCount > statistic[dtype].max) {
+              statistic[dtype].max = typeCount;
+            }
+            acc[state.state][dtype] = typeCount;
+          });
+          return acc;
+        }, {});
+      }
     } else if (currentMap.mapType === MAP_TYPES.STATE) {
+      setStatisticOption(1);
       const districtWiseData = (
         stateDistrictWiseData[currentMap.name] || {districtData: {}}
       ).districtData;
@@ -89,7 +116,13 @@ function MapExplorer({
       }, {});
     }
     return [statistic, currentMapData];
-  }, [currentMap, states, stateDistrictWiseData]);
+  }, [
+    currentMap.mapType,
+    currentMap.name,
+    statisticOption,
+    states,
+    stateDistrictWiseData,
+  ]);
 
   const setHoveredRegion = useCallback(
     (name, currentMap) => {
@@ -317,6 +350,22 @@ function MapExplorer({
           </div>
         )}
 
+        {currentMap.mapType === MAP_TYPES.COUNTRY &&
+        statisticOption === 2 &&
+        currentHoveredRegion.name !== 'Total' ? (
+          <h1
+            className={`district ${mapOption !== 'confirmed' ? mapOption : ''}`}
+          >
+            {currentMapData[currentHoveredRegion.name]
+              ? Math.round(currentMapData[currentHoveredRegion.name][mapOption])
+              : 0}
+            <br />
+            <span style={{fontSize: '0.75rem', fontWeight: 600}}>
+              {statisticOption === 1 ? 'confirmed cases' : 'cases per million'}
+            </span>
+          </h1>
+        ) : null}
+
         {currentMap.mapType === MAP_TYPES.STATE &&
         currentHoveredRegion.name !== currentMap.name ? (
           <h1
@@ -360,17 +409,45 @@ function MapExplorer({
       </div>
 
       {mapOption && (
-        <ChoroplethMap
-          statistic={statistic}
-          mapMeta={currentMap}
-          mapData={currentMapData}
-          setHoveredRegion={setHoveredRegion}
-          changeMap={switchMapToState}
-          selectedRegion={selectedRegion}
-          setSelectedRegion={setSelectedRegion}
-          isCountryLoaded={isCountryLoaded}
-          mapOption={mapOption}
-        />
+        <div>
+          <ChoroplethMap
+            statistic={statistic}
+            mapMeta={currentMap}
+            mapData={currentMapData}
+            setHoveredRegion={setHoveredRegion}
+            changeMap={switchMapToState}
+            selectedRegion={selectedRegion}
+            setSelectedRegion={setSelectedRegion}
+            isCountryLoaded={isCountryLoaded}
+            mapOption={mapOption}
+            statisticOption={statisticOption}
+          />
+
+          <div className="tabs2">
+            <div
+              className={`tab ${statisticOption === 1 ? 'focused' : ''}`}
+              onClick={() => {
+                setStatisticOption(1);
+              }}
+            >
+              <h4>Total Cases</h4>
+            </div>
+            <div
+              className={`tab ${
+                currentMap.mapType === MAP_TYPES.COUNTRY
+                  ? statisticOption === 2
+                    ? 'focused'
+                    : ''
+                  : 'disabled'
+              }`}
+              onClick={() => {
+                setStatisticOption(2);
+              }}
+            >
+              <h4>Cases Per Million</h4>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

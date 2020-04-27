@@ -23,6 +23,7 @@ function ChoroplethMap({
   setSelectedRegion,
   isCountryLoaded,
   mapOption,
+  statisticOption,
 }) {
   const choroplethMap = useRef(null);
   const choroplethLegend = useRef(null);
@@ -89,11 +90,11 @@ function ChoroplethMap({
       // Colorbar
       const widthLegend = parseInt(svgLegend.style('width'));
       const heightLegend = +svgLegend.attr('height');
+      const title = statisticOption === 1 ? ' Cases' : ' Cases Per Million';
       svgLegend.append('g').append(() =>
         legend({
           color: colorScale,
-          title:
-            mapOption.charAt(0).toUpperCase() + mapOption.slice(1) + ' Cases',
+          title: mapOption.charAt(0).toUpperCase() + mapOption.slice(1) + title,
           width: widthLegend,
           height: 0.8 * heightLegend,
           ticks: 6,
@@ -141,15 +142,17 @@ function ChoroplethMap({
         .text(function (d) {
           const region = d.properties[propertyField];
           const value = mapData[region] ? mapData[region][mapOption] : 0;
-          return (
-            Number(
-              parseFloat(
-                100 * (value / (statistic[mapOption].total || 0.001))
-              ).toFixed(2)
-            ).toString() +
-            '% from ' +
-            toTitleCase(region)
-          );
+          if (statisticOption === 1) {
+            return (
+              Number(
+                parseFloat(
+                  100 * (value / (statistic[mapOption].total || 0.001))
+                ).toFixed(2)
+              ).toString() +
+              '% from ' +
+              toTitleCase(region)
+            );
+          }
         });
 
       g.append('path')
@@ -211,6 +214,7 @@ function ChoroplethMap({
       setSelectedRegion,
       setHoveredRegion,
       changeMap,
+      statisticOption,
     ]
   );
 
