@@ -1,10 +1,16 @@
-import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ChoroplethMap from './choropleth';
+
 import {MAP_TYPES, MAP_META} from '../constants';
-import {formatDate, formatDateAbsolute} from '../utils/common-functions';
+import {
+  formatDate,
+  formatDateAbsolute,
+  formatNumber,
+} from '../utils/commonfunctions';
+
 import {formatDistance, format, parse} from 'date-fns';
-import {formatNumber} from '../utils/common-functions';
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import * as Icon from 'react-feather';
+import {Link} from 'react-router-dom';
 
 const getRegionFromState = (state) => {
   if (!state) return;
@@ -21,7 +27,6 @@ const getRegionFromDistrict = (districtData, name) => {
 };
 
 function MapExplorer({
-  forwardRef,
   mapMeta,
   states,
   stateDistrictWiseData,
@@ -29,6 +34,8 @@ function MapExplorer({
   regionHighlighted,
   onMapHighlightChange,
   isCountryLoaded,
+  anchor,
+  setAnchor,
 }) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [panelRegion, setPanelRegion] = useState(getRegionFromState(states[0]));
@@ -95,11 +102,13 @@ function MapExplorer({
             recovered: 0,
           };
         }
-        setCurrentHoveredRegion(getRegionFromDistrict(districtData, name));
+        const currentHoveredRegion = getRegionFromDistrict(districtData, name);
         const panelRegion = getRegionFromState(
           states.find((state) => currentMap.name === state.state)
         );
         setPanelRegion(panelRegion);
+        currentHoveredRegion.statecode = panelRegion.statecode;
+        setCurrentHoveredRegion(currentHoveredRegion);
         if (onMapHighlightChange) onMapHighlightChange(panelRegion);
       }
     },
@@ -163,10 +172,24 @@ function MapExplorer({
 
   return (
     <div
-      className="MapExplorer fadeInUp"
-      style={{animationDelay: '1.5s'}}
-      ref={forwardRef}
+      className={`MapExplorer fadeInUp ${
+        anchor === 'mapexplorer' ? 'stickied' : ''
+      }`}
+      style={{
+        animationDelay: '1.5s',
+        display: anchor === 'timeseries' ? 'none' : '',
+      }}
     >
+      {window.innerWidth > 769 && (
+        <div
+          className={`anchor ${anchor === 'mapexplorer' ? 'stickied' : ''}`}
+          onClick={() => {
+            setAnchor(anchor === 'mapexplorer' ? null : 'mapexplorer');
+          }}
+        >
+          <Icon.Anchor />
+        </div>
+      )}
       <div className="header">
         <h1>{currentMap.name} Map</h1>
         <h6>
@@ -300,6 +323,15 @@ function MapExplorer({
             Back
           </div>
         ) : null}
+
+        {currentMap.mapType === MAP_TYPES.STATE ? (
+          <Link to={`state/${currentHoveredRegion.statecode}`}>
+            <div className="button state-page-button">
+              <abbr>Visit state page</abbr>
+              <Icon.ArrowRightCircle />
+            </div>
+          </Link>
+        ) : null}
       </div>
 
       <ChoroplethMap
@@ -316,4 +348,4 @@ function MapExplorer({
   );
 }
 
-export default MapExplorer;
+export default React.memo(MapExplorer);

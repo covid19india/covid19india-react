@@ -1,7 +1,11 @@
+import Row from './row';
+
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 
-import Row from './row';
+const isEqual = () => {
+  return true;
+};
 
 function Table(props) {
   const [states, setStates] = useState(props.states);
@@ -108,7 +112,10 @@ function Table(props) {
           className="table-fineprint fadeInUp"
           style={{animationDelay: '1.5s'}}
         >
-          Compiled from State Govt. numbers, <Link to="/faq">know more!</Link>
+          Compiled from State Govt. numbers,{' '}
+          <Link to="/faq" style={{color: '#6c757d'}}>
+            know more!
+          </Link>
         </h5>
         <table className="table fadeInUp" style={{animationDelay: '1.8s'}}>
           <thead>
@@ -295,4 +302,4 @@ function Table(props) {
   }
 }
 
-export default Table;
+export default React.memo(Table, isEqual);

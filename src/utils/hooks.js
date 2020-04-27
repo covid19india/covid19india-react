@@ -1,5 +1,5 @@
-import {useState, useEffect} from 'react';
 import {ResizeObserver} from '@juggle/resize-observer';
+import {useState, useEffect} from 'react';
 
 export const useResizeObserver = (ref) => {
   const [dimensions, setDimensions] = useState(null);

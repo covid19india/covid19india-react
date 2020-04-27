@@ -1,8 +1,12 @@
 import axios from 'axios';
 import * as d3 from 'd3';
-import ForceGraph2D from 'react-force-graph-2d';
 import React, {useEffect, useRef, useState} from 'react';
 import ReactDOM from 'react-dom';
+import ForceGraph2D from 'react-force-graph-2d';
+
+const isEqual = () => {
+  return true;
+};
 
 function Clusters({stateCode}) {
   const [fetched, setFetched] = useState(false);
@@ -118,7 +122,7 @@ function Clusters({stateCode}) {
         width={width}
         height={height}
         graphData={networkData}
-        nodeLabel='id'
+        nodeLabel="id"
         nodeColor={(node) => (node.group === 'source' ? '#dc3545' : 'gray')}
         linkDirectionalParticleColor={() => 'red'}
         linkDirectionalParticles={1}
@@ -134,7 +138,7 @@ function Clusters({stateCode}) {
     ReactDOM.render(<NetworkGraph />, document.getElementById('clusters'));
   }, [networkData]);
 
-  return <div id='clusters'></div>;
+  return <div id="clusters"></div>;
 }
 
-export default Clusters;
+export default React.memo(Clusters, isEqual);

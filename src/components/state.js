@@ -1,24 +1,24 @@
-import axios from 'axios';
-import {format, parse} from 'date-fns';
-import React, {useEffect, useRef, useState} from 'react';
-import {Link, useParams} from 'react-router-dom';
-import * as Icon from 'react-feather';
-
-import {
-  formatDateAbsolute,
-  formatNumber,
-  parseStateTimeseries,
-} from '../utils/common-functions';
-import {MAP_META, STATE_CODES} from '../constants';
-
-import Tracker from './tracker';
 import Clusters from './clusters';
 import DeltaBarGraph from './deltabargraph';
+import Footer from './footer';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
 import TimeSeries from './timeseries';
-import Footer from './footer';
+import Tracker from './tracker';
+
+import {MAP_META, STATE_CODES} from '../constants';
+import {
+  formatDateAbsolute,
+  formatNumber,
+  parseStateTimeseries,
+} from '../utils/commonfunctions';
+
+import axios from 'axios';
+import {format, parse} from 'date-fns';
+import React, {useEffect, useRef, useState} from 'react';
+import * as Icon from 'react-feather';
+import {Link, useParams} from 'react-router-dom';
 
 function State(props) {
   const mapRef = useRef();
@@ -90,6 +90,7 @@ function State(props) {
             <Link to="/">Home</Link>/
             <Link to={`${stateCode}`}>{stateName}</Link>
           </div>
+
           <div className="header">
             <div
               className="header-left fadeInUp"
@@ -103,6 +104,7 @@ function State(props) {
                   : ''}
               </h5>
             </div>
+
             <div
               className="header-right fadeInUp"
               style={{animationDelay: '0.5s'}}
@@ -192,13 +194,14 @@ function State(props) {
                   <div className="districts">
                     {districtData[stateName]
                       ? Object.keys(districtData[stateName].districtData)
-                          .slice(0, 6)
+                          .filter((d) => d !== 'Unknown')
                           .sort(
                             (a, b) =>
                               districtData[stateName].districtData[b]
                                 .confirmed -
                               districtData[stateName].districtData[a].confirmed
                           )
+                          .slice(0, 6)
                           .map((district, index) => {
                             return (
                               <div key={index} className="district">
@@ -236,15 +239,17 @@ function State(props) {
                 </div>
               </div>
 
-              <Link to="/essentials">
-                <div
-                  className="to-essentials fadeInUp"
-                  style={{animationDelay: '0.9s'}}
-                >
-                  <h2>Go to essentials</h2>
-                  <Icon.ArrowRightCircle />
-                </div>
-              </Link>
+              {false && (
+                <Link to="/essentials">
+                  <div
+                    className="to-essentials fadeInUp"
+                    style={{animationDelay: '0.9s'}}
+                  >
+                    <h2>Go to essentials</h2>
+                    <Icon.ArrowRightCircle />
+                  </div>
+                </Link>
+              )}
 
               <div
                 className="timeseries-header fadeInUp"
@@ -315,7 +320,7 @@ function State(props) {
 
         <div className="state-left">
           <div className="Clusters fadeInUp" style={{animationDelay: '0.8s'}}>
-            <h1>Network of transmission</h1>
+            <h1>Network of Transmission</h1>
             <Clusters stateCode={stateCode} />
           </div>
         </div>
@@ -332,4 +337,4 @@ function State(props) {
   );
 }
 
-export default State;
+export default React.memo(State);

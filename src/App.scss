@@ -136,6 +136,13 @@ $pink-hover: #ffa8cb30;
 $pink-mid: #ffa8cb99;
 $brick: #e23028;
 
+// Dark mode variables
+$dark-m-gray: #161625;
+$dark-mid-subtext: #bdb8ae;
+$dark-m-white: #e1e1e1;
+$dark-m-purple: #7ba1ea;
+$dark-m-blue: #3391ff;
+
 body {
   padding: 0;
   margin: 0;
@@ -184,6 +191,7 @@ h6 {
 }
 
 .switch-wrapper > div {
+  transition: all 0.25s ease-in-out;
   position: absolute;
   width: 100%;
 }
@@ -214,7 +222,7 @@ h6 {
   flex-direction: row;
   justify-content: space-between;
   height: 3.9rem;
-  margin-bottom: 1rem;
+  padding-bottom: 1rem;
   & > * {
     align-self: center;
   }
@@ -251,7 +259,7 @@ h6 {
     font-size: 12px;
     color: $gray;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: all 0s ease-in-out;
     width: 2rem;
     &:hover {
       background: $pblue;
@@ -270,6 +278,7 @@ h6 {
     top: 3.85rem;
     background: $gray-light-opaque;
     z-index: 9999;
+    transform: none;
     & > * {
       padding: 1.5rem;
       border-top: 1px solid $gray-light;
@@ -277,6 +286,12 @@ h6 {
       transition: all 0.15s ease-in-out;
       &:hover {
         background: $gray-hover;
+      }
+
+      span.focused {
+        background: $pblue-light;
+        color: $pblue;
+        padding: .25rem;
       }
     }
 
@@ -295,7 +310,7 @@ h6 {
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
-  margin-left: 5rem;
+  margin-left: 10rem;
   margin-right: 5rem;
 
   .home-left,
@@ -321,7 +336,7 @@ h6 {
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
-  margin-left: 5rem;
+  margin-left: 10rem;
   margin-right: 5rem;
   .header {
     width: calc(100% - 3rem);
@@ -340,6 +355,7 @@ h6 {
 
       h1 {
         color: $brick;
+        max-width: 20rem;
       }
 
       h5 {
@@ -349,6 +365,7 @@ h6 {
     }
 
     .header-right {
+      margin-top: .1rem;
       text-align: right;
       display: flex;
       flex-direction: column;
@@ -478,7 +495,11 @@ h6 {
   }
 
   .MapExplorer {
-    .header, .map-stats, .back-button, .last-update, .unknown {
+    .header, .map-stats, .back-button, .last-update, .unknown, .state-page-button {
+      display: none;
+    }
+
+    .anchor {
       display: none;
     }
 
@@ -518,8 +539,8 @@ h6 {
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
-  margin-left: 7rem;
-  margin-right: 7rem;
+  margin-left: 5.5rem;
+  margin-right: 5.5rem;
 
   .resource-left,
   .resource-right {
@@ -538,10 +559,11 @@ h6 {
     margin-right: 2.5rem;
   }
 
-  .tableandcontrols{
+  .tableandaccordions{
     display: flex;
     flex-direction: column;
     width: 100%;
+    align-items: center;
   }
 
   table {
@@ -552,6 +574,9 @@ h6 {
     text-transform: none;
     border-spacing: 3px 2px;
     border-collapse: separate;
+    table-layout: fixed;
+    // animation-name: fadeInOut;
+    // animation-duration: 2s;
 
     thead {
       background: $purple-light;
@@ -565,9 +590,12 @@ h6 {
         border-radius: 5px;
         transition: all 0.1s ease-in-out;
         z-index: 99;
+        &.descriptionCol{
+          width: 50%;
+        }
 
         &.sticky {
-          top: 4px;
+          top: 0;
           background: $gray-opaque;
         }
 
@@ -621,8 +649,6 @@ h6 {
           background: #fff !important;
         }
       }
-
-       tr:nth-child(even) {background-color: $purple-light;}
 
       td {
         // padding: 0.25rem;
@@ -799,8 +825,8 @@ h6 {
   font-size: 0.7rem !important;
   font-weight: 400;
   text-align: center;
-  margin-top: 0.2rem;
-  margin-bottom: 0.1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   width: 100%;
 
   .react-autosuggest__input {
@@ -1471,7 +1497,6 @@ table {
     color: $gray;
 
     tr {
-      transition: background 0.1s ease-in-out;
       cursor: pointer;
 
       &:hover {
@@ -1500,7 +1525,7 @@ table {
       text-align: right;
       .deltas {
         display: inline-block;
-		    font-size: 11px !important;
+        font-size: 11px !important;
 
         svg {
           width: 9px;
@@ -1563,6 +1588,43 @@ table {
     .district-heading {
       transform: translateX(1rem);
       background: $gray-light;
+      &:hover {
+        background: $gray-light !important;
+      }
+
+      td.state-page-link {
+        background: $white;
+        padding: 0;
+        text-align: left;
+
+        div {
+          background: $yellow-light;
+          color: $orange;
+          padding: 0.45rem;
+          border-radius: 5px;
+          font-size: 0.75rem;
+          float: left;
+          align-items: center;
+          transition: all 0.2s ease-in-out;
+          &:hover {
+            background: $yellow-hover;
+            svg {
+              stroke: $orange;
+            }
+          }
+
+          svg {
+            width: 12px;
+            height: 12px;
+            stroke-width: 3px;
+            margin-left: 0.25rem;
+            color: $orange-mid;
+            vertical-align: middle;
+            margin-bottom: 1px;
+            transition: all 0.2s ease-in-out;
+          }
+        }
+      }
 
       td {
         font-size: 0.75rem;
@@ -1617,8 +1679,8 @@ table {
     }
   }
 
-	.table__title-wrapper {
-		position: relative;
+  .table__title-wrapper {
+    position: relative;
     & > * {
       align-self: center;
     }
@@ -1633,7 +1695,7 @@ table {
         color: $gray-mid;
       }
     }
-	}
+  }
 
   .unknown {
     svg {
@@ -1684,11 +1746,40 @@ table {
   stroke-width: 2;
 }
 
+.anchor {
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+  transform: rotate(45deg);
+  transition: all 0.1s ease-in-out;
+  svg {
+    width: 16px;
+    stroke: $gray-mid;
+    stroke-width: 3;
+    &:hover {
+      stroke: $gray;
+    }
+  }
+
+  &.stickied {
+    transform: rotate(0deg);
+    svg {
+      stroke: $gray;
+    }
+  }
+}
+
 .MapExplorer {
   display: flex;
   flex-direction: column;
   align-self: center;
   width: 30rem;
+
+  &.stickied {
+    position: -webkit-sticky;
+    position: sticky !important;
+    top: 0;
+  }
 
   .header {
     display: flex;
@@ -1734,14 +1825,46 @@ table {
 
   .back-button {
     position: absolute;
+    top: 2.75rem;
     right: 0;
-    background: $orange-light;
+    background: $yellow-light;
     color: $orange;
     transition: all 0.2s ease-in-out;
     &:hover {
-      background: $orange-hover;
+      background: $yellow-hover;
     }
   }
+
+  .state-page-button {
+    position: absolute;
+    top: -0.5rem;
+    right: 0;
+    border-radius: 5px;
+    background: $yellow-light;
+    color: $orange;
+    transition: all 0.2s ease-in-out;
+    padding: 0.45rem;
+    padding-left: 0.75rem;
+    font-size: 0.75rem;
+    height: 1.5rem;
+    &:hover {
+      background: $yellow-hover;
+    }
+
+    abbr {
+      text-transform: none;
+    }
+
+    svg {
+      width: 12px;
+      height: 12px;
+      stroke-width: 3px;
+      margin-left: 0.25rem;
+      stroke: $orange-mid;
+      vertical-align: middle;
+    }
+  }
+
 
   .meta {
     display: flex;
@@ -1779,7 +1902,7 @@ table {
 
     .unknown {
       position: absolute;
-      top: 3rem;
+      top: 5.5rem;
       right: 0;
       text-align: right;
       width: 5rem;
@@ -1918,7 +2041,7 @@ table {
 
   .tab {
     min-width: 5rem;
-    height: 3rem;
+    height: 3.25rem;
     background: $gray-light;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -1941,10 +2064,18 @@ table {
   }
 }
 
-.TimeSeries-Parent {
-  display: flex;
-  flex-direction: column;
+.TimeSeriesExplorer {
   width: 30rem;
+  align-self: center;
+  &.stickied {
+    position: -webkit-sticky;
+    position: sticky !important;
+    top: -6.5rem;
+  }
+}
+
+.TimeSeries {
+  width: 100%;
   align-self: center;
 }
 
@@ -1957,7 +2088,7 @@ table {
     color: $gray;
   }
 
-  width: 30rem;
+  width: 100%;
   align-self: center;
   margin-top: 3rem;
 
@@ -2111,6 +2242,7 @@ input.switch:checked::after {
     margin-left: -1px;
     width: auto;
     color: $gray;
+    cursor: pointer;
 
     &:focus {
       outline: none;
@@ -2118,7 +2250,7 @@ input.switch:checked::after {
   }
 }
 
-.timeseries,
+.TimeSeries,
 .Minigraph {
   display: flex;
   flex-direction: column;
@@ -2134,6 +2266,7 @@ input.switch:checked::after {
     border-radius: 3px;
     display: flex;
     flex-direction: column;
+    z-index: -1;
 
     h2,
     h5,
@@ -2191,7 +2324,12 @@ input.switch:checked::after {
     }
 
     &.is-blue {
-      h5 { color: $blue-mid; }
+      h5 {
+        color: $blue-mid;
+        &.title {
+          color: $blue;
+        }
+      }
 
       h2,
       h6 { color: $blue; }
@@ -2254,6 +2392,21 @@ input.switch:checked::after {
 
       text {
         color: $gray-mid;
+        stroke: transparent;
+      }
+    }
+
+    &.is-blue {
+      background: $blue-light;
+
+      .domain,
+      .tick,
+      line {
+        stroke: $blue;
+      }
+
+      text {
+        color: $blue-mid;
         stroke: transparent;
       }
     }
@@ -2500,7 +2653,121 @@ footer {
     display: flex;
     flex-direction: row;
     text-align: center;
-  
+
+    .react-date-picker.react-date-picker--closed.react-date-picker--enabled,
+    .react-date-picker.react-date-picker--open.react-date-picker--enabled {
+      height: 2.05rem;
+      margin: 0.2rem 0.1rem;
+      font-family: 'archia';
+      font-weight: 900;
+      font-size: 12px;
+      color: #6c757d;
+      background-color: #eee;
+      border: 2px solid #e8e8e9;
+      border-radius: 4px;
+      width: auto;
+      align-items: center;
+      padding-inline-start: 1px;
+      cursor: default;
+      padding: 0.5rem;
+      input:focus, button:focus {
+        outline: none;
+      }
+    }
+
+    .react-date-picker, .react-date-picker *, .react-date-picker *:before, .react-date-picker *:after {
+      border: 0;
+    }
+
+    .react-calendar button {
+      padding: 1rem;
+      border-radius: 5px;
+      transition: all 0.1s ease-in-out;
+      font-family: 'archia';
+      &:disabled {
+        border-radius: 0 !important;
+        color: $gray-mid;
+        cursor: not-allowed;
+      }
+    }
+
+    .react-date-picker__inputGroup__input:invalid {
+      background: transparent;
+    }
+
+    .react-date-picker__wrapper {
+      border: unset;
+      svg {
+        stroke: $gray-mid;
+        &:hover {
+          stroke: $gray;
+        }
+      }
+    }
+
+    .react-calendar__tile--active {
+      background: $pblue-light;
+      color: $pblue !important;
+      &:hover {
+        background: $pblue-hover;
+        color: $pblue !important;
+      }
+    }
+
+    .react-calendar__month-view__weekdays__weekday {
+      font-family: 'archia';
+      margin-bottom: 0.5rem;
+    }
+
+    .react-calendar__month-view__days__day--weekend, .react-calendar__month-view__days__day {
+      color: $gray;
+    }
+
+    .react-date-picker__calendar {
+      top: 3.5rem !important;
+    }
+
+    .react-calendar {
+      background: $gray-light-opaque;
+      border: 2px solid $gray-light;
+      border-radius: 5px;
+    }
+
+    .react-calendar__navigation__label {
+      color: $gray !important;
+    }
+
+    .react-calendar__navigation__arrow {
+      color: $gray;
+    }
+
+    .react-date-picker__inputGroup > * {
+      color: $gray !important;
+    }
+
+    .react-date-picker__clear-button {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .react-date-picker__calendar-button {
+      padding: 0 !important;
+      margin: 0 !important;
+      margin-left: 0.25rem !important;
+      svg {
+        height: 16px;
+        width: 16px;
+        stroke-width: 3px;
+      }
+    }
+
+    .react-date-picker__clear-button {
+      svg {
+        width: 16px;
+        stroke-width: 3px;
+      }
+    }
+
     select {
       appearance: none;
       background-color: #eee;
@@ -2515,7 +2782,6 @@ footer {
       font-weight: 900;
       margin: 0.2rem 0.1rem;
       padding: 0.5rem;
-      text-transform: uppercase;
       width: 130px;
       color: $gray;
       cursor: pointer;
@@ -2538,16 +2804,31 @@ footer {
     padding-right: 1rem;
     width: 30rem;
     line-height: 23px;
+    background: $pblue-light;
+    border-radius: 5px;
+    padding-top: 1rem;
+    svg {
+      position: absolute;
+      right: 0;
+      top: -.25rem;
+      padding: 0.5rem;
+      width: 16px;
+      stroke-width: 3px;
+      stroke: $pblue-mid;
+      cursor: pointer;
+      &:hover {
+        stroke: $pblue;
+      }
+    }
   }
 
   .header {
     margin-top: 1.75rem;
-    align-self: flex-start;
+    align-self: center;
     display: flex;
     flex-direction: row;
-    width: calc(100% - 10.5rem);
     justify-content: space-between;
-    margin-left: 5.25rem;
+    width: calc(100% - 10rem);
     h1 {
       color: $pblue;
     }
@@ -2563,7 +2844,6 @@ footer {
       margin-bottom: 1rem;
       width: 10rem;
       text-align: right;
-      text-transform: unset;
     }
 
     .deep-dive {
@@ -2577,6 +2857,29 @@ footer {
   .patientdb-wrapper {
     padding-left: 5rem;
     padding-right: 5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    .no-result {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 20rem;
+      align-self: center;
+      h5 {
+        color: $gray;
+        text-align: center;
+        font-weight: 600;
+        span {
+          font-weight: 900;
+          color: $pblue !important;
+        }
+      }
+    }
+  }
+
+  .legend {
+    z-index: unset;
   }
 }
 
@@ -2963,8 +3266,11 @@ footer {
     }
 
     a {
-     text-decoration: none !important;
-     color: $orange-mid;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      text-decoration: none !important;
+      color: $orange-mid;
     }
 
     .button {
@@ -2972,11 +3278,9 @@ footer {
       flex-direction: row;
       justify-content: center;
       & > * {
-        align-self: center;
+        align-self: center !important;
       }
       background: $orange-light;
-      height: 3rem;
-      width: 10rem;
       text-align: center;
       &:hover {
         background: $orange-hover;
@@ -3221,7 +3525,7 @@ body.modal-open {
 .pills {
   display: flex;
   flex-direction: row;
-  align-self: flex-end;
+  justify-content: flex-end;
   > button {
     border: 2px $yellow-light solid;
     border-top: 0;
@@ -3553,7 +3857,8 @@ body.modal-open {
 }
 
 .cards-container {
-  padding: 4rem;
+  padding: 2rem;
+  margin-left: 5rem;
   .cards {
     display: flex;
     justify-content: space-between;
@@ -3561,38 +3866,41 @@ body.modal-open {
     .card {
       margin-bottom: 2em;
       flex: 0 1 calc(33% - 1em);
-      box-shadow: rgba(#000, 0.2) 0 0 8px 0;
-      &:hover {
-        box-shadow: rgba(#000, 0.3) 0 0 8px 0;
-      }
       height: 30rem;
-        .charts-header {
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start;
-          .chart-title {
-            font-family: 'archia';
-            font-size: 1.5rem !important;
-            color: #6c757d;
-            font-weight: 900;
-            text-transform: uppercase;
-            padding: 20px 0 20px 0;
-          }
-
-          .chart-content {
-            height: 100%;
-            width: 100%;
-          }
-
-          .chart-note {
-           color: $gray;
-           height: 50px;
-           margin-top: 5px;
-          }
+      .charts-header {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        .chart-title {
+          font-family: 'archia';
+          font-size: 1.5rem !important;
+          color: #6c757d;
+          font-weight: 900;
+          text-transform: uppercase;
+          padding: 20px 0 20px 0;
         }
+
+        .chart-content {
+          height: 100%;
+          width: 100%;
+        }
+
+        .chart-note {
+          font-family: 'archia';
+          font-size: 0.8rem;
+          color: $gray;
+          height: 50px;
+          margin-top: 5px;
+        }
+      }
     }
+  }
+
+  @media (max-width: 769px) {
+    padding: 1rem;
+    margin-left: unset;
   }
 }
 
@@ -3634,24 +3942,42 @@ body.modal-open {
 
     .navbar-right {
       order: 2;
+      display: flex;
+      flex-direction: column;
+      padding-top: 0;
+      padding-bottom: 0;
+      background: $gray-light-opaque;
       &:hover {
-        margin-left: 1rem;
+        background: $gray-light-opaque !important;
+      }
+
+      & > span {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+        height: 1.5rem;
+        svg {
+          stroke: $gray;
+        }
       }
     }
 
     .expand {
       flex-direction: column;
-      width: 10rem;
-      left: 5rem;
+      width: 15rem;
       top: 0;
       background: $gray-light-opaque;
-      padding-top: 5.25rem;
-      padding-left: 1rem;
+      padding-top: 5.5rem;
+      padding-left: 0;
+      border-right: solid 2px $gray-light-opaque;
+      z-index: -1 !important;
       & > * {
         height: 1.5rem;
         border: 0;
         border-left: 1px solid $gray-light;
-        width: 7rem;
+        width: 12rem;
         color: $gray;
         font-weight: 600;
       }
@@ -3661,15 +3987,23 @@ body.modal-open {
   .PatientsDB {
     margin-left: 5rem;
   }
+
+  .dark-mode {
+    .Navbar, .expand {
+      background: #1e1e30 !important;
+    }
+
+    .navbar-right {
+      background: #1e1e30 !important;
+    }
+  }
 }
 
 @media (max-width: 769px) {
-  .TimeSeries,
   table,
   .header,
   .Level,
-  .timeseries-header,
-  .TimeSeries-Parent,
+  .TimeSeriesExplorer,
   .Links,
   .Minigraph,
   .Summary,
@@ -3713,7 +4047,7 @@ body.modal-open {
     width: calc(100% - 2rem);
   }
 
-  .timeseries {
+  .TimeSeries {
     .svg-parent {
       width: 100%;
     }
@@ -3763,11 +4097,21 @@ body.modal-open {
   }
 
   .cards-container {
-    padding: 1rem;
+    padding: 0.5rem;
     .cards {
       .card {
-        flex: 0 1 calc(100%);
+        margin-bottom: 0;
+        height: 25rem;
+        flex: 0 1 100%;
       }
+
+      .chart-title {
+        padding: 20px 0 10px 0;
+      }
+
+      .card-big {
+         height: 30rem;
+       }
     }
   }
 
@@ -3783,8 +4127,10 @@ body.modal-open {
     }
 
     .reminder {
-      width: calc(100% - 2rem);
-      padding: 0;
+      width: calc(100% - 4rem);
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+
     }
 
     .Patients {
@@ -3808,7 +4154,7 @@ body.modal-open {
     .filters {
       height: auto;
       justify-content: center;
-      padding: 0.2rem;
+      padding: 0.5rem;
     }
   }
 
@@ -3843,10 +4189,6 @@ body.modal-open {
 
   &.nationality {
     margin-bottom: 0.5rem;
-  }
-
-  &.genders {
-    margin-top: 0.5rem;
   }
 
   .Resources {
@@ -4107,6 +4449,22 @@ body.modal-open {
     }
   }
 
+  .Navbar {
+    .expand {
+      transform: none !important;
+    }
+
+    .navbar-right {
+      & > span {
+        display: none;
+      }
+
+      & > span:first-child {
+        display: initial;
+      }
+    }
+  }
+
   .Search {
     .result-name {
       max-width: 10rem !important;
@@ -4121,6 +4479,283 @@ body.modal-open {
       }
     }
   }
+
+
+  .PatientsDB .select .react-date-picker__calendar {
+    position: fixed;
+    top: 2.3rem !important;
+  }
+}
+
+/* Dark Mode */
+.dark-mode {
+  background: #161625 !important;
+  color: #bdbdbd;
+  transition: background-color 0.2s ease-out !important;
+
+  .switch-wrapper > div {
+    background: #161625 !important;
+  }
+
+  .expand {
+    background: #1e1e30 !important;
+  }
+
+  .Navbar, .expand {
+    border-right: 0;
+
+    .navbar-middle {
+      color: #bdbdbd;
+    }
+
+    .navbar-right {
+      background: #1e1e30 !important;
+    }
+  }
+
+  table {
+    th {
+      background: #1e1e30 !important;
+    }
+
+    .is-odd {
+      background: #1e1e30 !important;
+    }
+
+    .state-page-link {
+      background: #161625 !important;
+    }
+
+    .heading-content {
+      color: #bdbdbd !important;
+    }
+
+    .spacer {
+      background: #161625 !important;
+    }
+  }
+
+  .Search {
+    input {
+      background: #1e1e30 !important;
+    }
+  }
+
+  .State {
+    .header-right {
+      h5 {
+        color: #9673b9bb !important;
+      }
+
+      h2 {
+        color: #9673b9 !important;
+      }
+
+      a {
+        background: #40008050 !important;
+      }
+    }
+  }
+
+  .MapExplorer {
+    #chart,
+    #legend {
+      filter: invert(1) hue-rotate(150deg);
+    }
+
+    .legend {
+      background: #161625 !important;
+    }
+
+    .stats {
+      &.is-purple {
+        background: #40008050 !important;
+        h1 {
+          color: #9673b9 !important;
+        }
+
+        h5, h6 {
+          color: #9673b9bb !important;
+        }
+
+        svg {
+          stroke: #9673b9 !important;
+        }
+      }
+    }
+  }
+
+  .tab {
+    &.focused {
+      background: #1e1e30 !important;
+      color: #bdbdbd !important;
+    }
+  }
+
+  .pills { 
+    button {
+      &.selected {
+        background: #{$yellow}50;
+      }
+    }
+  }
+
+  select {
+    background: #1e1e30 !important;
+    border-color: #1e1e30 !important;
+  }
+
+  input.switch {
+      background-color: #161625 !important;
+      border: 2px solid $gray-mid !important;
+    }
+
+    input.switch::after {
+      background-color: #cfcfcf !important;
+    }
+
+    input.switch:checked {
+      background-color: #161625 !important;
+    }
+
+    input.switch:checked::after {
+      background-color: #cfcfcf !important;
+    }
+
+  .button {
+    &.github {
+      color: #bdbdbd !important;
+      svg {
+        stroke: #bdbdbd !important;
+      }
+    }
+  }
+
+  .FAQ {
+    .question {
+      color: $gray !important;
+    }
+  }
+
+  .Resources {
+    
+    .filtersection {
+      .disclaimercontainer {
+        .mobile-disclaimer-button {
+          background-color: $dark-m-white;
+          color: #808080;
+        }
+
+        .disclaimer-button {
+          color: $dark-mid-subtext;
+          background: none;
+    }
+    
+    .MuiSvgIcon-root {
+      fill: $dark-m-white;
+    }
+      }
+
+      .resourcefilters {
+        .MuiFormLabel-root {
+          color: rgba(232, 230, 227, 0.54);
+    }
+    
+    
+
+        .MuiInputBase-root {
+          color: rgba(232, 230, 227, 0.87);
+    }
+    
+    .MuiSelect-icon {
+      color: $dark-m-white;
+    }
+    
+
+    .MuiOutlinedInput-notchedOutline {
+      border-color: $dark-m-white;
+    }
+
+        .button.is-purple {
+          color: $dark-m-purple;
+          background-color: rgba(31, 25, 158, 0.13);
+          background-image: none;
+        }
+
+        div.MuiFormControl-root:nth-child(1) {
+          .MuiOutlinedInput-root {
+            position: relative;
+            /* border-radius: 23px; */
+            border-color: #dbd3d3;
+            border-width: 25px !important;
+          }
+        }
+
+        .MuiSelect-select:not([multiple]) option,
+        .MuiSelect-select:not([multiple]) optgroup {
+          background-color: $dark-m-gray;
+        }
+      }
+
+      .misclinkscontainer {
+        .button.is-purple {
+          color: $dark-m-purple;
+          background-color: rgba(31, 25, 158, 0.13);
+          background-image: none;
+        }
+      }
+    }
+
+    input.MuiInputBase-input{
+      color: $dark-m-white;
+    }
+
+  .searchbar {
+    .MuiFormLabel-root {
+      color: rgba(232, 230, 227, 0.54);
+    }
+
+    .MuiOutlinedInput-notchedOutline {
+      border-color: $dark-m-white;
+    }
+
+    .MuiSvgIcon-root {
+      fill: $white;
+    }
+  }
+
+    .tableandcontrols {
+      a {
+        color: $dark-m-blue;
+    }
+    
+    table thead {
+    color: rgb(210, 207, 200);
+    }
+
+    }
+
+}
+
+  .PatientsDB {
+    .filters {
+      background: #1e1e30 !important;
+      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 #1e1e30;
+    }
+
+    .legend {
+      background: #1e1e30 !important;
+    }
+
+    .modal-content {
+      background: #1e1e30 !important;
+    }
+
+    .modal {
+      background: #1e1e30bb !important;
+    }
+  }
+
 }
 
 
@@ -4253,7 +4888,7 @@ body.modal-open {
 }
 
 .height-22 {
-	height: 22px;
+  height: 22px;
 }
 
 .disclaimercontainer {

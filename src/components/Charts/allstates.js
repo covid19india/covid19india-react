@@ -1,31 +1,15 @@
-import React from 'react';
-import {Line, defaults} from 'react-chartjs-2';
+import {defaultOptions, xAxisDefaults, yAxisDefaults} from './chart-defaults';
+
+import {getStateName} from '../../utils/commonfunctions';
+
+import deepmerge from 'deepmerge';
 import moment from 'moment';
-import {getStateName} from '../../utils/common-functions';
+import React from 'react';
+import {Line} from 'react-chartjs-2';
+
 function AllStatesChart(props) {
   const dates = [];
   const chartReference = React.createRef();
-
-  defaults.global.elements.line.fill = false;
-
-  defaults.global.tooltips.intersect = false;
-  defaults.global.tooltips.mode = 'nearest';
-  defaults.global.tooltips.position = 'average';
-  defaults.global.tooltips.backgroundColor = 'rgba(255, 255, 255, 0.6)';
-  defaults.global.tooltips.displayColors = false;
-  defaults.global.tooltips.borderColor = '#c62828';
-  defaults.global.tooltips.borderWidth = 1;
-  defaults.global.tooltips.titleFontColor = '#000';
-  defaults.global.tooltips.bodyFontColor = '#000';
-  defaults.global.tooltips.caretPadding = 4;
-  defaults.global.tooltips.intersect = false;
-  defaults.global.tooltips.mode = 'nearest';
-  defaults.global.tooltips.position = 'nearest';
-
-  defaults.global.legend.display = true;
-  defaults.global.legend.position = 'bottom';
-
-  defaults.global.hover.intersect = false;
 
   if (!props.data || props.data.length === 0) {
     return <div></div>;
@@ -33,7 +17,7 @@ function AllStatesChart(props) {
 
   const statesData = new Map();
 
-  props.data.forEach((data, index) => {
+  props.data.forEach((data) => {
     if (data.status !== 'Confirmed') {
       return;
     }
@@ -66,21 +50,16 @@ function AllStatesChart(props) {
   );
 
   const colors = [
-    '#ff073a',
-    '#28a745',
-    '#342ead',
-    '#7D5BA6',
-    '#DD7596',
-    '#16c8f0',
-    '#f67575',
-    '#2b580c',
-    '#9D44B5',
-    '#91132d',
-    '#6D9DC5',
-    '#2b580c',
-    '#6c757d',
-    '#f67575',
-    '#d4f8e8',
+    '#718af0',
+    '#7dd6fa',
+    '#59b3aa',
+    '#9bc26b',
+    '#e5d22f',
+    '#ffb041',
+    '#ff8a66',
+    '#db6b8f',
+    '#bd66cc',
+    '#8e8e8e',
   ];
 
   let index = 0;
@@ -95,7 +74,7 @@ function AllStatesChart(props) {
     }
 
     datasets.push({
-      borderWidth: 1.5,
+      borderWidth: 2,
       data: statesData.get(key),
       borderCapStyle: 'round',
       pointBackgroundColor: colors[index],
@@ -112,10 +91,7 @@ function AllStatesChart(props) {
     datasets: datasets,
   };
 
-  const options = {
-    responsive: true,
-    events: ['click', 'mousemove', 'mouseout', 'touchstart', 'touchmove'],
-    maintainAspectRatio: false,
+  const options = deepmerge(defaultOptions, {
     tooltips: {
       mode: 'index',
     },
@@ -127,17 +103,15 @@ function AllStatesChart(props) {
         tension: 0,
       },
     },
-    layout: {
-      padding: {
-        left: 20,
-        right: 20,
-        top: 0,
-        bottom: 0,
+    legend: {
+      labels: {
+        boxWidth: 20,
+        fontSize: 11,
       },
     },
     scales: {
       yAxes: [
-        {
+        deepmerge(yAxisDefaults, {
           type: 'linear',
           ticks: {
             beginAtZero: true,
@@ -148,10 +122,10 @@ function AllStatesChart(props) {
             display: false,
             labelString: 'Total Cases',
           },
-        },
+        }),
       ],
       xAxes: [
-        {
+        deepmerge(xAxisDefaults, {
           type: 'time',
           time: {
             unit: 'day',
@@ -172,10 +146,10 @@ function AllStatesChart(props) {
           gridLines: {
             color: 'rgba(0, 0, 0, 0)',
           },
-        },
+        }),
       ],
     },
-  };
+  });
 
   function toggleSelection() {
     // Get reference of chartInstance and update it
