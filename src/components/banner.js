@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useCallback} from 'react';
 import axios from 'axios';
+import React, {useState, useEffect, useCallback} from 'react';
 
 function Banner(props) {
   const [snippets, setSnippets] = useState([]);

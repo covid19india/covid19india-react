@@ -1,17 +1,20 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import * as Icon from 'react-feather';
 import {
   formatDate,
   formatDateAbsolute,
   formatNumber,
-} from '../utils/common-functions';
+} from '../utils/commonfunctions';
+
 import {formatDistance} from 'date-fns';
-import {Tooltip} from 'react-lightweight-tooltip';
+import React, {useState, useEffect, useCallback} from 'react';
+import * as Icon from 'react-feather';
+import {Link} from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
 
 function Row(props) {
   const [state, setState] = useState(props.state);
   const [districts, setDistricts] = useState(props.districts);
   const [sortedDistricts, setSortedDistricts] = useState(props.districts);
+  const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useState({
     sortColumn: localStorage.getItem('district.sortColumn')
       ? localStorage.getItem('district.sortColumn')
@@ -32,6 +35,7 @@ function Row(props) {
 
   const handleReveal = () => {
     props.handleReveal(props.state.state);
+    setShowDistricts(!showDistricts);
   };
 
   const handleTooltip = (e) => {
@@ -92,53 +96,46 @@ function Row(props) {
   return (
     <React.Fragment>
       <tr
-        className={props.total ? 'state is-total' : 'state'}
+        className={`state ${props.total ? 'is-total' : ''} ${
+          props.index % 2 === 0 ? 'is-odd' : ''
+        } ${props.isHighlighted ? 'is-highlighted' : ''}`}
         onMouseEnter={() => props.onHighlightState?.(state, props.index)}
         onMouseLeave={() => props.onHighlightState?.()}
-        /* onTouchStart={() => props.onHighlightState?.(state, props.index)}*/
         onClick={!props.total ? handleReveal : null}
         style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
       >
         <td style={{fontWeight: 600}}>
           <div className="table__title-wrapper">
-            <span
-              className={`dropdown ${
-                props.reveal ? 'rotateRightDown' : 'rotateDownRight'
-              }`}
-              style={{display: !props.total ? '' : 'none'}}
-              onClick={() => {
-                handleReveal();
-              }}
-            >
-              <Icon.ChevronDown />
-            </span>
+            {!props.total && (
+              <span
+                className={`dropdown ${
+                  props.reveal && showDistricts
+                    ? 'rotateRightDown'
+                    : 'rotateDownRight'
+                }`}
+              >
+                <Icon.ChevronDown />
+              </span>
+            )}
             <span className="actual__title-wrapper">
               {state.state}
               {state.statenotes && (
                 <span onClick={handleTooltip}>
-                  <Tooltip
-                    content={[`${state.statenotes}`]}
-                    styles={{
-                      tooltip: {
-                        background: '#000',
-                        borderRadius: '10px',
-                        fontSize: '.8em',
-                        left: '250%',
-                        opacity: 0.65,
-                      },
-                      wrapper: {
-                        cursor: 'cursor',
-                        display: 'inline-block',
-                        position: 'relative',
-                        textAlign: 'center',
-                      },
-                      arrow: {
-                        left: '37%',
-                      },
-                    }}
+                  <span
+                    data-tip={[`${state.statenotes}`]}
+                    data-event="touchstart mouseover"
+                    data-event-off="mouseleave"
                   >
                     <Icon.Info />
-                  </Tooltip>
+                  </span>
+                  <ReactTooltip
+                    place="right"
+                    type="dark"
+                    effect="solid"
+                    multiline={true}
+                    scrollHide={true}
+                    globalEventOff="click"
+                  />
                 </span>
               )}
             </span>
@@ -158,10 +155,6 @@ function Row(props) {
         <td
           style={{color: parseInt(state.active) === 0 ? '#B5B5B5' : 'inherit'}}
         >
-          {/* <span className="deltas" style={{color: '#007bff'}}>
-            {!state.delta.active==0 && <Icon.ArrowUp/>}
-            {state.delta.active>0 ? `${state.delta.active}` : ''}
-          </span>*/}
           {parseInt(state.active) === 0 ? '-' : formatNumber(state.active)}
         </td>
         <td
@@ -192,81 +185,88 @@ function Row(props) {
         </td>
       </tr>
 
-      <tr
-        className={'state-last-update'}
-        style={{display: props.reveal && !props.total ? '' : 'none'}}
-      >
-        <td colSpan={2}>
-          <div className="last-update">
-            <h6>Last updated&nbsp;</h6>
-            <h6
-              title={
-                isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
-                  ? ''
-                  : formatDateAbsolute(props.state.lastupdatedtime)
-              }
-            >
-              {isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
-                ? ''
-                : `${formatDistance(
-                    new Date(formatDate(props.state.lastupdatedtime)),
-                    new Date()
-                  )} ago`}
-            </h6>
-          </div>
-        </td>
-      </tr>
+      {showDistricts && (
+        <React.Fragment>
+          <tr className={'state-last-update'}>
+            <td colSpan={2}>
+              <div className="last-update">
+                <h6>Last updated&nbsp;</h6>
+                <h6
+                  title={
+                    isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
+                      ? ''
+                      : formatDateAbsolute(props.state.lastupdatedtime)
+                  }
+                >
+                  {isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
+                    ? ''
+                    : `${formatDistance(
+                        new Date(formatDate(props.state.lastupdatedtime)),
+                        new Date()
+                      )} ago`}
+                </h6>
+              </div>
+            </td>
+          </tr>
 
-      <tr
-        className={`district-heading`}
-        style={{display: props.reveal && !props.total ? '' : 'none'}}
-      >
-        <td onClick={(e) => handleSort('district')}>
-          <div className="heading-content">
-            <abbr title="District">District</abbr>
-            <div
-              style={{
-                display:
-                  sortData.sortColumn === 'district' ? 'initial' : 'none',
-              }}
-            >
-              {sortData.isAscending ? (
-                <div className="arrow-up" />
-              ) : (
-                <div className="arrow-down" />
-              )}
-            </div>
-          </div>
-        </td>
-        <td onClick={(e) => handleSort('confirmed')}>
-          <div className="heading-content">
-            <abbr
-              className={`${window.innerWidth <= 769 ? 'is-cherry' : ''}`}
-              title="Confirmed"
-            >
-              {window.innerWidth <= 769
-                ? window.innerWidth <= 375
-                  ? 'C'
-                  : 'Cnfmd'
-                : 'Confirmed'}
-            </abbr>
-            <div
-              style={{
-                display:
-                  sortData.sortColumn === 'confirmed' ? 'initial' : 'none',
-              }}
-            >
-              {sortData.isAscending ? (
-                <div className="arrow-up" />
-              ) : (
-                <div className="arrow-down" />
-              )}
-            </div>
-          </div>
-        </td>
-      </tr>
+          <tr className={`district-heading`}>
+            <td onClick={(e) => handleSort('district')}>
+              <div className="heading-content">
+                <abbr title="District">District</abbr>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'district' ? 'initial' : 'none',
+                  }}
+                >
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
+                </div>
+              </div>
+            </td>
+            <td onClick={(e) => handleSort('confirmed')}>
+              <div className="heading-content">
+                <abbr
+                  className={`${window.innerWidth <= 769 ? 'is-cherry' : ''}`}
+                  title="Confirmed"
+                >
+                  {window.innerWidth <= 769
+                    ? window.innerWidth <= 375
+                      ? 'C'
+                      : 'Cnfmd'
+                    : 'Confirmed'}
+                </abbr>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'confirmed' ? 'initial' : 'none',
+                  }}
+                >
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
+                </div>
+              </div>
+            </td>
+            <td className="state-page-link" colSpan={3}>
+              <Link to={`state/${state.statecode}`}>
+                <div>
+                  <abbr>Visit state page</abbr>
+                  <Icon.ArrowRightCircle />
+                </div>
+              </Link>
+            </td>
+          </tr>
+        </React.Fragment>
+      )}
 
       {sortedDistricts &&
+        showDistricts &&
         Object.keys(sortedDistricts)
           .filter((district) => district.toLowerCase() !== 'unknown')
           .map((district, index) => {
@@ -274,20 +274,32 @@ function Row(props) {
               return (
                 <tr
                   key={index}
-                  className={`district`}
+                  className={`district ${index % 2 === 0 ? 'is-odd' : ''} ${
+                    props.highlightedDistrict === district
+                      ? 'is-highlighted'
+                      : ''
+                  }`}
                   style={{
-                    display: props.reveal && !props.total ? '' : 'none',
                     background: index % 2 === 0 ? '#f8f9fa' : '',
                   }}
                   onMouseEnter={() =>
                     props.onHighlightDistrict?.(district, state, props.index)
                   }
                   onMouseLeave={() => props.onHighlightDistrict?.()}
-                  /* onTouchStart={() =>
-                    props.onHighlightDistrict?.(district, state, props.index)
-                  }*/
                 >
-                  <td style={{fontWeight: 600}}>{district}</td>
+                  <td className="unknown" style={{fontWeight: 600}}>
+                    {district}
+                    <span onClick={handleTooltip}>
+                      <span
+                        data-for="unknown"
+                        data-tip={[[sortedDistricts[district].notes]]}
+                        data-event="touchstart mouseover"
+                        data-event-off="mouseleave"
+                      >
+                        {sortedDistricts[district].notes && <Icon.Info />}
+                      </span>
+                    </span>
+                  </td>
                   <td>
                     <span className="deltas" style={{color: '#ff073a'}}>
                       {sortedDistricts[district].delta.confirmed > 0 && (
@@ -307,35 +319,23 @@ function Row(props) {
             return null;
           })}
 
-      {sortedDistricts?.Unknown && (
+      {sortedDistricts?.Unknown && showDistricts && (
         <React.Fragment>
-          <tr
-            className={`district`}
-            style={{display: props.reveal && !props.total ? '' : 'none'}}
-          >
+          <tr className={`district`}>
             <td className="unknown" style={{fontWeight: 600}}>
               Unknown
-              <Tooltip
-                content={['Awaiting patient-level details from State Bulletin']}
-                styles={{
-                  tooltip: {
-                    background: '#000',
-                    borderRadius: '5px',
-                    fontSize: '1rem',
-                    left: '250%',
-                    opacity: 1,
-                    padding: '0.5rem',
-                  },
-                  wrapper: {
-                    cursor: 'cursor',
-                    display: 'inline-block',
-                    position: 'relative',
-                    textAlign: 'center',
-                  },
-                }}
-              >
-                <Icon.Info />
-              </Tooltip>
+              <span onClick={handleTooltip}>
+                <span
+                  data-for="unknown"
+                  data-tip={
+                    'Awaiting patient-level details from State Bulletin'
+                  }
+                  data-event="touchstart mouseover"
+                  data-event-off="mouseleave"
+                >
+                  <Icon.Info />
+                </span>
+              </span>
             </td>
             <td>
               <span className="deltas" style={{color: '#ff073a'}}>
@@ -354,6 +354,26 @@ function Row(props) {
         </React.Fragment>
       )}
 
+      {showDistricts && (
+        <React.Fragment>
+          <tr>
+            <td colSpan={2}>
+              <span className="unknown">
+                <ReactTooltip
+                  id="unknown"
+                  place="right"
+                  type="dark"
+                  effect="solid"
+                  multiline={true}
+                  scrollHide={true}
+                  globalEventOff="click"
+                />
+              </span>
+            </td>
+          </tr>
+        </React.Fragment>
+      )}
+
       <tr
         className={`spacer`}
         style={{display: props.reveal && !props.total ? '' : 'none'}}
@@ -366,4 +386,4 @@ function Row(props) {
   );
 }
 
-export default Row;
+export default React.memo(Row);

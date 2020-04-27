@@ -1,6 +1,8 @@
-import React from 'react';
 import Row from '../../components/row';
-import {shallow} from 'enzyme';
+
+import {mount} from 'enzyme';
+import React from 'react';
+import {MemoryRouter} from 'react-router-dom';
 
 const state = {
   active: '1',
@@ -26,8 +28,25 @@ const districts = {
 };
 
 describe('Row component', () => {
-  let wrapper;
   const RealDate = Date;
+  const handleReveal = jest.fn();
+
+  const wrapper = mount(
+    <MemoryRouter>
+      <table>
+        <tbody>
+          <Row
+            state={state}
+            districts={districts}
+            index={1}
+            total={false}
+            reveal={true}
+            handleReveal={handleReveal}
+          />
+        </tbody>
+      </table>
+    </MemoryRouter>
+  );
 
   beforeAll(() => {
     const mockedDate = new Date('2020-04-13T17:11:38.158Z');
@@ -37,10 +56,6 @@ describe('Row component', () => {
         return mockedDate;
       }
     };
-
-    wrapper = shallow(
-      <Row state={state} districts={districts} index={1} total={false} />
-    );
   });
 
   afterAll(() => {
@@ -66,15 +81,19 @@ describe('Row component', () => {
     expect(deaths).toEqual('-');
   });
 
-  test('State last update data', () => {
+  test('Districts and the confirmed cases', () => {
+    const stateRow = wrapper.find('tr.state');
+    expect(stateRow).toHaveLength(1);
+
+    stateRow.simulate('click');
+    expect(handleReveal).toHaveBeenCalledWith('Andaman and Nicobar Islands');
+
+    const districtsSelector = wrapper.find('tr.district');
     const stateLastUpdate = wrapper.find('tr.state-last-update');
 
-    expect(stateLastUpdate.text()).toMatch(/14 days ago/i);
-  });
-
-  test('Districts and the confirmed cases', () => {
-    const districtsSelector = wrapper.find('tr.district');
     expect(districtsSelector).toHaveLength(3);
+    expect(stateLastUpdate.text()).toMatch(/14 days ago/i);
+
     districtsSelector.forEach((e, index) => {
       const cells = e.find('td');
       const district = cells.at(0).childAt(0).text();

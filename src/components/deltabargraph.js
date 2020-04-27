@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
 import * as d3 from 'd3';
+import React, {useEffect, useRef, useState} from 'react';
 
 function DeltaBarGraph({timeseries, arrayKey}) {
   const [data, setData] = useState([]);
@@ -48,10 +48,8 @@ function DeltaBarGraph({timeseries, arrayKey}) {
       .call((g) => g.select('.domain').remove())
       .selectAll('text')
       .attr('y', 0)
-      .attr('x', -40)
-      .attr('dy', '.35em')
-      .attr('transform', 'rotate(-90)')
-      .style('text-anchor', 'start');
+      .attr('dy', '1.5em')
+      .style('text-anchor', 'middle');
 
     svg
       .selectAll('.bar')
@@ -109,7 +107,9 @@ function DeltaBarGraph({timeseries, arrayKey}) {
   );
 }
 
-export default DeltaBarGraph;
+export default React.memo(DeltaBarGraph, () => {
+  return true;
+});
 
 function roundedBar(x, y, w, h, r, f) {
   if (!h) return;

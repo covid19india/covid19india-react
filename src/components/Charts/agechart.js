@@ -1,28 +1,11 @@
+import {defaultOptions, xAxisDefaults, formatNumber} from './chart-defaults';
+
+import deepmerge from 'deepmerge';
 import React from 'react';
-import {Bar, defaults} from 'react-chartjs-2';
+import {Bar} from 'react-chartjs-2';
 
 function AgeChart(props) {
-  defaults.global.tooltips.intersect = false;
-  defaults.global.tooltips.mode = 'nearest';
-  defaults.global.tooltips.position = 'average';
-  defaults.global.tooltips.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-  defaults.global.tooltips.displayColors = false;
-  defaults.global.tooltips.borderColor = '#c62828';
-  defaults.global.tooltips.borderWidth = 1;
-  defaults.global.tooltips.titleFontColor = '#000';
-  defaults.global.tooltips.bodyFontColor = '#000';
-  defaults.global.tooltips.caretPadding = 4;
-  defaults.global.tooltips.intersect = false;
-  defaults.global.tooltips.mode = 'nearest';
-  defaults.global.tooltips.position = 'nearest';
-
-  defaults.global.legend.display = true;
-  defaults.global.legend.position = 'bottom';
-
-  defaults.global.hover.intersect = false;
-
   const ages = Array(10).fill(0);
-  let unknown = 0;
   if (!props.data || props.data.length === 0) {
     return <div></div>;
   }
@@ -35,8 +18,6 @@ function AgeChart(props) {
           ages[i]++;
         }
       }
-    } else {
-      unknown++;
     }
   });
 
@@ -57,34 +38,20 @@ function AgeChart(props) {
       {
         data: ages,
         label: 'Cases',
-        backgroundColor: '#ff073a',
+        backgroundColor: '#bc79c9',
       },
     ],
   };
 
-  const chartOptions = {
-    events: ['mousemove', 'mouseout', 'touchstart', 'touchmove', 'touchend'],
-    responsive: true,
-    maintainAspectRatio: false,
+  const chartOptions = deepmerge(defaultOptions, {
     legend: {
       display: false,
     },
-    layout: {
-      padding: {
-        left: 20,
-        right: 20,
-        top: 20,
-        bottom: 0,
-      },
-    },
     scales: {
       xAxes: [
-        {
+        deepmerge(xAxisDefaults, {
           stacked: true,
-          gridLines: {
-            color: 'rgba(0, 0, 0, 0)',
-          },
-        },
+        }),
       ],
       yAxes: [
         {
@@ -92,7 +59,15 @@ function AgeChart(props) {
         },
       ],
     },
-  };
+    events: ['mousemove', 'mouseout', 'touchstart', 'touchmove', 'touchend'],
+    responsive: true,
+    maintainAspectRatio: false,
+    tooltips: {
+      mode: 'index',
+    },
+  });
+
+  const sampleSize = ages.reduce((a, b) => a + b, 0);
 
   return (
     <div className="charts-header">
@@ -100,7 +75,9 @@ function AgeChart(props) {
       <div className="chart-content doughnut">
         <Bar data={chartData} options={chartOptions} />
       </div>
-      <div className="chart-note">*Awaiting details for {unknown} patients</div>
+      <div className="chart-note">
+        Sample Size: {formatNumber(sampleSize)} patients
+      </div>
     </div>
   );
 }
