@@ -28,7 +28,8 @@ export const MAP_VIEWS = {
   DISTRICTS: 1,
 };
 
-export const MAPS_DIR = '/maps';
+export const MAPS_DIR =
+  process.env.NODE_ENV === 'production' ? '/mini_maps' : '/maps';
 
 export const MAP_META = {
   India: {
