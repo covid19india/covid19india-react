@@ -23,8 +23,15 @@ function DeltaBarGraph({timeseries, arrayKeyProp}) {
 
     const margin = {top: 50, right: 0, bottom: 50, left: 0};
     const chartRight = width - margin.right;
-    const chartBottom = height - margin.bottom;
+    let chartBottom = height - margin.bottom;
     const barRadius = 5;
+    if (arrayKey === 'dailyactive') {
+      for (const day of data) {
+        if (day[arrayKey] < 0) {
+          chartBottom = height - margin.bottom * 2.2;
+        }
+      }
+    }
 
     const formatTime = d3.timeFormat('%e %b');
     const xScale = d3
@@ -39,7 +46,7 @@ function DeltaBarGraph({timeseries, arrayKeyProp}) {
         0,
         Math.max(
           1,
-          d3.max(data, (d) => d[arrayKey])
+          d3.max(data, (d) => Math.abs(d[arrayKey]))
         ),
       ])
       .range([chartBottom, margin.top]); // - barRadius
@@ -89,7 +96,9 @@ function DeltaBarGraph({timeseries, arrayKeyProp}) {
       .attr('text-anchor', 'middle')
       .attr('font-size', '11px')
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
-      .attr('y', (d) => yScale(d[arrayKey]) - 6)
+      .attr('y', (d) =>
+        d[arrayKey] >= 0 ? yScale(d[arrayKey]) - 6 : yScale(d[arrayKey]) + 12
+      )
       .text((d) => d[arrayKey])
       .append('tspan')
       .attr('class', 'percent')
