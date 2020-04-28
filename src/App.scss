@@ -2478,14 +2478,25 @@ input {
 }
 
 .trends-state-name {
+  align-items: center;
   display: flex;
   flex-direction: row;
+  margin-top: 1rem;
   text-align: center;
+
+  label {
+    color: $gray-mid;
+    font-family: 'archia';
+    font-size: .75rem;
+    font-weight: 900;
+    margin-right: .25rem;
+    transition: all .2s ease-in-out;
+    z-index: 99;
+  }
 
   select {
     appearance: none;
     background-color: #eee;
-
     background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
     linear-gradient(135deg, #808080 50%, transparent 50%);
     background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
@@ -2497,13 +2508,18 @@ input {
     cursor: pointer;
     font-family: 'archia';
     font-weight: 900;
-    margin-left: -1px;
-    margin-top: 1rem;
+    margin-left: 1rem;
     padding: .5rem;
     width: auto;
 
     &:focus {
       outline: none;
+    }
+  }
+
+  &:hover {
+    label {
+      color: $gray;
     }
   }
 }

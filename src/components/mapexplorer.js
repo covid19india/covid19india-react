@@ -1,5 +1,5 @@
 import ChoroplethMap from './choropleth';
-import {testedToolTip} from './tooltips';
+import TestedToolTip from './tooltips';
 
 import {MAP_TYPES, MAP_META} from '../constants';
 import {formatDate, formatNumber} from '../utils/commonfunctions';
@@ -289,11 +289,19 @@ function MapExplorer({
               : ''}
           </h6>
           {testObj?.totaltested?.length > 1 && (
-            <a href={testObj.source} target="_noblank">
+            <a
+              href={testObj.source}
+              target="_noblank"
+              title="ICMR Testing update"
+            >
               <Icon.Link />
             </a>
           )}
-          {currentHoveredRegion.name === 'Total' ? testedToolTip : ''}
+          {currentHoveredRegion.name === 'Total' ? (
+            <TestedToolTip id="testedtooltip_mapexplorer" />
+          ) : (
+            ''
+          )}
         </div>
       </div>
 

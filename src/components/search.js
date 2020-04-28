@@ -136,10 +136,11 @@ function Search(props) {
 
   return (
     <div className="Search">
-      <label>Search your city, resources, etc</label>
+      <label id="home_search">Search your city, resources, etc</label>
       <div className="line"></div>
 
       <input
+        aria-labelledby="home_search"
         type="text"
         value={searchValue}
         ref={searchInput}

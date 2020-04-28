@@ -104,7 +104,9 @@ function TimeSeriesExplorer({
 
         {states && (
           <div className="trends-state-name">
+            <label id="state_names">Pick a State/UT</label>
             <select
+              aria-labelledby="state_names"
               value={activeStateCode}
               onChange={({target}) => {
                 const selectedState = target.selectedOptions[0].getAttribute(

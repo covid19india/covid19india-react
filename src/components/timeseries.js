@@ -1,4 +1,4 @@
-import {testedToolTip} from './tooltips';
+import TestedToolTip from './tooltips';
 
 import {sliceTimeseriesFromEnd, formatNumber} from '../utils/commonfunctions';
 import {useResizeObserver} from '../utils/hooks';
@@ -500,7 +500,12 @@ function TimeSeries(props) {
           <div className="svg-parent is-purple">
             <div className="stats is-purple">
               <h5 className={`${!moving ? 'title' : ''}`}>
-                Tested {props.isTotal ? testedToolTip : ''}
+                Tested{' '}
+                {props.isTotal ? (
+                  <TestedToolTip id="testedtooltip_timeseries" />
+                ) : (
+                  ''
+                )}
               </h5>
               <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
               <div className="stats-bottom">

@@ -34,6 +34,7 @@ function Navbar({pages, darkMode, setDarkMode}) {
       <div className="navbar-middle">
         <Link
           to="/"
+          title="Covid19 India"
           onClick={() => {
             setExpand(false);
           }}
@@ -68,27 +69,27 @@ function Navbar({pages, darkMode, setDarkMode}) {
         {windowSize.width > 769 && (
           <React.Fragment>
             <span>
-              <Link to="/">
+              <Link to="/" title="Home">
                 <Icon.Home {...activeNavIcon('/')} />
               </Link>
             </span>
             <span>
-              <Link to="/demographics">
+              <Link to="/demographics" title="Demographics">
                 <Icon.Users {...activeNavIcon('/demographics')} />
               </Link>
             </span>
             <span>
-              <Link to="/deepdive">
+              <Link to="/deepdive" title="Deep dive">
                 <Icon.BarChart2 {...activeNavIcon('/deepdive')} />
               </Link>
             </span>
             <span>
-              <Link to="/essentials">
+              <Link to="/essentials" title="Essentials">
                 <Icon.Package {...activeNavIcon('/essentials')} />
               </Link>
             </span>
             <span>
-              <Link to="/faq">
+              <Link to="/faq" title="FAQ">
                 <Icon.HelpCircle {...activeNavIcon('/faq')} />
               </Link>
             </span>
