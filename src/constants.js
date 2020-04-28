@@ -287,6 +287,10 @@ Object.keys(STATE_CODES).map((key, index) => {
 export const STATE_CODES_REVERSE = reverseStateCodes;
 export const STATE_CODES_ARRAY = stateCodes;
 
+// Source: Projected Populations (2016)
+// National Commission on Population, "Population Projections for India and
+// States (2011-2036)", p259, November 2019
+// https://nhm.gov.in/New_Updates_2018/Report_Population_Projection_2019.pdf
 export const STATE_POPULATIONS = {
   'Andaman and Nicobar Islands': 392000,
   'Andhra Pradesh': 51371000,

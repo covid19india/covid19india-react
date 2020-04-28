@@ -96,9 +96,10 @@ function ChoroplethMap({
           title:
             mapOption.charAt(0).toUpperCase() +
             mapOption.slice(1) +
-            (statisticOption === MAP_STATISTICS.TOTAL
-              ? ' Cases'
-              : ' Cases Per Million'),
+            ' cases' +
+            (statisticOption === MAP_STATISTICS.PER_MILLION
+              ? ' per million'
+              : ''),
           width: widthLegend,
           height: 0.8 * heightLegend,
           ticks: 6,
