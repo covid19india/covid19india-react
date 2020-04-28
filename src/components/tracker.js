@@ -1,7 +1,7 @@
 import MapChart from './statelist';
 
 import React, {useState} from 'react';
-import {MapPin} from 'react-feather';
+import * as Icon from 'react-feather';
 
 const Tracker = (props) => {
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -14,20 +14,28 @@ const Tracker = (props) => {
   };
 
   return (
-    <div className="tracker">
+    <div className="Tracker">
       {currentLocation ? (
         <div className="Search">
+          <div className="location">{currentLocation}</div>
+          <span
+            className="close-button"
+            onClick={() => {
+              setCurrentLocation(null);
+            }}
+          >
+            <Icon.XCircle />
+          </span>
           <MapChart userLocation={currentLocation} />
         </div>
       ) : (
-        <div className="tabs">
-          <button
-            className="tab"
-            onClick={(event) => getLocationHandler(event)}
-          >
-            <MapPin /> &nbsp;
-            <h1>Essentials Nearby</h1>
-          </button>
+        <div
+          className="button fadeInUp"
+          style={{animationDelay: '0.9s'}}
+          onClick={(event) => getLocationHandler(event)}
+        >
+          <Icon.MapPin />
+          <h3>View nearby essentials offering special assistance</h3>
         </div>
       )}
     </div>
