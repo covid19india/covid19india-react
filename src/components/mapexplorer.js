@@ -80,6 +80,7 @@ function MapExplorer({
         return acc;
       }, {});
     } else if (currentMap.mapType === MAP_TYPES.STATE) {
+      setStatisticOption(MAP_STATISTICS.TOTAL);
       const districtWiseData = (
         stateDistrictWiseData[currentMap.name] || {districtData: {}}
       ).districtData;
@@ -95,6 +96,9 @@ function MapExplorer({
         });
         return acc;
       }, {});
+      currentMapData[currentMap.name] = states.find(
+        (state) => currentMap.name === state.state
+      );
     }
     return [statistic, currentMapData];
   }, [
@@ -177,7 +181,6 @@ function MapExplorer({
       if (newMap.mapType === MAP_TYPES.COUNTRY) {
         setHoveredRegion(states[0].state, newMap);
       } else if (newMap.mapType === MAP_TYPES.STATE) {
-        setStatisticOption(MAP_STATISTICS.TOTAL);
         const {districtData} = stateDistrictWiseData[name] || {
           districtData: {},
         };
@@ -340,13 +343,13 @@ function MapExplorer({
           >
             <h1>
               {currentMapData[currentHoveredRegion.name]
-                ? currentMap.mapType === MAP_TYPES.STATE
-                  ? currentMapData[currentHoveredRegion.name][mapOption]
-                  : parseFloat(
+                ? statisticOption === MAP_STATISTICS.PER_MILLION
+                  ? parseFloat(
                       currentMapData[currentHoveredRegion.name][
                         mapOption
                       ].toFixed(2)
                     )
+                  : currentMapData[currentHoveredRegion.name][mapOption]
                 : 0}
             </h1>
             <h5>
@@ -413,19 +416,33 @@ function MapExplorer({
             </div>
             <div
               className={`tab ${
-                currentMap.mapType === MAP_TYPES.COUNTRY
-                  ? statisticOption === MAP_STATISTICS.PER_MILLION
-                    ? 'focused'
-                    : ''
-                  : 'disabled'
+                currentMap.mapType === MAP_TYPES.COUNTRY &&
+                statisticOption === MAP_STATISTICS.PER_MILLION
+                  ? 'focused'
+                  : ''
               }`}
               onClick={() => {
-                setStatisticOption(MAP_STATISTICS.PER_MILLION);
+                if (currentMap.mapType === MAP_TYPES.COUNTRY)
+                  setStatisticOption(MAP_STATISTICS.PER_MILLION);
               }}
             >
-              <h4>Cases per million</h4>
+              <h4>
+                Cases per million<sup>&dagger;</sup>
+              </h4>
             </div>
           </div>
+
+          <h6 className="footnote table-fineprint">
+            &dagger; Based on 2016 population projection by NCP (
+            <a
+              href="https://nhm.gov.in/New_Updates_2018/Report_Population_Projection_2019.pdf"
+              target="_noblank"
+              style={{color: '#6c757d'}}
+            >
+              report
+            </a>
+            )
+          </h6>
         </div>
       )}
     </div>

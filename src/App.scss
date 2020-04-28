@@ -470,6 +470,7 @@ h6 {
     .last-update,
     .unknown,
     .tabs-map,
+    .footnote,
     .state-page-button {
       display: none;
     }
@@ -2285,6 +2286,14 @@ table {
       width: 20px !important;
     }
   }
+
+  .footnote {
+    &.table-fineprint {
+      margin-bottom: 0;
+      margin-top: 1em;
+      text-align: left;
+    }
+  }
 }
 
 .tooltip-tested {
@@ -2385,8 +2394,13 @@ table {
     &.disabled {
       background: $gray-opaque;
       color: $gray-mid;
-      visibility: hidden;
     }
+  }
+
+  svg {
+    height: .95em;
+    stroke-width: 3;
+    width: 1em;
   }
 }
 
