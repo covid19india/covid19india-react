@@ -4,6 +4,7 @@ import DeepDive from './components/deepdive';
 import FAQ from './components/faq';
 import Home from './components/home';
 import Navbar from './components/navbar';
+import NewsHome from './components/News/newshome';
 import PatientDB from './components/patientdb';
 import Resources from './components/resources';
 import State from './components/state';
@@ -45,6 +46,13 @@ function App() {
       pageLink: '/essentials',
       view: Resources,
       displayName: 'Essentials',
+      animationDelayForNavbar: 0.5,
+      showInNavbar: true,
+    },
+    {
+      pageLink: '/news',
+      view: NewsHome,
+      displayName: 'News',
       animationDelayForNavbar: 0.5,
       showInNavbar: true,
     },

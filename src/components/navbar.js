@@ -86,6 +86,11 @@ function Navbar({pages, darkMode, setDarkMode}) {
               </Link>
             </span>
             <span>
+              <Link to="/news">
+                <Icon.BookOpen {...activeNavIcon('/news')} />
+              </Link>
+            </span>
+            <span>
               <Link to="/faq">
                 <Icon.HelpCircle {...activeNavIcon('/faq')} />
               </Link>
