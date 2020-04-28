@@ -2058,15 +2058,11 @@ table {
 
     .district {
       color: #e23028;
-      line-height: 0;
+      line-height: 15px;
+      margin: 0;
       position: absolute;
-      top: 1.5rem;
+      top: 2rem;
       width: 10rem;
-
-      h5 {
-        font-size: .75rem;
-        font-weight: 600;
-      }
 
       &.active {
         color: $blue;
@@ -2397,10 +2393,10 @@ table {
     }
   }
 
-  svg {
-    height: .95em;
-    stroke-width: 3;
-    width: 1em;
+  sup {
+    position: relative;
+    top: -.5em;
+    vertical-align: top;
   }
 }
 

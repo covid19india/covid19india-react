@@ -335,31 +335,30 @@ function MapExplorer({
           </div>
         )}
 
-        {(currentMap.mapType === MAP_TYPES.STATE ||
-          (currentMap.mapType === MAP_TYPES.COUNTRY &&
-            statisticOption === MAP_STATISTICS.PER_MILLION)) && (
-          <div
+        {currentMap.mapType === MAP_TYPES.STATE ||
+        (currentMap.mapType === MAP_TYPES.COUNTRY &&
+          statisticOption === MAP_STATISTICS.PER_MILLION) ? (
+          <h1
             className={`district ${mapOption !== 'confirmed' ? mapOption : ''}`}
           >
-            <h1>
-              {currentMapData[currentHoveredRegion.name]
-                ? statisticOption === MAP_STATISTICS.PER_MILLION
-                  ? parseFloat(
-                      currentMapData[currentHoveredRegion.name][
-                        mapOption
-                      ].toFixed(2)
-                    )
-                  : currentMapData[currentHoveredRegion.name][mapOption]
-                : 0}
-            </h1>
-            <h5>
+            {currentMapData[currentHoveredRegion.name]
+              ? statisticOption === MAP_STATISTICS.PER_MILLION
+                ? Number(
+                    parseFloat(
+                      currentMapData[currentHoveredRegion.name][mapOption]
+                    ).toFixed(2)
+                  )
+                : currentMapData[currentHoveredRegion.name][mapOption]
+              : 0}
+            <br />
+            <span style={{fontSize: '0.75rem', fontWeight: 600}}>
               {mapOption}{' '}
               {statisticOption === MAP_STATISTICS.PER_MILLION
                 ? ' per million'
                 : ''}
-            </h5>
-          </div>
-        )}
+            </span>
+          </h1>
+        ) : null}
 
         {currentMap.mapType === MAP_TYPES.STATE &&
         currentMapData.Unknown &&
@@ -389,62 +388,60 @@ function MapExplorer({
       </div>
 
       {mapOption && (
-        <div>
-          <ChoroplethMap
-            statistic={statistic}
-            mapMeta={currentMap}
-            mapData={currentMapData}
-            setHoveredRegion={setHoveredRegion}
-            changeMap={switchMapToState}
-            selectedRegion={selectedRegion}
-            setSelectedRegion={setSelectedRegion}
-            isCountryLoaded={isCountryLoaded}
-            mapOption={mapOption}
-            statisticOption={statisticOption}
-          />
-
-          <div className="tabs-map">
-            <div
-              className={`tab ${
-                statisticOption === MAP_STATISTICS.TOTAL ? 'focused' : ''
-              }`}
-              onClick={() => {
-                setStatisticOption(MAP_STATISTICS.TOTAL);
-              }}
-            >
-              <h4>Total Cases</h4>
-            </div>
-            <div
-              className={`tab ${
-                currentMap.mapType === MAP_TYPES.COUNTRY &&
-                statisticOption === MAP_STATISTICS.PER_MILLION
-                  ? 'focused'
-                  : ''
-              }`}
-              onClick={() => {
-                if (currentMap.mapType === MAP_TYPES.COUNTRY)
-                  setStatisticOption(MAP_STATISTICS.PER_MILLION);
-              }}
-            >
-              <h4>
-                Cases per million<sup>&dagger;</sup>
-              </h4>
-            </div>
-          </div>
-
-          <h6 className="footnote table-fineprint">
-            &dagger; Based on 2016 population projection by NCP (
-            <a
-              href="https://nhm.gov.in/New_Updates_2018/Report_Population_Projection_2019.pdf"
-              target="_noblank"
-              style={{color: '#6c757d'}}
-            >
-              report
-            </a>
-            )
-          </h6>
-        </div>
+        <ChoroplethMap
+          statistic={statistic}
+          mapMeta={currentMap}
+          mapData={currentMapData}
+          setHoveredRegion={setHoveredRegion}
+          changeMap={switchMapToState}
+          selectedRegion={selectedRegion}
+          setSelectedRegion={setSelectedRegion}
+          isCountryLoaded={isCountryLoaded}
+          mapOption={mapOption}
+          statisticOption={statisticOption}
+        />
       )}
+
+      <div className="tabs-map">
+        <div
+          className={`tab ${
+            statisticOption === MAP_STATISTICS.TOTAL ? 'focused' : ''
+          }`}
+          onClick={() => {
+            setStatisticOption(MAP_STATISTICS.TOTAL);
+          }}
+        >
+          <h4>Total Cases</h4>
+        </div>
+        <div
+          className={`tab ${
+            currentMap.mapType === MAP_TYPES.COUNTRY &&
+            statisticOption === MAP_STATISTICS.PER_MILLION
+              ? 'focused'
+              : ''
+          }`}
+          onClick={() => {
+            if (currentMap.mapType === MAP_TYPES.COUNTRY)
+              setStatisticOption(MAP_STATISTICS.PER_MILLION);
+          }}
+        >
+          <h4>
+            Cases per million<sup>&dagger;</sup>
+          </h4>
+        </div>
+      </div>
+
+      <h6 className="footnote table-fineprint">
+        &dagger; Based on 2016 population projection by NCP (
+        <a
+          href="https://nhm.gov.in/New_Updates_2018/Report_Population_Projection_2019.pdf"
+          target="_noblank"
+          style={{color: '#6c757d'}}
+        >
+          report
+        </a>
+        )
+      </h6>
     </div>
   );
 }
