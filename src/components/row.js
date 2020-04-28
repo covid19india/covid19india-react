@@ -11,7 +11,12 @@ import {formatDistance} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
+<<<<<<< HEAD
 import {useHistory} from 'react-router-dom';
+=======
+import {useTranslation} from 'react-i18next';
+import {Link} from 'react-router-dom';
+>>>>>>> Updated config and rendered LanguageSwitcher
 import ReactTooltip from 'react-tooltip';
 import {createBreakpoint, useLocalStorage, useEffectOnce} from 'react-use';
 
@@ -175,6 +180,7 @@ function Row({
     sortColumn: 'confirmed',
     isAscending: false,
   });
+  const {t} = useTranslation();
 
   const history = useHistory();
 
@@ -261,7 +267,7 @@ function Row({
             : null
         }
       >
-        <td>
+<td>
           <div className="title-chevron">
             {state.statecode !== 'TT' && Chevron}
             <span className="title-icon">

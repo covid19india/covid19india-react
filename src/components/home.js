@@ -1,4 +1,5 @@
 import Footer from './footer';
+import LanguageSwitcher from './languageswitcher';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
@@ -174,6 +175,7 @@ function Home(props) {
 
         <div className="home-left">
           <div className="header fadeInUp" style={{animationDelay: '1s'}}>
+            <LanguageSwitcher />
             {fetched && <Search />}
 
             <div className="actions">

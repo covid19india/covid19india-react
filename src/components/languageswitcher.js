@@ -1,7 +1,7 @@
+import locales from '../i18n/locales.json';
+
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-
-import locales from '../i18n/locales.json';
 
 export default function LanguageSwitcher() {
   const {i18n, t} = useTranslation();
