@@ -31,21 +31,22 @@ function Updates(props) {
         .map(function (activity, index) {
           activity.update = activity.update.replace('\n', '<br/>');
           activity.update = activity.update.replace(
-            'recovery',
+            new RegExp('\\b' + 'recovery' + '\\b'),
             "<span style='color:#28a745'> recovery </span>"
           );
           activity.update = activity.update.replace(
-            'recoveries',
+            new RegExp('\\b' + 'recoveries' + '\\b'),
             "<span style='color:#28a745'> recoveries </span>"
           );
           activity.update = activity.update.replace(
-            'new cases',
+            new RegExp('\\b' + 'new cases' + '\\b'),
             "<span style='color:#dc3545'> new cases </span>"
           );
           activity.update = activity.update.replace(
-            'new case',
+            new RegExp('\\b' + 'new case' + '\\b'),
             "<span style='color:#dc3545'> new case </span>"
           );
+
           const activityDate = new Date(activity.timestamp * 1000);
           const addHeader = () => {
             currentDate = activityDate;
