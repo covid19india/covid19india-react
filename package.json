@@ -47,8 +47,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && cp build/index.html build/404.html",
+    "build": "react-scripts build && npm run compress_maps && cp build/index.html build/404.html",
     "map_test": "react-scripts test src/__tests__/mapAndApiStateNames.test.js",
+    "compress_maps": "rollup -c",
     "test": "react-scripts test --testPathIgnorePatterns=src/__tests__/mapAndApiStateNames.test.js",
     "eject": "react-scripts eject",
     "eslint": "eslint .",
@@ -92,6 +93,8 @@
     "husky": "^4.2.5",
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
+    "rollup": "^2.7.3",
+    "rollup-plugin-copy": "^3.3.0",
     "sass-lint": "^1.13.1",
     "sass-lint-auto-fix": "^0.21.0"
   },
@@ -106,6 +109,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "sideEffects": false
+  }
 }
