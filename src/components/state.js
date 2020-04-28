@@ -358,7 +358,6 @@ function State(props) {
                 <div
                   className="district-bar"
                   style={!showAllDistricts ? {display: 'flex'} : {}}
-                  key={mapOption}
                 >
                   <div
                     className="district-bar-left fadeInUp"
@@ -396,8 +395,10 @@ function State(props) {
                                   <h2>{cases[mapOption]}</h2>
                                   <h5>{district}</h5>
                                   <div className="delta">
-                                    <Icon.ArrowUp />
-                                    <h6>{cases.delta[mapOption]}</h6>
+                                    <Icon.ArrowUp className={mapOption} />
+                                    <h6 className={mapOption}>
+                                      {cases.delta[mapOption]}
+                                    </h6>
                                   </div>
                                 </div>
                               );
@@ -434,7 +435,8 @@ function State(props) {
                     {
                       <DeltaBarGraph
                         timeseries={timeseries.slice(-5)}
-                        arrayKey={`daily${mapOption}`}
+                        arrayKeyProp={mapOption}
+                        key={mapOption}
                       />
                     }
                   </div>

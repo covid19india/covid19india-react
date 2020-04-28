@@ -1,13 +1,18 @@
 import * as d3 from 'd3';
 import React, {useEffect, useRef, useState} from 'react';
 
-function DeltaBarGraph({timeseries, arrayKey}) {
+function DeltaBarGraph({timeseries, arrayKeyProp}) {
   const [data, setData] = useState([]);
+  const [arrayKey, setArrayKey] = useState(arrayKeyProp);
   const svgRef = useRef();
 
   useEffect(() => {
     setData(timeseries);
   }, [timeseries]);
+
+  useEffect(() => {
+    if (arrayKeyProp) setArrayKey(`daily${arrayKeyProp}`);
+  }, [arrayKeyProp, arrayKey]);
 
   useEffect(() => {
     if (!data.length) return;
