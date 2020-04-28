@@ -45,6 +45,7 @@ function DeltaBarGraph({timeseries, arrayKey}) {
       .select('.x-axis')
       .style('transform', `translateY(${chartBottom}px)`)
       .call(xAxis)
+      .attr('class', `x-axis ${arrayKey}`)
       .call((g) => g.select('.domain').remove())
       .selectAll('text')
       .attr('y', 0)
@@ -65,13 +66,21 @@ function DeltaBarGraph({timeseries, arrayKey}) {
           barRadius
         )
       )
-      .attr('fill', (d, i) => (i < data.length - 1 ? '#dc354590' : '#dc3545'));
+      .attr('fill', (d, i) => {
+        if (arrayKey === 'dailyconfirmed')
+          return i < data.length - 1 ? '#dc354590' : '#dc3545';
+        else if (arrayKey === 'dailyrecovered')
+          return i < data.length - 1 ? '#47A74590' : '#47A745';
+        else if (arrayKey === 'dailyactive')
+          return i < data.length - 1 ? '#0479FB90' : '#0479FB';
+        else return i < data.length - 1 ? '#6B747C90' : '#6B747C';
+      });
 
     svg
       .selectAll('.delta')
       .data(data)
       .join('text')
-      .attr('class', 'delta')
+      .attr('class', `delta ${arrayKey}`)
       .attr('text-anchor', 'middle')
       .attr('font-size', '11px')
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
@@ -79,6 +88,7 @@ function DeltaBarGraph({timeseries, arrayKey}) {
       .text((d) => d[arrayKey])
       .append('tspan')
       .attr('class', 'percent')
+      .attr('display', arrayKey !== 'dailyconfirmed' ? 'none' : '')
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
       .attr('dy', '-1.2em')
       .text((d, i) =>

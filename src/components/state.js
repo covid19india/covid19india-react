@@ -358,12 +358,13 @@ function State(props) {
                 <div
                   className="district-bar"
                   style={!showAllDistricts ? {display: 'flex'} : {}}
+                  key={mapOption}
                 >
                   <div
                     className="district-bar-left fadeInUp"
                     style={{animationDelay: '0.6s'}}
                   >
-                    <h2>Top districts</h2>
+                    <h2 className={mapOption}>Top districts</h2>
                     <div
                       className={`districts ${
                         showAllDistricts ? 'is-grid' : ''
@@ -377,34 +378,26 @@ function State(props) {
                       {districtData[stateName]
                         ? Object.keys(districtData[stateName].districtData)
                             .filter((d) => d !== 'Unknown')
-                            .sort(
-                              (a, b) =>
-                                districtData[stateName].districtData[b]
-                                  .confirmed -
-                                districtData[stateName].districtData[a]
-                                  .confirmed
-                            )
+                            .sort((a, b) => {
+                              const districtB =
+                                districtData[stateName].districtData[b];
+                              const districtA =
+                                districtData[stateName].districtData[a];
+                              return (
+                                districtB[mapOption] - districtA[mapOption]
+                              );
+                            })
                             .slice(0, showAllDistricts ? undefined : 5)
                             .map((district, index) => {
+                              const cases =
+                                districtData[stateName].districtData[district];
                               return (
                                 <div key={index} className="district">
-                                  <h2>
-                                    {
-                                      districtData[stateName].districtData[
-                                        district
-                                      ].confirmed
-                                    }
-                                  </h2>
+                                  <h2>{cases[mapOption]}</h2>
                                   <h5>{district}</h5>
                                   <div className="delta">
                                     <Icon.ArrowUp />
-                                    <h6>
-                                      {
-                                        districtData[stateName].districtData[
-                                          district
-                                        ].delta.confirmed
-                                      }
-                                    </h6>
+                                    <h6>{cases.delta[mapOption]}</h6>
                                   </div>
                                 </div>
                               );
@@ -441,7 +434,7 @@ function State(props) {
                     {
                       <DeltaBarGraph
                         timeseries={timeseries.slice(-5)}
-                        arrayKey={'dailyconfirmed'}
+                        arrayKey={`daily${mapOption}`}
                       />
                     }
                   </div>

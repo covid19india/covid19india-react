@@ -4441,13 +4441,21 @@ footer {
     width: 100%;
 
     text {
-      color: $red;
       font-family: 'archia';
     }
 
+    // .x-axis {
+    //   .daliyconfirmed text {
+    //     color: $red;
+    //   }
+    // }
+
     .delta {
-      fill: #dc3545;
       font-weight: 900;
+
+      &.dailyconfirmed {
+        fill: #dc3545;
+      }
     }
 
     .percent {
