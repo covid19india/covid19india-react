@@ -11,13 +11,17 @@ import {MAP_META} from '../constants';
 import {
   formatDate,
   formatDateAbsolute,
+  mergeTimeseries,
   preprocessTimeseries,
   parseStateTimeseries,
+  parseStateTestTimeseries,
+  parseTotalTestTimeseries,
 } from '../utils/commonfunctions';
 
 import axios from 'axios';
 import React, {useState, useCallback} from 'react';
 import * as Icon from 'react-feather';
+import {Helmet} from 'react-helmet';
 import {useEffectOnce, useLocalStorage, useFavicon} from 'react-use';
 
 function Home(props) {
@@ -29,6 +33,11 @@ function Home(props) {
   const [fetched, setFetched] = useState(false);
   const [activeStateCode, setActiveStateCode] = useState('TT');
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
+  const [rowHighlighted, setRowHighlighted] = useState({
+    statecode: undefined,
+    isDistrict: false,
+    districtName: undefined,
+  });
   const [showUpdates, setShowUpdates] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [lastViewedLog, setLastViewedLog] = useLocalStorage(
@@ -79,15 +88,20 @@ function Home(props) {
 
       const ts = parseStateTimeseries(statesDailyResponse);
       ts['TT'] = preprocessTimeseries(data.cases_time_series);
-      setTimeseries(ts);
+      // Testing data timeseries
+      const testTs = parseStateTestTimeseries(stateTestData.states_tested_data);
+      testTs['TT'] = parseTotalTestTimeseries(data.tested);
+      // Merge
+      const tsMerged = mergeTimeseries(ts, testTs);
+      setTimeseries(tsMerged);
 
       setLastUpdated(data.statewise[0].lastupdatedtime);
 
-      const testData = stateTestData.states_tested_data.reverse();
+      const testData = [...stateTestData.states_tested_data].reverse();
       const totalTest = data.tested[data.tested.length - 1];
       testData.push({
         updatedon: totalTest.updatetimestamp.split(' ')[0],
-        totaltested: totalTest.totalindividualstested,
+        totaltested: totalTest.totalsamplestested,
         source: totalTest.source,
         state: 'Total',
       });
@@ -110,13 +124,33 @@ function Home(props) {
     setRegionHighlighted({district, state, index});
   };
 
-  const onMapHighlightChange = useCallback(({statecode}) => {
-    setActiveStateCode(statecode);
+  const onMapHighlightChange = useCallback((region) => {
+    setActiveStateCode(region.statecode);
+    if ('districtName' in region)
+      setRowHighlighted({
+        statecode: region.statecode,
+        isDistrict: true,
+        districtName: region.districtName,
+      });
+    else
+      setRowHighlighted({
+        statecode: region.statecode,
+        isDistrict: false,
+        districtName: undefined,
+      });
   }, []);
 
   return (
     <React.Fragment>
       <div className="Home">
+        <Helmet>
+          <title>Coronavirus Outbreak in India - covid19india.org</title>
+          <meta
+            name="title"
+            content="Coronavirus Outbreak in India: Latest Map and Case Count"
+          />
+        </Helmet>
+
         <div className="home-left">
           <div className="header fadeInUp" style={{animationDelay: '1s'}}>
             {fetched && <Search />}
@@ -159,6 +193,7 @@ function Home(props) {
               states={states}
               summary={false}
               stateDistrictWiseData={stateDistrictWiseData}
+              rowHighlighted={rowHighlighted}
               onHighlightState={onHighlightState}
               onHighlightDistrict={onHighlightDistrict}
             />
@@ -182,7 +217,7 @@ function Home(props) {
 
               {fetched && (
                 <TimeSeriesExplorer
-                  timeseries={timeseries}
+                  timeseries={timeseries[activeStateCode]}
                   activeStateCode={activeStateCode}
                   onHighlightState={onHighlightState}
                   states={states}

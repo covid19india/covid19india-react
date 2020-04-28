@@ -1,36 +1,17 @@
+import {formatNumber} from './chart-defaults';
+
 import React from 'react';
-import {Doughnut, defaults} from 'react-chartjs-2';
+import {Doughnut} from 'react-chartjs-2';
 
 function NationalityChart(props) {
-  defaults.global.tooltips.intersect = false;
-  defaults.global.tooltips.mode = 'nearest';
-  defaults.global.tooltips.position = 'average';
-  defaults.global.tooltips.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-  defaults.global.tooltips.displayColors = false;
-  defaults.global.tooltips.borderColor = '#c62828';
-  defaults.global.tooltips.borderWidth = 1;
-  defaults.global.tooltips.titleFontColor = '#000';
-  defaults.global.tooltips.bodyFontColor = '#000';
-  defaults.global.tooltips.caretPadding = 4;
-  defaults.global.tooltips.intersect = false;
-  defaults.global.tooltips.mode = 'nearest';
-  defaults.global.tooltips.position = 'nearest';
-
-  defaults.global.legend.display = true;
-  defaults.global.legend.position = 'bottom';
-
-  defaults.global.hover.intersect = false;
-
   if (!props.data || props.data.length === 0) {
     return <div></div>;
   }
 
   const nationality = {};
-  let unknown = 0;
 
   props.data.forEach((patient) => {
     if (!patient.nationality) {
-      unknown++;
       return;
     }
     if (!nationality.hasOwnProperty(patient.nationality.toLowerCase())) {
@@ -55,22 +36,16 @@ function NationalityChart(props) {
       {
         data: data,
         backgroundColor: [
-          '#ff7272',
-          '#ffb385',
-          '#fae7cb',
-          '#ffd31d',
-          '#00a8cc',
-          '#005082',
-          '#000839',
-          '#ffa41b',
-          '#f1e7b6',
-          '#400082',
-          '#fe346e',
-          '#5a3f11',
-          '#9c5518',
-          '#f67575',
-          '#d4f8e8',
-          '#1eb2a6',
+          '#ff8a66',
+          '#718af0',
+          '#7dd6fa',
+          '#59b3aa',
+          '#9bc26b',
+          '#e5d22f',
+          '#ffb041',
+          '#db6b8f',
+          '#bd66cc',
+          '#8e8e8e',
         ],
       },
     ],
@@ -112,13 +87,17 @@ function NationalityChart(props) {
     },
   };
 
+  const sampleSize = data.reduce((a, b) => a + b, 0);
+
   return (
     <div className="charts-header">
       <div className="chart-title">{props.title}</div>
       <div className="chart-content doughnut">
         <Doughnut data={chartData} options={chartOptions} />
       </div>
-      <div className="chart-note">*Awaiting details for {unknown} patients</div>
+      <div className="chart-note">
+        Sample size: {formatNumber(sampleSize)} patients
+      </div>
     </div>
   );
 }
