@@ -41,7 +41,8 @@ export default function MapChart(props) {
   };
 
   if (medKnn) {
-    for (let i = 0; i < medKnn.length; i++) {
+    let i = 0;
+    for (i = 0; i < medKnn.length; i++) {
       gjKnn.features.push({
         type: 'Feature',
         geometry: {
@@ -62,7 +63,8 @@ export default function MapChart(props) {
   }
 
   if (restKnn) {
-    for (let j = 0; j < restKnn.length; j++) {
+    let j = 0;
+    for (j = 0; j < restKnn.length; j++) {
       gjKnn.features.push({
         type: 'Feature',
         geometry: {
@@ -71,11 +73,11 @@ export default function MapChart(props) {
         },
         properties: {
           name: restKnn[j].layer.feature.properties.name,
-          desc: restKnn[i].layer.feature.properties.desc,
-          addr: restKnn[i].layer.feature.properties.addr,
-          phone: restKnn[i].layer.feature.properties.phone,
-          contact: restKnn[i].layer.feature.properties.contact,
-          icon: './icons/' + restKnn[i].layer.feature.properties.icon + '.svg',
+          desc: restKnn[j].layer.feature.properties.desc,
+          addr: restKnn[j].layer.feature.properties.addr,
+          phone: restKnn[j].layer.feature.properties.phone,
+          contact: restKnn[j].layer.feature.properties.contact,
+          icon: './icons/' + restKnn[j].layer.feature.properties.icon + '.svg',
           id: j + 100,
         },
       });
