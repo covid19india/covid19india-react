@@ -2,7 +2,12 @@ import anime from 'animejs';
 import React, {useState, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
-import {useEffectOnce, useLockBodyScroll} from 'react-use';
+import {
+  useEffectOnce,
+  useLockBodyScroll,
+  useWindowSize,
+  useLocalStorage,
+} from 'react-use';
 
 const navLinkProps = (path, animationDelay) => ({
   className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
@@ -11,20 +16,38 @@ const navLinkProps = (path, animationDelay) => ({
   },
 });
 
+const activeNavIcon = (path) => ({
+  style: {
+    stroke: window.location.pathname === path ? '#4c75f2' : '',
+  },
+});
+
 function Navbar({pages, darkMode, setDarkMode}) {
   const [expand, setExpand] = useState(false);
+  // eslint-disable-next-line
+  const [isThemeSet, setIsThemeSet] = useLocalStorage('isThemeSet', false);
+
   useLockBodyScroll(expand);
+  const windowSize = useWindowSize();
 
   return (
     <div className="Navbar">
       <div
         className="navbar-left"
-        onClick={() => setDarkMode((prevMode) => !prevMode)}
+        onClick={() => {
+          setDarkMode((prevMode) => !prevMode);
+          setIsThemeSet(true);
+        }}
       >
         {darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
       </div>
       <div className="navbar-middle">
-        <Link to="/">
+        <Link
+          to="/"
+          onClick={() => {
+            setExpand(false);
+          }}
+        >
           Covid19<span>India</span>
         </Link>
       </div>
@@ -51,23 +74,33 @@ function Navbar({pages, darkMode, setDarkMode}) {
           }
         }}
       >
-        {window.innerWidth < 769 && <span>{expand ? 'Close' : 'Menu'}</span>}
-        {window.innerWidth > 769 && (
+        {windowSize.width < 769 && <span>{expand ? 'Close' : 'Menu'}</span>}
+        {windowSize.width > 769 && (
           <React.Fragment>
             <span>
-              <Icon.Home />
+              <Link to="/">
+                <Icon.Home {...activeNavIcon('/')} />
+              </Link>
             </span>
             <span>
-              <Icon.Users />
+              <Link to="/demographics">
+                <Icon.Users {...activeNavIcon('/demographics')} />
+              </Link>
             </span>
             <span>
-              <Icon.BarChart2 />
+              <Link to="/deepdive">
+                <Icon.BarChart2 {...activeNavIcon('/deepdive')} />
+              </Link>
             </span>
             <span>
-              <Icon.Package />
+              <Link to="/essentials">
+                <Icon.Package {...activeNavIcon('/essentials')} />
+              </Link>
             </span>
             <span>
-              <Icon.HelpCircle />
+              <Link to="/faq">
+                <Icon.HelpCircle {...activeNavIcon('/faq')} />
+              </Link>
             </span>
           </React.Fragment>
         )}
