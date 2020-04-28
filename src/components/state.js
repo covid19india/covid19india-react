@@ -394,12 +394,14 @@ function State(props) {
                                 <div key={index} className="district">
                                   <h2>{cases[mapOption]}</h2>
                                   <h5>{district}</h5>
-                                  <div className="delta">
-                                    <Icon.ArrowUp className={mapOption} />
-                                    <h6 className={mapOption}>
-                                      {cases.delta[mapOption]}
-                                    </h6>
-                                  </div>
+                                  {mapOption !== 'active' && (
+                                    <div className="delta">
+                                      <Icon.ArrowUp className={mapOption} />
+                                      <h6 className={mapOption}>
+                                        {cases.delta[mapOption]}
+                                      </h6>
+                                    </div>
+                                  )}
                                 </div>
                               );
                             })
@@ -436,7 +438,6 @@ function State(props) {
                       <DeltaBarGraph
                         timeseries={timeseries.slice(-5)}
                         arrayKeyProp={mapOption}
-                        key={mapOption}
                       />
                     }
                   </div>
