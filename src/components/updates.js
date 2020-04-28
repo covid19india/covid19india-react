@@ -44,7 +44,7 @@ function Updates(props) {
           );
           activity.update = activity.update.replace(
             'new case',
-            "<span style='color:#dc3545'> new cases </span>"
+            "<span style='color:#dc3545'> new case </span>"
           );
           const activityDate = new Date(activity.timestamp * 1000);
           const addHeader = () => {
