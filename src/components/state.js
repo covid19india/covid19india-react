@@ -5,6 +5,7 @@ import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
 import TimeSeriesExplorer from './timeseriesexplorer';
+import Tracker from './tracker';
 
 import {MAP_META, STATE_CODES} from '../constants';
 import {
@@ -427,6 +428,8 @@ function State(props) {
                     </div>
                   </Link>
                 )}
+
+                <Tracker />
 
                 <TimeSeriesExplorer timeseries={timeseries} />
               </React.Fragment>

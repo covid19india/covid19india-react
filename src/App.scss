@@ -3241,6 +3241,38 @@ footer {
   }
 }
 
+
+.tracker  {
+  padding: 7px;
+  position: center;
+
+  h1  {
+    color: $primary;
+    display: inline-block;
+    margin: auto;
+    text-align: right;
+  }
+
+  .tab  {
+    background: $gray-light;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color: $pink;
+    // cursor: pointer;
+    height: 4rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: center;
+    transition: all .3s ease-in-out;
+
+    &:hover {
+      background: $gray-hover;
+    }
+  }
+}
+
+
+
 .Patients {
   align-self: center;
   display: flex;
