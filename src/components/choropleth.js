@@ -115,6 +115,7 @@ function ChoroplethMap({
         })
         .on('mouseleave', (d) => {
           if (onceTouchedRegion === d) onceTouchedRegion = null;
+          if (mapMeta.mapType === MAP_TYPES.COUNTRY) changeMap('India');
         })
         .on('touchstart', (d) => {
           if (onceTouchedRegion === d) onceTouchedRegion = null;
