@@ -104,7 +104,11 @@ function ChoroplethMap({
           height: 0.8 * heightLegend,
           ticks: 6,
           tickFormat: function (d, i, n) {
-            if (!Number.isInteger(d)) return;
+            if (
+              statisticOption === MAP_STATISTICS.TOTAL &&
+              !Number.isInteger(d)
+            )
+              return;
             if (i === n.length - 1) return formatNumber(d) + '+';
             return formatNumber(d);
           },
