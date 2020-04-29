@@ -473,6 +473,8 @@ h6 {
     .back-button,
     .last-update,
     .unknown,
+    .tabs-map,
+    .footnote,
     .state-page-button {
       display: none;
     }
@@ -1943,7 +1945,7 @@ table {
     display: flex;
     flex-direction: row;
     margin: auto;
-    margin-top: 4rem;
+    margin-top: 2rem;
     overflow: hidden;
     width: 90%;
 
@@ -2030,13 +2032,15 @@ table {
   .meta {
     display: flex;
     flex-direction: row;
-    height: 1rem;
+    flex-wrap: wrap;
+    height: 4rem;
     justify-content: space-between;
 
     h2 {
       color: #e23028;
       font-weight: 900;
-      margin: 0;
+      margin-top: 0;
+      width: calc(100% - 10rem);
       word-wrap: break-word;
 
       &.active {
@@ -2058,13 +2062,19 @@ table {
       word-wrap: break-word;
     }
 
+    a {
+      width: 10rem;
+    }
+
     .district {
       color: #e23028;
       line-height: 15px;
       margin: 0;
-      position: absolute;
-      top: 3rem;
-      width: 5rem;
+
+      span {
+        font-size: .75rem;
+        font-weight: 600;
+      }
 
       &.active {
         color: $blue;
@@ -2272,6 +2282,7 @@ table {
     margin-left: auto;
     margin-right: auto;
     padding: .5rem;
+    pointer-events: none;
     position: absolute;
     right: 0;
     width: 14rem;
@@ -2282,6 +2293,14 @@ table {
       margin-top: -.9rem;
       stroke-width: 2px;
       width: 20px !important;
+    }
+  }
+
+  .footnote {
+    &.table-fineprint {
+      margin-bottom: 0;
+      margin-top: 1em;
+      text-align: left;
     }
   }
 }
@@ -2335,6 +2354,62 @@ table {
       background: $gray-opaque;
       color: $gray;
     }
+  }
+}
+
+.tabs-map {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  z-index: 99;
+
+  h4 {
+    display: table-cell;
+    font-family: 'archia';
+    font-size: 12px !important;
+    font-weight: 900;
+    height: 2rem;
+    margin-bottom: 0;
+    margin-top: 0;
+    vertical-align: middle;
+  }
+
+  .tab {
+    background: $gray-light;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color: $gray-mid;
+    cursor: pointer;
+    height: 2rem;
+    margin-right: .25rem;
+    min-width: 5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: center;
+    transition: all .3s ease-in-out;
+
+    &:hover {
+      background: $gray-hover;
+    }
+
+    &.focused {
+      background: $gray-opaque;
+      color: $gray;
+
+    }
+
+    &.disabled {
+      background: $gray-opaque;
+      color: $gray-mid;
+    }
+  }
+
+  sup {
+    position: relative;
+    top: -.5em;
+    vertical-align: top;
   }
 }
 
