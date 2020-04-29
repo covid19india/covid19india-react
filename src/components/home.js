@@ -21,6 +21,7 @@ import {
 import axios from 'axios';
 import React, {useState, useCallback} from 'react';
 import * as Icon from 'react-feather';
+import {Helmet} from 'react-helmet';
 import {useEffectOnce, useLocalStorage, useFavicon} from 'react-use';
 
 function Home(props) {
@@ -142,6 +143,14 @@ function Home(props) {
   return (
     <React.Fragment>
       <div className="Home">
+        <Helmet>
+          <title>Coronavirus Outbreak in India - covid19india.org</title>
+          <meta
+            name="title"
+            content="Coronavirus Outbreak in India: Latest Map and Case Count"
+          />
+        </Helmet>
+
         <div className="home-left">
           <div className="header fadeInUp" style={{animationDelay: '1s'}}>
             {fetched && <Search />}

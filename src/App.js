@@ -10,13 +10,23 @@ import State from './components/state';
 import ScrollToTop from './utils/ScrollToTop';
 
 import React from 'react';
+import {Helmet} from 'react-helmet';
 import {
   BrowserRouter as Router,
   Route,
   Redirect,
   Switch,
 } from 'react-router-dom';
-import {useLocalStorage} from 'react-use';
+import {useLocalStorage, useEffectOnce} from 'react-use';
+
+const schemaMarkup = {
+  '@context': 'http://schema.org/',
+  '@type': 'NGO',
+  name: 'Coronavirus Outbreak in India: Latest Map and Case Count',
+  alternateName: 'COVID-19 Tracker',
+  url: 'https://www.covid19india.org/',
+  image: 'https://www.covid19india.org/thumbnail.png',
+};
 
 function App() {
   const pages = [
@@ -65,6 +75,23 @@ function App() {
   ];
 
   const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
+  const [isThemeSet] = useLocalStorage('isThemeSet', false);
+
+  useEffectOnce(() => {
+    if (
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches &&
+      !isThemeSet
+    ) {
+      setDarkMode(true);
+    } else if (
+      window.matchMedia &&
+      !window.matchMedia('(prefers-color-scheme: dark)').matches &&
+      !isThemeSet
+    ) {
+      setDarkMode(false);
+    }
+  });
 
   React.useEffect(() => {
     if (darkMode) {
@@ -75,7 +102,13 @@ function App() {
   }, [darkMode]);
 
   return (
-    <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
+    <div className="App">
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(schemaMarkup)}
+        </script>
+      </Helmet>
+
       <Router>
         <ScrollToTop />
         <Route

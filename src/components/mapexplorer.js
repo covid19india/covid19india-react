@@ -1,7 +1,12 @@
 import ChoroplethMap from './choropleth';
 import {testedToolTip} from './tooltips';
 
-import {MAP_TYPES, MAP_META} from '../constants';
+import {
+  MAP_STATISTICS,
+  MAP_TYPES,
+  MAP_META,
+  STATE_POPULATIONS,
+} from '../constants';
 import {formatDate, formatNumber} from '../utils/commonfunctions';
 
 import {formatDistance, format, parse} from 'date-fns';
@@ -43,6 +48,7 @@ function MapExplorer({
   );
   const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta);
+  const [statisticOption, setStatisticOption] = useState(MAP_STATISTICS.TOTAL);
   const [mapOption, setMapOption] = useLocalStorage('mapOption', 'active');
 
   const [statistic, currentMapData] = useMemo(() => {
@@ -55,23 +61,26 @@ function MapExplorer({
 
     if (currentMap.mapType === MAP_TYPES.COUNTRY) {
       currentMapData = states.reduce((acc, state) => {
-        if (state.state === 'Total') {
-          return acc;
-        }
         acc[state.state] = {};
+
         dataTypes.forEach((dtype) => {
-          const typeCount = parseInt(
+          let typeCount = parseInt(
             state[dtype !== 'deceased' ? dtype : 'deaths']
           );
-          statistic[dtype].total += typeCount;
-          if (typeCount > statistic[dtype].max) {
-            statistic[dtype].max = typeCount;
+          if (statisticOption)
+            typeCount = (1e6 * typeCount) / STATE_POPULATIONS[state.state];
+          if (state.state !== 'Total') {
+            statistic[dtype].total += typeCount;
+            if (typeCount > statistic[dtype].max) {
+              statistic[dtype].max = typeCount;
+            }
           }
           acc[state.state][dtype] = typeCount;
         });
         return acc;
       }, {});
     } else if (currentMap.mapType === MAP_TYPES.STATE) {
+      setStatisticOption(MAP_STATISTICS.TOTAL);
       const districtWiseData = (
         stateDistrictWiseData[currentMap.name] || {districtData: {}}
       ).districtData;
@@ -87,9 +96,18 @@ function MapExplorer({
         });
         return acc;
       }, {});
+      currentMapData[currentMap.name] = states.find(
+        (state) => currentMap.name === state.state
+      );
     }
     return [statistic, currentMapData];
-  }, [currentMap, states, stateDistrictWiseData]);
+  }, [
+    currentMap.mapType,
+    currentMap.name,
+    states,
+    stateDistrictWiseData,
+    statisticOption,
+  ]);
 
   const setHoveredRegion = useCallback(
     (name, currentMap) => {
@@ -301,6 +319,7 @@ function MapExplorer({
         <h2 className={`${mapOption !== 'confirmed' ? mapOption : ''}`}>
           {currentHoveredRegion.name}
         </h2>
+
         {currentHoveredRegion.lastupdatedtime && (
           <div className="last-update">
             <h6>Last updated</h6>
@@ -317,27 +336,38 @@ function MapExplorer({
           </div>
         )}
 
-        {currentMap.mapType === MAP_TYPES.STATE &&
-        currentHoveredRegion.name !== currentMap.name ? (
+        {currentMap.mapType === MAP_TYPES.STATE ? (
+          <Link to={`state/${currentHoveredRegion.statecode}`}>
+            <div className="button state-page-button">
+              <abbr>Visit state page</abbr>
+              <Icon.ArrowRightCircle />
+            </div>
+          </Link>
+        ) : null}
+
+        {currentMap.mapType === MAP_TYPES.STATE ||
+        (currentMap.mapType === MAP_TYPES.COUNTRY &&
+          statisticOption === MAP_STATISTICS.PER_MILLION) ? (
           <h1
             className={`district ${mapOption !== 'confirmed' ? mapOption : ''}`}
           >
             {currentMapData[currentHoveredRegion.name]
-              ? currentMapData[currentHoveredRegion.name][mapOption]
+              ? statisticOption === MAP_STATISTICS.PER_MILLION
+                ? Number(
+                    parseFloat(
+                      currentMapData[currentHoveredRegion.name][mapOption]
+                    ).toFixed(2)
+                  )
+                : currentMapData[currentHoveredRegion.name][mapOption]
               : 0}
             <br />
-            <span style={{fontSize: '0.75rem', fontWeight: 600}}>
-              {mapOption}
+            <span>
+              {mapOption}{' '}
+              {statisticOption === MAP_STATISTICS.PER_MILLION
+                ? ' per million'
+                : ''}
             </span>
           </h1>
-        ) : null}
-
-        {currentMap.mapType === MAP_TYPES.STATE &&
-        currentMapData.Unknown &&
-        currentMapData.Unknown[mapOption] > 0 ? (
-          <h4 className="unknown">
-            Districts unknown for {currentMapData.Unknown[mapOption]} people
-          </h4>
         ) : null}
 
         {currentMap.mapType === MAP_TYPES.STATE ? (
@@ -349,13 +379,12 @@ function MapExplorer({
           </div>
         ) : null}
 
-        {currentMap.mapType === MAP_TYPES.STATE ? (
-          <Link to={`state/${currentHoveredRegion.statecode}`}>
-            <div className="button state-page-button">
-              <abbr>Visit state page</abbr>
-              <Icon.ArrowRightCircle />
-            </div>
-          </Link>
+        {currentMap.mapType === MAP_TYPES.STATE &&
+        currentMapData.Unknown &&
+        currentMapData.Unknown[mapOption] > 0 ? (
+          <h4 className="unknown">
+            Districts unknown for {currentMapData.Unknown[mapOption]} people
+          </h4>
         ) : null}
       </div>
 
@@ -370,8 +399,50 @@ function MapExplorer({
           setSelectedRegion={setSelectedRegion}
           isCountryLoaded={isCountryLoaded}
           mapOption={mapOption}
+          statisticOption={statisticOption}
         />
       )}
+
+      <div className="tabs-map">
+        <div
+          className={`tab ${
+            statisticOption === MAP_STATISTICS.TOTAL ? 'focused' : ''
+          }`}
+          onClick={() => {
+            setStatisticOption(MAP_STATISTICS.TOTAL);
+          }}
+        >
+          <h4>Total Cases</h4>
+        </div>
+        <div
+          className={`tab ${
+            currentMap.mapType === MAP_TYPES.COUNTRY &&
+            statisticOption === MAP_STATISTICS.PER_MILLION
+              ? 'focused'
+              : ''
+          }`}
+          onClick={() => {
+            if (currentMap.mapType === MAP_TYPES.COUNTRY)
+              setStatisticOption(MAP_STATISTICS.PER_MILLION);
+          }}
+        >
+          <h4>
+            Cases per million<sup>&dagger;</sup>
+          </h4>
+        </div>
+      </div>
+
+      <h6 className="footnote table-fineprint">
+        &dagger; Based on 2019 population projection by NCP (
+        <a
+          href="https://nhm.gov.in/New_Updates_2018/Report_Population_Projection_2019.pdf"
+          target="_noblank"
+          style={{color: '#6c757d'}}
+        >
+          report
+        </a>
+        )
+      </h6>
     </div>
   );
 }
