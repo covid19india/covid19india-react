@@ -1,7 +1,7 @@
 // Temp data
 import GeoData from './essentials.json';
 
-import {Label, LabelGroup} from '@primer/components';
+import {Label, LabelGroup, CounterLabel} from '@primer/components';
 import L from 'leaflet';
 import * as Knn from 'leaflet-knn';
 import React from 'react';
@@ -91,27 +91,27 @@ export default function MapChart({userLocation}) {
     })
     .reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map())
     .forEach((value, key, map) => {
-      console.log({key, value});
+      console.log(key, value);
+    });
+
+  const categories = [];
+  gjKnn.features
+    .map(function (feature) {
+      return feature?.properties?.icon;
+    })
+    .reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map())
+    .forEach((value, key, map) => {
+      categories.push(
+        <Label variant="xl" key={key}>
+          {key} <CounterLabel className="counter">{value}</CounterLabel>
+        </Label>
+      );
     });
 
   return (
     <div className="results">
       <div className="labels">
-        <LabelGroup>
-          {Array.from(
-            new Set(
-              gjKnn.features.map(function (feature) {
-                return feature?.properties?.icon;
-              })
-            )
-          ).map((category, index) => {
-            return (
-              <Label variant="xl" key={index}>
-                {category}
-              </Label>
-            );
-          })}
-        </LabelGroup>
+        <LabelGroup>{categories}</LabelGroup>
       </div>
 
       {gjKnn.features.map((d) => (
@@ -127,7 +127,6 @@ export default function MapChart({userLocation}) {
               <div className="result-location">{d.properties.addr}</div>
             </div>
             <div className="result-category">
-              <img src={d.properties.icon} alt="icon" />
               <ExternalLink />
             </div>
           </div>

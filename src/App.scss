@@ -3355,7 +3355,13 @@ footer {
       color: $orange-mid !important;
       cursor: pointer;
       font-family: 'archia' !important;
+      margin-bottom: .25rem;
       text-transform: capitalize;
+
+      .counter {
+        background: $orange-light;
+        color: $orange;
+      }
     }
 
     .essential-result {
