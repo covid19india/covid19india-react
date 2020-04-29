@@ -31,12 +31,14 @@ function ChoroplethMap({
 
   const ready = useCallback(
     (geoData) => {
-      d3.selectAll('svg#chart > *').remove();
-
       const propertyField = propertyFieldMap[mapMeta.mapType];
       const svg = d3.select(choroplethMap.current);
 
       const topology = topojson.feature(
+        geoData,
+        geoData.objects[mapMeta.graphObjectName]
+      );
+      const mesh = topojson.mesh(
         geoData,
         geoData.objects[mapMeta.graphObjectName]
       );
@@ -94,8 +96,7 @@ function ChoroplethMap({
         legend({
           color: colorScale,
           title:
-            mapOption.charAt(0).toUpperCase() +
-            mapOption.slice(1) +
+            toTitleCase(mapOption) +
             ' cases' +
             (statisticOption === MAP_STATISTICS.PER_MILLION
               ? ' per million'
@@ -119,21 +120,18 @@ function ChoroplethMap({
       svgLegend.attr('viewBox', `0 0 ${widthLegend} ${heightLegend}`);
 
       /* Draw map */
+      const t = svg.transition().duration(500);
       let onceTouchedRegion = null;
-      const g = svg.append('g').attr('class', mapMeta.graphObjectName);
-      g.append('g')
-        .attr('class', 'states')
+      const regionSelection = svg
+        .select('.regions')
         .selectAll('path')
-        .data(topology.features)
-        .join('path')
-        .attr('class', `path-region ${mapOption}`)
-        .attr('fill', function (d) {
-          const region = d.properties[propertyField];
-          const n = mapData[region] ? mapData[region][mapOption] : 0;
-          const color = n === 0 ? '#ffffff' : colorScale(n);
-          return color;
+        .data(topology.features, (d) => {
+          const state = d.properties['st_nm'];
+          const district = d.properties['district'];
+          return district ? `${district} ${state}` : state;
         })
-        .attr('d', path)
+        .join((enter) => enter.append('path').attr('d', path))
+        .attr('class', `path-region ${mapOption}`)
         .attr('pointer-events', 'all')
         .on('mouseenter', (d) => {
           handleMouseEnter(d.properties[propertyField]);
@@ -146,26 +144,40 @@ function ChoroplethMap({
           else onceTouchedRegion = d;
         })
         .on('click', handleClick)
-        .style('cursor', 'pointer')
-        .append('title')
-        .text(function (d) {
-          const region = d.properties[propertyField];
-          const value = mapData[region] ? mapData[region][mapOption] : 0;
-          if (statisticOption === MAP_STATISTICS.TOTAL) {
-            return (
-              Number(
-                parseFloat(
-                  100 * (value / (statistic[mapOption].total || 0.001))
-                ).toFixed(2)
-              ).toString() +
-              '% from ' +
-              toTitleCase(region)
-            );
-          }
-        });
+        .style('cursor', 'pointer');
 
-      g.append('path')
-        .attr('class', 'borders')
+      regionSelection.append('title').text(function (d) {
+        const region = d.properties[propertyField];
+        const value = mapData[region] ? mapData[region][mapOption] : 0;
+        if (statisticOption === MAP_STATISTICS.TOTAL) {
+          return (
+            Number(
+              parseFloat(
+                100 * (value / (statistic[mapOption].total || 0.001))
+              ).toFixed(2)
+            ).toString() +
+            '% from ' +
+            toTitleCase(region)
+          );
+        }
+      });
+
+      regionSelection.transition(t).attr('fill', function (d) {
+        const region = d.properties[propertyField];
+        const n = mapData[region] ? mapData[region][mapOption] : 0;
+        const color = n === 0 ? '#ffffff' : colorScale(n);
+        return color;
+      });
+
+      svg
+        .select('.borders')
+        .selectAll('path')
+        .data([mesh])
+        .join('path')
+        .attr('fill', 'none')
+        .attr('stroke-width', width / 250)
+        .attr('d', (d) => path(d))
+        .transition(t)
         .attr(
           'stroke',
           `${
@@ -179,12 +191,6 @@ function ChoroplethMap({
               ? '#6c757d30'
               : ''
           }`
-        )
-        .attr('fill', 'none')
-        .attr('stroke-width', width / 250)
-        .attr(
-          'd',
-          path(topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectName]))
         );
 
       const handleMouseEnter = (name) => {
@@ -201,7 +207,7 @@ function ChoroplethMap({
         if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE) return;
         // Disable pointer events till the new map is rendered
         svg.attr('pointer-events', 'none');
-        g.selectAll('.path-region').attr('pointer-events', 'none');
+        svg.selectAll('.path-region').attr('pointer-events', 'none');
         // Switch map
         changeMap(d.properties[propertyField]);
       }
@@ -266,11 +272,10 @@ function ChoroplethMap({
   return (
     <div>
       <div className="svg-parent fadeInUp" style={{animationDelay: '2.5s'}}>
-        <svg
-          id="chart"
-          preserveAspectRatio="xMidYMid meet"
-          ref={choroplethMap}
-        ></svg>
+        <svg id="chart" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}>
+          <g className="regions" />
+          <g className="borders" />
+        </svg>
         {(mapOption === 'recovered' && mapData?.Unknown?.recovered) ||
         (mapOption === 'deceased' && mapData?.Unknown?.deceased) ? (
           <div className="disclaimer">
