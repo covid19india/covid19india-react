@@ -1,6 +1,6 @@
 import legend from './legend';
 
-import {MAP_TYPES} from '../constants';
+import {MAP_STATISTICS, MAP_TYPES} from '../constants';
 import {formatNumber} from '../utils/commonfunctions';
 
 import * as d3 from 'd3';
@@ -23,6 +23,7 @@ function ChoroplethMap({
   setSelectedRegion,
   isCountryLoaded,
   mapOption,
+  statisticOption,
 }) {
   const choroplethMap = useRef(null);
   const choroplethLegend = useRef(null);
@@ -93,12 +94,21 @@ function ChoroplethMap({
         legend({
           color: colorScale,
           title:
-            mapOption.charAt(0).toUpperCase() + mapOption.slice(1) + ' Cases',
+            mapOption.charAt(0).toUpperCase() +
+            mapOption.slice(1) +
+            ' cases' +
+            (statisticOption === MAP_STATISTICS.PER_MILLION
+              ? ' per million'
+              : ''),
           width: widthLegend,
           height: 0.8 * heightLegend,
           ticks: 6,
           tickFormat: function (d, i, n) {
-            if (!Number.isInteger(d)) return;
+            if (
+              statisticOption === MAP_STATISTICS.TOTAL &&
+              !Number.isInteger(d)
+            )
+              return;
             if (i === n.length - 1) return formatNumber(d) + '+';
             return formatNumber(d);
           },
@@ -141,15 +151,17 @@ function ChoroplethMap({
         .text(function (d) {
           const region = d.properties[propertyField];
           const value = mapData[region] ? mapData[region][mapOption] : 0;
-          return (
-            Number(
-              parseFloat(
-                100 * (value / (statistic[mapOption].total || 0.001))
-              ).toFixed(2)
-            ).toString() +
-            '% from ' +
-            toTitleCase(region)
-          );
+          if (statisticOption === MAP_STATISTICS.TOTAL) {
+            return (
+              Number(
+                parseFloat(
+                  100 * (value / (statistic[mapOption].total || 0.001))
+                ).toFixed(2)
+              ).toString() +
+              '% from ' +
+              toTitleCase(region)
+            );
+          }
         });
 
       g.append('path')
@@ -211,6 +223,7 @@ function ChoroplethMap({
       setSelectedRegion,
       setHoveredRegion,
       changeMap,
+      statisticOption,
     ]
   );
 
