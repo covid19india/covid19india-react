@@ -433,10 +433,6 @@ function State(props) {
               </React.Fragment>
             )}
           </div>
-
-          <div className="state-left"></div>
-
-          <div className="state-right"></div>
         </div>
         <Footer />
       </React.Fragment>
