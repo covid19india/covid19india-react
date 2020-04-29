@@ -319,6 +319,7 @@ function MapExplorer({
         <h2 className={`${mapOption !== 'confirmed' ? mapOption : ''}`}>
           {currentHoveredRegion.name}
         </h2>
+
         {currentHoveredRegion.lastupdatedtime && (
           <div className="last-update">
             <h6>Last updated</h6>
@@ -334,6 +335,15 @@ function MapExplorer({
             </h3>
           </div>
         )}
+
+        {currentMap.mapType === MAP_TYPES.STATE ? (
+          <Link to={`state/${currentHoveredRegion.statecode}`}>
+            <div className="button state-page-button">
+              <abbr>Visit state page</abbr>
+              <Icon.ArrowRightCircle />
+            </div>
+          </Link>
+        ) : null}
 
         {currentMap.mapType === MAP_TYPES.STATE ||
         (currentMap.mapType === MAP_TYPES.COUNTRY &&
@@ -351,21 +361,13 @@ function MapExplorer({
                 : currentMapData[currentHoveredRegion.name][mapOption]
               : 0}
             <br />
-            <span style={{fontSize: '0.75rem', fontWeight: 600}}>
+            <span>
               {mapOption}{' '}
               {statisticOption === MAP_STATISTICS.PER_MILLION
                 ? ' per million'
                 : ''}
             </span>
           </h1>
-        ) : null}
-
-        {currentMap.mapType === MAP_TYPES.STATE &&
-        currentMapData.Unknown &&
-        currentMapData.Unknown[mapOption] > 0 ? (
-          <h4 className="unknown">
-            Districts unknown for {currentMapData.Unknown[mapOption]} people
-          </h4>
         ) : null}
 
         {currentMap.mapType === MAP_TYPES.STATE ? (
@@ -377,13 +379,12 @@ function MapExplorer({
           </div>
         ) : null}
 
-        {currentMap.mapType === MAP_TYPES.STATE ? (
-          <Link to={`state/${currentHoveredRegion.statecode}`}>
-            <div className="button state-page-button">
-              <abbr>Visit state page</abbr>
-              <Icon.ArrowRightCircle />
-            </div>
-          </Link>
+        {currentMap.mapType === MAP_TYPES.STATE &&
+        currentMapData.Unknown &&
+        currentMapData.Unknown[mapOption] > 0 ? (
+          <h4 className="unknown">
+            Districts unknown for {currentMapData.Unknown[mapOption]} people
+          </h4>
         ) : null}
       </div>
 
@@ -432,7 +433,7 @@ function MapExplorer({
       </div>
 
       <h6 className="footnote table-fineprint">
-        &dagger; Based on 2016 population projection by NCP (
+        &dagger; Based on 2019 population projection by NCP (
         <a
           href="https://nhm.gov.in/New_Updates_2018/Report_Population_Projection_2019.pdf"
           target="_noblank"

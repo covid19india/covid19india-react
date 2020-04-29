@@ -1941,7 +1941,7 @@ table {
     display: flex;
     flex-direction: row;
     margin: auto;
-    margin-top: 4rem;
+    margin-top: 2rem;
     overflow: hidden;
     width: 90%;
 
@@ -2028,13 +2028,15 @@ table {
   .meta {
     display: flex;
     flex-direction: row;
-    height: 1rem;
+    flex-wrap: wrap;
+    height: 4rem;
     justify-content: space-between;
 
     h2 {
       color: #e23028;
       font-weight: 900;
-      margin: 0;
+      margin-top: 0;
+      width: calc(100% - 10rem);
       word-wrap: break-word;
 
       &.active {
@@ -2056,13 +2058,19 @@ table {
       word-wrap: break-word;
     }
 
+    a {
+      width: 10rem;
+    }
+
     .district {
       color: #e23028;
       line-height: 15px;
       margin: 0;
-      position: absolute;
-      top: 2rem;
-      width: 10rem;
+
+      span {
+        font-size: .75rem;
+        font-weight: 600;
+      }
 
       &.active {
         color: $blue;
@@ -2270,6 +2278,7 @@ table {
     margin-left: auto;
     margin-right: auto;
     padding: .5rem;
+    pointer-events: none;
     position: absolute;
     right: 0;
     width: 14rem;
