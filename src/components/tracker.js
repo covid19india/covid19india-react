@@ -1,23 +1,45 @@
 import MapChart from './statelist';
 
+import axios from 'axios';
 import React, {useState} from 'react';
 import * as Icon from 'react-feather';
 
 const Tracker = (props) => {
   const [currentLocation, setCurrentLocation] = useState(null);
+  const [currAddr, setCurrAddr] = useState(null);
 
   const getLocationHandler = (event) => {
     event.preventDefault();
     navigator.geolocation.getCurrentPosition((position) => {
       setCurrentLocation([position.coords.latitude, position.coords.longitude]);
+      getCurrAddr(position.coords.latitude, position.coords.longitude);
     });
+  };
+
+  const getCurrAddr = (lat, lng) => {
+    try {
+      axios
+        .get(
+          'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=' +
+            lat +
+            '&longitude=' +
+            lng +
+            '&localityLanguage=en'
+        )
+        .then((response) => {
+          setCurrAddr(response.data.locality);
+        });
+    } catch (err) {
+      console.log(err);
+      setCurrAddr('Error fetching name of your location');
+    }
   };
 
   return (
     <div className="Tracker">
       {currentLocation ? (
         <div className="Search">
-          <div className="location">{currentLocation}</div>
+          <div className="location">{currAddr}</div>
           <span
             className="close-button"
             onClick={() => {

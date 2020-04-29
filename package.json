@@ -16,7 +16,6 @@
     "d3": "^5.15.0",
     "date-fns": "^2.11.0",
     "deepmerge": "^4.2.2",
-    "esri-leaflet-geocoder": "^2.3.2",
     "leaflet": "^1.6.0",
     "leaflet-knn": "^0.1.0",
     "moment": "^2.24.0",
