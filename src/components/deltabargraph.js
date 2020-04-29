@@ -28,7 +28,7 @@ function DeltaBarGraph({timeseries, arrayKeyProp}) {
     if (arrayKey === 'dailyactive') {
       for (const day of data) {
         if (day[arrayKey] < 0) {
-          chartBottom = height - margin.bottom * 2.2;
+          chartBottom = height - margin.bottom * 2;
         }
       }
     }
@@ -75,7 +75,9 @@ function DeltaBarGraph({timeseries, arrayKeyProp}) {
           chartBottom,
           xScale.bandwidth(),
           chartBottom - yScale(d[arrayKey]),
-          barRadius
+          barRadius,
+          d[arrayKey] >= 0 ? 1 : 0,
+          d[arrayKey]
         )
       )
       .attr('fill', (d, i) => {
@@ -92,17 +94,15 @@ function DeltaBarGraph({timeseries, arrayKeyProp}) {
       .selectAll('.delta')
       .data(data)
       .join('text')
-      .attr('class', `delta ${arrayKey}`)
+      .attr('class', 'delta')
+      .attr('display', arrayKey !== 'dailyconfirmed' ? 'none' : '')
       .attr('text-anchor', 'middle')
       .attr('font-size', '11px')
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
-      .attr('y', (d) =>
-        d[arrayKey] >= 0 ? yScale(d[arrayKey]) - 6 : yScale(d[arrayKey]) + 12
-      )
+      .attr('y', (d) => yScale(d[arrayKey]) - 6)
       .text((d) => d[arrayKey])
       .append('tspan')
       .attr('class', 'percent')
-      .attr('display', arrayKey !== 'dailyconfirmed' ? 'none' : '')
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
       .attr('dy', '-1.2em')
       .text((d, i) =>
@@ -136,15 +136,13 @@ export default React.memo(DeltaBarGraph);
 //   return true;
 // });
 
-function roundedBar(x, y, w, h, r, f) {
+function roundedBar(x, y, w, h, r, f, v) {
   if (!h) return;
-  // Flag for sweep:
-  if (f === undefined) f = 1;
   // x coordinates of top of arcs
   const x0 = x + r;
   const x1 = x + w - r;
   // y coordinates of bottom of arcs
-  const y0 = y - h + r;
+  const y0 = v >= 0 ? y - h + r : y - h - r;
 
   const parts = [
     'M',

@@ -4509,23 +4509,8 @@ footer {
         }
 
         .delta {
+          fill: #dc3545;
           font-weight: 900;
-
-          &.dailyconfirmed {
-            fill: #dc3545;
-          }
-
-          &.dailyrecovered {
-            fill: #47a745;
-          }
-
-          &.dailyactive {
-            fill: #0479fb;
-          }
-
-          &.dailydeceased {
-            fill: #6b747c;
-          }
         }
 
         .percent {
