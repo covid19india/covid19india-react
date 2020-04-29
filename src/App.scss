@@ -1231,6 +1231,22 @@ h6 {
     width: calc(100% - 4rem);
   }
 
+  .search-placeholder {
+    font-family: 'archia';
+    position: absolute;
+    top: 4.3rem;
+    left: 3rem;
+    font-size: 1rem;
+    color: $gray-mid;
+    pointer-events: none;
+    opacity: 0.8;
+    transition: opacity 1s;
+
+    &.disappear {
+      opacity: 0;
+    }
+  }
+
   .search-button {
     svg {
       color: $gray-mid;
