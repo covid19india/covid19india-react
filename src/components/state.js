@@ -419,21 +419,24 @@ function State(props) {
                       )}
                   </div>
                   <div className="district-bar-right">
-                    <div
-                      className="happy-sign fadeInUp"
-                      style={{animationDelay: '0.6s'}}
-                    >
-                      {timeseries
-                        .slice(-5)
-                        .every((day) => day.dailyconfirmed === 0) && (
-                        <div className="alert is-green">
-                          <Icon.Smile />
-                          <div className="alert-right">
-                            No new confirmed cases in the past five days
+                    {(mapOption === 'confirmed' ||
+                      mapOption === 'deceased') && (
+                      <div
+                        className="happy-sign fadeInUp"
+                        style={{animationDelay: '0.6s'}}
+                      >
+                        {timeseries
+                          .slice(-5)
+                          .every((day) => day[`daily${mapOption}`] === 0) && (
+                          <div className="alert is-green">
+                            <Icon.Smile />
+                            <div className="alert-right">
+                              No new {mapOption} cases in the past five days
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    )}
                     {
                       <DeltaBarGraph
                         timeseries={timeseries.slice(-5)}
