@@ -417,18 +417,6 @@ function State(props) {
                   </div>
                 </div>
 
-                {false && (
-                  <Link to="/essentials">
-                    <div
-                      className="to-essentials fadeInUp"
-                      style={{animationDelay: '0.9s'}}
-                    >
-                      <h2>Go to essentials</h2>
-                      <Icon.ArrowRightCircle />
-                    </div>
-                  </Link>
-                )}
-
                 <Tracker />
 
                 <TimeSeriesExplorer timeseries={timeseries} />

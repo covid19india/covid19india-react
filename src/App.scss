@@ -398,36 +398,6 @@ h6 {
     text-decoration: none;
   }
 
-  .to-essentials {
-    align-self: center;
-    background: $gray-light;
-    border-radius: 5px;
-    display: none;
-    flex-direction: row;
-    justify-content: center;
-    padding: .5rem;
-    transition: all .2s ease-in-out;
-
-    &:hover {
-      background: $gray-hover;
-    }
-
-    h2 {
-      color: $gray-mid;
-      font-weight: 600;
-    }
-
-    svg {
-      color: $gray-mid;
-      margin-bottom: 2px;
-      margin-left: 1rem;
-    }
-
-    & > * {
-      align-self: center;
-    }
-  }
-
   .meta-secondary {
     align-self: center;
     display: flex;
@@ -3241,32 +3211,81 @@ footer {
   }
 }
 
+.Tracker {
+  margin-top: 3rem;
+  width: 30rem;
 
-.tracker {
-  padding: 7px;
-  position: center;
+  .close-button {
+    position: absolute;
+    right: 0;
+    stroke: $gray;
+    top: -2rem;
 
-  h1 {
-    color: $primary;
-    display: inline-block;
-    margin: auto;
-    text-align: right;
+    svg {
+      width: 16px;
+    }
   }
 
-  .tab {
+  .button {
+    align-self: center;
     background: $gray-light;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    color: $pink;
-    // cursor: pointer;
-    height: 4rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    text-align: center;
-    transition: all .3s ease-in-out;
+    border-radius: 5px;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0;
+    transition: all .2s ease-in-out;
+    width: 100%;
 
     &:hover {
       background: $gray-hover;
+
+      svg {
+        color: $gray;
+      }
+    }
+
+    h3 {
+      color: $gray;
+      font-weight: 600;
+      text-transform: none;
+      width: 25rem;
+    }
+
+    svg {
+      color: $gray-mid;
+      transition: all .1s ease-in-out;
+    }
+
+    & > * {
+      align-self: center;
+    }
+  }
+
+  .location {
+    color: $gray;
+    font-family: 'archia';
+    margin-bottom: 1rem;
+  }
+
+  .results {
+    width: 100%;
+
+    .labels {
+      margin-bottom: 1rem;
+    }
+
+    .LabelItem {
+      background: $yellow-light;
+      border-radius: 5px;
+      color: $orange-mid !important;
+      cursor: pointer;
+      font-family: 'archia' !important;
+      text-transform: capitalize;
+    }
+
+    .essential-result {
+      padding-left: 0;
+      padding-right: 0;
     }
   }
 }
@@ -4902,7 +4921,6 @@ footer {
 
   .State {
     .district-bar,
-    .to-essentials,
     .Clusters {
       width: calc(100% - 3rem);
 

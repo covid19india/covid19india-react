@@ -1,6 +1,7 @@
 // Temp data
 import GeoData from './essentials.json';
 
+import {Label, LabelGroup} from '@primer/components';
 import L from 'leaflet';
 import * as Knn from 'leaflet-knn';
 import React from 'react';
@@ -14,7 +15,7 @@ function othersFilter(feature) {
   return !feature.properties.priority;
 }
 
-export default function MapChart(props) {
+export default function MapChart({userLocation}) {
   let medKnn;
   let restKnn;
 
@@ -22,13 +23,13 @@ export default function MapChart(props) {
   const rK = 10; // K nearest essentials wrt user location
   const rad = 100 * 1000; // Max distance of the K points, in meters
 
-  if (props.userLocation) {
+  if (userLocation) {
     medKnn = new Knn(L.geoJSON(GeoData, {filter: medFilter})).nearestLayer(
-      [props.userLocation[1], props.userLocation[0]],
+      [userLocation[1], userLocation[0]],
       hK
     );
     restKnn = new Knn(L.geoJSON(GeoData, {filter: othersFilter})).nearestLayer(
-      [props.userLocation[1], props.userLocation[0]],
+      [userLocation[1], userLocation[0]],
       rK,
       rad
     );
@@ -55,7 +56,7 @@ export default function MapChart(props) {
           addr: medKnn[i].layer.feature.properties.addr,
           phone: medKnn[i].layer.feature.properties.phone,
           contact: medKnn[i].layer.feature.properties.contact,
-          icon: './icons/' + medKnn[i].layer.feature.properties.icon + '.svg',
+          icon: medKnn[i].layer.feature.properties.icon,
           id: i + 1,
         },
       });
@@ -77,15 +78,42 @@ export default function MapChart(props) {
           addr: restKnn[j].layer.feature.properties.addr,
           phone: restKnn[j].layer.feature.properties.phone,
           contact: restKnn[j].layer.feature.properties.contact,
-          icon: './icons/' + restKnn[j].layer.feature.properties.icon + '.svg',
+          icon: restKnn[j].layer.feature.properties.icon,
           id: j + 100,
         },
       });
     }
   }
 
+  gjKnn.features
+    .map(function (feature) {
+      return feature?.properties?.icon;
+    })
+    .reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map())
+    .forEach((value, key, map) => {
+      console.log({key, value});
+    });
+
   return (
     <div className="results">
+      <div className="labels">
+        <LabelGroup>
+          {Array.from(
+            new Set(
+              gjKnn.features.map(function (feature) {
+                return feature?.properties?.icon;
+              })
+            )
+          ).map((category, index) => {
+            return (
+              <Label variant="xl" key={index}>
+                {category}
+              </Label>
+            );
+          })}
+        </LabelGroup>
+      </div>
+
       {gjKnn.features.map((d) => (
         <a
           key={d.properties.id}
@@ -112,7 +140,6 @@ export default function MapChart(props) {
       ))}
 
       <a
-        key={1000}
         href="https://www.covid19india.org/essentials"
         target="_noblank"
         className="essential-result"
