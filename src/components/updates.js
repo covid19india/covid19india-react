@@ -1,9 +1,10 @@
 import axios from 'axios';
 import {formatDistance, format} from 'date-fns';
-import React, {useState} from 'react';
+import React, {useState, useLayoutEffect} from 'react';
 import {useEffectOnce} from 'react-use';
 
-let currentDate = new Date();
+const newDate = new Date();
+let currentDate = newDate;
 
 function Updates(props) {
   const [updates, setUpdates] = useState([]);
@@ -17,6 +18,12 @@ function Updates(props) {
       .catch((err) => {
         console.log(err);
       });
+  });
+
+  // reset the currentDate after rendering is complete
+  // in case the currentDate was changed during addHeader
+  useLayoutEffect(() => {
+    currentDate = newDate;
   });
 
   return (
