@@ -428,7 +428,11 @@ function State(props) {
                         {timeseries
                           .slice(-5)
                           .every((day) => day[`daily${mapOption}`] === 0) && (
-                          <div className="alert is-green">
+                          <div
+                            className={`alert ${
+                              mapOption === 'confirmed' ? 'is-green' : ''
+                            }`}
+                          >
                             <Icon.Smile />
                             <div className="alert-right">
                               No new {mapOption} cases in the past five days
