@@ -505,28 +505,36 @@ h6 {
   display: grid;
   grid-gap: 1rem;
   grid-template-columns: repeat(2, 1fr);
-  margin-bottom: 1rem;
+  margin-bottom: 3rem;
   width: calc(100% - 3rem);
 
-  &:first-child {
+  &.population {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
     margin: 0;
-    justify-content: center;
+    margin-bottom: 2rem;
+
+    .alert {
+      margin: 0;
+    }
   }
 
   .__react_component_tooltip {
     font-size: .8em;
     padding: 1rem;
+
     img {
+      filter: invert(1);
       width: 20rem;
-      filter: invert(1)
     }
   }
 
   .meta-item {
     border-radius: 5px;
-    padding-top: 1rem;
-    padding-left: 1rem;
     min-height: 6rem;
+    padding-left: 1rem;
+    padding-top: 1rem;
 
     h1,
     h2,
@@ -537,8 +545,7 @@ h6 {
     }
 
     h5 {
-      font-weight: 900;
-      width: 4.6rem;
+      font-weight: 600;
     }
 
     h2 {
@@ -547,17 +554,18 @@ h6 {
 
     h3 {
       font-weight: 900;
-      word-wrap: break-word;
       width: 10rem;
+      word-wrap: break-word;
     }
 
     h1 {
+      display: inline-block;
       font-weight: 600;
     }
 
     &.population {
-      padding: 0 !important;
       min-height: 1rem !important;
+      padding: 0 !important;
 
       h1,
       h3 {
@@ -586,17 +594,33 @@ h6 {
       }
     }
 
+    .meta-item-middle {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      * {
+        align-self: center;
+      }
+
+      svg {
+        cursor: pointer;
+        margin-right: 1rem;
+      }
+    }
+
     p {
       font-family: 'archia';
-      padding-right: 1rem;
-      margin-bottom: 1.25rem;
       font-weight: 600;
+      margin-bottom: 1.25rem;
+      padding-right: 1rem;
     }
 
     &.confirmed {
       background: $cherry-light;
 
       h3,
+      h5,
       svg,
       p {
         color: $cherry-mid;
@@ -611,6 +635,7 @@ h6 {
       background: $blue-light;
 
       h3,
+      h5,
       svg,
       p {
         color: $blue-mid;
@@ -625,6 +650,7 @@ h6 {
       background: $green-light;
 
       h3,
+      h5,
       svg,
       p {
         color: $green-mid;
@@ -639,6 +665,7 @@ h6 {
       background: $gray-light;
 
       h3,
+      h5,
       svg,
       p {
         color: $gray-mid;
@@ -653,6 +680,7 @@ h6 {
       background: $yellow-light;
 
       h3,
+      h5,
       svg {
         color: $orange-mid;
       }
@@ -666,7 +694,7 @@ h6 {
       background: $purple-light;
 
       h3,
-      h6,
+      h5,
       svg,
       p {
         color: $purple-mid;
@@ -681,7 +709,7 @@ h6 {
       background: $pink-light;
 
       h3,
-      h6,
+      h5,
       svg,
       p {
         color: $pink-mid;
@@ -696,7 +724,7 @@ h6 {
       background: $brown-light;
 
       h3,
-      h6,
+      h5,
       p,
       svg {
         color: $brown-mid;
@@ -4686,7 +4714,8 @@ footer {
   .filters,
   .updates,
   .map-switcher,
-  .updates-header {
+  .updates-header,
+  .StateMeta {
     width: calc(100% - 2rem);
   }
 
@@ -5180,6 +5209,17 @@ footer {
       }
     }
   }
+
+  .StateMeta {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-rows: repeat(auto-fit, minmax(5rem));
+    margin-bottom: 1rem;
+
+    .meta-item {
+      min-width: 1rem;
+    }
+  }
 }
 
 // Dark Mode
@@ -5366,6 +5406,20 @@ footer {
     }
   }
 
+  .tpm {
+    background: #40008050 !important;
+
+    h3,
+    h5,
+    svg,
+    p {
+      color: #9673b9bb !important;
+    }
+
+    h1 {
+      color: #9673b9 !important;
+    }
+  }
 
   .tab {
     &.focused {
