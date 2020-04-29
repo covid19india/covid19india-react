@@ -10,23 +10,19 @@ import deepmerge from 'deepmerge';
 import React from 'react';
 import {Bar, defaults} from 'react-chartjs-2';
 
-function DailyConfirmedChart(props) {
+function DailyConfirmedChart({title, timeseries}) {
   const [range, setRange] = React.useState(31);
   let dates = [];
   let confirmed = [];
   let recovered = [];
   let deceased = [];
 
-  if (!props.timeseries || props.timeseries.length === 0) {
+  if (!timeseries || timeseries.length === 0) {
     return <div></div>;
   }
 
-  for (
-    let i = range !== 31 ? props.timeseries.length - range : range;
-    i < props.timeseries.length;
-    i++
-  ) {
-    const data = props.timeseries[i];
+  for (let i = range; i < timeseries.length; i++) {
+    const data = timeseries[i];
     const date = parse(data.date, 'dd MMMM', new Date(2020, 0, 1));
     dates.push(format(date, 'dd MMM'));
     confirmed.push(data.dailyconfirmed);
@@ -92,7 +88,7 @@ function DailyConfirmedChart(props) {
 
   return (
     <div className="charts-header">
-      <div className="chart-title">{props.title}</div>
+      <div className="chart-title">{title}</div>
       <div className="chart-content">
         <Bar data={barDataSet} options={options} />
       </div>
@@ -109,11 +105,19 @@ function DailyConfirmedChart(props) {
       >
         <input type="radio" id="begin" name="range" value={31} defaultChecked />
         <label htmlFor="begin">Beginning</label>
-        <input type="radio" id="6weeks" name="range" value={56} />
-        <label htmlFor="6weeks">8 weeks</label>
-        <input type="radio" id="6weeks" name="range" value={42} />
+        <input
+          type="radio"
+          id="6weeks"
+          name="range"
+          value={timeseries.length - 42}
+        />
         <label htmlFor="6weeks">6 weeks</label>
-        <input type="radio" id="4weeks" name="range" value={28} />
+        <input
+          type="radio"
+          id="4weeks"
+          name="range"
+          value={timeseries.length - 28}
+        />
         <label htmlFor="4weeks">4 weeks</label>
       </form>
     </div>
