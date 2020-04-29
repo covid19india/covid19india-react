@@ -99,7 +99,6 @@ function DailyConfirmedChart({title, timeseries}) {
           deceased = [];
           dates = [];
           setRange(e.target.value);
-          console.log(range);
         }}
         style={{display: 'inline'}}
       >
