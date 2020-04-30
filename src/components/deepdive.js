@@ -43,11 +43,17 @@ function DeepDive() {
   };
 
   return (
-    <div className="cards-container">
+    <div className="cards-container DeepDive">
       <Helmet>
         <title>Deep Dive - covid19india.org</title>
         <meta name="title" content="Deep Dive - covid19india.org" />
       </Helmet>
+
+      <div className="header fadeInUp" style={{animationDelay: '0.3s'}}>
+        <div>
+          <h1>Deep Dive</h1>
+        </div>
+      </div>
 
       <section className="cards">
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>

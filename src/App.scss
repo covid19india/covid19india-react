@@ -2975,6 +2975,21 @@ footer {
   }
 }
 
+.DeepDive {
+  .header {
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    width: calc(100% - 10rem);
+
+    h1 {
+      color: $pblue;
+    }
+  }
+}
+
 .PatientsDB {
   align-self: center;
   display: flex;
