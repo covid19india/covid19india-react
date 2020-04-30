@@ -70,7 +70,6 @@ function ChoroplethMap({
 
       /* Legend */
       const svgLegend = d3.select(choroplethLegend.current);
-      svgLegend.selectAll('*').remove();
       const colorInterpolator = (t) => {
         switch (mapOption) {
           case 'confirmed':
@@ -85,14 +84,17 @@ function ChoroplethMap({
             return;
         }
       };
-      const colorScale = d3.scaleSequential(
-        [0, Math.max(1, statistic[mapOption].max)],
-        colorInterpolator
-      );
+      const colorScale = d3
+        .scaleSequential(
+          [0, Math.max(1, statistic[mapOption].max)],
+          colorInterpolator
+        )
+        .clamp(true);
       // Colorbar
       const widthLegend = parseInt(svgLegend.style('width'));
       const heightLegend = +svgLegend.attr('height');
-      svgLegend.append(() =>
+      svgLegend.attr('viewBox', `0 0 ${widthLegend} ${heightLegend}`);
+      svgLegend.call(() =>
         legend({
           color: colorScale,
           title:
@@ -115,9 +117,9 @@ function ChoroplethMap({
           },
           marginLeft: 2,
           marginRight: 20,
+          svg: svgLegend,
         })
       );
-      svgLegend.attr('viewBox', `0 0 ${widthLegend} ${heightLegend}`);
 
       /* Draw map */
       const t = svg.transition().duration(500);
@@ -330,7 +332,12 @@ function ChoroplethMap({
           height="65"
           preserveAspectRatio="xMidYMid meet"
           ref={choroplethLegend}
-        ></svg>
+        >
+          <image className="ramp" />
+          <g className="axis">
+            <text className="axistext" />
+          </g>
+        </svg>
       </div>
       <svg style={{position: 'absolute', height: 0}}>
         <defs>
