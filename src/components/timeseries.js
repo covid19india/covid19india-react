@@ -4,7 +4,7 @@ import {sliceTimeseriesFromEnd, formatNumber} from '../utils/commonfunctions';
 import {useResizeObserver} from '../utils/hooks';
 
 import * as d3 from 'd3';
-import moment from 'moment';
+import {addDays, subDays, format} from 'date-fns';
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as Icon from 'react-feather';
 
@@ -83,10 +83,8 @@ function TimeSeries(props) {
       const svg4 = d3.select(svgRef4.current);
       const svg5 = d3.select(svgRef5.current);
 
-      const dateMin = new Date(timeseries[0]['date']);
-      dateMin.setDate(dateMin.getDate() - 1);
-      const dateMax = new Date(timeseries[T - 1]['date']);
-      dateMax.setDate(dateMax.getDate() + 1);
+      const dateMin = subDays(timeseries[0].date, 1);
+      const dateMax = addDays(timeseries[T - 1].date, 1);
 
       const xScale = d3
         .scaleTime()
@@ -154,7 +152,7 @@ function TimeSeries(props) {
           .clamp(true)
           .domain([
             Math.max(1, uniformScaleMin),
-            Math.max(1, yBufferTop * uniformScaleMax),
+            Math.max(10, yBufferTop * uniformScaleMax),
           ])
           .nice()
           .range([chartBottom, margin.top]);
@@ -177,7 +175,7 @@ function TimeSeries(props) {
                 1,
                 d3.min(timeseries, (d) => d[type])
               ),
-              Math.max(1, yBufferTop * d3.max(timeseries, (d) => d[type])),
+              Math.max(10, yBufferTop * d3.max(timeseries, (d) => d[type])),
             ])
             .nice()
             .range([chartBottom, margin.top]);
@@ -411,8 +409,7 @@ function TimeSeries(props) {
     }
   }, [timeseries, graphData]);
 
-  const focusDate = moment(datapoint.date).utcOffset('+05:30');
-  const dateStr = focusDate.format('DD MMMM');
+  const dateStr = datapoint.date ? format(datapoint.date, 'dd MMMM') : '';
 
   const chartKey1 = chartType === 1 ? 'totalconfirmed' : 'dailyconfirmed';
   const chartKey2 = chartType === 1 ? 'totalactive' : 'dailyactive';
@@ -541,7 +538,7 @@ function TimeSeries(props) {
         </button>
       </div>
 
-      <div className="alert is-purple">
+      <div className="alert">
         <Icon.AlertOctagon />
         <div className="alert-right">
           Tested chart is independent of uniform scaling

@@ -17,7 +17,7 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
-import {useLocalStorage} from 'react-use';
+import {useLocalStorage, useEffectOnce} from 'react-use';
 
 const schemaMarkup = {
   '@context': 'http://schema.org/',
@@ -75,6 +75,23 @@ function App() {
   ];
 
   const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
+  const [isThemeSet] = useLocalStorage('isThemeSet', false);
+
+  useEffectOnce(() => {
+    if (
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches &&
+      !isThemeSet
+    ) {
+      setDarkMode(true);
+    } else if (
+      window.matchMedia &&
+      !window.matchMedia('(prefers-color-scheme: dark)').matches &&
+      !isThemeSet
+    ) {
+      setDarkMode(false);
+    }
+  });
 
   React.useEffect(() => {
     if (darkMode) {
@@ -85,7 +102,7 @@ function App() {
   }, [darkMode]);
 
   return (
-    <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
+    <div className="App">
       <Helmet>
         <script type="application/ld+json">
           {JSON.stringify(schemaMarkup)}
