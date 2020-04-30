@@ -125,6 +125,7 @@ function PatientDB(props) {
         <div className="filters-left">
           <div className="select">
             <select
+              aria-label="Select State"
               style={{animationDelay: '0.3s'}}
               id="state"
               onChange={(event) => {
@@ -149,6 +150,7 @@ function PatientDB(props) {
 
           <div className="select">
             <select
+              aria-label="Select District"
               style={{animationDelay: '0.4s', display: 'none'}}
               id="district"
               onChange={(event) => {
@@ -176,34 +178,7 @@ function PatientDB(props) {
 
           <div className="select">
             <select
-              style={{animationDelay: '0.4s', display: 'none'}}
-              id="city"
-              onChange={(event) => {
-                handleFilters('detectedcity', event.target.value);
-              }}
-              defaultValue={filters.detectedcity}
-            >
-              <option value="" disabled>
-                Select City
-              </option>
-              {getSortedValues(
-                filterByObject(patients, {
-                  detectedstate: filters.detectedstate,
-                  detecteddistrict: filters.detecteddistrict,
-                }),
-                'detectedcity'
-              ).map((city, index) => {
-                return (
-                  <option key={index} value={city}>
-                    {city === '' ? 'All' : city}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-
-          <div className="select">
-            <select
+              aria-label="Select City"
               style={{animationDelay: '0.4s', display: 'none'}}
               id="city"
               onChange={(event) => {
@@ -232,6 +207,11 @@ function PatientDB(props) {
 
           <div className="select">
             <DatePicker
+              calendarAriaLabel="Choose a date"
+              clearAriaLabel="Clear date"
+              dayAriaLabel="Pick a date"
+              monthAriaLabel="Pick a month"
+              yearAriaLabel="Pick an year"
               value={filterDate}
               minDate={new Date('30-Jan-2020')}
               maxDate={subDays(new Date(), 1)}
@@ -319,6 +299,7 @@ function PatientDB(props) {
 
           <div className={`select ${colorMode}`}>
             <select
+              aria-label="Genders"
               style={{animationDelay: '0.4s'}}
               onChange={(event) => {
                 setColorMode(event.target.value);
@@ -344,6 +325,7 @@ function PatientDB(props) {
           <div className="deep-dive">
             <h5>Expand</h5>
             <input
+              aria-label="Expand Demographics"
               type="checkbox"
               checked={scaleMode}
               onChange={(event) => {
