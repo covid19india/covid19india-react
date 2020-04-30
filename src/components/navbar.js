@@ -2,7 +2,12 @@ import anime from 'animejs';
 import React, {useState, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
-import {useEffectOnce, useLockBodyScroll, useWindowSize} from 'react-use';
+import {
+  useEffectOnce,
+  useLockBodyScroll,
+  useWindowSize,
+  useLocalStorage,
+} from 'react-use';
 
 const navLinkProps = (path, animationDelay) => ({
   className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
@@ -19,15 +24,20 @@ const activeNavIcon = (path) => ({
 
 function Navbar({pages, darkMode, setDarkMode}) {
   const [expand, setExpand] = useState(false);
-  useLockBodyScroll(expand);
+  // eslint-disable-next-line
+  const [isThemeSet, setIsThemeSet] = useLocalStorage('isThemeSet', false);
 
+  useLockBodyScroll(expand);
   const windowSize = useWindowSize();
 
   return (
     <div className="Navbar">
       <div
         className="navbar-left"
-        onClick={() => setDarkMode((prevMode) => !prevMode)}
+        onClick={() => {
+          setDarkMode((prevMode) => !prevMode);
+          setIsThemeSet(true);
+        }}
       >
         {darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
       </div>
