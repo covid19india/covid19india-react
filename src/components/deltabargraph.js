@@ -1,18 +1,13 @@
 import * as d3 from 'd3';
 import React, {useEffect, useRef, useState} from 'react';
 
-function DeltaBarGraph({timeseries, arrayKeyProp}) {
+function DeltaBarGraph({timeseries, arrayKey}) {
   const [data, setData] = useState([]);
-  const [arrayKey, setArrayKey] = useState(`daily${arrayKeyProp}`);
   const svgRef = useRef();
 
   useEffect(() => {
     setData(timeseries);
   }, [timeseries]);
-
-  useEffect(() => {
-    if (arrayKeyProp) setArrayKey(`daily${arrayKeyProp}`);
-  }, [arrayKeyProp, setArrayKey]);
 
   useEffect(() => {
     if (!data.length) return;
@@ -131,10 +126,9 @@ function DeltaBarGraph({timeseries, arrayKeyProp}) {
   );
 }
 
-export default React.memo(DeltaBarGraph);
-// export default React.memo(DeltaBarGraph, () => {
-//   return true;
-// });
+export default React.memo(DeltaBarGraph, (prevProps, nextProps) => {
+  return prevProps === nextProps;
+});
 
 function roundedBar(x, y, w, h, r, f, v) {
   if (!h) return;
