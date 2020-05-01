@@ -5,42 +5,42 @@ import {
 } from '../utils/commonfunctions';
 
 import {formatDistance} from 'date-fns';
-import React, {useState, useEffect, useCallback} from 'react';
+import equal from 'fast-deep-equal';
+import React, {useState, useCallback} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
+import {useUpdateEffect} from 'react-use';
 
-function Row(props) {
-  const [state, setState] = useState(props.state);
-  const [districts, setDistricts] = useState(props.districts);
-  const [sortedDistricts, setSortedDistricts] = useState(props.districts);
+const isEqual = (prevProps, currProps) => {
+  if (!equal(prevProps.regionHighlighted, currProps.regionHighlighted)) {
+    return false;
+  }
+  return true;
+};
+
+function Row({
+  state,
+  districts,
+  regionHighlighted,
+  onHighlightState,
+  onHighlightDistrict,
+}) {
+  const [sortedDistricts, setSortedDistricts] = useState(districts);
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useState({
-    sortColumn: localStorage.getItem('district.sortColumn')
-      ? localStorage.getItem('district.sortColumn')
-      : 'confirmed',
-    isAscending: localStorage.getItem('district.isAscending')
-      ? localStorage.getItem('district.isAscending') === 'true'
-      : false,
+    sortColumn: 'confirmed',
+    isAscending: false,
   });
 
-  useEffect(() => {
-    setState(props.state);
-  }, [props.state]);
-
-  useEffect(() => {
-    setDistricts(props.districts);
-    setSortedDistricts(props.districts);
-  }, [props.districts]);
-
-  const handleReveal = () => {
-    props.handleReveal(props.state.state);
-    setShowDistricts(!showDistricts);
-  };
-
-  const handleTooltip = (e) => {
-    e.stopPropagation();
-  };
+  const onHighlightStateWrapper = useCallback(
+    (state) => {
+      if (!equal(state, regionHighlighted?.state)) {
+        onHighlightState(state);
+      }
+    },
+    [onHighlightState, regionHighlighted]
+  );
 
   const sortDistricts = useCallback(
     (aDistricts) => {
@@ -73,7 +73,7 @@ function Row(props) {
         setSortedDistricts(sorted);
       }
     },
-    [sortData.isAscending, sortData.sortColumn]
+    [sortData]
   );
 
   const handleSort = (column) => {
@@ -85,33 +85,27 @@ function Row(props) {
       sortColumn: column,
       isAscending: isAscending,
     });
-    localStorage.setItem('district.sortColumn', column);
-    localStorage.setItem('district.isAscending', isAscending);
   };
 
-  useEffect(() => {
-    sortDistricts(districts);
-  }, [districts, sortData, sortDistricts]);
+  useUpdateEffect(() => {
+    sortDistricts();
+  }, [sortData]);
 
   return (
     <React.Fragment>
       <tr
-        className={`state ${props.total ? 'is-total' : ''} ${
-          props.index % 2 === 0 ? 'is-odd' : ''
-        } ${props.isHighlighted ? 'is-highlighted' : ''}`}
-        onMouseEnter={() => props.onHighlightState?.(state, props.index)}
-        onMouseLeave={() => props.onHighlightState?.()}
-        onClick={!props.total ? handleReveal : null}
-        style={{background: props.index % 2 === 0 ? '#f8f9fa' : ''}}
+        className={`state ${state.state === 'TT' ? 'is-total' : ''}`}
+        onMouseEnter={() => onHighlightStateWrapper(state)}
+        onClick={() => {
+          setShowDistricts(!showDistricts);
+        }}
       >
         <td style={{fontWeight: 600}}>
           <div className="table__title-wrapper">
-            {!props.total && (
+            {state.state !== 'TT' && (
               <span
                 className={`dropdown ${
-                  props.reveal && showDistricts
-                    ? 'rotateRightDown'
-                    : 'rotateDownRight'
+                  showDistricts ? 'rotateRightDown' : 'rotateDownRight'
                 }`}
               >
                 <Icon.ChevronDown />
@@ -120,7 +114,7 @@ function Row(props) {
             <span className="actual__title-wrapper">
               {state.state}
               {state.statenotes && (
-                <span onClick={handleTooltip}>
+                <span>
                   <span
                     data-tip={[`${state.statenotes}`]}
                     data-event="touchstart mouseover"
@@ -153,7 +147,9 @@ function Row(props) {
           </span>
         </td>
         <td
-          style={{color: parseInt(state.active) === 0 ? '#B5B5B5' : 'inherit'}}
+          style={{
+            color: parseInt(state.active) === 0 ? '#B5B5B5' : 'inherit',
+          }}
         >
           {parseInt(state.active) === 0 ? '-' : formatNumber(state.active)}
         </td>
@@ -173,7 +169,9 @@ function Row(props) {
           </span>
         </td>
         <td
-          style={{color: parseInt(state.deaths) === 0 ? '#B5B5B5' : 'inherit'}}
+          style={{
+            color: parseInt(state.deaths) === 0 ? '#B5B5B5' : 'inherit',
+          }}
         >
           <span className="deltas" style={{color: '#6c757d'}}>
             {state.deltadeaths > 0 && <Icon.ArrowUp />}
@@ -187,29 +185,19 @@ function Row(props) {
 
       {showDistricts && (
         <React.Fragment>
-          <tr
-            className={`spacer`}
-            style={{display: props.reveal && !props.total ? '' : 'none'}}
-          >
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-
           <tr className={'state-last-update'}>
             <td colSpan={3}>
               <h6
                 title={
-                  isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
+                  isNaN(Date.parse(formatDate(state.lastupdatedtime)))
                     ? ''
-                    : formatDateAbsolute(props.state.lastupdatedtime)
+                    : formatDateAbsolute(state.lastupdatedtime)
                 }
               >
-                {isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
+                {isNaN(Date.parse(formatDate(state.lastupdatedtime)))
                   ? ''
                   : `Last updated ${formatDistance(
-                      new Date(formatDate(props.state.lastupdatedtime)),
+                      new Date(formatDate(state.lastupdatedtime)),
                       new Date()
                     )} ago`}
               </h6>
@@ -360,22 +348,18 @@ function Row(props) {
               return (
                 <tr
                   key={index}
-                  className={`district ${index % 2 === 0 ? 'is-odd' : ''} ${
-                    props.highlightedDistrict === district
-                      ? 'is-highlighted'
-                      : ''
-                  }`}
+                  className={`district ${index % 2 === 0 ? 'is-odd' : ''}`}
                   style={{
                     background: index % 2 === 0 ? '#f8f9fa' : '',
                   }}
                   onMouseEnter={() =>
-                    props.onHighlightDistrict?.(district, state, props.index)
+                    onHighlightDistrict(district, state, index)
                   }
-                  onMouseLeave={() => props.onHighlightDistrict?.()}
+                  onMouseLeave={() => onHighlightDistrict?.()}
                 >
                   <td className="unknown" style={{fontWeight: 600}}>
                     {district}
-                    <span onClick={handleTooltip}>
+                    <span>
                       <span
                         data-for="unknown"
                         data-tip={[[sortedDistricts[district].notes]]}
@@ -437,7 +421,7 @@ function Row(props) {
           <tr className={`district`}>
             <td className="unknown" style={{fontWeight: 600}}>
               Unknown
-              <span onClick={handleTooltip}>
+              <span>
                 <span
                   data-for="unknown"
                   data-tip={
@@ -511,18 +495,8 @@ function Row(props) {
           </tr>
         </React.Fragment>
       )}
-
-      <tr
-        className={`spacer`}
-        style={{display: props.reveal && !props.total ? '' : 'none'}}
-      >
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
     </React.Fragment>
   );
 }
 
-export default React.memo(Row);
+export default React.memo(Row, isEqual);

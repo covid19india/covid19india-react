@@ -98,7 +98,6 @@ function Search(props) {
     };
 
     const essentialsAsync = (datums) => {
-      // to handle async remote call on initial launch
       essentialsEngine.search(searchInput, essentialsSync);
     };
 
@@ -110,7 +109,7 @@ function Search(props) {
   useDebounce(
     () => {
       if (searchValue) {
-        handleSearch(searchValue.toLowerCase());
+        handleSearch(searchValue);
       } else {
         setResults([]);
       }
