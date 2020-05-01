@@ -164,6 +164,28 @@ function ChoroplethMap({
           }
         });
 
+      const zoom = d3
+        .zoom()
+        .extent([
+          [0, 0],
+          [width, height],
+        ])
+        .scaleExtent([1, 8])
+        .on('zoom', () => g.attr('transform', d3.event.transform));
+
+      svg.call(zoom);
+
+      d3.select('.zoomIn').on('click', () => {
+        zoom.scaleBy(svg.transition().duration(750), 1.3);
+      });
+
+      d3.select('.zoomOut').on('click', () => {
+        zoom.scaleBy(svg.transition().duration(750), 1 / 1.3);
+      });
+      d3.select('.reset').on('click', () => {
+        zoom.transform(svg.transition().duration(750), d3.zoomIdentity);
+      });
+
       g.append('path')
         .attr('class', 'borders')
         .attr(
@@ -266,6 +288,34 @@ function ChoroplethMap({
   return (
     <div>
       <div className="svg-parent fadeInUp" style={{animationDelay: '2.5s'}}>
+        <div
+          style={{
+            position: 'absolute',
+            width: '3rem',
+            bottom: '0',
+            right: '0',
+            color: 'darkgrey',
+            zIndex: '100',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <Icon.PlusSquare
+            className="zoomIn"
+            style={{cursor: 'pointer', width: 'auto'}}
+          />
+          <Icon.MinusSquare
+            className="zoomOut"
+            style={{cursor: 'pointer', width: 'auto'}}
+          />
+          <Icon.Crosshair
+            className="reset"
+            style={{cursor: 'pointer', width: 'auto', marginTop: '1rem'}}
+            data-tip="Reset Map"
+            data-event="touchstart mouseover"
+            data-event-off="mouseleave"
+          />
+        </div>
         <svg
           id="chart"
           preserveAspectRatio="xMidYMid meet"
