@@ -271,19 +271,15 @@ function State(props) {
             {fetched && <Level data={stateData} />}
             {fetched && <Minigraph timeseries={timeseries} />}
             {fetched && (
-              <React.Fragment>
-                {
-                  <MapExplorer
-                    forwardRef={mapRef}
-                    mapMeta={MAP_META[stateName]}
-                    states={[stateData]}
-                    stateDistrictWiseData={districtData}
-                    stateTestData={testData}
-                    isCountryLoaded={false}
-                    mapOptionProp={mapOption}
-                  />
-                }
-              </React.Fragment>
+              <MapExplorer
+                forwardRef={mapRef}
+                mapMeta={MAP_META[stateName]}
+                states={[stateData]}
+                districts={districtData}
+                stateTestData={testData}
+                isCountryLoaded={false}
+                mapOption={mapOption}
+              />
             )}
 
             {fetched && (

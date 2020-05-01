@@ -10,10 +10,20 @@ import {
 import {formatDate, formatNumber} from '../utils/commonfunctions';
 
 import {formatDistance, format, parse} from 'date-fns';
+import equal from 'fast-deep-equal';
 import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
-import {useLocalStorage} from 'react-use';
+
+const isEqual = (prevProps, currProps) => {
+  if (!equal(prevProps.regionHighlighted, currProps.regionHighlighted)) {
+    return false;
+  }
+  if (!equal(prevProps.mapOption, currProps.mapOption)) {
+    return false;
+  }
+  return true;
+};
 
 const getRegionFromState = (state) => {
   if (!state) return;
@@ -32,14 +42,14 @@ const getRegionFromDistrict = (districtData, name) => {
 function MapExplorer({
   mapMeta,
   states,
-  stateDistrictWiseData,
+  districts,
   stateTestData,
   regionHighlighted,
-  onMapHighlightChange,
   isCountryLoaded,
   anchor,
   setAnchor,
-  mapOptionProp,
+  mapOption,
+  setMapOption,
 }) {
   const [selectedRegion, setSelectedRegion] = useState({});
   const [panelRegion, setPanelRegion] = useState(getRegionFromState(states[0]));
@@ -49,7 +59,6 @@ function MapExplorer({
   const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta);
   const [statisticOption, setStatisticOption] = useState(MAP_STATISTICS.TOTAL);
-  const [mapOption, setMapOption] = useLocalStorage('mapOption', 'active');
 
   const [statistic, currentMapData] = useMemo(() => {
     const dataTypes = ['confirmed', 'active', 'recovered', 'deceased'];
@@ -82,7 +91,7 @@ function MapExplorer({
     } else if (currentMap.mapType === MAP_TYPES.STATE) {
       setStatisticOption(MAP_STATISTICS.TOTAL);
       const districtWiseData = (
-        stateDistrictWiseData[currentMap.name] || {districtData: {}}
+        districts[currentMap.name] || {districtData: {}}
       ).districtData;
       currentMapData = Object.keys(districtWiseData).reduce((acc, district) => {
         acc[district] = {};
@@ -101,13 +110,7 @@ function MapExplorer({
       );
     }
     return [statistic, currentMapData];
-  }, [
-    currentMap.mapType,
-    currentMap.name,
-    states,
-    stateDistrictWiseData,
-    statisticOption,
-  ]);
+  }, [currentMap.mapType, currentMap.name, districts, states, statisticOption]);
 
   const setHoveredRegion = useCallback(
     (name, currentMap) => {
@@ -117,9 +120,8 @@ function MapExplorer({
         );
         setCurrentHoveredRegion(region);
         setPanelRegion(region);
-        onMapHighlightChange(region);
       } else if (currentMap.mapType === MAP_TYPES.STATE) {
-        const state = stateDistrictWiseData[currentMap.name] || {
+        const state = districts[currentMap.name] || {
           districtData: {},
         };
         let districtData = state.districtData[name];
@@ -139,15 +141,10 @@ function MapExplorer({
         currentHoveredRegion.statecode = panelRegion.statecode;
         setCurrentHoveredRegion(currentHoveredRegion);
         panelRegion.districtName = currentHoveredRegion.name;
-        if (onMapHighlightChange) onMapHighlightChange(panelRegion);
       }
     },
-    [states, stateDistrictWiseData, onMapHighlightChange]
+    [states, districts]
   );
-
-  useEffect(() => {
-    if (mapOptionProp) setMapOption(mapOptionProp);
-  }, [mapOptionProp, setMapOption]);
 
   useEffect(() => {
     if (regionHighlighted === undefined || regionHighlighted === null) return;
@@ -181,7 +178,7 @@ function MapExplorer({
       if (newMap.mapType === MAP_TYPES.COUNTRY) {
         setHoveredRegion(states[0].state, newMap);
       } else if (newMap.mapType === MAP_TYPES.STATE) {
-        const {districtData} = stateDistrictWiseData[name] || {
+        const {districtData} = districts[name] || {
           districtData: {},
         };
         const topDistrict = Object.keys(districtData)
@@ -193,7 +190,7 @@ function MapExplorer({
         setSelectedRegion(topDistrict);
       }
     },
-    [setHoveredRegion, stateDistrictWiseData, states]
+    [setHoveredRegion, districts, states]
   );
 
   useEffect(() => {
@@ -394,9 +391,9 @@ function MapExplorer({
           mapMeta={currentMap}
           mapData={currentMapData}
           setHoveredRegion={setHoveredRegion}
-          changeMap={switchMapToState}
           selectedRegion={selectedRegion}
           setSelectedRegion={setSelectedRegion}
+          changeMap={switchMapToState}
           isCountryLoaded={isCountryLoaded}
           mapOption={mapOption}
           statisticOption={statisticOption}
@@ -447,4 +444,4 @@ function MapExplorer({
   );
 }
 
-export default React.memo(MapExplorer);
+export default React.memo(MapExplorer, isEqual);

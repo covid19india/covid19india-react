@@ -8,16 +8,13 @@ import {addDays, subDays, format} from 'date-fns';
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as Icon from 'react-feather';
 
-function TimeSeries(props) {
+function TimeSeries({timeseriesProp, chartType, mode, logMode, isTotal}) {
   const [lastDaysCount, setLastDaysCount] = useState(
     window.innerWidth > 512 ? Infinity : 30
   );
-  const [timeseries, setTimeseries] = useState([]);
+  const [timeseries, setTimeseries] = useState({});
   const [datapoint, setDatapoint] = useState({});
   const [index, setIndex] = useState(0);
-  const [mode, setMode] = useState(props.mode);
-  const [logMode, setLogMode] = useState(props.logMode);
-  const [chartType, setChartType] = useState(props.type);
   const [moving, setMoving] = useState(false);
 
   const svgRef1 = useRef();
@@ -44,20 +41,8 @@ function TimeSeries(props) {
   );
 
   useEffect(() => {
-    transformTimeSeries(props.timeseries);
-  }, [lastDaysCount, transformTimeSeries, props.timeseries]);
-
-  useEffect(() => {
-    setMode(props.mode);
-  }, [props.mode]);
-
-  useEffect(() => {
-    setLogMode(props.logMode);
-  }, [props.logMode]);
-
-  useEffect(() => {
-    setChartType(props.type);
-  }, [props.type]);
+    transformTimeSeries(timeseriesProp);
+  }, [lastDaysCount, timeseriesProp, transformTimeSeries]);
 
   const graphData = useCallback(
     (timeseries) => {
@@ -400,7 +385,7 @@ function TimeSeries(props) {
           .on('touchend', mouseout);
       });
     },
-    [dimensions, chartType, logMode, mode]
+    [chartType, dimensions, logMode, mode]
   );
 
   useEffect(() => {
@@ -497,7 +482,7 @@ function TimeSeries(props) {
           <div className="svg-parent is-purple">
             <div className="stats is-purple">
               <h5 className={`${!moving ? 'title' : ''}`}>
-                Tested {props.isTotal ? testedToolTip : ''}
+                Tested {isTotal ? testedToolTip : ''}
               </h5>
               <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
               <div className="stats-bottom">

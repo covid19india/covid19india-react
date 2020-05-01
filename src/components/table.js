@@ -1,20 +1,20 @@
 import Row from './row';
 
-import React, {useState, useEffect} from 'react';
+import equal from 'fast-deep-equal';
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 
 const isEqual = (prevProps, currProps) => {
-  return (
-    JSON.stringify(prevProps.rowHighlighted) ===
-    JSON.stringify(currProps.rowHighlighted)
-  );
+  return equal(prevProps.regionHighlighted, currProps.regionHighlighted);
 };
 
-function Table(props) {
-  const [states, setStates] = useState(props.states);
-  const [revealedStates, setRevealedStates] = useState({});
-  const [districts, setDistricts] = useState({});
-  const [count, setCount] = useState(0);
+function Table({
+  states,
+  districts,
+  regionHighlighted,
+  onHighlightState,
+  onHighlightDistrict,
+}) {
   const [sortData, setSortData] = useState({
     sortColumn: localStorage.getItem('state.sortColumn')
       ? localStorage.getItem('state.sortColumn')
@@ -24,36 +24,7 @@ function Table(props) {
       : false,
   });
 
-  useEffect(() => {
-    if (props.summary === true) {
-      setStates(props.states.slice(0, 9));
-    } else {
-      setStates(props.states);
-    }
-  }, [props.states, props.summary]);
-
-  useEffect(() => {
-    if (props.states[0]) {
-      setRevealedStates(
-        props.states.reduce((a, state) => {
-          return {...a, [state.state]: false};
-        }, {})
-      );
-    }
-  }, [props.states]);
-
-  useEffect(() => {
-    if (states.length > 0) {
-      // slice to ignore the first item which is the total count
-      setCount(states.slice(1).filter((s) => s && s.confirmed > 0).length);
-    }
-  }, [states]);
-
-  useEffect(() => {
-    setDistricts(props.stateDistrictWiseData);
-  }, [props.stateDistrictWiseData]);
-
-  const doSort = (e, props) => {
+  const doSort = (e) => {
     const totalRow = states.splice(0, 1);
     states.sort((StateData1, StateData2) => {
       const sortColumn = sortData.sortColumn;
@@ -82,7 +53,7 @@ function Table(props) {
     states.unshift(totalRow[0]);
   };
 
-  const handleSort = (e, props) => {
+  const handleSort = (e) => {
     const currentsortColumn = e.currentTarget
       .querySelector('abbr')
       .getAttribute('title')
@@ -97,13 +68,6 @@ function Table(props) {
     });
     localStorage.setItem('state.sortColumn', currentsortColumn);
     localStorage.setItem('state.isAscending', isAscending);
-  };
-
-  const handleReveal = (state) => {
-    setRevealedStates({
-      ...revealedStates,
-      [state]: !revealedStates[state],
-    });
   };
 
   doSort();
@@ -125,7 +89,7 @@ function Table(props) {
             <tr>
               <th
                 className="sticky state-heading"
-                onClick={(e) => handleSort(e, props)}
+                onClick={(e) => handleSort(e)}
               >
                 <div className="heading-content">
                   <abbr title="State">State/UT</abbr>
@@ -143,7 +107,7 @@ function Table(props) {
                   </div>
                 </div>
               </th>
-              <th className="sticky" onClick={(e) => handleSort(e, props)}>
+              <th className="sticky" onClick={(e) => handleSort(e)}>
                 <div className="heading-content">
                   <abbr
                     className={`${window.innerWidth <= 769 ? 'is-cherry' : ''}`}
@@ -171,7 +135,7 @@ function Table(props) {
                   </div>
                 </div>
               </th>
-              <th className="sticky" onClick={(e) => handleSort(e, props)}>
+              <th className="sticky" onClick={(e) => handleSort(e)}>
                 <div className="heading-content">
                   <abbr
                     className={`${window.innerWidth <= 769 ? 'is-blue' : ''}`}
@@ -197,7 +161,7 @@ function Table(props) {
                   </div>
                 </div>
               </th>
-              <th className="sticky" onClick={(e) => handleSort(e, props)}>
+              <th className="sticky" onClick={(e) => handleSort(e)}>
                 <div className="heading-content">
                   <abbr
                     className={`${window.innerWidth <= 769 ? 'is-green' : ''}`}
@@ -230,7 +194,7 @@ function Table(props) {
                   </div>
                 </div>
               </th>
-              <th className="sticky" onClick={(e) => handleSort(e, props)}>
+              <th className="sticky" onClick={(e) => handleSort(e)}>
                 <div className="heading-content">
                   <abbr
                     className={`${window.innerWidth <= 769 ? 'is-gray' : ''}`}
@@ -259,54 +223,41 @@ function Table(props) {
             </tr>
           </thead>
 
-          <tbody>
-            {states.map((state, index) => {
-              if (index !== 0 && state.confirmed > 0) {
-                return (
-                  <Row
-                    key={state.state}
-                    index={index}
-                    state={state}
-                    total={false}
-                    reveal={revealedStates[state.state]}
-                    districts={
-                      state.state in districts
-                        ? districts[state.state].districtData
-                        : []
-                    }
-                    isHighlighted={
-                      !props.rowHighlighted.isDistrict &&
-                      props.rowHighlighted.statecode === state.statecode
-                    }
-                    highlightedDistrict={
-                      props.rowHighlighted.isDistrict &&
-                      props.rowHighlighted.statecode === state.statecode
-                        ? props.rowHighlighted.districtName
-                        : null
-                    }
-                    onHighlightState={props.onHighlightState}
-                    onHighlightDistrict={props.onHighlightDistrict}
-                    handleReveal={handleReveal}
-                  />
-                );
-              }
-              return null;
-            })}
-          </tbody>
+          {states && (
+            <tbody>
+              {states.map((state, index) => {
+                if (index !== 0 && state.confirmed > 0) {
+                  return (
+                    <Row
+                      key={index}
+                      state={state}
+                      districts={districts[state.state]?.districtData}
+                      regionHighlighted={
+                        equal(regionHighlighted?.state, state)
+                          ? regionHighlighted
+                          : null
+                      }
+                      onHighlightState={onHighlightState}
+                      onHighlightDistrict={onHighlightDistrict}
+                    />
+                  );
+                }
+                return null;
+              })}
+            </tbody>
+          )}
 
           <tbody>
-            {states.length > 1 && props.summary === false && (
-              <Row
-                key={0}
-                state={states[0]}
-                total={true}
-                onHighlightState={props.onHighlightState}
-              />
-            )}
+            <Row
+              key={0}
+              state={states[0]}
+              onHighlightState={onHighlightState}
+            />
           </tbody>
         </table>
         <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1s'}}>
-          {count} States/UTS Affected
+          {states.slice(1).filter((s) => s && s.confirmed > 0).length}{' '}
+          States/UTS Affected
         </h5>
       </React.Fragment>
     );
