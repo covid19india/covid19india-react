@@ -7,7 +7,7 @@ import Table from './table';
 import TimeSeriesExplorer from './timeseriesexplorer';
 import Updates from './updates';
 
-import {MAP_META} from '../constants';
+import {STATE_CODES_REVERSE, MAP_META} from '../constants';
 import {
   formatDate,
   formatDateAbsolute,
@@ -22,7 +22,7 @@ import axios from 'axios';
 import React, {useState, useCallback} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
-import {useEffectOnce, useLocalStorage, useFavicon} from 'react-use';
+import {useEffectOnce, useLocalStorage} from 'react-use';
 
 function Home(props) {
   const [states, setStates] = useState([]);
@@ -31,22 +31,16 @@ function Home(props) {
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState({});
   const [fetched, setFetched] = useState(false);
-  const [activeStateCode, setActiveStateCode] = useState('TT');
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
-  const [rowHighlighted, setRowHighlighted] = useState({
-    statecode: undefined,
-    isDistrict: false,
-    districtName: undefined,
-  });
   const [showUpdates, setShowUpdates] = useState(false);
   const [anchor, setAnchor] = useState(null);
+  const [mapOption, setMapOption] = useState('confirmed');
+
   const [lastViewedLog, setLastViewedLog] = useLocalStorage(
     'lastViewedLog',
     null
   );
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
-
-  useFavicon(newUpdate ? '/icon_update.png' : '/favicon.ico');
 
   useEffectOnce(() => {
     getStates();
@@ -114,30 +108,15 @@ function Home(props) {
     }
   };
 
-  const onHighlightState = (state, index) => {
-    if (!state && !index) return setRegionHighlighted(null);
-    setRegionHighlighted({state, index});
-  };
+  const onHighlightState = useCallback((state) => {
+    if (!state) return setRegionHighlighted(null);
+    state.code = STATE_CODES_REVERSE[state.state];
+    setRegionHighlighted({state});
+  }, []);
 
-  const onHighlightDistrict = (district, state, index) => {
-    if (!state && !index && !district) return setRegionHighlighted(null);
-    setRegionHighlighted({district, state, index});
-  };
-
-  const onMapHighlightChange = useCallback((region) => {
-    setActiveStateCode(region.statecode);
-    if ('districtName' in region)
-      setRowHighlighted({
-        statecode: region.statecode,
-        isDistrict: true,
-        districtName: region.districtName,
-      });
-    else
-      setRowHighlighted({
-        statecode: region.statecode,
-        isDistrict: false,
-        districtName: undefined,
-      });
+  const onHighlightDistrict = useCallback((district, state) => {
+    if (!state && !district) return setRegionHighlighted(null);
+    setRegionHighlighted({district, state});
   }, []);
 
   return (
@@ -192,8 +171,8 @@ function Home(props) {
             <Table
               states={states}
               summary={false}
-              stateDistrictWiseData={stateDistrictWiseData}
-              rowHighlighted={rowHighlighted}
+              districts={stateDistrictWiseData}
+              regionHighlighted={regionHighlighted}
               onHighlightState={onHighlightState}
               onHighlightDistrict={onHighlightDistrict}
             />
@@ -206,19 +185,20 @@ function Home(props) {
               <MapExplorer
                 mapMeta={MAP_META.India}
                 states={states}
-                stateDistrictWiseData={stateDistrictWiseData}
+                districts={stateDistrictWiseData}
                 stateTestData={stateTestData}
                 regionHighlighted={regionHighlighted}
-                onMapHighlightChange={onMapHighlightChange}
                 isCountryLoaded={true}
                 anchor={anchor}
                 setAnchor={setAnchor}
+                mapOption={mapOption}
+                setMapOption={setMapOption}
               />
 
               {fetched && (
                 <TimeSeriesExplorer
-                  timeseries={timeseries[activeStateCode]}
-                  activeStateCode={activeStateCode}
+                  timeseries={timeseries[regionHighlighted?.state.code || 'TT']}
+                  activeStateCode={regionHighlighted?.state.code || 'TT'}
                   onHighlightState={onHighlightState}
                   states={states}
                   anchor={anchor}
@@ -234,4 +214,4 @@ function Home(props) {
   );
 }
 
-export default React.memo(Home);
+export default Home;

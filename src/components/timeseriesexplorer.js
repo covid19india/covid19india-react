@@ -1,8 +1,13 @@
 import TimeSeries from './timeseries';
 
+import equal from 'fast-deep-equal';
 import React from 'react';
 import * as Icon from 'react-feather';
 import {useLocalStorage} from 'react-use';
+
+const isEqual = (currProps, prevProps) => {
+  return equal(currProps.activeStateCode, prevProps.activeStateCode);
+};
 
 function TimeSeriesExplorer({
   timeseries,
@@ -12,10 +17,7 @@ function TimeSeriesExplorer({
   anchor,
   setAnchor,
 }) {
-  const [graphOption, setGraphOption] = useLocalStorage(
-    'timeseriesGraphOption',
-    1
-  );
+  const [chartType, setChartType] = useLocalStorage('timeseriesChartType', 1);
 
   const [timeseriesMode, setTimeseriesMode] = useLocalStorage(
     'timeseriesMode',
@@ -51,17 +53,17 @@ function TimeSeriesExplorer({
         <h1>Spread Trends</h1>
         <div className="tabs">
           <div
-            className={`tab ${graphOption === 1 ? 'focused' : ''}`}
+            className={`tab ${chartType === 1 ? 'focused' : ''}`}
             onClick={() => {
-              setGraphOption(1);
+              setChartType(1);
             }}
           >
             <h4>Cumulative</h4>
           </div>
           <div
-            className={`tab ${graphOption === 2 ? 'focused' : ''}`}
+            className={`tab ${chartType === 2 ? 'focused' : ''}`}
             onClick={() => {
-              setGraphOption(2);
+              setChartType(2);
             }}
           >
             <h4>Daily</h4>
@@ -85,16 +87,16 @@ function TimeSeriesExplorer({
           </div>
           <div
             className={`timeseries-logmode ${
-              graphOption !== 1 ? 'disabled' : ''
+              chartType !== 1 ? 'disabled' : ''
             }`}
           >
             <label htmlFor="timeseries-logmode">Logarithmic</label>
             <input
               id="timeseries-logmode"
               type="checkbox"
-              checked={graphOption === 1 && timeseriesLogMode}
+              checked={chartType === 1 && timeseriesLogMode}
               className="switch"
-              disabled={graphOption !== 1}
+              disabled={chartType !== 1}
               onChange={(event) => {
                 setTimeseriesLogMode(!timeseriesLogMode);
               }}
@@ -129,15 +131,17 @@ function TimeSeriesExplorer({
         )}
       </div>
 
-      <TimeSeries
-        timeseries={timeseries}
-        type={graphOption}
-        mode={timeseriesMode}
-        logMode={timeseriesLogMode}
-        isTotal={activeStateCode === 'TT'}
-      />
+      {timeseries && (
+        <TimeSeries
+          timeseriesProp={timeseries}
+          chartType={chartType}
+          mode={timeseriesMode}
+          logMode={timeseriesLogMode}
+          isTotal={activeStateCode === 'TT'}
+        />
+      )}
     </div>
   );
 }
 
-export default React.memo(TimeSeriesExplorer);
+export default React.memo(TimeSeriesExplorer, isEqual);
