@@ -182,6 +182,13 @@ function Home(props) {
                 />
               )}
             </div>
+            <img
+              src="/refresh-icon.svg"
+              alt="Refresh"
+              onClick={() => {
+                window.location.reload();
+              }}
+            />
           </div>
 
           {showUpdates && <Updates />}
