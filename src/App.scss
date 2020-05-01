@@ -1951,23 +1951,37 @@ table {
   .legend {
     margin-top: 1em;
     width: 100%;
+
+    svg {
+      display: block;
+      overflow: visible;
+    }
+  }
+
+  .zoomControls {
+    bottom: 0;
+    color: #a9a9a9;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    width: 3rem;
+    z-index: 100;
+
+    .zoomIn,
+    .zoomOut,
+    .reset {
+      cursor: pointer;
+      width: auto;
+    }
+
+    .reset {
+      margin-top: 1rem;
+    }
   }
 
   .map-hover {
-    stroke: #ff073a;
     stroke-width: 2;
-
-    &.active {
-      stroke: #007bff;
-    }
-
-    &.recovered {
-      stroke: #28a745;
-    }
-
-    &.deceased {
-      stroke: #6c757d;
-    }
   }
 
   .back-button {
