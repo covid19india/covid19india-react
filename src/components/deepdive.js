@@ -4,6 +4,7 @@ import DailyConfirmedChart from './Charts/dailyconfirmedchart';
 import GenderChart from './Charts/genderchart';
 import GrowthTrendChart from './Charts/growthtrendchart';
 import NationalityChart from './Charts/nationalitychart';
+import ContainmentZonesChart from './Charts/containmentzoneschart';
 import TotalConfirmedChart from './Charts/totalconfirmedchart';
 
 import axios from 'axios';
@@ -85,6 +86,10 @@ function DeepDive() {
 
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
           <NationalityChart title="Patients by  Nationality" data={rawData} />
+        </div>
+
+        <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
+          <ContainmentZonesChart title="Containment Zones by Districts" data={rawData} />
         </div>
       </section>
     </div>
