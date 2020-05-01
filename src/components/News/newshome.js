@@ -1,4 +1,4 @@
-// const url = `https://newsapi.org/v1/articles?source=${sr}&apiKey=YOUR_NEWSAPI_HERE`;
+//const url = `https://newsapi.org/v1/articles?source=${sr}&apiKey=YOUR_NEWSAPI_HERE`;
 import axios from 'axios';
 import React, {useState, useEffect} from 'react';
 
@@ -15,17 +15,16 @@ function NewsHome() {
         if (!newsArticles.length) {
           setStateNewsArticles(response.data.articles);
         }
-        // console.log('newsArticles', newsArticles);
+        //console.log('newsArticles', newsArticles);
       });
   });
 
   return (
     <div className="Resources" id="top-elem">
       <div className="filtersection">
-        <div className="filtertitle">
+      <div className="filtertitle">
           <h3>All News Come Here</h3>
-        </div>
-      </div>
+        </div></div>
     </div>
   );
 }
