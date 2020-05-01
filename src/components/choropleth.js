@@ -30,15 +30,11 @@ function ChoroplethMap({
   const [mapName, setMapName] = useState();
 
   const ready = useCallback(
-    (geoData) => {
+    (geoData, rerender = false) => {
       const propertyField = propertyFieldMap[mapMeta.mapType];
       const svg = d3.select(choroplethMap.current);
 
       const topology = topojson.feature(
-        geoData,
-        geoData.objects[mapMeta.graphObjectName]
-      );
-      const mesh = topojson.mesh(
         geoData,
         geoData.objects[mapMeta.graphObjectName]
       );
@@ -65,7 +61,9 @@ function ChoroplethMap({
       const bBox = svg.attr('viewBox').split(' ');
       width = +bBox[2];
       height = +bBox[3];
-      projection.fitSize([width, height], topology);
+      if (rerender) {
+        projection.fitSize([width, height], topology);
+      }
       path = d3.geoPath(projection);
 
       /* Legend */
@@ -198,11 +196,15 @@ function ChoroplethMap({
       svg
         .select('.borders')
         .selectAll('path')
-        .data([mesh])
-        .join('path')
+        .data([geoData], (d) => d.objects[mapMeta.graphObjectName])
+        .join((enter) =>
+          enter.append('path').attr('d', (d) => {
+            const mesh = topojson.mesh(d, d.objects[mapMeta.graphObjectName]);
+            return path(mesh);
+          })
+        )
         .attr('fill', 'none')
         .attr('stroke-width', width / 250)
-        .attr('d', (d) => path(d))
         .transition(t)
         .attr(
           'stroke',
@@ -271,11 +273,11 @@ function ChoroplethMap({
     (async () => {
       const data = await d3.json(mapMeta.geoDataFile);
       if (statistic && choroplethMap.current) {
-        ready(data);
+        ready(data, mapName !== mapMeta.name);
         setMapName(mapMeta.name);
       }
     })();
-  }, [mapMeta.geoDataFile, mapMeta.name, statistic, ready]);
+  }, [mapName, mapMeta.geoDataFile, mapMeta.name, statistic, ready]);
 
   useEffect(() => {
     const highlightRegionInMap = (name) => {
