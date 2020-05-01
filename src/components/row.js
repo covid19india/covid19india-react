@@ -310,9 +310,7 @@ function Row(props) {
                 <div
                   style={{
                     display:
-                      sortData.sortColumn === 'recovered'
-                        ? 'sort-black'
-                        : 'none',
+                      sortData.sortColumn === 'recovered' ? 'initial' : 'none',
                   }}
                 >
                   {sortData.isAscending ? (
