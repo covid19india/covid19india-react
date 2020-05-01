@@ -24,6 +24,7 @@ function DeltaBarGraph({timeseries, arrayKey}) {
       for (const day of data) {
         if (day[arrayKey] < 0) {
           chartBottom = height - margin.bottom * 2;
+          break;
         }
       }
     }
