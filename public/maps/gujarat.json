@@ -4317,7 +4317,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "731",
-            "district": "Chota Udaipur",
+            "district": "Chhota Udepur",
             "st_nm": "Gujarat",
             "st_code": "24",
             "year": "update2014"
@@ -4460,7 +4460,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "474",
-            "district": "Ahmadabad",
+            "district": "Ahmedabad",
             "st_nm": "Gujarat",
             "st_code": "24",
             "year": "2011_c"
