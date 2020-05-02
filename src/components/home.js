@@ -19,7 +19,7 @@ import {
 } from '../utils/commonfunctions';
 
 import axios from 'axios';
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useEffectOnce, useLocalStorage} from 'react-use';
@@ -41,6 +41,29 @@ function Home(props) {
     null
   );
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
+
+  const Bell = useMemo(
+    () => (
+      <Icon.Bell
+        onClick={() => {
+          setShowUpdates(!showUpdates);
+          setNewUpdate(false);
+        }}
+      />
+    ),
+    [setNewUpdate, showUpdates]
+  );
+
+  const BellOff = useMemo(
+    () => (
+      <Icon.BellOff
+        onClick={() => {
+          setShowUpdates(!showUpdates);
+        }}
+      />
+    ),
+    [showUpdates]
+  );
 
   useEffectOnce(() => {
     getStates();
@@ -142,24 +165,11 @@ function Home(props) {
               </h5>
               {!showUpdates && (
                 <div className="bell-icon">
-                  {fetched && (
-                    <Icon.Bell
-                      onClick={() => {
-                        setShowUpdates(!showUpdates);
-                        setNewUpdate(false);
-                      }}
-                    />
-                  )}
+                  {fetched && Bell}
                   {newUpdate && <div className="indicator"></div>}
                 </div>
               )}
-              {showUpdates && (
-                <Icon.BellOff
-                  onClick={() => {
-                    setShowUpdates(!showUpdates);
-                  }}
-                />
-              )}
+              {fetched && showUpdates && BellOff}
             </div>
           </div>
 

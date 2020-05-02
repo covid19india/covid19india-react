@@ -6,7 +6,13 @@ import * as Icon from 'react-feather';
 import {useLocalStorage} from 'react-use';
 
 const isEqual = (currProps, prevProps) => {
-  return equal(currProps.activeStateCode, prevProps.activeStateCode);
+  if (!equal(currProps.activeStateCode, prevProps.activeStateCode)) {
+    return false;
+  }
+  if (!equal(currProps.anchor, prevProps.anchor)) {
+    return false;
+  }
+  return true;
 };
 
 function TimeSeriesExplorer({

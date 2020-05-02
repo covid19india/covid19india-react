@@ -1,7 +1,7 @@
 import Row from './row';
 
 import equal from 'fast-deep-equal';
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import {Link} from 'react-router-dom';
 
 const isEqual = (prevProps, currProps) => {
@@ -23,6 +23,28 @@ function Table({
       ? localStorage.getItem('state.isAscending') === 'true'
       : false,
   });
+
+  const FineprintTop = useMemo(
+    () => (
+      <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1.5s'}}>
+        Compiled from State Govt. numbers,{' '}
+        <Link to="/faq" style={{color: '#6c757d'}}>
+          know more!
+        </Link>
+      </h5>
+    ),
+    []
+  );
+
+  const FineprintBottom = useMemo(
+    () => (
+      <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1s'}}>
+        {states.slice(1).filter((s) => s && s.confirmed > 0).length} States/UTS
+        Affected
+      </h5>
+    ),
+    [states]
+  );
 
   const doSort = (e) => {
     const totalRow = states.splice(0, 1);
@@ -75,15 +97,7 @@ function Table({
   if (states.length > 0) {
     return (
       <React.Fragment>
-        <h5
-          className="table-fineprint fadeInUp"
-          style={{animationDelay: '1.5s'}}
-        >
-          Compiled from State Govt. numbers,{' '}
-          <Link to="/faq" style={{color: '#6c757d'}}>
-            know more!
-          </Link>
-        </h5>
+        {FineprintTop}
         <table className="table fadeInUp" style={{animationDelay: '1.8s'}}>
           <thead>
             <tr>
@@ -255,10 +269,7 @@ function Table({
             />
           </tbody>
         </table>
-        <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1s'}}>
-          {states.slice(1).filter((s) => s && s.confirmed > 0).length}{' '}
-          States/UTS Affected
-        </h5>
+        {states && FineprintBottom}
       </React.Fragment>
     );
   } else {
