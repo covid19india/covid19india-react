@@ -194,19 +194,23 @@ function State(props) {
                 <h5 className="timestamp">
                   {!isNaN(
                     parse(testObjLast?.updatedon, 'dd/MM/yyyy', new Date())
-                  )
-                    ? `As of ${format(
-                        parse(testObjLast?.updatedon, 'dd/MM/yyyy', new Date()),
-                        'dd MMM'
-                      )}`
-                    : ''}
+                  ) ? (
+                    `As of ${format(
+                      parse(testObjLast?.updatedon, 'dd/MM/yyyy', new Date()),
+                      'dd MMM'
+                    )}`
+                  ) : (
+                    <div style={{height: '30px'}}></div>
+                  )}
                 </h5>
                 <h5>
-                  {'per '}
                   {testObjLast?.totaltested && (
-                    <a href={testObjLast.source} target="_noblank">
-                      source
-                    </a>
+                    <span>
+                      {'per '}
+                      <a href={testObjLast.source} target="_noblank">
+                        source
+                      </a>
+                    </span>
                   )}
                 </h5>
               </div>
