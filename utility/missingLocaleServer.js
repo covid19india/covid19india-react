@@ -13,13 +13,19 @@ const server = http.createServer(async (req, res) => {
     .on('end', () => {
       body = Buffer.concat(body).toString();
       fs.openSync('missing_locales.json', 'a');
+      const enJson = fs.readFileSync('public/locales/en.json', 'utf-8');
       const data = fs.readFileSync('missing_locales.json', 'utf-8');
       console.log(`body is: ${body}`);
 
-      const dataToWrite = JSON.stringify({
-        ...JSON.parse(data || '{}'),
-        ...JSON.parse(body || '{}'),
-      });
+      const dataToWrite = JSON.stringify(
+        {
+          ...JSON.parse(enJson || '{}'),
+          ...JSON.parse(data || '{}'),
+          ...JSON.parse(body || '{}'),
+        },
+        null,
+        2
+      );
 
       fs.writeFileSync('missing_locales.json', dataToWrite);
 
