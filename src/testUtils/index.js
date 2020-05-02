@@ -31,7 +31,8 @@ export async function getStatesAndDistrictsFromMaps() {
     const fileName = dirent.name;
     const fileNameWithoutExtension = removeFileExtension(fileName);
 
-    if (fileName === 'india.json') continue;
+    if (fileName === 'india.json' || fileName === 'india_districts.json')
+      continue;
     const data = JSON.parse(
       await fs.readFile(`public/maps/${fileName}`, 'binary')
     );
@@ -45,6 +46,11 @@ export async function getStatesAndDistrictsFromMaps() {
     ].geometries.map((e) => e.properties.district);
 
     districts[stateName] = result;
+  }
+  for (const stateName in districts) {
+    if (districts.hasOwnProperty(stateName)) {
+      console.log(`${stateName} | ${districts[stateName].join(' ')}`);
+    }
   }
   return districts;
 }

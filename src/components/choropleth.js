@@ -200,6 +200,8 @@ function ChoroplethMap({
           if (statisticOption === MAP_STATISTICS.ZONE) {
             const state = d.properties.st_nm;
             const district = d.properties[propertyField];
+            if (!mapData[state] || !mapData[state][district])
+              console.log(state, district);
             n =
               mapData[state] && mapData[state][district]
                 ? mapData[state][district].zone
