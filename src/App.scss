@@ -732,7 +732,6 @@ h6 {
 
       .state-last-update {
         background: transparent;
-        transform: translateX(1rem);
 
         &:hover {
           background: #fff !important;
@@ -751,7 +750,6 @@ h6 {
 
       .district-heading {
         background: $gray-light;
-        transform: translateX(1rem);
 
         td {
           background: $gray-light;
@@ -784,10 +782,6 @@ h6 {
             }
           }
         }
-      }
-
-      .district {
-        transform: translateX(1rem);
       }
     }
 
@@ -1642,7 +1636,7 @@ table {
 
       &.spacer {
         background: #fff !important;
-        height: .5rem;
+        height: 2rem;
       }
     }
 
@@ -1696,23 +1690,56 @@ table {
     .state-last-update {
       background: transparent;
       color: $green !important;
-      transform: translateX(1rem);
+      height: 2rem;
 
-      &:hover {
-        background: #fff !important;
+      h6 {
+        margin: 0;
       }
 
-      td {
-        .last-update {
-          align-items: baseline;
-          display: flex;
-          flex-direction: row;
-          text-align: left;
-          width: 100%;
+      &:hover {
+        background: transparent !important;
+      }
 
-          h6 {
-            color: $green !important;
-            font-weight: 600;
+      .disclaimer {
+        backdrop-filter: saturate(180%) blur(20px);
+        background: $gray-light;
+        border-radius: 5px;
+        color: $gray;
+        display: flex;
+        flex-direction: row;
+        font-family: 'archia';
+        font-size: 12px;
+        left: 0;
+        margin-top: .5rem;
+        padding: .5rem;
+        width: 14rem;
+
+        svg {
+          margin-right: .25rem;
+          margin-top: -.25rem;
+          stroke-width: 2px;
+          width: 20px !important;
+        }
+      }
+
+      .state-page-link {
+        padding: 0 !important;
+
+        a {
+          background: $yellow-light;
+          border-radius: 5px;
+          color: $orange;
+          font-size: .75rem;
+          padding: .5rem;
+          text-decoration: none;
+          transition: all .2s ease-in-out;
+
+          &:hover {
+            background: $yellow-hover;
+
+            svg {
+              stroke: $orange;
+            }
           }
         }
       }
@@ -1720,7 +1747,6 @@ table {
 
     .district-heading {
       background: $gray-light;
-      transform: translateX(1rem);
 
       &:hover {
         background: $gray-light !important;
@@ -1755,48 +1781,7 @@ table {
             width: 10px;
           }
         }
-
-        &.state-page-link {
-          background: $white;
-          padding: 0;
-          text-align: left;
-
-          div {
-            align-items: center;
-            background: $yellow-light;
-            border-radius: 5px;
-            color: $orange;
-            float: left;
-            font-size: .75rem;
-            padding: .45rem;
-            transition: all .2s ease-in-out;
-
-            &:hover {
-              background: $yellow-hover;
-
-              svg {
-                stroke: $orange;
-              }
-            }
-
-            svg {
-              color: $orange-mid;
-              height: 12px;
-              margin-bottom: 1px;
-              margin-left: .25rem;
-              stroke-width: 3px;
-              transition: all .2s ease-in-out;
-              vertical-align: middle;
-              width: 12px;
-            }
-          }
-        }
       }
-    }
-
-
-    .district {
-      transform: translateX(1rem);
     }
   }
 
@@ -1966,23 +1951,15 @@ table {
   .legend {
     margin-top: 1em;
     width: 100%;
+
+    svg {
+      display: block;
+      overflow: visible;
+    }
   }
 
   .map-hover {
-    stroke: #ff073a;
     stroke-width: 2;
-
-    &.active {
-      stroke: #007bff;
-    }
-
-    &.recovered {
-      stroke: #28a745;
-    }
-
-    &.deceased {
-      stroke: #6c757d;
-    }
   }
 
   .back-button {
@@ -4772,7 +4749,6 @@ footer {
 
         .state-last-update {
           background: transparent;
-          transform: translateX(1rem);
 
           &:hover {
             background: #fff !important;
@@ -4791,7 +4767,6 @@ footer {
 
         .district-heading {
           background: $gray-light;
-          transform: translateX(1rem);
 
           td {
             background: $gray-light;
@@ -4824,11 +4799,6 @@ footer {
               }
             }
           }
-        }
-
-
-        .district {
-          transform: translateX(1rem);
         }
       }
 

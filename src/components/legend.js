@@ -12,17 +12,19 @@ function legend({
   marginRight = 0,
   marginBottom = 16 + tickSize,
   marginLeft = 0,
+  svg,
   ticks = width / 64,
   tickFormat,
   tickValues,
 } = {}) {
-  const svg = d3
-    .create('svg')
-    .attr('width', width)
-    .attr('height', height)
-    .attr('viewBox', [0, 0, width, height])
-    .style('overflow', 'visible')
-    .style('display', 'block');
+  if (!svg)
+    svg = d3
+      .create('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .attr('viewBox', [0, 0, width, height])
+      .style('overflow', 'visible')
+      .style('display', 'block');
 
   let tickAdjust = (g) => {
     const ticks = g.selectAll('.tick line');
@@ -42,7 +44,8 @@ function legend({
       );
 
     svg
-      .append('image')
+      .select('.ramp')
+      .attr('class', 'ramp')
       .attr('x', marginLeft)
       .attr('y', marginTop)
       .attr('width', width - marginLeft - marginRight)
@@ -70,7 +73,8 @@ function legend({
     );
 
     svg
-      .append('image')
+      .select('.ramp')
+      .attr('class', 'ramp')
       .attr('x', marginLeft)
       .attr('y', marginTop)
       .attr('width', width - marginLeft - marginRight)
@@ -155,8 +159,11 @@ function legend({
   }
 
   svg
-    .append('g')
+    .select('.axis')
     .attr('transform', `translate(0,${height - marginBottom})`)
+    .transition()
+    .duration(500)
+    .attr('class', 'axis')
     .call(
       d3
         .axisBottom(x)
@@ -165,11 +172,13 @@ function legend({
         .tickSize(tickSize)
         .tickValues(tickValues)
     )
-    .call(tickAdjust)
-    .call((g) => g.select('.domain').remove())
+    .on('start', () => {
+      svg.call(tickAdjust).call((svg) => svg.select('.domain').remove());
+    })
     .call((g) =>
       g
-        .append('text')
+        .select('.axistext')
+        .attr('class', 'axistext')
         .attr('x', marginLeft)
         .attr('y', marginTop + marginBottom - height - 6)
         .attr('fill', 'currentColor')
