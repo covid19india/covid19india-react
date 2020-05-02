@@ -2667,7 +2667,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "357",
-            "district": "Purbi Singhbhum",
+            "district": "East Singhbhum",
             "st_code": "20",
             "year": "2011_c",
             "st_nm": "Jharkhand"
@@ -2678,7 +2678,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "368",
-            "district": "Pashchimi Singhbhum",
+            "district": "West Singhbhum",
             "st_code": "20",
             "year": "2011_c",
             "st_nm": "Jharkhand"
@@ -2700,7 +2700,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "348",
-            "district": "Kodarma",
+            "district": "Koderma",
             "st_code": "20",
             "year": "2011_c",
             "st_nm": "Jharkhand"

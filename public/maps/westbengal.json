@@ -3790,7 +3790,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "344",
-            "district": "Medinipur West",
+            "district": "Purba Medinipur",
             "st_nm": "West Bengal",
             "st_code": "19",
             "year": "2011_c"
@@ -3801,7 +3801,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "345",
-            "district": "Medinipur East",
+            "district": "Paschim Medinipur",
             "st_nm": "West Bengal",
             "st_code": "19",
             "year": "2011_c"
@@ -3856,7 +3856,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "332",
-            "district": "Maldah",
+            "district": "Malda",
             "st_nm": "West Bengal",
             "st_code": "19",
             "year": "2011_c"

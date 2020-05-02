@@ -4955,7 +4955,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "106",
-            "district": "Dhaulpur",
+            "district": "Dholpur",
             "st_code": "08",
             "year": "2011_c",
             "st_nm": "Rajasthan"
@@ -5149,7 +5149,7 @@
           "type": "MultiPolygon",
           "properties": {
             "dt_code": "126",
-            "district": "Chittaurgarh",
+            "district": "Chittorgarh",
             "st_code": "08",
             "year": "2011_c",
             "st_nm": "Rajasthan"
