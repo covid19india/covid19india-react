@@ -14,12 +14,13 @@ export const DISTRICT_ROW_STATISTICS = [
 export const MAP_TYPES = {
   COUNTRY: 'country',
   STATE: 'state',
-  COUNTRY_FULL: 'countryFull',
+  COUNTRY_DISTRICTS: 'countryDistrict',
 };
 
 export const MAP_STATISTICS = {
   TOTAL: 0,
   PER_MILLION: 1,
+  ZONE: 2,
 };
 
 export const MAPS_DIR = '/maps';
@@ -31,10 +32,10 @@ export const MAP_META = {
     mapType: MAP_TYPES.COUNTRY,
     graphObjectName: 'india',
   },
-  IndiaFull: {
-    name: 'IndiaFull',
-    geoDataFile: `${MAPS_DIR}/india_full.json`,
-    mapType: MAP_TYPES.COUNTRY_FULL,
+  IndiaDistricts: {
+    name: 'India',
+    geoDataFile: `${MAPS_DIR}/india_districts.json`,
+    mapType: MAP_TYPES.COUNTRY_DISTRICTS,
     graphObjectName: 'india-districts-2019-734',
   },
   'Andaman and Nicobar Islands': {

@@ -46,6 +46,7 @@ function MapExplorer({
   mapMeta,
   states,
   districts,
+  districtZones,
   stateTestData,
   regionHighlighted,
   isCountryLoaded,
@@ -109,30 +110,14 @@ function MapExplorer({
         return acc;
       }, {});
       currentMapData[currentMap.name] = states.find(
-        (state) => currentMap.name === state.state);
-    } else if (currentMap.mapType === MAP_TYPES.COUNTRY_FULL) {
-      currentMapData = Object.keys(districts).reduce(
-        (acc1, state) => {
-          const districtData = districts[state].districtData;
-          acc1[state] = Object.keys(districtData).reduce((acc2, district) => {
-            acc2[district] = {};
-            dataTypes.forEach((dtype) => {
-              const typeCount = parseInt(districtData[district][dtype]);
-              statistic[dtype].total += typeCount;
-              if (typeCount > statistic[dtype].max) {
-                statistic[dtype].max = typeCount;
-              }
-              acc2[district][dtype] = typeCount;
-            });
-            return acc2;
-          }, {});
-          return acc1;
-        },
-        {}
+        (state) => currentMap.name === state.state
       );
+    } else if (currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS) {
+      setStatisticOption(MAP_STATISTICS.ZONE);
+      currentMapData = districtZones;
     }
     return [statistic, currentMapData];
-  }, [currentMap.mapType, currentMap.name, districts, states, statisticOption]);
+  }, [currentMap.mapType, currentMap.name, districts, districtZones, states, statisticOption]);
 
   const setHoveredRegion = useCallback(
     (name, currentMap) => {
@@ -173,21 +158,27 @@ function MapExplorer({
 
     const isState = !('district' in regionHighlighted);
     if (isState) {
-      const newMap = MAP_META['India'];
-      setCurrentMap(newMap);
+      let newMap = currentMap;
+      if (currentMap.mapType === MAP_TYPES.STATE) {
+        newMap = MAP_META['India'];
+        setCurrentMap(newMap);
+      }
       const region = getRegionFromState(regionHighlighted.state);
       setHoveredRegion(region.name, newMap);
       setSelectedRegion(region.name);
-    } else {
-      const newMap = MAP_META[regionHighlighted.state.state];
-      if (!newMap) {
-        return;
+    } else if (!isState) {
+      let newMap = currentMap;
+      if (currentMap.name !== regionHighlighted.state.state) {
+        newMap = MAP_META[regionHighlighted.state.state];
+        if (!newMap) {
+          return;
+        }
+        setCurrentMap(newMap);
       }
-      setCurrentMap(newMap);
       setHoveredRegion(regionHighlighted.district, newMap);
       setSelectedRegion(regionHighlighted.district);
     }
-  }, [regionHighlighted, setHoveredRegion]);
+  }, [currentMap, regionHighlighted, setHoveredRegion]);
 
   const switchMapToState = useCallback(
     (name) => {
@@ -428,6 +419,8 @@ function MapExplorer({
             statisticOption === MAP_STATISTICS.TOTAL ? 'focused' : ''
           }`}
           onClick={() => {
+            if (currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS)
+              switchMapToState('India');
             setStatisticOption(MAP_STATISTICS.TOTAL);
           }}
         >
@@ -435,19 +428,28 @@ function MapExplorer({
         </div>
         <div
           className={`tab ${
-            currentMap.mapType === MAP_TYPES.COUNTRY &&
-            statisticOption === MAP_STATISTICS.PER_MILLION
-              ? 'focused'
-              : ''
+            statisticOption === MAP_STATISTICS.PER_MILLION ? 'focused' : ''
           }`}
           onClick={() => {
-            if (currentMap.mapType === MAP_TYPES.COUNTRY)
+            if (currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS)
+              switchMapToState('India');
+            if (currentMap.mapType !== MAP_TYPES.STATE)
               setStatisticOption(MAP_STATISTICS.PER_MILLION);
           }}
         >
           <h4>
             Cases per million<sup>&dagger;</sup>
           </h4>
+        </div>
+        <div
+          className={`tab ${
+            statisticOption === MAP_STATISTICS.ZONE ? 'focused' : ''
+          }`}
+          onClick={() => {
+            switchMapToState('IndiaDistricts');
+          }}
+        >
+          <h4>Zones</h4>
         </div>
       </div>
 

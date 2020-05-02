@@ -26,6 +26,8 @@ function legend({
       .style('overflow', 'visible')
       .style('display', 'block');
 
+  const t = svg.transition().duration(500);
+
   let tickAdjust = (g) => {
     const ticks = g.selectAll('.tick line');
     ticks.attr('y1', marginTop + marginBottom - height);
@@ -61,6 +63,8 @@ function legend({
 
   // Sequential
   else if (color.interpolator) {
+    svg.selectAll('rect').remove();
+
     x = Object.assign(
       color
         .copy()
@@ -139,13 +143,13 @@ function legend({
 
   // Ordinal
   else {
+    svg.select('.ramp').attr('xlink:href', null);
     x = d3
       .scaleBand()
       .domain(color.domain())
       .rangeRound([marginLeft, width - marginRight]);
 
     svg
-      .append('g')
       .selectAll('rect')
       .data(color.domain())
       .join('rect')
@@ -161,8 +165,7 @@ function legend({
   svg
     .select('.axis')
     .attr('transform', `translate(0,${height - marginBottom})`)
-    .transition()
-    .duration(500)
+    .transition(t)
     .attr('class', 'axis')
     .call(
       d3
@@ -191,7 +194,8 @@ function legend({
 }
 
 function ramp(color, n = 256) {
-  const canvas = document.createElement('canvas');
+  // const canvas = document.createElement('canvas');
+  const canvas = d3.select('.color-scale').node();
   const context = ((canvas.width = n), (canvas.height = 1), canvas).getContext(
     '2d'
   );

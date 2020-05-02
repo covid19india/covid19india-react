@@ -13,10 +13,10 @@ import {
   formatDateAbsolute,
   mergeTimeseries,
   preprocessTimeseries,
+  parseDistrictZones,
   parseStateTimeseries,
   parseStateTestTimeseries,
   parseTotalTestTimeseries,
-  parseDistrictZones,
 } from '../utils/commonfunctions';
 
 import axios from 'axios';
