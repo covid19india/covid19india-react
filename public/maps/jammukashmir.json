@@ -2305,7 +2305,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "009",
-            "district": "Bandipore",
+            "district": "Bandipora",
             "st_nm": "JAMMU & KASHMIR",
             "st_code": "01",
             "year": "2011_c"
@@ -2336,7 +2336,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "008",
-            "district": "Baramula",
+            "district": "Baramulla",
             "st_nm": "JAMMU & KASHMIR",
             "st_code": "01",
             "year": "2011_c"
@@ -2450,7 +2450,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "002",
-            "district": "Badgam",
+            "district": "Budgam",
             "st_nm": "JAMMU & KASHMIR",
             "st_code": "01",
             "year": "2011_c"
@@ -2526,7 +2526,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "013",
-            "district": "Shupiyan",
+            "district": "Shopiyan",
             "st_nm": "JAMMU & KASHMIR",
             "st_code": "01",
             "year": "2011_c"
