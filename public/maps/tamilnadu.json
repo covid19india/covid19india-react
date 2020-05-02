@@ -1960,7 +1960,7 @@
           "arcs": [[-33, 34, 35]],
           "type": "Polygon",
           "properties": {
-            "district": "The Nilgiris",
+            "district": "Nilgiris",
             "st_code": "33",
             "dt_code": "611",
             "year": "2011_c",
@@ -2125,7 +2125,7 @@
           "arcs": [[83, 84]],
           "type": "Polygon",
           "properties": {
-            "district": "Kanniyakumari",
+            "district": "Kanyakumari",
             "st_code": "33",
             "dt_code": "629",
             "year": "2011_c",

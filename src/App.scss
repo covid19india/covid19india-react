@@ -473,6 +473,8 @@ h6 {
     .back-button,
     .last-update,
     .unknown,
+    .tabs-map,
+    .footnote,
     .state-page-button {
       display: none;
     }
@@ -730,7 +732,6 @@ h6 {
 
       .state-last-update {
         background: transparent;
-        transform: translateX(1rem);
 
         &:hover {
           background: #fff !important;
@@ -749,7 +750,6 @@ h6 {
 
       .district-heading {
         background: $gray-light;
-        transform: translateX(1rem);
 
         td {
           background: $gray-light;
@@ -782,10 +782,6 @@ h6 {
             }
           }
         }
-      }
-
-      .district {
-        transform: translateX(1rem);
       }
     }
 
@@ -1640,7 +1636,7 @@ table {
 
       &.spacer {
         background: #fff !important;
-        height: .5rem;
+        height: 2rem;
       }
     }
 
@@ -1694,23 +1690,56 @@ table {
     .state-last-update {
       background: transparent;
       color: $green !important;
-      transform: translateX(1rem);
+      height: 2rem;
 
-      &:hover {
-        background: #fff !important;
+      h6 {
+        margin: 0;
       }
 
-      td {
-        .last-update {
-          align-items: baseline;
-          display: flex;
-          flex-direction: row;
-          text-align: left;
-          width: 100%;
+      &:hover {
+        background: transparent !important;
+      }
 
-          h6 {
-            color: $green !important;
-            font-weight: 600;
+      .disclaimer {
+        backdrop-filter: saturate(180%) blur(20px);
+        background: $gray-light;
+        border-radius: 5px;
+        color: $gray;
+        display: flex;
+        flex-direction: row;
+        font-family: 'archia';
+        font-size: 12px;
+        left: 0;
+        margin-top: .5rem;
+        padding: .5rem;
+        width: 14rem;
+
+        svg {
+          margin-right: .25rem;
+          margin-top: -.25rem;
+          stroke-width: 2px;
+          width: 20px !important;
+        }
+      }
+
+      .state-page-link {
+        padding: 0 !important;
+
+        a {
+          background: $yellow-light;
+          border-radius: 5px;
+          color: $orange;
+          font-size: .75rem;
+          padding: .5rem;
+          text-decoration: none;
+          transition: all .2s ease-in-out;
+
+          &:hover {
+            background: $yellow-hover;
+
+            svg {
+              stroke: $orange;
+            }
           }
         }
       }
@@ -1718,7 +1747,6 @@ table {
 
     .district-heading {
       background: $gray-light;
-      transform: translateX(1rem);
 
       &:hover {
         background: $gray-light !important;
@@ -1753,48 +1781,7 @@ table {
             width: 10px;
           }
         }
-
-        &.state-page-link {
-          background: $white;
-          padding: 0;
-          text-align: left;
-
-          div {
-            align-items: center;
-            background: $yellow-light;
-            border-radius: 5px;
-            color: $orange;
-            float: left;
-            font-size: .75rem;
-            padding: .45rem;
-            transition: all .2s ease-in-out;
-
-            &:hover {
-              background: $yellow-hover;
-
-              svg {
-                stroke: $orange;
-              }
-            }
-
-            svg {
-              color: $orange-mid;
-              height: 12px;
-              margin-bottom: 1px;
-              margin-left: .25rem;
-              stroke-width: 3px;
-              transition: all .2s ease-in-out;
-              vertical-align: middle;
-              width: 12px;
-            }
-          }
-        }
       }
-    }
-
-
-    .district {
-      transform: translateX(1rem);
     }
   }
 
@@ -1943,7 +1930,7 @@ table {
     display: flex;
     flex-direction: row;
     margin: auto;
-    margin-top: 4rem;
+    margin-top: 2rem;
     overflow: hidden;
     width: 90%;
 
@@ -1964,23 +1951,15 @@ table {
   .legend {
     margin-top: 1em;
     width: 100%;
+
+    svg {
+      display: block;
+      overflow: visible;
+    }
   }
 
   .map-hover {
-    stroke: #ff073a;
     stroke-width: 2;
-
-    &.active {
-      stroke: #007bff;
-    }
-
-    &.recovered {
-      stroke: #28a745;
-    }
-
-    &.deceased {
-      stroke: #6c757d;
-    }
   }
 
   .back-button {
@@ -2030,13 +2009,15 @@ table {
   .meta {
     display: flex;
     flex-direction: row;
-    height: 1rem;
+    flex-wrap: wrap;
+    height: 4rem;
     justify-content: space-between;
 
     h2 {
       color: #e23028;
       font-weight: 900;
-      margin: 0;
+      margin-top: 0;
+      width: calc(100% - 10rem);
       word-wrap: break-word;
 
       &.active {
@@ -2058,13 +2039,19 @@ table {
       word-wrap: break-word;
     }
 
+    a {
+      width: 10rem;
+    }
+
     .district {
       color: #e23028;
       line-height: 15px;
       margin: 0;
-      position: absolute;
-      top: 3rem;
-      width: 5rem;
+
+      span {
+        font-size: .75rem;
+        font-weight: 600;
+      }
 
       &.active {
         color: $blue;
@@ -2272,6 +2259,7 @@ table {
     margin-left: auto;
     margin-right: auto;
     padding: .5rem;
+    pointer-events: none;
     position: absolute;
     right: 0;
     width: 14rem;
@@ -2282,6 +2270,14 @@ table {
       margin-top: -.9rem;
       stroke-width: 2px;
       width: 20px !important;
+    }
+  }
+
+  .footnote {
+    &.table-fineprint {
+      margin-bottom: 0;
+      margin-top: 1em;
+      text-align: left;
     }
   }
 }
@@ -2335,6 +2331,62 @@ table {
       background: $gray-opaque;
       color: $gray;
     }
+  }
+}
+
+.tabs-map {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  z-index: 99;
+
+  h4 {
+    display: table-cell;
+    font-family: 'archia';
+    font-size: 12px !important;
+    font-weight: 900;
+    height: 2rem;
+    margin-bottom: 0;
+    margin-top: 0;
+    vertical-align: middle;
+  }
+
+  .tab {
+    background: $gray-light;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color: $gray-mid;
+    cursor: pointer;
+    height: 2rem;
+    margin-right: .25rem;
+    min-width: 5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: center;
+    transition: all .3s ease-in-out;
+
+    &:hover {
+      background: $gray-hover;
+    }
+
+    &.focused {
+      background: $gray-opaque;
+      color: $gray;
+
+    }
+
+    &.disabled {
+      background: $gray-opaque;
+      color: $gray-mid;
+    }
+  }
+
+  sup {
+    position: relative;
+    top: -.5em;
+    vertical-align: top;
   }
 }
 
@@ -4697,7 +4749,6 @@ footer {
 
         .state-last-update {
           background: transparent;
-          transform: translateX(1rem);
 
           &:hover {
             background: #fff !important;
@@ -4716,7 +4767,6 @@ footer {
 
         .district-heading {
           background: $gray-light;
-          transform: translateX(1rem);
 
           td {
             background: $gray-light;
@@ -4749,11 +4799,6 @@ footer {
               }
             }
           }
-        }
-
-
-        .district {
-          transform: translateX(1rem);
         }
       }
 
@@ -5044,8 +5089,7 @@ footer {
           .dot,
           .focus,
           .domain,
-          .tick,
-          line {
+          .tick {
             stroke: #9673b9 !important;
           }
 
@@ -5054,7 +5098,8 @@ footer {
             fill: #9673b9 !important;
           }
 
-          .trend {
+          .trend,
+          line {
             stroke: #9673b999 !important;
           }
 

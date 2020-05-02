@@ -68,6 +68,10 @@ function NationalityChart(props) {
     maintainAspectRatio: false,
     tooltips: {
       mode: 'point',
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      borderColor: 'rgba(0, 0, 0, 0)',
+      bodyFontColor: 'white',
+      titleFontColor: 'white',
       events: ['mousemove', 'mouseout', 'touchstart', 'touchmove', 'touchend'],
       callbacks: {
         label: function (tooltipItem, data) {

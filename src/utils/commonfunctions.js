@@ -1,6 +1,13 @@
 import {STATE_CODES} from '../constants';
 
-import moment from 'moment';
+import {
+  parse,
+  differenceInDays,
+  isBefore,
+  isSameDay,
+  startOfDay,
+} from 'date-fns';
+import {utcToZonedTime} from 'date-fns-tz';
 
 const months = {
   '01': 'Jan',
@@ -19,6 +26,10 @@ const months = {
 
 export const getStateName = (code) => {
   return STATE_CODES[code.toUpperCase()];
+};
+
+export const getIndiaDay = () => {
+  return startOfDay(utcToZonedTime(new Date(), 'Asia/Kolkata'));
 };
 
 export const formatDate = (unformattedDate) => {
@@ -50,16 +61,15 @@ const validateCTS = (data = []) => {
     .filter((d) => dataTypes.every((dt) => Number(d[dt]) >= 0))
     .filter((d) => {
       // Skip data from the current day
-      const today = moment().utcOffset('+05:30');
-      return moment(d.date, 'DD MMMM')
-        .utcOffset('+05:30')
-        .isBefore(today, 'day');
+      const today = getIndiaDay();
+      const date = parse(d.date, 'dd MMMM', new Date(2020, 0, 1));
+      return isBefore(date, today);
     });
 };
 
 export const preprocessTimeseries = (timeseries) => {
   return validateCTS(timeseries).map((stat, index) => ({
-    date: new Date(stat.date + ' 2020'),
+    date: parse(stat.date, 'dd MMMM', new Date(2020, 0, 1)),
     totalconfirmed: +stat.totalconfirmed,
     totalrecovered: +stat.totalrecovered,
     totaldeceased: +stat.totaldeceased,
@@ -96,11 +106,11 @@ export const parseStateTimeseries = ({states_daily: data}) => {
     return a;
   }, {});
 
-  const today = moment().utcOffset('+05:30');
+  const today = getIndiaDay();
   for (let i = 0; i < data.length; i += 3) {
-    const date = moment(data[i].date, 'DD-MMM-YY').utcOffset('+05:30');
+    const date = parse(data[i].date, 'dd-MMM-yy', new Date());
     // Skip data from the current day
-    if (date.isBefore(today, 'day')) {
+    if (isBefore(date, today)) {
       Object.entries(statewiseSeries).forEach(([k, v]) => {
         const stateCode = k.toLowerCase();
         const prev = v[v.length - 1] || {};
@@ -115,7 +125,7 @@ export const parseStateTimeseries = ({states_daily: data}) => {
           +data[i + 2][stateCode] + (prev.totaldeceased || 0);
         // Push
         v.push({
-          date: date.toDate(),
+          date: date,
           dailyconfirmed: dailyconfirmed,
           dailyrecovered: dailyrecovered,
           dailydeceased: dailydeceased,
@@ -144,15 +154,25 @@ export const parseStateTestTimeseries = (data) => {
     return ret;
   }, {});
 
-  const today = moment();
+  const today = getIndiaDay();
   data.forEach((d) => {
-    const date = moment(d.updatedon, 'DD/MM/YYYY');
+    const date = parse(d.updatedon, 'dd/MM/yyyy', new Date());
     const totaltested = +d.totaltested;
-    if (date.isBefore(today, 'Date') && totaltested) {
+    if (isBefore(date, today) && totaltested) {
       const stateCode = stateCodeMap[d.state];
-      testTimseries[stateCode].push({
-        date: date.toDate(),
+      const stateTs = testTimseries[stateCode];
+      let dailytested;
+      if (stateTs.length) {
+        const prev = stateTs[stateTs.length - 1];
+        dailytested =
+          differenceInDays(date, prev.date) === 1
+            ? totaltested - prev.totaltested
+            : NaN;
+      } else dailytested = NaN;
+      stateTs.push({
+        date: date,
         totaltested: totaltested,
+        dailytested: dailytested,
       });
     }
   });
@@ -161,14 +181,31 @@ export const parseStateTestTimeseries = (data) => {
 
 export const parseTotalTestTimeseries = (data) => {
   const testTimseries = [];
-  const today = moment();
+  const today = getIndiaDay();
   data.forEach((d) => {
-    const date = moment(d.updatetimestamp.split(' ')[0], 'DD/MM/YYYY');
+    const date = parse(
+      d.updatetimestamp.split(' ')[0],
+      'dd/MM/yyyy',
+      new Date()
+    );
     const totaltested = +d.totalsamplestested;
-    if (date.isBefore(today, 'Date') && totaltested) {
+    if (isBefore(date, today) && totaltested) {
+      let dailytested;
+      if (testTimseries.length) {
+        const prev = testTimseries[testTimseries.length - 1];
+        if (isSameDay(date, prev.date)) {
+          prev.dailytested += totaltested - prev.totaltested;
+          prev.totaltested = totaltested;
+        } else {
+          if (differenceInDays(date, prev.date) === 1)
+            dailytested = totaltested - prev.totaltested;
+          else dailytested = NaN;
+        }
+      } else dailytested = NaN;
       testTimseries.push({
-        date: date.toDate(),
+        date: date,
         totaltested: totaltested,
+        dailytested: dailytested,
       });
     }
   });
@@ -180,11 +217,10 @@ export const mergeTimeseries = (ts1, ts2) => {
   for (const state in ts1) {
     if (ts1.hasOwnProperty(state)) {
       tsRet[state] = ts1[state].map((d1) => {
-        const testData = ts2[state].find((d2) =>
-          moment(d1.date).isSame(moment(d2.date), 'day')
-        );
+        const testData = ts2[state].find((d2) => isSameDay(d1.date, d2.date));
         return {
           totaltested: testData?.totaltested,
+          dailytested: testData?.dailytested,
           ...d1,
         };
       });

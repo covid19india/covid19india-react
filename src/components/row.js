@@ -52,11 +52,11 @@ function Row(props) {
             const value1 =
               sortColumn === 'district'
                 ? district1
-                : parseInt(aDistricts[district1].confirmed);
+                : parseInt(aDistricts[district1][sortData.sortColumn]);
             const value2 =
               sortColumn === 'district'
                 ? district2
-                : parseInt(aDistricts[district2].confirmed);
+                : parseInt(aDistricts[district2][sortData.sortColumn]);
             const comparisonValue =
               value1 > value2
                 ? 1
@@ -187,25 +187,41 @@ function Row(props) {
 
       {showDistricts && (
         <React.Fragment>
+          <tr
+            className={`spacer`}
+            style={{display: props.reveal && !props.total ? '' : 'none'}}
+          >
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+
           <tr className={'state-last-update'}>
-            <td colSpan={2}>
-              <div className="last-update">
-                <h6>Last updated&nbsp;</h6>
-                <h6
-                  title={
-                    isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
-                      ? ''
-                      : formatDateAbsolute(props.state.lastupdatedtime)
-                  }
-                >
-                  {isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
+            <td colSpan={3}>
+              <h6
+                title={
+                  isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
                     ? ''
-                    : `${formatDistance(
-                        new Date(formatDate(props.state.lastupdatedtime)),
-                        new Date()
-                      )} ago`}
-                </h6>
-              </div>
+                    : formatDateAbsolute(props.state.lastupdatedtime)
+                }
+              >
+                {isNaN(Date.parse(formatDate(props.state.lastupdatedtime)))
+                  ? ''
+                  : `Last updated ${formatDistance(
+                      new Date(formatDate(props.state.lastupdatedtime)),
+                      new Date()
+                    )} ago`}
+              </h6>
+              {sortedDistricts?.Unknown && (
+                <div className="disclaimer">
+                  <Icon.AlertCircle />
+                  {`District-wise numbers are under reconciliation`}
+                </div>
+              )}
+            </td>
+            <td className="state-page-link" colSpan={2}>
+              <Link to={`state/${state.statecode}`}>Visit state page</Link>
             </td>
           </tr>
 
@@ -253,13 +269,83 @@ function Row(props) {
                 </div>
               </div>
             </td>
-            <td className="state-page-link" colSpan={3}>
-              <Link to={`state/${state.statecode}`}>
-                <div>
-                  <abbr>Visit state page</abbr>
-                  <Icon.ArrowRightCircle />
+            <td onClick={(e) => handleSort('active')}>
+              <div className="heading-content">
+                <abbr
+                  className={`${window.innerWidth <= 769 ? 'is-blue' : ''}`}
+                  title="Active"
+                >
+                  {window.innerWidth <= 769
+                    ? window.innerWidth <= 375
+                      ? 'A'
+                      : 'Actv'
+                    : 'Active'}
+                </abbr>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'active' ? 'initial' : 'none',
+                  }}
+                >
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
                 </div>
-              </Link>
+              </div>
+            </td>
+            <td onClick={(e) => handleSort('recovered')}>
+              <div className="heading-content">
+                <abbr
+                  className={`${window.innerWidth <= 769 ? 'is-green' : ''}`}
+                  title="Recovered"
+                >
+                  {window.innerWidth <= 769
+                    ? window.innerWidth <= 375
+                      ? 'R'
+                      : 'Rcvrd'
+                    : 'Recovered'}
+                </abbr>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'recovered' ? 'initial' : 'none',
+                  }}
+                >
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
+                </div>
+              </div>
+            </td>
+            <td onClick={(e) => handleSort('deceased')}>
+              <div className="heading-content">
+                <abbr
+                  className={`${window.innerWidth <= 769 ? 'is-gray' : ''}`}
+                  title="Deaths"
+                >
+                  {window.innerWidth <= 769
+                    ? window.innerWidth <= 375
+                      ? 'D'
+                      : 'Dcsd'
+                    : 'Deceased'}
+                </abbr>
+                <div
+                  style={{
+                    display:
+                      sortData.sortColumn === 'deceased' ? 'initial' : 'none',
+                  }}
+                >
+                  {sortData.isAscending ? (
+                    <div className="arrow-up" />
+                  ) : (
+                    <div className="arrow-down" />
+                  )}
+                </div>
+              </div>
             </td>
           </tr>
         </React.Fragment>
@@ -313,6 +399,33 @@ function Row(props) {
                       {formatNumber(sortedDistricts[district].confirmed)}
                     </span>
                   </td>
+                  <td>{formatNumber(sortedDistricts[district].active)}</td>
+                  <td>
+                    <span className="deltas" style={{color: '#28a745'}}>
+                      {sortedDistricts[district].delta.recovered > 0 && (
+                        <Icon.ArrowUp />
+                      )}
+                      {sortedDistricts[district].delta.recovered > 0
+                        ? `${sortedDistricts[district].delta.recovered}`
+                        : ''}
+                    </span>
+                    <span className="table__count-text">
+                      {formatNumber(sortedDistricts[district].recovered)}
+                    </span>
+                  </td>
+                  <td>
+                    <span className="deltas" style={{color: '#6c757d'}}>
+                      {sortedDistricts[district].delta.deceased > 0 && (
+                        <Icon.ArrowUp />
+                      )}
+                      {sortedDistricts[district].delta.deceased > 0
+                        ? `${sortedDistricts[district].delta.deceased}`
+                        : ''}
+                    </span>
+                    <span className="table__count-text">
+                      {formatNumber(sortedDistricts[district].deceased)}
+                    </span>
+                  </td>
                 </tr>
               );
             }
@@ -350,6 +463,33 @@ function Row(props) {
                 {formatNumber(sortedDistricts['Unknown'].confirmed)}
               </span>
             </td>
+            <td>{formatNumber(sortedDistricts['Unknown'].active)}</td>
+            <td>
+              <span className="deltas" style={{color: '#28a745'}}>
+                {sortedDistricts['Unknown'].delta.recovered > 0 && (
+                  <Icon.ArrowUp />
+                )}
+                {sortedDistricts['Unknown'].delta.recovered > 0
+                  ? `${sortedDistricts['Unknown'].delta.recovered}`
+                  : ''}
+              </span>
+              <span className="table__count-text">
+                {formatNumber(sortedDistricts['Unknown'].recovered)}
+              </span>
+            </td>
+            <td>
+              <span className="deltas" style={{color: '#6c757d'}}>
+                {sortedDistricts['Unknown'].delta.deceased > 0 && (
+                  <Icon.ArrowUp />
+                )}
+                {sortedDistricts['Unknown'].delta.deceased > 0
+                  ? `${sortedDistricts['Unknown'].delta.deceased}`
+                  : ''}
+              </span>
+              <span className="table__count-text">
+                {formatNumber(sortedDistricts['Unknown'].deceased)}
+              </span>
+            </td>
           </tr>
         </React.Fragment>
       )}
@@ -357,18 +497,16 @@ function Row(props) {
       {showDistricts && (
         <React.Fragment>
           <tr>
-            <td colSpan={2}>
-              <span className="unknown">
-                <ReactTooltip
-                  id="unknown"
-                  place="right"
-                  type="dark"
-                  effect="solid"
-                  multiline={true}
-                  scrollHide={true}
-                  globalEventOff="click"
-                />
-              </span>
+            <td colSpan={5}>
+              <ReactTooltip
+                id="unknown"
+                place="right"
+                type="dark"
+                effect="solid"
+                multiline={true}
+                scrollHide={true}
+                globalEventOff="click"
+              />
             </td>
           </tr>
         </React.Fragment>
@@ -378,6 +516,7 @@ function Row(props) {
         className={`spacer`}
         style={{display: props.reveal && !props.total ? '' : 'none'}}
       >
+        <td></td>
         <td></td>
         <td></td>
         <td></td>

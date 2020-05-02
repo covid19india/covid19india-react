@@ -2,8 +2,8 @@ import {defaultOptions, xAxisDefaults, yAxisDefaults} from './chart-defaults';
 
 import {getStateName} from '../../utils/commonfunctions';
 
+import {parse} from 'date-fns';
 import deepmerge from 'deepmerge';
-import moment from 'moment';
 import React from 'react';
 import {Line} from 'react-chartjs-2';
 
@@ -24,7 +24,8 @@ function AllStatesChart(props) {
 
     Object.keys(data).forEach((key) => {
       if (key === 'date') {
-        dates.push(moment(data.date.trim(), 'DD MMM').utcOffset('+05:30'));
+        const date = parse(data.date, 'dd-MMM-yy', new Date());
+        dates.push(date);
       }
 
       if (key === 'status' || key === 'date') {
