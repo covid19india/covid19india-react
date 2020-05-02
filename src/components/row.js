@@ -11,12 +11,7 @@ import {formatDistance} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
-<<<<<<< HEAD
 import {useHistory} from 'react-router-dom';
-=======
-import {useTranslation} from 'react-i18next';
-import {Link} from 'react-router-dom';
->>>>>>> Updated config and rendered LanguageSwitcher
 import ReactTooltip from 'react-tooltip';
 import {createBreakpoint, useLocalStorage, useEffectOnce} from 'react-use';
 
@@ -180,7 +175,6 @@ function Row({
     sortColumn: 'confirmed',
     isAscending: false,
   });
-  const {t} = useTranslation();
 
   const history = useHistory();
 
@@ -267,7 +261,7 @@ function Row({
             : null
         }
       >
-<td>
+        <td>
           <div className="title-chevron">
             {state.statecode !== 'TT' && Chevron}
             <span className="title-icon">
@@ -303,15 +297,15 @@ function Row({
               <p>
                 {isNaN(Date.parse(formatDate(state.lastupdatedtime)))
                   ? ''
-                  : `Last updated ${formatDistance(
+                  : `${t('Last updated')} ${formatDistance(
                       new Date(formatDate(state.lastupdatedtime)),
                       new Date()
-                    )} ago`}
+                    )} ${t('ago')}`}
               </p>
               {sortedDistricts?.Unknown && (
                 <div className="disclaimer">
                   <Icon.AlertCircle />
-                  District-wise numbers are under reconciliation
+                  {t('District-wise numbers are under reconciliation')}
                 </div>
               )}
             </td>
@@ -322,13 +316,13 @@ function Row({
               onClick={() => {
                 history.push(`state/${state.statecode}`);
               }}
-            >{`View ${state.state}'s Page`}</td>
+            >{`View ${t(state.state)}'s Page`}</td>
           </tr>
 
           <tr className={classnames('district-heading')}>
             <td onClick={() => handleSort('district')}>
               <div className="heading-content">
-                <abbr title="District">District</abbr>
+                <abbr title="District">{t('District')}</abbr>
                 <div
                   style={{
                     display:

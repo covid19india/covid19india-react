@@ -19,7 +19,9 @@ i18n
     fallbackLng: 'en',
     backend: {
       loadPath: '/locales/{{lng}}.json',
+      addPath: 'http://localhost:9999/',
     },
+    saveMissing: true,
     interpolation: {
       escapeValue: false,
     },

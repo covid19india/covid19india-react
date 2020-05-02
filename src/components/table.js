@@ -6,6 +6,7 @@ import {capitalize, abbreviate} from '../utils/commonfunctions';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import React, {useState, useMemo, useCallback} from 'react';
+import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import {createBreakpoint, useLocalStorage, useEffectOnce} from 'react-use';
@@ -63,6 +64,7 @@ function Table({
     sortColumn: 'confirmed',
     isAscending: false,
   });
+  const {t} = useTranslation();
 
   const [sortedStates, setSortedStates] = useState(
     states.filter((state) => state.statecode !== 'TT')
@@ -75,9 +77,9 @@ function Table({
           className="table-fineprint fadeInUp"
           style={{animationDelay: '1.5s'}}
         >
-          Compiled from State Govt. numbers,{' '}
+          {t('Compiled from State Govt. numbers')},{' '}
           <Link to="/faq" style={{color: '#6c757d'}}>
-            know more!
+            {t('know more')}!
           </Link>
         </h5>
         <h5
@@ -161,7 +163,7 @@ function Table({
             <tr>
               <th className="state-heading" onClick={() => handleSort('state')}>
                 <div className="heading-content">
-                  <abbr title="State">State/UT</abbr>
+                  <abbr title="State">{t('State/UT')}</abbr>
                   <div
                     style={{
                       display:
