@@ -137,14 +137,13 @@ function FiltersMobile(props) {
           classes={{root: classesFormControl.root}}
         >
           <InputLabel
-            id="demo-simple-select-outlined-label-state"
+            htmlFor="stateselect"
             classes={{root: classesInputLabel.root}}
           >
             State/UT
           </InputLabel>
           <Select
             native
-            labelId="demo-simple-select-outlined-label-state"
             id="stateselect"
             value={props.indianstate}
             onChange={props.changeIndianState}
@@ -164,14 +163,13 @@ function FiltersMobile(props) {
           classes={{root: classesFormControl.root}}
         >
           <InputLabel
-            id="demo-simple-select-outlined-label-city"
+            htmlFor="cityselect1"
             classes={{root: classesInputLabel.root}}
           >
             City
           </InputLabel>
           <Select
             native
-            labelId="demo-simple-select-outlined-label-city"
             id="cityselect1"
             value={props.city}
             onChange={props.changeCity}
@@ -191,14 +189,13 @@ function FiltersMobile(props) {
           classes={{root: classesFormControl.root}}
         >
           <InputLabel
-            id="demo-simple-select-outlined-label-services"
+            htmlFor="categoryselect"
             classes={{root: classesInputLabel.root}}
           >
             Services
           </InputLabel>
           <Select
             native
-            labelId="demo-simple-select-outlined-label-services"
             id="categoryselect"
             value={props.category}
             onChange={props.changeCategory}
