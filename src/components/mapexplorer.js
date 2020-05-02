@@ -63,6 +63,7 @@ function MapExplorer({
   const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta);
   const [statisticOption, setStatisticOption] = useState(MAP_STATISTICS.TOTAL);
+  const [mapView, setMapView] = useState('state');
 
   const [statistic, currentMapData] = useMemo(() => {
     const dataTypes = ['confirmed', 'active', 'recovered', 'deceased'];
@@ -71,50 +72,71 @@ function MapExplorer({
       return acc;
     }, {});
     let currentMapData = {};
+    if (statisticOption === MAP_STATISTICS.ZONE) currentMapData = districtZones;
+    else {
+      if (currentMap.mapType === MAP_TYPES.COUNTRY) {
+        currentMapData = states.reduce((acc, state) => {
+          acc[state.state] = {};
 
-    if (currentMap.mapType === MAP_TYPES.COUNTRY) {
-      currentMapData = states.reduce((acc, state) => {
-        acc[state.state] = {};
-
-        dataTypes.forEach((dtype) => {
-          let typeCount = parseInt(
-            state[dtype !== 'deceased' ? dtype : 'deaths']
-          );
-          if (statisticOption)
-            typeCount = (1e6 * typeCount) / STATE_POPULATIONS[state.state];
-          if (state.state !== 'Total') {
-            statistic[dtype].total += typeCount;
-            if (typeCount > statistic[dtype].max) {
-              statistic[dtype].max = typeCount;
+          dataTypes.forEach((dtype) => {
+            let typeCount = parseInt(
+              state[dtype !== 'deceased' ? dtype : 'deaths']
+            );
+            if (statisticOption)
+              typeCount = (1e6 * typeCount) / STATE_POPULATIONS[state.state];
+            if (state.state !== 'Total') {
+              statistic[dtype].total += typeCount;
+              if (typeCount > statistic[dtype].max) {
+                statistic[dtype].max = typeCount;
+              }
             }
-          }
-          acc[state.state][dtype] = typeCount;
-        });
-        return acc;
-      }, {});
-    } else if (currentMap.mapType === MAP_TYPES.STATE) {
-      setStatisticOption(MAP_STATISTICS.TOTAL);
-      const districtWiseData = (
-        districts[currentMap.name] || {districtData: {}}
-      ).districtData;
-      currentMapData = Object.keys(districtWiseData).reduce((acc, district) => {
-        acc[district] = {};
-        dataTypes.forEach((dtype) => {
-          const typeCount = parseInt(districtWiseData[district][dtype]);
-          statistic[dtype].total += typeCount;
-          if (typeCount > statistic[dtype].max) {
-            statistic[dtype].max = typeCount;
-          }
-          acc[district][dtype] = typeCount;
-        });
-        return acc;
-      }, {});
-      currentMapData[currentMap.name] = states.find(
-        (state) => currentMap.name === state.state
-      );
-    } else if (currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS) {
-      setStatisticOption(MAP_STATISTICS.ZONE);
-      currentMapData = districtZones;
+            acc[state.state][dtype] = typeCount;
+          });
+          return acc;
+        }, {});
+      } else if (currentMap.mapType === MAP_TYPES.STATE) {
+        const districtWiseData = (
+          districts[currentMap.name] || {districtData: {}}
+        ).districtData;
+        currentMapData[currentMap.name] = Object.keys(districtWiseData).reduce(
+          (acc, district) => {
+            acc[district] = {};
+            dataTypes.forEach((dtype) => {
+              const typeCount = parseInt(districtWiseData[district][dtype]);
+              statistic[dtype].total += typeCount;
+              if (typeCount > statistic[dtype].max) {
+                statistic[dtype].max = typeCount;
+              }
+              acc[district][dtype] = typeCount;
+            });
+            return acc;
+          },
+          {}
+        );
+        currentMapData[currentMap.name].Total = states.find(
+          (state) => currentMap.name === state.state
+        );
+      } else if (currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS) {
+        currentMapData = Object.keys(districts).reduce(
+          (acc1, state) => {
+            const districtData = districts[state].districtData;
+            acc1[state] = Object.keys(districtData).reduce((acc2, district) => {
+              acc2[district] = {};
+              dataTypes.forEach((dtype) => {
+                const typeCount = parseInt(districtData[district][dtype]);
+                statistic[dtype].total += typeCount;
+                if (typeCount > statistic[dtype].max) {
+                  statistic[dtype].max = typeCount;
+                }
+                acc2[district][dtype] = typeCount;
+              });
+              return acc2;
+            }, {});
+            return acc1;
+          },
+          {}
+        );
+      }
     }
     return [statistic, currentMapData];
   }, [currentMap.mapType, currentMap.name, districts, districtZones, states, statisticOption]);
@@ -350,21 +372,24 @@ function MapExplorer({
           {currentHoveredRegion.name}
         </h2>
 
-        {currentHoveredRegion.lastupdatedtime && (
-          <div className="last-update">
-            <h6>Last updated</h6>
-            <h3>
-              {isNaN(
-                Date.parse(formatDate(currentHoveredRegion.lastupdatedtime))
-              )
-                ? ''
-                : formatDistance(
-                    new Date(formatDate(currentHoveredRegion.lastupdatedtime)),
-                    new Date()
-                  ) + ' ago'}
-            </h3>
-          </div>
-        )}
+        {currentMap.mapType !== MAP_TYPES.STATE &&
+          currentHoveredRegion.lastupdatedtime && (
+            <div className="last-update">
+              <h6>Last updated</h6>
+              <h3>
+                {isNaN(
+                  Date.parse(formatDate(currentHoveredRegion.lastupdatedtime))
+                )
+                  ? ''
+                  : formatDistance(
+                      new Date(
+                        formatDate(currentHoveredRegion.lastupdatedtime)
+                      ),
+                      new Date()
+                    ) + ' ago'}
+              </h3>
+            </div>
+          )}
 
         {currentMap.mapType === MAP_TYPES.STATE ? (
           <Link to={`state/${currentHoveredRegion.statecode}`}>
@@ -453,8 +478,7 @@ function MapExplorer({
           onClick={() => {
             if (currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS)
               switchMapToState('India');
-            if (currentMap.mapType !== MAP_TYPES.STATE)
-              setStatisticOption(MAP_STATISTICS.PER_MILLION);
+            setStatisticOption(MAP_STATISTICS.PER_MILLION);
           }}
         >
           <h4>
@@ -466,10 +490,35 @@ function MapExplorer({
             statisticOption === MAP_STATISTICS.ZONE ? 'focused' : ''
           }`}
           onClick={() => {
-            switchMapToState('IndiaDistricts');
+            if (currentMap.mapType === MAP_TYPES.COUNTRY)
+              switchMapToState('IndiaDistricts');
+            setStatisticOption(MAP_STATISTICS.ZONE);
           }}
         >
           <h4>Zones</h4>
+        </div>
+      </div>
+
+      <div className="tabs-map">
+        <div
+          className={`tab ${mapView === 'state' ? 'focused' : ''}`}
+          onClick={() => {
+            if (currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS)
+              switchMapToState('India');
+            setMapView('state');
+          }}
+        >
+          <h4>State View</h4>
+        </div>
+        <div
+          className={`tab ${mapView === 'district' ? 'focused' : ''}`}
+          onClick={() => {
+            if (currentMap.mapType === MAP_TYPES.COUNTRY)
+              switchMapToState('IndiaDistricts');
+            setMapView('district');
+          }}
+        >
+          <h4> District View</h4>
         </div>
       </div>
 

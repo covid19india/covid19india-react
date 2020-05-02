@@ -84,9 +84,9 @@ function ChoroplethMap({
         svgLegend.call(() =>
           legend({
             color: colorScale,
-            title: 'Zones',
             width: widthLegend,
             height: 0.8 * heightLegend,
+            tickFormat: (d) => d + ' Zone',
             tickSize: 0,
             marginLeft: 2,
             marginRight: 20,
@@ -124,7 +124,7 @@ function ChoroplethMap({
                 ? ' per million'
                 : ''),
             width: widthLegend,
-            height: 0.8 * heightLegend,
+            height: heightLegend,
             ticks: 6,
             tickFormat: function (d, i, n) {
               if (
@@ -142,19 +142,24 @@ function ChoroplethMap({
         );
       }
 
+      // Add id to each feature
+      const features = topology.features.map((f) => {
+        const district = f.properties[propertyFieldMap.state];
+        const state = f.properties[propertyFieldMap.country];
+        const obj = Object.assign({}, f);
+        obj.id = `${mapMeta.graphObjectName}-${state}${
+          district ? `-${district}` : ''
+        }`;
+        return obj;
+      });
+
       /* Draw map */
       const t = svg.transition().duration(500);
       let onceTouchedRegion = null;
       const regionSelection = svg
         .select('.regions')
         .selectAll('path')
-        .data(topology.features, (d) => {
-          const district = d.properties[propertyFieldMap.state];
-          const state = d.properties[propertyFieldMap.country];
-          return `${mapMeta.graphObjectName}-${state}${
-            district ? `-${district}` : ''
-          }`;
-        })
+        .data(features, (d) => d.id)
         .join((enter) => enter.append('path').attr('d', path))
         .attr('class', function (d) {
           const isHovered = d3.select(this).classed('map-hover');
@@ -199,7 +204,7 @@ function ChoroplethMap({
           let n;
           if (statisticOption === MAP_STATISTICS.ZONE) {
             const state = d.properties.st_nm;
-            const district = d.properties[propertyField];
+            const district = d.properties.district;
             if (!mapData[state] || !mapData[state][district])
               console.log(state, district);
             n =
@@ -207,8 +212,14 @@ function ChoroplethMap({
                 ? mapData[state][district].zone
                 : 0;
           } else {
-            const region = d.properties[propertyField];
-            n = mapData[region] ? mapData[region][mapOption] : 0;
+            const state = d.properties.st_nm;
+            const district = d.properties.district;
+            if (district)
+              n =
+                mapData[state] && mapData[state][district]
+                  ? mapData[state][district][mapOption]
+                  : 0;
+            else n = mapData[state] ? mapData[state][mapOption] : 0;
           }
           const color = n === 0 ? '#ffffff' : colorScale(n);
           return color;
@@ -237,18 +248,17 @@ function ChoroplethMap({
         .transition()
         .attr('pointer-events', 'all');
 
+      // Add id to mesh
+      const mesh = topojson.mesh(
+        geoData,
+        geoData.objects[mapMeta.graphObjectName]
+      );
+      mesh.id = mapMeta.graphObjectName;
       svg
         .select('.borders')
         .selectAll('path')
-        .data([geoData], (d) => {
-          return Object.keys(d.objects)[0];
-        })
-        .join((enter) =>
-          enter.append('path').attr('d', (d) => {
-            const mesh = topojson.mesh(d, d.objects[mapMeta.graphObjectName]);
-            return path(mesh);
-          })
-        )
+        .data([mesh], (d) => d.id)
+        .join((enter) => enter.append('path').attr('d', (d) => path(d)))
         .attr('fill', 'none')
         .attr('stroke-width', width / 250)
         .transition(t)
@@ -403,7 +413,7 @@ function ChoroplethMap({
       >
         <svg
           id="legend"
-          height="65"
+          height="52"
           preserveAspectRatio="xMidYMid meet"
           ref={choroplethLegend}
         >
