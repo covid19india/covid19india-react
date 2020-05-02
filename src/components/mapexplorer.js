@@ -22,6 +22,9 @@ const isEqual = (prevProps, currProps) => {
   if (!equal(prevProps.mapOption, currProps.mapOption)) {
     return false;
   }
+  if (!equal(prevProps.anchor, currProps.anchor)) {
+    return false;
+  }
   return true;
 };
 

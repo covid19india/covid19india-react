@@ -6,7 +6,7 @@ import {
 
 import {formatDistance} from 'date-fns';
 import equal from 'fast-deep-equal';
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
@@ -32,6 +32,21 @@ function Row({
     sortColumn: 'confirmed',
     isAscending: false,
   });
+
+  const ArrowUp = useMemo(() => <Icon.ArrowUp />, []);
+
+  const Chevron = useMemo(
+    () => (
+      <span
+        className={`dropdown ${
+          showDistricts ? 'rotateRightDown' : 'rotateDownRight'
+        }`}
+      >
+        <Icon.ChevronDown />
+      </span>
+    ),
+    [showDistricts]
+  );
 
   const onHighlightStateWrapper = useCallback(
     (state) => {
@@ -102,15 +117,7 @@ function Row({
       >
         <td style={{fontWeight: 600}}>
           <div className="table__title-wrapper">
-            {state.state !== 'TT' && (
-              <span
-                className={`dropdown ${
-                  showDistricts ? 'rotateRightDown' : 'rotateDownRight'
-                }`}
-              >
-                <Icon.ChevronDown />
-              </span>
-            )}
+            {state.state !== 'TT' && Chevron}
             <span className="actual__title-wrapper">
               {state.state}
               {state.statenotes && (
@@ -137,7 +144,7 @@ function Row({
         </td>
         <td>
           <span className="deltas" style={{color: '#ff073a'}}>
-            {state.deltaconfirmed > 0 && <Icon.ArrowUp />}
+            {state.deltaconfirmed > 0 && ArrowUp}
             {state.deltaconfirmed > 0 ? `${state.deltaconfirmed}` : ''}
           </span>
           <span className="table__count-text">
@@ -159,7 +166,7 @@ function Row({
           }}
         >
           <span className="deltas" style={{color: '#28a745'}}>
-            {state.deltarecovered > 0 && <Icon.ArrowUp />}
+            {state.deltarecovered > 0 && ArrowUp}
             {state.deltarecovered > 0 ? `${state.deltarecovered}` : ''}
           </span>
           <span className="table__count-text">
@@ -174,7 +181,7 @@ function Row({
           }}
         >
           <span className="deltas" style={{color: '#6c757d'}}>
-            {state.deltadeaths > 0 && <Icon.ArrowUp />}
+            {state.deltadeaths > 0 && ArrowUp}
             {state.deltadeaths > 0 ? `${state.deltadeaths}` : ''}
           </span>
           <span className="table__count-text">
