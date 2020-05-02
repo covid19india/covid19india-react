@@ -48,10 +48,8 @@ function DeltaBarGraph({timeseries, arrayKey}) {
       .call((g) => g.select('.domain').remove())
       .selectAll('text')
       .attr('y', 0)
-      .attr('x', -40)
-      .attr('dy', '.35em')
-      .attr('transform', 'rotate(-90)')
-      .style('text-anchor', 'start');
+      .attr('dy', '1.5em')
+      .style('text-anchor', 'middle');
 
     svg
       .selectAll('.bar')

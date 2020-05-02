@@ -1,0 +1,11 @@
+Roadmap:
+  Available:
+    - 'Status: Available'
+  Claimed:
+    - 'Status: Claimed'
+  In progress:
+    - 'Status: In Progress'
+  Done:
+    - 'Status: Completed'
+  On Hold:
+    - 'Status: On Hold'

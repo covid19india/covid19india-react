@@ -113,6 +113,10 @@ h6 {
   font-weight: 600;
 }
 
+.App {
+  min-height: 100vh;
+}
+
 .switch-wrapper {
   position: relative;
 }
@@ -259,6 +263,51 @@ h6 {
   }
 }
 
+.alert {
+  background: $gray-light;
+  border-radius: 5px;
+  color: $gray;
+  display: flex;
+  flex-direction: row;
+  font-family: 'archia';
+  font-size: 10px;
+  margin-right: .5rem;
+  padding: .5rem;
+  width: 6rem;
+
+  svg {
+    color: $gray-mid;
+    margin-right: .25rem;
+    margin-top: -.25rem;
+    stroke-width: 2px;
+    width: 36px !important;
+  }
+
+  .alert-right {
+    width: 10rem;
+
+    a {
+      background: $gray-light;
+      color: $gray;
+      padding-left: .1rem;
+      padding-right: .1rem;
+
+      &:hover {
+        background: $gray-hover;
+      }
+    }
+  }
+
+  &.is-green {
+    background: $green-light;
+    color: $green;
+
+    svg {
+      stroke: $green-mid;
+    }
+  }
+}
+
 .State {
   display: flex;
   flex-direction: row;
@@ -385,48 +434,24 @@ h6 {
     flex-direction: row;
     margin-bottom: 3rem;
     margin-top: 3rem;
-
-    .unknown,
-    .sources {
-      background: $gray-light;
-      border-radius: 5px;
-      color: $gray;
-      display: flex;
-      flex-direction: row;
-      font-family: 'archia';
-      font-size: 10px;
-      margin-right: .5rem;
-      padding: .5rem;
-      width: 6rem;
-
-      svg {
-        color: $gray-mid;
-        margin-right: .25rem;
-        margin-top: -.25rem;
-        stroke-width: 2px;
-        width: 36px !important;
-      }
-    }
-
-    .sources-right {
-      width: 10rem;
-
-      a {
-        background: $gray-light;
-        color: $gray;
-        padding-left: .1rem;
-        padding-right: .1rem;
-
-        &:hover {
-          background: $gray-hover;
-        }
-      }
-    }
   }
 
   .district-bar,
   .to-essentials {
     width: 100%;
+  }
+
+  .district-bar-right {
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    .happy-sign {
+      display: flex;
+      flex-direction: row;
+      position: absolute;
+      top: 4rem;
+    }
   }
 
   .MapExplorer,
@@ -448,6 +473,8 @@ h6 {
     .back-button,
     .last-update,
     .unknown,
+    .tabs-map,
+    .footnote,
     .state-page-button {
       display: none;
     }
@@ -576,8 +603,8 @@ h6 {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin-left: 5.5rem;
-  margin-right: 5.5rem;
+  margin-left: 9rem;
+  margin-right: 4rem;
 
   .resource-left,
   .resource-right {
@@ -705,7 +732,6 @@ h6 {
 
       .state-last-update {
         background: transparent;
-        transform: translateX(1rem);
 
         &:hover {
           background: #fff !important;
@@ -724,7 +750,6 @@ h6 {
 
       .district-heading {
         background: $gray-light;
-        transform: translateX(1rem);
 
         td {
           background: $gray-light;
@@ -757,10 +782,6 @@ h6 {
             }
           }
         }
-      }
-
-      .district {
-        transform: translateX(1rem);
       }
     }
 
@@ -952,6 +973,8 @@ h6 {
   }
 
   input {
+    -moz-box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
+    -webkit-appearance: none !important;
     -webkit-box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
     background: #fff;
     border: 0;
@@ -1613,7 +1636,7 @@ table {
 
       &.spacer {
         background: #fff !important;
-        height: .5rem;
+        height: 2rem;
       }
     }
 
@@ -1667,23 +1690,56 @@ table {
     .state-last-update {
       background: transparent;
       color: $green !important;
-      transform: translateX(1rem);
+      height: 2rem;
 
-      &:hover {
-        background: #fff !important;
+      h6 {
+        margin: 0;
       }
 
-      td {
-        .last-update {
-          align-items: baseline;
-          display: flex;
-          flex-direction: row;
-          text-align: left;
-          width: 100%;
+      &:hover {
+        background: transparent !important;
+      }
 
-          h6 {
-            color: $green !important;
-            font-weight: 600;
+      .disclaimer {
+        backdrop-filter: saturate(180%) blur(20px);
+        background: $gray-light;
+        border-radius: 5px;
+        color: $gray;
+        display: flex;
+        flex-direction: row;
+        font-family: 'archia';
+        font-size: 12px;
+        left: 0;
+        margin-top: .5rem;
+        padding: .5rem;
+        width: 14rem;
+
+        svg {
+          margin-right: .25rem;
+          margin-top: -.25rem;
+          stroke-width: 2px;
+          width: 20px !important;
+        }
+      }
+
+      .state-page-link {
+        padding: 0 !important;
+
+        a {
+          background: $yellow-light;
+          border-radius: 5px;
+          color: $orange;
+          font-size: .75rem;
+          padding: .5rem;
+          text-decoration: none;
+          transition: all .2s ease-in-out;
+
+          &:hover {
+            background: $yellow-hover;
+
+            svg {
+              stroke: $orange;
+            }
           }
         }
       }
@@ -1691,7 +1747,6 @@ table {
 
     .district-heading {
       background: $gray-light;
-      transform: translateX(1rem);
 
       &:hover {
         background: $gray-light !important;
@@ -1726,48 +1781,7 @@ table {
             width: 10px;
           }
         }
-
-        &.state-page-link {
-          background: $white;
-          padding: 0;
-          text-align: left;
-
-          div {
-            align-items: center;
-            background: $yellow-light;
-            border-radius: 5px;
-            color: $orange;
-            float: left;
-            font-size: .75rem;
-            padding: .45rem;
-            transition: all .2s ease-in-out;
-
-            &:hover {
-              background: $yellow-hover;
-
-              svg {
-                stroke: $orange;
-              }
-            }
-
-            svg {
-              color: $orange-mid;
-              height: 12px;
-              margin-bottom: 1px;
-              margin-left: .25rem;
-              stroke-width: 3px;
-              transition: all .2s ease-in-out;
-              vertical-align: middle;
-              width: 12px;
-            }
-          }
-        }
       }
-    }
-
-
-    .district {
-      transform: translateX(1rem);
     }
   }
 
@@ -1916,7 +1930,7 @@ table {
     display: flex;
     flex-direction: row;
     margin: auto;
-    margin-top: 4rem;
+    margin-top: 2rem;
     overflow: hidden;
     width: 90%;
 
@@ -1937,23 +1951,15 @@ table {
   .legend {
     margin-top: 1em;
     width: 100%;
+
+    svg {
+      display: block;
+      overflow: visible;
+    }
   }
 
   .map-hover {
-    stroke: #ff073a;
     stroke-width: 2;
-
-    &.active {
-      stroke: #007bff;
-    }
-
-    &.recovered {
-      stroke: #28a745;
-    }
-
-    &.deceased {
-      stroke: #6c757d;
-    }
   }
 
   .back-button {
@@ -2003,13 +2009,15 @@ table {
   .meta {
     display: flex;
     flex-direction: row;
-    height: 1rem;
+    flex-wrap: wrap;
+    height: 4rem;
     justify-content: space-between;
 
     h2 {
       color: #e23028;
       font-weight: 900;
-      margin: 0;
+      margin-top: 0;
+      width: calc(100% - 10rem);
       word-wrap: break-word;
 
       &.active {
@@ -2031,13 +2039,19 @@ table {
       word-wrap: break-word;
     }
 
+    a {
+      width: 10rem;
+    }
+
     .district {
       color: #e23028;
       line-height: 15px;
       margin: 0;
-      position: absolute;
-      top: 3rem;
-      width: 5rem;
+
+      span {
+        font-size: .75rem;
+        font-weight: 600;
+      }
 
       &.active {
         color: $blue;
@@ -2200,6 +2214,13 @@ table {
             stroke: $purple;
           }
         }
+
+        .tooltip-tested {
+          svg {
+            bottom: .3rem;
+            top: auto;
+          }
+        }
       }
 
       &.focused {
@@ -2219,6 +2240,11 @@ table {
     }
   }
 
+  #chart,
+  #legend {
+    filter: saturate(1.5);
+  }
+
   .disclaimer {
     backdrop-filter: saturate(180%) blur(20px);
     background: $gray-light;
@@ -2233,6 +2259,7 @@ table {
     margin-left: auto;
     margin-right: auto;
     padding: .5rem;
+    pointer-events: none;
     position: absolute;
     right: 0;
     width: 14rem;
@@ -2244,6 +2271,34 @@ table {
       stroke-width: 2px;
       width: 20px !important;
     }
+  }
+
+  .footnote {
+    &.table-fineprint {
+      margin-bottom: 0;
+      margin-top: 1em;
+      text-align: left;
+    }
+  }
+}
+
+.tooltip-tested {
+  pointer-events: all;
+
+  svg {
+    cursor: pointer;
+    height: .95em;
+    stroke-width: 3;
+    width: 1em;
+  }
+
+  .__react_component_tooltip {
+    font-family: 'archia';
+    font-size: 11px;
+    font-weight: 600;
+    padding: .25rem;
+    text-align: center;
+    width: 200px;
   }
 }
 
@@ -2279,6 +2334,62 @@ table {
   }
 }
 
+.tabs-map {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  z-index: 99;
+
+  h4 {
+    display: table-cell;
+    font-family: 'archia';
+    font-size: 12px !important;
+    font-weight: 900;
+    height: 2rem;
+    margin-bottom: 0;
+    margin-top: 0;
+    vertical-align: middle;
+  }
+
+  .tab {
+    background: $gray-light;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color: $gray-mid;
+    cursor: pointer;
+    height: 2rem;
+    margin-right: .25rem;
+    min-width: 5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: center;
+    transition: all .3s ease-in-out;
+
+    &:hover {
+      background: $gray-hover;
+    }
+
+    &.focused {
+      background: $gray-opaque;
+      color: $gray;
+
+    }
+
+    &.disabled {
+      background: $gray-opaque;
+      color: $gray-mid;
+    }
+  }
+
+  sup {
+    position: relative;
+    top: -.5em;
+    vertical-align: top;
+  }
+}
+
 .TimeSeriesExplorer {
   align-self: center;
   width: 30rem;
@@ -2286,6 +2397,31 @@ table {
   &.stickied {
     position: sticky !important;
     top: -6.5rem;
+  }
+
+  .alert {
+    margin-bottom: .5rem;
+    margin-left: auto;
+    margin-right: 0;
+    margin-top: .5rem;
+    padding: .25rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    width: 16rem;
+
+    & > * {
+      align-self: center;
+    }
+
+    svg {
+      margin: 0 !important;
+      margin-right: .25rem !important;
+      width: 14px !important;
+    }
+
+    .alert-right {
+      width: 100%;
+    }
   }
 }
 
@@ -2449,22 +2585,9 @@ input {
     flex-direction: column;
     left: .5rem;
     padding: .25rem;
+    pointer-events: none;
     position: absolute;
     top: .5rem;
-    width: calc(100% - 3.5rem);
-    z-index: -1;
-
-    .yesterday {
-      font-family: 'archia';
-      font-size: .1rem !important;
-      position: absolute;
-      right: 0;
-      top: .25rem;
-
-      &.fourteen {
-        right: 1rem;
-      }
-    }
 
     h2,
     h5,
@@ -2556,6 +2679,12 @@ input {
       h2,
       h6 {
         color: $purple;
+      }
+
+      .tooltip-tested {
+        svg {
+          width: 1em;
+        }
       }
     }
   }
@@ -2917,7 +3046,7 @@ footer {
       font-family: 'archia';
       font-size: 12px;
       font-weight: 900;
-      height: 2.05rem;
+      height: 2.19rem;
       margin: .2rem .1rem;
       padding: .5rem;
       padding-inline-start: 1px;
@@ -4032,14 +4161,15 @@ footer {
     display: flex;
     flex-direction: column;
     margin-right: 1rem;
-    width: 10rem;
 
     .button {
       background: $gray-light;
       color: $gray;
+      font-weight: 600;
       height: 2.5rem;
       justify-content: center;
       margin-top: .75rem;
+      text-transform: unset;
       width: 5rem;
 
       &:hover {
@@ -4058,12 +4188,7 @@ footer {
       display: grid;
       grid-auto-flow: column;
       grid-gap: .5rem;
-      grid-template-rows: repeat(auto-fit, 2rem);
-      max-height: 20rem;
-      overflow-x: scroll;
-      overflow-y: none;
       padding-bottom: .5rem;
-      width: 30rem;
     }
 
     .district {
@@ -4331,6 +4456,10 @@ footer {
   }
 
   .MapExplorer {
+    .svg-parent {
+      width: 100%;
+    }
+
     .header {
       margin-top: 2rem;
     }
@@ -4510,6 +4639,8 @@ footer {
   }
 
   .Resources {
+    margin: 1rem;
+
     table {
       align-self: center;
       border-collapse: separate;
@@ -4618,7 +4749,6 @@ footer {
 
         .state-last-update {
           background: transparent;
-          transform: translateX(1rem);
 
           &:hover {
             background: #fff !important;
@@ -4637,7 +4767,6 @@ footer {
 
         .district-heading {
           background: $gray-light;
-          transform: translateX(1rem);
 
           td {
             background: $gray-light;
@@ -4670,11 +4799,6 @@ footer {
               }
             }
           }
-        }
-
-
-        .district {
-          transform: translateX(1rem);
         }
       }
 
@@ -4903,7 +5027,7 @@ footer {
   .MapExplorer {
     #chart,
     #legend {
-      filter: invert(1) hue-rotate(180deg) url('#white-balance');
+      filter: invert(1) hue-rotate(180deg) saturate(1.5) url('#balance-color');
     }
 
     .legend {
@@ -4924,9 +5048,17 @@ footer {
         }
 
         svg {
-          stroke: #9673b9 !important;
+          stroke: #9673b9bb !important;
+
+          &:hover {
+            stroke: #9673b9 !important;
+          }
         }
       }
+    }
+
+    .disclaimer {
+      color: $gray-light-opaque;
     }
   }
 
@@ -4996,9 +5128,17 @@ footer {
     }
   }
 
-  select {
-    background: #1e1e30 !important;
-    border-color: #1e1e30 !important;
+  .trends-state-name,
+  .select {
+    select {
+      background: #1e1e30;
+      background-image: linear-gradient(45deg, transparent 50%, $gray 50%),
+      linear-gradient(135deg, $gray 50%, transparent 50%);
+      background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+      background-repeat: no-repeat;
+      background-size: 5px 5px, 5px 5px;
+      border-color: #9494941a;
+    }
   }
 
   input {
@@ -5007,7 +5147,7 @@ footer {
       border: 2px solid $gray-mid !important;
 
       &:checked {
-        background-color: #161625 !important;
+        background-color: #6c757d99 !important;
 
         &::after {
           background-color: #cfcfcf !important;
@@ -5016,6 +5156,20 @@ footer {
 
       &::after {
         background-color: #cfcfcf !important;
+      }
+    }
+  }
+
+  .disabled {
+    input {
+      &.switch {
+        background: $dark !important;
+        border: $gray-light 2px solid !important;
+        opacity: .7;
+
+        &::after {
+          background: $gray !important;
+        }
       }
     }
   }
@@ -5155,12 +5309,23 @@ footer {
       background: #1e1e30 !important;
     }
 
+    .react-date-picker {
+      background: #1e1e30;
+      border-color: #9494941a !important;
+    }
+
     .modal-content {
       background: #1e1e30 !important;
     }
 
     .modal {
       background: #1e1e30bb !important;
+    }
+  }
+
+  .Clusters {
+    canvas {
+      filter: invert(1) hue-rotate(180deg) saturate(5);
     }
   }
 }

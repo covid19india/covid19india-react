@@ -37,7 +37,7 @@ function TimeSeriesExplorer({
         className="timeseries-header fadeInUp"
         style={{animationDelay: '2.5s'}}
       >
-        {window.innerWidth > 769 && (
+        {window.innerWidth > 769 && anchor !== undefined && (
           <div
             className={`anchor ${anchor === 'timeseries' ? 'stickied' : ''}`}
             onClick={() => {
@@ -102,37 +102,39 @@ function TimeSeriesExplorer({
           </div>
         </div>
 
-        <div className="trends-state-name">
-          <select
-            value={activeStateCode}
-            onChange={({target}) => {
-              const selectedState = target.selectedOptions[0].getAttribute(
-                'statedata'
-              );
-              onHighlightState(JSON.parse(selectedState));
-            }}
-          >
-            {states.map((s) => {
-              return (
-                <option
-                  value={s.statecode}
-                  key={s.statecode}
-                  statedata={JSON.stringify(s)}
-                >
-                  {s.statecode === 'TT' ? 'All States' : s.state}
-                </option>
-              );
-            })}
-          </select>
-        </div>
+        {states && (
+          <div className="trends-state-name">
+            <select
+              value={activeStateCode}
+              onChange={({target}) => {
+                const selectedState = target.selectedOptions[0].getAttribute(
+                  'statedata'
+                );
+                onHighlightState(JSON.parse(selectedState));
+              }}
+            >
+              {states.map((s) => {
+                return (
+                  <option
+                    value={s.statecode}
+                    key={s.statecode}
+                    statedata={JSON.stringify(s)}
+                  >
+                    {s.statecode === 'TT' ? 'All States' : s.state}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        )}
       </div>
 
       <TimeSeries
-        timeseries={timeseries[activeStateCode]}
-        stateCode={activeStateCode}
+        timeseries={timeseries}
         type={graphOption}
         mode={timeseriesMode}
         logMode={timeseriesLogMode}
+        isTotal={activeStateCode === 'TT'}
       />
     </div>
   );
