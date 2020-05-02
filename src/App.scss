@@ -486,6 +486,7 @@ h6 {
     a {
       pointer-events: none;
       cursor: default;
+      touch-action: none;
     }
 
     .svg-parent {
