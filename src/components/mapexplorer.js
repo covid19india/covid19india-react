@@ -94,6 +94,7 @@ function MapExplorer({
           return acc;
         }, {});
       } else if (currentMap.mapType === MAP_TYPES.STATE) {
+        setStatisticOption(MAP_STATISTICS.TOTAL);
         const districtWiseData = (
           districts[currentMap.name] || {districtData: {}}
         ).districtData;
@@ -179,9 +180,11 @@ function MapExplorer({
 
     const isState = !('district' in regionHighlighted);
     if (isState) {
-      let newMap = currentMap;
       if (currentMap.mapType === MAP_TYPES.STATE) {
-        newMap = MAP_META['India'];
+        const newMap =
+          statisticOption !== MAP_STATISTICS.ZONE
+            ? MAP_META.India
+            : MAP_META.IndiaDistricts;
         setCurrentMap(newMap);
       }
       setHoveredRegion({
@@ -190,13 +193,12 @@ function MapExplorer({
       setSelectedRegion({
         state: regionHighlighted.state.state,
       });
-    } else if (!isState) {
-      let newMap = currentMap;
+    } else {
       if (
-        !currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS &&
-        currentMap.name !== regionHighlighted.state.state
+        currentMap.name !== regionHighlighted.state.state &&
+        !(currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS)
       ) {
-        newMap = MAP_META[regionHighlighted.state.state];
+        const newMap = MAP_META[regionHighlighted.state.state];
         if (!newMap) {
           return;
         }
@@ -211,7 +213,7 @@ function MapExplorer({
         state: regionHighlighted.state.state,
       });
     }
-  }, [currentMap, regionHighlighted, setHoveredRegion]);
+  }, [currentMap, regionHighlighted, statisticOption, setHoveredRegion]);
 
   const switchMapToState = useCallback(
     (name) => {
@@ -427,7 +429,11 @@ function MapExplorer({
         {currentMap.mapType === MAP_TYPES.STATE ? (
           <div
             className="button back-button"
-            onClick={() => switchMapToState('India')}
+            onClick={() => {
+              if (statisticOption === MAP_STATISTICS.ZONE)
+                switchMapToState('IndiaDistricts');
+              else switchMapToState('India');
+            }}
           >
             Back
           </div>
@@ -475,8 +481,8 @@ function MapExplorer({
             statisticOption === MAP_STATISTICS.PER_MILLION ? 'focused' : ''
           }`}
           onClick={() => {
-            if (currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS)
-              switchMapToState('India');
+            if (currentMap.mapType === MAP_TYPES.STATE) return;
+            switchMapToState('India');
             setStatisticOption(MAP_STATISTICS.PER_MILLION);
           }}
         >
