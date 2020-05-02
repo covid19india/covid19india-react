@@ -162,7 +162,10 @@ function ChoroplethMap({
         })
         .style('cursor', 'pointer')
         .on('mouseenter', (d) => {
-          handleMouseEnter(d.properties[propertyField]);
+          handleMouseEnter({
+            district: d.properties.district,
+            state: d.properties.st_nm,
+          });
         })
         .on('mouseleave', (d) => {
           if (onceTouchedRegion === d) onceTouchedRegion = null;
@@ -284,10 +287,10 @@ function ChoroplethMap({
         svg.select('.state-borders').selectAll('path').remove();
       }
 
-      const handleMouseEnter = (name) => {
+      const handleMouseEnter = (region) => {
         try {
-          setSelectedRegion(name);
-          setHoveredRegion(name, mapMeta);
+          setSelectedRegion(region);
+          setHoveredRegion(region);
         } catch (err) {
           console.log('err', err);
         }
@@ -305,9 +308,11 @@ function ChoroplethMap({
 
       // Reset on tapping outside map
       svg.attr('pointer-events', 'auto').on('click', () => {
-        if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
-          setSelectedRegion(null);
-          setHoveredRegion('Total', mapMeta);
+        if (mapMeta.mapType !== MAP_TYPES.STATE) {
+          setSelectedRegion({});
+          setHoveredRegion({
+            state: 'Total',
+          });
         }
       });
     },
@@ -343,14 +348,14 @@ function ChoroplethMap({
   }, [mapId, mapMeta.geoDataFile, mapMeta.graphObjectName, statistic, ready]);
 
   useEffect(() => {
-    const highlightRegionInMap = (name) => {
+    const highlightRegionInMap = (region) => {
       const paths = d3.selectAll('.path-region');
       paths.attr('stroke', null);
       paths.classed('map-hover', (d, i, nodes) => {
-        const regionName = d.properties[propertyFieldMap.state]
-          ? d.properties[propertyFieldMap.state]
-          : d.properties[propertyFieldMap.country];
-        if (name === regionName) {
+        if (
+          region.district === d.properties.district &&
+          region.state === d.properties.st_nm
+        ) {
           nodes[i].parentNode.appendChild(nodes[i]);
           d3.select(nodes[i]).attr('stroke', function (d) {
             if (statisticOption === MAP_STATISTICS.ZONE) return '#343a40';

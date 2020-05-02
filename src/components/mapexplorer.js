@@ -120,29 +120,29 @@ function MapExplorer({
   }, [currentMap.mapType, currentMap.name, districts, districtZones, states, statisticOption]);
 
   const setHoveredRegion = useCallback(
-    (name, currentMap) => {
-      if (currentMap.mapType === MAP_TYPES.COUNTRY) {
+    (mapRegion) => {
+      if (!mapRegion.district) {
         const region = getRegionFromState(
-          states.find((state) => name === state.state)
+          states.find((state) => mapRegion.state === state.state)
         );
         setCurrentHoveredRegion(region);
         setPanelRegion(region);
-      } else if (currentMap.mapType === MAP_TYPES.STATE) {
-        const state = districts[currentMap.name] || {
+      } else {
+        const state = districts[mapRegion.state] || {
           districtData: {},
         };
-        let districtData = state.districtData[name];
-        if (!districtData) {
-          districtData = {
-            confirmed: 0,
-            active: 0,
-            recovered: 0,
-            deaths: 0,
-          };
-        }
-        const currentHoveredRegion = getRegionFromDistrict(districtData, name);
+        const districtData = state.districtData[mapRegion.district] || {
+          confirmed: 0,
+          active: 0,
+          recovered: 0,
+          deaths: 0,
+        };
+        const currentHoveredRegion = getRegionFromDistrict(
+          districtData,
+          mapRegion.district
+        );
         const panelRegion = getRegionFromState(
-          states.find((state) => currentMap.name === state.state)
+          states.find((state) => mapRegion.state === state.state)
         );
         setPanelRegion(panelRegion);
         currentHoveredRegion.statecode = panelRegion.statecode;
@@ -163,20 +163,32 @@ function MapExplorer({
         newMap = MAP_META['India'];
         setCurrentMap(newMap);
       }
-      const region = getRegionFromState(regionHighlighted.state);
-      setHoveredRegion(region.name, newMap);
-      setSelectedRegion(region.name);
+      setHoveredRegion({
+        state: regionHighlighted.state.state,
+      });
+      setSelectedRegion({
+        state: regionHighlighted.state.state,
+      });
     } else if (!isState) {
       let newMap = currentMap;
-      if (currentMap.name !== regionHighlighted.state.state) {
+      if (
+        !currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS &&
+        currentMap.name !== regionHighlighted.state.state
+      ) {
         newMap = MAP_META[regionHighlighted.state.state];
         if (!newMap) {
           return;
         }
         setCurrentMap(newMap);
       }
-      setHoveredRegion(regionHighlighted.district, newMap);
-      setSelectedRegion(regionHighlighted.district);
+      setHoveredRegion({
+        district: regionHighlighted.district,
+        state: regionHighlighted.state.state,
+      });
+      setSelectedRegion({
+        district: regionHighlighted.district,
+        state: regionHighlighted.state.state,
+      });
     }
   }, [currentMap, regionHighlighted, setHoveredRegion]);
 
@@ -187,10 +199,7 @@ function MapExplorer({
         return;
       }
       setCurrentMap(newMap);
-      setSelectedRegion(null);
-      if (newMap.mapType === MAP_TYPES.COUNTRY) {
-        setHoveredRegion(states[0].state, newMap);
-      } else if (newMap.mapType === MAP_TYPES.STATE) {
+      if (newMap.mapType === MAP_TYPES.STATE) {
         const {districtData} = districts[name] || {
           districtData: {},
         };
@@ -199,11 +208,22 @@ function MapExplorer({
           .sort((a, b) => {
             return districtData[b].confirmed - districtData[a].confirmed;
           })[0];
-        setHoveredRegion(topDistrict, newMap);
-        setSelectedRegion(topDistrict);
+        setHoveredRegion({
+          district: topDistrict,
+          state: name,
+        });
+        setSelectedRegion({
+          district: topDistrict,
+          state: name,
+        });
+      } else {
+        setHoveredRegion({
+          state: 'Total',
+        });
+        setSelectedRegion({});
       }
     },
-    [setHoveredRegion, districts, states]
+    [setHoveredRegion, districts]
   );
 
   useEffect(() => {
