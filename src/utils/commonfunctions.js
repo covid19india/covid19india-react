@@ -1,6 +1,12 @@
 import {STATE_CODES} from '../constants';
 
-import {parse, isBefore, isSameDay, startOfDay} from 'date-fns';
+import {
+  parse,
+  differenceInDays,
+  isBefore,
+  isSameDay,
+  startOfDay,
+} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
 
 const months = {
@@ -154,9 +160,19 @@ export const parseStateTestTimeseries = (data) => {
     const totaltested = +d.totaltested;
     if (isBefore(date, today) && totaltested) {
       const stateCode = stateCodeMap[d.state];
-      testTimseries[stateCode].push({
+      const stateTs = testTimseries[stateCode];
+      let dailytested;
+      if (stateTs.length) {
+        const prev = stateTs[stateTs.length - 1];
+        dailytested =
+          differenceInDays(date, prev.date) === 1
+            ? totaltested - prev.totaltested
+            : NaN;
+      } else dailytested = NaN;
+      stateTs.push({
         date: date,
         totaltested: totaltested,
+        dailytested: dailytested,
       });
     }
   });
@@ -174,9 +190,22 @@ export const parseTotalTestTimeseries = (data) => {
     );
     const totaltested = +d.totalsamplestested;
     if (isBefore(date, today) && totaltested) {
+      let dailytested;
+      if (testTimseries.length) {
+        const prev = testTimseries[testTimseries.length - 1];
+        if (isSameDay(date, prev.date)) {
+          prev.dailytested += totaltested - prev.totaltested;
+          prev.totaltested = totaltested;
+        } else {
+          if (differenceInDays(date, prev.date) === 1)
+            dailytested = totaltested - prev.totaltested;
+          else dailytested = NaN;
+        }
+      } else dailytested = NaN;
       testTimseries.push({
         date: date,
         totaltested: totaltested,
+        dailytested: dailytested,
       });
     }
   });
@@ -191,6 +220,7 @@ export const mergeTimeseries = (ts1, ts2) => {
         const testData = ts2[state].find((d2) => isSameDay(d1.date, d2.date));
         return {
           totaltested: testData?.totaltested,
+          dailytested: testData?.dailytested,
           ...d1,
         };
       });
