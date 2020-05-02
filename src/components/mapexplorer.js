@@ -63,7 +63,6 @@ function MapExplorer({
   const [testObj, setTestObj] = useState({});
   const [currentMap, setCurrentMap] = useState(mapMeta);
   const [statisticOption, setStatisticOption] = useState(MAP_STATISTICS.TOTAL);
-  const [mapView, setMapView] = useState('state');
 
   const [statistic, currentMapData] = useMemo(() => {
     const dataTypes = ['confirmed', 'active', 'recovered', 'deceased'];
@@ -496,29 +495,6 @@ function MapExplorer({
           }}
         >
           <h4>Zones</h4>
-        </div>
-      </div>
-
-      <div className="tabs-map">
-        <div
-          className={`tab ${mapView === 'state' ? 'focused' : ''}`}
-          onClick={() => {
-            if (currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS)
-              switchMapToState('India');
-            setMapView('state');
-          }}
-        >
-          <h4>State View</h4>
-        </div>
-        <div
-          className={`tab ${mapView === 'district' ? 'focused' : ''}`}
-          onClick={() => {
-            if (currentMap.mapType === MAP_TYPES.COUNTRY)
-              switchMapToState('IndiaDistricts');
-            setMapView('district');
-          }}
-        >
-          <h4> District View</h4>
         </div>
       </div>
 

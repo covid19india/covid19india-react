@@ -86,7 +86,7 @@ function ChoroplethMap({
             color: colorScale,
             width: widthLegend,
             height: 0.8 * heightLegend,
-            tickFormat: (d) => d + ' Zone',
+            tickValues: [],
             tickSize: 0,
             marginLeft: 2,
             marginRight: 20,
@@ -160,7 +160,11 @@ function ChoroplethMap({
         .select('.regions')
         .selectAll('path')
         .data(features, (d) => d.id)
-        .join((enter) => enter.append('path').attr('d', path))
+        .join((enter) => {
+          const sel = enter.append('path').attr('d', path);
+          sel.append('title');
+          return sel;
+        })
         .attr('class', function (d) {
           const isHovered = d3.select(this).classed('map-hover');
           return `path-region ${mapOption} ${isHovered ? 'map-hover' : ''}`;
@@ -182,10 +186,18 @@ function ChoroplethMap({
         .on('click', handleClick)
         .attr('pointer-events', 'none');
 
-      regionSelection.append('title').text(function (d) {
+      regionSelection.select('title').text(function (d) {
+        console.log('here');
         if (statisticOption === MAP_STATISTICS.TOTAL) {
-          const region = d.properties[propertyField];
-          const n = mapData[region] ? mapData[region][mapOption] : 0;
+          const state = d.properties.st_nm;
+          const district = d.properties.district;
+          let n;
+          if (district)
+            n =
+              mapData[state] && mapData[state][district]
+                ? mapData[state][district][mapOption]
+                : 0;
+          else n = mapData[state] ? mapData[state][mapOption] : 0;
           return (
             Number(
               parseFloat(
@@ -193,7 +205,7 @@ function ChoroplethMap({
               ).toFixed(2)
             ).toString() +
             '% from ' +
-            toTitleCase(region)
+            toTitleCase(district ? district : state)
           );
         }
       });
