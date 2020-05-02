@@ -137,6 +137,11 @@ function GrowthTrendChart(props) {
     maintainAspectRatio: false,
     tooltips: {
       mode: 'index',
+      backgroundColor: 'rgba(0, 0, 0, 0.9)',
+      borderColor: 'rgba(0, 0, 0, 0)',
+      bodyFontColor: 'white',
+      titleFontColor: 'white',
+      displayColors: true,
     },
     elements: {
       point: {

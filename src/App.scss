@@ -1951,23 +1951,15 @@ table {
   .legend {
     margin-top: 1em;
     width: 100%;
+
+    svg {
+      display: block;
+      overflow: visible;
+    }
   }
 
   .map-hover {
-    stroke: #ff073a;
     stroke-width: 2;
-
-    &.active {
-      stroke: #007bff;
-    }
-
-    &.recovered {
-      stroke: #28a745;
-    }
-
-    &.deceased {
-      stroke: #6c757d;
-    }
   }
 
   .back-button {
@@ -5097,8 +5089,7 @@ footer {
           .dot,
           .focus,
           .domain,
-          .tick,
-          line {
+          .tick {
             stroke: #9673b9 !important;
           }
 
@@ -5107,7 +5098,8 @@ footer {
             fill: #9673b9 !important;
           }
 
-          .trend {
+          .trend,
+          line {
             stroke: #9673b999 !important;
           }
 
