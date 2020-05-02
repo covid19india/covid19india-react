@@ -483,6 +483,11 @@ h6 {
       display: none;
     }
 
+    a {
+      pointer-events: none;
+      cursor: default;
+    }
+
     .svg-parent {
       &:not(.legend) {
         height: 400px;
