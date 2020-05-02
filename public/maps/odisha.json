@@ -3403,7 +3403,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "382",
-            "district": "Jajapur",
+            "district": "Jajpur",
             "st_code": "21",
             "year": "2011_c",
             "st_nm": "Odisha"
@@ -3447,7 +3447,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "391",
-            "district": "Baudh",
+            "district": "Boudh",
             "st_code": "21",
             "year": "2011_c",
             "st_nm": "Odisha"
@@ -3513,7 +3513,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "380",
-            "district": "Jagatsinghapur",
+            "district": "Jagatsinghpur",
             "st_code": "21",
             "year": "2011_c",
             "st_nm": "Odisha"
@@ -3579,7 +3579,7 @@
           "type": "MultiPolygon",
           "properties": {
             "dt_code": "384",
-            "district": "Anugul",
+            "district": "Angul",
             "st_code": "21",
             "year": "2011_c",
             "st_nm": "Odisha"
@@ -3656,7 +3656,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "377",
-            "district": "Baleshwar",
+            "district": "Balasore",
             "st_code": "21",
             "year": "2011_c",
             "st_nm": "Odisha"
@@ -3689,7 +3689,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "373",
-            "district": "Debagarh",
+            "district": "Deogarh",
             "st_code": "21",
             "year": "2011_c",
             "st_nm": "Odisha"
