@@ -127,12 +127,12 @@ function TimeSeries(props) {
         'dailyactive',
         'dailyrecovered',
         'dailydeceased',
+        'dailytested',
       ];
 
       const colors = ['#ff073a', '#007bff', '#28a745', '#6c757d', '#201aa2'];
 
-      const svgArray = [svg1, svg2, svg3, svg4];
-      if (plotTotal) svgArray.push(svg5);
+      const svgArray = [svg1, svg2, svg3, svg4, svg5];
 
       let yScales;
       if (plotTotal) {
@@ -205,7 +205,7 @@ function TimeSeries(props) {
           .range([chartBottom, margin.top]);
 
         yScales = dataTypesDaily.map((type) => {
-          if (mode) return yScaleDailyUniform;
+          if (mode && type !== 'dailytested') return yScaleDailyUniform;
           const yScaleLinear = d3
             .scaleLinear()
             .clamp(true)
@@ -308,8 +308,8 @@ function TimeSeries(props) {
           .join((enter) =>
             enter
               .append('circle')
-              .attr('cx', (d) => xScale(d.date))
               .attr('cy', chartBottom)
+              .attr('cx', (d) => xScale(d.date))
           )
           .attr('class', 'dot')
           .attr('fill', color)
@@ -374,21 +374,21 @@ function TimeSeries(props) {
           svg.selectAll('.trend').remove();
           svg
             .selectAll('.stem')
-            .data(timeseries, (d) => d.date)
+            .data(filteredTimeseries, (d) => d.date)
             .join((enter) =>
               enter
                 .append('line')
                 .attr('x1', (d) => xScale(d.date))
-                .attr('x2', (d) => xScale(d.date))
                 .attr('y1', chartBottom)
+                .attr('x2', (d) => xScale(d.date))
                 .attr('y2', chartBottom)
             )
             .attr('class', 'stem')
             .style('stroke', color + '99')
             .style('stroke-width', 4)
             .transition(t)
-            .attr('y1', yScale(0))
             .attr('x1', (d) => xScale(d.date))
+            .attr('y1', yScale(0))
             .attr('x2', (d) => xScale(d.date))
             .attr('y2', (d) => yScale(d[typeDaily]));
         }
@@ -415,6 +415,7 @@ function TimeSeries(props) {
   const chartKey2 = chartType === 1 ? 'totalactive' : 'dailyactive';
   const chartKey3 = chartType === 1 ? 'totalrecovered' : 'dailyrecovered';
   const chartKey4 = chartType === 1 ? 'totaldeceased' : 'dailydeceased';
+  const chartKey5 = chartType === 1 ? 'totaltested' : 'dailytested';
 
   // Function for calculate increased/decreased count for each type of data
   const currentStatusCount = (chartType) => {
@@ -493,23 +494,23 @@ function TimeSeries(props) {
           </svg>
         </div>
 
-        {chartType === 1 && (
-          <div className="svg-parent is-purple">
-            <div className="stats is-purple">
-              <h5 className={`${!moving ? 'title' : ''}`}>
-                Tested {props.isTotal ? testedToolTip : ''}
-              </h5>
-              <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
-              <div className="stats-bottom">
-                <h2>{formatNumber(datapoint.totaltested)}</h2>
-              </div>
+        <div className="svg-parent is-purple">
+          <div className="stats is-purple">
+            <h5 className={`${!moving ? 'title' : ''}`}>
+              Tested {props.isTotal ? testedToolTip : ''}
+            </h5>
+            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
+            <div className="stats-bottom">
+              <h2>{formatNumber(datapoint[chartKey5])}</h2>
+              <h6>{currentStatusCount(chartKey5)}</h6>
             </div>
-            <svg ref={svgRef5} preserveAspectRatio="xMidYMid meet">
-              <g className="x-axis" />
-              <g className="y-axis" />
-            </svg>
           </div>
-        )}
+          <svg ref={svgRef5} preserveAspectRatio="xMidYMid meet">
+            <g className="x-axis" />
+            <g className="x-axis2" />
+            <g className="y-axis" />
+          </svg>
+        </div>
       </div>
 
       <div className="pills">
