@@ -214,12 +214,6 @@ function ChoroplethMap({
           if (currentMap.stat === MAP_STATISTICS.ZONE) {
             const state = d.properties.st_nm;
             const district = d.properties.district;
-            if (
-              !mapData[state] ||
-              !mapData[state][district] ||
-              !mapData[state][district].zone
-            )
-              console.log(state, district);
             n =
               mapData[state] &&
               mapData[state][district] &&

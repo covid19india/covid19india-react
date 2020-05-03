@@ -32,14 +32,12 @@ const isEqual = (prevProps, currProps) => {
 const getRegionFromState = (state) => {
   if (!state) return;
   const region = {...state};
-  if (!region.name) region.name = region.state;
   return region;
 };
 
 const getRegionFromDistrict = (districtData, name) => {
   if (!districtData) return;
   const region = {...districtData};
-  if (!region.name) region.name = name;
   return region;
 };
 
@@ -56,9 +54,9 @@ function MapExplorer({
   mapOption,
   setMapOption,
 }) {
-  const [selectedRegion, setSelectedRegion] = useState(
-    getRegionFromState(states[0])
-  );
+  const [selectedRegion, setSelectedRegion] = useState({
+    state: states[0].state,
+  });
   const [currentMap, setCurrentMap] = useState({
     name: mapName,
     stat: MAP_STATISTICS.TOTAL,
@@ -176,6 +174,8 @@ function MapExplorer({
       const state = getRegionFromState(
         states.find((state) => selectedRegion.state === state.state)
       );
+      district.district = selectedRegion.district;
+      district.state = state.state;
       district.statecode = state.statecode;
       return [district, state];
     }
@@ -268,6 +268,20 @@ function MapExplorer({
       ),
     [stateTestData, panelRegion]
   );
+
+  let hoveredRegionData;
+  if (currentMap.stat !== MAP_STATISTICS.ZONE) {
+    const data = hoveredRegion.district
+      ? currentMapData[hoveredRegion.state][hoveredRegion.district]
+      : currentMapData[hoveredRegion.state];
+    hoveredRegionData = data
+      ? currentMap.stat === MAP_STATISTICS.PER_MILLION
+        ? Number(
+            parseFloat(currentMapData[hoveredRegion.name][mapOption]).toFixed(2)
+          )
+        : data[mapOption]
+      : 0;
+  }
 
   return (
     <div
@@ -378,13 +392,15 @@ function MapExplorer({
               <Icon.Link />
             </a>
           )}
-          {hoveredRegion.name === 'Total' ? testedToolTip : ''}
+          {hoveredRegion.state === 'Total' ? testedToolTip : ''}
         </div>
       </div>
 
       <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
         <h2 className={`${mapOption !== 'confirmed' ? mapOption : ''}`}>
-          {hoveredRegion.name}
+          {hoveredRegion.district
+            ? hoveredRegion.district
+            : hoveredRegion.state}
         </h2>
 
         {currentMapMeta.mapType !== MAP_TYPES.STATE &&
@@ -411,21 +427,14 @@ function MapExplorer({
           </Link>
         ) : null}
 
-        {currentMapMeta.mapType === MAP_TYPES.STATE ||
-        (currentMapMeta.mapType === MAP_TYPES.COUNTRY &&
-          currentMap.stat === MAP_STATISTICS.PER_MILLION) ? (
+        {currentMap.stat !== MAP_STATISTICS.ZONE &&
+        (currentMapMeta.mapType === MAP_TYPES.STATE ||
+          (currentMapMeta.mapType === MAP_TYPES.COUNTRY &&
+            currentMap.stat !== MAP_STATISTICS.TOTAL)) ? (
           <h1
             className={`district ${mapOption !== 'confirmed' ? mapOption : ''}`}
           >
-            {currentMapData[hoveredRegion.name]
-              ? currentMap.stat === MAP_STATISTICS.PER_MILLION
-                ? Number(
-                    parseFloat(
-                      currentMapData[hoveredRegion.name][mapOption]
-                    ).toFixed(2)
-                  )
-                : currentMapData[hoveredRegion.name][mapOption]
-              : 0}
+            {hoveredRegionData}
             <br />
             <span>
               {mapOption}{' '}
@@ -447,6 +456,9 @@ function MapExplorer({
                     ? MAP_VIEWS.DISTRICTS
                     : MAP_VIEWS.STATES,
                 stat: currentMap.stat,
+              });
+              setSelectedRegion({
+                state: currentMap.name,
               });
             }}
           >
