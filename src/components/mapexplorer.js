@@ -59,9 +59,6 @@ function MapExplorer({
   const [selectedRegion, setSelectedRegion] = useState(
     getRegionFromState(states[0])
   );
-
-  const [testObj, setTestObj] = useState({});
-
   const [currentMap, setCurrentMap] = useState({
     name: mapName,
     stat: MAP_STATISTICS.TOTAL,
@@ -264,13 +261,13 @@ function MapExplorer({
     [districts, currentMap.view, currentMap.stat]
   );
 
-  useEffect(() => {
-    setTestObj(
+  const testObj = useMemo(
+    () =>
       stateTestData.find(
         (obj) => obj.state === panelRegion.name && obj.totaltested !== ''
-      )
-    );
-  }, [panelRegion, stateTestData, testObj]);
+      ),
+    [stateTestData, panelRegion]
+  );
 
   return (
     <div
