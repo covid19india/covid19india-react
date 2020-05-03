@@ -228,3 +228,20 @@ export const mergeTimeseries = (ts1, ts2) => {
   }
   return tsRet;
 };
+
+export const capitalize = (s) => {
+  if (typeof s !== 'string') return '';
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
+export const abbreviate = (s) => {
+  return s.slice(0, 1) + s.slice(1).replace(/[aeiou]/gi, '');
+};
+
+export const parseDistrictZones = (data) => {
+  return data.reduce((ret, d) => {
+    ret[d.state] = ret[d.state] || {};
+    ret[d.state][d.district] = d;
+    return ret;
+  }, {});
+};

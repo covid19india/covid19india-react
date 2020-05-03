@@ -32,7 +32,7 @@ function State(props) {
   const [allStateData, setAllStateData] = useState({});
   const [fetched, setFetched] = useState(false);
   const [timeseries, setTimeseries] = useState({});
-  const [stateData, setStateData] = useState({});
+  const [stateData, setStateData] = useState(null);
   const [testData, setTestData] = useState({});
   const [sources, setSources] = useState({});
   const [districtData, setDistrictData] = useState({});
@@ -68,7 +68,7 @@ function State(props) {
           (state) => state.statecode !== code && STATE_CODES[state.statecode]
         )
       );
-      setStateData(states.find((s) => s.statecode === code));
+      setStateData([states.find((s) => s.statecode === code)]);
       // Timeseries
       const ts = parseStateTimeseries(statesDailyResponse)[code];
       const testTs = parseStateTestTimeseries(
@@ -129,6 +129,7 @@ function State(props) {
     return gridRowCount;
   };
   const gridRowCount = getGridRowCount();
+
   if (!stateName) {
     return <Redirect to="/" />;
   } else {
@@ -179,8 +180,8 @@ function State(props) {
                 <h1>{stateName}</h1>
                 <h5>
                   Last Updated on{' '}
-                  {Object.keys(stateData).length
-                    ? formatDateAbsolute(stateData.lastupdatedtime)
+                  {stateData && Object.keys(stateData[0]).length
+                    ? formatDateAbsolute(stateData[0].lastupdatedtime)
                     : ''}
                 </h5>
               </div>
@@ -268,22 +269,18 @@ function State(props) {
               </div>
             )}
 
-            {fetched && <Level data={stateData} />}
+            {fetched && <Level data={stateData[0]} />}
             {fetched && <Minigraph timeseries={timeseries} />}
             {fetched && (
-              <React.Fragment>
-                {
-                  <MapExplorer
-                    forwardRef={mapRef}
-                    mapMeta={MAP_META[stateName]}
-                    states={[stateData]}
-                    stateDistrictWiseData={districtData}
-                    stateTestData={testData}
-                    isCountryLoaded={false}
-                    mapOptionProp={mapOption}
-                  />
-                }
-              </React.Fragment>
+              <MapExplorer
+                forwardRef={mapRef}
+                mapMeta={MAP_META[stateName]}
+                states={stateData}
+                districts={districtData}
+                stateTestData={testData}
+                isCountryLoaded={false}
+                mapOption={mapOption}
+              />
             )}
 
             {fetched && (
