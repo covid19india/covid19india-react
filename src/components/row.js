@@ -1,25 +1,166 @@
+import {TABLE_STATISTICS} from '../constants';
 import {
   formatDate,
-  formatDateAbsolute,
   formatNumber,
+  capitalize,
+  stripVowels,
 } from '../utils/commonfunctions';
 
+import classnames from 'classnames';
 import {formatDistance} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
-import {Link} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
-import {useUpdateEffect} from 'react-use';
+import {createBreakpoint} from 'react-use';
+
+const useBreakpoint = createBreakpoint({XL: 1280, L: 768, S: 350});
+
+function StateCell({state, statistic}) {
+  const ArrowUp = useMemo(() => <Icon.ArrowUp />, []);
+
+  return (
+    <td>
+      <span className={classnames('delta', `is-${statistic}`)}>
+        {state[`delta${statistic}`] > 0 && ArrowUp}
+        {state[`delta${statistic}`] > 0 && state[`delta${statistic}`]}
+      </span>
+      <span className="total">
+        {state[statistic] === 0 ? '-' : formatNumber(state[statistic])}
+      </span>
+    </td>
+  );
+}
+
+function DistrictHeaderCell({handleSort, statistic, sortData}) {
+  const breakpoint = useBreakpoint();
+
+  return (
+    <td onClick={() => handleSort(statistic)}>
+      <div className="heading-content">
+        <abbr
+          className={classnames({[`is-${statistic}`]: breakpoint === 'S'})}
+          title={statistic}
+        >
+          {breakpoint === 'L'
+            ? statistic.slice(0)
+            : breakpoint === 'S'
+            ? capitalize(
+                stripVowels(statistic === 'deaths' ? 'deceased' : statistic)
+              )
+            : capitalize(statistic === 'deaths' ? 'deceased' : statistic)}
+        </abbr>
+        <div
+          style={{
+            display: sortData.sortColumn === statistic ? 'initial' : 'none',
+          }}
+        >
+          {sortData.isAscending ? (
+            <div className="arrow-up" />
+          ) : (
+            <div className="arrow-down" />
+          )}
+        </div>
+      </div>
+    </td>
+  );
+}
+
+function PureDistrictCell({district, statistic}) {
+  return (
+    <td>
+      <span className={classnames('delta', `is-${statistic}`)}>
+        {district.delta[statistic] > 0 && <Icon.ArrowUp />}
+        {district.delta[statistic] > 0 && district.delta[statistic]}
+      </span>
+      <span className="total">{formatNumber(district[statistic])}</span>
+    </td>
+  );
+}
+
+const DistrictCell = React.memo(PureDistrictCell);
+
+const isDistrictRowEqual = (prevProps, currProps) => {
+  if (equal(prevProps.regionHighlighted?.district, prevProps.district)) {
+    return false;
+  }
+  if (equal(currProps.regionHighlighted?.district, currProps.district)) {
+    return false;
+  }
+  return true;
+};
+
+function PureDistrictRow({
+  regionHighlighted,
+  district,
+  state,
+  onHighlightDistrict,
+  sortedDistricts,
+  districts,
+}) {
+  return (
+    <tr
+      key={district.district}
+      className={classnames('district', {
+        'is-highlighted': regionHighlighted?.district === district,
+      })}
+      onMouseEnter={() => onHighlightDistrict(district, state)}
+    >
+      <td>
+        <div className="title-chevron">
+          <span className="title-icon">
+            {district}
+            <span
+              data-for="district"
+              data-tip={[[sortedDistricts[district].notes]]}
+              data-event="touchstart mouseover"
+              data-event-off="mouseleave"
+            >
+              {sortedDistricts[district].notes && <Icon.Info />}
+            </span>
+          </span>
+        </div>
+      </td>
+
+      {TABLE_STATISTICS.map((statistic) => (
+        <DistrictCell
+          key={statistic}
+          district={districts[district]}
+          statistic={statistic}
+        />
+      ))}
+    </tr>
+  );
+}
+
+const DistrictRow = React.memo(PureDistrictRow, isDistrictRowEqual);
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.regionHighlighted, currProps.regionHighlighted)) {
+  if (!equal(prevProps.state.state, currProps.state.state)) {
+    return false;
+  }
+  if (
+    !equal(
+      prevProps.regionHighlighted?.state,
+      currProps.regionHighlighted?.state
+    )
+  ) {
+    return false;
+  }
+  if (
+    !equal(
+      prevProps.regionHighlighted?.district,
+      currProps.regionHighlighted?.district
+    )
+  ) {
     return false;
   }
   return true;
 };
 
 function Row({
+  index,
   state,
   districts,
   regionHighlighted,
@@ -33,14 +174,16 @@ function Row({
     isAscending: false,
   });
 
-  const ArrowUp = useMemo(() => <Icon.ArrowUp />, []);
+  const history = useHistory();
 
   const Chevron = useMemo(
     () => (
       <span
-        className={`dropdown ${
-          showDistricts ? 'rotateRightDown' : 'rotateDownRight'
-        }`}
+        className={classnames(
+          'dropdown',
+          {rotateRightDown: showDistricts},
+          {rotateDownRight: !showDistricts}
+        )}
       >
         <Icon.ChevronDown />
       </span>
@@ -48,7 +191,7 @@ function Row({
     [showDistricts]
   );
 
-  const onHighlightStateWrapper = useCallback(
+  const _onHighlightState = useCallback(
     (state) => {
       if (!equal(state, regionHighlighted?.state)) {
         onHighlightState(state);
@@ -57,171 +200,127 @@ function Row({
     [onHighlightState, regionHighlighted]
   );
 
-  const sortDistricts = useCallback(
-    (aDistricts) => {
-      const sorted = {};
-      if (aDistricts) {
-        Object.keys(aDistricts)
-          .sort((district1, district2) => {
-            const sortColumn = sortData.sortColumn;
-            const value1 =
-              sortColumn === 'district'
-                ? district1
-                : parseInt(aDistricts[district1][sortData.sortColumn]);
-            const value2 =
-              sortColumn === 'district'
-                ? district2
-                : parseInt(aDistricts[district2][sortData.sortColumn]);
-            const comparisonValue =
-              value1 > value2
-                ? 1
-                : value1 === value2 && district1 > district2
-                ? 1
-                : -1;
-            return sortData.isAscending
-              ? comparisonValue
-              : comparisonValue * -1;
-          })
-          .forEach((key) => {
-            sorted[key] = aDistricts[key];
-          });
-        setSortedDistricts(sorted);
-      }
+  const doSort = useCallback(() => {
+    const sorted = {};
+    Object.keys(sortedDistricts)
+      .sort((district1, district2) => {
+        const sortColumn = sortData.sortColumn;
+        const value1 =
+          sortColumn === 'district'
+            ? district1
+            : parseInt(sortedDistricts[district1][sortData.sortColumn]);
+        const value2 =
+          sortColumn === 'district'
+            ? district2
+            : parseInt(sortedDistricts[district2][sortData.sortColumn]);
+        const comparisonValue =
+          value1 > value2
+            ? 1
+            : value1 === value2 && district1 > district2
+            ? 1
+            : -1;
+        return sortData.isAscending ? comparisonValue : comparisonValue * -1;
+      })
+      .forEach((key) => {
+        sorted[key] = sortedDistricts[key];
+      });
+    setSortedDistricts(sorted);
+  }, [sortData.isAscending, sortData.sortColumn, sortedDistricts]);
+
+  const handleSort = useCallback(
+    (statistic) => {
+      const currentsortColumn = statistic;
+      const isAscending =
+        sortData.sortColumn === currentsortColumn
+          ? !sortData.isAscending
+          : sortData.sortColumn === 'district';
+      setSortData({
+        sortColumn: currentsortColumn,
+        isAscending: isAscending,
+      });
+      doSort();
     },
-    [sortData]
+    [doSort, sortData.isAscending, sortData.sortColumn]
   );
-
-  const handleSort = (column) => {
-    const isAscending =
-      sortData.sortColumn === column
-        ? !sortData.isAscending
-        : sortData.sortColumn === 'district';
-    setSortData({
-      sortColumn: column,
-      isAscending: isAscending,
-    });
-  };
-
-  useUpdateEffect(() => {
-    sortDistricts();
-  }, [sortData]);
 
   return (
     <React.Fragment>
       <tr
-        className={`state ${state.state === 'TT' ? 'is-total' : ''}`}
-        onMouseEnter={() => onHighlightStateWrapper(state)}
-        onClick={() => {
-          setShowDistricts(!showDistricts);
-        }}
+        className={classnames(
+          'state',
+          {'is-total': state.statecode === 'TT'},
+          {'is-highlighted': regionHighlighted?.state.state === state.state},
+          {'is-odd': index % 2 === 0}
+        )}
+        onMouseEnter={() => _onHighlightState(state)}
+        onClick={
+          state.statecode !== 'TT'
+            ? () => {
+                setShowDistricts(!showDistricts);
+              }
+            : null
+        }
       >
-        <td style={{fontWeight: 600}}>
-          <div className="table__title-wrapper">
-            {state.state !== 'TT' && Chevron}
-            <span className="actual__title-wrapper">
+        <td>
+          <div className="title-chevron">
+            {state.statecode !== 'TT' && Chevron}
+            <span className="title-icon">
               {state.state}
-              {state.statenotes && (
-                <span>
-                  <span
-                    data-tip={[`${state.statenotes}`]}
-                    data-event="touchstart mouseover"
-                    data-event-off="mouseleave"
-                  >
-                    <Icon.Info />
-                  </span>
-                  <ReactTooltip
-                    place="right"
-                    type="dark"
-                    effect="solid"
-                    multiline={true}
-                    scrollHide={true}
-                    globalEventOff="click"
-                  />
-                </span>
-              )}
+
+              <span
+                data-tip={[`${state.statenotes}`]}
+                data-event="touchstart mouseover"
+                data-event-off="mouseleave"
+              >
+                {state.statenotes && <Icon.Info />}
+              </span>
             </span>
           </div>
         </td>
-        <td>
-          <span className="deltas" style={{color: '#ff073a'}}>
-            {state.deltaconfirmed > 0 && ArrowUp}
-            {state.deltaconfirmed > 0 ? `${state.deltaconfirmed}` : ''}
-          </span>
-          <span className="table__count-text">
-            {parseInt(state.confirmed) === 0
-              ? '-'
-              : formatNumber(state.confirmed)}
-          </span>
-        </td>
-        <td
-          style={{
-            color: parseInt(state.active) === 0 ? '#B5B5B5' : 'inherit',
-          }}
-        >
-          {parseInt(state.active) === 0 ? '-' : formatNumber(state.active)}
-        </td>
-        <td
-          style={{
-            color: parseInt(state.recovered) === 0 ? '#B5B5B5' : 'inherit',
-          }}
-        >
-          <span className="deltas" style={{color: '#28a745'}}>
-            {state.deltarecovered > 0 && ArrowUp}
-            {state.deltarecovered > 0 ? `${state.deltarecovered}` : ''}
-          </span>
-          <span className="table__count-text">
-            {parseInt(state.recovered) === 0
-              ? '-'
-              : formatNumber(state.recovered)}
-          </span>
-        </td>
-        <td
-          style={{
-            color: parseInt(state.deaths) === 0 ? '#B5B5B5' : 'inherit',
-          }}
-        >
-          <span className="deltas" style={{color: '#6c757d'}}>
-            {state.deltadeaths > 0 && ArrowUp}
-            {state.deltadeaths > 0 ? `${state.deltadeaths}` : ''}
-          </span>
-          <span className="table__count-text">
-            {parseInt(state.deaths) === 0 ? '-' : formatNumber(state.deaths)}
-          </span>
-        </td>
+
+        {TABLE_STATISTICS.map((statistic, index) => (
+          <StateCell key={index} state={state} statistic={statistic} />
+        ))}
       </tr>
 
       {showDistricts && (
         <React.Fragment>
+          <tr className="is-spacer">
+            <td colSpan={5}>
+              <p />
+            </td>
+          </tr>
+
           <tr className={'state-last-update'}>
-            <td colSpan={3}>
-              <h6
-                title={
-                  isNaN(Date.parse(formatDate(state.lastupdatedtime)))
-                    ? ''
-                    : formatDateAbsolute(state.lastupdatedtime)
-                }
-              >
+            <td colSpan={3} style={{paddingBottom: 0}}>
+              <p className="spacer"></p>
+              <p>
                 {isNaN(Date.parse(formatDate(state.lastupdatedtime)))
                   ? ''
                   : `Last updated ${formatDistance(
                       new Date(formatDate(state.lastupdatedtime)),
                       new Date()
                     )} ago`}
-              </h6>
+              </p>
               {sortedDistricts?.Unknown && (
                 <div className="disclaimer">
                   <Icon.AlertCircle />
-                  {`District-wise numbers are under reconciliation`}
+                  District-wise numbers are under reconciliation
                 </div>
               )}
             </td>
-            <td className="state-page-link" colSpan={2}>
-              <Link to={`state/${state.statecode}`}>Visit state page</Link>
-            </td>
+            <td
+              align="center"
+              className="state-page-link"
+              colSpan={2}
+              onClick={() => {
+                history.push(`state/${state.statecode}`);
+              }}
+            >{`View ${state.state}'s Page`}</td>
           </tr>
 
-          <tr className={`district-heading`}>
-            <td onClick={(e) => handleSort('district')}>
+          <tr className={classnames('district-heading')}>
+            <td onClick={() => handleSort('district')}>
               <div className="heading-content">
                 <abbr title="District">District</abbr>
                 <div
@@ -238,269 +337,47 @@ function Row({
                 </div>
               </div>
             </td>
-            <td onClick={(e) => handleSort('confirmed')}>
-              <div className="heading-content">
-                <abbr
-                  className={`${window.innerWidth <= 769 ? 'is-cherry' : ''}`}
-                  title="Confirmed"
-                >
-                  {window.innerWidth <= 769
-                    ? window.innerWidth <= 375
-                      ? 'C'
-                      : 'Cnfmd'
-                    : 'Confirmed'}
-                </abbr>
-                <div
-                  style={{
-                    display:
-                      sortData.sortColumn === 'confirmed' ? 'initial' : 'none',
-                  }}
-                >
-                  {sortData.isAscending ? (
-                    <div className="arrow-up" />
-                  ) : (
-                    <div className="arrow-down" />
-                  )}
-                </div>
-              </div>
-            </td>
-            <td onClick={(e) => handleSort('active')}>
-              <div className="heading-content">
-                <abbr
-                  className={`${window.innerWidth <= 769 ? 'is-blue' : ''}`}
-                  title="Active"
-                >
-                  {window.innerWidth <= 769
-                    ? window.innerWidth <= 375
-                      ? 'A'
-                      : 'Actv'
-                    : 'Active'}
-                </abbr>
-                <div
-                  style={{
-                    display:
-                      sortData.sortColumn === 'active' ? 'initial' : 'none',
-                  }}
-                >
-                  {sortData.isAscending ? (
-                    <div className="arrow-up" />
-                  ) : (
-                    <div className="arrow-down" />
-                  )}
-                </div>
-              </div>
-            </td>
-            <td onClick={(e) => handleSort('recovered')}>
-              <div className="heading-content">
-                <abbr
-                  className={`${window.innerWidth <= 769 ? 'is-green' : ''}`}
-                  title="Recovered"
-                >
-                  {window.innerWidth <= 769
-                    ? window.innerWidth <= 375
-                      ? 'R'
-                      : 'Rcvrd'
-                    : 'Recovered'}
-                </abbr>
-                <div
-                  style={{
-                    display:
-                      sortData.sortColumn === 'recovered' ? 'initial' : 'none',
-                  }}
-                >
-                  {sortData.isAscending ? (
-                    <div className="arrow-up" />
-                  ) : (
-                    <div className="arrow-down" />
-                  )}
-                </div>
-              </div>
-            </td>
-            <td onClick={(e) => handleSort('deceased')}>
-              <div className="heading-content">
-                <abbr
-                  className={`${window.innerWidth <= 769 ? 'is-gray' : ''}`}
-                  title="Deaths"
-                >
-                  {window.innerWidth <= 769
-                    ? window.innerWidth <= 375
-                      ? 'D'
-                      : 'Dcsd'
-                    : 'Deceased'}
-                </abbr>
-                <div
-                  style={{
-                    display:
-                      sortData.sortColumn === 'deceased' ? 'initial' : 'none',
-                  }}
-                >
-                  {sortData.isAscending ? (
-                    <div className="arrow-up" />
-                  ) : (
-                    <div className="arrow-down" />
-                  )}
-                </div>
-              </div>
-            </td>
+
+            {TABLE_STATISTICS.map((statistic, index) => (
+              <DistrictHeaderCell
+                key={index}
+                handleSort={handleSort}
+                statistic={statistic}
+                sortData={sortData}
+              />
+            ))}
           </tr>
         </React.Fragment>
       )}
 
-      {sortedDistricts &&
-        showDistricts &&
-        Object.keys(sortedDistricts)
-          .filter((district) => district.toLowerCase() !== 'unknown')
-          .map((district, index) => {
-            if (district.toLowerCase() !== 'unknown') {
-              return (
-                <tr
-                  key={index}
-                  className={`district ${index % 2 === 0 ? 'is-odd' : ''}`}
-                  style={{
-                    background: index % 2 === 0 ? '#f8f9fa' : '',
-                  }}
-                  onMouseEnter={() =>
-                    onHighlightDistrict(district, state, index)
-                  }
-                  onMouseLeave={() => onHighlightDistrict?.()}
-                >
-                  <td className="unknown" style={{fontWeight: 600}}>
-                    {district}
-                    <span>
-                      <span
-                        data-for="unknown"
-                        data-tip={[[sortedDistricts[district].notes]]}
-                        data-event="touchstart mouseover"
-                        data-event-off="mouseleave"
-                      >
-                        {sortedDistricts[district].notes && <Icon.Info />}
-                      </span>
-                    </span>
-                  </td>
-                  <td>
-                    <span className="deltas" style={{color: '#ff073a'}}>
-                      {sortedDistricts[district].delta.confirmed > 0 && (
-                        <Icon.ArrowUp />
-                      )}
-                      {sortedDistricts[district].delta.confirmed > 0
-                        ? `${sortedDistricts[district].delta.confirmed}`
-                        : ''}
-                    </span>
-                    <span className="table__count-text">
-                      {formatNumber(sortedDistricts[district].confirmed)}
-                    </span>
-                  </td>
-                  <td>{formatNumber(sortedDistricts[district].active)}</td>
-                  <td>
-                    <span className="deltas" style={{color: '#28a745'}}>
-                      {sortedDistricts[district].delta.recovered > 0 && (
-                        <Icon.ArrowUp />
-                      )}
-                      {sortedDistricts[district].delta.recovered > 0
-                        ? `${sortedDistricts[district].delta.recovered}`
-                        : ''}
-                    </span>
-                    <span className="table__count-text">
-                      {formatNumber(sortedDistricts[district].recovered)}
-                    </span>
-                  </td>
-                  <td>
-                    <span className="deltas" style={{color: '#6c757d'}}>
-                      {sortedDistricts[district].delta.deceased > 0 && (
-                        <Icon.ArrowUp />
-                      )}
-                      {sortedDistricts[district].delta.deceased > 0
-                        ? `${sortedDistricts[district].delta.deceased}`
-                        : ''}
-                    </span>
-                    <span className="table__count-text">
-                      {formatNumber(sortedDistricts[district].deceased)}
-                    </span>
-                  </td>
-                </tr>
-              );
-            }
-            return null;
-          })}
-
-      {sortedDistricts?.Unknown && showDistricts && (
-        <React.Fragment>
-          <tr className={`district`}>
-            <td className="unknown" style={{fontWeight: 600}}>
-              Unknown
-              <span>
-                <span
-                  data-for="unknown"
-                  data-tip={
-                    'Awaiting patient-level details from State Bulletin'
-                  }
-                  data-event="touchstart mouseover"
-                  data-event-off="mouseleave"
-                >
-                  <Icon.Info />
-                </span>
-              </span>
-            </td>
-            <td>
-              <span className="deltas" style={{color: '#ff073a'}}>
-                {sortedDistricts['Unknown'].delta.confirmed > 0 && (
-                  <Icon.ArrowUp />
-                )}
-                {sortedDistricts['Unknown'].delta.confirmed > 0
-                  ? `${sortedDistricts['Unknown'].delta.confirmed}`
-                  : ''}
-              </span>
-              <span className="table__count-text">
-                {formatNumber(sortedDistricts['Unknown'].confirmed)}
-              </span>
-            </td>
-            <td>{formatNumber(sortedDistricts['Unknown'].active)}</td>
-            <td>
-              <span className="deltas" style={{color: '#28a745'}}>
-                {sortedDistricts['Unknown'].delta.recovered > 0 && (
-                  <Icon.ArrowUp />
-                )}
-                {sortedDistricts['Unknown'].delta.recovered > 0
-                  ? `${sortedDistricts['Unknown'].delta.recovered}`
-                  : ''}
-              </span>
-              <span className="table__count-text">
-                {formatNumber(sortedDistricts['Unknown'].recovered)}
-              </span>
-            </td>
-            <td>
-              <span className="deltas" style={{color: '#6c757d'}}>
-                {sortedDistricts['Unknown'].delta.deceased > 0 && (
-                  <Icon.ArrowUp />
-                )}
-                {sortedDistricts['Unknown'].delta.deceased > 0
-                  ? `${sortedDistricts['Unknown'].delta.deceased}`
-                  : ''}
-              </span>
-              <span className="table__count-text">
-                {formatNumber(sortedDistricts['Unknown'].deceased)}
-              </span>
-            </td>
-          </tr>
-        </React.Fragment>
-      )}
+      {showDistricts &&
+        Object.keys(sortedDistricts).map((district, index) => (
+          <DistrictRow
+            key={district}
+            state={state}
+            district={district}
+            districts={districts}
+            sortedDistricts={sortedDistricts}
+            regionHighlighted={regionHighlighted}
+            onHighlightDistrict={onHighlightDistrict}
+          />
+        ))}
 
       {showDistricts && (
-        <React.Fragment>
-          <tr>
-            <td colSpan={5}>
-              <ReactTooltip
-                id="unknown"
-                place="right"
-                type="dark"
-                effect="solid"
-                multiline={true}
-                scrollHide={true}
-                globalEventOff="click"
-              />
-            </td>
-          </tr>
-        </React.Fragment>
+        <tr className="is-spacer">
+          <td colSpan={5}>
+            <p />
+            <ReactTooltip
+              id="district"
+              place="right"
+              type="dark"
+              effect="solid"
+              multiline={true}
+              scrollHide={true}
+              globalEventOff="click"
+            />
+          </td>
+        </tr>
       )}
     </React.Fragment>
   );

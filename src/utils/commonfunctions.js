@@ -228,3 +228,12 @@ export const mergeTimeseries = (ts1, ts2) => {
   }
   return tsRet;
 };
+
+export const capitalize = (s) => {
+  if (typeof s !== 'string') return '';
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
+export const stripVowels = (s) => {
+  return s.replace(/[aeiou]/gi, '');
+};
