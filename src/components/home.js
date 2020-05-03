@@ -16,6 +16,7 @@ import {
   parseStateTimeseries,
   parseStateTestTimeseries,
   parseTotalTestTimeseries,
+  parseDistrictZones,
 } from '../utils/commonfunctions';
 
 import Observer from '@researchgate/react-intersection-observer';
@@ -28,6 +29,7 @@ import {useEffectOnce, useLocalStorage} from 'react-use';
 function Home(props) {
   const [states, setStates] = useState(null);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState(null);
+  const [districtZones, setDistrictZones] = useState(null);
   const [stateTestData, setStateTestData] = useState(null);
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState(null);
@@ -91,8 +93,12 @@ function Home(props) {
 
   const getStates = async () => {
     try {
-      const [{data: statesDailyResponse}] = await Promise.all([
+      const [
+        {data: statesDailyResponse},
+        {data: zonesResponse},
+      ] = await Promise.all([
         axios.get('https://api.covid19india.org/states_daily.json'),
+        axios.get('https://api.covid19india.org/zones.json'),
       ]);
 
       const [
@@ -106,6 +112,7 @@ function Home(props) {
       ]);
 
       setStates(data.statewise);
+      setDistrictZones(parseDistrictZones(zonesResponse.zones));
 
       const ts = parseStateTimeseries(statesDailyResponse);
       ts['TT'] = preprocessTimeseries(data.cases_time_series);
@@ -194,6 +201,7 @@ function Home(props) {
               states={states}
               summary={false}
               districts={stateDistrictWiseData}
+              zones={districtZones}
               regionHighlighted={regionHighlighted}
               onHighlightState={onHighlightState}
               onHighlightDistrict={onHighlightDistrict}
