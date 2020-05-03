@@ -396,113 +396,129 @@ function Resources(props) {
   );
 
   return (
-    <div className="Resources" id="top-elem">
-      <Helmet>
-        <title>Essentials - covid19india.org</title>
-        <meta name="title" content="Essentials - covid19india.org" />
-      </Helmet>
+    <React.Fragment>
+      <div className="BannerEssentials Banner">
+        <h3>
+          Call{' '}
+          <a
+            href="tel:+917901652932"
+            style={{textDecorationLine: 'none', color: 'red'}}
+          >
+            {' '}
+            7901652932{' '}
+          </a>
+          and get all required information on essential services just by
+          entering PIN code
+        </h3>
+      </div>
+      <div className="Resources" id="top-elem">
+        <Helmet>
+          <title>Essentials - covid19india.org</title>
+          <meta name="title" content="Essentials - covid19india.org" />
+        </Helmet>
 
-      <div className="filtersection">
-        <div className="filtertitle">
-          <h3>Service Before Self</h3>
+        <div className="filtersection">
+          <div className="filtertitle">
+            <h3>Service Before Self</h3>
+          </div>
+          {!isDesktop && (
+            <FiltersMobile
+              handleDisclaimerClick={handleDisclaimerClick}
+              popoverid={id}
+              isDisclaimerOpen={isDisclaimerOpen}
+              anchorEl={anchorEl}
+              handleDisclaimerClose={handleDisclaimerClose}
+              indianstate={indianstate}
+              changeIndianState={changeIndianState}
+              stateoptions={getIndianStateOptions()}
+              city={city}
+              changeCity={changeCity}
+              cityoptions={getCityOptions()}
+              category={category}
+              changeCategory={changeCategory}
+              servicesoptions={getCategoryOptions()}
+              filterTable={filterTable}
+              openSharingTray={openSharingTray}
+            />
+          )}
+          {isDesktop && (
+            <FiltersDesktop
+              handleDisclaimerClick={handleDisclaimerClick}
+              popoverid={id}
+              isDisclaimerOpen={isDisclaimerOpen}
+              anchorEl={anchorEl}
+              handleDisclaimerClose={handleDisclaimerClose}
+              indianstate={indianstate}
+              changeIndianState={changeIndianState}
+              stateoptions={getIndianStateOptions()}
+              city={city}
+              changeCity={changeCity}
+              cityoptions={getCityOptions()}
+              category={category}
+              changeCategory={changeCategory}
+              servicesoptions={getCategoryOptions()}
+              filterTable={filterTable}
+              openSharingTray={openSharingTray}
+            />
+          )}
         </div>
-        {!isDesktop && (
-          <FiltersMobile
-            handleDisclaimerClick={handleDisclaimerClick}
-            popoverid={id}
-            isDisclaimerOpen={isDisclaimerOpen}
-            anchorEl={anchorEl}
-            handleDisclaimerClose={handleDisclaimerClose}
-            indianstate={indianstate}
-            changeIndianState={changeIndianState}
-            stateoptions={getIndianStateOptions()}
-            city={city}
-            changeCity={changeCity}
-            cityoptions={getCityOptions()}
-            category={category}
-            changeCategory={changeCategory}
-            servicesoptions={getCategoryOptions()}
-            filterTable={filterTable}
-            openSharingTray={openSharingTray}
-          />
-        )}
-        {isDesktop && (
-          <FiltersDesktop
-            handleDisclaimerClick={handleDisclaimerClick}
-            popoverid={id}
-            isDisclaimerOpen={isDisclaimerOpen}
-            anchorEl={anchorEl}
-            handleDisclaimerClose={handleDisclaimerClose}
-            indianstate={indianstate}
-            changeIndianState={changeIndianState}
-            stateoptions={getIndianStateOptions()}
-            city={city}
-            changeCity={changeCity}
-            cityoptions={getCityOptions()}
-            category={category}
-            changeCategory={changeCategory}
-            servicesoptions={getCategoryOptions()}
-            filterTable={filterTable}
-            openSharingTray={openSharingTray}
-          />
+        {showTable && (
+          <React.Fragment>
+            <div className="searchbar">
+              <TextField
+                id="input-field-searchbar"
+                label="Search keyword"
+                fullWidth={true}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                style={{
+                  width: '100%',
+                }}
+                variant="outlined"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Icon.Search size="0.9em" />
+                    </InputAdornment>
+                  ),
+                }}
+                onChange={(event) => {
+                  setInterval(setSearchValue(event.target.value));
+                }}
+              />
+            </div>
+            <ResourceTable
+              columns={memocols}
+              data={partData}
+              totalCount={data.length}
+              isDesktop={isDesktop}
+              onScrollUpdate={appendData}
+              searchValue={searchValue}
+            />
+            <div>
+              <Fade in={hasScrolled}>
+                <Fab
+                  color="inherit"
+                  aria-label="gototop"
+                  id="gototopbtn"
+                  onClick={animateScroll}
+                  size="small"
+                  style={{
+                    position: 'fixed',
+                    bottom: '1rem',
+                    right: '1rem',
+                    zIndex: '1000',
+                  }}
+                >
+                  <Icon.Navigation2 strokeWidth="2.5" color="#4c75f2" />
+                </Fab>
+              </Fade>
+            </div>
+          </React.Fragment>
         )}
       </div>
-      {showTable && (
-        <React.Fragment>
-          <div className="searchbar">
-            <TextField
-              id="input-field-searchbar"
-              label="Search keyword"
-              fullWidth={true}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              style={{
-                width: '100%',
-              }}
-              variant="outlined"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Icon.Search size="0.9em" />
-                  </InputAdornment>
-                ),
-              }}
-              onChange={(event) => {
-                setInterval(setSearchValue(event.target.value));
-              }}
-            />
-          </div>
-          <ResourceTable
-            columns={memocols}
-            data={partData}
-            totalCount={data.length}
-            isDesktop={isDesktop}
-            onScrollUpdate={appendData}
-            searchValue={searchValue}
-          />
-          <div>
-            <Fade in={hasScrolled}>
-              <Fab
-                color="inherit"
-                aria-label="gototop"
-                id="gototopbtn"
-                onClick={animateScroll}
-                size="small"
-                style={{
-                  position: 'fixed',
-                  bottom: '1rem',
-                  right: '1rem',
-                  zIndex: '1000',
-                }}
-              >
-                <Icon.Navigation2 strokeWidth="2.5" color="#4c75f2" />
-              </Fab>
-            </Fade>
-          </div>
-        </React.Fragment>
-      )}
-    </div>
+    </React.Fragment>
   );
 }
 

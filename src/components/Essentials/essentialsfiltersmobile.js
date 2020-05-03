@@ -64,7 +64,7 @@ function FiltersMobile(props) {
         }}
       >
         <div
-          className="button is-purple mobile-disclaimer-button"
+          className="button mobile-disclaimer-button"
           style={{
             margin: '0.2rem',
             padding: '0.5rem',

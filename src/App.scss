@@ -948,6 +948,12 @@ h6 {
   }
 }
 
+.BannerEssentials {
+  align-items: center;
+  color: #201aa299;
+  text-align: center;
+}
+
 .Search {
   display: flex;
   flex-direction: column;
@@ -5206,6 +5212,14 @@ footer {
         .MuiSvgIcon-root {
           fill: $dark-m-white;
         }
+
+        .button {
+          &.is-purple {
+            background-color: rgba(31, 25, 158, .13);
+            background-image: none;
+            color: $dark-m-purple;
+          }
+        }
       }
 
       .resourcefilters {
@@ -5327,6 +5341,10 @@ footer {
     canvas {
       filter: invert(1) hue-rotate(180deg) saturate(5);
     }
+  }
+
+  .BannerEssentials {
+    color: #7ba1ea;
   }
 }
 
