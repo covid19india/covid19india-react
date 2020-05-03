@@ -13,7 +13,7 @@ import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
 import {useHistory} from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
-import {createBreakpoint} from 'react-use';
+import {createBreakpoint, useLocalStorage, useEffectOnce} from 'react-use';
 
 const useBreakpoint = createBreakpoint({XL: 1280, L: 768, S: 350});
 
@@ -171,9 +171,9 @@ function Row({
 }) {
   const [sortedDistricts, setSortedDistricts] = useState(districts);
   const [showDistricts, setShowDistricts] = useState(false);
-  const [sortData, setSortData] = useState({
+  const [sortData, setSortData] = useLocalStorage('districtSortData', {
     sortColumn: 'confirmed',
-    isAscending: false,
+    isAscending: true,
   });
 
   const history = useHistory();
@@ -202,48 +202,51 @@ function Row({
     [onHighlightState, regionHighlighted]
   );
 
-  const doSort = useCallback(() => {
-    const sorted = {};
-    Object.keys(sortedDistricts)
-      .sort((district1, district2) => {
-        const sortColumn = sortData.sortColumn;
-        const value1 =
-          sortColumn === 'district'
-            ? district1
-            : parseInt(sortedDistricts[district1][sortData.sortColumn]);
-        const value2 =
-          sortColumn === 'district'
-            ? district2
-            : parseInt(sortedDistricts[district2][sortData.sortColumn]);
-        const comparisonValue =
-          value1 > value2
-            ? 1
-            : value1 === value2 && district1 > district2
-            ? 1
-            : -1;
-        return sortData.isAscending ? comparisonValue : comparisonValue * -1;
-      })
-      .forEach((key) => {
-        sorted[key] = sortedDistricts[key];
-      });
-    setSortedDistricts(sorted);
-  }, [sortData.isAscending, sortData.sortColumn, sortedDistricts]);
+  const doSort = useCallback(
+    (sortData) => {
+      const sorted = {};
+      Object.keys(sortedDistricts)
+        .sort((district1, district2) => {
+          const sortColumn = sortData.sortColumn;
+          const value1 =
+            sortColumn === 'district'
+              ? district1
+              : parseInt(sortedDistricts[district1][sortData.sortColumn]);
+          const value2 =
+            sortColumn === 'district'
+              ? district2
+              : parseInt(sortedDistricts[district2][sortData.sortColumn]);
+          const comparisonValue =
+            value1 > value2
+              ? 1
+              : value1 === value2 && district1 > district2
+              ? 1
+              : -1;
+          return sortData.isAscending ? comparisonValue : comparisonValue * -1;
+        })
+        .forEach((key) => {
+          sorted[key] = sortedDistricts[key];
+        });
+      setSortedDistricts(sorted);
+    },
+    [sortedDistricts]
+  );
 
   const handleSort = useCallback(
     (statistic) => {
-      const currentsortColumn = statistic;
-      const isAscending =
-        sortData.sortColumn === currentsortColumn
-          ? !sortData.isAscending
-          : sortData.sortColumn === 'district';
-      setSortData({
-        sortColumn: currentsortColumn,
-        isAscending: isAscending,
-      });
-      doSort();
+      const newSortData = {
+        isAscending: !sortData.isAscending,
+        sortColumn: statistic,
+      };
+      doSort(newSortData);
+      setSortData(Object.assign({}, sortData, newSortData));
     },
-    [doSort, sortData.isAscending, sortData.sortColumn]
+    [doSort, setSortData, sortData]
   );
+
+  useEffectOnce(() => {
+    if (state.statecode !== 'TT') doSort(sortData);
+  });
 
   return (
     <React.Fragment>

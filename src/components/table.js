@@ -8,7 +8,7 @@ import equal from 'fast-deep-equal';
 import React, {useState, useMemo, useCallback} from 'react';
 import {Link} from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
-import {createBreakpoint} from 'react-use';
+import {createBreakpoint, useLocalStorage, useEffectOnce} from 'react-use';
 
 const useBreakpoint = createBreakpoint({XL: 1280, L: 768, S: 350});
 
@@ -59,7 +59,7 @@ function Table({
   onHighlightState,
   onHighlightDistrict,
 }) {
-  const [sortData, setSortData] = useState({
+  const [sortData, setSortData] = useLocalStorage('sortData', {
     sortColumn: 'confirmed',
     isAscending: true,
   });
@@ -70,12 +70,29 @@ function Table({
 
   const FineprintTop = useMemo(
     () => (
-      <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1.5s'}}>
-        Compiled from State Govt. numbers,{' '}
-        <Link to="/faq" style={{color: '#6c757d'}}>
-          know more!
-        </Link>
-      </h5>
+      <React.Fragment>
+        <h5
+          className="table-fineprint fadeInUp"
+          style={{animationDelay: '1.5s'}}
+        >
+          Compiled from State Govt. numbers,{' '}
+          <Link to="/faq" style={{color: '#6c757d'}}>
+            know more!
+          </Link>
+        </h5>
+        <h5
+          className="table-fineprint fadeInUp"
+          style={{animationDelay: '1.5s'}}
+        >
+          District zones as published by MoHFW,{' '}
+          <a
+            href="https://www.facebook.com/airnewsalerts/photos/a.262571017217636/1710062729135117/?type=3&theater"
+            style={{color: '#6c757d'}}
+          >
+            source
+          </a>
+        </h5>
+      </React.Fragment>
     ),
     []
   );
@@ -90,30 +107,33 @@ function Table({
     [states]
   );
 
-  const doSort = useCallback(() => {
-    const newSortedStates = [...sortedStates].sort((x, y) => {
-      return sortData.isAscending
-        ? parseInt(x[sortData.sortColumn]) - parseInt(y[sortData.sortColumn])
-        : parseInt(y[sortData.sortColumn]) - parseInt(x[sortData.sortColumn]);
-    });
-    setSortedStates(newSortedStates);
-  }, [sortData.isAscending, sortData.sortColumn, sortedStates]);
+  const doSort = useCallback(
+    (sortData) => {
+      const newSortedStates = [...sortedStates].sort((x, y) => {
+        return sortData.isAscending
+          ? parseInt(x[sortData.sortColumn]) - parseInt(y[sortData.sortColumn])
+          : parseInt(y[sortData.sortColumn]) - parseInt(x[sortData.sortColumn]);
+      });
+      setSortedStates(newSortedStates);
+    },
+    [sortedStates]
+  );
 
   const handleSort = useCallback(
     (statistic) => {
-      const currentsortColumn = statistic;
-      const isAscending =
-        sortData.sortColumn === currentsortColumn
-          ? !sortData.isAscending
-          : sortData.sortColumn === 'state';
-      setSortData({
-        sortColumn: currentsortColumn,
-        isAscending: isAscending,
-      });
-      doSort();
+      const newSortData = {
+        isAscending: !sortData.isAscending,
+        sortColumn: statistic,
+      };
+      doSort(newSortData);
+      setSortData(Object.assign({}, sortData, newSortData));
     },
-    [doSort, sortData.isAscending, sortData.sortColumn]
+    [doSort, setSortData, sortData]
   );
+
+  useEffectOnce(() => {
+    doSort(sortData);
+  });
 
   if (states.length > 0) {
     return (
@@ -163,7 +183,7 @@ function Table({
           {states && (
             <tbody>
               {sortedStates.map((state, index) => {
-                if (state.confirmed > 0) {
+                if (state.confirmed > 0 && state.statecode !== 'TT') {
                   return (
                     <Row
                       key={state.statecode}
@@ -185,13 +205,15 @@ function Table({
             </tbody>
           )}
 
-          <tbody>
-            <Row
-              key={0}
-              state={states[0]}
-              onHighlightState={onHighlightState}
-            />
-          </tbody>
+          {states && (
+            <tbody>
+              <Row
+                key={0}
+                state={states[0]}
+                onHighlightState={onHighlightState}
+              />
+            </tbody>
+          )}
         </table>
         {states && FineprintBottom}
       </React.Fragment>
