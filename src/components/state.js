@@ -7,7 +7,7 @@ import Minigraph from './minigraph';
 import StateMeta from './statemeta';
 import TimeSeriesExplorer from './timeseriesexplorer';
 
-import {MAP_META, STATE_CODES, STATE_POPULATIONS} from '../constants';
+import {STATE_CODES, STATE_POPULATIONS} from '../constants';
 import {
   formatDateAbsolute,
   formatNumber,
@@ -272,7 +272,7 @@ function State(props) {
             {fetched && (
               <MapExplorer
                 forwardRef={mapRef}
-                mapMeta={MAP_META[stateName]}
+                mapName={stateName}
                 states={stateData}
                 districts={districtData}
                 stateTestData={testData}

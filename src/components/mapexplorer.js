@@ -2,9 +2,10 @@ import ChoroplethMap from './choropleth';
 import {testedToolTip} from './tooltips';
 
 import {
+  MAP_META,
   MAP_STATISTICS,
   MAP_TYPES,
-  MAP_META,
+  MAP_VIEWS,
   STATE_POPULATIONS,
 } from '../constants';
 import {formatDate, formatNumber} from '../utils/commonfunctions';
@@ -43,7 +44,7 @@ const getRegionFromDistrict = (districtData, name) => {
 };
 
 function MapExplorer({
-  mapMeta,
+  mapName,
   states,
   districts,
   zones,
@@ -61,20 +62,26 @@ function MapExplorer({
     getRegionFromState(states[0])
   );
   const [testObj, setTestObj] = useState({});
-  const [currentMap, setCurrentMap] = useState(mapMeta);
-  const [statisticOption, setStatisticOption] = useState(MAP_STATISTICS.TOTAL);
+
+  const [currentMap, setCurrentMap] = useState({
+    name: mapName,
+    stat: MAP_STATISTICS.TOTAL,
+    view: MAP_VIEWS.STATES,
+  });
+
+  const currentMapMeta = MAP_META[currentMap.name];
 
   const [statistic, currentMapData] = useMemo(() => {
     let currentMapData = {};
     let statistic = {};
-    if (statisticOption === MAP_STATISTICS.ZONE) {
+    if (currentMap.stat === MAP_STATISTICS.ZONE) {
       const dataTypes = ['Red', 'Orange', 'Green'];
       statistic = dataTypes.reduce((acc, dtype) => {
         acc[dtype] = 0;
         return acc;
       }, {});
       currentMapData = zones;
-      if (currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS) {
+      if (currentMapMeta.mapType === MAP_TYPES.COUNTRY) {
         statistic = Object.values(zones).reduce((acc1, d1) => {
           acc1 = Object.values(d1).reduce((acc2, d2) => {
             if (d2.zone) acc2[d2.zone] += 1;
@@ -82,7 +89,7 @@ function MapExplorer({
           }, acc1);
           return acc1;
         }, statistic);
-      } else if (currentMap.mapType === MAP_TYPES.STATE) {
+      } else if (currentMapMeta.mapType === MAP_TYPES.STATE) {
         statistic = Object.values(zones[currentMap.name]).reduce((acc, d) => {
           if (d.zone) acc[d.zone] += 1;
           return acc;
@@ -94,7 +101,7 @@ function MapExplorer({
         acc[dtype] = {total: 0, max: 0};
         return acc;
       }, {});
-      if (currentMap.mapType === MAP_TYPES.COUNTRY) {
+      if (currentMapMeta.mapType === MAP_TYPES.COUNTRY) {
         currentMapData = states.reduce((acc, state) => {
           acc[state.state] = {};
 
@@ -102,7 +109,7 @@ function MapExplorer({
             let typeCount = parseInt(
               state[dtype !== 'deceased' ? dtype : 'deaths']
             );
-            if (statisticOption)
+            if (currentMap.stat === MAP_STATISTICS.PER_MILLION)
               typeCount = (1e6 * typeCount) / STATE_POPULATIONS[state.state];
             if (state.state !== 'Total') {
               statistic[dtype].total += typeCount;
@@ -114,8 +121,7 @@ function MapExplorer({
           });
           return acc;
         }, {});
-      } else if (currentMap.mapType === MAP_TYPES.STATE) {
-        setStatisticOption(MAP_STATISTICS.TOTAL);
+      } else if (currentMapMeta.mapType === MAP_TYPES.STATE) {
         const districtWiseData = (
           districts[currentMap.name] || {districtData: {}}
         ).districtData;
@@ -137,33 +143,16 @@ function MapExplorer({
         currentMapData[currentMap.name].Total = states.find(
           (state) => currentMap.name === state.state
         );
-      } else if (currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS) {
-        currentMapData = Object.keys(districts).reduce((acc1, state) => {
-          const districtData = districts[state].districtData;
-          acc1[state] = Object.keys(districtData).reduce((acc2, district) => {
-            acc2[district] = {};
-            dataTypes.forEach((dtype) => {
-              const typeCount = parseInt(districtData[district][dtype]);
-              statistic[dtype].total += typeCount;
-              if (typeCount > statistic[dtype].max) {
-                statistic[dtype].max = typeCount;
-              }
-              acc2[district][dtype] = typeCount;
-            });
-            return acc2;
-          }, {});
-          return acc1;
-        }, {});
       }
     }
     return [statistic, currentMapData];
   }, [
-    currentMap.mapType,
     currentMap.name,
+    currentMap.stat,
+    currentMapMeta.mapType,
     districts,
     zones,
     states,
-    statisticOption,
   ]);
 
   const setHoveredRegion = useCallback(
@@ -205,12 +194,15 @@ function MapExplorer({
 
     const isState = !('district' in regionHighlighted);
     if (isState) {
-      if (currentMap.mapType === MAP_TYPES.STATE) {
-        const newMap =
-          statisticOption !== MAP_STATISTICS.ZONE
-            ? MAP_META.India
-            : MAP_META.IndiaDistricts;
-        setCurrentMap(newMap);
+      if (currentMapMeta.mapType === MAP_TYPES.STATE) {
+        setCurrentMap({
+          name: 'India',
+          view:
+            currentMap.stat === MAP_STATISTICS.ZONE
+              ? MAP_VIEWS.DISTRICTS
+              : MAP_VIEWS.STATES,
+          stat: currentMap.stat,
+        });
       }
       setHoveredRegion({
         state: regionHighlighted.state.state,
@@ -221,13 +213,24 @@ function MapExplorer({
     } else {
       if (
         currentMap.name !== regionHighlighted.state.state &&
-        !(currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS)
+        !(
+          currentMapMeta.mapType === MAP_TYPES.COUNTRY &&
+          currentMap.view === MAP_VIEWS.DISTRICTS
+        )
       ) {
-        const newMap = MAP_META[regionHighlighted.state.state];
-        if (!newMap) {
+        const state = regionHighlighted.state.state;
+        const newMapMeta = MAP_META[state];
+        if (!newMapMeta) {
           return;
         }
-        setCurrentMap(newMap);
+        setCurrentMap({
+          name: state,
+          view: MAP_VIEWS.DISTRICTS,
+          stat:
+            currentMap.stat === MAP_STATISTICS.PER_MILLION
+              ? MAP_STATISTICS.TOTAL
+              : currentMap.stat,
+        });
       }
       setHoveredRegion({
         district: regionHighlighted.district,
@@ -238,16 +241,20 @@ function MapExplorer({
         state: regionHighlighted.state.state,
       });
     }
-  }, [currentMap, regionHighlighted, statisticOption, setHoveredRegion]);
+  }, [regionHighlighted, currentMap, currentMapMeta.mapType, setHoveredRegion]);
 
   const switchMapToState = useCallback(
     (name) => {
-      const newMap = MAP_META[name];
-      if (!newMap) {
+      const newMapMeta = MAP_META[name];
+      if (!newMapMeta) {
         return;
       }
-      setCurrentMap(newMap);
-      if (newMap.mapType === MAP_TYPES.STATE) {
+      setCurrentMap({
+        name: name,
+        view: currentMap.view,
+        stat: currentMap.stat,
+      });
+      if (newMapMeta.mapType === MAP_TYPES.STATE) {
         const {districtData} = districts[name] || {
           districtData: {},
         };
@@ -271,7 +278,7 @@ function MapExplorer({
         setSelectedRegion({});
       }
     },
-    [setHoveredRegion, districts]
+    [setHoveredRegion, districts, currentMap.view, currentMap.stat]
   );
 
   useEffect(() => {
@@ -306,7 +313,9 @@ function MapExplorer({
         <h1>{currentMap.name} Map</h1>
         <h6>
           {window.innerWidth <= 769 ? 'Tap' : 'Hover'} over a{' '}
-          {currentMap.mapType === MAP_TYPES.COUNTRY ? 'state/UT' : 'district'}{' '}
+          {currentMapMeta.mapType === MAP_TYPES.COUNTRY
+            ? 'state/UT'
+            : 'district'}{' '}
           for more details
         </h6>
       </div>
@@ -398,7 +407,7 @@ function MapExplorer({
           {currentHoveredRegion.name}
         </h2>
 
-        {currentMap.mapType !== MAP_TYPES.STATE &&
+        {currentMapMeta.mapType !== MAP_TYPES.STATE &&
           currentHoveredRegion.lastupdatedtime && (
             <div className="last-update">
               <h6>Last updated</h6>
@@ -417,7 +426,7 @@ function MapExplorer({
             </div>
           )}
 
-        {currentMap.mapType === MAP_TYPES.STATE ? (
+        {currentMapMeta.mapType === MAP_TYPES.STATE ? (
           <Link to={`state/${currentHoveredRegion.statecode}`}>
             <div className="button state-page-button">
               <abbr>Visit state page</abbr>
@@ -426,14 +435,14 @@ function MapExplorer({
           </Link>
         ) : null}
 
-        {currentMap.mapType === MAP_TYPES.STATE ||
-        (currentMap.mapType === MAP_TYPES.COUNTRY &&
-          statisticOption === MAP_STATISTICS.PER_MILLION) ? (
+        {currentMapMeta.mapType === MAP_TYPES.STATE ||
+        (currentMapMeta.mapType === MAP_TYPES.COUNTRY &&
+          currentMap.stat === MAP_STATISTICS.PER_MILLION) ? (
           <h1
             className={`district ${mapOption !== 'confirmed' ? mapOption : ''}`}
           >
             {currentMapData[currentHoveredRegion.name]
-              ? statisticOption === MAP_STATISTICS.PER_MILLION
+              ? currentMap.stat === MAP_STATISTICS.PER_MILLION
                 ? Number(
                     parseFloat(
                       currentMapData[currentHoveredRegion.name][mapOption]
@@ -444,27 +453,32 @@ function MapExplorer({
             <br />
             <span>
               {mapOption}{' '}
-              {statisticOption === MAP_STATISTICS.PER_MILLION
+              {currentMap.stat === MAP_STATISTICS.PER_MILLION
                 ? ' per million'
                 : ''}
             </span>
           </h1>
         ) : null}
 
-        {currentMap.mapType === MAP_TYPES.STATE ? (
+        {currentMapMeta.mapType === MAP_TYPES.STATE ? (
           <div
             className="button back-button"
             onClick={() => {
-              if (statisticOption === MAP_STATISTICS.ZONE)
-                switchMapToState('IndiaDistricts');
-              else switchMapToState('India');
+              setCurrentMap({
+                name: 'India',
+                view:
+                  currentMap.stat === MAP_STATISTICS.ZONE
+                    ? MAP_VIEWS.DISTRICTS
+                    : MAP_VIEWS.STATES,
+                stat: currentMap.stat,
+              });
             }}
           >
             Back
           </div>
         ) : null}
 
-        {currentMap.mapType === MAP_TYPES.STATE &&
+        {currentMapMeta.mapType === MAP_TYPES.STATE &&
         currentMapData.Unknown &&
         currentMapData.Unknown[mapOption] > 0 ? (
           <h4 className="unknown">
@@ -476,7 +490,7 @@ function MapExplorer({
       {mapOption && (
         <ChoroplethMap
           statistic={statistic}
-          mapMeta={currentMap}
+          currentMap={currentMap}
           mapData={currentMapData}
           setHoveredRegion={setHoveredRegion}
           selectedRegion={selectedRegion}
@@ -484,31 +498,38 @@ function MapExplorer({
           changeMap={switchMapToState}
           isCountryLoaded={isCountryLoaded}
           mapOption={mapOption}
-          statisticOption={statisticOption}
         />
       )}
 
       <div className="tabs-map">
         <div
           className={`tab ${
-            statisticOption === MAP_STATISTICS.TOTAL ? 'focused' : ''
+            currentMap.stat === MAP_STATISTICS.TOTAL ? 'focused' : ''
           }`}
           onClick={() => {
-            if (currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS)
-              switchMapToState('India');
-            setStatisticOption(MAP_STATISTICS.TOTAL);
+            setCurrentMap({
+              name: currentMap.name,
+              view:
+                currentMapMeta.mapType === MAP_TYPES.COUNTRY
+                  ? MAP_VIEWS.STATES
+                  : MAP_VIEWS.DISTRICTS,
+              stat: MAP_STATISTICS.TOTAL,
+            });
           }}
         >
           <h4>Total Cases</h4>
         </div>
         <div
           className={`tab ${
-            statisticOption === MAP_STATISTICS.PER_MILLION ? 'focused' : ''
+            currentMap.stat === MAP_STATISTICS.PER_MILLION ? 'focused' : ''
           }`}
           onClick={() => {
-            if (currentMap.mapType === MAP_TYPES.STATE) return;
-            switchMapToState('India');
-            setStatisticOption(MAP_STATISTICS.PER_MILLION);
+            if (currentMapMeta.mapType === MAP_TYPES.STATE) return;
+            setCurrentMap({
+              name: currentMap.name,
+              view: MAP_VIEWS.STATES,
+              stat: MAP_STATISTICS.PER_MILLION,
+            });
           }}
         >
           <h4>
@@ -517,12 +538,14 @@ function MapExplorer({
         </div>
         <div
           className={`tab ${
-            statisticOption === MAP_STATISTICS.ZONE ? 'focused' : ''
+            currentMap.stat === MAP_STATISTICS.ZONE ? 'focused' : ''
           }`}
           onClick={() => {
-            if (currentMap.mapType === MAP_TYPES.COUNTRY)
-              switchMapToState('IndiaDistricts');
-            setStatisticOption(MAP_STATISTICS.ZONE);
+            setCurrentMap({
+              name: currentMap.name,
+              view: MAP_VIEWS.DISTRICTS,
+              stat: MAP_STATISTICS.ZONE,
+            });
           }}
         >
           <h4>Zones</h4>

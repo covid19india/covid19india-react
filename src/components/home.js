@@ -7,7 +7,7 @@ import Table from './table';
 import TimeSeriesExplorer from './timeseriesexplorer';
 import Updates from './updates';
 
-import {STATE_CODES_REVERSE, MAP_META} from '../constants';
+import {STATE_CODES_REVERSE} from '../constants';
 import {
   formatDate,
   formatDateAbsolute,
@@ -203,7 +203,7 @@ function Home(props) {
           <React.Fragment>
             {fetched && (
               <MapExplorer
-                mapMeta={MAP_META.India}
+                mapName={'India'}
                 states={states}
                 districts={stateDistrictWiseData}
                 stateTestData={stateTestData}

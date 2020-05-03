@@ -1,7 +1,7 @@
 import legend from './legend';
 
-import {MAP_STATISTICS, MAP_TYPES} from '../constants';
-import {formatNumber} from '../utils/commonfunctions';
+import {MAP_META, MAP_STATISTICS, MAP_TYPES, MAP_VIEWS} from '../constants';
+import {capitalizeAll, formatNumber} from '../utils/commonfunctions';
 
 import * as d3 from 'd3';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
@@ -18,18 +18,18 @@ function ChoroplethMap({
   statistic,
   mapData,
   setHoveredRegion,
-  mapMeta,
+  currentMap,
   changeMap,
   selectedRegion,
   setSelectedRegion,
   isCountryLoaded,
   mapOption,
-  setMapOption,
-  statisticOption,
 }) {
   const choroplethMap = useRef(null);
   const choroplethLegend = useRef(null);
-  const [mapId, setMapId] = useState();
+  const [mapId, setMapId] = useState(null);
+
+  const mapMeta = MAP_META[currentMap.name];
 
   const ready = useCallback(
     (geoData, rerender = false) => {
@@ -76,7 +76,7 @@ function ChoroplethMap({
 
       // Colorbar
       let colorScale;
-      if (statisticOption === MAP_STATISTICS.ZONE) {
+      if (currentMap.stat === MAP_STATISTICS.ZONE) {
         colorScale = d3.scaleOrdinal(
           ['Red', 'Orange', 'Green'],
           ['#dc3545', '#fd7e14', '#28a745']
@@ -118,17 +118,16 @@ function ChoroplethMap({
           legend({
             color: colorScale,
             title:
-              toTitleCase(mapOption) +
-              ' cases' +
-              (statisticOption === MAP_STATISTICS.PER_MILLION
-                ? ' per million'
-                : ''),
+              capitalizeAll(mapOption) +
+              (currentMap.stat === MAP_STATISTICS.PER_MILLION
+                ? 'cases per million'
+                : 'cases'),
             width: widthLegend,
             height: heightLegend,
             ticks: 6,
             tickFormat: function (d, i, n) {
               if (
-                statisticOption === MAP_STATISTICS.TOTAL &&
+                currentMap.stat === MAP_STATISTICS.TOTAL &&
                 !Number.isInteger(d)
               )
                 return;
@@ -187,7 +186,7 @@ function ChoroplethMap({
         .attr('pointer-events', 'none');
 
       regionSelection.select('title').text(function (d) {
-        if (statisticOption === MAP_STATISTICS.TOTAL) {
+        if (currentMap.stat === MAP_STATISTICS.TOTAL) {
           const state = d.properties.st_nm;
           const district = d.properties.district;
           let n;
@@ -204,7 +203,7 @@ function ChoroplethMap({
               ).toFixed(2)
             ).toString() +
             '% from ' +
-            toTitleCase(district ? district : state)
+            capitalizeAll(district ? district : state)
           );
         }
       });
@@ -213,7 +212,7 @@ function ChoroplethMap({
         .transition(t)
         .attr('fill', function (d) {
           let n;
-          if (statisticOption === MAP_STATISTICS.ZONE) {
+          if (currentMap.stat === MAP_STATISTICS.ZONE) {
             const state = d.properties.st_nm;
             const district = d.properties.district;
             if (
@@ -244,7 +243,7 @@ function ChoroplethMap({
         .attr('stroke', function () {
           const isHovered = d3.select(this).classed('map-hover');
           if (isHovered) this.parentNode.appendChild(this);
-          if (statisticOption === MAP_STATISTICS.ZONE) {
+          if (currentMap.stat === MAP_STATISTICS.ZONE) {
             return isHovered ? '#343a40' : null;
           } else {
             return isHovered
@@ -280,7 +279,7 @@ function ChoroplethMap({
         .attr('stroke-width', width / 250)
         .transition(t)
         .attr('stroke', function () {
-          if (statisticOption === MAP_STATISTICS.ZONE) {
+          if (currentMap.stat === MAP_STATISTICS.ZONE) {
             return '#6c757d99';
           } else {
             return `${
@@ -297,21 +296,27 @@ function ChoroplethMap({
           }
         });
 
-      if (mapMeta.mapType === MAP_TYPES.COUNTRY_DISTRICTS) {
+      if (
+        mapMeta.mapType === MAP_TYPES.COUNTRY &&
+        currentMap.view === MAP_VIEWS.DISTRICTS
+      ) {
         // Add id to mesh
-        const meshStates = topojson.mesh(geoData, geoData.objects.states);
-        meshStates.id = mapMeta.graphObjectName;
+        const meshDistricts = topojson.mesh(
+          geoData,
+          geoData.objects[mapMeta.graphObjectDistricts]
+        );
+        meshDistricts.id = mapMeta.graphObjectDistricts;
         svg
-          .select('.state-borders')
+          .select('.borders-secondary')
           .selectAll('path')
-          .data([meshStates], (d) => d.id)
+          .data([meshDistricts], (d) => d.id)
           .join((enter) => enter.append('path').attr('d', (d) => path(d)))
           .attr('fill', 'none')
           .attr('stroke-width', width / 300)
           .transition(t)
           .attr('stroke', '#343a4099');
       } else {
-        svg.select('.state-borders').selectAll('path').remove();
+        svg.select('.borders-secondary').selectAll('path').remove();
       }
 
       const handleMouseEnter = (region) => {
@@ -345,6 +350,8 @@ function ChoroplethMap({
     },
     [
       mapMeta,
+      currentMap.stat,
+      currentMap.view,
       statistic,
       mapOption,
       isCountryLoaded,
@@ -352,17 +359,8 @@ function ChoroplethMap({
       setSelectedRegion,
       setHoveredRegion,
       changeMap,
-      statisticOption,
     ]
   );
-
-  const toTitleCase = (str) => {
-    str = str.toLowerCase().split(' ');
-    for (let i = 0; i < str.length; i++) {
-      str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
-    }
-    return str.join(' ');
-  };
 
   useEffect(() => {
     (async () => {
@@ -385,7 +383,7 @@ function ChoroplethMap({
         ) {
           nodes[i].parentNode.appendChild(nodes[i]);
           d3.select(nodes[i]).attr('stroke', function (d) {
-            if (statisticOption === MAP_STATISTICS.ZONE) return '#343a40';
+            if (currentMap.stat === MAP_STATISTICS.ZONE) return '#343a40';
             return d3.select(this).classed('confirmed')
               ? '#ff073a'
               : d3.select(this).classed('active')
@@ -402,7 +400,7 @@ function ChoroplethMap({
       });
     };
     highlightRegionInMap(selectedRegion);
-  }, [mapId, selectedRegion, statisticOption]);
+  }, [mapId, selectedRegion, currentMap.stat]);
 
   return (
     <div>
@@ -410,7 +408,7 @@ function ChoroplethMap({
         <svg id="chart" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}>
           <g className="regions" />
           <g className="borders" />
-          <g className="state-borders" />
+          <g className="borders-secondary" />
         </svg>
         {(mapOption === 'recovered' && mapData?.Unknown?.recovered) ||
         (mapOption === 'deceased' && mapData?.Unknown?.deceased) ? (
