@@ -14,7 +14,6 @@ export const DISTRICT_ROW_STATISTICS = [
 export const MAP_TYPES = {
   COUNTRY: 'country',
   STATE: 'state',
-  COUNTRY_DISTRICTS: 'countryDistrict',
 };
 
 export const MAP_STATISTICS = {
@@ -23,20 +22,20 @@ export const MAP_STATISTICS = {
   ZONE: 2,
 };
 
+export const MAP_VIEWS = {
+  STATES: 0,
+  DISTRICTS: 1,
+};
+
 export const MAPS_DIR = '/maps';
 
 export const MAP_META = {
   India: {
     name: 'India',
-    geoDataFile: `${MAPS_DIR}/india.json`,
-    mapType: MAP_TYPES.COUNTRY,
-    graphObjectName: 'india',
-  },
-  IndiaDistricts: {
-    name: 'India',
     geoDataFile: `${MAPS_DIR}/india_districts.json`,
-    mapType: MAP_TYPES.COUNTRY_DISTRICTS,
-    graphObjectName: 'india-districts-2019-734',
+    mapType: MAP_TYPES.COUNTRY,
+    graphObjectName: 'india-states',
+    graphObjectDistricts: 'india-districts-2019-734',
   },
   'Andaman and Nicobar Islands': {
     name: 'Andaman and Nicobar Islands',
