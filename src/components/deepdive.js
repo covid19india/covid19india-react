@@ -1,4 +1,5 @@
 import AgeChart from './Charts/agechart';
+import DeceasedAgeChart from './Charts/deceasedagechart';
 import AllStatesChart from './Charts/allstates';
 import DailyConfirmedChart from './Charts/dailyconfirmedchart';
 import GenderChart from './Charts/genderchart';
@@ -81,6 +82,10 @@ function DeepDive() {
 
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
           <AgeChart title="Patients by Age" data={rawData} />
+        </div>
+
+	<div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
+          <DeceasedAgeChart title="Deceased by Age" data={rawData} />
         </div>
 
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
