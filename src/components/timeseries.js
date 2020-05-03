@@ -482,7 +482,7 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, isTotal}) {
         <div className="svg-parent is-purple">
           <div className="stats is-purple">
             <h5 className={`${!moving ? 'title' : ''}`}>
-              Tested {props.isTotal ? testedToolTip : ''}
+              Tested {isTotal ? testedToolTip : ''}
             </h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">

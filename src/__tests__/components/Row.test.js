@@ -27,6 +27,39 @@ const districts = {
   Unknown: {confirmed: 5, lastupdatedtime: '', delta: {confirmed: 0}},
 };
 
+const zones = [
+  {
+    district: 'Nicobars',
+    districtcode: 'AN_Nicobars',
+    lastupdated: '01/05/2020',
+    source:
+      'https://www.facebook.com/airnewsalerts/photos/a.262571017217636/1710062729135117/?type=3&theater',
+    state: 'Andaman and Nicobar Islands',
+    statecode: 'AN',
+    zone: 'Green',
+  },
+  {
+    district: 'North and Middle Andaman',
+    districtcode: 'AN_North and Middle Andaman',
+    lastupdated: '01/05/2020',
+    source:
+      'https://www.facebook.com/airnewsalerts/photos/a.262571017217636/1710062729135117/?type=3&theater',
+    state: 'Andaman and Nicobar Islands',
+    statecode: 'AN',
+    zone: 'Green',
+  },
+  {
+    district: 'South Andaman',
+    districtcode: 'AN_South Andaman',
+    lastupdated: '01/05/2020',
+    source:
+      'https://www.facebook.com/airnewsalerts/photos/a.262571017217636/1710062729135117/?type=3&theater',
+    state: 'Andaman and Nicobar Islands',
+    statecode: 'AN',
+    zone: 'Red',
+  },
+];
+
 describe('Row component', () => {
   const RealDate = Date;
   const handleReveal = jest.fn();
@@ -41,6 +74,7 @@ describe('Row component', () => {
             index={1}
             total={false}
             reveal={true}
+            zones={zones}
             handleReveal={handleReveal}
           />
         </tbody>
@@ -78,7 +112,7 @@ describe('Row component', () => {
     expect(confirmed).toEqual('11');
     expect(active).toEqual('1');
     expect(recovered).toEqual('10');
-    expect(deaths).toEqual('-');
+    expect(deaths).toEqual('0');
   });
 
   test('Districts and the confirmed cases', () => {
@@ -86,7 +120,6 @@ describe('Row component', () => {
     expect(stateRow).toHaveLength(1);
 
     stateRow.simulate('click');
-    expect(handleReveal).toHaveBeenCalledWith('Andaman and Nicobar Islands');
 
     const districtsSelector = wrapper.find('tr.district');
     const stateLastUpdate = wrapper.find('tr.state-last-update');
