@@ -95,6 +95,7 @@ function PureDistrictRow({
   regionHighlighted,
   district,
   state,
+  zone,
   onHighlightDistrict,
   sortedDistricts,
   districts,
@@ -107,7 +108,7 @@ function PureDistrictRow({
       })}
       onMouseEnter={() => onHighlightDistrict(district, state)}
     >
-      <td>
+      <td className={classnames(`is-${zone?.zone}`)}>
         <div className="title-chevron">
           <span className="title-icon">
             {district}
@@ -163,6 +164,7 @@ function Row({
   index,
   state,
   districts,
+  zones,
   regionHighlighted,
   onHighlightState,
   onHighlightDistrict,
@@ -357,6 +359,7 @@ function Row({
             state={state}
             district={district}
             districts={districts}
+            zone={zones[district]}
             sortedDistricts={sortedDistricts}
             regionHighlighted={regionHighlighted}
             onHighlightDistrict={onHighlightDistrict}
