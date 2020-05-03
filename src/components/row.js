@@ -173,7 +173,7 @@ function Row({
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useLocalStorage('districtSortData', {
     sortColumn: 'confirmed',
-    isAscending: true,
+    isAscending: false,
   });
 
   const history = useHistory();

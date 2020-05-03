@@ -61,7 +61,7 @@ function Table({
 }) {
   const [sortData, setSortData] = useLocalStorage('sortData', {
     sortColumn: 'confirmed',
-    isAscending: true,
+    isAscending: false,
   });
 
   const [sortedStates, setSortedStates] = useState(
