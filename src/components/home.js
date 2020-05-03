@@ -212,7 +212,7 @@ function Home(props) {
         <Observer options={options} onChange={handleIntersection}>
           <div className="home-right">
             <React.Fragment>
-              {stateTestData && isIntersecting && (
+              {stateDistrictWiseData && stateTestData && isIntersecting && (
                 <MapExplorer
                   mapMeta={MAP_META.India}
                   states={states}
