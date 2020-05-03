@@ -54,6 +54,7 @@ const isEqual = (prevProps, currProps) => {
 function Table({
   states,
   districts,
+  zones,
   regionHighlighted,
   onHighlightState,
   onHighlightDistrict,
@@ -168,6 +169,7 @@ function Table({
                       key={state.statecode}
                       state={state}
                       districts={districts[state.state]?.districtData}
+                      zones={zones[state.state]}
                       regionHighlighted={
                         equal(regionHighlighted?.state, state)
                           ? regionHighlighted

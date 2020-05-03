@@ -1662,7 +1662,7 @@ table {
     }
 
     td {
-      border-radius: 5px;
+      border-radius: 4px;
       font-size: .9rem;
       padding: .25rem;
       text-align: right;
@@ -1723,6 +1723,36 @@ table {
           }
         }
       }
+
+      &.is-Orange {
+        background: $yellow-light;
+        border-left: 5px solid $orange-mid;
+        color: $orange;
+
+        svg {
+          color: $orange !important;
+        }
+      }
+
+      &.is-Red {
+        background: $cherry-light;
+        border-left: 5px solid $cherry-mid;
+        color: $cherry;
+
+        svg {
+          color: $cherry !important;
+        }
+      }
+
+      &.is-Green {
+        background: $green-light;
+        border-left: 5px solid $green-mid;
+        color: $green;
+
+        svg {
+          color: $green !important;
+        }
+      }
     }
 
     .title-chevron {
@@ -1733,12 +1763,17 @@ table {
       }
 
       .title-icon {
+
+        span {
+          margin-left: .25rem;
+          position: relative;
+        }
+
         svg {
           color: $gray-mid;
-          height: 12px;
-          padding-left: 2px;
+          position: absolute;
           stroke-width: 3;
-          vertical-align: -1.5px;
+          top: -3px;
           width: 12px;
         }
       }

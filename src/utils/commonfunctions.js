@@ -237,3 +237,11 @@ export const capitalize = (s) => {
 export const stripVowels = (s) => {
   return s.replace(/[aeiou]/gi, '');
 };
+
+export const parseDistrictZones = (data) => {
+  return data.reduce((ret, d) => {
+    ret[d.state] = ret[d.state] || {};
+    ret[d.state][d.district] = d;
+    return ret;
+  }, {});
+};
