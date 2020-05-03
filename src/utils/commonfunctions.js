@@ -234,8 +234,8 @@ export const capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
-export const stripVowels = (s) => {
-  return s.replace(/[aeiou]/gi, '');
+export const abbreviate = (s) => {
+  return s.slice(0, 1) + s.slice(1).replace(/[aeiou]/gi, '');
 };
 
 export const parseDistrictZones = (data) => {

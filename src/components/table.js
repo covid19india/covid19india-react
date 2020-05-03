@@ -1,7 +1,7 @@
 import Row from './row';
 
 import {STATE_ROW_STATISTICS} from '../constants';
-import {capitalize, stripVowels} from '../utils/commonfunctions';
+import {capitalize, abbreviate} from '../utils/commonfunctions';
 
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
@@ -26,7 +26,7 @@ function StateHeaderCell({handleSort, sortData, statistic}) {
             ? statistic.slice(0)
             : breakpoint === 'S'
             ? capitalize(
-                stripVowels(statistic === 'deaths' ? 'deceased' : statistic)
+                abbreviate(statistic === 'deaths' ? 'deceased' : statistic)
               )
             : capitalize(statistic === 'deaths' ? 'deceased' : statistic)}
         </abbr>

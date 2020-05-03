@@ -3,7 +3,7 @@ import {
   formatDate,
   formatNumber,
   capitalize,
-  stripVowels,
+  abbreviate,
 } from '../utils/commonfunctions';
 
 import classnames from 'classnames';
@@ -47,7 +47,7 @@ function DistrictHeaderCell({handleSort, statistic, sortData}) {
             ? statistic.slice(0)
             : breakpoint === 'S'
             ? capitalize(
-                stripVowels(statistic === 'deaths' ? 'deceased' : statistic)
+                abbreviate(statistic === 'deaths' ? 'deceased' : statistic)
               )
             : capitalize(statistic === 'deaths' ? 'deceased' : statistic)}
         </abbr>
