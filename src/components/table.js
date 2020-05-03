@@ -110,9 +110,17 @@ function Table({
   const doSort = useCallback(
     (sortData) => {
       const newSortedStates = [...sortedStates].sort((x, y) => {
-        return sortData.isAscending
-          ? parseInt(x[sortData.sortColumn]) - parseInt(y[sortData.sortColumn])
-          : parseInt(y[sortData.sortColumn]) - parseInt(x[sortData.sortColumn]);
+        if (sortData.sortColumn !== 'state') {
+          return sortData.isAscending
+            ? parseInt(x[sortData.sortColumn]) -
+                parseInt(y[sortData.sortColumn])
+            : parseInt(y[sortData.sortColumn]) -
+                parseInt(x[sortData.sortColumn]);
+        } else {
+          return sortData.isAscending
+            ? x[sortData.sortColumn].localeCompare(y[sortData.sortColumn])
+            : y[sortData.sortColumn].localeCompare(x[sortData.sortColumn]);
+        }
       });
       setSortedStates(newSortedStates);
     },
