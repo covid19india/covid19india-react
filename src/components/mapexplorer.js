@@ -46,7 +46,7 @@ function MapExplorer({
   mapMeta,
   states,
   districts,
-  districtZones,
+  zones,
   stateTestData,
   regionHighlighted,
   isCountryLoaded,
@@ -73,9 +73,9 @@ function MapExplorer({
         acc[dtype] = 0;
         return acc;
       }, {});
-      currentMapData = districtZones;
+      currentMapData = zones;
       if (currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS) {
-        statistic = Object.values(districtZones).reduce((acc1, d1) => {
+        statistic = Object.values(zones).reduce((acc1, d1) => {
           acc1 = Object.values(d1).reduce((acc2, d2) => {
             if (d2.zone) acc2[d2.zone] += 1;
             return acc2;
@@ -83,13 +83,10 @@ function MapExplorer({
           return acc1;
         }, statistic);
       } else if (currentMap.mapType === MAP_TYPES.STATE) {
-        statistic = Object.values(districtZones[currentMap.name]).reduce(
-          (acc, d) => {
-            if (d.zone) acc[d.zone] += 1;
-            return acc;
-          },
-          statistic
-        );
+        statistic = Object.values(zones[currentMap.name]).reduce((acc, d) => {
+          if (d.zone) acc[d.zone] += 1;
+          return acc;
+        }, statistic);
       }
     } else {
       const dataTypes = ['confirmed', 'active', 'recovered', 'deceased'];
@@ -141,29 +138,33 @@ function MapExplorer({
           (state) => currentMap.name === state.state
         );
       } else if (currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS) {
-        currentMapData = Object.keys(districts).reduce(
-          (acc1, state) => {
-            const districtData = districts[state].districtData;
-            acc1[state] = Object.keys(districtData).reduce((acc2, district) => {
-              acc2[district] = {};
-              dataTypes.forEach((dtype) => {
-                const typeCount = parseInt(districtData[district][dtype]);
-                statistic[dtype].total += typeCount;
-                if (typeCount > statistic[dtype].max) {
-                  statistic[dtype].max = typeCount;
-                }
-                acc2[district][dtype] = typeCount;
-              });
-              return acc2;
-            }, {});
-            return acc1;
-          },
-          {}
-        );
+        currentMapData = Object.keys(districts).reduce((acc1, state) => {
+          const districtData = districts[state].districtData;
+          acc1[state] = Object.keys(districtData).reduce((acc2, district) => {
+            acc2[district] = {};
+            dataTypes.forEach((dtype) => {
+              const typeCount = parseInt(districtData[district][dtype]);
+              statistic[dtype].total += typeCount;
+              if (typeCount > statistic[dtype].max) {
+                statistic[dtype].max = typeCount;
+              }
+              acc2[district][dtype] = typeCount;
+            });
+            return acc2;
+          }, {});
+          return acc1;
+        }, {});
       }
     }
     return [statistic, currentMapData];
-  }, [currentMap.mapType, currentMap.name, districts, districtZones, states, statisticOption]);
+  }, [
+    currentMap.mapType,
+    currentMap.name,
+    districts,
+    zones,
+    states,
+    statisticOption,
+  ]);
 
   const setHoveredRegion = useCallback(
     (mapRegion) => {

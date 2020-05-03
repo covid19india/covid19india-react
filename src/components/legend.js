@@ -163,10 +163,12 @@ function legend({
       const widthScale = d3
         .scaleLinear()
         .domain([0, ordinalWeights.reduce((a, b) => a + b)])
-        .rangeRound([marginLeft, width - marginRight]);
+        .rangeRound([0, width - marginLeft - marginRight]);
 
       const xPos = ordinalWeights.map((w, i) =>
-        widthScale(ordinalWeights.slice(0, i).reduce((a, b) => a + b, 0))
+        ordinalWeights
+          .slice(0, i)
+          .reduce((acc, w) => acc + widthScale(w), marginLeft)
       );
 
       x = d3.scaleOrdinal().domain(color.domain()).range(xPos);
@@ -174,12 +176,18 @@ function legend({
       svg
         .selectAll('rect')
         .data(color.domain())
-        .join('rect')
-        .attr('x', x)
+        .join((enter) =>
+          enter
+            .append('rect')
+            .attr('x', x)
+            .attr('width', (d, i) => widthScale(ordinalWeights[i]))
+        )
         .attr('y', marginTop)
-        .attr('width', (d, i) => widthScale(ordinalWeights[i]))
         .attr('height', height - marginTop - marginBottom)
-        .attr('fill', color);
+        .attr('fill', color)
+        .transition(t)
+        .attr('x', x)
+        .attr('width', (d, i) => widthScale(ordinalWeights[i]));
     }
 
     tickAdjust = () => {};

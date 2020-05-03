@@ -85,9 +85,8 @@ function ChoroplethMap({
           legend({
             color: colorScale,
             width: widthLegend,
-            height: 0.8 * heightLegend,
+            height: heightLegend,
             tickValues: [],
-            tickSize: 0,
             marginLeft: 2,
             marginRight: 20,
             svg: svgLegend,
