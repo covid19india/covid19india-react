@@ -30,7 +30,7 @@ function Updates(props) {
     <div className="updates">
       <div className="update">
         <h5>New!</h5>
-        <h4>Added zones to district tables.</h4>
+        <h4>Added zones to district tables</h4>
       </div>
 
       <div className="updates-header">
