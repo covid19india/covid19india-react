@@ -293,16 +293,14 @@ function ChoroplethMap({
         });
 
       if (mapMeta.mapType === MAP_TYPES.COUNTRY_DISTRICTS) {
+        // Add id to mesh
+        const meshStates = topojson.mesh(geoData, geoData.objects.states);
+        meshStates.id = mapMeta.graphObjectName;
         svg
-          .selectAll('.state-borders')
-          .data([geoData], (d) => `${mapMeta.graphObjectName}_states`)
-          .join((enter) =>
-            enter.append('path').attr('d', (d) => {
-              const mesh = topojson.mesh(d, d.objects.states);
-              return path(mesh);
-            })
-          )
-          .attr('class', 'state-borders')
+          .select('.state-borders')
+          .selectAll('path')
+          .data([meshStates], (d) => d.id)
+          .join((enter) => enter.append('path').attr('d', (d) => path(d)))
           .attr('fill', 'none')
           .attr('stroke-width', width / 300)
           .transition(t)
