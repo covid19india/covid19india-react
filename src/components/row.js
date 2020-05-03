@@ -207,22 +207,17 @@ function Row({
       const sorted = {};
       Object.keys(sortedDistricts)
         .sort((district1, district2) => {
-          const sortColumn = sortData.sortColumn;
-          const value1 =
-            sortColumn === 'district'
-              ? district1
-              : parseInt(sortedDistricts[district1][sortData.sortColumn]);
-          const value2 =
-            sortColumn === 'district'
-              ? district2
-              : parseInt(sortedDistricts[district2][sortData.sortColumn]);
-          const comparisonValue =
-            value1 > value2
-              ? 1
-              : value1 === value2 && district1 > district2
-              ? 1
-              : -1;
-          return sortData.isAscending ? comparisonValue : comparisonValue * -1;
+          if (sortData.sortColumn !== 'district') {
+            return sortData.isAscending
+              ? parseInt(sortedDistricts[district1][sortData.sortColumn]) -
+                  parseInt(sortedDistricts[district2][sortData.sortColumn])
+              : parseInt(sortedDistricts[district2][sortData.sortColumn]) -
+                  parseInt(sortedDistricts[district1][sortData.sortColumn]);
+          } else {
+            return sortData.isAscending
+              ? district1.localeCompare(district2)
+              : district2.localeCompare(district1);
+          }
         })
         .forEach((key) => {
           sorted[key] = sortedDistricts[key];
