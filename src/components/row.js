@@ -1,4 +1,4 @@
-import {TABLE_STATISTICS} from '../constants';
+import {STATE_ROW_STATISTICS, DISTRICT_ROW_STATISTICS} from '../constants';
 import {
   formatDate,
   formatNumber,
@@ -124,7 +124,7 @@ function PureDistrictRow({
         </div>
       </td>
 
-      {TABLE_STATISTICS.map((statistic) => (
+      {DISTRICT_ROW_STATISTICS.map((statistic) => (
         <DistrictCell
           key={statistic}
           district={districts[district]}
@@ -283,7 +283,7 @@ function Row({
           </div>
         </td>
 
-        {TABLE_STATISTICS.map((statistic, index) => (
+        {STATE_ROW_STATISTICS.map((statistic, index) => (
           <StateCell key={index} state={state} statistic={statistic} />
         ))}
       </tr>
@@ -343,7 +343,7 @@ function Row({
               </div>
             </td>
 
-            {TABLE_STATISTICS.map((statistic, index) => (
+            {DISTRICT_ROW_STATISTICS.map((statistic, index) => (
               <DistrictHeaderCell
                 key={index}
                 handleSort={handleSort}

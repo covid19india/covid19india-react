@@ -1,6 +1,6 @@
 import Row from './row';
 
-import {TABLE_STATISTICS} from '../constants';
+import {STATE_ROW_STATISTICS} from '../constants';
 import {capitalize, stripVowels} from '../utils/commonfunctions';
 
 import classnames from 'classnames';
@@ -169,7 +169,7 @@ function Table({
                   </div>
                 </div>
               </th>
-              {TABLE_STATISTICS.map((statistic, index) => (
+              {STATE_ROW_STATISTICS.map((statistic, index) => (
                 <StateHeaderCell
                   key={index}
                   handleSort={handleSort}
