@@ -16,6 +16,7 @@ function legend({
   ticks = width / 64,
   tickFormat,
   tickValues,
+  ordinalWeights,
 } = {}) {
   if (!svg)
     svg = d3
@@ -144,20 +145,42 @@ function legend({
   // Ordinal
   else {
     svg.select('.ramp').attr('xlink:href', null);
-    x = d3
-      .scaleBand()
-      .domain(color.domain())
-      .rangeRound([marginLeft, width - marginRight]);
+    if (!ordinalWeights) {
+      x = d3
+        .scaleBand()
+        .domain(color.domain())
+        .rangeRound([marginLeft, width - marginRight]);
+      svg
+        .selectAll('rect')
+        .data(color.domain())
+        .join('rect')
+        .attr('x', x)
+        .attr('y', marginTop)
+        .attr('width', Math.max(0, x.bandwidth() - 1))
+        .attr('height', height - marginTop - marginBottom)
+        .attr('fill', color);
+    } else {
+      const widthScale = d3
+        .scaleLinear()
+        .domain([0, ordinalWeights.reduce((a, b) => a + b)])
+        .rangeRound([marginLeft, width - marginRight]);
 
-    svg
-      .selectAll('rect')
-      .data(color.domain())
-      .join('rect')
-      .attr('x', x)
-      .attr('y', marginTop)
-      .attr('width', Math.max(0, x.bandwidth() - 1))
-      .attr('height', height - marginTop - marginBottom)
-      .attr('fill', color);
+      const xPos = ordinalWeights.map((w, i) =>
+        widthScale(ordinalWeights.slice(0, i).reduce((a, b) => a + b, 0))
+      );
+
+      x = d3.scaleOrdinal().domain(color.domain()).range(xPos);
+
+      svg
+        .selectAll('rect')
+        .data(color.domain())
+        .join('rect')
+        .attr('x', x)
+        .attr('y', marginTop)
+        .attr('width', (d, i) => widthScale(ordinalWeights[i]))
+        .attr('height', height - marginTop - marginBottom)
+        .attr('fill', color);
+    }
 
     tickAdjust = () => {};
   }

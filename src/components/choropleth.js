@@ -91,6 +91,7 @@ function ChoroplethMap({
             marginLeft: 2,
             marginRight: 20,
             svg: svgLegend,
+            ordinalWeights: Object.values(statistic),
           })
         );
       } else {
@@ -187,7 +188,6 @@ function ChoroplethMap({
         .attr('pointer-events', 'none');
 
       regionSelection.select('title').text(function (d) {
-        console.log('here');
         if (statisticOption === MAP_STATISTICS.TOTAL) {
           const state = d.properties.st_nm;
           const district = d.properties.district;
@@ -217,10 +217,16 @@ function ChoroplethMap({
           if (statisticOption === MAP_STATISTICS.ZONE) {
             const state = d.properties.st_nm;
             const district = d.properties.district;
-            if (!mapData[state] || !mapData[state][district])
+            if (
+              !mapData[state] ||
+              !mapData[state][district] ||
+              !mapData[state][district].zone
+            )
               console.log(state, district);
             n =
-              mapData[state] && mapData[state][district]
+              mapData[state] &&
+              mapData[state][district] &&
+              mapData[state][district].zone
                 ? mapData[state][district].zone
                 : 0;
           } else {

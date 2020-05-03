@@ -65,14 +65,38 @@ function MapExplorer({
   const [statisticOption, setStatisticOption] = useState(MAP_STATISTICS.TOTAL);
 
   const [statistic, currentMapData] = useMemo(() => {
-    const dataTypes = ['confirmed', 'active', 'recovered', 'deceased'];
-    const statistic = dataTypes.reduce((acc, dtype) => {
-      acc[dtype] = {total: 0, max: 0};
-      return acc;
-    }, {});
     let currentMapData = {};
-    if (statisticOption === MAP_STATISTICS.ZONE) currentMapData = districtZones;
-    else {
+    let statistic = {};
+    if (statisticOption === MAP_STATISTICS.ZONE) {
+      const dataTypes = ['Red', 'Orange', 'Green'];
+      statistic = dataTypes.reduce((acc, dtype) => {
+        acc[dtype] = 0;
+        return acc;
+      }, {});
+      currentMapData = districtZones;
+      if (currentMap.mapType === MAP_TYPES.COUNTRY_DISTRICTS) {
+        statistic = Object.values(districtZones).reduce((acc1, d1) => {
+          acc1 = Object.values(d1).reduce((acc2, d2) => {
+            if (d2.zone) acc2[d2.zone] += 1;
+            return acc2;
+          }, acc1);
+          return acc1;
+        }, statistic);
+      } else if (currentMap.mapType === MAP_TYPES.STATE) {
+        statistic = Object.values(districtZones[currentMap.name]).reduce(
+          (acc, d) => {
+            if (d.zone) acc[d.zone] += 1;
+            return acc;
+          },
+          statistic
+        );
+      }
+    } else {
+      const dataTypes = ['confirmed', 'active', 'recovered', 'deceased'];
+      statistic = dataTypes.reduce((acc, dtype) => {
+        acc[dtype] = {total: 0, max: 0};
+        return acc;
+      }, {});
       if (currentMap.mapType === MAP_TYPES.COUNTRY) {
         currentMapData = states.reduce((acc, state) => {
           acc[state.state] = {};
