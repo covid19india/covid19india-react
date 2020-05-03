@@ -56,11 +56,10 @@ function MapExplorer({
   mapOption,
   setMapOption,
 }) {
-  const [selectedRegion, setSelectedRegion] = useState({});
-  const [panelRegion, setPanelRegion] = useState(getRegionFromState(states[0]));
-  const [currentHoveredRegion, setCurrentHoveredRegion] = useState(
+  const [selectedRegion, setSelectedRegion] = useState(
     getRegionFromState(states[0])
   );
+
   const [testObj, setTestObj] = useState({});
 
   const [currentMap, setCurrentMap] = useState({
@@ -155,39 +154,35 @@ function MapExplorer({
     states,
   ]);
 
-  const setHoveredRegion = useCallback(
-    (mapRegion) => {
-      if (!mapRegion.district) {
-        const region = getRegionFromState(
-          states.find((state) => mapRegion.state === state.state)
-        );
-        setCurrentHoveredRegion(region);
-        setPanelRegion(region);
-      } else {
-        const state = districts[mapRegion.state] || {
-          districtData: {},
-        };
-        const districtData = state.districtData[mapRegion.district] || {
-          confirmed: 0,
-          active: 0,
-          recovered: 0,
-          deaths: 0,
-        };
-        const currentHoveredRegion = getRegionFromDistrict(
-          districtData,
-          mapRegion.district
-        );
-        const panelRegion = getRegionFromState(
-          states.find((state) => mapRegion.state === state.state)
-        );
-        setPanelRegion(panelRegion);
-        currentHoveredRegion.statecode = panelRegion.statecode;
-        setCurrentHoveredRegion(currentHoveredRegion);
-        panelRegion.districtName = currentHoveredRegion.name;
-      }
-    },
-    [states, districts]
-  );
+  const [hoveredRegion, panelRegion] = useMemo(() => {
+    if (!selectedRegion.district) {
+      const state = getRegionFromState(
+        states.find((state) => selectedRegion.state === state.state)
+      );
+      return [state, state];
+    } else {
+      const stateDistrictObj = districts[selectedRegion.state] || {
+        districtData: {},
+      };
+      const districtData = stateDistrictObj.districtData[
+        selectedRegion.district
+      ] || {
+        confirmed: 0,
+        active: 0,
+        recovered: 0,
+        deaths: 0,
+      };
+      const district = getRegionFromDistrict(
+        districtData,
+        selectedRegion.district
+      );
+      const state = getRegionFromState(
+        states.find((state) => selectedRegion.state === state.state)
+      );
+      district.statecode = state.statecode;
+      return [district, state];
+    }
+  }, [states, districts, selectedRegion]);
 
   useEffect(() => {
     if (regionHighlighted === undefined || regionHighlighted === null) return;
@@ -204,9 +199,6 @@ function MapExplorer({
           stat: currentMap.stat,
         });
       }
-      setHoveredRegion({
-        state: regionHighlighted.state.state,
-      });
       setSelectedRegion({
         state: regionHighlighted.state.state,
       });
@@ -232,16 +224,12 @@ function MapExplorer({
               : currentMap.stat,
         });
       }
-      setHoveredRegion({
-        district: regionHighlighted.district,
-        state: regionHighlighted.state.state,
-      });
       setSelectedRegion({
         district: regionHighlighted.district,
         state: regionHighlighted.state.state,
       });
     }
-  }, [regionHighlighted, currentMap, currentMapMeta.mapType, setHoveredRegion]);
+  }, [regionHighlighted, currentMap, currentMapMeta.mapType]);
 
   const switchMapToState = useCallback(
     (name) => {
@@ -263,22 +251,17 @@ function MapExplorer({
           .sort((a, b) => {
             return districtData[b].confirmed - districtData[a].confirmed;
           })[0];
-        setHoveredRegion({
-          district: topDistrict,
-          state: name,
-        });
         setSelectedRegion({
           district: topDistrict,
           state: name,
         });
       } else {
-        setHoveredRegion({
+        setSelectedRegion({
           state: 'Total',
         });
-        setSelectedRegion({});
       }
     },
-    [setHoveredRegion, districts, currentMap.view, currentMap.stat]
+    [districts, currentMap.view, currentMap.stat]
   );
 
   useEffect(() => {
@@ -398,28 +381,24 @@ function MapExplorer({
               <Icon.Link />
             </a>
           )}
-          {currentHoveredRegion.name === 'Total' ? testedToolTip : ''}
+          {hoveredRegion.name === 'Total' ? testedToolTip : ''}
         </div>
       </div>
 
       <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
         <h2 className={`${mapOption !== 'confirmed' ? mapOption : ''}`}>
-          {currentHoveredRegion.name}
+          {hoveredRegion.name}
         </h2>
 
         {currentMapMeta.mapType !== MAP_TYPES.STATE &&
-          currentHoveredRegion.lastupdatedtime && (
+          hoveredRegion.lastupdatedtime && (
             <div className="last-update">
               <h6>Last updated</h6>
               <h3>
-                {isNaN(
-                  Date.parse(formatDate(currentHoveredRegion.lastupdatedtime))
-                )
+                {isNaN(Date.parse(formatDate(hoveredRegion.lastupdatedtime)))
                   ? ''
                   : formatDistance(
-                      new Date(
-                        formatDate(currentHoveredRegion.lastupdatedtime)
-                      ),
+                      new Date(formatDate(hoveredRegion.lastupdatedtime)),
                       new Date()
                     ) + ' ago'}
               </h3>
@@ -427,7 +406,7 @@ function MapExplorer({
           )}
 
         {currentMapMeta.mapType === MAP_TYPES.STATE ? (
-          <Link to={`state/${currentHoveredRegion.statecode}`}>
+          <Link to={`state/${hoveredRegion.statecode}`}>
             <div className="button state-page-button">
               <abbr>Visit state page</abbr>
               <Icon.ArrowRightCircle />
@@ -441,14 +420,14 @@ function MapExplorer({
           <h1
             className={`district ${mapOption !== 'confirmed' ? mapOption : ''}`}
           >
-            {currentMapData[currentHoveredRegion.name]
+            {currentMapData[hoveredRegion.name]
               ? currentMap.stat === MAP_STATISTICS.PER_MILLION
                 ? Number(
                     parseFloat(
-                      currentMapData[currentHoveredRegion.name][mapOption]
+                      currentMapData[hoveredRegion.name][mapOption]
                     ).toFixed(2)
                   )
-                : currentMapData[currentHoveredRegion.name][mapOption]
+                : currentMapData[hoveredRegion.name][mapOption]
               : 0}
             <br />
             <span>
@@ -492,7 +471,6 @@ function MapExplorer({
           statistic={statistic}
           currentMap={currentMap}
           mapData={currentMapData}
-          setHoveredRegion={setHoveredRegion}
           selectedRegion={selectedRegion}
           setSelectedRegion={setSelectedRegion}
           changeMap={switchMapToState}

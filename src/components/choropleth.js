@@ -17,7 +17,6 @@ const propertyFieldMap = {
 function ChoroplethMap({
   statistic,
   mapData,
-  setHoveredRegion,
   currentMap,
   changeMap,
   selectedRegion,
@@ -322,7 +321,6 @@ function ChoroplethMap({
       const handleMouseEnter = (region) => {
         try {
           setSelectedRegion(region);
-          setHoveredRegion(region);
         } catch (err) {
           console.log('err', err);
         }
@@ -341,8 +339,7 @@ function ChoroplethMap({
       // Reset on tapping outside map
       svg.attr('pointer-events', 'auto').on('click', () => {
         if (mapMeta.mapType !== MAP_TYPES.STATE) {
-          setSelectedRegion({});
-          setHoveredRegion({
+          setSelectedRegion({
             state: 'Total',
           });
         }
@@ -357,7 +354,6 @@ function ChoroplethMap({
       isCountryLoaded,
       mapData,
       setSelectedRegion,
-      setHoveredRegion,
       changeMap,
     ]
   );
