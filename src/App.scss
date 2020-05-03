@@ -5120,8 +5120,7 @@ footer {
           .dot,
           .focus,
           .domain,
-          .tick,
-          line {
+          .tick {
             stroke: #9673b9 !important;
           }
 
@@ -5130,7 +5129,8 @@ footer {
             fill: #9673b9 !important;
           }
 
-          .trend {
+          .trend,
+          line {
             stroke: #9673b999 !important;
           }
 
