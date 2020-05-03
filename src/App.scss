@@ -1763,17 +1763,11 @@ table {
       }
 
       .title-icon {
-
-        span {
-          margin-left: .25rem;
-          position: relative;
-        }
-
         svg {
           color: $gray-mid;
-          position: absolute;
+          padding-left: 2px;
           stroke-width: 3;
-          top: -3px;
+          vertical-align: -6.5px;
           width: 12px;
         }
       }
