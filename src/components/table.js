@@ -1,8 +1,51 @@
 import Row from './row';
 
+import {TABLE_STATISTICS} from '../constants';
+import {capitalize, stripVowels} from '../utils/commonfunctions';
+
+import classnames from 'classnames';
 import equal from 'fast-deep-equal';
-import React, {useState, useMemo} from 'react';
+import React, {useState, useMemo, useCallback} from 'react';
 import {Link} from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
+import {createBreakpoint} from 'react-use';
+
+const useBreakpoint = createBreakpoint({XL: 1280, L: 768, S: 350});
+
+function StateHeaderCell({handleSort, sortData, statistic}) {
+  const breakpoint = useBreakpoint();
+
+  return (
+    <th onClick={() => handleSort(statistic)}>
+      <div className="heading-content">
+        <abbr
+          className={classnames({[`is-${statistic}`]: breakpoint === 'S'})}
+          title={statistic}
+        >
+          {breakpoint === 'L'
+            ? statistic.slice(0)
+            : breakpoint === 'S'
+            ? capitalize(
+                stripVowels(statistic === 'deaths' ? 'deceased' : statistic)
+              )
+            : capitalize(statistic === 'deaths' ? 'deceased' : statistic)}
+        </abbr>
+        <div
+          style={{
+            display: sortData.sortColumn === statistic ? 'initial' : 'none',
+          }}
+        >
+          <div
+            className={classnames(
+              {'arrow-up': sortData.isAscending},
+              {'arrow-down': !sortData.isAscending}
+            )}
+          />
+        </div>
+      </div>
+    </th>
+  );
+}
 
 const isEqual = (prevProps, currProps) => {
   return equal(prevProps.regionHighlighted, currProps.regionHighlighted);
@@ -16,13 +59,13 @@ function Table({
   onHighlightDistrict,
 }) {
   const [sortData, setSortData] = useState({
-    sortColumn: localStorage.getItem('state.sortColumn')
-      ? localStorage.getItem('state.sortColumn')
-      : 'confirmed',
-    isAscending: localStorage.getItem('state.isAscending')
-      ? localStorage.getItem('state.isAscending') === 'true'
-      : false,
+    sortColumn: 'confirmed',
+    isAscending: true,
   });
+
+  const [sortedStates, setSortedStates] = useState(
+    states.filter((state) => state.statecode !== 'TT')
+  );
 
   const FineprintTop = useMemo(
     () => (
@@ -46,65 +89,48 @@ function Table({
     [states]
   );
 
-  const doSort = (e) => {
-    const totalRow = states.splice(0, 1);
-    states.sort((StateData1, StateData2) => {
-      const sortColumn = sortData.sortColumn;
-      let value1 = StateData1[sortColumn];
-      let value2 = StateData2[sortColumn];
-
-      if (sortColumn !== 'state') {
-        value1 = parseInt(StateData1[sortColumn]);
-        value2 = parseInt(StateData2[sortColumn]);
-      }
-
-      if (sortData.isAscending) {
-        return value1 > value2
-          ? 1
-          : value1 === value2 && StateData1['state'] > StateData2['state']
-          ? 1
-          : -1;
-      } else {
-        return value1 < value2
-          ? 1
-          : value1 === value2 && StateData1['state'] > StateData2['state']
-          ? 1
-          : -1;
-      }
+  const doSort = useCallback(() => {
+    const newSortedStates = [...sortedStates].sort((x, y) => {
+      return sortData.isAscending
+        ? parseInt(x[sortData.sortColumn]) - parseInt(y[sortData.sortColumn])
+        : parseInt(y[sortData.sortColumn]) - parseInt(x[sortData.sortColumn]);
     });
-    states.unshift(totalRow[0]);
-  };
+    setSortedStates(newSortedStates);
+  }, [sortData.isAscending, sortData.sortColumn, sortedStates]);
 
-  const handleSort = (e) => {
-    const currentsortColumn = e.currentTarget
-      .querySelector('abbr')
-      .getAttribute('title')
-      .toLowerCase();
-    const isAscending =
-      sortData.sortColumn === currentsortColumn
-        ? !sortData.isAscending
-        : sortData.sortColumn === 'state';
-    setSortData({
-      sortColumn: currentsortColumn,
-      isAscending: isAscending,
-    });
-    localStorage.setItem('state.sortColumn', currentsortColumn);
-    localStorage.setItem('state.isAscending', isAscending);
-  };
-
-  doSort();
+  const handleSort = useCallback(
+    (statistic) => {
+      const currentsortColumn = statistic;
+      const isAscending =
+        sortData.sortColumn === currentsortColumn
+          ? !sortData.isAscending
+          : sortData.sortColumn === 'state';
+      setSortData({
+        sortColumn: currentsortColumn,
+        isAscending: isAscending,
+      });
+      doSort();
+    },
+    [doSort, sortData.isAscending, sortData.sortColumn]
+  );
 
   if (states.length > 0) {
     return (
       <React.Fragment>
+        <ReactTooltip
+          place="right"
+          type="dark"
+          effect="solid"
+          multiline={true}
+          globalEventOff="click"
+        />
+
         {FineprintTop}
+
         <table className="table fadeInUp" style={{animationDelay: '1.8s'}}>
           <thead>
             <tr>
-              <th
-                className="sticky state-heading"
-                onClick={(e) => handleSort(e)}
-              >
+              <th className="state-heading" onClick={() => handleSort('state')}>
                 <div className="heading-content">
                   <abbr title="State">State/UT</abbr>
                   <div
@@ -113,137 +139,33 @@ function Table({
                         sortData.sortColumn === 'state' ? 'initial' : 'none',
                     }}
                   >
-                    {sortData.isAscending ? (
-                      <div className="arrow-up" />
-                    ) : (
-                      <div className="arrow-down" />
-                    )}
+                    <div
+                      className={classnames(
+                        {'arrow-up': sortData.isAscending},
+                        {'arrow-down': !sortData.isAscending}
+                      )}
+                    />
                   </div>
                 </div>
               </th>
-              <th className="sticky" onClick={(e) => handleSort(e)}>
-                <div className="heading-content">
-                  <abbr
-                    className={`${window.innerWidth <= 769 ? 'is-cherry' : ''}`}
-                    title="Confirmed"
-                  >
-                    {window.innerWidth <= 769
-                      ? window.innerWidth <= 375
-                        ? 'C'
-                        : 'Cnfmd'
-                      : 'Confirmed'}
-                  </abbr>
-                  <div
-                    style={{
-                      display:
-                        sortData.sortColumn === 'confirmed'
-                          ? 'initial'
-                          : 'none',
-                    }}
-                  >
-                    {sortData.isAscending ? (
-                      <div className="arrow-up" />
-                    ) : (
-                      <div className="arrow-down" />
-                    )}
-                  </div>
-                </div>
-              </th>
-              <th className="sticky" onClick={(e) => handleSort(e)}>
-                <div className="heading-content">
-                  <abbr
-                    className={`${window.innerWidth <= 769 ? 'is-blue' : ''}`}
-                    title="Active"
-                  >
-                    {window.innerWidth <= 769
-                      ? window.innerWidth <= 375
-                        ? 'A'
-                        : 'Actv'
-                      : 'Active'}
-                  </abbr>
-                  <div
-                    style={{
-                      display:
-                        sortData.sortColumn === 'active' ? 'initial' : 'none',
-                    }}
-                  >
-                    {sortData.isAscending ? (
-                      <div className="arrow-up" />
-                    ) : (
-                      <div className="arrow-down" />
-                    )}
-                  </div>
-                </div>
-              </th>
-              <th className="sticky" onClick={(e) => handleSort(e)}>
-                <div className="heading-content">
-                  <abbr
-                    className={`${window.innerWidth <= 769 ? 'is-green' : ''}`}
-                    title="Recovered"
-                  >
-                    {window.innerWidth <= 769
-                      ? window.innerWidth <= 375
-                        ? 'R'
-                        : 'Rcvrd'
-                      : 'Recovered'}
-                  </abbr>
-                  <div
-                    className={
-                      sortData.sortColumn === 'recovered' ? 'sort-black' : ''
-                    }
-                  ></div>
-                  <div
-                    style={{
-                      display:
-                        sortData.sortColumn === 'recovered'
-                          ? 'initial'
-                          : 'none',
-                    }}
-                  >
-                    {sortData.isAscending ? (
-                      <div className="arrow-up" />
-                    ) : (
-                      <div className="arrow-down" />
-                    )}
-                  </div>
-                </div>
-              </th>
-              <th className="sticky" onClick={(e) => handleSort(e)}>
-                <div className="heading-content">
-                  <abbr
-                    className={`${window.innerWidth <= 769 ? 'is-gray' : ''}`}
-                    title="Deaths"
-                  >
-                    {window.innerWidth <= 769
-                      ? window.innerWidth <= 375
-                        ? 'D'
-                        : 'Dcsd'
-                      : 'Deceased'}
-                  </abbr>
-                  <div
-                    style={{
-                      display:
-                        sortData.sortColumn === 'deaths' ? 'initial' : 'none',
-                    }}
-                  >
-                    {sortData.isAscending ? (
-                      <div className="arrow-up" />
-                    ) : (
-                      <div className="arrow-down" />
-                    )}
-                  </div>
-                </div>
-              </th>
+              {TABLE_STATISTICS.map((statistic, index) => (
+                <StateHeaderCell
+                  key={index}
+                  handleSort={handleSort}
+                  sortData={sortData}
+                  statistic={statistic}
+                />
+              ))}
             </tr>
           </thead>
 
           {states && (
             <tbody>
-              {states.map((state, index) => {
-                if (index !== 0 && state.confirmed > 0) {
+              {sortedStates.map((state, index) => {
+                if (state.confirmed > 0) {
                   return (
                     <Row
-                      key={index}
+                      key={state.statecode}
                       state={state}
                       districts={districts[state.state]?.districtData}
                       regionHighlighted={

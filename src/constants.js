@@ -1,3 +1,5 @@
+export const TABLE_STATISTICS = ['confirmed', 'active', 'recovered', 'deaths'];
+
 export const MAP_TYPES = {
   COUNTRY: 'country',
   STATE: 'state',
