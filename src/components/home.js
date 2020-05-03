@@ -18,6 +18,7 @@ import {
   parseTotalTestTimeseries,
 } from '../utils/commonfunctions';
 
+import Observer from '@researchgate/react-intersection-observer';
 import axios from 'axios';
 import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
@@ -25,16 +26,17 @@ import {Helmet} from 'react-helmet';
 import {useEffectOnce, useLocalStorage} from 'react-use';
 
 function Home(props) {
-  const [states, setStates] = useState([]);
-  const [stateDistrictWiseData, setStateDistrictWiseData] = useState({});
-  const [stateTestData, setStateTestData] = useState({});
+  const [states, setStates] = useState(null);
+  const [stateDistrictWiseData, setStateDistrictWiseData] = useState(null);
+  const [stateTestData, setStateTestData] = useState(null);
   const [lastUpdated, setLastUpdated] = useState('');
-  const [timeseries, setTimeseries] = useState({});
+  const [timeseries, setTimeseries] = useState(null);
   const [fetched, setFetched] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState(undefined);
   const [showUpdates, setShowUpdates] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [mapOption, setMapOption] = useState('confirmed');
+  const [isIntersecting, setIsIntersecting] = useState(false);
 
   const [lastViewedLog, setLastViewedLog] = useLocalStorage(
     'lastViewedLog',
@@ -89,15 +91,17 @@ function Home(props) {
 
   const getStates = async () => {
     try {
+      const [{data: statesDailyResponse}] = await Promise.all([
+        axios.get('https://api.covid19india.org/states_daily.json'),
+      ]);
+
       const [
         {data},
         stateDistrictWiseResponse,
-        {data: statesDailyResponse},
         {data: stateTestData},
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
-        axios.get('https://api.covid19india.org/states_daily.json'),
         axios.get('https://api.covid19india.org/state_test_data.json'),
       ]);
 
@@ -142,6 +146,14 @@ function Home(props) {
     setRegionHighlighted({district, state});
   }, []);
 
+  const handleIntersection = ({isIntersecting}) => {
+    setIsIntersecting(isIntersecting);
+  };
+
+  const options = {
+    rootMargin: '0px 0px 0px 0px',
+  };
+
   return (
     <React.Fragment>
       <div className="Home">
@@ -175,9 +187,9 @@ function Home(props) {
 
           {showUpdates && <Updates />}
 
-          {fetched && <Level data={states[0]} />}
-          {fetched && <Minigraph timeseries={timeseries['TT']} />}
-          {fetched && (
+          {states && <Level data={states[0]} />}
+          {timeseries && <Minigraph timeseries={timeseries['TT']} />}
+          {stateDistrictWiseData && (
             <Table
               states={states}
               summary={false}
@@ -189,23 +201,25 @@ function Home(props) {
           )}
         </div>
 
-        <div className="home-right">
-          {fetched && (
+        <Observer options={options} onChange={handleIntersection}>
+          <div className="home-right">
             <React.Fragment>
-              <MapExplorer
-                mapMeta={MAP_META.India}
-                states={states}
-                districts={stateDistrictWiseData}
-                stateTestData={stateTestData}
-                regionHighlighted={regionHighlighted}
-                isCountryLoaded={true}
-                anchor={anchor}
-                setAnchor={setAnchor}
-                mapOption={mapOption}
-                setMapOption={setMapOption}
-              />
+              {stateTestData && isIntersecting && (
+                <MapExplorer
+                  mapMeta={MAP_META.India}
+                  states={states}
+                  districts={stateDistrictWiseData}
+                  stateTestData={stateTestData}
+                  regionHighlighted={regionHighlighted}
+                  isCountryLoaded={true}
+                  anchor={anchor}
+                  setAnchor={setAnchor}
+                  mapOption={mapOption}
+                  setMapOption={setMapOption}
+                />
+              )}
 
-              {fetched && (
+              {timeseries && isIntersecting && (
                 <TimeSeriesExplorer
                   timeseries={timeseries[regionHighlighted?.state.code || 'TT']}
                   activeStateCode={regionHighlighted?.state.code || 'TT'}
@@ -216,8 +230,8 @@ function Home(props) {
                 />
               )}
             </React.Fragment>
-          )}
-        </div>
+          </div>
+        </Observer>
       </div>
       {fetched && <Footer />}
     </React.Fragment>
