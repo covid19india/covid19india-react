@@ -19032,7 +19032,7 @@
           "arcs": [[-185, -200, 744, 745, 746, 747, 748]],
           "type": "Polygon",
           "properties": {
-            "district": "West Nimar",
+            "district": "Khargone",
             "dt_code": "440",
             "st_nm": "Madhya Pradesh",
             "st_code": "23",
@@ -19098,7 +19098,7 @@
           "arcs": [[-186, -749, 775, -741, 776, 777, 778, 779, 780, 781]],
           "type": "Polygon",
           "properties": {
-            "district": "East Nimar",
+            "district": "Khandwa",
             "dt_code": "466",
             "st_nm": "Madhya Pradesh",
             "st_code": "23",
@@ -19592,7 +19592,7 @@
           "properties": {
             "district": "Daman",
             "dt_code": "495",
-            "st_nm": "Daman and Diu",
+            "st_nm": "Daman And Diu",
             "st_code": "25",
             "year": "2011_c"
           }
@@ -19603,7 +19603,7 @@
           "properties": {
             "district": "Diu",
             "dt_code": "494",
-            "st_nm": "Daman and Diu",
+            "st_nm": "Daman And Diu",
             "st_code": "25",
             "year": "2011_c"
           }
@@ -21897,7 +21897,7 @@
           "arcs": [[-1478, -1519, 1568, 1569, 1570]],
           "type": "Polygon",
           "properties": {
-            "district": "Jalor",
+            "district": "Jalore",
             "dt_code": "116",
             "st_nm": "Rajasthan",
             "st_code": "08",
@@ -23066,7 +23066,7 @@
           "arcs": [[-757, 1935, -1928, -1900, -1893, 1936]],
           "type": "Polygon",
           "properties": {
-            "district": "Saraikela-kharsawan",
+            "district": "Saraikela-Kharsawan",
             "dt_code": "369",
             "st_nm": "Jharkhand",
             "st_code": "20",
