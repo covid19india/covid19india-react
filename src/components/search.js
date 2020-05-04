@@ -205,6 +205,7 @@ function Search(props) {
           setExpand(true);
         }}
         onBlur={() => {
+          focused = false;
           setExpand(false);
         }}
         onChange={(event) => {
