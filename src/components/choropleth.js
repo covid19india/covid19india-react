@@ -164,10 +164,9 @@ function ChoroplethMap({
         })
         .style('cursor', 'pointer')
         .on('mouseenter', (d) => {
-          handleMouseEnter({
-            district: d.properties.district,
-            state: d.properties.st_nm,
-          });
+          const region = {state: d.properties.st_nm};
+          if (d.properties.district) region.district = d.properties.district;
+          handleMouseEnter(region);
         })
         .on('mouseleave', (d) => {
           if (onceTouchedRegion === d) onceTouchedRegion = null;
