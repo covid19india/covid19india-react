@@ -27,6 +27,37 @@ import {Helmet} from 'react-helmet';
 import {Link, useParams, Redirect} from 'react-router-dom';
 import {useMeasure, useEffectOnce} from 'react-use';
 
+function PureBreadcrumbs({stateName, stateCode, fetched, allStateData}) {
+  return (
+    <div className="breadcrumb">
+      <Breadcrumb>
+        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+        <Dropdown direction="w">
+          <summary>
+            <Breadcrumb.Item href={`${stateCode}`} selected>
+              {stateName}
+            </Breadcrumb.Item>
+            <Dropdown.Caret className="caret" />
+          </summary>
+          {fetched && (
+            <Dropdown.Menu direction="se">
+              {allStateData.map((state) => (
+                <Dropdown.Item key={state.statecode} className="item">
+                  <Link to={`${state.statecode}`}>
+                    {STATE_CODES[state.statecode]}
+                  </Link>
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          )}
+        </Dropdown>
+      </Breadcrumb>
+    </div>
+  );
+}
+
+const Breadcrumbs = React.memo(PureBreadcrumbs);
+
 function State(props) {
   const mapRef = useRef();
 
@@ -156,30 +187,12 @@ function State(props) {
 
         <div className="State">
           <div className="state-left">
-            <div className="breadcrumb">
-              <Breadcrumb>
-                <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-                <Dropdown direction="w">
-                  <summary>
-                    <Breadcrumb.Item href={`${stateCode}`} selected>
-                      {stateName}
-                    </Breadcrumb.Item>
-                    <Dropdown.Caret className="caret" />
-                  </summary>
-                  {fetched && (
-                    <Dropdown.Menu direction="se">
-                      {allStateData.map((state) => (
-                        <Dropdown.Item key={state.statecode} className="item">
-                          <Link to={`${state.statecode}`}>
-                            {STATE_CODES[state.statecode]}
-                          </Link>
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  )}
-                </Dropdown>
-              </Breadcrumb>
-            </div>
+            <Breadcrumbs
+              stateName={stateName}
+              stateCode={stateCode}
+              fetched={fetched}
+              allStateData={allStateData}
+            />
 
             <div className="header">
               <div
