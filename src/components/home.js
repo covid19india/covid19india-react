@@ -70,10 +70,76 @@ function Home(props) {
   );
 
   useEffectOnce(() => {
+    // isComponentSubscribedToPromise flag used to setState only if component is still mounted
+    // will not setState on unmounted component to prevent memory leak
+    let isComponentSubscribedToPromise = true;
+
+    const getStates = async () => {
+      try {
+        const [
+          {data: statesDailyResponse},
+          {data: zonesResponse},
+        ] = await Promise.all([
+          axios.get('https://api.covid19india.org/states_daily.json'),
+          axios.get('https://api.covid19india.org/zones.json'),
+        ]);
+
+        const [
+          {data},
+          {data: stateDistrictWiseResponse},
+          {data: stateTestData},
+        ] = await Promise.all([
+          axios.get('https://api.covid19india.org/data.json'),
+          axios.get('https://api.covid19india.org/state_district_wise.json'),
+          axios.get('https://api.covid19india.org/state_test_data.json'),
+        ]);
+
+        if (isComponentSubscribedToPromise) {
+          setStates(data.statewise);
+          setDistrictZones(parseDistrictZones(zonesResponse.zones));
+
+          const ts = parseStateTimeseries(statesDailyResponse);
+          ts['TT'] = preprocessTimeseries(data.cases_time_series);
+          // Testing data timeseries
+          const testTs = parseStateTestTimeseries(
+            stateTestData.states_tested_data
+          );
+          testTs['TT'] = parseTotalTestTimeseries(data.tested);
+          // Merge
+          const tsMerged = mergeTimeseries(ts, testTs);
+          setTimeseries(tsMerged);
+
+          setLastUpdated(data.statewise[0].lastupdatedtime);
+
+          const testData = [...stateTestData.states_tested_data].reverse();
+          const totalTest = data.tested[data.tested.length - 1];
+          testData.push({
+            updatedon: totalTest.updatetimestamp.split(' ')[0],
+            totaltested: totalTest.totalsamplestested,
+            source: totalTest.source,
+            state: 'Total',
+          });
+          setStateTestData(testData);
+
+          setStateDistrictWiseData(stateDistrictWiseResponse);
+          setFetched(true);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
     getStates();
+    return () => {
+      isComponentSubscribedToPromise = false;
+    };
   });
 
   useEffectOnce(() => {
+    // isComponentSubscribedToPromise flag used to setState only if component is still mounted
+    // will not setState on unmounted component to prevent memory leak
+    let isComponentSubscribedToPromise = true;
+
     axios
       .get('https://api.covid19india.org/updatelog/log.json')
       .then((response) => {
@@ -81,7 +147,7 @@ function Home(props) {
           .slice()
           .reverse()[0]
           .timestamp.toString();
-        if (lastTimestamp !== lastViewedLog) {
+        if (lastTimestamp !== lastViewedLog && isComponentSubscribedToPromise) {
           setNewUpdate(true);
           setLastViewedLog(lastTimestamp);
         }
@@ -89,58 +155,10 @@ function Home(props) {
       .catch((err) => {
         console.log(err);
       });
+    return () => {
+      isComponentSubscribedToPromise = false;
+    };
   });
-
-  const getStates = async () => {
-    try {
-      const [
-        {data: statesDailyResponse},
-        {data: zonesResponse},
-      ] = await Promise.all([
-        axios.get('https://api.covid19india.org/states_daily.json'),
-        axios.get('https://api.covid19india.org/zones.json'),
-      ]);
-
-      const [
-        {data},
-        {data: stateDistrictWiseResponse},
-        {data: stateTestData},
-      ] = await Promise.all([
-        axios.get('https://api.covid19india.org/data.json'),
-        axios.get('https://api.covid19india.org/state_district_wise.json'),
-        axios.get('https://api.covid19india.org/state_test_data.json'),
-      ]);
-
-      setStates(data.statewise);
-      setDistrictZones(parseDistrictZones(zonesResponse.zones));
-
-      const ts = parseStateTimeseries(statesDailyResponse);
-      ts['TT'] = preprocessTimeseries(data.cases_time_series);
-      // Testing data timeseries
-      const testTs = parseStateTestTimeseries(stateTestData.states_tested_data);
-      testTs['TT'] = parseTotalTestTimeseries(data.tested);
-      // Merge
-      const tsMerged = mergeTimeseries(ts, testTs);
-      setTimeseries(tsMerged);
-
-      setLastUpdated(data.statewise[0].lastupdatedtime);
-
-      const testData = [...stateTestData.states_tested_data].reverse();
-      const totalTest = data.tested[data.tested.length - 1];
-      testData.push({
-        updatedon: totalTest.updatetimestamp.split(' ')[0],
-        totaltested: totalTest.totalsamplestested,
-        source: totalTest.source,
-        state: 'Total',
-      });
-      setStateTestData(testData);
-
-      setStateDistrictWiseData(stateDistrictWiseResponse);
-      setFetched(true);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const onHighlightState = useCallback((state) => {
     if (!state) return setRegionHighlighted(null);
