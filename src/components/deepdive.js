@@ -17,30 +17,38 @@ function DeepDive() {
   const [statesTimeSeries, setStatesTimeSeries] = useState([]);
 
   useEffect(() => {
+    // isComponentSubscribedToPromise flag used to setState only if component is still mounted
+    // will not setState on unmounted component to prevent memory leak
+    let isComponentSubscribedToPromise = true;
+
     if (fetched === false) {
+      const getStates = async () => {
+        try {
+          const [
+            response,
+            rawDataResponse,
+            stateDailyResponse,
+          ] = await Promise.all([
+            axios.get('https://api.covid19india.org/data.json'),
+            axios.get('https://api.covid19india.org/raw_data.json'),
+            axios.get('https://api.covid19india.org/states_daily.json'),
+          ]);
+          if (isComponentSubscribedToPromise) {
+            setTimeseries(response.data.cases_time_series);
+            setStatesTimeSeries(stateDailyResponse.data.states_daily);
+            setRawData(rawDataResponse.data.raw_data);
+            setFetched(true);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
       getStates();
     }
+    return () => {
+      isComponentSubscribedToPromise = false;
+    };
   }, [fetched]);
-
-  const getStates = async () => {
-    try {
-      const [
-        response,
-        rawDataResponse,
-        stateDailyResponse,
-      ] = await Promise.all([
-        axios.get('https://api.covid19india.org/data.json'),
-        axios.get('https://api.covid19india.org/raw_data.json'),
-        axios.get('https://api.covid19india.org/states_daily.json'),
-      ]);
-      setTimeseries(response.data.cases_time_series);
-      setStatesTimeSeries(stateDailyResponse.data.states_daily);
-      setRawData(rawDataResponse.data.raw_data);
-      setFetched(true);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   return (
     <div className="cards-container">

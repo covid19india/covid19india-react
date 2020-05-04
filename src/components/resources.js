@@ -28,9 +28,45 @@ function Resources(props) {
   const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
+    // isComponentSubscribedToPromise flag used to setState only if component is still mounted
+    // will not setState on unmounted component to prevent memory leak
+    let isComponentSubscribedToPromise = true;
     if (fetched === false) {
+      const getResources = async () => {
+        try {
+          const [response] = await Promise.all([
+            axios.get('https://api.covid19india.org/resources/resources.json'),
+          ]);
+          // setData(response.data.resources);
+          const hashmap = {};
+          response.data.resources.forEach((x) => {
+            if (typeof hashmap[x['state']] === 'undefined')
+              hashmap[x['state']] = {};
+            if (typeof hashmap[x['state']][x['city']] === 'undefined')
+              hashmap[x['state']][x['city']] = {};
+            if (
+              typeof hashmap[x['state']][x['city']][x['category']] ===
+              'undefined'
+            )
+              hashmap[x['state']][x['city']][x['category']] = [];
+            if (Array.isArray(hashmap[x['state']][x['city']][x['category']]))
+              hashmap[x['state']][x['city']][x['category']].push(x);
+          });
+
+          if (isComponentSubscribedToPromise) {
+            setResourceDict(hashmap);
+            // setIndianState(Object.keys()[0]);
+            setFetched(true);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      };
       getResources();
     }
+    return () => {
+      isComponentSubscribedToPromise = false;
+    };
   }, [fetched, data, resourcedict]);
 
   const checkForResizeEvent = useCallback((event) => {
@@ -58,33 +94,6 @@ function Resources(props) {
       window.removeEventListener('scroll', checkScrollEvent);
     };
   }, [hasScrolled, checkScrollEvent]);
-
-  const getResources = async () => {
-    try {
-      const [response] = await Promise.all([
-        axios.get('https://api.covid19india.org/resources/resources.json'),
-      ]);
-      // setData(response.data.resources);
-      const hashmap = {};
-      response.data.resources.forEach((x) => {
-        if (typeof hashmap[x['state']] === 'undefined')
-          hashmap[x['state']] = {};
-        if (typeof hashmap[x['state']][x['city']] === 'undefined')
-          hashmap[x['state']][x['city']] = {};
-        if (
-          typeof hashmap[x['state']][x['city']][x['category']] === 'undefined'
-        )
-          hashmap[x['state']][x['city']][x['category']] = [];
-        if (Array.isArray(hashmap[x['state']][x['city']][x['category']]))
-          hashmap[x['state']][x['city']][x['category']].push(x);
-      });
-
-      setResourceDict(hashmap);
-      // setIndianState(Object.keys()[0]);
-
-      setFetched(true);
-    } catch (err) {}
-  };
 
   const handleDisclaimerClick = (event) => {
     setAnchorEl(event.currentTarget);

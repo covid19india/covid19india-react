@@ -44,16 +44,24 @@ function PatientDB(props) {
   }, [pathname]);
 
   useEffectOnce(() => {
+    // isComponentSubscribedToPromise flag used to setState only if component is still mounted
+    // will not setState on unmounted component to prevent memory leak
+    let isComponentSubscribedToPromise = true;
     try {
       axios
         .get('https://api.covid19india.org/raw_data.json')
         .then((response) => {
-          setPatients(response.data.raw_data.reverse());
-          setFetched(true);
+          if (isComponentSubscribedToPromise) {
+            setPatients(response.data.raw_data.reverse());
+            setFetched(true);
+          }
         });
     } catch (err) {
       console.log(err);
     }
+    return () => {
+      isComponentSubscribedToPromise = false;
+    };
   });
 
   useEffect(() => {
