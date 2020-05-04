@@ -199,7 +199,7 @@ function Table({
                       districts={districts[state.state]?.districtData}
                       zones={zones[state.state]}
                       regionHighlighted={
-                        equal(regionHighlighted?.state, state)
+                        equal(regionHighlighted?.state, state.state)
                           ? regionHighlighted
                           : null
                       }

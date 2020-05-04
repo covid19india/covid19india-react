@@ -8,19 +8,13 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import * as Icon from 'react-feather';
 import * as topojson from 'topojson';
 
-const propertyFieldMap = {
-  country: 'st_nm',
-  state: 'district',
-  countryDistrict: 'district',
-};
-
 function ChoroplethMap({
   statistic,
   mapData,
   currentMap,
   changeMap,
-  selectedRegion,
-  setSelectedRegion,
+  regionHighlighted,
+  setRegionHighlighted,
   isCountryLoaded,
   mapOption,
 }) {
@@ -32,14 +26,17 @@ function ChoroplethMap({
 
   const ready = useCallback(
     (geoData, rerender = false) => {
-      const propertyField = propertyFieldMap[mapMeta.mapType];
       const svg = d3.select(choroplethMap.current);
 
+      const graphObjectName =
+        mapMeta.mapType === MAP_TYPES.COUNTRY &&
+        currentMap.view === MAP_VIEWS.DISTRICTS
+          ? mapMeta.graphObjectDistricts
+          : mapMeta.graphObjectName;
       const topology = topojson.feature(
         geoData,
-        geoData.objects[mapMeta.graphObjectName]
+        geoData.objects[graphObjectName]
       );
-
       const projection = d3.geoMercator();
 
       // Set size of the map
@@ -119,8 +116,8 @@ function ChoroplethMap({
             title:
               capitalizeAll(mapOption) +
               (currentMap.stat === MAP_STATISTICS.PER_MILLION
-                ? 'cases per million'
-                : 'cases'),
+                ? ' cases per million'
+                : ' cases'),
             width: widthLegend,
             height: heightLegend,
             ticks: 6,
@@ -142,12 +139,10 @@ function ChoroplethMap({
 
       // Add id to each feature
       const features = topology.features.map((f) => {
-        const district = f.properties[propertyFieldMap.state];
-        const state = f.properties[propertyFieldMap.country];
+        const district = f.properties.district;
+        const state = f.properties.st_nm;
         const obj = Object.assign({}, f);
-        obj.id = `${mapMeta.graphObjectName}-${state}${
-          district ? `-${district}` : ''
-        }`;
+        obj.id = `${graphObjectName}-${state}${district ? `-${district}` : ''}`;
         return obj;
       });
 
@@ -258,11 +253,8 @@ function ChoroplethMap({
         .attr('pointer-events', 'all');
 
       // Add id to mesh
-      const mesh = topojson.mesh(
-        geoData,
-        geoData.objects[mapMeta.graphObjectName]
-      );
-      mesh.id = mapMeta.graphObjectName;
+      const mesh = topojson.mesh(geoData, geoData.objects[graphObjectName]);
+      mesh.id = graphObjectName;
       svg
         .select('.borders')
         .selectAll('path')
@@ -294,15 +286,15 @@ function ChoroplethMap({
         currentMap.view === MAP_VIEWS.DISTRICTS
       ) {
         // Add id to mesh
-        const meshDistricts = topojson.mesh(
+        const meshStates = topojson.mesh(
           geoData,
-          geoData.objects[mapMeta.graphObjectDistricts]
+          geoData.objects[mapMeta.graphObjectName]
         );
-        meshDistricts.id = mapMeta.graphObjectDistricts;
+        meshStates.id = mapMeta.graphObjectName;
         svg
           .select('.borders-secondary')
           .selectAll('path')
-          .data([meshDistricts], (d) => d.id)
+          .data([meshStates], (d) => d.id)
           .join((enter) => enter.append('path').attr('d', (d) => path(d)))
           .attr('fill', 'none')
           .attr('stroke-width', width / 300)
@@ -314,7 +306,7 @@ function ChoroplethMap({
 
       const handleMouseEnter = (region) => {
         try {
-          setSelectedRegion(region);
+          setRegionHighlighted(region);
         } catch (err) {
           console.log('err', err);
         }
@@ -322,18 +314,19 @@ function ChoroplethMap({
 
       function handleClick(d) {
         d3.event.stopPropagation();
-        if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE) return;
+        if (onceTouchedRegion || currentMap.view === MAP_VIEWS.DISTRICTS)
+          return;
         // Disable pointer events till the new map is rendered
         svg.attr('pointer-events', 'none');
         svg.selectAll('.path-region').attr('pointer-events', 'none');
         // Switch map
-        changeMap(d.properties[propertyField]);
+        changeMap(d.properties.st_nm);
       }
 
       // Reset on tapping outside map
       svg.attr('pointer-events', 'auto').on('click', () => {
         if (mapMeta.mapType !== MAP_TYPES.STATE) {
-          setSelectedRegion({
+          setRegionHighlighted({
             state: 'Total',
           });
         }
@@ -347,7 +340,7 @@ function ChoroplethMap({
       mapOption,
       isCountryLoaded,
       mapData,
-      setSelectedRegion,
+      setRegionHighlighted,
       changeMap,
     ]
   );
@@ -356,11 +349,16 @@ function ChoroplethMap({
     (async () => {
       const data = await d3.json(mapMeta.geoDataFile);
       if (statistic && choroplethMap.current) {
-        ready(data, mapId !== mapMeta.graphObjectName);
-        setMapId(mapMeta.graphObjectName);
+        const graphObjectName =
+          mapMeta.mapType === MAP_TYPES.COUNTRY &&
+          currentMap.view === MAP_VIEWS.DISTRICTS
+            ? mapMeta.graphObjectDistricts
+            : mapMeta.graphObjectName;
+        ready(data, mapId !== graphObjectName);
+        setMapId(graphObjectName);
       }
     })();
-  }, [mapId, mapMeta.geoDataFile, mapMeta.graphObjectName, statistic, ready]);
+  }, [currentMap.view, mapId, mapMeta, statistic, ready]);
 
   useEffect(() => {
     const highlightRegionInMap = (region) => {
@@ -389,14 +387,15 @@ function ChoroplethMap({
         return false;
       });
     };
-    highlightRegionInMap(selectedRegion);
-  }, [mapId, selectedRegion, currentMap.stat]);
+    highlightRegionInMap(regionHighlighted);
+  }, [mapId, regionHighlighted, currentMap.stat]);
 
   return (
     <div>
       <div className="svg-parent fadeInUp" style={{animationDelay: '2.5s'}}>
         <svg id="chart" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}>
           <g className="regions" />
+          <g className="regions-secondary" />
           <g className="borders" />
           <g className="borders-secondary" />
         </svg>

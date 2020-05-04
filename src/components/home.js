@@ -33,7 +33,9 @@ function Home(props) {
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState(null);
   const [fetched, setFetched] = useState(false);
-  const [regionHighlighted, setRegionHighlighted] = useState(undefined);
+  const [regionHighlighted, setRegionHighlighted] = useState({
+    state: 'Total',
+  });
   const [showUpdates, setShowUpdates] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [mapOption, setMapOption] = useState('confirmed');
@@ -142,13 +144,12 @@ function Home(props) {
 
   const onHighlightState = useCallback((state) => {
     if (!state) return setRegionHighlighted(null);
-    state.code = STATE_CODES_REVERSE[state.state];
-    setRegionHighlighted({state});
+    setRegionHighlighted({state: state.state});
   }, []);
 
   const onHighlightDistrict = useCallback((district, state) => {
     if (!state && !district) return setRegionHighlighted(null);
-    setRegionHighlighted({district, state});
+    setRegionHighlighted({district, state: state.state});
   }, []);
 
   return (
@@ -193,6 +194,7 @@ function Home(props) {
               districts={stateDistrictWiseData}
               zones={districtZones}
               regionHighlighted={regionHighlighted}
+              setRegionHighlighted={setRegionHighlighted}
               onHighlightState={onHighlightState}
               onHighlightDistrict={onHighlightDistrict}
             />
@@ -206,8 +208,10 @@ function Home(props) {
                 mapName={'India'}
                 states={states}
                 districts={stateDistrictWiseData}
+                zones={districtZones}
                 stateTestData={stateTestData}
                 regionHighlighted={regionHighlighted}
+                setRegionHighlighted={setRegionHighlighted}
                 isCountryLoaded={true}
                 anchor={anchor}
                 setAnchor={setAnchor}
@@ -218,8 +222,14 @@ function Home(props) {
 
             {timeseries && (
               <TimeSeriesExplorer
-                timeseries={timeseries[regionHighlighted?.state.code || 'TT']}
-                activeStateCode={regionHighlighted?.state.code || 'TT'}
+                timeseries={
+                  timeseries[
+                    STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
+                  ]
+                }
+                activeStateCode={
+                  STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
+                }
                 onHighlightState={onHighlightState}
                 states={states}
                 anchor={anchor}

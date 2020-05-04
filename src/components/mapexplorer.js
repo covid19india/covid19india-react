@@ -48,15 +48,13 @@ function MapExplorer({
   zones,
   stateTestData,
   regionHighlighted,
+  setRegionHighlighted,
   isCountryLoaded,
   anchor,
   setAnchor,
   mapOption,
   setMapOption,
 }) {
-  const [selectedRegion, setSelectedRegion] = useState({
-    state: states[0].state,
-  });
   const [currentMap, setCurrentMap] = useState({
     name: mapName,
     stat: MAP_STATISTICS.TOTAL,
@@ -150,17 +148,17 @@ function MapExplorer({
   ]);
 
   const [hoveredRegion, panelRegion] = useMemo(() => {
-    if (!selectedRegion.district) {
+    if (!regionHighlighted.district) {
       const state = getRegionFromState(
-        states.find((state) => selectedRegion.state === state.state)
+        states.find((state) => regionHighlighted.state === state.state)
       );
       return [state, state];
     } else {
-      const stateDistrictObj = districts[selectedRegion.state] || {
+      const stateDistrictObj = districts[regionHighlighted.state] || {
         districtData: {},
       };
       const districtData = stateDistrictObj.districtData[
-        selectedRegion.district
+        regionHighlighted.district
       ] || {
         confirmed: 0,
         active: 0,
@@ -169,45 +167,30 @@ function MapExplorer({
       };
       const district = getRegionFromDistrict(
         districtData,
-        selectedRegion.district
+        regionHighlighted.district
       );
       const state = getRegionFromState(
-        states.find((state) => selectedRegion.state === state.state)
+        states.find((state) => regionHighlighted.state === state.state)
       );
-      district.district = selectedRegion.district;
+      district.district = regionHighlighted.district;
       district.state = state.state;
       district.statecode = state.statecode;
       return [district, state];
     }
-  }, [states, districts, selectedRegion]);
+  }, [states, districts, regionHighlighted]);
 
   useEffect(() => {
     if (regionHighlighted === undefined || regionHighlighted === null) return;
 
-    const isState = !('district' in regionHighlighted);
-    if (isState) {
-      if (currentMapMeta.mapType === MAP_TYPES.STATE) {
-        setCurrentMap({
-          name: 'India',
-          view:
-            currentMap.stat === MAP_STATISTICS.ZONE
-              ? MAP_VIEWS.DISTRICTS
-              : MAP_VIEWS.STATES,
-          stat: currentMap.stat,
-        });
-      }
-      setSelectedRegion({
-        state: regionHighlighted.state.state,
-      });
-    } else {
+    if (regionHighlighted.district) {
       if (
-        currentMap.name !== regionHighlighted.state.state &&
+        currentMap.name !== regionHighlighted.state &&
         !(
           currentMapMeta.mapType === MAP_TYPES.COUNTRY &&
           currentMap.view === MAP_VIEWS.DISTRICTS
         )
       ) {
-        const state = regionHighlighted.state.state;
+        const state = regionHighlighted.state;
         const newMapMeta = MAP_META[state];
         if (!newMapMeta) {
           return;
@@ -221,10 +204,17 @@ function MapExplorer({
               : currentMap.stat,
         });
       }
-      setSelectedRegion({
-        district: regionHighlighted.district,
-        state: regionHighlighted.state.state,
-      });
+    } else {
+      if (currentMapMeta.mapType === MAP_TYPES.STATE) {
+        setCurrentMap({
+          name: 'India',
+          view:
+            currentMap.stat === MAP_STATISTICS.ZONE
+              ? MAP_VIEWS.DISTRICTS
+              : MAP_VIEWS.STATES,
+          stat: currentMap.stat,
+        });
+      }
     }
   }, [regionHighlighted, currentMap, currentMapMeta.mapType]);
 
@@ -248,17 +238,17 @@ function MapExplorer({
           .sort((a, b) => {
             return districtData[b].confirmed - districtData[a].confirmed;
           })[0];
-        setSelectedRegion({
+        setRegionHighlighted({
           district: topDistrict,
           state: name,
         });
       } else {
-        setSelectedRegion({
+        setRegionHighlighted({
           state: 'Total',
         });
       }
     },
-    [districts, currentMap.view, currentMap.stat]
+    [districts, currentMap.view, currentMap.stat, setRegionHighlighted]
   );
 
   const testObj = useMemo(
@@ -276,9 +266,7 @@ function MapExplorer({
       : currentMapData[hoveredRegion.state];
     hoveredRegionData = data
       ? currentMap.stat === MAP_STATISTICS.PER_MILLION
-        ? Number(
-            parseFloat(currentMapData[hoveredRegion.name][mapOption]).toFixed(2)
-          )
+        ? Number(parseFloat(data[mapOption]).toFixed(2))
         : data[mapOption]
       : 0;
   }
@@ -457,7 +445,7 @@ function MapExplorer({
                     : MAP_VIEWS.STATES,
                 stat: currentMap.stat,
               });
-              setSelectedRegion({
+              setRegionHighlighted({
                 state: currentMap.name,
               });
             }}
@@ -480,8 +468,8 @@ function MapExplorer({
           statistic={statistic}
           currentMap={currentMap}
           mapData={currentMapData}
-          selectedRegion={selectedRegion}
-          setSelectedRegion={setSelectedRegion}
+          regionHighlighted={regionHighlighted}
+          setRegionHighlighted={setRegionHighlighted}
           changeMap={switchMapToState}
           isCountryLoaded={isCountryLoaded}
           mapOption={mapOption}
@@ -502,6 +490,10 @@ function MapExplorer({
                   : MAP_VIEWS.DISTRICTS,
               stat: MAP_STATISTICS.TOTAL,
             });
+            if (currentMapMeta.mapType === MAP_TYPES.COUNTRY)
+              setRegionHighlighted({
+                state: regionHighlighted.state,
+              });
           }}
         >
           <h4>Total Cases</h4>
@@ -516,6 +508,9 @@ function MapExplorer({
               name: currentMap.name,
               view: MAP_VIEWS.STATES,
               stat: MAP_STATISTICS.PER_MILLION,
+            });
+            setRegionHighlighted({
+              state: regionHighlighted.state,
             });
           }}
         >
