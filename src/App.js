@@ -112,16 +112,7 @@ function App() {
 
       <Router>
         <ScrollToTop />
-        <Suspense
-          fallback={
-            <div>
-              <p>Loading...</p>
-              <p>
-                Try refreshing if it does not load or check internet connection.
-              </p>
-            </div>
-          }
-        >
+        <Suspense fallback={<div className="lazy"></div>}>
           <Route
             render={({location}) => (
               <div className="Almighty-Router">
