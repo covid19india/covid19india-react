@@ -25,7 +25,7 @@ function ChoroplethMap({
   const mapMeta = MAP_META[currentMap.name];
 
   const ready = useCallback(
-    (geoData, rerender = false) => {
+    (geoData, isChangedMap = false) => {
       const svg = d3.select(choroplethMap.current);
 
       const graphObjectName =
@@ -59,7 +59,7 @@ function ChoroplethMap({
       const bBox = svg.attr('viewBox').split(' ');
       width = +bBox[2];
       height = +bBox[3];
-      if (rerender) {
+      if (isChangedMap) {
         projection.fitSize([width, height], topology);
       }
       path = d3.geoPath(projection);
@@ -166,7 +166,7 @@ function ChoroplethMap({
         .on('mouseenter', (d) => {
           const region = {state: d.properties.st_nm};
           if (d.properties.district) region.district = d.properties.district;
-          handleMouseEnter(region);
+          setRegionHighlighted(region);
         })
         .on('mouseleave', (d) => {
           if (onceTouchedRegion === d) onceTouchedRegion = null;
@@ -303,21 +303,10 @@ function ChoroplethMap({
         svg.select('.borders-secondary').selectAll('path').remove();
       }
 
-      const handleMouseEnter = (region) => {
-        try {
-          setRegionHighlighted(region);
-        } catch (err) {
-          console.log('err', err);
-        }
-      };
-
       function handleClick(d) {
         d3.event.stopPropagation();
         if (onceTouchedRegion || currentMap.view === MAP_VIEWS.DISTRICTS)
           return;
-        // Disable pointer events till the new map is rendered
-        svg.attr('pointer-events', 'none');
-        svg.selectAll('.path-region').attr('pointer-events', 'none');
         // Switch map
         changeMap(d.properties.st_nm);
       }
@@ -390,7 +379,7 @@ function ChoroplethMap({
   }, [mapId, regionHighlighted, currentMap.stat]);
 
   return (
-    <div>
+    <React.Fragment>
       <div className="svg-parent fadeInUp" style={{animationDelay: '2.5s'}}>
         <svg id="chart" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}>
           <g className="regions" />
@@ -438,7 +427,7 @@ function ChoroplethMap({
           </filter>
         </defs>
       </svg>
-    </div>
+    </React.Fragment>
   );
 }
 

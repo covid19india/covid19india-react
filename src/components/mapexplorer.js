@@ -10,9 +10,11 @@ import {
 } from '../constants';
 import {formatDate, formatNumber} from '../utils/commonfunctions';
 
+import * as d3 from 'd3';
 import {formatDistance, format, parse} from 'date-fns';
 import equal from 'fast-deep-equal';
-import React, {useState, useEffect, useMemo, useCallback} from 'react';
+import React, {useRef, useState, useEffect, useMemo, useCallback} from 'react';
+import ReactDOM from 'react-dom';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
 
@@ -60,8 +62,8 @@ function MapExplorer({
     stat: MAP_STATISTICS.TOTAL,
     view: MAP_VIEWS.STATES,
   });
-
   const currentMapMeta = MAP_META[currentMap.name];
+  const mapRef = useRef();
 
   const [statistic, currentMapData] = useMemo(() => {
     let currentMapData = {};
@@ -182,7 +184,7 @@ function MapExplorer({
   useEffect(() => {
     if (regionHighlighted === undefined || regionHighlighted === null) return;
 
-    if (regionHighlighted.district) {
+    if ('district' in regionHighlighted) {
       if (
         currentMap.name !== regionHighlighted.state &&
         !(
@@ -217,31 +219,56 @@ function MapExplorer({
   }, [isCountryLoaded, regionHighlighted, currentMap, currentMapMeta.mapType]);
 
   const switchMapToState = useCallback(
-    (name) => {
-      const newMapMeta = MAP_META[name];
+    (state) => {
+      // Disable pointer events till the new map is rendered
+      const svg = d3.select(mapRef.current).select('#chart');
+      svg.attr('pointer-events', 'none');
+      svg.selectAll('.path-region').attr('pointer-events', 'none');
+
+      const newMapMeta = MAP_META[state];
       if (!newMapMeta) {
         return;
       }
       if (newMapMeta.mapType === MAP_TYPES.STATE) {
-        const {districtData} = districts[name] || {
+        const {districtData} = districts[state] || {
           districtData: {},
         };
         const topDistrict = Object.keys(districtData)
-          .filter((name) => name !== 'Unknown')
+          .filter((state) => state !== 'Unknown')
           .sort((a, b) => {
             return districtData[b].confirmed - districtData[a].confirmed;
           })[0];
-        setRegionHighlighted({
-          district: topDistrict,
-          state: name,
+        ReactDOM.unstable_batchedUpdates(() => {
+          setRegionHighlighted({
+            district: topDistrict,
+            state: state,
+          });
+          setCurrentMap({
+            name: state,
+            view: MAP_VIEWS.DISTRICTS,
+            stat:
+              currentMap.stat === MAP_STATISTICS.PER_MILLION
+                ? MAP_STATISTICS.TOTAL
+                : currentMap.stat,
+          });
         });
       } else {
-        setRegionHighlighted({
-          state: 'Total',
+        ReactDOM.unstable_batchedUpdates(() => {
+          setCurrentMap({
+            name: 'India',
+            view:
+              currentMap.stat === MAP_STATISTICS.ZONE
+                ? MAP_VIEWS.DISTRICTS
+                : MAP_VIEWS.STATES,
+            stat: currentMap.stat,
+          });
+          setRegionHighlighted({
+            state: 'Total',
+          });
         });
       }
     },
-    [districts, setRegionHighlighted]
+    [currentMap.stat, districts, setRegionHighlighted]
   );
 
   const testObj = useMemo(
@@ -432,19 +459,7 @@ function MapExplorer({
         {currentMapMeta.mapType === MAP_TYPES.STATE ? (
           <div
             className="button back-button"
-            onClick={() => {
-              setCurrentMap({
-                name: 'India',
-                view:
-                  currentMap.stat === MAP_STATISTICS.ZONE
-                    ? MAP_VIEWS.DISTRICTS
-                    : MAP_VIEWS.STATES,
-                stat: currentMap.stat,
-              });
-              setRegionHighlighted({
-                state: currentMap.name,
-              });
-            }}
+            onClick={() => switchMapToState('India')}
           >
             Back
           </div>
@@ -459,18 +474,20 @@ function MapExplorer({
         ) : null}
       </div>
 
-      {mapOption && (
-        <ChoroplethMap
-          statistic={statistic}
-          currentMap={currentMap}
-          mapData={currentMapData}
-          regionHighlighted={regionHighlighted}
-          setRegionHighlighted={setRegionHighlighted}
-          changeMap={switchMapToState}
-          isCountryLoaded={isCountryLoaded}
-          mapOption={mapOption}
-        />
-      )}
+      <div ref={mapRef}>
+        {mapOption && (
+          <ChoroplethMap
+            statistic={statistic}
+            currentMap={currentMap}
+            mapData={currentMapData}
+            regionHighlighted={regionHighlighted}
+            setRegionHighlighted={setRegionHighlighted}
+            changeMap={switchMapToState}
+            isCountryLoaded={isCountryLoaded}
+            mapOption={mapOption}
+          />
+        )}
+      </div>
 
       <div className="tabs-map">
         <div
