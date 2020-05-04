@@ -3790,7 +3790,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "344",
-            "district": "Purba Medinipur",
+            "district": "Paschim Medinipur",
             "st_nm": "West Bengal",
             "st_code": "19",
             "year": "2011_c"
@@ -3801,7 +3801,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "345",
-            "district": "Paschim Medinipur",
+            "district": "Purba Medinipur",
             "st_nm": "West Bengal",
             "st_code": "19",
             "year": "2011_c"
