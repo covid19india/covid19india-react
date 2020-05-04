@@ -224,11 +224,6 @@ function MapExplorer({
       if (!newMapMeta) {
         return;
       }
-      setCurrentMap({
-        name: name,
-        view: currentMap.view,
-        stat: currentMap.stat,
-      });
       if (newMapMeta.mapType === MAP_TYPES.STATE) {
         const {districtData} = districts[name] || {
           districtData: {},
@@ -248,22 +243,23 @@ function MapExplorer({
         });
       }
     },
-    [districts, currentMap.view, currentMap.stat, setRegionHighlighted]
+    [districts, setRegionHighlighted]
   );
 
   const testObj = useMemo(
     () =>
       stateTestData.find(
-        (obj) => obj.state === panelRegion.name && obj.totaltested !== ''
+        (obj) => obj.state === panelRegion.state && obj.totaltested !== ''
       ),
     [stateTestData, panelRegion]
   );
 
   let hoveredRegionData;
   if (currentMap.stat !== MAP_STATISTICS.ZONE) {
-    const data = hoveredRegion.district
-      ? currentMapData[hoveredRegion.state][hoveredRegion.district]
-      : currentMapData[hoveredRegion.state];
+    const data =
+      hoveredRegion.district && currentMapData[hoveredRegion.state]
+        ? currentMapData[hoveredRegion.state][hoveredRegion.district]
+        : currentMapData[hoveredRegion.state];
     hoveredRegionData = data
       ? currentMap.stat === MAP_STATISTICS.PER_MILLION
         ? Number(parseFloat(data[mapOption]).toFixed(2))
