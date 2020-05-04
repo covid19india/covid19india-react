@@ -112,15 +112,15 @@ function App() {
 
       <Router>
         <ScrollToTop />
-        <Suspense fallback={<div className="lazy"></div>}>
-          <Route
-            render={({location}) => (
-              <div className="Almighty-Router">
-                <Navbar
-                  pages={pages}
-                  darkMode={darkMode}
-                  setDarkMode={setDarkMode}
-                />
+        <Route
+          render={({location}) => (
+            <div className="Almighty-Router">
+              <Navbar
+                pages={pages}
+                darkMode={darkMode}
+                setDarkMode={setDarkMode}
+              />
+              <Suspense fallback={<div className="lazy"></div>}>
                 <Switch location={location}>
                   {pages.map((page, index) => {
                     return (
@@ -136,10 +136,10 @@ function App() {
                   })}
                   <Redirect to="/" />
                 </Switch>
-              </div>
-            )}
-          />
-        </Suspense>
+              </Suspense>
+            </div>
+          )}
+        />
       </Router>
     </div>
   );
