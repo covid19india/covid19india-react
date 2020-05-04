@@ -19,7 +19,6 @@ import {
   parseDistrictZones,
 } from '../utils/commonfunctions';
 
-import Observer from '@researchgate/react-intersection-observer';
 import axios from 'axios';
 import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
@@ -38,7 +37,6 @@ function Home(props) {
   const [showUpdates, setShowUpdates] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [mapOption, setMapOption] = useState('confirmed');
-  const [isIntersecting, setIsIntersecting] = useState(false);
 
   const [lastViewedLog, setLastViewedLog] = useLocalStorage(
     'lastViewedLog',
@@ -153,14 +151,6 @@ function Home(props) {
     setRegionHighlighted({district, state});
   }, []);
 
-  const handleIntersection = ({isIntersecting}) => {
-    setIsIntersecting(isIntersecting);
-  };
-
-  const options = {
-    rootMargin: '0px 0px 0px 0px',
-  };
-
   return (
     <React.Fragment>
       <div className="Home">
@@ -182,7 +172,7 @@ function Home(props) {
                   ? ''
                   : formatDateAbsolute(lastUpdated)}
               </h5>
-              {!showUpdates && (
+              {fetched && !showUpdates && (
                 <div className="bell-icon">
                   {fetched && Bell}
                   {newUpdate && <div className="indicator"></div>}
@@ -209,37 +199,35 @@ function Home(props) {
           )}
         </div>
 
-        <Observer options={options} onChange={handleIntersection}>
-          <div className="home-right">
-            <React.Fragment>
-              {fetched && isIntersecting && (
-                <MapExplorer
-                  mapMeta={MAP_META.India}
-                  states={states}
-                  districts={stateDistrictWiseData}
-                  stateTestData={stateTestData}
-                  regionHighlighted={regionHighlighted}
-                  isCountryLoaded={true}
-                  anchor={anchor}
-                  setAnchor={setAnchor}
-                  mapOption={mapOption}
-                  setMapOption={setMapOption}
-                />
-              )}
+        <div className="home-right">
+          <React.Fragment>
+            {fetched && (
+              <MapExplorer
+                mapMeta={MAP_META.India}
+                states={states}
+                districts={stateDistrictWiseData}
+                stateTestData={stateTestData}
+                regionHighlighted={regionHighlighted}
+                isCountryLoaded={true}
+                anchor={anchor}
+                setAnchor={setAnchor}
+                mapOption={mapOption}
+                setMapOption={setMapOption}
+              />
+            )}
 
-              {timeseries && isIntersecting && (
-                <TimeSeriesExplorer
-                  timeseries={timeseries[regionHighlighted?.state.code || 'TT']}
-                  activeStateCode={regionHighlighted?.state.code || 'TT'}
-                  onHighlightState={onHighlightState}
-                  states={states}
-                  anchor={anchor}
-                  setAnchor={setAnchor}
-                />
-              )}
-            </React.Fragment>
-          </div>
-        </Observer>
+            {timeseries && (
+              <TimeSeriesExplorer
+                timeseries={timeseries[regionHighlighted?.state.code || 'TT']}
+                activeStateCode={regionHighlighted?.state.code || 'TT'}
+                onHighlightState={onHighlightState}
+                states={states}
+                anchor={anchor}
+                setAnchor={setAnchor}
+              />
+            )}
+          </React.Fragment>
+        </div>
       </div>
       {fetched && <Footer />}
     </React.Fragment>
