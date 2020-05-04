@@ -76,7 +76,7 @@ function ChoroplethMap({
       if (currentMap.stat === MAP_STATISTICS.ZONE) {
         colorScale = d3.scaleOrdinal(
           ['Red', 'Orange', 'Green'],
-          ['#dc3545', '#fd7e14', '#28a745']
+          ['#ff073ac9', '#fd7e14b9', '#28a745b9']
         );
         svgLegend.call(() =>
           legend({
@@ -261,11 +261,16 @@ function ChoroplethMap({
         .data([mesh], (d) => d.id)
         .join((enter) => enter.append('path').attr('d', (d) => path(d)))
         .attr('fill', 'none')
-        .attr('stroke-width', width / 250)
+        .attr('stroke-width', () => {
+          return mapMeta.mapType === MAP_TYPES.COUNTRY &&
+            currentMap.stat === MAP_STATISTICS.ZONE
+            ? width / 500
+            : width / 250;
+        })
         .transition(t)
         .attr('stroke', function () {
           if (currentMap.stat === MAP_STATISTICS.ZONE) {
-            return '#6c757d99';
+            return '#00000060';
           } else {
             return `${
               mapOption === 'confirmed'

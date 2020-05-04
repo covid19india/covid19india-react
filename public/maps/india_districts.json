@@ -18977,7 +18977,7 @@
           "arcs": [[716, 717, 718, 719, 720, 721]],
           "type": "Polygon",
           "properties": {
-            "district": "Purba Medinipur",
+            "district": "Paschim Medinipur",
             "dt_code": "344",
             "st_nm": "West Bengal",
             "st_code": "19",
@@ -19043,7 +19043,7 @@
           "arcs": [[-719, 749, 750, 751]],
           "type": "Polygon",
           "properties": {
-            "district": "Paschim Medinipur",
+            "district": "Purba Medinipur",
             "dt_code": "345",
             "st_nm": "West Bengal",
             "st_code": "19",
