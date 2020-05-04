@@ -103,7 +103,7 @@ function Home(props) {
 
       const [
         {data},
-        stateDistrictWiseResponse,
+        {data: stateDistrictWiseResponse},
         {data: stateTestData},
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
@@ -135,7 +135,7 @@ function Home(props) {
       });
       setStateTestData(testData);
 
-      setStateDistrictWiseData(stateDistrictWiseResponse.data);
+      setStateDistrictWiseData(stateDistrictWiseResponse);
       setFetched(true);
     } catch (err) {
       console.log(err);
@@ -212,7 +212,7 @@ function Home(props) {
         <Observer options={options} onChange={handleIntersection}>
           <div className="home-right">
             <React.Fragment>
-              {stateTestData && isIntersecting && (
+              {fetched && isIntersecting && (
                 <MapExplorer
                   mapMeta={MAP_META.India}
                   states={states}

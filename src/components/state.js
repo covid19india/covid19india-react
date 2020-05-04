@@ -4,9 +4,10 @@ import Footer from './footer';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
+import StateMeta from './statemeta';
 import TimeSeriesExplorer from './timeseriesexplorer';
 
-import {MAP_META, STATE_CODES} from '../constants';
+import {MAP_META, STATE_CODES, STATE_POPULATIONS} from '../constants';
 import {
   formatDateAbsolute,
   formatNumber,
@@ -63,11 +64,7 @@ function State(props) {
       const name = STATE_CODES[code];
 
       const states = dataResponse.statewise;
-      setAllStateData(
-        states.filter(
-          (state) => state.statecode !== code && STATE_CODES[state.statecode]
-        )
-      );
+      setAllStateData(states.filter((state) => state.statecode !== code));
       setStateData([states.find((s) => s.statecode === code)]);
       // Timeseries
       const ts = parseStateTimeseries(statesDailyResponse)[code];
@@ -114,6 +111,7 @@ function State(props) {
   };
 
   const testObjLast = testData[testData.length - 1];
+  const population = STATE_POPULATIONS[stateName];
 
   function toggleShowAllDistricts() {
     setShowAllDistricts(!showAllDistricts);
@@ -315,6 +313,18 @@ function State(props) {
                   </div>
                 </div>
               </div>
+            )}
+
+            {fetched && (
+              <StateMeta
+                stateData={stateData[0]}
+                lastTestObject={testObjLast}
+                population={population}
+                lastSevenDaysData={timeseries.slice(-7)}
+                totalData={allStateData.filter(
+                  (state) => state.statecode === 'TT'
+                )}
+              />
             )}
           </div>
 

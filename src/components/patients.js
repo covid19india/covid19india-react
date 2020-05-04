@@ -3,7 +3,7 @@ import PatientsView from './patientsview';
 import {parse} from 'date-fns';
 import React, {useState, useEffect, useCallback} from 'react';
 import * as Icon from 'react-feather';
-import {useLockBodyScroll} from 'react-use';
+import {useLockBodyScroll, useKeyPressEvent} from 'react-use';
 
 function Patients(props) {
   const [patients, setPatients] = useState(props.patients);
@@ -19,6 +19,10 @@ function Patients(props) {
       setModal(false);
     }
   };
+
+  useKeyPressEvent('Escape', () => {
+    setModal(false);
+  });
 
   useEffect(() => {
     setPatients(props.patients);
