@@ -260,6 +260,7 @@ h6 {
   .home-right {
     margin-left: 2.5rem;
     margin-right: 2.5rem;
+    min-height: 10rem;
   }
 }
 
@@ -731,10 +732,10 @@ h6 {
       }
 
       .state-last-update {
-        background: transparent;
+        background: transparent !important;
 
         &:hover {
-          background: #fff !important;
+          background: transparent !important;
         }
 
         td {
@@ -1547,10 +1548,6 @@ abbr {
   }
 }
 
-.sticky {
-  position: sticky;
-}
-
 .Table {
   margin-bottom: 1rem;
 }
@@ -1570,55 +1567,89 @@ table {
     text-align: left;
 
     th {
+      background: $gray-light-opaque;
       border-radius: 5px;
       cursor: pointer;
       padding: .5rem;
+      position: sticky !important;
+      top: 5px;
       transition: all .1s ease-in-out;
       z-index: 99;
-
-      &.sticky {
-        background: $gray-opaque;
-        top: 4px;
-      }
 
       &:hover {
         background: #ecedee;
       }
+    }
+  }
 
-      .heading-content {
-        align-items: center;
-        display: flex;
-        flex-direction: row;
-        height: .9rem;
-        justify-content: space-between;
-        position: relative;
+  .heading-content {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    height: .9rem;
+    justify-content: space-between;
+    position: relative;
 
-        abbr {
-          text-align: right;
-        }
+    abbr {
+      color: $gray;
+      text-align: right;
 
-        svg {
-          color: $gray-mid;
-          margin: 0;
-          margin-left: .25rem;
-          margin-top: .15rem;
-          right: 0;
-          stroke-width: 4px;
-          width: 10px;
-        }
+      &.is-confirmed {
+        color: $cherry;
       }
+
+      &.is-active {
+        color: $blue;
+      }
+
+      &.is-recovered {
+        color: $green;
+      }
+
+      &.is-deaths {
+        color: $gray;
+      }
+    }
+
+    svg {
+      color: $gray-mid;
+      margin: 0;
+      margin-left: .25rem;
+      margin-top: .15rem;
+      right: 0;
+      stroke-width: 4px;
+      width: 10px;
     }
   }
 
   tbody {
     color: $gray;
-    max-width: 10rem;
 
     tr {
       cursor: pointer;
 
+      &:nth-child(odd) {
+        background: $gray-light;
+      }
+
       &.is-highlighted {
         background: $gray-hover !important;
+      }
+
+      &.is-odd {
+        background: $gray-light !important;
+      }
+
+      &.is-total {
+        background: $gray-hover;
+      }
+
+      &.is-spacer {
+        background: transparent !important;
+
+        &:hover {
+          background: transparent !important;
+        }
       }
 
       &:hover {
@@ -1628,31 +1659,22 @@ table {
           background: $gray-hover;
         }
       }
-
-      &.divider {
-        background: #6c757d10 !important;
-        height: .5rem;
-      }
-
-      &.spacer {
-        background: #fff !important;
-        height: 2rem;
-      }
     }
 
     td {
-      border-radius: 5px;
+      border-radius: 4px;
       font-size: .9rem;
       padding: .25rem;
       text-align: right;
 
       &:first-child {
-        max-width: 7.5rem;
+        font-weight: 600;
+        max-width: 7.5rem !important;
         text-align: left;
-        word-wrap: break-word;
+        word-wrap: break-word !important;
       }
 
-      .deltas {
+      .delta {
         display: inline-block;
         font-size: 11px !important;
 
@@ -1662,6 +1684,26 @@ table {
           vertical-align: -.25px;
           width: 9px;
         }
+
+        &.is-confirmed {
+          color: $cherry;
+        }
+
+        &.is-active {
+          color: $blue;
+        }
+
+        &.is-recovered {
+          color: $green;
+        }
+
+        &.is-deaths {
+          color: $gray;
+        }
+      }
+
+      .total {
+        margin-left: .25rem;
       }
 
       a {
@@ -1681,18 +1723,63 @@ table {
           }
         }
       }
+
+      &.is-Orange {
+        background: $yellow-light;
+        border-left: 5px solid $orange-mid;
+        color: $orange;
+
+        svg {
+          color: $orange !important;
+        }
+      }
+
+      &.is-Red {
+        background: $cherry-light;
+        border-left: 5px solid $cherry-mid;
+        color: $cherry;
+
+        svg {
+          color: $cherry !important;
+        }
+      }
+
+      &.is-Green {
+        background: $green-light;
+        border-left: 5px solid $green-mid;
+        color: $green;
+
+        svg {
+          color: $green !important;
+        }
+      }
     }
 
-    .table__count-text {
-      margin-left: .25rem;
+    .title-chevron {
+      position: relative;
+
+      & > * {
+        align-self: center;
+      }
+
+      .title-icon {
+        svg {
+          color: $gray-mid;
+          padding-left: 2px;
+          stroke-width: 3;
+          vertical-align: -6.5px;
+          width: 12px;
+        }
+      }
     }
 
     .state-last-update {
-      background: transparent;
+      background: transparent !important;
       color: $green !important;
       height: 2rem;
 
-      h6 {
+      p {
+        font-size: .75rem;
         margin: 0;
       }
 
@@ -1711,8 +1798,8 @@ table {
         font-size: 12px;
         left: 0;
         margin-top: .5rem;
+        max-width: 10rem;
         padding: .5rem;
-        width: 14rem;
 
         svg {
           margin-right: .25rem;
@@ -1723,24 +1810,15 @@ table {
       }
 
       .state-page-link {
-        padding: 0 !important;
+        background: $yellow-light !important;
+        color: $orange;
+        font-size: .75rem;
+        font-weight: 600;
+        padding: .5rem;
+        text-align: center;
 
-        a {
-          background: $yellow-light;
-          border-radius: 5px;
-          color: $orange;
-          font-size: .75rem;
-          padding: .5rem;
-          text-decoration: none;
-          transition: all .2s ease-in-out;
-
-          &:hover {
-            background: $yellow-hover;
-
-            svg {
-              stroke: $orange;
-            }
-          }
+        &:hover {
+          background: $yellow-hover !important;
         }
       }
     }
@@ -1793,42 +1871,7 @@ table {
     top: -1rem;
   }
 
-  .is-total {
-    td {
-      background: $gray-hover;
-    }
-  }
-
-  .table__title-wrapper {
-    position: relative;
-
-    & > * {
-      align-self: center;
-    }
-
-    .actual__title-wrapper {
-      .__react_component_tooltip {
-        font-size: .8em;
-        max-width: 200px;
-      }
-
-      svg {
-        color: $gray-mid;
-        height: 12px;
-        padding-left: 2px;
-        stroke-width: 3;
-        vertical-align: -1.5px;
-        width: 12px;
-      }
-    }
-  }
-
   .unknown {
-    .__react_component_tooltip {
-      font-size: .8em;
-      max-width: 200px;
-    }
-
     svg {
       color: $gray-mid;
       height: 12px;
@@ -2282,6 +2325,15 @@ table {
   }
 }
 
+.__react_component_tooltip {
+  font-family: 'archia';
+  font-size: 11px;
+  font-weight: 600;
+  padding: .25rem;
+  text-align: center;
+  width: 200px;
+}
+
 .tooltip-tested {
   pointer-events: all;
 
@@ -2290,15 +2342,6 @@ table {
     height: .95em;
     stroke-width: 3;
     width: 1em;
-  }
-
-  .__react_component_tooltip {
-    font-family: 'archia';
-    font-size: 11px;
-    font-weight: 600;
-    padding: .25rem;
-    text-align: center;
-    width: 200px;
   }
 }
 
