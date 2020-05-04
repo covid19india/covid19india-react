@@ -247,10 +247,11 @@ export const abbreviate = (s) => {
   return s.slice(0, 1) + s.slice(1).replace(/[aeiou]/gi, '');
 };
 
-export const parseDistrictZones = (data) => {
-  return data.reduce((ret, d) => {
+export const parseDistrictZones = (data, state) => {
+  const zones = data.reduce((ret, d) => {
     ret[d.state] = ret[d.state] || {};
     ret[d.state][d.district] = d;
     return ret;
   }, {});
+  return state ? {[state]: zones[state]} : zones;
 };

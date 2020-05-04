@@ -49,11 +49,11 @@ function MapExplorer({
   stateTestData,
   regionHighlighted,
   setRegionHighlighted,
-  isCountryLoaded,
   anchor,
   setAnchor,
   mapOption,
   setMapOption,
+  isCountryLoaded = true,
 }) {
   const [currentMap, setCurrentMap] = useState({
     name: mapName,
@@ -204,19 +204,17 @@ function MapExplorer({
               : currentMap.stat,
         });
       }
-    } else {
-      if (currentMapMeta.mapType === MAP_TYPES.STATE) {
-        setCurrentMap({
-          name: 'India',
-          view:
-            currentMap.stat === MAP_STATISTICS.ZONE
-              ? MAP_VIEWS.DISTRICTS
-              : MAP_VIEWS.STATES,
-          stat: currentMap.stat,
-        });
-      }
+    } else if (isCountryLoaded && currentMapMeta.mapType === MAP_TYPES.STATE) {
+      setCurrentMap({
+        name: 'India',
+        view:
+          currentMap.stat === MAP_STATISTICS.ZONE
+            ? MAP_VIEWS.DISTRICTS
+            : MAP_VIEWS.STATES,
+        stat: currentMap.stat,
+      });
     }
-  }, [regionHighlighted, currentMap, currentMapMeta.mapType]);
+  }, [isCountryLoaded, regionHighlighted, currentMap, currentMapMeta.mapType]);
 
   const switchMapToState = useCallback(
     (name) => {
@@ -259,7 +257,9 @@ function MapExplorer({
     const data =
       hoveredRegion.district && currentMapData[hoveredRegion.state]
         ? currentMapData[hoveredRegion.state][hoveredRegion.district]
-        : currentMapData[hoveredRegion.state];
+        : hoveredRegion.state !== currentMap.name
+        ? currentMapData[hoveredRegion.state]
+        : currentMapData[hoveredRegion.state].Total;
     hoveredRegionData = data
       ? currentMap.stat === MAP_STATISTICS.PER_MILLION
         ? Number(parseFloat(data[mapOption]).toFixed(2))
@@ -494,26 +494,28 @@ function MapExplorer({
         >
           <h4>Total Cases</h4>
         </div>
-        <div
-          className={`tab ${
-            currentMap.stat === MAP_STATISTICS.PER_MILLION ? 'focused' : ''
-          }`}
-          onClick={() => {
-            if (currentMapMeta.mapType === MAP_TYPES.STATE) return;
-            setCurrentMap({
-              name: currentMap.name,
-              view: MAP_VIEWS.STATES,
-              stat: MAP_STATISTICS.PER_MILLION,
-            });
-            setRegionHighlighted({
-              state: regionHighlighted.state,
-            });
-          }}
-        >
-          <h4>
-            Cases per million<sup>&dagger;</sup>
-          </h4>
-        </div>
+        {isCountryLoaded && (
+          <div
+            className={`tab ${
+              currentMap.stat === MAP_STATISTICS.PER_MILLION ? 'focused' : ''
+            }`}
+            onClick={() => {
+              if (currentMapMeta.mapType === MAP_TYPES.STATE) return;
+              setCurrentMap({
+                name: currentMap.name,
+                view: MAP_VIEWS.STATES,
+                stat: MAP_STATISTICS.PER_MILLION,
+              });
+              setRegionHighlighted({
+                state: regionHighlighted.state,
+              });
+            }}
+          >
+            <h4>
+              Cases per million<sup>&dagger;</sup>
+            </h4>
+          </div>
+        )}
         <div
           className={`tab ${
             currentMap.stat === MAP_STATISTICS.ZONE ? 'focused' : ''

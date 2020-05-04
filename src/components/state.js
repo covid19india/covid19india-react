@@ -14,6 +14,7 @@ import {
   mergeTimeseries,
   parseStateTimeseries,
   parseStateTestTimeseries,
+  parseDistrictZones,
 } from '../utils/commonfunctions';
 
 import {Breadcrumb, Dropdown} from '@primer/components';
@@ -30,17 +31,22 @@ function State(props) {
   const mapRef = useRef();
 
   const stateCode = useParams().stateCode.toUpperCase();
+  const stateName = STATE_CODES[stateCode];
+
   const [allStateData, setAllStateData] = useState({});
   const [fetched, setFetched] = useState(false);
+  const [districtZones, setDistrictZones] = useState(null);
   const [timeseries, setTimeseries] = useState({});
   const [stateData, setStateData] = useState(null);
   const [testData, setTestData] = useState({});
   const [sources, setSources] = useState({});
   const [districtData, setDistrictData] = useState({});
-  const [stateName] = useState(STATE_CODES[stateCode]);
   const [mapOption, setMapOption] = useState('confirmed');
   const [mapSwitcher, {width}] = useMeasure();
   const [showAllDistricts, setShowAllDistricts] = useState(false);
+  const [regionHighlighted, setRegionHighlighted] = useState({
+    state: stateName,
+  });
 
   useEffectOnce(() => {
     getState(stateCode);
@@ -54,12 +60,14 @@ function State(props) {
         {data: statesDailyResponse},
         {data: stateTestResponse},
         {data: sourcesResponse},
+        {data: zonesResponse},
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
         axios.get('https://api.covid19india.org/states_daily.json'),
         axios.get('https://api.covid19india.org/state_test_data.json'),
         axios.get('https://api.covid19india.org/sources_list.json'),
+        axios.get('https://api.covid19india.org/zones.json'),
       ]);
       const name = STATE_CODES[code];
 
@@ -87,6 +95,9 @@ function State(props) {
           (obj) => obj.state === name && obj.totaltested !== ''
         )
       );
+
+      setDistrictZones(parseDistrictZones(zonesResponse.zones, stateName));
+
       setFetched(true);
       anime({
         targets: '.highlight',
@@ -275,9 +286,12 @@ function State(props) {
                 mapName={stateName}
                 states={stateData}
                 districts={districtData}
+                zones={districtZones}
                 stateTestData={testData}
-                isCountryLoaded={false}
+                regionHighlighted={regionHighlighted}
+                setRegionHighlighted={setRegionHighlighted}
                 mapOption={mapOption}
+                isCountryLoaded={false}
               />
             )}
 
