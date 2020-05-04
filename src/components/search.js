@@ -224,6 +224,7 @@ function Search(props) {
           onClick={() => {
             setSearchValue('');
             setResults([]);
+            searchInput.current.focus();
           }}
         >
           <Icon.X />
