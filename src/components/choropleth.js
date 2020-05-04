@@ -15,6 +15,7 @@ function ChoroplethMap({
   changeMap,
   regionHighlighted,
   setRegionHighlighted,
+  setRegionHighlightedMap,
   isCountryLoaded,
   mapOption,
 }) {
@@ -163,10 +164,10 @@ function ChoroplethMap({
           return `path-region ${mapOption} ${isHovered ? 'map-hover' : ''}`;
         })
         .style('cursor', 'pointer')
-        .on('mouseenter', (d) => {
+        .on('mouseenter', function (d) {
           const region = {state: d.properties.st_nm};
           if (d.properties.district) region.district = d.properties.district;
-          setRegionHighlighted(region);
+          setRegionHighlightedMap(region);
         })
         .on('mouseleave', (d) => {
           if (onceTouchedRegion === d) onceTouchedRegion = null;
@@ -329,6 +330,7 @@ function ChoroplethMap({
       isCountryLoaded,
       mapData,
       setRegionHighlighted,
+      setRegionHighlightedMap,
       changeMap,
     ]
   );

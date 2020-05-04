@@ -10,10 +10,9 @@ import {
 } from '../constants';
 import {formatDate, formatNumber} from '../utils/commonfunctions';
 
-import * as d3 from 'd3';
 import {formatDistance, format, parse} from 'date-fns';
 import equal from 'fast-deep-equal';
-import React, {useRef, useState, useEffect, useMemo, useCallback} from 'react';
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ReactDOM from 'react-dom';
 import * as Icon from 'react-feather';
 import {Link} from 'react-router-dom';
@@ -62,8 +61,8 @@ function MapExplorer({
     stat: MAP_STATISTICS.TOTAL,
     view: MAP_VIEWS.STATES,
   });
+  const [regionHighlightedMap, setRegionHighlightedMap] = useState(null);
   const currentMapMeta = MAP_META[currentMap.name];
-  const mapRef = useRef();
 
   const [statistic, currentMapData] = useMemo(() => {
     let currentMapData = {};
@@ -149,6 +148,19 @@ function MapExplorer({
     states,
   ]);
 
+  useEffect(() => {
+    if (
+      !regionHighlightedMap ||
+      (regionHighlightedMap.district &&
+        currentMap.view !== MAP_VIEWS.DISTRICTS) ||
+      (!regionHighlightedMap.district &&
+        currentMap.view === MAP_VIEWS.DISTRICTS)
+    ) {
+      return;
+    }
+    setRegionHighlighted(regionHighlightedMap);
+  }, [currentMap.view, regionHighlightedMap, setRegionHighlighted]);
+
   const [hoveredRegion, panelRegion] = useMemo(() => {
     if (!regionHighlighted.district) {
       const state = getRegionFromState(
@@ -220,11 +232,6 @@ function MapExplorer({
 
   const switchMapToState = useCallback(
     (state) => {
-      // Disable pointer events till the new map is rendered
-      const svg = d3.select(mapRef.current).select('#chart');
-      svg.attr('pointer-events', 'none');
-      svg.selectAll('.path-region').attr('pointer-events', 'none');
-
       const newMapMeta = MAP_META[state];
       if (!newMapMeta) {
         return;
@@ -474,7 +481,7 @@ function MapExplorer({
         ) : null}
       </div>
 
-      <div ref={mapRef}>
+      <div>
         {mapOption && (
           <ChoroplethMap
             statistic={statistic}
@@ -482,6 +489,7 @@ function MapExplorer({
             mapData={currentMapData}
             regionHighlighted={regionHighlighted}
             setRegionHighlighted={setRegionHighlighted}
+            setRegionHighlightedMap={setRegionHighlightedMap}
             changeMap={switchMapToState}
             isCountryLoaded={isCountryLoaded}
             mapOption={mapOption}
