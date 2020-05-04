@@ -5,7 +5,9 @@ import React from 'react';
 import * as Icon from 'react-feather';
 import {useLocalStorage} from 'react-use';
 
-const isEqual = (currProps, prevProps) => {
+const isEqual = (prevProps, currProps) => {
+  if (!currProps.isIntersecting) return true;
+  if (!prevProps.isIntersecting) return false;
   if (!equal(currProps.activeStateCode, prevProps.activeStateCode)) {
     return false;
   }
@@ -22,6 +24,7 @@ function TimeSeriesExplorer({
   states,
   anchor,
   setAnchor,
+  isIntersecting,
 }) {
   const [chartType, setChartType] = useLocalStorage('timeseriesChartType', 1);
 
