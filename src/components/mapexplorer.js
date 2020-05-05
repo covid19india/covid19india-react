@@ -64,7 +64,6 @@ function MapExplorer({
         ? MAP_VIEWS.STATES
         : MAP_VIEWS.DISTRICTS,
   });
-  const [regionHighlightedMap, setRegionHighlightedMap] = useState(null);
   const currentMapMeta = MAP_META[currentMap.name];
 
   const [statistic, currentMapData] = useMemo(() => {
@@ -160,19 +159,6 @@ function MapExplorer({
     zones,
     states,
   ]);
-
-  useEffect(() => {
-    if (
-      !regionHighlightedMap ||
-      (regionHighlightedMap.district &&
-        currentMap.view !== MAP_VIEWS.DISTRICTS) ||
-      (!regionHighlightedMap.district &&
-        currentMap.view === MAP_VIEWS.DISTRICTS)
-    ) {
-      return;
-    }
-    setRegionHighlighted(regionHighlightedMap);
-  }, [currentMap.view, regionHighlightedMap, setRegionHighlighted]);
 
   const [hoveredRegion, panelRegion] = useMemo(() => {
     if (!regionHighlighted.district) {
@@ -517,7 +503,6 @@ function MapExplorer({
             mapData={currentMapData}
             regionHighlighted={regionHighlighted}
             setRegionHighlighted={setRegionHighlighted}
-            setRegionHighlightedMap={setRegionHighlightedMap}
             changeMap={switchMapToState}
             isCountryLoaded={isCountryLoaded}
             mapOption={mapOption}

@@ -15,7 +15,6 @@ function ChoroplethMap({
   changeMap,
   regionHighlighted,
   setRegionHighlighted,
-  setRegionHighlightedMap,
   isCountryLoaded,
   mapOption,
 }) {
@@ -186,7 +185,7 @@ function ChoroplethMap({
         .on('mouseenter', function (d) {
           const region = {state: d.properties.st_nm};
           if (d.properties.district) region.district = d.properties.district;
-          setRegionHighlightedMap(region);
+          setRegionHighlighted(region);
         })
         .on('mouseleave', (d) => {
           if (onceTouchedRegion === d) onceTouchedRegion = null;
@@ -361,6 +360,9 @@ function ChoroplethMap({
       function handleClick(d) {
         d3.event.stopPropagation();
         if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE) return;
+        // Disable pointer events till the new map is rendered
+        svg.attr('pointer-events', 'none');
+        svg.selectAll('.path-region').attr('pointer-events', 'none');
         // Switch map
         changeMap(d.properties.st_nm);
       }
@@ -383,7 +385,6 @@ function ChoroplethMap({
       isCountryLoaded,
       mapData,
       setRegionHighlighted,
-      setRegionHighlightedMap,
       changeMap,
     ]
   );
