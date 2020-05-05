@@ -183,14 +183,20 @@ function MapExplorer({
         regionHighlighted.district
       );
       const state = getRegionFromState(
-        states.find((state) => regionHighlighted.state === state.state)
+        states.find(
+          (state) =>
+            state.state ===
+            (currentMapMeta.mapType === MAP_TYPES.COUNTRY
+              ? 'Total'
+              : regionHighlighted.state)
+        )
       );
       district.district = regionHighlighted.district;
       district.state = state.state;
       district.statecode = state.statecode;
       return [district, state];
     }
-  }, [states, districts, regionHighlighted]);
+  }, [states, districts, currentMapMeta.mapType, regionHighlighted]);
 
   useEffect(() => {
     if (regionHighlighted === undefined || regionHighlighted === null) return;
