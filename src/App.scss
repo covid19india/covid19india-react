@@ -2065,11 +2065,13 @@ table {
 
       .state-page-link {
         background: $yellow-light !important;
+        border-radius: 5px;
         color: $orange;
         font-size: .75rem;
         font-weight: 600;
         padding: .5rem;
         text-align: center;
+        transition: .2s all ease-in-out;
 
         &:hover {
           background: $yellow-hover !important;

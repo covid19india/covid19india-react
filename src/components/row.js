@@ -317,13 +317,16 @@ function Row({
               )}
             </td>
             <td
-              align="center"
-              className="state-page-link"
+              style={{verticalAlign: 'bottom'}}
               colSpan={2}
               onClick={() => {
                 history.push(`state/${state.statecode}`);
               }}
-            >{`View ${t(state.state)}'s Page`}</td>
+            >
+              <div className="state-page-link">{`View ${t(
+                state.state
+              )}'s Page`}</div>
+            </td>
           </tr>
 
           <tr className={classnames('district-heading')}>
