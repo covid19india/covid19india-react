@@ -15,6 +15,7 @@ const useBreakpoint = createBreakpoint({XL: 1280, L: 768, S: 350});
 
 function StateHeaderCell({handleSort, sortData, statistic}) {
   const breakpoint = useBreakpoint();
+  const {t} = useTranslation();
 
   return (
     <th onClick={() => handleSort(statistic)}>
@@ -29,7 +30,7 @@ function StateHeaderCell({handleSort, sortData, statistic}) {
             ? capitalize(
                 abbreviate(statistic === 'deaths' ? 'deceased' : statistic)
               )
-            : capitalize(statistic === 'deaths' ? 'deceased' : statistic)}
+            : t(capitalize(statistic === 'deaths' ? 'deceased' : statistic))}
         </abbr>
         <div
           style={{

@@ -297,7 +297,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Testing Pune
+                  {t('Testing Pune')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -311,7 +311,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Delhi Shelter
+                  {t('Delhi Shelter')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -328,7 +328,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Community Kitchen in Kerala
+                  {t('Community Kitchen in Kerala')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -342,7 +342,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Groceries Chennai
+                  {t('Groceries Chennai')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -359,7 +359,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Senior citizen support bangalore
+                  {t('Senior citizen support bangalore')}
                 </h4>
               </div>
             </div>
@@ -378,7 +378,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Hyderabad
+                  {t('Hyderabad')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -392,7 +392,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Karnataka
+                  {t('Karnataka')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -406,7 +406,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Chennai
+                  {t('Chennai')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -420,7 +420,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Jharkhand
+                  {t('Jharkhand')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -434,7 +434,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Alappuzha
+                  {t('Alappuzha')}
                 </h4>
               </div>
             </div>

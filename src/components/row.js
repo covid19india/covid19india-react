@@ -36,6 +36,7 @@ function StateCell({state, statistic}) {
 
 function DistrictHeaderCell({handleSort, statistic, sortData}) {
   const breakpoint = useBreakpoint();
+  const {t} = useTranslation();
 
   return (
     <td onClick={() => handleSort(statistic)}>
@@ -50,7 +51,7 @@ function DistrictHeaderCell({handleSort, statistic, sortData}) {
             ? capitalize(
                 abbreviate(statistic === 'deaths' ? 'deceased' : statistic)
               )
-            : capitalize(statistic === 'deaths' ? 'deceased' : statistic)}
+            : t(capitalize(statistic === 'deaths' ? 'deceased' : statistic))}
         </abbr>
         <div
           style={{
@@ -101,6 +102,8 @@ function PureDistrictRow({
   sortedDistricts,
   districts,
 }) {
+  const {t} = useTranslation();
+
   return (
     <tr
       key={district.district}
@@ -115,7 +118,7 @@ function PureDistrictRow({
             {district}
             <span
               data-for="district"
-              data-tip={[[sortedDistricts[district].notes]]}
+              data-tip={t([[sortedDistricts[district].notes]])}
               data-event="touchstart mouseover"
               data-event-off="mouseleave"
             >
@@ -178,6 +181,7 @@ function Row({
   });
 
   const history = useHistory();
+  const {t} = useTranslation();
 
   const Chevron = useMemo(
     () => (
@@ -243,7 +247,6 @@ function Row({
   useEffectOnce(() => {
     if (state.statecode !== 'TT') doSort(sortData);
   });
-  const {t} = useTranslation();
 
   return (
     <React.Fragment>
@@ -270,7 +273,7 @@ function Row({
               {state.state}
 
               <span
-                data-tip={[`${state.statenotes}`]}
+                data-tip={[t(`${state.statenotes}`)]}
                 data-event="touchstart mouseover"
                 data-event-off="mouseleave"
               >
