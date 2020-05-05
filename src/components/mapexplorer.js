@@ -578,6 +578,10 @@ function MapExplorer({
               view: MAP_VIEWS.DISTRICTS,
               stat: MAP_STATISTICS.ZONE,
             });
+            if (currentMapMeta.mapType === MAP_TYPES.COUNTRY)
+              setRegionHighlighted({
+                state: 'Total',
+              });
           }}
         >
           <h4>Zones</h4>
