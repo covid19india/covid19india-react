@@ -19,6 +19,7 @@ import {
   parseDistrictZones,
 } from '../utils/commonfunctions';
 
+import 'intersection-observer';
 import Observer from '@researchgate/react-intersection-observer';
 import axios from 'axios';
 import React, {useState, useCallback, useMemo} from 'react';
