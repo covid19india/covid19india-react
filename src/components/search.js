@@ -7,6 +7,7 @@ import {
 import Bloodhound from 'corejs-typeahead';
 import React, {useState, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
+import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useDebounce} from 'react-use';
 
@@ -61,6 +62,7 @@ function Search(props) {
   const [expand, setExpand] = useState(false);
   const [results, setResults] = useState([]);
   const searchInput = useRef(null);
+  const {t} = useTranslation();
 
   const handleSearch = useCallback((searchInput) => {
     const results = [];
@@ -193,7 +195,7 @@ function Search(props) {
 
   return (
     <div className="Search">
-      <label>Search your city, resources, etc</label>
+      <label>{t('Search your city, resources, etc')}</label>
       <div className="line"></div>
 
       <input
@@ -282,7 +284,7 @@ function Search(props) {
       {expand && (
         <div className="expanded">
           <div className="expanded-left">
-            <h3>Essentials</h3>
+            <h3>{t('Essentials')}</h3>
             <div className="suggestions">
               <div className="suggestion">
                 <div>-</div>
@@ -363,7 +365,7 @@ function Search(props) {
             </div>
           </div>
           <div className="expanded-right">
-            <h3>Locations</h3>
+            <h3>{t('Locations')}</h3>
             <div className="suggestions">
               <div className="suggestion">
                 <div>-</div>

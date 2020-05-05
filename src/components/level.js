@@ -1,10 +1,12 @@
 import {formatNumber} from '../utils/commonfunctions';
 
 import React, {useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useEffectOnce} from 'react-use';
 
 function Level(props) {
   const [data, setData] = useState(props.data);
+  const {t} = useTranslation();
 
   useEffectOnce(() => {
     setData({
@@ -24,7 +26,7 @@ function Level(props) {
         className="level-item is-cherry fadeInUp"
         style={{animationDelay: '1s'}}
       >
-        <h5>Confirmed</h5>
+        <h5>{t('Confirmed')}</h5>
         <h4>
           [
           {isNaN(data.deltaconfirmed)
