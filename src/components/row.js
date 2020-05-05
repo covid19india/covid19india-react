@@ -11,6 +11,7 @@ import {formatDistance} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
+import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import {createBreakpoint, useLocalStorage, useEffectOnce} from 'react-use';
@@ -242,6 +243,7 @@ function Row({
   useEffectOnce(() => {
     if (state.statecode !== 'TT') doSort(sortData);
   });
+  const {t} = useTranslation();
 
   return (
     <React.Fragment>
