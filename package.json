@@ -18,6 +18,7 @@
     "deepmerge": "^4.2.2",
     "i18next": "^19.4.3",
     "i18next-xhr-backend": "^3.2.2",
+    "i18next-browser-languagedetector": "4.1.1",
     "moment": "^2.24.0",
     "node-sass": "^4.13.1",
     "react": "^16.13.1",
