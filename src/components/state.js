@@ -6,6 +6,7 @@ import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
 import StateMeta from './statemeta';
 import TimeSeriesExplorer from './timeseriesexplorer';
+import TrackerTable from './trackertable';
 
 import {MAP_META, STATE_CODES, STATE_POPULATIONS} from '../constants';
 import {
@@ -326,6 +327,16 @@ function State(props) {
                 )}
               />
             )}
+
+            {fetched && (
+              <div
+                className="Clusters fadeInUp"
+                style={{animationDelay: '0.8s'}}
+              >
+                <h1>Network of Transmission</h1>
+                <Clusters stateCode={stateCode} />
+              </div>
+            )}
           </div>
 
           <div className="state-right">
@@ -434,20 +445,11 @@ function State(props) {
                     </div>
                   </Link>
                 )}
-
+                <TrackerTable />
                 <TimeSeriesExplorer timeseries={timeseries} />
               </React.Fragment>
             )}
           </div>
-
-          <div className="state-left">
-            <div className="Clusters fadeInUp" style={{animationDelay: '0.8s'}}>
-              <h1>Network of Transmission</h1>
-              <Clusters stateCode={stateCode} />
-            </div>
-          </div>
-
-          <div className="state-right"></div>
         </div>
         <Footer />
       </React.Fragment>
