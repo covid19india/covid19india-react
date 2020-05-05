@@ -1906,7 +1906,8 @@ table {
         }
       }
 
-      &.district {
+      &.district,
+      &.is-spacer {
         cursor: default;
       }
 
@@ -2035,6 +2036,12 @@ table {
       background: transparent !important;
       color: $green !important;
       height: 2rem;
+
+      td {
+        &:first-child {
+          cursor: default;
+        }
+      }
 
       p {
         font-size: .75rem;
