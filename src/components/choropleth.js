@@ -93,7 +93,7 @@ function ChoroplethMap({
             marginLeft: 2,
             marginRight: 20,
             svg: svgLegend,
-            ordinalWeights: Object.values(statistic).map((d) => d.total),
+            ordinalWeights: Object.values(statistic),
           })
         );
       } else {
@@ -229,10 +229,8 @@ function ChoroplethMap({
             const state = d.properties.st_nm;
             const district = d.properties.district;
             n =
-              mapData[state] &&
-              mapData[state][district] &&
-              mapData[state][district].zone
-                ? mapData[state][district].zone
+              mapData[state] && mapData[state][district]
+                ? mapData[state][district]
                 : 0;
           } else {
             const state = d.properties.st_nm;
@@ -362,8 +360,7 @@ function ChoroplethMap({
 
       function handleClick(d) {
         d3.event.stopPropagation();
-        if (onceTouchedRegion || currentMap.view === MAP_VIEWS.DISTRICTS)
-          return;
+        if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE) return;
         // Switch map
         changeMap(d.properties.st_nm);
       }

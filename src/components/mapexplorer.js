@@ -70,26 +70,16 @@ function MapExplorer({
     if (currentMap.stat === MAP_STATISTICS.ZONE) {
       const dataTypes = ['Red', 'Orange', 'Green'];
       statistic = dataTypes.reduce((acc, dtype) => {
-        acc[dtype] = {total: 0, maxactive: 0};
+        acc[dtype] = 0;
         return acc;
       }, {});
       if (currentMapMeta.mapType === MAP_TYPES.COUNTRY) {
         currentMapData = Object.keys(zones).reduce((acc1, state) => {
-          const districtData = (districts[state] || {districtData: {}})
-            .districtData;
           acc1[state] = Object.keys(zones[state]).reduce((acc2, district) => {
-            acc2[district] = {};
-            const dactive =
-              districtData && districtData[district]
-                ? districtData[district].active
-                : 0;
-            acc2[district].active = dactive;
             const zone = zones[state][district].zone;
             if (zone) {
-              acc2[district].zone = zone;
-              statistic[zone].total += 1;
-              if (dactive > statistic[zone].maxactive)
-                statistic[zone].maxactive = dactive;
+              acc2[district] = zone;
+              statistic[zone] += 1;
             }
             return acc2;
           }, {});
@@ -97,22 +87,12 @@ function MapExplorer({
         }, {});
       } else if (currentMapMeta.mapType === MAP_TYPES.STATE) {
         const state = currentMap.name;
-        const districtData = (districts[state] || {districtData: {}})
-          .districtData;
         currentMapData[state] = Object.keys(zones[state]).reduce(
           (acc, district) => {
-            acc[district] = {};
-            const dactive =
-              districtData && districtData[district]
-                ? districtData[district].active
-                : 0;
-            acc[district].active = dactive;
             const zone = zones[state][district].zone;
             if (zone) {
-              acc[district].zone = zone;
-              statistic[zone].total += 1;
-              if (dactive > statistic[zone].maxactive)
-                statistic[zone].maxactive = dactive;
+              acc[district] = zone;
+              statistic[zone] += 1;
             }
             return acc;
           },
