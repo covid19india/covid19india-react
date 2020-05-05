@@ -142,6 +142,10 @@ function ChoroplethMap({
           })
         );
       }
+      svgLegend.attr(
+        'class',
+        currentMap.stat === MAP_STATISTICS.ZONE ? 'zone' : ''
+      );
 
       // Add id to each feature
       const featureStates = topologyStates.features.map((f) => {
@@ -241,7 +245,7 @@ function ChoroplethMap({
                   : 0;
             else n = mapData[state] ? mapData[state][mapOption] : 0;
           }
-          const color = n === 0 ? '#ffffff' : colorScale(n);
+          const color = n === 0 ? '#ffffff00' : colorScale(n);
           return color;
         })
         .attr('stroke', function () {
@@ -267,6 +271,8 @@ function ChoroplethMap({
         })
         .transition()
         .attr('pointer-events', 'all');
+
+      svg.attr('class', currentMap.stat === MAP_STATISTICS.ZONE ? 'zone' : '');
 
       let meshStates = [];
       if (mapMeta.mapType === MAP_TYPES.COUNTRY) {

@@ -1231,14 +1231,14 @@ h6 {
   }
 
   .search-placeholder {
+    color: $gray-mid;
     font-family: 'archia';
+    font-size: 1rem;
+    left: 3rem;
+    opacity: .8;
+    pointer-events: none;
     position: absolute;
     top: 4.3rem;
-    left: 3rem;
-    font-size: 1rem;
-    color: $gray-mid;
-    pointer-events: none;
-    opacity: 0.8;
     transition: opacity 1s;
 
     &.disappear {
@@ -5349,7 +5349,13 @@ footer {
   .MapExplorer {
     #chart,
     #legend {
-      filter: invert(1) hue-rotate(180deg) saturate(1.5) url('#balance-color');
+      &.zone {
+        filter: none;
+      }
+
+      &:not(.zone) {
+        filter: invert(1) hue-rotate(180deg) saturate(1.5) url('#balance-color');
+      }
     }
 
     .legend {
