@@ -24,6 +24,12 @@ const months = {
   '12': 'Dec',
 };
 
+export const isDevelopmentOrTest = () => {
+  if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')
+    return true;
+  return false;
+};
+
 export const getStateName = (code) => {
   return STATE_CODES[code.toUpperCase()];
 };
