@@ -96,7 +96,7 @@ function Table({
         </h5>
       </React.Fragment>
     ),
-    []
+    [t]
   );
 
   const FineprintBottom = useMemo(
