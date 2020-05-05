@@ -2,7 +2,7 @@ import GeoData from "./essentials.json";
 
 import * as Knn from "leaflet-knn";
 import React from 'react';
-import { Map, Marker, Popup, TileLayer, LayerGroup } from "react-leaflet";
+import { Map, Marker, Popup, TileLayer, LayerGroup} from "react-leaflet";
 import L from 'leaflet';
 import Search from './geosearch';
 import 'leaflet/dist/leaflet.css';

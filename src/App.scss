@@ -135,9 +135,9 @@ h6 {
 }
 
 .leaflet-container {
-    width: 98%;
+    width: 90%;
     height: 90vh;
-    margin: auto;
+    margin-left: 4rem;
 }
 
 .Navbar {
@@ -3075,22 +3075,8 @@ footer {
     }
 }
 
-// .tracker_display
-// {
-//    margin-top: 30px;
-//   .line {
-//     position: relative;
-//     top: 50%;
-//     width: 100%;
-//     margin: 0 auto;
-//     border-right: 6px solid rgba(0,0,0, 0.75);
-//     font-size: 5vw;
-//     text-align: center;
-//      white-space:nowrap;
-//     overflow:hidden;transform: translateY(-50%);
-//   }
-// }
 .tracker {
+
     padding: 7px;
     position: relative;
     h1 {
@@ -3103,30 +3089,46 @@ footer {
         color: $cyan;
     }
     .tracker_bar {
-        display: flex;
-        align-items: flex-end;
-        div:first-of-type {
-            margin-left: auto;
-            margin-right: 10px;
-        }
-        label {
-            text-align: right;
-        }
-        .input_tracker {
-            position: relative;
-            left: calc(100% - 60%);
-            border: 1px solid rgba(155, 148, 139, 0.5);
-            background: rgba(155, 148, 139, 0.5);
-            width: 60%;
-            //display:block;
-            border-radius: 5px;
-            &:focus-within {
-                border: 1px solid black;
-                background: white;
+        margin-top: 3rem;
+        width: 30rem;
+        .close-button {
+            position: absolute;
+            right: 0;
+            stroke: $gray;
+            top: -2rem;
+            svg {
+                width: 16px;
             }
         }
-        button {
-            padding: auto;
+        .button {
+            align-self: center;
+            background: $gray-light;
+            border-radius: 5px;
+            flex-direction: row;
+            justify-content: center;
+            margin: 0;
+            transition: all 0.2s ease-in-out;
+            width: 100%;
+            &:hover {
+                background: $gray-hover;
+                svg {
+                    color: $gray;
+                }
+            }
+            h3 {
+                color: $gray;
+                font-weight: 600;
+                text-align: center;
+                text-transform: none;
+                width: 25rem;
+            }
+            svg {
+                color: $gray-mid;
+                transition: all 0.1s ease-in-out;
+            }
+            & > * {
+                align-self: center;
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ import React,{
   //, useEffect
   }  from 'react';
 import MapChart from './mapchart'
+import * as Icon from 'react-feather';
 
 let reset=false;
 
@@ -40,14 +41,16 @@ setCurrentLocation([data.lat,data.lng]);
 
 }
   return (
-  <div className="tracker">
+  <div className="tracker_bar">
   
-
-    <div className="tracker_bar">
-    <button className="button" 
-     onClick={(event)=>getLocationHandler(event)}>
-     GPS Location</button>
-    </div>
+      <div
+          className="button"
+          style={{animationDelay: '0.9s'}}
+          onClick={(event) => getLocationHandler(event)}
+        >
+          <Icon.MapPin />
+          <h3>View nearby essentials offering special assistance</h3>
+      </div>
 
     <div>
     <MapChart 
