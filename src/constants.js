@@ -14,6 +14,7 @@ export const DISTRICT_ROW_STATISTICS = [
 export const MAP_TYPES = {
   COUNTRY: 'country',
   STATE: 'state',
+  DISTRICT: 'district',
 };
 
 export const MAP_STATISTICS = {

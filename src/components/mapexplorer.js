@@ -15,6 +15,7 @@ import equal from 'fast-deep-equal';
 import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ReactDOM from 'react-dom';
 import * as Icon from 'react-feather';
+import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 
 const isEqual = (prevProps, currProps) => {
@@ -56,6 +57,7 @@ function MapExplorer({
   setMapOption,
   isCountryLoaded = true,
 }) {
+  const {t} = useTranslation();
   const [currentMap, setCurrentMap] = useState({
     name: mapName,
     stat: MAP_STATISTICS.TOTAL,
@@ -334,13 +336,15 @@ function MapExplorer({
         </div>
       )}
       <div className="header">
-        <h1>{currentMap.name} Map</h1>
+        <h1>
+          {t(currentMap.name)} {t('Map')}
+        </h1>
         <h6>
-          {window.innerWidth <= 769 ? 'Tap' : 'Hover'} over a{' '}
+          {window.innerWidth <= 769 ? t('Tap') : t('Hover')} over a{' '}
           {currentMapMeta.mapType === MAP_TYPES.COUNTRY
-            ? 'state/UT'
-            : 'district'}{' '}
-          for more details
+            ? t('state/UT')
+            : t('district')}{' '}
+          {t('for more details')}
         </h6>
       </div>
 
@@ -352,7 +356,7 @@ function MapExplorer({
           style={{animationDelay: '2s'}}
           onClick={() => setMapOption('confirmed')}
         >
-          <h5>{window.innerWidth <= 769 ? 'Cnfmd' : 'Confirmed'}</h5>
+          <h5>{window.innerWidth <= 769 ? t('Cnfmd') : t('Confirmed')}</h5>
           <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.confirmed)}</h1>
             <h6>{`+${formatNumber(panelRegion.deltaconfirmed)}`}</h6>
@@ -366,7 +370,7 @@ function MapExplorer({
           style={{animationDelay: '2.1s'}}
           onClick={() => setMapOption('active')}
         >
-          <h5>{window.innerWidth <= 769 ? 'Actv' : 'Active'}</h5>
+          <h5>{window.innerWidth <= 769 ? t('Actv') : t('Active')}</h5>
           <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.active)}</h1>
             <h6>{` `}</h6>
@@ -380,7 +384,7 @@ function MapExplorer({
           style={{animationDelay: '2.2s'}}
           onClick={() => setMapOption('recovered')}
         >
-          <h5>{window.innerWidth <= 769 ? 'Rcvrd' : 'Recovered'}</h5>
+          <h5>{window.innerWidth <= 769 ? t('Rcvrd') : t('Recovered')}</h5>
           <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.recovered)}</h1>
             <h6>{`+${formatNumber(panelRegion.deltarecovered)}`}</h6>
@@ -394,7 +398,7 @@ function MapExplorer({
           style={{animationDelay: '2.3s'}}
           onClick={() => setMapOption('deceased')}
         >
-          <h5>{window.innerWidth <= 769 ? 'Dcsd' : 'Deceased'}</h5>
+          <h5>{window.innerWidth <= 769 ? t('Dcsd') : t('Deceased')}</h5>
           <div className="stats-bottom">
             <h1>{formatNumber(panelRegion.deaths)}</h1>
             <h6>{`+${formatNumber(panelRegion.deltadeaths)}`}</h6>
@@ -405,13 +409,13 @@ function MapExplorer({
           className="stats is-purple tested fadeInUp"
           style={{animationDelay: '2.4s'}}
         >
-          <h5>Tested</h5>
+          <h5>{t('Tested')}</h5>
           <div className="stats-bottom">
             <h1>{formatNumber(testObj?.totaltested)}</h1>
           </div>
           <h6 className="timestamp">
             {!isNaN(parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()))
-              ? `As of ${format(
+              ? `${t('As of')} ${format(
                   parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
                   'dd MMM'
                 )}`
@@ -437,21 +441,23 @@ function MapExplorer({
           }`}
         >
           {hoveredRegion.district
-            ? hoveredRegion.district
-            : hoveredRegion.state}
+            ? t(hoveredRegion.district)
+            : t(hoveredRegion.state)}
         </h2>
 
         {currentMapMeta.mapType !== MAP_TYPES.STATE &&
           hoveredRegion.lastupdatedtime && (
             <div className="last-update">
-              <h6>Last updated</h6>
+              <h6>{t('Last updated')}</h6>
               <h3>
                 {isNaN(Date.parse(formatDate(hoveredRegion.lastupdatedtime)))
                   ? ''
                   : formatDistance(
                       new Date(formatDate(hoveredRegion.lastupdatedtime)),
                       new Date()
-                    ) + ' ago'}
+                    ) +
+                    ' ' +
+                    t('ago')}
               </h3>
             </div>
           )}
@@ -459,7 +465,7 @@ function MapExplorer({
         {currentMapMeta.mapType === MAP_TYPES.STATE ? (
           <Link to={`state/${hoveredRegion.statecode}`}>
             <div className="button state-page-button">
-              <abbr>Visit state page</abbr>
+              <abbr>{t('Visit state page')}</abbr>
               <Icon.ArrowRightCircle />
             </div>
           </Link>
@@ -477,7 +483,7 @@ function MapExplorer({
             <span>
               {mapOption}{' '}
               {currentMap.stat === MAP_STATISTICS.PER_MILLION
-                ? ' per million'
+                ? ` ${t('per million')}`
                 : ''}
             </span>
           </h1>
@@ -496,7 +502,8 @@ function MapExplorer({
         currentMapData.Unknown &&
         currentMapData.Unknown[mapOption] > 0 ? (
           <h4 className="unknown">
-            Districts unknown for {currentMapData.Unknown[mapOption]} people
+            {t('Districts unknown for')} {currentMapData.Unknown[mapOption]}{' '}
+            {t('people')}
           </h4>
         ) : null}
       </div>
@@ -536,7 +543,7 @@ function MapExplorer({
               });
           }}
         >
-          <h4>Total Cases</h4>
+          <h4>{t('Total Cases')}</h4>
         </div>
         {isCountryLoaded && (
           <div
@@ -556,7 +563,8 @@ function MapExplorer({
             }}
           >
             <h4>
-              Cases per million<sup>&dagger;</sup>
+              {t('Cases per million')}
+              <sup>&dagger;</sup>
             </h4>
           </div>
         )}
@@ -577,13 +585,13 @@ function MapExplorer({
       </div>
 
       <h6 className="footnote table-fineprint">
-        &dagger; Based on 2019 population projection by NCP (
+        &dagger; {t('Based on 2019 population projection by NCP') + '('}
         <a
           href="https://nhm.gov.in/New_Updates_2018/Report_Population_Projection_2019.pdf"
           target="_noblank"
           style={{color: '#6c757d'}}
         >
-          report
+          {t('report')}
         </a>
         )
       </h6>

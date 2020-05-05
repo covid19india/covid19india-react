@@ -1,4 +1,5 @@
 import Footer from './footer';
+import LanguageSwitcher from './languageswitcher';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
@@ -17,6 +18,7 @@ import {
   parseStateTestTimeseries,
   parseTotalTestTimeseries,
   parseDistrictZones,
+  isDevelopmentOrTest,
 } from '../utils/commonfunctions';
 
 import 'intersection-observer';
@@ -174,6 +176,7 @@ function Home(props) {
 
         <div className="home-left">
           <div className="header fadeInUp" style={{animationDelay: '1s'}}>
+            {isDevelopmentOrTest && <LanguageSwitcher />}
             {fetched && <Search />}
 
             <div className="actions">
