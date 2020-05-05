@@ -20,6 +20,7 @@ const FAQ = lazy(() => import('./components/faq'));
 const PatientDB = lazy(() => import('./components/patientdb'));
 const Resources = lazy(() => import('./components/resources'));
 const State = lazy(() => import('./components/state'));
+const Tracker = lazy(() => import('./components/tracker'));
 
 const schemaMarkup = {
   '@context': 'http://schema.org/',
