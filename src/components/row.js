@@ -102,6 +102,8 @@ function PureDistrictRow({
   sortedDistricts,
   districts,
 }) {
+  const {t} = useTranslation();
+
   return (
     <tr
       key={district.district}
@@ -113,7 +115,7 @@ function PureDistrictRow({
       <td className={classnames(`is-${zone?.zone}`)}>
         <div className="title-chevron">
           <span className="title-icon">
-            {district}
+            {t(district)}
             <span
               data-for="district"
               data-tip={[[sortedDistricts[district].notes]]}
@@ -268,7 +270,7 @@ function Row({
           <div className="title-chevron">
             {state.statecode !== 'TT' && Chevron}
             <span className="title-icon">
-              {state.state}
+              {t(state.state)}
 
               <span
                 data-tip={[t(`${state.statenotes}`)]}
