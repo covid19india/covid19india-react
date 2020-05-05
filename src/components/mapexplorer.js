@@ -57,7 +57,7 @@ function MapExplorer({
   setMapOption,
   isCountryLoaded = true,
 }) {
-<<<<<<< HEAD
+  const {t} = useTranslation();
   const [currentMap, setCurrentMap] = useState({
     name: mapName,
     stat: MAP_STATISTICS.TOTAL,
@@ -67,17 +67,6 @@ function MapExplorer({
         : MAP_VIEWS.DISTRICTS,
   });
   const currentMapMeta = MAP_META[currentMap.name];
-=======
-  const [selectedRegion, setSelectedRegion] = useState({});
-  const [panelRegion, setPanelRegion] = useState(getRegionFromState(states[0]));
-  const [currentHoveredRegion, setCurrentHoveredRegion] = useState(
-    getRegionFromState(states[0])
-  );
-  const [testObj, setTestObj] = useState({});
-  const [currentMap, setCurrentMap] = useState(mapMeta);
-  const [statisticOption, setStatisticOption] = useState(MAP_STATISTICS.TOTAL);
-  const {t} = useTranslation();
->>>>>>> Translation tags for the right side of the page
 
   const [statistic, currentMapData] = useMemo(() => {
     let currentMapData = {};
@@ -346,10 +335,10 @@ function MapExplorer({
         </h1>
         <h6>
           {window.innerWidth <= 769 ? t('Tap') : t('Hover')} over a{' '}
-          {currentMap.mapType === MAP_TYPES.COUNTRY
+          {currentMapMeta.mapType === MAP_TYPES.COUNTRY
             ? t('state/UT')
             : t('district')}{' '}
-          for more details
+          {t('for more details')}
         </h6>
       </div>
 
@@ -446,21 +435,23 @@ function MapExplorer({
           }`}
         >
           {hoveredRegion.district
-            ? t( hoveredRegion.district )
-            : t( hoveredRegion.state )}
+            ? t(hoveredRegion.district)
+            : t(hoveredRegion.state)}
         </h2>
 
         {currentMapMeta.mapType !== MAP_TYPES.STATE &&
           hoveredRegion.lastupdatedtime && (
             <div className="last-update">
-              <h6>{t(' Last updated') }</h6>
+              <h6>{t('Last updated')}</h6>
               <h3>
                 {isNaN(Date.parse(formatDate(hoveredRegion.lastupdatedtime)))
                   ? ''
                   : formatDistance(
                       new Date(formatDate(hoveredRegion.lastupdatedtime)),
                       new Date()
-                    ) + ' ' + t('ago')}
+                    ) +
+                    ' ' +
+                    t('ago')}
               </h3>
             </div>
           )}
@@ -485,8 +476,8 @@ function MapExplorer({
             <br />
             <span>
               {mapOption}{' '}
-              {statisticOption === MAP_STATISTICS.PER_MILLION
-                ? t(' per million')
+              {currentMap.stat === MAP_STATISTICS.PER_MILLION
+                ? ` ${t('per million')}`
                 : ''}
             </span>
           </h1>
@@ -566,7 +557,8 @@ function MapExplorer({
             }}
           >
             <h4>
-              Cases per million<sup>&dagger;</sup>
+              {t('Cases per million')}
+              <sup>&dagger;</sup>
             </h4>
           </div>
         )}
@@ -582,19 +574,12 @@ function MapExplorer({
             });
           }}
         >
-<<<<<<< HEAD
           <h4>Zones</h4>
-=======
-          <h4>
-            {t('Cases per million')}
-            <sup>&dagger;</sup>
-          </h4>
->>>>>>> Translation tags for the right side of the page
         </div>
       </div>
 
       <h6 className="footnote table-fineprint">
-        &dagger; {t('Based on 2019 population projection by NCP (')}
+        &dagger; {t('Based on 2019 population projection by NCP') + '('}
         <a
           href="https://nhm.gov.in/New_Updates_2018/Report_Population_Projection_2019.pdf"
           target="_noblank"
