@@ -3,6 +3,7 @@ import TimeSeries from './timeseries';
 import equal from 'fast-deep-equal';
 import React from 'react';
 import * as Icon from 'react-feather';
+import {useTranslation} from 'react-i18next';
 import {useLocalStorage} from 'react-use';
 
 const isEqual = (prevProps, currProps) => {
@@ -36,6 +37,7 @@ function TimeSeriesExplorer({
     'timeseriesLogMode',
     false
   );
+  const {t} = useTranslation();
 
   return (
     <div
@@ -59,7 +61,7 @@ function TimeSeriesExplorer({
           </div>
         )}
 
-        <h1>Spread Trends</h1>
+        <h1>{t('Spread Trends')}</h1>
         <div className="tabs">
           <div
             className={`tab ${chartType === 1 ? 'focused' : ''}`}
@@ -67,7 +69,7 @@ function TimeSeriesExplorer({
               setChartType(1);
             }}
           >
-            <h4>Cumulative</h4>
+            <h4>{t('Cumulative')}</h4>
           </div>
           <div
             className={`tab ${chartType === 2 ? 'focused' : ''}`}
@@ -75,20 +77,20 @@ function TimeSeriesExplorer({
               setChartType(2);
             }}
           >
-            <h4>Daily</h4>
+            <h4>{t('Daily')}</h4>
           </div>
         </div>
 
         <div className="scale-modes">
-          <label className="main">Scale Modes</label>
+          <label className="main">{t('Scale Modes')}</label>
           <div className="timeseries-mode">
-            <label htmlFor="timeseries-mode">Uniform</label>
+            <label htmlFor="timeseries-mode">{t('Uniform')}</label>
             <input
               id="timeseries-mode"
               type="checkbox"
               checked={timeseriesMode}
               className="switch"
-              aria-label="Checked by default to scale uniformly."
+              aria-label={t('Checked by default to scale uniformly.')}
               onChange={(event) => {
                 setTimeseriesMode(!timeseriesMode);
               }}
@@ -99,7 +101,7 @@ function TimeSeriesExplorer({
               chartType !== 1 ? 'disabled' : ''
             }`}
           >
-            <label htmlFor="timeseries-logmode">Logarithmic</label>
+            <label htmlFor="timeseries-logmode">{t('Logarithmic')}</label>
             <input
               id="timeseries-logmode"
               type="checkbox"
@@ -131,7 +133,7 @@ function TimeSeriesExplorer({
                     key={s.statecode}
                     statedata={JSON.stringify(s)}
                   >
-                    {s.statecode === 'TT' ? 'All States' : s.state}
+                    {s.statecode === 'TT' ? t('All States') : t(s.state)}
                   </option>
                 );
               })}
