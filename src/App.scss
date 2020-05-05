@@ -1906,6 +1906,10 @@ table {
         }
       }
 
+      &.district {
+        cursor: default;
+      }
+
       &:hover {
         background: $gray-hover !important;
 
