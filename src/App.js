@@ -2,15 +2,15 @@ import Home from './components/home';
 import Navbar from './components/navbar';
 import ScrollToTop from './utils/ScrollToTop';
 
-import React, {Suspense, lazy} from 'react';
-import {Helmet} from 'react-helmet';
+import React, { Suspense, lazy } from 'react';
+import { Helmet } from 'react-helmet';
 import {
   BrowserRouter as Router,
   Route,
   Redirect,
   Switch,
 } from 'react-router-dom';
-import {useLocalStorage, useEffectOnce} from 'react-use';
+import { useLocalStorage, useEffectOnce } from 'react-use';
 
 import './App.scss';
 
@@ -19,6 +19,8 @@ const FAQ = lazy(() => import('./components/faq'));
 const PatientDB = lazy(() => import('./components/patientdb'));
 const Resources = lazy(() => import('./components/resources'));
 const State = lazy(() => import('./components/state'));
+const Tracker = lazy(() => import('./components/tracker'));
+
 
 const schemaMarkup = {
   '@context': 'http://schema.org/',
@@ -61,7 +63,7 @@ function App() {
     },
     {
       pageLink: '/navigate',
-      view: Resources,
+      view: Tracker,
       displayName: 'Locate Me',
       animationDelayForNavbar: 0.6,
       showInNavbar: true,
@@ -121,7 +123,7 @@ function App() {
         <ScrollToTop />
         <Suspense fallback={<div className="lazy"></div>}>
           <Route
-            render={({location}) => (
+            render={({ location }) => (
               <div className="Almighty-Router">
                 <Navbar
                   pages={pages}
@@ -134,7 +136,7 @@ function App() {
                       <Route
                         exact
                         path={page.pageLink}
-                        render={({match}) => (
+                        render={({ match }) => (
                           <page.view key={match.params.stateCode || index} />
                         )}
                         key={index}

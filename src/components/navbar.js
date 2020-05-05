@@ -1,7 +1,7 @@
 import anime from 'animejs';
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import * as Icon from 'react-feather';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   useEffectOnce,
   useLockBodyScroll,
@@ -22,7 +22,7 @@ const activeNavIcon = (path) => ({
   },
 });
 
-function Navbar({pages, darkMode, setDarkMode}) {
+function Navbar({ pages, darkMode, setDarkMode }) {
   const [expand, setExpand] = useState(false);
   // eslint-disable-next-line
   const [isThemeSet, setIsThemeSet] = useLocalStorage('isThemeSet', false);
@@ -116,7 +116,7 @@ function Navbar({pages, darkMode, setDarkMode}) {
   );
 }
 
-function Expand({expand, pages, setExpand}) {
+function Expand({ expand, pages, setExpand }) {
   const expandElement = useRef(null);
 
   useEffectOnce(() => {
@@ -157,7 +157,7 @@ function Expand({expand, pages, setExpand}) {
         return null;
       })}
 
-      <div className="expand-bottom fadeInUp" style={{animationDelay: '1s'}}>
+      <div className="expand-bottom fadeInUp" style={{ animationDelay: '1s' }}>
         <h5>A crowdsourced initiative.</h5>
       </div>
     </div>

@@ -1,11 +1,11 @@
 import GeoData from './essentials.json';
 
-import {Label, LabelGroup, CounterLabel} from '@primer/components';
+import { Label, LabelGroup, CounterLabel } from '@primer/components';
 import L from 'leaflet';
 import * as Knn from 'leaflet-knn';
 import React from 'react';
 import 'leaflet/dist/leaflet.css';
-import {ExternalLink, Phone} from 'react-feather';
+import { ExternalLink, Phone } from 'react-feather';
 
 function medFilter(feature) {
   return feature.properties.priority;
@@ -14,7 +14,7 @@ function othersFilter(feature) {
   return !feature.properties.priority;
 }
 
-export default function MapChart({userLocation}) {
+export default function MapChart({ userLocation }) {
   let medKnn;
   let restKnn;
 
@@ -23,11 +23,11 @@ export default function MapChart({userLocation}) {
   const rad = 100 * 1000; // Max distance of the K points, in meters
 
   if (userLocation) {
-    medKnn = new Knn(L.geoJSON(GeoData, {filter: medFilter})).nearestLayer(
+    medKnn = new Knn(L.geoJSON(GeoData, { filter: medFilter })).nearestLayer(
       [userLocation[1], userLocation[0]],
       hK
     );
-    restKnn = new Knn(L.geoJSON(GeoData, {filter: othersFilter})).nearestLayer(
+    restKnn = new Knn(L.geoJSON(GeoData, { filter: othersFilter })).nearestLayer(
       [userLocation[1], userLocation[0]],
       rK,
       rad
