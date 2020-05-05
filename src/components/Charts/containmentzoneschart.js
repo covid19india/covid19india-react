@@ -64,19 +64,19 @@ function ContainmentZonesChart(props) {
   for (let i = 0; i < patients.length; i++){
     let plotDate = parse(patients[i].dateannounced, 'dd/MM/yyyy', runDate);
     if (redcasemap[patients[i].detecteddistrict]) {
-      // update latest for already red;
+      // update latest for already red
       redcasemap[patients[i].detecteddistrict] = patients[i].dateannounced;
     } else if (orangecasemap[patients[i].detecteddistrict]) {
       redcasemap[patients[i].detecteddistrict] = patients[i].dateannounced;
-      // few oranges went back to red;
+      // few oranges went back to red
       delete orangecasemap[patients[i].detecteddistrict];
     } else {
-      // new red;
+      // new red
       redcasemap[patients[i].detecteddistrict] = patients[i].dateannounced;
     }
     if (i > 0 && patients[i-1].dateannounced !== patients[i].dateannounced){
 
-      // moving old reds to orage
+      // moving old reds to orange
       Object.keys(redcasemap).forEach((dist) => {
         if (dist) {
           let eventDate  = parse(redcasemap[dist], 'dd/MM/yyyy', plotDate);
@@ -164,11 +164,16 @@ function ContainmentZonesChart(props) {
     },
   });
 
+  const sampleSize = patients.length;
+
   return (
     <div className="charts-header">
       <div className="chart-title">{props.title}</div>
       <div className="chart-content">
         <Bar data={barDataSet} options={options} />
+      </div>
+      <div className="chart-note">
+        Sample size: {formatNumber(sampleSize)} patients
       </div>
     </div>
   );
