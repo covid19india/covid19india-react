@@ -21,7 +21,7 @@ import {Breadcrumb, Dropdown} from '@primer/components';
 import anime from 'animejs';
 import axios from 'axios';
 import {format, parse} from 'date-fns';
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {Link, useParams, Redirect} from 'react-router-dom';
@@ -59,8 +59,6 @@ function PureBreadcrumbs({stateName, stateCode, fetched, allStateData}) {
 const Breadcrumbs = React.memo(PureBreadcrumbs);
 
 function State(props) {
-  const mapRef = useRef();
-
   const stateCode = useParams().stateCode.toUpperCase();
   const stateName = STATE_CODES[stateCode];
 
@@ -295,7 +293,6 @@ function State(props) {
             {fetched && <Minigraph timeseries={timeseries} />}
             {fetched && (
               <MapExplorer
-                forwardRef={mapRef}
                 mapName={stateName}
                 states={stateData}
                 districts={districtData}

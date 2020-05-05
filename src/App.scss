@@ -2328,6 +2328,18 @@ table {
       &.deceased {
         color: $gray;
       }
+
+      &.Red {
+        color: #d73027;
+      }
+
+      &.Orange {
+        color: #fee08b;
+      }
+
+      &.Green {
+        color: #66bd63;
+      }
     }
 
     h4 {

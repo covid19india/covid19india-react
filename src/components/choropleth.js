@@ -355,7 +355,7 @@ function ChoroplethMap({
         .join((enter) => enter.append('path').attr('d', path))
         .attr('fill', 'none')
         .transition(t)
-        .attr('stroke-width', width / 300)
+        .attr('stroke-width', width / 250)
         .attr('stroke', '#343a4099');
 
       function handleClick(d) {

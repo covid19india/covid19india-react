@@ -59,7 +59,10 @@ function MapExplorer({
   const [currentMap, setCurrentMap] = useState({
     name: mapName,
     stat: MAP_STATISTICS.TOTAL,
-    view: MAP_VIEWS.STATES,
+    view:
+      MAP_META[mapName].mapType === MAP_TYPES.COUNTRY
+        ? MAP_VIEWS.STATES
+        : MAP_VIEWS.DISTRICTS,
   });
   const [regionHighlightedMap, setRegionHighlightedMap] = useState(null);
   const currentMapMeta = MAP_META[currentMap.name];
@@ -296,7 +299,8 @@ function MapExplorer({
     [stateTestData, panelRegion]
   );
 
-  let hoveredRegionData;
+  let hoveredRegionCount;
+  let hoveredRegionZone;
   if (currentMap.stat !== MAP_STATISTICS.ZONE) {
     const data =
       hoveredRegion.district && currentMapData[hoveredRegion.state]
@@ -304,11 +308,17 @@ function MapExplorer({
         : hoveredRegion.state !== currentMap.name
         ? currentMapData[hoveredRegion.state]
         : currentMapData[hoveredRegion.state].Total;
-    hoveredRegionData = data
+    hoveredRegionCount = data
       ? currentMap.stat === MAP_STATISTICS.PER_MILLION
         ? Number(parseFloat(data[mapOption]).toFixed(2))
         : data[mapOption]
       : 0;
+  } else {
+    hoveredRegionZone =
+      zones[hoveredRegion.state] &&
+      zones[hoveredRegion.state][hoveredRegion.district]
+        ? zones[hoveredRegion.state][hoveredRegion.district].zone
+        : '';
   }
 
   return (
@@ -425,7 +435,15 @@ function MapExplorer({
       </div>
 
       <div className="meta fadeInUp" style={{animationDelay: '2.4s'}}>
-        <h2 className={`${mapOption !== 'confirmed' ? mapOption : ''}`}>
+        <h2
+          className={`${
+            currentMap.stat !== MAP_STATISTICS.ZONE
+              ? mapOption !== 'confirmed'
+                ? mapOption
+                : ''
+              : hoveredRegionZone
+          }`}
+        >
           {hoveredRegion.district
             ? hoveredRegion.district
             : hoveredRegion.state}
@@ -462,7 +480,7 @@ function MapExplorer({
           <h1
             className={`district ${mapOption !== 'confirmed' ? mapOption : ''}`}
           >
-            {hoveredRegionData}
+            {hoveredRegionCount}
             <br />
             <span>
               {mapOption}{' '}
