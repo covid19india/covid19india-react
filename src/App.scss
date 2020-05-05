@@ -10,9 +10,6 @@ $pblue-light: #4c75f210;
 $pblue-hover: #4c75f230;
 $pblue-light-opaque: #eff7ff;
 $pblue-mid: #4c75f299;
-$indigo: #6610f2;
-$purple: #6f42c1;
-$pink: #e83e8c;
 $cherry: #ff073a;
 $cherry-mid: #ff073a99;
 $cherry-light: #ff073a20;
@@ -45,12 +42,6 @@ $gray-hover: #6c757d20;
 $gray-mid: #6c757d99;
 $gray-dark: #343a40;
 $gray-opaque: #f1f1f1;
-$primary: #007bff;
-$secondary: #6c757d;
-$success: #28a745;
-$info: #17a2b8;
-$warning: #ffc107;
-$danger: #dc3545;
 $light: #f8f9fa;
 $dark: #343a40;
 $purple: #201aa2dd;
@@ -59,10 +50,15 @@ $purple-hover: #201aa230;
 $purple-mid: #201aa299;
 $purple-light-opaque: #e3e2f3;
 $pink: #fb5581;
-$pink-light: #ffa8cb10;
-$pink-hover: #ffa8cb30;
-$pink-mid: #ffa8cb99;
+$pink-light: #ffa8cb30;
+$pink-hover: #ffa8cb60;
+$pink-mid: #fb558199;
+$brown: #b6854d;
+$brown-light: #b6854d10;
+$brown-hover: #b6854d30;
+$brown-mid: #b6854d99;
 $brick: #e23028;
+
 // Dark mode variables
 $dark-m-gray: #161625;
 $dark-mid-subtext: #bdb8ae;
@@ -317,7 +313,6 @@ h6 {
   margin-left: 10rem;
   margin-right: 5rem;
 
-
   .header {
     display: flex;
     flex-direction: row;
@@ -492,6 +487,251 @@ h6 {
         svg {
           height: 100%;
         }
+      }
+    }
+  }
+
+  .__react_component_tooltip {
+    font-family: 'archia';
+    font-size: 11px;
+    font-weight: 600;
+    padding: .25rem;
+    text-align: center;
+  }
+}
+
+.StateMeta {
+  align-self: center;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+  margin-bottom: 3rem;
+  width: calc(100% - 3rem);
+
+  &.population {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    margin: 0;
+    margin-bottom: 2rem;
+
+    .alert {
+      margin: 0;
+    }
+  }
+
+  .__react_component_tooltip {
+    font-size: .8em;
+    padding: 1rem;
+
+    img {
+      filter: invert(1);
+      width: 20rem;
+    }
+  }
+
+  .meta-item {
+    border-radius: 5px;
+    min-height: 6rem;
+    padding-left: 1rem;
+    padding-top: 1rem;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      margin: 0;
+    }
+
+    h5 {
+      font-weight: 600;
+    }
+
+    h2 {
+      font-weight: 600;
+    }
+
+    h3 {
+      font-weight: 900;
+      width: 10rem;
+      word-wrap: break-word;
+    }
+
+    h1 {
+      display: inline-block;
+      font-weight: 600;
+    }
+
+    &.population {
+      min-height: 1rem !important;
+      padding: 0 !important;
+
+      h1,
+      h3 {
+        color: $gray;
+      }
+    }
+
+    .meta-item-top {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      & > * {
+        align-self: center;
+      }
+
+      span {
+        margin-right: 1rem;
+      }
+
+      svg {
+        align-self: flex-start;
+        cursor: pointer;
+        stroke-width: 3;
+        width: 12px;
+      }
+    }
+
+    .meta-item-middle {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      * {
+        align-self: center;
+      }
+
+      svg {
+        cursor: pointer;
+        margin-right: 1rem;
+      }
+    }
+
+    p {
+      font-family: 'archia';
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      padding-right: 1rem;
+    }
+
+    &.confirmed {
+      background: $cherry-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $cherry-mid;
+      }
+
+      h1 {
+        color: $cherry;
+      }
+    }
+
+    &.active {
+      background: $blue-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $blue-mid;
+      }
+
+      h1 {
+        color: $blue;
+      }
+    }
+
+    &.recovery {
+      background: $green-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $green-mid;
+      }
+
+      h1 {
+        color: $green;
+      }
+    }
+
+    &.mortality {
+      background: $gray-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $gray-mid;
+      }
+
+      h1 {
+        color: $gray;
+      }
+    }
+
+    &.cpm {
+      background: $yellow-light;
+
+      h3,
+      h5,
+      svg {
+        color: $orange-mid;
+      }
+
+      h1 {
+        color: $orange;
+      }
+    }
+
+    &.tpm {
+      background: $purple-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $purple-mid;
+      }
+
+      h1 {
+        color: $purple;
+      }
+    }
+
+    &.ptr {
+      background: $pink-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $pink-mid;
+      }
+
+      h1 {
+        color: $pink;
+      }
+    }
+
+    &.gr {
+      background: $brown-light;
+
+      h3,
+      h5,
+      p,
+      svg {
+        color: $brown-mid;
+      }
+
+      h1 {
+        color: $brown;
       }
     }
   }
@@ -864,7 +1104,6 @@ h6 {
 
 
   .filterlabel {
-    color: $indigo;
     font-family: 'archia';
     font-size: 11px !important;
     font-weight: 600;
@@ -990,6 +1229,22 @@ h6 {
     padding-left: 3rem;
     transition: all .2s ease-in-out;
     width: calc(100% - 4rem);
+  }
+
+  .search-placeholder {
+    font-family: 'archia';
+    position: absolute;
+    top: 4.3rem;
+    left: 3rem;
+    font-size: 1rem;
+    color: $gray-mid;
+    pointer-events: none;
+    opacity: 0.8;
+    transition: opacity 1s;
+
+    &.disappear {
+      opacity: 0;
+    }
   }
 
   .search-button {
@@ -2213,7 +2468,7 @@ table {
       }
 
       &.is-yellow {
-        background: $warning;
+        background: $yellow;
 
         h5,
         h6 {
@@ -4475,7 +4730,8 @@ footer {
   .filters,
   .updates,
   .map-switcher,
-  .updates-header {
+  .updates-header,
+  .StateMeta {
     width: calc(100% - 2rem);
   }
 
@@ -4969,6 +5225,17 @@ footer {
       }
     }
   }
+
+  .StateMeta {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-rows: repeat(auto-fit, minmax(5rem));
+    margin-bottom: 1rem;
+
+    .meta-item {
+      min-width: 1rem;
+    }
+  }
 }
 
 // Dark Mode
@@ -5155,6 +5422,20 @@ footer {
     }
   }
 
+  .tpm {
+    background: #40008050 !important;
+
+    h3,
+    h5,
+    svg,
+    p {
+      color: #9673b9bb !important;
+    }
+
+    h1 {
+      color: #9673b9 !important;
+    }
+  }
 
   .tab {
     &.focused {

@@ -46,6 +46,16 @@ const essentialsEngine = new Bloodhound({
   },
 });
 
+let focused = false;
+const suggestions = [
+  'Karnataka',
+  'West Bengal',
+  'Pune Testing',
+  'Mumbai Shelter',
+  'Medical',
+  'Delhi Police',
+];
+
 function Search(props) {
   const [searchValue, setSearchValue] = useState('');
   const [expand, setExpand] = useState(false);
@@ -133,6 +143,54 @@ function Search(props) {
     }
   }
 
+  function fillPlaceholder(target, index, cursorPosition, callback) {
+    if (focused) {
+      target.textContent = '';
+      return true;
+    }
+    const text = suggestions[index];
+    const placeholder = target.textContent;
+    target.classList.remove('disappear');
+    target.textContent = placeholder + text[cursorPosition];
+    if (cursorPosition < text.length - 1) {
+      setTimeout(function () {
+        fillPlaceholder(target, index, cursorPosition + 1, callback);
+      }, 200);
+      return true;
+    }
+    callback();
+  }
+
+  function clearPlaceholder(target, callback) {
+    const placeholder = target.textContent;
+    target.classList.add('disappear');
+    if (placeholder.length > 0) {
+      setTimeout(function () {
+        target.textContent = '';
+        clearPlaceholder(target, callback);
+      }, 1000);
+      return true;
+    }
+    callback();
+  }
+
+  function loopThroughSuggestions(target, index) {
+    if (focused) {
+      target.textContent = '';
+      return true;
+    }
+    fillPlaceholder(target, index, 0, function () {
+      setTimeout(function () {
+        clearPlaceholder(target, function () {
+          loopThroughSuggestions(target, (index + 1) % suggestions.length);
+        });
+      }, 2000);
+    });
+  }
+
+  const targetInput = document.getElementById('search-placeholder');
+  if (targetInput) loopThroughSuggestions(targetInput, 0);
+
   return (
     <div className="Search">
       <label>Search your city, resources, etc</label>
@@ -143,6 +201,7 @@ function Search(props) {
         value={searchValue}
         ref={searchInput}
         onFocus={(event) => {
+          focused = true;
           setExpand(true);
         }}
         onBlur={() => {
@@ -152,6 +211,7 @@ function Search(props) {
           setSearchValue(event.target.value);
         }}
       />
+      <span id="search-placeholder" className="search-placeholder"></span>
 
       <div className={`search-button`}>
         <Icon.Search />
