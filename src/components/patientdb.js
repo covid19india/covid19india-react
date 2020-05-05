@@ -322,12 +322,17 @@ function PatientDB(props) {
         <div>
           <h1>Demographics</h1>
 
-          <div className="deep-dive">
+          <div
+            className={`deep-dive ${
+              message || filteredPatients.length === 0 ? 'disabled' : ''
+            }`}
+          >
             <h5>Expand</h5>
             <input
               aria-label="Expand Demographics"
               type="checkbox"
               checked={scaleMode}
+              disabled={message || filteredPatients.length === 0}
               onChange={(event) => {
                 setScaleMode(!scaleMode);
               }}

@@ -4,9 +4,10 @@ import Footer from './footer';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
+import StateMeta from './statemeta';
 import TimeSeriesExplorer from './timeseriesexplorer';
 
-import {MAP_META, STATE_CODES} from '../constants';
+import {MAP_META, STATE_CODES, STATE_POPULATIONS} from '../constants';
 import {
   formatDateAbsolute,
   formatNumber,
@@ -32,7 +33,7 @@ function State(props) {
   const [allStateData, setAllStateData] = useState({});
   const [fetched, setFetched] = useState(false);
   const [timeseries, setTimeseries] = useState({});
-  const [stateData, setStateData] = useState({});
+  const [stateData, setStateData] = useState(null);
   const [testData, setTestData] = useState({});
   const [sources, setSources] = useState({});
   const [districtData, setDistrictData] = useState({});
@@ -63,12 +64,8 @@ function State(props) {
       const name = STATE_CODES[code];
 
       const states = dataResponse.statewise;
-      setAllStateData(
-        states.filter(
-          (state) => state.statecode !== code && STATE_CODES[state.statecode]
-        )
-      );
-      setStateData(states.find((s) => s.statecode === code));
+      setAllStateData(states.filter((state) => state.statecode !== code));
+      setStateData([states.find((s) => s.statecode === code)]);
       // Timeseries
       const ts = parseStateTimeseries(statesDailyResponse)[code];
       const testTs = parseStateTestTimeseries(
@@ -114,6 +111,7 @@ function State(props) {
   };
 
   const testObjLast = testData[testData.length - 1];
+  const population = STATE_POPULATIONS[stateName];
 
   function toggleShowAllDistricts() {
     setShowAllDistricts(!showAllDistricts);
@@ -129,6 +127,7 @@ function State(props) {
     return gridRowCount;
   };
   const gridRowCount = getGridRowCount();
+
   if (!stateName) {
     return <Redirect to="/" />;
   } else {
@@ -179,8 +178,8 @@ function State(props) {
                 <h1>{stateName}</h1>
                 <h5>
                   Last Updated on{' '}
-                  {Object.keys(stateData).length
-                    ? formatDateAbsolute(stateData.lastupdatedtime)
+                  {stateData && Object.keys(stateData[0]).length
+                    ? formatDateAbsolute(stateData[0].lastupdatedtime)
                     : ''}
                 </h5>
               </div>
@@ -268,22 +267,18 @@ function State(props) {
               </div>
             )}
 
-            {fetched && <Level data={stateData} />}
+            {fetched && <Level data={stateData[0]} />}
             {fetched && <Minigraph timeseries={timeseries} />}
             {fetched && (
-              <React.Fragment>
-                {
-                  <MapExplorer
-                    forwardRef={mapRef}
-                    mapMeta={MAP_META[stateName]}
-                    states={[stateData]}
-                    stateDistrictWiseData={districtData}
-                    stateTestData={testData}
-                    isCountryLoaded={false}
-                    mapOptionProp={mapOption}
-                  />
-                }
-              </React.Fragment>
+              <MapExplorer
+                forwardRef={mapRef}
+                mapMeta={MAP_META[stateName]}
+                states={stateData}
+                districts={districtData}
+                stateTestData={testData}
+                isCountryLoaded={false}
+                mapOption={mapOption}
+              />
             )}
 
             {fetched && (
@@ -318,6 +313,18 @@ function State(props) {
                   </div>
                 </div>
               </div>
+            )}
+
+            {fetched && (
+              <StateMeta
+                stateData={stateData[0]}
+                lastTestObject={testObjLast}
+                population={population}
+                lastSevenDaysData={timeseries.slice(-7)}
+                totalData={allStateData.filter(
+                  (state) => state.statecode === 'TT'
+                )}
+              />
             )}
           </div>
 

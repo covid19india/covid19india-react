@@ -1,3 +1,16 @@
+export const STATE_ROW_STATISTICS = [
+  'confirmed',
+  'active',
+  'recovered',
+  'deaths',
+];
+export const DISTRICT_ROW_STATISTICS = [
+  'confirmed',
+  'active',
+  'recovered',
+  'deceased',
+];
+
 export const MAP_TYPES = {
   COUNTRY: 'country',
   STATE: 'state',

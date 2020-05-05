@@ -28,6 +28,11 @@ function Updates(props) {
 
   return (
     <div className="updates">
+      <div className="update">
+        <h5>New!</h5>
+        <h4>Added zones to district tables</h4>
+      </div>
+
       <div className="updates-header">
         <h2>{format(currentDate, 'd MMM')}</h2>
       </div>
