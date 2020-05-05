@@ -195,7 +195,7 @@ function Row({
 
   const _onHighlightState = useCallback(
     (state) => {
-      if (!equal(state, regionHighlighted?.state)) {
+      if (!equal(state.state, regionHighlighted?.state)) {
         onHighlightState(state);
       }
     },
@@ -249,7 +249,7 @@ function Row({
         className={classnames(
           'state',
           {'is-total': state.statecode === 'TT'},
-          {'is-highlighted': regionHighlighted?.state.state === state.state},
+          {'is-highlighted': regionHighlighted?.state === state.state},
           {'is-odd': index % 2 === 0}
         )}
         onMouseEnter={() => _onHighlightState(state)}
