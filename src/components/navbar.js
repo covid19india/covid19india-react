@@ -98,6 +98,11 @@ function Navbar({pages, darkMode, setDarkMode}) {
               </Link>
             </span>
             <span>
+              <Link to="/navigate">
+                <Icon.Compass {...activeNavIcon('/navigate')} />
+              </Link>
+            </span>
+            <span>
               <Link to="/faq">
                 <Icon.HelpCircle {...activeNavIcon('/faq')} />
               </Link>

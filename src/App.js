@@ -60,10 +60,17 @@ function App() {
       showInNavbar: true,
     },
     {
+      pageLink: '/navigate',
+      view: Resources,
+      displayName: 'Locate Me',
+      animationDelayForNavbar: 0.6,
+      showInNavbar: true,
+    },
+    {
       pageLink: '/faq',
       view: FAQ,
       displayName: 'FAQ',
-      animationDelayForNavbar: 0.6,
+      animationDelayForNavbar: 0.7,
       showInNavbar: true,
     },
     {
