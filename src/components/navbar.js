@@ -1,6 +1,7 @@
 import anime from 'animejs';
 import React, {useState, useRef} from 'react';
 import * as Icon from 'react-feather';
+import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {
   useEffectOnce,
@@ -113,6 +114,7 @@ function Navbar({pages, darkMode, setDarkMode}) {
 
 function Expand({expand, pages, setExpand}) {
   const expandElement = useRef(null);
+  const {t} = useTranslation();
 
   useEffectOnce(() => {
     anime({
@@ -144,7 +146,7 @@ function Expand({expand, pages, setExpand}) {
               <span
                 {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}
               >
-                {page.displayName}
+                {t(page.displayName)}
               </span>
             </Link>
           );
@@ -153,7 +155,7 @@ function Expand({expand, pages, setExpand}) {
       })}
 
       <div className="expand-bottom fadeInUp" style={{animationDelay: '1s'}}>
-        <h5>A crowdsourced initiative.</h5>
+        <h5>{t('A crowdsourced initiative.')}</h5>
       </div>
     </div>
   );

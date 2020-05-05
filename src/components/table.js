@@ -6,6 +6,7 @@ import {capitalize, abbreviate} from '../utils/commonfunctions';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import React, {useState, useMemo, useCallback} from 'react';
+import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import {createBreakpoint, useLocalStorage, useEffectOnce} from 'react-use';
@@ -14,6 +15,7 @@ const useBreakpoint = createBreakpoint({XL: 1280, L: 768, S: 350});
 
 function StateHeaderCell({handleSort, sortData, statistic}) {
   const breakpoint = useBreakpoint();
+  const {t} = useTranslation();
 
   return (
     <th onClick={() => handleSort(statistic)}>
@@ -28,7 +30,7 @@ function StateHeaderCell({handleSort, sortData, statistic}) {
             ? capitalize(
                 abbreviate(statistic === 'deaths' ? 'deceased' : statistic)
               )
-            : capitalize(statistic === 'deaths' ? 'deceased' : statistic)}
+            : t(capitalize(statistic === 'deaths' ? 'deceased' : statistic))}
         </abbr>
         <div
           style={{
@@ -63,6 +65,7 @@ function Table({
     sortColumn: 'confirmed',
     isAscending: false,
   });
+  const {t} = useTranslation();
 
   const [sortedStates, setSortedStates] = useState(
     states.filter((state) => state.statecode !== 'TT')
@@ -75,9 +78,9 @@ function Table({
           className="table-fineprint fadeInUp"
           style={{animationDelay: '1.5s'}}
         >
-          Compiled from State Govt. numbers,{' '}
+          {t('Compiled from State Govt. numbers')},{' '}
           <Link to="/faq" style={{color: '#6c757d'}}>
-            know more!
+            {t('know more')}!
           </Link>
         </h5>
         <h5
@@ -94,7 +97,7 @@ function Table({
         </h5>
       </React.Fragment>
     ),
-    []
+    [t]
   );
 
   const FineprintBottom = useMemo(
@@ -161,7 +164,7 @@ function Table({
             <tr>
               <th className="state-heading" onClick={() => handleSort('state')}>
                 <div className="heading-content">
-                  <abbr title="State">State/UT</abbr>
+                  <abbr title="State">{t('State/UT')}</abbr>
                   <div
                     style={{
                       display:
@@ -199,7 +202,7 @@ function Table({
                       districts={districts[state.state]?.districtData}
                       zones={zones[state.state]}
                       regionHighlighted={
-                        equal(regionHighlighted?.state, state)
+                        equal(regionHighlighted?.state, state.state)
                           ? regionHighlighted
                           : null
                       }
