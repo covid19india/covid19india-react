@@ -272,7 +272,15 @@ function ChoroplethMap({
         .transition()
         .attr('pointer-events', 'all');
 
-      svg.attr('class', currentMap.stat === MAP_STATISTICS.ZONE ? 'zone' : '');
+      svg
+        .transition()
+        .duration(mapMeta.mapType === MAP_TYPES.STATE ? 250 : 0)
+        .on('end', () =>
+          svg.attr(
+            'class',
+            currentMap.stat === MAP_STATISTICS.ZONE ? 'zone' : ''
+          )
+        );
 
       let meshStates = [];
       if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
