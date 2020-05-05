@@ -117,6 +117,7 @@ function PureDistrictRow({
               data-tip={[[sortedDistricts[district].notes]]}
               data-event="touchstart mouseover"
               data-event-off="mouseleave"
+              onClick={(e) => e.stopPropagation()}
             >
               {sortedDistricts[district].notes && <Icon.Info />}
             </span>
@@ -271,6 +272,7 @@ function Row({
                 data-tip={[`${state.statenotes}`]}
                 data-event="touchstart mouseover"
                 data-event-off="mouseleave"
+                onClick={(e) => e.stopPropagation()}
               >
                 {state.statenotes && <Icon.Info />}
               </span>
