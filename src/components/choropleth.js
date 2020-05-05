@@ -4,7 +4,7 @@ import {MAP_META, MAP_STATISTICS, MAP_TYPES, MAP_VIEWS} from '../constants';
 import {capitalizeAll, formatNumber} from '../utils/commonfunctions';
 
 import * as d3 from 'd3';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import * as Icon from 'react-feather';
 import * as topojson from 'topojson';
 
@@ -21,23 +21,30 @@ function ChoroplethMap({
 }) {
   const choroplethMap = useRef(null);
   const choroplethLegend = useRef(null);
-  const [mapId, setMapId] = useState(null);
 
   const mapMeta = MAP_META[currentMap.name];
 
   const ready = useCallback(
-    (geoData, isChangedMap = false) => {
+    (geoData) => {
       const svg = d3.select(choroplethMap.current);
 
-      const graphObjectName =
-        mapMeta.mapType === MAP_TYPES.COUNTRY &&
-        currentMap.view === MAP_VIEWS.DISTRICTS
-          ? mapMeta.graphObjectDistricts
-          : mapMeta.graphObjectName;
-      const topology = topojson.feature(
+      const topologyStates =
+        mapMeta.mapType === MAP_TYPES.COUNTRY
+          ? topojson.feature(
+              geoData,
+              geoData.objects[mapMeta.graphObjectStates]
+            )
+          : {features: []};
+      const topologyDistricts = topojson.feature(
         geoData,
-        geoData.objects[graphObjectName]
+        geoData.objects[mapMeta.graphObjectDistricts]
       );
+
+      const topology =
+        currentMap.view === MAP_VIEWS.STATES
+          ? topologyStates
+          : topologyDistricts;
+
       const projection = d3.geoMercator();
 
       // Set size of the map
@@ -60,9 +67,7 @@ function ChoroplethMap({
       const bBox = svg.attr('viewBox').split(' ');
       width = +bBox[2];
       height = +bBox[3];
-      if (isChangedMap) {
-        projection.fitSize([width, height], topology);
-      }
+      projection.fitSize([width, height], topology);
       path = d3.geoPath(projection);
 
       /* Legend */
@@ -76,8 +81,9 @@ function ChoroplethMap({
       if (currentMap.stat === MAP_STATISTICS.ZONE) {
         colorScale = d3.scaleOrdinal(
           ['Red', 'Orange', 'Green'],
-          ['#ff073ac9', '#fd7e14b9', '#28a745b9']
+          ['#d73027', '#fee08b', '#66bd63']
         );
+
         svgLegend.call(() =>
           legend({
             color: colorScale,
@@ -87,7 +93,7 @@ function ChoroplethMap({
             marginLeft: 2,
             marginRight: 20,
             svg: svgLegend,
-            ordinalWeights: Object.values(statistic),
+            ordinalWeights: Object.values(statistic).map((d) => d.total),
           })
         );
       } else {
@@ -139,11 +145,19 @@ function ChoroplethMap({
       }
 
       // Add id to each feature
-      const features = topology.features.map((f) => {
+      const featureStates = topologyStates.features.map((f) => {
+        const state = f.properties.st_nm;
+        const obj = Object.assign({}, f);
+        obj.id = `${mapMeta.graphObjectStates}-${state}`;
+        return obj;
+      });
+
+      // Add id to each feature
+      const featureDistricts = topologyDistricts.features.map((f) => {
         const district = f.properties.district;
         const state = f.properties.st_nm;
         const obj = Object.assign({}, f);
-        obj.id = `${graphObjectName}-${state}${district ? `-${district}` : ''}`;
+        obj.id = `${mapMeta.graphObjectDistricts}-${state}${district}`;
         return obj;
       });
 
@@ -151,9 +165,14 @@ function ChoroplethMap({
       const t = svg.transition().duration(500);
       let onceTouchedRegion = null;
       const regionSelection = svg
-        .select('.regions')
+        .select(currentMap.view === MAP_VIEWS.STATES ? '.states' : '.districts')
         .selectAll('path')
-        .data(features, (d) => d.id)
+        .data(
+          currentMap.view === MAP_VIEWS.STATES
+            ? featureStates
+            : featureDistricts,
+          (d) => d.id
+        )
         .join((enter) => {
           const sel = enter.append('path').attr('d', path);
           sel.append('title');
@@ -252,22 +271,46 @@ function ChoroplethMap({
         .transition()
         .attr('pointer-events', 'all');
 
-      // Add id to mesh
-      const mesh = topojson.mesh(geoData, geoData.objects[graphObjectName]);
-      mesh.id = graphObjectName;
+      let meshStates = [];
+      if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
+        meshStates = [
+          topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectStates]),
+        ];
+        meshStates[0].id = mapMeta.graphObjectStates;
+      }
+      let meshDistricts = [];
+      if (currentMap.view === MAP_VIEWS.DISTRICTS) {
+        // Add id to mesh
+        meshDistricts = [
+          topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectDistricts]),
+        ];
+        meshDistricts[0].id = mapMeta.graphObjectStates;
+      }
       svg
-        .select('.borders')
+        .select(
+          currentMap.view === MAP_VIEWS.STATES
+            ? '.state-borders'
+            : '.district-borders'
+        )
         .selectAll('path')
-        .data([mesh], (d) => d.id)
-        .join((enter) => enter.append('path').attr('d', (d) => path(d)))
+        .data(
+          currentMap.view === MAP_VIEWS.STATES ? meshStates : meshDistricts,
+          (d) => d.id
+        )
+        .join((enter) =>
+          enter
+            .append('path')
+            .attr('d', path)
+            .attr('stroke-width', width / 250)
+        )
         .attr('fill', 'none')
-        .attr('stroke-width', () => {
+        .transition(t)
+        .attr('stroke-width', function () {
           return mapMeta.mapType === MAP_TYPES.COUNTRY &&
-            currentMap.stat === MAP_STATISTICS.ZONE
-            ? width / 500
+            currentMap.view === MAP_VIEWS.DISTRICTS
+            ? 'none'
             : width / 250;
         })
-        .transition(t)
         .attr('stroke', function () {
           if (currentMap.stat === MAP_STATISTICS.ZONE) {
             return '#00000060';
@@ -286,28 +329,36 @@ function ChoroplethMap({
           }
         });
 
-      if (
-        mapMeta.mapType === MAP_TYPES.COUNTRY &&
-        currentMap.view === MAP_VIEWS.DISTRICTS
-      ) {
-        // Add id to mesh
-        const meshStates = topojson.mesh(
-          geoData,
-          geoData.objects[mapMeta.graphObjectName]
-        );
-        meshStates.id = mapMeta.graphObjectName;
-        svg
-          .select('.borders-secondary')
-          .selectAll('path')
-          .data([meshStates], (d) => d.id)
-          .join((enter) => enter.append('path').attr('d', (d) => path(d)))
-          .attr('fill', 'none')
-          .attr('stroke-width', width / 300)
-          .transition(t)
-          .attr('stroke', '#343a4099');
-      } else {
-        svg.select('.borders-secondary').selectAll('path').remove();
-      }
+      svg
+        .select(currentMap.view === MAP_VIEWS.STATES ? '.districts' : '.states')
+        .selectAll('path')
+        .data(
+          currentMap.view === MAP_VIEWS.STATES
+            ? featureDistricts
+            : featureStates,
+          (d) => d.id
+        )
+        .join((enter) => enter.append('path').attr('d', path))
+        .attr('fill', 'none')
+        .attr('stroke', 'none')
+        .attr('pointer-events', 'none');
+
+      svg
+        .select(
+          currentMap.view === MAP_VIEWS.STATES
+            ? '.district-borders'
+            : '.state-borders'
+        )
+        .selectAll('path')
+        .data(
+          currentMap.view === MAP_VIEWS.STATES ? meshDistricts : meshStates,
+          (d) => d.id
+        )
+        .join((enter) => enter.append('path').attr('d', path))
+        .attr('fill', 'none')
+        .transition(t)
+        .attr('stroke-width', width / 300)
+        .attr('stroke', '#343a4099');
 
       function handleClick(d) {
         d3.event.stopPropagation();
@@ -344,16 +395,10 @@ function ChoroplethMap({
     (async () => {
       const data = await d3.json(mapMeta.geoDataFile);
       if (statistic && choroplethMap.current) {
-        const graphObjectName =
-          mapMeta.mapType === MAP_TYPES.COUNTRY &&
-          currentMap.view === MAP_VIEWS.DISTRICTS
-            ? mapMeta.graphObjectDistricts
-            : mapMeta.graphObjectName;
-        ready(data, mapId !== graphObjectName);
-        setMapId(graphObjectName);
+        ready(data);
       }
     })();
-  }, [currentMap.view, mapId, mapMeta, statistic, ready]);
+  }, [mapMeta, statistic, ready]);
 
   useEffect(() => {
     const highlightRegionInMap = (region) => {
@@ -383,16 +428,16 @@ function ChoroplethMap({
       });
     };
     highlightRegionInMap(regionHighlighted);
-  }, [mapId, regionHighlighted, currentMap.stat]);
+  }, [regionHighlighted, currentMap.stat]);
 
   return (
     <React.Fragment>
       <div className="svg-parent fadeInUp" style={{animationDelay: '2.5s'}}>
         <svg id="chart" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}>
-          <g className="regions" />
-          <g className="regions-secondary" />
-          <g className="borders" />
-          <g className="borders-secondary" />
+          <g className="states" />
+          <g className="districts" />
+          <g className="state-borders" />
+          <g className="district-borders" />
         </svg>
         {(mapOption === 'recovered' && mapData?.Unknown?.recovered) ||
         (mapOption === 'deceased' && mapData?.Unknown?.deceased) ? (
@@ -410,7 +455,7 @@ function ChoroplethMap({
       >
         <svg
           id="legend"
-          height="52"
+          height="50"
           preserveAspectRatio="xMidYMid meet"
           ref={choroplethLegend}
         >

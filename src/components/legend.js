@@ -64,7 +64,7 @@ function legend({
 
   // Sequential
   else if (color.interpolator) {
-    svg.selectAll('rect').remove();
+    svg.selectAll('rect').transition(t).attr('opacity', 0);
 
     x = Object.assign(
       color
@@ -85,7 +85,9 @@ function legend({
       .attr('width', width - marginLeft - marginRight)
       .attr('height', height - marginTop - marginBottom)
       .attr('preserveAspectRatio', 'none')
-      .attr('xlink:href', ramp(color.interpolator()).toDataURL());
+      .attr('xlink:href', ramp(color.interpolator()).toDataURL())
+      .transition(t)
+      .attr('opacity', 1);
 
     // scaleSequentialQuantile doesn’t implement ticks or tickFormat.
     if (!x.ticks) {
@@ -144,7 +146,11 @@ function legend({
 
   // Ordinal
   else {
-    svg.select('.ramp').attr('xlink:href', null);
+    svg
+      .select('.ramp')
+      .transition(t)
+      .attr('opacity', 0)
+      .attr('xlink:href', null);
     if (!ordinalWeights) {
       x = d3
         .scaleBand()
@@ -187,7 +193,8 @@ function legend({
         .attr('fill', color)
         .transition(t)
         .attr('x', x)
-        .attr('width', (d, i) => widthScale(ordinalWeights[i]));
+        .attr('width', (d, i) => widthScale(ordinalWeights[i]))
+        .attr('opacity', 1);
     }
 
     tickAdjust = () => {};

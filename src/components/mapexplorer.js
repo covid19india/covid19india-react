@@ -70,23 +70,54 @@ function MapExplorer({
     if (currentMap.stat === MAP_STATISTICS.ZONE) {
       const dataTypes = ['Red', 'Orange', 'Green'];
       statistic = dataTypes.reduce((acc, dtype) => {
-        acc[dtype] = 0;
+        acc[dtype] = {total: 0, maxactive: 0};
         return acc;
       }, {});
-      currentMapData = zones;
       if (currentMapMeta.mapType === MAP_TYPES.COUNTRY) {
-        statistic = Object.values(zones).reduce((acc1, d1) => {
-          acc1 = Object.values(d1).reduce((acc2, d2) => {
-            if (d2.zone) acc2[d2.zone] += 1;
+        currentMapData = Object.keys(zones).reduce((acc1, state) => {
+          const districtData = (districts[state] || {districtData: {}})
+            .districtData;
+          acc1[state] = Object.keys(zones[state]).reduce((acc2, district) => {
+            acc2[district] = {};
+            const dactive =
+              districtData && districtData[district]
+                ? districtData[district].active
+                : 0;
+            acc2[district].active = dactive;
+            const zone = zones[state][district].zone;
+            if (zone) {
+              acc2[district].zone = zone;
+              statistic[zone].total += 1;
+              if (dactive > statistic[zone].maxactive)
+                statistic[zone].maxactive = dactive;
+            }
             return acc2;
-          }, acc1);
+          }, {});
           return acc1;
-        }, statistic);
+        }, {});
       } else if (currentMapMeta.mapType === MAP_TYPES.STATE) {
-        statistic = Object.values(zones[currentMap.name]).reduce((acc, d) => {
-          if (d.zone) acc[d.zone] += 1;
-          return acc;
-        }, statistic);
+        const state = currentMap.name;
+        const districtData = (districts[state] || {districtData: {}})
+          .districtData;
+        currentMapData[state] = Object.keys(zones[state]).reduce(
+          (acc, district) => {
+            acc[district] = {};
+            const dactive =
+              districtData && districtData[district]
+                ? districtData[district].active
+                : 0;
+            acc[district].active = dactive;
+            const zone = zones[state][district].zone;
+            if (zone) {
+              acc[district].zone = zone;
+              statistic[zone].total += 1;
+              if (dactive > statistic[zone].maxactive)
+                statistic[zone].maxactive = dactive;
+            }
+            return acc;
+          },
+          {}
+        );
       }
     } else {
       const dataTypes = ['confirmed', 'active', 'recovered', 'deceased'];
@@ -97,7 +128,6 @@ function MapExplorer({
       if (currentMapMeta.mapType === MAP_TYPES.COUNTRY) {
         currentMapData = states.reduce((acc, state) => {
           acc[state.state] = {};
-
           dataTypes.forEach((dtype) => {
             let typeCount = parseInt(
               state[dtype !== 'deceased' ? dtype : 'deaths']
