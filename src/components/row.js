@@ -102,8 +102,6 @@ function PureDistrictRow({
   sortedDistricts,
   districts,
 }) {
-  const {t} = useTranslation();
-
   return (
     <tr
       key={district.district}
@@ -118,7 +116,7 @@ function PureDistrictRow({
             {district}
             <span
               data-for="district"
-              data-tip={t([[sortedDistricts[district].notes]])}
+              data-tip={[[sortedDistricts[district].notes]]}
               data-event="touchstart mouseover"
               data-event-off="mouseleave"
             >
