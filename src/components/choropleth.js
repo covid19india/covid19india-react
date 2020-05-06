@@ -1,44 +1,48 @@
 import legend from './legend';
 
-import {MAP_STATISTICS, MAP_TYPES} from '../constants';
-import {formatNumber} from '../utils/commonfunctions';
+import {MAP_META, MAP_STATISTICS, MAP_TYPES, MAP_VIEWS} from '../constants';
+import {capitalizeAll, formatNumber} from '../utils/commonfunctions';
 
 import * as d3 from 'd3';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import * as Icon from 'react-feather';
 import * as topojson from 'topojson';
-
-const propertyFieldMap = {
-  country: 'st_nm',
-  state: 'district',
-};
 
 function ChoroplethMap({
   statistic,
   mapData,
-  setHoveredRegion,
-  mapMeta,
+  currentMap,
   changeMap,
-  selectedRegion,
-  setSelectedRegion,
+  regionHighlighted,
+  setRegionHighlighted,
   isCountryLoaded,
   mapOption,
-  setMapOption,
-  statisticOption,
 }) {
   const choroplethMap = useRef(null);
   const choroplethLegend = useRef(null);
-  const [mapName, setMapName] = useState();
+
+  const mapMeta = MAP_META[currentMap.name];
 
   const ready = useCallback(
-    (geoData, rerender = false) => {
-      const propertyField = propertyFieldMap[mapMeta.mapType];
+    (geoData) => {
       const svg = d3.select(choroplethMap.current);
 
-      const topology = topojson.feature(
+      const topologyStates =
+        mapMeta.mapType === MAP_TYPES.COUNTRY
+          ? topojson.feature(
+              geoData,
+              geoData.objects[mapMeta.graphObjectStates]
+            )
+          : {features: []};
+      const topologyDistricts = topojson.feature(
         geoData,
-        geoData.objects[mapMeta.graphObjectName]
+        geoData.objects[mapMeta.graphObjectDistricts]
       );
+
+      const topology =
+        currentMap.view === MAP_VIEWS.STATES
+          ? topologyStates
+          : topologyDistricts;
 
       const projection = d3.geoMercator();
 
@@ -62,83 +66,130 @@ function ChoroplethMap({
       const bBox = svg.attr('viewBox').split(' ');
       width = +bBox[2];
       height = +bBox[3];
-      if (rerender) {
-        projection.fitSize([width, height], topology);
-      }
+      projection.fitSize([width, height], topology);
       path = d3.geoPath(projection);
 
       /* Legend */
       const svgLegend = d3.select(choroplethLegend.current);
-      const colorInterpolator = (t) => {
-        switch (mapOption) {
-          case 'confirmed':
-            return d3.interpolateReds(t * 0.85);
-          case 'active':
-            return d3.interpolateBlues(t * 0.85);
-          case 'recovered':
-            return d3.interpolateGreens(t * 0.85);
-          case 'deceased':
-            return d3.interpolateGreys(t * 0.85);
-          default:
-            return;
-        }
-      };
-      const colorScale = d3
-        .scaleSequential(
-          [0, Math.max(1, statistic[mapOption].max)],
-          colorInterpolator
-        )
-        .clamp(true);
-      // Colorbar
       const widthLegend = parseInt(svgLegend.style('width'));
       const heightLegend = +svgLegend.attr('height');
       svgLegend.attr('viewBox', `0 0 ${widthLegend} ${heightLegend}`);
-      svgLegend.call(() =>
-        legend({
-          color: colorScale,
-          title:
-            toTitleCase(mapOption) +
-            ' cases' +
-            (statisticOption === MAP_STATISTICS.PER_MILLION
-              ? ' per million'
-              : ''),
-          width: widthLegend,
-          height: 0.8 * heightLegend,
-          ticks: 6,
-          tickFormat: function (d, i, n) {
-            if (
-              statisticOption === MAP_STATISTICS.TOTAL &&
-              !Number.isInteger(d)
-            )
+
+      // Colorbar
+      let colorScale;
+      if (currentMap.stat === MAP_STATISTICS.ZONE) {
+        colorScale = d3.scaleOrdinal(
+          ['Red', 'Orange', 'Green'],
+          ['#d73027', '#fee08b', '#66bd63']
+        );
+
+        svgLegend.call(() =>
+          legend({
+            color: colorScale,
+            width: widthLegend,
+            height: heightLegend,
+            tickValues: [],
+            marginLeft: 2,
+            marginRight: 20,
+            svg: svgLegend,
+            ordinalWeights: Object.values(statistic),
+          })
+        );
+      } else {
+        const colorInterpolator = (t) => {
+          switch (mapOption) {
+            case 'confirmed':
+              return d3.interpolateReds(t * 0.85);
+            case 'active':
+              return d3.interpolateBlues(t * 0.85);
+            case 'recovered':
+              return d3.interpolateGreens(t * 0.85);
+            case 'deceased':
+              return d3.interpolateGreys(t * 0.85);
+            default:
               return;
-            if (i === n.length - 1) return formatNumber(d) + '+';
-            return formatNumber(d);
-          },
-          marginLeft: 2,
-          marginRight: 20,
-          svg: svgLegend,
-        })
+          }
+        };
+        colorScale = d3
+          .scaleSequential(
+            [0, Math.max(1, statistic[mapOption].max)],
+            colorInterpolator
+          )
+          .clamp(true);
+        svgLegend.call(() =>
+          legend({
+            color: colorScale,
+            title:
+              capitalizeAll(mapOption) +
+              (currentMap.stat === MAP_STATISTICS.PER_MILLION
+                ? ' cases per million'
+                : ' cases'),
+            width: widthLegend,
+            height: heightLegend,
+            ticks: 6,
+            tickFormat: function (d, i, n) {
+              if (
+                currentMap.stat === MAP_STATISTICS.TOTAL &&
+                !Number.isInteger(d)
+              )
+                return;
+              if (i === n.length - 1) return formatNumber(d) + '+';
+              return formatNumber(d);
+            },
+            marginLeft: 2,
+            marginRight: 20,
+            svg: svgLegend,
+          })
+        );
+      }
+      svgLegend.attr(
+        'class',
+        currentMap.stat === MAP_STATISTICS.ZONE ? 'zone' : ''
       );
+
+      // Add id to each feature
+      const featureStates = topologyStates.features.map((f) => {
+        const state = f.properties.st_nm;
+        const obj = Object.assign({}, f);
+        obj.id = `${mapMeta.graphObjectStates}-${state}`;
+        return obj;
+      });
+
+      // Add id to each feature
+      const featureDistricts = topologyDistricts.features.map((f) => {
+        const district = f.properties.district;
+        const state = f.properties.st_nm;
+        const obj = Object.assign({}, f);
+        obj.id = `${mapMeta.graphObjectDistricts}-${state}${district}`;
+        return obj;
+      });
 
       /* Draw map */
       const t = svg.transition().duration(500);
       let onceTouchedRegion = null;
       const regionSelection = svg
-        .select('.regions')
+        .select(currentMap.view === MAP_VIEWS.STATES ? '.states' : '.districts')
         .selectAll('path')
-        .data(topology.features, (d) => {
-          const state = d.properties[propertyFieldMap.country];
-          const district = d.properties[propertyFieldMap.state];
-          return district ? `${district} ${state}` : state;
+        .data(
+          currentMap.view === MAP_VIEWS.STATES
+            ? featureStates
+            : featureDistricts,
+          (d) => d.id
+        )
+        .join((enter) => {
+          const sel = enter.append('path').attr('d', path);
+          sel.append('title');
+          return sel;
         })
-        .join((enter) => enter.append('path').attr('d', path))
         .attr('class', function (d) {
           const isHovered = d3.select(this).classed('map-hover');
           return `path-region ${mapOption} ${isHovered ? 'map-hover' : ''}`;
         })
         .style('cursor', 'pointer')
-        .on('mouseenter', (d) => {
-          handleMouseEnter(d.properties[propertyField]);
+        .on('mouseenter', function (d) {
+          const region = {state: d.properties.st_nm};
+          if (d.properties.district) region.district = d.properties.district;
+          setRegionHighlighted(region);
         })
         .on('mouseleave', (d) => {
           if (onceTouchedRegion === d) onceTouchedRegion = null;
@@ -150,18 +201,25 @@ function ChoroplethMap({
         .on('click', handleClick)
         .attr('pointer-events', 'none');
 
-      regionSelection.append('title').text(function (d) {
-        const region = d.properties[propertyField];
-        const value = mapData[region] ? mapData[region][mapOption] : 0;
-        if (statisticOption === MAP_STATISTICS.TOTAL) {
+      regionSelection.select('title').text(function (d) {
+        if (currentMap.stat === MAP_STATISTICS.TOTAL) {
+          const state = d.properties.st_nm;
+          const district = d.properties.district;
+          let n;
+          if (district)
+            n =
+              mapData[state] && mapData[state][district]
+                ? mapData[state][district][mapOption]
+                : 0;
+          else n = mapData[state] ? mapData[state][mapOption] : 0;
           return (
             Number(
               parseFloat(
-                100 * (value / (statistic[mapOption].total || 0.001))
+                100 * (n / (statistic[mapOption].total || 0.001))
               ).toFixed(2)
             ).toString() +
             '% from ' +
-            toTitleCase(region)
+            capitalizeAll(district ? district : state)
           );
         }
       });
@@ -169,67 +227,149 @@ function ChoroplethMap({
       regionSelection
         .transition(t)
         .attr('fill', function (d) {
-          const region = d.properties[propertyField];
-          const n = mapData[region] ? mapData[region][mapOption] : 0;
-          const color = n === 0 ? '#ffffff' : colorScale(n);
+          let n;
+          if (currentMap.stat === MAP_STATISTICS.ZONE) {
+            const state = d.properties.st_nm;
+            const district = d.properties.district;
+            n =
+              mapData[state] && mapData[state][district]
+                ? mapData[state][district]
+                : 0;
+          } else {
+            const state = d.properties.st_nm;
+            const district = d.properties.district;
+            if (district)
+              n =
+                mapData[state] && mapData[state][district]
+                  ? mapData[state][district][mapOption]
+                  : 0;
+            else n = mapData[state] ? mapData[state][mapOption] : 0;
+          }
+          const color = n === 0 ? '#ffffff00' : colorScale(n);
           return color;
         })
-        .attr('stroke', function (d) {
+        .attr('stroke', function () {
           const isHovered = d3.select(this).classed('map-hover');
           if (isHovered) this.parentNode.appendChild(this);
-          return isHovered
-            ? `${
-                mapOption === 'confirmed'
-                  ? '#ff073a'
-                  : mapOption === 'active'
-                  ? '#007bff'
-                  : mapOption === 'recovered'
-                  ? '#28a745'
-                  : mapOption === 'deceased'
-                  ? '#6c757d'
-                  : ''
-              }`
-            : null;
+          if (currentMap.stat === MAP_STATISTICS.ZONE) {
+            return isHovered ? '#343a40' : null;
+          } else {
+            return isHovered
+              ? `${
+                  mapOption === 'confirmed'
+                    ? '#ff073a'
+                    : mapOption === 'active'
+                    ? '#007bff'
+                    : mapOption === 'recovered'
+                    ? '#28a745'
+                    : mapOption === 'deceased'
+                    ? '#6c757d'
+                    : ''
+                }`
+              : null;
+          }
         })
         .transition()
         .attr('pointer-events', 'all');
 
       svg
-        .select('.borders')
-        .selectAll('path')
-        .data([geoData], (d) => d.objects[mapMeta.graphObjectName])
-        .join((enter) =>
-          enter.append('path').attr('d', (d) => {
-            const mesh = topojson.mesh(d, d.objects[mapMeta.graphObjectName]);
-            return path(mesh);
-          })
-        )
-        .attr('fill', 'none')
-        .attr('stroke-width', width / 250)
-        .transition(t)
-        .attr(
-          'stroke',
-          `${
-            mapOption === 'confirmed'
-              ? '#ff073a30'
-              : mapOption === 'active'
-              ? '#007bff30'
-              : mapOption === 'recovered'
-              ? '#28a74530'
-              : mapOption === 'deceased'
-              ? '#6c757d30'
-              : ''
-          }`
+        .transition()
+        .duration(mapMeta.mapType === MAP_TYPES.STATE ? 250 : 0)
+        .on('end', () =>
+          svg.attr(
+            'class',
+            currentMap.stat === MAP_STATISTICS.ZONE ? 'zone' : ''
+          )
         );
 
-      const handleMouseEnter = (name) => {
-        try {
-          setSelectedRegion(name);
-          setHoveredRegion(name, mapMeta);
-        } catch (err) {
-          console.log('err', err);
-        }
-      };
+      let meshStates = [];
+      if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
+        meshStates = [
+          topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectStates]),
+        ];
+        meshStates[0].id = mapMeta.graphObjectStates;
+      }
+      let meshDistricts = [];
+      if (currentMap.view === MAP_VIEWS.DISTRICTS) {
+        // Add id to mesh
+        meshDistricts = [
+          topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectDistricts]),
+        ];
+        meshDistricts[0].id = mapMeta.graphObjectStates;
+      }
+      svg
+        .select(
+          currentMap.view === MAP_VIEWS.STATES
+            ? '.state-borders'
+            : '.district-borders'
+        )
+        .selectAll('path')
+        .data(
+          currentMap.view === MAP_VIEWS.STATES ? meshStates : meshDistricts,
+          (d) => d.id
+        )
+        .join((enter) =>
+          enter
+            .append('path')
+            .attr('d', path)
+            .attr('stroke-width', width / 250)
+        )
+        .attr('fill', 'none')
+        .transition(t)
+        .attr('stroke-width', function () {
+          return mapMeta.mapType === MAP_TYPES.COUNTRY &&
+            currentMap.view === MAP_VIEWS.DISTRICTS
+            ? 'none'
+            : width / 250;
+        })
+        .attr('stroke', function () {
+          if (currentMap.stat === MAP_STATISTICS.ZONE) {
+            return '#00000060';
+          } else {
+            return `${
+              mapOption === 'confirmed'
+                ? '#ff073a30'
+                : mapOption === 'active'
+                ? '#007bff30'
+                : mapOption === 'recovered'
+                ? '#28a74530'
+                : mapOption === 'deceased'
+                ? '#6c757d30'
+                : ''
+            }`;
+          }
+        });
+
+      svg
+        .select(currentMap.view === MAP_VIEWS.STATES ? '.districts' : '.states')
+        .selectAll('path')
+        .data(
+          currentMap.view === MAP_VIEWS.STATES
+            ? featureDistricts
+            : featureStates,
+          (d) => d.id
+        )
+        .join((enter) => enter.append('path').attr('d', path))
+        .attr('fill', 'none')
+        .attr('stroke', 'none')
+        .attr('pointer-events', 'none');
+
+      svg
+        .select(
+          currentMap.view === MAP_VIEWS.STATES
+            ? '.district-borders'
+            : '.state-borders'
+        )
+        .selectAll('path')
+        .data(
+          currentMap.view === MAP_VIEWS.STATES ? meshDistricts : meshStates,
+          (d) => d.id
+        )
+        .join((enter) => enter.append('path').attr('d', path))
+        .attr('fill', 'none')
+        .transition(t)
+        .attr('stroke-width', width / 250)
+        .attr('stroke', '#343a4099');
 
       function handleClick(d) {
         d3.event.stopPropagation();
@@ -238,59 +378,52 @@ function ChoroplethMap({
         svg.attr('pointer-events', 'none');
         svg.selectAll('.path-region').attr('pointer-events', 'none');
         // Switch map
-        changeMap(d.properties[propertyField]);
+        changeMap(d.properties.st_nm);
       }
 
       // Reset on tapping outside map
       svg.attr('pointer-events', 'auto').on('click', () => {
-        if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
-          setSelectedRegion(null);
-          setHoveredRegion('Total', mapMeta);
+        if (mapMeta.mapType !== MAP_TYPES.STATE) {
+          setRegionHighlighted({
+            state: 'Total',
+          });
         }
       });
     },
     [
       mapMeta,
+      currentMap.stat,
+      currentMap.view,
       statistic,
       mapOption,
       isCountryLoaded,
       mapData,
-      setSelectedRegion,
-      setHoveredRegion,
+      setRegionHighlighted,
       changeMap,
-      statisticOption,
     ]
   );
-
-  const toTitleCase = (str) => {
-    str = str.toLowerCase().split(' ');
-    for (let i = 0; i < str.length; i++) {
-      str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
-    }
-    return str.join(' ');
-  };
 
   useEffect(() => {
     (async () => {
       const data = await d3.json(mapMeta.geoDataFile);
       if (statistic && choroplethMap.current) {
-        ready(data, mapName !== mapMeta.name);
-        setMapName(mapMeta.name);
+        ready(data);
       }
     })();
-  }, [mapName, mapMeta.geoDataFile, mapMeta.name, statistic, ready]);
+  }, [mapMeta, statistic, ready]);
 
   useEffect(() => {
-    const highlightRegionInMap = (name) => {
+    const highlightRegionInMap = (region) => {
       const paths = d3.selectAll('.path-region');
       paths.attr('stroke', null);
       paths.classed('map-hover', (d, i, nodes) => {
-        const regionName = d.properties[propertyFieldMap.state]
-          ? d.properties[propertyFieldMap.state]
-          : d.properties[propertyFieldMap.country];
-        if (name === regionName) {
+        if (
+          region.district === d.properties.district &&
+          region.state === d.properties.st_nm
+        ) {
           nodes[i].parentNode.appendChild(nodes[i]);
           d3.select(nodes[i]).attr('stroke', function (d) {
+            if (currentMap.stat === MAP_STATISTICS.ZONE) return '#343a40';
             return d3.select(this).classed('confirmed')
               ? '#ff073a'
               : d3.select(this).classed('active')
@@ -306,15 +439,17 @@ function ChoroplethMap({
         return false;
       });
     };
-    highlightRegionInMap(selectedRegion);
-  }, [mapName, selectedRegion]);
+    highlightRegionInMap(regionHighlighted);
+  }, [regionHighlighted, currentMap.stat]);
 
   return (
-    <div>
+    <React.Fragment>
       <div className="svg-parent fadeInUp" style={{animationDelay: '2.5s'}}>
         <svg id="chart" preserveAspectRatio="xMidYMid meet" ref={choroplethMap}>
-          <g className="regions" />
-          <g className="borders" />
+          <g className="states" />
+          <g className="districts" />
+          <g className="state-borders" />
+          <g className="district-borders" />
         </svg>
         {(mapOption === 'recovered' && mapData?.Unknown?.recovered) ||
         (mapOption === 'deceased' && mapData?.Unknown?.deceased) ? (
@@ -332,7 +467,7 @@ function ChoroplethMap({
       >
         <svg
           id="legend"
-          height="65"
+          height="50"
           preserveAspectRatio="xMidYMid meet"
           ref={choroplethLegend}
         >
@@ -341,6 +476,10 @@ function ChoroplethMap({
             <text className="axistext" />
           </g>
         </svg>
+        <canvas
+          className="color-scale"
+          style={{position: 'absolute', height: 0}}
+        />
       </div>
       <svg style={{position: 'absolute', height: 0}}>
         <defs>
@@ -352,7 +491,7 @@ function ChoroplethMap({
           </filter>
         </defs>
       </svg>
-    </div>
+    </React.Fragment>
   );
 }
 
