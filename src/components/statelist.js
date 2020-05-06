@@ -1,11 +1,12 @@
-import GeoData from './essentials.json';
-
+import testData from './_pantest.json';
+import axios from 'axios';
 import { Label, LabelGroup, CounterLabel } from '@primer/components';
 import L from 'leaflet';
 import * as Knn from 'leaflet-knn';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import 'leaflet/dist/leaflet.css';
 import { ExternalLink, Phone } from 'react-feather';
+
 
 function medFilter(feature) {
   return feature.properties.priority;
@@ -14,24 +15,50 @@ function othersFilter(feature) {
   return !feature.properties.priority;
 }
 
+function panFilter(feature){
+  const builder = [feature.properties.city,feature.properties.state].join(" ");
+  return (builder.includes("PAN") || builder.includes("Pan"));
+}
+
 export default function MapChart({ userLocation }) {
+  const [geoData, setGeoData] = useState([]);
+
+  useEffect(() => {
+    getJSON();
+  }, []);
+
+  const getJSON = () => {
+    axios
+      .get('https://raw.githubusercontent.com/aswaathb/covid19india-react/80922c70bb451cda94cce1e809e54fa72754f05c/newResources/geoResources.json')
+      .then((response) => {
+        setGeoData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+
   let medKnn;
   let restKnn;
+  let panKnn;
 
   const hK = 5; // K nearest hospitals/labs wrt user location
   const rK = 10; // K nearest essentials wrt user location
   const rad = 100 * 1000; // Max distance of the K points, in meters
 
   if (userLocation) {
-    medKnn = new Knn(L.geoJSON(GeoData, { filter: medFilter })).nearestLayer(
+    medKnn = new Knn(L.geoJSON(geoData, { filter: medFilter })).nearestLayer(
       [userLocation[1], userLocation[0]],
       hK
     );
-    restKnn = new Knn(L.geoJSON(GeoData, { filter: othersFilter })).nearestLayer(
+    restKnn = new Knn(L.geoJSON(geoData, { filter: othersFilter })).nearestLayer(
       [userLocation[1], userLocation[0]],
       rK,
       rad
     );
+    panKnn = testData["features"].filter(panFilter)
+    console.log(panKnn)
   }
 
   const gjKnn = {
@@ -83,6 +110,12 @@ export default function MapChart({ userLocation }) {
       });
     }
   }
+  if (panKnn) {
+    let k = 0;
+    for (k = 0; k < panKnn.length; k++) {
+      gjKnn.features.push(panKnn[k]);
+    }
+  }
 
   gjKnn.features
     .map(function (feature) {
@@ -130,10 +163,10 @@ export default function MapChart({ userLocation }) {
             </div>
           </div>
           <div className="result-description">{d.properties.desc}</div>
-          <div className="result-contact">
+          {d.properties.phone?(<div className="result-contact">
             <Phone />
             <div>{d.properties.phone}</div>
-          </div>
+          </div>):null}
         </a>
       ))}
 

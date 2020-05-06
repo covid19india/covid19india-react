@@ -36,7 +36,6 @@ const getLocationHandler = (event)=>{
 
 const searchHandler = (data)=>{
   reset=false;
-console.log('successful',data.lat,data.lng );
 setCurrentLocation([data.lat,data.lng]);
 
 }
