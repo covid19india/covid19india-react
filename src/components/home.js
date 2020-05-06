@@ -142,19 +142,25 @@ function Home(props) {
     }
   };
 
-  const setActiveState = (state) => {
-    if (state === null) setCurrentState(states[0]);
-    else setCurrentState(state);
-  };
+  const setActiveState = useCallback(
+    (state) => {
+      if (state === null) setCurrentState(states[0]);
+      else setCurrentState(state);
+    },
+    [states]
+  );
 
-  const onHighlightState = (state, flag) => {
-    if (!state) return setRegionHighlighted(null);
-    state.code = STATE_CODES_REVERSE[state.state];
+  const onHighlightState = useCallback(
+    (state, flag) => {
+      if (!state) return setRegionHighlighted(null);
+      state.code = STATE_CODES_REVERSE[state.state];
 
-    if (flag === false) {
-      setRegionHighlighted({state: currentState});
-    } else setRegionHighlighted({state});
-  };
+      if (flag === false) {
+        setRegionHighlighted({state: currentState});
+      } else setRegionHighlighted({state});
+    },
+    [currentState]
+  );
 
   const onHighlightDistrict = useCallback((district, state) => {
     if (!state && !district) return setRegionHighlighted(null);
