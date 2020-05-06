@@ -1,5 +1,12 @@
 import * as d3 from 'd3';
+import equal from 'fast-deep-equal';
 import React, {useEffect, useRef, useState} from 'react';
+
+const isEqual = (prevProps, currProps) => {
+  if (!equal(prevProps.arrayKey, currProps.arrayKey)) return false;
+  if (!equal(prevProps.timeseries, currProps.timeseries)) return false;
+  return true;
+};
 
 function DeltaBarGraph({timeseries, arrayKey}) {
   const [data, setData] = useState([]);
@@ -18,16 +25,8 @@ function DeltaBarGraph({timeseries, arrayKey}) {
 
     const margin = {top: 50, right: 0, bottom: 50, left: 0};
     const chartRight = width - margin.right;
-    let chartBottom = height - margin.bottom;
+    const chartBottom = height - margin.bottom;
     const barRadius = 5;
-    if (arrayKey === 'dailyactive') {
-      for (const day of data) {
-        if (day[arrayKey] < 0) {
-          chartBottom = height - margin.bottom * 2;
-          break;
-        }
-      }
-    }
 
     const formatTime = d3.timeFormat('%e %b');
     const xScale = d3
@@ -39,10 +38,13 @@ function DeltaBarGraph({timeseries, arrayKey}) {
     const yScale = d3
       .scaleLinear()
       .domain([
-        0,
+        Math.min(
+          0,
+          d3.min(data, (d) => d[arrayKey])
+        ),
         Math.max(
           1,
-          d3.max(data, (d) => Math.abs(d[arrayKey]))
+          d3.max(data, (d) => d[arrayKey])
         ),
       ])
       .range([chartBottom, margin.top]); // - barRadius
@@ -51,13 +53,13 @@ function DeltaBarGraph({timeseries, arrayKey}) {
 
     svg
       .select('.x-axis')
-      .style('transform', `translateY(${chartBottom}px)`)
+      .style('transform', `translateY(${yScale(0)}px)`)
       .call(xAxis)
       .attr('class', `x-axis ${arrayKey}`)
       .call((g) => g.select('.domain').remove())
       .selectAll('text')
       .attr('y', 0)
-      .attr('dy', '1.5em')
+      .attr('dy', (d, i) => (data[i][arrayKey] < 0 ? '-1.5em' : '1.5em'))
       .style('text-anchor', 'middle');
 
     svg
@@ -68,9 +70,9 @@ function DeltaBarGraph({timeseries, arrayKey}) {
       .attr('d', (d) =>
         roundedBar(
           xScale(formatTime(d.date)),
-          chartBottom,
+          yScale(0),
           xScale.bandwidth(),
-          chartBottom - yScale(d[arrayKey]),
+          yScale(0) - yScale(d[arrayKey]),
           barRadius,
           d[arrayKey] >= 0 ? 1 : 0,
           d[arrayKey]
@@ -127,9 +129,7 @@ function DeltaBarGraph({timeseries, arrayKey}) {
   );
 }
 
-export default React.memo(DeltaBarGraph, (prevProps, nextProps) => {
-  return prevProps === nextProps;
-});
+export default React.memo(DeltaBarGraph, isEqual);
 
 function roundedBar(x, y, w, h, r, f, v) {
   if (!h) return;
