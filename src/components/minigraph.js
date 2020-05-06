@@ -61,7 +61,7 @@ function Minigraph({timeseries}) {
         .append('path')
         .datum(data)
         .attr('fill', 'none')
-        .attr('stroke', color + '99')
+        .attr('stroke', color)
         .attr('stroke-width', 2.5)
         .attr('cursor', 'pointer')
         .attr(
@@ -71,7 +71,8 @@ function Minigraph({timeseries}) {
             .x((d) => xScale(d.date))
             .y((d) => yScale(d[type]))
             .curve(d3.curveCardinal)
-        );
+        )
+        .style('opacity', 0.6);
 
       const totalLength = path.node().getTotalLength();
       path
