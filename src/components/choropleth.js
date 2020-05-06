@@ -322,7 +322,7 @@ function ChoroplethMap({
         .attr('stroke-width', function () {
           return mapMeta.mapType === MAP_TYPES.COUNTRY &&
             currentMap.view === MAP_VIEWS.DISTRICTS
-            ? 'none'
+            ? 0
             : width / 250;
         })
         .attr('stroke', function () {
@@ -353,6 +353,7 @@ function ChoroplethMap({
           (d) => d.id
         )
         .join((enter) => enter.append('path').attr('d', path))
+        .attr('class', 'path-region')
         .attr('fill', 'none')
         .attr('stroke', 'none')
         .attr('pointer-events', 'none');
@@ -421,7 +422,7 @@ function ChoroplethMap({
       paths.attr('stroke', null);
       paths.classed('map-hover', (d, i, nodes) => {
         if (
-          region.district === d.properties.district &&
+          region.district === d.properties?.district &&
           region.state === d.properties.st_nm
         ) {
           nodes[i].parentNode.appendChild(nodes[i]);
