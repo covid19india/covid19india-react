@@ -4,42 +4,78 @@ import Footer from './footer';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
+import StateMeta from './statemeta';
 import TimeSeriesExplorer from './timeseriesexplorer';
 
-import {MAP_META, STATE_CODES} from '../constants';
+import {STATE_CODES, STATE_POPULATIONS} from '../constants';
 import {
   formatDateAbsolute,
   formatNumber,
   mergeTimeseries,
   parseStateTimeseries,
   parseStateTestTimeseries,
+  parseDistrictZones,
 } from '../utils/commonfunctions';
 
 import {Breadcrumb, Dropdown} from '@primer/components';
 import anime from 'animejs';
 import axios from 'axios';
 import {format, parse} from 'date-fns';
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {Link, useParams, Redirect} from 'react-router-dom';
 import {useMeasure, useEffectOnce} from 'react-use';
 
-function State(props) {
-  const mapRef = useRef();
+function PureBreadcrumbs({stateName, stateCode, fetched, allStateData}) {
+  return (
+    <div className="breadcrumb">
+      <Breadcrumb>
+        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+        <Dropdown direction="w">
+          <summary>
+            <Breadcrumb.Item href={`${stateCode}`} selected>
+              {stateName}
+            </Breadcrumb.Item>
+            <Dropdown.Caret className="caret" />
+          </summary>
+          {fetched && (
+            <Dropdown.Menu direction="se">
+              {allStateData.map((state) => (
+                <Dropdown.Item key={state.statecode} className="item">
+                  <Link to={`${state.statecode}`}>
+                    {STATE_CODES[state.statecode]}
+                  </Link>
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          )}
+        </Dropdown>
+      </Breadcrumb>
+    </div>
+  );
+}
 
+const Breadcrumbs = React.memo(PureBreadcrumbs);
+
+function State(props) {
   const stateCode = useParams().stateCode.toUpperCase();
+  const stateName = STATE_CODES[stateCode];
+
   const [allStateData, setAllStateData] = useState({});
   const [fetched, setFetched] = useState(false);
+  const [districtZones, setDistrictZones] = useState(null);
   const [timeseries, setTimeseries] = useState({});
-  const [stateData, setStateData] = useState({});
+  const [stateData, setStateData] = useState(null);
   const [testData, setTestData] = useState({});
   const [sources, setSources] = useState({});
   const [districtData, setDistrictData] = useState({});
-  const [stateName] = useState(STATE_CODES[stateCode]);
   const [mapOption, setMapOption] = useState('confirmed');
   const [mapSwitcher, {width}] = useMeasure();
   const [showAllDistricts, setShowAllDistricts] = useState(false);
+  const [regionHighlighted, setRegionHighlighted] = useState({
+    state: stateName,
+  });
 
   useEffectOnce(() => {
     getState(stateCode);
@@ -53,22 +89,20 @@ function State(props) {
         {data: statesDailyResponse},
         {data: stateTestResponse},
         {data: sourcesResponse},
+        {data: zonesResponse},
       ] = await Promise.all([
         axios.get('https://api.covid19india.org/data.json'),
         axios.get('https://api.covid19india.org/state_district_wise.json'),
         axios.get('https://api.covid19india.org/states_daily.json'),
         axios.get('https://api.covid19india.org/state_test_data.json'),
         axios.get('https://api.covid19india.org/sources_list.json'),
+        axios.get('https://api.covid19india.org/zones.json'),
       ]);
       const name = STATE_CODES[code];
 
       const states = dataResponse.statewise;
-      setAllStateData(
-        states.filter(
-          (state) => state.statecode !== code && STATE_CODES[state.statecode]
-        )
-      );
-      setStateData(states.find((s) => s.statecode === code));
+      setAllStateData(states.filter((state) => state.statecode !== code));
+      setStateData([states.find((s) => s.statecode === code)]);
       // Timeseries
       const ts = parseStateTimeseries(statesDailyResponse)[code];
       const testTs = parseStateTestTimeseries(
@@ -90,6 +124,9 @@ function State(props) {
           (obj) => obj.state === name && obj.totaltested !== ''
         )
       );
+
+      setDistrictZones(parseDistrictZones(zonesResponse.zones, stateName));
+
       setFetched(true);
       anime({
         targets: '.highlight',
@@ -114,6 +151,7 @@ function State(props) {
   };
 
   const testObjLast = testData[testData.length - 1];
+  const population = STATE_POPULATIONS[stateName];
 
   function toggleShowAllDistricts() {
     setShowAllDistricts(!showAllDistricts);
@@ -129,6 +167,7 @@ function State(props) {
     return gridRowCount;
   };
   const gridRowCount = getGridRowCount();
+
   if (!stateName) {
     return <Redirect to="/" />;
   } else {
@@ -146,30 +185,12 @@ function State(props) {
 
         <div className="State">
           <div className="state-left">
-            <div className="breadcrumb">
-              <Breadcrumb>
-                <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-                <Dropdown direction="w">
-                  <summary>
-                    <Breadcrumb.Item href={`${stateCode}`} selected>
-                      {stateName}
-                    </Breadcrumb.Item>
-                    <Dropdown.Caret className="caret" />
-                  </summary>
-                  {fetched && (
-                    <Dropdown.Menu direction="se">
-                      {allStateData.map((state) => (
-                        <Dropdown.Item key={state.statecode} className="item">
-                          <Link to={`${state.statecode}`}>
-                            {STATE_CODES[state.statecode]}
-                          </Link>
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  )}
-                </Dropdown>
-              </Breadcrumb>
-            </div>
+            <Breadcrumbs
+              stateName={stateName}
+              stateCode={stateCode}
+              fetched={fetched}
+              allStateData={allStateData}
+            />
 
             <div className="header">
               <div
@@ -179,8 +200,8 @@ function State(props) {
                 <h1>{stateName}</h1>
                 <h5>
                   Last Updated on{' '}
-                  {Object.keys(stateData).length
-                    ? formatDateAbsolute(stateData.lastupdatedtime)
+                  {stateData && Object.keys(stateData[0]).length
+                    ? formatDateAbsolute(stateData[0].lastupdatedtime)
                     : ''}
                 </h5>
               </div>
@@ -268,22 +289,20 @@ function State(props) {
               </div>
             )}
 
-            {fetched && <Level data={stateData} />}
+            {fetched && <Level data={stateData[0]} />}
             {fetched && <Minigraph timeseries={timeseries} />}
             {fetched && (
-              <React.Fragment>
-                {
-                  <MapExplorer
-                    forwardRef={mapRef}
-                    mapMeta={MAP_META[stateName]}
-                    states={[stateData]}
-                    stateDistrictWiseData={districtData}
-                    stateTestData={testData}
-                    isCountryLoaded={false}
-                    mapOptionProp={mapOption}
-                  />
-                }
-              </React.Fragment>
+              <MapExplorer
+                mapName={stateName}
+                states={stateData}
+                districts={districtData}
+                zones={districtZones}
+                stateTestData={testData}
+                regionHighlighted={regionHighlighted}
+                setRegionHighlighted={setRegionHighlighted}
+                mapOption={mapOption}
+                isCountryLoaded={false}
+              />
             )}
 
             {fetched && (
@@ -318,6 +337,18 @@ function State(props) {
                   </div>
                 </div>
               </div>
+            )}
+
+            {fetched && (
+              <StateMeta
+                stateData={stateData[0]}
+                lastTestObject={testObjLast}
+                population={population}
+                lastSevenDaysData={timeseries.slice(-7)}
+                totalData={allStateData.filter(
+                  (state) => state.statecode === 'TT'
+                )}
+              />
             )}
           </div>
 
