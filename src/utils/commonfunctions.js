@@ -259,5 +259,8 @@ export const parseDistrictZones = (data, state) => {
     ret[d.state][d.district] = d;
     return ret;
   }, {});
+  Object.values(STATE_CODES).forEach((state) => {
+    if (!zones[state]) zones[state] = {};
+  });
   return state ? {[state]: zones[state]} : zones;
 };
