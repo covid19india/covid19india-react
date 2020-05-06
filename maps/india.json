@@ -18811,7 +18811,7 @@
           "properties": {
             "district": "Dadra and Nagar Haveli",
             "dt_code": "496",
-            "st_nm": "Dadra and Nagar Haveli",
+            "st_nm": "Dadra and Nagar Haveli and Daman and Diu",
             "st_code": "26",
             "year": "2011_c"
           }
@@ -19592,8 +19592,8 @@
           "properties": {
             "district": "Daman",
             "dt_code": "495",
-            "st_nm": "Daman And Diu",
-            "st_code": "25",
+            "st_nm": "Dadra and Nagar Haveli and Daman and Diu",
+            "st_code": "26",
             "year": "2011_c"
           }
         },
@@ -19603,8 +19603,8 @@
           "properties": {
             "district": "Diu",
             "dt_code": "494",
-            "st_nm": "Daman And Diu",
-            "st_code": "25",
+            "st_nm": "Dadra and Nagar Haveli and Daman and Diu",
+            "st_code": "26",
             "year": "2011_c"
           }
         },
@@ -25663,16 +25663,14 @@
           "id": "West Bengal"
         },
         {
-          "arcs": [[-225, 690]],
-          "type": "Polygon",
+          "arcs": [[[-225, 690]], [[-220, 878]], [[-842, 879]]],
+          "type": "MultiPolygon",
           "properties": {
-            "district": "Dadra and Nagar Haveli",
-            "dt_code": "496",
-            "st_nm": "Dadra and Nagar Haveli",
+            "st_nm": "Dadra and Nagar Haveli and Daman and Diu",
             "st_code": "26",
             "year": "2011_c"
           },
-          "id": "Dadra and Nagar Haveli"
+          "id": "Dadra and Nagar Haveli and Daman and Diu"
         },
         {
           "arcs": [
@@ -25700,16 +25698,6 @@
             "year": "2011_c"
           },
           "id": "Lakshadweep"
-        },
-        {
-          "arcs": [[[-220, 878]], [[-842, 879]]],
-          "type": "MultiPolygon",
-          "properties": {
-            "st_nm": "Daman and Diu",
-            "st_code": "25",
-            "year": "2011_c"
-          },
-          "id": "Daman and Diu"
         },
         {
           "arcs": [
