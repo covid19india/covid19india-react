@@ -3,14 +3,10 @@ import {
   // renderCell,
   getHighlightedText,
   getFormattedLink,
-  getSuggestions,
 } from './Essentials/essentialsutls';
 
-import InputAdornment from '@material-ui/core/InputAdornment';
-import TextField from '@material-ui/core/TextField';
-import React, {useState, useEffect, useRef} from 'react';
+import React from 'react';
 // import Autosuggest from 'react-autosuggest';
-import * as Icon from 'react-feather';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useTable} from 'react-table';
 
@@ -20,16 +16,8 @@ function ResourceTable({
   isDesktop,
   totalCount,
   onScrollUpdate,
-  city,
-  category,
-  indianstate,
+  searchValue,
 }) {
-  const [searchValue, setSearchValue] = useState('');
-  const [suggestions, setSuggestions] = useState(data);
-  const prevIndianState = useRef('');
-  const prevCity = useRef('');
-  const prevCategory = useRef('');
-
   const renderCell = (celli) => {
     const value = celli.cell.value;
     let renderedvalue = '';
@@ -64,39 +52,6 @@ function ResourceTable({
     );
   };
 
-  useEffect(() => {
-    if (
-      prevCategory.current === category &&
-      prevIndianState.current === indianstate &&
-      prevCity.current === city
-    ) {
-      setSuggestions(getSuggestions(searchValue, data));
-    } else {
-      setSuggestions(data);
-      setSearchValue('');
-      prevCategory.current = category;
-      prevIndianState.current = indianstate;
-      prevCity.current = city;
-    }
-  }, [searchValue, data, category, indianstate, city]);
-
-  useEffect(() => {
-    if (suggestions.length < 7 && totalCount > suggestions.length) {
-      onScrollUpdate();
-    }
-  }, [suggestions, totalCount, onScrollUpdate]);
-
-  setInterval(checkAutosuggestChange, 2000);
-
-  function checkAutosuggestChange() {
-    try {
-      const newVal = document.getElementById('input-field-searchbar').value;
-      if (newVal !== searchValue) {
-        setSearchValue(newVal);
-      }
-    } catch {}
-  }
-
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -106,35 +61,14 @@ function ResourceTable({
     rows,
   } = useTable({
     columns,
-    data: suggestions,
+    data,
     initialState: {hiddenColumns: 'contact'},
   });
   return (
     <React.Fragment>
-      <div className="searchbar">
-        <TextField
-          id="input-field-searchbar"
-          label="Search keyword"
-          fullWidth={true}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          style={{
-            width: '100%',
-          }}
-          variant="outlined"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Icon.Search size="0.9em" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </div>
       <InfiniteScroll
-        dataLength={suggestions.length}
-        hasMore={suggestions.length < totalCount}
+        dataLength={data.length}
+        hasMore={data.length < totalCount}
         next={onScrollUpdate}
         loader={
           <h3 style={{textAlign: 'center'}}>
@@ -148,6 +82,13 @@ function ResourceTable({
           isDesktop
             ? {width: '100%', overflow: 'none'}
             : {width: '100%', overflow: 'none', maxWidth: '300px'}
+        }
+        endMessage={
+          <div>
+            {!data.length && (
+              <h3 style={{textAlign: 'center'}}>No Results Found</h3>
+            )}
+          </div>
         }
       >
         <div className="tableandaccordions">

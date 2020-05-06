@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, {useState, useEffect, useCallback} from 'react';
+// import {useTranslation} from 'react-i18next';
 
 function Banner(props) {
+  // const {t} = useTranslation();
   const [snippets, setSnippets] = useState([]);
   const [snippet, setSnippet] = useState();
 

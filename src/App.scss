@@ -10,9 +10,6 @@ $pblue-light: #4c75f210;
 $pblue-hover: #4c75f230;
 $pblue-light-opaque: #eff7ff;
 $pblue-mid: #4c75f299;
-$indigo: #6610f2;
-$purple: #6f42c1;
-$pink: #e83e8c;
 $cherry: #ff073a;
 $cherry-mid: #ff073a99;
 $cherry-light: #ff073a20;
@@ -45,12 +42,6 @@ $gray-hover: #6c757d20;
 $gray-mid: #6c757d99;
 $gray-dark: #343a40;
 $gray-opaque: #f1f1f1;
-$primary: #007bff;
-$secondary: #6c757d;
-$success: #28a745;
-$info: #17a2b8;
-$warning: #ffc107;
-$danger: #dc3545;
 $light: #f8f9fa;
 $dark: #343a40;
 $purple: #201aa2dd;
@@ -59,10 +50,15 @@ $purple-hover: #201aa230;
 $purple-mid: #201aa299;
 $purple-light-opaque: #e3e2f3;
 $pink: #fb5581;
-$pink-light: #ffa8cb10;
-$pink-hover: #ffa8cb30;
-$pink-mid: #ffa8cb99;
+$pink-light: #ffa8cb30;
+$pink-hover: #ffa8cb60;
+$pink-mid: #fb558199;
+$brown: #b6854d;
+$brown-light: #b6854d10;
+$brown-hover: #b6854d30;
+$brown-mid: #b6854d99;
 $brick: #e23028;
+
 // Dark mode variables
 $dark-m-gray: #161625;
 $dark-mid-subtext: #bdb8ae;
@@ -111,6 +107,10 @@ h6 {
   font-family: 'archia';
   font-size: 11px !important;
   font-weight: 600;
+}
+
+.App {
+  min-height: 100vh;
 }
 
 .switch-wrapper {
@@ -256,6 +256,52 @@ h6 {
   .home-right {
     margin-left: 2.5rem;
     margin-right: 2.5rem;
+    min-height: 10rem;
+  }
+}
+
+.alert {
+  background: $gray-light;
+  border-radius: 5px;
+  color: $gray;
+  display: flex;
+  flex-direction: row;
+  font-family: 'archia';
+  font-size: 10px;
+  margin-right: .5rem;
+  padding: .5rem;
+  width: 6rem;
+
+  svg {
+    color: $gray-mid;
+    margin-right: .25rem;
+    margin-top: -.25rem;
+    stroke-width: 2px;
+    width: 36px !important;
+  }
+
+  .alert-right {
+    width: 10rem;
+
+    a {
+      background: $gray-light;
+      color: $gray;
+      padding-left: .1rem;
+      padding-right: .1rem;
+
+      &:hover {
+        background: $gray-hover;
+      }
+    }
+  }
+
+  &.is-green {
+    background: $green-light;
+    color: $green;
+
+    svg {
+      stroke: $green-mid;
+    }
   }
 }
 
@@ -266,7 +312,6 @@ h6 {
   justify-content: center;
   margin-left: 10rem;
   margin-right: 5rem;
-
 
   .header {
     display: flex;
@@ -385,48 +430,24 @@ h6 {
     flex-direction: row;
     margin-bottom: 3rem;
     margin-top: 3rem;
-
-    .unknown,
-    .sources {
-      background: $gray-light;
-      border-radius: 5px;
-      color: $gray;
-      display: flex;
-      flex-direction: row;
-      font-family: 'archia';
-      font-size: 10px;
-      margin-right: .5rem;
-      padding: .5rem;
-      width: 6rem;
-
-      svg {
-        color: $gray-mid;
-        margin-right: .25rem;
-        margin-top: -.25rem;
-        stroke-width: 2px;
-        width: 36px !important;
-      }
-    }
-
-    .sources-right {
-      width: 10rem;
-
-      a {
-        background: $gray-light;
-        color: $gray;
-        padding-left: .1rem;
-        padding-right: .1rem;
-
-        &:hover {
-          background: $gray-hover;
-        }
-      }
-    }
   }
 
   .district-bar,
   .to-essentials {
     width: 100%;
+  }
+
+  .district-bar-right {
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    .happy-sign {
+      display: flex;
+      flex-direction: row;
+      position: absolute;
+      top: 4rem;
+    }
   }
 
   .MapExplorer,
@@ -448,6 +469,7 @@ h6 {
     .back-button,
     .last-update,
     .unknown,
+    .footnote,
     .state-page-button {
       display: none;
     }
@@ -467,17 +489,289 @@ h6 {
       }
     }
   }
+
+  .__react_component_tooltip {
+    font-family: 'archia';
+    font-size: 11px;
+    font-weight: 600;
+    padding: .25rem;
+    text-align: center;
+  }
+}
+
+.StateMeta {
+  align-self: center;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+  margin-bottom: 3rem;
+  width: calc(100% - 3rem);
+
+  &.population {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    margin: 0;
+    margin-bottom: 2rem;
+
+    .alert {
+      margin: 0;
+    }
+  }
+
+  .__react_component_tooltip {
+    font-size: .8em;
+    padding: 1rem;
+
+    img {
+      filter: invert(1);
+      width: 20rem;
+    }
+  }
+
+  .meta-item {
+    border-radius: 5px;
+    min-height: 6rem;
+    padding-left: 1rem;
+    padding-top: 1rem;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      margin: 0;
+    }
+
+    h5 {
+      font-weight: 600;
+    }
+
+    h2 {
+      font-weight: 600;
+    }
+
+    h3 {
+      font-weight: 900;
+      width: 10rem;
+      word-wrap: break-word;
+    }
+
+    h1 {
+      display: inline-block;
+      font-weight: 600;
+    }
+
+    &.population {
+      min-height: 1rem !important;
+      padding: 0 !important;
+
+      h1,
+      h3 {
+        color: $gray;
+      }
+    }
+
+    .meta-item-top {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      & > * {
+        align-self: center;
+      }
+
+      span {
+        margin-right: 1rem;
+      }
+
+      svg {
+        align-self: flex-start;
+        cursor: pointer;
+        stroke-width: 3;
+        width: 12px;
+      }
+    }
+
+    .meta-item-middle {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      * {
+        align-self: center;
+      }
+
+      svg {
+        cursor: pointer;
+        margin-right: 1rem;
+      }
+    }
+
+    p {
+      font-family: 'archia';
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      padding-right: 1rem;
+    }
+
+    &.confirmed {
+      background: $cherry-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $cherry-mid;
+      }
+
+      h1 {
+        color: $cherry;
+      }
+    }
+
+    &.active {
+      background: $blue-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $blue-mid;
+      }
+
+      h1 {
+        color: $blue;
+      }
+    }
+
+    &.recovery {
+      background: $green-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $green-mid;
+      }
+
+      h1 {
+        color: $green;
+      }
+    }
+
+    &.mortality {
+      background: $gray-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $gray-mid;
+      }
+
+      h1 {
+        color: $gray;
+      }
+    }
+
+    &.cpm {
+      background: $yellow-light;
+
+      h3,
+      h5,
+      svg {
+        color: $orange-mid;
+      }
+
+      h1 {
+        color: $orange;
+      }
+    }
+
+    &.tpm {
+      background: $purple-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $purple-mid;
+      }
+
+      h1 {
+        color: $purple;
+      }
+    }
+
+    &.ptr {
+      background: $pink-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $pink-mid;
+      }
+
+      h1 {
+        color: $pink;
+      }
+    }
+
+    &.gr {
+      background: $brown-light;
+
+      h3,
+      h5,
+      p,
+      svg {
+        color: $brown-mid;
+      }
+
+      h1 {
+        color: $brown;
+      }
+    }
+  }
 }
 
 .breadcrumb {
+  cursor: pointer;
   display: flex;
   flex-direction: row;
   font-family: 'archia';
   font-size: .75rem;
   padding-left: 1.5rem;
 
+  ul {
+    background: $light;
+    border: 2px solid $gray-light;
+    box-shadow: none;
+    max-height: 20rem;
+    overflow-y: scroll;
+  }
+
+  .item {
+    a {
+      color: $gray;
+      width: 100%;
+    }
+
+    &:hover {
+      background: $gray-hover;
+
+      a {
+        background: transparent;
+        color: $gray;
+      }
+    }
+  }
+
   a {
     color: $gray;
+    font-family: 'archia';
+    font-size: .75rem;
     margin-right: .25rem;
     text-decoration: none;
     transition: all .2s ease-in-out;
@@ -488,6 +782,28 @@ h6 {
 
     &:hover {
       background: $gray-hover;
+      text-decoration: none;
+    }
+
+    &.selected {
+      background: $gray-light;
+      color: $gray;
+    }
+  }
+
+  .caret {
+    color: $gray;
+    margin-left: 0;
+    transition: all .1s ease-in-out;
+
+    &:hover {
+      color: $gray-dark;
+    }
+  }
+
+  summary {
+    &:focus {
+      outline: none;
     }
   }
 }
@@ -527,8 +843,8 @@ h6 {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin-left: 5.5rem;
-  margin-right: 5.5rem;
+  margin-left: 9rem;
+  margin-right: 4rem;
 
   .resource-left,
   .resource-right {
@@ -655,11 +971,10 @@ h6 {
       }
 
       .state-last-update {
-        background: transparent;
-        transform: translateX(1rem);
+        background: transparent !important;
 
         &:hover {
-          background: #fff !important;
+          background: transparent !important;
         }
 
         td {
@@ -675,7 +990,6 @@ h6 {
 
       .district-heading {
         background: $gray-light;
-        transform: translateX(1rem);
 
         td {
           background: $gray-light;
@@ -708,10 +1022,6 @@ h6 {
             }
           }
         }
-      }
-
-      .district {
-        transform: translateX(1rem);
       }
     }
 
@@ -793,7 +1103,6 @@ h6 {
 
 
   .filterlabel {
-    color: $indigo;
     font-family: 'archia';
     font-size: 11px !important;
     font-weight: 600;
@@ -903,6 +1212,8 @@ h6 {
   }
 
   input {
+    -moz-box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
+    -webkit-appearance: none !important;
     -webkit-box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
     background: #fff;
     border: 0;
@@ -917,6 +1228,22 @@ h6 {
     padding-left: 3rem;
     transition: all .2s ease-in-out;
     width: calc(100% - 4rem);
+  }
+
+  .search-placeholder {
+    color: $gray-mid;
+    font-family: 'archia';
+    font-size: 1rem;
+    left: 3rem;
+    opacity: .8;
+    pointer-events: none;
+    position: absolute;
+    top: 4.3rem;
+    transition: opacity 1s;
+
+    &.disappear {
+      opacity: 0;
+    }
   }
 
   .search-button {
@@ -1475,10 +1802,6 @@ abbr {
   }
 }
 
-.sticky {
-  position: sticky;
-}
-
 .Table {
   margin-bottom: 1rem;
 }
@@ -1498,55 +1821,89 @@ table {
     text-align: left;
 
     th {
+      background: $gray-light-opaque;
       border-radius: 5px;
       cursor: pointer;
       padding: .5rem;
+      position: sticky !important;
+      top: 5px;
       transition: all .1s ease-in-out;
       z-index: 99;
-
-      &.sticky {
-        background: $gray-opaque;
-        top: 4px;
-      }
 
       &:hover {
         background: #ecedee;
       }
+    }
+  }
 
-      .heading-content {
-        align-items: center;
-        display: flex;
-        flex-direction: row;
-        height: .9rem;
-        justify-content: space-between;
-        position: relative;
+  .heading-content {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    height: .9rem;
+    justify-content: space-between;
+    position: relative;
 
-        abbr {
-          text-align: right;
-        }
+    abbr {
+      color: $gray;
+      text-align: right;
 
-        svg {
-          color: $gray-mid;
-          margin: 0;
-          margin-left: .25rem;
-          margin-top: .15rem;
-          right: 0;
-          stroke-width: 4px;
-          width: 10px;
-        }
+      &.is-confirmed {
+        color: $cherry;
       }
+
+      &.is-active {
+        color: $blue;
+      }
+
+      &.is-recovered {
+        color: $green;
+      }
+
+      &.is-deaths {
+        color: $gray;
+      }
+    }
+
+    svg {
+      color: $gray-mid;
+      margin: 0;
+      margin-left: .25rem;
+      margin-top: .15rem;
+      right: 0;
+      stroke-width: 4px;
+      width: 10px;
     }
   }
 
   tbody {
     color: $gray;
-    max-width: 10rem;
 
     tr {
       cursor: pointer;
 
+      &:nth-child(odd) {
+        background: $gray-light;
+      }
+
       &.is-highlighted {
         background: $gray-hover !important;
+      }
+
+      &.is-odd {
+        background: $gray-light !important;
+      }
+
+      &.is-total {
+        background: $gray-hover;
+      }
+
+      &.is-spacer {
+        background: transparent !important;
+
+        &:hover {
+          background: transparent !important;
+        }
       }
 
       &:hover {
@@ -1556,31 +1913,22 @@ table {
           background: $gray-hover;
         }
       }
-
-      &.divider {
-        background: #6c757d10 !important;
-        height: .5rem;
-      }
-
-      &.spacer {
-        background: #fff !important;
-        height: .5rem;
-      }
     }
 
     td {
-      border-radius: 5px;
+      border-radius: 4px;
       font-size: .9rem;
       padding: .25rem;
       text-align: right;
 
       &:first-child {
-        max-width: 7.5rem;
+        font-weight: 600;
+        max-width: 7.5rem !important;
         text-align: left;
-        word-wrap: break-word;
+        word-wrap: break-word !important;
       }
 
-      .deltas {
+      .delta {
         display: inline-block;
         font-size: 11px !important;
 
@@ -1590,6 +1938,26 @@ table {
           vertical-align: -.25px;
           width: 9px;
         }
+
+        &.is-confirmed {
+          color: $cherry;
+        }
+
+        &.is-active {
+          color: $blue;
+        }
+
+        &.is-recovered {
+          color: $green;
+        }
+
+        &.is-deaths {
+          color: $gray;
+        }
+      }
+
+      .total {
+        margin-left: .25rem;
       }
 
       a {
@@ -1609,40 +1977,108 @@ table {
           }
         }
       }
+
+      &.is-Orange {
+        background: $yellow-light;
+        border-left: 5px solid $orange-mid;
+        color: $orange;
+
+        svg {
+          color: $orange !important;
+        }
+      }
+
+      &.is-Red {
+        background: $cherry-light;
+        border-left: 5px solid $cherry-mid;
+        color: $cherry;
+
+        svg {
+          color: $cherry !important;
+        }
+      }
+
+      &.is-Green {
+        background: $green-light;
+        border-left: 5px solid $green-mid;
+        color: $green;
+
+        svg {
+          color: $green !important;
+        }
+      }
     }
 
-    .table__count-text {
-      margin-left: .25rem;
+    .title-chevron {
+      position: relative;
+
+      & > * {
+        align-self: center;
+      }
+
+      .title-icon {
+        svg {
+          color: $gray-mid;
+          padding-left: 2px;
+          stroke-width: 3;
+          vertical-align: -6.5px;
+          width: 12px;
+        }
+      }
     }
 
     .state-last-update {
-      background: transparent;
+      background: transparent !important;
       color: $green !important;
-      transform: translateX(1rem);
+      height: 2rem;
 
-      &:hover {
-        background: #fff !important;
+      p {
+        font-size: .75rem;
+        margin: 0;
       }
 
-      td {
-        .last-update {
-          align-items: baseline;
-          display: flex;
-          flex-direction: row;
-          text-align: left;
-          width: 100%;
+      &:hover {
+        background: transparent !important;
+      }
 
-          h6 {
-            color: $green !important;
-            font-weight: 600;
-          }
+      .disclaimer {
+        backdrop-filter: saturate(180%) blur(20px);
+        background: $gray-light;
+        border-radius: 5px;
+        color: $gray;
+        display: flex;
+        flex-direction: row;
+        font-family: 'archia';
+        font-size: 12px;
+        left: 0;
+        margin-top: .5rem;
+        max-width: 10rem;
+        padding: .5rem;
+
+        svg {
+          margin-right: .25rem;
+          margin-top: -.25rem;
+          stroke-width: 2px;
+          width: 20px !important;
+        }
+      }
+
+      .state-page-link {
+        background: $yellow-light !important;
+        color: $orange;
+        font-size: .75rem;
+        font-weight: 600;
+        padding: .5rem;
+        text-align: center;
+
+        &:hover {
+          background: $yellow-hover !important;
         }
       }
     }
 
     .district-heading {
       background: $gray-light;
-      transform: translateX(1rem);
 
       &:hover {
         background: $gray-light !important;
@@ -1677,48 +2113,7 @@ table {
             width: 10px;
           }
         }
-
-        &.state-page-link {
-          background: $white;
-          padding: 0;
-          text-align: left;
-
-          div {
-            align-items: center;
-            background: $yellow-light;
-            border-radius: 5px;
-            color: $orange;
-            float: left;
-            font-size: .75rem;
-            padding: .45rem;
-            transition: all .2s ease-in-out;
-
-            &:hover {
-              background: $yellow-hover;
-
-              svg {
-                stroke: $orange;
-              }
-            }
-
-            svg {
-              color: $orange-mid;
-              height: 12px;
-              margin-bottom: 1px;
-              margin-left: .25rem;
-              stroke-width: 3px;
-              transition: all .2s ease-in-out;
-              vertical-align: middle;
-              width: 12px;
-            }
-          }
-        }
       }
-    }
-
-
-    .district {
-      transform: translateX(1rem);
     }
   }
 
@@ -1730,42 +2125,7 @@ table {
     top: -1rem;
   }
 
-  .is-total {
-    td {
-      background: $gray-hover;
-    }
-  }
-
-  .table__title-wrapper {
-    position: relative;
-
-    & > * {
-      align-self: center;
-    }
-
-    .actual__title-wrapper {
-      .__react_component_tooltip {
-        font-size: .8em;
-        max-width: 200px;
-      }
-
-      svg {
-        color: $gray-mid;
-        height: 12px;
-        padding-left: 2px;
-        stroke-width: 3;
-        vertical-align: -1.5px;
-        width: 12px;
-      }
-    }
-  }
-
   .unknown {
-    .__react_component_tooltip {
-      font-size: .8em;
-      max-width: 200px;
-    }
-
     svg {
       color: $gray-mid;
       height: 12px;
@@ -1867,7 +2227,7 @@ table {
     display: flex;
     flex-direction: row;
     margin: auto;
-    margin-top: 4rem;
+    margin-top: 2rem;
     overflow: hidden;
     width: 90%;
 
@@ -1888,23 +2248,15 @@ table {
   .legend {
     margin-top: 1em;
     width: 100%;
+
+    svg {
+      display: block;
+      overflow: visible;
+    }
   }
 
   .map-hover {
-    stroke: #ff073a;
     stroke-width: 2;
-
-    &.active {
-      stroke: #007bff;
-    }
-
-    &.recovered {
-      stroke: #28a745;
-    }
-
-    &.deceased {
-      stroke: #6c757d;
-    }
   }
 
   .back-button {
@@ -1954,13 +2306,15 @@ table {
   .meta {
     display: flex;
     flex-direction: row;
-    height: 1rem;
+    flex-wrap: wrap;
+    height: 4rem;
     justify-content: space-between;
 
     h2 {
       color: #e23028;
       font-weight: 900;
-      margin: 0;
+      margin-top: 0;
+      width: calc(100% - 10rem);
       word-wrap: break-word;
 
       &.active {
@@ -1974,6 +2328,18 @@ table {
       &.deceased {
         color: $gray;
       }
+
+      &.Red {
+        color: #d73027;
+      }
+
+      &.Orange {
+        color: #fee08b;
+      }
+
+      &.Green {
+        color: #66bd63;
+      }
     }
 
     h4 {
@@ -1982,13 +2348,19 @@ table {
       word-wrap: break-word;
     }
 
+    a {
+      width: 10rem;
+    }
+
     .district {
       color: #e23028;
       line-height: 15px;
       margin: 0;
-      position: absolute;
-      top: 3rem;
-      width: 5rem;
+
+      span {
+        font-size: .75rem;
+        font-weight: 600;
+      }
 
       &.active {
         color: $blue;
@@ -2107,7 +2479,7 @@ table {
       }
 
       &.is-yellow {
-        background: $warning;
+        background: $yellow;
 
         h5,
         h6 {
@@ -2151,6 +2523,13 @@ table {
             stroke: $purple;
           }
         }
+
+        .tooltip-tested {
+          svg {
+            bottom: .3rem;
+            top: auto;
+          }
+        }
       }
 
       &.focused {
@@ -2170,6 +2549,11 @@ table {
     }
   }
 
+  #chart,
+  #legend {
+    filter: saturate(1.5);
+  }
+
   .disclaimer {
     backdrop-filter: saturate(180%) blur(20px);
     background: $gray-light;
@@ -2184,6 +2568,7 @@ table {
     margin-left: auto;
     margin-right: auto;
     padding: .5rem;
+    pointer-events: none;
     position: absolute;
     right: 0;
     width: 14rem;
@@ -2195,6 +2580,34 @@ table {
       stroke-width: 2px;
       width: 20px !important;
     }
+  }
+
+  .footnote {
+    &.table-fineprint {
+      margin-bottom: 0;
+      margin-top: 1em;
+      text-align: left;
+    }
+  }
+}
+
+.__react_component_tooltip {
+  font-family: 'archia';
+  font-size: 11px;
+  font-weight: 600;
+  padding: .25rem;
+  text-align: center;
+  width: 200px;
+}
+
+.tooltip-tested {
+  pointer-events: all;
+
+  svg {
+    cursor: pointer;
+    height: .95em;
+    stroke-width: 3;
+    width: 1em;
   }
 }
 
@@ -2230,6 +2643,63 @@ table {
   }
 }
 
+.tabs-map {
+  display: flex;
+  flex-direction: row;
+  margin-top: .5rem;
+  position: relative;
+  z-index: 99;
+
+  h4 {
+    display: table-cell;
+    font-family: 'archia';
+    font-size: 12px !important;
+    font-weight: 900;
+    height: 2rem;
+    margin-bottom: 0;
+    margin-top: 0;
+    vertical-align: middle;
+  }
+
+  .tab {
+    background: $gray-light;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color: $gray-mid;
+    cursor: pointer;
+    height: 2rem;
+    margin-right: .25rem;
+    min-width: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: center;
+    transition: all .3s ease-in-out;
+
+    &:hover {
+      background: $gray-hover;
+    }
+
+    &.focused {
+      background: $gray-opaque;
+      color: $gray;
+
+    }
+
+    &.disabled {
+      background: $gray-opaque;
+      color: $gray-mid;
+    }
+  }
+
+  sup {
+    position: relative;
+    top: -.5em;
+    vertical-align: top;
+  }
+}
+
 .TimeSeriesExplorer {
   align-self: center;
   width: 30rem;
@@ -2237,6 +2707,31 @@ table {
   &.stickied {
     position: sticky !important;
     top: -6.5rem;
+  }
+
+  .alert {
+    margin-bottom: .5rem;
+    margin-left: auto;
+    margin-right: 0;
+    margin-top: .5rem;
+    padding: .25rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    width: 16rem;
+
+    & > * {
+      align-self: center;
+    }
+
+    svg {
+      margin: 0 !important;
+      margin-right: .25rem !important;
+      width: 14px !important;
+    }
+
+    .alert-right {
+      width: 100%;
+    }
   }
 }
 
@@ -2400,10 +2895,9 @@ input {
     flex-direction: column;
     left: .5rem;
     padding: .25rem;
+    pointer-events: none;
     position: absolute;
     top: .5rem;
-    width: 5rem;
-    z-index: -1;
 
     h2,
     h5,
@@ -2482,6 +2976,27 @@ input {
         color: $blue;
       }
     }
+
+    &.is-purple {
+      h5 {
+        color: $purple-mid;
+
+        &.title {
+          color: $purple;
+        }
+      }
+
+      h2,
+      h6 {
+        color: $purple;
+      }
+
+      .tooltip-tested {
+        svg {
+          width: 1em;
+        }
+      }
+    }
   }
 
   .svg-parent {
@@ -2531,30 +3046,51 @@ input {
     &.is-gray {
       background: $gray-light;
 
-      .domain,
-      .tick,
-      line {
-        stroke: $gray;
-      }
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $gray;
+        }
 
-      text {
-        color: $gray-mid;
-        stroke: transparent;
+        text {
+          color: $gray-mid;
+          stroke: transparent;
+        }
       }
     }
 
     &.is-blue {
       background: $blue-light;
 
-      .domain,
-      .tick,
-      line {
-        stroke: $blue;
-      }
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $blue;
+        }
 
-      text {
-        color: $blue-mid;
-        stroke: transparent;
+        text {
+          color: $blue-mid;
+          stroke: transparent;
+        }
+      }
+    }
+
+    &.is-purple {
+      background: $purple-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $purple;
+        }
+
+        text {
+          color: $purple-mid;
+          stroke: transparent;
+        }
       }
     }
   }
@@ -2820,7 +3356,7 @@ footer {
       font-family: 'archia';
       font-size: 12px;
       font-weight: 900;
-      height: 2.05rem;
+      height: 2.19rem;
       margin: .2rem .1rem;
       padding: .5rem;
       padding-inline-start: 1px;
@@ -3922,7 +4458,6 @@ footer {
 
 .district-bar {
   align-self: center;
-  display: flex;
   flex-direction: row;
   justify-content: space-between;
 
@@ -3936,23 +4471,43 @@ footer {
     display: flex;
     flex-direction: column;
     margin-right: 1rem;
-    width: 10rem;
+
+    .button {
+      background: $gray-light;
+      color: $gray;
+      font-weight: 600;
+      height: 2.5rem;
+      justify-content: center;
+      margin-top: .75rem;
+      text-transform: unset;
+      width: 5rem;
+
+      &:hover {
+        background: $gray-hover;
+      }
+    }
   }
 
   .districts {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 15rem;
     width: 100%;
 
+    &.is-grid {
+      display: grid;
+      grid-auto-flow: column;
+      grid-gap: .5rem;
+      padding-bottom: .5rem;
+    }
 
     .district {
       display: flex;
       flex-direction: row;
       font-family: 'archia';
-      margin-bottom: .15rem;
-      margin-top: .15rem;
+      height: 2.5rem;
+      justify-content: flex-start;
+      margin-right: 1rem;
 
       h2,
       h5 {
@@ -3962,9 +4517,11 @@ footer {
       }
 
       h5 {
-        display: table;
+        display: inline-block !important;
+        flex: 0 1;
         margin-left: .5rem;
         margin-top: .15rem;
+        width: auto !important;
       }
 
       & > * {
@@ -4185,7 +4742,8 @@ footer {
   .filters,
   .updates,
   .map-switcher,
-  .updates-header {
+  .updates-header,
+  .StateMeta {
     width: calc(100% - 2rem);
   }
 
@@ -4209,6 +4767,10 @@ footer {
   }
 
   .MapExplorer {
+    .svg-parent {
+      width: 100%;
+    }
+
     .header {
       margin-top: 2rem;
     }
@@ -4388,6 +4950,8 @@ footer {
   }
 
   .Resources {
+    margin: 1rem;
+
     table {
       align-self: center;
       border-collapse: separate;
@@ -4496,7 +5060,6 @@ footer {
 
         .state-last-update {
           background: transparent;
-          transform: translateX(1rem);
 
           &:hover {
             background: #fff !important;
@@ -4515,7 +5078,6 @@ footer {
 
         .district-heading {
           background: $gray-light;
-          transform: translateX(1rem);
 
           td {
             background: $gray-light;
@@ -4548,11 +5110,6 @@ footer {
               }
             }
           }
-        }
-
-
-        .district {
-          transform: translateX(1rem);
         }
       }
 
@@ -4680,6 +5237,17 @@ footer {
       }
     }
   }
+
+  .StateMeta {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-rows: repeat(auto-fit, minmax(5rem));
+    margin-bottom: 1rem;
+
+    .meta-item {
+      min-width: 1rem;
+    }
+  }
 }
 
 // Dark Mode
@@ -4754,12 +5322,40 @@ footer {
         background: #40008050 !important;
       }
     }
+
+    .breadcrumb {
+      ul {
+        background: #1e1e30 !important;
+
+        &::after {
+          border-bottom-color: #1e1e30 !important;
+        }
+
+        li {
+
+          a {
+            color: $gray !important;
+
+            &:hover {
+              color: $white !important;
+            }
+          }
+
+        }
+      }
+    }
   }
 
   .MapExplorer {
     #chart,
     #legend {
-      filter: invert(1) hue-rotate(150deg);
+      &.zone {
+        filter: none;
+      }
+
+      &:not(.zone) {
+        filter: invert(1) hue-rotate(180deg) saturate(1.5) url('#balance-color');
+      }
     }
 
     .legend {
@@ -4780,9 +5376,82 @@ footer {
         }
 
         svg {
-          stroke: #9673b9 !important;
+          stroke: #9673b9bb !important;
+
+          &:hover {
+            stroke: #9673b9 !important;
+          }
         }
       }
+    }
+
+    .disclaimer {
+      color: $gray-light-opaque;
+    }
+  }
+
+  .TimeSeries,
+  .Minigraph {
+    .stats {
+      &.is-purple {
+        h5 {
+          color: #9673b9bb !important;
+
+          &.title {
+            color: #9673b9 !important;
+          }
+        }
+
+        h2,
+        h6 {
+          color: #9673b9 !important;
+        }
+      }
+    }
+
+    .svg-parent {
+      &.is-purple {
+        background: #40008050 !important;
+
+        svg {
+          .dot,
+          .focus,
+          .domain,
+          .tick {
+            stroke: #9673b9 !important;
+          }
+
+          .dot,
+          .focus {
+            fill: #9673b9 !important;
+          }
+
+          .trend,
+          line {
+            stroke: #9673b999 !important;
+          }
+
+          text {
+            color: #9673b9bb !important;
+            stroke: transparent;
+          }
+        }
+      }
+    }
+  }
+
+  .tpm {
+    background: #40008050 !important;
+
+    h3,
+    h5,
+    svg,
+    p {
+      color: #9673b9bb !important;
+    }
+
+    h1 {
+      color: #9673b9 !important;
     }
   }
 
@@ -4801,9 +5470,17 @@ footer {
     }
   }
 
-  select {
-    background: #1e1e30 !important;
-    border-color: #1e1e30 !important;
+  .trends-state-name,
+  .select {
+    select {
+      background: #1e1e30;
+      background-image: linear-gradient(45deg, transparent 50%, $gray 50%),
+      linear-gradient(135deg, $gray 50%, transparent 50%);
+      background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+      background-repeat: no-repeat;
+      background-size: 5px 5px, 5px 5px;
+      border-color: #9494941a;
+    }
   }
 
   input {
@@ -4812,7 +5489,7 @@ footer {
       border: 2px solid $gray-mid !important;
 
       &:checked {
-        background-color: #161625 !important;
+        background-color: #6c757d99 !important;
 
         &::after {
           background-color: #cfcfcf !important;
@@ -4821,6 +5498,20 @@ footer {
 
       &::after {
         background-color: #cfcfcf !important;
+      }
+    }
+  }
+
+  .disabled {
+    input {
+      &.switch {
+        background: $dark !important;
+        border: $gray-light 2px solid !important;
+        opacity: .7;
+
+        &::after {
+          background: $gray !important;
+        }
       }
     }
   }
@@ -4960,12 +5651,23 @@ footer {
       background: #1e1e30 !important;
     }
 
+    .react-date-picker {
+      background: #1e1e30;
+      border-color: #9494941a !important;
+    }
+
     .modal-content {
       background: #1e1e30 !important;
     }
 
     .modal {
       background: #1e1e30bb !important;
+    }
+  }
+
+  .Clusters {
+    canvas {
+      filter: invert(1) hue-rotate(180deg) saturate(5);
     }
   }
 }

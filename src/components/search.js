@@ -7,7 +7,9 @@ import {
 import Bloodhound from 'corejs-typeahead';
 import React, {useState, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
+import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
+import {useDebounce} from 'react-use';
 
 const engine = new Bloodhound({
   initialize: true,
@@ -45,11 +47,22 @@ const essentialsEngine = new Bloodhound({
   },
 });
 
+let focused = false;
+const suggestions = [
+  'Karnataka',
+  'West Bengal',
+  'Pune Testing',
+  'Mumbai Shelter',
+  'Medical',
+  'Delhi Police',
+];
+
 function Search(props) {
   const [searchValue, setSearchValue] = useState('');
   const [expand, setExpand] = useState(false);
   const [results, setResults] = useState([]);
   const searchInput = useRef(null);
+  const {t} = useTranslation();
 
   const handleSearch = useCallback((searchInput) => {
     const results = [];
@@ -97,7 +110,6 @@ function Search(props) {
     };
 
     const essentialsAsync = (datums) => {
-      // to handle async remote call on initial launch
       essentialsEngine.search(searchInput, essentialsSync);
     };
 
@@ -105,6 +117,18 @@ function Search(props) {
     districtEngine.search(searchInput, districtSync);
     essentialsEngine.search(searchInput, essentialsSync, essentialsAsync);
   }, []);
+
+  useDebounce(
+    () => {
+      if (searchValue) {
+        handleSearch(searchValue);
+      } else {
+        setResults([]);
+      }
+    },
+    800,
+    [searchValue]
+  );
 
   function setNativeValue(element, value) {
     const valueSetter = Object.getOwnPropertyDescriptor(element, 'value').set;
@@ -121,9 +145,57 @@ function Search(props) {
     }
   }
 
+  function fillPlaceholder(target, index, cursorPosition, callback) {
+    if (focused) {
+      target.textContent = '';
+      return true;
+    }
+    const text = suggestions[index];
+    const placeholder = target.textContent;
+    target.classList.remove('disappear');
+    target.textContent = placeholder + text[cursorPosition];
+    if (cursorPosition < text.length - 1) {
+      setTimeout(function () {
+        fillPlaceholder(target, index, cursorPosition + 1, callback);
+      }, 200);
+      return true;
+    }
+    callback();
+  }
+
+  function clearPlaceholder(target, callback) {
+    const placeholder = target.textContent;
+    target.classList.add('disappear');
+    if (placeholder.length > 0) {
+      setTimeout(function () {
+        target.textContent = '';
+        clearPlaceholder(target, callback);
+      }, 1000);
+      return true;
+    }
+    callback();
+  }
+
+  function loopThroughSuggestions(target, index) {
+    if (focused) {
+      target.textContent = '';
+      return true;
+    }
+    fillPlaceholder(target, index, 0, function () {
+      setTimeout(function () {
+        clearPlaceholder(target, function () {
+          loopThroughSuggestions(target, (index + 1) % suggestions.length);
+        });
+      }, 2000);
+    });
+  }
+
+  const targetInput = document.getElementById('search-placeholder');
+  if (targetInput) loopThroughSuggestions(targetInput, 0);
+
   return (
     <div className="Search">
-      <label>Search your city, resources, etc</label>
+      <label>{t('Search your city, resources, etc')}</label>
       <div className="line"></div>
 
       <input
@@ -131,6 +203,7 @@ function Search(props) {
         value={searchValue}
         ref={searchInput}
         onFocus={(event) => {
+          focused = true;
           setExpand(true);
         }}
         onBlur={() => {
@@ -138,9 +211,9 @@ function Search(props) {
         }}
         onChange={(event) => {
           setSearchValue(event.target.value);
-          handleSearch(event.target.value.toLowerCase());
         }}
       />
+      <span id="search-placeholder" className="search-placeholder"></span>
 
       <div className={`search-button`}>
         <Icon.Search />
@@ -211,7 +284,7 @@ function Search(props) {
       {expand && (
         <div className="expanded">
           <div className="expanded-left">
-            <h3>Essentials</h3>
+            <h3>{t('Essentials')}</h3>
             <div className="suggestions">
               <div className="suggestion">
                 <div>-</div>
@@ -224,7 +297,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Testing Pune
+                  {t('Testing Pune')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -238,7 +311,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Delhi Shelter
+                  {t('Delhi Shelter')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -255,7 +328,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Community Kitchen in Kerala
+                  {t('Community Kitchen in Kerala')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -269,7 +342,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Groceries Chennai
+                  {t('Groceries Chennai')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -286,13 +359,13 @@ function Search(props) {
                     );
                   }}
                 >
-                  Senior citizen support bangalore
+                  {t('Senior citizen support bangalore')}
                 </h4>
               </div>
             </div>
           </div>
           <div className="expanded-right">
-            <h3>Locations</h3>
+            <h3>{t('Locations')}</h3>
             <div className="suggestions">
               <div className="suggestion">
                 <div>-</div>
@@ -305,7 +378,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Hyderabad
+                  {t('Hyderabad')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -319,7 +392,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Karnataka
+                  {t('Karnataka')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -333,7 +406,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Chennai
+                  {t('Chennai')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -347,7 +420,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Jharkhand
+                  {t('Jharkhand')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -361,7 +434,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Alappuzha
+                  {t('Alappuzha')}
                 </h4>
               </div>
             </div>

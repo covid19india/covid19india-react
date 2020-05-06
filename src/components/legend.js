@@ -12,17 +12,22 @@ function legend({
   marginRight = 0,
   marginBottom = 16 + tickSize,
   marginLeft = 0,
+  svg,
   ticks = width / 64,
   tickFormat,
   tickValues,
+  ordinalWeights,
 } = {}) {
-  const svg = d3
-    .create('svg')
-    .attr('width', width)
-    .attr('height', height)
-    .attr('viewBox', [0, 0, width, height])
-    .style('overflow', 'visible')
-    .style('display', 'block');
+  if (!svg)
+    svg = d3
+      .create('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .attr('viewBox', [0, 0, width, height])
+      .style('overflow', 'visible')
+      .style('display', 'block');
+
+  const t = svg.transition().duration(500);
 
   let tickAdjust = (g) => {
     const ticks = g.selectAll('.tick line');
@@ -42,7 +47,8 @@ function legend({
       );
 
     svg
-      .append('image')
+      .select('.ramp')
+      .attr('class', 'ramp')
       .attr('x', marginLeft)
       .attr('y', marginTop)
       .attr('width', width - marginLeft - marginRight)
@@ -58,6 +64,8 @@ function legend({
 
   // Sequential
   else if (color.interpolator) {
+    svg.selectAll('rect').transition(t).attr('opacity', 0);
+
     x = Object.assign(
       color
         .copy()
@@ -70,13 +78,16 @@ function legend({
     );
 
     svg
-      .append('image')
+      .select('.ramp')
+      .attr('class', 'ramp')
       .attr('x', marginLeft)
       .attr('y', marginTop)
       .attr('width', width - marginLeft - marginRight)
       .attr('height', height - marginTop - marginBottom)
       .attr('preserveAspectRatio', 'none')
-      .attr('xlink:href', ramp(color.interpolator()).toDataURL());
+      .attr('xlink:href', ramp(color.interpolator()).toDataURL())
+      .transition(t)
+      .attr('opacity', 1);
 
     // scaleSequentialQuantile doesn’t implement ticks or tickFormat.
     if (!x.ticks) {
@@ -135,28 +146,65 @@ function legend({
 
   // Ordinal
   else {
-    x = d3
-      .scaleBand()
-      .domain(color.domain())
-      .rangeRound([marginLeft, width - marginRight]);
-
     svg
-      .append('g')
-      .selectAll('rect')
-      .data(color.domain())
-      .join('rect')
-      .attr('x', x)
-      .attr('y', marginTop)
-      .attr('width', Math.max(0, x.bandwidth() - 1))
-      .attr('height', height - marginTop - marginBottom)
-      .attr('fill', color);
+      .select('.ramp')
+      .transition(t)
+      .attr('opacity', 0)
+      .attr('xlink:href', null);
+    if (!ordinalWeights) {
+      x = d3
+        .scaleBand()
+        .domain(color.domain())
+        .rangeRound([marginLeft, width - marginRight]);
+      svg
+        .selectAll('rect')
+        .data(color.domain())
+        .join('rect')
+        .attr('x', x)
+        .attr('y', marginTop)
+        .attr('width', Math.max(0, x.bandwidth() - 1))
+        .attr('height', height - marginTop - marginBottom)
+        .attr('fill', color);
+    } else {
+      const widthScale = d3
+        .scaleLinear()
+        .domain([0, ordinalWeights.reduce((a, b) => a + b)])
+        .rangeRound([0, width - marginLeft - marginRight]);
+
+      const xPos = ordinalWeights.map((w, i) =>
+        ordinalWeights
+          .slice(0, i)
+          .reduce((acc, w) => acc + widthScale(w), marginLeft)
+      );
+
+      x = d3.scaleOrdinal().domain(color.domain()).range(xPos);
+
+      svg
+        .selectAll('rect')
+        .data(color.domain())
+        .join((enter) =>
+          enter
+            .append('rect')
+            .attr('x', x)
+            .attr('width', (d, i) => widthScale(ordinalWeights[i]))
+        )
+        .attr('y', marginTop)
+        .attr('height', height - marginTop - marginBottom)
+        .attr('fill', color)
+        .transition(t)
+        .attr('x', x)
+        .attr('width', (d, i) => widthScale(ordinalWeights[i]))
+        .attr('opacity', 1);
+    }
 
     tickAdjust = () => {};
   }
 
   svg
-    .append('g')
+    .select('.axis')
     .attr('transform', `translate(0,${height - marginBottom})`)
+    .transition(t)
+    .attr('class', 'axis')
     .call(
       d3
         .axisBottom(x)
@@ -165,11 +213,13 @@ function legend({
         .tickSize(tickSize)
         .tickValues(tickValues)
     )
-    .call(tickAdjust)
-    .call((g) => g.select('.domain').remove())
+    .on('start', () => {
+      svg.call(tickAdjust).call((svg) => svg.select('.domain').remove());
+    })
     .call((g) =>
       g
-        .append('text')
+        .select('.axistext')
+        .attr('class', 'axistext')
         .attr('x', marginLeft)
         .attr('y', marginTop + marginBottom - height - 6)
         .attr('fill', 'currentColor')
@@ -182,7 +232,8 @@ function legend({
 }
 
 function ramp(color, n = 256) {
-  const canvas = document.createElement('canvas');
+  // const canvas = document.createElement('canvas');
+  const canvas = d3.select('.color-scale').node();
   const context = ((canvas.width = n), (canvas.height = 1), canvas).getContext(
     '2d'
   );
