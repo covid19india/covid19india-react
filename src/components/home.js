@@ -158,7 +158,6 @@ function Home(props) {
       if (flag === false) {
         setRegionHighlighted({state: currentState});
       } else setRegionHighlighted({state});
-      console.log(state.state + ' ' + currentState.state);
     },
     [currentState]
   );
