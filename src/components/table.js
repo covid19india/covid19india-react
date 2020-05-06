@@ -47,6 +47,13 @@ function StateHeaderCell({handleSort, sortData, statistic}) {
   );
 }
 
+const isEqual = (prevProps, currProps) => {
+  return (
+    equal(prevProps.regionHighlighted, currProps.regionHighlighted) &&
+    equal(prevProps.currentState, currProps.currentState)
+  );
+};
+
 function Table({
   states,
   districts,
@@ -55,6 +62,7 @@ function Table({
   onHighlightState,
   onHighlightDistrict,
   setActiveState,
+  currentState,
 }) {
   const [sortData, setSortData] = useLocalStorage('sortData', {
     sortColumn: 'confirmed',
@@ -193,6 +201,7 @@ function Table({
                     <Row
                       key={state.statecode}
                       state={state}
+                      currentState={currentState}
                       setActiveState={setActiveState}
                       districts={districts[state.state]?.districtData}
                       zones={zones[state.state]}
@@ -216,6 +225,7 @@ function Table({
               <Row
                 key={0}
                 state={states[0]}
+                currentState={currentState}
                 setActiveState={setActiveState}
                 onHighlightState={onHighlightState}
               />
@@ -230,4 +240,4 @@ function Table({
   }
 }
 
-export default React.memo(Table);
+export default React.memo(Table, isEqual);

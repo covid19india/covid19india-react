@@ -158,6 +158,7 @@ function Home(props) {
       if (flag === false) {
         setRegionHighlighted({state: currentState});
       } else setRegionHighlighted({state});
+      console.log(state.state + ' ' + currentState.state);
     },
     [currentState]
   );
@@ -205,6 +206,7 @@ function Home(props) {
           {stateDistrictWiseData && (
             <Table
               states={states}
+              currentState={currentState}
               setActiveState={setActiveState}
               summary={false}
               districts={stateDistrictWiseData}
@@ -222,6 +224,7 @@ function Home(props) {
               <MapExplorer
                 mapMeta={MAP_META.India}
                 states={states}
+                currentState={currentState}
                 setActiveState={setActiveState}
                 districts={stateDistrictWiseData}
                 stateTestData={stateTestData}

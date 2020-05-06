@@ -137,6 +137,30 @@ function PureDistrictRow({
 
 const DistrictRow = React.memo(PureDistrictRow, isDistrictRowEqual);
 
+const isEqual = (prevProps, currProps) => {
+  if (!equal(prevProps.state.state, currProps.state.state)) {
+    return false;
+  }
+  if (
+    !equal(
+      prevProps.regionHighlighted?.state,
+      currProps.regionHighlighted?.state
+    )
+  ) {
+    return false;
+  }
+  if (
+    !equal(
+      prevProps.regionHighlighted?.district,
+      currProps.regionHighlighted?.district
+    )
+  ) {
+    return false;
+  }
+  if (!equal(prevProps.currentState, currProps.currentState)) return false;
+  return true;
+};
+
 function Row({
   index,
   state,
@@ -358,4 +382,4 @@ function Row({
   );
 }
 
-export default React.memo(Row);
+export default React.memo(Row, isEqual);
