@@ -19,6 +19,7 @@ function StateMetaCard({
           data-event="touchstart mouseover"
           data-event-off="mouseleave"
           data-for="stateMeta"
+          onClick={(e) => e.stopPropagation()}
         >
           <Icon.Info />
         </span>

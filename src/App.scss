@@ -469,7 +469,6 @@ h6 {
     .back-button,
     .last-update,
     .unknown,
-    .tabs-map,
     .footnote,
     .state-page-button {
       display: none;
@@ -1234,7 +1233,7 @@ h6 {
   .search-placeholder {
     color: $gray-mid;
     font-family: 'archia';
-    font-size: 16px;
+    font-size: 1rem;
     left: 3rem;
     opacity: .8;
     pointer-events: none;
@@ -2329,6 +2328,18 @@ table {
       &.deceased {
         color: $gray;
       }
+
+      &.Red {
+        color: #d73027;
+      }
+
+      &.Orange {
+        color: #fee08b;
+      }
+
+      &.Green {
+        color: #66bd63;
+      }
     }
 
     h4 {
@@ -2635,6 +2646,7 @@ table {
 .tabs-map {
   display: flex;
   flex-direction: row;
+  margin-top: .5rem;
   position: relative;
   z-index: 99;
 
@@ -2659,7 +2671,7 @@ table {
     cursor: pointer;
     height: 2rem;
     margin-right: .25rem;
-    min-width: 5rem;
+    min-width: 2rem;
     padding-left: 1rem;
     padding-right: 1rem;
     text-align: center;
@@ -5368,7 +5380,13 @@ footer {
   .MapExplorer {
     #chart,
     #legend {
-      filter: invert(1) hue-rotate(180deg) saturate(1.5) url('#balance-color');
+      &.zone {
+        filter: none;
+      }
+
+      &:not(.zone) {
+        filter: invert(1) hue-rotate(180deg) saturate(1.5) url('#balance-color');
+      }
     }
 
     .legend {

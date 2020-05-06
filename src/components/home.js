@@ -1,4 +1,5 @@
 import Footer from './footer';
+// import LanguageSwitcher from './languageswitcher';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
@@ -7,7 +8,7 @@ import Table from './table';
 import TimeSeriesExplorer from './timeseriesexplorer';
 import Updates from './updates';
 
-import {STATE_CODES_REVERSE, MAP_META} from '../constants';
+import {STATE_CODES_REVERSE} from '../constants';
 import {
   formatDate,
   formatDateAbsolute,
@@ -17,8 +18,11 @@ import {
   parseStateTestTimeseries,
   parseTotalTestTimeseries,
   parseDistrictZones,
+  //  isDevelopmentOrTest,
 } from '../utils/commonfunctions';
 
+import 'intersection-observer';
+import Observer from '@researchgate/react-intersection-observer';
 import axios from 'axios';
 import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
@@ -33,10 +37,15 @@ function Home(props) {
   const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState(null);
   const [fetched, setFetched] = useState(false);
-  const [regionHighlighted, setRegionHighlighted] = useState(undefined);
+  const [regionHighlighted, setRegionHighlighted] = useState({
+    state: 'Total',
+  });
   const [showUpdates, setShowUpdates] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [mapOption, setMapOption] = useState('confirmed');
+  const [isTimeseriesIntersecting, setIsTimeseriesIntersecting] = useState(
+    false
+  );
 
   const [lastViewedLog, setLastViewedLog] = useLocalStorage(
     'lastViewedLog',
@@ -142,14 +151,17 @@ function Home(props) {
 
   const onHighlightState = useCallback((state) => {
     if (!state) return setRegionHighlighted(null);
-    state.code = STATE_CODES_REVERSE[state.state];
-    setRegionHighlighted({state});
+    setRegionHighlighted({state: state.state});
   }, []);
 
   const onHighlightDistrict = useCallback((district, state) => {
     if (!state && !district) return setRegionHighlighted(null);
-    setRegionHighlighted({district, state});
+    setRegionHighlighted({district, state: state.state});
   }, []);
+
+  const options = {
+    rootMargin: '0px 0px 0px 0px',
+  };
 
   return (
     <React.Fragment>
@@ -164,6 +176,7 @@ function Home(props) {
 
         <div className="home-left">
           <div className="header fadeInUp" style={{animationDelay: '1s'}}>
+            {/* <LanguageSwitcher />*/}
             {fetched && <Search />}
 
             <div className="actions">
@@ -193,6 +206,7 @@ function Home(props) {
               districts={stateDistrictWiseData}
               zones={districtZones}
               regionHighlighted={regionHighlighted}
+              setRegionHighlighted={setRegionHighlighted}
               onHighlightState={onHighlightState}
               onHighlightDistrict={onHighlightDistrict}
             />
@@ -203,12 +217,13 @@ function Home(props) {
           <React.Fragment>
             {fetched && (
               <MapExplorer
-                mapMeta={MAP_META.India}
+                mapName={'India'}
                 states={states}
                 districts={stateDistrictWiseData}
+                zones={districtZones}
                 stateTestData={stateTestData}
                 regionHighlighted={regionHighlighted}
-                isCountryLoaded={true}
+                setRegionHighlighted={setRegionHighlighted}
                 anchor={anchor}
                 setAnchor={setAnchor}
                 mapOption={mapOption}
@@ -216,16 +231,32 @@ function Home(props) {
               />
             )}
 
-            {timeseries && (
-              <TimeSeriesExplorer
-                timeseries={timeseries[regionHighlighted?.state.code || 'TT']}
-                activeStateCode={regionHighlighted?.state.code || 'TT'}
-                onHighlightState={onHighlightState}
-                states={states}
-                anchor={anchor}
-                setAnchor={setAnchor}
-              />
-            )}
+            <Observer
+              options={options}
+              onChange={({isIntersecting}) =>
+                setIsTimeseriesIntersecting(isIntersecting)
+              }
+            >
+              <div>
+                {timeseries && (
+                  <TimeSeriesExplorer
+                    timeseries={
+                      timeseries[
+                        STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
+                      ]
+                    }
+                    activeStateCode={
+                      STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
+                    }
+                    onHighlightState={onHighlightState}
+                    states={states}
+                    anchor={anchor}
+                    setAnchor={setAnchor}
+                    isIntersecting={isTimeseriesIntersecting}
+                  />
+                )}
+              </div>
+            </Observer>
           </React.Fragment>
         </div>
       </div>

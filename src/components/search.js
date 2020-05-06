@@ -7,6 +7,7 @@ import {
 import Bloodhound from 'corejs-typeahead';
 import React, {useState, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
+import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useDebounce} from 'react-use';
 
@@ -61,6 +62,7 @@ function Search(props) {
   const [expand, setExpand] = useState(false);
   const [results, setResults] = useState([]);
   const searchInput = useRef(null);
+  const {t} = useTranslation();
 
   const handleSearch = useCallback((searchInput) => {
     const results = [];
@@ -193,7 +195,7 @@ function Search(props) {
 
   return (
     <div className="Search">
-      <label id="home_search">Search your city, resources, etc</label>
+      <label id="home_search">{t('Search your city, resources, etc')}</label>
       <div className="line"></div>
 
       <input
@@ -283,7 +285,7 @@ function Search(props) {
       {expand && (
         <div className="expanded">
           <div className="expanded-left">
-            <h3>Essentials</h3>
+            <h3>{t('Essentials')}</h3>
             <div className="suggestions">
               <div className="suggestion">
                 <div>-</div>
@@ -296,7 +298,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Testing Pune
+                  {t('Testing Pune')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -310,7 +312,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Delhi Shelter
+                  {t('Delhi Shelter')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -327,7 +329,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Community Kitchen in Kerala
+                  {t('Community Kitchen in Kerala')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -341,7 +343,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Groceries Chennai
+                  {t('Groceries Chennai')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -358,13 +360,13 @@ function Search(props) {
                     );
                   }}
                 >
-                  Senior citizen support bangalore
+                  {t('Senior citizen support bangalore')}
                 </h4>
               </div>
             </div>
           </div>
           <div className="expanded-right">
-            <h3>Locations</h3>
+            <h3>{t('Locations')}</h3>
             <div className="suggestions">
               <div className="suggestion">
                 <div>-</div>
@@ -377,7 +379,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Hyderabad
+                  {t('Hyderabad')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -391,7 +393,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Karnataka
+                  {t('Karnataka')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -405,7 +407,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Chennai
+                  {t('Chennai')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -419,7 +421,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Jharkhand
+                  {t('Jharkhand')}
                 </h4>
               </div>
               <div className="suggestion">
@@ -433,7 +435,7 @@ function Search(props) {
                     );
                   }}
                 >
-                  Alappuzha
+                  {t('Alappuzha')}
                 </h4>
               </div>
             </div>
