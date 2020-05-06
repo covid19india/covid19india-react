@@ -1,9 +1,10 @@
-import GeoData from "./essentials.json";
-
+import testData from './_pantest.json'
+import axios from 'axios';
 import * as Knn from "leaflet-knn";
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Map, Marker, Popup, TileLayer, LayerGroup} from "react-leaflet";
 import L from 'leaflet';
+import MarkerClusterGroup from "react-leaflet-markercluster";
 import Search from './geosearch';
 import 'leaflet/dist/leaflet.css';
 
@@ -13,6 +14,14 @@ const user = new L.Icon({
   iconSize: [40, 40]
 });
 
+const createClusterCustomIcon = function (cluster) {
+  return L.divIcon({
+    html: cluster.getChildCount(),
+    className: 'marker-cluster-custom',
+    iconSize: L.point(30, 30, true),
+  });
+};
+
 function medFilter(feature) {
   return (feature.properties.priority);
 }
@@ -20,25 +29,53 @@ function othersFilter(feature) {
   return (!feature.properties.priority);
 }
 
+function panFilter(feature){
+  const builder = [feature.properties.city,feature.properties.state].join(" ");
+  return (builder.includes("PAN") || builder.includes("Pan"));
+}
 
 export default function MapChart(props) {
+  const [geoData, setGeoData] = useState([]);
+  const [panData, setPanData] = useState([]);
+
+
+  useEffect(() => {
+    getJSON();
+    setPanData(testData);
+  }, []);
+
+  // Get processed data from forked repo until its pushed to API
+  const getJSON = () => {
+    axios
+      .get('https://raw.githubusercontent.com/aswaathb/covid19india-react/80922c70bb451cda94cce1e809e54fa72754f05c/newResources/geoResources.json')
+      .then((response) => {
+        setGeoData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
 
 
 
 
   const center = props.pLocation || props.currentLocation || [21.3041, 77.1025];
   const zoom = props.radius ? (props.radius > 6 ? 11 : 12) : 5;
-  var medKnn;
-  var restKnn;
+  let medKnn;
+  let restKnn;
+  let panKnn
   var icon;
   const userLocation = props.pLocation || props.currentLocation
   const hK = 5; // Finds the K nearest hospitals/labs wrt user location
-  const rK = 10;// Finds the K nearest essentials wrt user location
+  const rK = 50;// Finds the K nearest essentials wrt user location
   const rad = 100 * 1000; // Max distance of the K points, in meters
 
   if (userLocation) {
-    medKnn = new Knn(L.geoJSON(GeoData, { filter: medFilter })).nearestLayer([userLocation[1], userLocation[0]], hK);
-    restKnn = new Knn(L.geoJSON(GeoData, { filter: othersFilter })).nearest([userLocation[1], userLocation[0]], rK, rad);
+    medKnn = new Knn(L.geoJSON(geoData, { filter: medFilter })).nearestLayer([userLocation[1], userLocation[0]], hK);
+    restKnn = new Knn(L.geoJSON(geoData, { filter: othersFilter })).nearest([userLocation[1], userLocation[0]], rK, rad);
+    panKnn = panData["features"].filter(panFilter)
+    // console.log(panKnn)
   }
 
   var gjKnn = {
@@ -48,9 +85,7 @@ export default function MapChart(props) {
 
   };
 
-
-
-
+  
   if (medKnn) {
     let i = 0;
     for (i = 0; i < medKnn.length; i++) {
@@ -71,7 +106,7 @@ export default function MapChart(props) {
             iconRetinaUrl: require('../icons/' + medKnn[i].layer.feature.properties.icon + '.svg'),
             iconSize: [25, 25],
           }),
-          "id": i + 1
+          "id": medKnn[i].layer.feature.properties.id
         }
       });
     }
@@ -98,7 +133,7 @@ export default function MapChart(props) {
             iconRetinaUrl: require('../icons/' + restKnn[j].layer.feature.properties.icon + '.svg'),
             iconSize: [25, 25],
           }),
-          "id": j + 100
+          "id": restKnn[j].layer.feature.properties.id
         }
       });
     }
@@ -110,17 +145,32 @@ export default function MapChart(props) {
         <TileLayer
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
+          detectRetina={true}
         // "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}" //This map is too detailed
         />
         <Search search={props.searchMap} />
         {(props.currentLocation) && (
           <Marker position={props.currentLocation} icon={user} key="userLoc">
-            <Popup>Your current location</Popup>
+            <Popup>
+              <h2>Your current location</h2>
+                {panKnn.map( p => (
+                  <p key={p.properties.id} >
+                  <a href={p.properties.contact}>{p.properties.name}</a> <br/>
+                  {p.properties.desc} <br/>
+                  {p.properties.phone}
+                  </p>
+                ))}
+            </Popup>
           </Marker>
         )}
 
         <LayerGroup>
-
+        <MarkerClusterGroup
+            showCoverageOnHover={true}
+            maxClusterRadius={10}
+            spiderfyDistanceMultiplier={2}
+            iconCreateFunction={createClusterCustomIcon}
+        >
           {gjKnn.features.map(d => (
             <Marker
               key={d.properties.id}
@@ -129,18 +179,21 @@ export default function MapChart(props) {
             >
               <Popup>
                 <div>
-                  <h2>{d.properties.name}</h2>
+                  <a href={d.properties.contact}><h2>{d.properties.name}</h2></a>
                   <p>
                     <b>Description:</b> {d.properties.desc}<br />
-                    <b>Address:</b> {d.properties.addr}<br />
-                    <b>Contact:</b> {d.properties.contact}<br />
-                    <b>Phone:</b> {d.properties.phone}
+                    <b>Address:</b> {d.properties.addr}
+                    {d.properties.phone?(<><br />
+                    <b>Phone:</b> {d.properties.phone}</>):null
+                  }
                   </p>
                 </div>{" "}
               </Popup>
             </Marker>
 
           ))}
+        </MarkerClusterGroup>
+
 
         </LayerGroup>
       </Map>

@@ -34,6 +34,7 @@
     "react-infinite-scroll-component": "^5.0.4",
     "react-latex": "^1.6.0",
     "react-leaflet": "^2.6.3",
+    "react-leaflet-markercluster": "2.0.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-table": "^7.0.4",
