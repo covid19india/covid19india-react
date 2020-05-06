@@ -6,6 +6,7 @@ import {
   MAP_STATISTICS,
   MAP_TYPES,
   MAP_VIEWS,
+  STATE_CODES_REVERSE,
   STATE_POPULATIONS,
 } from '../constants';
 import {formatDate, formatNumber} from '../utils/commonfunctions';
@@ -189,7 +190,6 @@ function MapExplorer({
       );
       district.district = regionHighlighted.district;
       district.state = state.state;
-      district.statecode = state.statecode;
       if (currentMapMeta.mapType === MAP_TYPES.COUNTRY)
         state = states.find((state) => state.state === 'Total');
       return [district, state];
@@ -422,7 +422,7 @@ function MapExplorer({
               <Icon.Link />
             </a>
           )}
-          {hoveredRegion.state === 'Total' ? testedToolTip : ''}
+          {panelRegion.state === 'Total' ? testedToolTip : ''}
         </div>
       </div>
 
@@ -442,14 +442,14 @@ function MapExplorer({
         </h2>
 
         {currentMapMeta.mapType !== MAP_TYPES.STATE &&
-          hoveredRegion.lastupdatedtime && (
+          panelRegion.lastupdatedtime && (
             <div className="last-update">
               <h6>{t('Last updated')}</h6>
               <h3>
-                {isNaN(Date.parse(formatDate(hoveredRegion.lastupdatedtime)))
+                {isNaN(Date.parse(formatDate(panelRegion.lastupdatedtime)))
                   ? ''
                   : formatDistance(
-                      new Date(formatDate(hoveredRegion.lastupdatedtime)),
+                      new Date(formatDate(panelRegion.lastupdatedtime)),
                       new Date()
                     ) +
                     ' ' +
@@ -459,7 +459,7 @@ function MapExplorer({
           )}
 
         {currentMapMeta.mapType === MAP_TYPES.STATE ? (
-          <Link to={`state/${hoveredRegion.statecode}`}>
+          <Link to={`state/${STATE_CODES_REVERSE[panelRegion.state]}`}>
             <div className="button state-page-button">
               <abbr>{t('Visit state page')}</abbr>
               <Icon.ArrowRightCircle />
