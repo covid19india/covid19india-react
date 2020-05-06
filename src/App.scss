@@ -437,19 +437,6 @@ h6 {
     width: 100%;
   }
 
-  .district-bar-right {
-    display: flex;
-    justify-content: center;
-    position: relative;
-
-    .happy-sign {
-      display: flex;
-      flex-direction: row;
-      position: absolute;
-      top: 4rem;
-    }
-  }
-
   .MapExplorer,
   .meta-secondary {
     width: calc(100% - 3rem);
@@ -4436,35 +4423,30 @@ footer {
   }
 }
 
-.DeltaBarGraph {
-  svg {
-    width: 100%;
-
-    text {
-      color: $red;
-      font-family: 'archia';
-    }
-
-    .delta {
-      fill: #dc3545;
-      font-weight: 900;
-    }
-
-    .percent {
-      fill: #dc354590;
-    }
-  }
-}
-
 .district-bar {
   align-self: center;
   flex-direction: row;
   justify-content: space-between;
 
   h2 {
-    color: $red;
     font-weight: 900;
     margin-bottom: .5rem;
+
+    &.confirmed {
+      color: $red;
+    }
+
+    &.active {
+      color: $blue;
+    }
+
+    &.recovered {
+      color: $green;
+    }
+
+    &.deceased {
+      color: $gray;
+    }
   }
 
   .district-bar-left {
@@ -4484,6 +4466,38 @@ footer {
 
       &:hover {
         background: $gray-hover;
+      }
+    }
+  }
+
+  .district-bar-right {
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    .happy-sign {
+      display: flex;
+      flex-direction: row;
+      position: absolute;
+      top: 4rem;
+    }
+
+    .DeltaBarGraph {
+      svg {
+        width: 100%;
+
+        text {
+          font-family: 'archia';
+        }
+
+        .delta {
+          fill: #dc3545;
+          font-weight: 900;
+        }
+
+        .percent {
+          fill: #dc354590;
+        }
       }
     }
   }
@@ -4535,15 +4549,45 @@ footer {
         margin-top: 4px;
 
         h6 {
-          color: $red-mid;
           margin: 0;
+
+          &.confirmed {
+            color: $red-mid;
+          }
+
+          &.active {
+            color: $blue-mid;
+          }
+
+          &.recovered {
+            color: $green-mid;
+          }
+
+          &.deceased {
+            color: $gray-mid;
+          }
         }
 
         svg {
-          color: $red-mid;
           stroke-width: 4;
           vertical-align: bottom;
           width: 10px;
+
+          &.confirmed {
+            color: $red-mid;
+          }
+
+          &.active {
+            color: $blue-mid;
+          }
+
+          &.recovered {
+            color: $green-mid;
+          }
+
+          &.deceased {
+            color: $gray-mid;
+          }
         }
 
         & > * {

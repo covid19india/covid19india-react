@@ -363,7 +363,7 @@ function State(props) {
                     className="district-bar-left fadeInUp"
                     style={{animationDelay: '0.6s'}}
                   >
-                    <h2>Top districts</h2>
+                    <h2 className={mapOption}>Top districts</h2>
                     <div
                       className={`districts ${
                         showAllDistricts ? 'is-grid' : ''
@@ -377,35 +377,31 @@ function State(props) {
                       {districtData[stateName]
                         ? Object.keys(districtData[stateName].districtData)
                             .filter((d) => d !== 'Unknown')
-                            .sort(
-                              (a, b) =>
-                                districtData[stateName].districtData[b]
-                                  .confirmed -
-                                districtData[stateName].districtData[a]
-                                  .confirmed
-                            )
+                            .sort((a, b) => {
+                              const districtB =
+                                districtData[stateName].districtData[b];
+                              const districtA =
+                                districtData[stateName].districtData[a];
+                              return (
+                                districtB[mapOption] - districtA[mapOption]
+                              );
+                            })
                             .slice(0, showAllDistricts ? undefined : 5)
                             .map((district, index) => {
+                              const cases =
+                                districtData[stateName].districtData[district];
                               return (
                                 <div key={index} className="district">
-                                  <h2>
-                                    {
-                                      districtData[stateName].districtData[
-                                        district
-                                      ].confirmed
-                                    }
-                                  </h2>
+                                  <h2>{cases[mapOption]}</h2>
                                   <h5>{district}</h5>
-                                  <div className="delta">
-                                    <Icon.ArrowUp />
-                                    <h6>
-                                      {
-                                        districtData[stateName].districtData[
-                                          district
-                                        ].delta.confirmed
-                                      }
-                                    </h6>
-                                  </div>
+                                  {mapOption !== 'active' && (
+                                    <div className="delta">
+                                      <Icon.ArrowUp className={mapOption} />
+                                      <h6 className={mapOption}>
+                                        {cases.delta[mapOption]}
+                                      </h6>
+                                    </div>
+                                  )}
                                 </div>
                               );
                             })
@@ -423,25 +419,32 @@ function State(props) {
                       )}
                   </div>
                   <div className="district-bar-right">
-                    <div
-                      className="happy-sign fadeInUp"
-                      style={{animationDelay: '0.6s'}}
-                    >
-                      {timeseries
-                        .slice(-5)
-                        .every((day) => day.dailyconfirmed === 0) && (
-                        <div className="alert is-green">
-                          <Icon.Smile />
-                          <div className="alert-right">
-                            No new confirmed cases in the past five days
+                    {(mapOption === 'confirmed' ||
+                      mapOption === 'deceased') && (
+                      <div
+                        className="happy-sign fadeInUp"
+                        style={{animationDelay: '0.6s'}}
+                      >
+                        {timeseries
+                          .slice(-5)
+                          .every((day) => day[`daily${mapOption}`] === 0) && (
+                          <div
+                            className={`alert ${
+                              mapOption === 'confirmed' ? 'is-green' : ''
+                            }`}
+                          >
+                            <Icon.Smile />
+                            <div className="alert-right">
+                              No new {mapOption} cases in the past five days
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    )}
                     {
                       <DeltaBarGraph
                         timeseries={timeseries.slice(-5)}
-                        arrayKey={'dailyconfirmed'}
+                        arrayKey={`daily${mapOption}`}
                       />
                     }
                   </div>
