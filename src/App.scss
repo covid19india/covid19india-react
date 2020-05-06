@@ -4490,24 +4490,6 @@ footer {
           font-family: 'archia';
         }
 
-        .x-axis {
-          &.dailyconfirmed {
-            color: $red;
-          }
-
-          &.dailyactive {
-            color: $blue;
-          }
-
-          &.dailyrecovered {
-            color: $green;
-          }
-
-          &.dailydeceased {
-            color: $gray;
-          }
-        }
-
         .delta {
           fill: #dc3545;
           font-weight: 900;
