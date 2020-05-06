@@ -137,29 +137,6 @@ function PureDistrictRow({
 
 const DistrictRow = React.memo(PureDistrictRow, isDistrictRowEqual);
 
-const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.state.state, currProps.state.state)) {
-    return false;
-  }
-  if (
-    !equal(
-      prevProps.regionHighlighted?.state,
-      currProps.regionHighlighted?.state
-    )
-  ) {
-    return false;
-  }
-  if (
-    !equal(
-      prevProps.regionHighlighted?.district,
-      currProps.regionHighlighted?.district
-    )
-  ) {
-    return false;
-  }
-  return true;
-};
-
 function Row({
   index,
   state,
@@ -168,9 +145,11 @@ function Row({
   regionHighlighted,
   onHighlightState,
   onHighlightDistrict,
+  setActiveState,
 }) {
   const [sortedDistricts, setSortedDistricts] = useState(districts);
   const [showDistricts, setShowDistricts] = useState(false);
+  const [flag, setFlag] = useState(false);
   const [sortData, setSortData] = useLocalStorage('districtSortData', {
     sortColumn: 'confirmed',
     isAscending: false,
@@ -191,15 +170,6 @@ function Row({
       </span>
     ),
     [showDistricts]
-  );
-
-  const _onHighlightState = useCallback(
-    (state) => {
-      if (!equal(state, regionHighlighted?.state)) {
-        onHighlightState(state);
-      }
-    },
-    [onHighlightState, regionHighlighted]
   );
 
   const doSort = useCallback(
@@ -239,6 +209,15 @@ function Row({
     [doSort, setSortData, sortData]
   );
 
+  const clickhandler = () => {
+    if (state.statecode !== 'TT') setShowDistricts(!showDistricts);
+    setFlag(!flag);
+    if (!flag) setActiveState(state);
+    else {
+      setActiveState(null);
+    }
+  };
+
   useEffectOnce(() => {
     if (state.statecode !== 'TT') doSort(sortData);
   });
@@ -252,14 +231,9 @@ function Row({
           {'is-highlighted': regionHighlighted?.state.state === state.state},
           {'is-odd': index % 2 === 0}
         )}
-        onMouseEnter={() => _onHighlightState(state)}
-        onClick={
-          state.statecode !== 'TT'
-            ? () => {
-                setShowDistricts(!showDistricts);
-              }
-            : null
-        }
+        onMouseEnter={() => onHighlightState?.(state)}
+        onMouseLeave={() => onHighlightState?.(state, flag)}
+        onClick={clickhandler}
       >
         <td>
           <div className="title-chevron">
@@ -384,4 +358,4 @@ function Row({
   );
 }
 
-export default React.memo(Row, isEqual);
+export default React.memo(Row);

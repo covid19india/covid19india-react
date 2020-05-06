@@ -27,6 +27,7 @@ import {useEffectOnce, useLocalStorage} from 'react-use';
 
 function Home(props) {
   const [states, setStates] = useState(null);
+  const [currentState, setCurrentState] = useState(null);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState(null);
   const [districtZones, setDistrictZones] = useState(null);
   const [stateTestData, setStateTestData] = useState(null);
@@ -122,6 +123,7 @@ function Home(props) {
       setTimeseries(tsMerged);
 
       setLastUpdated(data.statewise[0].lastupdatedtime);
+      setCurrentState(data.statewise[0]);
 
       const testData = [...stateTestData.states_tested_data].reverse();
       const totalTest = data.tested[data.tested.length - 1];
@@ -140,11 +142,19 @@ function Home(props) {
     }
   };
 
-  const onHighlightState = useCallback((state) => {
+  const setActiveState = (state) => {
+    if (state === null) setCurrentState(states[0]);
+    else setCurrentState(state);
+  };
+
+  const onHighlightState = (state, flag) => {
     if (!state) return setRegionHighlighted(null);
     state.code = STATE_CODES_REVERSE[state.state];
-    setRegionHighlighted({state});
-  }, []);
+
+    if (flag === false) {
+      setRegionHighlighted({state: currentState});
+    } else setRegionHighlighted({state});
+  };
 
   const onHighlightDistrict = useCallback((district, state) => {
     if (!state && !district) return setRegionHighlighted(null);
@@ -189,6 +199,7 @@ function Home(props) {
           {stateDistrictWiseData && (
             <Table
               states={states}
+              setActiveState={setActiveState}
               summary={false}
               districts={stateDistrictWiseData}
               zones={districtZones}
@@ -205,6 +216,7 @@ function Home(props) {
               <MapExplorer
                 mapMeta={MAP_META.India}
                 states={states}
+                setActiveState={setActiveState}
                 districts={stateDistrictWiseData}
                 stateTestData={stateTestData}
                 regionHighlighted={regionHighlighted}
