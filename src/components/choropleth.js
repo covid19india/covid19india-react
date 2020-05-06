@@ -295,7 +295,7 @@ function ChoroplethMap({
         meshDistricts = [
           topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectDistricts]),
         ];
-        meshDistricts[0].id = mapMeta.graphObjectStates;
+        meshDistricts[0].id = mapMeta.graphObjectDistricts;
       }
       svg
         .select(
