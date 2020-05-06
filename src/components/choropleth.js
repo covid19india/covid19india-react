@@ -34,10 +34,13 @@ function ChoroplethMap({
               geoData.objects[mapMeta.graphObjectStates]
             )
           : {features: []};
-      const topologyDistricts = topojson.feature(
-        geoData,
-        geoData.objects[mapMeta.graphObjectDistricts]
-      );
+      const topologyDistricts =
+        currentMap.view === MAP_VIEWS.DISTRICTS
+          ? topojson.feature(
+              geoData,
+              geoData.objects[mapMeta.graphObjectDistricts]
+            )
+          : {features: []};
 
       const topology =
         currentMap.view === MAP_VIEWS.STATES
