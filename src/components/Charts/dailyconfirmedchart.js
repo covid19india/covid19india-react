@@ -8,7 +8,7 @@ import {
 import {format, parse} from 'date-fns';
 import deepmerge from 'deepmerge';
 import React from 'react';
-import {Bar, defaults} from 'react-chartjs-2';
+import {Line, defaults} from 'react-chartjs-2';
 
 function DailyConfirmedChart(props) {
   const dates = [];
@@ -34,26 +34,43 @@ function DailyConfirmedChart(props) {
     labels: dates,
     datasets: [
       {
-        data: recovered,
-        label: 'Recovered',
-        backgroundColor: '#7ebf80',
-      },
-      {
-        data: deceased,
-        label: 'Deceased',
-        backgroundColor: '#6c757d',
-      },
-      {
+        borderWidth: 2,
         data: confirmed,
+        borderCapStyle: 'round',
+        pointBackgroundColor: '#ff6862',
         label: 'Confirmed',
-        backgroundColor: '#ff6862',
+        borderColor: '#ff6862',
+        pointHoverRadius: 2,
+      },
+      {
+        borderWidth: 2,
+        data: recovered,
+        borderCapStyle: 'round',
+        pointBackgroundColor: '#7ebf80',
+        label: 'Recovered',
+        borderColor: '#7ebf80',
+        pointHoverRadius: 2,
+      },
+      {
+        borderWidth: 2,
+        data: deceased,
+        borderCapStyle: 'round',
+        pointBackgroundColor: '#6c757d',
+        label: 'Deceased',
+        borderColor: '#6c757d',
+        pointHoverRadius: 2,
       },
     ],
   };
 
   const options = deepmerge(defaultOptions, {
-    tooltips: {
-      mode: 'index',
+    elements: {
+      point: {
+        radius: 0,
+      },
+      line: {
+        tension: 0.1,
+      },
     },
     legend: {
       display: true,
@@ -70,14 +87,9 @@ function DailyConfirmedChart(props) {
       },
     },
     scales: {
-      xAxes: [
-        deepmerge(xAxisDefaults, {
-          stacked: true,
-        }),
-      ],
+      xAxes: [deepmerge(xAxisDefaults, {})],
       yAxes: [
         deepmerge(yAxisDefaults, {
-          stacked: true,
           ticks: {
             callback: (value) => formatNumber(value),
           },
@@ -90,7 +102,7 @@ function DailyConfirmedChart(props) {
     <div className="charts-header">
       <div className="chart-title">{props.title}</div>
       <div className="chart-content">
-        <Bar data={barDataSet} options={options} />
+        <Line data={barDataSet} options={options} />
       </div>
     </div>
   );
