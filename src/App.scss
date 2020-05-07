@@ -134,22 +134,6 @@ h6 {
     margin-left: 0.25rem;
 }
 
-.leaflet-container {
-    width: 90%;
-    height: 90vh;
-    margin-left: 4rem;
-
-}
-.marker-cluster-custom {
-    background: $pink;
-    border: 5px solid $purple;
-    border-radius: 50%;
-    color: $white;
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-    width: 30px;
-  }
 
 .Navbar {
     display: flex;
@@ -3086,6 +3070,24 @@ footer {
     }
 }
 
+.leaflet-container {
+    width: 90%;
+    height: 90vh;
+    margin-left: 4rem;
+    
+}
+
+.marker-cluster-custom {
+    background: $pink;
+    border: 5px solid $purple;
+    border-radius: 50%;
+    color: $white;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    width: 30px;
+} 
+
 .tracker {
 
     padding: 7px;
@@ -3099,6 +3101,8 @@ footer {
         text-align: center;
         color: $cyan;
     }
+
+
     .tracker_bar {
         margin-top: 3rem;
         width: 30rem;

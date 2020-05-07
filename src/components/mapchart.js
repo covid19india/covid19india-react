@@ -3,6 +3,8 @@ import axios from 'axios';
 import * as Knn from "leaflet-knn";
 import React, {useState, useEffect} from 'react';
 import { Map, Marker, Popup, TileLayer, LayerGroup} from "react-leaflet";
+// import {Sidebar, Tab}  from 'react-leaflet-sidebarv2';
+// import 'leaflet-sidebar-v2/css/leaflet-sidebar.css'; // TODO:Import just the .min.css instead of the whole package :|
 import L from 'leaflet';
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import Search from './geosearch';
@@ -56,16 +58,12 @@ export default function MapChart(props) {
       });
   };
 
-
-
-
-
   const center = props.pLocation || props.currentLocation || [21.3041, 77.1025];
   const zoom = props.radius ? (props.radius > 6 ? 11 : 12) : 5;
   let medKnn;
   let restKnn;
   let panKnn
-  var icon;
+  let icon;
   const userLocation = props.pLocation || props.currentLocation
   const hK = 5; // Finds the K nearest hospitals/labs wrt user location
   const rK = 50;// Finds the K nearest essentials wrt user location
@@ -75,7 +73,6 @@ export default function MapChart(props) {
     medKnn = new Knn(L.geoJSON(geoData, { filter: medFilter })).nearestLayer([userLocation[1], userLocation[0]], hK);
     restKnn = new Knn(L.geoJSON(geoData, { filter: othersFilter })).nearest([userLocation[1], userLocation[0]], rK, rad);
     panKnn = panData["features"].filter(panFilter)
-    // console.log(panKnn)
   }
 
   var gjKnn = {
@@ -193,9 +190,8 @@ export default function MapChart(props) {
 
           ))}
         </MarkerClusterGroup>
-
-
         </LayerGroup>
+
       </Map>
     </div>
   )
