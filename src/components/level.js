@@ -4,6 +4,14 @@ import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useEffectOnce} from 'react-use';
 
+function getFontSize(number) {
+  console.log(number);
+  if (number.length <= 4) {
+    return 24;
+  }
+  return 24 - number.length + 3;
+}
+
 function Level(props) {
   const [data, setData] = useState(props.data);
   const {t} = useTranslation();
@@ -36,7 +44,9 @@ function Level(props) {
             : '+0'}
           ]
         </h4>
-        <h1>{formatNumber(data.confirmed)} </h1>
+        <h1 style={{fontSize: getFontSize(formatNumber(data.confirmed))}}>
+          {formatNumber(data.confirmed)}{' '}
+        </h1>
       </div>
 
       <div
@@ -45,7 +55,12 @@ function Level(props) {
       >
         <h5 className="heading">{t('Active')}</h5>
         <h4>&nbsp;</h4>
-        <h1 className="title has-text-info">{formatNumber(data.active)}</h1>
+        <h1
+          className="title has-text-info"
+          style={{fontSize: getFontSize(formatNumber(data.active))}}
+        >
+          {formatNumber(data.active)}
+        </h1>
       </div>
 
       <div
@@ -62,8 +77,11 @@ function Level(props) {
             : '+0'}
           ]
         </h4>
-        <h1 className="title has-text-success">
-          {formatNumber(data.recovered)}{' '}
+        <h1
+          className="title has-text-success"
+          style={{fontSize: getFontSize(formatNumber(data.recovered))}}
+        >
+          {formatNumber(data.recovered)}
         </h1>
       </div>
 
@@ -81,7 +99,12 @@ function Level(props) {
             : '+0'}
           ]
         </h4>
-        <h1 className="title has-text-grey">{formatNumber(data.deaths)}</h1>
+        <h1
+          className="title has-text-grey"
+          style={{fontSize: getFontSize(formatNumber(data.deaths))}}
+        >
+          {formatNumber(data.deaths)}
+        </h1>
       </div>
     </div>
   );
