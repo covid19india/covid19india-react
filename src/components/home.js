@@ -237,25 +237,23 @@ function Home(props) {
                 setIsTimeseriesIntersecting(isIntersecting)
               }
             >
-              <div>
-                {timeseries && (
-                  <TimeSeriesExplorer
-                    timeseries={
-                      timeseries[
-                        STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
-                      ]
-                    }
-                    activeStateCode={
+              {timeseries && (
+                <TimeSeriesExplorer
+                  timeseries={
+                    timeseries[
                       STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
-                    }
-                    onHighlightState={onHighlightState}
-                    states={states}
-                    anchor={anchor}
-                    setAnchor={setAnchor}
-                    isIntersecting={isTimeseriesIntersecting}
-                  />
-                )}
-              </div>
+                    ]
+                  }
+                  activeStateCode={
+                    STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
+                  }
+                  onHighlightState={onHighlightState}
+                  states={states}
+                  anchor={anchor}
+                  setAnchor={setAnchor}
+                  isIntersecting={isTimeseriesIntersecting}
+                />
+              )}
             </Observer>
           </React.Fragment>
         </div>
