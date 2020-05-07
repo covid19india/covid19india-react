@@ -5,7 +5,6 @@ import {useTranslation} from 'react-i18next';
 import {useEffectOnce} from 'react-use';
 
 function getFontSize(number) {
-  console.log(number);
   if (number.length <= 4) {
     return 24;
   }
