@@ -80,7 +80,7 @@ function Level(props) {
           className="title has-text-success"
           style={{fontSize: getFontSize(formatNumber(data.recovered))}}
         >
-          {formatNumber(data.recovered)}
+          {formatNumber(data.recovered)}{' '}
         </h1>
       </div>
 
