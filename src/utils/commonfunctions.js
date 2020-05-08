@@ -99,9 +99,16 @@ export const formatNumber = (value) => {
   const numberFormatter = new Intl.NumberFormat('en-IN');
   if (isNaN(value)) return '-';
   if (window.innerWidth <= 375) {
-    return Math.abs(value) > 999 ? Math.sign(value) * ((Math.abs(value) / 1000).toFixed(1)) + 'k' : Math.sign(value) * Math.abs(value)
-  }
-  else return numberFormatter.format(value)
+    return Math.abs(Number(value)) >= 1.0e9
+      ? (Math.abs(Number(value)) / 1.0e9).toFixed(1) + 'B'
+      : // Six Zeroes for Millions
+      Math.abs(Number(value)) >= 1.0e6
+      ? (Math.abs(Number(value)) / 1.0e6).toFixed(1) + 'M'
+      : // Three Zeroes for Thousands
+      Math.abs(Number(value)) >= 1.0e3
+      ? (Math.abs(Number(value)) / 1.0e3).toFixed(1) + 'k'
+      : Math.abs(Number(value));
+  } else return numberFormatter.format(value);
 };
 
 export const parseStateTimeseries = ({states_daily: data}) => {
