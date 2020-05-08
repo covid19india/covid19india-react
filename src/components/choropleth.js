@@ -455,8 +455,9 @@ function ChoroplethMap({
           <g className="state-borders" />
           <g className="district-borders" />
         </svg>
-        {(mapOption === 'recovered' && mapData?.Unknown?.recovered) ||
-        (mapOption === 'deceased' && mapData?.Unknown?.deceased) ? (
+        {mapMeta.mapType === MAP_TYPES.STATE &&
+        mapData[currentMap.name]?.Unknown &&
+        mapData[currentMap.name]?.Unknown[mapOption] ? (
           <div className="disclaimer">
             <Icon.AlertCircle />
             {`District-wise ${mapOption} numbers are under reconciliation`}
