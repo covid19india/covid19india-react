@@ -6,7 +6,7 @@
   "dependencies": {
     "@juggle/resize-observer": "^3.1.3",
     "@material-ui/core": "^4.9.12",
-    "@primer/components": "^18.1.1",
+    "@primer/components": "^19.0.0",
     "@researchgate/react-intersection-observer": "^1.1.3",
     "@testing-library/jest-dom": "^5.5.0",
     "@testing-library/react": "^10.0.4",
