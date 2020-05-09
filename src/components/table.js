@@ -79,7 +79,7 @@ function Table({
           style={{animationDelay: '1.5s'}}
         >
           {t('Compiled from State Govt. numbers')},{' '}
-          <Link to="/faq" style={{color: '#6c757d'}}>
+          <Link to="/about" style={{color: '#6c757d'}}>
             {t('know more')}!
           </Link>
         </h5>
