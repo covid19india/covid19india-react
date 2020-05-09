@@ -34,10 +34,13 @@ function ChoroplethMap({
               geoData.objects[mapMeta.graphObjectStates]
             )
           : {features: []};
-      const topologyDistricts = topojson.feature(
-        geoData,
-        geoData.objects[mapMeta.graphObjectDistricts]
-      );
+      const topologyDistricts =
+        currentMap.view === MAP_VIEWS.DISTRICTS
+          ? topojson.feature(
+              geoData,
+              geoData.objects[mapMeta.graphObjectDistricts]
+            )
+          : {features: []};
 
       const topology =
         currentMap.view === MAP_VIEWS.STATES
@@ -319,7 +322,7 @@ function ChoroplethMap({
         .attr('stroke-width', function () {
           return mapMeta.mapType === MAP_TYPES.COUNTRY &&
             currentMap.view === MAP_VIEWS.DISTRICTS
-            ? 'none'
+            ? 0
             : width / 250;
         })
         .attr('stroke', function () {
@@ -350,6 +353,7 @@ function ChoroplethMap({
           (d) => d.id
         )
         .join((enter) => enter.append('path').attr('d', path))
+        .attr('class', 'path-region')
         .attr('fill', 'none')
         .attr('stroke', 'none')
         .attr('pointer-events', 'none');
@@ -418,7 +422,7 @@ function ChoroplethMap({
       paths.attr('stroke', null);
       paths.classed('map-hover', (d, i, nodes) => {
         if (
-          region.district === d.properties.district &&
+          region.district === d.properties?.district &&
           region.state === d.properties.st_nm
         ) {
           nodes[i].parentNode.appendChild(nodes[i]);
@@ -451,8 +455,9 @@ function ChoroplethMap({
           <g className="state-borders" />
           <g className="district-borders" />
         </svg>
-        {(mapOption === 'recovered' && mapData?.Unknown?.recovered) ||
-        (mapOption === 'deceased' && mapData?.Unknown?.deceased) ? (
+        {mapMeta.mapType === MAP_TYPES.STATE &&
+        mapData[currentMap.name]?.Unknown &&
+        mapData[currentMap.name]?.Unknown[mapOption] ? (
           <div className="disclaimer">
             <Icon.AlertCircle />
             {`District-wise ${mapOption} numbers are under reconciliation`}
