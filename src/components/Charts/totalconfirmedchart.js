@@ -1,7 +1,7 @@
 import {defaultOptions, xAxisDefaults, yAxisDefaults} from './chart-defaults';
 
+import {parse} from 'date-fns';
 import deepmerge from 'deepmerge';
-import moment from 'moment';
 import React from 'react';
 import {Line} from 'react-chartjs-2';
 
@@ -17,7 +17,8 @@ function TotalConfirmedChart(props) {
 
   props.timeseries.forEach((data, index) => {
     if (index >= 31) {
-      dates.push(moment(data.date.trim(), 'DD MMM').utcOffset('+05:30'));
+      const date = parse(data.date, 'dd MMMM', new Date(2020, 0, 1));
+      dates.push(date);
       confirmed.push(data.totalconfirmed);
       recovered.push(data.totalrecovered);
       deceased.push(data.totaldeceased);

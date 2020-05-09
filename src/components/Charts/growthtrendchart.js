@@ -1,8 +1,9 @@
 import {getStateName} from '../../utils/commonfunctions';
 
-import moment from 'moment';
+import {parse} from 'date-fns';
 import React from 'react';
 import {Line, defaults} from 'react-chartjs-2';
+
 function GrowthTrendChart(props) {
   const dates = [];
 
@@ -41,7 +42,8 @@ function GrowthTrendChart(props) {
 
     Object.keys(data).forEach((key) => {
       if (key === 'date') {
-        dates.push(moment(data.date.trim(), 'DD MMM').utcOffset('+05:30'));
+        const date = parse(data.date, 'dd-MMM-yy', new Date());
+        dates.push(date);
       }
 
       if (key === 'status' || key === 'date') {
@@ -135,6 +137,11 @@ function GrowthTrendChart(props) {
     maintainAspectRatio: false,
     tooltips: {
       mode: 'index',
+      backgroundColor: 'rgba(0, 0, 0, 0.9)',
+      borderColor: 'rgba(0, 0, 0, 0)',
+      bodyFontColor: 'white',
+      titleFontColor: 'white',
+      displayColors: true,
     },
     elements: {
       point: {
