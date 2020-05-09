@@ -1,11 +1,12 @@
 import Row from './row';
 
 import {STATE_ROW_STATISTICS} from '../constants';
-import {capitalize, abbreviate} from '../utils/commonfunctions';
+import {capitalize, abbreviate, formatNumber} from '../utils/commonfunctions';
 
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import React, {useState, useMemo, useCallback} from 'react';
+import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
@@ -45,6 +46,25 @@ function StateHeaderCell({handleSort, sortData, statistic}) {
           />
         </div>
       </div>
+    </th>
+  );
+}
+
+function TotalHeaderCell({statistic, state}) {
+  const ArrowUp = useMemo(() => <Icon.ArrowUp />, []);
+  const {t} = useTranslation();
+
+  return (
+    <th style={{top: '4%'}}>
+      <div className="heading-content" style={{float: 'right'}}>
+        <abbr title={state[statistic]}>
+          {t(formatNumber(state[statistic]))}
+        </abbr>
+      </div>
+      <span className={classnames('delta', `is-${statistic}`)}>
+        {state[`delta${statistic}`] > 0 && ArrowUp}
+        {state[`delta${statistic}`] > 0 && state[`delta${statistic}`]}
+      </span>
     </th>
   );
 }
@@ -191,6 +211,29 @@ function Table({
             </tr>
           </thead>
 
+          <thead>
+            {states && (
+              <tr>
+                <th
+                  className="state-heading"
+                  style={{top: '4%'}}
+                  onClick={() => handleSort('state')}
+                >
+                  <div className="heading-content">
+                    <abbr title="State">{t('Total')}</abbr>
+                  </div>
+                </th>
+                {STATE_ROW_STATISTICS.map((statistic, index) => (
+                  <TotalHeaderCell
+                    key={index}
+                    statistic={statistic}
+                    state={states[0]}
+                  />
+                ))}
+              </tr>
+            )}
+          </thead>
+
           {states && (
             <tbody>
               {sortedStates.map((state, index) => {
@@ -213,16 +256,6 @@ function Table({
                 }
                 return null;
               })}
-            </tbody>
-          )}
-
-          {states && (
-            <tbody>
-              <Row
-                key={0}
-                state={states[0]}
-                onHighlightState={onHighlightState}
-              />
             </tbody>
           )}
         </table>

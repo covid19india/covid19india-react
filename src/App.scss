@@ -1820,6 +1820,36 @@ table {
       &:hover {
         background: #ecedee;
       }
+
+      .delta {
+        float: right;
+        font-size: 11px !important;
+        margin-right: 5px;
+        margin-top: 1px;
+
+        svg {
+          height: 9px;
+          stroke-width: 3;
+          vertical-align: -.25px;
+          width: 9px;
+        }
+
+        &.is-confirmed {
+          color: $cherry;
+        }
+
+        &.is-active {
+          color: $blue;
+        }
+
+        &.is-recovered {
+          color: $green;
+        }
+
+        &.is-deaths {
+          color: $gray;
+        }
+      }
     }
   }
 
