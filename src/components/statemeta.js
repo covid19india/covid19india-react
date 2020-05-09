@@ -22,14 +22,14 @@ function StateMeta({
   const sevenDayBeforeDate = format(lastSevenDaysData[0].date, 'dd MMM');
   const previousDayData = lastSevenDaysData[6].totalconfirmed;
   const previousDayDate = format(lastSevenDaysData[6].date, 'dd MMM');
-  const confirmedPerMillion = (confirmed / population) * 1000000;
-  const recoveryPercent = (recovered / confirmed) * 100;
-  const activePercent = (active / confirmed) * 100;
-  const deathPercent = (deaths / confirmed) * 100;
-  const testPerMillion = (lastTestObject?.totaltested / population) * 1000000;
-  const growthRate =
+  var confirmedPerMillion = (confirmed / population) * 1000000;
+  var recoveryPercent = (recovered / confirmed) * 100;
+  var activePercent = (active / confirmed) * 100;
+  var deathPercent = (deaths / confirmed) * 100;
+  var testPerMillion = (lastTestObject?.totaltested / population) * 1000000;
+  var growthRate =
     ((previousDayData - sevenDayBeforeData) / sevenDayBeforeData) * 100;
-  const totalConfirmedPerMillion =
+  var totalConfirmedPerMillion =
     (totalData[0].confirmed / 1332900000) * 1000000;
   // const doublingRate =
   // growthRate > 0 ? (70 / Math.round(growthRate)).toFixed(2) : 0;
@@ -42,6 +42,13 @@ function StateMeta({
         'dd MMM'
       )}`
     : '';
+  totalConfirmedPerMillion = ((isNaN(totalConfirmedPerMillion)) || (totalConfirmedPerMillion === Infinity)) ? '-' : totalConfirmedPerMillion.toFixed(2);
+  confirmedPerMillion = ((isNaN(confirmedPerMillion)) || (confirmedPerMillion === Infinity)) ? '-' : confirmedPerMillion.toFixed(2);
+  recoveryPercent = ((isNaN(recoveryPercent)) || (recoveryPercent === Infinity)) ? '-' : recoveryPercent.toFixed(2);
+  activePercent = ((isNaN(activePercent)) || (activePercent === Infinity)) ? '-' : activePercent.toFixed(2);
+  deathPercent = ((isNaN(deathPercent)) || (deathPercent === Infinity)) ? '-' : deathPercent.toFixed(2);
+  testPerMillion = ((isNaN(testPerMillion)) || (testPerMillion === Infinity)) ? '-' : testPerMillion.toFixed(2);
+  growthRate = ((isNaN(growthRate)) || (growthRate === Infinity)) ? '-' : (growthRate/7).toFixed(2);
 
   return (
     <React.Fragment>
@@ -77,13 +84,11 @@ function StateMeta({
         <StateMetaCard
           className="confirmed"
           title={'Confirmed Per Million'}
-          statistic={confirmedPerMillion.toFixed(2)}
-          total={totalConfirmedPerMillion.toFixed(2)}
+          statistic={confirmedPerMillion}
+          total={totalConfirmedPerMillion}
           formula={'(confirmed / state population) * 1 Million'}
           description={`
-            ${Math.round(
-              confirmedPerMillion
-            )} out of every 1 million people in ${
+            ${confirmedPerMillion} out of every 1 million people in ${
             stateData.state
           } have tested positive for the virus.
             `}
@@ -92,58 +97,50 @@ function StateMeta({
         <StateMetaCard
           className="active"
           title={'Active'}
-          statistic={`${activePercent.toFixed(2)}%`}
+          statistic={`${activePercent}%`}
           formula={'(active / confirmed) * 100'}
-          description={`For every 100 confirmed cases, ${activePercent.toFixed(
-            0
-          )} are currently infected.`}
+          description={`For every 100 confirmed cases, ${activePercent} are currently infected.`}
         />
 
         <StateMetaCard
           className="recovery"
           title={'Recovery Rate'}
-          statistic={`${recoveryPercent.toFixed(2)}%`}
+          statistic={`${recoveryPercent}%`}
           formula={'(recovered / confirmed) * 100'}
           description={`For every 100 confirmed cases, 
-            ${Math.round(
-              recoveryPercent.toFixed(0)
-            )} have recovered from the virus.`}
+            ${recoveryPercent} have recovered from the virus.`}
         />
 
         <StateMetaCard
           className="mortality"
           title={'Mortality Rate'}
-          statistic={`${deathPercent.toFixed(2)}%`}
+          statistic={`${deathPercent}%`}
           formula={'(deceased / confirmed) * 100'}
           description={`For every 100 confirmed cases, 
-            ${Math.round(
-              deathPercent.toFixed(0)
-            )} have unfortunately passed away from the virus.`}
+            ${deathPercent} have unfortunately passed away from the virus.`}
         />
 
         <StateMetaCard
           className="gr"
           title={'Avg. Growth Rate'}
-          statistic={growthRate > 0 ? `${Math.round(growthRate / 7)}%` : '-'}
+          statistic={`${growthRate}%`}
           formula={
             '(((previousDayData - sevenDayBeforeData) / sevenDayBeforeData) * 100)/7'
           }
           date={`${sevenDayBeforeDate} - ${previousDayDate}`}
-          description={`In the last one week, the number of new infections has grown by an average of ${Math.round(
-            growthRate / 7
-          )}% every day.`}
+          description={`In the last one week, the number of new infections has grown by an average of ${growthRate}% every day.`}
         />
 
         <StateMetaCard
           className="tpm"
           title={'Tests Per Million'}
-          statistic={`≈ ${Math.round(testPerMillion)}`}
+          statistic={`≈ ${testPerMillion}`}
           formula={
             '(total tests in state / total population of state) * 1 Million'
           }
           date={updatedDate}
           description={`For every 1 million people in ${stateData.state},
-            ${Math.round(testPerMillion)} people were tested.`}
+            ${testPerMillion} people were tested.`}
         />
 
         {/* <div className="meta-item ptr fadeInUp">
