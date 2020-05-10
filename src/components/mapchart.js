@@ -9,6 +9,7 @@ import L from 'leaflet';
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import Search from './geosearch';
 import 'leaflet/dist/leaflet.css';
+import {ExternalLink} from 'react-feather';
 
 const user = new L.Icon({
   iconUrl: require('../icons/user.svg'),
@@ -141,9 +142,9 @@ export default function MapChart(props) {
       <Map center={center} zoom={zoom}>
         <TileLayer
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
+          // url='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png' // != DarkMode
+          url='https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' // == DarkMode
           detectRetina={true}
-        // "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}" //This map is too detailed
         />
         <Search search={props.searchMap} />
         {(props.currentLocation) && (
@@ -174,17 +175,22 @@ export default function MapChart(props) {
               position={[d.geometry.coordinates[1], d.geometry.coordinates[0]]}
               icon={d.properties.icon}
             >
-              <Popup>
+              <Popup className="custom-popup" >
                 <div>
-                  <a href={d.properties.contact}><h2>{d.properties.name}</h2></a>
-                  <p>
+                  <a 
+                    href={d.properties.contact} 
+                    target="_noblank" 
+                    >
+                    <h2>{d.properties.name}</h2> 
+                    </a>
+                    <p>
                     <b>Description:</b> {d.properties.desc}<br />
                     <b>Address:</b> {d.properties.addr}
                     {d.properties.phone?(<><br />
                     <b>Phone:</b> {d.properties.phone}</>):null
-                  }
-                  </p>
-                </div>{" "}
+                    }
+                    </p>                  
+                </div>
               </Popup>
             </Marker>
 

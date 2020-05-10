@@ -3074,8 +3074,22 @@ footer {
     width: 90%;
     height: 90vh;
     margin-left: 4rem;
-    
 }
+.custom-popup .leaflet-popup-content-wrapper {
+    background: $pblue;
+    color: $white;
+    // font-size:16px;
+    line-height:24px;
+    font-family: "archia" !important;
+}
+.custom-popup .leaflet-popup-content-wrapper a {
+    background: $pblue;
+    color: $white;
+    // font-size:16px;
+    line-height:24px;
+    font-family: "archia" !important;
+}
+
 
 .marker-cluster-custom {
     background: $pink;
@@ -3085,6 +3099,7 @@ footer {
     height: 30px;
     line-height: 30px;
     text-align: center;
+    font-family: "archia" !important;
     width: 30px;
 } 
 
