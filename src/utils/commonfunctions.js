@@ -164,9 +164,9 @@ export const parseStateTestTimeseries = (data) => {
   data.forEach((d) => {
     const date = parse(d.updatedon, 'dd/MM/yyyy', new Date());
     const totaltested = +d.totaltested;
-    if (isBefore(date, today) && totaltested) {
-      const stateCode = stateCodeMap[d.state];
-      const stateTs = testTimseries[stateCode];
+    const stateCode = stateCodeMap[d.state];
+    const stateTs = testTimseries[stateCode];
+    if (stateTs && isBefore(date, today) && totaltested) {
       let dailytested;
       if (stateTs.length) {
         const prev = stateTs[stateTs.length - 1];
