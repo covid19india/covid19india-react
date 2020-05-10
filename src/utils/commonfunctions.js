@@ -1,4 +1,4 @@
-import {STATE_CODES} from '../constants';
+import {STATE_CODES, STATE_CODES_REVERSE} from '../constants';
 
 import {
   parse,
@@ -150,11 +150,6 @@ export const parseStateTimeseries = ({states_daily: data}) => {
 };
 
 export const parseStateTestTimeseries = (data) => {
-  const stateCodeMap = Object.keys(STATE_CODES).reduce((ret, sc) => {
-    ret[STATE_CODES[sc]] = sc;
-    return ret;
-  }, {});
-
   const testTimseries = Object.keys(STATE_CODES).reduce((ret, sc) => {
     ret[sc] = [];
     return ret;
@@ -164,8 +159,8 @@ export const parseStateTestTimeseries = (data) => {
   data.forEach((d) => {
     const date = parse(d.updatedon, 'dd/MM/yyyy', new Date());
     const totaltested = +d.totaltested;
-    if (isBefore(date, today) && totaltested) {
-      const stateCode = stateCodeMap[d.state];
+    const stateCode = STATE_CODES_REVERSE[d.state];
+    if (stateCode && isBefore(date, today) && totaltested) {
       const stateTs = testTimseries[stateCode];
       let dailytested;
       if (stateTs.length) {

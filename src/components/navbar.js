@@ -99,8 +99,8 @@ function Navbar({pages, darkMode, setDarkMode}) {
               </Link>
             </span>
             <span>
-              <Link to="/faq">
-                <Icon.HelpCircle {...activeNavIcon('/faq')} />
+              <Link to="/about">
+                <Icon.HelpCircle {...activeNavIcon('/about')} />
               </Link>
             </span>
           </React.Fragment>

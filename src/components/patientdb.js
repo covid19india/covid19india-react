@@ -46,7 +46,7 @@ function PatientDB(props) {
   useEffectOnce(() => {
     try {
       axios
-        .get('https://api.covid19india.org/raw_data.json')
+        .get('https://api.covid19india.org/raw_data3.json')
         .then((response) => {
           setPatients(response.data.raw_data.reverse());
           setFetched(true);
