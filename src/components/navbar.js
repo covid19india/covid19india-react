@@ -54,7 +54,9 @@ function Navbar({pages, darkMode, setDarkMode}) {
       </div>
 
       <div
-        className="navbar-right"
+        className={`navbar-right${
+          windowSize.width < 769 ? (expand ? ' is-expanded' : '') : ''
+        }`}
         onClick={() => {
           setExpand(!expand);
         }}

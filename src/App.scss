@@ -184,7 +184,14 @@ h6 {
     transition: all 0s ease-in-out;
     width: 2rem;
 
-    &:hover {
+    @media (min-width: 769px) {
+      &:hover {
+        background: $pblue;
+        color: #fff;
+      }
+    }
+
+    &.is-expanded {
       background: $pblue;
       color: #fff;
     }
@@ -5320,7 +5327,13 @@ footer {
     }
 
     .navbar-right {
-      background: #1e1e30 !important;
+      @media (min-width: 769px) {
+        background: #1e1e30 !important;
+      }
+
+      &.is-expanded {
+        background: #1e1e30 !important;
+      }
     }
   }
 
