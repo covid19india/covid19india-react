@@ -1,14 +1,13 @@
 {
   "english": "English",
   "hindi": "हिंदी",
-  "telugu": "తెలుగు",
-  "kannada": "ಕನ್ನಡ",
+  "bengali": "বাংলা",
   "gujarati": "ગુજરાતી",
+  "kannada": "ಕನ್ನಡ",
+  "malayalam": "മലയാളം",
   "marathi": "मराठी",
-  "tamil": "தமிழ்",
-  "bengali": "বাঙালি",
   "odiya": "ଓଡିଆ",
   "punjabi": "ਪੰਜਾਬੀ",
-  "malayalam": "മലയാളം",
-  "urdu": "اردو"
+  "tamil": "தமிழ்",
+  "telugu": "తెలుగు"
 }

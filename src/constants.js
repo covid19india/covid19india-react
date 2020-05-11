@@ -1,3 +1,5 @@
+import {hi, te, gu, ta, bn} from 'date-fns/locale/';
+
 export const STATE_ROW_STATISTICS = [
   'confirmed',
   'active',
@@ -334,4 +336,18 @@ export const RAW_DATA_PARTITIONS = {
     start: new Date(2020, 4, 10),
     end: new Date(),
   },
+};
+
+export const LOCALE_SHORTHANDS = {
+  english: null,
+  hindi: hi,
+  telugu: te,
+  kannada: null,
+  gujarati: gu,
+  marathi: null,
+  tamil: ta,
+  bengali: bn,
+  punjabi: null,
+  malayalam: null,
+  odiya: null,
 };

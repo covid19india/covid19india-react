@@ -1,4 +1,8 @@
-import {STATE_CODES, STATE_CODES_REVERSE} from '../constants';
+import {
+  STATE_CODES,
+  STATE_CODES_REVERSE,
+  LOCALE_SHORTHANDS,
+} from '../constants';
 
 import {
   parse,
@@ -6,23 +10,11 @@ import {
   isBefore,
   isSameDay,
   startOfDay,
+  format,
+  formatDistance,
 } from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
-
-const months = {
-  '01': 'Jan',
-  '02': 'Feb',
-  '03': 'Mar',
-  '04': 'Apr',
-  '05': 'May',
-  '06': 'Jun',
-  '07': 'Jul',
-  '08': 'Aug',
-  '09': 'Sep',
-  '10': 'Oct',
-  '11': 'Nov',
-  '12': 'Dec',
-};
+import i18n from 'i18next';
 
 export const isDevelopmentOrTest = () => {
   if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')
@@ -47,10 +39,31 @@ export const formatDate = (unformattedDate) => {
 };
 
 export const formatDateAbsolute = (unformattedDate) => {
-  const day = unformattedDate.slice(0, 2);
-  const month = unformattedDate.slice(3, 5);
-  const time = unformattedDate.slice(11);
-  return `${day} ${months[month]}, ${time.slice(0, 5)} IST`;
+  return format(
+    parse(unformattedDate, 'dd/MM/yyyy HH:mm:ss', new Date()),
+    'dd MMM, hh:mm b',
+    {
+      locale: LOCALE_SHORTHANDS[i18n.language],
+    }
+  );
+};
+
+export const formatDayMonth = (unformattedDate) => {
+  return format(parse(unformattedDate, 'dd/MM/yyyy', new Date()), 'dd MMM', {
+    locale: LOCALE_SHORTHANDS[i18n.language],
+  });
+};
+
+export const formatLastUpdated = (unformattedDate) => {
+  return formatDistance(new Date(formatDate(unformattedDate)), new Date(), {
+    locale: LOCALE_SHORTHANDS[i18n.language],
+  });
+};
+
+export const formatTimeseriesDate = (unformattedDate) => {
+  return format(unformattedDate, 'dd MMMM', {
+    locale: LOCALE_SHORTHANDS[i18n.language],
+  });
 };
 
 const validateCTS = (data = []) => {
