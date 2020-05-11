@@ -476,7 +476,7 @@ function MapExplorer({
             {hoveredRegionCount}
             <br />
             <span>
-              {mapOption}{' '}
+              {t(mapOption)}{' '}
               {currentMap.stat === MAP_STATISTICS.PER_MILLION
                 ? ` ${t('per million')}`
                 : ''}

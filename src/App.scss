@@ -250,6 +250,10 @@ h6 {
     margin-right: 2.5rem;
     min-height: 10rem;
   }
+
+  .header {
+    z-index: 99;
+  }
 }
 
 .alert {
@@ -2199,7 +2203,6 @@ table {
       display: flex;
       flex: 1;
       flex-direction: column;
-      height: 3rem;
       margin-bottom: 1rem;
       margin-left: .25rem;
       margin-right: .25rem;
@@ -4391,6 +4394,43 @@ footer {
         & > * {
           align-self: center;
         }
+      }
+    }
+  }
+}
+
+.LanguageSwitcher {
+  .button {
+    border: 2px solid $gray-light;
+    border-radius: 5px;
+    color: $gray;
+    font-family: 'archia';
+    font-size: .75rem;
+    font-weight: 600;
+    padding: .5rem;
+    text-transform: unset;
+
+    * {
+      align-self: center;
+    }
+  }
+
+  .select-menu-modal {
+    width: 8.25rem;
+  }
+
+  a {
+    &.select-menu-item {
+      display: flex;
+      flex-direction: row;
+      font-family: 'archia';
+      font-weight: 600;
+      height: 2rem;
+      justify-content: center;
+      width: auto;
+
+      svg {
+        display: none !important;
       }
     }
   }
