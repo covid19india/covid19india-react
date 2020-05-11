@@ -948,7 +948,7 @@ export const DISTRICTS_ARRAY = [
     state: 'Chhattisgarh',
   },
   {
-    district: 'Kabeerdham',
+    district: 'Kabirdham',
     othernamesspellings: '',
     state: 'Chhattisgarh',
   },
