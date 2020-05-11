@@ -1,8 +1,84 @@
-/* Source: https://observablehq.com/@d3/color-legend */
+import {MAP_STATISTICS} from '../constants';
+import {capitalizeAll, formatNumber} from '../utils/commonfunctions';
+import {useResizeObserver} from '../utils/hooks';
 
 import * as d3 from 'd3';
+import React, {useEffect, useRef} from 'react';
+
+function MapLegend({colorScale, statistic, mapStatistic, mapOption}) {
+  const svgRef = useRef(null);
+  const wrapperRef = useRef();
+  const dimensions = useResizeObserver(wrapperRef);
+
+  useEffect(() => {
+    const svg = d3.select(svgRef.current);
+    const {width, height} =
+      dimensions || wrapperRef.current.getBoundingClientRect();
+
+    if (mapStatistic === MAP_STATISTICS.ZONE) {
+      svg.call(() =>
+        legend({
+          svg: svg,
+          color: colorScale,
+          width: width,
+          height: height,
+          tickValues: [],
+          marginLeft: 2,
+          marginRight: 20,
+          ordinalWeights: Object.values(statistic),
+        })
+      );
+    } else {
+      svg.call(() =>
+        legend({
+          svg: svg,
+          color: colorScale,
+          title:
+            capitalizeAll(mapOption) +
+            (mapStatistic === MAP_STATISTICS.PER_MILLION
+              ? ' cases per million'
+              : ' cases'),
+          width: width,
+          height: height,
+          ticks: 5,
+          tickFormat: function (d, i, n) {
+            if (mapStatistic === MAP_STATISTICS.TOTAL && !Number.isInteger(d))
+              return;
+            if (i === n.length - 1) return formatNumber(d) + '+';
+            return formatNumber(d);
+          },
+          marginLeft: 2,
+          marginRight: 20,
+        })
+      );
+    }
+    svg.attr('class', mapStatistic === MAP_STATISTICS.ZONE ? 'zone' : '');
+  });
+
+  return (
+    <div
+      className="svg-parent legend fadeInUp"
+      style={{animationDelay: '2.5s', height: 50}}
+      ref={wrapperRef}
+    >
+      <svg id="legend" preserveAspectRatio="xMidYMid meet" ref={svgRef}>
+        <image className="ramp" />
+        <g className="axis">
+          <text className="axistext" />
+        </g>
+      </svg>
+      <canvas
+        className="color-scale"
+        style={{position: 'absolute', height: 0}}
+      />
+    </div>
+  );
+}
+
+export default MapLegend;
 
 function legend({
+  svg,
   color,
   title,
   tickSize = 6,
@@ -12,21 +88,11 @@ function legend({
   marginRight = 0,
   marginBottom = 16 + tickSize,
   marginLeft = 0,
-  svg,
   ticks = width / 64,
   tickFormat,
   tickValues,
   ordinalWeights,
 } = {}) {
-  if (!svg)
-    svg = d3
-      .create('svg')
-      .attr('width', width)
-      .attr('height', height)
-      .attr('viewBox', [0, 0, width, height])
-      .style('overflow', 'visible')
-      .style('display', 'block');
-
   const t = svg.transition().duration(500);
 
   let tickAdjust = (g) => {
@@ -243,5 +309,3 @@ function ramp(color, n = 256) {
   }
   return canvas;
 }
-
-export default legend;

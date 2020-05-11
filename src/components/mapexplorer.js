@@ -516,8 +516,8 @@ function MapExplorer({
             regionHighlighted={regionHighlighted}
             setRegionHighlighted={setRegionHighlighted}
             changeMap={switchMapToState}
-            isCountryLoaded={isCountryLoaded}
             mapOption={mapOption}
+            isCountryLoaded={isCountryLoaded}
           />
         )}
       </div>

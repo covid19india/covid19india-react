@@ -2040,12 +2040,16 @@ table {
   }
 
   .svg-parent {
-    display: flex;
-    flex-direction: row;
+    display: block;
     margin: auto;
     margin-top: 2rem;
     overflow: hidden;
     width: 90%;
+
+    &.legend {
+      margin-top: .6rem;
+      width: 100%;
+    }
 
     svg {
       align-self: center;
@@ -2058,16 +2062,6 @@ table {
         font-weight: 600;
         text-align: right;
       }
-    }
-  }
-
-  .legend {
-    margin-top: 1em;
-    width: 100%;
-
-    svg {
-      display: block;
-      overflow: visible;
     }
   }
 
