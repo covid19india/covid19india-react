@@ -21,7 +21,7 @@ export default function LanguageSwitcher() {
           {locales[language]}
         </Button>
         <SelectMenu.Modal className="select-menu-modal">
-          <SelectMenu.List>
+          <SelectMenu.List className="select-menu-list">
             {Object.entries(locales).map(([key, language]) => (
               <SelectMenu.Item
                 key={key}

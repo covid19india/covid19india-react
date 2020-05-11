@@ -1,3 +1,5 @@
+import LanguageSwitcher from './languageswitcher';
+
 import anime from 'animejs';
 import React, {useState, useRef} from 'react';
 import * as Icon from 'react-feather';
@@ -34,15 +36,18 @@ function Navbar({pages, darkMode, setDarkMode}) {
 
   return (
     <div className="Navbar">
-      <div
-        className="navbar-left"
-        onClick={() => {
-          setDarkMode((prevMode) => !prevMode);
-          setIsThemeSet(true);
-        }}
-      >
-        {darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
-      </div>
+      <LanguageSwitcher />
+      {window.innerWidth > 769 && (
+        <div
+          className="navbar-left"
+          onClick={() => {
+            setDarkMode((prevMode) => !prevMode);
+            setIsThemeSet(true);
+          }}
+        >
+          {darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
+        </div>
+      )}
       <div className="navbar-middle">
         <Link
           to="/"
@@ -99,19 +104,35 @@ function Navbar({pages, darkMode, setDarkMode}) {
         )}
       </div>
 
-      {expand && <Expand expand={expand} pages={pages} setExpand={setExpand} />}
+      {expand && (
+        <Expand
+          expand={expand}
+          pages={pages}
+          setExpand={setExpand}
+          darkMode={darkMode}
+          setIsThemeSet={setIsThemeSet}
+          setDarkMode={setDarkMode}
+        />
+      )}
     </div>
   );
 }
 
-function Expand({expand, pages, setExpand}) {
+function Expand({
+  expand,
+  pages,
+  setExpand,
+  darkMode,
+  setIsThemeSet,
+  setDarkMode,
+}) {
   const expandElement = useRef(null);
   const {t} = useTranslation();
 
   useEffectOnce(() => {
     anime({
       targets: expandElement.current,
-      translateX: '10rem',
+      translateX: '10.5rem',
       easing: 'easeOutExpo',
       duration: 250,
     });
@@ -145,6 +166,19 @@ function Expand({expand, pages, setExpand}) {
         }
         return null;
       })}
+
+      {window.innerWidth < 768 && (
+        <div
+          className="fadeInUp"
+          style={{animationDelay: '0.9s'}}
+          onClick={() => {
+            setDarkMode((prevMode) => !prevMode);
+            setIsThemeSet(true);
+          }}
+        >
+          <div>{darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}</div>
+        </div>
+      )}
 
       <div className="expand-bottom fadeInUp" style={{animationDelay: '1s'}}>
         <h5>{t('A crowdsourced initiative.')}</h5>

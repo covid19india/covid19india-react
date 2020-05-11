@@ -1,13 +1,16 @@
 import {testedToolTip} from './tooltips';
 
-import {sliceTimeseriesFromEnd, formatNumber} from '../utils/commonfunctions';
+import {
+  sliceTimeseriesFromEnd,
+  formatNumber,
+  formatTimeseriesDate,
+} from '../utils/commonfunctions';
 import {useResizeObserver} from '../utils/hooks';
 
 import * as d3 from 'd3';
-import {addDays, subDays, format} from 'date-fns';
+import {addDays, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useState, useEffect, useRef, useCallback} from 'react';
-import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 
 const isEqual = (prevProps, currProps) => {
@@ -415,7 +418,7 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
     }
   }, [timeseries, graphData]);
 
-  const dateStr = datapoint.date ? format(datapoint.date, 'dd MMMM') : '';
+  const dateStr = datapoint.date ? formatTimeseriesDate(datapoint.date) : '';
 
   const chartKey1 = chartType === 1 ? 'totalconfirmed' : 'dailyconfirmed';
   const chartKey2 = chartType === 1 ? 'totalactive' : 'dailyactive';
@@ -543,13 +546,6 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
         >
           {`2 ${t('Weeks')}`}
         </button>
-      </div>
-
-      <div className="alert">
-        <Icon.AlertOctagon />
-        <div className="alert-right">
-          {t('Tested chart is independent of uniform scaling')}
-        </div>
       </div>
     </React.Fragment>
   );

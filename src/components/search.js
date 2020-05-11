@@ -62,7 +62,7 @@ const essentialsEngine = new Bloodhound({
   },
 });
 
-let focused = false;
+/* let focused = false;
 const suggestions = [
   'Karnataka',
   'West Bengal',
@@ -70,7 +70,7 @@ const suggestions = [
   'Senior citizen support bangalore',
   'Community Kitchen in Kerala',
   'Groceries Chennai',
-];
+];*/
 
 function Search({districtZones}) {
   const [searchValue, setSearchValue] = useState('');
@@ -156,7 +156,7 @@ function Search({districtZones}) {
     }
   }
 
-  function fillPlaceholder(target, index, cursorPosition, callback) {
+  /* function fillPlaceholder(target, index, cursorPosition, callback) {
     if (focused) {
       target.textContent = '';
       return true;
@@ -202,45 +202,46 @@ function Search({districtZones}) {
   }
 
   const targetInput = document.getElementById('search-placeholder');
-  if (targetInput) loopThroughSuggestions(targetInput, 0);
+  if (targetInput) loopThroughSuggestions(targetInput, 0);*/
 
   return (
     <div className="Search">
       <label>{t('Search your city, resources, etc')}</label>
       <div className="line"></div>
 
-      <input
-        type="text"
-        value={searchValue}
-        ref={searchInput}
-        onFocus={(event) => {
-          focused = true;
-          setExpand(true);
-        }}
-        onBlur={() => {
-          setExpand(false);
-        }}
-        onChange={(event) => {
-          setSearchValue(event.target.value);
-        }}
-      />
-      <span id="search-placeholder" className="search-placeholder"></span>
-
-      <div className={`search-button`}>
-        <Icon.Search />
-      </div>
-
-      {searchValue.length > 0 && (
-        <div
-          className={`close-button`}
-          onClick={() => {
-            setSearchValue('');
-            setResults([]);
+      <div className="search-input-wrapper">
+        <input
+          type="text"
+          value={searchValue}
+          ref={searchInput}
+          onFocus={(event) => {
+            setExpand(true);
           }}
-        >
-          <Icon.X />
+          onBlur={() => {
+            setExpand(false);
+          }}
+          onChange={(event) => {
+            setSearchValue(event.target.value);
+          }}
+        />
+        <span id="search-placeholder" className="search-placeholder"></span>
+
+        <div className={`search-button`}>
+          <Icon.Search />
         </div>
-      )}
+
+        {searchValue.length > 0 && (
+          <div
+            className={`close-button`}
+            onClick={() => {
+              setSearchValue('');
+              setResults([]);
+            }}
+          >
+            <Icon.X />
+          </div>
+        )}
+      </div>
 
       {results.length > 0 && (
         <div className="results">

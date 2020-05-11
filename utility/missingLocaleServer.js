@@ -12,14 +12,11 @@ const server = http.createServer(async (req, res) => {
     })
     .on('end', () => {
       body = Buffer.concat(body).toString();
-      fs.openSync('all_locales.json', 'a');
-      const enJson = fs.readFileSync('public/locales/en.json', 'utf-8');
-      const data = fs.readFileSync('all_locales.json', 'utf-8');
-      console.log(`body is: ${body}`);
+      fs.openSync('missing_locales.json', 'a');
+      const data = fs.readFileSync('missing_locales.json', 'utf-8');
 
       const dataToWrite = JSON.stringify(
         {
-          ...JSON.parse(enJson || '{}'),
           ...JSON.parse(data || '{}'),
           ...JSON.parse(body || '{}'),
         },
@@ -27,9 +24,8 @@ const server = http.createServer(async (req, res) => {
         2
       );
 
-      fs.writeFileSync('all_locales.json', dataToWrite);
+      fs.writeFileSync('missing_locales.json', dataToWrite);
 
-      console.log(`${body} added to the file!`);
       res.writeHead(200, {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',

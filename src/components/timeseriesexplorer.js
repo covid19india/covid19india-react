@@ -161,10 +161,16 @@ function TimeSeriesExplorer({
             chartType={chartType}
             mode={timeseriesMode}
             logMode={timeseriesLogMode}
-            stateCode={activeStateCode}
-            isIntersecting={isTimeseriesIntersecting}
+            isTotal={activeStateCode === 'TT'}
           />
         )}
+
+        <div className="alert">
+          <Icon.AlertOctagon />
+          <div className="alert-right">
+            {t('Tested chart is independent of uniform scaling')}
+          </div>
+        </div>
       </div>
     </Observer>
   );

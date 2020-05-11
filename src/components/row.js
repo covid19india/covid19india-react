@@ -1,4 +1,8 @@
-import {STATE_ROW_STATISTICS, DISTRICT_ROW_STATISTICS} from '../constants';
+import {
+  STATE_ROW_STATISTICS,
+  DISTRICT_ROW_STATISTICS,
+  LOCALE_SHORTHANDS,
+} from '../constants';
 import {
   formatDate,
   formatNumber,
@@ -9,6 +13,7 @@ import {
 import classnames from 'classnames';
 import {formatDistance} from 'date-fns';
 import equal from 'fast-deep-equal';
+import i18n from 'i18next';
 import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
@@ -274,7 +279,7 @@ function Row({
               {t(state.state)}
 
               <span
-                data-tip={[t(`${state.statenotes}`)]}
+                data-tip={[state.statenotes]}
                 data-event="touchstart mouseover"
                 data-event-off="mouseleave"
                 onClick={(e) => e.stopPropagation()}
@@ -306,7 +311,10 @@ function Row({
                   ? ''
                   : `${t('Last updated')} ${formatDistance(
                       new Date(formatDate(state.lastupdatedtime)),
-                      new Date()
+                      new Date(),
+                      {
+                        locale: LOCALE_SHORTHANDS[i18n.language],
+                      }
                     )} ${t('ago')}`}
               </p>
               {sortedDistricts?.Unknown && (
@@ -323,7 +331,9 @@ function Row({
               onClick={() => {
                 history.push(`state/${state.statecode}`);
               }}
-            >{`View ${t(state.state)}'s Page`}</td>
+            >
+              {t('See more details on {{state}}', {state: state.state})}
+            </td>
           </tr>
 
           <tr className={classnames('district-heading')}>

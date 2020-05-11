@@ -145,6 +145,25 @@ h6 {
     text-decoration: none;
   }
 
+  .LanguageSwitcher {
+    .button {
+      border: 0;
+      color: #6c757d;
+      cursor: pointer;
+      font-family: 'archia';
+      font-size: 12px;
+      font-weight: 600;
+      margin: 0;
+      padding: 1.5rem;
+      transition: all 0s ease-in-out;
+      width: 3rem;
+
+      &:active {
+        border: 0;
+      }
+    }
+  }
+
   .navbar-left {
     color: $gray;
     cursor: pointer;
@@ -173,8 +192,9 @@ h6 {
     font-size: 12px;
     font-weight: 600;
     padding: 1.5rem;
+    text-align: center;
     transition: all 0s ease-in-out;
-    width: 2rem;
+    width: 3rem;
 
     &:hover {
       background: $pblue;
@@ -965,6 +985,11 @@ h6 {
     width: calc(100% - 4rem);
   }
 
+  .search-input-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
   .search-placeholder {
     color: $gray-mid;
     font-family: 'archia';
@@ -986,7 +1011,7 @@ h6 {
       color: $gray-mid;
       left: .75rem;
       position: absolute;
-      top: 4.15rem;
+      top: 1.25rem;
       transition: all .2s ease-in-out;
     }
 
@@ -1007,7 +1032,7 @@ h6 {
     justify-content: center;
     position: absolute;
     right: 1rem;
-    top: 4.15rem;
+    top: 1.35rem;
     transition: all .2s ease-in-out;
     width: 20px;
 
@@ -1504,6 +1529,9 @@ h6 {
 
   h5 {
     font-weight: 600;
+    overflow-wrap: break-word;
+    text-align: center;
+    width: 100%;
   }
 
   .is-cherry {
@@ -1629,7 +1657,6 @@ table {
     align-items: center;
     display: flex;
     flex-direction: row;
-    height: .9rem;
     justify-content: space-between;
     position: relative;
 
@@ -2490,6 +2517,8 @@ table {
 
 .TimeSeriesExplorer {
   align-self: center;
+  display: flex;
+  flex-direction: column;
   width: 30rem;
 
   &.stickied {
@@ -2498,28 +2527,9 @@ table {
   }
 
   .alert {
-    margin-bottom: .5rem;
-    margin-left: auto;
-    margin-right: 0;
-    margin-top: .5rem;
-    padding: .25rem;
-    padding-left: .5rem;
-    padding-right: .5rem;
-    width: 16rem;
-
-    & > * {
-      align-self: center;
-    }
-
-    svg {
-      margin: 0 !important;
-      margin-right: .25rem !important;
-      width: 14px !important;
-    }
-
-    .alert-right {
-      width: 100%;
-    }
+    align-self: flex-end;
+    margin: 0;
+    margin-top: 1rem;
   }
 }
 
@@ -4400,15 +4410,25 @@ footer {
 }
 
 .LanguageSwitcher {
+  z-index: 999;
+
   .button {
     border: 2px solid $gray-light;
-    border-radius: 5px;
+    border-radius: 0;
     color: $gray;
     font-family: 'archia';
     font-size: .75rem;
     font-weight: 600;
     padding: .5rem;
     text-transform: unset;
+
+    &:hover {
+      background: $gray-hover !important;
+    }
+
+    &:active {
+      border: 2px solid transparent;
+    }
 
     * {
       align-self: center;
@@ -4421,6 +4441,7 @@ footer {
 
   a {
     &.select-menu-item {
+      color: $gray;
       display: flex;
       flex-direction: row;
       font-family: 'archia';
@@ -4523,7 +4544,6 @@ footer {
     position: fixed;
     z-index: 99999;
 
-
     .navbar-left {
       margin-top: auto;
       order: 3;
@@ -4531,7 +4551,7 @@ footer {
       padding-right: 0;
       text-align: center;
       transition: all .2s ease-in-out;
-      width: 5rem;
+      width: 100%;
 
       &:hover {
         background: $gray-hover;
@@ -4579,7 +4599,7 @@ footer {
       border-right: solid 2px $gray-light-opaque;
       flex-direction: column;
       padding-left: 0;
-      padding-top: 5.5rem;
+      padding-top: 9.75rem;
       top: 0;
       width: 15rem;
       z-index: -1 !important;
@@ -4875,6 +4895,25 @@ footer {
 
     .meta-item {
       min-width: 1rem;
+    }
+  }
+
+  .LanguageSwitcher {
+    .select-menu-modal {
+      background: transparent;
+      width: auto;
+
+      div {
+        background: none;
+      }
+    }
+
+    .select-menu-list {
+      align-self: center;
+    }
+
+    .select-menu-item {
+      width: 10rem !important;
     }
   }
 }
@@ -5188,6 +5227,38 @@ footer {
   .Clusters {
     canvas {
       filter: invert(1) hue-rotate(180deg) saturate(5);
+    }
+  }
+
+  .LanguageSwitcher {
+    summary {
+      box-shadow: none;
+    }
+
+    .button {
+      background: #1e1e30;
+    }
+
+    .select-menu-list {
+      background: transparent;
+      border: 0;
+    }
+
+    .select-menu-modal {
+      background: transparent;
+      height: 100%;
+
+      div {
+        background: none;
+        border: 1px solid #1e1e30bb;
+      }
+    }
+
+    a {
+      &.select-menu-item {
+        background: #161625 !important;
+        border: 1px solid #1e1e30bb;
+      }
     }
   }
 }
