@@ -87,12 +87,12 @@ function Table({
           className="table-fineprint fadeInUp"
           style={{animationDelay: '1.5s'}}
         >
-          District zones as published by MoHFW,{' '}
+          {t('District zones as published by MoHFW,')}{' '}
           <a
             href="https://www.facebook.com/airnewsalerts/photos/a.262571017217636/1710062729135117/?type=3&theater"
             style={{color: '#6c757d'}}
           >
-            source
+            {t('source')}
           </a>
         </h5>
       </React.Fragment>

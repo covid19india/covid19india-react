@@ -66,10 +66,10 @@ let focused = false;
 const suggestions = [
   'Karnataka',
   'West Bengal',
-  'Pune Testing',
-  'Mumbai Shelter',
-  'Medical',
-  'Delhi Police',
+  'Alappuzha',
+  'Senior citizen support bangalore',
+  'Community Kitchen in Kerala',
+  'Groceries Chennai',
 ];
 
 function Search({districtZones}) {
@@ -161,7 +161,7 @@ function Search({districtZones}) {
       target.textContent = '';
       return true;
     }
-    const text = suggestions[index];
+    const text = t(suggestions[index]);
     const placeholder = target.textContent;
     target.classList.remove('disappear');
     target.textContent = placeholder + text[cursorPosition];

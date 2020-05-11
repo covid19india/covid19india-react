@@ -16,7 +16,7 @@ i18n
     lng: 'en',
     fallbackLng: 'en',
     backend: {
-      loadPath: '/locales/{{lng}}.json',
+      loadPath: 'https://api.covid19india.org/locales/locale_{{lng}}.json',
       addPath: 'http://localhost:9999/',
     },
     saveMissing: isDevelopmentOrTest() && DEBUG,

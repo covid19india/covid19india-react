@@ -27,6 +27,7 @@ function Navbar({pages, darkMode, setDarkMode}) {
   const [expand, setExpand] = useState(false);
   // eslint-disable-next-line
   const [isThemeSet, setIsThemeSet] = useLocalStorage('isThemeSet', false);
+  const {t} = useTranslation();
 
   useLockBodyScroll(expand);
   const windowSize = useWindowSize();
@@ -64,7 +65,9 @@ function Navbar({pages, darkMode, setDarkMode}) {
           }
         }}
       >
-        {windowSize.width < 769 && <span>{expand ? 'Close' : 'Menu'}</span>}
+        {windowSize.width < 769 && (
+          <span>{expand ? t('Close') : t('Menu')}</span>
+        )}
         {windowSize.width > 769 && (
           <React.Fragment>
             <span>
