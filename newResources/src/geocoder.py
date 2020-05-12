@@ -118,7 +118,7 @@ def get_icon(category: str) -> str:
     elif category == 'Hospitals and Centers':
         return "hospital"
     elif category == 'Mental well being and Emotional support':
-        return "mental-health"
+        return "mental-health" //TODO
     elif category == 'Police':
         return "police"
     elif category == 'Senior Citizen Support':
