@@ -61,17 +61,6 @@ function Navbar({pages, darkMode, setDarkMode}) {
         onMouseEnter={() => {
           if (window.innerWidth > 769) {
             setExpand(true);
-            anime({
-              targets: '.navbar-right path',
-              strokeDashoffset: [anime.setDashoffset, 0],
-              easing: 'easeInOutSine',
-              duration: 250,
-              delay: function (el, i) {
-                return i * 250;
-              },
-              direction: 'alternate',
-              loop: false,
-            });
           }
         }}
       >

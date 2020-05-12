@@ -18,9 +18,8 @@ import './App.scss';
 const DeepDive = lazy(() => import('./components/deepdive'));
 const FAQ = lazy(() => import('./components/faq'));
 const PatientDB = lazy(() => import('./components/patientdb'));
-const Resources = lazy(() => import('./components/resources'));
 const State = lazy(() => import('./components/state'));
-const Tracker = lazy(() => import('./components/tracker'));
+const Essentials = lazy(() => import('./components/essentials'));
 
 const schemaMarkup = {
   '@context': 'http://schema.org/',
@@ -58,7 +57,7 @@ function App() {
     },
     {
       pageLink: '/essentials',
-      view: Resources,
+      view: Essentials,
       displayName: t('Essentials'),
       animationDelayForNavbar: 0.5,
       showInNavbar: true,
