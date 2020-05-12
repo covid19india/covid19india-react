@@ -343,75 +343,147 @@ def make_geojson(entries, refs):
 
     return processed, skipped, verify
 
-
-if __name__ == "__main__":
+def main():
     """    0. Import essentials data    """
+        
     api_data = read_data(path='./resources.json', url=False)
 
+
+        
     """    1. Generate list of full City names and get properties --bbox --center    """
+        
     analysis, pretty_cities = get_data_breakdown(api_data)
 
+
+        
     write_analysis(analysis)
+        
     write_analysis(pretty_cities, simple=True, path="./cityList.json")
 
+
+        
     city_list = read_data(path='./cityList.json', url=False)
+        
     # Replace spotted typos
+        
     city_list.append("Sri Ganganagar Rajasthan")
+        
     city_list.remove("Sriganganagar Rajasthan")
+        
     city_list.append("Muzaffarpur Bihar")
+        
     city_list.remove("Muzzafarpur Bihar")
+        
     print(f'City_list entries {len(city_list)}')  # 1291
 
+
+        
     city_bounds, failed = make_boundaries(city_list)
 
+
+        
     write_analysis(city_bounds, simple=True, path="./cityDict.json")
+        
     write_analysis(failed, simple=True, path="./failed1.json")
 
+
+        
     city_dict = read_data(path='./cityDict.json', url=False)
+        
     # second pass
+        
     city_rem = list(set(city_list) - set(city_dict.keys()))
 
+
+        
     # SANITY CHECK - if failed list == original - processed
+        
     excl = len([city for city in city_rem if "PAN" in city])  # = 10
+        
     print("checking for continuity")
+        
     assert(len(set(city_list) - set(city_dict.keys())) - excl == len(failed))
 
+
+        
     # # print([c.split()[-1] for c in city_rem if c.split()[-1] != "Kerala"])
+        
     city_bounds2, ffs = make_boundaries(
+        
         failed, lvl1=['place', 'locality', 'neighborhood'], lvl2=None)
 
+
+        
     write_analysis(city_bounds2, simple=True, path="./cityDict2.json")
+        
     write_analysis(ffs, simple=True, path="./failed_again.json")
 
+
+        
     """    2. Time to geocode individual entries. finally.    """
+        
     # read in the dicts
 
+
+        
     first_pass = read_data(path='./cityDict.json', url=False)
+        
     second_pass = read_data(path='./cityDict2.json', url=False)
+        
     geo_references = {**first_pass, **second_pass}
 
-    # SANITY CHECK - no overlapping refs
-    assert(len(first_pass) + len(second_pass)
-           == len(set(geo_references.keys())))
 
+        
+    # SANITY CHECK - no overlapping refs
+        
+    assert(len(first_pass) + len(second_pass)
+        
+        == len(set(geo_references.keys())))
+
+
+        
     processed, skipped, verify = make_geojson(api_data, geo_references)
+        
     # Print progress
+        
     print(f'Processed: {len(processed)}')
+        
     print(f'Skipped: {len(skipped)}')
+        
     print(f'Need to verify: {len(verify)}')
 
+
+        
     # crtl + S
+        
     write_data(processed)
+        
     write_analysis(skipped, simple=True, path="./skipped_geocoding.json")
+        
     write_analysis(verify, simple=True, path="./verifyList.json")
 
+
+        
     """     3. Scrap existing coordinate from contact urls.     """
+        
     skipped = read_data(path="./skipped_geocoding.json", url=False)
 
+
+        
     delhi, others = scrape_url(skipped)
 
+
+        
     assert(len(delhi)==635)
 
+
+        
     write_data(delhi, path="geoDelhi.json")
+        
     write_analysis(others, simple=True, path="./skipped.json")
 
+
+
+
+if __name__ == "__main__":
+    main()
