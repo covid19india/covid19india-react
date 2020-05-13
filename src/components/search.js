@@ -27,8 +27,9 @@ const districtEngine = new Bloodhound({
       Object.keys(response).map((stateName) => {
         const districtData = response[stateName].districtData;
         Object.keys(districtData).map((districtName) => {
-          districts.push({district: districtName, state: stateName});
+          return districts.push({district: districtName, state: stateName});
         });
+        return null;
       });
       return districts;
     },
