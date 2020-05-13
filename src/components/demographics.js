@@ -2,14 +2,16 @@ import DownloadBlock from './downloadblock';
 import Footer from './footer';
 import Patients from './patients';
 
+import {RAW_DATA_PARTITIONS} from '../constants';
+
 import axios from 'axios';
-import {format, subDays} from 'date-fns';
-import React, {useState, useEffect} from 'react';
+import {format, subDays, isWithinInterval, parse} from 'date-fns';
+import React, {useState, useEffect, useCallback} from 'react';
 import DatePicker from 'react-date-picker';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useLocation} from 'react-router-dom';
-import {useEffectOnce, useLocalStorage} from 'react-use';
+import {useLocalStorage} from 'react-use';
 
 function filterByObject(obj, filters) {
   const keys = Object.keys(filters);
@@ -21,7 +23,7 @@ function filterByObject(obj, filters) {
   });
 }
 
-function PatientDB(props) {
+function Demographics(props) {
   const [fetched, setFetched] = useState(false);
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
@@ -43,10 +45,23 @@ function PatientDB(props) {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  useEffectOnce(() => {
+  const getPartition = useCallback(() => {
+    const chosenDate = parse(filters.dateannounced, 'dd/MM/yyyy', new Date());
+    if (isWithinInterval(chosenDate, RAW_DATA_PARTITIONS.v1)) {
+      return 1;
+    } else if (isWithinInterval(chosenDate, RAW_DATA_PARTITIONS.v2)) {
+      return 2;
+    } else if (isWithinInterval(chosenDate, RAW_DATA_PARTITIONS.v3)) {
+      return 3;
+    } else if (isWithinInterval(chosenDate, RAW_DATA_PARTITIONS.v4)) {
+      return 4;
+    }
+  }, [filters.dateannounced]);
+
+  useEffect(() => {
     try {
       axios
-        .get('https://api.covid19india.org/raw_data3.json')
+        .get(`https://api.covid19india.org/raw_data${getPartition()}.json`)
         .then((response) => {
           setPatients(response.data.raw_data.reverse());
           setFetched(true);
@@ -54,7 +69,7 @@ function PatientDB(props) {
     } catch (err) {
       console.log(err);
     }
-  });
+  }, [filters.dateannounced, getPartition]);
 
   useEffect(() => {
     const datePickers = document.querySelectorAll(
@@ -111,7 +126,7 @@ function PatientDB(props) {
   }
 
   return (
-    <div className="PatientsDB">
+    <div className="Demographics">
       <Helmet>
         <title>Demographics - covid19india.org</title>
         <meta name="title" content={`Demographics - covid19india.org`} />
@@ -421,4 +436,4 @@ function PatientDB(props) {
   );
 }
 
-export default PatientDB;
+export default Demographics;
