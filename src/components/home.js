@@ -18,7 +18,6 @@ import {
   parseStateTestTimeseries,
   parseTotalTestTimeseries,
   parseDistrictZones,
-  //  isDevelopmentOrTest,
 } from '../utils/commonfunctions';
 
 import 'intersection-observer';
@@ -177,7 +176,7 @@ function Home(props) {
         <div className="home-left">
           <div className="header fadeInUp" style={{animationDelay: '1s'}}>
             {/* <LanguageSwitcher />*/}
-            {fetched && <Search />}
+            {fetched && <Search districtZones={districtZones} />}
 
             <div className="actions">
               <h5>
