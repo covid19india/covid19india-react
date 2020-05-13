@@ -56,7 +56,6 @@ setCurrentLocation([data.lat,data.lng]);
       searchMap={(data)=>searchHandler(data)} 
       currentLocation={currentLocation}  
       className="leaflet-container"
-      pLocation={receiveData?[receiveData.lat,receiveData.lng]:null}
       radius={receiveData?+receiveData.minDist:null}
       cases={receiveData?receiveData.cases:null}
       />

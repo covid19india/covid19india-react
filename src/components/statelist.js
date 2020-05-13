@@ -4,7 +4,6 @@ import { Label, LabelGroup, CounterLabel } from '@primer/components';
 import L from 'leaflet';
 import * as Knn from 'leaflet-knn';
 import React, {useState, useEffect} from 'react';
-import 'leaflet/dist/leaflet.css';
 import { ExternalLink, Phone } from 'react-feather';
 
 

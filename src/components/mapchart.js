@@ -1,15 +1,17 @@
 import testData from './_pantest.json'
 import axios from 'axios';
 import * as Knn from "leaflet-knn";
-import React, {useState, useEffect} from 'react';
-import { Map, Marker, Popup, TileLayer, LayerGroup} from "react-leaflet";
+import React, { useState, useEffect } from 'react';
+import { Map, Marker, Popup, TileLayer, LayerGroup, LayersControl } from "react-leaflet";
 // import {Sidebar, Tab}  from 'react-leaflet-sidebarv2';
 // import 'leaflet-sidebar-v2/css/leaflet-sidebar.css'; // TODO:Import just the .min.css instead of the whole package :|
 import L from 'leaflet';
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import Search from './geosearch';
 import 'leaflet/dist/leaflet.css';
-import {ExternalLink} from 'react-feather';
+// import {ExternalLink} from 'react-feather';
+
+const {BaseLayer} = LayersControl;
 
 const user = new L.Icon({
   iconUrl: require('../icons/user.svg'),
@@ -139,13 +141,30 @@ export default function MapChart(props) {
 
   return (
     <div>
-      <Map center={center} zoom={zoom}>
-        <TileLayer
-          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          // url='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png' // != DarkMode
-          url='https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' // == DarkMode
-          detectRetina={true}
-        />
+      <Map 
+        center={center} 
+        zoom={zoom} 
+        minZoom={5}
+        maxZoom={20}
+        zoomControl={true}
+      >
+        <LayersControl position="topright" >
+        <BaseLayer checked name="Light Mode">
+          <TileLayer
+            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png' // != DarkMode
+            detectRetina={true}
+          />
+        </BaseLayer>
+        <BaseLayer name="Dark Mode">
+          <TileLayer
+            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url='https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' // == DarkMode
+            detectRetina={true}
+          />
+        </BaseLayer>
+        </LayersControl>
+        
         <Search search={props.searchMap} />
         {(props.currentLocation) && (
           <Marker position={props.currentLocation} icon={user} key="userLoc">
