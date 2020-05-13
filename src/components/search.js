@@ -1,8 +1,4 @@
-import {
-  STATE_CODES_ARRAY,
-  DISTRICTS_ARRAY,
-  STATE_CODES_REVERSE,
-} from '../constants';
+import {STATE_CODES_ARRAY, STATE_CODES_REVERSE} from '../constants';
 
 import Bloodhound from 'corejs-typeahead';
 import React, {useState, useCallback, useRef} from 'react';
@@ -20,10 +16,23 @@ const engine = new Bloodhound({
 
 const districtEngine = new Bloodhound({
   initialize: true,
-  local: DISTRICTS_ARRAY,
   limit: 5,
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('district'),
+  indexRemote: true,
+  remote: {
+    url: 'https://api.covid19india.org/state_district_wise.json',
+    transform: function (response) {
+      const districts = [];
+      Object.keys(response).map((stateName) => {
+        const districtData = response[stateName].districtData;
+        Object.keys(districtData).map((districtName) => {
+          districts.push({district: districtName, state: stateName});
+        });
+      });
+      return districts;
+    },
+  },
 });
 
 const essentialsEngine = new Bloodhound({
@@ -80,7 +89,7 @@ function Search(props) {
     };
 
     const districtSync = (datums) => {
-      datums.slice(0, 5).map((result, index) => {
+      datums.slice(0, 3).map((result, index) => {
         const districtObj = {
           name: result.district + ', ' + result.state,
           type: 'state',
@@ -109,13 +118,9 @@ function Search(props) {
       setResults([...results]);
     };
 
-    const essentialsAsync = (datums) => {
-      essentialsEngine.search(searchInput, essentialsSync);
-    };
-
     engine.search(searchInput, sync);
     districtEngine.search(searchInput, districtSync);
-    essentialsEngine.search(searchInput, essentialsSync, essentialsAsync);
+    essentialsEngine.search(searchInput, essentialsSync);
   }, []);
 
   useDebounce(
@@ -126,7 +131,7 @@ function Search(props) {
         setResults([]);
       }
     },
-    800,
+    100,
     [searchValue]
   );
 
