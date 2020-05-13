@@ -1,5 +1,10 @@
-import {STATE_CODES_ARRAY, STATE_CODES_REVERSE} from '../constants';
+import {
+  STATE_CODES_ARRAY,
+  STATE_CODES_REVERSE,
+  STATE_CODES,
+} from '../constants';
 
+import classnames from 'classnames';
 import Bloodhound from 'corejs-typeahead';
 import React, {useState, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
@@ -67,7 +72,7 @@ const suggestions = [
   'Delhi Police',
 ];
 
-function Search(props) {
+function Search({districtZones}) {
   const [searchValue, setSearchValue] = useState('');
   const [expand, setExpand] = useState(false);
   const [results, setResults] = useState([]);
@@ -92,8 +97,8 @@ function Search(props) {
     const districtSync = (datums) => {
       datums.slice(0, 3).map((result, index) => {
         const districtObj = {
-          name: result.district + ', ' + result.state,
-          type: 'state',
+          name: result.district,
+          type: 'district',
           route: STATE_CODES_REVERSE[result.state],
         };
         results.push(districtObj);
@@ -240,13 +245,27 @@ function Search(props) {
       {results.length > 0 && (
         <div className="results">
           {results.map((result, index) => {
-            if (result.type === 'state') {
+            if (result.type === 'state' || result.type === 'district') {
               return (
                 <Link key={index} to={`state/${result.route}`}>
                   <div className="result">
-                    <div className="result-name">{result.name}</div>
+                    <div className="result-left">
+                      <div className="result-name">
+                        {`${result.name}`}
+                        {result.type === 'district' &&
+                          `, ${STATE_CODES[result.route]}`}
+                      </div>
+                      <div
+                        className={classnames('result-zone', {
+                          [`is-${districtZones[STATE_CODES[result.route]][
+                            result.name
+                          ]?.zone.toLowerCase()}`]: true,
+                        })}
+                      ></div>
+                    </div>
                     <div className="result-type">
-                      Visit {result?.type?.toLowerCase()} page
+                      <span>{[result.route]}</span>
+                      <Icon.ArrowRightCircle size={14} />
                     </div>
                   </div>
                 </Link>

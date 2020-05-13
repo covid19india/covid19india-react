@@ -1326,6 +1326,7 @@ h6 {
       font-family: 'archia';
       font-size: .9rem;
       justify-content: space-between;
+      min-height: 2rem;
       padding: 1rem;
       transition: all .2s ease-in-out;
 
@@ -1345,8 +1346,53 @@ h6 {
         background: $yellow-light;
         border-radius: 2px;
         color: $orange;
+        display: flex;
+        flex-direction: row;
         font-size: .75rem;
         padding: .25rem;
+
+        svg {
+          margin-left: .25rem;
+          stroke: $orange-mid;
+          stroke-width: 3px;
+        }
+
+        * {
+          align-self: center;
+        }
+      }
+
+      .result-left {
+        display: flex;
+        flex-direction: row;
+
+        * {
+          align-self: center;
+        }
+      }
+
+      .result-zone {
+        border-radius: 50%;
+        height: .75rem;
+        margin-left: .5rem;
+        width: .75rem;
+
+        &.is-red {
+          background: $cherry-light;
+          border: 2px solid $cherry-mid;
+        }
+
+        &.is-orange {
+          background: $orange-light;
+          border: 2px solid $orange-mid;
+        }
+
+
+        &.is-green {
+          background: $green-light;
+          border: 2px solid $green-mid;
+        }
+
       }
     }
 
