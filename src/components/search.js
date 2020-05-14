@@ -78,6 +78,7 @@ function Search({districtZones}) {
   const [results, setResults] = useState([]);
   const searchInput = useRef(null);
   const {t} = useTranslation();
+  const [searchDone, setSearchDone] = useState(false);
 
   const handleSearch = useCallback((searchInput) => {
     const results = [];
@@ -133,7 +134,11 @@ function Search({districtZones}) {
     () => {
       if (searchValue) {
         handleSearch(searchValue);
+        setTimeout(() => {
+          setSearchDone(true);
+        }, 800);
       } else {
+        setSearchDone(false);
         setResults([]);
       }
     },
@@ -236,9 +241,16 @@ function Search({districtZones}) {
           onClick={() => {
             setSearchValue('');
             setResults([]);
+            setSearchDone(false);
           }}
         >
           <Icon.X />
+        </div>
+      )}
+
+      {searchDone && results.length === 0 && (
+        <div className="results">
+          <h3 style={{textAlign: 'center'}}>No Results Found</h3>
         </div>
       )}
 
