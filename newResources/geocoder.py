@@ -32,12 +32,21 @@ class EssentialsConverter:
         self.failed_ids = []
         self.failed_cities = []
         self.gaussian=[]
+        self.__api = 0
 
+    @property
+    def request_ctr(self):
+        self.__api+=1
 
+    @property
+    def rate_limit_exceeded(self):
+        return not self.__api % 600
+
+    
     def populate_cities(self, dir="./", fromFile=True):
         if fromFile: 
-            with open(dir+'cityData.json') as clist:
-                data = json.load(clist)
+            with open(dir+'cityData.json') as c_list:
+                data = json.load(c_list)
 
             self.cityDict = data["cityboundaries"]
             self.cityList = data["cities"]
@@ -46,7 +55,7 @@ class EssentialsConverter:
             pass
 
 
-    def generate_geojson(self, oldData=None): #TODO: feed in old geojson object
+    def generate_geojson(self, oldData=None):
         update = []
         if oldData:
             update = oldData["features"]
@@ -75,18 +84,24 @@ class EssentialsConverter:
         lvl2 = ['place']
         lvl3 = ['place', 'locality', 'neighborhood']
 
+        self.request_ctr
         response = self.coder.forward(city, types=lvl1, country=['in'], limit=1)
+        
 
         if not response.json()["features"]:
+            self.request_ctr
             response = self.coder.forward(city, types=lvl2, country=['in'], limit=1)
 
             if not response.json()["features"]:
+                self.request_ctr
                 response = self.coder.forward(city, types=lvl2, country=['in'], limit=1)
             
                 if not response.json()["features"]:
+                    self.request_ctr
                     response = self.coder.forward(city, types=lvl3, country=['in'], limit=1)
 
                     if not response.json()["features"]:
+                        self.request_ctr
                         response = self.coder.forward(city, country=['in'], limit=1)
         
         if not response.json()["features"]:
@@ -205,6 +220,7 @@ class EssentialsConverter:
         
         if "http://www.google.com/maps/place/" in contact:
             geom = self.scrape_url(contact)
+            self.request_ctr
             reverse = self.coder.reverse(geom["coordinates"][0],geom["coordinates"][1])
             target = reverse.geojson()
             
@@ -216,7 +232,8 @@ class EssentialsConverter:
         c_bbox = self.cityDict[city]["bbox"]
         c_center = self.cityDict[city]["center"]
 
-
+        
+        self.request_ctr
         if c_bbox != []:
             resp = self.coder.forward(query, country=["in"], bbox=c_bbox, limit=1)
         else:
@@ -285,12 +302,16 @@ def main():
     
     for i, entry in enumerate(entries):
         converter.process_entry(i+1, entry)
-        if not (i+1)%600:
-            print("Minute delay: API rate limit ")
+        if converter.rate_limit_exceeded:
+            print("API rate limit: Minute delay")
             time.sleep(60)
 
 
-    processed_entries = fetch_data(path="https://raw.githubusercontent.com/aswaathb/covid19india-react/publish/newResources/geoResources.json", geojson=True)
+    # # Read in old geojson via url or filepath
+    # processed_entries = fetch_data(path="https://raw.githubusercontent.com/aswaathb/covid19india-react/publish/newResources/geoResources.json", geojson=True)
+    # with open('./geoResources.json') as geo:
+    #     old = json.load(geo)
+
     #Feed in processed_entries as oldData to append new batch to previously geocoded entries
     feature_collection = converter.generate_geojson(oldData=None) 
 

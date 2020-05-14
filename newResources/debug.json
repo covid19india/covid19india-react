@@ -1,17 +1,36 @@
 {
-  "gaussian": [5, 11, 17, 19, 28, 44, 50],
-  "failed_cities": ["Charaideo Assam"],
-  "failed_ids": [24],
-  "failed_entries": [
-    {
-      "category": "Police",
-      "city": "Charaideo",
-      "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
-      "descriptionandorserviceprovided": "District level government helpline number for COVID-19 assistance",
-      "nameoftheorganisation": "Government of Assam",
-      "phonenumber": "3772256045,\n9678921813",
-      "recordid": "24",
-      "state": "Assam"
-    }
-  ]
+  "gaussian": [
+    2434,
+    2435,
+    2436,
+    2437,
+    2438,
+    2509,
+    2607,
+    2608,
+    2609,
+    2610,
+    2611,
+    2612,
+    2613,
+    2614,
+    2615,
+    2616,
+    2617,
+    2618,
+    2619,
+    2620,
+    2621,
+    2622,
+    2623,
+    4485,
+    4641,
+    4888,
+    4891,
+    4894,
+    4895
+  ],
+  "failed_cities": [],
+  "failed_ids": [],
+  "failed_entries": []
 }
