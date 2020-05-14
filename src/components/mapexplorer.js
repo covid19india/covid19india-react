@@ -49,6 +49,10 @@ const getRegionFromDistrict = (districtData, name) => {
   return region;
 };
 
+const isDistrict = (region) => {
+  return 'district' in region;
+};
+
 function MapExplorer({
   mapName,
   states,
@@ -116,23 +120,46 @@ function MapExplorer({
         return acc;
       }, {});
       if (currentMapMeta.mapType === MAP_TYPES.COUNTRY) {
-        currentMapData = states.reduce((acc, state) => {
-          acc[state.state] = {};
-          dataTypes.forEach((dtype) => {
-            let typeCount =
-              parseInt(state[dtype !== 'deceased' ? dtype : 'deaths']) || 0;
-            if (currentMap.stat === MAP_STATISTICS.PER_MILLION)
-              typeCount = (1e6 * typeCount) / STATE_POPULATIONS[state.state];
-            if (state.state !== 'Total') {
-              statistic[dtype].total += typeCount;
-              if (typeCount > statistic[dtype].max) {
-                statistic[dtype].max = typeCount;
+        if (currentMap.view === MAP_VIEWS.STATES) {
+          currentMapData = states.reduce((acc, state) => {
+            acc[state.state] = {};
+            dataTypes.forEach((dtype) => {
+              let typeCount = parseInt(
+                state[dtype !== 'deceased' ? dtype : 'deaths']) || 0;
+              if (currentMap.stat === MAP_STATISTICS.PER_MILLION)
+                typeCount = (1e6 * typeCount) / STATE_POPULATIONS[state.state];
+              if (state.state !== 'Total') {
+                statistic[dtype].total += typeCount;
+                if (typeCount > statistic[dtype].max) {
+                  statistic[dtype].max = typeCount;
+                }
               }
-            }
-            acc[state.state][dtype] = typeCount;
-          });
-          return acc;
-        }, {});
+              acc[state.state][dtype] = typeCount;
+            });
+            return acc;
+          }, {});
+        } else {
+          currentMapData = Object.keys(districts).reduce((acc1, state) => {
+            const districtWiseData = (districts[state] || {districtData: {}})
+              .districtData;
+            acc1[state] = Object.keys(districtWiseData).reduce(
+              (acc2, district) => {
+                acc2[district] = {};
+                dataTypes.forEach((dtype) => {
+                  const typeCount = parseInt(districtWiseData[district][dtype]);
+                  statistic[dtype].total += typeCount;
+                  if (typeCount > statistic[dtype].max) {
+                    statistic[dtype].max = typeCount;
+                  }
+                  acc2[district][dtype] = typeCount;
+                });
+                return acc2;
+              },
+              {}
+            );
+            return acc1;
+          }, {});
+        }
       } else if (currentMapMeta.mapType === MAP_TYPES.STATE) {
         const districtWiseData = (
           districts[currentMap.name] || {districtData: {}}
@@ -158,14 +185,7 @@ function MapExplorer({
       }
     }
     return [statistic, currentMapData];
-  }, [
-    currentMap.name,
-    currentMap.stat,
-    currentMapMeta.mapType,
-    districts,
-    zones,
-    states,
-  ]);
+  }, [currentMap, currentMapMeta.mapType, districts, zones, states]);
 
   const [hoveredRegion, panelRegion] = useMemo(() => {
     if (!regionHighlighted.district) {
@@ -203,7 +223,7 @@ function MapExplorer({
   useEffect(() => {
     if (regionHighlighted === undefined || regionHighlighted === null) return;
 
-    if ('district' in regionHighlighted) {
+    if (isDistrict(regionHighlighted)) {
       if (
         currentMap.name !== regionHighlighted.state &&
         !(
@@ -443,7 +463,10 @@ function MapExplorer({
           }`}
         >
           {hoveredRegion.district
-            ? t(hoveredRegion.district)
+            ? t(hoveredRegion.district) +
+              (hoveredRegion.district === 'Unknown'
+                ? ` (${t(hoveredRegion.state)})`
+                : '')
             : t(hoveredRegion.state)}
         </h2>
 
@@ -473,7 +496,9 @@ function MapExplorer({
         {currentMap.stat !== MAP_STATISTICS.ZONE &&
         (currentMapMeta.mapType === MAP_TYPES.STATE ||
           (currentMapMeta.mapType === MAP_TYPES.COUNTRY &&
-            currentMap.stat !== MAP_STATISTICS.TOTAL)) ? (
+            currentMap.stat !== MAP_STATISTICS.TOTAL)) &&
+        (currentMap.stat !== MAP_STATISTICS.HOTSPOTS ||
+          isDistrict(hoveredRegion)) ? (
           <h1
             className={`district ${mapOption !== 'confirmed' ? mapOption : ''}`}
           >
@@ -565,6 +590,23 @@ function MapExplorer({
               {t('Cases per million')}
               <sup>&dagger;</sup>
             </h4>
+          </div>
+        )}
+        {isCountryLoaded && (
+          <div
+            className={`tab ${
+              currentMap.stat === MAP_STATISTICS.HOTSPOTS ? 'focused' : ''
+            }`}
+            onClick={() => {
+              if (currentMapMeta.mapType === MAP_TYPES.STATE) return;
+              setCurrentMap({
+                name: currentMap.name,
+                view: MAP_VIEWS.DISTRICTS,
+                stat: MAP_STATISTICS.HOTSPOTS,
+              });
+            }}
+          >
+            <h4>{t('Hotspots')}</h4>
           </div>
         )}
         <div

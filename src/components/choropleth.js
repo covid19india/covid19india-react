@@ -79,13 +79,10 @@ function ChoroplethMap({
     if (!geoDataResponse.data) return;
     const geoData = geoDataResponse.data;
 
-    const topology =
-      currentMap.view === MAP_VIEWS.STATES
-        ? topojson.feature(geoData, geoData.objects[mapMeta.graphObjectStates])
-        : topojson.feature(
-            geoData,
-            geoData.objects[mapMeta.graphObjectDistricts]
-          );
+    const topology = topojson.feature(
+      geoData,
+      geoData.objects[mapMeta.graphObjectStates || mapMeta.graphObjectDistricts]
+    );
 
     const svg = d3.select(svgRef.current);
 
@@ -109,7 +106,29 @@ function ChoroplethMap({
     const path = d3.geoPath(projection);
 
     // Add id to each feature
-    const features = topology.features.map((f) => {
+    let features =
+      currentMap.stat !== MAP_STATISTICS.HOTSPOTS
+        ? currentMap.view === MAP_VIEWS.STATES
+          ? topojson.feature(
+              geoData,
+              geoData.objects[mapMeta.graphObjectStates]
+            ).features
+          : topojson.feature(
+              geoData,
+              geoData.objects[mapMeta.graphObjectDistricts]
+            ).features
+        : [
+            ...topojson.feature(
+              geoData,
+              geoData.objects[mapMeta.graphObjectStates]
+            ).features,
+            ...topojson.feature(
+              geoData,
+              geoData.objects[mapMeta.graphObjectDistricts]
+            ).features,
+          ];
+
+    features = features.map((f) => {
       const district = f.properties.district;
       const state = f.properties.st_nm;
       const obj = Object.assign({}, f);
@@ -123,7 +142,10 @@ function ChoroplethMap({
     const regionSelection = svg
       .select('.regions')
       .selectAll('path')
-      .data(features, (d) => d.id)
+      .data(
+        currentMap.stat !== MAP_STATISTICS.HOTSPOTS ? features : [],
+        (d) => d.id
+      )
       .join((enter) => {
         const sel = enter
           .append('path')
@@ -233,6 +255,59 @@ function ChoroplethMap({
         svg.attr('class', currentMap.stat === MAP_STATISTICS.ZONE ? 'zone' : '')
       );
 
+    const radius = d3.scaleSqrt([0, statistic[mapOption]?.max], [0, 30]);
+    let circlesData = [];
+    if (currentMap.stat === MAP_STATISTICS.HOTSPOTS) {
+      circlesData = features
+        .map((d) => {
+          const district = d.properties.district;
+          const state = d.properties.st_nm;
+          if (district) {
+            d.value =
+              mapData[state] && mapData[state][district]
+                ? mapData[state][district][mapOption]
+                : 0;
+          } else {
+            d.value =
+              mapData[state] && mapData[state].Unknown
+                ? mapData[state].Unknown[mapOption]
+                : 0;
+          }
+          return d;
+        })
+        .sort((a, b) => b.value - a.value);
+    }
+
+    svg
+      .select('.circles')
+      .attr('fill-opacity', 0.5)
+      .attr('stroke-width', 0.5)
+      .selectAll('circle')
+      .data(circlesData, (d) => d.id)
+      .join('circle')
+      .attr('transform', (d) => `translate(${path.centroid(d)})`)
+      .on('mouseenter', (d) => {
+        const region = {
+          state: d.properties.st_nm,
+          district: d.properties.district || 'Unknown',
+        };
+        setRegionHighlighted(region);
+      })
+      .on('mouseleave', (d) => {
+        if (onceTouchedRegion === d) onceTouchedRegion = null;
+      })
+      .on('touchstart', (d) => {
+        if (onceTouchedRegion === d) onceTouchedRegion = null;
+        else onceTouchedRegion = d;
+      })
+      .transition(t)
+      .attr('fill', caseColor(mapOption, '90'))
+      .attr('stroke', caseColor(mapOption))
+      .attr('r', (d) => radius(d.value));
+
+    // .append('title')
+    // .text(d => `${d.properties.district ? d.properties.district : d.properties.state}\n${formatNumber(d.value)}`);
+
     let meshStates = [];
     if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
       meshStates = [
@@ -255,23 +330,19 @@ function ChoroplethMap({
           ? '.state-borders'
           : '.district-borders'
       )
+      .attr('fill', 'none')
+      .attr('stroke-width', function () {
+        return mapMeta.mapType === MAP_TYPES.COUNTRY &&
+          currentMap.view === MAP_VIEWS.DISTRICTS
+          ? 0
+          : width / 250;
+      })
       .selectAll('path')
       .data(
         currentMap.view === MAP_VIEWS.STATES ? meshStates : meshDistricts,
         (d) => d.id
       )
-      .join((enter) =>
-        enter
-          .append('path')
-          .attr('d', path)
-          .attr('fill', 'none')
-          .attr('stroke-width', function () {
-            return mapMeta.mapType === MAP_TYPES.COUNTRY &&
-              currentMap.view === MAP_VIEWS.DISTRICTS
-              ? 0
-              : width / 250;
-          })
-      )
+      .join((enter) => enter.append('path').attr('d', path))
       .transition(t)
       .attr('stroke', () => {
         if (currentMap.stat === MAP_STATISTICS.ZONE) {
@@ -364,7 +435,10 @@ function ChoroplethMap({
         <svg id="chart" preserveAspectRatio="xMidYMid meet" ref={svgRef}>
           <g className="regions" />
           <g className="state-borders" />
-          <g className="district-borders" />
+          {currentMap.view === MAP_VIEWS.DISTRICTS && (
+            <g className="district-borders" />
+          )}
+          <g className="circles" />
         </svg>
         {mapMeta.mapType === MAP_TYPES.STATE &&
         mapData[currentMap.name]?.Unknown &&
