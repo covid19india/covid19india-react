@@ -22,14 +22,14 @@ function StateMeta({
   const sevenDayBeforeDate = format(lastSevenDaysData[0].date, 'dd MMM');
   const previousDayData = lastSevenDaysData[6].totalconfirmed;
   const previousDayDate = format(lastSevenDaysData[6].date, 'dd MMM');
-  var confirmedPerMillion = (confirmed / population) * 1000000;
-  var recoveryPercent = (recovered / confirmed) * 100;
-  var activePercent = (active / confirmed) * 100;
-  var deathPercent = (deaths / confirmed) * 100;
-  var testPerMillion = (lastTestObject?.totaltested / population) * 1000000;
-  var growthRate =
+  let confirmedPerMillion = (confirmed / population) * 1000000;
+  let recoveryPercent = (recovered / confirmed) * 100;
+  let activePercent = (active / confirmed) * 100;
+  let deathPercent = (deaths / confirmed) * 100;
+  let testPerMillion = (lastTestObject?.totaltested / population) * 1000000;
+  let growthRate =
     ((previousDayData - sevenDayBeforeData) / sevenDayBeforeData) * 100;
-  var totalConfirmedPerMillion =
+  let totalConfirmedPerMillion =
     (totalData[0].confirmed / 1332900000) * 1000000;
   // const doublingRate =
   // growthRate > 0 ? (70 / Math.round(growthRate)).toFixed(2) : 0;
@@ -42,13 +42,13 @@ function StateMeta({
         'dd MMM'
       )}`
     : '';
-  totalConfirmedPerMillion = ((isNaN(totalConfirmedPerMillion)) || (totalConfirmedPerMillion === Infinity)) ? '-' : totalConfirmedPerMillion.toFixed(2);
-  confirmedPerMillion = ((isNaN(confirmedPerMillion)) || (confirmedPerMillion === Infinity)) ? '-' : confirmedPerMillion.toFixed(2);
-  recoveryPercent = ((isNaN(recoveryPercent)) || (recoveryPercent === Infinity)) ? '-' : recoveryPercent.toFixed(2);
-  activePercent = ((isNaN(activePercent)) || (activePercent === Infinity)) ? '-' : activePercent.toFixed(2);
-  deathPercent = ((isNaN(deathPercent)) || (deathPercent === Infinity)) ? '-' : deathPercent.toFixed(2);
-  testPerMillion = ((isNaN(testPerMillion)) || (testPerMillion === Infinity)) ? '-' : testPerMillion.toFixed(2);
-  growthRate = ((isNaN(growthRate)) || (growthRate === Infinity)) ? '-' : (growthRate/7).toFixed(2);
+  totalConfirmedPerMillion =  formatNumber(totalConfirmedPerMillion);
+  confirmedPerMillion = formatNumber(confirmedPerMillion);
+  recoveryPercent = formatNumber(recoveryPercent);
+  activePercent = formatNumber(activePercent);
+  deathPercent = formatNumber(deathPercent);
+  testPerMillion = formatNumber(testPerMillion);
+  growthRate = formatNumber((growthRate/7));
 
   return (
     <React.Fragment>
