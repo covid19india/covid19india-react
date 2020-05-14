@@ -243,10 +243,16 @@ function ChoroplethMap({
             const district = d.properties.district;
             if (district)
               n =
-                mapData[state] && mapData[state][district]
+                mapData[state] &&
+                mapData[state][district] &&
+                mapData[state][district][mapOption]
                   ? mapData[state][district][mapOption]
                   : 0;
-            else n = mapData[state] ? mapData[state][mapOption] : 0;
+            else
+              n =
+                mapData[state] && mapData[state][mapOption]
+                  ? mapData[state][mapOption]
+                  : 0;
           }
           const color = n === 0 ? '#ffffff00' : colorScale(n);
           return color;
