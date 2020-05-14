@@ -20,8 +20,6 @@ import {
   parseDistrictZones,
 } from '../utils/commonfunctions';
 
-import 'intersection-observer';
-import Observer from '@researchgate/react-intersection-observer';
 import axios from 'axios';
 import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
@@ -42,9 +40,6 @@ function Home(props) {
   const [showUpdates, setShowUpdates] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [mapOption, setMapOption] = useState('confirmed');
-  const [isTimeseriesIntersecting, setIsTimeseriesIntersecting] = useState(
-    false
-  );
 
   const [lastViewedLog, setLastViewedLog] = useLocalStorage(
     'lastViewedLog',
@@ -158,10 +153,6 @@ function Home(props) {
     setRegionHighlighted({district, state: state.state});
   }, []);
 
-  const options = {
-    rootMargin: '0px 0px 0px 0px',
-  };
-
   return (
     <React.Fragment>
       <div className="Home">
@@ -230,32 +221,22 @@ function Home(props) {
               />
             )}
 
-            <Observer
-              options={options}
-              onChange={({isIntersecting}) =>
-                setIsTimeseriesIntersecting(isIntersecting)
-              }
-            >
-              <div>
-                {timeseries && (
-                  <TimeSeriesExplorer
-                    timeseries={
-                      timeseries[
-                        STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
-                      ]
-                    }
-                    activeStateCode={
-                      STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
-                    }
-                    onHighlightState={onHighlightState}
-                    states={states}
-                    anchor={anchor}
-                    setAnchor={setAnchor}
-                    isIntersecting={isTimeseriesIntersecting}
-                  />
-                )}
-              </div>
-            </Observer>
+            {timeseries && (
+              <TimeSeriesExplorer
+                timeseries={
+                  timeseries[
+                    STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
+                  ]
+                }
+                activeStateCode={
+                  STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
+                }
+                onHighlightState={onHighlightState}
+                states={states}
+                anchor={anchor}
+                setAnchor={setAnchor}
+              />
+            )}
           </React.Fragment>
         </div>
       </div>

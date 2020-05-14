@@ -5,11 +5,30 @@ import {useResizeObserver} from '../utils/hooks';
 
 import * as d3 from 'd3';
 import {addDays, subDays, format} from 'date-fns';
+import equal from 'fast-deep-equal';
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 
-function TimeSeries({timeseriesProp, chartType, mode, logMode, isTotal}) {
+const isEqual = (prevProps, currProps) => {
+  if (!currProps.isIntersecting) return true;
+  if (!prevProps.isIntersecting) return false;
+  if (!equal(currProps.chartType, prevProps.chartType)) {
+    return false;
+  }
+  if (!equal(currProps.mode, prevProps.mode)) {
+    return false;
+  }
+  if (!equal(currProps.logMode, prevProps.logMode)) {
+    return false;
+  }
+  if (!equal(currProps.stateCode, prevProps.stateCode)) {
+    return false;
+  }
+  return true;
+};
+
+function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
   const {t} = useTranslation();
   const [lastDaysCount, setLastDaysCount] = useState(
     window.innerWidth > 512 ? Infinity : 30
@@ -484,7 +503,7 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, isTotal}) {
         <div className="svg-parent is-purple">
           <div className="stats is-purple">
             <h5 className={`${!moving ? 'title' : ''}`}>
-              {t('Tested')} {isTotal ? testedToolTip : ''}
+              {t('Tested')} {stateCode === 'TT' ? testedToolTip : ''}
             </h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
@@ -536,4 +555,4 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, isTotal}) {
   );
 }
 
-export default React.memo(TimeSeries);
+export default React.memo(TimeSeries, isEqual);
