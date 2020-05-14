@@ -65,7 +65,7 @@ function KnnResults({userLocation, userState}) {
 
     const hK = 5; // K nearest hospitals/labs wrt user location
     const rK = 100; // K nearest essentials wrt user location
-    const rad = 10 * 1000; // Max distance of the K points, in meters : aim to be  ~(avg city radius)
+    const rad = 10 * 1000; // Max distance of the K points, in meters ; aim to be  ~(avg city radius)
 
     if (userLocation) {
       medKnn = new Knn(L.geoJSON(geoData, {filter: medFilter})).nearestLayer(
@@ -81,7 +81,6 @@ function KnnResults({userLocation, userState}) {
           (feat.properties.state.includes('PAN') &&
             feat.properties.state.includes(userState))
       );
-      console.log('PAN', panKnn);
     }
 
     const result = {
