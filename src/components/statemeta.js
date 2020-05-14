@@ -105,8 +105,8 @@ function StateMeta({
           statistic={`${recoveryPercent.toFixed(2)}%`}
           formula={'(recovered / confirmed) * 100'}
           description={`For every 100 confirmed cases, 
-            ${Math.round(
-              recoveryPercent.toFixed(0)
+            ${Math.ceil(
+              recoveryPercent.toFixed(2)
             )} have recovered from the virus.`}
         />
 
@@ -116,8 +116,8 @@ function StateMeta({
           statistic={`${deathPercent.toFixed(2)}%`}
           formula={'(deceased / confirmed) * 100'}
           description={`For every 100 confirmed cases, 
-            ${Math.round(
-              deathPercent.toFixed(0)
+            ${Math.ceil(
+              deathPercent.toFixed(2)
             )} have unfortunately passed away from the virus.`}
         />
 
