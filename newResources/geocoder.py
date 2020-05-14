@@ -6,9 +6,11 @@ import time
 from random import gauss
 
 
-def fetch_data(path="https://api.covid19india.org/resources/resources.json", url=True):
+def fetch_data(path="https://api.covid19india.org/resources/resources.json", geojson=False):
     request = urllib.request.urlopen(path)
     data = json.load(request)
+    if geojson:
+        return data
 
     inputDict = data["resources"]
     return inputDict
@@ -285,11 +287,12 @@ def main():
     for i, entry in enumerate(entries):
         converter.process_entry(i+1, entry)
         if not (i+1)%600:
+            break
             print("Minute delay: API rate limit ")
             time.sleep(60)
 
 
-    processed_entries = fetch_data(path="https://github.com/aswaathb/covid19india-react/blob/publish/newResources/geoResources.json")
+    processed_entries = fetch_data(path="https://raw.githubusercontent.com/aswaathb/covid19india-react/publish/newResources/geoResources.json", geojson=True)
     #Feed in processed_entries as oldData to append new batch to previously geocoded entries
     feature_collection = converter.generate_geojson(oldData=None) 
 

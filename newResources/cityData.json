@@ -1,0 +1,493 @@
+{
+  "cities": [
+    "Port Blair Andaman & Nicobar",
+    "Kakinada Andhra Pradesh",
+    "Vijayawada Andhra Pradesh",
+    "Visakhapatnam Andhra Pradesh",
+    "Kurnool Andhra Pradesh",
+    "Tirupati Andhra Pradesh",
+    "Kadapa Andhra Pradesh",
+    "Dibrugarh Assam",
+    "Guwahati Assam",
+    "Jorhat Assam",
+    "Silchar Assam",
+    "Tezpur Assam",
+    "Biswanath Assam",
+    "Bongaigaon Assam",
+    "Barpeta Assam",
+    "Baksa Assam",
+    "Cachar Assam",
+    "Charaideo Assam",
+    "Chirang Assam",
+    "Dhubri Assam",
+    "Dima Hasao Assam",
+    "Darrang Assam",
+    "Dhemaji Assam",
+    "Goalpara Assam",
+    "Golaghat Assam",
+    "Guwahati City Assam",
+    "Hamren Assam",
+    "Hailakandi Assam",
+    "Hojai Assam",
+    "Karbi Anglong Assam",
+    "Karimganj Assam",
+    "Kamrup Assam",
+    "Kokrajhar Assam",
+    "Lakhimpur Assam",
+    "Morigaon Assam",
+    "Majuli Assam",
+    "Nagaon Assam",
+    "Nalbari Assam",
+    "Sadiya Assam",
+    "Sivasagar Assam",
+    "Sonitpur Assam",
+    "South Salmara Assam",
+    "Tinsukia Assam",
+    "Udalguri Assam",
+    "PAN State Assam",
+    "Darbhanga Bihar",
+    "Patna Bihar",
+    "Jehanabad Bihar",
+    "Bihar Sharif Bihar",
+    "Muzzafarpur Bihar",
+    "PAN State Bihar",
+    "Chandigarh Chandigarh",
+    "Bilaspur Chhattisgarh",
+    "Raipur Chhattisgarh",
+    "Jagdalpur Chhattisgarh",
+    "Korba Chhattisgarh",
+    "jashpur nagar Chhattisgarh",
+    "Dantewada Chhattisgarh",
+    "Naraynpur Chhattisgarh",
+    "Mungeli Chhattisgarh",
+    "Balod Chhattisgarh",
+    "Sukma Chhattisgarh",
+    "Bastar Chhattisgarh",
+    "Raigarh Chhattisgarh",
+    "Janjgir Chhattisgarh",
+    "Baloda Bazar Chhattisgarh",
+    "Bemetara Chhattisgarh",
+    "Surajpur Chhattisgarh",
+    "Mahasamund Chhattisgarh",
+    "PAN State Chhattisgarh",
+    "Korea Chhattisgarh",
+    "Katghora Chhattisgarh",
+    "Rajnandgaon Chhattisgarh",
+    "Kabirdham Chhattisgarh",
+    "Balrampur Chhattisgarh",
+    "Dhamtari Chhattisgarh",
+    "Delhi Delhi",
+    "New Delhi Delhi"
+  ],
+  "cityboundaries": {
+    "Port Blair Andaman & Nicobar": {
+      "bbox": [
+        92.7154900011238,
+        11.6404400184092,
+        92.7573626324429,
+        11.6863649674444
+      ],
+      "center": [92.75, 11.66667]
+    },
+    "Kakinada Andhra Pradesh": {
+      "bbox": [
+        82.0411069319225,
+        16.698150828722,
+        82.3657926571443,
+        17.0921691247617
+      ],
+      "center": [82.21667, 16.93333]
+    },
+    "Vijayawada Andhra Pradesh": {
+      "bbox": [
+        80.388105761541,
+        16.2736198286614,
+        80.8344941381795,
+        16.9301925399988
+      ],
+      "center": [80.61667, 16.51667]
+    },
+    "Visakhapatnam Andhra Pradesh": {
+      "bbox": [81.868454, 17.253408, 83.487282, 18.549049],
+      "center": [83.21876, 17.68838]
+    },
+    "Kurnool Andhra Pradesh": {
+      "bbox": [76.974038, 14.902695, 78.929565, 16.150288],
+      "center": [78.05, 15.83]
+    },
+    "Tirupati Andhra Pradesh": {
+      "bbox": [
+        79.2616345741851,
+        13.5429603777279,
+        79.5557285036535,
+        13.7049857126737
+      ],
+      "center": [79.42, 13.65]
+    },
+    "Kadapa Andhra Pradesh": {
+      "bbox": [
+        78.7981101130086,
+        14.433791702967,
+        78.8626126093593,
+        14.5023466784368
+      ],
+      "center": [78.848853, 14.468053]
+    },
+    "Dibrugarh Assam": {
+      "bbox": [94.566193, 27.093195, 95.485518, 27.701992],
+      "center": [94.9181, 27.47416]
+    },
+    "Guwahati Assam": {
+      "bbox": [
+        91.630102550439,
+        25.9994301837581,
+        92.1784074796932,
+        26.2551400578018
+      ],
+      "center": [91.76667, 26.16667]
+    },
+    "Jorhat Assam": {
+      "bbox": [93.815338, 26.35029, 94.595268, 27.183153],
+      "center": [94.2167, 26.75]
+    },
+    "Silchar Assam": {
+      "bbox": [
+        92.4235364434601,
+        24.3762690422251,
+        93.2634211769325,
+        25.1455677207475
+      ],
+      "center": [92.8, 24.81667]
+    },
+    "Tezpur Assam": {
+      "bbox": [
+        92.3222791450726,
+        26.4971019330355,
+        93.7889690867057,
+        27.0331419798833
+      ],
+      "center": [92.994906, 26.765034]
+    },
+    "Biswanath Assam": {
+      "bbox": [
+        77.6372061198591,
+        28.4304227365724,
+        77.649186158931,
+        28.438996351
+      ],
+      "center": [77.64308, 28.434763]
+    },
+    "Bongaigaon Assam": {
+      "bbox": [90.375504, 26.171597, 90.859398, 26.52993],
+      "center": [90.5667, 26.4667]
+    },
+    "Barpeta Assam": {
+      "bbox": [90.644142, 26.088167, 91.308861, 26.662166],
+      "center": [91, 26.53333]
+    },
+    "Baksa Assam": {
+      "bbox": [90.812851, 26.460114, 91.788161, 26.842473],
+      "center": [91.72, 26.52]
+    },
+    "Cachar Assam": {
+      "bbox": [92.419174, 24.374603, 93.2621, 25.142536],
+      "center": [92.81, 24.84]
+    },
+    "Chirang Assam": {
+      "bbox": [90.352694, 26.399814, 90.958742, 26.895476],
+      "center": [90.647737, 26.64781]
+    },
+    "Dhubri Assam": {
+      "bbox": [89.701181, 25.450577, 90.485252, 26.385233],
+      "center": [89.9667, 26.0333]
+    },
+    "Dima Hasao Assam": {
+      "bbox": [
+        72.9508398055081,
+        21.6311944542247,
+        72.9838980903342,
+        21.6629843425241
+      ],
+      "center": [72.96737, 21.645663]
+    },
+    "Darrang Assam": {
+      "bbox": [91.750404, 26.183866, 92.39325, 26.676464],
+      "center": [92.12, 26.51]
+    },
+    "Dhemaji Assam": {
+      "bbox": [94.209351, 27.209596, 95.516762, 27.87458],
+      "center": [94.5511, 27.4798]
+    },
+    "Goalpara Assam": {
+      "bbox": [90.128578, 25.888363, 91.095665, 26.226323],
+      "center": [90.63, 26.16]
+    },
+    "Golaghat Assam": {
+      "bbox": [93.28511, 25.807976, 94.177996, 26.840553],
+      "center": [94.01, 26.51]
+    },
+    "Guwahati City Assam": {
+      "bbox": [
+        91.630102550439,
+        25.9994301837581,
+        92.1784074796932,
+        26.2551400578018
+      ],
+      "center": [91.76667, 26.16667]
+    },
+    "Hamren Assam": {
+      "bbox": [
+        92.1494656612831,
+        25.5528882795646,
+        93.077607938029,
+        26.1522210493335
+      ],
+      "center": [92.6083, 25.9233]
+    },
+    "Hailakandi Assam": {
+      "bbox": [92.416168, 24.133992, 92.775894, 24.881392],
+      "center": [92.5667, 24.6833]
+    },
+    "Hojai Assam": {
+      "bbox": [
+        92.8433829688949,
+        25.9949311759976,
+        92.8614740758348,
+        26.0047579125731
+      ],
+      "center": [92.852173, 25.999848]
+    },
+    "Karbi Anglong Assam": {
+      "bbox": [92.149338, 25.525326, 93.896149, 26.613026],
+      "center": [93.5, 26]
+    },
+    "Karimganj Assam": {
+      "bbox": [92.223129, 24.249556, 92.572716, 24.916412],
+      "center": [92.35, 24.8667]
+    },
+    "Kamrup Assam": {
+      "bbox": [91.451853, 25.888428, 92.177331, 26.250607],
+      "center": [92.018827, 26.072011]
+    },
+    "Kokrajhar Assam": {
+      "bbox": [89.84716, 26.131037, 90.433018, 26.905778],
+      "center": [90.27, 26.4]
+    },
+    "Lakhimpur Assam": {
+      "bbox": [93.705261, 26.818781, 94.582016, 27.520416],
+      "center": [94.1, 27.23]
+    },
+    "Morigaon Assam": {
+      "bbox": [91.957565, 26.061876, 92.556458, 26.516962],
+      "center": [92.34, 26.25]
+    },
+    "Majuli Assam": {
+      "bbox": [
+        74.0869052077346,
+        14.8624435500895,
+        74.1228379920359,
+        14.9146032337411
+      ],
+      "center": [74.1, 14.9]
+    },
+    "Nagaon Assam": {
+      "bbox": [92.403447, 25.713148, 93.321482, 26.69251],
+      "center": [92.6667, 26.35]
+    },
+    "Nalbari Assam": {
+      "bbox": [91.226196, 26.16169, 91.569344, 26.579546],
+      "center": [91.44, 26.45]
+    },
+    "Sadiya Assam": {
+      "bbox": [
+        95.461551485738,
+        27.7500792869164,
+        95.9775625201857,
+        27.9774722031428
+      ],
+      "center": [95.67, 27.83]
+    },
+    "Sivasagar Assam": {
+      "bbox": [94.397835, 26.704727, 95.371552, 27.275211],
+      "center": [94.63141, 26.98442]
+    },
+    "Sonitpur Assam": {
+      "bbox": [92.326053, 26.500416, 93.784035, 27.036503],
+      "center": [92.8, 26.63]
+    },
+    "South Salmara Assam": {
+      "bbox": [
+        77.5411524001919,
+        27.0732212306761,
+        77.5667297936142,
+        27.1118059468139
+      ],
+      "center": [77.552645, 27.088488]
+    },
+    "Tinsukia Assam": {
+      "bbox": [95.219009, 27.222879, 96.017937, 27.967524],
+      "center": [95.36014, 27.48946]
+    },
+    "Udalguri Assam": {
+      "bbox": [91.699364, 26.483385, 92.402035, 26.933582],
+      "center": [92.0962, 26.7452]
+    },
+    "PAN State Assam": {
+      "bbox": [
+        89.850638387418,
+        25.7031914633272,
+        89.9782265469692,
+        25.9316568828456
+      ],
+      "center": [89.956393, 25.923094]
+    },
+    "Darbhanga Bihar": {
+      "bbox": [85.671949, 25.868046, 86.402962, 26.448333],
+      "center": [86, 26]
+    },
+    "Patna Bihar": {
+      "bbox": [84.690437, 25.201537, 86.031647, 25.756979],
+      "center": [85.16667, 25.41667]
+    },
+    "Jehanabad Bihar": {
+      "bbox": [84.811203, 24.985954, 85.208488, 25.317993],
+      "center": [84.98, 25.21]
+    },
+    "Bihar Sharif Bihar": {
+      "bbox": [76.690132, 17.583908, 77.655006, 18.457019],
+      "center": [77.51972, 17.92]
+    },
+    "PAN State Bihar": {
+      "bbox": [76.690132, 17.583908, 77.655006, 18.457019],
+      "center": [77.51972, 17.92]
+    },
+    "Chandigarh Chandigarh": {
+      "bbox": [76.704142, 30.664393, 76.848405, 30.797197],
+      "center": [76.79111, 30.73528]
+    },
+    "Bilaspur Chhattisgarh": {
+      "bbox": [81.722792, 21.711262, 82.461693, 23.117081],
+      "center": [82.13333, 22.38333]
+    },
+    "Raipur Chhattisgarh": {
+      "bbox": [81.534065, 20.941219, 82.191849, 21.622348],
+      "center": [81.814801, 21.281399]
+    },
+    "Jagdalpur Chhattisgarh": {
+      "bbox": [
+        81.167561760159,
+        18.6877006874029,
+        82.2396631102007,
+        19.5466305885505
+      ],
+      "center": [82.03, 19.07]
+    },
+    "Korba Chhattisgarh": {
+      "bbox": [82.137665, 22.034986, 83.126366, 22.996738],
+      "center": [82.68333, 22.35]
+    },
+    "jashpur nagar Chhattisgarh": {
+      "bbox": [83.389587, 22.288198, 84.395584, 23.253302],
+      "center": [84.15, 22.9]
+    },
+    "Dantewada Chhattisgarh": {
+      "bbox": [81.122065, 18.379811, 81.777657, 19.336191],
+      "center": [81.35, 18.9]
+    },
+    "Naraynpur Chhattisgarh": {
+      "bbox": [80.663178, 19.226112, 81.507237, 20.096332],
+      "center": [81.25, 19.71667]
+    },
+    "Mungeli Chhattisgarh": {
+      "bbox": [81.480949, 21.81539, 82.031296, 22.664032],
+      "center": [81.67, 22.067]
+    },
+    "Balod Chhattisgarh": {
+      "bbox": [80.802994, 20.375822, 81.517456, 21.076923],
+      "center": [81.25, 20.78]
+    },
+    "Sukma Chhattisgarh": {
+      "bbox": [80.906982, 17.781338, 81.967102, 18.77257],
+      "center": [81.314707, 18.277715]
+    },
+    "Bastar Chhattisgarh": {
+      "bbox": [81.467049, 18.697569, 82.245956, 19.545317],
+      "center": [82.0331, 19.0667]
+    },
+    "Raigarh Chhattisgarh": {
+      "bbox": [82.923538, 21.34177, 83.804352, 22.787909],
+      "center": [83.4, 21.9]
+    },
+    "Janjgir Chhattisgarh": {
+      "bbox": [
+        82.3015210308364,
+        21.7070086709783,
+        82.7389467001965,
+        22.2579405279904
+      ],
+      "center": [82.567, 22.017]
+    },
+    "Baloda Bazar Chhattisgarh": {
+      "bbox": [81.657242, 21.263172, 82.985825, 21.88299],
+      "center": [82.17, 21.66]
+    },
+    "Bemetara Chhattisgarh": {
+      "bbox": [81.13945, 21.331593, 81.939674, 22.022793],
+      "center": [81.61, 21.91]
+    },
+    "Surajpur Chhattisgarh": {
+      "bbox": [82.500336, 22.789625, 83.359875, 23.916571],
+      "center": [82.8684, 23.2135]
+    },
+    "Mahasamund Chhattisgarh": {
+      "bbox": [81.984276, 20.826639, 83.279457, 21.553192],
+      "center": [82.1, 21.1]
+    },
+    "PAN State Chhattisgarh": {
+      "bbox": [
+        76.3791549349171,
+        21.7091390110841,
+        82.467926549351,
+        31.4296284021884
+      ],
+      "center": [82.253807, 22.01845]
+    },
+    "Korea Chhattisgarh": {
+      "bbox": [82.137665, 22.034986, 83.126366, 22.996738],
+      "center": [82.68333, 22.35]
+    },
+    "Katghora Chhattisgarh": {
+      "bbox": [
+        82.1308133544514,
+        22.2065804864527,
+        82.8275383852638,
+        22.9974296703386
+      ],
+      "center": [82.55, 22.5]
+    },
+    "Rajnandgaon Chhattisgarh": {
+      "bbox": [80.392014, 20.114059, 81.216995, 21.834833],
+      "center": [81.03333, 21.1]
+    },
+    "Kabirdham Chhattisgarh": {
+      "bbox": [80.825836, 21.704115, 81.558617, 22.526144],
+      "center": [81.25, 22.01667]
+    },
+    "Balrampur Chhattisgarh": {
+      "bbox": [82.692574, 23.151468, 84.073929, 24.103897],
+      "center": [83.480212, 23.627727]
+    },
+    "Dhamtari Chhattisgarh": {
+      "bbox": [81.407188, 20.04307, 82.182167, 21.026758],
+      "center": [81.54972, 20.70722]
+    },
+    "Delhi Delhi": {
+      "bbox": [77.112366, 28.404268, 77.345345, 28.60932],
+      "center": [77.251465, 28.506764]
+    },
+    "New Delhi Delhi": {
+      "bbox": [77.170923, 28.579523, 77.257332, 28.642354],
+      "center": [77.21672, 28.61157]
+    }
+  }
+}
