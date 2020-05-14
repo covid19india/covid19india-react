@@ -47,11 +47,10 @@ class EssentialsConverter:
 
 
     def generate_geojson(self, oldData=None): #TODO: feed in old geojson object
+        update = []
         if oldData:
-            prev = oldData["features"]
-            update = prev + self.processedBatch
-        else:
-            update = self.processedBatch
+            update = oldData["features"]
+        update += self.processedBatch
         
 
         geojson = {
@@ -287,7 +286,6 @@ def main():
     for i, entry in enumerate(entries):
         converter.process_entry(i+1, entry)
         if not (i+1)%600:
-            break
             print("Minute delay: API rate limit ")
             time.sleep(60)
 

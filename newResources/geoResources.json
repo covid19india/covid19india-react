@@ -1,6 +1,6 @@
 {
   "type": "FeatureCollection",
-  "lastupdated": "Thu May 14 18:59:45 2020",
+  "lastupdated": "Thu May 14 19:07:28 2020",
   "features": [
     {
       "type": "Feature",
@@ -11343,6 +11343,937 @@
       "geometry": {
         "type": "Point",
         "coordinates": [77.251465, 28.506764]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 1,
+        "name": "Regional Medical Research Centre (ICMR)",
+        "desc": "Government approved and supported Testing labs by ICMR",
+        "geoTag": "Port Blair",
+        "addr": "Port Blair, Andaman and Nicobar, India",
+        "state": "Andaman & Nicobar",
+        "phone": "3192251158,\n3192251159",
+        "contact": "http://rmrc.res.in/",
+        "priority": 1,
+        "icon": "lab"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [92.75, 11.66667]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 2,
+        "name": "Rangaraya Medical College",
+        "desc": "Government Approved and Supported Testing Lab by ICMR",
+        "geoTag": "Kakinada",
+        "addr": "Kakinada, Andhra Pradesh, India",
+        "state": "Andhra Pradesh",
+        "phone": "8842363401",
+        "contact": "https://web.archive.org/web/20190103062219/http://rmckakinada.com/",
+        "priority": 1,
+        "icon": "lab"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [82.21667, 16.93333]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 3,
+        "name": "Amrutha Hastam Charitable Trust",
+        "desc": "We are providing free food service to the needy from more than 2 years, now during lockdown we are distributing more than 10000 people daily during lockdown",
+        "geoTag": "Vijayawada",
+        "addr": "Vijayawada, Andhra Pradesh, India",
+        "state": "Andhra Pradesh",
+        "phone": "9246472100",
+        "contact": "http://amruthahastam.org",
+        "priority": 0,
+        "icon": "food"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [80.61667, 16.51667]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 4,
+        "name": "Sidhartha Medical College",
+        "desc": "Government Approved and Supported Testing Lab by ICMR",
+        "geoTag": "Lakki Reddy Balreddy College Of Engineering",
+        "addr": "Lakki Reddy Balreddy College Of Engineering, Mylavaram, Vijayawada, Andhra Pradesh, India",
+        "state": "Andhra Pradesh",
+        "phone": "8662450390",
+        "contact": "http://ssmctumkur.org/",
+        "priority": 1,
+        "icon": "lab"
+      },
+      "geometry": {
+        "coordinates": [80.634987, 16.748502],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 5,
+        "name": "The Integrated Rural Development of Weaker Sections in India",
+        "desc": "Volunteers and Staff to engage in awareness building and relief work",
+        "geoTag": "",
+        "addr": "Visakhapatnam Andhra Pradesh",
+        "state": "Andhra Pradesh",
+        "phone": "9849120377",
+        "contact": "http://www.irdwsi.in",
+        "priority": 0,
+        "icon": "fund"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [83.13380410356837, 17.561027506560748]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 6,
+        "name": "Govt General Hospital Kurnool",
+        "desc": "Covid-19 treatment.",
+        "geoTag": "Kurnool",
+        "addr": "Kurnool, Andhra Pradesh, India",
+        "state": "Andhra Pradesh",
+        "phone": "8518255422",
+        "contact": "http://gghknl.com",
+        "priority": 1,
+        "icon": "hospital"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [78.035, 15.82222]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 7,
+        "name": "Tirupati municipal Corporation",
+        "desc": "It consist of list of vendors,providing home delivery",
+        "geoTag": "Tirupati",
+        "addr": "Tirupati, Tirupati, Chittoor, Andhra Pradesh, India",
+        "state": "Andhra Pradesh",
+        "phone": "9849983062",
+        "contact": "https://tirupati.cdma.ap.gov.in",
+        "priority": 0,
+        "icon": "delivery"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [79.485619, 13.636981]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 8,
+        "name": "Rajiv Gandhi institute of medical science",
+        "desc": "Covid-19 testing approved by govt. and isolation wards",
+        "geoTag": "Kadapa(HX) Railway Station",
+        "addr": "Kadapa(HX) Railway Station, Kadapa, Andhra Pradesh, India",
+        "state": "Andhra Pradesh",
+        "phone": "8562220200",
+        "contact": "http://rimskadapa.in/contact-us.html",
+        "priority": 1,
+        "icon": "hospital"
+      },
+      "geometry": {
+        "coordinates": [78.829203, 14.451433],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 9,
+        "name": "government TB & chest hospitals",
+        "desc": "Covid 19 isolation wards and treatment",
+        "geoTag": "Simhadri Hospital",
+        "addr": "Simhadri Hospital, Visakhapatnam, Andhra Pradesh, India",
+        "state": "Andhra Pradesh",
+        "phone": "8912552525",
+        "contact": "https://mediniz.com/list/hivhelp/center/government-tb-and-chest-hospital-visakhapatnam",
+        "priority": 1,
+        "icon": "hospital"
+      },
+      "geometry": {
+        "coordinates": [83.311619, 17.709448],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 10,
+        "name": "VR Deliver",
+        "desc": "Delivery of fruits and vegetables",
+        "geoTag": "Tirupati Airport",
+        "addr": "Tirupati Airport, Tirupati, Andhra Pradesh, India",
+        "state": "Andhra Pradesh",
+        "phone": "9553733334",
+        "contact": "https://vrdeliver.in/",
+        "priority": 0,
+        "icon": "delivery"
+      },
+      "geometry": {
+        "coordinates": [79.499852, 13.6343],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 11,
+        "name": "Sagar Software Solutions",
+        "desc": "Providing free Groceries & food to needy people.",
+        "geoTag": "",
+        "addr": "Vijayawada Andhra Pradesh",
+        "state": "Andhra Pradesh",
+        "phone": "9396455666",
+        "contact": "https://www.getgroceries.in",
+        "priority": 0,
+        "icon": "delivery"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [80.69510112974726, 16.588835425376107]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 12,
+        "name": "Regional Medical Research Center, NE Region",
+        "desc": "Government approved and supported Testing labs by ICMR",
+        "geoTag": "Dibrugarh",
+        "addr": "Dibrugarh, Assam, India",
+        "state": "Assam",
+        "phone": "3732381548",
+        "contact": "http://rmrcne.org.in/",
+        "priority": 1,
+        "icon": "lab"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [95, 27.48333]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 13,
+        "name": "Gauhati Medical College",
+        "desc": "Government approved and supported testing lab by ICMR",
+        "geoTag": "Guwahati Railway Station",
+        "addr": "Guwahati Railway Station, Pan Bazar, Guwahati, Assam, India",
+        "state": "Assam",
+        "phone": "3612132751",
+        "contact": "http://www.gmchassam.gov.in/",
+        "priority": 1,
+        "icon": "lab"
+      },
+      "geometry": {
+        "coordinates": [91.749787, 26.1823],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 14,
+        "name": "Ayang Trust - Rituparna Neog",
+        "desc": "Preparation and distribution of kits containing Rice, Daal, Oil, Chira, Salt, Soyabean and Soap through a planned mechanism to slum pockets of Guwahati. They have Assam police as one of their major stakeholders.",
+        "geoTag": "Guwahati Railway Station",
+        "addr": "Guwahati Railway Station, Pan Bazar, Guwahati, Assam, India",
+        "state": "Assam",
+        "phone": "8723034337",
+        "contact": "https://ayang.org.in",
+        "priority": 0,
+        "icon": "food"
+      },
+      "geometry": {
+        "coordinates": [91.749787, 26.1823],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 15,
+        "name": "Jorhat Medical College",
+        "desc": "Government approved and supported Testing Lab by ICMR",
+        "geoTag": "Jorhat",
+        "addr": "Jorhat, Assam, India",
+        "state": "Assam",
+        "phone": "3762370107",
+        "contact": "https://jorhatmedicalcollege.in/jmch/",
+        "priority": 1,
+        "icon": "lab"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [94.21667, 26.75]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 16,
+        "name": "Silchar Medical College",
+        "desc": "Government approved and supported Testing labs by ICMR",
+        "geoTag": "Goldighi Mall",
+        "addr": "Goldighi Mall, Silchar, Assam, India",
+        "state": "Assam",
+        "phone": "3842229110",
+        "contact": "http://smcassam.gov.in/",
+        "priority": 1,
+        "icon": "lab"
+      },
+      "geometry": {
+        "coordinates": [92.799548, 24.822838],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 17,
+        "name": "The UnCivilised Indian in collaboration with Love and Acceptance NGO",
+        "desc": "The Funds will be used to provide groceries to the daily wagers, providing two time meal to the homeless people. We have been trying to deliver the basic needs to the people(Including Sanitizers and Masks) and feeding the Homeless and Stray Animals in Tezpur, Assam.* If you cannot step out of home and need any essential commodity, contact them.",
+        "geoTag": "",
+        "addr": "Guwahati Assam",
+        "state": "Assam",
+        "phone": "9126446620",
+        "contact": "http://www.uciofficial.org/?fbclid=IwAR0DQGpRkuPmbxKI3TgEnSzvS8_1-BnA1S6J5deDBuT4XWFERr2Rh5HFcgI",
+        "priority": 0,
+        "icon": "food"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [91.80256468499792, 26.174014185869968]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 18,
+        "name": "TEZPUR MEDICAL COLLEGE & HOSPITAL",
+        "desc": "Hospital and CoVID-19 testing available",
+        "geoTag": "Hotel KRC Palace",
+        "addr": "Hotel KRC Palace, Tezpur, Assam, India",
+        "state": "Assam",
+        "phone": "18003456767",
+        "contact": "http://tmcassam.org/about_hospital.php",
+        "priority": 1,
+        "icon": "lab"
+      },
+      "geometry": {
+        "coordinates": [92.790272, 26.626557],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 19,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "",
+        "addr": "Biswanath Assam",
+        "state": "Assam",
+        "phone": "3715222012,\n8135837614",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [77.64348423573395, 28.43637314853767]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 20,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Bongaigaon",
+        "addr": "Bongaigaon, Assam, India",
+        "state": "Assam",
+        "phone": "9435736111,\n8638480652",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [90.5667, 26.4667]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 21,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Barpeta",
+        "addr": "Barpeta, Assam, India",
+        "state": "Assam",
+        "phone": "6026704630",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [91.00632, 26.32293]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 22,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Baksa",
+        "addr": "Baksa, Assam, India",
+        "state": "Assam",
+        "phone": "3624295552,\n8724846530",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [91.72, 26.52]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 23,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Cachar",
+        "addr": "Cachar, Assam, India",
+        "state": "Assam",
+        "phone": "3842246892,\n7086021473",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [92.81, 24.84]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 25,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Chirang",
+        "addr": "Chirang, Assam, India",
+        "state": "Assam",
+        "phone": "3664243201,\n9401347035",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [90.647737, 26.64781]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 26,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Dhubri",
+        "addr": "Dhubri, Assam, India",
+        "state": "Assam",
+        "phone": "3662232180,\n8486038342",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [89.9667, 26.0333]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 27,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Dibrugarh",
+        "addr": "Dibrugarh, Assam, India",
+        "state": "Assam",
+        "phone": "3732329655,\n6002075019",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [95, 27.48333]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 28,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "",
+        "addr": "Dima Hasao Assam",
+        "state": "Assam",
+        "phone": "8638389873",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [72.96291031100381, 21.641871493827455]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 29,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Darrang",
+        "addr": "Darrang, Assam, India",
+        "state": "Assam",
+        "phone": "3713222213,\n8876603074",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [92.12, 26.51]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 30,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Dhemaji",
+        "addr": "Dhemaji, Assam, India",
+        "state": "Assam",
+        "phone": "9859916060,\n8876444412",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [94.58, 27.48]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 31,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Goalpara",
+        "addr": "Goalpara, Assam, India",
+        "state": "Assam",
+        "phone": "9435721514",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [90.62, 26.17]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 32,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Golaghat",
+        "addr": "Golaghat, Assam, India",
+        "state": "Assam",
+        "phone": "8134820114",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [93.96954, 26.50896]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 33,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "City Tyre Care Centre",
+        "addr": "City Tyre Care Centre, 1, Guwahati, Assam, India",
+        "state": "Assam",
+        "phone": "3612464557,\n9127801077,\n9127801078,\n100",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "coordinates": [91.756713, 26.184056],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 34,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Hamren",
+        "addr": "Hamren, Assam, India",
+        "state": "Assam",
+        "phone": "9401321286,\n8474834510",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [92.6083, 25.9233]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 35,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Hailakandi",
+        "addr": "Hailakandi, Assam, India",
+        "state": "Assam",
+        "phone": "3844222254,\n9864609954",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [92.57, 24.68]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 36,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Hojai Town No.2",
+        "addr": "Hojai Town No.2, Nagaon, Nagaon, Assam, India",
+        "state": "Assam",
+        "phone": "3674284172,\n6000924750",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [92.856, 26.0028]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 37,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Jorhat",
+        "addr": "Jorhat, Assam, India",
+        "state": "Assam",
+        "phone": "3762320018",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [94.21667, 26.75]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 38,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Karbi Anglong",
+        "addr": "Karbi Anglong, Assam, India",
+        "state": "Assam",
+        "phone": "3671272594,\n9365972436",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [93.5, 26]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 39,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Karimganj",
+        "addr": "Karimganj, Sylhet, India",
+        "state": "Assam",
+        "phone": "3843266101,\n9954399885",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [92.36667, 24.86667]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 40,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Kamrup Metro",
+        "addr": "Kamrup Metro, Assam, India",
+        "state": "Assam",
+        "phone": "3612684402,\n7578982561",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [92.018827, 26.072011]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 41,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Kokrajhar",
+        "addr": "Kokrajhar, Assam, India",
+        "state": "Assam",
+        "phone": "8811029100,\n8486356200",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [90.27, 26.4]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 42,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Lakhimpur",
+        "addr": "Lakhimpur, Assam, India",
+        "state": "Assam",
+        "phone": "3752223737,\n9435760899",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [94.25, 27.35]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 43,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Morigaon",
+        "addr": "Morigaon, Assam, India",
+        "state": "Assam",
+        "phone": "3678241161,\n9854102220",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [92.194349, 26.29226]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 44,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "",
+        "addr": "Majuli Assam",
+        "state": "Assam",
+        "phone": "6002628243,\n8011077752",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [74.09535049530224, 14.897123076660732]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 45,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Nagaon",
+        "addr": "Nagaon, Assam, India",
+        "state": "Assam",
+        "phone": "3672235620,\n8724915419",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [92.68333, 26.33333]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 46,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Nalbari",
+        "addr": "Nalbari, Assam, India",
+        "state": "Assam",
+        "phone": "3624220440,\n8811087224",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [91.43, 26.42]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 47,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Sadiya",
+        "addr": "Sadiya, Assam, India",
+        "state": "Assam",
+        "phone": "3756244005,\n9706556882",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [95.67, 27.83]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 48,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Sibsagar",
+        "addr": "Sibsagar, Assam, India",
+        "state": "Assam",
+        "phone": "3772222801,\n9435500597",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [94.63, 26.98]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 49,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "Sonitpur",
+        "addr": "Sonitpur, Assam, India",
+        "state": "Assam",
+        "phone": "3712232800,\n7086993898",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [92.8, 26.63]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": 50,
+        "name": "Government of Assam",
+        "desc": "District level government helpline number for COVID-19 assistance",
+        "geoTag": "",
+        "addr": "South Salmara Assam",
+        "state": "Assam",
+        "phone": "7635831151",
+        "contact": "https://twitter.com/airnews_ghy/status/1251021569104601088",
+        "priority": 0,
+        "icon": "police"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [77.55593734812672, 27.084912749626696]
       }
     }
   ]
