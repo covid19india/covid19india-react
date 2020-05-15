@@ -32,9 +32,9 @@ function FAQ(props) {
           name="title"
           content="Coronavirus Outbreak in India: Latest Map and Case Count"
         />
-    <div class="Header">
-              <h1>About</h1>
-            </div>
+    return {
+    return <div className='header'><h1>About</h1></div>;
+  }
       </Helmet>
       {faq.map((faq, index) => {
         return (
