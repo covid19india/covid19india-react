@@ -1,19 +1,14 @@
-import {
-  STATE_ROW_STATISTICS,
-  DISTRICT_ROW_STATISTICS,
-  LOCALE_SHORTHANDS,
-} from '../constants';
+import {STATE_ROW_STATISTICS, DISTRICT_ROW_STATISTICS} from '../constants';
 import {
   formatDate,
   formatNumber,
+  formatLastUpdated,
   capitalize,
   abbreviate,
 } from '../utils/commonfunctions';
 
 import classnames from 'classnames';
-import {formatDistance} from 'date-fns';
 import equal from 'fast-deep-equal';
-import i18n from 'i18next';
 import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
@@ -309,12 +304,8 @@ function Row({
               <p>
                 {isNaN(Date.parse(formatDate(state.lastupdatedtime)))
                   ? ''
-                  : `${t('Last updated')} ${formatDistance(
-                      new Date(formatDate(state.lastupdatedtime)),
-                      new Date(),
-                      {
-                        locale: LOCALE_SHORTHANDS[i18n.language],
-                      }
+                  : `${t('Last updated')} ${formatLastUpdated(
+                      state.lastupdatedtime
                     )} ${t('ago')}`}
               </p>
               {sortedDistricts?.Unknown && (
@@ -332,7 +323,7 @@ function Row({
                 history.push(`state/${state.statecode}`);
               }}
             >
-              {t('See more details on {{state}}', {state: state.state})}
+              {t('See more details on {{state}}', {state: t(state.state)})}
             </td>
           </tr>
 

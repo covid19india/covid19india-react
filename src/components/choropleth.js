@@ -6,6 +6,7 @@ import {capitalizeAll, formatNumber} from '../utils/commonfunctions';
 import * as d3 from 'd3';
 import React, {useCallback, useEffect, useRef} from 'react';
 import * as Icon from 'react-feather';
+import {useTranslation} from 'react-i18next';
 import * as topojson from 'topojson';
 
 function ChoroplethMap({
@@ -20,7 +21,7 @@ function ChoroplethMap({
 }) {
   const choroplethMap = useRef(null);
   const choroplethLegend = useRef(null);
-
+  const {t} = useTranslation();
   const mapMeta = MAP_META[currentMap.name];
 
   const ready = useCallback(
@@ -466,7 +467,9 @@ function ChoroplethMap({
         mapData[currentMap.name]?.Unknown[mapOption] ? (
           <div className="disclaimer">
             <Icon.AlertCircle />
-            {`District-wise ${mapOption} numbers are under reconciliation`}
+            {t('District-wise {{mapOption}} numbers are under reconciliation', {
+              mapOption: t(mapOption),
+            })}
           </div>
         ) : (
           ''

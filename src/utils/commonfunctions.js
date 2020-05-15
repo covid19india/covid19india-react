@@ -66,6 +66,12 @@ export const formatTimeseriesDate = (unformattedDate) => {
   });
 };
 
+export const formatTimeseriesTickX = (unformattedDate) => {
+  return format(unformattedDate, 'd MMM', {
+    locale: LOCALE_SHORTHANDS[i18n.language],
+  });
+};
+
 const validateCTS = (data = []) => {
   const dataTypes = [
     'dailyconfirmed',

@@ -162,6 +162,7 @@ function TimeSeriesExplorer({
             mode={timeseriesMode}
             logMode={timeseriesLogMode}
             isTotal={activeStateCode === 'TT'}
+            isIntersecting={isTimeseriesIntersecting}
           />
         )}
 
