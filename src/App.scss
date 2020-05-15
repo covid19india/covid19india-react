@@ -2461,7 +2461,7 @@ table {
 .tabs-map {
   display: flex;
   flex-direction: row;
-  margin-top: .5rem;
+  flex-wrap: wrap;
   position: relative;
   z-index: 99;
 
@@ -2486,7 +2486,8 @@ table {
     cursor: pointer;
     height: 2rem;
     margin-right: .25rem;
-    min-width: 2rem;
+    margin-top: .25rem;
+    min-width: 1.6rem;
     padding-left: 1rem;
     padding-right: 1rem;
     text-align: center;

@@ -48,7 +48,7 @@ function MapLegend({mapScale, statistic, mapStatistic, mapOption}) {
 
       const legend = svg
         .select('.circles')
-        .attr('transform', `translate(36,36)`)
+        .attr('transform', `translate(48,40)`)
         .attr('text-anchor', 'middle');
 
       legend

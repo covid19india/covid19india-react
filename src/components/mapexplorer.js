@@ -124,8 +124,8 @@ function MapExplorer({
           currentMapData = states.reduce((acc, state) => {
             acc[state.state] = {};
             dataTypes.forEach((dtype) => {
-              let typeCount = parseInt(
-                state[dtype !== 'deceased' ? dtype : 'deaths']) || 0;
+              let typeCount =
+                parseInt(state[dtype !== 'deceased' ? dtype : 'deaths']) || 0;
               if (currentMap.stat === MAP_STATISTICS.PER_MILLION)
                 typeCount = (1e6 * typeCount) / STATE_POPULATIONS[state.state];
               if (state.state !== 'Total') {
