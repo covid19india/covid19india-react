@@ -32,6 +32,9 @@ function FAQ(props) {
           name="title"
           content="Coronavirus Outbreak in India: Latest Map and Case Count"
         />
+    <div class="Header">
+              <h1>About</h1>
+            </div>
       </Helmet>
       {faq.map((faq, index) => {
         return (
@@ -40,9 +43,7 @@ function FAQ(props) {
             className="faq fadeInUp"
             style={{animationDelay: `${0.5 + index * 0.1}s`}}
           >
-            <div class="Header">
-              <h1>About</h1>
-            </div>
+            
             <h2 className="question">{faq.question}</h2>
             <h2
               className="answer"
