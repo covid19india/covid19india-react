@@ -3,12 +3,27 @@ import equal from 'fast-deep-equal';
 import React, {useEffect, useRef, useState} from 'react';
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.arrayKey, currProps.arrayKey)) return false;
+  if (!equal(prevProps.caseType, currProps.caseType)) return false;
   if (!equal(prevProps.timeseries, currProps.timeseries)) return false;
   return true;
 };
 
-function DeltaBarGraph({timeseries, arrayKey}) {
+const caseColor = (ctype, alpha = '') => {
+  switch (ctype) {
+    case 'dailyconfirmed':
+      return '#dc3545' + alpha;
+    case 'dailyactive':
+      return '#007bff' + alpha;
+    case 'dailyrecovered':
+      return '#28a745' + alpha;
+    case 'dailydeceased':
+      return '#6c757d' + alpha;
+    default:
+      return;
+  }
+};
+
+function DeltaBarGraph({timeseries, caseType}) {
   const [data, setData] = useState([]);
   const svgRef = useRef();
 
@@ -23,7 +38,7 @@ function DeltaBarGraph({timeseries, arrayKey}) {
     const width = +svg.attr('width');
     const height = +svg.attr('height');
 
-    const margin = {top: 50, right: 0, bottom: 50, left: 0};
+    const margin = {top: 50, right: 5, bottom: 50, left: 0};
     const chartRight = width - margin.right;
     const chartBottom = height - margin.bottom;
     const r = 5;
@@ -40,11 +55,11 @@ function DeltaBarGraph({timeseries, arrayKey}) {
       .domain([
         Math.min(
           0,
-          d3.min(data, (d) => d[arrayKey])
+          d3.min(data, (d) => d[caseType])
         ),
         Math.max(
           1,
-          d3.max(data, (d) => d[arrayKey])
+          d3.max(data, (d) => d[caseType])
         ),
       ])
       .range([chartBottom, margin.top]);
@@ -52,7 +67,6 @@ function DeltaBarGraph({timeseries, arrayKey}) {
     const xAxis = d3.axisBottom(xScale).tickSize(0);
 
     const t = svg.transition().duration(500);
-    svg.selectAll('.delta').remove();
     svg
       .select('.x-axis')
       .transition(t)
@@ -61,20 +75,9 @@ function DeltaBarGraph({timeseries, arrayKey}) {
       .on('start', () => svg.select('.domain').remove())
       .selectAll('text')
       .attr('y', 0)
-      .attr('dy', (d, i) => (data[i][arrayKey] < 0 ? '-1.5em' : '1.5em'))
+      .attr('dy', (d, i) => (data[i][caseType] < 0 ? '-1em' : '1.5em'))
       .style('text-anchor', 'middle')
-      .attr('fill', (d, i) => {
-        switch (arrayKey) {
-          case 'dailyconfirmed':
-            return '#dc3545';
-          case 'dailyrecovered':
-            return '#28a745';
-          case 'dailyactive':
-            return '#0479fb';
-          default:
-            return '#6c757d';
-        }
-      });
+      .attr('fill', caseColor(caseType));
 
     svg
       .selectAll('.bar')
@@ -87,44 +90,44 @@ function DeltaBarGraph({timeseries, arrayKey}) {
           xScale(formatTime(d.date)),
           yScale(0),
           xScale.bandwidth(),
-          yScale(0) - yScale(d[arrayKey]),
+          yScale(0) - yScale(d[caseType]),
           r
         )
       )
       .attr('fill', (d, i) => {
-        if (arrayKey === 'dailyconfirmed')
-          return i < data.length - 1 ? '#dc354590' : '#dc3545';
-        else if (arrayKey === 'dailyrecovered')
-          return i < data.length - 1 ? '#28a74590' : '#28a745';
-        else if (arrayKey === 'dailyactive')
-          return i < data.length - 1 ? '#007bff90' : '#007bff';
-        else return i < data.length - 1 ? '#6c757d90' : '#6c757d';
-      })
-      .on('end', () =>
-        svg
-          .selectAll('.delta')
-          .data(arrayKey === 'dailyconfirmed' ? data : [])
-          .join('text')
-          .attr('class', 'delta')
-          .attr('text-anchor', 'middle')
-          .attr('font-size', '11px')
-          .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
-          .attr('y', (d) => yScale(d[arrayKey]) - 6)
-          .text((d) => d[arrayKey])
-          .append('tspan')
-          .attr('class', 'percent')
-          .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
-          .attr('dy', '-1.2em')
-          .text((d, i) =>
-            i && data[i - 1][arrayKey]
-              ? d3.format('+.1%')(
-                  (data[i][arrayKey] - data[i - 1][arrayKey]) /
-                    data[i - 1][arrayKey]
-                )
-              : ''
-          )
-      );
-  }, [data, arrayKey]);
+        return i < data.length - 1
+          ? caseColor(caseType, '90')
+          : caseColor(caseType);
+      });
+
+    const textSelection = svg
+      .selectAll('.label')
+      .data(data)
+      .join('text')
+      .attr('class', 'label')
+      .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
+      .text((d) => d[caseType]);
+
+    textSelection
+      .transition(t)
+      .attr('fill', caseColor(caseType))
+      .attr('y', (d) => yScale(d[caseType]) + (d[caseType] < 0 ? 15 : -6));
+
+    textSelection
+      .append('tspan')
+      .attr('dy', (d) => `${d[caseType] < 0 ? 1.2 : -1.2}em`)
+      .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
+      .text((d, i) =>
+        i && data[i - 1][caseType]
+          ? d3.format('+.1~%')(
+              (data[i][caseType] - data[i - 1][caseType]) /
+                data[i - 1][caseType]
+            )
+          : ''
+      )
+      .transition(t)
+      .attr('fill', caseColor(caseType, '90'));
+  }, [data, caseType]);
 
   return (
     <div className="DeltaBarGraph fadeInUp" style={{animationDelay: '0.8s'}}>

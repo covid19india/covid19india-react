@@ -460,7 +460,7 @@ function State(props) {
                     {
                       <DeltaBarGraph
                         timeseries={timeseries.slice(-5)}
-                        arrayKey={`daily${mapOption}`}
+                        caseType={`daily${mapOption}`}
                       />
                     }
                   </div>
