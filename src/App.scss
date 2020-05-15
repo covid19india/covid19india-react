@@ -1991,6 +1991,7 @@ table {
   right: 0;
   transform: rotate(45deg);
   transition: all .1s ease-in-out;
+  z-index: 999;
 
   svg {
     stroke: $gray-mid;
@@ -3135,8 +3136,8 @@ footer {
   align-self: center;
   display: flex;
   flex-direction: column;
-  margin-left: 5rem;
-  width: calc(100% - 5rem);
+  margin-left: 6rem;
+  width: calc(100% - 6rem);
 
 
   .select {
