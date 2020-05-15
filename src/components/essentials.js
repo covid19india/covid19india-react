@@ -109,8 +109,7 @@ const Essentials = (props) => {
             <Icon.AlertOctagon size={16} />
             <div className="alert-right is-full">
               {`We do not collect any location data; they're all stored 
-              inside your browser and are inaccessible to us. 
-              you.`}
+              inside your browser and are inaccessible to us.`}
             </div>
           </div>
           <div className="alert fadeInUp" style={{animationDelay: '0.8s'}}>
