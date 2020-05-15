@@ -7,7 +7,7 @@ assignees: ''
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+A clear and concise description of what the bug is. If your issue is regarding an error in the data, it's best reported through [this form](https://forms.gle/MLeSrdwRuf8AjFkp9).
 
 **To Reproduce**
 Steps to reproduce the behavior:
