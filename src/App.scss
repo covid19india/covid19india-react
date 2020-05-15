@@ -486,7 +486,7 @@ h6 {
     }
 
     .svg-parent {
-      &:not(.legend) {
+      &:not(.maplegend) {
         height: 400px;
         width: 100%;
 
@@ -1351,6 +1351,7 @@ h6 {
   margin-bottom: auto;
   margin-top: .25rem;
   text-align: right;
+  width: 10rem;
 
   h6 {
     color: $green-mid;
@@ -2041,16 +2042,25 @@ table {
   }
 
   .svg-parent {
-    display: flex;
-    flex-direction: row;
+    display: block;
     margin: auto;
     margin-top: 2rem;
     overflow: hidden;
     width: 90%;
 
+    &.maplegend {
+      margin-top: .6rem;
+      overflow: visible;
+      width: 100%;
+    }
+
     svg {
       align-self: center;
       width: 100%;
+
+      &#legend {
+        overflow: visible;
+      }
 
       text {
         fill: $gray;
@@ -2060,20 +2070,6 @@ table {
         text-align: right;
       }
     }
-  }
-
-  .legend {
-    margin-top: 1em;
-    width: 100%;
-
-    svg {
-      display: block;
-      overflow: visible;
-    }
-  }
-
-  .map-hover {
-    stroke-width: 2;
   }
 
   .back-button {
@@ -2462,7 +2458,7 @@ table {
 .tabs-map {
   display: flex;
   flex-direction: row;
-  margin-top: .5rem;
+  flex-wrap: wrap;
   position: relative;
   z-index: 99;
 
@@ -2487,7 +2483,8 @@ table {
     cursor: pointer;
     height: 2rem;
     margin-right: .25rem;
-    min-width: 2rem;
+    margin-top: .25rem;
+    min-width: 1.6rem;
     padding-left: 1rem;
     padding-right: 1rem;
     text-align: center;
@@ -4702,10 +4699,6 @@ footer {
     }
   }
 
-  .last-update {
-    width: 10rem;
-  }
-
   a {
     &.button {
       display: flex;
@@ -5031,7 +5024,7 @@ footer {
       }
     }
 
-    .legend {
+    .maplegend {
       background: #161625 !important;
     }
 

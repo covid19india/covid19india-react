@@ -71,9 +71,8 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
 
   const graphData = useCallback(
     (timeseries) => {
-      if (!dimensions) return;
-      const width = dimensions.width;
-      const height = dimensions.height;
+      const {width, height} =
+        dimensions || wrapperRef.current.getBoundingClientRect();
 
       // Margins
       const margin = {top: 15, right: 35, bottom: 25, left: 25};
@@ -380,12 +379,6 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
                 .y((d) => yScale(d[typeTotal]))
                 .curve(d3.curveMonotoneX)
             );
-          // Using d3-interpolate-path
-          // .attrTween('d', function (d) {
-          //   var previous = path.attr('d');
-          //   var current = line(d);
-          //   return interpolatePath(previous, current);
-          // });
         } else {
           /* DAILY TRENDS */
           svg.selectAll('.trend').remove();

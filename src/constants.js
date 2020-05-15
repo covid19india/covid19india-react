@@ -23,6 +23,7 @@ export const MAP_STATISTICS = {
   TOTAL: 0,
   PER_MILLION: 1,
   ZONE: 2,
+  HOTSPOTS: 3,
 };
 
 export const MAP_VIEWS = {
