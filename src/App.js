@@ -1,4 +1,3 @@
-import Home from './components/home';
 import Navbar from './components/navbar';
 import ScrollToTop from './utils/ScrollToTop';
 
@@ -12,14 +11,26 @@ import {
   Switch,
 } from 'react-router-dom';
 import {useLocalStorage, useEffectOnce} from 'react-use';
-
 import './App.scss';
 
-const DeepDive = lazy(() => import('./components/deepdive'));
-const FAQ = lazy(() => import('./components/faq'));
-const PatientDB = lazy(() => import('./components/patientdb'));
-const State = lazy(() => import('./components/state'));
-const Essentials = lazy(() => import('./components/essentials'));
+const Home = lazy(() =>
+  import('./components/home' /* webpackChunkName: "Home" */)
+);
+const DeepDive = lazy(() =>
+  import('./components/deepdive' /* webpackChunkName: "DeepDive" */)
+);
+const FAQ = lazy(() =>
+  import('./components/faq' /* webpackChunkName: "FAQ" */)
+);
+const Demographics = lazy(() =>
+  import('./components/demographics' /* webpackChunkName: "PatientDB" */)
+);
+const State = lazy(() =>
+  import('./components/state' /* webpackChunkName: "State" */)
+);
+const Essentials = lazy(() =>
+  import('./components/essentials' /* webpackChunkName: "Essentials" */)
+);
 
 const schemaMarkup = {
   '@context': 'http://schema.org/',
@@ -43,7 +54,7 @@ function App() {
     },
     {
       pageLink: '/demographics',
-      view: PatientDB,
+      view: Demographics,
       displayName: t('Demographics'),
       animationDelayForNavbar: 0.3,
       showInNavbar: true,
@@ -118,7 +129,7 @@ function App() {
         <Suspense fallback={<div className="lazy"></div>}>
           <Route
             render={({location}) => (
-              <div className="Almighty-Router">
+              <React.Fragment>
                 <Navbar
                   pages={pages}
                   darkMode={darkMode}
@@ -139,7 +150,7 @@ function App() {
                   })}
                   <Redirect to="/" />
                 </Switch>
-              </div>
+              </React.Fragment>
             )}
           />
         </Suspense>

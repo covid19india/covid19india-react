@@ -316,3 +316,22 @@ export const STATE_POPULATIONS = {
   'West Bengal': 96906000,
   Total: 1332900000,
 };
+
+export const RAW_DATA_PARTITIONS = {
+  v1: {
+    start: new Date(2020, 0, 1),
+    end: new Date(2020, 3, 19),
+  },
+  v2: {
+    start: new Date(2020, 3, 20),
+    end: new Date(2020, 3, 26),
+  },
+  v3: {
+    start: new Date(2020, 3, 27),
+    end: new Date(2020, 4, 9),
+  },
+  v4: {
+    start: new Date(2020, 4, 10),
+    end: new Date(),
+  },
+};

@@ -110,22 +110,9 @@ h6 {
 }
 
 .App {
-  min-height: 100vh;
-}
-
-.switch-wrapper {
-  position: relative;
-}
-
-.switch-wrapper > div {
-  position: absolute;
-  transition: all .25s ease-in-out;
-  width: 100%;
-}
-
-.Almighty-Router {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
 .arrow-up {
@@ -3131,12 +3118,12 @@ footer {
   }
 }
 
-.PatientsDB {
+.Demographics {
   align-self: center;
   display: flex;
   flex-direction: column;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 5rem;
+  width: calc(100% - 5rem);
 
 
   .select {
