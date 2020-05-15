@@ -493,7 +493,7 @@ function MapExplorer({
             className="button back-button"
             onClick={() => switchMapToState('India')}
           >
-            Back
+            {t('Back')}
           </div>
         ) : null}
 

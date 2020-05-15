@@ -4,6 +4,7 @@ import {
   sliceTimeseriesFromEnd,
   formatNumber,
   formatTimeseriesDate,
+  formatTimeseriesTickX,
 } from '../utils/commonfunctions';
 import {useResizeObserver} from '../utils/hooks';
 
@@ -105,7 +106,14 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
       const numTicksX = width < 480 ? 4 : 7;
 
       const xAxis = (g) =>
-        g.attr('class', 'x-axis').call(d3.axisBottom(xScale).ticks(numTicksX));
+        g.attr('class', 'x-axis').call(
+          d3
+            .axisBottom(xScale)
+            .ticks(numTicksX)
+            .tickFormat((tick) => {
+              return formatTimeseriesTickX(tick);
+            })
+        );
 
       const xAxis2 = (g, yScale) => {
         g.attr('class', 'x-axis2')
