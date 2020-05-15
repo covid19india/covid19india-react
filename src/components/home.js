@@ -171,6 +171,10 @@ function Home(props) {
             name="title"
             content="Coronavirus Outbreak in India: Latest Map and Case Count"
           />
+          <meta
+            name="keywords"
+            content="covid19,coronavirus,corona tracker,corona updates,corona india" 
+          />  
         </Helmet>
 
         <div className="home-left">
