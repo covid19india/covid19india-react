@@ -296,18 +296,12 @@ function ChoroplethMap({
         };
         setRegionHighlighted(region);
       })
-      .on('mouseleave', (d) => {
-        if (onceTouchedRegion === d) onceTouchedRegion = null;
-      })
-      .on('touchstart', (d) => {
-        if (onceTouchedRegion === d) onceTouchedRegion = null;
-        else onceTouchedRegion = d;
-      })
       .on('click', () => {
         d3.event.stopPropagation();
       })
       .transition(t)
-      .attr('fill', caseColor(mapOption, '40'))
+      .attr('fill-opacity', 0.5)
+      .attr('fill', caseColor(mapOption, '90'))
       .attr('stroke', caseColor(mapOption, '90'))
       .attr('r', (d) => mapScale(d.value));
 
@@ -399,31 +393,47 @@ function ChoroplethMap({
 
   const highlightRegionInMap = useCallback(
     (region) => {
-      const paths = d3.selectAll('.path-region');
-      paths.attr('stroke', null);
-      paths.classed('map-hover', (d, i, nodes) => {
-        if (
-          region.district === d.properties?.district &&
-          region.state === d.properties.st_nm
-        ) {
-          nodes[i].parentNode.appendChild(nodes[i]);
-          d3.select(nodes[i]).attr('stroke', function (d) {
-            if (currentMap.stat === MAP_STATISTICS.ZONE) return '#343a40';
-            else
-              return d3.select(this).classed('confirmed')
-                ? caseColor('confirmed')
-                : d3.select(this).classed('active')
-                ? caseColor('active')
-                : d3.select(this).classed('recovered')
-                ? caseColor('recovered')
-                : d3.select(this).classed('deceased')
-                ? caseColor('deceased')
-                : null;
+      const svg = d3.select(svgRef.current);
+      if (currentMap.stat === MAP_STATISTICS.HOTSPOTS) {
+        svg
+          .select('.circles')
+          .selectAll('circle')
+          .attr('fill-opacity', (d) => {
+            return region?.district &&
+              region.state === d.properties.st_nm &&
+              (region?.district === d.properties.district ||
+                (region?.district === 'Unknown' && !d.properties.district))
+              ? 1.0
+              : 0.5;
           });
-          return true;
-        }
-        return false;
-      });
+      } else {
+        svg
+          .selectAll('.path-region')
+          .attr('stroke', null)
+          .classed('map-hover', (d, i, nodes) => {
+            if (
+              region.district === d.properties?.district &&
+              region.state === d.properties.st_nm
+            ) {
+              nodes[i].parentNode.appendChild(nodes[i]);
+              d3.select(nodes[i]).attr('stroke', function (d) {
+                if (currentMap.stat === MAP_STATISTICS.ZONE) return '#343a40';
+                else
+                  return d3.select(this).classed('confirmed')
+                    ? caseColor('confirmed')
+                    : d3.select(this).classed('active')
+                    ? caseColor('active')
+                    : d3.select(this).classed('recovered')
+                    ? caseColor('recovered')
+                    : d3.select(this).classed('deceased')
+                    ? caseColor('deceased')
+                    : null;
+              });
+              return true;
+            }
+            return false;
+          });
+      }
     },
     [currentMap.stat]
   );
