@@ -4646,7 +4646,8 @@ footer {
   .updates,
   .map-switcher,
   .updates-header,
-  .StateMeta {
+  .StateMeta,
+  .Essentials {
     width: calc(100% - 2rem);
   }
 
@@ -4915,6 +4916,12 @@ footer {
 
     .select-menu-item {
       width: 10rem !important;
+    }
+  }
+
+  .Essentials {
+    .alert {
+      width: 15rem !important;
     }
   }
 }
