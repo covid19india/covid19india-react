@@ -5,7 +5,7 @@ import {useResizeObserver} from '../utils/hooks';
 import * as d3 from 'd3';
 import React, {useEffect, useRef} from 'react';
 
-function MapLegend({colorScale, statistic, mapStatistic, mapOption}) {
+function MapLegend({mapScale, statistic, mapStatistic, mapOption}) {
   const svgRef = useRef(null);
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
@@ -19,7 +19,7 @@ function MapLegend({colorScale, statistic, mapStatistic, mapOption}) {
       svg.call(() =>
         legend({
           svg: svg,
-          color: colorScale,
+          color: mapScale,
           width: width,
           height: height,
           tickValues: [],
@@ -28,11 +28,52 @@ function MapLegend({colorScale, statistic, mapStatistic, mapOption}) {
           ordinalWeights: Object.values(statistic),
         })
       );
+    } else if (mapStatistic === MAP_STATISTICS.HOTSPOTS) {
+      const t = svg.transition().duration(500);
+      svg
+        .select('.ramp')
+        .transition(t)
+        .attr('opacity', 0)
+        .attr('xlink:href', null);
+
+      svg
+        .select('.bars')
+        .selectAll('rect')
+        .transition(t)
+        .attr('opacity', 0)
+        .remove();
+      svg.selectAll('.axis > *').remove();
+
+      const maxRadius = mapScale.domain()[1];
+
+      const legend = svg
+        .select('.circles')
+        .attr('transform', `translate(36,36)`)
+        .attr('text-anchor', 'middle');
+
+      legend
+        .selectAll('circle')
+        .data([maxRadius / 10, (maxRadius * 2) / 5, maxRadius])
+        .join('circle')
+        .attr('fill', 'none')
+        .attr('stroke', '#ccc')
+        .transition(t)
+        .attr('cy', (d) => -mapScale(d))
+        .attr('r', mapScale);
+
+      legend
+        .selectAll('text')
+        .data([maxRadius / 10, (maxRadius * 2) / 5, maxRadius])
+        .join('text')
+        .attr('dy', '1.3em')
+        .transition(t)
+        .attr('y', (d) => -2 * mapScale(d))
+        .text(d3.format('.1s'));
     } else {
       svg.call(() =>
         legend({
           svg: svg,
-          color: colorScale,
+          color: mapScale,
           title:
             capitalizeAll(mapOption) +
             (mapStatistic === MAP_STATISTICS.PER_MILLION
@@ -57,12 +98,14 @@ function MapLegend({colorScale, statistic, mapStatistic, mapOption}) {
 
   return (
     <div
-      className="svg-parent legend fadeInUp"
+      className="svg-parent maplegend fadeInUp"
       style={{animationDelay: '2.5s', height: 50}}
       ref={wrapperRef}
     >
       <svg id="legend" preserveAspectRatio="xMidYMid meet" ref={svgRef}>
         <image className="ramp" />
+        <g className="bars"></g>
+        <g className="circles"></g>
         <g className="axis">
           <text className="axistext" />
         </g>
@@ -93,6 +136,7 @@ function legend({
   tickValues,
   ordinalWeights,
 } = {}) {
+  svg.selectAll('.circles > *').remove();
   const t = svg.transition().duration(500);
 
   let tickAdjust = (g) => {
@@ -130,7 +174,12 @@ function legend({
 
   // Sequential
   else if (color.interpolator) {
-    svg.selectAll('rect').transition(t).attr('opacity', 0);
+    svg
+      .select('.bars')
+      .selectAll('rect')
+      .transition(t)
+      .attr('opacity', 0)
+      .remove();
 
     x = Object.assign(
       color
@@ -246,6 +295,7 @@ function legend({
       x = d3.scaleOrdinal().domain(color.domain()).range(xPos);
 
       svg
+        .select('.bars')
         .selectAll('rect')
         .data(color.domain())
         .join((enter) =>
