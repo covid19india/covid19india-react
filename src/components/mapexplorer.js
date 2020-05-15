@@ -49,10 +49,6 @@ const getRegionFromDistrict = (districtData, name) => {
   return region;
 };
 
-const isDistrict = (region) => {
-  return 'district' in region;
-};
-
 function MapExplorer({
   mapName,
   states,
@@ -218,12 +214,16 @@ function MapExplorer({
         state = states.find((state) => state.state === 'Total');
       return [district, state];
     }
-  }, [states, districts, currentMapMeta.mapType, regionHighlighted]);
+  }, [
+    states,
+    districts,
+    currentMapMeta.mapType,
+    regionHighlighted.state,
+    regionHighlighted.district,
+  ]);
 
   useEffect(() => {
-    if (regionHighlighted === undefined || regionHighlighted === null) return;
-
-    if (isDistrict(regionHighlighted)) {
+    if (regionHighlighted.district) {
       if (
         currentMap.name !== regionHighlighted.state &&
         !(
@@ -255,7 +255,13 @@ function MapExplorer({
         stat: currentMap.stat,
       });
     }
-  }, [isCountryLoaded, regionHighlighted, currentMap, currentMapMeta.mapType]);
+  }, [
+    isCountryLoaded,
+    regionHighlighted.state,
+    regionHighlighted.district,
+    currentMap,
+    currentMapMeta.mapType,
+  ]);
 
   const switchMapToState = useCallback(
     (state) => {
@@ -498,7 +504,7 @@ function MapExplorer({
           (currentMapMeta.mapType === MAP_TYPES.COUNTRY &&
             currentMap.stat !== MAP_STATISTICS.TOTAL)) &&
         (currentMap.stat !== MAP_STATISTICS.HOTSPOTS ||
-          isDistrict(hoveredRegion)) ? (
+          hoveredRegion?.district) ? (
           <h1
             className={`district ${mapOption !== 'confirmed' ? mapOption : ''}`}
           >
