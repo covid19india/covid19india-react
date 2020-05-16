@@ -9,7 +9,7 @@ import ReactTooltip from 'react-tooltip';
 
 function StateMeta({
   stateData,
-  lastTestObject,
+  testObject,
   population,
   lastSevenDaysData,
   totalData,
@@ -26,7 +26,7 @@ function StateMeta({
   const recoveryPercent = (recovered / confirmed) * 100;
   const activePercent = (active / confirmed) * 100;
   const deathPercent = (deaths / confirmed) * 100;
-  const testPerMillion = (lastTestObject?.totaltested / population) * 1000000;
+  const testPerMillion = (testObject?.totaltested / population) * 1000000;
   const growthRate =
     ((previousDayData - sevenDayBeforeData) / sevenDayBeforeData) * 100;
   const totalConfirmedPerMillion =
@@ -35,10 +35,10 @@ function StateMeta({
   // growthRate > 0 ? (70 / Math.round(growthRate)).toFixed(2) : 0;
 
   const updatedDate = !isNaN(
-    parse(lastTestObject?.updatedon, 'dd/MM/yyyy', new Date())
+    parse(testObject?.updatedon, 'dd/MM/yyyy', new Date())
   )
     ? `As of ${format(
-        parse(lastTestObject?.updatedon, 'dd/MM/yyyy', new Date()),
+        parse(testObject?.updatedon, 'dd/MM/yyyy', new Date()),
         'dd MMM'
       )}`
     : '';
@@ -104,7 +104,7 @@ function StateMeta({
           title={'Recovery Rate'}
           statistic={`${recoveryPercent.toFixed(2)}%`}
           formula={'(recovered / confirmed) * 100'}
-          description={`For every 100 confirmed cases, 
+          description={`For every 100 confirmed cases,
             ${Math.round(
               recoveryPercent.toFixed(0)
             )} have recovered from the virus.`}
@@ -115,7 +115,7 @@ function StateMeta({
           title={'Mortality Rate'}
           statistic={`${deathPercent.toFixed(2)}%`}
           formula={'(deceased / confirmed) * 100'}
-          description={`For every 100 confirmed cases, 
+          description={`For every 100 confirmed cases,
             ${Math.round(
               deathPercent.toFixed(0)
             )} have unfortunately passed away from the virus.`}
@@ -161,14 +161,14 @@ function StateMeta({
             </span>
           </div>
           <h1>
-            {lastTestObject?.testpositivityrate
-              ? lastTestObject.testpositivityrate
+            {testObject?.testpositivityrate
+              ? testObject.testpositivityrate
               : 'N/A'}
           </h1>
           {updatedDate}
           <p>
-            {lastTestObject?.testpositivityrate
-              ? `Out the of total tests conducted till date month, ${lastTestObject.testpositivityrate}% were positive for the virus`
+            {testObject?.testpositivityrate
+              ? `Out the of total tests conducted till date month, ${testObject.testpositivityrate}% were positive for the virus`
               : 'N/A'}
           </p>
         </div>*/}

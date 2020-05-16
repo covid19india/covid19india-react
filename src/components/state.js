@@ -13,6 +13,7 @@ import {
   formatNumber,
   mergeTimeseries,
   parseStateTimeseries,
+  parseStateTestData,
   parseStateTestTimeseries,
   parseDistrictZones,
 } from '../utils/commonfunctions';
@@ -82,12 +83,12 @@ function State(props) {
   });
 
   useEffectOnce(() => {
-    getState(stateCode);
+    getState();
   });
 
   const {t} = useTranslation();
 
-  const getState = async (code) => {
+  const getState = async () => {
     try {
       const [
         {data: dataResponse},
@@ -104,32 +105,31 @@ function State(props) {
         axios.get('https://api.covid19india.org/sources_list.json'),
         axios.get('https://api.covid19india.org/zones.json'),
       ]);
-      const name = STATE_CODES[code];
-
       const states = dataResponse.statewise;
-      setAllStateData(states.filter((state) => state.statecode !== code));
-      setStateData([states.find((s) => s.statecode === code)]);
+      setAllStateData(states.filter((state) => state.statecode !== stateCode));
+      setStateData([states.find((s) => s.statecode === stateCode)]);
       // Timeseries
-      const ts = parseStateTimeseries(statesDailyResponse)[code];
+      const ts = parseStateTimeseries(statesDailyResponse)[stateCode];
       const testTs = parseStateTestTimeseries(
         stateTestResponse.states_tested_data
-      )[code];
+      )[stateCode];
       // Merge
-      const tsMerged = mergeTimeseries({[code]: ts}, {[code]: testTs});
-      setTimeseries(tsMerged[code]);
+      const tsMerged = mergeTimeseries(
+        {[stateCode]: ts},
+        {[stateCode]: testTs}
+      );
+      setTimeseries(tsMerged[stateCode]);
       // District data
       setDistrictData({
-        [name]: stateDistrictWiseResponse[name],
+        [stateName]: stateDistrictWiseResponse[stateName],
       });
       const sourceList = sourcesResponse.sources_list;
-      setSources(sourceList.filter((state) => state.statecode === code));
+      setSources(sourceList.filter((state) => state.statecode === stateCode));
 
-      const statesTests = stateTestResponse.states_tested_data;
-      setTestData(
-        statesTests.filter(
-          (obj) => obj.state === name && obj.totaltested !== ''
-        )
+      const stateTestData = parseStateTestData(
+        stateTestResponse.states_tested_data
       );
+      setTestData({[stateName]: stateTestData[stateName]});
 
       setDistrictZones(parseDistrictZones(zonesResponse.zones, stateName));
 
@@ -156,7 +156,7 @@ function State(props) {
     }
   };
 
-  const testObjLast = testData[testData.length - 1];
+  const testObj = testData[stateName];
   const population = STATE_POPULATIONS[stateName];
 
   function toggleShowAllDistricts() {
@@ -217,21 +217,19 @@ function State(props) {
                 style={{animationDelay: '0.5s'}}
               >
                 <h5>{t('Tested')}</h5>
-                <h2>{formatNumber(testObjLast?.totaltested)}</h2>
+                <h2>{formatNumber(testObj?.totaltested)}</h2>
                 <h5 className="timestamp">
-                  {!isNaN(
-                    parse(testObjLast?.updatedon, 'dd/MM/yyyy', new Date())
-                  )
+                  {!isNaN(parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()))
                     ? `As of ${format(
-                        parse(testObjLast?.updatedon, 'dd/MM/yyyy', new Date()),
+                        parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
                         'dd MMM'
                       )}`
                     : ''}
                 </h5>
                 <h5>
                   {'per '}
-                  {testObjLast?.totaltested && (
-                    <a href={testObjLast.source} target="_noblank">
+                  {testObj?.totaltested && (
+                    <a href={testObj?.source} target="_noblank">
                       source
                     </a>
                   )}
@@ -348,7 +346,7 @@ function State(props) {
             {fetched && (
               <StateMeta
                 stateData={stateData[0]}
-                lastTestObject={testObjLast}
+                testObject={testObj}
                 population={population}
                 lastSevenDaysData={timeseries.slice(-7)}
                 totalData={allStateData.filter(

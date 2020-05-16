@@ -14,6 +14,7 @@ import {
   mergeTimeseries,
   preprocessTimeseries,
   parseStateTimeseries,
+  parseStateTestData,
   parseStateTestTimeseries,
   parseTotalTestTimeseries,
   parseDistrictZones,
@@ -124,14 +125,13 @@ function Home(props) {
 
       setLastUpdated(data.statewise[0].lastupdatedtime);
 
-      const testData = [...stateTestData.states_tested_data].reverse();
+      const testData = parseStateTestData(stateTestData.states_tested_data);
       const totalTest = data.tested[data.tested.length - 1];
-      testData.push({
-        updatedon: totalTest.updatetimestamp.split(' ')[0],
-        totaltested: totalTest.totalsamplestested,
+      testData['Total'] = {
         source: totalTest.source,
-        state: 'Total',
-      });
+        totaltested: totalTest.totalsamplestested,
+        updatedon: totalTest.updatetimestamp.split(' ')[0],
+      };
       setStateTestData(testData);
 
       setStateDistrictWiseData(stateDistrictWiseResponse);

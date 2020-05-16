@@ -168,6 +168,21 @@ export const parseStateTimeseries = ({states_daily: data}) => {
   return statewiseSeries;
 };
 
+export const parseStateTestData = (data) => {
+  const reversed = [...data].reverse();
+  return Object.keys(STATE_CODES_REVERSE).reduce((ret, state) => {
+    const obj = reversed.find(
+      (obj) => obj.state === state && obj.totaltested !== ''
+    );
+    ret[state] = {
+      source: obj?.source1 || obj?.source2,
+      totaltested: obj?.totaltested,
+      updatedon: obj?.updatedon,
+    };
+    return ret;
+  }, {});
+};
+
 export const parseStateTestTimeseries = (data) => {
   const testTimseries = Object.keys(STATE_CODES).reduce((ret, sc) => {
     ret[sc] = [];

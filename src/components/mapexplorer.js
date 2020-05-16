@@ -311,13 +311,7 @@ function MapExplorer({
     [currentMap.stat, districts, setRegionHighlighted]
   );
 
-  const testObj = useMemo(
-    () =>
-      stateTestData.find(
-        (obj) => obj.state === panelRegion.state && obj.totaltested !== ''
-      ),
-    [stateTestData, panelRegion]
-  );
+  const testObj = stateTestData[panelRegion.state];
 
   let hoveredRegionCount;
   let hoveredRegionZone;
@@ -450,7 +444,7 @@ function MapExplorer({
               : ''}
           </h6>
           {testObj?.totaltested?.length > 1 && (
-            <a href={testObj.source || testObj.source1} target="_noblank">
+            <a href={testObj.source} target="_noblank">
               <Icon.Link />
             </a>
           )}
