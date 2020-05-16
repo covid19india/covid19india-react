@@ -4610,10 +4610,6 @@ footer {
     }
   }
 
-  .PatientsDB {
-    margin-left: 5rem;
-  }
-
   .dark-mode {
     .Navbar,
     .expand {
@@ -4754,7 +4750,8 @@ footer {
     }
   }
 
-  .PatientsDB {
+  .Demographics {
+    margin-left: 0;
     width: 100%;
 
     .select {
@@ -4798,6 +4795,7 @@ footer {
     }
 
     .filters {
+      align-self: center;
       height: auto;
       justify-content: center;
       padding: .5rem;
@@ -5198,7 +5196,7 @@ footer {
     }
   }
 
-  .PatientsDB {
+  .Demographics {
     .filters {
       background: #1e1e30 !important;
       box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .12), inset 0 -1px 0 0 #1e1e30;
