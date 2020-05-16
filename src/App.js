@@ -127,32 +127,31 @@ function App() {
       <Router>
         <ScrollToTop />
         <Suspense fallback={<div className="lazy"></div>}>
-          <Route
-            render={({location}) => (
-              <React.Fragment>
-                <Navbar
-                  pages={pages}
-                  darkMode={darkMode}
-                  setDarkMode={setDarkMode}
-                />
-                <Switch location={location}>
-                  {pages.map((page, index) => {
-                    return (
-                      <Route
-                        exact
-                        path={page.pageLink}
-                        render={({match}) => (
-                          <page.view key={match.params.stateCode || index} />
-                        )}
-                        key={index}
+          <div className="Almighty-Router">
+            <Navbar
+              pages={pages}
+              darkMode={darkMode}
+              setDarkMode={setDarkMode}
+            />
+            <Switch>
+              {pages.map((page, index) => {
+                return (
+                  <Route
+                    exact
+                    path={page.pageLink}
+                    render={({match}) => (
+                      <page.view
+                        stuff={match}
+                        key={match.params.stateCode || index}
                       />
-                    );
-                  })}
-                  <Redirect to="/" />
-                </Switch>
-              </React.Fragment>
-            )}
-          />
+                    )}
+                    key={index}
+                  />
+                );
+              })}
+              <Redirect to="/" />
+            </Switch>
+          </div>
         </Suspense>
       </Router>
     </div>
