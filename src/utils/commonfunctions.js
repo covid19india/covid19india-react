@@ -1,21 +1,25 @@
-import {STATE_CODES} from '../constants';
+import {
+  STATE_CODES,
+  STATE_CODES_REVERSE,
+  LOCALE_SHORTHANDS,
+} from '../constants';
 
-import {parse, isBefore, isSameDay, startOfDay} from 'date-fns';
+import {
+  parse,
+  differenceInDays,
+  isBefore,
+  isSameDay,
+  startOfDay,
+  format,
+  formatDistance,
+} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
+import i18n from 'i18next';
 
-const months = {
-  '01': 'Jan',
-  '02': 'Feb',
-  '03': 'Mar',
-  '04': 'Apr',
-  '05': 'May',
-  '06': 'Jun',
-  '07': 'Jul',
-  '08': 'Aug',
-  '09': 'Sep',
-  '10': 'Oct',
-  '11': 'Nov',
-  '12': 'Dec',
+export const isDevelopmentOrTest = () => {
+  if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')
+    return true;
+  return false;
 };
 
 export const getStateName = (code) => {
@@ -35,10 +39,37 @@ export const formatDate = (unformattedDate) => {
 };
 
 export const formatDateAbsolute = (unformattedDate) => {
-  const day = unformattedDate.slice(0, 2);
-  const month = unformattedDate.slice(3, 5);
-  const time = unformattedDate.slice(11);
-  return `${day} ${months[month]}, ${time.slice(0, 5)} IST`;
+  return format(
+    parse(unformattedDate, 'dd/MM/yyyy HH:mm:ss', new Date()),
+    'dd MMM, hh:mm b',
+    {
+      locale: LOCALE_SHORTHANDS[i18n.language],
+    }
+  );
+};
+
+export const formatDayMonth = (unformattedDate) => {
+  return format(parse(unformattedDate, 'dd/MM/yyyy', new Date()), 'dd MMM', {
+    locale: LOCALE_SHORTHANDS[i18n.language],
+  });
+};
+
+export const formatLastUpdated = (unformattedDate) => {
+  return formatDistance(new Date(formatDate(unformattedDate)), new Date(), {
+    locale: LOCALE_SHORTHANDS[i18n.language],
+  });
+};
+
+export const formatTimeseriesDate = (unformattedDate) => {
+  return format(unformattedDate, 'dd MMMM', {
+    locale: LOCALE_SHORTHANDS[i18n.language],
+  });
+};
+
+export const formatTimeseriesTickX = (unformattedDate) => {
+  return format(unformattedDate, 'd MMM', {
+    locale: LOCALE_SHORTHANDS[i18n.language],
+  });
 };
 
 const validateCTS = (data = []) => {
@@ -138,11 +169,6 @@ export const parseStateTimeseries = ({states_daily: data}) => {
 };
 
 export const parseStateTestTimeseries = (data) => {
-  const stateCodeMap = Object.keys(STATE_CODES).reduce((ret, sc) => {
-    ret[STATE_CODES[sc]] = sc;
-    return ret;
-  }, {});
-
   const testTimseries = Object.keys(STATE_CODES).reduce((ret, sc) => {
     ret[sc] = [];
     return ret;
@@ -152,11 +178,21 @@ export const parseStateTestTimeseries = (data) => {
   data.forEach((d) => {
     const date = parse(d.updatedon, 'dd/MM/yyyy', new Date());
     const totaltested = +d.totaltested;
-    if (isBefore(date, today) && totaltested) {
-      const stateCode = stateCodeMap[d.state];
-      testTimseries[stateCode].push({
+    const stateCode = STATE_CODES_REVERSE[d.state];
+    if (stateCode && isBefore(date, today) && totaltested) {
+      const stateTs = testTimseries[stateCode];
+      let dailytested;
+      if (stateTs.length) {
+        const prev = stateTs[stateTs.length - 1];
+        dailytested =
+          differenceInDays(date, prev.date) === 1
+            ? totaltested - prev.totaltested
+            : NaN;
+      } else dailytested = NaN;
+      stateTs.push({
         date: date,
         totaltested: totaltested,
+        dailytested: dailytested,
       });
     }
   });
@@ -174,9 +210,22 @@ export const parseTotalTestTimeseries = (data) => {
     );
     const totaltested = +d.totalsamplestested;
     if (isBefore(date, today) && totaltested) {
+      let dailytested;
+      if (testTimseries.length) {
+        const prev = testTimseries[testTimseries.length - 1];
+        if (isSameDay(date, prev.date)) {
+          prev.dailytested += totaltested - prev.totaltested;
+          prev.totaltested = totaltested;
+        } else {
+          if (differenceInDays(date, prev.date) === 1)
+            dailytested = totaltested - prev.totaltested;
+          else dailytested = NaN;
+        }
+      } else dailytested = NaN;
       testTimseries.push({
         date: date,
         totaltested: totaltested,
+        dailytested: dailytested,
       });
     }
   });
@@ -191,10 +240,47 @@ export const mergeTimeseries = (ts1, ts2) => {
         const testData = ts2[state].find((d2) => isSameDay(d1.date, d2.date));
         return {
           totaltested: testData?.totaltested,
+          dailytested: testData?.dailytested,
           ...d1,
         };
       });
     }
   }
   return tsRet;
+};
+
+export const capitalize = (s) => {
+  if (typeof s !== 'string') return '';
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
+export const capitalizeAll = (s) => {
+  if (typeof s !== 'string') return '';
+  const str = s.toLowerCase().split(' ');
+  for (let i = 0; i < str.length; i++) {
+    str[i] = capitalize(str[i]);
+  }
+  return str.join(' ');
+};
+
+export const abbreviate = (s) => {
+  return s.slice(0, 1) + s.slice(1).replace(/[aeiou]/gi, '');
+};
+
+export const parseDistrictZones = (data, state) => {
+  const zones = data.reduce((ret, d) => {
+    ret[d.state] = ret[d.state] || {};
+    ret[d.state][d.district] = d;
+    return ret;
+  }, {});
+  Object.values(STATE_CODES).forEach((state) => {
+    if (!zones[state]) zones[state] = {};
+  });
+  return state ? {[state]: zones[state]} : zones;
+};
+
+export const toTitleCase = (str) => {
+  return str.replace(/\w\S*/g, function (txt) {
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  });
 };

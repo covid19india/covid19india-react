@@ -1,7 +1,29 @@
 import * as d3 from 'd3';
+import equal from 'fast-deep-equal';
 import React, {useEffect, useRef, useState} from 'react';
 
-function DeltaBarGraph({timeseries, arrayKey}) {
+const isEqual = (prevProps, currProps) => {
+  if (!equal(prevProps.caseType, currProps.caseType)) return false;
+  if (!equal(prevProps.timeseries, currProps.timeseries)) return false;
+  return true;
+};
+
+const caseColor = (ctype, alpha = '') => {
+  switch (ctype) {
+    case 'dailyconfirmed':
+      return '#dc3545' + alpha;
+    case 'dailyactive':
+      return '#007bff' + alpha;
+    case 'dailyrecovered':
+      return '#28a745' + alpha;
+    case 'dailydeceased':
+      return '#6c757d' + alpha;
+    default:
+      return;
+  }
+};
+
+function DeltaBarGraph({timeseries, caseType}) {
   const [data, setData] = useState([]);
   const svgRef = useRef();
 
@@ -16,10 +38,10 @@ function DeltaBarGraph({timeseries, arrayKey}) {
     const width = +svg.attr('width');
     const height = +svg.attr('height');
 
-    const margin = {top: 50, right: 0, bottom: 50, left: 0};
+    const margin = {top: 50, right: 5, bottom: 50, left: 0};
     const chartRight = width - margin.right;
     const chartBottom = height - margin.bottom;
-    const barRadius = 5;
+    const r = 5;
 
     const formatTime = d3.timeFormat('%e %b');
     const xScale = d3
@@ -31,65 +53,81 @@ function DeltaBarGraph({timeseries, arrayKey}) {
     const yScale = d3
       .scaleLinear()
       .domain([
-        0,
+        Math.min(
+          0,
+          d3.min(data, (d) => d[caseType])
+        ),
         Math.max(
           1,
-          d3.max(data, (d) => d[arrayKey])
+          d3.max(data, (d) => d[caseType])
         ),
       ])
-      .range([chartBottom, margin.top]); // - barRadius
+      .range([chartBottom, margin.top]);
 
     const xAxis = d3.axisBottom(xScale).tickSize(0);
 
+    const t = svg.transition().duration(500);
     svg
       .select('.x-axis')
-      .style('transform', `translateY(${chartBottom}px)`)
+      .transition(t)
+      .style('transform', `translateY(${yScale(0)}px)`)
       .call(xAxis)
-      .call((g) => g.select('.domain').remove())
+      .on('start', () => svg.select('.domain').remove())
       .selectAll('text')
       .attr('y', 0)
-      .attr('dy', '1.5em')
-      .style('text-anchor', 'middle');
+      .attr('dy', (d, i) => (data[i][caseType] < 0 ? '-1em' : '1.5em'))
+      .style('text-anchor', 'middle')
+      .attr('fill', caseColor(caseType));
 
     svg
       .selectAll('.bar')
       .data(data)
       .join('path')
       .attr('class', 'bar')
+      .transition(t)
       .attr('d', (d) =>
         roundedBar(
           xScale(formatTime(d.date)),
-          chartBottom,
+          yScale(0),
           xScale.bandwidth(),
-          chartBottom - yScale(d[arrayKey]),
-          barRadius
+          yScale(0) - yScale(d[caseType]),
+          r
         )
       )
-      .attr('fill', (d, i) => (i < data.length - 1 ? '#dc354590' : '#dc3545'));
+      .attr('fill', (d, i) => {
+        return i < data.length - 1
+          ? caseColor(caseType, '90')
+          : caseColor(caseType);
+      });
 
-    svg
-      .selectAll('.delta')
+    const textSelection = svg
+      .selectAll('.label')
       .data(data)
       .join('text')
-      .attr('class', 'delta')
-      .attr('text-anchor', 'middle')
-      .attr('font-size', '11px')
+      .attr('class', 'label')
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
-      .attr('y', (d) => yScale(d[arrayKey]) - 6)
-      .text((d) => d[arrayKey])
+      .text((d) => d[caseType]);
+
+    textSelection
+      .transition(t)
+      .attr('fill', caseColor(caseType))
+      .attr('y', (d) => yScale(d[caseType]) + (d[caseType] < 0 ? 15 : -6));
+
+    textSelection
       .append('tspan')
-      .attr('class', 'percent')
+      .attr('dy', (d) => `${d[caseType] < 0 ? 1.2 : -1.2}em`)
       .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
-      .attr('dy', '-1.2em')
       .text((d, i) =>
-        i && data[i - 1][arrayKey]
-          ? d3.format('+.1%')(
-              (data[i][arrayKey] - data[i - 1][arrayKey]) /
-                data[i - 1][arrayKey]
+        i && data[i - 1][caseType]
+          ? d3.format('+.1~%')(
+              (data[i][caseType] - data[i - 1][caseType]) /
+                data[i - 1][caseType]
             )
           : ''
-      );
-  }, [data, arrayKey]);
+      )
+      .transition(t)
+      .attr('fill', caseColor(caseType, '90'));
+  }, [data, caseType]);
 
   return (
     <div className="DeltaBarGraph fadeInUp" style={{animationDelay: '0.8s'}}>
@@ -107,50 +145,18 @@ function DeltaBarGraph({timeseries, arrayKey}) {
   );
 }
 
-export default React.memo(DeltaBarGraph, () => {
-  return true;
-});
+export default React.memo(DeltaBarGraph, isEqual);
 
-function roundedBar(x, y, w, h, r, f) {
-  if (!h) return;
-  // Flag for sweep:
-  if (f === undefined) f = 1;
-  // x coordinates of top of arcs
-  const x0 = x + r;
-  const x1 = x + w - r;
-  // y coordinates of bottom of arcs
-  const y0 = y - h + r;
-
-  const parts = [
-    'M',
-    x,
-    y,
-    'L',
-    x,
-    y0,
-    'A',
-    r,
-    r,
-    0,
-    0,
-    f,
-    x0,
-    y - h,
-    'L',
-    x1,
-    y - h,
-    'A',
-    r,
-    r,
-    0,
-    0,
-    f,
-    x + w,
-    y0,
-    'L',
-    x + w,
-    y,
+function roundedBar(x, y, w, h, r) {
+  r = Math.sign(h) * Math.min(Math.abs(h), r);
+  const paths = [
+    `M ${x} ${y}`,
+    `v ${-h + r}`,
+    `q 0 ${-r} ${Math.abs(r)} ${-r}`,
+    `h ${w - 2 * Math.abs(r)}`,
+    `q ${Math.abs(r)} 0 ${Math.abs(r)} ${r}`,
+    `v ${h - r}`,
     'Z',
   ];
-  return parts.join(' ');
+  return paths.join(' ');
 }

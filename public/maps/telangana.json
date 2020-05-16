@@ -2600,7 +2600,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "737",
-            "district": "Jagitial",
+            "district": "Jagtial",
             "st_code": "36",
             "year": "2016_c",
             "st_nm": "Telangana"
@@ -2611,7 +2611,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "752",
-            "district": "Jangoan",
+            "district": "Jangaon",
             "st_code": "36",
             "year": "2016_c",
             "st_nm": "Telangana"
@@ -2677,7 +2677,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "733",
-            "district": "Kumuram Bheem Asifabad",
+            "district": "Komaram Bheem",
             "st_code": "36",
             "year": "2016_c",
             "st_nm": "Telangana"
@@ -2919,7 +2919,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "750",
-            "district": "Jayashankar",
+            "district": "Jayashankar Bhupalapally",
             "st_code": "36",
             "year": "2016_c",
             "st_nm": "Telangana"

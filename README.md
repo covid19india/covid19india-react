@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  View our live <a href="http://patientdb.covid19india.org/">database</a>.
+  Here's our data <a href="http://patientdb.covid19india.org/">API</a>.
  </p>
 
 ## Setup
