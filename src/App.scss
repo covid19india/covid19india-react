@@ -908,9 +908,11 @@ h6 {
     }
   }
 
-  &:hover {
-    background: $yellow-light !important;
-    color: $orange-mid !important;
+  @media not all and (pointer: coarse) {
+    &:hover {
+      background: $yellow-light !important;
+      color: $orange-mid !important;
+    }
   }
 
   .counter {
