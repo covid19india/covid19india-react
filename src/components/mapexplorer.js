@@ -450,7 +450,7 @@ function MapExplorer({
               : ''}
           </h6>
           {testObj?.totaltested?.length > 1 && (
-            <a href={testObj.source} target="_noblank">
+            <a href={testObj.source || testObj.source1} target="_noblank">
               <Icon.Link />
             </a>
           )}
