@@ -30,12 +30,6 @@ function getDistance(p1, p2) {
   return Number((d / 1000).toFixed(2));
 }
 
-// function panFilter(feature){
-//   const city = feature.properties.city
-//   const state = feature.properties.state
-//   return (city.includes("PAN") && ( state.includes("India") || state.includes(userState) ));
-// }
-
 function KnnResults({userLocation, userState}) {
   const [geoData, setGeoData] = useState([]);
   const [results, setResults] = useState();
@@ -203,11 +197,64 @@ function KnnResults({userLocation, userState}) {
 
         {results?.features
           .filter((feature) => {
-            return Object.keys(categories)
-              .filter(
-                (categoryName) => categories[categoryName].isSelected === true
-              )
-              .includes(feature.properties.icon);
+            return (
+              Object.keys(categories)
+                .filter(
+                  (categoryName) => categories[categoryName].isSelected === true
+                )
+                .includes(feature.properties.icon) && feature.properties.dist
+            );
+          })
+          .map((result, i) => (
+            <div
+              key={result.properties.recordid ? result.properties.recordid : i}
+              className="essential-result"
+            >
+              <div className="result-top">
+                <div className="result-top-left">
+                  <div className="result-name">{result.properties.name}</div>
+                  <div className="result-location">
+                    {result.properties.addr}
+                  </div>
+                  {result.properties.dist && (
+                    <div className="result-distance">
+                      {result.properties.dist + ' km away'}
+                    </div>
+                  )}
+                </div>
+                <a
+                  className="result-category"
+                  href={result.properties.contact}
+                  target="_noblank"
+                >
+                  <span>{result.properties.icon}</span>
+                  <ExternalLink />
+                </a>
+              </div>
+              <div className="result-description">{result.properties.desc}</div>
+              {result.properties.phone ? (
+                <a
+                  className="result-contact"
+                  href={`tel:${result.properties.phone}`}
+                >
+                  <Phone />
+                  <div>{result.properties.phone}</div>
+                </a>
+              ) : null}
+            </div>
+          ))}
+        <div>
+          <h4> Throughout {userState} and India</h4>
+        </div>
+        {results?.features
+          .filter((feature) => {
+            return (
+              Object.keys(categories)
+                .filter(
+                  (categoryName) => categories[categoryName].isSelected === true
+                )
+                .includes(feature.properties.icon) && !feature.properties.dist
+            );
           })
           .map((result, i) => (
             <div
