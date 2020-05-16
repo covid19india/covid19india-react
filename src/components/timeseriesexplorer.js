@@ -25,7 +25,6 @@ function TimeSeriesExplorer({
   states,
   anchor,
   setAnchor,
-  isIntersecting,
 }) {
   const [chartType, setChartType] = useLocalStorage('timeseriesChartType', 1);
   const [isTimeseriesIntersecting, setIsTimeseriesIntersecting] = useState(
@@ -161,7 +160,7 @@ function TimeSeriesExplorer({
             chartType={chartType}
             mode={timeseriesMode}
             logMode={timeseriesLogMode}
-            isTotal={activeStateCode === 'TT'}
+            stateCode={activeStateCode}
             isIntersecting={isTimeseriesIntersecting}
           />
         )}
