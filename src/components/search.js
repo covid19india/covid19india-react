@@ -72,6 +72,21 @@ const suggestions = [
   'Groceries Chennai',
 ];*/
 
+const essentialSuggestions = [
+  'Testing Pune',
+  'Delhi Shelter',
+  'Community Kitchen in Kerala',
+  'Groceries Chennai',
+  'Senior citizen support bangalore',
+];
+const locationSuggestions = [
+  'Mumbai',
+  'Karnataka',
+  'Chennai',
+  'Alappuzha',
+  'Ganjam',
+];
+
 function Search({districtZones}) {
   const [searchValue, setSearchValue] = useState('');
   const [expand, setExpand] = useState(false);
@@ -312,157 +327,43 @@ function Search({districtZones}) {
           <div className="expanded-left">
             <h3>{t('Essentials')}</h3>
             <div className="suggestions">
-              <div className="suggestion">
-                <div>-</div>
-                <h4
-                  onMouseDown={(event) => {
-                    event.preventDefault();
-                    setNativeValue(searchInput.current, 'Testing Pune');
-                    searchInput.current.dispatchEvent(
-                      new Event('input', {bubbles: true})
-                    );
-                  }}
-                >
-                  {t('Testing Pune')}
-                </h4>
-              </div>
-              <div className="suggestion">
-                <div>-</div>
-                <h4
-                  onMouseDown={(event) => {
-                    event.preventDefault();
-                    setNativeValue(searchInput.current, 'Delhi Shelter');
-                    searchInput.current.dispatchEvent(
-                      new Event('input', {bubbles: true})
-                    );
-                  }}
-                >
-                  {t('Delhi Shelter')}
-                </h4>
-              </div>
-              <div className="suggestion">
-                <div>-</div>
-                <h4
-                  onMouseDown={(event) => {
-                    event.preventDefault();
-                    setNativeValue(
-                      searchInput.current,
-                      'Community Kitchen in Kerala'
-                    );
-                    searchInput.current.dispatchEvent(
-                      new Event('input', {bubbles: true})
-                    );
-                  }}
-                >
-                  {t('Community Kitchen in Kerala')}
-                </h4>
-              </div>
-              <div className="suggestion">
-                <div>-</div>
-                <h4
-                  onMouseDown={(event) => {
-                    event.preventDefault();
-                    setNativeValue(searchInput.current, 'Groceries Chennai');
-                    searchInput.current.dispatchEvent(
-                      new Event('input', {bubbles: true})
-                    );
-                  }}
-                >
-                  {t('Groceries Chennai')}
-                </h4>
-              </div>
-              <div className="suggestion">
-                <div>-</div>
-                <h4
-                  onMouseDown={(event) => {
-                    event.preventDefault();
-                    setNativeValue(
-                      searchInput.current,
-                      'Senior citizen support bangalore'
-                    );
-                    searchInput.current.dispatchEvent(
-                      new Event('input', {bubbles: true})
-                    );
-                  }}
-                >
-                  {t('Senior citizen support bangalore')}
-                </h4>
-              </div>
+              {essentialSuggestions.map((suggestion, index) => (
+                <div className="suggestion" key={index}>
+                  <div>-</div>
+                  <h4
+                    onMouseDown={(event) => {
+                      event.preventDefault();
+                      setNativeValue(searchInput.current, suggestion);
+                      searchInput.current.dispatchEvent(
+                        new Event('input', {bubbles: true})
+                      );
+                    }}
+                  >
+                    {t(suggestion)}
+                  </h4>
+                </div>
+              ))}
             </div>
           </div>
           <div className="expanded-right">
             <h3>{t('Locations')}</h3>
             <div className="suggestions">
-              <div className="suggestion">
-                <div>-</div>
-                <h4
-                  onMouseDown={(event) => {
-                    event.preventDefault();
-                    setNativeValue(searchInput.current, 'Hyderabad');
-                    searchInput.current.dispatchEvent(
-                      new Event('input', {bubbles: true})
-                    );
-                  }}
-                >
-                  {t('Hyderabad')}
-                </h4>
-              </div>
-              <div className="suggestion">
-                <div>-</div>
-                <h4
-                  onMouseDown={(event) => {
-                    event.preventDefault();
-                    setNativeValue(searchInput.current, 'Karnataka');
-                    searchInput.current.dispatchEvent(
-                      new Event('input', {bubbles: true})
-                    );
-                  }}
-                >
-                  {t('Karnataka')}
-                </h4>
-              </div>
-              <div className="suggestion">
-                <div>-</div>
-                <h4
-                  onMouseDown={(event) => {
-                    event.preventDefault();
-                    setNativeValue(searchInput.current, 'Chennai');
-                    searchInput.current.dispatchEvent(
-                      new Event('input', {bubbles: true})
-                    );
-                  }}
-                >
-                  {t('Chennai')}
-                </h4>
-              </div>
-              <div className="suggestion">
-                <div>-</div>
-                <h4
-                  onMouseDown={(event) => {
-                    event.preventDefault();
-                    setNativeValue(searchInput.current, 'Jharkhand');
-                    searchInput.current.dispatchEvent(
-                      new Event('input', {bubbles: true})
-                    );
-                  }}
-                >
-                  {t('Jharkhand')}
-                </h4>
-              </div>
-              <div className="suggestion">
-                <div>-</div>
-                <h4
-                  onMouseDown={(event) => {
-                    event.preventDefault();
-                    setNativeValue(searchInput.current, 'Alappuzha');
-                    searchInput.current.dispatchEvent(
-                      new Event('input', {bubbles: true})
-                    );
-                  }}
-                >
-                  {t('Alappuzha')}
-                </h4>
-              </div>
+              {locationSuggestions.map((suggestion, index) => (
+                <div className="suggestion" key={index}>
+                  <div>-</div>
+                  <h4
+                    onMouseDown={(event) => {
+                      event.preventDefault();
+                      setNativeValue(searchInput.current, suggestion);
+                      searchInput.current.dispatchEvent(
+                        new Event('input', {bubbles: true})
+                      );
+                    }}
+                  >
+                    {t(suggestion)}
+                  </h4>
+                </div>
+              ))}
             </div>
           </div>
         </div>
