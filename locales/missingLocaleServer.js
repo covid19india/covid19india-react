@@ -12,8 +12,8 @@ const server = http.createServer(async (req, res) => {
     })
     .on('end', () => {
       body = Buffer.concat(body).toString();
-      fs.openSync('missing_locales.json', 'a');
-      const data = fs.readFileSync('missing_locales.json', 'utf-8');
+      fs.openSync('locales/missing_locales.json', 'a');
+      const data = fs.readFileSync('locales/missing_locales.json', 'utf-8');
 
       const dataToWrite = JSON.stringify(
         {
@@ -24,7 +24,7 @@ const server = http.createServer(async (req, res) => {
         2
       );
 
-      fs.writeFileSync('missing_locales.json', dataToWrite);
+      fs.writeFileSync('locales/missing_locales.json', dataToWrite);
 
       res.writeHead(200, {
         'Content-Type': 'application/json',
