@@ -301,9 +301,9 @@ export const toTitleCase = (str) => {
 };
 
 export const indianNumberSystemTickFormat = (numberValue) => {
-  const limits = [100000000000, 1000000000, 10000000, 100000, 1000];
-  // Kharab, Arab, Crore, Lakh, Thousand
-  const shorteners = ['K', 'A', 'C', 'L', 'K'];
+  const limits = [1000000000, 10000000, 100000, 1000];
+  // Arab, Crore, Lakh, Thousand
+  const shorteners = ['A', 'Cr', 'L', 'K'];
   for (const i in limits) {
     if (numberValue >= limits[i]) {
       return (numberValue / limits[i]).toFixed() + shorteners[i];
