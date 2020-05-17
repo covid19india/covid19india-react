@@ -103,6 +103,7 @@ function State(props) {
 
       const states = dataResponse.statewise;
       setAllStateData(states.filter((state) => state.statecode !== code));
+      setAllStateData(states.filter((state) => state.statecode !== 'DD'));
       setStateData([states.find((s) => s.statecode === code)]);
       // Timeseries
       const ts = parseStateTimeseries(statesDailyResponse)[code];
