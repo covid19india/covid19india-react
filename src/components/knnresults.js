@@ -47,9 +47,7 @@ function KnnResults({userLocation, userState}) {
 
   const getJSON = useCallback(() => {
     axios
-      .get(
-        'https://raw.githubusercontent.com/aswaathb/covid19india-react/publish/newResources/geoResources.json'
-      )
+      .get('https://api.covid19india.org/resources/geoResources.json')
       .then((response) => {
         setGeoData(response.data);
       })
