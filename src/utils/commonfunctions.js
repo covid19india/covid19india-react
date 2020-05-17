@@ -299,3 +299,15 @@ export const toTitleCase = (str) => {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
 };
+
+export const indianNumberSystemTickFormat = (numberValue) => {
+  const limits = [100000000000, 1000000000, 10000000, 100000, 1000];
+  // Kharab, Arab, Crore, Lakh, Thousand
+  const shorteners = ['K', 'A', 'C', 'L', 'K'];
+  for (const i in limits) {
+    if (numberValue >= limits[i]) {
+      return (numberValue / limits[i]).toFixed() + shorteners[i];
+    }
+  }
+  return numberValue;
+};
