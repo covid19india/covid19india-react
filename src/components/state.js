@@ -30,7 +30,7 @@ import {useTranslation} from 'react-i18next';
 import {Link, useParams, Redirect} from 'react-router-dom';
 import {useMeasure, useEffectOnce} from 'react-use';
 
-function PureBreadcrumbs({stateName, stateCode, fetched, allStateData}) {
+function PureBreadcrumbs({stateName, stateCode, fetched, states}) {
   const {t} = useTranslation();
 
   return (
@@ -46,7 +46,7 @@ function PureBreadcrumbs({stateName, stateCode, fetched, allStateData}) {
           </summary>
           {fetched && (
             <Dropdown.Menu direction="se">
-              {allStateData.map((state) => (
+              {states.map((state) => (
                 <Dropdown.Item key={state.statecode} className="item">
                   <Link to={`${state.statecode}`}>
                     {t(STATE_CODES[state.statecode])}
@@ -106,7 +106,7 @@ function State(props) {
         axios.get('https://api.covid19india.org/zones.json'),
       ]);
       const states = dataResponse.statewise;
-      setAllStateData(states.filter((state) => state.statecode !== stateCode));
+      setAllStateData(states);
       setStateData([states.find((s) => s.statecode === stateCode)]);
       // Timeseries
       const ts = parseStateTimeseries(statesDailyResponse)[stateCode];
@@ -191,12 +191,17 @@ function State(props) {
 
         <div className="State">
           <div className="state-left">
-            <Breadcrumbs
-              stateName={stateName}
-              stateCode={stateCode}
-              fetched={fetched}
-              allStateData={allStateData}
-            />
+            {fetched && (
+              <Breadcrumbs
+                stateName={stateName}
+                stateCode={stateCode}
+                fetched={fetched}
+                states={allStateData.filter(
+                  (state) =>
+                    state.statecode !== 'TT' && state.statecode !== stateCode
+                )}
+              />
+            )}
 
             <div className="header">
               <div
