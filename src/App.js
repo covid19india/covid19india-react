@@ -140,10 +140,7 @@ function App() {
                     exact
                     path={page.pageLink}
                     render={({match}) => (
-                      <page.view
-                        stuff={match}
-                        key={match.params.stateCode || index}
-                      />
+                      <page.view key={match.params.stateCode || index} />
                     )}
                     key={index}
                   />
