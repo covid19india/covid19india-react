@@ -5,6 +5,7 @@ import {
   formatNumber,
   formatTimeseriesDate,
   formatTimeseriesTickX,
+  indianNumberSystemTickFormat,
 } from '../utils/commonfunctions';
 import {useResizeObserver} from '../utils/hooks';
 
@@ -124,10 +125,17 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
         else g.select('.domain').attr('opacity', 0);
       };
 
-      const yAxis = (g, yScale) =>
-        g
+      const yAxis = (g, yScale) => {
+        return g
           .attr('class', 'y-axis')
-          .call(d3.axisRight(yScale).ticks(4, '0~s').tickPadding(5));
+          .call(
+            d3
+              .axisRight(yScale)
+              .ticks(4)
+              .tickFormat(indianNumberSystemTickFormat)
+              .tickPadding(5)
+          );
+      };
 
       // Arrays of objects
       const plotTotal = chartType === 1;
