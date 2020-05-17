@@ -150,6 +150,19 @@ function TimeSeriesExplorer({
                   );
                 })}
               </select>
+              {activeStateCode !== 'TT' && (
+                <div
+                  className="button"
+                  onClick={() => {
+                    const selectedState = states.find(
+                      (s) => s.statecode === 'TT'
+                    );
+                    onHighlightState(selectedState);
+                  }}
+                >
+                  <span>{t('All States')}</span>
+                </div>
+              )}
             </div>
           )}
         </div>

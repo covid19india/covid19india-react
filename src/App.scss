@@ -2679,6 +2679,20 @@ input {
       outline: none;
     }
   }
+
+  .button {
+    background-color: $gray-light;
+    border: 2px solid $gray-light;
+    border-radius: 4px;
+    color: $gray;
+    margin: 1rem 0 0 1rem;
+    text-transform: none;
+    width: 50vw;
+
+    &:hover {
+      background: $gray-hover;
+    }
+  }
 }
 
 .TimeSeries,
