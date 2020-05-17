@@ -175,9 +175,14 @@ function MapExplorer({
           },
           {}
         );
-        currentMapData[currentMap.name].Total = states.find(
+        currentMapData[currentMap.name].Total = {};
+        const stateData = states.find(
           (state) => currentMap.name === state.state
         );
+        dataTypes.forEach((dtype) => {
+          currentMapData[currentMap.name].Total[dtype] =
+            parseInt(stateData[dtype !== 'deceased' ? dtype : 'deaths']) || 0;
+        });
       }
     }
     return [statistic, currentMapData];
