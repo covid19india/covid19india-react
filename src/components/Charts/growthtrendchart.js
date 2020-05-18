@@ -2,7 +2,7 @@ import {getStateName} from '../../utils/commonfunctions';
 
 import {parse} from 'date-fns';
 import React from 'react';
-import {Line, defaults} from 'react-chartjs-2';
+import {Line,defaults,Bar} from 'react-chartjs-2';
 
 function GrowthTrendChart(props) {
   const dates = [];
@@ -148,26 +148,35 @@ function GrowthTrendChart(props) {
         radius: 0,
       },
       line: {
-        cubicInterpolationMode: 'monotone',
+        cubicInterpolationMode: 'default',
       },
     },
     layout: {
       padding: {
         left: 20,
         right: 20,
-        top: 0,
+        top: 20,
         bottom: 20,
       },
+      margin:{
+        left:20,
+        right:20,
+        bottom:20,
+        top:0
+      }
     },
     scales: {
       yAxes: [
         {
           type: 'logarithmic',
+
           ticks: {
             beginAtZero: true,
-            min: 1,
-            max: 2000,
-            precision: 0,
+            suggestedMin: 1,
+            maxTicksLimit : 9,
+            suggestedMax: 2000,
+            
+            
             callback: function (value, index, values) {
               return Number(value.toString());
             },
@@ -186,9 +195,10 @@ function GrowthTrendChart(props) {
           type: 'logarithmic',
           ticks: {
             beginAtZero: true,
-            min: 0,
-            max: 2000,
-            precision: 0,
+            suggestedMin: 0,
+            maxTicksLimit : 12,
+            suggestedMax: 2000,
+            minRotation:90,
             callback: function (value, index, values) {
               return Number(value.toString());
             },

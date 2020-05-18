@@ -42,6 +42,8 @@ function DeepDive() {
     }
   };
 
+  //console.log(statesTimeSeries);
+
   return (
     <div className="cards-container">
       <Helmet>
@@ -53,7 +55,7 @@ function DeepDive() {
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
           <TotalConfirmedChart title="Total Cases" timeseries={timeseries} />
         </div>
-
+        <br/><br/>
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
           <DailyConfirmedChart title="Daily Cases" timeseries={timeseries} />
         </div>
@@ -74,7 +76,7 @@ function DeepDive() {
             data={statesTimeSeries}
           />
         </div>
-
+        <br/><br/><br/><br/>
         <div className="card fadeInUp" style={{animationDelay: '0.7s'}}>
           <GenderChart title="Patient Gender" data={rawData} />
         </div>
