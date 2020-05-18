@@ -1,15 +1,38 @@
 import {testedToolTip} from './tooltips';
 
-import {sliceTimeseriesFromEnd, formatNumber} from '../utils/commonfunctions';
+import {
+  sliceTimeseriesFromEnd,
+  formatNumber,
+  formatTimeseriesDate,
+  formatTimeseriesTickX,
+} from '../utils/commonfunctions';
 import {useResizeObserver} from '../utils/hooks';
 
 import * as d3 from 'd3';
-import {addDays, subDays, format} from 'date-fns';
+import {addDays, subDays} from 'date-fns';
+import equal from 'fast-deep-equal';
 import React, {useState, useEffect, useRef, useCallback} from 'react';
-import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 
-function TimeSeries({timeseriesProp, chartType, mode, logMode, isTotal}) {
+const isEqual = (prevProps, currProps) => {
+  if (!currProps.isIntersecting) return true;
+  if (!prevProps.isIntersecting) return false;
+  if (!equal(currProps.chartType, prevProps.chartType)) {
+    return false;
+  }
+  if (!equal(currProps.mode, prevProps.mode)) {
+    return false;
+  }
+  if (!equal(currProps.logMode, prevProps.logMode)) {
+    return false;
+  }
+  if (!equal(currProps.stateCode, prevProps.stateCode)) {
+    return false;
+  }
+  return true;
+};
+
+function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
   const {t} = useTranslation();
   const [lastDaysCount, setLastDaysCount] = useState(
     window.innerWidth > 512 ? Infinity : 30
@@ -48,9 +71,8 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, isTotal}) {
 
   const graphData = useCallback(
     (timeseries) => {
-      if (!dimensions) return;
-      const width = dimensions.width;
-      const height = dimensions.height;
+      const {width, height} =
+        dimensions || wrapperRef.current.getBoundingClientRect();
 
       // Margins
       const margin = {top: 15, right: 35, bottom: 25, left: 25};
@@ -83,7 +105,14 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, isTotal}) {
       const numTicksX = width < 480 ? 4 : 7;
 
       const xAxis = (g) =>
-        g.attr('class', 'x-axis').call(d3.axisBottom(xScale).ticks(numTicksX));
+        g.attr('class', 'x-axis').call(
+          d3
+            .axisBottom(xScale)
+            .ticks(numTicksX)
+            .tickFormat((tick) => {
+              return formatTimeseriesTickX(tick);
+            })
+        );
 
       const xAxis2 = (g, yScale) => {
         g.attr('class', 'x-axis2')
@@ -350,12 +379,6 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, isTotal}) {
                 .y((d) => yScale(d[typeTotal]))
                 .curve(d3.curveMonotoneX)
             );
-          // Using d3-interpolate-path
-          // .attrTween('d', function (d) {
-          //   var previous = path.attr('d');
-          //   var current = line(d);
-          //   return interpolatePath(previous, current);
-          // });
         } else {
           /* DAILY TRENDS */
           svg.selectAll('.trend').remove();
@@ -396,7 +419,7 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, isTotal}) {
     }
   }, [timeseries, graphData]);
 
-  const dateStr = datapoint.date ? format(datapoint.date, 'dd MMMM') : '';
+  const dateStr = datapoint.date ? formatTimeseriesDate(datapoint.date) : '';
 
   const chartKey1 = chartType === 1 ? 'totalconfirmed' : 'dailyconfirmed';
   const chartKey2 = chartType === 1 ? 'totalactive' : 'dailyactive';
@@ -484,7 +507,7 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, isTotal}) {
         <div className="svg-parent is-purple">
           <div className="stats is-purple">
             <h5 className={`${!moving ? 'title' : ''}`}>
-              {t('Tested')} {isTotal ? testedToolTip : ''}
+              {t('Tested')} {stateCode === 'TT' ? testedToolTip : ''}
             </h5>
             <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
             <div className="stats-bottom">
@@ -525,15 +548,8 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, isTotal}) {
           {`2 ${t('Weeks')}`}
         </button>
       </div>
-
-      <div className="alert">
-        <Icon.AlertOctagon />
-        <div className="alert-right">
-          {t('Tested chart is independent of uniform scaling')}
-        </div>
-      </div>
     </React.Fragment>
   );
 }
 
-export default React.memo(TimeSeries);
+export default React.memo(TimeSeries, isEqual);

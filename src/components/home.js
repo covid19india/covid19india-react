@@ -1,5 +1,4 @@
 import Footer from './footer';
-// import LanguageSwitcher from './languageswitcher';
 import Level from './level';
 import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
@@ -15,19 +14,17 @@ import {
   mergeTimeseries,
   preprocessTimeseries,
   parseStateTimeseries,
+  parseStateTestData,
   parseStateTestTimeseries,
   parseTotalTestTimeseries,
   parseDistrictZones,
 } from '../utils/commonfunctions';
 
-import 'intersection-observer';
-import Observer from '@researchgate/react-intersection-observer';
 import axios from 'axios';
 import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useEffectOnce, useLocalStorage} from 'react-use';
-
 function Home(props) {
   const [states, setStates] = useState(null);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState(null);
@@ -42,9 +39,6 @@ function Home(props) {
   const [showUpdates, setShowUpdates] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [mapOption, setMapOption] = useState('confirmed');
-  const [isTimeseriesIntersecting, setIsTimeseriesIntersecting] = useState(
-    false
-  );
 
   const [lastViewedLog, setLastViewedLog] = useLocalStorage(
     'lastViewedLog',
@@ -131,14 +125,13 @@ function Home(props) {
 
       setLastUpdated(data.statewise[0].lastupdatedtime);
 
-      const testData = [...stateTestData.states_tested_data].reverse();
+      const testData = parseStateTestData(stateTestData.states_tested_data);
       const totalTest = data.tested[data.tested.length - 1];
-      testData.push({
-        updatedon: totalTest.updatetimestamp.split(' ')[0],
-        totaltested: totalTest.totalsamplestested,
+      testData['Total'] = {
         source: totalTest.source,
-        state: 'Total',
-      });
+        totaltested: totalTest.totalsamplestested,
+        updatedon: totalTest.updatetimestamp.split(' ')[0],
+      };
       setStateTestData(testData);
 
       setStateDistrictWiseData(stateDistrictWiseResponse);
@@ -158,10 +151,6 @@ function Home(props) {
     setRegionHighlighted({district, state: state.state});
   }, []);
 
-  const options = {
-    rootMargin: '0px 0px 0px 0px',
-  };
-
   return (
     <React.Fragment>
       <div className="Home">
@@ -175,14 +164,13 @@ function Home(props) {
 
         <div className="home-left">
           <div className="header fadeInUp" style={{animationDelay: '1s'}}>
-            {/* <LanguageSwitcher />*/}
             {fetched && <Search districtZones={districtZones} />}
 
             <div className="actions">
               <h5>
                 {isNaN(Date.parse(formatDate(lastUpdated)))
                   ? ''
-                  : formatDateAbsolute(lastUpdated)}
+                  : `${formatDateAbsolute(lastUpdated)} IST`}
               </h5>
               {fetched && !showUpdates && (
                 <div className="bell-icon">
@@ -230,32 +218,22 @@ function Home(props) {
               />
             )}
 
-            <Observer
-              options={options}
-              onChange={({isIntersecting}) =>
-                setIsTimeseriesIntersecting(isIntersecting)
-              }
-            >
-              <div>
-                {timeseries && (
-                  <TimeSeriesExplorer
-                    timeseries={
-                      timeseries[
-                        STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
-                      ]
-                    }
-                    activeStateCode={
-                      STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
-                    }
-                    onHighlightState={onHighlightState}
-                    states={states}
-                    anchor={anchor}
-                    setAnchor={setAnchor}
-                    isIntersecting={isTimeseriesIntersecting}
-                  />
-                )}
-              </div>
-            </Observer>
+            {timeseries && (
+              <TimeSeriesExplorer
+                timeseries={
+                  timeseries[
+                    STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
+                  ]
+                }
+                activeStateCode={
+                  STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
+                }
+                onHighlightState={onHighlightState}
+                states={states}
+                anchor={anchor}
+                setAnchor={setAnchor}
+              />
+            )}
           </React.Fragment>
         </div>
       </div>

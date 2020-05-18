@@ -1,3 +1,5 @@
+import LanguageSwitcher from './languageswitcher';
+
 import anime from 'animejs';
 import React, {useState, useRef} from 'react';
 import * as Icon from 'react-feather';
@@ -27,21 +29,25 @@ function Navbar({pages, darkMode, setDarkMode}) {
   const [expand, setExpand] = useState(false);
   // eslint-disable-next-line
   const [isThemeSet, setIsThemeSet] = useLocalStorage('isThemeSet', false);
+  const {t} = useTranslation();
 
   useLockBodyScroll(expand);
   const windowSize = useWindowSize();
 
   return (
     <div className="Navbar">
-      <div
-        className="navbar-left"
-        onClick={() => {
-          setDarkMode((prevMode) => !prevMode);
-          setIsThemeSet(true);
-        }}
-      >
-        {darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
-      </div>
+      <LanguageSwitcher />
+      {window.innerWidth > 769 && (
+        <div
+          className="navbar-left"
+          onClick={() => {
+            setDarkMode((prevMode) => !prevMode);
+            setIsThemeSet(true);
+          }}
+        >
+          {darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
+        </div>
+      )}
       <div className="navbar-middle">
         <Link
           to="/"
@@ -61,21 +67,12 @@ function Navbar({pages, darkMode, setDarkMode}) {
         onMouseEnter={() => {
           if (window.innerWidth > 769) {
             setExpand(true);
-            anime({
-              targets: '.navbar-right path',
-              strokeDashoffset: [anime.setDashoffset, 0],
-              easing: 'easeInOutSine',
-              duration: 250,
-              delay: function (el, i) {
-                return i * 250;
-              },
-              direction: 'alternate',
-              loop: false,
-            });
           }
         }}
       >
-        {windowSize.width < 769 && <span>{expand ? 'Close' : 'Menu'}</span>}
+        {windowSize.width < 769 && (
+          <span>{expand ? t('Close') : t('Menu')}</span>
+        )}
         {windowSize.width > 769 && (
           <React.Fragment>
             <span>
@@ -107,19 +104,35 @@ function Navbar({pages, darkMode, setDarkMode}) {
         )}
       </div>
 
-      {expand && <Expand expand={expand} pages={pages} setExpand={setExpand} />}
+      {expand && (
+        <Expand
+          expand={expand}
+          pages={pages}
+          setExpand={setExpand}
+          darkMode={darkMode}
+          setIsThemeSet={setIsThemeSet}
+          setDarkMode={setDarkMode}
+        />
+      )}
     </div>
   );
 }
 
-function Expand({expand, pages, setExpand}) {
+function Expand({
+  expand,
+  pages,
+  setExpand,
+  darkMode,
+  setIsThemeSet,
+  setDarkMode,
+}) {
   const expandElement = useRef(null);
   const {t} = useTranslation();
 
   useEffectOnce(() => {
     anime({
       targets: expandElement.current,
-      translateX: '10rem',
+      translateX: '10.5rem',
       easing: 'easeOutExpo',
       duration: 250,
     });
@@ -153,6 +166,19 @@ function Expand({expand, pages, setExpand}) {
         }
         return null;
       })}
+
+      {window.innerWidth < 768 && (
+        <div
+          className="fadeInUp"
+          style={{animationDelay: '0.9s'}}
+          onClick={() => {
+            setDarkMode((prevMode) => !prevMode);
+            setIsThemeSet(true);
+          }}
+        >
+          <div>{darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}</div>
+        </div>
+      )}
 
       <div className="expand-bottom fadeInUp" style={{animationDelay: '1s'}}>
         <h5>{t('A crowdsourced initiative.')}</h5>

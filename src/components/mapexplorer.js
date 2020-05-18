@@ -9,9 +9,14 @@ import {
   STATE_CODES_REVERSE,
   STATE_POPULATIONS,
 } from '../constants';
-import {formatDate, formatNumber} from '../utils/commonfunctions';
+import {
+  formatDate,
+  formatNumber,
+  formatDayMonth,
+  formatLastUpdated,
+} from '../utils/commonfunctions';
 
-import {formatDistance, format, parse} from 'date-fns';
+import {parse} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ReactDOM from 'react-dom';
@@ -111,24 +116,46 @@ function MapExplorer({
         return acc;
       }, {});
       if (currentMapMeta.mapType === MAP_TYPES.COUNTRY) {
-        currentMapData = states.reduce((acc, state) => {
-          acc[state.state] = {};
-          dataTypes.forEach((dtype) => {
-            let typeCount = parseInt(
-              state[dtype !== 'deceased' ? dtype : 'deaths']
-            );
-            if (currentMap.stat === MAP_STATISTICS.PER_MILLION)
-              typeCount = (1e6 * typeCount) / STATE_POPULATIONS[state.state];
-            if (state.state !== 'Total') {
-              statistic[dtype].total += typeCount;
-              if (typeCount > statistic[dtype].max) {
-                statistic[dtype].max = typeCount;
+        if (currentMap.view === MAP_VIEWS.STATES) {
+          currentMapData = states.reduce((acc, state) => {
+            acc[state.state] = {};
+            dataTypes.forEach((dtype) => {
+              let typeCount =
+                parseInt(state[dtype !== 'deceased' ? dtype : 'deaths']) || 0;
+              if (currentMap.stat === MAP_STATISTICS.PER_MILLION)
+                typeCount = (1e6 * typeCount) / STATE_POPULATIONS[state.state];
+              if (state.state !== 'Total') {
+                statistic[dtype].total += typeCount;
+                if (typeCount > statistic[dtype].max) {
+                  statistic[dtype].max = typeCount;
+                }
               }
-            }
-            acc[state.state][dtype] = typeCount;
-          });
-          return acc;
-        }, {});
+              acc[state.state][dtype] = typeCount;
+            });
+            return acc;
+          }, {});
+        } else {
+          currentMapData = Object.keys(districts).reduce((acc1, state) => {
+            const districtWiseData = (districts[state] || {districtData: {}})
+              .districtData;
+            acc1[state] = Object.keys(districtWiseData).reduce(
+              (acc2, district) => {
+                acc2[district] = {};
+                dataTypes.forEach((dtype) => {
+                  const typeCount = parseInt(districtWiseData[district][dtype]);
+                  statistic[dtype].total += typeCount;
+                  if (typeCount > statistic[dtype].max) {
+                    statistic[dtype].max = typeCount;
+                  }
+                  acc2[district][dtype] = typeCount;
+                });
+                return acc2;
+              },
+              {}
+            );
+            return acc1;
+          }, {});
+        }
       } else if (currentMapMeta.mapType === MAP_TYPES.STATE) {
         const districtWiseData = (
           districts[currentMap.name] || {districtData: {}}
@@ -148,20 +175,18 @@ function MapExplorer({
           },
           {}
         );
-        currentMapData[currentMap.name].Total = states.find(
+        currentMapData[currentMap.name].Total = {};
+        const stateData = states.find(
           (state) => currentMap.name === state.state
         );
+        dataTypes.forEach((dtype) => {
+          currentMapData[currentMap.name].Total[dtype] =
+            parseInt(stateData[dtype !== 'deceased' ? dtype : 'deaths']) || 0;
+        });
       }
     }
     return [statistic, currentMapData];
-  }, [
-    currentMap.name,
-    currentMap.stat,
-    currentMapMeta.mapType,
-    districts,
-    zones,
-    states,
-  ]);
+  }, [currentMap, currentMapMeta.mapType, districts, zones, states]);
 
   const [hoveredRegion, panelRegion] = useMemo(() => {
     if (!regionHighlighted.district) {
@@ -194,12 +219,16 @@ function MapExplorer({
         state = states.find((state) => state.state === 'Total');
       return [district, state];
     }
-  }, [states, districts, currentMapMeta.mapType, regionHighlighted]);
+  }, [
+    states,
+    districts,
+    currentMapMeta.mapType,
+    regionHighlighted.state,
+    regionHighlighted.district,
+  ]);
 
   useEffect(() => {
-    if (regionHighlighted === undefined || regionHighlighted === null) return;
-
-    if ('district' in regionHighlighted) {
+    if (regionHighlighted.district) {
       if (
         currentMap.name !== regionHighlighted.state &&
         !(
@@ -231,7 +260,13 @@ function MapExplorer({
         stat: currentMap.stat,
       });
     }
-  }, [isCountryLoaded, regionHighlighted, currentMap, currentMapMeta.mapType]);
+  }, [
+    isCountryLoaded,
+    regionHighlighted.state,
+    regionHighlighted.district,
+    currentMap,
+    currentMapMeta.mapType,
+  ]);
 
   const switchMapToState = useCallback(
     (state) => {
@@ -281,13 +316,7 @@ function MapExplorer({
     [currentMap.stat, districts, setRegionHighlighted]
   );
 
-  const testObj = useMemo(
-    () =>
-      stateTestData.find(
-        (obj) => obj.state === panelRegion.state && obj.totaltested !== ''
-      ),
-    [stateTestData, panelRegion]
-  );
+  const testObj = stateTestData[panelRegion.state];
 
   let hoveredRegionCount;
   let hoveredRegionZone;
@@ -336,11 +365,14 @@ function MapExplorer({
           {t(currentMap.name)} {t('Map')}
         </h1>
         <h6>
-          {window.innerWidth <= 769 ? t('Tap') : t('Hover')} over a{' '}
-          {currentMapMeta.mapType === MAP_TYPES.COUNTRY
-            ? t('state/UT')
-            : t('district')}{' '}
-          {t('for more details')}
+          {t('{{action}} over a {{mapType}} for more details', {
+            action: t(window.innerWidth <= 769 ? 'Tap' : 'Hover'),
+            mapType: t(
+              currentMapMeta.mapType === MAP_TYPES.COUNTRY
+                ? 'state/UT'
+                : 'District'
+            ),
+          })}
         </h6>
       </div>
 
@@ -411,10 +443,9 @@ function MapExplorer({
           </div>
           <h6 className="timestamp">
             {!isNaN(parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()))
-              ? `${t('As of')} ${format(
-                  parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
-                  'dd MMM'
-                )}`
+              ? t('As of {{date}}', {
+                  date: formatDayMonth(testObj?.updatedon),
+                })
               : ''}
           </h6>
           {testObj?.totaltested?.length > 1 && (
@@ -437,7 +468,10 @@ function MapExplorer({
           }`}
         >
           {hoveredRegion.district
-            ? t(hoveredRegion.district)
+            ? t(hoveredRegion.district) +
+              (hoveredRegion.district === 'Unknown'
+                ? ` (${t(hoveredRegion.state)})`
+                : '')
             : t(hoveredRegion.state)}
         </h2>
 
@@ -448,10 +482,7 @@ function MapExplorer({
               <h3>
                 {isNaN(Date.parse(formatDate(panelRegion.lastupdatedtime)))
                   ? ''
-                  : formatDistance(
-                      new Date(formatDate(panelRegion.lastupdatedtime)),
-                      new Date()
-                    ) +
+                  : formatLastUpdated(panelRegion.lastupdatedtime) +
                     ' ' +
                     t('ago')}
               </h3>
@@ -470,14 +501,16 @@ function MapExplorer({
         {currentMap.stat !== MAP_STATISTICS.ZONE &&
         (currentMapMeta.mapType === MAP_TYPES.STATE ||
           (currentMapMeta.mapType === MAP_TYPES.COUNTRY &&
-            currentMap.stat !== MAP_STATISTICS.TOTAL)) ? (
+            currentMap.stat !== MAP_STATISTICS.TOTAL)) &&
+        (currentMap.stat !== MAP_STATISTICS.HOTSPOTS ||
+          hoveredRegion?.district) ? (
           <h1
             className={`district ${mapOption !== 'confirmed' ? mapOption : ''}`}
           >
             {hoveredRegionCount}
             <br />
             <span>
-              {mapOption}{' '}
+              {t(mapOption)}{' '}
               {currentMap.stat === MAP_STATISTICS.PER_MILLION
                 ? ` ${t('per million')}`
                 : ''}
@@ -490,7 +523,7 @@ function MapExplorer({
             className="button back-button"
             onClick={() => switchMapToState('India')}
           >
-            Back
+            {t('Back')}
           </div>
         ) : null}
 
@@ -513,8 +546,8 @@ function MapExplorer({
             regionHighlighted={regionHighlighted}
             setRegionHighlighted={setRegionHighlighted}
             changeMap={switchMapToState}
-            isCountryLoaded={isCountryLoaded}
             mapOption={mapOption}
+            isCountryLoaded={isCountryLoaded}
           />
         )}
       </div>
@@ -564,6 +597,23 @@ function MapExplorer({
             </h4>
           </div>
         )}
+        {isCountryLoaded && (
+          <div
+            className={`tab ${
+              currentMap.stat === MAP_STATISTICS.HOTSPOTS ? 'focused' : ''
+            }`}
+            onClick={() => {
+              if (currentMapMeta.mapType === MAP_TYPES.STATE) return;
+              setCurrentMap({
+                name: currentMap.name,
+                view: MAP_VIEWS.DISTRICTS,
+                stat: MAP_STATISTICS.HOTSPOTS,
+              });
+            }}
+          >
+            <h4>{t('Hotspots')}</h4>
+          </div>
+        )}
         <div
           className={`tab ${
             currentMap.stat === MAP_STATISTICS.ZONE ? 'focused' : ''
@@ -580,18 +630,18 @@ function MapExplorer({
               });
           }}
         >
-          <h4>Zones</h4>
+          <h4>{t('Zones')}</h4>
         </div>
       </div>
 
       <h6 className="footnote table-fineprint">
-        &dagger; {t('Based on 2019 population projection by NCP') + '('}
+        &dagger; {t('Based on 2019 population projection by NCP') + ' ('}
         <a
           href="https://nhm.gov.in/New_Updates_2018/Report_Population_Projection_2019.pdf"
           target="_noblank"
           style={{color: '#6c757d'}}
         >
-          {t('report')}
+          {t('source')}
         </a>
         )
       </h6>
