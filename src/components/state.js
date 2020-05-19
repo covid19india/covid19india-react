@@ -13,6 +13,7 @@ import {
   formatNumber,
   mergeTimeseries,
   parseStateTimeseries,
+  parseStateTestData,
   parseStateTestTimeseries,
   parseDistrictZones,
 } from '../utils/commonfunctions';
@@ -25,27 +26,30 @@ import {format, parse} from 'date-fns';
 import React, {useState} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
+import {useTranslation} from 'react-i18next';
 import {Link, useParams, Redirect} from 'react-router-dom';
 import {useMeasure, useEffectOnce} from 'react-use';
 
-function PureBreadcrumbs({stateName, stateCode, fetched, allStateData}) {
+function PureBreadcrumbs({stateName, stateCode, fetched, states}) {
+  const {t} = useTranslation();
+
   return (
     <div className="breadcrumb">
       <Breadcrumb>
-        <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+        <Breadcrumb.Item href="/">{t('Home')}</Breadcrumb.Item>
         <Dropdown direction="w">
           <summary>
             <Breadcrumb.Item href={`${stateCode}`} selected>
-              {stateName}
+              {t(stateName)}
             </Breadcrumb.Item>
             <Dropdown.Caret className="caret" />
           </summary>
           {fetched && (
             <Dropdown.Menu direction="se">
-              {allStateData.map((state) => (
+              {states.map((state) => (
                 <Dropdown.Item key={state.statecode} className="item">
                   <Link to={`${state.statecode}`}>
-                    {STATE_CODES[state.statecode]}
+                    {t(STATE_CODES[state.statecode])}
                   </Link>
                 </Dropdown.Item>
               ))}
@@ -79,10 +83,12 @@ function State(props) {
   });
 
   useEffectOnce(() => {
-    getState(stateCode);
+    getState();
   });
 
-  const getState = async (code) => {
+  const {t} = useTranslation();
+
+  const getState = async () => {
     try {
       const [
         {data: dataResponse},
@@ -99,33 +105,32 @@ function State(props) {
         axios.get('https://api.covid19india.org/sources_list.json'),
         axios.get('https://api.covid19india.org/zones.json'),
       ]);
-      const name = STATE_CODES[code];
-
       const states = dataResponse.statewise;
-      setAllStateData(states.filter((state) => state.statecode !== code));
-      setAllStateData(states.filter((state) => state.statecode !== 'DD'));
-      setStateData([states.find((s) => s.statecode === code)]);
+
+      setAllStateData(states);
+      setStateData([states.find((s) => s.statecode === stateCode)]);
       // Timeseries
-      const ts = parseStateTimeseries(statesDailyResponse)[code];
+      const ts = parseStateTimeseries(statesDailyResponse)[stateCode];
       const testTs = parseStateTestTimeseries(
         stateTestResponse.states_tested_data
-      )[code];
+      )[stateCode];
       // Merge
-      const tsMerged = mergeTimeseries({[code]: ts}, {[code]: testTs});
-      setTimeseries(tsMerged[code]);
+      const tsMerged = mergeTimeseries(
+        {[stateCode]: ts},
+        {[stateCode]: testTs}
+      );
+      setTimeseries(tsMerged[stateCode]);
       // District data
       setDistrictData({
-        [name]: stateDistrictWiseResponse[name],
+        [stateName]: stateDistrictWiseResponse[stateName],
       });
       const sourceList = sourcesResponse.sources_list;
-      setSources(sourceList.filter((state) => state.statecode === code));
+      setSources(sourceList.filter((state) => state.statecode === stateCode));
 
-      const statesTests = stateTestResponse.states_tested_data;
-      setTestData(
-        statesTests.filter(
-          (obj) => obj.state === name && obj.totaltested !== ''
-        )
+      const stateTestData = parseStateTestData(
+        stateTestResponse.states_tested_data
       );
+      setTestData({[stateName]: stateTestData[stateName]});
 
       setDistrictZones(parseDistrictZones(zonesResponse.zones, stateName));
 
@@ -152,7 +157,7 @@ function State(props) {
     }
   };
 
-  const testObjLast = testData[testData.length - 1];
+  const testObj = testData[stateName];
   const population = STATE_POPULATIONS[stateName];
 
   function toggleShowAllDistricts() {
@@ -187,19 +192,24 @@ function State(props) {
 
         <div className="State">
           <div className="state-left">
-            <Breadcrumbs
-              stateName={stateName}
-              stateCode={stateCode}
-              fetched={fetched}
-              allStateData={allStateData}
-            />
+            {fetched && (
+              <Breadcrumbs
+                stateName={stateName}
+                stateCode={stateCode}
+                fetched={fetched}
+                states={allStateData.filter(
+                  (state) =>
+                    state.statecode !== 'TT' && state.statecode !== stateCode
+                )}
+              />
+            )}
 
             <div className="header">
               <div
                 className="header-left fadeInUp"
                 style={{animationDelay: '0.3s'}}
               >
-                <h1>{stateName}</h1>
+                <h1>{t(stateName)}</h1>
                 <h5>
                   Last Updated on{' '}
                   {stateData && Object.keys(stateData[0]).length
@@ -212,22 +222,20 @@ function State(props) {
                 className="header-right fadeInUp"
                 style={{animationDelay: '0.5s'}}
               >
-                <h5>Tested</h5>
-                <h2>{formatNumber(testObjLast?.totaltested)}</h2>
+                <h5>{t('Tested')}</h5>
+                <h2>{formatNumber(testObj?.totaltested)}</h2>
                 <h5 className="timestamp">
-                  {!isNaN(
-                    parse(testObjLast?.updatedon, 'dd/MM/yyyy', new Date())
-                  )
+                  {!isNaN(parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()))
                     ? `As of ${format(
-                        parse(testObjLast?.updatedon, 'dd/MM/yyyy', new Date()),
+                        parse(testObj?.updatedon, 'dd/MM/yyyy', new Date()),
                         'dd MMM'
                       )}`
                     : ''}
                 </h5>
                 <h5>
                   {'per '}
-                  {testObjLast?.totaltested && (
-                    <a href={testObjLast.source} target="_noblank">
+                  {testObj?.totaltested && (
+                    <a href={testObj?.source} target="_noblank">
                       source
                     </a>
                   )}
@@ -344,13 +352,23 @@ function State(props) {
             {fetched && (
               <StateMeta
                 stateData={stateData[0]}
-                lastTestObject={testObjLast}
+                testObject={testObj}
                 population={population}
                 lastSevenDaysData={timeseries.slice(-7)}
                 totalData={allStateData.filter(
                   (state) => state.statecode === 'TT'
                 )}
               />
+            )}
+
+            {fetched && (
+              <div
+                className="Clusters fadeInUp"
+                style={{animationDelay: '0.8s'}}
+              >
+                <h1>Network of Transmission</h1>
+                <Clusters stateCode={stateCode} />
+              </div>
             )}
           </div>
 
@@ -395,7 +413,7 @@ function State(props) {
                               return (
                                 <div key={index} className="district">
                                   <h2>{cases[mapOption]}</h2>
-                                  <h5>{district}</h5>
+                                  <h5>{t(district)}</h5>
                                   {mapOption !== 'active' && (
                                     <div className="delta">
                                       <Icon.ArrowUp className={mapOption} />
@@ -446,37 +464,15 @@ function State(props) {
                     {
                       <DeltaBarGraph
                         timeseries={timeseries.slice(-5)}
-                        arrayKey={`daily${mapOption}`}
+                        caseType={`daily${mapOption}`}
                       />
                     }
                   </div>
                 </div>
-
-                {false && (
-                  <Link to="/essentials">
-                    <div
-                      className="to-essentials fadeInUp"
-                      style={{animationDelay: '0.9s'}}
-                    >
-                      <h2>Go to essentials</h2>
-                      <Icon.ArrowRightCircle />
-                    </div>
-                  </Link>
-                )}
-
                 <TimeSeriesExplorer timeseries={timeseries} />
               </React.Fragment>
             )}
           </div>
-
-          <div className="state-left">
-            <div className="Clusters fadeInUp" style={{animationDelay: '0.8s'}}>
-              <h1>Network of Transmission</h1>
-              <Clusters stateCode={stateCode} />
-            </div>
-          </div>
-
-          <div className="state-right"></div>
         </div>
         <Footer />
       </React.Fragment>

@@ -1,8 +1,127 @@
-/* Source: https://observablehq.com/@d3/color-legend */
+import {MAP_STATISTICS} from '../constants';
+import {capitalizeAll, formatNumber} from '../utils/commonfunctions';
+import {useResizeObserver} from '../utils/hooks';
 
 import * as d3 from 'd3';
+import React, {useEffect, useRef} from 'react';
+
+function MapLegend({mapScale, statistic, mapStatistic, mapOption}) {
+  const svgRef = useRef(null);
+  const wrapperRef = useRef();
+  const dimensions = useResizeObserver(wrapperRef);
+
+  useEffect(() => {
+    const svg = d3.select(svgRef.current);
+    const {width, height} =
+      dimensions || wrapperRef.current.getBoundingClientRect();
+
+    if (mapStatistic === MAP_STATISTICS.ZONE) {
+      svg.call(() =>
+        legend({
+          svg: svg,
+          color: mapScale,
+          width: width,
+          height: height,
+          tickValues: [],
+          marginLeft: 2,
+          marginRight: 20,
+          ordinalWeights: Object.values(statistic),
+        })
+      );
+    } else if (mapStatistic === MAP_STATISTICS.HOTSPOTS) {
+      const t = svg.transition().duration(500);
+      svg
+        .select('.ramp')
+        .transition(t)
+        .attr('opacity', 0)
+        .attr('xlink:href', null);
+
+      svg
+        .select('.bars')
+        .selectAll('rect')
+        .transition(t)
+        .attr('opacity', 0)
+        .remove();
+      svg.selectAll('.axis > *').remove();
+
+      const maxRadius = mapScale.domain()[1];
+
+      const legend = svg
+        .select('.circles')
+        .attr('transform', `translate(48,40)`)
+        .attr('text-anchor', 'middle');
+
+      legend
+        .selectAll('circle')
+        .data([maxRadius / 10, (maxRadius * 2) / 5, maxRadius])
+        .join('circle')
+        .attr('fill', 'none')
+        .attr('stroke', '#ccc')
+        .transition(t)
+        .attr('cy', (d) => -mapScale(d))
+        .attr('r', mapScale);
+
+      legend
+        .selectAll('text')
+        .data([maxRadius / 10, (maxRadius * 2) / 5, maxRadius])
+        .join('text')
+        .attr('dy', '1.3em')
+        .transition(t)
+        .attr('y', (d) => -2 * mapScale(d))
+        .text(d3.format('.1s'));
+    } else {
+      svg.call(() =>
+        legend({
+          svg: svg,
+          color: mapScale,
+          title:
+            capitalizeAll(mapOption) +
+            (mapStatistic === MAP_STATISTICS.PER_MILLION
+              ? ' cases per million'
+              : ' cases'),
+          width: width,
+          height: height,
+          ticks: 5,
+          tickFormat: function (d, i, n) {
+            if (mapStatistic === MAP_STATISTICS.TOTAL && !Number.isInteger(d))
+              return;
+            if (i === n.length - 1) return formatNumber(d) + '+';
+            return formatNumber(d);
+          },
+          marginLeft: 2,
+          marginRight: 20,
+        })
+      );
+    }
+    svg.attr('class', mapStatistic === MAP_STATISTICS.ZONE ? 'zone' : '');
+  });
+
+  return (
+    <div
+      className="svg-parent maplegend fadeInUp"
+      style={{animationDelay: '2.5s', height: 50}}
+      ref={wrapperRef}
+    >
+      <svg id="legend" preserveAspectRatio="xMidYMid meet" ref={svgRef}>
+        <image className="ramp" />
+        <g className="bars"></g>
+        <g className="circles"></g>
+        <g className="axis">
+          <text className="axistext" />
+        </g>
+      </svg>
+      <canvas
+        className="color-scale"
+        style={{position: 'absolute', height: 0}}
+      />
+    </div>
+  );
+}
+
+export default MapLegend;
 
 function legend({
+  svg,
   color,
   title,
   tickSize = 6,
@@ -12,21 +131,12 @@ function legend({
   marginRight = 0,
   marginBottom = 16 + tickSize,
   marginLeft = 0,
-  svg,
   ticks = width / 64,
   tickFormat,
   tickValues,
   ordinalWeights,
 } = {}) {
-  if (!svg)
-    svg = d3
-      .create('svg')
-      .attr('width', width)
-      .attr('height', height)
-      .attr('viewBox', [0, 0, width, height])
-      .style('overflow', 'visible')
-      .style('display', 'block');
-
+  svg.selectAll('.circles > *').remove();
   const t = svg.transition().duration(500);
 
   let tickAdjust = (g) => {
@@ -64,7 +174,12 @@ function legend({
 
   // Sequential
   else if (color.interpolator) {
-    svg.selectAll('rect').transition(t).attr('opacity', 0);
+    svg
+      .select('.bars')
+      .selectAll('rect')
+      .transition(t)
+      .attr('opacity', 0)
+      .remove();
 
     x = Object.assign(
       color
@@ -180,6 +295,7 @@ function legend({
       x = d3.scaleOrdinal().domain(color.domain()).range(xPos);
 
       svg
+        .select('.bars')
         .selectAll('rect')
         .data(color.domain())
         .join((enter) =>
@@ -243,5 +359,3 @@ function ramp(color, n = 256) {
   }
   return canvas;
 }
-
-export default legend;
