@@ -1,90 +1,75 @@
-import {formatNumber} from '../utils/commonfunctions';
+import {PRIMARY_STATISTICS} from '../constants';
+import {formatNumber, capitalize} from '../utils/commonfunctions';
 
-import React, {useState} from 'react';
+import classnames from 'classnames';
+import * as easings from 'd3-ease';
+import equal from 'fast-deep-equal';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {useEffectOnce} from 'react-use';
+import {animated, useSpring} from 'react-spring';
 
-function Level(props) {
-  const [data, setData] = useState(props.data);
+function PureLevelItem({statistic, total, delta}) {
   const {t} = useTranslation();
-
-  useEffectOnce(() => {
-    setData({
-      active: +props.data.active,
-      confirmed: +props.data.confirmed,
-      recovered: +props.data.recovered,
-      deaths: +props.data.deaths,
-      deltaconfirmed: +props.data.deltaconfirmed,
-      deltadeaths: +props.data.deltadeaths,
-      deltarecovered: +props.data.deltarecovered,
-    });
+  const spring = useSpring({
+    total: total,
+    delta: delta,
+    from: {total: total, delta: delta},
+    config: {
+      easing: easings.easeQuadOut,
+      tension: 500,
+      duration: 1000,
+      clamp: true,
+    },
   });
 
   return (
-    <div className="Level">
-      <div
-        className="level-item is-cherry fadeInUp"
-        style={{animationDelay: '1s'}}
-      >
-        <h5>{t('Confirmed')}</h5>
-        <h4>
-          [
-          {isNaN(data.deltaconfirmed)
-            ? ''
-            : data.deltaconfirmed > 0
-            ? '+' + formatNumber(data.deltaconfirmed)
-            : '+0'}
-          ]
-        </h4>
-        <h1>{formatNumber(data.confirmed)} </h1>
-      </div>
-
-      <div
-        className="level-item is-blue fadeInUp"
-        style={{animationDelay: '1.1s'}}
-      >
-        <h5 className="heading">{t('Active')}</h5>
-        <h4>&nbsp;</h4>
-        <h1 className="title has-text-info">{formatNumber(data.active)}</h1>
-      </div>
-
-      <div
-        className="level-item is-green fadeInUp"
-        style={{animationDelay: '1.2s'}}
-      >
-        <h5 className="heading">{t('Recovered')}</h5>
-        <h4>
-          [
-          {isNaN(data.deltarecovered)
-            ? ''
-            : data.deltarecovered > 0
-            ? '+' + formatNumber(data.deltarecovered)
-            : '+0'}
-          ]
-        </h4>
-        <h1 className="title has-text-success">
-          {formatNumber(data.recovered)}{' '}
-        </h1>
-      </div>
-
-      <div
-        className="level-item is-gray fadeInUp"
-        style={{animationDelay: '1.3s'}}
-      >
-        <h5 className="heading">{t('Deceased')}</h5>
-        <h4>
-          [
-          {isNaN(data.deltadeaths)
-            ? ''
-            : data.deltadeaths > 0
-            ? '+' + formatNumber(data.deltadeaths)
-            : '+0'}
-          ]
-        </h4>
-        <h1 className="title has-text-grey">{formatNumber(data.deaths)}</h1>
-      </div>
+    <div className={classnames('level-item', `is-${statistic}`, 'fadeInUp')}>
+      <h5>{capitalize(t(statistic))}</h5>
+      <h4>
+        <animated.span>
+          {spring.delta.interpolate(
+            (delta) => `+${formatNumber(Math.floor(delta))}`
+          )}
+        </animated.span>
+      </h4>
+      <h1>
+        <animated.span>
+          {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
+        </animated.span>
+      </h1>
     </div>
   );
 }
 
-export default React.memo(Level);
+const LevelItem = React.memo(PureLevelItem);
+
+const handleStatistic = (statistic, data) => {
+  if (statistic === 'active') {
+    return data.confirmed - data.recovered - data.deceased;
+  }
+  return data[statistic];
+};
+
+function Level({data}) {
+  return (
+    <div className="Level">
+      {PRIMARY_STATISTICS.map((statistic) => (
+        <LevelItem
+          key={statistic}
+          statistic={statistic}
+          total={handleStatistic(statistic, data.total)}
+          delta={handleStatistic(statistic, data.delta)}
+        />
+      ))}
+    </div>
+  );
+}
+
+const isEqual = (prevProps, currProps) => {
+  if (equal(prevProps, currProps)) {
+    return true;
+  }
+  return false;
+};
+
+export default React.memo(Level, isEqual);

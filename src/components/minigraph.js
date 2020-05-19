@@ -1,20 +1,30 @@
+import {PRIMARY_STATISTICS} from '../constants';
+
 import * as d3 from 'd3';
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import produce from 'immer';
+import React, {useEffect, useRef, useCallback, useMemo} from 'react';
 
 function Minigraph({timeseries}) {
-  const [timeSeriesData, setTimeSeriesData] = useState([]);
   const svgRef1 = useRef();
   const svgRef2 = useRef();
   const svgRef3 = useRef();
   const svgRef4 = useRef();
 
-  useEffect(() => {
-    setTimeSeriesData(timeseries.slice(timeseries.length - 20));
+  const dates = useMemo(() => {
+    return Object.keys(timeseries);
   }, [timeseries]);
 
-  const graphData = useCallback((data) => {
-    if (data.length <= 1) return 0;
+  dates.map((date) => {
+    timeseries = produce(timeseries, (draftTimeseries) => {
+      draftTimeseries[date].active =
+        draftTimeseries[date].confirmed -
+        draftTimeseries[date].recovered -
+        draftTimeseries[date].deceased;
+    });
+  });
 
+  const graphData = useCallback(() => {
+    console.log(timeseries);
     const margin = {top: 10, right: 5, bottom: 20, left: 5};
     const chartRight = 100 - margin.right;
     const chartBottom = 100 - margin.bottom;
@@ -24,27 +34,21 @@ function Minigraph({timeseries}) {
     const svg3 = d3.select(svgRef3.current);
     const svg4 = d3.select(svgRef4.current);
 
-    data.forEach((d) => {
-      d['dailyactive'] = d.dailyconfirmed - d.dailyrecovered - d.dailydeceased;
-    });
-
     const xScale = d3
       .scaleTime()
-      .domain(d3.extent(data, (d) => d.date))
+      .domain([new Date(d3.min(dates)), new Date(d3.max(dates))])
       .range([margin.left, chartRight]);
 
     const svgArray = [svg1, svg2, svg3, svg4];
-    const dataTypes = [
-      'dailyconfirmed',
-      'dailyactive',
-      'dailyrecovered',
-      'dailydeceased',
-    ];
     const colors = ['#ff073a', '#007bff', '#28a745', '#6c757d'];
 
-    const dailyMin = d3.min(data, (d) => d.dailyactive);
-    const dailyMax = d3.max(data, (d) =>
-      Math.max(d.dailyconfirmed, d.dailyrecovered, d.dailydeceased)
+    const dailyMin = d3.min(dates, (date) => timeseries[date].active);
+    const dailyMax = d3.max(dates, (date) =>
+      Math.max(
+        timeseries[date].confirmed,
+        timeseries[date].recovered,
+        timeseries[date].deceased
+      )
     );
     const domainMinMax = Math.max(-dailyMin, dailyMax);
 
@@ -53,13 +57,13 @@ function Minigraph({timeseries}) {
       .domain([-domainMinMax, domainMinMax])
       .range([chartBottom, margin.top]);
 
-    svgArray.forEach((svg, i) => {
-      const type = dataTypes[i];
-      const color = colors[i];
+    svgArray.forEach((svg, index) => {
+      const type = PRIMARY_STATISTICS[index];
+      const color = colors[index];
 
       const path = svg
         .append('path')
-        .datum(data)
+        .datum(dates)
         .attr('fill', 'none')
         .attr('stroke', color + '99')
         .attr('stroke-width', 2.5)
@@ -68,12 +72,18 @@ function Minigraph({timeseries}) {
           'd',
           d3
             .line()
-            .x((d) => xScale(d.date))
-            .y((d) => yScale(d[type]))
-            .curve(d3.curveCardinal)
+            .x((date) => {
+              xScale(new Date(date));
+            })
+            .y((date) => {
+              yScale(timeseries[date][type]);
+            })
+            .curve(d3.curveMonotoneX)
         );
 
       const totalLength = path.node().getTotalLength();
+      console.log(totalLength);
+
       path
         .attr('stroke-dasharray', totalLength + ' ' + totalLength)
         .attr('stroke-dashoffset', totalLength)
@@ -81,6 +91,8 @@ function Minigraph({timeseries}) {
         .delay(500)
         .duration(2500)
         .attr('stroke-dashoffset', 0);
+
+      /*
 
       svg
         .selectAll('.dot')
@@ -103,13 +115,15 @@ function Minigraph({timeseries}) {
         .transition()
         .delay(500)
         .duration(2500)
-        .style('opacity', 1);
+        .style('opacity', 1);*/
     });
-  }, []);
+  }, [dates, timeseries]);
 
   useEffect(() => {
-    graphData(timeSeriesData);
-  }, [timeSeriesData, graphData]);
+    if (timeseries) {
+      graphData();
+    }
+  }, [timeseries, graphData]);
 
   return (
     <div className="Minigraph">
