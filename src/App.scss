@@ -4917,6 +4917,18 @@ footer {
   }
 }
 
+@media (max-width: 480px) {
+  h1 {
+    font-size: 21px !important;
+  }
+}
+
+@media (max-width: 379px) {
+  h1 {
+    font-size: 18px !important;
+  }
+}
+
 // Dark Mode
 
 .dark-mode {
