@@ -210,6 +210,7 @@ function Row({
 
   const doSort = useCallback(
     (sortData) => {
+      if (!sortedDistricts) return null;
       const sorted = {};
       Object.keys(sortedDistricts)
         .sort((district1, district2) => {
@@ -315,16 +316,18 @@ function Row({
                 </div>
               )}
             </td>
-            <td
-              align="center"
-              className="state-page-link"
-              colSpan={2}
-              onClick={() => {
-                history.push(`state/${state.statecode}`);
-              }}
-            >
-              {t('See more details on {{state}}', {state: t(state.state)})}
-            </td>
+            {state.state !== 'State Unassigned' && (
+              <td
+                align="center"
+                className="state-page-link"
+                colSpan={2}
+                onClick={() => {
+                  history.push(`state/${state.statecode}`);
+                }}
+              >
+                {t('See more details on {{state}}', {state: t(state.state)})}
+              </td>
+            )}
           </tr>
 
           <tr className={classnames('district-heading')}>
@@ -365,7 +368,7 @@ function Row({
             state={state}
             district={district}
             districts={districts}
-            zone={zones[district]}
+            zone={zones?.[district]}
             sortedDistricts={sortedDistricts}
             regionHighlighted={regionHighlighted}
             onHighlightDistrict={onHighlightDistrict}
