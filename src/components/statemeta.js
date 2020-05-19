@@ -94,9 +94,13 @@ function StateMeta({
           title={'Active'}
           statistic={`${activePercent.toFixed(2)}%`}
           formula={'(active / confirmed) * 100'}
-          description={`For every 100 confirmed cases, ${activePercent.toFixed(
-            0
-          )} are currently infected.`}
+          description={
+            activePercent > 0
+              ? `For every 100 confirmed cases, ${activePercent.toFixed(
+                  0
+                )} are currently infected.`
+              : `Currently, there are no active cases in this state.`
+          }
         />
 
         <StateMetaCard
@@ -104,10 +108,14 @@ function StateMeta({
           title={'Recovery Rate'}
           statistic={`${recoveryPercent.toFixed(2)}%`}
           formula={'(recovered / confirmed) * 100'}
-          description={`For every 100 confirmed cases,
-            ${Math.round(
-              recoveryPercent.toFixed(0)
-            )} have recovered from the virus.`}
+          description={
+            recoveryPercent > 0
+              ? `For every 100 confirmed cases,
+                ${Math.round(
+                  recoveryPercent.toFixed(0)
+                )} have recovered from the virus.`
+              : `Unfortunately, there are no recoveries in this state yet.`
+          }
         />
 
         <StateMetaCard
@@ -115,10 +123,14 @@ function StateMeta({
           title={'Mortality Rate'}
           statistic={`${deathPercent.toFixed(2)}%`}
           formula={'(deceased / confirmed) * 100'}
-          description={`For every 100 confirmed cases,
-            ${Math.round(
-              deathPercent.toFixed(0)
-            )} have unfortunately passed away from the virus.`}
+          description={
+            deathPercent > 0
+              ? `For every 100 confirmed cases,
+                ${Math.round(
+                  deathPercent.toFixed(0)
+                )} have unfortunately passed away from the virus.`
+              : `Fortunately, no one has passed away from the virus in this state.`
+          }
         />
 
         <StateMetaCard
@@ -129,9 +141,13 @@ function StateMeta({
             '(((previousDayData - sevenDayBeforeData) / sevenDayBeforeData) * 100)/7'
           }
           date={`${sevenDayBeforeDate} - ${previousDayDate}`}
-          description={`In the last one week, the number of new infections has grown by an average of ${Math.round(
-            growthRate / 7
-          )}% every day.`}
+          description={
+            growthRate > 0
+              ? `In the last one week, the number of new infections has grown by an average of ${Math.round(
+                  growthRate / 7
+                )}% every day.`
+              : `There has been no growth in the number of cases in last 7 days.`
+          }
         />
 
         <StateMetaCard
@@ -142,8 +158,12 @@ function StateMeta({
             '(total tests in state / total population of state) * 1 Million'
           }
           date={updatedDate}
-          description={`For every 1 million people in ${stateData.state},
-            ${Math.round(testPerMillion)} people were tested.`}
+          description={
+            testPerMillion > 0
+              ? `For every 1 million people in ${stateData.state},
+                ${Math.round(testPerMillion)} people were tested.`
+              : `No tests have been conducted in this state yet.`
+          }
         />
 
         {/* <div className="meta-item ptr fadeInUp">
