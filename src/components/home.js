@@ -25,6 +25,7 @@ import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useEffectOnce, useLocalStorage} from 'react-use';
+
 function Home(props) {
   const [states, setStates] = useState(null);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState(null);
