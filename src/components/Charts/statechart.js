@@ -48,7 +48,7 @@ function StateChart(props) {
       {
         data: stateCases,
         backgroundColor: [
-          '#ff7272',
+          '#ff5454',
           '#ffb385',
           '#fae7cb',
           '#ffd31d',
@@ -74,10 +74,10 @@ function StateChart(props) {
     events: ['mousemove', 'mouseout', 'touchstart', 'touchmove', 'touchend'],
     layout: {
       padding: {
-        left: 20,
-        right: 20,
+        left: 25,
+        right: 25,
         top: 0,
-        bottom: 20,
+        bottom: 25,
       },
     },
     legend: {
