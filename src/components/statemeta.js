@@ -101,9 +101,9 @@ function StateMeta({stateCode, data, timeseries}) {
           description={
             activePercent > 0
               ? `For every 100 confirmed cases, ${formatNumber(
-                Math.round(activePercent))
-                } are currently infected.`
-              : `Currently, there are no active cases in this state.`
+                  Math.round(activePercent)
+                )} are currently infected.`
+              : 'Currently, there are no active cases in this state.'
           }
         />
 
@@ -115,9 +115,9 @@ function StateMeta({stateCode, data, timeseries}) {
           description={
             recoveryPercent > 0
               ? `For every 100 confirmed cases, ${formatNumber(
-                Math.round(recoveryPercent)
+                  Math.round(recoveryPercent)
                 )} have recovered from the virus.`
-              : `Unfortunately, there are no recoveries in this state yet.`
+              : 'Unfortunately, there are no recoveries in this state yet.'
           }
         />
 
@@ -128,10 +128,10 @@ function StateMeta({stateCode, data, timeseries}) {
           formula={'(deceased / confirmed) * 100'}
           description={
             deathPercent > 0
-            ? `For every 100 confirmed cases, ${formatNumber(
-                Math.round(deathPercent)
+              ? `For every 100 confirmed cases, ${formatNumber(
+                  Math.round(deathPercent)
                 )} have unfortunately passed away from the virus.`
-              : `Fortunately, no one has passed away from the virus in this state.`
+              : 'Fortunately, no one has passed away from the virus in this state.'
           }
         />
 
@@ -151,11 +151,13 @@ function StateMeta({stateCode, data, timeseries}) {
             'dd MMM'
           )}`}
           description={
-            growthRate !== 0
-            ? `In the last one week, the number of new infections has
-              grown by an average of ${formatNumber(Math.round(growthRate / 7))}%
+            growthRate > 0
+              ? `In the last one week, the number of new infections has
+              grown by an average of ${formatNumber(
+                Math.round(growthRate / 7)
+              )}%
               every day.`
-              : `There has been no growth in the number of cases in last 7 days.`
+              : 'There has been no growth in the number of infections in last one week.'
           }
         />
 
@@ -177,7 +179,8 @@ function StateMeta({stateCode, data, timeseries}) {
             testPerMillion > 0
               ? `For every 1 million people in ${STATE_NAMES[stateCode]},
                 ${formatNumber(Math.round(testPerMillion))} people were tested.`
-              : `No tests have been conducted in this state yet.`}
+              : 'No tests have been conducted in this state yet.'
+          }
         />
       </div>
     </React.Fragment>
