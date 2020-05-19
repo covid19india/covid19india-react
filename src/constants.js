@@ -6,7 +6,15 @@ export const STATE_ROW_STATISTICS = [
   'recovered',
   'deaths',
 ];
+
 export const DISTRICT_ROW_STATISTICS = [
+  'confirmed',
+  'active',
+  'recovered',
+  'deceased',
+];
+
+export const PRIMARY_STATISTICS = [
   'confirmed',
   'active',
   'recovered',

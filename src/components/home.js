@@ -21,17 +21,19 @@ import {
 } from '../utils/commonfunctions';
 
 import axios from 'axios';
-import React, {useState, useCallback, useMemo} from 'react';
+import React, {useState, useCallback, useMemo, Suspense} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useEffectOnce, useLocalStorage} from 'react-use';
+import useSWR from 'swr';
+
+const fetcher = (url) => axios(url).then((response) => response.data);
 
 function Home(props) {
   const [states, setStates] = useState(null);
   const [stateDistrictWiseData, setStateDistrictWiseData] = useState(null);
   const [districtZones, setDistrictZones] = useState(null);
   const [stateTestData, setStateTestData] = useState(null);
-  const [lastUpdated, setLastUpdated] = useState('');
   const [timeseries, setTimeseries] = useState(null);
   const [fetched, setFetched] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState({
@@ -46,6 +48,11 @@ function Home(props) {
     null
   );
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
+
+  const {data} = useSWR('http://localhost:3001/', fetcher, {
+    suspense: true,
+    refreshInterval: 5000,
+  });
 
   const Bell = useMemo(
     () => (
@@ -124,8 +131,6 @@ function Home(props) {
       const tsMerged = mergeTimeseries(ts, testTs);
       setTimeseries(tsMerged);
 
-      setLastUpdated(data.statewise[0].lastupdatedtime);
-
       const testData = parseStateTestData(stateTestData.states_tested_data);
       const totalTest = data.tested[data.tested.length - 1];
       testData['Total'] = {
@@ -163,43 +168,41 @@ function Home(props) {
           />
         </Helmet>
 
-        <div className="home-left">
-          <div className="header fadeInUp" style={{animationDelay: '1s'}}>
-            {fetched && <Search districtZones={districtZones} />}
+        <Suspense fallback={<div />}>
+          <div className="home-left">
+            <div className="header fadeInUp" style={{animationDelay: '1s'}}>
+              {fetched && <Search districtZones={districtZones} />}
 
-            <div className="actions">
-              <h5>
-                {isNaN(Date.parse(formatDate(lastUpdated)))
-                  ? ''
-                  : `${formatDateAbsolute(lastUpdated)} IST`}
-              </h5>
-              {fetched && !showUpdates && (
-                <div className="bell-icon">
-                  {fetched && Bell}
-                  {newUpdate && <div className="indicator"></div>}
-                </div>
-              )}
-              {fetched && showUpdates && BellOff}
+              <div className="actions">
+                <h5>{data['TT'].last_updated}</h5>
+                {fetched && !showUpdates && (
+                  <div className="bell-icon">
+                    {fetched && Bell}
+                    {newUpdate && <div className="indicator"></div>}
+                  </div>
+                )}
+                {fetched && showUpdates && BellOff}
+              </div>
             </div>
+
+            {showUpdates && <Updates />}
+
+            <Level data={data['TT']} />
+            <Minigraph timeseries={data['TT'].timeseries} />
+            {stateDistrictWiseData && (
+              <Table
+                states={states}
+                summary={false}
+                districts={stateDistrictWiseData}
+                zones={districtZones}
+                regionHighlighted={regionHighlighted}
+                setRegionHighlighted={setRegionHighlighted}
+                onHighlightState={onHighlightState}
+                onHighlightDistrict={onHighlightDistrict}
+              />
+            )}
           </div>
-
-          {showUpdates && <Updates />}
-
-          {states && <Level data={states[0]} />}
-          {timeseries && <Minigraph timeseries={timeseries['TT']} />}
-          {stateDistrictWiseData && (
-            <Table
-              states={states}
-              summary={false}
-              districts={stateDistrictWiseData}
-              zones={districtZones}
-              regionHighlighted={regionHighlighted}
-              setRegionHighlighted={setRegionHighlighted}
-              onHighlightState={onHighlightState}
-              onHighlightDistrict={onHighlightDistrict}
-            />
-          )}
-        </div>
+        </Suspense>
 
         <div className="home-right">
           <React.Fragment>
