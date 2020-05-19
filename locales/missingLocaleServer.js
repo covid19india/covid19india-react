@@ -1,7 +1,7 @@
 const fs = require('fs');
 const http = require('http');
 
-const hostname = '127.0.0.1';
+const hostname = 'localhost';
 const port = '9999';
 
 const server = http.createServer(async (req, res) => {
