@@ -4455,22 +4455,6 @@ footer {
   }
 }
 
-.Clusters {
-  align-self: center;
-  width: 100%;
-
-  h1 {
-    color: $red;
-    margin-bottom: 0;
-    padding-left: 1.5rem;
-    width: 100%;
-  }
-
-  canvas {
-    touch-action: auto !important;
-  }
-}
-
 .cards-container {
   margin-left: 5rem;
   padding: 2rem;
@@ -4870,8 +4854,7 @@ footer {
 
   .State {
     .district-bar,
-    .to-essentials,
-    .Clusters {
+    .to-essentials {
       width: calc(100% - 3rem);
 
       h1 {
@@ -5220,12 +5203,6 @@ footer {
 
     .modal {
       background: #1e1e30bb !important;
-    }
-  }
-
-  .Clusters {
-    canvas {
-      filter: invert(1) hue-rotate(180deg) saturate(5);
     }
   }
 
