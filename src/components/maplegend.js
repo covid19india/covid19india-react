@@ -44,7 +44,7 @@ function MapLegend({mapScale, statistic, mapStatistic, mapOption}) {
         .remove();
       svg.selectAll('.axis > *').remove();
 
-      const maxRadius = mapScale.domain()[1];
+      const domainMax = mapScale.domain()[1];
 
       const legend = svg
         .select('.circles')
@@ -53,7 +53,7 @@ function MapLegend({mapScale, statistic, mapStatistic, mapOption}) {
 
       legend
         .selectAll('circle')
-        .data([maxRadius / 10, (maxRadius * 2) / 5, maxRadius])
+        .data([domainMax / 10, (domainMax * 2) / 5, domainMax])
         .join('circle')
         .attr('fill', 'none')
         .attr('stroke', '#ccc')
@@ -61,14 +61,24 @@ function MapLegend({mapScale, statistic, mapStatistic, mapOption}) {
         .attr('cy', (d) => -mapScale(d))
         .attr('r', mapScale);
 
-      legend
-        .selectAll('text')
-        .data([maxRadius / 10, (maxRadius * 2) / 5, maxRadius])
-        .join('text')
-        .attr('dy', '1.3em')
+      const yScale = mapScale.copy().range([0, -2 * mapScale(domainMax)]);
+
+      svg
+        .select('.circleAxis')
+        .attr('transform', `translate(48,50)`)
         .transition(t)
-        .attr('y', (d) => -2 * mapScale(d))
-        .text(d3.format('.1s'));
+        .call(
+          d3
+            .axisRight(yScale)
+            .tickSize(0)
+            .tickPadding(0)
+            .tickValues([domainMax / 10, (domainMax * 2) / 5, domainMax])
+            .tickFormat(d3.format('0~s'))
+        )
+        .selectAll('.tick text')
+        .style('text-anchor', 'middle');
+
+      svg.select('.circleAxis').call((g) => g.select('.domain').remove());
     } else {
       svg.call(() =>
         legend({
@@ -106,6 +116,7 @@ function MapLegend({mapScale, statistic, mapStatistic, mapOption}) {
         <image className="ramp" />
         <g className="bars"></g>
         <g className="circles"></g>
+        <g className="circleAxis"></g>
         <g className="axis">
           <text className="axistext" />
         </g>
@@ -137,6 +148,7 @@ function legend({
   ordinalWeights,
 } = {}) {
   svg.selectAll('.circles > *').remove();
+  svg.selectAll('.circleAxis > *').remove();
   const t = svg.transition().duration(500);
 
   let tickAdjust = (g) => {
