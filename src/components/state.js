@@ -1,4 +1,3 @@
-import Clusters from './clusters';
 import DeltaBarGraph from './deltabargraph';
 import Footer from './footer';
 import Level from './level';
@@ -358,16 +357,6 @@ function State(props) {
                   (state) => state.statecode === 'TT'
                 )}
               />
-            )}
-
-            {fetched && (
-              <div
-                className="Clusters fadeInUp"
-                style={{animationDelay: '0.8s'}}
-              >
-                <h1>Network of Transmission</h1>
-                <Clusters stateCode={stateCode} />
-              </div>
             )}
           </div>
 
