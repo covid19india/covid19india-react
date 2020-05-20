@@ -933,7 +933,6 @@ h6 {
   justify-content: center;
   line-height: 20px;
 
-
   .snippet {
     align-self: center;
     cursor: pointer;
@@ -1055,6 +1054,17 @@ h6 {
     }
   }
 
+  .feature {
+    background: $pink-light;
+    border-radius: 5px;
+    color: $pink;
+    cursor: pointer;
+    font-family: 'archia';
+    font-size: .75rem;
+    padding: .75rem;
+    text-align: center;
+  }
+
   .expanded {
     display: flex;
     flex-direction: row;
@@ -1162,12 +1172,10 @@ h6 {
           border: 2px solid $orange-mid;
         }
 
-
         &.is-green {
           background: $green-light;
           border: 2px solid $green-mid;
         }
-
       }
     }
 
@@ -1181,11 +1189,9 @@ h6 {
         justify-content: space-between;
         width: 100%;
 
-
         .result-top-left {
           display: flex;
           flex-direction: column;
-
 
           .result-location {
             display: flex;
@@ -1264,7 +1270,6 @@ h6 {
     flex-direction: column;
     margin-right: 1rem;
 
-
     .suggestion {
       color: $gray-mid;
       display: flex;
@@ -1331,7 +1336,6 @@ h6 {
     .bell-icon {
       height: 24px;
       position: relative;
-
 
       .indicator {
         background: $pblue;
@@ -1505,7 +1509,6 @@ h6 {
   flex-direction: row;
   justify-content: space-between;
   width: 30rem;
-
 
   .level-item {
     display: flex;
@@ -2432,7 +2435,6 @@ table {
   position: relative;
   z-index: 99;
 
-
   .tab {
     background: $gray-light;
     border-top-left-radius: 5px;
@@ -2500,7 +2502,6 @@ table {
     &.focused {
       background: $gray-opaque;
       color: $gray;
-
     }
 
     &.disabled {
@@ -3056,7 +3057,6 @@ footer {
     justify-content: space-between;
     width: calc(100% - 0);
 
-
     .link {
       margin-right: -.75rem;
       width: 12rem;
@@ -3138,7 +3138,6 @@ footer {
   flex-direction: column;
   margin-left: 6rem;
   width: calc(100% - 6rem);
-
 
   .select {
     display: flex;
@@ -3375,7 +3374,6 @@ footer {
     justify-content: center;
     padding-left: 5rem;
     padding-right: 5rem;
-
 
     .no-result {
       align-self: center;
@@ -3772,7 +3770,6 @@ footer {
   width: 100vw;
   z-index: 9999;
 
-
   .modal-content {
     align-self: center;
     background: #fff;
@@ -3881,7 +3878,6 @@ footer {
 .patients-summary {
   align-self: center;
   width: 30rem;
-
 
   .Patients {
     min-height: 5rem;
@@ -4178,7 +4174,6 @@ footer {
   min-height: 22rem !important;
   width: 100%;
 
-
   .update {
     background: $gray-light;
     border-radius: 5px;
@@ -4459,18 +4454,15 @@ footer {
   margin-left: 5rem;
   padding: 2rem;
 
-
   .cards {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 
-
     .card {
       flex: 0 1 calc(33% - 1em);
       height: 30rem;
       margin-bottom: 2em;
-
 
       .charts-header {
         align-items: center;
@@ -4478,7 +4470,6 @@ footer {
         flex-direction: column;
         height: 100%;
         justify-content: flex-start;
-
 
         .chart-title {
           color: #6c757d;
@@ -4716,7 +4707,6 @@ footer {
   .Banner {
     height: 7rem;
 
-
     .snippet {
       margin-left: 1rem;
       margin-right: 1rem;
@@ -4732,7 +4722,6 @@ footer {
 
   .cards-container {
     padding: .5rem;
-
 
     .cards {
       .card {
@@ -4783,7 +4772,6 @@ footer {
       .modal-content {
         width: calc(100% - 5rem);
 
-
         .meta {
           height: 20rem;
         }
@@ -4810,11 +4798,9 @@ footer {
   .patients-summary {
     width: calc(100% - 2rem);
 
-
     .modal {
       .modal-content {
         width: calc(100% - 5rem);
-
 
         .meta {
           height: 20rem;
@@ -4826,7 +4812,6 @@ footer {
   .patientdb-wrapper {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
-
 
     .Patients {
       width: 100%;
@@ -4921,7 +4906,6 @@ footer {
   color: #bdbdbd;
   transition: background-color .2s ease-out !important;
 
-
   .switch-wrapper > div {
     background: #161625 !important;
   }
@@ -4933,7 +4917,6 @@ footer {
   .Navbar,
   .expand {
     border-right: 0;
-
 
     .navbar-middle {
       color: #bdbdbd;
@@ -4996,7 +4979,6 @@ footer {
         }
 
         li {
-
           a {
             color: $gray !important;
 
@@ -5004,7 +4986,6 @@ footer {
               color: $white !important;
             }
           }
-
         }
       }
     }

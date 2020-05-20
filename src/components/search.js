@@ -298,13 +298,16 @@ function Search({districtZones}) {
                     <div className="result-top-left">
                       <div className="result-name">{result.name}</div>
                       <div className="result-location">
-                        {result.city}, {result.state}
+                        {result.city && `${result.city}, `}
+                        {result.state}
                       </div>
                     </div>
                     <div className="result-category">
                       <div>
                         {result.category.match('Delivery')
                           ? 'Home Delivery'
+                          : result.category.match('Helpline for Cyclone Amphan')
+                          ? 'Cyclone Amphan'
                           : result.category}
                       </div>
                       <Icon.ExternalLink />
@@ -323,50 +326,65 @@ function Search({districtZones}) {
       )}
 
       {expand && (
-        <div className="expanded">
-          <div className="expanded-left">
-            <h3>{t('Essentials')}</h3>
-            <div className="suggestions">
-              {essentialSuggestions.map((suggestion, index) => (
-                <div className="suggestion" key={index}>
-                  <div>-</div>
-                  <h4
-                    onMouseDown={(event) => {
-                      event.preventDefault();
-                      setNativeValue(searchInput.current, suggestion);
-                      searchInput.current.dispatchEvent(
-                        new Event('input', {bubbles: true})
-                      );
-                    }}
-                  >
-                    {t(suggestion)}
-                  </h4>
-                </div>
-              ))}
+        <React.Fragment>
+          <p
+            className="feature"
+            onMouseDown={(event) => {
+              event.preventDefault();
+              setNativeValue(searchInput.current, 'Cyclone Amphan');
+              searchInput.current.dispatchEvent(
+                new Event('input', {bubbles: true})
+              );
+            }}
+          >
+            To those who are in states affected by Cyclone Amphan or have
+            family/friends there, click here to view helplines for assistance.
+          </p>
+          <div className="expanded">
+            <div className="expanded-left">
+              <h3>{t('Essentials')}</h3>
+              <div className="suggestions">
+                {essentialSuggestions.map((suggestion, index) => (
+                  <div className="suggestion" key={index}>
+                    <div>-</div>
+                    <h4
+                      onMouseDown={(event) => {
+                        event.preventDefault();
+                        setNativeValue(searchInput.current, suggestion);
+                        searchInput.current.dispatchEvent(
+                          new Event('input', {bubbles: true})
+                        );
+                      }}
+                    >
+                      {t(suggestion)}
+                    </h4>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="expanded-right">
+              <h3>{t('Locations')}</h3>
+              <div className="suggestions">
+                {locationSuggestions.map((suggestion, index) => (
+                  <div className="suggestion" key={index}>
+                    <div>-</div>
+                    <h4
+                      onMouseDown={(event) => {
+                        event.preventDefault();
+                        setNativeValue(searchInput.current, suggestion);
+                        searchInput.current.dispatchEvent(
+                          new Event('input', {bubbles: true})
+                        );
+                      }}
+                    >
+                      {t(suggestion)}
+                    </h4>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-          <div className="expanded-right">
-            <h3>{t('Locations')}</h3>
-            <div className="suggestions">
-              {locationSuggestions.map((suggestion, index) => (
-                <div className="suggestion" key={index}>
-                  <div>-</div>
-                  <h4
-                    onMouseDown={(event) => {
-                      event.preventDefault();
-                      setNativeValue(searchInput.current, suggestion);
-                      searchInput.current.dispatchEvent(
-                        new Event('input', {bubbles: true})
-                      );
-                    }}
-                  >
-                    {t(suggestion)}
-                  </h4>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        </React.Fragment>
       )}
     </div>
   );
