@@ -9,8 +9,6 @@ import Updates from './updates';
 
 import {STATE_CODES_REVERSE} from '../constants';
 import {
-  formatDate,
-  formatDateAbsolute,
   mergeTimeseries,
   preprocessTimeseries,
   parseStateTimeseries,

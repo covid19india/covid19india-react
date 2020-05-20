@@ -1,6 +1,7 @@
 import {PRIMARY_STATISTICS} from '../constants';
 
 import * as d3 from 'd3';
+import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {useEffect, useRef, useCallback, useMemo} from 'react';
 
@@ -11,10 +12,10 @@ function Minigraph({timeseries}) {
   const svgRef4 = useRef();
 
   const dates = useMemo(() => {
-    return Object.keys(timeseries);
+    return Object.keys(timeseries).slice(-20);
   }, [timeseries]);
 
-  dates.map((date) => {
+  dates.forEach((date) => {
     timeseries = produce(timeseries, (draftTimeseries) => {
       draftTimeseries[date].active =
         draftTimeseries[date].confirmed -
@@ -24,7 +25,6 @@ function Minigraph({timeseries}) {
   });
 
   const graphData = useCallback(() => {
-    console.log(timeseries);
     const margin = {top: 10, right: 5, bottom: 20, left: 5};
     const chartRight = 100 - margin.right;
     const chartBottom = 100 - margin.bottom;
@@ -72,17 +72,12 @@ function Minigraph({timeseries}) {
           'd',
           d3
             .line()
-            .x((date) => {
-              xScale(new Date(date));
-            })
-            .y((date) => {
-              yScale(timeseries[date][type]);
-            })
+            .x((date) => xScale(new Date(date)))
+            .y((date) => yScale(timeseries[date][type]))
             .curve(d3.curveMonotoneX)
         );
 
       const totalLength = path.node().getTotalLength();
-      console.log(totalLength);
 
       path
         .attr('stroke-dasharray', totalLength + ' ' + totalLength)
@@ -92,19 +87,17 @@ function Minigraph({timeseries}) {
         .duration(2500)
         .attr('stroke-dashoffset', 0);
 
-      /*
-
       svg
         .selectAll('.dot')
-        .data(data.slice(data.length - 1))
+        .data(dates.slice(-1))
         .enter()
         .append('circle')
         .attr('fill', color)
         .attr('stroke', color)
         .attr('r', 2)
         .attr('cursor', 'pointer')
-        .attr('cx', (d) => xScale(d.date))
-        .attr('cy', (d) => yScale(d[type]))
+        .attr('cx', (date) => xScale(new Date(date)))
+        .attr('cy', (date) => yScale(timeseries[date][type]))
         .on('mouseover', (d) => {
           d3.select(d3.event.target).attr('r', '5');
         })
@@ -115,7 +108,7 @@ function Minigraph({timeseries}) {
         .transition()
         .delay(500)
         .duration(2500)
-        .style('opacity', 1);*/
+        .style('opacity', 1);
     });
   }, [dates, timeseries]);
 
@@ -179,4 +172,11 @@ function Minigraph({timeseries}) {
   );
 }
 
-export default React.memo(Minigraph);
+const isEqual = (currProps, prevProps) => {
+  if (equal(currProps, prevProps)) {
+    return true;
+  }
+  return false;
+};
+
+export default React.memo(Minigraph, isEqual);
