@@ -119,14 +119,14 @@ h6 {
   border-bottom: 5px solid $gray-mid;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  margin-left: .25rem;
+  margin-left: 0.25rem;
 }
 
 .arrow-down {
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   border-top: 5px solid $gray-mid;
-  margin-left: .25rem;
+  margin-left: 0.25rem;
 }
 
 .Navbar {
@@ -219,7 +219,7 @@ h6 {
       border-bottom: 1px solid $gray-light;
       border-top: 1px solid $gray-light;
       padding: 1.5rem;
-      transition: all .15s ease-in-out;
+      transition: all 0.15s ease-in-out;
 
       &:hover {
         background: $gray-hover;
@@ -229,7 +229,7 @@ h6 {
         &.focused {
           background: $pblue-light;
           color: $pblue;
-          padding: .25rem;
+          padding: 0.25rem;
         }
       }
     }
@@ -284,14 +284,14 @@ h6 {
   flex-direction: row;
   font-family: 'archia';
   font-size: 10px;
-  margin-right: .5rem;
-  padding: .5rem;
+  margin-right: 0.5rem;
+  padding: 0.5rem;
   width: 6rem;
 
   svg {
     color: $gray-mid;
-    margin-right: .25rem;
-    margin-top: -.25rem;
+    margin-right: 0.25rem;
+    margin-top: -0.25rem;
     stroke-width: 2px;
     width: 36px !important;
   }
@@ -302,8 +302,8 @@ h6 {
     a {
       background: $gray-light;
       color: $gray;
-      padding-left: .1rem;
-      padding-right: .1rem;
+      padding-left: 0.1rem;
+      padding-right: 0.1rem;
 
       &:hover {
         background: $gray-hover;
@@ -365,7 +365,7 @@ h6 {
       color: $purple-mid;
       display: flex;
       flex-direction: column;
-      margin-top: .1rem;
+      margin-top: 0.1rem;
       text-align: right;
 
       h2,
@@ -384,7 +384,7 @@ h6 {
         background: $purple-light;
         color: inherit;
         text-decoration: none;
-        transition: all .2s ease-in-out;
+        transition: all 0.2s ease-in-out;
 
         &:hover {
           background: $purple-hover;
@@ -421,8 +421,8 @@ h6 {
     display: none;
     flex-direction: row;
     justify-content: center;
-    padding: .5rem;
-    transition: all .2s ease-in-out;
+    padding: 0.5rem;
+    transition: all 0.2s ease-in-out;
 
     &:hover {
       background: $gray-hover;
@@ -501,7 +501,7 @@ h6 {
     font-family: 'archia';
     font-size: 11px;
     font-weight: 600;
-    padding: .25rem;
+    padding: 0.25rem;
     text-align: center;
   }
 }
@@ -527,7 +527,7 @@ h6 {
   }
 
   .__react_component_tooltip {
-    font-size: .8em;
+    font-size: 0.8em;
     padding: 1rem;
 
     img {
@@ -748,7 +748,7 @@ h6 {
   display: flex;
   flex-direction: row;
   font-family: 'archia';
-  font-size: .75rem;
+  font-size: 0.75rem;
   padding-left: 1.5rem;
 
   ul {
@@ -778,13 +778,13 @@ h6 {
   a {
     color: $gray;
     font-family: 'archia';
-    font-size: .75rem;
-    margin-right: .25rem;
+    font-size: 0.75rem;
+    margin-right: 0.25rem;
     text-decoration: none;
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 
     &:not(:first-child) {
-      margin-left: .25rem;
+      margin-left: 0.25rem;
     }
 
     &:hover {
@@ -801,7 +801,7 @@ h6 {
   .caret {
     color: $gray;
     margin-left: 0;
-    transition: all .1s ease-in-out;
+    transition: all 0.1s ease-in-out;
 
     &:hover {
       color: $gray-dark;
@@ -906,7 +906,7 @@ h6 {
   color: $gray-mid !important;
   cursor: pointer;
   font-family: 'archia' !important;
-  margin-bottom: .25rem;
+  margin-bottom: 0.25rem;
   text-transform: capitalize;
 
   &.is-selected {
@@ -929,7 +929,7 @@ h6 {
   .counter {
     background: inherit;
     color: inherit;
-    margin-left: .25rem;
+    margin-left: 0.25rem;
   }
 }
 
@@ -939,7 +939,7 @@ h6 {
   display: flex;
   flex-direction: row;
   font-family: 'Archia';
-  font-size: .8rem;
+  font-size: 0.8rem;
   font-weight: 600;
   justify-content: center;
   line-height: 20px;
@@ -968,7 +968,7 @@ h6 {
   label {
     color: $gray;
     font-family: 'archia';
-    font-size: .75rem;
+    font-size: 0.75rem;
     margin-bottom: 1rem;
   }
 
@@ -979,13 +979,13 @@ h6 {
   }
 
   input {
-    -moz-box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
+    -moz-box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
     -webkit-appearance: none !important;
-    -webkit-box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
+    -webkit-box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
     background: #fff;
     border: 0;
     border-radius: 5px;
-    box-shadow: 0 10px 35px rgba(0, 0, 0, .1);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
     color: $gray;
     font-family: 'archia';
     font-size: 1rem;
@@ -993,7 +993,7 @@ h6 {
     outline: none;
     padding: 1rem;
     padding-left: 3rem;
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
     width: calc(100% - 4rem);
   }
 
@@ -1007,7 +1007,7 @@ h6 {
     font-family: 'archia';
     font-size: 1rem;
     left: 3rem;
-    opacity: .8;
+    opacity: 0.8;
     pointer-events: none;
     position: absolute;
     top: 4.3rem;
@@ -1021,15 +1021,15 @@ h6 {
   .search-button {
     svg {
       color: $gray-mid;
-      left: .75rem;
+      left: 0.75rem;
       position: absolute;
       top: 1.25rem;
-      transition: all .2s ease-in-out;
+      transition: all 0.2s ease-in-out;
     }
 
     &.is-expand {
       svg {
-        left: .5rem;
+        left: 0.5rem;
       }
     }
   }
@@ -1045,7 +1045,7 @@ h6 {
     position: absolute;
     right: 1rem;
     top: 1.35rem;
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
     width: 20px;
 
     &:hover {
@@ -1053,7 +1053,7 @@ h6 {
     }
 
     &.is-expand {
-      right: .75rem;
+      right: 0.75rem;
     }
 
     svg {
@@ -1103,12 +1103,12 @@ h6 {
       color: $gray;
       font-weight: 600;
       margin: 0;
-      margin-bottom: .5rem;
+      margin-bottom: 0.5rem;
     }
 
     h3 {
       color: $pblue;
-      margin-bottom: .75rem;
+      margin-bottom: 0.75rem;
     }
   }
 
@@ -1136,11 +1136,11 @@ h6 {
       display: flex;
       flex-direction: row;
       font-family: 'archia';
-      font-size: .9rem;
+      font-size: 0.9rem;
       justify-content: space-between;
       min-height: 2rem;
       padding: 1rem;
-      transition: all .2s ease-in-out;
+      transition: all 0.2s ease-in-out;
 
       &:hover {
         background: $gray-light;
@@ -1160,15 +1160,15 @@ h6 {
         color: $orange;
         display: flex;
         flex-direction: row;
-        font-size: .75rem;
-        padding: .25rem;
+        font-size: 0.75rem;
+        padding: 0.25rem;
 
         &:hover {
           background: $yellow-hover;
         }
 
         svg {
-          margin-left: .25rem;
+          margin-left: 0.25rem;
           stroke: $orange-mid;
           stroke-width: 3px;
         }
@@ -1189,9 +1189,9 @@ h6 {
 
       .result-zone {
         border-radius: 50%;
-        height: .75rem;
-        margin-left: .5rem;
-        width: .75rem;
+        height: 0.75rem;
+        margin-left: 0.5rem;
+        width: 0.75rem;
 
         &.is-red {
           background: $cherry-light;
@@ -1227,14 +1227,14 @@ h6 {
           .result-location {
             display: flex;
             flex-direction: row;
-            font-size: .75rem;
+            font-size: 0.75rem;
           }
 
           .result-distance {
             color: $green;
             display: flex;
             flex-direction: row;
-            font-size: .75rem;
+            font-size: 0.75rem;
           }
         }
       }
@@ -1246,9 +1246,9 @@ h6 {
         color: $pink;
         display: flex;
         flex-direction: row;
-        font-size: .75rem;
+        font-size: 0.75rem;
         height: 1rem;
-        padding: .25rem;
+        padding: 0.25rem;
         text-align: right;
         text-transform: capitalize;
 
@@ -1261,7 +1261,7 @@ h6 {
         }
 
         svg {
-          margin-left: .25rem;
+          margin-left: 0.25rem;
           stroke-width: 3px;
           width: 12px;
         }
@@ -1269,7 +1269,7 @@ h6 {
 
       .result-description {
         align-self: flex-start;
-        font-size: .75rem;
+        font-size: 0.75rem;
         margin-top: 1rem;
       }
 
@@ -1286,11 +1286,10 @@ h6 {
         color: $gray;
         display: flex;
         flex-direction: row;
-        font-size: .75rem;
+        font-size: 0.75rem;
         height: 1rem;
-        margin-right: .5rem;
-        margin-top: .5rem;
-        padding: .25rem;
+        margin-top: 0.5rem;
+        padding: 0.25rem;
         text-align: right;
 
         &:hover {
@@ -1306,7 +1305,7 @@ h6 {
         }
 
         svg {
-          margin-right: .25rem;
+          margin-right: 0.25rem;
           stroke: $gray-mid;
           stroke-width: 3px;
           width: 12px;
@@ -1332,7 +1331,7 @@ h6 {
 
       h4 {
         cursor: pointer;
-        margin-left: .25rem;
+        margin-left: 0.25rem;
         word-wrap: wrap;
 
         &:hover {
@@ -1362,8 +1361,8 @@ h6 {
 
     & > * {
       align-self: center;
-      margin-left: .5rem;
-      margin-right: .5rem;
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
     }
 
     h5 {
@@ -1405,7 +1404,7 @@ h6 {
   display: flex;
   flex-direction: column;
   margin-bottom: auto;
-  margin-top: .25rem;
+  margin-top: 0.25rem;
   text-align: right;
   width: 10rem;
 
@@ -1434,15 +1433,15 @@ h6 {
   display: flex;
   flex-direction: row;
   font-family: 'archia';
-  font-size: .75rem;
+  font-size: 0.75rem;
   font-weight: 900;
-  margin-bottom: .5rem;
-  margin-top: .25rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.25rem;
   outline: none;
-  padding: .5rem;
+  padding: 0.5rem;
   text-decoration: none;
   text-transform: uppercase;
-  transition: background .2s ease-in-out;
+  transition: background 0.2s ease-in-out;
 
   svg {
     padding-right: 6px;
@@ -1481,7 +1480,7 @@ h6 {
   background: $gray-light !important;
   color: #08c !important;
   justify-content: center;
-  padding-left: .65rem;
+  padding-left: 0.65rem;
   width: 15.5rem;
 
   &:hover {
@@ -1493,8 +1492,8 @@ h6 {
   background: #000 !important;
   color: #fff !important;
   justify-content: center;
-  padding-left: .65rem;
-  transition: all .2s ease-in-out;
+  padding-left: 0.65rem;
+  transition: all 0.2s ease-in-out;
   width: 15.5rem;
 
   &:hover {
@@ -1580,7 +1579,7 @@ h6 {
   }
 
   h4 {
-    margin-bottom: -.5rem;
+    margin-bottom: -0.5rem;
   }
 
   h5 {
@@ -1659,15 +1658,15 @@ abbr {
   color: $gray-mid;
   font-weight: 600;
   margin: 0;
-  margin-bottom: .25rem;
-  margin-right: .25rem;
+  margin-bottom: 0.25rem;
+  margin-right: 0.25rem;
   text-align: right;
 
   a {
     border-bottom: 2px solid $gray-hover;
     color: inherit;
     text-decoration: none;
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 
     &:hover {
       background: $gray-hover;
@@ -1690,17 +1689,17 @@ table {
   thead {
     background: $gray-light;
     color: $gray;
-    font-size: .75rem;
+    font-size: 0.75rem;
     text-align: left;
 
     th {
       background: $gray-light-opaque;
       border-radius: 5px;
       cursor: pointer;
-      padding: .5rem;
+      padding: 0.5rem;
       position: sticky !important;
       top: 5px;
-      transition: all .1s ease-in-out;
+      transition: all 0.1s ease-in-out;
       z-index: 99;
 
       &:hover {
@@ -1740,8 +1739,8 @@ table {
     svg {
       color: $gray-mid;
       margin: 0;
-      margin-left: .25rem;
-      margin-top: .15rem;
+      margin-left: 0.25rem;
+      margin-top: 0.15rem;
       right: 0;
       stroke-width: 4px;
       width: 10px;
@@ -1789,8 +1788,8 @@ table {
 
     td {
       border-radius: 4px;
-      font-size: .9rem;
-      padding: .25rem;
+      font-size: 0.9rem;
+      padding: 0.25rem;
       text-align: right;
 
       &:first-child {
@@ -1807,7 +1806,7 @@ table {
         svg {
           height: 9px;
           stroke-width: 3;
-          vertical-align: -.25px;
+          vertical-align: -0.25px;
           width: 9px;
         }
 
@@ -1829,7 +1828,7 @@ table {
       }
 
       .total {
-        margin-left: .25rem;
+        margin-left: 0.25rem;
       }
 
       a {
@@ -1840,8 +1839,8 @@ table {
           color: $gray-mid;
           margin-left: 2px;
           stroke-width: 3px;
-          transition: all .2s ease-in-out;
-          vertical-align: -.435rem;
+          transition: all 0.2s ease-in-out;
+          vertical-align: -0.435rem;
           width: 12px;
 
           &:hover {
@@ -1905,7 +1904,7 @@ table {
       height: 2rem;
 
       p {
-        font-size: .75rem;
+        font-size: 0.75rem;
         margin: 0;
       }
 
@@ -1923,13 +1922,13 @@ table {
         font-family: 'archia';
         font-size: 12px;
         left: 0;
-        margin-top: .5rem;
+        margin-top: 0.5rem;
         max-width: 10rem;
-        padding: .5rem;
+        padding: 0.5rem;
 
         svg {
-          margin-right: .25rem;
-          margin-top: -.25rem;
+          margin-right: 0.25rem;
+          margin-top: -0.25rem;
           stroke-width: 2px;
           width: 20px !important;
         }
@@ -1938,9 +1937,9 @@ table {
       .state-page-link {
         background: $yellow-light !important;
         color: $orange;
-        font-size: .75rem;
+        font-size: 0.75rem;
         font-weight: 600;
-        padding: .5rem;
+        padding: 0.5rem;
         text-align: center;
 
         &:hover {
@@ -1959,15 +1958,15 @@ table {
       td {
         background: $gray-light;
         color: $gray-dark;
-        font-size: .75rem;
+        font-size: 0.75rem;
         font-weight: 900;
-        padding: .45rem;
+        padding: 0.45rem;
 
         .heading-content {
           align-items: center;
           display: flex;
           flex-direction: row;
-          height: .9rem;
+          height: 0.9rem;
           justify-content: space-between;
           position: relative;
 
@@ -1978,8 +1977,8 @@ table {
           svg {
             color: $gray-mid;
             margin: 0;
-            margin-left: .25rem;
-            margin-top: .15rem;
+            margin-left: 0.25rem;
+            margin-top: 0.15rem;
             right: 0;
             stroke-width: 4px;
             width: 10px;
@@ -2015,8 +2014,8 @@ table {
     height: 13px;
     left: -1.25rem;
     position: absolute;
-    top: .125rem;
-    transition: background .2s ease-in-out;
+    top: 0.125rem;
+    transition: background 0.2s ease-in-out;
     width: 13px;
 
     &:hover {
@@ -2027,7 +2026,7 @@ table {
       left: 1px;
       position: absolute;
       stroke-width: 3;
-      top: -.35rem;
+      top: -0.35rem;
       width: 11px;
     }
   }
@@ -2046,7 +2045,7 @@ table {
   position: absolute;
   right: 0;
   transform: rotate(45deg);
-  transition: all .1s ease-in-out;
+  transition: all 0.1s ease-in-out;
   z-index: 999;
 
   svg {
@@ -2092,7 +2091,7 @@ table {
 
     h6 {
       margin-bottom: 2rem;
-      margin-top: .75rem;
+      margin-top: 0.75rem;
     }
   }
 
@@ -2104,7 +2103,7 @@ table {
     width: 90%;
 
     &.maplegend {
-      margin-top: .6rem;
+      margin-top: 0.6rem;
       overflow: visible;
       width: 100%;
     }
@@ -2133,7 +2132,7 @@ table {
     position: absolute;
     right: 0;
     top: 2.75rem;
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 
     &:hover {
       background: $yellow-hover;
@@ -2144,14 +2143,14 @@ table {
     background: $yellow-light;
     border-radius: 5px;
     color: $orange;
-    font-size: .75rem;
+    font-size: 0.75rem;
     height: 1.5rem;
-    padding: .45rem;
-    padding-left: .75rem;
+    padding: 0.45rem;
+    padding-left: 0.75rem;
     position: absolute;
     right: 0;
-    top: -.5rem;
-    transition: all .2s ease-in-out;
+    top: -0.5rem;
+    transition: all 0.2s ease-in-out;
 
     &:hover {
       background: $yellow-hover;
@@ -2163,7 +2162,7 @@ table {
 
     svg {
       height: 12px;
-      margin-left: .25rem;
+      margin-left: 0.25rem;
       stroke: $orange-mid;
       stroke-width: 3px;
       vertical-align: middle;
@@ -2226,7 +2225,7 @@ table {
       margin: 0;
 
       span {
-        font-size: .75rem;
+        font-size: 0.75rem;
         font-weight: 600;
       }
 
@@ -2283,11 +2282,11 @@ table {
       flex: 1;
       flex-direction: column;
       margin-bottom: 1rem;
-      margin-left: .25rem;
-      margin-right: .25rem;
-      padding: .25rem;
+      margin-left: 0.25rem;
+      margin-right: 0.25rem;
+      padding: 0.25rem;
       position: relative;
-      transition: all .1s ease-in-out;
+      transition: all 0.1s ease-in-out;
 
       .stats-bottom {
         display: flex;
@@ -2295,7 +2294,7 @@ table {
 
         h6 {
           font-weight: 900;
-          margin-bottom: .25rem;
+          margin-bottom: 0.25rem;
           margin-top: auto;
         }
       }
@@ -2379,11 +2378,11 @@ table {
         svg {
           cursor: pointer;
           position: absolute;
-          right: .35rem;
+          right: 0.35rem;
           stroke: $purple-mid;
           stroke-width: 3;
           top: 0;
-          transition: stroke .2s ease-in-out;
+          transition: stroke 0.2s ease-in-out;
           width: 12px;
 
           &:hover {
@@ -2393,17 +2392,17 @@ table {
 
         .tooltip-tested {
           svg {
-            bottom: .3rem;
+            bottom: 0.3rem;
             top: auto;
           }
         }
       }
 
       &.focused {
-        margin-bottom: .5rem;
-        margin-top: -.5rem;
-        padding-bottom: .75rem;
-        padding-top: .75rem;
+        margin-bottom: 0.5rem;
+        margin-top: -0.5rem;
+        padding-bottom: 0.75rem;
+        padding-top: 0.75rem;
       }
 
       &:first-child {
@@ -2434,7 +2433,7 @@ table {
     left: 0;
     margin-left: auto;
     margin-right: auto;
-    padding: .5rem;
+    padding: 0.5rem;
     pointer-events: none;
     position: absolute;
     right: 0;
@@ -2442,8 +2441,8 @@ table {
     z-index: 99;
 
     svg {
-      margin-right: .25rem;
-      margin-top: -.9rem;
+      margin-right: 0.25rem;
+      margin-top: -0.9rem;
       stroke-width: 2px;
       width: 20px !important;
     }
@@ -2463,7 +2462,7 @@ table {
   font-family: 'archia';
   font-size: 11px;
   font-weight: 600;
-  padding: .25rem;
+  padding: 0.25rem;
   text-align: center;
   width: 200px;
 }
@@ -2473,7 +2472,7 @@ table {
 
   svg {
     cursor: pointer;
-    height: .95em;
+    height: 0.95em;
     stroke-width: 3;
     width: 1em;
   }
@@ -2492,12 +2491,12 @@ table {
     color: $gray-mid;
     cursor: pointer;
     height: 3.25rem;
-    margin-right: .25rem;
+    margin-right: 0.25rem;
     min-width: 5rem;
     padding-left: 1rem;
     padding-right: 1rem;
     text-align: center;
-    transition: all .3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 
     &:hover {
       background: $gray-hover;
@@ -2537,13 +2536,13 @@ table {
     color: $gray-mid;
     cursor: pointer;
     height: 2rem;
-    margin-right: .25rem;
-    margin-top: .25rem;
+    margin-right: 0.25rem;
+    margin-top: 0.25rem;
     min-width: 1.6rem;
     padding-left: 1rem;
     padding-right: 1rem;
     text-align: center;
-    transition: all .3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 
     &:hover {
       background: $gray-hover;
@@ -2562,7 +2561,7 @@ table {
 
   sup {
     position: relative;
-    top: -.5em;
+    top: -0.5em;
     vertical-align: top;
   }
 }
@@ -2620,10 +2619,10 @@ table {
     label {
       color: $gray-mid;
       font-family: 'archia';
-      font-size: .75rem;
+      font-size: 0.75rem;
       font-weight: 900;
-      margin-right: .25rem;
-      transition: all .2s ease-in-out;
+      margin-right: 0.25rem;
+      transition: all 0.2s ease-in-out;
       z-index: 99;
     }
 
@@ -2723,7 +2722,7 @@ input {
     font-weight: 900;
     margin-left: -1px;
     margin-top: 1rem;
-    padding: .5rem;
+    padding: 0.5rem;
     width: auto;
 
     &:focus {
@@ -2743,18 +2742,18 @@ input {
     border-radius: 3px;
     display: flex;
     flex-direction: column;
-    left: .5rem;
-    padding: .25rem;
+    left: 0.5rem;
+    padding: 0.25rem;
     pointer-events: none;
     position: absolute;
-    top: .5rem;
+    top: 0.5rem;
 
     h2,
     h5,
     h6 {
       color: $cherry-mid;
       margin: 0;
-      transition: all .15s ease-in-out;
+      transition: all 0.15s ease-in-out;
     }
 
     h5 {
@@ -2773,8 +2772,8 @@ input {
       flex-direction: row;
 
       h6 {
-        margin-bottom: .1rem;
-        margin-left: .25rem;
+        margin-bottom: 0.1rem;
+        margin-left: 0.25rem;
       }
 
       & > * {
@@ -2960,12 +2959,6 @@ input {
     background: transparent !important;
     width: calc(25%);
   }
-
-  .tooltip {
-    position: fixed;
-    right: 0;
-    top: 0;
-  }
 }
 
 .floating-buttons {
@@ -2987,10 +2980,10 @@ input {
     cursor: pointer;
     display: flex;
     flex-direction: row;
-    margin: .25rem;
+    margin: 0.25rem;
     outline: none;
-    padding: .75rem;
-    transition: all .2s ease-in-out;
+    padding: 0.75rem;
+    transition: all 0.2s ease-in-out;
 
     &:hover {
       background: #ffa500;
@@ -3026,7 +3019,7 @@ input {
     font-weight: 900;
     text-decoration: none;
     text-transform: uppercase;
-    transition: background .2s ease-in-out;
+    transition: background 0.2s ease-in-out;
     word-wrap: break-word;
 
     &:hover {
@@ -3056,7 +3049,7 @@ footer {
   h5 {
     color: $gray;
     margin: 0;
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
     margin-top: 1rem;
   }
 
@@ -3108,7 +3101,7 @@ footer {
     width: calc(100% - 0);
 
     .link {
-      margin-right: -.75rem;
+      margin-right: -0.75rem;
       width: 12rem;
     }
 
@@ -3117,9 +3110,9 @@ footer {
     }
 
     img {
-      margin-bottom: .25rem;
+      margin-bottom: 0.25rem;
       margin-left: 1rem;
-      margin-right: .25rem;
+      margin-right: 0.25rem;
     }
 
     h5 {
@@ -3163,7 +3156,7 @@ footer {
   .question {
     color: $gray-dark;
     margin: 0;
-    margin-bottom: .25rem;
+    margin-bottom: 0.25rem;
   }
 
   .answer {
@@ -3205,8 +3198,8 @@ footer {
       font-size: 12px;
       font-weight: 900;
       height: 2.19rem;
-      margin: .2rem .1rem;
-      padding: .5rem;
+      margin: 0.2rem 0.1rem;
+      padding: 0.5rem;
       padding-inline-start: 1px;
       width: auto;
 
@@ -3234,7 +3227,7 @@ footer {
         border-radius: 5px;
         font-family: 'archia';
         padding: 1rem;
-        transition: all .1s ease-in-out;
+        transition: all 0.1s ease-in-out;
 
         &:disabled {
           border-radius: 0 !important;
@@ -3274,7 +3267,7 @@ footer {
 
     .react-calendar__month-view__weekdays__weekday {
       font-family: 'archia';
-      margin-bottom: .5rem;
+      margin-bottom: 0.5rem;
     }
 
     .react-calendar__month-view__days__day--weekend,
@@ -3310,7 +3303,7 @@ footer {
 
     .react-date-picker__calendar-button {
       margin: 0 !important;
-      margin-left: .25rem !important;
+      margin-left: 0.25rem !important;
       padding: 0 !important;
 
       svg {
@@ -3335,8 +3328,8 @@ footer {
       cursor: pointer;
       font-family: 'archia';
       font-weight: 900;
-      margin: .2rem .1rem;
-      padding: .5rem;
+      margin: 0.2rem 0.1rem;
+      padding: 0.5rem;
       width: 130px;
 
       &:focus {
@@ -3351,7 +3344,7 @@ footer {
     border-radius: 5px;
     color: $pblue;
     font-family: 'archia';
-    font-size: .9rem;
+    font-size: 0.9rem;
     font-weight: 600;
     line-height: 23px;
     margin-bottom: 3rem;
@@ -3364,12 +3357,12 @@ footer {
 
     svg {
       cursor: pointer;
-      padding: .5rem;
+      padding: 0.5rem;
       position: absolute;
       right: 0;
       stroke: $pblue-mid;
       stroke-width: 3px;
-      top: -.25rem;
+      top: -0.25rem;
       width: 16px;
 
       &:hover {
@@ -3481,8 +3474,8 @@ footer {
     flex-direction: row;
     height: 3.25rem;
     justify-content: center;
-    margin: .25rem;
-    transition: background .3s ease-in-out;
+    margin: 0.25rem;
+    transition: background 0.3s ease-in-out;
     width: 3.25rem;
 
     & > * {
@@ -3834,7 +3827,7 @@ footer {
     svg {
       stroke: $pblue-mid;
       stroke-width: 3;
-      transition: all .1s ease-in-out;
+      transition: all 0.1s ease-in-out;
       width: 20px;
 
       &:hover {
@@ -3860,7 +3853,7 @@ footer {
 
     h3 {
       color: $pblue;
-      margin-bottom: .5rem;
+      margin-bottom: 0.5rem;
     }
 
     h5 {
@@ -3882,7 +3875,7 @@ footer {
           cursor: pointer;
           text-decoration: underline;
           text-decoration-style: dotted;
-          transition: all .1s ease-in-out;
+          transition: all 0.1s ease-in-out;
           width: 2rem;
 
           &:hover {
@@ -3909,13 +3902,13 @@ footer {
 
     .link {
       margin: 0;
-      margin-bottom: .5rem;
-      margin-top: .25rem;
+      margin-bottom: 0.5rem;
+      margin-top: 0.25rem;
 
       a {
         background: $pblue-light;
         color: $pblue;
-        transition: background .2s ease-in-out;
+        transition: background 0.2s ease-in-out;
 
         &:hover {
           background: $pblue-hover;
@@ -3935,7 +3928,7 @@ footer {
 
   h1 {
     color: $gray-dark;
-    margin-bottom: .25rem;
+    margin-bottom: 0.25rem;
   }
 
   h6 {
@@ -4002,7 +3995,7 @@ footer {
   .legend {
     justify-content: flex-start;
     padding: 1rem;
-    padding-bottom: .25rem;
+    padding-bottom: 0.25rem;
     padding-left: 0;
   }
 }
@@ -4013,9 +4006,9 @@ footer {
 
   label {
     color: $gray-mid;
-    font-size: .75rem;
+    font-size: 0.75rem;
     font-weight: 900;
-    margin-bottom: .25rem;
+    margin-bottom: 0.25rem;
     text-transform: uppercase;
   }
 }
@@ -4023,13 +4016,13 @@ footer {
 .filters {
   background: #fff !important;
   border-radius: 5px;
-  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .12), inset 0 -1px 0 0 #dadce0;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 #dadce0;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   font-family: archia;
   justify-content: space-between;
-  padding: .5rem;
+  padding: 0.5rem;
   position: sticky;
   top: 0;
   z-index: 101;
@@ -4062,7 +4055,7 @@ footer {
     outline: none;
     padding: 10px 15px;
     text-align: center;
-    transition: background .25s ease-in-out;
+    transition: background 0.25s ease-in-out;
 
     &:hover {
       background: $yellow-hover;
@@ -4116,7 +4109,7 @@ footer {
   h5 {
     color: $gray;
     margin: 0;
-    margin-right: .5rem;
+    margin-right: 0.5rem;
 
     &.is-female {
       color: $pink;
@@ -4138,9 +4131,9 @@ footer {
   .circle {
     background: $gray-mid;
     border-radius: 50%;
-    height: .8rem;
-    margin-right: .25rem;
-    width: .8rem;
+    height: 0.8rem;
+    margin-right: 0.25rem;
+    width: 0.8rem;
 
     &.is-female {
       background: $pink;
@@ -4227,9 +4220,9 @@ footer {
   .update {
     background: $gray-light;
     border-radius: 5px;
-    margin-bottom: .5rem;
-    padding: .75rem;
-    transition: all .2s ease-in-out;
+    margin-bottom: 0.5rem;
+    padding: 0.75rem;
+    transition: all 0.2s ease-in-out;
 
     &:hover {
       background: $gray-hover;
@@ -4242,7 +4235,7 @@ footer {
 
     h5 {
       color: $gray-mid;
-      margin-bottom: .15rem;
+      margin-bottom: 0.15rem;
     }
 
     h4 {
@@ -4287,7 +4280,7 @@ footer {
 
   h2 {
     font-weight: 900;
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
 
     &.confirmed {
       color: $red;
@@ -4317,7 +4310,7 @@ footer {
       font-weight: 600;
       height: 2.5rem;
       justify-content: center;
-      margin-top: .75rem;
+      margin-top: 0.75rem;
       text-transform: unset;
       width: 5rem;
 
@@ -4365,8 +4358,8 @@ footer {
     &.is-grid {
       display: grid;
       grid-auto-flow: column;
-      grid-gap: .5rem;
-      padding-bottom: .5rem;
+      grid-gap: 0.5rem;
+      padding-bottom: 0.5rem;
     }
 
     .district {
@@ -4387,8 +4380,8 @@ footer {
       h5 {
         display: inline-block !important;
         flex: 0 1;
-        margin-left: .5rem;
-        margin-top: .15rem;
+        margin-left: 0.5rem;
+        margin-top: 0.15rem;
         width: auto !important;
       }
 
@@ -4399,7 +4392,7 @@ footer {
       .delta {
         display: flex;
         flex-direction: row;
-        margin-left: .5rem;
+        margin-left: 0.5rem;
         margin-top: 4px;
 
         h6 {
@@ -4460,9 +4453,9 @@ footer {
     border-radius: 0;
     color: $gray;
     font-family: 'archia';
-    font-size: .75rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    padding: .5rem;
+    padding: 0.5rem;
     text-transform: unset;
 
     &:hover {
@@ -4538,7 +4531,7 @@ footer {
         .chart-note {
           color: $gray;
           font-family: 'archia';
-          font-size: .8rem;
+          font-size: 0.8rem;
           height: 50px;
           margin-top: 5px;
         }
@@ -4573,7 +4566,7 @@ footer {
       padding-left: 0;
       padding-right: 0;
       text-align: center;
-      transition: all .2s ease-in-out;
+      transition: all 0.2s ease-in-out;
       width: 100%;
 
       &:hover {
@@ -4582,7 +4575,7 @@ footer {
     }
 
     .navbar-middle {
-      font-size: .6rem;
+      font-size: 0.6rem;
       order: 1;
       padding-bottom: 2rem;
       padding-top: 2rem;
@@ -4837,7 +4830,7 @@ footer {
       align-self: center;
       height: auto;
       justify-content: center;
-      padding: .5rem;
+      padding: 0.5rem;
     }
   }
 
@@ -4874,7 +4867,7 @@ footer {
   }
 
   &.nationality {
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
   }
 
   .Navbar {
@@ -4954,7 +4947,6 @@ footer {
 .dark-mode {
   background: #161625 !important;
   color: #bdbdbd;
-  transition: background-color .2s ease-out !important;
 
   .switch-wrapper > div {
     background: #161625 !important;
@@ -5202,7 +5194,7 @@ footer {
       &.switch {
         background: $dark !important;
         border: $gray-light 2px solid !important;
-        opacity: .7;
+        opacity: 0.7;
 
         &::after {
           background: $gray !important;
@@ -5230,7 +5222,7 @@ footer {
   .Demographics {
     .filters {
       background: #1e1e30 !important;
-      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, .12), inset 0 -1px 0 0 #1e1e30;
+      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 #1e1e30;
     }
 
     .legend {
@@ -5287,7 +5279,7 @@ footer {
 // Animation Support
 
 .fadeInUp {
-  animation-duration: .45s;
+  animation-duration: 0.45s;
   animation-fill-mode: both;
   animation-name: fadeInUp;
 }
@@ -5305,7 +5297,7 @@ footer {
 }
 
 .rotateDownRight {
-  animation-duration: .25s;
+  animation-duration: 0.25s;
   animation-fill-mode: both;
   animation-name: rotateDownRight;
 }
@@ -5317,7 +5309,7 @@ footer {
 }
 
 .rotateRightDown {
-  animation-duration: .25s;
+  animation-duration: 0.25s;
   animation-fill-mode: both;
   animation-name: rotateRightDown;
 }
@@ -5329,7 +5321,7 @@ footer {
 }
 
 .fadeOutDown {
-  animation-duration: .45s;
+  animation-duration: 0.45s;
   animation-fill-mode: both;
   animation-name: fadeOutDown;
 }
