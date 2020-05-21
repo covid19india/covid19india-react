@@ -1,15 +1,17 @@
 import Row from './row';
 
-import {STATE_ROW_STATISTICS} from '../constants';
+import {PRIMARY_STATISTICS} from '../constants';
 import {capitalize, abbreviate} from '../utils/commonfunctions';
 
+import {TriangleUpIcon, TriangleDownIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
-import React, {useState, useMemo, useCallback} from 'react';
+import produce from 'immer';
+import React, {useMemo, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
-import {createBreakpoint, useLocalStorage, useEffectOnce} from 'react-use';
+import {createBreakpoint, useLocalStorage} from 'react-use';
 
 const useBreakpoint = createBreakpoint({XL: 1280, L: 768, S: 350});
 
@@ -22,63 +24,56 @@ function StateHeaderCell({handleSort, sortData, statistic}) {
       <div className="heading-content">
         <abbr
           className={classnames({[`is-${statistic}`]: breakpoint === 'S'})}
-          title={statistic}
+          title={capitalize(statistic)}
         >
-          {breakpoint === 'L'
-            ? statistic.slice(0)
-            : breakpoint === 'S'
-            ? capitalize(
-                abbreviate(statistic === 'deaths' ? 'deceased' : statistic)
-              )
-            : t(capitalize(statistic === 'deaths' ? 'deceased' : statistic))}
+          {breakpoint === 'S'
+            ? capitalize(statistic.slice(0, 1))
+            : breakpoint === 'L'
+            ? capitalize(abbreviate(statistic))
+            : capitalize(t(statistic))}
         </abbr>
-        <div
-          style={{
-            display: sortData.sortColumn === statistic ? 'initial' : 'none',
-          }}
-        >
-          <div
-            className={classnames(
-              {'arrow-up': sortData.isAscending},
-              {'arrow-down': !sortData.isAscending}
-            )}
-          />
-        </div>
+        {sortData.sortColumn === statistic && (
+          <div>
+            {sortData.isAscending && <TriangleDownIcon />}
+            {!sortData.isAscending && <TriangleUpIcon />}
+            <div />
+          </div>
+        )}
       </div>
     </th>
   );
 }
 
-const isEqual = (prevProps, currProps) => {
-  return equal(prevProps.regionHighlighted, currProps.regionHighlighted);
-};
-
 function Table({
+  data: original,
   states,
-  districts,
-  zones,
   regionHighlighted,
   onHighlightState,
   onHighlightDistrict,
 }) {
+  const {t} = useTranslation();
+
   const [sortData, setSortData] = useLocalStorage('sortData', {
     sortColumn: 'confirmed',
     isAscending: false,
   });
 
-  const {t} = useTranslation();
-
-  const [sortedStates, setSortedStates] = useState(
-    states.filter((state) => state.statecode !== 'TT')
-  );
+  const data = useMemo(() => {
+    Object.keys(original).map((stateCode) => {
+      original[stateCode] = produce(original[stateCode], (draftState) => {
+        draftState.total['active'] =
+          draftState.total.confirmed -
+          draftState.total.recovered -
+          draftState.total.deceased;
+      });
+    });
+    return original;
+  }, [original]);
 
   const FineprintTop = useMemo(
     () => (
       <React.Fragment>
-        <h5
-          className="table-fineprint fadeInUp"
-          style={{animationDelay: '1.5s'}}
-        >
+        <h5 className="table-fineprint">
           {t('Compiled from State Govt. numbers')},{' '}
           <Link to="/about" style={{color: '#6c757d'}}>
             {t('know more')}!
@@ -91,136 +86,113 @@ function Table({
 
   const FineprintBottom = useMemo(
     () => (
-      <h5 className="table-fineprint fadeInUp" style={{animationDelay: '1s'}}>
-        {states.slice(1).filter((s) => s && s.confirmed > 0).length} States/UTS
-        Affected
+      <h5 className="table-fineprint">
+        {`${
+          Object.keys(data).filter(
+            (stateCode) => data[stateCode].total.confirmed > 0
+          ).length
+        } States/UTS Affected`}
       </h5>
     ),
-    [states]
+    [data]
   );
 
-  const doSort = useCallback(
-    (sortData) => {
-      const newSortedStates = [...sortedStates].sort((x, y) => {
-        if (sortData.sortColumn !== 'state') {
-          return sortData.isAscending
-            ? parseInt(x[sortData.sortColumn]) -
-                parseInt(y[sortData.sortColumn])
-            : parseInt(y[sortData.sortColumn]) -
-                parseInt(x[sortData.sortColumn]);
-        } else {
-          return sortData.isAscending
-            ? x[sortData.sortColumn].localeCompare(y[sortData.sortColumn])
-            : y[sortData.sortColumn].localeCompare(x[sortData.sortColumn]);
-        }
-      });
-      setSortedStates(newSortedStates);
-    },
-    [sortedStates]
-  );
-
-  const handleSort = useCallback(
+  const handleSortClick = useCallback(
     (statistic) => {
-      const newSortData = {
-        isAscending: !sortData.isAscending,
-        sortColumn: statistic,
-      };
-      doSort(newSortData);
-      setSortData(Object.assign({}, sortData, newSortData));
+      setSortData(
+        produce(sortData, (draftSortData) => {
+          draftSortData.isAscending = !sortData.isAscending;
+          draftSortData.sortColumn = statistic;
+        })
+      );
     },
-    [doSort, setSortData, sortData]
+    [sortData, setSortData]
   );
 
-  useEffectOnce(() => {
-    doSort(sortData);
-  });
+  const sortingFunction = useCallback(
+    (stateCodeA, stateCodeB) => {
+      if (sortData.sortColumn !== 'stateName') {
+        const statisticA = data[stateCodeA].total[sortData.sortColumn] || 0;
+        const statisticB = data[stateCodeB].total[sortData.sortColumn] || 0;
+        return sortData.isAscending
+          ? statisticA - statisticB
+          : statisticB - statisticA;
+      } else {
+        return sortData.isAscending
+          ? stateCodeA.localeCompare(stateCodeB)
+          : stateCodeB.localeCompare(stateCodeA);
+      }
+    },
+    [sortData, data]
+  );
 
-  if (states.length > 0) {
-    return (
-      <React.Fragment>
-        <ReactTooltip
-          place="right"
-          type="dark"
-          effect="solid"
-          multiline={true}
-          globalEventOff="click"
-        />
+  return (
+    <React.Fragment>
+      <ReactTooltip
+        place="right"
+        type="dark"
+        effect="solid"
+        multiline={true}
+        globalEventOff="click"
+      />
 
-        {FineprintTop}
+      {FineprintTop}
 
-        <table className="table fadeInUp" style={{animationDelay: '1.8s'}}>
-          <thead>
-            <tr>
-              <th className="state-heading" onClick={() => handleSort('state')}>
-                <div className="heading-content">
-                  <abbr title="State">{t('State/UT')}</abbr>
-                  <div
-                    style={{
-                      display:
-                        sortData.sortColumn === 'state' ? 'initial' : 'none',
-                    }}
-                  >
-                    <div
-                      className={classnames(
-                        {'arrow-up': sortData.isAscending},
-                        {'arrow-down': !sortData.isAscending}
-                      )}
-                    />
+      <table className="table">
+        <thead>
+          <tr>
+            <th
+              className="state-heading"
+              onClick={() => handleSortClick('stateName')}
+            >
+              <div className="heading-content">
+                <abbr title="State">{t('State/UT')}</abbr>
+                {sortData.sortColumn === 'stateName' && (
+                  <div>
+                    {sortData.isAscending && <TriangleDownIcon />}
+                    {!sortData.isAscending && <TriangleUpIcon />}
                   </div>
-                </div>
-              </th>
-              {STATE_ROW_STATISTICS.map((statistic, index) => (
-                <StateHeaderCell
-                  key={index}
-                  handleSort={handleSort}
-                  sortData={sortData}
-                  statistic={statistic}
-                />
-              ))}
-            </tr>
-          </thead>
-
-          {states && (
-            <tbody>
-              {sortedStates.map((state, index) => {
-                if (state.confirmed > 0 && state.statecode !== 'TT') {
-                  return (
-                    <Row
-                      key={state.statecode}
-                      state={state}
-                      districts={districts[state.state]?.districtData}
-                      zones={zones[state.state]}
-                      regionHighlighted={
-                        equal(regionHighlighted?.state, state.state)
-                          ? regionHighlighted
-                          : null
-                      }
-                      onHighlightState={onHighlightState}
-                      onHighlightDistrict={onHighlightDistrict}
-                    />
-                  );
-                }
-                return null;
-              })}
-            </tbody>
-          )}
-
-          {states && (
-            <tbody>
-              <Row
-                key={0}
-                state={states[0]}
-                onHighlightState={onHighlightState}
+                )}
+              </div>
+            </th>
+            {PRIMARY_STATISTICS.map((statistic) => (
+              <StateHeaderCell
+                key={statistic}
+                {...{statistic, sortData}}
+                handleSort={() => {
+                  handleSortClick(statistic);
+                }}
               />
-            </tbody>
-          )}
-        </table>
-        {states && FineprintBottom}
-      </React.Fragment>
-    );
-  } else {
-    return <div style={{height: '50rem'}}></div>;
-  }
+            ))}
+          </tr>
+        </thead>
+
+        <tbody>
+          {Object.keys(data)
+            .sort((a, b) => sortingFunction(a, b))
+            .map((stateCode) => {
+              if (stateCode !== 'TT') {
+                return (
+                  <Row
+                    key={stateCode}
+                    {...{stateCode}}
+                    data={data[stateCode]}
+                    onHighlightState={onHighlightState}
+                    onHighlightDistrict={onHighlightDistrict}
+                  />
+                );
+              }
+              return null;
+            })}
+        </tbody>
+      </table>
+      {states && FineprintBottom}
+    </React.Fragment>
+  );
 }
+
+const isEqual = (prevProps, currProps) => {
+  return equal(prevProps.regionHighlighted, currProps.regionHighlighted);
+};
 
 export default React.memo(Table, isEqual);

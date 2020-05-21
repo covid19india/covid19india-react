@@ -7,6 +7,7 @@
     "@emotion/core": "^10.0.28",
     "@juggle/resize-observer": "^3.1.3",
     "@primer/components": "^19.0.0",
+    "@primer/octicons-v2-react": "0.0.0-dd899ea",
     "@researchgate/react-intersection-observer": "^1.1.3",
     "@testing-library/jest-dom": "^5.5.0",
     "@testing-library/react": "^10.0.4",

@@ -993,7 +993,6 @@ h6 {
     outline: none;
     padding: 1rem;
     padding-left: 3rem;
-    transition: all 0.2s ease-in-out;
     width: calc(100% - 4rem);
   }
 
@@ -1699,7 +1698,6 @@ table {
       padding: 0.5rem;
       position: sticky !important;
       top: 5px;
-      transition: all 0.1s ease-in-out;
       z-index: 99;
 
       &:hover {
@@ -1734,16 +1732,6 @@ table {
       &.is-deaths {
         color: $gray;
       }
-    }
-
-    svg {
-      color: $gray-mid;
-      margin: 0;
-      margin-left: 0.25rem;
-      margin-top: 0.15rem;
-      right: 0;
-      stroke-width: 4px;
-      width: 10px;
     }
   }
 
@@ -1803,13 +1791,6 @@ table {
         display: inline-block;
         font-size: 11px !important;
 
-        svg {
-          height: 9px;
-          stroke-width: 3;
-          vertical-align: -0.25px;
-          width: 9px;
-        }
-
         &.is-confirmed {
           color: $cherry;
         }
@@ -1833,20 +1814,6 @@ table {
 
       a {
         height: 1px;
-
-        svg {
-          align-self: center;
-          color: $gray-mid;
-          margin-left: 2px;
-          stroke-width: 3px;
-          transition: all 0.2s ease-in-out;
-          vertical-align: -0.435rem;
-          width: 12px;
-
-          &:hover {
-            stroke: $gray;
-          }
-        }
       }
 
       &.is-Orange {
@@ -1939,7 +1906,6 @@ table {
         color: $orange;
         font-size: 0.75rem;
         font-weight: 600;
-        padding: 0.5rem;
         text-align: center;
 
         &:hover {
@@ -1972,16 +1938,6 @@ table {
 
           abbr {
             text-align: right;
-          }
-
-          svg {
-            color: $gray-mid;
-            margin: 0;
-            margin-left: 0.25rem;
-            margin-top: 0.15rem;
-            right: 0;
-            stroke-width: 4px;
-            width: 10px;
           }
         }
       }
@@ -2476,6 +2432,10 @@ table {
     stroke-width: 3;
     width: 1em;
   }
+}
+
+.tooltip:after {
+  font-family: 'archia' !important;
 }
 
 .tabs {

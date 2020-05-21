@@ -47,10 +47,19 @@ function Home(props) {
   );
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
 
-  const {data} = useSWR('http://localhost:3001/db', fetcher, {
-    suspense: true,
-    refreshInterval: 5000,
-  });
+  // const {data} = useSWR('http://localhost:3001/db', fetcher, {
+  //   suspense: true,
+  //   refreshInterval: 5000,
+  // });
+
+  const {data} = useSWR(
+    'https://api.covid19india.org/v2/data.min.json',
+    fetcher,
+    {
+      suspense: true,
+      refreshInterval: 5000,
+    }
+  );
 
   const Bell = useMemo(
     () => (
@@ -168,18 +177,18 @@ function Home(props) {
 
         <Suspense fallback={<div />}>
           <div className="home-left">
-            <div className="header fadeInUp" style={{animationDelay: '1s'}}>
-              {fetched && <Search districtZones={districtZones} />}
+            <div className="header">
+              <Search districtZones={null} />
 
               <div className="actions">
                 <h5>{data['TT'].last_updated}</h5>
-                {fetched && !showUpdates && (
+                {!showUpdates && (
                   <div className="bell-icon">
-                    {fetched && Bell}
+                    {Bell}
                     {newUpdate && <div className="indicator"></div>}
                   </div>
                 )}
-                {fetched && showUpdates && BellOff}
+                {showUpdates && BellOff}
               </div>
             </div>
 
@@ -187,18 +196,13 @@ function Home(props) {
 
             <Level data={data['TT']} />
             <Minigraph timeseries={data['TT'].timeseries} />
-            {stateDistrictWiseData && (
-              <Table
-                states={states}
-                summary={false}
-                districts={stateDistrictWiseData}
-                zones={districtZones}
-                regionHighlighted={regionHighlighted}
-                setRegionHighlighted={setRegionHighlighted}
-                onHighlightState={onHighlightState}
-                onHighlightDistrict={onHighlightDistrict}
-              />
-            )}
+            <Table
+              data={data}
+              regionHighlighted={regionHighlighted}
+              setRegionHighlighted={setRegionHighlighted}
+              onHighlightState={onHighlightState}
+              onHighlightDistrict={onHighlightDistrict}
+            />
           </div>
         </Suspense>
 
