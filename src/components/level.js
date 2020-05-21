@@ -7,6 +7,7 @@ import equal from 'fast-deep-equal';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {animated, useSpring} from 'react-spring';
+import {HeartFillIcon} from '@primer/octicons-v2-react';
 
 function PureLevelItem({statistic, total, delta}) {
   const {t} = useTranslation();
@@ -23,12 +24,16 @@ function PureLevelItem({statistic, total, delta}) {
   });
 
   return (
-    <div className={classnames('level-item', `is-${statistic}`, 'fadeInUp')}>
+    <div className={classnames('level-item', `is-${statistic}`)}>
       <h5>{capitalize(t(statistic))}</h5>
       <h4>
         <animated.span>
-          {spring.delta.interpolate(
-            (delta) => `+${formatNumber(Math.floor(delta))}`
+          {delta > 0 ? (
+            spring.delta.interpolate(
+              (delta) => `+${formatNumber(Math.floor(delta))}`
+            )
+          ) : (
+            <HeartFillIcon size={9} verticalAlign={2} />
           )}
         </animated.span>
       </h4>

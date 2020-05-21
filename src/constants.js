@@ -279,6 +279,7 @@ export const STATE_CODES = {
   LA: 'Ladakh',
   LD: 'Lakshadweep',
   PY: 'Puducherry',
+  TT: 'Total',
 };
 
 const stateCodes = [];
