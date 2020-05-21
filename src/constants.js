@@ -21,6 +21,13 @@ export const PRIMARY_STATISTICS = [
   'deceased',
 ];
 
+export const COLORS = {
+  confirmed: '#ff073a',
+  active: '#007bff',
+  recovered: '#28a745',
+  deceased: '#6c757d',
+};
+
 export const MAP_TYPES = {
   COUNTRY: 'country',
   STATE: 'state',
