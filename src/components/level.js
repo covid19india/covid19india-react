@@ -1,13 +1,13 @@
 import {PRIMARY_STATISTICS} from '../constants';
 import {formatNumber, capitalize} from '../utils/commonfunctions';
 
+import {HeartFillIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import * as easings from 'd3-ease';
 import equal from 'fast-deep-equal';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {animated, useSpring} from 'react-spring';
-import {HeartFillIcon} from '@primer/octicons-v2-react';
 
 function PureLevelItem({statistic, total, delta}) {
   const {t} = useTranslation();
