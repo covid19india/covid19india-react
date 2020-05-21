@@ -339,7 +339,7 @@ function Row({
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.data.total, currProps.data.total)) {
+  if (!equal(prevProps.data.last_updated, currProps.data.last_updated)) {
     return false;
   }
   if (!equal(prevProps.statecode, currProps.statecode)) {
