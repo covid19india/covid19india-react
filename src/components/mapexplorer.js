@@ -401,6 +401,8 @@ function MapExplorer({
           </div>
         </div>
 
+        <div class="break"></div> <!-- break -->
+        
         <div
           className="stats is-purple tested fadeInUp"
           style={{animationDelay: '2.4s'}}
