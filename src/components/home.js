@@ -47,19 +47,19 @@ function Home(props) {
   );
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
 
-  // const {data} = useSWR('http://localhost:3001/db', fetcher, {
-  //   suspense: true,
-  //   refreshInterval: 5000,
-  // });
+  const {data} = useSWR('http://localhost:3001/db', fetcher, {
+    suspense: true,
+    refreshInterval: 5000,
+  });
 
-  const {data} = useSWR(
-    'https://api.covid19india.org/v2/data.min.json',
-    fetcher,
-    {
-      suspense: true,
-      refreshInterval: 5000,
-    }
-  );
+  // const {data} = useSWR(
+  //   'https://api.covid19india.org/v2/data.min.json',
+  //   fetcher,
+  //   {
+  //     suspense: true,
+  //     refreshInterval: 5000,
+  //   }
+  // );
 
   const Bell = useMemo(
     () => (

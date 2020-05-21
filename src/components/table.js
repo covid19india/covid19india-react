@@ -192,7 +192,13 @@ function Table({
 }
 
 const isEqual = (prevProps, currProps) => {
-  return equal(prevProps.regionHighlighted, currProps.regionHighlighted);
+  if (
+    !equal(prevProps.data['TT'].last_updated, currProps.data['TT'].last_updated)
+  ) {
+    return false;
+  }
+  return true;
+  // return equal(prevProps.regionHighlighted, currProps.regionHighlighted);
 };
 
 export default React.memo(Table, isEqual);
