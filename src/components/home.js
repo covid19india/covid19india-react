@@ -47,7 +47,7 @@ function Home(props) {
   );
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
 
-  const {data} = useSWR('http://localhost:3001/', fetcher, {
+  const {data} = useSWR('http://localhost:3001/db', fetcher, {
     suspense: true,
     refreshInterval: 5000,
   });
