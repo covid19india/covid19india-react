@@ -4791,6 +4791,11 @@ footer {
     width: calc(100% - 2rem);
   }
 
+  .break {
+    flex-basis: 100%;
+    height: 0;
+  }
+  
   .Home,
   .State {
     display: flex;
@@ -5294,12 +5299,6 @@ footer {
   }
 }
 
-@media (max-width: 530px) {
-  .break {
-    flex-basis: 100%;
-    height: 0;
-  }
-}
 
 // Dark Mode
 
