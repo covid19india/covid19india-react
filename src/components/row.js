@@ -9,32 +9,57 @@ import {
   TriangleDownIcon,
 } from '@primer/octicons-v2-react';
 import classnames from 'classnames';
+import * as easings from 'd3-ease';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
+import {useSpring, animated} from 'react-spring';
 import {createBreakpoint, useLocalStorage} from 'react-use';
 
 const useBreakpoint = createBreakpoint({XL: 1280, L: 768, S: 350});
 
 function PureCell({statistic, data}) {
+  const total = data.total[statistic];
+  const delta = data.delta[statistic];
+
+  const spring = useSpring({
+    total: total || '-',
+    delta: delta || '',
+    from: {
+      total: total || '-',
+      delta: delta || '',
+    },
+    config: {
+      easing: easings.easeQuadOut,
+      tension: 500,
+      duration: 1000,
+      clamp: true,
+    },
+  });
+
   const ArrowUp = useMemo(
     () => <ArrowUpIcon size={10.5} verticalAlign={-2.1} />,
     []
   );
 
-  const total = data.total[statistic];
-  const delta = data.delta[statistic];
-
   return (
     <td>
       <span className={classnames('delta', `is-${statistic}`)}>
         {delta > 0 && ArrowUp}
-        {delta > 0 && formatNumber(delta)}
+        <animated.span>
+          {delta > 0
+            ? spring.delta.interpolate((delta) =>
+                formatNumber(Math.floor(delta))
+              )
+            : ''}
+        </animated.span>
       </span>
-      <span className="total">{formatNumber(total) || '-'}</span>
+      <animated.span className="total">
+        {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
+      </animated.span>
     </td>
   );
 }
