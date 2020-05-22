@@ -100,6 +100,7 @@ function Navbar({pages, darkMode}) {
 function Expand({expand, pages, setExpand, darkMode}) {
   const expandElement = useRef(null);
   const {t} = useTranslation();
+  const windowSize = useWindowSize();
 
   useEffectOnce(() => {
     anime({
@@ -115,7 +116,7 @@ function Expand({expand, pages, setExpand, darkMode}) {
       className="expand"
       ref={expandElement}
       onMouseLeave={() => {
-        setExpand(false);
+        if (windowSize.width > 768) setExpand(false);
       }}
     >
       {pages.map((page, i) => {
