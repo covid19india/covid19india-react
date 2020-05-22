@@ -1,11 +1,11 @@
-import {MAP_STATISTICS} from '../constants';
+import {MAP_OPTIONS} from '../constants';
 import {capitalizeAll, formatNumber} from '../utils/commonfunctions';
 import {useResizeObserver} from '../utils/hooks';
 
 import * as d3 from 'd3';
 import React, {useEffect, useRef} from 'react';
 
-function MapLegend({mapScale, statistic, mapStatistic, mapOption}) {
+function MapLegend({mapScale, statistic, mapOption, mapStatistic}) {
   const svgRef = useRef(null);
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
@@ -15,7 +15,7 @@ function MapLegend({mapScale, statistic, mapStatistic, mapOption}) {
     const {width, height} =
       dimensions || wrapperRef.current.getBoundingClientRect();
 
-    if (mapStatistic === MAP_STATISTICS.ZONE) {
+    if (mapOption === MAP_OPTIONS.ZONE) {
       svg.call(() =>
         legend({
           svg: svg,
@@ -28,7 +28,7 @@ function MapLegend({mapScale, statistic, mapStatistic, mapOption}) {
           ordinalWeights: Object.values(statistic),
         })
       );
-    } else if (mapStatistic === MAP_STATISTICS.HOTSPOTS) {
+    } else if (mapOption === MAP_OPTIONS.HOTSPOTS) {
       const t = svg.transition().duration(500);
       svg
         .select('.ramp')
@@ -85,15 +85,15 @@ function MapLegend({mapScale, statistic, mapStatistic, mapOption}) {
           svg: svg,
           color: mapScale,
           title:
-            capitalizeAll(mapOption) +
-            (mapStatistic === MAP_STATISTICS.PER_MILLION
+            capitalizeAll(mapStatistic) +
+            (mapOption === MAP_OPTIONS.PER_MILLION
               ? ' cases per million'
               : ' cases'),
           width: width,
           height: height,
           ticks: 5,
           tickFormat: function (d, i, n) {
-            if (mapStatistic === MAP_STATISTICS.TOTAL && !Number.isInteger(d))
+            if (mapOption === MAP_OPTIONS.TOTAL && !Number.isInteger(d))
               return;
             if (i === n.length - 1) return formatNumber(d) + '+';
             return formatNumber(d);
@@ -103,7 +103,7 @@ function MapLegend({mapScale, statistic, mapStatistic, mapOption}) {
         })
       );
     }
-    svg.attr('class', mapStatistic === MAP_STATISTICS.ZONE ? 'zone' : '');
+    svg.attr('class', mapOption === MAP_OPTIONS.ZONE ? 'zone' : '');
   });
 
   return (

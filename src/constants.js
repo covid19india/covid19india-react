@@ -21,6 +21,14 @@ export const PRIMARY_STATISTICS = [
   'deceased',
 ];
 
+export const MAP_STATISTICS = [
+  'confirmed',
+  'active',
+  'recovered',
+  'deceased',
+  // 'tested',
+];
+
 export const COLORS = {
   confirmed: '#ff073a',
   active: '#007bff',
@@ -28,23 +36,24 @@ export const COLORS = {
   deceased: '#6c757d',
 };
 
-export const MAP_TYPES = {
-  COUNTRY: 'country',
-  STATE: 'state',
-  DISTRICT: 'district',
-};
-
-export const MAP_STATISTICS = {
-  TOTAL: 0,
-  PER_MILLION: 1,
-  ZONE: 2,
-  HOTSPOTS: 3,
+export const MAP_OPTIONS = {
+  TOTAL: 'Total',
+  PER_MILLION: 'Per million',
+  ZONE: 'Zones',
+  HOTSPOTS: 'Hotspots',
 };
 
 export const MAP_VIEWS = {
   STATES: 0,
   DISTRICTS: 1,
 };
+
+export const MAP_TYPES = {
+  COUNTRY: 0,
+  STATE: 1,
+};
+
+export const ZONES = ['Red', 'Orange', 'Green'];
 
 export const MAPS_DIR =
   process.env.NODE_ENV === 'production' ? '/mini_maps' : '/maps';
@@ -297,43 +306,43 @@ export const STATE_CODES_ARRAY = stateCodes;
 // States (2011-2036)", Table-8 (p43), November 2019
 // https://nhm.gov.in/New_Updates_2018/Report_Population_Projection_2019.pdf
 export const STATE_POPULATIONS = {
-  'Andaman and Nicobar Islands': 397000,
-  'Andhra Pradesh': 52221000,
-  'Arunachal Pradesh': 1504000,
-  Assam: 34293000,
-  Bihar: 119520000,
-  Chandigarh: 1179000,
-  Chhattisgarh: 28724000,
-  'Dadra and Nagar Haveli and Daman and Diu': 959000,
-  Delhi: 19814000,
-  Goa: 1540000,
-  Gujarat: 67936000,
-  Haryana: 28672000,
-  'Himachal Pradesh': 7300000,
-  'Jammu and Kashmir': 13203000,
-  Jharkhand: 37403000,
-  Karnataka: 65798000,
-  Kerala: 35125000,
-  Ladakh: 293000,
-  Lakshadweep: 68000,
-  'Madhya Pradesh': 82232000,
-  Maharashtra: 122153000,
-  Manipur: 3103000,
-  Meghalaya: 3224000,
-  Mizoram: 1192000,
-  Nagaland: 2150000,
-  Odisha: 43671000,
-  Puducherry: 1504000,
-  Punjab: 29859000,
-  Rajasthan: 77264000,
-  Sikkim: 664000,
-  'Tamil Nadu': 75695000,
-  Telangana: 37220000,
-  Tripura: 3992000,
-  'Uttar Pradesh': 224979000,
-  Uttarakhand: 11141000,
-  'West Bengal': 96906000,
-  Total: 1332900000,
+  AP: 52221000,
+  AR: 1504000,
+  AS: 34293000,
+  BR: 119520000,
+  CT: 28724000,
+  GA: 1540000,
+  GJ: 67936000,
+  HR: 28672000,
+  HP: 7300000,
+  JH: 37403000,
+  KA: 65798000,
+  KL: 35125000,
+  MP: 82232000,
+  MH: 122153000,
+  MN: 3103000,
+  ML: 3224000,
+  MZ: 1192000,
+  NL: 2150000,
+  OR: 43671000,
+  PB: 29859000,
+  RJ: 77264000,
+  SK: 664000,
+  TN: 75695000,
+  TG: 37220000,
+  TR: 3992000,
+  UP: 224979000,
+  UT: 11141000,
+  WB: 96906000,
+  AN: 397000,
+  CH: 1179000,
+  DN: 959000,
+  DL: 19814000,
+  JK: 13203000,
+  LA: 293000,
+  LD: 68000,
+  PY: 1504000,
+  TT: 1332900000,
 };
 
 export const RAW_DATA_PARTITIONS = {

@@ -39,7 +39,7 @@ function Home(props) {
   });
   const [showUpdates, setShowUpdates] = useState(false);
   const [anchor, setAnchor] = useState(null);
-  const [mapOption, setMapOption] = useState('confirmed');
+  const [mapStatistic, setMapStatistic] = useState('confirmed');
 
   const [lastViewedLog, setLastViewedLog] = useLocalStorage(
     'lastViewedLog',
@@ -164,6 +164,8 @@ function Home(props) {
     setRegionHighlighted({district, state: state.state});
   }, []);
 
+  const highlightedStateCode = STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT';
+
   return (
     <React.Fragment>
       <div className="Home">
@@ -206,42 +208,28 @@ function Home(props) {
           </div>
         </Suspense>
 
-        <div className="home-right">
-          <React.Fragment>
-            {fetched && (
-              <MapExplorer
-                mapName={'India'}
-                states={states}
-                districts={stateDistrictWiseData}
-                zones={districtZones}
-                stateTestData={stateTestData}
-                regionHighlighted={regionHighlighted}
-                setRegionHighlighted={setRegionHighlighted}
-                anchor={anchor}
-                setAnchor={setAnchor}
-                mapOption={mapOption}
-                setMapOption={setMapOption}
-              />
-            )}
-
-            {timeseries && (
-              <TimeSeriesExplorer
-                timeseries={
-                  timeseries[
-                    STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
-                  ]
-                }
-                activeStateCode={
-                  STATE_CODES_REVERSE[regionHighlighted?.state] || 'TT'
-                }
-                onHighlightState={onHighlightState}
-                states={states}
-                anchor={anchor}
-                setAnchor={setAnchor}
-              />
-            )}
-          </React.Fragment>
-        </div>
+        <Suspense fallback={<div />}>
+          <div className="home-right">
+            <MapExplorer
+              mapName={'India'}
+              data={data}
+              regionHighlighted={regionHighlighted}
+              setRegionHighlighted={setRegionHighlighted}
+              anchor={anchor}
+              setAnchor={setAnchor}
+              mapStatistic={mapStatistic}
+              setMapStatistic={setMapStatistic}
+            />
+            <TimeSeriesExplorer
+              timeseries={data[highlightedStateCode].timeseries}
+              activeStateCode={highlightedStateCode}
+              onHighlightState={onHighlightState}
+              states={states}
+              anchor={anchor}
+              setAnchor={setAnchor}
+            />
+          </div>
+        </Suspense>
       </div>
       {fetched && <Footer />}
     </React.Fragment>
