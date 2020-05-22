@@ -8,11 +8,12 @@ import {capitalize} from '../utils/commonfunctions';
 
 import classnames from 'classnames';
 import Bloodhound from 'corejs-typeahead';
-import React, {useState, useCallback, useRef} from 'react';
+import React, {useState, useEffect, useCallback, useRef} from 'react';
+import ContentLoader from 'react-content-loader';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
-import {useDebounce} from 'react-use';
+import {useDebounce, useMeasure} from 'react-use';
 
 const engine = new Bloodhound({
   initialize: true,
@@ -88,6 +89,29 @@ const locationSuggestions = [
   'Alappuzha',
   'Ganjam',
 ];
+
+function SearchLoader() {
+  const [svgElement, {width}] = useMeasure();
+
+  useEffect(() => {}, [width]);
+
+  return (
+    <React.Fragment>
+      <span ref={svgElement} style={{width: '100%'}} />
+      {width && (
+        <ContentLoader
+          speed={1.5}
+          width={width}
+          height={100}
+          viewBox={`0 0 ${width} 100`}
+          position="absolute"
+        >
+          <rect x="10" y="20" rx="5" ry="5" width={width - 20} height="75" />
+        </ContentLoader>
+      )}
+    </React.Fragment>
+  );
+}
 
 function Search({districtZones}) {
   const [searchValue, setSearchValue] = useState('');
@@ -276,6 +300,8 @@ function Search({districtZones}) {
           </div>
         )}
       </div>
+
+      {results.length < 1 && searchValue.length > 0 && <SearchLoader />}
 
       {results.length > 0 && (
         <div className="results">
