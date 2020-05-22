@@ -842,11 +842,22 @@ h6 {
     align-self: center;
     background: $yellow-light;
     color: $orange;
+    display: flex;
+    flex-direction: row;
     font-weight: 400;
-    height: 5rem;
+    justify-content: center;
     margin: 0;
+    padding: .75rem;
     text-transform: unset;
-    width: 10rem;
+
+    * {
+      align-self: center;
+    }
+
+    svg {
+      margin-left: .5rem;
+      padding-right: 0;
+    }
 
     &:hover {
       background: $yellow-hover;
@@ -874,6 +885,14 @@ h6 {
     * {
       align-self: center;
     }
+  }
+
+  .essential-result {
+    background: $gray-light;
+    border: transparent !important;
+    border-radius: 5px;
+    cursor: default !important;
+    margin-bottom: 1rem;
   }
 }
 
@@ -1100,6 +1119,12 @@ h6 {
 
     a {
       text-decoration: none !important;
+    }
+
+    .pan-divider {
+      color: $gray;
+      font-weight: 600;
+      padding: 1rem 0;
     }
 
     .result,
