@@ -2034,6 +2034,10 @@ table {
     top: 0;
   }
 
+  &.hidden {
+    display: none;
+  }
+
   .header {
     align-self: flex-start;
     color: $gray;
@@ -2230,9 +2234,7 @@ table {
     }
 
     .stats {
-      background: $cherry-light;
       border-radius: 5px;
-      color: $cherry-mid;
       cursor: pointer;
       display: flex;
       flex: 1;
@@ -2256,12 +2258,24 @@ table {
       }
 
       h1 {
-        color: $cherry;
         font-size: 1em !important;
         font-weight: 600;
       }
 
-      &.is-green {
+      &.confirmed {
+        background: $cherry-light;
+
+        h5,
+        h6 {
+          color: $cherry-mid;
+        }
+
+        h1 {
+          color: $cherry;
+        }
+      }
+
+      &.recovered {
         background: $green-light;
 
         h5,
@@ -2274,7 +2288,7 @@ table {
         }
       }
 
-      &.is-blue {
+      &.active {
         background: $blue-light;
 
         h5,
@@ -2287,7 +2301,7 @@ table {
         }
       }
 
-      &.is-gray {
+      &.deceased {
         background: $gray-light;
 
         h5,
@@ -2300,20 +2314,7 @@ table {
         }
       }
 
-      &.is-yellow {
-        background: $yellow;
-
-        h5,
-        h6 {
-          color: $white;
-        }
-
-        h1 {
-          color: $white;
-        }
-      }
-
-      &.is-purple {
+      &.tested {
         background: $purple-light;
         padding-right: 1rem;
 
@@ -2351,6 +2352,19 @@ table {
             bottom: 0.3rem;
             top: auto;
           }
+        }
+      }
+
+      &.is-yellow {
+        background: $yellow;
+
+        h5,
+        h6 {
+          color: $white;
+        }
+
+        h1 {
+          color: $white;
         }
       }
 

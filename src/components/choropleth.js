@@ -1,6 +1,6 @@
 import MapLegend from './maplegend';
 
-import {MAP_META, MAP_STATISTICS, MAP_TYPES, MAP_VIEWS} from '../constants';
+import {MAP_META, MAP_TYPES, MAP_VIEWS} from '../constants';
 import {capitalizeAll} from '../utils/commonfunctions';
 
 import * as d3 from 'd3';
@@ -47,7 +47,7 @@ function ChoroplethMap({
   changeMap,
   regionHighlighted,
   setRegionHighlighted,
-  mapOption,
+  mapStatistic,
   isCountryLoaded,
 }) {
   const {t} = useTranslation();
@@ -59,25 +59,24 @@ function ChoroplethMap({
   });
 
   const mapScale = useMemo(() => {
-    if (currentMap.stat === MAP_STATISTICS.ZONE) {
+    if (currentMap.option === MAP_TYPES.ZONE) {
       return d3.scaleOrdinal(
         ['Red', 'Orange', 'Green'],
         ['#d73027', '#fee08b', '#66bd63']
       );
-    } else if (currentMap.stat === MAP_STATISTICS.HOTSPOTS) {
+    } else if (currentMap.option === MAP_TYPES.HOTSPOTS) {
       const {width} = svgRef.current.getBoundingClientRect();
       return d3
-        .scaleSqrt([0, statistic[mapOption].max], [0, width / 10])
-        .clamp(true)
-        .nice(3);
+        .scaleSqrt([0, statistic[mapStatistic].max], [0, width / 10])
+        .clamp(true);
     } else {
       return d3
-        .scaleSequential([0, Math.max(1, statistic[mapOption].max)], (t) =>
-          colorInterpolator(mapOption, t)
+        .scaleSequential([0, Math.max(1, statistic[mapStatistic].max)], (t) =>
+          colorInterpolator(mapStatistic, t)
         )
         .clamp(true);
     }
-  }, [currentMap.stat, statistic, mapOption]);
+  }, [currentMap.option, statistic, mapStatistic]);
 
   useEffect(() => {
     if (!geoDataResponse.data) return;
@@ -111,7 +110,7 @@ function ChoroplethMap({
 
     // Add id to each feature
     let features =
-      currentMap.stat !== MAP_STATISTICS.HOTSPOTS
+      currentMap.option !== MAP_TYPES.HOTSPOTS
         ? currentMap.view === MAP_VIEWS.STATES
           ? topojson.feature(
               geoData,
@@ -147,7 +146,7 @@ function ChoroplethMap({
       .select('.regions')
       .selectAll('path')
       .data(
-        currentMap.stat !== MAP_STATISTICS.HOTSPOTS ? features : [],
+        currentMap.option !== MAP_TYPES.HOTSPOTS ? features : [],
         (d) => d.id
       )
       .join((enter) => {
@@ -191,7 +190,7 @@ function ChoroplethMap({
       .transition(t)
       .attr('fill', (d) => {
         let n;
-        if (currentMap.stat === MAP_STATISTICS.ZONE) {
+        if (currentMap.option === MAP_TYPES.ZONE) {
           const state = d.properties.st_nm;
           const district = d.properties.district;
           n =
@@ -205,13 +204,13 @@ function ChoroplethMap({
             n =
               mapData[state] &&
               mapData[state][district] &&
-              mapData[state][district][mapOption]
-                ? mapData[state][district][mapOption]
+              mapData[state][district][mapStatistic]
+                ? mapData[state][district][mapStatistic]
                 : 0;
           else
             n =
-              mapData[state] && mapData[state][mapOption]
-                ? mapData[state][mapOption]
+              mapData[state] && mapData[state][mapStatistic]
+                ? mapData[state][mapStatistic]
                 : 0;
         }
         const color = n === 0 ? '#ffffff00' : mapScale(n);
@@ -219,29 +218,29 @@ function ChoroplethMap({
       })
       .attr(
         'stroke',
-        currentMap.stat === MAP_STATISTICS.ZONE
+        currentMap.option === MAP_TYPES.ZONE
           ? '#343a40'
-          : caseColor(mapOption)
+          : caseColor(mapStatistic)
       )
       .on('end', function () {
         d3.select(this).attr('pointer-events', 'all');
       });
 
     regionSelection.select('title').text((d) => {
-      if (currentMap.stat === MAP_STATISTICS.TOTAL) {
+      if (currentMap.option === MAP_TYPES.TOTAL) {
         const state = d.properties.st_nm;
         const district = d.properties.district;
         let n;
         if (district)
           n =
             mapData[state] && mapData[state][district]
-              ? mapData[state][district][mapOption]
+              ? mapData[state][district][mapStatistic]
               : 0;
-        else n = mapData[state] ? mapData[state][mapOption] : 0;
+        else n = mapData[state] ? mapData[state][mapStatistic] : 0;
         return (
           Number(
             parseFloat(
-              100 * (n / (statistic[mapOption].total || 0.001))
+              100 * (n / (statistic[mapStatistic].total || 0.001))
             ).toFixed(2)
           ).toString() +
           '% from ' +
@@ -254,12 +253,12 @@ function ChoroplethMap({
       .transition()
       .duration(mapMeta.mapType === MAP_TYPES.STATE ? t.duration() / 2 : 0)
       .on('end', () =>
-        svg.attr('class', currentMap.stat === MAP_STATISTICS.ZONE ? 'zone' : '')
+        svg.attr('class', currentMap.option === MAP_TYPES.ZONE ? 'zone' : '')
       );
 
     /* ----------BUBBLE MAP----------*/
     let circlesData = [];
-    if (currentMap.stat === MAP_STATISTICS.HOTSPOTS) {
+    if (currentMap.option === MAP_TYPES.HOTSPOTS) {
       circlesData = features
         .map((d) => {
           const district = d.properties.district;
@@ -267,12 +266,12 @@ function ChoroplethMap({
           if (district) {
             d.value =
               mapData[state] && mapData[state][district]
-                ? mapData[state][district][mapOption]
+                ? mapData[state][district][mapStatistic]
                 : 0;
           } else {
             d.value =
               mapData[state] && mapData[state].Unknown
-                ? mapData[state].Unknown[mapOption]
+                ? mapData[state].Unknown[mapStatistic]
                 : 0;
           }
           return d;
@@ -303,8 +302,8 @@ function ChoroplethMap({
           })
       )
       .transition(t)
-      .attr('fill', caseColor(mapOption, '70'))
-      .attr('stroke', caseColor(mapOption, '70'))
+      .attr('fill', caseColor(mapStatistic, '70'))
+      .attr('stroke', caseColor(mapStatistic, '70'))
       .attr('r', (d) => mapScale(d.value));
     /* ------------------------------*/
 
@@ -345,10 +344,10 @@ function ChoroplethMap({
       .join((enter) => enter.append('path').attr('d', path))
       .transition(t)
       .attr('stroke', () => {
-        if (currentMap.stat === MAP_STATISTICS.ZONE) {
+        if (currentMap.option === MAP_TYPES.ZONE) {
           return '#00000060';
         } else {
-          return caseColor(mapOption, '30');
+          return caseColor(mapStatistic, '30');
         }
       });
 
@@ -391,13 +390,13 @@ function ChoroplethMap({
     mapScale,
     statistic,
     mapData,
-    mapOption,
+    mapStatistic,
   ]);
 
   const highlightRegionInMap = useCallback(
     (state, district) => {
       const svg = d3.select(svgRef.current);
-      if (currentMap.stat === MAP_STATISTICS.HOTSPOTS) {
+      if (currentMap.option === MAP_TYPES.HOTSPOTS) {
         svg
           .select('.circles')
           .selectAll('circle')
@@ -422,7 +421,7 @@ function ChoroplethMap({
           });
       }
     },
-    [currentMap.stat]
+    [currentMap.option]
   );
 
   useEffect(() => {
@@ -433,7 +432,7 @@ function ChoroplethMap({
     highlightRegionInMap,
     regionHighlighted.state,
     regionHighlighted.district,
-    mapOption,
+    mapStatistic,
   ]);
 
   return (
@@ -445,17 +444,17 @@ function ChoroplethMap({
           {currentMap.view === MAP_VIEWS.DISTRICTS && (
             <g className="district-borders" />
           )}
-          {currentMap.stat === MAP_STATISTICS.HOTSPOTS && (
+          {currentMap.option === MAP_TYPES.HOTSPOTS && (
             <g className="circles" />
           )}
         </svg>
         {mapMeta.mapType === MAP_TYPES.STATE &&
         mapData[currentMap.name]?.Unknown &&
-        mapData[currentMap.name]?.Unknown[mapOption] ? (
+        mapData[currentMap.name]?.Unknown[mapStatistic] ? (
           <div className="disclaimer">
             <Icon.AlertCircle />
-            {t('District-wise {{mapOption}} numbers are under reconciliation', {
-              mapOption: t(mapOption),
+            {t('District-wise {{mapStatistic}} numbers need reconciliation', {
+              mapStatistic: t(mapStatistic),
             })}
           </div>
         ) : (
@@ -467,8 +466,8 @@ function ChoroplethMap({
         <MapLegend
           mapScale={mapScale}
           statistic={statistic}
-          mapStatistic={currentMap.stat}
-          mapOption={mapOption}
+          mapOption={currentMap.option}
+          mapStatistic={mapStatistic}
         />
       )}
 

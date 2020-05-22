@@ -49,13 +49,13 @@ export const formatDateAbsolute = (unformattedDate) => {
 };
 
 export const formatDayMonth = (unformattedDate) => {
-  return format(parse(unformattedDate, 'dd/MM/yyyy', new Date()), 'dd MMM', {
+  return format(new Date(unformattedDate), 'dd MMM', {
     locale: LOCALE_SHORTHANDS[i18n.language],
   });
 };
 
 export const formatLastUpdated = (unformattedDate) => {
-  return formatDistance(new Date(formatDate(unformattedDate)), new Date(), {
+  return formatDistance(new Date(unformattedDate), new Date(), {
     locale: LOCALE_SHORTHANDS[i18n.language],
   });
 };
