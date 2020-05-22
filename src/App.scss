@@ -875,14 +875,6 @@ h6 {
       align-self: center;
     }
   }
-
-  .essential-result {
-    background: $gray-light;
-    border: transparent !important;
-    border-radius: 5px;
-    cursor: default !important;
-    margin-bottom: 1rem;
-  }
 }
 
 .labels {
@@ -1052,6 +1044,16 @@ h6 {
       stroke-width: 3;
       width: 12px;
     }
+
+    &.custom {
+      background: $pink-light !important;
+      pointer-events: none;
+      z-index: 0;
+
+      svg {
+        stroke: $pink !important;
+      }
+    }
   }
 
   .feature {
@@ -1135,6 +1137,10 @@ h6 {
         flex-direction: row;
         font-size: .75rem;
         padding: .25rem;
+
+        &:hover {
+          background: $yellow-hover;
+        }
 
         svg {
           margin-left: .25rem;
@@ -1221,6 +1227,10 @@ h6 {
         text-align: right;
         text-transform: capitalize;
 
+        &:hover {
+          background: $pink-hover;
+        }
+
         & > * {
           align-self: center;
         }
@@ -1238,6 +1248,12 @@ h6 {
         margin-top: 1rem;
       }
 
+      .result-contacts {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+      }
+
       .result-contact {
         align-self: flex-start;
         background: $gray-light;
@@ -1247,9 +1263,18 @@ h6 {
         flex-direction: row;
         font-size: .75rem;
         height: 1rem;
+        margin-right: .5rem;
         margin-top: .5rem;
         padding: .25rem;
         text-align: right;
+
+        &:hover {
+          background: $gray-hover;
+        }
+
+        a {
+          color: inherit;
+        }
 
         & > * {
           align-self: center;
