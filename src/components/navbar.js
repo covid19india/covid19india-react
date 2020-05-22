@@ -116,7 +116,7 @@ function Expand({expand, pages, setExpand, darkMode}) {
       className="expand"
       ref={expandElement}
       onMouseLeave={() => {
-        if (windowSize.width > 768) setExpand(false);
+        if (windowSize.width > 769) setExpand(false);
       }}
     >
       {pages.map((page, i) => {
