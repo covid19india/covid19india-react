@@ -232,20 +232,21 @@ function KnnResults({userLocation, userState}) {
                 </a>
               </div>
               <div className="result-description">{result.properties.desc}</div>
-              {result.properties.phone ? (
-                <a
-                  className="result-contact"
-                  href={`tel:${result.properties.phone}`}
-                >
-                  <Phone />
-                  <div>{result.properties.phone}</div>
-                </a>
-              ) : null}
+              <div className="result-contacts">
+                {result.properties.phone.split('\n').map((contact) => (
+                  <div key={contact} className="result-contact">
+                    <Phone />
+                    <a href={`tel:${contact}`}>{contact}</a>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
+
         <div>
-          <h4> Throughout {userState} and India</h4>
+          <h3 className="pan-divider">{`Throughout ${userState} and India`}</h3>
         </div>
+
         {results?.features
           .filter((feature) => {
             return (
@@ -283,15 +284,14 @@ function KnnResults({userLocation, userState}) {
                 </a>
               </div>
               <div className="result-description">{result.properties.desc}</div>
-              {result.properties.phone ? (
-                <a
-                  className="result-contact"
-                  href={`tel:${result.properties.phone}`}
-                >
-                  <Phone />
-                  <div>{result.properties.phone}</div>
-                </a>
-              ) : null}
+              <div className="result-contacts">
+                {result.properties.phone.split('\n').map((contact) => (
+                  <div key={contact} className="result-contact">
+                    <Phone />
+                    <a href={`tel:${contact}`}>{contact}</a>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
       </div>
