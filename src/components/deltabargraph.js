@@ -11,7 +11,7 @@ const isEqual = (prevProps, currProps) => {
 const caseColor = (ctype, alpha = '') => {
   switch (ctype) {
     case 'dailyconfirmed':
-      return '#dc3545' + alpha;
+      return '#ff073a' + alpha;
     case 'dailyactive':
       return '#007bff' + alpha;
     case 'dailyrecovered':

@@ -26,7 +26,7 @@ export const MAP_STATISTICS = [
   'active',
   'recovered',
   'deceased',
-  // 'tested',
+  'tested',
 ];
 
 export const COLORS = {
@@ -39,8 +39,8 @@ export const COLORS = {
 export const MAP_OPTIONS = {
   TOTAL: 'Total',
   PER_MILLION: 'Per million',
-  ZONE: 'Zones',
   HOTSPOTS: 'Hotspots',
+  ZONES: 'Zones',
 };
 
 export const MAP_VIEWS = {
