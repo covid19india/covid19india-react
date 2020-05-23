@@ -129,7 +129,7 @@ function Home(props) {
         </div>
 
         <div className="home-right">
-          {/* <MapExplorer
+          <MapExplorer
             mapName={'India'}
             data={data}
             regionHighlighted={regionHighlighted}
@@ -138,7 +138,7 @@ function Home(props) {
             setAnchor={setAnchor}
             mapStatistic={mapStatistic}
             setMapStatistic={setMapStatistic}
-          />*/}
+          />
 
           <TimeSeriesExplorer
             timeseries={data[regionHighlighted.stateCode].timeseries}

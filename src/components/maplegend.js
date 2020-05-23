@@ -1,21 +1,39 @@
-import {MAP_OPTIONS} from '../constants';
+import {MAP_OPTIONS, ZONE_COLORS} from '../constants';
 import {capitalizeAll, formatNumber} from '../utils/commonfunctions';
 import {useResizeObserver} from '../utils/hooks';
 
 import * as d3 from 'd3';
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useMemo, useRef} from 'react';
 
-function MapLegend({mapScale, statistic, mapOption, mapStatistic}) {
+function MapLegend({data, mapScale, mapOption, statistic}) {
   const svgRef = useRef(null);
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
+
+  const totalZones = useMemo(() => {
+    return Object.values(data).reduce(
+      (counts, stateData) => {
+        if (stateData.districts) {
+          Object.values(stateData.districts).forEach((districtData) => {
+            if (districtData?.zone?.status)
+              counts[districtData.zone.status] += 1;
+          });
+        }
+        return counts;
+      },
+      Object.keys(ZONE_COLORS).reduce((count, zone) => {
+        count[zone] = 0;
+        return count;
+      }, {})
+    );
+  }, [data]);
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
     const {width, height} =
       dimensions || wrapperRef.current.getBoundingClientRect();
 
-    if (mapOption === MAP_OPTIONS.ZONE) {
+    if (mapOption === MAP_OPTIONS.ZONES) {
       svg.call(() =>
         legend({
           svg: svg,
@@ -25,7 +43,7 @@ function MapLegend({mapScale, statistic, mapOption, mapStatistic}) {
           tickValues: [],
           marginLeft: 2,
           marginRight: 20,
-          ordinalWeights: Object.values(statistic),
+          ordinalWeights: Object.values(totalZones),
         })
       );
     } else if (mapOption === MAP_OPTIONS.HOTSPOTS) {
@@ -85,7 +103,7 @@ function MapLegend({mapScale, statistic, mapOption, mapStatistic}) {
           svg: svg,
           color: mapScale,
           title:
-            capitalizeAll(mapStatistic) +
+            capitalizeAll(statistic) +
             (mapOption === MAP_OPTIONS.PER_MILLION
               ? ' cases per million'
               : ' cases'),
@@ -93,8 +111,7 @@ function MapLegend({mapScale, statistic, mapOption, mapStatistic}) {
           height: height,
           ticks: 5,
           tickFormat: function (d, i, n) {
-            if (mapOption === MAP_OPTIONS.TOTAL && !Number.isInteger(d))
-              return;
+            if (mapOption === MAP_OPTIONS.TOTAL && !Number.isInteger(d)) return;
             if (i === n.length - 1) return formatNumber(d) + '+';
             return formatNumber(d);
           },
@@ -103,15 +120,11 @@ function MapLegend({mapScale, statistic, mapOption, mapStatistic}) {
         })
       );
     }
-    svg.attr('class', mapOption === MAP_OPTIONS.ZONE ? 'zone' : '');
-  });
+    svg.attr('class', mapOption === MAP_OPTIONS.ZONES ? 'zone' : '');
+  }, [dimensions, totalZones, mapScale, mapOption, statistic]);
 
   return (
-    <div
-      className="svg-parent maplegend fadeInUp"
-      style={{animationDelay: '2.5s', height: 50}}
-      ref={wrapperRef}
-    >
+    <div className="svg-parent maplegend" style={{height: 50}} ref={wrapperRef}>
       <svg id="legend" preserveAspectRatio="xMidYMid meet" ref={svgRef}>
         <image className="ramp" />
         <g className="bars"></g>

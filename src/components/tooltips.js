@@ -12,8 +12,6 @@ export const testedToolTip = (
     />
     <ReactTooltip
       id="tested"
-      place="top"
-      type="dark"
       effect="solid"
       multiline={true}
       scrollHide={true}
