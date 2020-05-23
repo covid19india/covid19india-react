@@ -36,7 +36,7 @@ function PureBreadcrumbs({stateName, stateCode, fetched, states}) {
     <div className="breadcrumb">
       <Breadcrumb>
         <Breadcrumb.Item href="/">{t('Home')}</Breadcrumb.Item>
-        <Dropdown direction="w">
+        <Dropdown direction="w" overlay={true}>
           <summary>
             <Breadcrumb.Item href={`${stateCode}`} selected>
               {t(stateName)}
