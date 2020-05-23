@@ -299,3 +299,15 @@ export const toTitleCase = (str) => {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
 };
+
+export const getStatistic = (data, type, statistic, per_million=false) => {
+  let count;
+  if (statistic === 'active') {
+    count = data[type].confirmed - data[type].recovered - data[type].deceased;
+  } else if (statistic === 'tested') {
+    count = data[type].tested?.samples;
+  } else {
+    count = data[type][statistic];
+  }
+  return per_million ? 1e6 * count / data.population : count;
+}

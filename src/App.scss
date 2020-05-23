@@ -1394,31 +1394,6 @@ h6 {
   }
 }
 
-.last-update {
-  align-self: center;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: auto;
-  margin-top: 0.25rem;
-  text-align: right;
-  width: 10rem;
-
-  h6 {
-    color: $green-mid;
-    font-weight: 900;
-  }
-
-  h3 {
-    color: $green;
-    font-weight: 600;
-  }
-
-  h3,
-  h6 {
-    margin: 0;
-  }
-}
-
 .button {
   background: $blue-light;
   border: 0;
@@ -2018,9 +1993,7 @@ table {
 }
 
 .MapExplorer {
-  align-self: center;
-  display: flex;
-  flex-direction: column;
+  position: relative;
   width: 30rem;
 
   &.stickied {
@@ -2080,38 +2053,47 @@ table {
     }
   }
 
-  .back-button {
-    background: $yellow-light;
-    color: $orange;
+  .last-update {
     position: absolute;
     right: 0;
-    top: 2.75rem;
-    transition: all 0.2s ease-in-out;
+    align-self: center;
+    margin-bottom: auto;
+    margin-top: 0.25rem;
+    text-align: right;
+    width: 10rem;
 
-    &:hover {
-      background: $yellow-hover;
+    h6 {
+      color: $green-mid;
+      font-weight: 900;
+    }
+
+    h3 {
+      color: $green;
+      font-weight: 600;
+    }
+
+    h3,
+    h6 {
+      margin: 0;
     }
   }
 
-  .state-page-button {
+  .map-button {
+    position: absolute;
+    right: 0;
+    font-family: 'archia';
+    font-weight: 900;
     background: $yellow-light;
     border-radius: 5px;
     color: $orange;
+    cursor: pointer;
     font-size: 0.75rem;
-    height: 1.5rem;
-    padding: 0.45rem;
-    padding-left: 0.75rem;
-    position: absolute;
-    right: 0;
-    top: -0.5rem;
+    padding: 0.5rem;
+    margin-bottom: 0.25rem;
     transition: all 0.2s ease-in-out;
 
     &:hover {
       background: $yellow-hover;
-    }
-
-    abbr {
-      text-transform: none;
     }
 
     svg {
@@ -2125,18 +2107,19 @@ table {
   }
 
   .meta {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    position: relative;
     height: 4rem;
     justify-content: space-between;
 
     h2 {
-      color: #e23028;
       font-weight: 900;
       margin-top: 0;
       width: calc(100% - 10rem);
       word-wrap: break-word;
+
+      &.confirmed {
+        color: $brick;
+      }
 
       &.active {
         color: $blue;
@@ -2148,6 +2131,10 @@ table {
 
       &.deceased {
         color: $gray;
+      }
+
+      &.tested {
+        color: $purple;
       }
 
       &.Red {
@@ -2174,13 +2161,16 @@ table {
     }
 
     .district {
-      color: #e23028;
       line-height: 15px;
       margin: 0;
 
       span {
         font-size: 0.75rem;
         font-weight: 600;
+      }
+
+      &.confirmed {
+        color: $brick;
       }
 
       &.active {
@@ -2194,15 +2184,10 @@ table {
       &.deceased {
         color: $gray;
       }
-    }
 
-    .unknown {
-      font-weight: 600;
-      position: absolute;
-      right: 0;
-      text-align: right;
-      top: 5.5rem;
-      width: 5rem;
+      &.tested {
+        color: $purple;
+      }
     }
   }
 
@@ -5037,7 +5022,7 @@ footer {
     }
 
     .stats {
-      &.is-purple {
+      &.tested {
         background: #40008050 !important;
 
         h1 {

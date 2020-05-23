@@ -7,13 +7,7 @@ export const PRIMARY_STATISTICS = [
   'deceased',
 ];
 
-export const MAP_STATISTICS = [
-  'confirmed',
-  'active',
-  'recovered',
-  'deceased',
-  'tested',
-];
+export const MAP_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
 export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
@@ -22,6 +16,7 @@ export const COLORS = {
   active: '#007bff',
   recovered: '#28a745',
   deceased: '#6c757d',
+  tested: '#4b1eaa',
 };
 
 export const MAP_OPTIONS = {
@@ -41,7 +36,11 @@ export const MAP_TYPES = {
   STATE: 1,
 };
 
-export const ZONES = ['Red', 'Orange', 'Green'];
+export const ZONE_COLORS = {
+  Red: '#d73027',
+  Orange: '#fee08b',
+  Green: '#66bd63',
+};
 
 export const MAPS_DIR =
   process.env.NODE_ENV === 'production' ? '/mini_maps' : '/maps';
