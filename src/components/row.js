@@ -19,7 +19,7 @@ import {useHistory} from 'react-router-dom';
 import {useSpring, animated} from 'react-spring';
 import {createBreakpoint, useLocalStorage} from 'react-use';
 
-const useBreakpoint = createBreakpoint({XL: 1280, L: 768, S: 350});
+const useBreakpoint = createBreakpoint({L: 768, S: 350});
 
 function PureCell({statistic, data}) {
   const total = data.total[statistic];
@@ -109,8 +109,7 @@ function PureDistrictRow({
   districtName,
   data: original,
   regionHighlighted,
-  onHighlightDistrict,
-  sortedDistricts,
+  setRegionHighlighted,
 }) {
   const {t} = useTranslation();
 
@@ -126,12 +125,22 @@ function PureDistrictRow({
     return original;
   }, [original]);
 
+  const highlightDistrict = useCallback(() => {
+    if (regionHighlighted.districtName !== districtName) {
+      setRegionHighlighted(
+        produce(regionHighlighted, (draftRegionHighlighted) => {
+          draftRegionHighlighted.districtName = districtName;
+        })
+      );
+    }
+  }, [regionHighlighted, setRegionHighlighted, districtName]);
+
   return (
     <tr
       className={classnames('district', {
-        'is-highlighted': regionHighlighted?.districtName === districtName,
+        'is-highlighted': regionHighlighted.districtName === districtName,
       })}
-      // onMouseEnter={() => onHighlightDistrict(districtName, null)}
+      onMouseEnter={highlightDistrict}
     >
       <td>
         <div className="title-chevron">
@@ -154,27 +163,23 @@ function PureDistrictRow({
 }
 
 const isDistrictRowEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.data, currProps.data)) {
+  if (!equal(prevProps.data.last_updated, currProps.data.last_updated)) {
     return false;
-  }
-  if (equal(prevProps.regionHighlighted?.district, prevProps.district)) {
-    return false;
-  }
-  if (equal(currProps.regionHighlighted?.district, currProps.district)) {
+  } else if (
+    !equal(
+      prevProps.regionHighlighted.districtName,
+      currProps.regionHighlighted.districtName
+    ) &&
+    (equal(prevProps.regionHighlighted.districtName, prevProps.districtName) ||
+      equal(currProps.regionHighlighted.districtName, currProps.districtName))
+  ) {
     return false;
   }
   return true;
 };
-
 const DistrictRow = React.memo(PureDistrictRow, isDistrictRowEqual);
 
-function Row({
-  stateCode,
-  data,
-  regionHighlighted,
-  onHighlightState,
-  onHighlightDistrict,
-}) {
+function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useLocalStorage('districtSortData', {
     sortColumn: 'confirmed',
@@ -198,15 +203,6 @@ function Row({
     ),
     [showDistricts]
   );
-
-  // const _onHighlightState = useCallback(
-  //   (state) => {
-  //     if (!equal(state.state, regionHighlighted?.state)) {
-  //       onHighlightState(state);
-  //     }
-  //   },
-  //   [onHighlightState, regionHighlighted]
-  // );
 
   const handleSortClick = useCallback(
     (statistic) => {
@@ -239,22 +235,32 @@ function Row({
     [sortData, data]
   );
 
+  const highlightState = useCallback(() => {
+    if (regionHighlighted.stateCode !== stateCode) {
+      setRegionHighlighted(
+        produce(regionHighlighted, (draftRegionHighlighted) => {
+          draftRegionHighlighted.stateCode = stateCode;
+        })
+      );
+    }
+  }, [regionHighlighted, setRegionHighlighted, stateCode]);
+
+  const _setShowDistrict = useCallback(() => {
+    if (data.districts) {
+      setShowDistricts(!showDistricts);
+    }
+  }, [stateCode, showDistricts, data]);
+
   return (
     <React.Fragment>
       <tr
         className={classnames(
           'state',
           {'is-total': stateCode === 'TT'},
-          {'is-highlighted': null}
+          {'is-highlighted': regionHighlighted.stateCode === stateCode}
         )}
-        // onMouseEnter={() => _onHighlightState(state)}
-        onClick={
-          stateCode !== 'TT'
-            ? () => {
-                setShowDistricts(!showDistricts);
-              }
-            : null
-        }
+        onMouseEnter={highlightState}
+        onClick={_setShowDistrict}
       >
         <td>
           <div className="title-chevron">
@@ -345,10 +351,8 @@ function Row({
           .map((districtName) => (
             <DistrictRow
               key={districtName}
-              {...{districtName}}
+              {...{districtName, regionHighlighted, setRegionHighlighted}}
               data={data.districts[districtName]}
-              regionHighlighted={regionHighlighted}
-              onHighlightDistrict={onHighlightDistrict}
             />
           ))}
 
@@ -366,27 +370,28 @@ function Row({
 const isEqual = (prevProps, currProps) => {
   if (!equal(prevProps.data.last_updated, currProps.data.last_updated)) {
     return false;
-  }
-  if (!equal(prevProps.statecode, currProps.statecode)) {
-    return false;
-  }
-  if (
-    !equal(
-      prevProps.regionHighlighted?.state,
-      currProps.regionHighlighted?.state
-    )
+  } else if (
+    (!equal(
+      prevProps.regionHighlighted.stateCode,
+      currProps.regionHighlighted.stateCode
+    ) &&
+      equal(prevProps.regionHighlighted.stateCode, prevProps.stateCode)) ||
+    equal(currProps.regionHighlighted.stateCode, currProps.stateCode)
   ) {
     return false;
-  }
-  if (
-    !equal(
-      prevProps.regionHighlighted?.district,
-      currProps.regionHighlighted?.district
-    )
+  } else if (
+    (!equal(
+      prevProps.regionHighlighted.districtName,
+      currProps.regionHighlighted.districtName
+    ) &&
+      equal(
+        prevProps.regionHighlighted.districtName,
+        prevProps.districtName
+      )) ||
+    equal(currProps.regionHighlighted.districtName, currProps.districtName)
   ) {
     return false;
-  }
-  return true;
+  } else return true;
 };
 
 export default React.memo(Row, isEqual);

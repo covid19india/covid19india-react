@@ -2,15 +2,15 @@ import locales from '../i18n/locales.json';
 
 import Button from '@primer/components/lib/Button';
 import SelectMenu from '@primer/components/lib/SelectMenu';
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {useLocalStorage} from 'react-use';
+import {useLocalStorage, useUpdateEffect} from 'react-use';
 
-export default function LanguageSwitcher() {
+function LanguageSwitcher() {
   const [language, setLanguage] = useLocalStorage('language', 'english');
   const {i18n} = useTranslation();
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     if (i18n) i18n.changeLanguage(language);
   }, [i18n, language]);
 
@@ -39,3 +39,5 @@ export default function LanguageSwitcher() {
     </div>
   );
 }
+
+export default React.memo(LanguageSwitcher);

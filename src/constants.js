@@ -1,19 +1,5 @@
 import {hi, te, gu, ta, bn} from 'date-fns/locale/';
 
-export const STATE_ROW_STATISTICS = [
-  'confirmed',
-  'active',
-  'recovered',
-  'deaths',
-];
-
-export const DISTRICT_ROW_STATISTICS = [
-  'confirmed',
-  'active',
-  'recovered',
-  'deceased',
-];
-
 export const PRIMARY_STATISTICS = [
   'confirmed',
   'active',
@@ -28,6 +14,8 @@ export const MAP_STATISTICS = [
   'deceased',
   'tested',
 ];
+
+export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
 export const COLORS = {
   confirmed: '#ff073a',
@@ -396,4 +384,32 @@ export const ESSENTIALS_CATEGORIES = {
   'Quarantine Facility': 'quarantine',
   Other: 'other',
   'Helpline for Cyclone Amphan': 'cyclone amphan',
+};
+
+export const INITIAL_DATA = {
+  TT: {
+    total: {
+      confirmed: 0,
+      recovered: 0,
+      deceased: 0,
+    },
+    delta: {
+      confirmed: 0,
+      recovered: 0,
+      deceased: 0,
+    },
+    timeseries: {
+      '2020-01-01': {
+        confirmed: 0,
+        recovered: 0,
+        deceased: 0,
+        tested: {
+          samples: 0,
+          source: '',
+        },
+      },
+    },
+    last_updated: null,
+    notes: '',
+  },
 };

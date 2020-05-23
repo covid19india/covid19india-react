@@ -126,7 +126,7 @@ function App() {
 
       <Router>
         <ScrollToTop />
-        <Suspense fallback={<div className="lazy"></div>}>
+        <Suspense fallback={<Navbar />}>
           <Route
             render={({location}) => (
               <React.Fragment>
