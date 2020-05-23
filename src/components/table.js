@@ -10,12 +10,11 @@ import produce from 'immer';
 import React, {useMemo, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
-import ReactTooltip from 'react-tooltip';
 import {createBreakpoint, useLocalStorage} from 'react-use';
 
 const useBreakpoint = createBreakpoint({XL: 1280, L: 768, S: 350});
 
-function StateHeaderCell({handleSort, sortData, statistic}) {
+function PureStateHeaderCell({handleSort, sortData, statistic}) {
   const breakpoint = useBreakpoint();
   const {t} = useTranslation();
 
@@ -44,13 +43,48 @@ function StateHeaderCell({handleSort, sortData, statistic}) {
   );
 }
 
-function Table({
-  data: original,
-  states,
-  regionHighlighted,
-  onHighlightState,
-  onHighlightDistrict,
-}) {
+const isStateHeaderCellEqual = (prevProps, currProps) => {
+  if (!equal(prevProps.sortData, currProps.sortData)) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+const StateHeaderCell = React.memo(PureStateHeaderCell, isStateHeaderCellEqual);
+
+function PureFineprintTop() {
+  const {t} = useTranslation();
+
+  return (
+    <React.Fragment>
+      <h5 className="table-fineprint">
+        {t('Compiled from State Govt. numbers')},{' '}
+        <Link to="/about" style={{color: '#6c757d'}}>
+          {t('know more')}!
+        </Link>
+      </h5>
+    </React.Fragment>
+  );
+}
+const FineprintTop = React.memo(PureFineprintTop);
+
+function PureFineprintBottom({data}) {
+  return (
+    <h5 className="table-fineprint">
+      {`${
+        Object.keys(data).filter(
+          (stateCode) => data[stateCode].total.confirmed > 0
+        ).length
+      } States/UTS Affected`}
+    </h5>
+  );
+}
+const FineprintBottom = React.memo(PureFineprintBottom, () => {
+  return true;
+});
+
+function Table({data: original, regionHighlighted, setRegionHighlighted}) {
   const {t} = useTranslation();
 
   const [sortData, setSortData] = useLocalStorage('sortData', {
@@ -59,43 +93,15 @@ function Table({
   });
 
   const data = useMemo(() => {
-    Object.keys(original).map((stateCode) => {
-      original[stateCode] = produce(original[stateCode], (draftState) => {
-        draftState.total['active'] =
-          draftState.total.confirmed -
-          draftState.total.recovered -
-          draftState.total.deceased;
+    return produce(original, (draftState) => {
+      Object.keys(draftState).map((stateCode) => {
+        draftState[stateCode].total['active'] =
+          draftState[stateCode].total.confirmed -
+          draftState[stateCode].total.recovered -
+          draftState[stateCode].total.deceased;
       });
     });
-    return original;
   }, [original]);
-
-  const FineprintTop = useMemo(
-    () => (
-      <React.Fragment>
-        <h5 className="table-fineprint">
-          {t('Compiled from State Govt. numbers')},{' '}
-          <Link to="/about" style={{color: '#6c757d'}}>
-            {t('know more')}!
-          </Link>
-        </h5>
-      </React.Fragment>
-    ),
-    [t]
-  );
-
-  const FineprintBottom = useMemo(
-    () => (
-      <h5 className="table-fineprint">
-        {`${
-          Object.keys(data).filter(
-            (stateCode) => data[stateCode].total.confirmed > 0
-          ).length
-        } States/UTS Affected`}
-      </h5>
-    ),
-    [data]
-  );
 
   const handleSortClick = useCallback(
     (statistic) => {
@@ -128,15 +134,7 @@ function Table({
 
   return (
     <React.Fragment>
-      <ReactTooltip
-        place="right"
-        type="dark"
-        effect="solid"
-        multiline={true}
-        globalEventOff="click"
-      />
-
-      {FineprintTop}
+      <FineprintTop />
 
       <table className="table">
         <thead>
@@ -175,30 +173,50 @@ function Table({
                 return (
                   <Row
                     key={stateCode}
-                    {...{stateCode}}
                     data={data[stateCode]}
-                    onHighlightState={onHighlightState}
-                    onHighlightDistrict={onHighlightDistrict}
+                    {...{stateCode, regionHighlighted, setRegionHighlighted}}
                   />
                 );
               }
               return null;
             })}
         </tbody>
+
+        <tbody>
+          <Row
+            key={'TT'}
+            data={data['TT']}
+            stateCode={'TT'}
+            {...{regionHighlighted, setRegionHighlighted}}
+          />
+        </tbody>
       </table>
-      {states && FineprintBottom}
+
+      <FineprintBottom {...{data}} />
     </React.Fragment>
   );
 }
 
 const isEqual = (prevProps, currProps) => {
   if (
+    !equal(
+      prevProps.regionHighlighted.districtName,
+      currProps.regionHighlighted.districtName
+    )
+  ) {
+    return false;
+  } else if (
+    !equal(
+      prevProps.regionHighlighted.stateCode,
+      currProps.regionHighlighted.stateCode
+    )
+  ) {
+    return false;
+  } else if (
     !equal(prevProps.data['TT'].last_updated, currProps.data['TT'].last_updated)
   ) {
     return false;
-  }
-  return true;
-  // return equal(prevProps.regionHighlighted, currProps.regionHighlighted);
+  } else return true;
 };
 
 export default React.memo(Table, isEqual);

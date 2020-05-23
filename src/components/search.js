@@ -7,8 +7,8 @@ import {
 import {capitalize} from '../utils/commonfunctions';
 
 import Bloodhound from 'corejs-typeahead';
-import React, {useState, useEffect, useCallback, useRef} from 'react';
-import ContentLoader from 'react-content-loader';
+import produce from 'immer';
+import React, {useState, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
@@ -89,30 +89,7 @@ const locationSuggestions = [
   'Ganjam',
 ];
 
-function SearchLoader() {
-  const [svgElement, {width}] = useMeasure();
-
-  useEffect(() => {}, [width]);
-
-  return (
-    <React.Fragment>
-      <span ref={svgElement} style={{width: '100%'}} />
-      {width && (
-        <ContentLoader
-          speed={1.5}
-          width={width}
-          height={100}
-          viewBox={`0 0 ${width} 100`}
-          position="absolute"
-        >
-          <rect x="10" y="20" rx="5" ry="5" width={width - 20} height="75" />
-        </ContentLoader>
-      )}
-    </React.Fragment>
-  );
-}
-
-function Search({districtZones}) {
+function Search() {
   const [searchValue, setSearchValue] = useState('');
   const [expand, setExpand] = useState(false);
   const [results, setResults] = useState([]);
@@ -179,7 +156,11 @@ function Search({districtZones}) {
       if (searchValue) {
         handleSearch(searchValue);
       } else {
-        setResults([]);
+        setResults(
+          produce(results, (draftResults) => {
+            draftResults.splice(0);
+          })
+        );
       }
     },
     100,
@@ -427,4 +408,8 @@ function Search({districtZones}) {
   );
 }
 
-export default React.memo(Search);
+const isEqual = () => {
+  return true;
+};
+
+export default React.memo(Search, isEqual);

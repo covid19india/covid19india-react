@@ -1,73 +1,69 @@
-import {testedToolTip} from './tooltips';
-
+import {PRIMARY_STATISTICS} from '../constants';
 import {
-  sliceTimeseriesFromEnd,
   formatNumber,
-  formatTimeseriesDate,
   formatTimeseriesTickX,
+  capitalize,
 } from '../utils/commonfunctions';
 import {useResizeObserver} from '../utils/hooks';
 
+import classnames from 'classnames';
 import * as d3 from 'd3';
-import {addDays, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
+import produce from 'immer';
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 
-const isEqual = (prevProps, currProps) => {
-  if (!currProps.isIntersecting) return true;
-  if (!prevProps.isIntersecting) return false;
-  if (!equal(currProps.chartType, prevProps.chartType)) {
-    return false;
-  }
-  if (!equal(currProps.mode, prevProps.mode)) {
-    return false;
-  }
-  if (!equal(currProps.logMode, prevProps.logMode)) {
-    return false;
-  }
-  if (!equal(currProps.stateCode, prevProps.stateCode)) {
-    return false;
-  }
-  return true;
-};
-
-function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
+function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
   const {t} = useTranslation();
-  const [lastDaysCount, setLastDaysCount] = useState(
-    window.innerWidth > 512 ? Infinity : 30
-  );
-  const [timeseries, setTimeseries] = useState({});
-  const [datapoint, setDatapoint] = useState({});
-  const [index, setIndex] = useState(0);
-  const [moving, setMoving] = useState(false);
-
-  const svgRef1 = useRef();
-  const svgRef2 = useRef();
-  const svgRef3 = useRef();
-  const svgRef4 = useRef();
-  const svgRef5 = useRef();
+  const [highlightedDate, setHighlightedDate] = useState('2020-05-03');
+  const refs = useRef([]);
 
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
 
-  const transformTimeSeries = useCallback(
-    (timeseries) => {
-      if (timeseries.length > 1) {
-        const slicedTimeseries = sliceTimeseriesFromEnd(
-          timeseries,
-          lastDaysCount
-        );
-        setIndex(slicedTimeseries.length - 1);
-        setTimeseries(slicedTimeseries);
+  const getDailyStatistic = useCallback(
+    (date, statistic, chartType) => {
+      switch (chartType) {
+        case 'Cumulative':
+          return null;
+
+        default:
+          switch (statistic) {
+            case 'active':
+              return (
+                timeseries[date].confirmed -
+                timeseries[date].recovered -
+                timeseries[date].deceased
+              );
+
+            case 'tested':
+              return timeseries[date].tested?.samples || 0;
+
+            default:
+              return timeseries[date][statistic];
+          }
       }
     },
-    [lastDaysCount]
+    [timeseries]
   );
 
-  useEffect(() => {
-    transformTimeSeries(timeseriesProp);
-  }, [lastDaysCount, timeseriesProp, transformTimeSeries]);
+  const getDiscreteStatisticArray = useCallback(
+    (statistic) => {
+      let array = [];
+      dates.map(
+        (date) => (array = [...array, getDailyStatistic(date, statistic)])
+      );
+      return array;
+    },
+    [dates, getDailyStatistic]
+  );
+
+  const getCumulativeStatisticArray = (discreteStatisticArray) => {
+    return discreteStatisticArray.reduce(function (r, discreteStatisticArray) {
+      r.push(((r.length && r[r.length - 1]) || 0) + discreteStatisticArray);
+      return r;
+    }, []);
+  };
 
   const graphData = useCallback(
     (timeseries) => {
@@ -79,26 +75,17 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
       const chartRight = width - margin.right;
       const chartBottom = height - margin.bottom;
 
-      const T = timeseries.length;
+      const T = dates.length;
       const yBufferTop = 1.2;
       const yBufferBottom = 1.1;
 
-      setDatapoint(timeseries[T - 1]);
-      setIndex(T - 1);
-
-      const svg1 = d3.select(svgRef1.current);
-      const svg2 = d3.select(svgRef2.current);
-      const svg3 = d3.select(svgRef3.current);
-      const svg4 = d3.select(svgRef4.current);
-      const svg5 = d3.select(svgRef5.current);
-
-      const dateMin = subDays(timeseries[0].date, 1);
-      const dateMax = addDays(timeseries[T - 1].date, 1);
+      const dateMin = d3.min(dates);
+      const dateMax = d3.max(dates);
 
       const xScale = d3
         .scaleTime()
         .clamp(true)
-        .domain([dateMin, dateMax])
+        .domain([new Date(dateMin), new Date(dateMax)])
         .range([margin.left, chartRight]);
 
       // Number of x-axis ticks
@@ -129,26 +116,12 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
           .attr('class', 'y-axis')
           .call(d3.axisRight(yScale).ticks(4, '0~s').tickPadding(4));
 
-      // Arrays of objects
-      const plotTotal = chartType === 1;
-      const dataTypesTotal = [
-        'totalconfirmed',
-        'totalactive',
-        'totalrecovered',
-        'totaldeceased',
-        'totaltested',
-      ];
-      const dataTypesDaily = [
-        'dailyconfirmed',
-        'dailyactive',
-        'dailyrecovered',
-        'dailydeceased',
-        'dailytested',
-      ];
-
       const colors = ['#ff073a', '#007bff', '#28a745', '#6c757d', '#201aa2'];
 
-      const svgArray = [svg1, svg2, svg3, svg4, svg5];
+      const svgArray = [];
+      refs.current.forEach((ref) => {
+        svgArray.push(d3.select(ref));
+      });
 
       let yScales;
       if (plotTotal) {
@@ -187,65 +160,41 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
             .scaleLog()
             .clamp(true)
             .domain([
+              Math.max(1, d3.min(statistics[chartType][statistic])),
               Math.max(
-                1,
-                d3.min(timeseries, (d) => d[type])
+                10,
+                yBufferTop * d3.max(statistics[chartType][statistic])
               ),
-              Math.max(10, yBufferTop * d3.max(timeseries, (d) => d[type])),
             ])
             .nice(4)
             .range([chartBottom, margin.top]);
-          if (mode && type !== 'totaltested')
-            return logMode ? yScaleUniformLog : yScaleUniformLinear;
-          else return logMode ? yScaleLog : yScaleLinear;
-        });
-      } else {
-        const yScaleDailyUniform = d3
+
+        return d3
           .scaleLinear()
           .clamp(true)
           .domain([
             yBufferBottom *
-              Math.min(
-                0,
-                d3.min(timeseries, (d) => d.dailyactive)
-              ),
-            Math.max(
-              1,
-              yBufferTop *
-                d3.max(timeseries, (d) =>
-                  Math.max(d.dailyconfirmed, d.dailyrecovered, d.dailydeceased)
-                )
-            ),
+              Math.min(0, d3.min(statistics[chartType][statistic])),
+            Math.max(1, yBufferTop * d3.max(statistics[chartType][statistic])),
           ])
           .nice(4)
           .range([chartBottom, margin.top]);
+      };
 
-        yScales = dataTypesDaily.map((type) => {
-          if (mode && type !== 'dailytested') return yScaleDailyUniform;
-          const yScaleLinear = d3
-            .scaleLinear()
-            .clamp(true)
-            .domain([
-              yBufferBottom *
-                Math.min(
-                  0,
-                  d3.min(timeseries, (d) => d[type])
-                ),
-              Math.max(1, yBufferTop * d3.max(timeseries, (d) => d[type])),
-            ])
-            .nice(4)
-            .range([chartBottom, margin.top]);
-          return yScaleLinear;
-        });
-      }
+      const yScales = [];
+      PRIMARY_STATISTICS.map((statistic) => {
+        yScales.push(generateYScale(statistic));
+      });
 
       /* Focus dots */
       const focus = svgArray.map((svg, i) => {
         return svg
           .selectAll('.focus')
-          .data([timeseries[T - 1]], (d) => d.date)
+          .data([dates])
           .join((enter) =>
-            enter.append('circle').attr('cx', (d) => xScale(d.date))
+            enter.append('circle').attr('cx', (date) => {
+              xScale(new Date(date));
+            })
           )
           .attr('class', 'focus')
           .attr('fill', colors[i])
@@ -256,52 +205,21 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
       function mousemove() {
         const xm = d3.mouse(this)[0];
         const date = xScale.invert(xm);
-        const bisectDate = d3.bisector((d) => d.date).left;
-        let i = bisectDate(timeseries, date, 1);
-        if (0 <= i && i < T) {
-          if (date - timeseries[i - 1].date < timeseries[i].date - date) --i;
-          setDatapoint(timeseries[i]);
-          setIndex(i);
-          setMoving(true);
-          const d = timeseries[i];
-          focus.forEach((f, j) => {
-            const yScale = yScales[j];
-            const type = plotTotal ? dataTypesTotal[j] : dataTypesDaily[j];
-            if (!isNaN(d[type]))
-              f.attr('cx', xScale(d.date))
-                .attr('cy', yScale(d[type]))
-                .attr('opacity', 1);
-            else f.attr('opacity', 0);
-          });
-        }
+        const bisectDate = d3.bisector((date) => new Date(date)).left;
+        const index = bisectDate(dates, date, 1);
+        setHighlightedDate(dates[index]);
       }
 
       function mouseout() {
-        setDatapoint(timeseries[T - 1]);
-        setIndex(T - 1);
-        setMoving(false);
-        focus.forEach((f, j) => {
-          const yScale = yScales[j];
-          const type = plotTotal ? dataTypesTotal[j] : dataTypesDaily[j];
-          if (!isNaN(timeseries[T - 1][type]))
-            f.attr('cx', xScale(timeseries[T - 1].date))
-              .attr('cy', yScale(timeseries[T - 1][type]))
-              .attr('opacity', 1);
-          else f.attr('opacity', 0);
-        });
+        setHighlightedDate(dates[T - 1]);
       }
 
       /* Begin drawing charts */
       svgArray.forEach((svg, i) => {
-        // Transition interval
-        const t = svg.transition().duration(500);
-        const typeTotal = dataTypesTotal[i];
-        const typeDaily = dataTypesDaily[i];
-        const type = plotTotal ? typeTotal : typeDaily;
-
-        const filteredTimeseries = timeseries.filter((d) => !isNaN(d[type]));
+        const t = svg.transition().duration(300);
         const color = colors[i];
         const yScale = yScales[i];
+        const statistic = PRIMARY_STATISTICS[i];
 
         /* X axis */
         svg
@@ -310,6 +228,7 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
           .transition(t)
           .call(xAxis);
         svg.select('.x-axis2').transition(t).call(xAxis2, yScale);
+
         /* Y axis */
         svg
           .select('.y-axis')
@@ -320,40 +239,46 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
         /* Path dots */
         svg
           .selectAll('.dot')
-          .data(filteredTimeseries, (d) => d.date)
+          .data(dates)
           .join((enter) =>
             enter
               .append('circle')
               .attr('cy', chartBottom)
-              .attr('cx', (d) => xScale(d.date))
+              .attr('cx', (date) => xScale(new Date(date)))
           )
           .attr('class', 'dot')
           .attr('fill', color)
           .attr('stroke', color)
           .attr('r', 2)
           .transition(t)
-          .attr('cx', (d) => xScale(d.date))
-          .attr('cy', (d) => yScale(d[type]));
+          .attr('cx', (date) => xScale(new Date(date)))
+          .attr('cy', (date, index) =>
+            yScale(statistics[chartType][statistic][index])
+          );
 
-        if (!isNaN(timeseries[T - 1][type]))
-          focus[i]
-            .transition(t)
-            .attr('cx', (d) => xScale(d.date))
-            .attr('cy', (d) => yScale(d[type]))
-            .attr('opacity', 1);
-        else focus[i].transition(t).attr('opacity', 0);
+        // if (!isNaN(timeseries[dates[T - 1]][statistic]))
+        //   focus[i]
+        //     .transition(t)
+        //     .attr('cx', (date) => xScale(new Date(date)))
+        //     .attr('cy', (date, index) =>
+        //       yScale(statistics[chartType][statistic][index])
+        //     )
+        //     .attr('opacity', 1);
+        // else focus[i].transition(t).attr('opacity', 0);
 
-        if (plotTotal) {
+        if (chartType === 'cumulative') {
           /* TOTAL TRENDS */
           svg.selectAll('.stem').remove();
+
           const path = svg
             .selectAll('.trend')
-            .data([[...filteredTimeseries].reverse()])
+            .data([dates])
             .join('path')
             .attr('class', 'trend')
             .attr('fill', 'none')
             .attr('stroke', color + '99')
             .attr('stroke-width', 4);
+
           // HACK
           // Path interpolation is non-trivial. Ideally, a custom path tween
           // function should be defined which takes care that old path dots
@@ -368,39 +293,47 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
               () => path.attr('d') + `L${p.x},${p.y}`.repeat(3 * T)
             );
           }
+
           path
             .transition(t)
-            .attr('opacity', plotTotal ? 1 : 0)
+            .attr('opacity', chartType === 'cumulative' ? 1 : 0)
             .attr(
               'd',
               d3
                 .line()
-                .x((d) => xScale(d.date))
-                .y((d) => yScale(d[typeTotal]))
+                .x((date) => {
+                  xScale(new Date(date));
+                })
+                .y((date, index) => {
+                  yScale(statistics[chartType][statistic][index]);
+                })
                 .curve(d3.curveMonotoneX)
             );
         } else {
           /* DAILY TRENDS */
           svg.selectAll('.trend').remove();
+
           svg
             .selectAll('.stem')
-            .data(filteredTimeseries, (d) => d.date)
+            .data(dates, (date) => date)
             .join((enter) =>
               enter
                 .append('line')
-                .attr('x1', (d) => xScale(d.date))
+                .attr('x1', (date) => xScale(new Date(date)))
                 .attr('y1', chartBottom)
-                .attr('x2', (d) => xScale(d.date))
+                .attr('x2', (date) => xScale(new Date(date)))
                 .attr('y2', chartBottom)
             )
             .attr('class', 'stem')
             .style('stroke', color + '99')
             .style('stroke-width', 4)
             .transition(t)
-            .attr('x1', (d) => xScale(d.date))
+            .attr('x1', (date) => xScale(new Date(date)))
             .attr('y1', yScale(0))
-            .attr('x2', (d) => xScale(d.date))
-            .attr('y2', (d) => yScale(d[typeDaily]));
+            .attr('x2', (date) => xScale(new Date(date)))
+            .attr('y2', (date, index) =>
+              yScale(statistics[chartType][statistic][index])
+            );
         }
 
         svg
@@ -410,146 +343,68 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
           .on('touchend', mouseout);
       });
     },
-    [chartType, dimensions, logMode, mode]
+    [chartType, dimensions, isUniform, isLog, dates, getDiscreteStatisticArray]
   );
 
   useEffect(() => {
-    if (timeseries.length > 1) {
-      graphData(timeseries);
-    }
-  }, [timeseries, graphData]);
-
-  const dateStr = datapoint.date ? formatTimeseriesDate(datapoint.date) : '';
-
-  const chartKey1 = chartType === 1 ? 'totalconfirmed' : 'dailyconfirmed';
-  const chartKey2 = chartType === 1 ? 'totalactive' : 'dailyactive';
-  const chartKey3 = chartType === 1 ? 'totalrecovered' : 'dailyrecovered';
-  const chartKey4 = chartType === 1 ? 'totaldeceased' : 'dailydeceased';
-  const chartKey5 = chartType === 1 ? 'totaltested' : 'dailytested';
-
-  // Function for calculate increased/decreased count for each type of data
-  const currentStatusCount = (chartType) => {
-    if (timeseries.length <= 0 || index <= 0 || index >= timeseries.length)
-      return '';
-    const currentDiff =
-      timeseries[index][chartType] - timeseries[index - 1][chartType];
-    const formatedDiff = formatNumber(currentDiff);
-    return currentDiff >= 0 ? `+${formatedDiff}` : formatedDiff;
-  };
+    graphData(timeseries);
+  }, [timeseries, graphData, dates]);
 
   return (
     <React.Fragment>
-      <div className="TimeSeries fadeInUp" style={{animationDelay: '2.7s'}}>
-        <div className="svg-parent" ref={wrapperRef}>
-          <div className="stats">
-            <h5 className={`${!moving ? 'title' : ''}`}>{t('Confirmed')}</h5>
-            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
-            <div className="stats-bottom">
-              <h2>{formatNumber(datapoint[chartKey1])}</h2>
-              <h6>{currentStatusCount(chartKey1)}</h6>
+      <div className="TimeSeries">
+        {PRIMARY_STATISTICS.map((statistic, index) => (
+          <div
+            key={statistic}
+            className={classnames('svg-parent', `is-${statistic}`)}
+            ref={wrapperRef}
+          >
+            <div className={classnames('stats', `is-${statistic}`)}>
+              <h5 className="title">{capitalize(t(statistic))}</h5>
+              <h5 className="">{`${highlightedDate}`}</h5>
+              <div className="stats-bottom">
+                <h2>
+                  {formatNumber(
+                    getDailyStatistic(highlightedDate, statistic, chartType)
+                  )}
+                </h2>
+                <h6></h6>
+              </div>
             </div>
+            <svg
+              ref={(el) => {
+                refs.current[index] = el;
+              }}
+              preserveAspectRatio="xMidYMid meet"
+            >
+              <g className="x-axis" />
+              <g className="x-axis2" />
+              <g className="y-axis" />
+            </svg>
           </div>
-          <svg ref={svgRef1} preserveAspectRatio="xMidYMid meet">
-            <g className="x-axis" />
-            <g className="x-axis2" />
-            <g className="y-axis" />
-          </svg>
-        </div>
-
-        <div className="svg-parent is-blue">
-          <div className="stats is-blue">
-            <h5 className={`${!moving ? 'title' : ''}`}>{t('Active')}</h5>
-            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
-            <div className="stats-bottom">
-              <h2>{formatNumber(datapoint[chartKey2])}</h2>
-              <h6>{currentStatusCount(chartKey2)}</h6>
-            </div>
-          </div>
-          <svg ref={svgRef2} preserveAspectRatio="xMidYMid meet">
-            <g className="x-axis" />
-            <g className="x-axis2" />
-            <g className="y-axis" />
-          </svg>
-        </div>
-
-        <div className="svg-parent is-green">
-          <div className="stats is-green">
-            <h5 className={`${!moving ? 'title' : ''}`}>{t('Recovered')}</h5>
-            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
-            <div className="stats-bottom">
-              <h2>{formatNumber(datapoint[chartKey3])}</h2>
-              <h6>{currentStatusCount(chartKey3)}</h6>
-            </div>
-          </div>
-          <svg ref={svgRef3} preserveAspectRatio="xMidYMid meet">
-            <g className="x-axis" />
-            <g className="x-axis2" />
-            <g className="y-axis" />
-          </svg>
-        </div>
-
-        <div className="svg-parent is-gray">
-          <div className="stats is-gray">
-            <h5 className={`${!moving ? 'title' : ''}`}>{t('Deceased')}</h5>
-            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
-            <div className="stats-bottom">
-              <h2>{formatNumber(datapoint[chartKey4])}</h2>
-              <h6>{currentStatusCount(chartKey4)}</h6>
-            </div>
-          </div>
-          <svg ref={svgRef4} preserveAspectRatio="xMidYMid meet">
-            <g className="x-axis" />
-            <g className="x-axis2" />
-            <g className="y-axis" />
-          </svg>
-        </div>
-
-        <div className="svg-parent is-purple">
-          <div className="stats is-purple">
-            <h5 className={`${!moving ? 'title' : ''}`}>
-              {t('Tested')} {stateCode === 'TT' ? testedToolTip : ''}
-            </h5>
-            <h5 className={`${moving ? 'title' : ''}`}>{`${dateStr}`}</h5>
-            <div className="stats-bottom">
-              <h2>{formatNumber(datapoint[chartKey5])}</h2>
-              <h6>{currentStatusCount(chartKey5)}</h6>
-            </div>
-          </div>
-          <svg ref={svgRef5} preserveAspectRatio="xMidYMid meet">
-            <g className="x-axis" />
-            <g className="x-axis2" />
-            <g className="y-axis" />
-          </svg>
-        </div>
-      </div>
-
-      <div className="pills">
-        <button
-          type="button"
-          onClick={() => setLastDaysCount(Infinity)}
-          className={lastDaysCount === Infinity ? 'selected' : ''}
-        >
-          {t('Beginning')}
-        </button>
-        <button
-          type="button"
-          onClick={() => setLastDaysCount(30)}
-          className={lastDaysCount === 30 ? 'selected' : ''}
-          aria-label="1 month"
-        >
-          {`1 ${t('Month')}`}
-        </button>
-        <button
-          type="button"
-          onClick={() => setLastDaysCount(14)}
-          className={lastDaysCount === 14 ? 'selected' : ''}
-          aria-label="14 days"
-        >
-          {`2 ${t('Weeks')}`}
-        </button>
+        ))}
       </div>
     </React.Fragment>
   );
 }
+
+const isEqual = (prevProps, currProps) => {
+  if (!equal(currProps.dates.length, prevProps.dates.length)) {
+    return false;
+  }
+  if (!equal(currProps.chartType, prevProps.chartType)) {
+    return false;
+  }
+  if (!equal(currProps.isUniform, prevProps.isUniform)) {
+    return false;
+  }
+  if (!equal(currProps.isLog, prevProps.isLog)) {
+    return false;
+  }
+  if (!equal(currProps.stateCode, prevProps.stateCode)) {
+    return false;
+  }
+  return true;
+};
 
 export default React.memo(TimeSeries, isEqual);

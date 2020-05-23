@@ -71,7 +71,7 @@ function Level({data}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (equal(prevProps, currProps)) {
+  if (equal(prevProps.data.last_updated, currProps.data.last_updated)) {
     return true;
   }
   return false;

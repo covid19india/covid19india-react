@@ -30,7 +30,10 @@
       href="https://www.google-analytics.com"
       crossorigin
     />
-    <link rel="preconnect" href="https://api.covid19india.org/" />
+    <link
+      rel="preconnect"
+      href="https://api.covid19india.org/v2/data.min.json"
+    />
     <link
       rel="preconnect"
       href="https://www.googletagmanager.com/"
@@ -163,6 +166,9 @@
       dataLayer.push(arguments);
     }
     gtag('js', new Date());
-    gtag('config', 'UA-160698988-1', {"site_speed_sample_rate": 1, "sample_rate": 1});
+    gtag('config', 'UA-160698988-1', {
+      site_speed_sample_rate: 1,
+      sample_rate: 1,
+    });
   </script>
 </html>

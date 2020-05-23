@@ -139,11 +139,11 @@ function Minigraph({timeseries}) {
 
   return (
     <div className="Minigraph">
-      {PRIMARY_STATISTICS.map((statistic, i) => (
+      {PRIMARY_STATISTICS.map((statistic, index) => (
         <div key={statistic} className={classnames('svg-parent')}>
           <svg
             ref={(el) => {
-              refs.current[i] = el;
+              refs.current[index] = el;
             }}
             width="100"
             height="75"
