@@ -9,18 +9,15 @@ import {
   MAP_VIEWS,
   STATE_CODES_REVERSE,
   STATE_POPULATIONS,
-  ZONES,
 } from '../constants';
 import {
   capitalize,
-  formatDate,
   formatNumber,
   formatDayMonth,
   formatLastUpdated,
 } from '../utils/commonfunctions';
 
 import classnames from 'classnames';
-import {parse} from 'date-fns';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {useState, useEffect, useMemo, useCallback} from 'react';
@@ -37,6 +34,17 @@ const isEqual = (prevProps, currProps) => {
     return false;
   }
   if (!equal(prevProps.anchor, currProps.anchor)) {
+    return false;
+  }
+  let stateName = prevProps.mapName;
+  if (stateName === 'India') stateName = 'Total';
+  const stateCode = STATE_CODES_REVERSE[stateName];
+  if (
+    !equal(
+      prevProps.data[stateCode].last_updated,
+      currProps.data[stateCode].last_updated
+    )
+  ) {
     return false;
   }
   return true;
@@ -78,11 +86,11 @@ function MapExplorer({
   const {t} = useTranslation();
   const [currentMap, setCurrentMap] = useState({
     name: mapName,
-    option: MAP_OPTIONS.TOTAL,
     view:
       MAP_META[mapName].mapType === MAP_TYPES.COUNTRY
         ? MAP_VIEWS.STATES
         : MAP_VIEWS.DISTRICTS,
+    option: MAP_OPTIONS.TOTAL,
   });
   const currentMapMeta = MAP_META[currentMap.name];
 
@@ -177,10 +185,11 @@ function MapExplorer({
   );
 
   const panelState = useMemo(() => {
-    const state =
+    let state =
       currentMap.view === MAP_VIEWS.STATES
         ? regionHighlighted.state
         : currentMap.name;
+    if (state === 'India') state = 'Total';
     const stateCode = STATE_CODES_REVERSE[state];
     const stateData = preProcess(data[stateCode]);
     return {
@@ -189,22 +198,21 @@ function MapExplorer({
       lastUpdated: data[stateCode].last_updated,
       ...stateData,
     };
-  }, [currentMap.name, currentMap.view, data, regionHighlighted.state]);
+  }, [data, regionHighlighted.state, currentMap.name, currentMap.view]);
 
   const hoveredRegion = useMemo(() => {
     const stateCode = STATE_CODES_REVERSE[regionHighlighted.state];
-    const hoveredData = preProcess(
+    let hoveredData = preProcess(
       regionHighlighted.district
         ? data[stateCode].districts[regionHighlighted.district]
         : data[stateCode]
     );
-
     if (currentMap.option === MAP_OPTIONS.PER_MILLION) {
       const population = STATE_POPULATIONS[stateCode];
-      produce(hoveredData, (draft) => {
+      hoveredData = produce(hoveredData, (draft) => {
         ['total', 'delta'].forEach((ctype) => {
           MAP_STATISTICS.forEach((statistic) => {
-            draft[ctype][statistic] /= population;
+            draft[ctype][statistic] *= 1e6 / population;
           });
         });
       });
@@ -214,11 +222,62 @@ function MapExplorer({
       ...hoveredData,
     };
   }, [
+    data,
     regionHighlighted.state,
     regionHighlighted.district,
-    data,
     currentMap.option,
   ]);
+
+  const handleTabClick = (option) => {
+    switch (option) {
+      case MAP_OPTIONS.TOTAL:
+        setCurrentMap({
+          name: currentMap.name,
+          view:
+            currentMapMeta.mapType === MAP_TYPES.COUNTRY
+              ? MAP_VIEWS.STATES
+              : MAP_VIEWS.DISTRICTS,
+          option: MAP_OPTIONS.TOTAL,
+        });
+        if (currentMapMeta.mapType === MAP_TYPES.COUNTRY)
+          setRegionHighlighted({
+            state: regionHighlighted.state,
+          });
+        return;
+      case MAP_OPTIONS.PER_MILLION:
+        if (currentMapMeta.mapType === MAP_TYPES.STATE) return;
+        setCurrentMap({
+          name: currentMap.name,
+          view: MAP_VIEWS.STATES,
+          option: MAP_OPTIONS.PER_MILLION,
+        });
+        setRegionHighlighted({
+          state: regionHighlighted.state,
+        });
+        return;
+      case MAP_OPTIONS.HOTSPOTS:
+        if (currentMapMeta.mapType === MAP_TYPES.STATE) return;
+        setCurrentMap({
+          name: currentMap.name,
+          view: MAP_VIEWS.DISTRICTS,
+          option: MAP_OPTIONS.HOTSPOTS,
+        });
+        return;
+      case MAP_OPTIONS.ZONES:
+        setCurrentMap({
+          name: currentMap.name,
+          view: MAP_VIEWS.DISTRICTS,
+          option: MAP_OPTIONS.ZONES,
+        });
+        if (currentMapMeta.mapType === MAP_TYPES.COUNTRY)
+          setRegionHighlighted({
+            state: 'Total',
+          });
+        return;
+      default:
+        return;
+    }
+  };
 
   return (
     <div
@@ -266,29 +325,35 @@ function MapExplorer({
           >
             <h5>{t(capitalize(statistic))}</h5>
             <div className="stats-bottom">
-              <h1>{formatNumber(panelState.total[statistic])}</h1>
+              <h1>
+                {formatNumber(
+                  statistic !== 'tested'
+                    ? panelState.total[statistic]
+                    : panelState.total.tested.samples
+                )}
+              </h1>
               <h6>
-                {panelState.delta[statistic] > 0 && '+'}
-                {formatNumber(panelState.delta[statistic])}
+                {statistic !== 'tested' &&
+                  panelState.delta[statistic] > 0 &&
+                  '+'}
+                {statistic !== 'tested' &&
+                  formatNumber(panelState.delta[statistic])}
+                {statistic === 'tested' &&
+                  t('As of {{date}}', {
+                    date: formatDayMonth(panelState.total.tested.last_updated),
+                  })}
               </h6>
             </div>
+            {statistic === 'tested' && (
+              <a href={panelState.total.tested.source} target="_noblank">
+                <Icon.Link />
+              </a>
+            )}
+            {statistic === 'tested' &&
+              panelState.state === 'Total' &&
+              testedToolTip}
           </div>
         ))}
-        <div className={classnames('stats', 'tested')}>
-          <h5>{t('Tested')}</h5>
-          <div className="stats-bottom">
-            <h1>{formatNumber(panelState.total.tested.samples)}</h1>
-            <h6 className="timestamp">
-              {t('As of {{date}}', {
-                date: formatDayMonth(panelState.total.tested.last_updated),
-              })}
-            </h6>
-            <a href={panelState.total.tested.source} target="_noblank">
-              <Icon.Link />
-            </a>
-            {panelState.state === 'Total' && testedToolTip}
-          </div>
-        </div>
       </div>
 
       <div className="meta">
@@ -317,13 +382,12 @@ function MapExplorer({
         )}
 
         {currentMap.option !== MAP_OPTIONS.ZONE &&
-          (currentMapMeta.mapType === MAP_TYPES.STATE ||
-            (currentMapMeta.mapType === MAP_TYPES.COUNTRY &&
-              currentMap.option !== MAP_OPTIONS.TOTAL)) &&
-          (currentMap.option !== MAP_OPTIONS.HOTSPOTS ||
-            regionHighlighted?.district) && (
+          ((currentMap.view === MAP_VIEWS.DISTRICTS &&
+            regionHighlighted.district) ||
+            (currentMap.view === MAP_VIEWS.STATES &&
+              currentMap.option !== MAP_OPTIONS.TOTAL)) && (
             <h1 className={classnames('district', mapStatistic)}>
-              {hoveredRegion.total[mapStatistic]}
+              {formatNumber(hoveredRegion.total[mapStatistic])}
               <br />
               <span>
                 {t(mapStatistic)}
@@ -346,7 +410,6 @@ function MapExplorer({
       {/* <div>
         {mapStatistic && (
           <ChoroplethMap
-            statistic={statistic}
             currentMap={currentMap}
             mapData={currentMapData}
             regionHighlighted={regionHighlighted}
@@ -365,15 +428,12 @@ function MapExplorer({
             className={classnames('tab', {
               focused: currentMap.option === option,
             })}
-            onClick={() => {
-              setCurrentMap({
-                name: currentMap.name,
-                view: currentMap.view,
-                option: option,
-              });
-            }}
+            onClick={() => handleTabClick(option)}
           >
-            <h4>{t(option)}</h4>
+            <h4>
+              {t(option)}
+              {option === MAP_OPTIONS.PER_MILLION && <sup>&dagger;</sup>}
+            </h4>
           </div>
         ))}
       </div>
