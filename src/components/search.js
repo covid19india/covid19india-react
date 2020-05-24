@@ -6,7 +6,6 @@ import {
 } from '../constants';
 import {capitalize} from '../utils/commonfunctions';
 
-import classnames from 'classnames';
 import Bloodhound from 'corejs-typeahead';
 import React, {useState, useEffect, useCallback, useRef} from 'react';
 import ContentLoader from 'react-content-loader';
@@ -316,13 +315,6 @@ function Search({districtZones}) {
                         {result.type === 'district' &&
                           `, ${STATE_CODES[result.route]}`}
                       </div>
-                      <div
-                        className={classnames('result-zone', {
-                          [`is-${districtZones[STATE_CODES[result.route]][
-                            result.name
-                          ]?.zone.toLowerCase()}`]: true,
-                        })}
-                      ></div>
                     </div>
                     <div className="result-type">
                       <span>{[result.route]}</span>
