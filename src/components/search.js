@@ -2,15 +2,17 @@ import {
   STATE_CODES_ARRAY,
   STATE_CODES_REVERSE,
   STATE_CODES,
+  ESSENTIALS_CATEGORIES,
 } from '../constants';
+import {capitalize} from '../utils/commonfunctions';
 
-import classnames from 'classnames';
 import Bloodhound from 'corejs-typeahead';
-import React, {useState, useCallback, useRef} from 'react';
+import React, {useState, useEffect, useCallback, useRef} from 'react';
+import ContentLoader from 'react-content-loader';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
-import {useDebounce} from 'react-use';
+import {useDebounce, useMeasure} from 'react-use';
 
 const engine = new Bloodhound({
   initialize: true,
@@ -87,6 +89,29 @@ const locationSuggestions = [
   'Ganjam',
 ];
 
+function SearchLoader() {
+  const [svgElement, {width}] = useMeasure();
+
+  useEffect(() => {}, [width]);
+
+  return (
+    <React.Fragment>
+      <span ref={svgElement} style={{width: '100%'}} />
+      {width && (
+        <ContentLoader
+          speed={1.5}
+          width={width}
+          height={100}
+          viewBox={`0 0 ${width} 100`}
+          position="absolute"
+        >
+          <rect x="10" y="20" rx="5" ry="5" width={width - 20} height="75" />
+        </ContentLoader>
+      )}
+    </React.Fragment>
+  );
+}
+
 function Search({districtZones}) {
   const [searchValue, setSearchValue] = useState('');
   const [expand, setExpand] = useState(false);
@@ -139,9 +164,14 @@ function Search({districtZones}) {
       setResults([...results]);
     };
 
+    const essentialsAsync = (datums) => {
+      // to handle async remote call on initial launch
+      essentialsEngine.search(searchInput, essentialsSync);
+    };
+
     engine.search(searchInput, sync);
     districtEngine.search(searchInput, districtSync);
-    essentialsEngine.search(searchInput, essentialsSync);
+    essentialsEngine.search(searchInput, essentialsSync, essentialsAsync);
   }, []);
 
   useDebounce(
@@ -256,7 +286,21 @@ function Search({districtZones}) {
             <Icon.X />
           </div>
         )}
+
+        {!expand && searchValue.length === 0 && (
+          <div
+            className={`close-button custom`}
+            onClick={() => {
+              setSearchValue('');
+              setResults([]);
+            }}
+          >
+            <Icon.Heart />
+          </div>
+        )}
       </div>
+
+      {results.length < 1 && searchValue.length > 0 && <SearchLoader />}
 
       {results.length > 0 && (
         <div className="results">
@@ -271,13 +315,6 @@ function Search({districtZones}) {
                         {result.type === 'district' &&
                           `, ${STATE_CODES[result.route]}`}
                       </div>
-                      <div
-                        className={classnames('result-zone', {
-                          [`is-${districtZones[STATE_CODES[result.route]][
-                            result.name
-                          ]?.zone.toLowerCase()}`]: true,
-                        })}
-                      ></div>
                     </div>
                     <div className="result-type">
                       <span>{[result.route]}</span>
@@ -290,7 +327,7 @@ function Search({districtZones}) {
               return (
                 <a
                   key={index}
-                  href={result.website}
+                  href={result.website || null}
                   target="_noblank"
                   className="essential-result"
                 >
@@ -298,22 +335,25 @@ function Search({districtZones}) {
                     <div className="result-top-left">
                       <div className="result-name">{result.name}</div>
                       <div className="result-location">
-                        {result.city}, {result.state}
+                        {result.city && `${result.city}, `}
+                        {result.state}
                       </div>
                     </div>
                     <div className="result-category">
                       <div>
-                        {result.category.match('Delivery')
-                          ? 'Home Delivery'
-                          : result.category}
+                        {capitalize(ESSENTIALS_CATEGORIES[result.category])}
                       </div>
-                      <Icon.ExternalLink />
+                      {result.website && <Icon.ExternalLink />}
                     </div>
                   </div>
                   <div className="result-description">{result.description}</div>
-                  <div className="result-contact">
-                    <Icon.Phone />
-                    <div>{result.contact}</div>
+                  <div className="result-contacts">
+                    {result.contact.split('\n').map((contact) => (
+                      <div key={contact} className="result-contact">
+                        <Icon.Phone />
+                        <a href={`tel:${contact}`}>{contact}</a>
+                      </div>
+                    ))}
                   </div>
                 </a>
               );
@@ -323,50 +363,65 @@ function Search({districtZones}) {
       )}
 
       {expand && (
-        <div className="expanded">
-          <div className="expanded-left">
-            <h3>{t('Essentials')}</h3>
-            <div className="suggestions">
-              {essentialSuggestions.map((suggestion, index) => (
-                <div className="suggestion" key={index}>
-                  <div>-</div>
-                  <h4
-                    onMouseDown={(event) => {
-                      event.preventDefault();
-                      setNativeValue(searchInput.current, suggestion);
-                      searchInput.current.dispatchEvent(
-                        new Event('input', {bubbles: true})
-                      );
-                    }}
-                  >
-                    {t(suggestion)}
-                  </h4>
-                </div>
-              ))}
+        <React.Fragment>
+          <p
+            className="feature"
+            onMouseDown={(event) => {
+              event.preventDefault();
+              setNativeValue(searchInput.current, 'Cyclone Amphan');
+              searchInput.current.dispatchEvent(
+                new Event('input', {bubbles: true})
+              );
+            }}
+          >
+            To those who are in states affected by Cyclone Amphan or have
+            family/friends there, click here to view helplines for assistance.
+          </p>
+          <div className="expanded">
+            <div className="expanded-left">
+              <h3>{t('Essentials')}</h3>
+              <div className="suggestions">
+                {essentialSuggestions.map((suggestion, index) => (
+                  <div className="suggestion" key={index}>
+                    <div>-</div>
+                    <h4
+                      onMouseDown={(event) => {
+                        event.preventDefault();
+                        setNativeValue(searchInput.current, suggestion);
+                        searchInput.current.dispatchEvent(
+                          new Event('input', {bubbles: true})
+                        );
+                      }}
+                    >
+                      {t(suggestion)}
+                    </h4>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="expanded-right">
+              <h3>{t('Locations')}</h3>
+              <div className="suggestions">
+                {locationSuggestions.map((suggestion, index) => (
+                  <div className="suggestion" key={index}>
+                    <div>-</div>
+                    <h4
+                      onMouseDown={(event) => {
+                        event.preventDefault();
+                        setNativeValue(searchInput.current, suggestion);
+                        searchInput.current.dispatchEvent(
+                          new Event('input', {bubbles: true})
+                        );
+                      }}
+                    >
+                      {t(suggestion)}
+                    </h4>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-          <div className="expanded-right">
-            <h3>{t('Locations')}</h3>
-            <div className="suggestions">
-              {locationSuggestions.map((suggestion, index) => (
-                <div className="suggestion" key={index}>
-                  <div>-</div>
-                  <h4
-                    onMouseDown={(event) => {
-                      event.preventDefault();
-                      setNativeValue(searchInput.current, suggestion);
-                      searchInput.current.dispatchEvent(
-                        new Event('input', {bubbles: true})
-                      );
-                    }}
-                  >
-                    {t(suggestion)}
-                  </h4>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        </React.Fragment>
       )}
     </div>
   );

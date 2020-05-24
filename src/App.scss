@@ -842,11 +842,22 @@ h6 {
     align-self: center;
     background: $yellow-light;
     color: $orange;
+    display: flex;
+    flex-direction: row;
     font-weight: 400;
-    height: 5rem;
+    justify-content: center;
     margin: 0;
+    padding: .75rem;
     text-transform: unset;
-    width: 10rem;
+
+    * {
+      align-self: center;
+    }
+
+    svg {
+      margin-left: .5rem;
+      padding-right: 0;
+    }
 
     &:hover {
       background: $yellow-hover;
@@ -932,7 +943,6 @@ h6 {
   font-weight: 600;
   justify-content: center;
   line-height: 20px;
-
 
   .snippet {
     align-self: center;
@@ -1053,6 +1063,27 @@ h6 {
       stroke-width: 3;
       width: 12px;
     }
+
+    &.custom {
+      background: $pink-light !important;
+      pointer-events: none;
+      z-index: 0;
+
+      svg {
+        stroke: $pink !important;
+      }
+    }
+  }
+
+  .feature {
+    background: $pink-light;
+    border-radius: 5px;
+    color: $pink;
+    cursor: pointer;
+    font-family: 'archia';
+    font-size: .75rem;
+    padding: .75rem;
+    text-align: center;
   }
 
   .expanded {
@@ -1088,6 +1119,12 @@ h6 {
 
     a {
       text-decoration: none !important;
+    }
+
+    .pan-divider {
+      color: $gray;
+      font-weight: 600;
+      padding: 1rem 0;
     }
 
     .result,
@@ -1126,6 +1163,10 @@ h6 {
         font-size: .75rem;
         padding: .25rem;
 
+        &:hover {
+          background: $yellow-hover;
+        }
+
         svg {
           margin-left: .25rem;
           stroke: $orange-mid;
@@ -1162,12 +1203,10 @@ h6 {
           border: 2px solid $orange-mid;
         }
 
-
         &.is-green {
           background: $green-light;
           border: 2px solid $green-mid;
         }
-
       }
     }
 
@@ -1181,11 +1220,9 @@ h6 {
         justify-content: space-between;
         width: 100%;
 
-
         .result-top-left {
           display: flex;
           flex-direction: column;
-
 
           .result-location {
             display: flex;
@@ -1215,6 +1252,10 @@ h6 {
         text-align: right;
         text-transform: capitalize;
 
+        &:hover {
+          background: $pink-hover;
+        }
+
         & > * {
           align-self: center;
         }
@@ -1232,6 +1273,12 @@ h6 {
         margin-top: 1rem;
       }
 
+      .result-contacts {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+      }
+
       .result-contact {
         align-self: flex-start;
         background: $gray-light;
@@ -1241,9 +1288,18 @@ h6 {
         flex-direction: row;
         font-size: .75rem;
         height: 1rem;
+        margin-right: .5rem;
         margin-top: .5rem;
         padding: .25rem;
         text-align: right;
+
+        &:hover {
+          background: $gray-hover;
+        }
+
+        a {
+          color: inherit;
+        }
 
         & > * {
           align-self: center;
@@ -1263,7 +1319,6 @@ h6 {
     display: flex;
     flex-direction: column;
     margin-right: 1rem;
-
 
     .suggestion {
       color: $gray-mid;
@@ -1331,7 +1386,6 @@ h6 {
     .bell-icon {
       height: 24px;
       position: relative;
-
 
       .indicator {
         background: $pblue;
@@ -1505,7 +1559,6 @@ h6 {
   flex-direction: row;
   justify-content: space-between;
   width: 30rem;
-
 
   .level-item {
     display: flex;
@@ -2432,7 +2485,6 @@ table {
   position: relative;
   z-index: 99;
 
-
   .tab {
     background: $gray-light;
     border-top-left-radius: 5px;
@@ -2500,7 +2552,6 @@ table {
     &.focused {
       background: $gray-opaque;
       color: $gray;
-
     }
 
     &.disabled {
@@ -3056,7 +3107,6 @@ footer {
     justify-content: space-between;
     width: calc(100% - 0);
 
-
     .link {
       margin-right: -.75rem;
       width: 12rem;
@@ -3138,7 +3188,6 @@ footer {
   flex-direction: column;
   margin-left: 6rem;
   width: calc(100% - 6rem);
-
 
   .select {
     display: flex;
@@ -3375,7 +3424,6 @@ footer {
     justify-content: center;
     padding-left: 5rem;
     padding-right: 5rem;
-
 
     .no-result {
       align-self: center;
@@ -3772,7 +3820,6 @@ footer {
   width: 100vw;
   z-index: 9999;
 
-
   .modal-content {
     align-self: center;
     background: #fff;
@@ -3881,7 +3928,6 @@ footer {
 .patients-summary {
   align-self: center;
   width: 30rem;
-
 
   .Patients {
     min-height: 5rem;
@@ -4178,7 +4224,6 @@ footer {
   min-height: 22rem !important;
   width: 100%;
 
-
   .update {
     background: $gray-light;
     border-radius: 5px;
@@ -4455,38 +4500,19 @@ footer {
   }
 }
 
-.Clusters {
-  align-self: center;
-  width: 100%;
-
-  h1 {
-    color: $red;
-    margin-bottom: 0;
-    padding-left: 1.5rem;
-    width: 100%;
-  }
-
-  canvas {
-    touch-action: auto !important;
-  }
-}
-
 .cards-container {
   margin-left: 5rem;
   padding: 2rem;
-
 
   .cards {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 
-
     .card {
       flex: 0 1 calc(33% - 1em);
       height: 30rem;
       margin-bottom: 2em;
-
 
       .charts-header {
         align-items: center;
@@ -4494,7 +4520,6 @@ footer {
         flex-direction: column;
         height: 100%;
         justify-content: flex-start;
-
 
         .chart-title {
           color: #6c757d;
@@ -4663,6 +4688,20 @@ footer {
     }
   }
 
+  .Level {
+    h1 {
+      font-size: 5vw !important;
+    }
+
+    h5 {
+      font-size: 2.75vw !important;
+    }
+
+    h4 {
+      font-size: 3vw !important;
+    }
+  }
+
   .MapExplorer {
     .svg-parent {
       width: 100%;
@@ -4718,7 +4757,6 @@ footer {
   .Banner {
     height: 7rem;
 
-
     .snippet {
       margin-left: 1rem;
       margin-right: 1rem;
@@ -4734,7 +4772,6 @@ footer {
 
   .cards-container {
     padding: .5rem;
-
 
     .cards {
       .card {
@@ -4785,7 +4822,6 @@ footer {
       .modal-content {
         width: calc(100% - 5rem);
 
-
         .meta {
           height: 20rem;
         }
@@ -4812,11 +4848,9 @@ footer {
   .patients-summary {
     width: calc(100% - 2rem);
 
-
     .modal {
       .modal-content {
         width: calc(100% - 5rem);
-
 
         .meta {
           height: 20rem;
@@ -4828,7 +4862,6 @@ footer {
   .patientdb-wrapper {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
-
 
     .Patients {
       width: 100%;
@@ -4870,8 +4903,7 @@ footer {
 
   .State {
     .district-bar,
-    .to-essentials,
-    .Clusters {
+    .to-essentials {
       width: calc(100% - 3rem);
 
       h1 {
@@ -4924,7 +4956,6 @@ footer {
   color: #bdbdbd;
   transition: background-color .2s ease-out !important;
 
-
   .switch-wrapper > div {
     background: #161625 !important;
   }
@@ -4936,7 +4967,6 @@ footer {
   .Navbar,
   .expand {
     border-right: 0;
-
 
     .navbar-middle {
       color: #bdbdbd;
@@ -4999,7 +5029,6 @@ footer {
         }
 
         li {
-
           a {
             color: $gray !important;
 
@@ -5007,7 +5036,6 @@ footer {
               color: $white !important;
             }
           }
-
         }
       }
     }
@@ -5220,12 +5248,6 @@ footer {
 
     .modal {
       background: #1e1e30bb !important;
-    }
-  }
-
-  .Clusters {
-    canvas {
-      filter: invert(1) hue-rotate(180deg) saturate(5);
     }
   }
 

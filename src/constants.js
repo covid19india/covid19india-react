@@ -352,3 +352,23 @@ export const LOCALE_SHORTHANDS = {
   malayalam: null,
   odiya: null,
 };
+
+export const ESSENTIALS_CATEGORIES = {
+  'Accommodation and Shelter Homes': 'homes',
+  Ambulance: 'ambulance',
+  'Community Kitchen': 'kitchen',
+  'CoVID-19 Testing Lab': 'lab',
+  'Delivery [Vegetables, Fruits, Groceries, Medicines, etc.]': 'delivery',
+  'Fire Brigade': 'fire',
+  'Free Food': 'food',
+  Fundraisers: 'fund',
+  'Government Helpline': 'helpline',
+  'Hospitals and Centers': 'hospital',
+  'Mental well being and Emotional Support': 'well-being',
+  Police: 'police',
+  'Senior Citizen Support': 'seniors',
+  Transportation: 'transport',
+  'Quarantine Facility': 'quarantine',
+  Other: 'other',
+  'Helpline for Cyclone Amphan': 'cyclone amphan',
+};

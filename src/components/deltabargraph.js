@@ -121,7 +121,7 @@ function DeltaBarGraph({timeseries, caseType}) {
         i && data[i - 1][caseType]
           ? d3.format('+.1~%')(
               (data[i][caseType] - data[i - 1][caseType]) /
-                data[i - 1][caseType]
+                Math.abs(data[i - 1][caseType])
             )
           : ''
       )
