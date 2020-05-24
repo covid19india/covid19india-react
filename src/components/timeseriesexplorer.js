@@ -3,11 +3,11 @@ import TimeSeries from './timeseries';
 import {PinIcon, IssueOpenedIcon} from '@primer/octicons-v2-react';
 import 'intersection-observer';
 import Observer from '@researchgate/react-intersection-observer';
+import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {createBreakpoint, useLocalStorage} from 'react-use';
-import classnames from 'classnames';
 
 const useBreakpoint = createBreakpoint({XL: 1280, L: 768, S: 350});
 
@@ -22,7 +22,7 @@ function TimeSeriesExplorer({
   setAnchor,
 }) {
   const {t} = useTranslation();
-  //const breakpoint = useBreakpoint();
+  // const breakpoint = useBreakpoint();
   const [lastDaysCount, setLastDaysCount] = useState(30);
 
   const [chartType, setChartType] = useLocalStorage('chartType', 'cumulative');

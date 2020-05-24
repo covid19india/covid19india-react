@@ -2564,8 +2564,8 @@ table {
 }
 
 .timeseries-header {
-  position: relative;
   align-self: center;
+  position: relative;
   width: 100%;
 
   h1 {
@@ -3017,10 +3017,10 @@ footer {
 
   h5 {
     color: $gray;
+    font-weight: 600;
     margin: 0;
     margin-bottom: 0.5rem;
     margin-top: 1rem;
-    font-weight: 600;
   }
 
   img {
@@ -4512,6 +4512,23 @@ footer {
   @media (max-width: 769px) {
     margin-left: unset;
     padding: 1rem;
+  }
+}
+
+.timeline {
+  position: fixed;
+  right: 0;
+  padding-right: .5rem;
+  font-family: 'archia';
+  color: $gray-mid;
+  overflow-y: scroll;
+
+  .date {
+    cursor: pointer;
+
+    &:hover {
+      color: $gray;
+    }
   }
 }
 

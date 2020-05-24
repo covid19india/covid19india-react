@@ -249,7 +249,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
     if (data.districts) {
       setShowDistricts(!showDistricts);
     }
-  }, [stateCode, showDistricts, data]);
+  }, [showDistricts, data]);
 
   return (
     <React.Fragment>
