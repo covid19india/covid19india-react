@@ -1,3 +1,5 @@
+import useTimeseries from './hooks/usetimeseries';
+
 import {TIMESERIES_STATISTICS} from '../constants';
 import {
   formatNumber,
@@ -9,115 +11,24 @@ import {useResizeObserver} from '../utils/hooks';
 import classnames from 'classnames';
 import * as d3 from 'd3';
 import equal from 'fast-deep-equal';
-import produce from 'immer';
-import React, {useState, useEffect, useRef, useCallback, useMemo} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 
-function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
+function TimeSeries({timeseries, chartType, isUniform, isLog}) {
   const {t} = useTranslation();
-  const [highlightedDate, setHighlightedDate] = useState(
-    dates[dates.length - 1]
-  );
   const refs = useRef([]);
 
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
 
-  const getDailyStatistic = useCallback(
-    (date, statistic, chartType) => {
-      switch (chartType) {
-        case 'cumulative':
-          const index = dates.findIndex((date) => date === highlightedDate);
-          switch (statistic) {
-            case 'active':
-              return (
-                statistics[chartType].confirmed[index] -
-                statistics[chartType].recovered[index] -
-                statistics[chartType].deceased[index]
-              );
-
-            default:
-              return statistics[chartType][statistic][index];
-          }
-
-        default:
-          switch (statistic) {
-            case 'active':
-              return (
-                timeseries[date].confirmed -
-                timeseries[date].recovered -
-                timeseries[date].deceased
-              );
-
-            case 'tested':
-              return timeseries[date].tested?.samples || 0;
-
-            default:
-              return timeseries[date][statistic];
-          }
-      }
-    },
-    [dates, highlightedDate, statistics, timeseries]
+  const [statistics, dates, getDailyStatistic] = useTimeseries(
+    timeseries,
+    chartType
   );
 
-  const getDiscreteStatisticArray = useCallback(
-    (statistic) => {
-      let array = [];
-      dates.map(
-        (date) => (array = [...array, getDailyStatistic(date, statistic)])
-      );
-      return array;
-    },
-    [dates, getDailyStatistic]
+  const [highlightedDate, setHighlightedDate] = useState(
+    dates[dates.length - 1]
   );
-
-  const getCumulativeStatisticArray = (discreteStatisticArray) => {
-    return discreteStatisticArray.reduce(function (r, discreteStatisticArray) {
-      r.push(((r.length && r[r.length - 1]) || 0) + discreteStatisticArray);
-      return r;
-    }, []);
-  };
-
-  const statistics = useMemo(() => {
-    const statistics = {
-      cumulative: {
-        confirmed: null,
-        active: null,
-        recovered: null,
-        deceased: null,
-      },
-      discrete: {
-        confirmed: null,
-        active: null,
-        recovered: null,
-        deceased: null,
-      },
-    };
-
-    TIMESERIES_STATISTICS.map((statistic) => {
-      switch (chartType) {
-        case 'cumulative':
-          return (statistics['cumulative'] = produce(
-            statistics['cumulative'],
-            (draftCumulative) => {
-              draftCumulative[statistic] = getCumulativeStatisticArray(
-                getDiscreteStatisticArray(statistic)
-              );
-            }
-          ));
-
-        case 'discrete':
-          return (statistics['discrete'] = produce(
-            statistics['discrete'],
-            (draftDiscrete) => {
-              draftDiscrete[statistic] = getDiscreteStatisticArray(statistic);
-            }
-          ));
-      }
-    });
-
-    return statistics;
-  }, [chartType, getDiscreteStatisticArray]);
 
   useEffect(() => {
     const {width, height} =
@@ -235,21 +146,21 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
       yScales.push(generateYScale(statistic));
     });
 
-    /* Focus dots */
-    const focus = svgArray.map((svg, i) => {
-      return svg
-        .selectAll('.focus')
-        .data([dates])
-        .join((enter) =>
-          enter.append('circle').attr('cx', (date) => {
-            xScale(new Date(date));
-          })
-        )
-        .attr('class', 'focus')
-        .attr('fill', colors[i])
-        .attr('stroke', colors[i])
-        .attr('r', 4);
-    });
+    // /* Focus dots */
+    // const focus = svgArray.map((svg, i) => {
+    //   return svg
+    //     .selectAll('.focus')
+    //     .data([dates])
+    //     .join((enter) =>
+    //       enter.append('circle').attr('cx', (date) => {
+    //         xScale(new Date(date));
+    //       })
+    //     )
+    //     .attr('class', 'focus')
+    //     .attr('fill', colors[i])
+    //     .attr('stroke', colors[i])
+    //     .attr('r', 4);
+    // });
 
     function mousemove() {
       const xm = d3.mouse(this)[0];
@@ -388,15 +299,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
         .on('mouseout', mouseout)
         .on('touchend', mouseout);
     });
-  }, [
-    chartType,
-    dimensions,
-    isUniform,
-    isLog,
-    dates,
-    getDiscreteStatisticArray,
-    statistics,
-  ]);
+  }, [chartType, dimensions, isUniform, isLog, dates, statistics]);
 
   return (
     <React.Fragment>
