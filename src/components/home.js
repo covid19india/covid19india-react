@@ -1,5 +1,3 @@
-import {INITIAL_DATA} from '../constants';
-
 import Footer from './footer';
 import Level from './level';
 import MapExplorer from './mapexplorer';
@@ -8,6 +6,8 @@ import Search from './search';
 import Table from './table';
 import TimeSeriesExplorer from './timeseriesexplorer';
 import Updates from './updates';
+
+import {INITIAL_DATA} from '../constants';
 
 import axios from 'axios';
 import React, {useState, useMemo} from 'react';
@@ -33,24 +33,25 @@ function Home(props) {
   );
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
 
-  // const {data} = useSWR('http://localhost:3001/db', fetcher, {
-  //   suspense: true,
-  //   refreshInterval: 5000,
-  // });
+  const {data} = useSWR('http://localhost:3001/db', fetcher, {
+    suspense: true,
+    refreshInterval: 100000,
+    revalidateOnFocus: false,
+  });
 
-  const {data} = useSWR(
-    'https://api.covid19india.org/v2/data.min.json',
-    fetcher,
-    {
-      initialData: INITIAL_DATA,
-      suspense: true,
-      revalidateOnFocus: false,
-      refreshInterval: 5 * 60 * 1000,
-      compare: (dataA, dataB) => {
-        return dataA['TT'].last_updated - dataB['TT'].last_updated;
-      },
-    }
-  );
+  // const {data} = useSWR(
+  //   'https://api.covid19india.org/v2/data.min.json',
+  //   fetcher,
+  //   {
+  //     initialData: INITIAL_DATA,
+  //     suspense: true,
+  //     revalidateOnFocus: false,
+  //     refreshInterval: 5 * 60 * 1000,
+  //     compare: (dataA, dataB) => {
+  //       return dataA['TT'].last_updated - dataB['TT'].last_updated;
+  //     },
+  //   }
+  // );
 
   const Bell = useMemo(
     () => (
@@ -129,15 +130,16 @@ function Home(props) {
 
         <div className="home-right">
           {/* <MapExplorer
-                mapName={'India'}
-                data={data}
-                regionHighlighted={regionHighlighted}
-                setRegionHighlighted={setRegionHighlighted}
-                anchor={anchor}
-                setAnchor={setAnchor}
-                mapStatistic={mapStatistic}
-                setMapStatistic={setMapStatistic}
-               />*/}
+            mapName={'India'}
+            data={data}
+            regionHighlighted={regionHighlighted}
+            setRegionHighlighted={setRegionHighlighted}
+            anchor={anchor}
+            setAnchor={setAnchor}
+            mapStatistic={mapStatistic}
+            setMapStatistic={setMapStatistic}
+          />*/}
+
           <TimeSeriesExplorer
             timeseries={data[regionHighlighted.stateCode].timeseries}
             activeStateCode={regionHighlighted.stateCode}

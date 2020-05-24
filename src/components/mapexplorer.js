@@ -26,30 +26,6 @@ import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 
-const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.regionHighlighted, currProps.regionHighlighted)) {
-    return false;
-  }
-  if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
-    return false;
-  }
-  if (!equal(prevProps.anchor, currProps.anchor)) {
-    return false;
-  }
-  let stateName = prevProps.mapName;
-  if (stateName === 'India') stateName = 'Total';
-  const stateCode = STATE_CODES_REVERSE[stateName];
-  if (
-    !equal(
-      prevProps.data[stateCode].last_updated,
-      currProps.data[stateCode].last_updated
-    )
-  ) {
-    return false;
-  }
-  return true;
-};
-
 const preProcess = (original) => {
   if (!original)
     return {
@@ -452,5 +428,29 @@ function MapExplorer({
     </div>
   );
 }
+
+const isEqual = (prevProps, currProps) => {
+  if (!equal(prevProps.regionHighlighted, currProps.regionHighlighted)) {
+    return false;
+  }
+  if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
+    return false;
+  }
+  if (!equal(prevProps.anchor, currProps.anchor)) {
+    return false;
+  }
+  let stateName = prevProps.mapName;
+  if (stateName === 'India') stateName = 'Total';
+  const stateCode = STATE_CODES_REVERSE[stateName];
+  if (
+    !equal(
+      prevProps.data[stateCode].last_updated,
+      currProps.data[stateCode].last_updated
+    )
+  ) {
+    return false;
+  }
+  return true;
+};
 
 export default React.memo(MapExplorer, isEqual);
