@@ -21,6 +21,7 @@ import {
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
+import {PinIcon} from '@primer/octicons-v2-react';
 import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ReactDOM from 'react-dom';
 import {useHistory} from 'react-router-dom';
@@ -251,7 +252,7 @@ function MapExplorer({
             setAnchor(anchor === 'mapexplorer' ? null : 'mapexplorer');
           }}
         >
-          <Icon.Anchor />
+          <PinIcon/>
         </div>
       )}
 

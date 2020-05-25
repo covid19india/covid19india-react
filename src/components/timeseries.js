@@ -1,6 +1,6 @@
 import useTimeseries from './hooks/usetimeseries';
 
-import {TIMESERIES_STATISTICS} from '../constants';
+import {COLORS, TIMESERIES_STATISTICS} from '../constants';
 import {
   formatNumber,
   formatTimeseriesTickX,
@@ -80,13 +80,6 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
         .attr('class', 'y-axis')
         .call(d3.axisRight(yScale).ticks(4, '0~s').tickPadding(5));
 
-    const colors = ['#ff073a', '#007bff', '#28a745', '#6c757d', '#201aa2'];
-
-    const svgArray = [];
-    refs.current.forEach((ref) => {
-      svgArray.push(d3.select(ref));
-    });
-
     const uniformScaleMin = d3.min([
       ...statistics[chartType].active,
       ...statistics[chartType].recovered,
@@ -141,27 +134,6 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
         .range([chartBottom, margin.top]);
     };
 
-    const yScales = [];
-    TIMESERIES_STATISTICS.map((statistic) => {
-      yScales.push(generateYScale(statistic));
-    });
-
-    // /* Focus dots */
-    // const focus = svgArray.map((svg, i) => {
-    //   return svg
-    //     .selectAll('.focus')
-    //     .data([dates])
-    //     .join((enter) =>
-    //       enter.append('circle').attr('cx', (date) => {
-    //         xScale(new Date(date));
-    //       })
-    //     )
-    //     .attr('class', 'focus')
-    //     .attr('fill', colors[i])
-    //     .attr('stroke', colors[i])
-    //     .attr('r', 4);
-    // });
-
     function mousemove() {
       const xm = d3.mouse(this)[0];
       const date = xScale.invert(xm);
@@ -175,11 +147,13 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
     }
 
     /* Begin drawing charts */
-    svgArray.forEach((svg, i) => {
+    refs.current.forEach((ref, i) => {
+      const svg = d3.select(ref);
       const t = svg.transition().duration(300);
-      const color = colors[i];
-      const yScale = yScales[i];
+
       const statistic = TIMESERIES_STATISTICS[i];
+      const yScale = generateYScale(statistic);
+      const color = COLORS[statistic];
 
       /* X axis */
       svg
@@ -187,7 +161,8 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
         .style('transform', `translateY(${chartBottom}px)`)
         .transition(t)
         .call(xAxis);
-      svg.select('.x-axis2').transition(t).call(xAxis2, yScale);
+      svg.select('.x-axis2')
+        .transition(t).call(xAxis2, yScale);
 
       /* Y axis */
       svg
@@ -198,37 +173,29 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
 
       /* Path dots */
       svg
-        .selectAll('.dot')
+        .selectAll('circle')
         .data(dates)
         .join((enter) =>
           enter
             .append('circle')
+            .attr('fill', color)
+            .attr('stroke', color)
+            .attr('r', 2)
             .attr('cy', chartBottom)
             .attr('cx', (date) => xScale(new Date(date)))
         )
-        .attr('class', 'dot')
-        .attr('fill', color)
-        .attr('stroke', color)
-        .attr('r', 2)
         .transition(t)
         .attr('cx', (date) => xScale(new Date(date)))
         .attr('cy', (date, index) =>
           yScale(statistics[chartType][statistic][index])
         );
 
-      // if (!isNaN(timeseries[dates[T - 1]][statistic]))
-      //   focus[i]
-      //     .transition(t)
-      //     .attr('cx', (date) => xScale(new Date(date)))
-      //     .attr('cy', (date, index) =>
-      //       yScale(statistics[chartType][statistic][index])
-      //     )
-      //     .attr('opacity', 1);
-      // else focus[i].transition(t).attr('opacity', 0);
-
       if (chartType === 'cumulative') {
-        /* TOTAL TRENDS */
-        svg.selectAll('.stem').remove();
+        svg.selectAll('.stem')
+        .transition(t)
+        .attr('y1', yScale(0))
+        .attr('y2', yScale(0))
+        .remove();
 
         const path = svg
           .selectAll('.trend')
@@ -276,14 +243,14 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
           .join((enter) =>
             enter
               .append('line')
+              .attr('class', 'stem')
+              .style('stroke', color + '99')
+              .style('stroke-width', 4)
               .attr('x1', (date) => xScale(new Date(date)))
               .attr('y1', chartBottom)
               .attr('x2', (date) => xScale(new Date(date)))
               .attr('y2', chartBottom)
           )
-          .attr('class', 'stem')
-          .style('stroke', color + '99')
-          .style('stroke-width', 4)
           .transition(t)
           .attr('x1', (date) => xScale(new Date(date)))
           .attr('y1', yScale(0))
@@ -294,12 +261,23 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
       }
 
       svg
+        .selectAll('*').attr('pointer-events', 'none');
+      svg
         .on('mousemove', mousemove)
         .on('touchmove', mousemove)
         .on('mouseout', mouseout)
         .on('touchend', mouseout);
     });
   }, [chartType, dimensions, isUniform, isLog, dates, statistics]);
+
+  useEffect(() => {
+    refs.current.forEach((ref) => {
+      const svg = d3.select(ref);
+      svg
+        .selectAll('circle')
+        .attr('r', (date) => date === highlightedDate ? 4 : 2);
+    });
+  }, [highlightedDate]);
 
   return (
     <React.Fragment>
