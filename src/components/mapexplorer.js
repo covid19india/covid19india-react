@@ -25,6 +25,7 @@ import {PinIcon} from '@primer/octicons-v2-react';
 import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import ReactDOM from 'react-dom';
 import {useHistory} from 'react-router-dom';
+import {useSprings, animated} from 'react-spring';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 
@@ -237,6 +238,19 @@ function MapExplorer({
     }
   };
 
+  const springs = useSprings(MAP_STATISTICS.length, MAP_STATISTICS.map((statistic) => ({
+    total: getStatistic(panelState, 'total', statistic) || '-',
+    delta: getStatistic(panelState, 'delta', statistic) || '-',
+    from: {
+      total: getStatistic(panelState, 'total', statistic) || '-',
+      delta: getStatistic(panelState, 'delta', statistic) || '-',
+    },
+    config: {
+      tension: 500,
+      clamp: true,
+    },
+  })));
+
   return (
     <div
       className={classnames(
@@ -273,7 +287,7 @@ function MapExplorer({
       </div>
 
       <div className="map-stats">
-        {MAP_STATISTICS.map((statistic) => (
+        {MAP_STATISTICS.map((statistic, index) => (
           <div
             key={statistic}
             className={classnames('stats', statistic, {
@@ -283,20 +297,20 @@ function MapExplorer({
           >
             <h5>{t(capitalize(statistic))}</h5>
             <div className="stats-bottom">
-              <h1>
-                {formatNumber(getStatistic(panelState, 'total', statistic))}
-              </h1>
-              <h6>
-                {statistic !== 'tested' &&
-                  getStatistic(panelState, 'delta', statistic) > 0 &&
-                  '+'}
-                {statistic !== 'tested' &&
-                  formatNumber(getStatistic(panelState, 'delta', statistic))}
-                {statistic === 'tested' && panelState.total.tested &&
-                  t('As of {{date}}', {
-                    date: formatDayMonth(panelState.total.tested.last_updated),
-                  })}
-              </h6>
+              <animated.h1>
+                {springs[index].total.interpolate((total) => formatNumber(Math.floor(total)))}
+              </animated.h1>
+              {statistic !== 'tested' &&
+                <animated.h6>
+                  {springs[index].delta.interpolate((delta) => (delta > 0 ? '+' : '') + formatNumber(Math.floor(delta)))}
+                </animated.h6>}
+              {statistic === 'tested' &&
+                <h6>
+                  {panelState.total.tested &&
+                    t('As of {{date}}', {
+                      date: formatDayMonth(panelState.total.tested.last_updated),
+                    })}
+                </h6>}
             </div>
             {statistic === 'tested' && panelState.total.tested &&
               <a href={panelState.total.tested.source} target="_noblank">
