@@ -106,13 +106,11 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
       .range([chartBottom, margin.top]);
 
     const generateYScale = (statistic) => {
-      if (isUniform && isLog && statistic !== 'tested') {
-        return yScaleUniformLog;
-      }
+      if (isUniform && isLog && statistic !== 'tested') return yScaleUniformLog;
 
       if (isUniform && statistic !== 'tested') return yScaleUniformLinear;
 
-      if (!isUniform && !isLog)
+      if (isLog)
         return d3
           .scaleLog()
           .clamp(true)
