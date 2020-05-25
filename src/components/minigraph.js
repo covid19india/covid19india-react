@@ -29,11 +29,6 @@ function Minigraph({timeseries}) {
     const chartBottom = 100 - margin.bottom;
     const T = dates.length;
 
-    const svgArray = [];
-    refs.current.forEach((ref) => {
-      svgArray.push(d3.select(ref));
-    });
-
     const xScale = d3
       .scaleTime()
       .domain([new Date(dates[0]), new Date(dates[T - 1])])
@@ -55,7 +50,8 @@ function Minigraph({timeseries}) {
       .domain([-domainMinMax, domainMinMax])
       .range([chartBottom, margin.top]);
 
-    svgArray.forEach((svg, index) => {
+    refs.current.forEach((ref, index) => {
+      const svg = d3.select(ref);
       const statistic = PRIMARY_STATISTICS[index];
       const color = COLORS[statistic];
 
