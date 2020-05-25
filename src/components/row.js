@@ -95,8 +95,8 @@ function DistrictHeaderCell({handleSortClick, statistic, sortData}) {
         </abbr>
         {sortData.sortColumn === statistic && (
           <div>
-            {sortData.isAscending && <TriangleDownIcon />}
-            {!sortData.isAscending && <TriangleUpIcon />}
+            {sortData.isAscending && <TriangleUpIcon />}
+            {!sortData.isAscending && <TriangleDownIcon />}
             <div />
           </div>
         )}
