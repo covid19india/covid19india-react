@@ -166,7 +166,7 @@ function MapExplorer({
       currentMap.view === MAP_VIEWS.STATES
         ? regionHighlighted.stateCode
         : currentMapCode;
-    const stateData = data[stateCode];
+    const stateData = data[stateCode] || emptyData();
     return produce(stateData, (draft) => {
       draft.state = STATE_CODES[stateCode];
     });
