@@ -156,7 +156,7 @@ function MapVisualizer({
     });
 
     /* Draw map */
-    const t = d3.transition().duration(500);
+    const t = d3.transition().duration(1000);
     let onceTouchedRegion = null;
     const regionSelection = svg
       .select('.regions')
@@ -209,13 +209,13 @@ function MapVisualizer({
         const stateCode = STATE_CODES_REVERSE[d.properties.st_nm];
         const district = d.properties.district;
         const stateData = data[stateCode];
-        const districtData = stateData.districts[district];
+        const districtData = stateData?.districts[district];
         let n;
         if (currentMap.option === MAP_OPTIONS.ZONES) {
           n = districtData?.zone?.status || 0;
         } else {
-          if (district) n = getTotalStatistic(districtData, statistic) || 0;
-          else n = getTotalStatistic(stateData, statistic) || 0;
+          if (district) n = getTotalStatistic(districtData, statistic);
+          else n = getTotalStatistic(stateData, statistic);
         }
         const color = n === 0 ? '#ffffff00' : mapScale(n);
         return color;
@@ -232,10 +232,10 @@ function MapVisualizer({
         const district = d.properties.district;
 
         const stateData = data[stateCode];
-        const districtData = stateData.districts[district];
+        const districtData = stateData?.districts[district];
         let n;
-        if (district) n = getTotalStatistic(districtData, statistic) || 0;
-        else n = getTotalStatistic(stateData, statistic) || 0;
+        if (district) n = getTotalStatistic(districtData, statistic);
+        else n = getTotalStatistic(stateData, statistic);
         return formatNumber(100 * (n / (statisticTotal || 0.001))) +
           '% from ' +
           capitalizeAll(district ? district : state)
@@ -259,12 +259,12 @@ function MapVisualizer({
           const district = d.properties.district;
 
           const stateData = data[stateCode];
-          const districtData = stateData.districts[district];
+          const districtData = stateData?.districts[district];
           if (district) {
-            d.value = getTotalStatistic(districtData, statistic) || 0;
+            d.value = getTotalStatistic(districtData, statistic);
           } else {
-            // d.value =
-            //   getTotalStatistic(stateData.districts.Unknown, statistic) || 0;
+            d.value =
+              getTotalStatistic(stateData?.districts?.Unassigned, statistic);
           }
           return d;
         })
@@ -285,7 +285,7 @@ function MapVisualizer({
           .on('mouseenter', (d) => {
             setRegionHighlighted({
               stateCode: STATE_CODES_REVERSE[d.properties.st_nm],
-              districtName: d.properties.district || 'Unknown',
+              districtName: d.properties.district || 'Unassigned',
             });
           })
           .on('click', () => {
@@ -396,7 +396,7 @@ function MapVisualizer({
         .select('.circles')
         .selectAll('circle')
         .attr('fill-opacity', (d) => {
-          const highlighted = state === d.properties.st_nm && (!district || district === d.properties?.district || (district === 'Unknown' && !d.properties.district));
+          const highlighted = state === d.properties.st_nm && (!district || district === d.properties?.district || (district === 'Unassigned' && !d.properties.district));
           return highlighted ? 1 : 0.5;
         });
     } else {
@@ -430,9 +430,9 @@ function MapVisualizer({
             <g className="circles" />
           }
         </svg>
-        {/*mapMeta.mapType === MAP_TYPES.STATE &&
+        {mapMeta.mapType === MAP_TYPES.STATE &&
           getTotalStatistic(
-            data[currentMapCode].districts.Unknown,
+            data[currentMapCode]?.districts?.Unassigned,
             statistic
           ) &&
             <div className="disclaimer">
@@ -441,7 +441,7 @@ function MapVisualizer({
                 statistic: t(statistic),
               })}
             </div>
-          */}
+          }
       </div>
 
       {mapScale && (

@@ -1,5 +1,5 @@
 import {PRIMARY_STATISTICS, STATE_CODES} from '../constants';
-import {formatNumber, capitalize, abbreviate} from '../utils/commonfunctions';
+import {formatNumber, capitalize, abbreviate, getStatistic} from '../utils/commonfunctions';
 
 import Tooltip from '@primer/components/lib/Tooltip';
 import {
@@ -22,15 +22,15 @@ import {createBreakpoint, useLocalStorage} from 'react-use';
 const useBreakpoint = createBreakpoint({L: 768, S: 350});
 
 function PureCell({statistic, data}) {
-  const total = data.total[statistic];
-  const delta = data.delta[statistic];
+  const total = getStatistic(data, 'total', statistic)
+  const delta = getStatistic(data, 'delta', statistic)
 
   const spring = useSpring({
-    total: total || '-',
-    delta: delta || '',
+    total: total,
+    delta: delta,
     from: {
-      total: total || '-',
-      delta: delta || '',
+      total: total,
+      delta: delta,
     },
     config: {
       easing: easings.easeQuadOut,

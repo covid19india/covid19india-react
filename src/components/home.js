@@ -10,7 +10,8 @@ import Updates from './updates';
 import {INITIAL_DATA} from '../constants';
 
 import axios from 'axios';
-import React, {useState, useMemo} from 'react';
+import {addDays, formatISO} from 'date-fns';
+import React, {useEffect, useMemo, useState} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useEffectOnce, useLocalStorage} from 'react-use';
@@ -33,11 +34,24 @@ function Home(props) {
   );
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
 
-  const {data} = useSWR('http://localhost:3001/db', fetcher, {
+  const [date, setDate] = useState('2020-03-02')
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDate(date => formatISO(addDays(new Date(date), 1), { representation: 'date' }))
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  const {data: totalData} = useSWR('http://localhost:3001/db', fetcher, {
     suspense: true,
     refreshInterval: 100000,
     revalidateOnFocus: false,
   });
+
+  const data = totalData[date];
 
   // const {data} = useSWR(
   //   'https://api.covid19india.org/v2/data.min.json',
@@ -124,7 +138,7 @@ function Home(props) {
           {showUpdates && <Updates />}
 
           <Level data={data['TT']} />
-          <Minigraph timeseries={data['TT'].timeseries} />
+          {/*<Minigraph timeseries={data['TT'].timeseries} />*/}
           <Table {...{data, regionHighlighted, setRegionHighlighted}} />
         </div>
 
@@ -140,13 +154,13 @@ function Home(props) {
             setMapStatistic={setMapStatistic}
           />
 
-          <TimeSeriesExplorer
+          {/*<TimeSeriesExplorer
             timeseries={data[regionHighlighted.stateCode].timeseries}
             activeStateCode={regionHighlighted.stateCode}
             {...{regionHighlighted, setRegionHighlighted}}
             anchor={anchor}
             setAnchor={setAnchor}
-          />
+          />*/}
         </div>
       </div>
       <Footer />

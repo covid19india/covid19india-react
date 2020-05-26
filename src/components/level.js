@@ -1,5 +1,5 @@
 import {PRIMARY_STATISTICS} from '../constants';
-import {formatNumber, capitalize} from '../utils/commonfunctions';
+import {capitalize, formatNumber, getStatistic} from '../utils/commonfunctions';
 
 import {HeartFillIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
@@ -48,13 +48,6 @@ function PureLevelItem({statistic, total, delta}) {
 
 const LevelItem = React.memo(PureLevelItem);
 
-const handleStatistic = (statistic, data) => {
-  if (statistic === 'active') {
-    return data.confirmed - data.recovered - data.deceased;
-  }
-  return data[statistic];
-};
-
 function Level({data}) {
   return (
     <div className="Level">
@@ -62,8 +55,8 @@ function Level({data}) {
         <LevelItem
           key={statistic}
           statistic={statistic}
-          total={handleStatistic(statistic, data.total)}
-          delta={handleStatistic(statistic, data.delta)}
+          total={getStatistic(data, 'total', statistic)}
+          delta={getStatistic(data, 'delta', statistic)}
         />
       ))}
     </div>

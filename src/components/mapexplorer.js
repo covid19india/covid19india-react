@@ -70,8 +70,6 @@ function MapExplorer({
 
   const currentMapData = currentMapMeta.mapType === MAP_TYPES.COUNTRY ? data : {[currentMapCode]: data[currentMapCode]};
 
-  console.log(regionHighlighted)
-
   useEffect(() => {
     if (regionHighlighted.districtName) {
       if (
@@ -239,14 +237,15 @@ function MapExplorer({
   };
 
   const springs = useSprings(MAP_STATISTICS.length, MAP_STATISTICS.map((statistic) => ({
-    total: getStatistic(panelState, 'total', statistic) || '-',
-    delta: getStatistic(panelState, 'delta', statistic) || '-',
+    total: getStatistic(panelState, 'total', statistic),
+    delta: getStatistic(panelState, 'delta', statistic),
     from: {
-      total: getStatistic(panelState, 'total', statistic) || '-',
-      delta: getStatistic(panelState, 'delta', statistic) || '-',
+      total: getStatistic(panelState, 'total', statistic),
+      delta: getStatistic(panelState, 'delta', statistic),
     },
     config: {
       tension: 500,
+      duration: 1000,
       clamp: true,
     },
   })));
@@ -339,7 +338,8 @@ function MapExplorer({
           <div className="last-update">
             <h6>{t('Last updated')}</h6>
             <h3>
-              {`${formatLastUpdated(panelState.last_updated)} ${t('ago')}`}
+              {`${panelState.last_updated}`}
+              {/*`${formatLastUpdated(panelState.last_updated)} ${t('ago')}`*/}
             </h3>
           </div>
         )}
