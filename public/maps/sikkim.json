@@ -238,7 +238,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "241",
-            "district": "North District",
+            "district": "North Sikkim",
             "st_code": "11",
             "year": "2011_c",
             "st_nm": "Sikkim"
@@ -249,7 +249,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "242",
-            "district": "West District",
+            "district": "West Sikkim",
             "st_code": "11",
             "year": "2011_c",
             "st_nm": "Sikkim"
@@ -260,7 +260,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "243",
-            "district": "South District",
+            "district": "South Sikkim",
             "st_code": "11",
             "year": "2011_c",
             "st_nm": "Sikkim"
@@ -271,7 +271,7 @@
           "type": "Polygon",
           "properties": {
             "dt_code": "244",
-            "district": "East District",
+            "district": "East Sikkim",
             "st_code": "11",
             "year": "2011_c",
             "st_nm": "Sikkim"

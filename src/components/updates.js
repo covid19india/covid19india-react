@@ -36,7 +36,7 @@ function Updates(props) {
         .slice(-5)
         .reverse()
         .map(function (activity, index) {
-          activity.update = activity.update.replace('\n', '<br/>');
+          activity.update = activity.update.replace(/\n/g, '<br/>');
           const activityDate = new Date(activity.timestamp * 1000);
           const addHeader = () => {
             currentDate = activityDate;

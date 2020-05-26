@@ -33,7 +33,6 @@
     "react-date-picker": "^8.0.1",
     "react-dom": "^16.13.1",
     "react-feather": "^2.0.8",
-    "react-force-graph-2d": "^1.15.4",
     "react-helmet": "^6.0.0",
     "react-i18next": "^11.3.5",
     "swr": "^0.2.0",

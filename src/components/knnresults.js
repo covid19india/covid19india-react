@@ -30,12 +30,6 @@ function getDistance(p1, p2) {
   return Number((d / 1000).toFixed(2));
 }
 
-// function panFilter(feature){
-//   const city = feature.properties.city
-//   const state = feature.properties.state
-//   return (city.includes("PAN") && ( state.includes("India") || state.includes(userState) ));
-// }
-
 function KnnResults({userLocation, userState}) {
   const [geoData, setGeoData] = useState([]);
   const [results, setResults] = useState();
@@ -203,11 +197,13 @@ function KnnResults({userLocation, userState}) {
 
         {results?.features
           .filter((feature) => {
-            return Object.keys(categories)
-              .filter(
-                (categoryName) => categories[categoryName].isSelected === true
-              )
-              .includes(feature.properties.icon);
+            return (
+              Object.keys(categories)
+                .filter(
+                  (categoryName) => categories[categoryName].isSelected === true
+                )
+                .includes(feature.properties.icon) && feature.properties.dist
+            );
           })
           .map((result, i) => (
             <div
@@ -236,15 +232,66 @@ function KnnResults({userLocation, userState}) {
                 </a>
               </div>
               <div className="result-description">{result.properties.desc}</div>
-              {result.properties.phone ? (
+              <div className="result-contacts">
+                {result.properties.phone.split('\n').map((contact) => (
+                  <div key={contact} className="result-contact">
+                    <Phone />
+                    <a href={`tel:${contact}`}>{contact}</a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+
+        <div>
+          <h3 className="pan-divider">{`Throughout ${userState} and India`}</h3>
+        </div>
+
+        {results?.features
+          .filter((feature) => {
+            return (
+              Object.keys(categories)
+                .filter(
+                  (categoryName) => categories[categoryName].isSelected === true
+                )
+                .includes(feature.properties.icon) && !feature.properties.dist
+            );
+          })
+          .map((result, i) => (
+            <div
+              key={result.properties.recordid ? result.properties.recordid : i}
+              className="essential-result"
+            >
+              <div className="result-top">
+                <div className="result-top-left">
+                  <div className="result-name">{result.properties.name}</div>
+                  <div className="result-location">
+                    {result.properties.addr}
+                  </div>
+                  {result.properties.dist && (
+                    <div className="result-distance">
+                      {result.properties.dist + ' km away'}
+                    </div>
+                  )}
+                </div>
                 <a
-                  className="result-contact"
-                  href={`tel:${result.properties.phone}`}
+                  className="result-category"
+                  href={result.properties.contact}
+                  target="_noblank"
                 >
-                  <Phone />
-                  <div>{result.properties.phone}</div>
+                  <span>{result.properties.icon}</span>
+                  <ExternalLink />
                 </a>
-              ) : null}
+              </div>
+              <div className="result-description">{result.properties.desc}</div>
+              <div className="result-contacts">
+                {result.properties.phone.split('\n').map((contact) => (
+                  <div key={contact} className="result-contact">
+                    <Phone />
+                    <a href={`tel:${contact}`}>{contact}</a>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
       </div>
