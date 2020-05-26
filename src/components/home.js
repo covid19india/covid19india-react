@@ -45,13 +45,11 @@ function Home(props) {
     };
   }, []);
 
-  const {data: totalData} = useSWR('http://localhost:3001/db', fetcher, {
+  const {data} = useSWR(`http://localhost:3001/${date}`, fetcher, {
     suspense: true,
     refreshInterval: 100000,
     revalidateOnFocus: false,
   });
-
-  const data = totalData[date];
 
   // const {data} = useSWR(
   //   'https://api.covid19india.org/v2/data.min.json',
