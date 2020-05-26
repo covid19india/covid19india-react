@@ -8,14 +8,14 @@ import TimeSeriesExplorer from './timeseriesexplorer';
 import Updates from './updates';
 
 import {INITIAL_DATA} from '../constants';
+import useStickySWR from '../hooks/usestickyswr';
 
 import axios from 'axios';
 import {addDays, formatISO} from 'date-fns';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useEffectOnce, useLocalStorage} from 'react-use';
-import useSWR from 'swr';
 
 const fetcher = (url) => axios(url).then((response) => response.data);
 
@@ -34,19 +34,22 @@ function Home(props) {
   );
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
 
-  const [date, setDate] = useState('2020-03-02')
+  const [date, setDate] = useState('2020-03-02');
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setDate(date => formatISO(addDays(new Date(date), 1), { representation: 'date' }))
+      setDate((date) =>
+        formatISO(addDays(new Date(date), 1), {representation: 'date'})
+      );
     }, 1000);
     return () => {
       clearInterval(interval);
     };
   }, []);
 
-  const {data} = useSWR(`http://localhost:3001/${date}`, fetcher, {
-    suspense: true,
+  const {data} = useStickySWR(`http://localhost:3001/${date}`, fetcher, {
+    revalidateOnMount: true,
+    initialData: INITIAL_DATA,
     refreshInterval: 100000,
     revalidateOnFocus: false,
   });
@@ -136,7 +139,7 @@ function Home(props) {
           {showUpdates && <Updates />}
 
           <Level data={data['TT']} />
-          {/*<Minigraph timeseries={data['TT'].timeseries} />*/}
+          {/* <Minigraph timeseries={data['TT'].timeseries} />*/}
           <Table {...{data, regionHighlighted, setRegionHighlighted}} />
         </div>
 
@@ -152,7 +155,7 @@ function Home(props) {
             setMapStatistic={setMapStatistic}
           />
 
-          {/*<TimeSeriesExplorer
+          {/* <TimeSeriesExplorer
             timeseries={data[regionHighlighted.stateCode].timeseries}
             activeStateCode={regionHighlighted.stateCode}
             {...{regionHighlighted, setRegionHighlighted}}
