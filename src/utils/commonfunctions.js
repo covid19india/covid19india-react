@@ -303,11 +303,14 @@ export const toTitleCase = (str) => {
 export const getStatistic = (data, type, statistic, per_million=false) => {
   let count;
   if (statistic === 'active') {
-    count = data[type].confirmed - data[type].recovered - data[type].deceased;
+    const confirmed = data?.[type]?.confirmed || 0;
+    const deceased = data?.[type]?.deceased || 0;
+    const recovered = data?.[type]?.recovered || 0;
+    count = confirmed - deceased - recovered;
   } else if (statistic === 'tested') {
-    count = data[type].tested?.samples;
+    count = data?.[type]?.tested?.samples || 0;
   } else {
-    count = data[type][statistic];
+    count = data?.[type]?.[statistic] || 0;
   }
   return per_million ? 1e6 * count / data.population : count;
 }
