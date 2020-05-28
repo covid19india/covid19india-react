@@ -49,16 +49,9 @@ function PureCell({statistic, data}) {
 
   return (
     <td>
-      <span className={classnames('delta', `is-${statistic}`)}>
-        {delta > 0 && ArrowUp}
-        <animated.span>
-          {delta > 0
-            ? spring.delta.interpolate((delta) =>
-                formatNumber(Math.floor(delta))
-              )
-            : ''}
-        </animated.span>
-      </span>
+      <animated.span className={classnames('delta', `is-${statistic}`)}>
+        {spring.delta.interpolate((delta) => delta > 0 ? ('\u2191' + formatNumber(Math.floor(delta))) : '')}
+      </animated.span>
       <animated.span className="total">
         {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
       </animated.span>
