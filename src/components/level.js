@@ -7,21 +7,18 @@ import * as easings from 'd3-ease';
 import equal from 'fast-deep-equal';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {animated, useSpring} from 'react-spring';
+import {animated, useSpring, config} from 'react-spring';
 
 function PureLevelItem({statistic, total, delta}) {
   const {t} = useTranslation();
-  const spring = useSpring({
-    total: total,
-    delta: delta,
-    from: {total: total, delta: delta},
-    config: {
-      easing: easings.easeQuadOut,
-      tension: 500,
-      duration: 1000,
-      clamp: true,
+  const spring = useSpring(
+    {
+      total: total,
+      delta: delta,
+      from: {total: total, delta: delta},
     },
-  });
+    config.gentle
+  );
 
   return (
     <div className={classnames('level-item', `is-${statistic}`)}>

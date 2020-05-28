@@ -4,6 +4,7 @@ import {
   LOCALE_SHORTHANDS,
 } from '../constants';
 
+import axios from 'axios';
 import {
   parse,
   differenceInDays,
@@ -300,7 +301,7 @@ export const toTitleCase = (str) => {
   });
 };
 
-export const getStatistic = (data, type, statistic, per_million=false) => {
+export const getStatistic = (data, type, statistic, per_million = false) => {
   let count;
   if (statistic === 'active') {
     const confirmed = data?.[type]?.confirmed || 0;
@@ -312,5 +313,7 @@ export const getStatistic = (data, type, statistic, per_million=false) => {
   } else {
     count = data?.[type]?.[statistic] || 0;
   }
-  return per_million ? 1e6 * count / data.population : count;
-}
+  return per_million ? (1e6 * count) / data.population : count;
+};
+
+export const fetcher = (url) => axios(url).then((response) => response.data);
