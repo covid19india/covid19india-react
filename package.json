@@ -35,13 +35,14 @@
     "react-feather": "^2.0.8",
     "react-helmet": "^6.0.0",
     "react-i18next": "^11.3.5",
-    "swr": "^0.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "react-scroll": "^1.7.16",
     "react-tooltip": "^4.2.5",
     "react-use": "^14.2.0",
     "source-map-explorer": "^2.4.2",
     "styled-components": "^5.1.0",
+    "swr": "^0.2.0",
     "topojson": "^3.0.2"
   },
   "scripts": {

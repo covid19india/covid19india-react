@@ -5,6 +5,7 @@ import React, {useState, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
+import {animateScroll as scroll} from 'react-scroll';
 import {
   useEffectOnce,
   useLockBodyScroll,
@@ -52,7 +53,7 @@ function Navbar({pages, darkMode, setDarkMode}) {
         <Link
           to="/"
           onClick={() => {
-            setExpand(false);
+            scroll.scrollToTop();
           }}
         >
           Covid19<span>India</span>
