@@ -1,5 +1,10 @@
 import {PRIMARY_STATISTICS, STATE_CODES} from '../constants';
-import {formatNumber, capitalize, abbreviate, getStatistic} from '../utils/commonfunctions';
+import {
+  formatNumber,
+  capitalize,
+  abbreviate,
+  getStatistic,
+} from '../utils/commonfunctions';
 
 import Tooltip from '@primer/components/lib/Tooltip';
 import {
@@ -16,29 +21,26 @@ import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
-import {useSpring, animated} from 'react-spring';
+import {useSpring, animated, config} from 'react-spring';
 import {createBreakpoint, useLocalStorage} from 'react-use';
 
 const useBreakpoint = createBreakpoint({L: 768, S: 350});
 
 function PureCell({statistic, data}) {
-  const total = getStatistic(data, 'total', statistic)
-  const delta = getStatistic(data, 'delta', statistic)
+  const total = getStatistic(data, 'total', statistic);
+  const delta = getStatistic(data, 'delta', statistic);
 
-  const spring = useSpring({
-    total: total,
-    delta: delta,
-    from: {
+  const spring = useSpring(
+    {
       total: total,
       delta: delta,
+      from: {
+        total: total,
+        delta: delta,
+      },
     },
-    config: {
-      easing: easings.easeQuadOut,
-      tension: 500,
-      duration: 1000,
-      clamp: true,
-    },
-  });
+    config.gentle
+  );
 
   const ArrowUp = useMemo(
     () => <ArrowUpIcon size={10.5} verticalAlign={-2.1} />,

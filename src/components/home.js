@@ -1,51 +1,39 @@
+import Actions from './actions';
 import Footer from './footer';
 import Level from './level';
 import MapExplorer from './mapexplorer';
-import Minigraph from './minigraph';
+// import Minigraph from './minigraph';
 import Search from './search';
 import Table from './table';
-import TimeSeriesExplorer from './timeseriesexplorer';
-import Updates from './updates';
+// import TimeSeriesExplorer from './timeseriesexplorer';
 
 import {INITIAL_DATA} from '../constants';
 import useStickySWR from '../hooks/usestickyswr';
+import {fetcher} from '../utils/commonfunctions';
 
-import axios from 'axios';
-import {addDays, formatISO} from 'date-fns';
-import React, {useEffect, useMemo, useState, useRef} from 'react';
-import * as Icon from 'react-feather';
+import React, {useState} from 'react';
 import {Helmet} from 'react-helmet';
-import {useEffectOnce, useLocalStorage} from 'react-use';
-
-const fetcher = (url) => axios(url).then((response) => response.data);
 
 function Home(props) {
   const [regionHighlighted, setRegionHighlighted] = useState({
     stateCode: 'TT',
     districtName: null,
   });
-  const [showUpdates, setShowUpdates] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [mapStatistic, setMapStatistic] = useState('confirmed');
 
-  const [lastViewedLog, setLastViewedLog] = useLocalStorage(
-    'lastViewedLog',
-    null
-  );
-  const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
-
   const [date, setDate] = useState('2020-03-02');
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDate((date) =>
-        formatISO(addDays(new Date(date), 1), {representation: 'date'})
-      );
-    }, 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setDate((date) =>
+  //       formatISO(addDays(new Date(date), 1), {representation: 'date'})
+  //     );
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, []);
 
   const {data} = useStickySWR(`http://localhost:3001/${date}`, fetcher, {
     revalidateOnMount: true,
@@ -68,47 +56,6 @@ function Home(props) {
   //   }
   // );
 
-  const Bell = useMemo(
-    () => (
-      <Icon.Bell
-        onClick={() => {
-          setShowUpdates(!showUpdates);
-          setNewUpdate(false);
-        }}
-      />
-    ),
-    [setNewUpdate, showUpdates]
-  );
-
-  const BellOff = useMemo(
-    () => (
-      <Icon.BellOff
-        onClick={() => {
-          setShowUpdates(!showUpdates);
-        }}
-      />
-    ),
-    [showUpdates]
-  );
-
-  useEffectOnce(() => {
-    axios
-      .get('https://api.covid19india.org/updatelog/log.json')
-      .then((response) => {
-        const lastTimestamp = response.data
-          .slice()
-          .reverse()[0]
-          .timestamp.toString();
-        if (lastTimestamp !== lastViewedLog) {
-          setNewUpdate(true);
-          setLastViewedLog(lastTimestamp);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-
   return (
     <React.Fragment>
       <div className="Home">
@@ -122,21 +69,9 @@ function Home(props) {
 
         <div className="home-left">
           <div className="header">
-            <Search districtZones={null} />
-
-            <div className="actions">
-              <h5>{data['TT'].last_updated}</h5>
-              {!showUpdates && (
-                <div className="bell-icon">
-                  {Bell}
-                  {newUpdate && <div className="indicator"></div>}
-                </div>
-              )}
-              {showUpdates && BellOff}
-            </div>
+            <Search />
+            <Actions {...{setDate}} />
           </div>
-
-          {showUpdates && <Updates />}
 
           <Level data={data['TT']} />
           {/* <Minigraph timeseries={data['TT'].timeseries} />*/}

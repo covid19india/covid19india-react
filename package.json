@@ -42,6 +42,7 @@
     "react-spring": "^8.0.27",
     "react-tooltip": "^4.2.6",
     "react-use": "^15.1.0",
+    "react-use-gesture": "^7.0.15",
     "source-map-explorer": "^2.4.2",
     "styled-components": "^5.1.0",
     "swr": "^0.2.2",
