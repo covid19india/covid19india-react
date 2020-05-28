@@ -1276,6 +1276,7 @@ h6 {
       .result-contacts {
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
         width: 100%;
       }
 
