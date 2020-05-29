@@ -308,8 +308,6 @@ export const getStatistic = (data, type, statistic, per_million = false) => {
     const deceased = data?.[type]?.deceased || 0;
     const recovered = data?.[type]?.recovered || 0;
     count = confirmed - deceased - recovered;
-  } else if (statistic === 'tested') {
-    count = data?.[type]?.tested?.samples || 0;
   } else {
     count = data?.[type]?.[statistic] || 0;
   }

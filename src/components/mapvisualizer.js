@@ -209,7 +209,7 @@ function MapVisualizer({
         const stateCode = STATE_CODES_REVERSE[d.properties.st_nm];
         const district = d.properties.district;
         const stateData = data[stateCode];
-        const districtData = stateData?.districts[district];
+        const districtData = stateData?.districts?.[district];
         let n;
         if (currentMap.option === MAP_OPTIONS.ZONES) {
           n = districtData?.zone?.status || 0;
@@ -232,7 +232,7 @@ function MapVisualizer({
         const district = d.properties.district;
 
         const stateData = data[stateCode];
-        const districtData = stateData?.districts[district];
+        const districtData = stateData?.districts?.[district];
         let n;
         if (district) n = getTotalStatistic(districtData, statistic);
         else n = getTotalStatistic(stateData, statistic);
