@@ -365,7 +365,9 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.data.total.confirmed, currProps.data.total.confirmed)) {
+  if (
+    !equal(prevProps.data.total?.confirmed, currProps.data.total?.confirmed)
+  ) {
     return false;
   } else if (
     (!equal(

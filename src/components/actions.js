@@ -11,7 +11,7 @@ import {useSpring, animated} from 'react-spring';
 import {useLocalStorage} from 'react-use';
 import useSWR from 'swr';
 
-const Actions = ({setDate}) => {
+const Actions = ({setDate, dates}) => {
   const [showUpdates, setShowUpdates] = useState(false);
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
   const [lastViewedLog, setLastViewedLog] = useLocalStorage('lastViewedLog', 0);
@@ -131,7 +131,9 @@ const Actions = ({setDate}) => {
           pointerEvents: !isTimelineMode ? 'none' : '',
         }}
       >
-        {isTimelineMode && <Timeline {...{setIsTimelineMode, setDate}} />}
+        {isTimelineMode && (
+          <Timeline {...{setIsTimelineMode, setDate, dates}} />
+        )}
       </animated.div>
 
       {showUpdates && <Updates {...{updates}} />}

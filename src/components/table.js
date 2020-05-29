@@ -1,7 +1,7 @@
 import Row from './row';
 
 import {PRIMARY_STATISTICS} from '../constants';
-import {capitalize, abbreviate} from '../utils/commonfunctions';
+import {capitalize, abbreviate, getStatistic} from '../utils/commonfunctions';
 
 import {TriangleUpIcon, TriangleDownIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
@@ -74,7 +74,7 @@ function PureFineprintBottom({data}) {
     <h5 className="table-fineprint">
       {`${
         Object.keys(data).filter(
-          (stateCode) => data[stateCode].total.confirmed > 0
+          (stateCode) => data[stateCode].total?.confirmed > 0
         ).length
       } States/UTS Affected`}
     </h5>
@@ -84,24 +84,13 @@ const FineprintBottom = React.memo(PureFineprintBottom, () => {
   return true;
 });
 
-function Table({data: original, regionHighlighted, setRegionHighlighted}) {
+function Table({data, regionHighlighted, setRegionHighlighted}) {
   const {t} = useTranslation();
 
   const [sortData, setSortData] = useLocalStorage('sortData', {
     sortColumn: 'confirmed',
     isAscending: false,
   });
-
-  const data = useMemo(() => {
-    return produce(original, (draftState) => {
-      Object.keys(draftState).map((stateCode) => {
-        draftState[stateCode].total['active'] =
-          draftState[stateCode].total.confirmed -
-          draftState[stateCode].total.recovered -
-          draftState[stateCode].total.deceased;
-      });
-    });
-  }, [original]);
 
   const handleSortClick = useCallback(
     (statistic) => {
@@ -118,8 +107,16 @@ function Table({data: original, regionHighlighted, setRegionHighlighted}) {
   const sortingFunction = useCallback(
     (stateCodeA, stateCodeB) => {
       if (sortData.sortColumn !== 'stateName') {
-        const statisticA = data[stateCodeA].total[sortData.sortColumn] || 0;
-        const statisticB = data[stateCodeB].total[sortData.sortColumn] || 0;
+        const statisticA = getStatistic(
+          data[stateCodeA],
+          'total',
+          sortData.sortColumn
+        );
+        const statisticB = getStatistic(
+          data[stateCodeB],
+          'total',
+          sortData.sortColumn
+        );
         return sortData.isAscending
           ? statisticA - statisticB
           : statisticB - statisticA;
