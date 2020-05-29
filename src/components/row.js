@@ -50,7 +50,9 @@ function PureCell({statistic, data}) {
   return (
     <td>
       <animated.span className={classnames('delta', `is-${statistic}`)}>
-        {spring.delta.interpolate((delta) => delta > 0 ? ('\u2191' + formatNumber(Math.floor(delta))) : '')}
+        {spring.delta.interpolate((delta) =>
+          delta > 0 ? '\u2191' + formatNumber(Math.floor(delta)) : ''
+        )}
       </animated.span>
       <animated.span className="total">
         {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
@@ -363,7 +365,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.data.last_updated, currProps.data.last_updated)) {
+  if (!equal(prevProps.data.total.confirmed, currProps.data.total.confirmed)) {
     return false;
   } else if (
     (!equal(

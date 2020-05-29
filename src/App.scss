@@ -4676,7 +4676,8 @@ footer {
   .map-switcher,
   .updates-header,
   .StateMeta,
-  .Essentials {
+  .Essentials,
+  .timeline {
     width: calc(100% - 2rem);
   }
 
@@ -4957,6 +4958,11 @@ footer {
     .alert {
       width: 15rem !important;
     }
+  }
+
+  .timeline {
+    padding-left: 0rem !important;
+    padding-right: 0rem !important;
   }
 }
 

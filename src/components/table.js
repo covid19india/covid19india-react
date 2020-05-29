@@ -213,7 +213,10 @@ const isEqual = (prevProps, currProps) => {
   ) {
     return false;
   } else if (
-    !equal(prevProps.data['TT'].last_updated, currProps.data['TT'].last_updated)
+    !equal(
+      prevProps.data['TT'].total.confirmed,
+      currProps.data['TT'].total.confirmed
+    )
   ) {
     return false;
   } else return true;
