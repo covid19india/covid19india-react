@@ -2,7 +2,7 @@ import Actions from './actions';
 import Footer from './footer';
 import Level from './level';
 import MapExplorer from './mapexplorer';
-// import Minigraph from './minigraph';
+import Minigraph from './minigraph';
 import Search from './search';
 import Table from './table';
 // import TimeSeriesExplorer from './timeseriesexplorer';
@@ -22,7 +22,7 @@ function Home(props) {
   const [anchor, setAnchor] = useState(null);
   const [mapStatistic, setMapStatistic] = useState('confirmed');
 
-  const [date, setDate] = useState('2020-03-02');
+  const [date, setDate] = useState('2020-05-25');
 
   // useEffect(() => {
   //   const interval = setInterval(() => {
@@ -37,10 +37,19 @@ function Home(props) {
 
   const {data} = useStickySWR(`http://localhost:3001/${date}`, fetcher, {
     revalidateOnMount: true,
-    initialData: INITIAL_DATA,
     refreshInterval: 100000,
     revalidateOnFocus: false,
   });
+
+  const {data: timeseries} = useStickySWR(
+    'https://api.covid19india.org/v3/timeseries.json',
+    fetcher,
+    {
+      revalidateOnMount: true,
+      refreshInterval: 100000,
+      revalidateOnFocus: false,
+    }
+  );
 
   // const {data} = useSWR(
   //   'https://api.covid19india.org/v2/data.min.json',
@@ -73,13 +82,15 @@ function Home(props) {
             <Actions {...{setDate}} />
           </div>
 
-          <Level data={data['TT']} />
-          {/* <Minigraph timeseries={data['TT'].timeseries} />*/}
-          <Table {...{data, regionHighlighted, setRegionHighlighted}} />
+          {data && <Level data={data['TT']} />}
+          {timeseries && <Minigraph timeseries={timeseries['TT'].timeseries} />}
+          {timeseries && data && (
+            <Table {...{data, regionHighlighted, setRegionHighlighted}} />
+          )}
         </div>
 
         <div className="home-right">
-          <MapExplorer
+          {/* <MapExplorer
             mapName={'India'}
             data={data}
             regionHighlighted={regionHighlighted}
@@ -88,7 +99,7 @@ function Home(props) {
             setAnchor={setAnchor}
             mapStatistic={mapStatistic}
             setMapStatistic={setMapStatistic}
-          />
+          />*/}
 
           {/* <TimeSeriesExplorer
             timeseries={data[regionHighlighted.stateCode].timeseries}

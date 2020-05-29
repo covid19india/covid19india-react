@@ -3,11 +3,16 @@ import {capitalize, formatNumber, getStatistic} from '../utils/commonfunctions';
 
 import {HeartFillIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
-import * as easings from 'd3-ease';
 import equal from 'fast-deep-equal';
-import React from 'react';
+import React, {useRef} from 'react';
 import {useTranslation} from 'react-i18next';
-import {animated, useSpring, config} from 'react-spring';
+import {
+  animated,
+  useSpring,
+  config,
+  useChain,
+  useTransition,
+} from 'react-spring';
 
 function PureLevelItem({statistic, total, delta}) {
   const {t} = useTranslation();
@@ -21,7 +26,7 @@ function PureLevelItem({statistic, total, delta}) {
   );
 
   return (
-    <div className={classnames('level-item', `is-${statistic}`)}>
+    <React.Fragment>
       <h5>{capitalize(t(statistic))}</h5>
       <h4>
         <animated.span>
@@ -39,22 +44,33 @@ function PureLevelItem({statistic, total, delta}) {
           {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
         </animated.span>
       </h1>
-    </div>
+    </React.Fragment>
   );
 }
 
 const LevelItem = React.memo(PureLevelItem);
 
 function Level({data}) {
+  const transitions = useTransition(PRIMARY_STATISTICS, null, {
+    from: {transform: 'translate3d(0, 20px, 0)', opacity: 0},
+    enter: {transform: 'translate3d(0, 0px, 0)', opacity: 1},
+    trail: 200,
+  });
+
   return (
     <div className="Level">
-      {PRIMARY_STATISTICS.map((statistic) => (
-        <LevelItem
-          key={statistic}
-          statistic={statistic}
-          total={getStatistic(data, 'total', statistic)}
-          delta={getStatistic(data, 'delta', statistic)}
-        />
+      {transitions.map(({item: statistic, key, props}) => (
+        <animated.div
+          key={key}
+          className={classnames('level-item', `is-${statistic}`)}
+          style={props}
+        >
+          <LevelItem
+            {...{statistic}}
+            total={getStatistic(data, 'total', statistic)}
+            delta={getStatistic(data, 'delta', statistic)}
+          />
+        </animated.div>
       ))}
     </div>
   );

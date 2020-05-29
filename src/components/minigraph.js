@@ -1,9 +1,9 @@
 import {COLORS, PRIMARY_STATISTICS} from '../constants';
+import {getStatistic} from '../utils/commonfunctions';
 
 import classnames from 'classnames';
 import * as d3 from 'd3';
 import equal from 'fast-deep-equal';
-import produce from 'immer';
 import React, {useEffect, useRef, useMemo} from 'react';
 
 function Minigraph({timeseries}) {
@@ -13,17 +13,7 @@ function Minigraph({timeseries}) {
     return Object.keys(timeseries).slice(-20);
   }, [timeseries]);
 
-  dates.forEach((date) => {
-    timeseries = produce(timeseries, (draftTimeseries) => {
-      draftTimeseries[date].active =
-        draftTimeseries[date].confirmed -
-        draftTimeseries[date].recovered -
-        draftTimeseries[date].deceased;
-    });
-  });
-
   useEffect(() => {
-    if (!timeseries) return;
     const margin = {top: 10, right: 5, bottom: 20, left: 5};
     const chartRight = 100 - margin.right;
     const chartBottom = 100 - margin.bottom;
@@ -34,12 +24,15 @@ function Minigraph({timeseries}) {
       .domain([new Date(dates[0]), new Date(dates[T - 1])])
       .range([margin.left, chartRight]);
 
-    const dailyMin = d3.min(dates, (date) => timeseries[date].active);
+    const dailyMin = d3.min(dates, (date) =>
+      getStatistic(timeseries[date], 'delta', 'active')
+    );
+
     const dailyMax = d3.max(dates, (date) =>
       Math.max(
-        timeseries[date].confirmed,
-        timeseries[date].recovered,
-        timeseries[date].deceased
+        getStatistic(timeseries[date], 'delta', 'confirmed'),
+        getStatistic(timeseries[date], 'delta', 'recovered'),
+        getStatistic(timeseries[date], 'delta', 'deceased')
       )
     );
 
@@ -71,7 +64,9 @@ function Minigraph({timeseries}) {
                 d3
                   .line()
                   .x((date) => xScale(new Date(date)))
-                  .y((date) => yScale(timeseries[date][statistic]))
+                  .y((date) =>
+                    yScale(getStatistic(timeseries[date], 'delta', statistic))
+                  )
                   .curve(d3.curveMonotoneX)
               )
               .attr('stroke-dasharray', function () {
@@ -97,7 +92,9 @@ function Minigraph({timeseries}) {
                 d3
                   .line()
                   .x((date) => xScale(new Date(date)))
-                  .y((date) => yScale(timeseries[date][statistic]))
+                  .y((date) =>
+                    yScale(getStatistic(timeseries[date], 'delta', statistic))
+                  )
                   .curve(d3.curveMonotoneX)
               )
         );
@@ -112,7 +109,9 @@ function Minigraph({timeseries}) {
               .attr('fill', color)
               .attr('r', 2.5)
               .attr('cx', (date) => xScale(new Date(date)))
-              .attr('cy', (date) => yScale(timeseries[date][statistic]))
+              .attr('cy', (date) =>
+                yScale(getStatistic(timeseries[date], 'delta', statistic))
+              )
               .style('opacity', 0)
               .call((enter) =>
                 enter
@@ -121,14 +120,18 @@ function Minigraph({timeseries}) {
                   .duration(500)
                   .style('opacity', 1)
                   .attr('cx', (date) => xScale(new Date(date)))
-                  .attr('cy', (date) => yScale(timeseries[date][statistic]))
+                  .attr('cy', (date) =>
+                    yScale(getStatistic(timeseries[date], 'delta', statistic))
+                  )
               ),
           (update) =>
             update
               .transition()
               .duration(500)
               .attr('cx', (date) => xScale(new Date(date)))
-              .attr('cy', (date) => yScale(timeseries[date][statistic]))
+              .attr('cy', (date) =>
+                yScale(getStatistic(timeseries[date], 'delta', statistic))
+              )
         );
     });
   }, [dates, timeseries]);
