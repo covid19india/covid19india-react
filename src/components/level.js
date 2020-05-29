@@ -71,10 +71,15 @@ function Level({data}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (equal(prevProps.data.last_updated, currProps.data.last_updated)) {
-    return true;
+  if (
+    !equal(
+      getStatistic(prevProps.data, 'total', 'active'),
+      getStatistic(currProps.data, 'total', 'active')
+    )
+  ) {
+    return false;
   }
-  return false;
+  return true;
 };
 
 export default React.memo(Level, isEqual);

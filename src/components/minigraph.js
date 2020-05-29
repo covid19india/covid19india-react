@@ -1,17 +1,28 @@
 import {COLORS, PRIMARY_STATISTICS} from '../constants';
-import {getStatistic} from '../utils/commonfunctions';
+import {getStatistic, getIndiaDay} from '../utils/commonfunctions';
 
 import classnames from 'classnames';
 import * as d3 from 'd3';
+import {differenceInDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useEffect, useRef, useMemo} from 'react';
 
-function Minigraph({timeseries}) {
+function Minigraph({timeseries, date: timelineDate}) {
   const refs = useRef([]);
 
   const dates = useMemo(() => {
-    return Object.keys(timeseries).slice(-20);
-  }, [timeseries]);
+    return Object.keys(timeseries)
+      .filter(
+        (date) =>
+          differenceInDays(
+            new Date(date),
+            timelineDate ? new Date(timelineDate) : getIndiaDay()
+          ) <= 0
+      )
+      .slice(-20);
+  }, [timeseries, timelineDate]);
+
+  console.log(dates);
 
   useEffect(() => {
     const margin = {top: 10, right: 5, bottom: 20, left: 5};
@@ -155,11 +166,11 @@ function Minigraph({timeseries}) {
   );
 }
 
-const isEqual = (currProps, prevProps) => {
-  if (equal(currProps, prevProps)) {
-    return true;
+const isEqual = (prevProps, currProps) => {
+  if (!equal(currProps.date, prevProps.date)) {
+    return false;
   }
-  return false;
+  return true;
 };
 
 export default React.memo(Minigraph, isEqual);
