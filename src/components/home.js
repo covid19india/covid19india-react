@@ -35,6 +35,8 @@ function Home(props) {
     `https://api.covid19india.org/v3/data${date ? `-${date}` : ''}.json`,
     fetcher,
     {
+      revalidateOnMount: true,
+      refreshInterval: 100000,
       revalidateOnFocus: false,
     }
   );
