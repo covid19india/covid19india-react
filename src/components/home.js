@@ -67,16 +67,16 @@ function Home(props) {
           </div>
 
           <div className="home-right">
-            {/* <MapExplorer
-                  mapName={'India'}
-                  data={data}
-                  regionHighlighted={regionHighlighted}
-                  setRegionHighlighted={setRegionHighlighted}
-                  anchor={anchor}
-                  setAnchor={setAnchor}
-                  mapStatistic={mapStatistic}
-                  setMapStatistic={setMapStatistic}
-                />*/}
+            {<MapExplorer
+              mapName={'India'}
+              data={data}
+              regionHighlighted={regionHighlighted}
+              setRegionHighlighted={setRegionHighlighted}
+              anchor={anchor}
+              setAnchor={setAnchor}
+              mapStatistic={mapStatistic}
+              setMapStatistic={setMapStatistic}
+            />}
 
             {/* <TimeSeriesExplorer
                   timeseries={data[regionHighlighted.stateCode].timeseries}

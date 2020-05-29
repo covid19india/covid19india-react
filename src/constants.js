@@ -7,7 +7,7 @@ export const PRIMARY_STATISTICS = [
   'deceased',
 ];
 
-export const MAP_STATISTICS = [...PRIMARY_STATISTICS]; // , 'tested'];
+export const MAP_STATISTICS = [...PRIMARY_STATISTICS , 'tested'];
 
 export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 

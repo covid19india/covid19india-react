@@ -305,9 +305,9 @@ function MapExplorer({
                 </animated.h6>}
               {statistic === 'tested' &&
                 <h6>
-                  {panelState.total.tested &&
+                  {panelState?.total?.tested &&
                     t('As of {{date}}', {
-                      date: formatDayMonth(panelState.total.tested.last_updated),
+                      date: formatDayMonth(panelState.meta.tested.last_updated),
                     })}
                 </h6>}
             </div>
@@ -338,8 +338,7 @@ function MapExplorer({
           <div className="last-update">
             <h6>{t('Last updated')}</h6>
             <h3>
-              {`${panelState.last_updated}`}
-              {/*`${formatLastUpdated(panelState.last_updated)} ${t('ago')}`*/}
+              {`${formatLastUpdated(panelState.last_updated)} ${t('ago')}`}
             </h3>
           </div>
         )}
@@ -439,13 +438,10 @@ const isEqual = (prevProps, currProps) => {
   if (!equal(prevProps.anchor, currProps.anchor)) {
     return false;
   }
-  let stateName = prevProps.mapName;
-  if (stateName === 'India') stateName = 'Total';
-  const stateCode = STATE_CODES_REVERSE[stateName];
   if (
     !equal(
-      prevProps.data[stateCode].last_updated,
-      currProps.data[stateCode].last_updated
+      getStatistic(prevProps.data['TT'], 'total', 'confirmed'),
+      getStatistic(currProps.data['TT'], 'total', 'confirmed')
     )
   ) {
     return false;
