@@ -24,13 +24,11 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
       const clampedIndex = getClampedIndex(xDir);
       if (down && distance > 30) {
         cancel(setIndex(clampedIndex));
-        setDate(dates[clampedIndex]);
+        setClampedDate(clampedIndex);
       }
 
       if (index === 0 && xDir < 0) {
-        setTimeout(() => {
-          setIsTimelineMode(false);
-        }, 1000);
+        hideTimeline();
       }
 
       setSprings({clampedIndex: index, xDir, down, xDelta});
@@ -61,9 +59,9 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
       }
 
       if (i === clampedIndex) {
-        return {x, display: 'block', color: '#6c757d'};
+        return {x, color: '#6c757d'};
       }
-      return {x, display: 'block', color: '#6c757d99', opacity: 1};
+      return {x, color: '#6c757d99', opacity: 1};
     });
   };
 
@@ -72,7 +70,10 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
       const clampedIndex = getClampedIndex(direction);
       setSprings({direction, clampedIndex});
       setIndex(clampedIndex);
-      setDate(dates[clampedIndex]);
+      setClampedDate(clampedIndex);
+    }
+    if (index === 1 && direction === -1) {
+      hideTimeline();
     }
   };
 
@@ -87,6 +88,22 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
   useKeyPressEvent('Escape', () => {
     setIsTimelineMode(false);
   });
+
+  const hideTimeline = () => {
+    setTimeout(() => {
+      setIsTimelineMode(false);
+    }, 1000);
+  };
+
+  const getDate = (index) => {
+    if (index === 0) return 'Today';
+    return format(new Date(dates[index]), 'dd MMM');
+  };
+
+  const setClampedDate = (clampedIndex) => {
+    if (clampedIndex === 0) setDate('');
+    setDate(dates[clampedIndex]);
+  };
 
   return (
     <div className="Timeline" ref={timelineElement} {...bind()}>
@@ -111,15 +128,13 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
           >
             {index < 2 && (
               <React.Fragment>
-                <animated.h5 style={{color}}>
-                  {format(new Date(dates[i]), 'dd MMM')}
-                </animated.h5>
+                <animated.h5 style={{color}}>{getDate(i)}</animated.h5>
               </React.Fragment>
             )}
             {index > 1 && index < dates.length && (
               <React.Fragment>
                 <animated.h5 style={{color}}>
-                  {format(new Date(dates[index + i - 2]), 'dd MMM')}
+                  {getDate(index + i - 2)}
                 </animated.h5>
               </React.Fragment>
             )}

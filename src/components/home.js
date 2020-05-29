@@ -21,24 +21,21 @@ function Home(props) {
   const [anchor, setAnchor] = useState(null);
   const [mapStatistic, setMapStatistic] = useState('confirmed');
 
-  const [date, setDate] = useState('2020-05-25');
+  const [date, setDate] = useState('');
 
   const {data: timeseries} = useStickySWR(
     'https://api.covid19india.org/v3/timeseries.json',
     fetcher,
     {
-      revalidateOnMount: true,
-      refreshInterval: 100000,
       revalidateOnFocus: false,
     }
   );
 
   const {data} = useStickySWR(
-    'https://api.covid19india.org/v3/data.json',
+    `https://api.covid19india.org/v3/data${date ? `-${date}` : ''}.json`,
     fetcher,
     {
       revalidateOnFocus: false,
-      refreshInterval: 5 * 60 * 1000,
     }
   );
 
