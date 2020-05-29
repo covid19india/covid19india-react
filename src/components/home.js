@@ -57,12 +57,16 @@ function Home(props) {
             <div className="header">
               <Search />
               <Actions
-                {...{setDate, dates: Object.keys(timeseries['TT']).reverse()}}
+                {...{
+                  setDate,
+                  dates: Object.keys(timeseries['TT']).reverse(),
+                  date,
+                }}
               />
             </div>
 
             <Level data={data['TT']} />
-            <Minigraph timeseries={timeseries['TT']} />
+            <Minigraph timeseries={timeseries['TT']} {...{date}} />
             <Table {...{data, regionHighlighted, setRegionHighlighted}} />
           </div>
 
