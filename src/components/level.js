@@ -4,15 +4,9 @@ import {capitalize, formatNumber, getStatistic} from '../utils/commonfunctions';
 import {HeartFillIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
-import React, {useRef} from 'react';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-  animated,
-  useSpring,
-  config,
-  useChain,
-  useTransition,
-} from 'react-spring';
+import {animated, useSpring, config, useTransition} from 'react-spring';
 
 function PureLevelItem({statistic, total, delta}) {
   const {t} = useTranslation();
