@@ -104,23 +104,11 @@ function DistrictHeaderCell({handleSortClick, statistic, sortData}) {
 
 function PureDistrictRow({
   districtName,
-  data: original,
+  data,
   regionHighlighted,
   setRegionHighlighted,
 }) {
   const {t} = useTranslation();
-
-  const data = useMemo(() => {
-    ['total', 'delta'].map((groupType) => {
-      original[groupType] = produce(original[groupType], (draftDistrict) => {
-        draftDistrict['active'] =
-          draftDistrict.confirmed -
-          draftDistrict.recovered -
-          draftDistrict.deceased;
-      });
-    });
-    return original;
-  }, [original]);
 
   const highlightDistrict = useCallback(() => {
     if (regionHighlighted.districtName !== districtName) {

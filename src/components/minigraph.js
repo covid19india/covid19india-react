@@ -22,8 +22,6 @@ function Minigraph({timeseries, date: timelineDate}) {
       .slice(-20);
   }, [timeseries, timelineDate]);
 
-  console.log(dates);
-
   useEffect(() => {
     const margin = {top: 10, right: 5, bottom: 20, left: 5};
     const chartRight = 100 - margin.right;

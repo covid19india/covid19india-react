@@ -245,7 +245,6 @@ function MapExplorer({
     },
     config: {
       tension: 500,
-      duration: 1000,
       clamp: true,
     },
   })));
@@ -343,7 +342,7 @@ function MapExplorer({
           </div>
         )}
 
-        <h2 className={classnames(mapStatistic, {[hoveredRegion?.zone?.status]: currentMap.option === MAP_OPTIONS.ZONES})}>
+        <h2 className={classnames(mapStatistic, {[hoveredRegion?.zone]: currentMap.option === MAP_OPTIONS.ZONES})}>
           {t(hoveredRegion.name)}
           {hoveredRegion.name === 'Unknown' &&
             ` (${t(STATE_CODES[regionHighlighted.stateCode])})`}

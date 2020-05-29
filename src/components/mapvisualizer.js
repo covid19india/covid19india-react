@@ -157,7 +157,7 @@ function MapVisualizer({
     });
 
     /* Draw map */
-    const t = d3.transition().duration(1000);
+    const t = d3.transition().duration(500);
     let onceTouchedRegion = null;
     const regionSelection = svg
       .select('.regions')
@@ -412,6 +412,7 @@ function MapVisualizer({
       }
   }, [
     geoDataResponse.data,
+    data,
     currentMap.option,
     regionHighlighted.stateCode,
     regionHighlighted.districtName,
