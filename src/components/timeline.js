@@ -5,13 +5,12 @@ import {useSprings, animated, config} from 'react-spring';
 import {useMeasure, useKeyPressEvent} from 'react-use';
 import {useDrag} from 'react-use-gesture';
 
-const Timeline = ({setIsTimelineMode, setDate}) => {
-  const [days, setDays] = useState([]);
+const Timeline = ({setIsTimelineMode, setDate, dates}) => {
   const [timelineElement, {width}] = useMeasure();
   const [index, setIndex] = useState(0);
 
   const [springs, set] = useSprings(
-    days.length,
+    dates.length,
     (i) => ({
       x: (index - i) * (480 / 3) + 480 / 2 - 35,
       color: i == 0 ? '#6c757d' : '#6c757d99',
@@ -25,7 +24,7 @@ const Timeline = ({setIsTimelineMode, setDate}) => {
       const clampedIndex = getClampedIndex(xDir);
       if (down && distance > 30) {
         cancel(setIndex(clampedIndex));
-        setDate(days[clampedIndex]);
+        setDate(dates[clampedIndex]);
       }
 
       if (index === 0 && xDir < 0) {
@@ -38,23 +37,8 @@ const Timeline = ({setIsTimelineMode, setDate}) => {
     }
   );
 
-  useEffect(() => {
-    const zeroDay = '2020-03-02';
-    const latestDay = new Date();
-    const elapsedDays = differenceInDays(latestDay, new Date(zeroDay));
-    const daysList = [];
-
-    for (let i = 0; i < elapsedDays; i++) {
-      daysList.push(
-        formatISO(addDays(new Date(zeroDay), i), {representation: 'date'})
-      );
-    }
-
-    setDays(daysList.reverse());
-  }, [days.length]);
-
   const getClampedIndex = (direction) => {
-    return clamp(index + (direction > 0 ? 1 : -1), 0, days.length - 3);
+    return clamp(index + (direction > 0 ? 1 : -1), 0, dates.length - 3);
   };
 
   const setSprings = ({direction, clampedIndex, down, xDelta}) => {
@@ -84,11 +68,11 @@ const Timeline = ({setIsTimelineMode, setDate}) => {
   };
 
   const handleKeyPress = (direction) => {
-    if (index < days.length) {
+    if (index < dates.length) {
       const clampedIndex = getClampedIndex(direction);
       setSprings({direction, clampedIndex});
       setIndex(clampedIndex);
-      setDate(days[clampedIndex]);
+      setDate(dates[clampedIndex]);
     }
   };
 
@@ -109,7 +93,7 @@ const Timeline = ({setIsTimelineMode, setDate}) => {
       {springs
         .filter(
           ({opacity}, i) =>
-            i < days.length - 2 &&
+            i < dates.length - 2 &&
             (i === index + 1 ||
               i === index - 1 ||
               i === index + 2 ||
@@ -128,14 +112,14 @@ const Timeline = ({setIsTimelineMode, setDate}) => {
             {index < 2 && (
               <React.Fragment>
                 <animated.h5 style={{color}}>
-                  {format(new Date(days[i]), 'dd MMM')}
+                  {format(new Date(dates[i]), 'dd MMM')}
                 </animated.h5>
               </React.Fragment>
             )}
-            {index > 1 && index < days.length && (
+            {index > 1 && index < dates.length && (
               <React.Fragment>
                 <animated.h5 style={{color}}>
-                  {format(new Date(days[index + i - 2]), 'dd MMM')}
+                  {format(new Date(dates[index + i - 2]), 'dd MMM')}
                 </animated.h5>
               </React.Fragment>
             )}

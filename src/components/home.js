@@ -7,7 +7,6 @@ import Search from './search';
 import Table from './table';
 // import TimeSeriesExplorer from './timeseriesexplorer';
 
-import {INITIAL_DATA} from '../constants';
 import useStickySWR from '../hooks/usestickyswr';
 import {fetcher} from '../utils/commonfunctions';
 
@@ -24,23 +23,6 @@ function Home(props) {
 
   const [date, setDate] = useState('2020-05-25');
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setDate((date) =>
-  //       formatISO(addDays(new Date(date), 1), {representation: 'date'})
-  //     );
-  //   }, 1000);
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // }, []);
-
-  const {data} = useStickySWR(`http://localhost:3001/${date}`, fetcher, {
-    revalidateOnMount: true,
-    refreshInterval: 100000,
-    revalidateOnFocus: false,
-  });
-
   const {data: timeseries} = useStickySWR(
     'https://api.covid19india.org/v3/timeseries.json',
     fetcher,
@@ -51,65 +33,62 @@ function Home(props) {
     }
   );
 
-  // const {data} = useSWR(
-  //   'https://api.covid19india.org/v2/data.min.json',
-  //   fetcher,
-  //   {
-  //     initialData: INITIAL_DATA,
-  //     suspense: true,
-  //     revalidateOnFocus: false,
-  //     refreshInterval: 5 * 60 * 1000,
-  //     compare: (dataA, dataB) => {
-  //       return dataA['TT'].last_updated - dataB['TT'].last_updated;
-  //     },
-  //   }
-  // );
+  const {data} = useStickySWR(
+    'https://api.covid19india.org/v3/data.json',
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      refreshInterval: 5 * 60 * 1000,
+    }
+  );
 
   return (
     <React.Fragment>
-      <div className="Home">
-        <Helmet>
-          <title>Coronavirus Outbreak in India - covid19india.org</title>
-          <meta
-            name="title"
-            content="Coronavirus Outbreak in India: Latest Map and Case Count"
-          />
-        </Helmet>
+      {data && timeseries && (
+        <div className="Home">
+          <Helmet>
+            <title>Coronavirus Outbreak in India - covid19india.org</title>
+            <meta
+              name="title"
+              content="Coronavirus Outbreak in India: Latest Map and Case Count"
+            />
+          </Helmet>
 
-        <div className="home-left">
-          <div className="header">
-            <Search />
-            <Actions {...{setDate}} />
+          <div className="home-left">
+            <div className="header">
+              <Search />
+              <Actions
+                {...{setDate, dates: Object.keys(timeseries['TT']).reverse()}}
+              />
+            </div>
+
+            <Level data={data['TT']} />
+            <Minigraph timeseries={timeseries['TT']} />
+            <Table {...{data, regionHighlighted, setRegionHighlighted}} />
           </div>
 
-          {data && <Level data={data['TT']} />}
-          {timeseries && <Minigraph timeseries={timeseries['TT'].timeseries} />}
-          {timeseries && data && (
-            <Table {...{data, regionHighlighted, setRegionHighlighted}} />
-          )}
-        </div>
+          <div className="home-right">
+            {/* <MapExplorer
+                  mapName={'India'}
+                  data={data}
+                  regionHighlighted={regionHighlighted}
+                  setRegionHighlighted={setRegionHighlighted}
+                  anchor={anchor}
+                  setAnchor={setAnchor}
+                  mapStatistic={mapStatistic}
+                  setMapStatistic={setMapStatistic}
+                />*/}
 
-        <div className="home-right">
-          {/* <MapExplorer
-            mapName={'India'}
-            data={data}
-            regionHighlighted={regionHighlighted}
-            setRegionHighlighted={setRegionHighlighted}
-            anchor={anchor}
-            setAnchor={setAnchor}
-            mapStatistic={mapStatistic}
-            setMapStatistic={setMapStatistic}
-          />*/}
-
-          {/* <TimeSeriesExplorer
-            timeseries={data[regionHighlighted.stateCode].timeseries}
-            activeStateCode={regionHighlighted.stateCode}
-            {...{regionHighlighted, setRegionHighlighted}}
-            anchor={anchor}
-            setAnchor={setAnchor}
-          />*/}
+            {/* <TimeSeriesExplorer
+                  timeseries={data[regionHighlighted.stateCode].timeseries}
+                  activeStateCode={regionHighlighted.stateCode}
+                  {...{regionHighlighted, setRegionHighlighted}}
+                  anchor={anchor}
+                  setAnchor={setAnchor}
+                />*/}
+          </div>
         </div>
-      </div>
+      )}
       <Footer />
     </React.Fragment>
   );
