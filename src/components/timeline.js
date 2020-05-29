@@ -101,8 +101,11 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
   };
 
   const setClampedDate = (clampedIndex) => {
-    if (clampedIndex === 0) setDate('');
-    setDate(dates[clampedIndex]);
+    if (clampedIndex === 0) {
+      setDate('');
+    } else {
+      setDate(dates[clampedIndex]);
+    }
   };
 
   return (
