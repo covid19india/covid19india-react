@@ -23,7 +23,7 @@ export const MAP_OPTIONS = {
   TOTAL: 'Total',
   PER_MILLION: 'Per million',
   HOTSPOTS: 'Hotspots',
-  ZONES: 'Zones',
+  // ZONES: 'Zones',
 };
 
 export const MAP_VIEWS = {

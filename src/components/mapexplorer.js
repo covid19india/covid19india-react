@@ -175,7 +175,7 @@ function MapExplorer({
   const hoveredRegion = useMemo(() => {
     const hoveredData =
       (regionHighlighted.districtName
-        ? data[regionHighlighted.stateCode].districts[regionHighlighted.districtName]
+        ? data[regionHighlighted.stateCode]?.districts?.[regionHighlighted.districtName]
         : data[regionHighlighted.stateCode]) || emptyData();
     return produce(hoveredData, (draft) => {
       draft.name = regionHighlighted.districtName || STATE_CODES[regionHighlighted.stateCode];
@@ -311,7 +311,7 @@ function MapExplorer({
                     })}
                 </h6>}
             </div>
-            {statistic === 'tested' && panelState.total.tested &&
+            {statistic === 'tested' && panelState?.total?.tested &&
               <a href={panelState.total.tested.source} target="_noblank">
                 <Icon.Link />
               </a>

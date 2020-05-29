@@ -65,9 +65,10 @@ function MapVisualizer({
           getTotalStatistic(stateData, statistic)
         )
       : d3.max(Object.values(statesData), (stateData) =>
-          d3.max(Object.values(stateData.districts), (districtData) =>
-            getTotalStatistic(districtData, statistic)
-          )
+          stateData?.districts ? d3.max(Object.values(stateData.districts), (districtData) =>
+              getTotalStatistic(districtData, statistic)
+            )
+          : 0
         );
   }, [data, currentMap.view, statistic]);
 
@@ -83,7 +84,7 @@ function MapVisualizer({
       );
     } else if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
       const {width} = svgRef.current.getBoundingClientRect();
-      return d3.scaleSqrt([0, statisticMax], [0, width / 10]).clamp(true);
+      return d3.scaleSqrt([0, Math.max(statisticMax, 1)], [0, width / 10]).clamp(true);
     } else {
       return d3
         .scaleSequential(
@@ -259,7 +260,7 @@ function MapVisualizer({
           const district = d.properties.district;
 
           const stateData = data[stateCode];
-          const districtData = stateData?.districts[district];
+          const districtData = stateData?.districts?.[district];
           if (district) {
             d.value = getTotalStatistic(districtData, statistic);
           } else {
