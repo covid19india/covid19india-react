@@ -1,12 +1,11 @@
-import useTimeseries from './hooks/usetimeseries';
-
 import {COLORS, TIMESERIES_STATISTICS} from '../constants';
+import {useResizeObserver} from '../hooks/useresizeobserver';
 import {
   formatNumber,
   formatTimeseriesTickX,
   capitalize,
+  getStatistic,
 } from '../utils/commonfunctions';
-import {useResizeObserver} from '../hooks/useresizeobserver';
 
 import classnames from 'classnames';
 import * as d3 from 'd3';
@@ -14,17 +13,12 @@ import equal from 'fast-deep-equal';
 import React, {useState, useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 
-function TimeSeries({timeseries, chartType, isUniform, isLog}) {
+function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
   const {t} = useTranslation();
   const refs = useRef([]);
 
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
-
-  const [statistics, dates, getDailyStatistic] = useTimeseries(
-    timeseries,
-    chartType
-  );
 
   const [highlightedDate, setHighlightedDate] = useState(
     dates[dates.length - 1]
@@ -80,13 +74,17 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
         .attr('class', 'y-axis')
         .call(d3.axisRight(yScale).ticks(4, '0~s').tickPadding(5));
 
-    const uniformScaleMin = d3.min([
-      ...statistics[chartType].active,
-      ...statistics[chartType].recovered,
-      ...statistics[chartType].deceased,
-    ]);
+    const uniformScaleMin = d3.min(dates, (date) =>
+      getStatistic(timeseries[date], chartType, 'active')
+    );
 
-    const uniformScaleMax = d3.max([...statistics[chartType].confirmed]);
+    const uniformScaleMax = d3.max(dates, (date) =>
+      Math.max(
+        getStatistic(timeseries[date], chartType, 'confirmed'),
+        getStatistic(timeseries[date], chartType, 'recovered'),
+        getStatistic(timeseries[date], chartType, 'deceased')
+      )
+    );
 
     const yScaleUniformLinear = d3
       .scaleLinear()
@@ -115,8 +113,19 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
           .scaleLog()
           .clamp(true)
           .domain([
-            Math.max(1, d3.min(statistics[chartType][statistic])),
-            Math.max(10, yBufferTop * d3.max(statistics[chartType][statistic])),
+            Math.max(
+              1,
+              d3.min(dates, (date) =>
+                getStatistic(timeseries[date], chartType, statistic)
+              )
+            ),
+            Math.max(
+              10,
+              yBufferTop *
+                d3.max(dates, (date) =>
+                  getStatistic(timeseries[date], chartType, statistic)
+                )
+            ),
           ])
           .nice(4)
           .range([chartBottom, margin.top]);
@@ -125,8 +134,20 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
         .scaleLinear()
         .clamp(true)
         .domain([
-          yBufferBottom * Math.min(0, d3.min(statistics[chartType][statistic])),
-          Math.max(1, yBufferTop * d3.max(statistics[chartType][statistic])),
+          yBufferBottom *
+            Math.min(
+              0,
+              d3.min(dates, (date) =>
+                getStatistic(timeseries[date], chartType, statistic)
+              )
+            ),
+          Math.max(
+            1,
+            yBufferTop *
+              d3.max(dates, (date) =>
+                getStatistic(timeseries[date], chartType, statistic)
+              )
+          ),
         ])
         .nice()
         .range([chartBottom, margin.top]);
@@ -183,11 +204,11 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
         )
         .transition(t)
         .attr('cx', (date) => xScale(new Date(date)))
-        .attr('cy', (date, index) =>
-          yScale(statistics[chartType][statistic][index])
+        .attr('cy', (date) =>
+          yScale(getStatistic(timeseries[date], chartType, statistic))
         );
 
-      if (chartType === 'cumulative') {
+      if (chartType === 'total') {
         svg
           .selectAll('.stem')
           .transition(t)
@@ -201,7 +222,7 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
           .join('path')
           .attr('class', 'trend')
           .attr('fill', 'none')
-          .attr('stroke', color + '99')
+          .attr('stroke', color + '50')
           .attr('stroke-width', 4);
 
         // HACK
@@ -218,17 +239,15 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
 
         path
           .transition(t)
-          .attr('opacity', chartType === 'cumulative' ? 1 : 0)
+          .attr('opacity', chartType === 'total' ? 1 : 0)
           .attr(
             'd',
             d3
               .line()
-              .x((date) => {
-                xScale(new Date(date));
-              })
-              .y((date, index) => {
-                yScale(statistics[chartType][statistic][index]);
-              })
+              .x((date) => xScale(new Date(date)))
+              .y((date) =>
+                yScale(getStatistic(timeseries[date], chartType, statistic))
+              )
               .curve(d3.curveMonotoneX)
           );
       } else {
@@ -253,8 +272,8 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
           .attr('x1', (date) => xScale(new Date(date)))
           .attr('y1', yScale(0))
           .attr('x2', (date) => xScale(new Date(date)))
-          .attr('y2', (date, index) =>
-            yScale(statistics[chartType][statistic][index])
+          .attr('y2', (date) =>
+            yScale(getStatistic(timeseries[date], chartType, statistic))
           );
       }
 
@@ -265,7 +284,7 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
         .on('mouseout', mouseout)
         .on('touchend', mouseout);
     });
-  }, [chartType, dimensions, isUniform, isLog, dates, statistics]);
+  }, [chartType, dimensions, isUniform, isLog, timeseries, dates]);
 
   useEffect(() => {
     refs.current.forEach((ref) => {
@@ -291,15 +310,19 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
               <div className="stats-bottom">
                 <h2>
                   {formatNumber(
-                    getDailyStatistic(highlightedDate, statistic, chartType)
+                    getStatistic(
+                      timeseries[highlightedDate],
+                      chartType,
+                      statistic
+                    )
                   )}
                 </h2>
                 <h6></h6>
               </div>
             </div>
             <svg
-              ref={(el) => {
-                refs.current[index] = el;
+              ref={(element) => {
+                refs.current[index] = element;
               }}
               preserveAspectRatio="xMidYMid meet"
             >

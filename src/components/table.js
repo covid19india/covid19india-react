@@ -10,6 +10,7 @@ import produce from 'immer';
 import React, {useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
+import {useTrail, animated, config} from 'react-spring';
 import {createBreakpoint, useLocalStorage} from 'react-use';
 
 const useBreakpoint = createBreakpoint({XL: 1280, L: 768, S: 350});
@@ -129,11 +130,21 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
     [sortData, data]
   );
 
+  const [trail, set] = useTrail(2, () => ({
+    transform: 'translate3d(0, 10px, 0)',
+    opacity: 0,
+    config: config.stiff,
+  }));
+
+  set({transform: 'translate3d(0, 0px, 0)', opacity: 1});
+
   return (
     <React.Fragment>
-      <FineprintTop />
+      <animated.span style={trail[0]}>
+        <FineprintTop />
+      </animated.span>
 
-      <table className="table">
+      <animated.table className="table" style={trail[1]}>
         <thead>
           <tr>
             <th
@@ -164,17 +175,19 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
 
         <tbody>
           {Object.keys(data)
+            .filter(
+              (stateCode) =>
+                stateCode !== 'TT' && data[stateCode].total?.confirmed
+            )
             .sort((a, b) => sortingFunction(a, b))
             .map((stateCode) => {
-              if (stateCode !== 'TT') {
-                return (
-                  <Row
-                    key={stateCode}
-                    data={data[stateCode]}
-                    {...{stateCode, regionHighlighted, setRegionHighlighted}}
-                  />
-                );
-              }
+              return (
+                <Row
+                  key={stateCode}
+                  data={data[stateCode]}
+                  {...{stateCode, regionHighlighted, setRegionHighlighted}}
+                />
+              );
               return null;
             })}
         </tbody>
@@ -187,7 +200,7 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
             {...{regionHighlighted, setRegionHighlighted}}
           />
         </tbody>
-      </table>
+      </animated.table>
 
       <FineprintBottom {...{data}} />
     </React.Fragment>

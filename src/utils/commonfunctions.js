@@ -1,4 +1,4 @@
-import {STATE_NAMES, LOCALE_SHORTHANDS} from '../constants';
+import {LOCALE_SHORTHANDS} from '../constants';
 
 import axios from 'axios';
 import {parse, startOfDay, format, formatDistance} from 'date-fns';
@@ -9,10 +9,6 @@ export const isDevelopmentOrTest = () => {
   if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')
     return true;
   return false;
-};
-
-export const getStateName = (code) => {
-  return STATE_NAMES[code.toUpperCase()];
 };
 
 export const getIndiaDay = () => {

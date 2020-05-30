@@ -25,7 +25,7 @@ function TimeSeriesExplorer({
   // const breakpoint = useBreakpoint();
   const [lastDaysCount, setLastDaysCount] = useState(30);
 
-  const [chartType, setChartType] = useLocalStorage('chartType', 'cumulative');
+  const [chartType, setChartType] = useLocalStorage('chartType', 'total');
 
   const [isTimeseriesIntersecting, setIsTimeseriesIntersecting] = useState(
     false
@@ -60,17 +60,17 @@ function TimeSeriesExplorer({
         <h1>{t('Spread Trends')}</h1>
         <div className="tabs">
           <div
-            className={`tab ${chartType === 'cumulative' ? 'focused' : ''}`}
+            className={`tab ${chartType === 'total' ? 'focused' : ''}`}
             onClick={() => {
-              setChartType('cumulative');
+              setChartType('total');
             }}
           >
             <h4>{t('Cumulative')}</h4>
           </div>
           <div
-            className={`tab ${chartType === 'discrete' ? 'focused' : ''}`}
+            className={`tab ${chartType === 'delta' ? 'focused' : ''}`}
             onClick={() => {
-              setChartType('discrete');
+              setChartType('delta');
               setIsLog(false);
             }}
           >
@@ -95,16 +95,16 @@ function TimeSeriesExplorer({
           </div>
           <div
             className={`timeseries-logmode ${
-              chartType !== 'cumulative' ? 'disabled' : ''
+              chartType !== 'total' ? 'disabled' : ''
             }`}
           >
             <label htmlFor="timeseries-logmode">{t('Logarithmic')}</label>
             <input
               id="timeseries-logmode"
               type="checkbox"
-              checked={chartType === 'cumulative' && isLog}
+              checked={chartType === 'total' && isLog}
               className="switch"
-              disabled={chartType !== 'cumulative'}
+              disabled={chartType !== 'total'}
               onChange={() => {
                 setIsLog(!isLog);
               }}

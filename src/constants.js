@@ -276,6 +276,7 @@ export const STATE_NAMES = {
   LD: 'Lakshadweep',
   PY: 'Puducherry',
   TT: 'Total',
+  UN: 'Unassigned',
 };
 
 const stateCodes = [];
@@ -400,17 +401,6 @@ export const INITIAL_DATA = {
       confirmed: 0,
       recovered: 0,
       deceased: 0,
-    },
-    timeseries: {
-      '2020-01-01': {
-        confirmed: 0,
-        recovered: 0,
-        deceased: 0,
-        tested: {
-          samples: 0,
-          source: '',
-        },
-      },
     },
     last_updated: null,
     notes: '',
