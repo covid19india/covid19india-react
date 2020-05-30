@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {animated, useSpring, config, useTransition} from 'react-spring';
+import {animated, useSpring, config, useTrail} from 'react-spring';
 
 function PureLevelItem({statistic, total, delta}) {
   const {t} = useTranslation();
@@ -16,7 +16,7 @@ function PureLevelItem({statistic, total, delta}) {
       delta: delta,
       from: {total: total, delta: delta},
     },
-    config.gentle
+    config.stiff
   );
 
   return (
@@ -45,19 +45,21 @@ function PureLevelItem({statistic, total, delta}) {
 const LevelItem = React.memo(PureLevelItem);
 
 function Level({data}) {
-  const transitions = useTransition(PRIMARY_STATISTICS, null, {
-    from: {transform: 'translate3d(0, 20px, 0)', opacity: 0},
-    enter: {transform: 'translate3d(0, 0px, 0)', opacity: 1},
-    trail: 200,
-  });
+  const [trail, set] = useTrail(4, () => ({
+    transform: 'translate3d(0, 20px, 0)',
+    opacity: 0,
+    config: config.stiff,
+  }));
+
+  set({transform: 'translate3d(0, 0px, 0)', opacity: 1});
 
   return (
     <div className="Level">
-      {transitions.map(({item: statistic, key, props}) => (
+      {PRIMARY_STATISTICS.map((statistic, index) => (
         <animated.div
-          key={key}
+          key={index}
           className={classnames('level-item', `is-${statistic}`)}
-          style={props}
+          style={trail[index]}
         >
           <LevelItem
             {...{statistic}}

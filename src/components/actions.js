@@ -7,7 +7,7 @@ import {parse, format} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
 import React, {useMemo, useState, useEffect} from 'react';
 import * as Icon from 'react-feather';
-import {useSpring, animated} from 'react-spring';
+import {useSpring, animated, useTrail, config} from 'react-spring';
 import {useLocalStorage} from 'react-use';
 import useSWR from 'swr';
 
@@ -93,6 +93,14 @@ const Actions = ({setDate, dates}) => {
     );
   };
 
+  const [trail, set] = useTrail(3, () => ({
+    transform: 'translate3d(0, 10px, 0)',
+    opacity: 0,
+    config: config.stiff,
+  }));
+
+  set({transform: 'translate3d(0, 0px, 0)', opacity: 1});
+
   return (
     <React.Fragment>
       <animated.div
@@ -103,24 +111,27 @@ const Actions = ({setDate, dates}) => {
           pointerEvents: isTimelineMode ? 'none' : '',
         }}
       >
-        <h5>{`${getTimeFromMilliseconds(lastViewedLog)} IST`}</h5>
+        <animated.h5 style={trail[0]}>{`${getTimeFromMilliseconds(
+          lastViewedLog
+        )} IST`}</animated.h5>
 
         {!showUpdates && (
-          <div className="bell-icon">
+          <animated.div className="bell-icon" style={trail[1]}>
             {Bell}
             {newUpdate && <div className="indicator"></div>}
-          </div>
+          </animated.div>
         )}
 
         {showUpdates && BellOff}
-        <div
+        <animated.div
           className="timeline-icon"
           onClick={() => {
             setIsTimelineMode(true);
           }}
+          style={trail[2]}
         >
           {TimelineIcon}
-        </div>
+        </animated.div>
       </animated.div>
 
       <animated.div

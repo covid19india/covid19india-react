@@ -5,7 +5,7 @@ import MapExplorer from './mapexplorer';
 import Minigraph from './minigraph';
 import Search from './search';
 import Table from './table';
-// import TimeSeriesExplorer from './timeseriesexplorer';
+import TimeSeriesExplorer from './timeseriesexplorer';
 
 import useStickySWR from '../hooks/usestickyswr';
 import {fetcher} from '../utils/commonfunctions';
@@ -18,13 +18,14 @@ function Home(props) {
     stateCode: 'TT',
     districtName: null,
   });
+
   const [anchor, setAnchor] = useState(null);
   const [mapStatistic, setMapStatistic] = useState('confirmed');
 
   const [date, setDate] = useState('');
 
   const {data: timeseries} = useStickySWR(
-    'https://api.covid19india.org/v3/timeseries.json',
+    'https://api.covid19india.org/v3/min/timeseries.min.json',
     fetcher,
     {
       revalidateOnFocus: false,
@@ -32,7 +33,9 @@ function Home(props) {
   );
 
   const {data} = useStickySWR(
-    `https://api.covid19india.org/v3/data${date ? `-${date}` : ''}.json`,
+    `https://api.covid19india.org/v3/min/data${
+      date ? `-${date}` : ''
+    }.min.json`,
     fetcher,
     {
       revalidateOnMount: true,
@@ -84,13 +87,13 @@ function Home(props) {
               />
             }
 
-            {/* <TimeSeriesExplorer
-                  timeseries={data[regionHighlighted.stateCode].timeseries}
-                  activeStateCode={regionHighlighted.stateCode}
-                  {...{regionHighlighted, setRegionHighlighted}}
-                  anchor={anchor}
-                  setAnchor={setAnchor}
-                />*/}
+            <TimeSeriesExplorer
+              timeseries={timeseries[regionHighlighted.stateCode]}
+              activeStateCode={regionHighlighted.stateCode}
+              {...{regionHighlighted, setRegionHighlighted}}
+              anchor={anchor}
+              setAnchor={setAnchor}
+            />
           </div>
         </div>
       )}

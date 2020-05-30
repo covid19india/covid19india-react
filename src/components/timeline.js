@@ -1,7 +1,7 @@
-import {addDays, formatISO, differenceInDays, format} from 'date-fns';
+import {format} from 'date-fns';
 import clamp from 'lodash/clamp';
-import React, {useState, useEffect} from 'react';
-import {useSprings, animated, config} from 'react-spring';
+import React, {useState} from 'react';
+import {useSprings, useTransition, animated, config} from 'react-spring';
 import {useMeasure, useKeyPressEvent} from 'react-use';
 import {useDrag} from 'react-use-gesture';
 
@@ -22,7 +22,7 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
   const bind = useDrag(
     ({down, delta: [xDelta], direction: [xDir], distance, cancel}) => {
       const clampedIndex = getClampedIndex(xDir);
-      if (down && distance > 30) {
+      if (down && distance > 25) {
         cancel(setIndex(clampedIndex));
         setClampedDate(clampedIndex);
       }
@@ -55,7 +55,7 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
           35 +
           (down ? xDelta : 0);
       } else {
-        x = (clampedIndex - i) * (width / 3) + width / 3 + 35;
+        x = (clampedIndex - i) * (width / 3) + width / 3 + 45;
       }
 
       if (i === clampedIndex) {
@@ -87,6 +87,7 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
 
   useKeyPressEvent('Escape', () => {
     setIsTimelineMode(false);
+    setDate('');
   });
 
   const hideTimeline = () => {
@@ -108,42 +109,64 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
     }
   };
 
+  const timeline = {
+    '2020-05-28': 'First Day',
+    '2020-05-23': 'Second Day',
+  };
+
+  const transition = useTransition(
+    timeline.hasOwnProperty(dates[index]),
+    null,
+    {
+      from: {transform: 'translate3d(0, 20px, 0)', opacity: 0},
+      enter: {transform: 'translate3d(0, 0px, 0)', opacity: 1},
+      leave: {transform: 'translate3d(0, 20px, 0)', opacity: 0},
+    }
+  );
+
   return (
-    <div className="Timeline" ref={timelineElement} {...bind()}>
-      {springs
-        .filter(
-          ({opacity}, i) =>
-            i < dates.length - 2 &&
-            (i === index + 1 ||
-              i === index - 1 ||
-              i === index + 2 ||
-              i === index - 2 ||
-              i === index)
-        )
-        .map(({x, color, opacity}, i) => (
-          <animated.div
-            className="day"
-            key={i}
-            style={{
-              transform: x.interpolate((x) => `translate3d(${x}px,0,0)`),
-              opacity,
-            }}
-          >
-            {index < 2 && (
-              <React.Fragment>
+    <React.Fragment>
+      {transition.map(
+        ({item, key, props}) =>
+          item && (
+            <animated.h5 className="highlight" key={key} style={props}>
+              {timeline[dates[index]]}
+            </animated.h5>
+          )
+      )}
+
+      <div className="Timeline" ref={timelineElement} {...bind()}>
+        {springs
+          .filter(
+            ({opacity}, i) =>
+              i < dates.length - 2 &&
+              (i === index + 1 ||
+                i === index - 1 ||
+                i === index + 2 ||
+                i === index - 2 ||
+                i === index)
+          )
+          .map(({x, color, opacity}, i) => (
+            <animated.div
+              className="day"
+              key={i}
+              style={{
+                transform: x.interpolate((x) => `translate3d(${x}px,0,0)`),
+                opacity,
+              }}
+            >
+              {index < 2 && (
                 <animated.h5 style={{color}}>{getDate(i)}</animated.h5>
-              </React.Fragment>
-            )}
-            {index > 1 && index < dates.length && (
-              <React.Fragment>
+              )}
+              {index > 1 && index < dates.length && (
                 <animated.h5 style={{color}}>
                   {getDate(index + i - 2)}
                 </animated.h5>
-              </React.Fragment>
-            )}
-          </animated.div>
-        ))}
-    </div>
+              )}
+            </animated.div>
+          ))}
+      </div>
+    </React.Fragment>
   );
 };
 

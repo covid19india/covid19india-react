@@ -85,7 +85,7 @@ function Minigraph({timeseries, date: timelineDate}) {
                 enter
                   .attr('stroke-dashoffset', pathLength)
                   .transition()
-                  .delay(500)
+                  .delay(100)
                   .duration(2500)
                   .attr('stroke-dashoffset', 0)
                   .transition()

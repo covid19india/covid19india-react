@@ -16,14 +16,11 @@ import './App.scss';
 const Home = lazy(() =>
   import('./components/home' /* webpackChunkName: "Home" */)
 );
-const DeepDive = lazy(() =>
-  import('./components/deepdive' /* webpackChunkName: "DeepDive" */)
-);
 const FAQ = lazy(() =>
-  import('./components/faq' /* webpackChunkName: "FAQ" */)
+  import('./components/faq' /* webpackChunkName: "About" */)
 );
 const Demographics = lazy(() =>
-  import('./components/demographics' /* webpackChunkName: "PatientDB" */)
+  import('./components/demographics' /* webpackChunkName: "Demographics" */)
 );
 const State = lazy(() =>
   import('./components/state' /* webpackChunkName: "State" */)
@@ -57,13 +54,6 @@ function App() {
       view: Demographics,
       displayName: t('Demographics'),
       animationDelayForNavbar: 0.3,
-      showInNavbar: true,
-    },
-    {
-      pageLink: '/deepdive',
-      view: DeepDive,
-      displayName: t('Deep Dive'),
-      animationDelayForNavbar: 0.4,
       showInNavbar: true,
     },
     {

@@ -1357,10 +1357,18 @@ h6 {
     &.timeline {
       position: absolute;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       justify-content: space-around;
       padding: 1rem;
       top: 13.25rem;
+
+      .highlight {
+        position: absolute;
+        top: 2.5rem;
+        width: 100%;
+        text-align: center;
+        color: $brown !important;
+      }
     }
 
     & > * {
@@ -1445,10 +1453,6 @@ h6 {
       &::selection {
       background: transparent !important;
       }
-    }
-
-    &:first-child {
-      // padding-right: 17.5rem;
     }
   }
 }

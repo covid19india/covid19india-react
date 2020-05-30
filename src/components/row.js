@@ -13,7 +13,6 @@ import {
   TriangleDownIcon,
 } from '@primer/octicons-v2-react';
 import classnames from 'classnames';
-import * as easings from 'd3-ease';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {useState, useCallback, useMemo} from 'react';
