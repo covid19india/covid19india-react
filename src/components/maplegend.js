@@ -1,4 +1,4 @@
-import {MAP_OPTIONS, ZONE_COLORS} from '../constants';
+import {D3_TRANSITION_DURATION, MAP_OPTIONS, ZONE_COLORS} from '../constants';
 import {capitalizeAll, formatNumber} from '../utils/commonfunctions';
 import {useResizeObserver} from '../hooks/useresizeobserver';
 
@@ -50,7 +50,7 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
         })
       );
     } else if (mapOption === MAP_OPTIONS.HOTSPOTS) {
-      const t = svg.transition().duration(500);
+      const t = svg.transition().duration(D3_TRANSITION_DURATION);
       svg
         .select('.ramp')
         .transition(t)
@@ -164,7 +164,7 @@ function legend({
   ordinalWeights,
 } = {}) {
   svg.selectAll('.circles > *').remove();
-  const t = svg.transition().duration(500);
+  const t = svg.transition().duration(D3_TRANSITION_DURATION);
 
   let tickAdjust = (g) => {
     const ticks = g.selectAll('.tick line');

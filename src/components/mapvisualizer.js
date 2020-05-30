@@ -2,6 +2,7 @@ import MapLegend from './maplegend';
 
 import {
   COLORS,
+  D3_TRANSITION_DURATION,
   MAP_META,
   MAP_TYPES,
   MAP_OPTIONS,
@@ -177,7 +178,7 @@ function MapVisualizer({
     });
 
     /* Draw map */
-    const t = d3.transition().duration(500);
+    const t = d3.transition().duration(D3_TRANSITION_DURATION);
     let onceTouchedRegion = null;
     const regionSelection = svg
       .select('.regions')
@@ -449,6 +450,7 @@ function MapVisualizer({
     geoDataResponse.data,
     data,
     currentMap.option,
+    currentMap.view,
     regionHighlighted.stateCode,
     regionHighlighted.districtName,
     statistic,

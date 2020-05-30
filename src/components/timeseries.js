@@ -1,9 +1,8 @@
-import {COLORS, TIMESERIES_STATISTICS} from '../constants';
+import {COLORS, D3_TRANSITION_DURATION, TIMESERIES_STATISTICS} from '../constants';
 import {useResizeObserver} from '../hooks/useresizeobserver';
 import {
   formatNumber,
-  formatTimeseriesDate,
-  formatTimeseriesTickX,
+  formatDate,
   capitalize,
   getStatistic,
 } from '../utils/commonfunctions';
@@ -56,9 +55,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
         d3
           .axisBottom(xScale)
           .ticks(numTicksX)
-          .tickFormat((tick) => {
-            return formatTimeseriesTickX(tick);
-          })
+          .tickFormat((date) => formatDate(date, 'dd MMM'))
       );
 
     const xAxis2 = (g, yScale) => {
@@ -170,7 +167,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
     /* Begin drawing charts */
     refs.current.forEach((ref, i) => {
       const svg = d3.select(ref);
-      const t = svg.transition().duration(300);
+      const t = svg.transition().duration(D3_TRANSITION_DURATION);
 
       const statistic = TIMESERIES_STATISTICS[i];
       const yScale = generateYScale(statistic);
@@ -299,7 +296,9 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
           >
             <div className={classnames('stats', `is-${statistic}`)}>
               <h5 className="title">{capitalize(t(statistic))}</h5>
-              <h5 className="title">{formatTimeseriesDate(highlightedDate)}</h5>
+              <h5 className="title">
+                {formatDate(highlightedDate, 'dd MMMM')}
+              </h5>
               <div className="stats-bottom">
                 <h2>
                   {formatNumber(

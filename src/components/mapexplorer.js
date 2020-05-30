@@ -15,7 +15,7 @@ import {
 import {
   capitalize,
   formatNumber,
-  formatDayMonth,
+  formatDate,
   formatLastUpdated,
   getStatistic,
 } from '../utils/commonfunctions';
@@ -339,7 +339,10 @@ function MapExplorer({
                 <h6>
                   {panelState?.total?.tested &&
                     t('As of {{date}}', {
-                      date: formatDayMonth(panelState.meta.tested.last_updated),
+                      date: formatDate(
+                        panelState.meta.tested.last_updated,
+                        'dd MMM'
+                      ),
                     })}
                 </h6>
               )}

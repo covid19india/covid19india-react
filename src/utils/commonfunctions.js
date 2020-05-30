@@ -15,12 +15,10 @@ export const getIndiaDay = () => {
   return startOfDay(utcToZonedTime(new Date(), 'Asia/Kolkata'));
 };
 
-export const formatDate = (unformattedDate) => {
-  const day = unformattedDate.slice(0, 2);
-  const month = unformattedDate.slice(3, 5);
-  const year = unformattedDate.slice(6, 10);
-  const time = unformattedDate.slice(11);
-  return `${year}-${month}-${day}T${time}+05:30`;
+export const formatLastUpdated = (unformattedDate) => {
+  return formatDistance(new Date(unformattedDate), new Date(), {
+    locale: LOCALE_SHORTHANDS[i18n.language],
+  });
 };
 
 export const formatDateAbsolute = (unformattedDate) => {
@@ -33,37 +31,12 @@ export const formatDateAbsolute = (unformattedDate) => {
   );
 };
 
-export const formatDayMonth = (unformattedDate) => {
-  return format(new Date(unformattedDate), 'dd MMM', {
+export const formatDate = (unformattedDate, formatString) => {
+  return format(new Date(unformattedDate), formatString, {
     locale: LOCALE_SHORTHANDS[i18n.language],
   });
 };
 
-export const formatLastUpdated = (unformattedDate) => {
-  return formatDistance(new Date(unformattedDate), new Date(), {
-    locale: LOCALE_SHORTHANDS[i18n.language],
-  });
-};
-
-export const formatTimeseriesDate = (unformattedDate) => {
-  return format(new Date(unformattedDate), 'dd MMMM', {
-    locale: LOCALE_SHORTHANDS[i18n.language],
-  });
-};
-
-export const formatTimeseriesTickX = (unformattedDate) => {
-  return format(unformattedDate, 'd MMM', {
-    locale: LOCALE_SHORTHANDS[i18n.language],
-  });
-};
-
-/**
- * Returns the last `days` entries
- * @param {Array<Object>} timeseries
- * @param {number} days
- *
- * @return {Array<Object>}
- */
 export function sliceTimeseriesFromEnd(timeseries, days) {
   return timeseries.slice(-days);
 }
