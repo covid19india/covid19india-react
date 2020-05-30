@@ -9,7 +9,7 @@ import TimeSeriesExplorer from './timeseriesexplorer';
 import {NUM_BARS_STATEPAGE, STATE_NAMES, STATE_POPULATIONS} from '../constants';
 import {
   fetcher,
-  formatDateAbsolute,
+  formatDate,
   formatNumber,
   getStatistic,
 } from '../utils/commonfunctions';
@@ -156,7 +156,10 @@ function State(props) {
             <div className="header">
               <div className="header-left">
                 <h1>{t(stateName)}</h1>
-                <h5>Last Updated on {data[stateCode].meta.last_updated}</h5>
+                <h5>{`Last Updated on ${formatDate(
+                  data[stateCode].meta.last_updated,
+                  'dd MMM, p'
+                )}`}</h5>
               </div>
 
               <div className="header-right">
@@ -165,7 +168,10 @@ function State(props) {
                   <React.Fragment>
                     <h2>{formatNumber(data[stateCode].total.tested)}</h2>
                     <h5 className="timestamp">
-                      {`As of ${data[stateCode].meta.tested.last_updated}`}
+                      {`As of ${formatDate(
+                        data[stateCode].meta.tested.last_updated,
+                        'dd MMMM'
+                      )}`}
                     </h5>
                     <h5>
                       {'per '}
@@ -357,11 +363,19 @@ function State(props) {
                 </div>
 
                 <div className="district-bar-right">
-                  {(mapStatistic === 'confirmed' || mapStatistic === 'deceased') && (
+                  {(mapStatistic === 'confirmed' ||
+                    mapStatistic === 'deceased') && (
                     <div className="happy-sign">
                       {Object.keys(timeseries[stateCode])
                         .slice(-NUM_BARS_STATEPAGE)
-                        .every((date) => getStatistic(timeseries[stateCode][date], 'delta', mapStatistic) === 0) && (
+                        .every(
+                          (date) =>
+                            getStatistic(
+                              timeseries[stateCode][date],
+                              'delta',
+                              mapStatistic
+                            ) === 0
+                        ) && (
                         <div
                           className={`alert ${
                             mapStatistic === 'confirmed' ? 'is-green' : ''

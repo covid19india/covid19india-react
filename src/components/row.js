@@ -1,8 +1,9 @@
 import {PRIMARY_STATISTICS, STATE_NAMES} from '../constants';
 import {
-  formatNumber,
-  capitalize,
   abbreviate,
+  capitalize,
+  formatLastUpdated,
+  formatNumber,
   getStatistic,
 } from '../utils/commonfunctions';
 
@@ -277,7 +278,11 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
           <tr className={'state-last-update'}>
             <td colSpan={4} style={{paddingBottom: 0}}>
               <p className="spacer"></p>
-              <p>{data?.meta?.last_updated}</p>
+              {data?.meta?.last_updated && (
+                <p>{`Last updated ${formatLastUpdated(
+                  data.meta.last_updated
+                )}`}</p>
+              )}
               {data.districts['Unknown'] && (
                 <div className="disclaimer">
                   <Icon.AlertCircle />

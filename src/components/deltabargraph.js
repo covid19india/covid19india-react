@@ -9,15 +9,15 @@ const getDeltaStatistic = (data, statistic) => {
   return getStatistic(data, 'delta', statistic);
 };
 
+const [width, height] = [250, 250];
+const margin = {top: 50, right: 5, bottom: 50, left: 0};
+
 function DeltaBarGraph({timeseries, dates, statistic}) {
   const svgRef = useRef();
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
-    const width = +svg.attr('width');
-    const height = +svg.attr('height');
 
-    const margin = {top: 50, right: 5, bottom: 50, left: 0};
     const chartRight = width - margin.right;
     const chartBottom = height - margin.bottom;
     const r = 5;
@@ -70,8 +70,14 @@ function DeltaBarGraph({timeseries, dates, statistic}) {
     svg
       .selectAll('.bar')
       .data(dates)
-      .join('path')
-      .attr('class', 'bar')
+      .join((enter) =>
+        enter
+          .append('path')
+          .attr('class', 'bar')
+          .attr('d', (date) =>
+            roundedBar(xScale(date), yScale(0), xScale.bandwidth(), 0, r)
+          )
+      )
       .transition(t)
       .attr('d', (date) =>
         roundedBar(
@@ -133,7 +139,7 @@ function DeltaBarGraph({timeseries, dates, statistic}) {
         viewBox="0 0 250 250"
         preserveAspectRatio="xMidYMid meet"
       >
-        <g className="x-axis" />
+        <g className="x-axis" transform={`translate(0, ${height - margin.bottom})`}/>
         <g className="y-axis" />
       </svg>
     </div>

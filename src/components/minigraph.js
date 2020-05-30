@@ -88,12 +88,10 @@ function Minigraph({timeseries, date: timelineDate}) {
                   .delay(100)
                   .duration(2500)
                   .attr('stroke-dashoffset', 0)
-                  .transition()
-                  .duration(0)
-                  .attr('stroke-dasharray', null)
               ),
           (update) =>
             update
+              .attr('stroke-dasharray', null)
               .transition()
               .duration(500)
               .attr(
