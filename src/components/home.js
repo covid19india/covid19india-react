@@ -80,13 +80,15 @@ function Home(props) {
             {
               <MapExplorer
                 mapName={'India'}
-                data={data}
-                regionHighlighted={regionHighlighted}
-                setRegionHighlighted={setRegionHighlighted}
-                anchor={anchor}
-                setAnchor={setAnchor}
-                mapStatistic={mapStatistic}
-                setMapStatistic={setMapStatistic}
+                {...{
+                  data,
+                  regionHighlighted,
+                  setRegionHighlighted,
+                  anchor,
+                  setAnchor,
+                  mapStatistic,
+                  setMapStatistic,
+                }}
               />
             }
 

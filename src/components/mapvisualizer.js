@@ -439,7 +439,8 @@ function MapVisualizer({
         .each(function (d) {
           const highlighted =
             state === d.properties.st_nm &&
-            (!district || district === d.properties?.district);
+            (currentMap.view === MAP_VIEWS.STATES ||
+              district === d.properties?.district);
           if (highlighted) this.parentNode.appendChild(this);
           d3.select(this).attr('stroke-opacity', highlighted ? 1 : 0);
         });
