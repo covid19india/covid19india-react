@@ -1,4 +1,8 @@
-import {COLORS, D3_TRANSITION_DURATION, TIMESERIES_STATISTICS} from '../constants';
+import {
+  COLORS,
+  D3_TRANSITION_DURATION,
+  TIMESERIES_STATISTICS,
+} from '../constants';
 import {useResizeObserver} from '../hooks/useresizeobserver';
 import {
   formatNumber,
@@ -215,15 +219,6 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
           .attr('y2', yScale(0))
           .remove();
 
-        const path = svg
-          .selectAll('.trend')
-          .data([dates])
-          .join('path')
-          .attr('class', 'trend')
-          .attr('fill', 'none')
-          .attr('stroke', color + '50')
-          .attr('stroke-width', 4);
-
         const line = d3
           .line()
           .curve(d3.curveMonotoneX)
@@ -232,14 +227,39 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
             yScale(getStatistic(timeseries[date], chartType, statistic))
           );
 
-        path
-          .transition(t)
-          .attr('opacity', chartType === 'total' ? 1 : 0)
-          .attrTween('d', function (d) {
-            const previous = d3.select(this).attr('d');
-            const current = line(d);
-            return interpolatePath(previous, current);
-          });
+        let pathLength;
+        svg
+          .selectAll('.trend')
+          .data([dates])
+          .join(
+            (enter) =>
+              enter
+                .append('path')
+                .attr('class', 'trend')
+                .attr('fill', 'none')
+                .attr('stroke', color + '50')
+                .attr('stroke-width', 4)
+                .attr('d', line)
+                .attr('stroke-dasharray', function () {
+                  return (pathLength = this.getTotalLength());
+                })
+                .call((enter) =>
+                  enter
+                    .attr('stroke-dashoffset', pathLength)
+                    .transition(t)
+                    .attr('stroke-dashoffset', 0)
+                    .transition()
+                ),
+            (update) =>
+              update
+                .attr('stroke-dasharray', null)
+                .transition(t)
+                .attrTween('d', function (d) {
+                  const previous = d3.select(this).attr('d');
+                  const current = line(d);
+                  return interpolatePath(previous, current);
+                })
+          );
       } else {
         /* DAILY TRENDS */
         svg.selectAll('.trend').remove();

@@ -1,7 +1,7 @@
 import {LOCALE_SHORTHANDS} from '../constants';
 
 import axios from 'axios';
-import {parse, startOfDay, format, formatDistance} from 'date-fns';
+import {startOfDay, format, formatDistance} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
 import i18n from 'i18next';
 
@@ -19,16 +19,6 @@ export const formatLastUpdated = (unformattedDate) => {
   return formatDistance(new Date(unformattedDate), new Date(), {
     locale: LOCALE_SHORTHANDS[i18n.language],
   });
-};
-
-export const formatDateAbsolute = (unformattedDate) => {
-  return format(
-    parse(unformattedDate, 'dd/MM/yyyy HH:mm:ss', new Date()),
-    'dd MMM, hh:mm b',
-    {
-      locale: LOCALE_SHORTHANDS[i18n.language],
-    }
-  );
 };
 
 export const formatDate = (unformattedDate, formatString) => {
