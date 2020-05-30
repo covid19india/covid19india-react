@@ -131,8 +131,8 @@ function PureDistrictRow({
         <div className="title-chevron">
           <span className="title-icon">
             {t(districtName)}
-            {data.notes && (
-              <Tooltip aria-label={data.notes}>
+            {data?.meta?.notes && (
+              <Tooltip aria-label={data.meta.notes}>
                 <Icon.Info />
               </Tooltip>
             )}
@@ -253,10 +253,10 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
             <span className="title-icon">
               {t(STATE_CODES[stateCode])}
 
-              {data.notes && (
+              {data?.meta?.notes && (
                 <Tooltip
                   className="tooltip"
-                  aria-label={data.notes}
+                  aria-label={data.meta.notes}
                   wrap={true}
                   direction={'e'}
                   noDelay={true}
