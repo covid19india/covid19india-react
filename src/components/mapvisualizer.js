@@ -7,10 +7,15 @@ import {
   MAP_OPTIONS,
   MAP_VIEWS,
   STATE_CODES,
-  STATE_CODES_REVERSE,
+  STATE_NAMES,
+  STATE_POPULATIONS_MIL,
   ZONE_COLORS,
 } from '../constants';
-import {capitalizeAll, formatNumber, getStatistic} from '../utils/commonfunctions';
+import {
+  capitalizeAll,
+  formatNumber,
+  getStatistic,
+} from '../utils/commonfunctions';
 
 import * as d3 from 'd3';
 import React, {useEffect, useMemo, useRef} from 'react';
@@ -27,8 +32,8 @@ const colorInterpolator = {
   tested: (t) => d3.interpolatePurples(t * 0.85),
 };
 
-const getTotalStatistic = (data, statistic, per_million = false) => {
-  return getStatistic(data, 'total', statistic, per_million);
+const getTotalStatistic = (data, statistic, normalizer = 1) => {
+  return getStatistic(data, 'total', statistic, normalizer);
 };
 
 function MapVisualizer({
@@ -47,7 +52,7 @@ function MapVisualizer({
   const currentMapCode = useMemo(() => {
     let stateName = currentMap.name;
     if (stateName === 'India') stateName = 'Total';
-    return STATE_CODES_REVERSE[stateName];
+    return STATE_CODES[stateName];
   }, [currentMap.name]);
 
   const geoDataResponse = useSWR(
@@ -59,22 +64,35 @@ function MapVisualizer({
   );
 
   const statisticMax = useMemo(() => {
-    const {TT, ...statesData} = data;
+    const {TT, UN, ...statesData} = data;
     return currentMap.view === MAP_VIEWS.STATES
-      ? d3.max(Object.values(statesData), (stateData) =>
-          getTotalStatistic(stateData, statistic)
+      ? d3.max(Object.keys(statesData), (stateCode) =>
+          getTotalStatistic(
+            statesData[stateCode],
+            statistic,
+            currentMap.option === MAP_OPTIONS.PER_MILLION
+              ? STATE_POPULATIONS_MIL[stateCode]
+              : 1
+          )
         )
       : d3.max(Object.values(statesData), (stateData) =>
-          stateData?.districts ? d3.max(Object.values(stateData.districts), (districtData) =>
-              getTotalStatistic(districtData, statistic)
-            )
-          : 0
+          stateData?.districts
+            ? d3.max(Object.values(stateData.districts), (districtData) =>
+                getTotalStatistic(districtData, statistic)
+              )
+            : 0
         );
-  }, [data, currentMap.view, statistic]);
+  }, [data, currentMap.option, currentMap.view, statistic]);
 
   const statisticTotal = useMemo(() => {
-    return getTotalStatistic(data[currentMapCode], statistic);
-  }, [data, currentMapCode, statistic]);
+    return getTotalStatistic(
+      data[currentMapCode],
+      statistic,
+      currentMap.option === MAP_OPTIONS.PER_MILLION
+        ? STATE_POPULATIONS_MIL[currentMapCode]
+        : 1
+    );
+  }, [data, currentMapCode, currentMap.option, statistic]);
 
   const mapScale = useMemo(() => {
     if (currentMap.option === MAP_OPTIONS.ZONES) {
@@ -84,7 +102,9 @@ function MapVisualizer({
       );
     } else if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
       const {width} = svgRef.current.getBoundingClientRect();
-      return d3.scaleSqrt([0, Math.max(statisticMax, 1)], [0, width / 10]).clamp(true);
+      return d3
+        .scaleSqrt([0, Math.max(statisticMax, 1)], [0, width / 10])
+        .clamp(true);
     } else {
       return d3
         .scaleSequential(
@@ -175,7 +195,7 @@ function MapVisualizer({
           .style('cursor', 'pointer')
           .on('mouseenter', (d) => {
             setRegionHighlighted({
-              stateCode: STATE_CODES_REVERSE[d.properties.st_nm],
+              stateCode: STATE_CODES[d.properties.st_nm],
               districtName: d.properties.district,
             });
           })
@@ -207,16 +227,23 @@ function MapVisualizer({
     regionSelection
       .transition(t)
       .attr('fill', (d) => {
-        const stateCode = STATE_CODES_REVERSE[d.properties.st_nm];
+        const stateCode = STATE_CODES[d.properties.st_nm];
         const district = d.properties.district;
         const stateData = data[stateCode];
         const districtData = stateData?.districts?.[district];
         let n;
         if (currentMap.option === MAP_OPTIONS.ZONES) {
-          n = districtData?.zone?.status || 0;
+          n = districtData?.zone || 0;
         } else {
           if (district) n = getTotalStatistic(districtData, statistic);
-          else n = getTotalStatistic(stateData, statistic);
+          else
+            n = getTotalStatistic(
+              stateData,
+              statistic,
+              currentMap.option === MAP_OPTIONS.PER_MILLION
+                ? STATE_POPULATIONS_MIL[stateCode]
+                : 1
+            );
         }
         const color = n === 0 ? '#ffffff00' : mapScale(n);
         return color;
@@ -229,7 +256,7 @@ function MapVisualizer({
     regionSelection.select('title').text((d) => {
       if (currentMap.option === MAP_OPTIONS.TOTAL) {
         const state = d.properties.st_nm;
-        const stateCode = STATE_CODES_REVERSE[state];
+        const stateCode = STATE_CODES[state];
         const district = d.properties.district;
 
         const stateData = data[stateCode];
@@ -237,10 +264,11 @@ function MapVisualizer({
         let n;
         if (district) n = getTotalStatistic(districtData, statistic);
         else n = getTotalStatistic(stateData, statistic);
-        return formatNumber(100 * (n / (statisticTotal || 0.001))) +
+        return (
+          formatNumber(100 * (n / (statisticTotal || 0.001))) +
           '% from ' +
           capitalizeAll(district ? district : state)
-        ;
+        );
       }
     });
 
@@ -256,17 +284,17 @@ function MapVisualizer({
     if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
       circlesData = features
         .map((d) => {
-          const stateCode = STATE_CODES_REVERSE[d.properties.st_nm];
+          const stateCode = STATE_CODES[d.properties.st_nm];
           const district = d.properties.district;
 
           const stateData = data[stateCode];
           const districtData = stateData?.districts?.[district];
-          if (district) {
-            d.value = getTotalStatistic(districtData, statistic);
-          } else {
-            d.value =
-              getTotalStatistic(stateData?.districts?.Unassigned, statistic);
-          }
+          if (district) d.value = getTotalStatistic(districtData, statistic);
+          else
+            d.value = getTotalStatistic(
+              stateData?.districts?.Unassigned,
+              statistic
+            );
           return d;
         })
         .sort((a, b) => b.value - a.value);
@@ -285,7 +313,7 @@ function MapVisualizer({
           .attr('pointer-events', 'all')
           .on('mouseenter', (d) => {
             setRegionHighlighted({
-              stateCode: STATE_CODES_REVERSE[d.properties.st_nm],
+              stateCode: STATE_CODES[d.properties.st_nm],
               districtName: d.properties.district || 'Unassigned',
             });
           })
@@ -388,7 +416,7 @@ function MapVisualizer({
 
   useEffect(() => {
     if (!geoDataResponse.data) return;
-    const state = STATE_CODES[regionHighlighted.stateCode];
+    const state = STATE_NAMES[regionHighlighted.stateCode];
     const district = regionHighlighted.districtName;
 
     const svg = d3.select(svgRef.current);
@@ -397,7 +425,11 @@ function MapVisualizer({
         .select('.circles')
         .selectAll('circle')
         .attr('fill-opacity', (d) => {
-          const highlighted = state === d.properties.st_nm && (!district || district === d.properties?.district || (district === 'Unassigned' && !d.properties.district));
+          const highlighted =
+            state === d.properties.st_nm &&
+            (!district ||
+              district === d.properties?.district ||
+              (district === 'Unassigned' && !d.properties.district));
           return highlighted ? 1 : 0.5;
         });
     } else {
@@ -405,11 +437,13 @@ function MapVisualizer({
         .select('.regions')
         .selectAll('path')
         .each(function (d) {
-          const highlighted = state === d.properties.st_nm && (!district || district === d.properties?.district);
+          const highlighted =
+            state === d.properties.st_nm &&
+            (!district || district === d.properties?.district);
           if (highlighted) this.parentNode.appendChild(this);
           d3.select(this).attr('stroke-opacity', highlighted ? 1 : 0);
         });
-      }
+    }
   }, [
     geoDataResponse.data,
     data,
@@ -425,25 +459,25 @@ function MapVisualizer({
         <svg id="chart" preserveAspectRatio="xMidYMid meet" ref={svgRef}>
           <g className="regions" />
           <g className="state-borders" />
-          {currentMap.view === MAP_VIEWS.DISTRICTS &&
+          {currentMap.view === MAP_VIEWS.DISTRICTS && (
             <g className="district-borders" />
-          }
-          {currentMap.option === MAP_OPTIONS.HOTSPOTS &&
+          )}
+          {currentMap.option === MAP_OPTIONS.HOTSPOTS && (
             <g className="circles" />
-          }
+          )}
         </svg>
         {mapMeta.mapType === MAP_TYPES.STATE &&
-          getTotalStatistic(
+          !!getTotalStatistic(
             data[currentMapCode]?.districts?.Unassigned,
             statistic
-          ) &&
+          ) && (
             <div className="disclaimer">
               <Icon.AlertCircle />
               {t('District-wise {{statistic}} numbers need reconciliation', {
                 statistic: t(statistic),
               })}
             </div>
-          }
+          )}
       </div>
 
       {mapScale && (
