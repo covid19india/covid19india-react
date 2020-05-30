@@ -46,7 +46,7 @@ export const formatLastUpdated = (unformattedDate) => {
 };
 
 export const formatTimeseriesDate = (unformattedDate) => {
-  return format(unformattedDate, 'dd MMMM', {
+  return format(new Date(unformattedDate), 'dd MMMM', {
     locale: LOCALE_SHORTHANDS[i18n.language],
   });
 };

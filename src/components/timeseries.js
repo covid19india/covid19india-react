@@ -2,6 +2,7 @@ import {COLORS, TIMESERIES_STATISTICS} from '../constants';
 import {useResizeObserver} from '../hooks/useresizeobserver';
 import {
   formatNumber,
+  formatTimeseriesDate,
   formatTimeseriesTickX,
   capitalize,
   getStatistic,
@@ -9,6 +10,7 @@ import {
 
 import classnames from 'classnames';
 import * as d3 from 'd3';
+import {interpolatePath} from 'd3-interpolate-path';
 import equal from 'fast-deep-equal';
 import React, {useState, useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -192,7 +194,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
       /* Path dots */
       svg
         .selectAll('circle')
-        .data(dates)
+        .data(dates, (date) => date)
         .join((enter) =>
           enter
             .append('circle')
@@ -225,31 +227,22 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
           .attr('stroke', color + '50')
           .attr('stroke-width', 4);
 
-        // HACK
-        // Path interpolation is non-trivial. Ideally, a custom path tween
-        // function should be defined which takes care that old path dots
-        // transition synchronously along with the path transition. This hack
-        // simulates that behaviour.
-        if (path.attr('d')) {
-          const n = path.node().getTotalLength();
-          const p = path.node().getPointAtLength(n);
-          // Append points at end of path for better interpolation
-          path.attr('d', () => path.attr('d') + `L${p.x},${p.y}`.repeat(3 * T));
-        }
+        const line = d3
+          .line()
+          .curve(d3.curveMonotoneX)
+          .x((date) => xScale(new Date(date)))
+          .y((date) =>
+            yScale(getStatistic(timeseries[date], chartType, statistic))
+          );
 
         path
           .transition(t)
           .attr('opacity', chartType === 'total' ? 1 : 0)
-          .attr(
-            'd',
-            d3
-              .line()
-              .x((date) => xScale(new Date(date)))
-              .y((date) =>
-                yScale(getStatistic(timeseries[date], chartType, statistic))
-              )
-              .curve(d3.curveMonotoneX)
-          );
+          .attrTween('d', function (d) {
+            const previous = d3.select(this).attr('d');
+            const current = line(d);
+            return interpolatePath(previous, current);
+          });
       } else {
         /* DAILY TRENDS */
         svg.selectAll('.trend').remove();
@@ -306,7 +299,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
           >
             <div className={classnames('stats', `is-${statistic}`)}>
               <h5 className="title">{capitalize(t(statistic))}</h5>
-              <h5 className="">{`${highlightedDate}`}</h5>
+              <h5 className="title">{formatTimeseriesDate(highlightedDate)}</h5>
               <div className="stats-bottom">
                 <h2>
                   {formatNumber(
@@ -317,7 +310,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
                     )
                   )}
                 </h2>
-                <h6></h6>
+                {/*<h6>Delta</h6>*/}
               </div>
             </div>
             <svg
