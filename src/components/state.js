@@ -6,8 +6,9 @@ import Minigraph from './minigraph';
 import StateMeta from './statemeta';
 import TimeSeriesExplorer from './timeseriesexplorer';
 
-import {STATE_NAMES, STATE_POPULATIONS} from '../constants';
+import {NUM_BARS_STATEPAGE, STATE_NAMES, STATE_POPULATIONS} from '../constants';
 import {
+  fetcher,
   formatDateAbsolute,
   formatNumber,
   getStatistic,
@@ -25,8 +26,6 @@ import {useTranslation} from 'react-i18next';
 import {Link, useParams, Redirect} from 'react-router-dom';
 import {useMeasure, useEffectOnce} from 'react-use';
 import useSWR from 'swr';
-
-const fetcher = (url) => axios(url).then((response) => response.data);
 
 function PureBreadcrumbs({stateName, stateCode, stateCodes}) {
   const {t} = useTranslation();
@@ -357,15 +356,12 @@ function State(props) {
                   )}
                 </div>
 
-                {/* <div className="district-bar-right">
+                <div className="district-bar-right">
                   {(mapStatistic === 'confirmed' || mapStatistic === 'deceased') && (
-                    <div
-                      className="happy-sign fadeInUp"
-                      style={{animationDelay: '0.6s'}}
-                    >
-                      {timeseries
-                        .slice(-5)
-                        .every((day) => day[`daily${mapStatistic}`] === 0) && (
+                    <div className="happy-sign">
+                      {Object.keys(timeseries[stateCode])
+                        .slice(-NUM_BARS_STATEPAGE)
+                        .every((date) => getStatistic(timeseries[stateCode][date], 'delta', mapStatistic) === 0) && (
                         <div
                           className={`alert ${
                             mapStatistic === 'confirmed' ? 'is-green' : ''
@@ -379,13 +375,14 @@ function State(props) {
                       )}
                     </div>
                   )}
-                  {
-                    <DeltaBarGraph
-                      timeseries={timeseries.slice(-5)}
-                      caseType={`daily${mapStatistic}`}
-                    />
-                  }
-                </div>*/}
+                  <DeltaBarGraph
+                    timeseries={timeseries[stateCode]}
+                    dates={Object.keys(timeseries[stateCode]).slice(
+                      -NUM_BARS_STATEPAGE
+                    )}
+                    statistic={mapStatistic}
+                  />
+                </div>
               </div>
 
               <TimeSeriesExplorer

@@ -1,39 +1,18 @@
+import {COLORS, D3_TRANSITION_DURATION} from '../constants';
+import {formatDate, getStatistic} from '../utils/commonfunctions';
+
 import * as d3 from 'd3';
 import equal from 'fast-deep-equal';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 
-const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.caseType, currProps.caseType)) return false;
-  if (!equal(prevProps.timeseries, currProps.timeseries)) return false;
-  return true;
+const getDeltaStatistic = (data, statistic) => {
+  return getStatistic(data, 'delta', statistic);
 };
 
-const caseColor = (ctype, alpha = '') => {
-  switch (ctype) {
-    case 'dailyconfirmed':
-      return '#ff073a' + alpha;
-    case 'dailyactive':
-      return '#007bff' + alpha;
-    case 'dailyrecovered':
-      return '#28a745' + alpha;
-    case 'dailydeceased':
-      return '#6c757d' + alpha;
-    default:
-      return;
-  }
-};
-
-function DeltaBarGraph({timeseries, caseType}) {
-  const [data, setData] = useState([]);
+function DeltaBarGraph({timeseries, dates, statistic}) {
   const svgRef = useRef();
 
   useEffect(() => {
-    setData(timeseries);
-  }, [timeseries]);
-
-  useEffect(() => {
-    if (!data.length) return;
-
     const svg = d3.select(svgRef.current);
     const width = +svg.attr('width');
     const height = +svg.attr('height');
@@ -43,10 +22,10 @@ function DeltaBarGraph({timeseries, caseType}) {
     const chartBottom = height - margin.bottom;
     const r = 5;
 
-    const formatTime = d3.timeFormat('%e %b');
+    // const formatTime = d3.timeFormat('%e %b');
     const xScale = d3
       .scaleBand()
-      .domain(data.map((d) => formatTime(d.date)))
+      .domain(dates)
       .range([margin.left, chartRight])
       .paddingInner(0.33);
 
@@ -55,18 +34,25 @@ function DeltaBarGraph({timeseries, caseType}) {
       .domain([
         Math.min(
           0,
-          d3.min(data, (d) => d[caseType])
+          d3.min(dates, (date) =>
+            getDeltaStatistic(timeseries[date], statistic)
+          )
         ),
         Math.max(
           1,
-          d3.max(data, (d) => d[caseType])
+          d3.max(dates, (date) =>
+            getDeltaStatistic(timeseries[date], statistic)
+          )
         ),
       ])
       .range([chartBottom, margin.top]);
 
-    const xAxis = d3.axisBottom(xScale).tickSize(0);
+    const xAxis = d3
+      .axisBottom(xScale)
+      .tickSize(0)
+      .tickFormat((date) => formatDate(date, 'dd MMM'));
 
-    const t = svg.transition().duration(500);
+    const t = svg.transition().duration(D3_TRANSITION_DURATION);
     svg
       .select('.x-axis')
       .transition(t)
@@ -75,62 +61,71 @@ function DeltaBarGraph({timeseries, caseType}) {
       .on('start', () => svg.select('.domain').remove())
       .selectAll('text')
       .attr('y', 0)
-      .attr('dy', (d, i) => (data[i][caseType] < 0 ? '-1em' : '1.5em'))
+      .attr('dy', (date, i) =>
+        getDeltaStatistic(timeseries[date], statistic) < 0 ? '-1em' : '1.5em'
+      )
       .style('text-anchor', 'middle')
-      .attr('fill', caseColor(caseType));
+      .attr('fill', COLORS[statistic]);
 
     svg
       .selectAll('.bar')
-      .data(data)
+      .data(dates)
       .join('path')
       .attr('class', 'bar')
       .transition(t)
-      .attr('d', (d) =>
+      .attr('d', (date) =>
         roundedBar(
-          xScale(formatTime(d.date)),
+          xScale(date),
           yScale(0),
           xScale.bandwidth(),
-          yScale(0) - yScale(d[caseType]),
+          yScale(0) - yScale(getDeltaStatistic(timeseries[date], statistic)),
           r
         )
       )
-      .attr('fill', (d, i) => {
-        return i < data.length - 1
-          ? caseColor(caseType, '90')
-          : caseColor(caseType);
+      .attr('fill', (date, i) => {
+        return i < date.length - 1
+          ? COLORS[statistic] + '90'
+          : COLORS[statistic];
       });
 
     const textSelection = svg
       .selectAll('.label')
-      .data(data)
+      .data(dates)
       .join('text')
       .attr('class', 'label')
-      .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
-      .text((d) => d[caseType]);
+      .attr('x', (date) => xScale(date) + xScale.bandwidth() / 2)
+      .text((date) => getDeltaStatistic(timeseries[date], statistic));
 
     textSelection
       .transition(t)
-      .attr('fill', caseColor(caseType))
-      .attr('y', (d) => yScale(d[caseType]) + (d[caseType] < 0 ? 15 : -6));
+      .attr('fill', COLORS[statistic])
+      .attr('y', (date) => {
+        const val = getDeltaStatistic(timeseries[date], statistic);
+        return yScale(val) + (val < 0 ? 15 : -6);
+      });
 
     textSelection
       .append('tspan')
-      .attr('dy', (d) => `${d[caseType] < 0 ? 1.2 : -1.2}em`)
-      .attr('x', (d) => xScale(formatTime(d.date)) + xScale.bandwidth() / 2)
-      .text((d, i) =>
-        i && data[i - 1][caseType]
-          ? d3.format('+.1~%')(
-              (data[i][caseType] - data[i - 1][caseType]) /
-                Math.abs(data[i - 1][caseType])
-            )
-          : ''
+      .attr(
+        'dy',
+        (date) =>
+          `${getDeltaStatistic(timeseries[date], statistic) < 0 ? 1.2 : -1.2}em`
       )
+      .attr('x', (date) => xScale(date) + xScale.bandwidth() / 2)
+      .text((date, i) => {
+        if (i === 0) return '';
+        const prevVal = getDeltaStatistic(timeseries[dates[i - 1]], statistic);
+        const val = getDeltaStatistic(timeseries[date], statistic);
+        return prevVal
+          ? d3.format('+.1~%')((val - prevVal) / Math.abs(prevVal))
+          : '';
+      })
       .transition(t)
-      .attr('fill', caseColor(caseType, '90'));
-  }, [data, caseType]);
+      .attr('fill', COLORS[statistic] + '90');
+  }, [dates, timeseries, statistic]);
 
   return (
-    <div className="DeltaBarGraph fadeInUp" style={{animationDelay: '0.8s'}}>
+    <div className="DeltaBarGraph">
       <svg
         ref={svgRef}
         width="250"
@@ -144,6 +139,11 @@ function DeltaBarGraph({timeseries, caseType}) {
     </div>
   );
 }
+
+const isEqual = (prevProps, currProps) => {
+  if (!equal(prevProps.statistic, currProps.statistic)) return false;
+  return true;
+};
 
 export default React.memo(DeltaBarGraph, isEqual);
 
