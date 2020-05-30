@@ -138,13 +138,11 @@ function MapExplorer({
       }
       if (newMapMeta.mapType === MAP_TYPES.STATE) {
         const districts = data[STATE_CODES[state]].districts;
-        const topDistrict = Object.keys(districts)
-          .filter((d) => d !== 'Unknown')
-          .sort(
-            (a, b) =>
-              getStatistic(districts[b], 'total', mapStatistic) -
-              getStatistic(districts[a], 'total', mapStatistic)
-          )[0];
+        const topDistrict = Object.keys(districts).sort(
+          (a, b) =>
+            getStatistic(districts[b], 'total', mapStatistic) -
+            getStatistic(districts[a], 'total', mapStatistic)
+        )[0];
         ReactDOM.unstable_batchedUpdates(() => {
           setRegionHighlighted({
             stateCode: STATE_CODES[state],
@@ -347,7 +345,7 @@ function MapExplorer({
               )}
             </div>
             {statistic === 'tested' && panelState?.total?.tested && (
-              <a href={panelState.total.tested.source} target="_noblank">
+              <a href={panelState.meta.tested.source} target="_noblank">
                 <Icon.Link />
               </a>
             )}
@@ -387,7 +385,7 @@ function MapExplorer({
           })}
         >
           {t(hoveredRegion.name)}
-          {hoveredRegion.name === 'Unknown' &&
+          {hoveredRegion.name === 'Unassigned' &&
             ` (${t(STATE_NAMES[regionHighlighted.stateCode])})`}
         </h2>
 

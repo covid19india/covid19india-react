@@ -469,11 +469,10 @@ h6 {
 
     .header,
     .map-stats,
-    .back-button,
+    .map-button,
+    .tabs-map,
     .last-update,
-    .unknown,
-    .footnote,
-    .state-page-button {
+    .footnote {
       display: none;
     }
 
@@ -2030,10 +2029,6 @@ table {
   z-index: 10;
 }
 
-.back-button {
-  z-index: 11;
-}
-
 .anchor {
   cursor: pointer;
   position: absolute;
@@ -2096,6 +2091,7 @@ table {
     margin-top: 2rem;
     overflow: hidden;
     width: 90%;
+    position: relative;
 
     &.maplegend {
       margin-top: 0.6rem;

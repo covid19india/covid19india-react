@@ -125,7 +125,7 @@ function Minigraph({timeseries, date: timelineDate}) {
               .call((enter) =>
                 enter
                   .transition()
-                  .delay(2500)
+                  .delay(2100)
                   .duration(500)
                   .style('opacity', 1)
                   .attr('cx', (date) => xScale(new Date(date)))

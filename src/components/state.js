@@ -61,11 +61,12 @@ function State(props) {
   const stateCode = useParams().stateCode.toUpperCase();
   const stateName = STATE_NAMES[stateCode];
 
-  const [mapOption, setMapOption] = useState('confirmed');
+  const [mapStatistic, setMapStatistic] = useState('confirmed');
   const [mapSwitcher, {width}] = useMeasure();
   const [showAllDistricts, setShowAllDistricts] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState({
-    state: stateName,
+    stateCode: stateCode,
+    districtName: null,
   });
 
   const {t} = useTranslation();
@@ -76,13 +77,13 @@ function State(props) {
       duration: 200,
       delay: 3000,
       translateX:
-        mapOption === 'confirmed'
+        mapStatistic === 'confirmed'
           ? `${width * 0}px`
-          : mapOption === 'active'
+          : mapStatistic === 'active'
           ? `${width * 0.25}px`
-          : mapOption === 'recovered'
+          : mapStatistic === 'recovered'
           ? `${width * 0.5}px`
-          : mapOption === 'deceased'
+          : mapStatistic === 'deceased'
           ? `${width * 0.75}px`
           : '0px',
       easing: 'spring(1, 80, 90, 10)',
@@ -119,12 +120,14 @@ function State(props) {
   const handleSort = (districtNameA, districtNameB) => {
     const districtA = data[stateCode].districts[districtNameA];
     const districtB = data[stateCode].districts[districtNameB];
-    return districtB[mapOption] - districtA[mapOption];
+    return districtB[mapStatistic] - districtA[mapStatistic];
   };
 
   const gridRowCount = useMemo(() => {
     const gridColumnCount = window.innerWidth >= 540 ? 3 : 2;
-    const districtCount = Object.keys(data[stateCode].districts).length;
+    const districtCount = data[stateCode]?.districts
+      ? Object.keys(data[stateCode].districts).length
+      : 0;
     const gridRowCount = Math.ceil(districtCount / gridColumnCount);
     return gridRowCount;
   }, [data, stateCode]);
@@ -159,25 +162,29 @@ function State(props) {
 
               <div className="header-right">
                 <h5>{t('Tested')}</h5>
-                <h2>{formatNumber(data[stateCode].total.tested)}</h2>
-                <h5 className="timestamp">
-                  {`As of ${data[stateCode].meta.tested.last_updated}`}
-                </h5>
-                <h5>
-                  {'per '}
-                  <a
-                    href={data[stateCode].meta.tested.source}
-                    target="_noblank"
-                  >
-                    source
-                  </a>
-                </h5>
+                {data[stateCode]?.total?.tested && (
+                  <React.Fragment>
+                    <h2>{formatNumber(data[stateCode].total.tested)}</h2>
+                    <h5 className="timestamp">
+                      {`As of ${data[stateCode].meta.tested.last_updated}`}
+                    </h5>
+                    <h5>
+                      {'per '}
+                      <a
+                        href={data[stateCode].meta.tested.source}
+                        target="_noblank"
+                      >
+                        source
+                      </a>
+                    </h5>
+                  </React.Fragment>
+                )}
               </div>
             </div>
 
             <div className="map-switcher" ref={mapSwitcher}>
               <div
-                className={`highlight ${mapOption}`}
+                className={`highlight ${mapStatistic}`}
                 style={{
                   transform: `translateX(${width * 0}px)`,
                   opacity: 0,
@@ -186,7 +193,7 @@ function State(props) {
               <div
                 className="clickable"
                 onClick={() => {
-                  setMapOption('confirmed');
+                  setMapStatistic('confirmed');
                   anime({
                     targets: '.highlight',
                     translateX: `${width * 0}px`,
@@ -197,7 +204,7 @@ function State(props) {
               <div
                 className="clickable"
                 onClick={() => {
-                  setMapOption('active');
+                  setMapStatistic('active');
                   anime({
                     targets: '.highlight',
                     translateX: `${width * 0.25}px`,
@@ -208,7 +215,7 @@ function State(props) {
               <div
                 className="clickable"
                 onClick={() => {
-                  setMapOption('recovered');
+                  setMapStatistic('recovered');
                   anime({
                     targets: '.highlight',
                     translateX: `${width * 0.5}px`,
@@ -219,7 +226,7 @@ function State(props) {
               <div
                 className="clickable"
                 onClick={() => {
-                  setMapOption('deceased');
+                  setMapStatistic('deceased');
                   anime({
                     targets: '.highlight',
                     translateX: `${width * 0.75}px`,
@@ -232,19 +239,17 @@ function State(props) {
             <Level data={data[stateCode]} />
             <Minigraph timeseries={timeseries[stateCode]} />
 
-            {/*
-              <MapExplorer
-                mapName={stateName}
-                states={stateData}
-                districts={districtData}
-                zones={districtZones}
-                stateTestData={testData}
-                regionHighlighted={regionHighlighted}
-                setRegionHighlighted={setRegionHighlighted}
-                mapOption={mapOption}
-                isCountryLoaded={false}
-              />
-            )*/}
+            <MapExplorer
+              mapName={stateName}
+              isCountryLoaded={false}
+              {...{
+                data,
+                regionHighlighted,
+                setRegionHighlighted,
+                mapStatistic,
+                setMapStatistic,
+              }}
+            />
             {/* fetched && (
               <div className="meta-secondary">
                 <div className="alert">
@@ -300,7 +305,7 @@ function State(props) {
                   className="district-bar-left fadeInUp"
                   style={{animationDelay: '0.6s'}}
                 >
-                  <h2 className={mapOption}>Top districts</h2>
+                  <h2 className={mapStatistic}>Top districts</h2>
                   <div
                     className={`districts ${showAllDistricts ? 'is-grid' : ''}`}
                     style={
@@ -321,20 +326,20 @@ function State(props) {
                                 getStatistic(
                                   data[stateCode].districts[districtName],
                                   'total',
-                                  mapOption
+                                  mapStatistic
                                 )
                               )}
                             </h2>
                             <h5>{t(districtName)}</h5>
-                            {mapOption !== 'active' && (
+                            {mapStatistic !== 'active' && (
                               <div className="delta">
-                                <Icon.ArrowUp className={mapOption} />
-                                <h6 className={mapOption}>
+                                <Icon.ArrowUp className={mapStatistic} />
+                                <h6 className={mapStatistic}>
                                   {formatNumber(
                                     getStatistic(
                                       data[stateCode].districts[districtName],
                                       'delta',
-                                      mapOption
+                                      mapStatistic
                                     )
                                   )}
                                 </h6>
@@ -353,22 +358,22 @@ function State(props) {
                 </div>
 
                 {/* <div className="district-bar-right">
-                  {(mapOption === 'confirmed' || mapOption === 'deceased') && (
+                  {(mapStatistic === 'confirmed' || mapStatistic === 'deceased') && (
                     <div
                       className="happy-sign fadeInUp"
                       style={{animationDelay: '0.6s'}}
                     >
                       {timeseries
                         .slice(-5)
-                        .every((day) => day[`daily${mapOption}`] === 0) && (
+                        .every((day) => day[`daily${mapStatistic}`] === 0) && (
                         <div
                           className={`alert ${
-                            mapOption === 'confirmed' ? 'is-green' : ''
+                            mapStatistic === 'confirmed' ? 'is-green' : ''
                           }`}
                         >
                           <Icon.Smile />
                           <div className="alert-right">
-                            No new {mapOption} cases in the past five days
+                            No new {mapStatistic} cases in the past five days
                           </div>
                         </div>
                       )}
@@ -377,7 +382,7 @@ function State(props) {
                   {
                     <DeltaBarGraph
                       timeseries={timeseries.slice(-5)}
-                      caseType={`daily${mapOption}`}
+                      caseType={`daily${mapStatistic}`}
                     />
                   }
                 </div>*/}
