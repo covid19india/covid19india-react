@@ -1,42 +1,30 @@
 import TimeSeries from './timeseries';
 
-import {PinIcon, IssueOpenedIcon} from '@primer/octicons-v2-react';
 import 'intersection-observer';
-import Observer from '@researchgate/react-intersection-observer';
+
+import {PinIcon, IssueOpenedIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
-import {createBreakpoint, useLocalStorage} from 'react-use';
-
-const useBreakpoint = createBreakpoint({XL: 1280, L: 768, S: 350});
+import {useIsVisible} from 'react-is-visible';
+import {useLocalStorage} from 'react-use';
 
 function TimeSeriesExplorer({
   timeseries,
   activeStateCode,
-  onHighlightState,
   regionHighlighted,
   setRegionHighlighted,
-  states,
   anchor,
   setAnchor,
 }) {
   const {t} = useTranslation();
-  // const breakpoint = useBreakpoint();
   const [lastDaysCount, setLastDaysCount] = useState(30);
-
   const [chartType, setChartType] = useLocalStorage('chartType', 'total');
-
-  const [isTimeseriesIntersecting, setIsTimeseriesIntersecting] = useState(
-    false
-  );
-
   const [isUniform, setIsUniform] = useLocalStorage('isUniform', true);
   const [isLog, setIsLog] = useLocalStorage('isLog', false);
-
-  const options = {
-    rootMargin: '0px 0px 0px 0px',
-  };
+  const explorerElement = useRef();
+  const isVisible = useIsVisible(explorerElement, {once: true});
 
   return (
     <div
@@ -44,6 +32,7 @@ function TimeSeriesExplorer({
         stickied: anchor === 'timeseries',
       })}
       style={{display: anchor === 'mapexplorer' ? 'none' : ''}}
+      ref={explorerElement}
     >
       <div className="timeseries-header">
         <div
@@ -112,7 +101,7 @@ function TimeSeriesExplorer({
           </div>
         </div>
 
-        {states && (
+        {/* states && (
           <div className="trends-state-name">
             <select
               value={activeStateCode}
@@ -136,14 +125,16 @@ function TimeSeriesExplorer({
               })}
             </select>
           </div>
-        )}
+        )*/}
       </div>
 
-      <TimeSeries
-        {...{timeseries, chartType, isUniform, isLog}}
-        dates={Object.keys(timeseries).slice(-lastDaysCount)}
-        stateCode={activeStateCode}
-      />
+      {isVisible && (
+        <TimeSeries
+          {...{timeseries, chartType, isUniform, isLog}}
+          dates={Object.keys(timeseries).slice(-lastDaysCount)}
+          stateCode={activeStateCode}
+        />
+      )}
 
       <div className="pills">
         <button

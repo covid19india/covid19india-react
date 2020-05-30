@@ -60,7 +60,7 @@ function MapVisualizer({
     async (file) => {
       return await d3.json(file);
     },
-    {revalidateOnFocus: false}
+    {revalidateOnFocus: false, suspense: true}
   );
 
   const statisticMax = useMemo(() => {

@@ -2062,6 +2062,7 @@ table {
 .MapExplorer {
   position: relative;
   width: 30rem;
+  align-self: center;
 
   &.stickied {
     position: sticky !important;
@@ -2472,6 +2473,10 @@ table {
       z-index: 1;
     }
   }
+}
+
+.MapVisualizer {
+  min-height: 30rem;
 }
 
 .__react_component_tooltip {

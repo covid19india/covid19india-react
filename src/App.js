@@ -1,7 +1,7 @@
 import Navbar from './components/navbar';
 import ScrollToTop from './utils/ScrollToTop';
 
-import React, {Suspense, lazy} from 'react';
+import React, {useEffect, Suspense, lazy} from 'react';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
 import {
@@ -98,7 +98,7 @@ function App() {
     }
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (darkMode) {
       document.querySelector('body').classList.add('dark-mode');
     } else {
@@ -116,7 +116,7 @@ function App() {
 
       <Router>
         <ScrollToTop />
-        <Suspense fallback={<Navbar />}>
+        <Suspense fallback={<div />}>
           <Route
             render={({location}) => (
               <React.Fragment>

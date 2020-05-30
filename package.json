@@ -33,6 +33,7 @@
     "react-feather": "^2.0.8",
     "react-helmet": "^6.0.0",
     "react-i18next": "^11.5.0",
+    "react-is-visible": "^1.1.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-spring": "^8.0.27",

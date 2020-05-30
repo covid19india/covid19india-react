@@ -10,7 +10,7 @@ import TimeSeriesExplorer from './timeseriesexplorer';
 import useStickySWR from '../hooks/usestickyswr';
 import {fetcher} from '../utils/commonfunctions';
 
-import React, {useState} from 'react';
+import React, {useState, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 
 function Home(props) {
@@ -59,13 +59,16 @@ function Home(props) {
           <div className="home-left">
             <div className="header">
               <Search />
-              <Actions
-                {...{
-                  setDate,
-                  dates: Object.keys(timeseries['TT']).reverse(),
-                  date,
-                }}
-              />
+
+              <Suspense fallback={<div style={{minHeight: '5rem'}} />}>
+                <Actions
+                  {...{
+                    setDate,
+                    dates: Object.keys(timeseries['TT']).reverse(),
+                    date,
+                  }}
+                />
+              </Suspense>
             </div>
 
             <Level data={data['TT']} />
