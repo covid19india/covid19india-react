@@ -6,7 +6,7 @@ import {
   formatTimeseriesTickX,
   capitalize,
 } from '../utils/commonfunctions';
-import {useResizeObserver} from '../utils/hooks';
+import {useResizeObserver} from '../hooks/useresizeobserver';
 
 import classnames from 'classnames';
 import * as d3 from 'd3';
@@ -159,8 +159,7 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
         .style('transform', `translateY(${chartBottom}px)`)
         .transition(t)
         .call(xAxis);
-      svg.select('.x-axis2')
-        .transition(t).call(xAxis2, yScale);
+      svg.select('.x-axis2').transition(t).call(xAxis2, yScale);
 
       /* Y axis */
       svg
@@ -189,11 +188,12 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
         );
 
       if (chartType === 'cumulative') {
-        svg.selectAll('.stem')
-        .transition(t)
-        .attr('y1', yScale(0))
-        .attr('y2', yScale(0))
-        .remove();
+        svg
+          .selectAll('.stem')
+          .transition(t)
+          .attr('y1', yScale(0))
+          .attr('y2', yScale(0))
+          .remove();
 
         const path = svg
           .selectAll('.trend')
@@ -258,8 +258,7 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
           );
       }
 
-      svg
-        .selectAll('*').attr('pointer-events', 'none');
+      svg.selectAll('*').attr('pointer-events', 'none');
       svg
         .on('mousemove', mousemove)
         .on('touchmove', mousemove)
@@ -273,7 +272,7 @@ function TimeSeries({timeseries, chartType, isUniform, isLog}) {
       const svg = d3.select(ref);
       svg
         .selectAll('circle')
-        .attr('r', (date) => date === highlightedDate ? 4 : 2);
+        .attr('r', (date) => (date === highlightedDate ? 4 : 2));
     });
   }, [highlightedDate]);
 

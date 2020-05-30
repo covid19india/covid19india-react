@@ -6,7 +6,7 @@ import Minigraph from './minigraph';
 import StateMeta from './statemeta';
 import TimeSeriesExplorer from './timeseriesexplorer';
 
-import {STATE_CODES, STATE_POPULATIONS, INITIAL_DATA} from '../constants';
+import {STATE_NAMES, STATE_POPULATIONS, INITIAL_DATA} from '../constants';
 import {formatDateAbsolute, formatNumber} from '../utils/commonfunctions';
 
 import Breadcrumb from '@primer/components/lib/Breadcrumb';
@@ -41,7 +41,7 @@ function PureBreadcrumbs({stateName, stateCode, stateCodes}) {
           <Dropdown.Menu direction="se">
             {stateCodes.map((stateCode) => (
               <Dropdown.Item key={stateCode} className="item">
-                <Link to={`${stateCode}`}>{t(STATE_CODES[stateCode])}</Link>
+                <Link to={`${stateCode}`}>{t(STATE_NAMES[stateCode])}</Link>
               </Dropdown.Item>
             ))}
           </Dropdown.Menu>
@@ -55,7 +55,7 @@ const Breadcrumbs = React.memo(PureBreadcrumbs);
 
 function State(props) {
   const stateCode = useParams().stateCode.toUpperCase();
-  const stateName = STATE_CODES[stateCode];
+  const stateName = STATE_NAMES[stateCode];
 
   const [mapOption, setMapOption] = useState('confirmed');
   const [mapSwitcher, {width}] = useMeasure();
@@ -121,11 +121,11 @@ function State(props) {
       <React.Fragment>
         <Helmet>
           <title>
-            Coronavirus Outbreak in {STATE_CODES[stateCode]} - covid19india.org
+            Coronavirus Outbreak in {STATE_NAMES[stateCode]} - covid19india.org
           </title>
           <meta
             name="title"
-            content={`Coronavirus Outbreak in ${STATE_CODES[stateCode]}: Latest Map and Case Count`}
+            content={`Coronavirus Outbreak in ${STATE_NAMES[stateCode]}: Latest Map and Case Count`}
           />
         </Helmet>
 

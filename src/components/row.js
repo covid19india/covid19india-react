@@ -1,4 +1,4 @@
-import {PRIMARY_STATISTICS, STATE_CODES} from '../constants';
+import {PRIMARY_STATISTICS, STATE_NAMES} from '../constants';
 import {
   formatNumber,
   capitalize,
@@ -8,7 +8,6 @@ import {
 
 import Tooltip from '@primer/components/lib/Tooltip';
 import {
-  ArrowUpIcon,
   InfoIcon,
   TriangleUpIcon,
   TriangleDownIcon,
@@ -40,11 +39,6 @@ function PureCell({statistic, data}) {
       },
     },
     config.gentle
-  );
-
-  const ArrowUp = useMemo(
-    () => <ArrowUpIcon size={10.5} verticalAlign={-2.1} />,
-    []
   );
 
   return (
@@ -251,7 +245,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
           <div className="title-chevron">
             {stateCode !== 'TT' && Chevron}
             <span className="title-icon">
-              {t(STATE_CODES[stateCode])}
+              {t(STATE_NAMES[stateCode])}
 
               {data?.meta?.notes && (
                 <Tooltip
@@ -284,7 +278,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
           <tr className={'state-last-update'}>
             <td colSpan={4} style={{paddingBottom: 0}}>
               <p className="spacer"></p>
-              <p>{data.last_updated}</p>
+              <p>{data?.meta?.last_updated}</p>
               {data.districts['Unknown'] && (
                 <div className="disclaimer">
                   <Icon.AlertCircle />
@@ -302,7 +296,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
               }}
             >
               {t('See more details on {{state}}', {
-                state: t(STATE_CODES[stateCode]),
+                state: t(STATE_NAMES[stateCode]),
               })}
             </td>
           </tr>

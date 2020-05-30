@@ -8,7 +8,8 @@ import {
   MAP_TYPES,
   MAP_VIEWS,
   STATE_CODES,
-  STATE_CODES_REVERSE,
+  STATE_NAMES,
+  STATE_POPULATIONS_MIL,
 } from '../constants';
 import {
   capitalize,
@@ -30,14 +31,18 @@ import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 
 const emptyData = () => {
-  return Object.fromEntries(['total', 'delta'].map((ctype) => [
-        ctype, {
-          active: 0,
-          confirmed: 0,
-          deceased: 0,
-          recovered: 0,
-        }
-      ]))};
+  return Object.fromEntries(
+    ['total', 'delta'].map((ctype) => [
+      ctype,
+      {
+        active: 0,
+        confirmed: 0,
+        deceased: 0,
+        recovered: 0,
+      },
+    ])
+  );
+};
 
 function MapExplorer({
   mapName,
@@ -65,10 +70,13 @@ function MapExplorer({
   const currentMapCode = useMemo(() => {
     let stateName = currentMap.name;
     if (stateName === 'India') stateName = 'Total';
-    return STATE_CODES_REVERSE[stateName];
+    return STATE_CODES[stateName];
   }, [currentMap.name]);
 
-  const currentMapData = currentMapMeta.mapType === MAP_TYPES.COUNTRY ? data : {[currentMapCode]: data[currentMapCode]};
+  const currentMapData =
+    currentMapMeta.mapType === MAP_TYPES.COUNTRY
+      ? data
+      : {[currentMapCode]: data[currentMapCode]};
 
   useEffect(() => {
     if (regionHighlighted.districtName) {
@@ -79,7 +87,7 @@ function MapExplorer({
           currentMap.view === MAP_VIEWS.DISTRICTS
         )
       ) {
-        const state = STATE_CODES[regionHighlighted.stateCode];
+        const state = STATE_NAMES[regionHighlighted.stateCode];
         const newMapMeta = MAP_META[state];
         if (!newMapMeta) {
           return;
@@ -120,16 +128,17 @@ function MapExplorer({
         return;
       }
       if (newMapMeta.mapType === MAP_TYPES.STATE) {
-        const districts = data[STATE_CODES_REVERSE[state]].districts;
+        const districts = data[STATE_CODES[state]].districts;
         const topDistrict = Object.keys(districts)
           .filter((d) => d !== 'Unknown')
-          .sort((a, b) =>
+          .sort(
+            (a, b) =>
               getStatistic(districts[b], 'total', mapStatistic) -
               getStatistic(districts[a], 'total', mapStatistic)
           )[0];
         ReactDOM.unstable_batchedUpdates(() => {
           setRegionHighlighted({
-            stateCode: STATE_CODES_REVERSE[state],
+            stateCode: STATE_CODES[state],
             districtName: topDistrict,
           });
           setCurrentMap({
@@ -168,17 +177,24 @@ function MapExplorer({
         : currentMapCode;
     const stateData = data[stateCode] || emptyData();
     return produce(stateData, (draft) => {
-      draft.state = STATE_CODES[stateCode];
+      draft.state = STATE_NAMES[stateCode];
     });
   }, [data, regionHighlighted.stateCode, currentMap.view, currentMapCode]);
 
   const hoveredRegion = useMemo(() => {
     const hoveredData =
       (regionHighlighted.districtName
-        ? data[regionHighlighted.stateCode]?.districts?.[regionHighlighted.districtName]
+        ? data[regionHighlighted.stateCode]?.districts?.[
+            regionHighlighted.districtName
+          ]
         : data[regionHighlighted.stateCode]) || emptyData();
     return produce(hoveredData, (draft) => {
-      draft.name = regionHighlighted.districtName || STATE_CODES[regionHighlighted.stateCode];
+      draft.name =
+        regionHighlighted.districtName ||
+        STATE_NAMES[regionHighlighted.stateCode];
+      if (!regionHighlighted.districtName)
+        draft.population_millions =
+          STATE_POPULATIONS_MIL[regionHighlighted.stateCode];
     });
   }, [data, regionHighlighted.stateCode, regionHighlighted.districtName]);
 
@@ -236,18 +252,21 @@ function MapExplorer({
     }
   };
 
-  const springs = useSprings(MAP_STATISTICS.length, MAP_STATISTICS.map((statistic) => ({
-    total: getStatistic(panelState, 'total', statistic),
-    delta: getStatistic(panelState, 'delta', statistic),
-    from: {
+  const springs = useSprings(
+    MAP_STATISTICS.length,
+    MAP_STATISTICS.map((statistic) => ({
       total: getStatistic(panelState, 'total', statistic),
       delta: getStatistic(panelState, 'delta', statistic),
-    },
-    config: {
-      tension: 500,
-      clamp: true,
-    },
-  })));
+      from: {
+        total: getStatistic(panelState, 'total', statistic),
+        delta: getStatistic(panelState, 'delta', statistic),
+      },
+      config: {
+        tension: 500,
+        clamp: true,
+      },
+    }))
+  );
 
   return (
     <div
@@ -264,7 +283,7 @@ function MapExplorer({
             setAnchor(anchor === 'mapexplorer' ? null : 'mapexplorer');
           }}
         >
-          <PinIcon/>
+          <PinIcon />
         </div>
       )}
 
@@ -296,25 +315,32 @@ function MapExplorer({
             <h5>{t(capitalize(statistic))}</h5>
             <div className="stats-bottom">
               <animated.h1>
-                {springs[index].total.interpolate((total) => formatNumber(Math.floor(total)))}
+                {springs[index].total.interpolate((total) =>
+                  formatNumber(Math.floor(total))
+                )}
               </animated.h1>
-              {statistic !== 'tested' &&
+              {statistic !== 'tested' && (
                 <animated.h6>
-                  {springs[index].delta.interpolate((delta) => (delta > 0 ? '+' : '') + formatNumber(Math.floor(delta)))}
-                </animated.h6>}
-              {statistic === 'tested' &&
+                  {springs[index].delta.interpolate(
+                    (delta) =>
+                      (delta > 0 ? '+' : '') + formatNumber(Math.floor(delta))
+                  )}
+                </animated.h6>
+              )}
+              {statistic === 'tested' && (
                 <h6>
                   {panelState?.total?.tested &&
                     t('As of {{date}}', {
                       date: formatDayMonth(panelState.meta.tested.last_updated),
                     })}
-                </h6>}
+                </h6>
+              )}
             </div>
-            {statistic === 'tested' && panelState?.total?.tested &&
+            {statistic === 'tested' && panelState?.total?.tested && (
               <a href={panelState.total.tested.source} target="_noblank">
                 <Icon.Link />
               </a>
-            }
+            )}
             {statistic === 'tested' &&
               panelState.state === 'Total' &&
               testedToolTip}
@@ -323,15 +349,15 @@ function MapExplorer({
       </div>
 
       <div className="meta">
-        {currentMapMeta.mapType === MAP_TYPES.STATE &&
+        {currentMapMeta.mapType === MAP_TYPES.STATE && (
           <div
-            className='map-button'
+            className="map-button"
             onClick={() => history.push(`state/${currentMapCode}`)}
           >
             {t('Visit state page')}
             <Icon.ArrowRightCircle />
           </div>
-        }
+        )}
 
         {currentMapMeta.mapType !== MAP_TYPES.STATE && panelState.last_updated && (
           <div className="last-update">
@@ -342,17 +368,18 @@ function MapExplorer({
           </div>
         )}
 
-        <h2 className={classnames(mapStatistic, {[hoveredRegion?.zone]: currentMap.option === MAP_OPTIONS.ZONES})}>
+        <h2
+          className={classnames(mapStatistic, {
+            [hoveredRegion?.zone]: currentMap.option === MAP_OPTIONS.ZONES,
+          })}
+        >
           {t(hoveredRegion.name)}
           {hoveredRegion.name === 'Unknown' &&
-            ` (${t(STATE_CODES[regionHighlighted.stateCode])})`}
+            ` (${t(STATE_NAMES[regionHighlighted.stateCode])})`}
         </h2>
 
         {currentMapMeta.mapType === MAP_TYPES.STATE && (
-          <div
-            className='map-button'
-            onClick={() => switchMap('India')}
-          >
+          <div className="map-button" onClick={() => switchMap('India')}>
             {t('Back')}
           </div>
         )}
@@ -369,6 +396,8 @@ function MapExplorer({
                   'total',
                   mapStatistic,
                   currentMap.option === MAP_OPTIONS.PER_MILLION
+                    ? hoveredRegion.population_millions
+                    : 1
                 )
               )}
               <br />

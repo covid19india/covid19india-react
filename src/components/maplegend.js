@@ -1,6 +1,6 @@
 import {MAP_OPTIONS, ZONE_COLORS} from '../constants';
 import {capitalizeAll, formatNumber} from '../utils/commonfunctions';
-import {useResizeObserver} from '../utils/hooks';
+import {useResizeObserver} from '../hooks/useresizeobserver';
 
 import * as d3 from 'd3';
 import React, {useEffect, useMemo, useRef} from 'react';

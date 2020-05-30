@@ -7,7 +7,7 @@ export const PRIMARY_STATISTICS = [
   'deceased',
 ];
 
-export const MAP_STATISTICS = [...PRIMARY_STATISTICS , 'tested'];
+export const MAP_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
 export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
@@ -238,7 +238,7 @@ export const MAP_META = {
   },
 };
 
-export const STATE_CODES = {
+export const STATE_NAMES = {
   AP: 'Andhra Pradesh',
   AR: 'Arunachal Pradesh',
   AS: 'Assam',
@@ -279,13 +279,13 @@ export const STATE_CODES = {
 };
 
 const stateCodes = [];
-const reverseStateCodes = {};
-Object.keys(STATE_CODES).map((key, index) => {
-  reverseStateCodes[STATE_CODES[key]] = key;
-  stateCodes.push({code: key, name: STATE_CODES[key]});
+const stateCodesMap = {};
+Object.keys(STATE_NAMES).map((key, index) => {
+  stateCodesMap[STATE_NAMES[key]] = key;
+  stateCodes.push({code: key, name: STATE_NAMES[key]});
   return null;
 });
-export const STATE_CODES_REVERSE = reverseStateCodes;
+export const STATE_CODES = stateCodesMap;
 export const STATE_CODES_ARRAY = stateCodes;
 
 // Source: Projected Populations (2019)
@@ -331,6 +331,10 @@ export const STATE_POPULATIONS = {
   PY: 1504000,
   TT: 1332900000,
 };
+
+export const STATE_POPULATIONS_MIL = Object.fromEntries(
+  Object.entries(STATE_POPULATIONS).map(([state, pop]) => [state, 1e-6 * pop])
+);
 
 export const RAW_DATA_PARTITIONS = {
   v1: {
