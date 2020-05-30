@@ -1,3 +1,4 @@
+import MapVisualizerLoader from './loaders/mapvisualizer';
 import MapVisualizer from './mapvisualizer';
 import {testedToolTip} from './tooltips';
 
@@ -19,16 +20,23 @@ import {
   getStatistic,
 } from '../utils/commonfunctions';
 
+import {PinIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import {PinIcon} from '@primer/octicons-v2-react';
-import React, {useState, useEffect, useMemo, useCallback} from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  Suspense,
+} from 'react';
 import ReactDOM from 'react-dom';
-import {useHistory} from 'react-router-dom';
-import {useSprings, animated} from 'react-spring';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
+import {useHistory} from 'react-router-dom';
+import {useSprings, animated} from 'react-spring';
+import {useMeasure} from 'react-use';
 
 const emptyData = () => {
   return Object.fromEntries(
@@ -57,6 +65,7 @@ function MapExplorer({
 }) {
   const {t} = useTranslation();
   const history = useHistory();
+  const [mapExplorerRef, {width}] = useMeasure();
 
   const [currentMap, setCurrentMap] = useState({
     name: mapName,
@@ -275,6 +284,7 @@ function MapExplorer({
         {stickied: anchor === 'mapexplorer'},
         {hidden: anchor && anchor !== 'mapexplorer'}
       )}
+      ref={mapExplorerRef}
     >
       {window.innerWidth > 769 && (
         <div
@@ -412,15 +422,21 @@ function MapExplorer({
 
       <div>
         {mapStatistic && (
-          <MapVisualizer
-            currentMap={currentMap}
-            data={currentMapData}
-            changeMap={switchMap}
-            regionHighlighted={regionHighlighted}
-            setRegionHighlighted={setRegionHighlighted}
-            statistic={mapStatistic}
-            isCountryLoaded={isCountryLoaded}
-          />
+          <Suspense
+            fallback={
+              <MapVisualizerLoader {...{width, statistic: mapStatistic}} />
+            }
+          >
+            <MapVisualizer
+              currentMap={currentMap}
+              data={currentMapData}
+              changeMap={switchMap}
+              regionHighlighted={regionHighlighted}
+              setRegionHighlighted={setRegionHighlighted}
+              statistic={mapStatistic}
+              isCountryLoaded={isCountryLoaded}
+            />
+          </Suspense>
         )}
       </div>
 

@@ -5,6 +5,7 @@ import React, {useState, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
+import {useSpring, animated} from 'react-spring';
 import {
   useEffectOnce,
   useLockBodyScroll,
@@ -12,31 +13,22 @@ import {
   useLocalStorage,
 } from 'react-use';
 
-const navLinkProps = (path, animationDelay) => ({
-  className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
-  style: {
-    animationDelay: `${animationDelay}s`,
-  },
-});
-
-const activeNavIcon = (path) => ({
-  style: {
-    stroke: window.location.pathname === path ? '#4c75f2' : '',
-  },
-});
-
 function Navbar({pages, darkMode, setDarkMode}) {
-  const [expand, setExpand] = useState(false);
-  // eslint-disable-next-line
-  const [isThemeSet, setIsThemeSet] = useLocalStorage('isThemeSet', false);
   const {t} = useTranslation();
 
+  const [expand, setExpand] = useState(false);
+  const [, setIsThemeSet] = useLocalStorage('isThemeSet', false);
   useLockBodyScroll(expand);
   const windowSize = useWindowSize();
 
+  const [spring, set, stop] = useSpring(() => ({opacity: 0}));
+  set({opacity: 1});
+  stop();
+
   return (
-    <div className="Navbar">
+    <animated.div className="Navbar" style={spring}>
       <LanguageSwitcher />
+
       {window.innerWidth > 769 && (
         <div
           className="navbar-left"
@@ -48,6 +40,7 @@ function Navbar({pages, darkMode, setDarkMode}) {
           {darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
         </div>
       )}
+
       <div className="navbar-middle">
         <Link
           to="/"
@@ -86,11 +79,6 @@ function Navbar({pages, darkMode, setDarkMode}) {
               </Link>
             </span>
             <span>
-              <Link to="/deepdive">
-                <Icon.BarChart2 {...activeNavIcon('/deepdive')} />
-              </Link>
-            </span>
-            <span>
               <Link to="/essentials">
                 <Icon.Package {...activeNavIcon('/essentials')} />
               </Link>
@@ -114,7 +102,7 @@ function Navbar({pages, darkMode, setDarkMode}) {
           setDarkMode={setDarkMode}
         />
       )}
-    </div>
+    </animated.div>
   );
 }
 
@@ -188,3 +176,16 @@ function Expand({
 }
 
 export default Navbar;
+
+const navLinkProps = (path, animationDelay) => ({
+  className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
+  style: {
+    animationDelay: `${animationDelay}s`,
+  },
+});
+
+const activeNavIcon = (path) => ({
+  style: {
+    stroke: window.location.pathname === path ? '#4c75f2' : '',
+  },
+});

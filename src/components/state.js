@@ -6,15 +6,19 @@ import Minigraph from './minigraph';
 import StateMeta from './statemeta';
 import TimeSeriesExplorer from './timeseriesexplorer';
 
-import {STATE_NAMES, STATE_POPULATIONS, INITIAL_DATA} from '../constants';
-import {formatDateAbsolute, formatNumber} from '../utils/commonfunctions';
+import {STATE_NAMES, STATE_POPULATIONS} from '../constants';
+import {
+  formatDateAbsolute,
+  formatNumber,
+  getStatistic,
+} from '../utils/commonfunctions';
 
 import Breadcrumb from '@primer/components/lib/Breadcrumb';
 import Dropdown from '@primer/components/lib/Dropdown';
 import anime from 'animejs';
 import axios from 'axios';
 import {format, parse} from 'date-fns';
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
@@ -86,17 +90,23 @@ function State(props) {
     });
   });
 
-  const {data} = useSWR(
-    'https://api.covid19india.org/v2/data.min.json',
+  const {data: timeseries} = useSWR(
+    'https://api.covid19india.org/v3/min/timeseries.min.json',
     fetcher,
     {
-      initialData: INITIAL_DATA,
       suspense: true,
       revalidateOnFocus: false,
-      refreshInterval: 5 * 60 * 1000,
-      compare: (dataA, dataB) => {
-        return dataA['TT'].last_updated - dataB['TT'].last_updated;
-      },
+    }
+  );
+
+  const {data} = useSWR(
+    'https://api.covid19india.org/v3/min/data.min.json',
+    fetcher,
+    {
+      suspense: true,
+      revalidateOnMount: true,
+      refreshInterval: 100000,
+      revalidateOnFocus: false,
     }
   );
 
@@ -106,13 +116,18 @@ function State(props) {
     setShowAllDistricts(!showAllDistricts);
   };
 
-  const getGridRowCount = () => {
+  const handleSort = (districtNameA, districtNameB) => {
+    const districtA = data[stateCode].districts[districtNameA];
+    const districtB = data[stateCode].districts[districtNameB];
+    return districtB[mapOption] - districtA[mapOption];
+  };
+
+  const gridRowCount = useMemo(() => {
     const gridColumnCount = window.innerWidth >= 540 ? 3 : 2;
     const districtCount = Object.keys(data[stateCode].districts).length;
     const gridRowCount = Math.ceil(districtCount / gridColumnCount);
     return gridRowCount;
-  };
-  const gridRowCount = getGridRowCount();
+  }, [data, stateCode]);
 
   if (!stateName) {
     return <Redirect to="/" />;
@@ -139,19 +154,19 @@ function State(props) {
             <div className="header">
               <div className="header-left">
                 <h1>{t(stateName)}</h1>
-                <h5>Last Updated on {data[stateCode].last_updated}</h5>
+                <h5>Last Updated on {data[stateCode].meta.last_updated}</h5>
               </div>
 
               <div className="header-right">
                 <h5>{t('Tested')}</h5>
-                <h2>{formatNumber(data[stateCode].total.tested.samples)}</h2>
+                <h2>{formatNumber(data[stateCode].total.tested)}</h2>
                 <h5 className="timestamp">
-                  {data[stateCode].total.tested.last_updated}
+                  {`As of ${data[stateCode].meta.tested.last_updated}`}
                 </h5>
                 <h5>
                   {'per '}
                   <a
-                    href={data[stateCode].total.tested.source}
+                    href={data[stateCode].meta.tested.source}
                     target="_noblank"
                   >
                     source
@@ -215,7 +230,7 @@ function State(props) {
             </div>
 
             <Level data={data[stateCode]} />
-            <Minigraph timeseries={data[stateCode].timeseries} />
+            <Minigraph timeseries={timeseries[stateCode]} />
 
             {/*
               <MapExplorer
@@ -277,7 +292,7 @@ function State(props) {
 
           <div className="state-right">
             <React.Fragment>
-              {/*<div
+              <div
                 className="district-bar"
                 style={!showAllDistricts ? {display: 'flex'} : {}}
               >
@@ -294,51 +309,50 @@ function State(props) {
                         : {}
                     }
                   >
-                    {districtData[stateName]
-                      ? Object.keys(districtData[stateName].districtData)
-                          .filter((d) => d !== 'Unknown')
-                          .sort((a, b) => {
-                            const districtB =
-                              districtData[stateName].districtData[b];
-                            const districtA =
-                              districtData[stateName].districtData[a];
-                            return districtB[mapOption] - districtA[mapOption];
-                          })
-                          .slice(0, showAllDistricts ? undefined : 5)
-                          .map((district, index) => {
-                            const cases =
-                              districtData[stateName].districtData[district];
-                            return (
-                              <div key={index} className="district">
-                                <h2>{cases[mapOption]}</h2>
-                                <h5>{t(district)}</h5>
-                                {mapOption !== 'active' && (
-                                  <div className="delta">
-                                    <Icon.ArrowUp className={mapOption} />
-                                    <h6 className={mapOption}>
-                                      {cases.delta[mapOption]}
-                                    </h6>
-                                  </div>
-                                )}
+                    {Object.keys(data[stateCode].districts)
+                      .filter((districtName) => districtName !== 'Unknown')
+                      .sort((a, b) => handleSort(a, b))
+                      .slice(0, showAllDistricts ? undefined : 5)
+                      .map((districtName) => {
+                        return (
+                          <div key={districtName} className="district">
+                            <h2>
+                              {formatNumber(
+                                getStatistic(
+                                  data[stateCode].districts[districtName],
+                                  'total',
+                                  mapOption
+                                )
+                              )}
+                            </h2>
+                            <h5>{t(districtName)}</h5>
+                            {mapOption !== 'active' && (
+                              <div className="delta">
+                                <Icon.ArrowUp className={mapOption} />
+                                <h6 className={mapOption}>
+                                  {formatNumber(
+                                    getStatistic(
+                                      data[stateCode].districts[districtName],
+                                      'delta',
+                                      mapOption
+                                    )
+                                  )}
+                                </h6>
                               </div>
-                            );
-                          })
-                      : ''}
+                            )}
+                          </div>
+                        );
+                      })}
                   </div>
 
-                  {districtData[stateName] &&
-                    Object.keys(districtData[stateName].districtData).length >
-                      5 && (
-                      <button
-                        className="button"
-                        onClick={toggleShowAllDistricts}
-                      >
-                        {showAllDistricts ? `View less` : `View all`}
-                      </button>
-                    )}
+                  {Object.keys(data[stateCode].districts).length > 5 && (
+                    <button className="button" onClick={toggleShowAllDistricts}>
+                      {showAllDistricts ? `View less` : `View all`}
+                    </button>
+                  )}
                 </div>
 
-                <div className="district-bar-right">
+                {/* <div className="district-bar-right">
                   {(mapOption === 'confirmed' || mapOption === 'deceased') && (
                     <div
                       className="happy-sign fadeInUp"
@@ -366,11 +380,11 @@ function State(props) {
                       caseType={`daily${mapOption}`}
                     />
                   }
-                </div>
-              </div>*/}
+                </div>*/}
+              </div>
 
               <TimeSeriesExplorer
-                timeseries={data[stateCode].timeseries}
+                timeseries={timeseries[stateCode]}
                 activeStateCode={stateCode}
               />
             </React.Fragment>

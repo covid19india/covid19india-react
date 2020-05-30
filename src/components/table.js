@@ -133,7 +133,7 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
   const [trail, set] = useTrail(2, () => ({
     transform: 'translate3d(0, 10px, 0)',
     opacity: 0,
-    config: config.stiff,
+    config: config.wobbly,
   }));
 
   set({transform: 'translate3d(0, 0px, 0)', opacity: 1});
