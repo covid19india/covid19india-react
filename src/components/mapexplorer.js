@@ -369,14 +369,17 @@ function MapExplorer({
           </div>
         )}
 
-        {currentMapMeta.mapType !== MAP_TYPES.STATE && panelState.last_updated && (
-          <div className="last-update">
-            <h6>{t('Last updated')}</h6>
-            <h3>
-              {`${formatLastUpdated(panelState.last_updated)} ${t('ago')}`}
-            </h3>
-          </div>
-        )}
+        {currentMapMeta.mapType !== MAP_TYPES.STATE &&
+          panelState?.meta?.last_updated && (
+            <div className="last-update">
+              <h6>{t('Last updated')}</h6>
+              <h3>
+                {`${formatLastUpdated(panelState.meta.last_updated)} ${t(
+                  'ago'
+                )}`}
+              </h3>
+            </div>
+          )}
 
         <h2
           className={classnames(mapStatistic, {
