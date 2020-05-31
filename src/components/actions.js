@@ -17,29 +17,65 @@ const Actions = ({setDate, dates}) => {
   const [lastViewedLog, setLastViewedLog] = useLocalStorage('lastViewedLog', 0);
   const [isTimelineMode, setIsTimelineMode] = useState(false);
 
-  const {transform, opacity} = useSpring({
-    opacity: isTimelineMode ? 1 : 0,
-    transform: `perspective(600px) rotateX(${isTimelineMode ? 180 : 0}deg)`,
-    config: {mass: 5, tension: 500, friction: 80},
-  });
-
   const {data: updates} = useSWR(
     'https://api.covid19india.org/updatelog/log.json',
     fetcher,
     {
-      suspense: true,
       revalidateOnFocus: false,
+      suspense: false,
     }
   );
 
   useEffect(() => {
-    const lastTimestamp = updates.slice().reverse()[0].timestamp * 1000;
-    if (lastTimestamp !== lastViewedLog) {
-      setNewUpdate(true);
-      setLastViewedLog(lastTimestamp);
+    if (updates !== undefined) {
+      const lastTimestamp = updates.slice().reverse()[0].timestamp * 1000;
+      if (lastTimestamp !== lastViewedLog) {
+        setNewUpdate(true);
+        setLastViewedLog(lastTimestamp);
+      }
     }
   }, [lastViewedLog, updates, setLastViewedLog, setNewUpdate]);
 
+  return (
+    <React.Fragment>
+      {updates && (
+        <ActionsPanel
+          {...{
+            lastViewedLog,
+            newUpdate,
+            isTimelineMode,
+            setIsTimelineMode,
+            showUpdates,
+            setDate,
+            dates,
+            setNewUpdate,
+            setShowUpdates,
+          }}
+        />
+      )}
+
+      {showUpdates && <Updates {...{updates}} />}
+    </React.Fragment>
+  );
+};
+
+const isEqual = (prevProps, currProps) => {
+  return true;
+};
+
+export default React.memo(Actions, isEqual);
+
+const ActionsPanel = ({
+  lastViewedLog,
+  newUpdate,
+  isTimelineMode,
+  setIsTimelineMode,
+  showUpdates,
+  setDate,
+  dates,
+  setNewUpdate,
+  setShowUpdates,
+}) => {
   const Bell = useMemo(
     () => (
       <Icon.Bell
@@ -49,7 +85,7 @@ const Actions = ({setDate, dates}) => {
         }}
       />
     ),
-    [setNewUpdate, showUpdates]
+    [setNewUpdate, setShowUpdates, showUpdates]
   );
 
   const BellOff = useMemo(
@@ -60,7 +96,7 @@ const Actions = ({setDate, dates}) => {
         }}
       />
     ),
-    [showUpdates]
+    [setShowUpdates, showUpdates]
   );
 
   const TimelineIcon = useMemo(
@@ -86,20 +122,27 @@ const Actions = ({setDate, dates}) => {
     []
   );
 
+  const {transform, opacity} = useSpring({
+    opacity: isTimelineMode ? 1 : 0,
+    transform: `perspective(600px) rotateX(${isTimelineMode ? 180 : 0}deg)`,
+    config: {mass: 5, tension: 500, friction: 80},
+  });
+
+  const trail = useTrail(3, {
+    from: {transform: 'translate3d(0, 10px, 0)', opacity: 0},
+    to: {
+      transform: 'translate3d(0, 0px, 0)',
+      opacity: 1,
+    },
+    config: config.stiff,
+  });
+
   const getTimeFromMilliseconds = (lastViewedLog) => {
     return format(
       utcToZonedTime(parse(lastViewedLog, 'T', new Date()), 'Asia/Kolkata'),
       'dd MMM, p'
     );
   };
-
-  const [trail, set] = useTrail(3, () => ({
-    transform: 'translate3d(0, 10px, 0)',
-    opacity: 0,
-    config: config.stiff,
-  }));
-
-  set({transform: 'translate3d(0, 0px, 0)', opacity: 1});
 
   return (
     <React.Fragment>
@@ -146,12 +189,6 @@ const Actions = ({setDate, dates}) => {
           <Timeline {...{setIsTimelineMode, setDate, dates}} />
         )}
       </animated.div>
-
-      {showUpdates && <Updates {...{updates}} />}
     </React.Fragment>
   );
 };
-
-export default React.memo(Actions, () => {
-  return true;
-});

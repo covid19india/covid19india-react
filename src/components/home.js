@@ -7,11 +7,14 @@ import Search from './search';
 import Table from './table';
 import TimeSeriesExplorer from './timeseriesexplorer';
 
+import 'intersection-observer';
+
 import useStickySWR from '../hooks/usestickyswr';
 import {fetcher} from '../utils/commonfunctions';
 
-import React, {useState, Suspense} from 'react';
+import React, {useState, Suspense, useRef} from 'react';
 import {Helmet} from 'react-helmet';
+import {useIsVisible} from 'react-is-visible';
 
 function Home(props) {
   const [regionHighlighted, setRegionHighlighted] = useState({
@@ -43,6 +46,9 @@ function Home(props) {
       revalidateOnFocus: false,
     }
   );
+
+  const homeRightElement = useRef();
+  const isVisible = useIsVisible(homeRightElement, {once: true});
 
   return (
     <React.Fragment>
@@ -76,23 +82,25 @@ function Home(props) {
             <Table {...{data, regionHighlighted, setRegionHighlighted}} />
           </div>
 
-          <div className="home-right">
-            {
-              <MapExplorer
-                mapName={'India'}
-                {...{data, date}}
-                {...{mapStatistic, setMapStatistic}}
-                {...{regionHighlighted, setRegionHighlighted}}
-                {...{anchor, setAnchor}}
-              />
-            }
+          <div className="home-right" ref={homeRightElement}>
+            {isVisible && (
+              <React.Fragment>
+                <MapExplorer
+                  mapName={'India'}
+                  {...{data, date}}
+                  {...{mapStatistic, setMapStatistic}}
+                  {...{regionHighlighted, setRegionHighlighted}}
+                  {...{anchor, setAnchor}}
+                />
 
-            <TimeSeriesExplorer
-              timeseries={timeseries[regionHighlighted.stateCode]}
-              {...{date}}
-              {...{regionHighlighted, setRegionHighlighted}}
-              {...{anchor, setAnchor}}
-            />
+                <TimeSeriesExplorer
+                  timeseries={timeseries[regionHighlighted.stateCode]}
+                  {...{date}}
+                  {...{regionHighlighted, setRegionHighlighted}}
+                  {...{anchor, setAnchor}}
+                />
+              </React.Fragment>
+            )}
           </div>
         </div>
       )}

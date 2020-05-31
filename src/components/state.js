@@ -401,7 +401,7 @@ function State(props) {
 
               <TimeSeriesExplorer
                 timeseries={timeseries[stateCode]}
-                activeStateCode={stateCode}
+                {...{regionHighlighted, setRegionHighlighted}}
               />
             </React.Fragment>
           </div>
