@@ -68,7 +68,8 @@ function ChoroplethMap({
       const {width} = svgRef.current.getBoundingClientRect();
       return d3
         .scaleSqrt([0, statistic[mapOption].max], [0, width / 10])
-        .clamp(true);
+        .clamp(true)
+        .nice(3);
     } else {
       return d3
         .scaleSequential([0, Math.max(1, statistic[mapOption].max)], (t) =>

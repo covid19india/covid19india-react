@@ -112,7 +112,7 @@ function PureDistrictRow({
       })}
       onMouseEnter={() => onHighlightDistrict(district, state)}
     >
-      <td className={classnames(`is-${zone?.zone}`)}>
+      <td>
         <div className="title-chevron">
           <span className="title-icon">
             {t(district)}

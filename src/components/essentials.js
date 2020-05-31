@@ -103,7 +103,8 @@ const Essentials = (props) => {
             style={{animationDelay: '0.6s'}}
             onClick={() => getLocation()}
           >
-            View essentials nearby offering special assistance
+            <span>View Nearby Essentials</span>
+            <Icon.Compass size={16} />
           </button>
           <div className="alert fadeInUp" style={{animationDelay: '0.7s'}}>
             <Icon.AlertOctagon size={16} />

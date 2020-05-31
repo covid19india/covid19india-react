@@ -127,7 +127,7 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
       const yAxis = (g, yScale) =>
         g
           .attr('class', 'y-axis')
-          .call(d3.axisRight(yScale).ticks(4, '0~s').tickPadding(5));
+          .call(d3.axisRight(yScale).ticks(4, '0~s').tickPadding(4));
 
       // Arrays of objects
       const plotTotal = chartType === 1;
@@ -160,7 +160,7 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
           .scaleLinear()
           .clamp(true)
           .domain([uniformScaleMin, Math.max(1, yBufferTop * uniformScaleMax)])
-          .nice()
+          .nice(4)
           .range([chartBottom, margin.top]);
 
         const yScaleUniformLog = d3
@@ -170,7 +170,7 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
             Math.max(1, uniformScaleMin),
             Math.max(10, yBufferTop * uniformScaleMax),
           ])
-          .nice()
+          .nice(4)
           .range([chartBottom, margin.top]);
 
         yScales = dataTypesTotal.map((type) => {
@@ -181,7 +181,7 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
               d3.min(timeseries, (d) => d[type]),
               Math.max(1, yBufferTop * d3.max(timeseries, (d) => d[type])),
             ])
-            .nice()
+            .nice(4)
             .range([chartBottom, margin.top]);
           const yScaleLog = d3
             .scaleLog()
@@ -193,7 +193,7 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
               ),
               Math.max(10, yBufferTop * d3.max(timeseries, (d) => d[type])),
             ])
-            .nice()
+            .nice(4)
             .range([chartBottom, margin.top]);
           if (mode && type !== 'totaltested')
             return logMode ? yScaleUniformLog : yScaleUniformLinear;
@@ -217,7 +217,7 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
                 )
             ),
           ])
-          .nice()
+          .nice(4)
           .range([chartBottom, margin.top]);
 
         yScales = dataTypesDaily.map((type) => {
@@ -233,7 +233,7 @@ function TimeSeries({timeseriesProp, chartType, mode, logMode, stateCode}) {
                 ),
               Math.max(1, yBufferTop * d3.max(timeseries, (d) => d[type])),
             ])
-            .nice()
+            .nice(4)
             .range([chartBottom, margin.top]);
           return yScaleLinear;
         });
