@@ -235,7 +235,7 @@ function KnnResults({userLocation, userState}) {
               <div className="result-contacts">
                 {result.properties.phone.split('\n').map((contact) => (
                   <div key={contact} className="result-contact">
-                    <Phone />
+                    {contact && (<Phone /> )}
                     <a href={`tel:${contact}`}>{contact}</a>
                   </div>
                 ))}
@@ -287,7 +287,7 @@ function KnnResults({userLocation, userState}) {
               <div className="result-contacts">
                 {result.properties.phone.split('\n').map((contact) => (
                   <div key={contact} className="result-contact">
-                    <Phone />
+                      {contact && (<Phone /> )}
                     <a href={`tel:${contact}`}>{contact}</a>
                   </div>
                 ))}
