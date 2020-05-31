@@ -50,6 +50,8 @@ function Home(props) {
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement, {once: true});
 
+  const stateCodes = ['TT', ...Object.keys(data || []).filter(stateCode => stateCode !== 'TT')]
+
   return (
     <React.Fragment>
       {data && timeseries && (
@@ -95,7 +97,7 @@ function Home(props) {
 
                 <TimeSeriesExplorer
                   timeseries={timeseries[regionHighlighted.stateCode]}
-                  {...{date}}
+                  {...{date, stateCodes}}
                   {...{regionHighlighted, setRegionHighlighted}}
                   {...{anchor, setAnchor}}
                 />
