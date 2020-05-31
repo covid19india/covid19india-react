@@ -484,17 +484,6 @@ h6 {
     .anchor {
       display: none;
     }
-
-    .svg-parent {
-      &:not(.maplegend) {
-        height: 400px;
-        width: 100%;
-
-        svg {
-          height: 100%;
-        }
-      }
-    }
   }
 
   .__react_component_tooltip {
@@ -2099,19 +2088,30 @@ table {
     width: 90%;
     position: relative;
 
+    &.map-parent {
+      // Based on aspect ratio India map (width * AR)
+      padding-bottom: 101.7%;
+
+      svg {
+        position: absolute;
+        top: 0; bottom: 0; left: 0; right: 0;
+      }
+    }
+
     &.maplegend {
       margin-top: 0.6rem;
       overflow: visible;
       width: 100%;
+
+      svg {
+        overflow: visible;
+      }
     }
 
     svg {
       align-self: center;
       width: 100%;
-
-      &#legend {
-        overflow: visible;
-      }
+      height: 100%;
 
       text {
         fill: $gray;
@@ -4729,6 +4729,11 @@ footer {
   .MapExplorer {
     .svg-parent {
       width: 100%;
+
+      &.map-parent {
+        // Based on aspect ratio India map (width * AR)
+        padding-bottom: 113%;
+      }
     }
 
     .header {

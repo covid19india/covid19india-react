@@ -1,4 +1,4 @@
-import {D3_TRANSITION_DURATION, MAP_OPTIONS, ZONE_COLORS} from '../constants';
+import {D3_TRANSITION_DURATION, MAP_LEGEND_HEIGHT, MAP_OPTIONS, ZONE_COLORS} from '../constants';
 import {capitalizeAll, formatNumber} from '../utils/commonfunctions';
 import {useResizeObserver} from '../hooks/useresizeobserver';
 
@@ -127,7 +127,7 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
   }, [dimensions, totalZones, mapScale, mapOption, statistic]);
 
   return (
-    <div className="svg-parent maplegend" style={{height: 50}} ref={wrapperRef}>
+    <div className="svg-parent maplegend" style={{height: MAP_LEGEND_HEIGHT}} ref={wrapperRef}>
       <svg id="legend" preserveAspectRatio="xMidYMid meet" ref={svgRef}>
         <image className="ramp" />
         <g className="bars"></g>
