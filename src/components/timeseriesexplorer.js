@@ -1,30 +1,53 @@
 import TimeSeries from './timeseries';
+import {getIndiaYesterdayISO} from '../utils/commonfunctions';
+import {TIMESERIES_OPTIONS} from '../constants';
 
 import 'intersection-observer';
 
 import {PinIcon, IssueOpenedIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
+import {formatISO, subWeeks, subMonths} from 'date-fns';
 import equal from 'fast-deep-equal';
-import React, {useState, useRef} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useIsVisible} from 'react-is-visible';
 import {useLocalStorage} from 'react-use';
 
 function TimeSeriesExplorer({
   timeseries,
-  activeStateCode,
+  date: timelineDate,
   regionHighlighted,
   setRegionHighlighted,
   anchor,
   setAnchor,
 }) {
   const {t} = useTranslation();
-  const [lastDaysCount, setLastDaysCount] = useState(30);
+  const [timeseriesOption, setTimeseriesOption] = useState(
+    TIMESERIES_OPTIONS.MONTH
+  );
   const [chartType, setChartType] = useLocalStorage('chartType', 'total');
   const [isUniform, setIsUniform] = useLocalStorage('isUniform', true);
   const [isLog, setIsLog] = useLocalStorage('isLog', false);
   const explorerElement = useRef();
   const isVisible = useIsVisible(explorerElement, {once: true});
+
+  const dates = useMemo(() => {
+    const today = timelineDate || getIndiaYesterdayISO();
+    const pastDates = Object.keys(timeseries).filter((date) => date <= today);
+
+    if (timeseriesOption === TIMESERIES_OPTIONS.TWO_WEEKS) {
+      const cutOffDate = formatISO(subWeeks(new Date(today), 2), {
+        representation: 'date',
+      });
+      return pastDates.filter((date) => date >= cutOffDate);
+    } else if (timeseriesOption === TIMESERIES_OPTIONS.MONTH) {
+      const cutOffDate = formatISO(subMonths(new Date(today), 1), {
+        representation: 'date',
+      });
+      return pastDates.filter((date) => date >= cutOffDate);
+    }
+    return pastDates;
+  }, [timeseries, timelineDate, timeseriesOption]);
 
   return (
     <div
@@ -104,7 +127,7 @@ function TimeSeriesExplorer({
         {/* states && (
           <div className="trends-state-name">
             <select
-              value={activeStateCode}
+              value={regionHighlighted.stateCode}
               onChange={({target}) => {
                 const selectedState = target.selectedOptions[0].getAttribute(
                   'statedata'
@@ -130,36 +153,22 @@ function TimeSeriesExplorer({
 
       {isVisible && (
         <TimeSeries
-          {...{timeseries, chartType, isUniform, isLog}}
-          dates={Object.keys(timeseries).slice(-lastDaysCount)}
-          stateCode={activeStateCode}
+          {...{timeseries, dates, chartType, isUniform, isLog}}
+          stateCode={regionHighlighted.stateCode}
         />
       )}
 
       <div className="pills">
-        <button
-          type="button"
-          onClick={() => setLastDaysCount(Infinity)}
-          className={lastDaysCount === Infinity ? 'selected' : ''}
-        >
-          {t('Beginning')}
-        </button>
-        <button
-          type="button"
-          onClick={() => setLastDaysCount(30)}
-          className={lastDaysCount === 30 ? 'selected' : ''}
-          aria-label="1 month"
-        >
-          {`1 ${t('Month')}`}
-        </button>
-        <button
-          type="button"
-          onClick={() => setLastDaysCount(14)}
-          className={lastDaysCount === 14 ? 'selected' : ''}
-          aria-label="14 days"
-        >
-          {`2 ${t('Weeks')}`}
-        </button>
+        {Object.values(TIMESERIES_OPTIONS).map((option) => (
+          <button
+            key={option}
+            type="button"
+            className={classnames({selected: timeseriesOption === option})}
+            onClick={() => setTimeseriesOption(option)}
+          >
+            {t(option)}
+          </button>
+        ))}
       </div>
 
       <div className="alert">
@@ -173,7 +182,15 @@ function TimeSeriesExplorer({
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(currProps.activeStateCode, prevProps.activeStateCode)) {
+  if (
+    !equal(
+      currProps.regionHighlighted.stateCode,
+      prevProps.regionHighlighted.stateCode
+    )
+  ) {
+    return false;
+  }
+  if (!equal(currProps.date, prevProps.date)) {
     return false;
   }
   if (!equal(currProps.anchor, prevProps.anchor)) {

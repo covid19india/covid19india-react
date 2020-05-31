@@ -1,4 +1,4 @@
-// import './wdyr';
+import './wdyr';
 import App from './App';
 import './i18n';
 import * as serviceWorker from './serviceWorker';

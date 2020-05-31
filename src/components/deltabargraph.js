@@ -139,7 +139,10 @@ function DeltaBarGraph({timeseries, dates, statistic}) {
         viewBox="0 0 250 250"
         preserveAspectRatio="xMidYMid meet"
       >
-        <g className="x-axis" transform={`translate(0, ${height - margin.bottom})`}/>
+        <g
+          className="x-axis"
+          transform={`translate(0, ${height - margin.bottom})`}
+        />
         <g className="y-axis" />
       </svg>
     </div>

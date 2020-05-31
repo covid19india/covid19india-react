@@ -80,24 +80,18 @@ function Home(props) {
             {
               <MapExplorer
                 mapName={'India'}
-                {...{
-                  data,
-                  regionHighlighted,
-                  setRegionHighlighted,
-                  anchor,
-                  setAnchor,
-                  mapStatistic,
-                  setMapStatistic,
-                }}
+                {...{data, date}}
+                {...{mapStatistic, setMapStatistic}}
+                {...{regionHighlighted, setRegionHighlighted}}
+                {...{anchor, setAnchor}}
               />
             }
 
             <TimeSeriesExplorer
               timeseries={timeseries[regionHighlighted.stateCode]}
-              activeStateCode={regionHighlighted.stateCode}
+              {...{date}}
               {...{regionHighlighted, setRegionHighlighted}}
-              anchor={anchor}
-              setAnchor={setAnchor}
+              {...{anchor, setAnchor}}
             />
           </div>
         </div>

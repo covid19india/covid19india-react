@@ -1,9 +1,14 @@
-import {COLORS, PRIMARY_STATISTICS} from '../constants';
-import {getStatistic, getIndiaDay} from '../utils/commonfunctions';
+import {
+  COLORS,
+  MINIGRAPH_LOOKBACK_DAYS,
+  PRIMARY_STATISTICS,
+} from '../constants';
+import {getStatistic, getIndiaYesterdayISO} from '../utils/commonfunctions';
 
 import classnames from 'classnames';
 import * as d3 from 'd3';
-import {differenceInDays} from 'date-fns';
+import {interpolatePath} from 'd3-interpolate-path';
+import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useEffect, useRef, useMemo} from 'react';
 
@@ -11,25 +16,25 @@ function Minigraph({timeseries, date: timelineDate}) {
   const refs = useRef([]);
 
   const dates = useMemo(() => {
-    return Object.keys(timeseries)
-      .filter(
-        (date) =>
-          differenceInDays(
-            new Date(date),
-            timelineDate ? new Date(timelineDate) : getIndiaDay()
-          ) <= 0
-      )
-      .slice(-20);
+    const today = timelineDate || getIndiaYesterdayISO();
+    const pastDates = Object.keys(timeseries).filter((date) => date <= today);
+    const cutOffDate = formatISO(
+      subDays(new Date(today), MINIGRAPH_LOOKBACK_DAYS),
+      {representation: 'date'}
+    );
+    return pastDates.filter((date) => date >= cutOffDate);
   }, [timeseries, timelineDate]);
 
   useEffect(() => {
+    const T = dates.length;
+
     const margin = {top: 10, right: 5, bottom: 20, left: 5};
     const chartRight = 100 - margin.right;
     const chartBottom = 100 - margin.bottom;
-    const T = dates.length;
 
     const xScale = d3
       .scaleTime()
+      .clamp(true)
       .domain([new Date(dates[0]), new Date(dates[T - 1])])
       .range([margin.left, chartRight]);
 
@@ -49,6 +54,7 @@ function Minigraph({timeseries, date: timelineDate}) {
 
     const yScale = d3
       .scaleLinear()
+      .clamp(true)
       .domain([-domainMinMax, domainMinMax])
       .range([chartBottom, margin.top]);
 
@@ -56,6 +62,14 @@ function Minigraph({timeseries, date: timelineDate}) {
       const svg = d3.select(ref);
       const statistic = PRIMARY_STATISTICS[index];
       const color = COLORS[statistic];
+
+      const line = d3
+        .line()
+        .curve(d3.curveMonotoneX)
+        .x((date) => xScale(new Date(date)))
+        .y((date) =>
+          yScale(getStatistic(timeseries[date], 'delta', statistic))
+        );
 
       let pathLength;
       svg
@@ -68,16 +82,7 @@ function Minigraph({timeseries, date: timelineDate}) {
               .attr('fill', 'none')
               .attr('stroke', color + '99')
               .attr('stroke-width', 2.5)
-              .attr(
-                'd',
-                d3
-                  .line()
-                  .x((date) => xScale(new Date(date)))
-                  .y((date) =>
-                    yScale(getStatistic(timeseries[date], 'delta', statistic))
-                  )
-                  .curve(d3.curveMonotoneX)
-              )
+              .attr('d', line)
               .attr('stroke-dasharray', function () {
                 return (pathLength = this.getTotalLength());
               })
@@ -94,16 +99,11 @@ function Minigraph({timeseries, date: timelineDate}) {
               .attr('stroke-dasharray', null)
               .transition()
               .duration(500)
-              .attr(
-                'd',
-                d3
-                  .line()
-                  .x((date) => xScale(new Date(date)))
-                  .y((date) =>
-                    yScale(getStatistic(timeseries[date], 'delta', statistic))
-                  )
-                  .curve(d3.curveMonotoneX)
-              )
+              .attrTween('d', function (date) {
+                const previous = d3.select(this).attr('d');
+                const current = line(date);
+                return interpolatePath(previous, current);
+              })
         );
 
       svg

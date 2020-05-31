@@ -11,12 +11,24 @@ export const MAP_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
 export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
+export const D3_TRANSITION_DURATION = 300;
+
+export const MINIGRAPH_LOOKBACK_DAYS = 20;
+
+export const NUM_BARS_STATEPAGE = 5;
+
 export const COLORS = {
   confirmed: '#ff073a',
   active: '#007bff',
   recovered: '#28a745',
   deceased: '#6c757d',
   tested: '#4b1eaa',
+};
+
+export const TIMESERIES_OPTIONS = {
+  BEGINNING: 'Beginning',
+  MONTH: '1 Month',
+  TWO_WEEKS: '2 Weeks',
 };
 
 export const MAP_OPTIONS = {
@@ -406,7 +418,3 @@ export const INITIAL_DATA = {
     notes: '',
   },
 };
-
-export const NUM_BARS_STATEPAGE = 5;
-
-export const D3_TRANSITION_DURATION = 300;

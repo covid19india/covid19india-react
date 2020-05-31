@@ -1,7 +1,7 @@
 import {LOCALE_SHORTHANDS} from '../constants';
 
 import axios from 'axios';
-import {startOfDay, format, formatDistance} from 'date-fns';
+import {format, formatDistance, formatISO, subDays} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
 import i18n from 'i18next';
 
@@ -11,8 +11,12 @@ export const isDevelopmentOrTest = () => {
   return false;
 };
 
-export const getIndiaDay = () => {
-  return startOfDay(utcToZonedTime(new Date(), 'Asia/Kolkata'));
+export const getIndiaDate = () => {
+  return utcToZonedTime(new Date(), 'Asia/Kolkata');
+};
+
+export const getIndiaYesterdayISO = () => {
+  return formatISO(subDays(getIndiaDate(), 1), {representation: 'date'});
 };
 
 export const formatLastUpdated = (unformattedDate) => {
