@@ -70,7 +70,8 @@ export const getStatistic = (data, type, statistic, normalizer = 1) => {
     const confirmed = data?.[type]?.confirmed || 0;
     const deceased = data?.[type]?.deceased || 0;
     const recovered = data?.[type]?.recovered || 0;
-    count = confirmed - deceased - recovered;
+    const migrated = data?.[type]?.migrated || 0;
+    count = confirmed - deceased - recovered - migrated;
   } else {
     count = data?.[type]?.[statistic] || 0;
   }
