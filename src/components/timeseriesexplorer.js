@@ -1,6 +1,7 @@
 import TimeSeries from './timeseries';
-import {getIndiaYesterdayISO} from '../utils/commonfunctions';
+
 import {TIMESERIES_OPTIONS} from '../constants';
+import {getIndiaYesterdayISO} from '../utils/commonfunctions';
 
 import 'intersection-observer';
 

@@ -42,9 +42,9 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
   const setSprings = ({direction, clampedIndex, down, xDelta}) => {
     set((i) => {
       if (i < clampedIndex - 1) {
-        return {x: width, color: '#6c757d99', opacity: 0};
+        return {x: width, color: '#6c757d99', opacity: 0, display: 'none'};
       } else if (i > clampedIndex + 1) {
-        return {x: -40, color: '#6c757d99', opacity: 0};
+        return {x: -40, color: '#6c757d99', opacity: 0, display: 'none'};
       }
 
       let x = 0;
@@ -59,9 +59,9 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
       }
 
       if (i === clampedIndex) {
-        return {x, color: '#6c757d'};
+        return {x, color: '#6c757d', display: 'block'};
       }
-      return {x, color: '#6c757d99', opacity: 1};
+      return {x, color: '#6c757d99', opacity: 1, display: 'block'};
     });
   };
 
@@ -146,13 +146,14 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
                 i === index - 2 ||
                 i === index)
           )
-          .map(({x, color, opacity}, i) => (
+          .map(({x, color, opacity, display}, i) => (
             <animated.div
               className="day"
               key={i}
               style={{
                 transform: x.interpolate((x) => `translate3d(${x}px,0,0)`),
                 opacity,
+                display,
               }}
             >
               {index < 2 && (

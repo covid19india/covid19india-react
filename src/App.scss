@@ -66,6 +66,11 @@ $dark-m-white: #e1e1e1;
 $dark-m-purple: #7ba1ea;
 $dark-m-blue: #3391ff;
 
+html {
+  width: 100vw;
+  overflow-x: hidden;
+}
+
 body {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
@@ -4073,12 +4078,13 @@ footer {
     color: $orange;
     cursor: pointer;
     font-family: 'archia';
-    font-weight: 900;
+    font-weight: 600;
     margin: 0;
     outline: none;
     padding: 10px 15px;
     text-align: center;
     transition: background 0.25s ease-in-out;
+    font-size: 10px !important;
 
     &:hover {
       background: $yellow-hover;
@@ -4968,6 +4974,10 @@ footer {
   .timeline {
     padding-left: 0rem !important;
     padding-right: 0rem !important;
+  }
+
+  .Timeline {
+    width: 100%;
   }
 }
 
