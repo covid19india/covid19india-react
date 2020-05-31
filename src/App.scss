@@ -5088,6 +5088,20 @@ footer {
       background: #161625 !important;
     }
 
+    .meta {
+      h1 {
+        &.tested {
+          color: #9673b9 !important;
+        }
+      }
+
+      h2 {
+        &.tested {
+          color: #9673b9 !important;
+        }
+      }
+    }
+
     .stats {
       &.tested {
         background: #40008050 !important;
@@ -5140,15 +5154,13 @@ footer {
         background: #40008050 !important;
 
         svg {
-          .dot,
-          .focus,
+          circle,
           .domain,
           .tick {
             stroke: #9673b9 !important;
           }
 
-          .dot,
-          .focus {
+          circle {
             fill: #9673b9 !important;
           }
 

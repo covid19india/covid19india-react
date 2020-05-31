@@ -1,6 +1,6 @@
 import TimeSeries from './timeseries';
 
-import {TIMESERIES_OPTIONS} from '../constants';
+import {STATE_NAMES, TIMESERIES_OPTIONS} from '../constants';
 import {getIndiaYesterdayISO} from '../utils/commonfunctions';
 
 import 'intersection-observer';
@@ -21,6 +21,7 @@ function TimeSeriesExplorer({
   setRegionHighlighted,
   anchor,
   setAnchor,
+  stateCodes,
 }) {
   const {t} = useTranslation();
   const [timeseriesOption, setTimeseriesOption] = useState(
@@ -49,6 +50,13 @@ function TimeSeriesExplorer({
     }
     return pastDates;
   }, [timeseries, timelineDate, timeseriesOption]);
+
+  const handleChange = ({target}) => {
+    setRegionHighlighted({
+      stateCode: target.value,
+      districtName: null
+    })
+  };
 
   return (
     <div
@@ -125,37 +133,31 @@ function TimeSeriesExplorer({
           </div>
         </div>
 
-        {/* states && (
+        {stateCodes && (
           <div className="trends-state-name">
             <select
               value={regionHighlighted.stateCode}
-              onChange={({target}) => {
-                const selectedState = target.selectedOptions[0].getAttribute(
-                  'statedata'
-                );
-                onHighlightState(JSON.parse(selectedState));
-              }}
+              onChange={handleChange}
             >
-              {states.map((s) => {
+              {stateCodes.map((stateCode) => {
                 return (
                   <option
-                    value={s.statecode}
-                    key={s.statecode}
-                    statedata={JSON.stringify(s)}
+                    value={stateCode}
+                    key={stateCode}
                   >
-                    {s.statecode === 'TT' ? t('All States') : t(s.state)}
+                    {stateCode === 'TT' ? t('All States') : t(STATE_NAMES[stateCode])}
                   </option>
                 );
               })}
             </select>
           </div>
-        )*/}
+        )}
       </div>
 
       {isVisible && (
         <TimeSeries
-          {...{timeseries, dates, chartType, isUniform, isLog}}
           stateCode={regionHighlighted.stateCode}
+          {...{timeseries, dates, chartType, isUniform, isLog}}
         />
       )}
 
