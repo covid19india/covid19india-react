@@ -25,10 +25,11 @@ import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {
-  useState,
+  useCallback,
   useEffect,
   useMemo,
-  useCallback,
+  useRef,
+  useState,
   Suspense,
 } from 'react';
 import ReactDOM from 'react-dom';
@@ -36,7 +37,6 @@ import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {useSprings, animated} from 'react-spring';
-import {useMeasure} from 'react-use';
 
 const emptyData = () => {
   return Object.fromEntries(
@@ -66,7 +66,13 @@ function MapExplorer({
 }) {
   const {t} = useTranslation();
   const history = useHistory();
-  const [mapExplorerRef, {width}] = useMeasure();
+
+  const [width, setWidth] = useState(480)
+  const mapExplorerRef = useRef();
+
+  useEffect(() => {
+    setWidth(mapExplorerRef.current.clientWidth)
+  }, [])
 
   const [currentMap, setCurrentMap] = useState({
     name: mapName,
@@ -283,7 +289,6 @@ function MapExplorer({
         {stickied: anchor === 'mapexplorer'},
         {hidden: anchor && anchor !== 'mapexplorer'}
       )}
-      ref={mapExplorerRef}
     >
       {window.innerWidth > 769 && (
         <div
@@ -425,11 +430,13 @@ function MapExplorer({
           )}
       </div>
 
-      <div>
+      <div ref={mapExplorerRef}>
         {mapStatistic && (
           <Suspense
             fallback={
-              <MapVisualizerLoader {...{width, statistic: mapStatistic}} />
+              <MapVisualizerLoader
+                {...{width, statistic: mapStatistic}}
+              />
             }
           >
             <MapVisualizer

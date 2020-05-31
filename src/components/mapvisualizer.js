@@ -127,22 +127,7 @@ function MapVisualizer({
 
     const svg = d3.select(svgRef.current);
 
-    if (!svg.attr('viewBox')) {
-      const {
-        width: widthDefault,
-        height: heightDefault,
-      } = svgRef.current.getBoundingClientRect();
-      const projection = isCountryLoaded
-        ? d3.geoMercator().fitWidth(widthDefault, topology)
-        : d3.geoMercator().fitSize([widthDefault, heightDefault], topology);
-      const path = d3.geoPath(projection);
-      const bBox = path.bounds(topology);
-      const [width, height] = [+bBox[1][0], bBox[1][1]];
-      svg.attr('viewBox', `0 0 ${width} ${height}`);
-    }
-    const bBox = svg.attr('viewBox').split(' ');
-    const [width, height] = [+bBox[2], +bBox[3]];
-
+    const {width, height} = svgRef.current.getBoundingClientRect();
     const projection = d3.geoMercator().fitSize([width, height], topology);
     const path = d3.geoPath(projection);
 
@@ -458,7 +443,7 @@ function MapVisualizer({
 
   return (
     <React.Fragment>
-      <div className="svg-parent">
+      <div className="svg-parent map-parent">
         <svg id="chart" preserveAspectRatio="xMidYMid meet" ref={svgRef}>
           <g className="regions" />
           <g className="state-borders" />
