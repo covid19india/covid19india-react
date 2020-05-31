@@ -1,4 +1,9 @@
-import {STATE_CODES_ARRAY, STATE_CODES, STATE_NAMES} from '../constants';
+import {
+  STATE_CODES_ARRAY,
+  STATE_CODES,
+  STATE_NAMES,
+  ESSENTIALS_CATEGORIES,
+} from '../constants';
 import {capitalize} from '../utils/commonfunctions';
 
 import Bloodhound from 'corejs-typeahead';
@@ -274,8 +279,6 @@ function Search() {
           </div>
         )}
       </animated.div>
-
-      {results.length < 1 && searchValue.length > 0 && <SearchLoader />}
 
       {results.length > 0 && (
         <div className="results">
