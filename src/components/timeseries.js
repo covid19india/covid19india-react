@@ -25,9 +25,11 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
 
-  const [highlightedDate, setHighlightedDate] = useState(
-    dates[dates.length - 1]
-  );
+  const [highlightedDate, setHighlightedDate] = useState();
+
+  useEffect(() => {
+    setHighlightedDate(dates[dates.length - 1]);
+  }, [dates]);
 
   useEffect(() => {
     const {width, height} =
@@ -42,13 +44,10 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
     const yBufferTop = 1.2;
     const yBufferBottom = 1.1;
 
-    const dateMin = d3.min(dates);
-    const dateMax = d3.max(dates);
-
     const xScale = d3
       .scaleTime()
       .clamp(true)
-      .domain([new Date(dateMin), new Date(dateMax)])
+      .domain([new Date(dates[0]), new Date(dates[T - 1])])
       .range([margin.left, chartRight]);
 
     // Number of x-axis ticks
@@ -248,15 +247,14 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
                     .attr('stroke-dashoffset', pathLength)
                     .transition(t)
                     .attr('stroke-dashoffset', 0)
-                    .transition()
                 ),
             (update) =>
               update
                 .attr('stroke-dasharray', null)
                 .transition(t)
-                .attrTween('d', function (d) {
+                .attrTween('d', function (date) {
                   const previous = d3.select(this).attr('d');
-                  const current = line(d);
+                  const current = line(date);
                   return interpolatePath(previous, current);
                 })
           );
@@ -314,24 +312,26 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
             className={classnames('svg-parent', `is-${statistic}`)}
             ref={wrapperRef}
           >
-            <div className={classnames('stats', `is-${statistic}`)}>
-              <h5 className="title">{capitalize(t(statistic))}</h5>
-              <h5 className="title">
-                {formatDate(highlightedDate, 'dd MMMM')}
-              </h5>
-              <div className="stats-bottom">
-                <h2>
-                  {formatNumber(
-                    getStatistic(
-                      timeseries[highlightedDate],
-                      chartType,
-                      statistic
-                    )
-                  )}
-                </h2>
-                {/*<h6>Delta</h6>*/}
+            {highlightedDate && (
+              <div className={classnames('stats', `is-${statistic}`)}>
+                <h5 className="title">{capitalize(t(statistic))}</h5>
+                <h5 className="title">
+                  {formatDate(highlightedDate, 'dd MMMM')}
+                </h5>
+                <div className="stats-bottom">
+                  <h2>
+                    {formatNumber(
+                      getStatistic(
+                        timeseries[highlightedDate],
+                        chartType,
+                        statistic
+                      )
+                    )}
+                  </h2>
+                  {/*<h6>Delta</h6>*/}
+                </div>
               </div>
-            </div>
+            )}
             <svg
               ref={(element) => {
                 refs.current[index] = element;
@@ -350,9 +350,6 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(currProps.dates.length, prevProps.dates.length)) {
-    return false;
-  }
   if (!equal(currProps.chartType, prevProps.chartType)) {
     return false;
   }
@@ -363,6 +360,9 @@ const isEqual = (prevProps, currProps) => {
     return false;
   }
   if (!equal(currProps.stateCode, prevProps.stateCode)) {
+    return false;
+  }
+  if (!equal(currProps.dates, prevProps.dates)) {
     return false;
   }
   return true;

@@ -55,6 +55,7 @@ const emptyData = () => {
 function MapExplorer({
   mapName,
   data,
+  date,
   regionHighlighted,
   setRegionHighlighted,
   anchor,
@@ -486,10 +487,13 @@ const isEqual = (prevProps, currProps) => {
   if (!equal(prevProps.anchor, currProps.anchor)) {
     return false;
   }
+  if (!equal(prevProps.date, currProps.date)) {
+    return false;
+  }
   if (
     !equal(
-      getStatistic(prevProps.data['TT'], 'total', 'confirmed'),
-      getStatistic(currProps.data['TT'], 'total', 'confirmed')
+      prevProps.data?.TT?.meta?.last_updated,
+      currProps.data?.TT?.meta?.last_updated
     )
   ) {
     return false;
