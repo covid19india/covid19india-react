@@ -54,8 +54,8 @@ function TimeSeriesExplorer({
   const handleChange = ({target}) => {
     setRegionHighlighted({
       stateCode: target.value,
-      districtName: null
-    })
+      districtName: null,
+    });
   };
 
   return (
@@ -135,17 +135,13 @@ function TimeSeriesExplorer({
 
         {stateCodes && (
           <div className="trends-state-name">
-            <select
-              value={regionHighlighted.stateCode}
-              onChange={handleChange}
-            >
+            <select value={regionHighlighted.stateCode} onChange={handleChange}>
               {stateCodes.map((stateCode) => {
                 return (
-                  <option
-                    value={stateCode}
-                    key={stateCode}
-                  >
-                    {stateCode === 'TT' ? t('All States') : t(STATE_NAMES[stateCode])}
+                  <option value={stateCode} key={stateCode}>
+                    {stateCode === 'TT'
+                      ? t('All States')
+                      : t(STATE_NAMES[stateCode])}
                   </option>
                 );
               })}

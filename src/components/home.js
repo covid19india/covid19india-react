@@ -50,7 +50,10 @@ function Home(props) {
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement, {once: true});
 
-  const stateCodes = ['TT', ...Object.keys(data || []).filter(stateCode => stateCode !== 'TT')]
+  const stateCodes = [
+    'TT',
+    ...Object.keys(data || []).filter((stateCode) => stateCode !== 'TT'),
+  ];
 
   return (
     <React.Fragment>
