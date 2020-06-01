@@ -21167,7 +21167,7 @@
           "arcs": [[1328, 1329, 1330, 1331]],
           "type": "Polygon",
           "properties": {
-            "district": "North District",
+            "district": "North Sikkim",
             "dt_code": "241",
             "st_nm": "Sikkim",
             "st_code": "11",
@@ -21321,7 +21321,7 @@
           "arcs": [[-1330, 1377, 1378, 1379]],
           "type": "Polygon",
           "properties": {
-            "district": "West District",
+            "district": "West Sikkim",
             "dt_code": "242",
             "st_nm": "Sikkim",
             "st_code": "11",
@@ -21332,7 +21332,7 @@
           "arcs": [[-1329, 1380, 1381, 1382, -1378]],
           "type": "Polygon",
           "properties": {
-            "district": "South District",
+            "district": "South Sikkim",
             "dt_code": "243",
             "st_nm": "Sikkim",
             "st_code": "11",
@@ -21343,7 +21343,7 @@
           "arcs": [[-1332, 1383, 1384, -1381]],
           "type": "Polygon",
           "properties": {
-            "district": "East District",
+            "district": "East Sikkim",
             "dt_code": "244",
             "st_nm": "Sikkim",
             "st_code": "11",
