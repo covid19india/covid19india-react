@@ -36,7 +36,7 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
   );
 
   const getClampedIndex = (direction) => {
-    return clamp(index + (direction > 0 ? 1 : -1), 0, dates.length - 3);
+    return clamp(index + (direction > 0 ? 1 : -1), 0, dates.length - 1);
   };
 
   const setSprings = ({direction, clampedIndex, down, xDelta}) => {
@@ -139,7 +139,7 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
         {springs
           .filter(
             ({opacity}, i) =>
-              i < dates.length - 2 &&
+              i < dates.length &&
               (i === index + 1 ||
                 i === index - 1 ||
                 i === index + 2 ||
