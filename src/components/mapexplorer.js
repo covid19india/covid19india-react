@@ -54,7 +54,6 @@ const emptyData = () => {
 function MapExplorer({
   stateCode,
   data,
-  date,
   regionHighlighted,
   setRegionHighlighted,
   anchor,
@@ -487,15 +486,15 @@ const isEqual = (prevProps, currProps) => {
   if (!equal(prevProps.anchor, currProps.anchor)) {
     return false;
   }
-  if (!equal(prevProps.date, currProps.date)) {
-    return false;
-  }
   if (
     !equal(
       prevProps.data?.TT?.meta?.['last_updated'],
       currProps.data?.TT?.meta?.['last_updated']
     )
   ) {
+    return false;
+  }
+  if (!equal(prevProps.data?.TT?.total, currProps.data?.TT?.total)) {
     return false;
   }
   return true;

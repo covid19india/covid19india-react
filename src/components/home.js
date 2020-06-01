@@ -96,7 +96,7 @@ function Home(props) {
               <React.Fragment>
                 <MapExplorer
                   stateCode="TT"
-                  {...{data, date}}
+                  {...{data}}
                   {...{mapStatistic, setMapStatistic}}
                   {...{regionHighlighted, setRegionHighlighted}}
                   {...{anchor, setAnchor}}
