@@ -49,12 +49,7 @@ function MapVisualizer({
   const {t} = useTranslation();
   const svgRef = useRef(null);
 
-  const mapMeta = MAP_META[currentMap.name];
-  const currentMapCode = useMemo(() => {
-    let stateName = currentMap.name;
-    if (stateName === 'India') stateName = 'Total';
-    return STATE_CODES[stateName];
-  }, [currentMap.name]);
+  const mapMeta = MAP_META[currentMap.code];
 
   const geoDataResponse = useSWR(
     mapMeta.geoDataFile,
@@ -65,20 +60,23 @@ function MapVisualizer({
   );
 
   const statisticMax = useMemo(() => {
-    const {TT, UN, ...statesData} = data;
+    const stateCodes = Object.keys(data).filter(
+      (stateCode) =>
+        stateCode !== 'TT' && Object.keys(MAP_META).includes(stateCode)
+    );
     return currentMap.view === MAP_VIEWS.STATES
-      ? d3.max(Object.keys(statesData), (stateCode) =>
+      ? d3.max(stateCodes, (stateCode) =>
           getTotalStatistic(
-            statesData[stateCode],
+            data[stateCode],
             statistic,
             currentMap.option === MAP_OPTIONS.PER_MILLION
               ? STATE_POPULATIONS_MIL[stateCode]
               : 1
           )
         )
-      : d3.max(Object.values(statesData), (stateData) =>
-          stateData?.districts
-            ? d3.max(Object.values(stateData.districts), (districtData) =>
+      : d3.max(stateCodes, (stateCode) =>
+          data[stateCode]?.districts
+            ? d3.max(Object.values(data[stateCode].districts), (districtData) =>
                 getTotalStatistic(districtData, statistic)
               )
             : 0
@@ -87,13 +85,13 @@ function MapVisualizer({
 
   const statisticTotal = useMemo(() => {
     return getTotalStatistic(
-      data[currentMapCode],
+      data[currentMap.code],
       statistic,
       currentMap.option === MAP_OPTIONS.PER_MILLION
-        ? STATE_POPULATIONS_MIL[currentMapCode]
+        ? STATE_POPULATIONS_MIL[currentMap.code]
         : 1
     );
-  }, [data, currentMapCode, currentMap.option, statistic]);
+  }, [data, currentMap.code, currentMap.option, statistic]);
 
   const mapScale = useMemo(() => {
     if (currentMap.option === MAP_OPTIONS.ZONES) {
@@ -159,7 +157,7 @@ function MapVisualizer({
       const district = f.properties.district;
       const state = f.properties.st_nm;
       const obj = Object.assign({}, f);
-      obj.id = `${currentMap.name}-${state}${district ? '-' + district : ''}`;
+      obj.id = `${currentMap.code}-${state}${district ? '-' + district : ''}`;
       return obj;
     });
 
@@ -204,7 +202,7 @@ function MapVisualizer({
               .selectAll('path')
               .attr('pointer-events', 'none');
             // Switch map
-            changeMap(d.properties.st_nm);
+            changeMap(STATE_CODES[d.properties.st_nm]);
           });
         sel.append('title');
         return sel;
@@ -457,7 +455,7 @@ function MapVisualizer({
         </svg>
         {mapMeta.mapType === MAP_TYPES.STATE &&
           !!getTotalStatistic(
-            data[currentMapCode]?.districts?.Unassigned,
+            data[currentMap.code]?.districts?.Unassigned,
             statistic
           ) && (
             <div className="disclaimer">

@@ -6,7 +6,12 @@ import Minigraph from './minigraph';
 import StateMeta from './statemeta';
 import TimeSeriesExplorer from './timeseriesexplorer';
 
-import {NUM_BARS_STATEPAGE, STATE_NAMES, STATE_POPULATIONS} from '../constants';
+import {
+  MAP_META,
+  NUM_BARS_STATEPAGE,
+  STATE_NAMES,
+  STATE_POPULATIONS,
+} from '../constants';
 import {
   fetcher,
   formatDate,
@@ -146,7 +151,11 @@ function State(props) {
           <div className="state-left">
             <Breadcrumbs
               {...{stateCode, stateName}}
-              stateCodes={Object.keys(data)}
+              stateCodes={Object.keys(data).filter(
+                (stateCode) =>
+                  stateCode !== 'TT' &&
+                  Object.keys(MAP_META).includes(stateCode)
+              )}
             />
 
             <div className="header">
@@ -241,9 +250,9 @@ function State(props) {
             <Minigraph timeseries={timeseries[stateCode]} />
 
             <MapExplorer
-              mapName={stateName}
               isCountryLoaded={false}
               {...{
+                stateCode,
                 data,
                 regionHighlighted,
                 setRegionHighlighted,
