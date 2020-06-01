@@ -43,7 +43,8 @@
     "source-map-explorer": "^2.4.2",
     "styled-components": "^5.1.0",
     "swr": "^0.2.2",
-    "topojson": "^3.0.2"
+    "topojson": "^3.0.2",
+    "use-dark-mode": "^2.3.1"
   },
   "scripts": {
     "start": "react-scripts start",

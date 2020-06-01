@@ -1,7 +1,8 @@
+import './App.scss';
 import Navbar from './components/navbar';
 import ScrollToTop from './utils/ScrollToTop';
 
-import React, {useEffect, Suspense, lazy} from 'react';
+import React, {Suspense, lazy} from 'react';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
 import {
@@ -10,8 +11,7 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
-import {useLocalStorage, useEffectOnce} from 'react-use';
-import './App.scss';
+import useDarkMode from 'use-dark-mode';
 
 const Home = lazy(() =>
   import('./components/home' /* webpackChunkName: "Home" */)
@@ -79,32 +79,7 @@ function App() {
     },
   ];
 
-  const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
-  const [isThemeSet] = useLocalStorage('isThemeSet', false);
-
-  useEffectOnce(() => {
-    if (
-      window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches &&
-      !isThemeSet
-    ) {
-      setDarkMode(true);
-    } else if (
-      window.matchMedia &&
-      !window.matchMedia('(prefers-color-scheme: dark)').matches &&
-      !isThemeSet
-    ) {
-      setDarkMode(false);
-    }
-  });
-
-  useEffect(() => {
-    if (darkMode) {
-      document.querySelector('body').classList.add('dark-mode');
-    } else {
-      document.querySelector('body').classList.remove('dark-mode');
-    }
-  }, [darkMode]);
+  const darkMode = useDarkMode(false);
 
   return (
     <div className="App">
@@ -120,11 +95,7 @@ function App() {
           <Route
             render={({location}) => (
               <React.Fragment>
-                <Navbar
-                  pages={pages}
-                  darkMode={darkMode}
-                  setDarkMode={setDarkMode}
-                />
+                <Navbar pages={pages} {...{darkMode}} />
                 <Switch location={location}>
                   {pages.map((page, index) => {
                     return (

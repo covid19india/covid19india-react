@@ -394,7 +394,7 @@ function MapExplorer({
         </h2>
 
         {currentMapMeta.mapType === MAP_TYPES.STATE && (
-          <div className="map-button" onClick={() => switchMap('India')}>
+          <div className="map-button" onClick={() => switchMap('TT')}>
             {t('Back')}
           </div>
         )}

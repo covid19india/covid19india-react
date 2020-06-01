@@ -6,18 +6,12 @@ import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useSpring, animated} from 'react-spring';
-import {
-  useEffectOnce,
-  useLockBodyScroll,
-  useWindowSize,
-  useLocalStorage,
-} from 'react-use';
+import {useEffectOnce, useLockBodyScroll, useWindowSize} from 'react-use';
 
-function Navbar({pages, darkMode, setDarkMode}) {
+function Navbar({pages, darkMode}) {
   const {t} = useTranslation();
 
   const [expand, setExpand] = useState(false);
-  const [, setIsThemeSet] = useLocalStorage('isThemeSet', false);
   useLockBodyScroll(expand);
   const windowSize = useWindowSize();
 
@@ -33,11 +27,10 @@ function Navbar({pages, darkMode, setDarkMode}) {
         <div
           className="navbar-left"
           onClick={() => {
-            setDarkMode((prevMode) => !prevMode);
-            setIsThemeSet(true);
+            darkMode.toggle();
           }}
         >
-          {darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
+          {darkMode.value ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
         </div>
       )}
 
@@ -98,22 +91,13 @@ function Navbar({pages, darkMode, setDarkMode}) {
           pages={pages}
           setExpand={setExpand}
           darkMode={darkMode}
-          setIsThemeSet={setIsThemeSet}
-          setDarkMode={setDarkMode}
         />
       )}
     </animated.div>
   );
 }
 
-function Expand({
-  expand,
-  pages,
-  setExpand,
-  darkMode,
-  setIsThemeSet,
-  setDarkMode,
-}) {
+function Expand({expand, pages, setExpand, darkMode}) {
   const expandElement = useRef(null);
   const {t} = useTranslation();
 
@@ -160,11 +144,12 @@ function Expand({
           className="fadeInUp"
           style={{animationDelay: '0.9s'}}
           onClick={() => {
-            setDarkMode((prevMode) => !prevMode);
-            setIsThemeSet(true);
+            darkMode.toggle();
           }}
         >
-          <div>{darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}</div>
+          <div>
+            {darkMode.value ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
+          </div>
         </div>
       )}
 
