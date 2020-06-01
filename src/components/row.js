@@ -97,6 +97,7 @@ function DistrictHeaderCell({handleSortClick, statistic, sortData}) {
 }
 
 function PureDistrictRow({
+  stateCode,
   districtName,
   data,
   regionHighlighted,
@@ -108,11 +109,12 @@ function PureDistrictRow({
     if (regionHighlighted.districtName !== districtName) {
       setRegionHighlighted(
         produce(regionHighlighted, (draftRegionHighlighted) => {
+          draftRegionHighlighted.stateCode = stateCode;
           draftRegionHighlighted.districtName = districtName;
         })
       );
     }
-  }, [regionHighlighted, setRegionHighlighted, districtName]);
+  }, [regionHighlighted, districtName, setRegionHighlighted, stateCode]);
 
   return (
     <tr
@@ -335,7 +337,12 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
           .map((districtName) => (
             <DistrictRow
               key={districtName}
-              {...{districtName, regionHighlighted, setRegionHighlighted}}
+              {...{
+                districtName,
+                regionHighlighted,
+                setRegionHighlighted,
+                stateCode,
+              }}
               data={data.districts[districtName]}
             />
           ))}
