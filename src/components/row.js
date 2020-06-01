@@ -119,7 +119,7 @@ function PureDistrictRow({
   return (
     <tr
       className={classnames('district', {
-        'is-highlighted': regionHighlighted.districtName === districtName,
+        'is-highlighted': regionHighlighted?.districtName === districtName,
       })}
       onMouseEnter={highlightDistrict}
     >
@@ -239,7 +239,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
         className={classnames(
           'state',
           {'is-total': stateCode === 'TT'},
-          {'is-highlighted': regionHighlighted.stateCode === stateCode}
+          {'is-highlighted': regionHighlighted?.stateCode === stateCode}
         )}
         onMouseEnter={highlightState}
         onClick={_setShowDistrict}
@@ -282,9 +282,11 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
             <td colSpan={4} style={{paddingBottom: 0}}>
               <p className="spacer"></p>
               {data?.meta?.['last_updated'] && (
-                <p>{`Last updated ${formatLastUpdated(
-                  data.meta.last_updated
-                )}`}</p>
+                <p>
+                  {`Last updated ${formatLastUpdated(
+                    data.meta.last_updated
+                  )} ${t('ago')}`}
+                </p>
               )}
               {data.districts['Unknown'] && (
                 <div className="disclaimer">
