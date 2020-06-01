@@ -162,6 +162,8 @@ h6 {
       padding: 1.5rem;
       transition: all 0s ease-in-out;
       width: 3rem;
+      box-shadow: none;
+      background: transparent;
 
       &:active {
         border: 0;
@@ -289,16 +291,19 @@ h6 {
   flex-direction: row;
   font-family: 'archia';
   font-size: 10px;
-  margin-right: 0.5rem;
+  align-items: flex-start;
   padding: 0.5rem;
-  width: 6rem;
 
   svg {
     color: $gray-mid;
+    width: 16px;
+    height: 16px;
   }
 
   .alert-right {
-    width: 10rem;
+    width: 5rem;
+    margin-left: .25rem;
+    text-align: right;
 
     a {
       background: $gray-light;
@@ -445,21 +450,11 @@ h6 {
     }
   }
 
-  .meta-secondary {
-    align-self: center;
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 3rem;
-    margin-top: 3rem;
-  }
-
-  .district-bar,
-  .to-essentials {
+  .district-bar {
     width: 100%;
   }
 
-  .MapExplorer,
-  .meta-secondary {
+  .MapExplorer {
     width: calc(100% - 3rem);
   }
 
@@ -508,7 +503,8 @@ h6 {
     flex-direction: row !important;
     justify-content: space-between !important;
     margin: 0;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
+    margin-top: 2.5rem;
 
     .alert {
       margin: 0;
@@ -821,6 +817,10 @@ h6 {
     margin-top: 2rem;
     width: 90% !important;
     word-wrap: break-word;
+    
+    .alert-right {
+      text-align: left;
+    }
 
     svg {
       margin: 0;
@@ -1701,10 +1701,6 @@ abbr {
   }
 }
 
-.Table {
-  margin-bottom: 1rem;
-}
-
 table {
   align-self: center;
   border-collapse: separate;
@@ -1712,6 +1708,7 @@ table {
   font-family: 'archia';
   position: relative;
   width: 30rem;
+  margin-bottom: 2.5rem;
 
   thead {
     background: $gray-light;
@@ -2041,7 +2038,7 @@ table {
   }
 
   &.stickied {
-    transform: rotate(0deg);
+    transform: rotate(90deg);
 
     svg {
       color: $gray;
@@ -4364,6 +4361,8 @@ footer {
     }
 
     .DeltaBarGraph {
+      margin-top: 1rem;
+
       svg {
         width: 100%;
 
@@ -4932,8 +4931,7 @@ footer {
   }
 
   .State {
-    .district-bar,
-    .to-essentials {
+    .district-bar {
       width: calc(100% - 3rem);
 
       h1 {

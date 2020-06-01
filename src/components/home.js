@@ -12,7 +12,7 @@ import 'intersection-observer';
 import useStickySWR from '../hooks/usestickyswr';
 import {fetcher} from '../utils/commonfunctions';
 
-import React, {useState, Suspense, useRef} from 'react';
+import React, {useState, useRef} from 'react';
 import {Helmet} from 'react-helmet';
 import {useIsVisible} from 'react-is-visible';
 
@@ -71,15 +71,13 @@ function Home(props) {
             <div className="header">
               <Search />
 
-              <Suspense fallback={<div style={{minHeight: '5rem'}} />}>
-                <Actions
-                  {...{
-                    setDate,
-                    dates: Object.keys(timeseries['TT']).reverse(),
-                    date,
-                  }}
-                />
-              </Suspense>
+              <Actions
+                {...{
+                  setDate,
+                  dates: Object.keys(timeseries['TT']).reverse(),
+                  date,
+                }}
+              />
             </div>
 
             <Level data={data['TT']} />

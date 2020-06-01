@@ -10,7 +10,7 @@ const getDeltaStatistic = (data, statistic) => {
 };
 
 const [width, height] = [250, 250];
-const margin = {top: 50, right: 5, bottom: 50, left: 0};
+const margin = {top: 50, right: -15, bottom: 50, left: 0};
 
 function DeltaBarGraph({timeseries, dates, statistic}) {
   const svgRef = useRef();

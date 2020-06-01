@@ -22,7 +22,6 @@ const Actions = ({setDate, dates}) => {
     fetcher,
     {
       revalidateOnFocus: false,
-      suspense: false,
     }
   );
 
@@ -38,6 +37,8 @@ const Actions = ({setDate, dates}) => {
 
   return (
     <React.Fragment>
+      {!updates && <div style={{minHeight: '5rem'}} />}
+
       {updates && (
         <ActionsPanel
           {...{
