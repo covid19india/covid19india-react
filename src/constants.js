@@ -58,195 +58,193 @@ export const MAPS_DIR =
   process.env.NODE_ENV === 'production' ? '/mini_maps' : '/maps';
 
 export const MAP_META = {
-  India: {
-    geoDataFile: `${MAPS_DIR}/india.json`,
-    mapType: MAP_TYPES.COUNTRY,
-    graphObjectStates: 'india-states',
-    graphObjectDistricts: 'india-districts-2019-734',
-  },
-  'Andaman and Nicobar Islands': {
-    geoDataFile: `${MAPS_DIR}/andamannicobarislands.json`,
-    mapType: MAP_TYPES.STATE,
-    graphObjectDistricts: 'andamannicobarislands_district',
-  },
-  'Arunachal Pradesh': {
-    geoDataFile: `${MAPS_DIR}/arunachalpradesh.json`,
-    mapType: MAP_TYPES.STATE,
-    graphObjectDistricts: 'arunachalpradesh_district',
-  },
-  'Andhra Pradesh': {
+  AP: {
     geoDataFile: `${MAPS_DIR}/andhrapradesh.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'andhrapradesh_district',
   },
-  Assam: {
+  AR: {
+    geoDataFile: `${MAPS_DIR}/arunachalpradesh.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectDistricts: 'arunachalpradesh_district',
+  },
+  AS: {
     geoDataFile: `${MAPS_DIR}/assam.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'assam_district',
   },
-  Bihar: {
-    name: 'Bihar',
+  BR: {
     geoDataFile: `${MAPS_DIR}/bihar.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'bihar_district',
   },
-  Chandigarh: {
-    name: 'Chandigarh',
-    geoDataFile: `${MAPS_DIR}/chandigarh.json`,
-    mapType: MAP_TYPES.STATE,
-    graphObjectDistricts: 'chandigarh_district',
-  },
-  Chhattisgarh: {
+  CT: {
     name: 'Chhattisgarh',
     geoDataFile: `${MAPS_DIR}/chhattisgarh.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'chhattisgarh_district',
   },
-  'Dadra and Nagar Haveli and Daman and Diu': {
-    geoDataFile: `${MAPS_DIR}/dnh-and-dd.json`,
-    mapType: MAP_TYPES.STATE,
-    graphObjectDistricts: 'dnh-and-dd',
-  },
-  Delhi: {
-    geoDataFile: `${MAPS_DIR}/delhi.json`,
-    mapType: MAP_TYPES.STATE,
-    graphObjectDistricts: 'delhi_district',
-  },
-  Karnataka: {
-    geoDataFile: `${MAPS_DIR}/karnataka.json`,
-    mapType: MAP_TYPES.STATE,
-    graphObjectDistricts: 'karnataka_district',
-  },
-  Kerala: {
-    geoDataFile: `${MAPS_DIR}/kerala.json`,
-    mapType: MAP_TYPES.STATE,
-    graphObjectDistricts: 'kerala_district',
-  },
-  Goa: {
+  GA: {
     geoDataFile: `${MAPS_DIR}/goa.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'goa_district',
   },
-  Gujarat: {
+  GJ: {
     geoDataFile: `${MAPS_DIR}/gujarat.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'gujarat_district',
   },
-  Haryana: {
+  HR: {
     geoDataFile: `${MAPS_DIR}/haryana.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'haryana_district',
   },
-  'Himachal Pradesh': {
+  HP: {
     geoDataFile: `${MAPS_DIR}/himachalpradesh.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'himachalpradesh_district',
   },
-  'Jammu and Kashmir': {
+  JK: {
     geoDataFile: `${MAPS_DIR}/jammukashmir.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'jammukashmir_district',
   },
-  Jharkhand: {
+  JH: {
     geoDataFile: `${MAPS_DIR}/jharkhand.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'jharkhand_district',
   },
-  Ladakh: {
-    geoDataFile: `${MAPS_DIR}/ladakh.json`,
+  KA: {
+    geoDataFile: `${MAPS_DIR}/karnataka.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectDistricts: 'ladakh_district',
+    graphObjectDistricts: 'karnataka_district',
   },
-  Lakshadweep: {
-    geoDataFile: `${MAPS_DIR}/lakshadweep.json`,
+  KL: {
+    geoDataFile: `${MAPS_DIR}/kerala.json`,
     mapType: MAP_TYPES.STATE,
-    graphObjectDistricts: 'lakshadweep_district',
+    graphObjectDistricts: 'kerala_district',
   },
-  'Madhya Pradesh': {
+  MP: {
     geoDataFile: `${MAPS_DIR}/madhyapradesh.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'madhyapradesh_district',
   },
-  Maharashtra: {
+  MH: {
     geoDataFile: `${MAPS_DIR}/maharashtra.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'maharashtra_district',
   },
-  Manipur: {
+  MN: {
     geoDataFile: `${MAPS_DIR}/manipur.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'manipur_district',
   },
-  Meghalaya: {
+  ML: {
     geoDataFile: `${MAPS_DIR}/meghalaya.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'meghalaya_district',
   },
-  Mizoram: {
+  MZ: {
     geoDataFile: `${MAPS_DIR}/mizoram.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'mizoram_district',
   },
-  Nagaland: {
+  NL: {
     geoDataFile: `${MAPS_DIR}/nagaland.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'nagaland_district',
   },
-  Odisha: {
+  OR: {
     geoDataFile: `${MAPS_DIR}/odisha.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'odisha_district',
   },
-  Puducherry: {
-    geoDataFile: `${MAPS_DIR}/puducherry.json`,
-    mapType: MAP_TYPES.STATE,
-    graphObjectDistricts: 'puducherry_district',
-  },
-  Punjab: {
+  PB: {
     geoDataFile: `${MAPS_DIR}/punjab.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'punjab_district',
   },
-  Rajasthan: {
+  RJ: {
     geoDataFile: `${MAPS_DIR}/rajasthan.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'rajasthan_district',
   },
-  Sikkim: {
+  SK: {
     geoDataFile: `${MAPS_DIR}/sikkim.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'sikkim_district',
   },
-  'Tamil Nadu': {
+  TN: {
     geoDataFile: `${MAPS_DIR}/tamilnadu.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'tamilnadu_district',
   },
-  Telangana: {
+  TG: {
     geoDataFile: `${MAPS_DIR}/telangana.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'telangana_district',
   },
-  Tripura: {
+  TR: {
     geoDataFile: `${MAPS_DIR}/tripura.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'tripura_district',
   },
-  Uttarakhand: {
+  UT: {
     geoDataFile: `${MAPS_DIR}/uttarakhand.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'uttarakhand_district',
   },
-  'Uttar Pradesh': {
+  UP: {
     geoDataFile: `${MAPS_DIR}/uttarpradesh.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'uttarpradesh_district',
   },
-
-  'West Bengal': {
+  WB: {
     geoDataFile: `${MAPS_DIR}/westbengal.json`,
     mapType: MAP_TYPES.STATE,
     graphObjectDistricts: 'westbengal_district',
+  },
+  AN: {
+    name: 'Andaman and Nicobar Islands',
+    geoDataFile: `${MAPS_DIR}/andamannicobarislands.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectDistricts: 'andamannicobarislands_district',
+  },
+  CH: {
+    geoDataFile: `${MAPS_DIR}/chandigarh.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectDistricts: 'chandigarh_district',
+  },
+  DN: {
+    geoDataFile: `${MAPS_DIR}/dnh-and-dd.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectDistricts: 'dnh-and-dd',
+  },
+  DL: {
+    geoDataFile: `${MAPS_DIR}/delhi.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectDistricts: 'delhi_district',
+  },
+  LA: {
+    geoDataFile: `${MAPS_DIR}/ladakh.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectDistricts: 'ladakh_district',
+  },
+  LD: {
+    geoDataFile: `${MAPS_DIR}/lakshadweep.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectDistricts: 'lakshadweep_district',
+  },
+  PY: {
+    geoDataFile: `${MAPS_DIR}/puducherry.json`,
+    mapType: MAP_TYPES.STATE,
+    graphObjectDistricts: 'puducherry_district',
+  },
+  TT: {
+    geoDataFile: `${MAPS_DIR}/india.json`,
+    mapType: MAP_TYPES.COUNTRY,
+    graphObjectStates: 'india-states',
+    graphObjectDistricts: 'india-districts-2019-734',
   },
 };
 

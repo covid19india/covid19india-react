@@ -8,7 +8,6 @@ import {
   MAP_STATISTICS,
   MAP_TYPES,
   MAP_VIEWS,
-  STATE_CODES,
   STATE_NAMES,
   STATE_POPULATIONS_MIL,
 } from '../constants';
@@ -53,7 +52,7 @@ const emptyData = () => {
 };
 
 function MapExplorer({
-  mapName,
+  stateCode,
   data,
   date,
   regionHighlighted,
@@ -75,41 +74,35 @@ function MapExplorer({
   }, []);
 
   const [currentMap, setCurrentMap] = useState({
-    name: mapName,
+    code: stateCode,
     view:
-      MAP_META[mapName].mapType === MAP_TYPES.COUNTRY
+      MAP_META[stateCode].mapType === MAP_TYPES.COUNTRY
         ? MAP_VIEWS.STATES
         : MAP_VIEWS.DISTRICTS,
     option: MAP_OPTIONS.TOTAL,
   });
-  const currentMapMeta = MAP_META[currentMap.name];
-  const currentMapCode = useMemo(() => {
-    let stateName = currentMap.name;
-    if (stateName === 'India') stateName = 'Total';
-    return STATE_CODES[stateName];
-  }, [currentMap.name]);
+  const currentMapMeta = MAP_META[currentMap.code];
 
   const currentMapData =
     currentMapMeta.mapType === MAP_TYPES.COUNTRY
       ? data
-      : {[currentMapCode]: data[currentMapCode]};
+      : {[currentMap.code]: data[currentMap.code]};
 
   useEffect(() => {
     if (regionHighlighted.districtName) {
       if (
-        currentMapCode !== regionHighlighted.stateCode &&
+        currentMap.code !== regionHighlighted.stateCode &&
         !(
           currentMapMeta.mapType === MAP_TYPES.COUNTRY &&
           currentMap.view === MAP_VIEWS.DISTRICTS
         )
       ) {
-        const state = STATE_NAMES[regionHighlighted.stateCode];
-        const newMapMeta = MAP_META[state];
+        const newMapMeta = MAP_META[regionHighlighted.stateCode];
         if (!newMapMeta) {
           return;
         }
         setCurrentMap({
-          name: state,
+          code: regionHighlighted.stateCode,
           view: MAP_VIEWS.DISTRICTS,
           option:
             currentMap.option === MAP_OPTIONS.PER_MILLION
@@ -119,7 +112,7 @@ function MapExplorer({
       }
     } else if (isCountryLoaded && currentMapMeta.mapType === MAP_TYPES.STATE) {
       setCurrentMap({
-        name: 'India',
+        code: 'TT',
         view:
           currentMap.option === MAP_OPTIONS.ZONES
             ? MAP_VIEWS.DISTRICTS
@@ -131,20 +124,20 @@ function MapExplorer({
     isCountryLoaded,
     regionHighlighted.stateCode,
     regionHighlighted.districtName,
-    currentMapCode,
+    currentMap.code,
     currentMap.option,
     currentMap.view,
     currentMapMeta.mapType,
   ]);
 
   const switchMap = useCallback(
-    (state) => {
-      const newMapMeta = MAP_META[state];
+    (stateCode) => {
+      const newMapMeta = MAP_META[stateCode];
       if (!newMapMeta) {
         return;
       }
       if (newMapMeta.mapType === MAP_TYPES.STATE) {
-        const districts = data[STATE_CODES[state]].districts;
+        const districts = data[stateCode].districts;
         const topDistrict = Object.keys(districts).sort(
           (a, b) =>
             getStatistic(districts[b], 'total', mapStatistic) -
@@ -152,11 +145,11 @@ function MapExplorer({
         )[0];
         ReactDOM.unstable_batchedUpdates(() => {
           setRegionHighlighted({
-            stateCode: STATE_CODES[state],
+            stateCode: stateCode,
             districtName: topDistrict,
           });
           setCurrentMap({
-            name: state,
+            code: stateCode,
             view: MAP_VIEWS.DISTRICTS,
             option:
               currentMap.option === MAP_OPTIONS.PER_MILLION
@@ -167,7 +160,7 @@ function MapExplorer({
       } else {
         ReactDOM.unstable_batchedUpdates(() => {
           setCurrentMap({
-            name: 'India',
+            code: 'TT',
             view:
               currentMap.option === MAP_OPTIONS.ZONES
                 ? MAP_VIEWS.DISTRICTS
@@ -188,12 +181,12 @@ function MapExplorer({
     const stateCode =
       currentMap.view === MAP_VIEWS.STATES
         ? regionHighlighted.stateCode
-        : currentMapCode;
+        : currentMap.code;
     const stateData = data[stateCode] || emptyData();
     return produce(stateData, (draft) => {
       draft.state = STATE_NAMES[stateCode];
     });
-  }, [data, regionHighlighted.stateCode, currentMap.view, currentMapCode]);
+  }, [data, regionHighlighted.stateCode, currentMap.view, currentMap.code]);
 
   const hoveredRegion = useMemo(() => {
     const hoveredData =
@@ -216,7 +209,7 @@ function MapExplorer({
     switch (option) {
       case MAP_OPTIONS.TOTAL:
         setCurrentMap({
-          name: currentMap.name,
+          code: currentMap.code,
           view:
             currentMapMeta.mapType === MAP_TYPES.COUNTRY
               ? MAP_VIEWS.STATES
@@ -232,7 +225,7 @@ function MapExplorer({
       case MAP_OPTIONS.PER_MILLION:
         if (currentMapMeta.mapType === MAP_TYPES.STATE) return;
         setCurrentMap({
-          name: currentMap.name,
+          code: currentMap.code,
           view: MAP_VIEWS.STATES,
           option: MAP_OPTIONS.PER_MILLION,
         });
@@ -244,14 +237,14 @@ function MapExplorer({
       case MAP_OPTIONS.HOTSPOTS:
         if (currentMapMeta.mapType === MAP_TYPES.STATE) return;
         setCurrentMap({
-          name: currentMap.name,
+          code: currentMap.code,
           view: MAP_VIEWS.DISTRICTS,
           option: MAP_OPTIONS.HOTSPOTS,
         });
         return;
       case MAP_OPTIONS.ZONES:
         setCurrentMap({
-          name: currentMap.name,
+          code: currentMap.code,
           view: MAP_VIEWS.DISTRICTS,
           option: MAP_OPTIONS.ZONES,
         });
@@ -303,7 +296,10 @@ function MapExplorer({
 
       <div className="header">
         <h1>
-          {t(currentMap.name)} {t('Map')}
+          {currentMap.code === 'TT'
+            ? t('India')
+            : t(STATE_NAMES[currentMap.code])}{' '}
+          {t('Map')}
         </h1>
         <h6>
           {t('{{action}} over a {{mapType}} for more details', {
@@ -368,7 +364,7 @@ function MapExplorer({
         {currentMapMeta.mapType === MAP_TYPES.STATE && (
           <div
             className="map-button"
-            onClick={() => history.push(`state/${currentMapCode}`)}
+            onClick={() => history.push(`state/${currentMap.code}`)}
           >
             {t('Visit state page')}
             <Icon.ArrowRightCircle />
