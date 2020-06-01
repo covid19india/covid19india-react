@@ -17,6 +17,8 @@ export const MINIGRAPH_LOOKBACK_DAYS = 20;
 
 export const NUM_BARS_STATEPAGE = 5;
 
+export const UNKNOWN_DISTRICT_KEY = 'Unknown';
+
 export const COLORS = {
   confirmed: '#ff073a',
   active: '#007bff',

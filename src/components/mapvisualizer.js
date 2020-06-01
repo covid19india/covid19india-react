@@ -10,6 +10,7 @@ import {
   STATE_CODES,
   STATE_NAMES,
   STATE_POPULATIONS_MIL,
+  UNKNOWN_DISTRICT_KEY,
   ZONE_COLORS,
 } from '../constants';
 import {
@@ -277,7 +278,7 @@ function MapVisualizer({
           if (district) d.value = getTotalStatistic(districtData, statistic);
           else
             d.value = getTotalStatistic(
-              stateData?.districts?.Unassigned,
+              stateData?.districts?.[UNKNOWN_DISTRICT_KEY],
               statistic
             );
           return d;
@@ -299,7 +300,7 @@ function MapVisualizer({
           .on('mouseenter', (d) => {
             setRegionHighlighted({
               stateCode: STATE_CODES[d.properties.st_nm],
-              districtName: d.properties.district || 'Unassigned',
+              districtName: d.properties.district || UNKNOWN_DISTRICT_KEY,
             });
           })
           .on('click', () => {
@@ -414,7 +415,7 @@ function MapVisualizer({
             state === d.properties.st_nm &&
             (!district ||
               district === d.properties?.district ||
-              (district === 'Unassigned' && !d.properties.district));
+              (district === UNKNOWN_DISTRICT_KEY && !d.properties.district));
           return highlighted ? 1 : 0.5;
         });
     } else {
@@ -455,7 +456,7 @@ function MapVisualizer({
         </svg>
         {mapMeta.mapType === MAP_TYPES.STATE &&
           !!getTotalStatistic(
-            data[currentMap.code]?.districts?.Unassigned,
+            data[currentMap.code]?.districts?.[UNKNOWN_DISTRICT_KEY],
             statistic
           ) && (
             <div className="disclaimer">

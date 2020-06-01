@@ -10,6 +10,7 @@ import {
   MAP_VIEWS,
   STATE_NAMES,
   STATE_POPULATIONS_MIL,
+  UNKNOWN_DISTRICT_KEY,
 } from '../constants';
 import {
   capitalize,
@@ -388,7 +389,7 @@ function MapExplorer({
           })}
         >
           {t(hoveredRegion.name)}
-          {hoveredRegion.name === 'Unassigned' &&
+          {hoveredRegion.name === UNKNOWN_DISTRICT_KEY &&
             ` (${t(STATE_NAMES[regionHighlighted.stateCode])})`}
         </h2>
 
