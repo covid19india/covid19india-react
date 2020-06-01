@@ -2,36 +2,36 @@ import {
   D3_TRANSITION_DURATION,
   MAP_LEGEND_HEIGHT,
   MAP_OPTIONS,
-  ZONE_COLORS,
+  // ZONE_COLORS,
 } from '../constants';
 import {useResizeObserver} from '../hooks/useresizeobserver';
 import {capitalizeAll, formatNumber} from '../utils/commonfunctions';
 
 import * as d3 from 'd3';
-import React, {useEffect, useMemo, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 
 function MapLegend({data, mapScale, mapOption, statistic}) {
   const svgRef = useRef(null);
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
 
-  const totalZones = useMemo(() => {
-    return Object.values(data).reduce(
-      (counts, stateData) => {
-        if (stateData.districts) {
-          Object.values(stateData.districts).forEach((districtData) => {
-            if (districtData?.zone?.status)
-              counts[districtData.zone.status] += 1;
-          });
-        }
-        return counts;
-      },
-      Object.keys(ZONE_COLORS).reduce((count, zone) => {
-        count[zone] = 0;
-        return count;
-      }, {})
-    );
-  }, [data]);
+  // const totalZones = useMemo(() => {
+  //   return Object.values(data).reduce(
+  //     (counts, stateData) => {
+  //       if (stateData?.districts) {
+  //         Object.values(stateData.districts).forEach((districtData) => {
+  //           if (districtData?.zone?.status)
+  //             counts[districtData.zone.status] += 1;
+  //         });
+  //       }
+  //       return counts;
+  //     },
+  //     Object.keys(ZONE_COLORS).reduce((count, zone) => {
+  //       count[zone] = 0;
+  //       return count;
+  //     }, {})
+  //   );
+  // }, [data]);
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
@@ -41,20 +41,21 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
     if (!width || !height)
       ({width, height} = wrapperRef.current.getBoundingClientRect());
 
-    if (mapOption === MAP_OPTIONS.ZONES) {
-      svg.call(() =>
-        legend({
-          svg: svg,
-          color: mapScale,
-          width: width,
-          height: height,
-          tickValues: [],
-          marginLeft: 2,
-          marginRight: 20,
-          ordinalWeights: Object.values(totalZones),
-        })
-      );
-    } else if (mapOption === MAP_OPTIONS.HOTSPOTS) {
+    // if (mapOption === MAP_OPTIONS.ZONES) {
+    //   svg.call(() =>
+    //     legend({
+    //       svg: svg,
+    //       color: mapScale,
+    //       width: width,
+    //       height: height,
+    //       tickValues: [],
+    //       marginLeft: 2,
+    //       marginRight: 20,
+    //       ordinalWeights: Object.values(totalZones),
+    //     })
+    //   );
+    // }
+    if (mapOption === MAP_OPTIONS.HOTSPOTS) {
       const t = svg.transition().duration(D3_TRANSITION_DURATION);
       svg
         .select('.ramp')
@@ -129,7 +130,7 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
       );
     }
     svg.attr('class', mapOption === MAP_OPTIONS.ZONES ? 'zone' : '');
-  }, [dimensions, totalZones, mapScale, mapOption, statistic]);
+  }, [dimensions, mapScale, mapOption, statistic]); // totalZones
 
   return (
     <div

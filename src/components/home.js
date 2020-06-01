@@ -9,6 +9,7 @@ import TimeSeriesExplorer from './timeseriesexplorer';
 
 import 'intersection-observer';
 
+import {MAP_META} from '../constants';
 import useStickySWR from '../hooks/usestickyswr';
 import {fetcher} from '../utils/commonfunctions';
 
@@ -52,7 +53,12 @@ function Home(props) {
 
   const stateCodes = [
     'TT',
-    ...Object.keys(timeseries || []).filter((stateCode) => stateCode !== 'TT'),
+    ...[
+      ...new Set([
+        ...Object.keys(MAP_META).filter((stateCode) => stateCode !== 'TT'),
+        ...Object.keys(data || {}).filter((stateCode) => stateCode !== 'TT'),
+      ]),
+    ].sort(),
   ];
 
   return (

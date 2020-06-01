@@ -322,13 +322,13 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
                   <h2>
                     {formatNumber(
                       getStatistic(
-                        timeseries[highlightedDate],
+                        timeseries?.[highlightedDate],
                         chartType,
                         statistic
                       )
                     )}
                   </h2>
-                  {/*<h6>Delta</h6>*/}
+                  {/* <h6>Delta</h6>*/}
                 </div>
               </div>
             )}
