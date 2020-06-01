@@ -110,8 +110,15 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
   };
 
   const timeline = {
-    '2020-05-28': 'First Day',
-    '2020-05-23': 'Second Day',
+    '2020-03-25': 'Beginning of Lockdown Phase 1',
+    '2020-04-14': 'End of Lockdown Phase 1',
+    '2020-04-15': 'Beginning of Lockdown Phase 2',
+    '2020-05-03': 'End of Lockdown Phase 2',
+    '2020-04-04': 'Beginning of Lockdown Phase 3',
+    '2020-04-17': 'End of Lockdown Phase 3',
+    '2020-05-18': 'Beginning of Lockdown Phase 4',
+    '2020-05-31': 'End of Lockdown Phase 4',
+    '2020-06-01': 'Beginning of Lockdown Phase 5',
   };
 
   const transition = useTransition(
