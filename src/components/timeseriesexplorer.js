@@ -7,7 +7,7 @@ import 'intersection-observer';
 
 import {PinIcon, IssueOpenedIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
-import {formatISO, subWeeks, subMonths} from 'date-fns';
+import {formatISO, sub} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -38,12 +38,12 @@ function TimeSeriesExplorer({
     const pastDates = Object.keys(timeseries).filter((date) => date <= today);
 
     if (timeseriesOption === TIMESERIES_OPTIONS.TWO_WEEKS) {
-      const cutOffDate = formatISO(subWeeks(new Date(today), 2), {
+      const cutOffDate = formatISO(sub(new Date(today), {weeks: 2}), {
         representation: 'date',
       });
       return pastDates.filter((date) => date >= cutOffDate);
     } else if (timeseriesOption === TIMESERIES_OPTIONS.MONTH) {
-      const cutOffDate = formatISO(subMonths(new Date(today), 1), {
+      const cutOffDate = formatISO(sub(new Date(today), {months: 1}), {
         representation: 'date',
       });
       return pastDates.filter((date) => date >= cutOffDate);

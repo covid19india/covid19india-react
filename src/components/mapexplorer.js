@@ -67,12 +67,12 @@ function MapExplorer({
   const {t} = useTranslation();
   const history = useHistory();
 
-  const [width, setWidth] = useState(480)
+  const [width, setWidth] = useState(480);
   const mapExplorerRef = useRef();
 
   useEffect(() => {
-    setWidth(mapExplorerRef.current.clientWidth)
-  }, [])
+    setWidth(mapExplorerRef.current.clientWidth);
+  }, []);
 
   const [currentMap, setCurrentMap] = useState({
     name: mapName,
@@ -335,9 +335,8 @@ function MapExplorer({
               </animated.h1>
               {statistic !== 'tested' && (
                 <animated.h6>
-                  {springs[index].delta.interpolate(
-                    (delta) =>
-                      (delta > 0 ? '+' : '') + formatNumber(Math.floor(delta))
+                  {springs[index].delta.interpolate((delta) =>
+                    delta > 0 ? `+${formatNumber(Math.floor(delta))}` : ''
                   )}
                 </animated.h6>
               )}
@@ -346,7 +345,7 @@ function MapExplorer({
                   {panelState?.total?.tested &&
                     t('As of {{date}}', {
                       date: formatDate(
-                        panelState.meta.tested.last_updated,
+                        panelState.meta.tested['last_updated'],
                         'dd MMM'
                       ),
                     })}
@@ -377,11 +376,11 @@ function MapExplorer({
         )}
 
         {currentMapMeta.mapType !== MAP_TYPES.STATE &&
-          panelState?.meta?.last_updated && (
+          panelState?.meta?.['last_updated'] && (
             <div className="last-update">
               <h6>{t('Last updated')}</h6>
               <h3>
-                {`${formatLastUpdated(panelState.meta.last_updated)} ${t(
+                {`${formatLastUpdated(panelState.meta['last_updated'])} ${t(
                   'ago'
                 )}`}
               </h3>
@@ -434,9 +433,7 @@ function MapExplorer({
         {mapStatistic && (
           <Suspense
             fallback={
-              <MapVisualizerLoader
-                {...{width, statistic: mapStatistic}}
-              />
+              <MapVisualizerLoader {...{width, statistic: mapStatistic}} />
             }
           >
             <MapVisualizer
@@ -499,8 +496,8 @@ const isEqual = (prevProps, currProps) => {
   }
   if (
     !equal(
-      prevProps.data?.TT?.meta?.last_updated,
-      currProps.data?.TT?.meta?.last_updated
+      prevProps.data?.TT?.meta?.['last_updated'],
+      currProps.data?.TT?.meta?.['last_updated']
     )
   ) {
     return false;

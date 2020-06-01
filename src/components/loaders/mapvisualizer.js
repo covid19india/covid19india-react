@@ -13,11 +13,11 @@ const MapVisualizerLoader = ({width, statistic}) => {
       speed={2}
       backgroundColor={COLORS[statistic]}
     >
-      <circle cx={0.4*width} cy={height / 2} r="5" />
-      <circle cx={0.5*width} cy={height / 2} r="5" />
-      <circle cx={0.6*width} cy={height / 2} r="5" />
+      <circle cx={0.4 * width} cy={height / 2} r="5" />
+      <circle cx={0.5 * width} cy={height / 2} r="5" />
+      <circle cx={0.6 * width} cy={height / 2} r="5" />
     </ContentLoader>
   );
-}
+};
 
 export default MapVisualizerLoader;
