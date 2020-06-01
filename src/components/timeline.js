@@ -13,7 +13,7 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
     dates.length,
     (i) => ({
       x: (index - i) * (480 / 3) + 480 / 2 - 35,
-      color: i == 0 ? '#6c757d' : '#6c757d99',
+      color: i === 0 ? '#6c757d' : '#6c757d99',
       opacity: i < 2 ? 1 : 0,
     }),
     config.stiff

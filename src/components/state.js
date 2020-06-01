@@ -17,8 +17,6 @@ import {
 import Breadcrumb from '@primer/components/lib/Breadcrumb';
 import Dropdown from '@primer/components/lib/Dropdown';
 import anime from 'animejs';
-import axios from 'axios';
-import {format, parse} from 'date-fns';
 import React, {useState, useMemo} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
@@ -109,8 +107,6 @@ function State(props) {
       revalidateOnFocus: false,
     }
   );
-
-  const population = STATE_POPULATIONS[stateName];
 
   const toggleShowAllDistricts = () => {
     setShowAllDistricts(!showAllDistricts);
@@ -255,49 +251,17 @@ function State(props) {
                 setMapStatistic,
               }}
             />
-            {/* fetched && (
-              <div className="meta-secondary">
-                <div className="alert">
-                  <Icon.AlertCircle />
-                  <div className="alert-right">
-                    Awaiting district details for{' '}
-                    {districtData[stateName]?.districtData['Unknown']
-                      ?.confirmed || '0'}{' '}
-                    cases
-                  </div>
-                </div>
-                <div className="alert">
-                  <Icon.Compass />
-                  <div className="alert-right">
-                    Data collected from sources{' '}
-                    {sources.length > 0
-                      ? Object.keys(sources[0]).map((key, index) => {
-                          if (key.match('source') && sources[0][key] !== '') {
-                            const num = key.match(/\d+/);
-                            return (
-                              <React.Fragment key={index}>
-                                {num > 1 ? ',' : ''}
-                                <a href={sources[0][key]}>{num}</a>
-                              </React.Fragment>
-                            );
-                          }
-                          return null;
-                        })
-                      : ''}
-                  </div>
-                </div>
-              </div>
-            )*/}
-            {/* fetched && (
+
+            {data && (
               <StateMeta
-                stateData={stateData[0]}
-                population={population}
-                lastSevenDaysData={timeseries.slice(-7)}
-                totalData={allStateData.filter(
-                  (state) => state.statecode === 'TT'
-                )}
+                {...{
+                  stateCode,
+                  data: data[stateCode],
+                  timeseries: timeseries[stateCode],
+                  population: STATE_POPULATIONS[stateCode],
+                }}
               />
-            )*/}
+            )}
           </div>
 
           <div className="state-right">
@@ -406,6 +370,7 @@ function State(props) {
             </React.Fragment>
           </div>
         </div>
+        <Footer />
       </React.Fragment>
     );
   }

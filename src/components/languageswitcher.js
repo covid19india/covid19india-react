@@ -7,7 +7,7 @@ import {useTranslation} from 'react-i18next';
 import {useLocalStorage, useUpdateEffect} from 'react-use';
 
 function LanguageSwitcher() {
-  const [language, setLanguage] = useLocalStorage('language', 'english');
+  const [language, setLanguage] = useLocalStorage('i18nextLng', 'english');
   const {i18n} = useTranslation();
 
   useUpdateEffect(() => {
