@@ -377,7 +377,7 @@ function MapVisualizer({
           .attr('stroke-width', width / 250)
       )
       .transition(t)
-      .attr('stroke', '#343a4099');
+      .attr('stroke', '#343a4050');
 
     // Reset on tapping outside map
     svg.attr('pointer-events', 'auto').on('click', () => {

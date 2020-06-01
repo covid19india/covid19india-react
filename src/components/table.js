@@ -70,21 +70,6 @@ function PureFineprintTop() {
 }
 const FineprintTop = React.memo(PureFineprintTop);
 
-function PureFineprintBottom({data}) {
-  return (
-    <h5 className="table-fineprint">
-      {`${
-        Object.keys(data).filter(
-          (stateCode) => data[stateCode].total?.confirmed > 0
-        ).length
-      } States/UTS Affected`}
-    </h5>
-  );
-}
-const FineprintBottom = React.memo(PureFineprintBottom, () => {
-  return true;
-});
-
 function Table({data, regionHighlighted, setRegionHighlighted}) {
   const {t} = useTranslation();
 
@@ -200,8 +185,6 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
           />
         </tbody>
       </animated.table>
-
-      <FineprintBottom {...{data}} />
     </React.Fragment>
   );
 }
