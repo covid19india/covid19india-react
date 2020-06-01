@@ -2,7 +2,7 @@ import './App.scss';
 import Navbar from './components/navbar';
 import ScrollToTop from './utils/ScrollToTop';
 
-import React, {Suspense, lazy} from 'react';
+import React, {lazy} from 'react';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
 import {
@@ -91,30 +91,28 @@ function App() {
 
       <Router>
         <ScrollToTop />
-        <Suspense fallback={<div />}>
-          <Route
-            render={({location}) => (
-              <React.Fragment>
-                <Navbar pages={pages} {...{darkMode}} />
-                <Switch location={location}>
-                  {pages.map((page, index) => {
-                    return (
-                      <Route
-                        exact
-                        path={page.pageLink}
-                        render={({match}) => (
-                          <page.view key={match.params.stateCode || index} />
-                        )}
-                        key={index}
-                      />
-                    );
-                  })}
-                  <Redirect to="/" />
-                </Switch>
-              </React.Fragment>
-            )}
-          />
-        </Suspense>
+        <Route
+          render={({location}) => (
+            <React.Fragment>
+              <Navbar pages={pages} {...{darkMode}} />
+              <Switch location={location}>
+                {pages.map((page, index) => {
+                  return (
+                    <Route
+                      exact
+                      path={page.pageLink}
+                      render={({match}) => (
+                        <page.view key={match.params.stateCode || index} />
+                      )}
+                      key={index}
+                    />
+                  );
+                })}
+                <Redirect to="/" />
+              </Switch>
+            </React.Fragment>
+          )}
+        />
       </Router>
     </div>
   );

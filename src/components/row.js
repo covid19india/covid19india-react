@@ -219,6 +219,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
       setRegionHighlighted(
         produce(regionHighlighted, (draftRegionHighlighted) => {
           draftRegionHighlighted.stateCode = stateCode;
+          draftRegionHighlighted.districtName = null;
         })
       );
     }
@@ -278,7 +279,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
           <tr className={'state-last-update'}>
             <td colSpan={4} style={{paddingBottom: 0}}>
               <p className="spacer"></p>
-              {data?.meta?.last_updated && (
+              {data?.meta?.['last_updated'] && (
                 <p>{`Last updated ${formatLastUpdated(
                   data.meta.last_updated
                 )}`}</p>
