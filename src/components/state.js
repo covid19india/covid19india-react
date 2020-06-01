@@ -364,9 +364,6 @@ function State(props) {
                   )}
                   <DeltaBarGraph
                     timeseries={timeseries[stateCode]}
-                    dates={Object.keys(timeseries[stateCode]).slice(
-                      -NUM_BARS_STATEPAGE
-                    )}
                     statistic={mapStatistic}
                   />
                 </div>
