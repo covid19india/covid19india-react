@@ -105,7 +105,8 @@ function MapVisualizer({
       const {width} = svgRef.current.getBoundingClientRect();
       return d3
         .scaleSqrt([0, Math.max(statisticMax, 1)], [0, width / 10])
-        .clamp(true);
+        .clamp(true)
+        .nice(3);
     } else {
       return d3
         .scaleSequential(
