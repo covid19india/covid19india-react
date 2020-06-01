@@ -1,5 +1,9 @@
-import {COLORS, D3_TRANSITION_DURATION} from '../constants';
-import {formatDate, getStatistic} from '../utils/commonfunctions';
+import {COLORS, D3_TRANSITION_DURATION, NUM_BARS_STATEPAGE} from '../constants';
+import {
+  formatDate,
+  getIndiaYesterdayISO,
+  getStatistic,
+} from '../utils/commonfunctions';
 
 import * as d3 from 'd3';
 import equal from 'fast-deep-equal';
@@ -10,10 +14,15 @@ const getDeltaStatistic = (data, statistic) => {
 };
 
 const [width, height] = [250, 250];
-const margin = {top: 50, right: -15, bottom: 50, left: 0};
+const margin = {top: 50, right: 0, bottom: 50, left: 0};
 
-function DeltaBarGraph({timeseries, dates, statistic}) {
+function DeltaBarGraph({timeseries, statistic}) {
   const svgRef = useRef();
+
+  const pastDates = Object.keys(timeseries || {}).filter(
+    (date) => date <= getIndiaYesterdayISO()
+  );
+  const dates = pastDates.slice(-NUM_BARS_STATEPAGE);
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
