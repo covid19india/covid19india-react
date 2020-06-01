@@ -188,7 +188,6 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
                   {...{stateCode, regionHighlighted, setRegionHighlighted}}
                 />
               );
-              return null;
             })}
         </tbody>
 

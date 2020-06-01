@@ -13,8 +13,6 @@ i18n
   .use(initReactI18next)
   .init({
     debug: isDevelopmentOrTest() && DEBUG,
-    lng: 'english',
-    fallbackLng: 'english',
     keySeparator: false,
     returnEmptyString: false,
     backend: {
