@@ -35,7 +35,9 @@ function TimeSeriesExplorer({
 
   const dates = useMemo(() => {
     const today = timelineDate || getIndiaYesterdayISO();
-    const pastDates = Object.keys(timeseries).filter((date) => date <= today);
+    const pastDates = Object.keys(timeseries || {}).filter(
+      (date) => date <= today
+    );
 
     if (timeseriesOption === TIMESERIES_OPTIONS.TWO_WEEKS) {
       const cutOffDate = formatISO(sub(new Date(today), {weeks: 2}), {
