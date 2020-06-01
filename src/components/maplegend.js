@@ -164,6 +164,7 @@ function legend({
   ordinalWeights,
 } = {}) {
   svg.selectAll('.circles > *').remove();
+  svg.selectAll('.circleAxis > *').remove();
   const t = svg.transition().duration(D3_TRANSITION_DURATION);
 
   let tickAdjust = (g) => {

@@ -74,7 +74,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
     const yAxis = (g, yScale) =>
       g
         .attr('class', 'y-axis')
-        .call(d3.axisRight(yScale).ticks(4, '0~s').tickPadding(5));
+        .call(d3.axisRight(yScale).ticks(4, '0~s').tickPadding(4));
 
     const uniformScaleMin = d3.min(dates, (date) =>
       getStatistic(timeseries[date], chartType, 'active')
@@ -92,7 +92,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
       .scaleLinear()
       .clamp(true)
       .domain([uniformScaleMin, Math.max(1, yBufferTop * uniformScaleMax)])
-      .nice()
+      .nice(4)
       .range([chartBottom, margin.top]);
 
     const yScaleUniformLog = d3
@@ -102,7 +102,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
         Math.max(1, uniformScaleMin),
         Math.max(10, yBufferTop * uniformScaleMax),
       ])
-      .nice()
+      .nice(4)
       .range([chartBottom, margin.top]);
 
     const generateYScale = (statistic) => {
@@ -151,7 +151,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
               )
           ),
         ])
-        .nice()
+        .nice(4)
         .range([chartBottom, margin.top]);
     };
 
