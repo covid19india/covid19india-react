@@ -34,7 +34,7 @@ export const formatDate = (unformattedDate, formatString) => {
     typeof unformattedDate === 'string' &&
     unformattedDate.match(/^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/g)
   )
-    unformattedDate += 'T00:00:00+0530';
+    unformattedDate += 'T00:00:00+05:30';
   const date = utcToZonedTime(new Date(unformattedDate), 'Asia/Kolkata');
   return format(date, formatString, {
     locale: LOCALE_SHORTHANDS[i18n.language],
