@@ -49,6 +49,16 @@ function TimeSeriesExplorer({
         representation: 'date',
       });
       return pastDates.filter((date) => date >= cutOffDate);
+    } else if (timeseriesOption === TIMESERIES_OPTIONS.MONTH2) {
+      const cutOffDate = formatISO(sub(parseIndiaDate(today), {months: 2}), {
+        representation: 'date',
+      });
+      return pastDates.filter((date) => date >= cutOffDate);
+    } else if (timeseriesOption === TIMESERIES_OPTIONS.MONTH3) {
+      const cutOffDate = formatISO(sub(parseIndiaDate(today), {months: 3}), {
+        representation: 'date',
+      });
+      return pastDates.filter((date) => date >= cutOffDate);
     }
     return pastDates;
   }, [timeseries, timelineDate, timeseriesOption]);

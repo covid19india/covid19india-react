@@ -31,6 +31,8 @@ export const COLORS = {
 
 export const TIMESERIES_OPTIONS = {
   BEGINNING: 'Beginning',
+  MONTH3: '3 Months',
+  MONTH2: '2 Months',
   MONTH: '1 Month',
   TWO_WEEKS: '2 Weeks',
 };
