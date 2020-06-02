@@ -1,7 +1,8 @@
+import './App.scss';
 import Navbar from './components/navbar';
 import ScrollToTop from './utils/ScrollToTop';
 
-import React, {Suspense, lazy} from 'react';
+import React, {lazy} from 'react';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
 import {
@@ -10,20 +11,16 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
-import {useLocalStorage, useEffectOnce} from 'react-use';
-import './App.scss';
+import useDarkMode from 'use-dark-mode';
 
 const Home = lazy(() =>
   import('./components/home' /* webpackChunkName: "Home" */)
 );
-const DeepDive = lazy(() =>
-  import('./components/deepdive' /* webpackChunkName: "DeepDive" */)
-);
 const FAQ = lazy(() =>
-  import('./components/faq' /* webpackChunkName: "FAQ" */)
+  import('./components/faq' /* webpackChunkName: "About" */)
 );
 const Demographics = lazy(() =>
-  import('./components/demographics' /* webpackChunkName: "PatientDB" */)
+  import('./components/demographics' /* webpackChunkName: "Demographics" */)
 );
 const State = lazy(() =>
   import('./components/state' /* webpackChunkName: "State" */)
@@ -60,13 +57,6 @@ function App() {
       showInNavbar: true,
     },
     {
-      pageLink: '/deepdive',
-      view: DeepDive,
-      displayName: t('Deep Dive'),
-      animationDelayForNavbar: 0.4,
-      showInNavbar: true,
-    },
-    {
       pageLink: '/essentials',
       view: Essentials,
       displayName: t('Essentials'),
@@ -89,32 +79,7 @@ function App() {
     },
   ];
 
-  const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
-  const [isThemeSet] = useLocalStorage('isThemeSet', false);
-
-  useEffectOnce(() => {
-    if (
-      window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches &&
-      !isThemeSet
-    ) {
-      setDarkMode(true);
-    } else if (
-      window.matchMedia &&
-      !window.matchMedia('(prefers-color-scheme: dark)').matches &&
-      !isThemeSet
-    ) {
-      setDarkMode(false);
-    }
-  });
-
-  React.useEffect(() => {
-    if (darkMode) {
-      document.querySelector('body').classList.add('dark-mode');
-    } else {
-      document.querySelector('body').classList.remove('dark-mode');
-    }
-  }, [darkMode]);
+  const darkMode = useDarkMode(false);
 
   return (
     <div className="App">
@@ -126,34 +91,28 @@ function App() {
 
       <Router>
         <ScrollToTop />
-        <Suspense fallback={<div className="lazy"></div>}>
-          <Route
-            render={({location}) => (
-              <React.Fragment>
-                <Navbar
-                  pages={pages}
-                  darkMode={darkMode}
-                  setDarkMode={setDarkMode}
-                />
-                <Switch location={location}>
-                  {pages.map((page, index) => {
-                    return (
-                      <Route
-                        exact
-                        path={page.pageLink}
-                        render={({match}) => (
-                          <page.view key={match.params.stateCode || index} />
-                        )}
-                        key={index}
-                      />
-                    );
-                  })}
-                  <Redirect to="/" />
-                </Switch>
-              </React.Fragment>
-            )}
-          />
-        </Suspense>
+        <Route
+          render={({location}) => (
+            <React.Fragment>
+              <Navbar pages={pages} {...{darkMode}} />
+              <Switch location={location}>
+                {pages.map((page, index) => {
+                  return (
+                    <Route
+                      exact
+                      path={page.pageLink}
+                      render={({match}) => (
+                        <page.view key={match.params.stateCode || index} />
+                      )}
+                      key={index}
+                    />
+                  );
+                })}
+                <Redirect to="/" />
+              </Switch>
+            </React.Fragment>
+          )}
+        />
       </Router>
     </div>
   );

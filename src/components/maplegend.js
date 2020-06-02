@@ -1,35 +1,62 @@
-import {MAP_STATISTICS} from '../constants';
+import {
+  D3_TRANSITION_DURATION,
+  MAP_LEGEND_HEIGHT,
+  MAP_OPTIONS,
+  // ZONE_COLORS,
+} from '../constants';
+import {useResizeObserver} from '../hooks/useresizeobserver';
 import {capitalizeAll, formatNumber} from '../utils/commonfunctions';
-import {useResizeObserver} from '../utils/hooks';
 
 import * as d3 from 'd3';
 import React, {useEffect, useRef} from 'react';
 
-function MapLegend({mapScale, statistic, mapStatistic, mapOption}) {
+function MapLegend({data, mapScale, mapOption, statistic}) {
   const svgRef = useRef(null);
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
 
+  // const totalZones = useMemo(() => {
+  //   return Object.values(data).reduce(
+  //     (counts, stateData) => {
+  //       if (stateData?.districts) {
+  //         Object.values(stateData.districts).forEach((districtData) => {
+  //           if (districtData?.zone?.status)
+  //             counts[districtData.zone.status] += 1;
+  //         });
+  //       }
+  //       return counts;
+  //     },
+  //     Object.keys(ZONE_COLORS).reduce((count, zone) => {
+  //       count[zone] = 0;
+  //       return count;
+  //     }, {})
+  //   );
+  // }, [data]);
+
   useEffect(() => {
     const svg = d3.select(svgRef.current);
-    const {width, height} =
+    let {width, height} =
       dimensions || wrapperRef.current.getBoundingClientRect();
 
-    if (mapStatistic === MAP_STATISTICS.ZONE) {
-      svg.call(() =>
-        legend({
-          svg: svg,
-          color: mapScale,
-          width: width,
-          height: height,
-          tickValues: [],
-          marginLeft: 2,
-          marginRight: 20,
-          ordinalWeights: Object.values(statistic),
-        })
-      );
-    } else if (mapStatistic === MAP_STATISTICS.HOTSPOTS) {
-      const t = svg.transition().duration(500);
+    if (!width || !height)
+      ({width, height} = wrapperRef.current.getBoundingClientRect());
+
+    // if (mapOption === MAP_OPTIONS.ZONES) {
+    //   svg.call(() =>
+    //     legend({
+    //       svg: svg,
+    //       color: mapScale,
+    //       width: width,
+    //       height: height,
+    //       tickValues: [],
+    //       marginLeft: 2,
+    //       marginRight: 20,
+    //       ordinalWeights: Object.values(totalZones),
+    //     })
+    //   );
+    // }
+    if (mapOption === MAP_OPTIONS.HOTSPOTS) {
+      const t = svg.transition().duration(D3_TRANSITION_DURATION);
       svg
         .select('.ramp')
         .transition(t)
@@ -85,16 +112,15 @@ function MapLegend({mapScale, statistic, mapStatistic, mapOption}) {
           svg: svg,
           color: mapScale,
           title:
-            capitalizeAll(mapOption) +
-            (mapStatistic === MAP_STATISTICS.PER_MILLION
+            capitalizeAll(statistic) +
+            (mapOption === MAP_OPTIONS.PER_MILLION
               ? ' cases per million'
               : ' cases'),
           width: width,
           height: height,
           ticks: 5,
           tickFormat: function (d, i, n) {
-            if (mapStatistic === MAP_STATISTICS.TOTAL && !Number.isInteger(d))
-              return;
+            if (mapOption === MAP_OPTIONS.TOTAL && !Number.isInteger(d)) return;
             if (i === n.length - 1) return formatNumber(d) + '+';
             return formatNumber(d);
           },
@@ -103,13 +129,13 @@ function MapLegend({mapScale, statistic, mapStatistic, mapOption}) {
         })
       );
     }
-    svg.attr('class', mapStatistic === MAP_STATISTICS.ZONE ? 'zone' : '');
-  });
+    svg.attr('class', mapOption === MAP_OPTIONS.ZONES ? 'zone' : '');
+  }, [dimensions, mapScale, mapOption, statistic]); // totalZones
 
   return (
     <div
-      className="svg-parent maplegend fadeInUp"
-      style={{animationDelay: '2.5s', height: 50}}
+      className="svg-parent maplegend"
+      style={{height: MAP_LEGEND_HEIGHT}}
       ref={wrapperRef}
     >
       <svg id="legend" preserveAspectRatio="xMidYMid meet" ref={svgRef}>
@@ -149,7 +175,7 @@ function legend({
 } = {}) {
   svg.selectAll('.circles > *').remove();
   svg.selectAll('.circleAxis > *').remove();
-  const t = svg.transition().duration(500);
+  const t = svg.transition().duration(D3_TRANSITION_DURATION);
 
   let tickAdjust = (g) => {
     const ticks = g.selectAll('.tick line');

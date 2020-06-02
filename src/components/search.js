@@ -1,18 +1,19 @@
 import {
   STATE_CODES_ARRAY,
-  STATE_CODES_REVERSE,
   STATE_CODES,
+  STATE_NAMES,
   ESSENTIALS_CATEGORIES,
 } from '../constants';
 import {capitalize} from '../utils/commonfunctions';
 
 import Bloodhound from 'corejs-typeahead';
-import React, {useState, useEffect, useCallback, useRef} from 'react';
-import ContentLoader from 'react-content-loader';
+import produce from 'immer';
+import React, {useState, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
-import {useDebounce, useMeasure} from 'react-use';
+import {useTrail, animated, config} from 'react-spring';
+import {useDebounce} from 'react-use';
 
 const engine = new Bloodhound({
   initialize: true,
@@ -89,30 +90,7 @@ const locationSuggestions = [
   'Ganjam',
 ];
 
-function SearchLoader() {
-  const [svgElement, {width}] = useMeasure();
-
-  useEffect(() => {}, [width]);
-
-  return (
-    <React.Fragment>
-      <span ref={svgElement} style={{width: '100%'}} />
-      {width && (
-        <ContentLoader
-          speed={1.5}
-          width={width}
-          height={100}
-          viewBox={`0 0 ${width} 100`}
-          position="absolute"
-        >
-          <rect x="10" y="20" rx="5" ry="5" width={width - 20} height="75" />
-        </ContentLoader>
-      )}
-    </React.Fragment>
-  );
-}
-
-function Search({districtZones}) {
+function Search() {
   const [searchValue, setSearchValue] = useState('');
   const [expand, setExpand] = useState(false);
   const [results, setResults] = useState([]);
@@ -139,7 +117,7 @@ function Search({districtZones}) {
         const districtObj = {
           name: result.district,
           type: 'district',
-          route: STATE_CODES_REVERSE[result.state],
+          route: STATE_CODES[result.state],
         };
         results.push(districtObj);
         return null;
@@ -179,7 +157,11 @@ function Search({districtZones}) {
       if (searchValue) {
         handleSearch(searchValue);
       } else {
-        setResults([]);
+        setResults(
+          produce(results, (draftResults) => {
+            draftResults.splice(0);
+          })
+        );
       }
     },
     100,
@@ -249,12 +231,22 @@ function Search({districtZones}) {
   const targetInput = document.getElementById('search-placeholder');
   if (targetInput) loopThroughSuggestions(targetInput, 0);*/
 
+  const [trail, set] = useTrail(3, () => ({
+    transform: 'translate3d(0, 10px, 0)',
+    opacity: 0,
+    config: config.stiff,
+  }));
+
+  set({transform: 'translate3d(0, 0px, 0)', opacity: 1});
+
   return (
     <div className="Search">
-      <label>{t('Search your city, resources, etc')}</label>
-      <div className="line"></div>
+      <animated.label style={trail[0]}>
+        {t('Search your city, resources, etc')}
+      </animated.label>
+      <animated.div className="line" style={trail[1]}></animated.div>
 
-      <div className="search-input-wrapper">
+      <animated.div className="search-input-wrapper" style={trail[2]}>
         <input
           type="text"
           value={searchValue}
@@ -286,21 +278,7 @@ function Search({districtZones}) {
             <Icon.X />
           </div>
         )}
-
-        {!expand && searchValue.length === 0 && (
-          <div
-            className={`close-button custom`}
-            onClick={() => {
-              setSearchValue('');
-              setResults([]);
-            }}
-          >
-            <Icon.Heart />
-          </div>
-        )}
-      </div>
-
-      {results.length < 1 && searchValue.length > 0 && <SearchLoader />}
+      </animated.div>
 
       {results.length > 0 && (
         <div className="results">
@@ -313,7 +291,7 @@ function Search({districtZones}) {
                       <div className="result-name">
                         {`${result.name}`}
                         {result.type === 'district' &&
-                          `, ${STATE_CODES[result.route]}`}
+                          `, ${STATE_NAMES[result.route]}`}
                       </div>
                     </div>
                     <div className="result-type">
@@ -427,4 +405,8 @@ function Search({districtZones}) {
   );
 }
 
-export default React.memo(Search);
+const isEqual = () => {
+  return true;
+};
+
+export default React.memo(Search, isEqual);

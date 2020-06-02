@@ -55,6 +55,8 @@ function Demographics(props) {
       return 3;
     } else if (isWithinInterval(chosenDate, RAW_DATA_PARTITIONS.v4)) {
       return 4;
+    } else if (isWithinInterval(chosenDate, RAW_DATA_PARTITIONS.v5)) {
+      return 5;
     }
   }, [filters.dateannounced]);
 

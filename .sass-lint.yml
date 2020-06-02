@@ -14,3 +14,4 @@ rules:
   no-transition-all: 0
   no-vendor-prefixes: 0
   no-misspelled-properties: 0
+  leading-zero: 0

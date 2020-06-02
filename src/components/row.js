@@ -1,180 +1,166 @@
-import {STATE_ROW_STATISTICS, DISTRICT_ROW_STATISTICS} from '../constants';
+import {PRIMARY_STATISTICS, STATE_NAMES} from '../constants';
 import {
-  formatDate,
-  formatNumber,
-  formatLastUpdated,
-  capitalize,
   abbreviate,
+  capitalize,
+  formatLastUpdated,
+  formatNumber,
+  getStatistic,
 } from '../utils/commonfunctions';
 
+import Tooltip from '@primer/components/lib/Tooltip';
+import {
+  InfoIcon,
+  TriangleUpIcon,
+  TriangleDownIcon,
+} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
+import produce from 'immer';
 import React, {useState, useCallback, useMemo} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
-import ReactTooltip from 'react-tooltip';
-import {createBreakpoint, useLocalStorage, useEffectOnce} from 'react-use';
+import {useSpring, animated, config} from 'react-spring';
+import {createBreakpoint, useLocalStorage} from 'react-use';
 
-const useBreakpoint = createBreakpoint({XL: 1280, L: 768, S: 350});
+const useBreakpoint = createBreakpoint({L: 768, S: 350});
 
-function StateCell({state, statistic}) {
-  const ArrowUp = useMemo(() => <Icon.ArrowUp />, []);
+function PureCell({statistic, data}) {
+  const total = getStatistic(data, 'total', statistic);
+  const delta = getStatistic(data, 'delta', statistic);
+
+  const spring = useSpring(
+    {
+      total: total,
+      delta: delta,
+      from: {
+        total: total,
+        delta: delta,
+      },
+    },
+    config.gentle
+  );
 
   return (
     <td>
-      <span className={classnames('delta', `is-${statistic}`)}>
-        {state[`delta${statistic}`] > 0 && ArrowUp}
-        {state[`delta${statistic}`] > 0 && state[`delta${statistic}`]}
-      </span>
-      <span className="total">
-        {state[statistic] === 0 ? '-' : formatNumber(state[statistic])}
-      </span>
+      <animated.span className={classnames('delta', `is-${statistic}`)}>
+        {spring.delta.interpolate((delta) =>
+          delta > 0 ? '\u2191' + formatNumber(Math.floor(delta)) : ''
+        )}
+      </animated.span>
+      <animated.span className="total">
+        {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
+      </animated.span>
     </td>
   );
 }
 
-function DistrictHeaderCell({handleSort, statistic, sortData}) {
+const isCellEqual = (prevProps, currProps) => {
+  if (!equal(prevProps.data.total, currProps.data.total)) {
+    return false;
+  }
+  if (!equal(prevProps.data.delta, currProps.data.delta)) {
+    return false;
+  }
+  return true;
+};
+
+const Cell = React.memo(PureCell, isCellEqual);
+
+function DistrictHeaderCell({handleSortClick, statistic, sortData}) {
   const breakpoint = useBreakpoint();
   const {t} = useTranslation();
 
   return (
-    <td onClick={() => handleSort(statistic)}>
+    <td onClick={() => handleSortClick(statistic)}>
       <div className="heading-content">
         <abbr
           className={classnames({[`is-${statistic}`]: breakpoint === 'S'})}
-          title={statistic}
+          title={capitalize(statistic)}
         >
-          {breakpoint === 'L'
-            ? statistic.slice(0)
-            : breakpoint === 'S'
-            ? capitalize(
-                abbreviate(statistic === 'deaths' ? 'deceased' : statistic)
-              )
-            : t(capitalize(statistic === 'deaths' ? 'deceased' : statistic))}
+          {breakpoint === 'S'
+            ? capitalize(statistic.slice(0, 1))
+            : breakpoint === 'L'
+            ? capitalize(abbreviate(statistic))
+            : capitalize(t(statistic))}
         </abbr>
-        <div
-          style={{
-            display: sortData.sortColumn === statistic ? 'initial' : 'none',
-          }}
-        >
-          {sortData.isAscending ? (
-            <div className="arrow-up" />
-          ) : (
-            <div className="arrow-down" />
-          )}
-        </div>
+        {sortData.sortColumn === statistic && (
+          <div>
+            {sortData.isAscending && <TriangleUpIcon />}
+            {!sortData.isAscending && <TriangleDownIcon />}
+            <div />
+          </div>
+        )}
       </div>
     </td>
   );
 }
 
-function PureDistrictCell({district, statistic}) {
-  return (
-    <td>
-      <span className={classnames('delta', `is-${statistic}`)}>
-        {district.delta[statistic] > 0 && <Icon.ArrowUp />}
-        {district.delta[statistic] > 0 && district.delta[statistic]}
-      </span>
-      <span className="total">{formatNumber(district[statistic])}</span>
-    </td>
-  );
-}
-
-const DistrictCell = React.memo(PureDistrictCell);
-
-const isDistrictRowEqual = (prevProps, currProps) => {
-  if (equal(prevProps.regionHighlighted?.district, prevProps.district)) {
-    return false;
-  }
-  if (equal(currProps.regionHighlighted?.district, currProps.district)) {
-    return false;
-  }
-  return true;
-};
-
 function PureDistrictRow({
+  stateCode,
+  districtName,
+  data,
   regionHighlighted,
-  district,
-  state,
-  zone,
-  onHighlightDistrict,
-  sortedDistricts,
-  districts,
+  setRegionHighlighted,
 }) {
   const {t} = useTranslation();
 
+  const highlightDistrict = useCallback(() => {
+    if (regionHighlighted.districtName !== districtName) {
+      setRegionHighlighted(
+        produce(regionHighlighted, (draftRegionHighlighted) => {
+          draftRegionHighlighted.stateCode = stateCode;
+          draftRegionHighlighted.districtName = districtName;
+        })
+      );
+    }
+  }, [regionHighlighted, districtName, setRegionHighlighted, stateCode]);
+
   return (
     <tr
-      key={district.district}
       className={classnames('district', {
-        'is-highlighted': regionHighlighted?.district === district,
+        'is-highlighted': regionHighlighted?.districtName === districtName,
       })}
-      onMouseEnter={() => onHighlightDistrict(district, state)}
+      onMouseEnter={highlightDistrict}
     >
       <td>
         <div className="title-chevron">
           <span className="title-icon">
-            {t(district)}
-            <span
-              data-for="district"
-              data-tip={[[sortedDistricts[district].notes]]}
-              data-event="touchstart mouseover"
-              data-event-off="mouseleave"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {sortedDistricts[district].notes && <Icon.Info />}
-            </span>
+            {t(districtName)}
+            {data?.meta?.notes && (
+              <Tooltip aria-label={data.meta.notes}>
+                <Icon.Info />
+              </Tooltip>
+            )}
           </span>
         </div>
       </td>
 
-      {DISTRICT_ROW_STATISTICS.map((statistic) => (
-        <DistrictCell
-          key={statistic}
-          district={districts[district]}
-          statistic={statistic}
-        />
+      {PRIMARY_STATISTICS.map((statistic) => (
+        <Cell key={statistic} {...{statistic}} data={data} />
       ))}
     </tr>
   );
 }
 
-const DistrictRow = React.memo(PureDistrictRow, isDistrictRowEqual);
-
-const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.state.state, currProps.state.state)) {
+const isDistrictRowEqual = (prevProps, currProps) => {
+  if (!equal(prevProps.data.last_updated, currProps.data.last_updated)) {
     return false;
-  }
-  if (
+  } else if (
     !equal(
-      prevProps.regionHighlighted?.state,
-      currProps.regionHighlighted?.state
-    )
-  ) {
-    return false;
-  }
-  if (
-    !equal(
-      prevProps.regionHighlighted?.district,
-      currProps.regionHighlighted?.district
-    )
+      prevProps.regionHighlighted.districtName,
+      currProps.regionHighlighted.districtName
+    ) &&
+    (equal(prevProps.regionHighlighted.districtName, prevProps.districtName) ||
+      equal(currProps.regionHighlighted.districtName, currProps.districtName))
   ) {
     return false;
   }
   return true;
 };
+const DistrictRow = React.memo(PureDistrictRow, isDistrictRowEqual);
 
-function Row({
-  index,
-  state,
-  districts,
-  zones,
-  regionHighlighted,
-  onHighlightState,
-  onHighlightDistrict,
-}) {
-  const [sortedDistricts, setSortedDistricts] = useState(districts);
+function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useLocalStorage('districtSortData', {
     sortColumn: 'confirmed',
@@ -199,95 +185,102 @@ function Row({
     [showDistricts]
   );
 
-  const _onHighlightState = useCallback(
-    (state) => {
-      if (!equal(state.state, regionHighlighted?.state)) {
-        onHighlightState(state);
+  const handleSortClick = useCallback(
+    (statistic) => {
+      setSortData(
+        produce(sortData, (draftSortData) => {
+          draftSortData.isAscending = !sortData.isAscending;
+          draftSortData.sortColumn = statistic;
+        })
+      );
+    },
+    [sortData, setSortData]
+  );
+
+  const sortingFunction = useCallback(
+    (districtNameA, districtNameB) => {
+      if (sortData.sortColumn !== 'districtName') {
+        return sortData.isAscending
+          ? getStatistic(
+              data.districts[districtNameA],
+              'total',
+              sortData.sortColumn
+            ) -
+              getStatistic(
+                data.districts[districtNameB],
+                'total',
+                sortData.sortColumn
+              )
+          : getStatistic(
+              data.districts[districtNameB],
+              'total',
+              sortData.sortColumn
+            ) -
+              getStatistic(
+                data.districts[districtNameA],
+                'total',
+                sortData.sortColumn
+              );
+      } else {
+        return sortData.isAscending
+          ? districtNameA.localeCompare(districtNameB)
+          : districtNameB.localeCompare(districtNameA);
       }
     },
-    [onHighlightState, regionHighlighted]
+    [sortData, data]
   );
 
-  const doSort = useCallback(
-    (sortData) => {
-      if (!sortedDistricts) return null;
-      const sorted = {};
-      Object.keys(sortedDistricts)
-        .sort((district1, district2) => {
-          if (sortData.sortColumn !== 'district') {
-            return sortData.isAscending
-              ? parseInt(sortedDistricts[district1][sortData.sortColumn]) -
-                  parseInt(sortedDistricts[district2][sortData.sortColumn])
-              : parseInt(sortedDistricts[district2][sortData.sortColumn]) -
-                  parseInt(sortedDistricts[district1][sortData.sortColumn]);
-          } else {
-            return sortData.isAscending
-              ? district1.localeCompare(district2)
-              : district2.localeCompare(district1);
-          }
+  const highlightState = useCallback(() => {
+    if (regionHighlighted.stateCode !== stateCode) {
+      setRegionHighlighted(
+        produce(regionHighlighted, (draftRegionHighlighted) => {
+          draftRegionHighlighted.stateCode = stateCode;
+          draftRegionHighlighted.districtName = null;
         })
-        .forEach((key) => {
-          sorted[key] = sortedDistricts[key];
-        });
-      setSortedDistricts(sorted);
-    },
-    [sortedDistricts]
-  );
+      );
+    }
+  }, [regionHighlighted, setRegionHighlighted, stateCode]);
 
-  const handleSort = useCallback(
-    (statistic) => {
-      const newSortData = {
-        isAscending: !sortData.isAscending,
-        sortColumn: statistic,
-      };
-      doSort(newSortData);
-      setSortData(Object.assign({}, sortData, newSortData));
-    },
-    [doSort, setSortData, sortData]
-  );
-
-  useEffectOnce(() => {
-    if (state.statecode !== 'TT') doSort(sortData);
-  });
+  const _setShowDistrict = useCallback(() => {
+    if (data.districts) {
+      setShowDistricts(!showDistricts);
+    }
+  }, [showDistricts, data]);
 
   return (
     <React.Fragment>
       <tr
         className={classnames(
           'state',
-          {'is-total': state.statecode === 'TT'},
-          {'is-highlighted': regionHighlighted?.state === state.state},
-          {'is-odd': index % 2 === 0}
+          {'is-total': stateCode === 'TT'},
+          {'is-highlighted': regionHighlighted?.stateCode === stateCode}
         )}
-        onMouseEnter={() => _onHighlightState(state)}
-        onClick={
-          state.statecode !== 'TT'
-            ? () => {
-                setShowDistricts(!showDistricts);
-              }
-            : null
-        }
+        onMouseEnter={highlightState}
+        onClick={_setShowDistrict}
       >
         <td>
           <div className="title-chevron">
-            {state.statecode !== 'TT' && Chevron}
+            {stateCode !== 'TT' && Chevron}
             <span className="title-icon">
-              {t(state.state)}
+              {t(STATE_NAMES[stateCode])}
 
-              <span
-                data-tip={[state.statenotes]}
-                data-event="touchstart mouseover"
-                data-event-off="mouseleave"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {state.statenotes && <Icon.Info />}
-              </span>
+              {data?.meta?.notes && (
+                <Tooltip
+                  className="tooltip"
+                  aria-label={data.meta.notes}
+                  wrap={true}
+                  direction={'e'}
+                  noDelay={true}
+                >
+                  <InfoIcon size={'small'} />
+                </Tooltip>
+              )}
             </span>
           </div>
         </td>
 
-        {STATE_ROW_STATISTICS.map((statistic, index) => (
-          <StateCell key={index} state={state} statistic={statistic} />
+        {PRIMARY_STATISTICS.map((statistic) => (
+          <Cell key={statistic} {...{data, statistic}} />
         ))}
       </tr>
 
@@ -300,61 +293,54 @@ function Row({
           </tr>
 
           <tr className={'state-last-update'}>
-            <td colSpan={3} style={{paddingBottom: 0}}>
+            <td colSpan={4} style={{paddingBottom: 0}}>
               <p className="spacer"></p>
-              <p>
-                {isNaN(Date.parse(formatDate(state.lastupdatedtime)))
-                  ? ''
-                  : `${t('Last updated')} ${formatLastUpdated(
-                      state.lastupdatedtime
-                    )} ${t('ago')}`}
-              </p>
-              {sortedDistricts?.Unknown && (
+              {data?.meta?.['last_updated'] && (
+                <p>
+                  {`Last updated ${formatLastUpdated(
+                    data.meta.last_updated
+                  )} ${t('ago')}`}
+                </p>
+              )}
+              {data.districts['Unknown'] && (
                 <div className="disclaimer">
                   <Icon.AlertCircle />
                   {t('District-wise numbers are under reconciliation')}
                 </div>
               )}
             </td>
-            {state.state !== 'State Unassigned' && (
-              <td
-                align="center"
-                className="state-page-link"
-                colSpan={2}
-                onClick={() => {
-                  history.push(`state/${state.statecode}`);
-                }}
-              >
-                {t('See more details on {{state}}', {state: t(state.state)})}
-              </td>
-            )}
+            <td
+              align="center"
+              className="state-page-link"
+              colSpan={1}
+              style={{width: '1.5rem'}}
+              onClick={() => {
+                history.push(`state/${stateCode}`);
+              }}
+            >
+              {t('See more details on {{state}}', {
+                state: t(STATE_NAMES[stateCode]),
+              })}
+            </td>
           </tr>
 
           <tr className={classnames('district-heading')}>
-            <td onClick={() => handleSort('district')}>
+            <td onClick={() => handleSortClick('districtName')}>
               <div className="heading-content">
                 <abbr title="District">{t('District')}</abbr>
-                <div
-                  style={{
-                    display:
-                      sortData.sortColumn === 'district' ? 'initial' : 'none',
-                  }}
-                >
-                  {sortData.isAscending ? (
-                    <div className="arrow-up" />
-                  ) : (
-                    <div className="arrow-down" />
-                  )}
-                </div>
+                {sortData.sortColumn === 'districtName' && (
+                  <div>
+                    {sortData.isAscending && <TriangleDownIcon />}
+                    {!sortData.isAscending && <TriangleUpIcon />}
+                  </div>
+                )}
               </div>
             </td>
 
-            {DISTRICT_ROW_STATISTICS.map((statistic, index) => (
+            {PRIMARY_STATISTICS.map((statistic) => (
               <DistrictHeaderCell
-                key={index}
-                handleSort={handleSort}
-                statistic={statistic}
-                sortData={sortData}
+                key={statistic}
+                {...{statistic, sortData, handleSortClick}}
               />
             ))}
           </tr>
@@ -362,37 +348,57 @@ function Row({
       )}
 
       {showDistricts &&
-        Object.keys(sortedDistricts).map((district, index) => (
-          <DistrictRow
-            key={district}
-            state={state}
-            district={district}
-            districts={districts}
-            zone={zones?.[district]}
-            sortedDistricts={sortedDistricts}
-            regionHighlighted={regionHighlighted}
-            onHighlightDistrict={onHighlightDistrict}
-          />
-        ))}
+        Object.keys(data.districts)
+          .sort((a, b) => sortingFunction(a, b))
+          .map((districtName) => (
+            <DistrictRow
+              key={districtName}
+              {...{
+                districtName,
+                regionHighlighted,
+                setRegionHighlighted,
+                stateCode,
+              }}
+              data={data.districts[districtName]}
+            />
+          ))}
 
       {showDistricts && (
         <tr className="is-spacer">
           <td colSpan={5}>
             <p />
-            <ReactTooltip
-              id="district"
-              place="right"
-              type="dark"
-              effect="solid"
-              multiline={true}
-              scrollHide={true}
-              globalEventOff="click"
-            />
           </td>
         </tr>
       )}
     </React.Fragment>
   );
 }
+
+const isEqual = (prevProps, currProps) => {
+  if (!equal(prevProps.data.total, currProps.data.total)) {
+    return false;
+  } else if (
+    (!equal(
+      prevProps.regionHighlighted.stateCode,
+      currProps.regionHighlighted.stateCode
+    ) &&
+      equal(prevProps.regionHighlighted.stateCode, prevProps.stateCode)) ||
+    equal(currProps.regionHighlighted.stateCode, currProps.stateCode)
+  ) {
+    return false;
+  } else if (
+    (!equal(
+      prevProps.regionHighlighted.districtName,
+      currProps.regionHighlighted.districtName
+    ) &&
+      equal(
+        prevProps.regionHighlighted.districtName,
+        prevProps.districtName
+      )) ||
+    equal(currProps.regionHighlighted.districtName, currProps.districtName)
+  ) {
+    return false;
+  } else return true;
+};
 
 export default React.memo(Row, isEqual);

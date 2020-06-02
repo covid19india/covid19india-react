@@ -30,7 +30,10 @@
       href="https://www.google-analytics.com"
       crossorigin
     />
-    <link rel="preconnect" href="https://api.covid19india.org/" />
+    <link
+      rel="preconnect"
+      href="https://api.covid19india.org/v2/data.min.json"
+    />
     <link
       rel="preconnect"
       href="https://www.googletagmanager.com/"
@@ -65,7 +68,7 @@
 
     <style>
       /* font-face declarations for preloaded fonts */
-      /* These are the only 3 fonts being used. 
+      /* These are the only 3 fonts being used.
       font-face declarations for thin, regular and light fonts should be added as needed */
       @font-face {
         font-family: 'Archia';
@@ -152,6 +155,48 @@
     <div id="root"></div>
   </body>
 
+  <script>
+  // Insert this script in your index.html right after the <body> tag.
+  // This will help to prevent a flash if dark mode is the default.
+  (function() {
+    // Change these if you use something different in your hook.
+    var storageKey = 'darkMode';
+    var classNameDark = 'dark-mode';
+    var classNameLight = 'light-mode';
+
+    function setClassOnDocumentBody(darkMode) {
+      document.body.classList.add(darkMode ? classNameDark : classNameLight);
+      document.body.classList.remove(darkMode ? classNameLight : classNameDark);
+    }
+
+    var preferDarkQuery = '(prefers-color-scheme: dark)';
+    var mql = window.matchMedia(preferDarkQuery);
+    var supportsColorSchemeQuery = mql.media === preferDarkQuery;
+    var localStorageTheme = null;
+    try {
+      localStorageTheme = localStorage.getItem(storageKey);
+    } catch (err) {}
+    var localStorageExists = localStorageTheme !== null;
+    if (localStorageExists) {
+      localStorageTheme = JSON.parse(localStorageTheme);
+    }
+
+    // Determine the source of truth
+    if (localStorageExists) {
+      // source of truth from localStorage
+      setClassOnDocumentBody(localStorageTheme);
+    } else if (supportsColorSchemeQuery) {
+      // source of truth from system
+      setClassOnDocumentBody(mql.matches);
+      localStorage.setItem(storageKey, mql.matches);
+    } else {
+      // source of truth from document.body
+      var isDarkMode = document.body.classList.contains(classNameDark);
+      localStorage.setItem(storageKey, JSON.stringify(isDarkMode));
+    }
+  })();
+  </script>
+
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script
     async
@@ -163,6 +208,9 @@
       dataLayer.push(arguments);
     }
     gtag('js', new Date());
-    gtag('config', 'UA-160698988-1', {"site_speed_sample_rate": 1, "sample_rate": 1});
+    gtag('config', 'UA-160698988-1', {
+      site_speed_sample_rate: 1,
+      sample_rate: 1,
+    });
   </script>
 </html>
