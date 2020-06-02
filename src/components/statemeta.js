@@ -138,9 +138,9 @@ function StateMeta({stateCode, data, timeseries}) {
             indiaDate,
             'dd MMM'
           )}`}
-          description={`In the last one week, the number of new infections has grown by an average of ${Math.round(
-            growthRate / 7
-          )}% every day.`}
+          description={`In the last one week, the number of new infections has
+          grown by an average of ${formatNumber(Math.round(growthRate / 7))}%
+          every day.`}
         />
 
         <StateMetaCard
