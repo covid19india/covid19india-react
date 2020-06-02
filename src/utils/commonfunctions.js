@@ -26,7 +26,7 @@ export const formatLastUpdated = (unformattedDate) => {
 };
 
 export const parseIndiaDate = (isoDate) => {
-  return new Date(isoDate + 'T00:00:00+0530');
+  return new Date(isoDate + 'T00:00:00+05:30');
 };
 
 export const formatDate = (unformattedDate, formatString) => {
