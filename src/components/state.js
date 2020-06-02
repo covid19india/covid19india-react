@@ -72,7 +72,7 @@ function State(props) {
     anime({
       targets: '.highlight',
       duration: 200,
-      delay: 3000,
+      delay: 500,
       translateX:
         mapStatistic === 'confirmed'
           ? `${width * 0}px`
