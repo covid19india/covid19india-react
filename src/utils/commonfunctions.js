@@ -1,4 +1,4 @@
-import {LOCALE_SHORTHANDS} from '../constants';
+import {INDIA_ISO_SUFFIX, LOCALE_SHORTHANDS} from '../constants';
 
 import axios from 'axios';
 import {format, formatDistance, formatISO, subDays} from 'date-fns';
@@ -26,7 +26,7 @@ export const formatLastUpdated = (unformattedDate) => {
 };
 
 export const parseIndiaDate = (isoDate) => {
-  return new Date(isoDate + 'T00:00:00+05:30');
+  return new Date(isoDate + INDIA_ISO_SUFFIX);
 };
 
 export const formatDate = (unformattedDate, formatString) => {
@@ -34,7 +34,7 @@ export const formatDate = (unformattedDate, formatString) => {
     typeof unformattedDate === 'string' &&
     unformattedDate.match(/^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/g)
   )
-    unformattedDate += 'T00:00:00+05:30';
+    unformattedDate += INDIA_ISO_SUFFIX;
   const date = utcToZonedTime(new Date(unformattedDate), 'Asia/Kolkata');
   return format(date, formatString, {
     locale: LOCALE_SHORTHANDS[i18n.language],

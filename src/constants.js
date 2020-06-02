@@ -19,6 +19,8 @@ export const NUM_BARS_STATEPAGE = 5;
 
 export const UNKNOWN_DISTRICT_KEY = 'Unknown';
 
+export const INDIA_ISO_SUFFIX = 'T00:00:00+05:30';
+
 export const COLORS = {
   confirmed: '#ff073a',
   active: '#007bff',
@@ -348,8 +350,12 @@ export const STATE_POPULATIONS = {
   TT: 1332900000,
 };
 
-export const STATE_POPULATIONS_MIL = Object.fromEntries(
-  Object.entries(STATE_POPULATIONS).map(([state, pop]) => [state, 1e-6 * pop])
+export const STATE_POPULATIONS_MIL = Object.keys(STATE_POPULATIONS).reduce(
+  (res, stateCode) => {
+    res[stateCode] = 1e-6 * STATE_POPULATIONS[stateCode];
+    return res;
+  },
+  {}
 );
 
 export const RAW_DATA_PARTITIONS = {

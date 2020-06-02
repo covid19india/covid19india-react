@@ -38,20 +38,6 @@ import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {useSprings, animated} from 'react-spring';
 
-const emptyData = () => {
-  return Object.fromEntries(
-    ['total', 'delta'].map((ctype) => [
-      ctype,
-      {
-        active: 0,
-        confirmed: 0,
-        deceased: 0,
-        recovered: 0,
-      },
-    ])
-  );
-};
-
 function MapExplorer({
   stateCode,
   data,
@@ -182,7 +168,7 @@ function MapExplorer({
       currentMap.view === MAP_VIEWS.STATES
         ? regionHighlighted.stateCode
         : currentMap.code;
-    const stateData = data[stateCode] || emptyData();
+    const stateData = data[stateCode] || {};
     return produce(stateData, (draft) => {
       draft.state = STATE_NAMES[stateCode];
     });
@@ -194,7 +180,7 @@ function MapExplorer({
         ? data[regionHighlighted.stateCode]?.districts?.[
             regionHighlighted.districtName
           ]
-        : data[regionHighlighted.stateCode]) || emptyData();
+        : data[regionHighlighted.stateCode]) || {};
     return produce(hoveredData, (draft) => {
       draft.name =
         regionHighlighted.districtName ||
@@ -332,7 +318,7 @@ function MapExplorer({
               {statistic !== 'tested' && (
                 <animated.h6>
                   {springs[index].delta.interpolate((delta) =>
-                    delta > 0 ? `+${formatNumber(Math.floor(delta))}` : ''
+                    delta > 0 ? `+${formatNumber(Math.floor(delta))}` : '\u00A0'
                   )}
                 </animated.h6>
               )}
