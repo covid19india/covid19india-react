@@ -2,6 +2,7 @@ import StateMetaCard from './statemetacard';
 
 import {STATE_NAMES} from '../constants';
 import {
+  formatDate,
   formatNumber,
   formatLastUpdated,
   getStatistic,
@@ -74,12 +75,12 @@ function StateMeta({stateCode, data, timeseries, population}) {
         <StateMetaCard
           className="confirmed"
           title={'Confirmed Per Million'}
-          statistic={confirmedPerMillion.toFixed(2)}
-          total={totalConfirmedPerMillion.toFixed(2)}
+          statistic={formatNumber(confirmedPerMillion)}
+          total={formatNumber(totalConfirmedPerMillion)}
           formula={'(confirmed / state population) * 1 Million'}
           description={`
-            ${Math.round(
-              confirmedPerMillion
+            ${formatNumber(
+              Math.round(confirmedPerMillion)
             )} out of every 1 million people in ${
             STATE_NAMES[stateCode]
           } have tested positive for the virus.
@@ -89,44 +90,46 @@ function StateMeta({stateCode, data, timeseries, population}) {
         <StateMetaCard
           className="active"
           title={'Active'}
-          statistic={`${activePercent.toFixed(2)}%`}
+          statistic={`${formatNumber(activePercent)}%`}
           formula={'(active / confirmed) * 100'}
-          description={`For every 100 confirmed cases, ${activePercent.toFixed(
-            0
+          description={`For every 100 confirmed cases, ${formatNumber(
+            Math.round(activePercent)
           )} are currently infected.`}
         />
 
         <StateMetaCard
           className="recovery"
           title={'Recovery Rate'}
-          statistic={`${recoveryPercent.toFixed(2)}%`}
+          statistic={`${formatNumber(recoveryPercent)}%`}
           formula={'(recovered / confirmed) * 100'}
-          description={`For every 100 confirmed cases,
-            ${Math.round(
-              recoveryPercent.toFixed(0)
-            )} have recovered from the virus.`}
+          description={`For every 100 confirmed cases, ${formatNumber(
+            Math.round(recoveryPercent)
+          )} have recovered from the virus.`}
         />
 
         <StateMetaCard
           className="mortality"
           title={'Mortality Rate'}
-          statistic={`${deathPercent.toFixed(2)}%`}
+          statistic={`${formatNumber(deathPercent)}%`}
           formula={'(deceased / confirmed) * 100'}
-          description={`For every 100 confirmed cases,
-            ${Math.round(
-              deathPercent.toFixed(0)
-            )} have unfortunately passed away from the virus.`}
+          description={`For every 100 confirmed cases, ${formatNumber(
+            Math.round(deathPercent)
+          )} have unfortunately passed away from the virus.`}
         />
 
         <StateMetaCard
           className="gr"
           title={'Avg. Growth Rate'}
-          statistic={growthRate > 0 ? `${Math.round(growthRate / 7)}%` : '-'}
+          statistic={
+            growthRate > 0
+              ? `${formatNumber(Math.round(growthRate / 7))}%`
+              : '-'
+          }
           formula={
             '(((previousDayData - sevenDayBeforeData) / sevenDayBeforeData) * 100)/7'
           }
-          date={`${format(new Date(prevWeekDate), 'dd MMM')} - ${format(
-            new Date(indiaDate),
+          date={`${formatDate(prevWeekDate, 'dd MMM')} - ${formatDate(
+            indiaDate,
             'dd MMM'
           )}`}
           description={`In the last one week, the number of new infections has grown by an average of ${Math.round(
@@ -137,13 +140,13 @@ function StateMeta({stateCode, data, timeseries, population}) {
         <StateMetaCard
           className="tpm"
           title={'Tests Per Million'}
-          statistic={`≈ ${Math.round(testPerMillion)}`}
+          statistic={`≈ ${formatNumber(Math.round(testPerMillion))}`}
           formula={
             '(total tests in state / total population of state) * 1 Million'
           }
           date={`As of ${formatLastUpdated(data.meta.tested.last_updated)} ago`}
           description={`For every 1 million people in ${STATE_NAMES[stateCode]},
-            ${Math.round(testPerMillion)} people were tested.`}
+            ${formatNumber(Math.round(testPerMillion))} people were tested.`}
         />
       </div>
     </React.Fragment>

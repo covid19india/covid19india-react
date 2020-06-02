@@ -1,6 +1,7 @@
 import {COLORS, D3_TRANSITION_DURATION, NUM_BARS_STATEPAGE} from '../constants';
 import {
   formatDate,
+  formatNumber,
   getIndiaYesterdayISO,
   getStatistic,
 } from '../utils/commonfunctions';
@@ -109,7 +110,9 @@ function DeltaBarGraph({timeseries, statistic}) {
       .join('text')
       .attr('class', 'label')
       .attr('x', (date) => xScale(date) + xScale.bandwidth() / 2)
-      .text((date) => getDeltaStatistic(timeseries[date], statistic));
+      .text((date) =>
+        formatNumber(getDeltaStatistic(timeseries[date], statistic))
+      );
 
     textSelection
       .transition(t)
@@ -130,10 +133,11 @@ function DeltaBarGraph({timeseries, statistic}) {
       .text((date, i) => {
         if (i === 0) return '';
         const prevVal = getDeltaStatistic(timeseries[dates[i - 1]], statistic);
-        const val = getDeltaStatistic(timeseries[date], statistic);
-        return prevVal
-          ? d3.format('+.1~%')((val - prevVal) / Math.abs(prevVal))
-          : '';
+        if (!prevVal) return '';
+        const delta = getDeltaStatistic(timeseries[date], statistic) - prevVal;
+        return `${delta > 0 ? '+' : ''}${formatNumber(
+          (100 * delta) / Math.abs(prevVal)
+        )}%`;
       })
       .transition(t)
       .attr('fill', COLORS[statistic] + '90');
