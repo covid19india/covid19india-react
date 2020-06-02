@@ -6,12 +6,7 @@ import Minigraph from './minigraph';
 import StateMeta from './statemeta';
 import TimeSeriesExplorer from './timeseriesexplorer';
 
-import {
-  MAP_META,
-  NUM_BARS_STATEPAGE,
-  STATE_NAMES,
-  STATE_POPULATIONS,
-} from '../constants';
+import {MAP_META, NUM_BARS_STATEPAGE, STATE_NAMES} from '../constants';
 import {
   fetcher,
   formatDate,
@@ -265,9 +260,8 @@ function State(props) {
               <StateMeta
                 {...{
                   stateCode,
-                  data: data[stateCode],
-                  timeseries: timeseries[stateCode],
-                  population: STATE_POPULATIONS[stateCode],
+                  data,
+                  timeseries,
                 }}
               />
             )}

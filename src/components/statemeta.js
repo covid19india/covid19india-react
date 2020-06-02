@@ -1,6 +1,10 @@
 import StateMetaCard from './statemetacard';
 
-import {STATE_NAMES} from '../constants';
+import {
+  STATE_NAMES,
+  STATE_POPULATIONS,
+  STATE_POPULATIONS_MIL,
+} from '../constants';
 import {
   formatDate,
   formatNumber,
@@ -14,25 +18,27 @@ import React from 'react';
 import * as Icon from 'react-feather';
 import ReactTooltip from 'react-tooltip';
 
-function StateMeta({stateCode, data, timeseries, population}) {
-  const confirmed = getStatistic(data, 'total', 'confirmed');
-  const active = getStatistic(data, 'total', 'active');
-  const deceased = getStatistic(data, 'total', 'deceased');
-  const recovered = getStatistic(data, 'total', 'recovered');
-  const tested = getStatistic(data, 'total', 'tested');
+function StateMeta({stateCode, data, timeseries}) {
+  const confirmed = getStatistic(data[stateCode], 'total', 'confirmed');
+  const active = getStatistic(data[stateCode], 'total', 'active');
+  const deceased = getStatistic(data[stateCode], 'total', 'deceased');
+  const recovered = getStatistic(data[stateCode], 'total', 'recovered');
+  const tested = getStatistic(data[stateCode], 'total', 'tested');
+
+  const totalConfirmed = getStatistic(data['TT'], 'total', 'confirmed');
 
   const indiaDate = format(getIndiaDate(), 'yyyy-MM-dd');
   const prevWeekDate = format(sub(getIndiaDate(), {weeks: 1}), 'yyyy-MM-dd');
 
   const prevWeekConfirmed = getStatistic(
-    timeseries[prevWeekDate],
+    timeseries[stateCode][prevWeekDate],
     'total',
     'confirmed'
   );
 
-  const confirmedPerMillion = (confirmed / population) * 1000000;
-  const testPerMillion = (tested / population) * 1000000;
-  const totalConfirmedPerMillion = (confirmed / 1332900000) * 1000000;
+  const confirmedPerMillion = confirmed / STATE_POPULATIONS_MIL[stateCode];
+  const testPerMillion = tested / STATE_POPULATIONS_MIL[stateCode];
+  const totalConfirmedPerMillion = totalConfirmed / STATE_POPULATIONS_MIL['TT'];
 
   const recoveryPercent = (recovered / confirmed) * 100;
   const activePercent = (active / confirmed) * 100;
@@ -55,7 +61,7 @@ function StateMeta({stateCode, data, timeseries, population}) {
         />
         <div className="meta-item population fadeInUp">
           <h3>Population</h3>
-          <h1>{formatNumber(population)}</h1>
+          <h1>{formatNumber(STATE_POPULATIONS[stateCode])}</h1>
         </div>
         <div className="alert">
           <Icon.Compass />
@@ -144,7 +150,9 @@ function StateMeta({stateCode, data, timeseries, population}) {
           formula={
             '(total tests in state / total population of state) * 1 Million'
           }
-          date={`As of ${formatLastUpdated(data.meta.tested.last_updated)} ago`}
+          date={`As of ${formatLastUpdated(
+            data[stateCode]?.meta?.tested?.['last_updated']
+          )} ago`}
           description={`For every 1 million people in ${STATE_NAMES[stateCode]},
             ${formatNumber(Math.round(testPerMillion))} people were tested.`}
         />
