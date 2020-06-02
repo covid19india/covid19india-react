@@ -131,6 +131,14 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
     }
   );
 
+  const handleClick = (clampedIndex) => {
+    if (clampedIndex > index) {
+      handleKeyPress(+1);
+    } else {
+      handleKeyPress(-1);
+    }
+  };
+
   return (
     <React.Fragment>
       {transition.map(
@@ -164,10 +172,22 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
               }}
             >
               {index < 2 && (
-                <animated.h5 style={{color}}>{getDate(i)}</animated.h5>
+                <animated.h5
+                  style={{color}}
+                  onClick={() => {
+                    handleClick(i);
+                  }}
+                >
+                  {getDate(i)}
+                </animated.h5>
               )}
               {index > 1 && index < dates.length && (
-                <animated.h5 style={{color}}>
+                <animated.h5
+                  style={{color}}
+                  onClick={() => {
+                    handleClick(index + i - 2);
+                  }}
+                >
                   {getDate(index + i - 2)}
                 </animated.h5>
               )}
