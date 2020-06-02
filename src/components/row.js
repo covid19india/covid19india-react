@@ -201,11 +201,25 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
     (districtNameA, districtNameB) => {
       if (sortData.sortColumn !== 'districtName') {
         return sortData.isAscending
-          ? parseInt(data.districts[districtNameA].total[sortData.sortColumn]) -
-              parseInt(data.districts[districtNameB].total[sortData.sortColumn])
-          : parseInt(data.districts[districtNameB].total[sortData.sortColumn]) -
-              parseInt(
-                data.districts[districtNameA].total[sortData.sortColumn]
+          ? getStatistic(
+              data.districts[districtNameA],
+              'total',
+              sortData.sortColumn
+            ) -
+              getStatistic(
+                data.districts[districtNameB],
+                'total',
+                sortData.sortColumn
+              )
+          : getStatistic(
+              data.districts[districtNameB],
+              'total',
+              sortData.sortColumn
+            ) -
+              getStatistic(
+                data.districts[districtNameA],
+                'total',
+                sortData.sortColumn
               );
       } else {
         return sortData.isAscending
@@ -361,9 +375,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (
-    !equal(prevProps.data.total?.confirmed, currProps.data.total?.confirmed)
-  ) {
+  if (!equal(prevProps.data.total, currProps.data.total)) {
     return false;
   } else if (
     (!equal(
