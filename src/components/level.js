@@ -1,90 +1,87 @@
-import {formatNumber} from '../utils/commonfunctions';
+import {PRIMARY_STATISTICS} from '../constants';
+import {capitalize, formatNumber, getStatistic} from '../utils/commonfunctions';
 
-import React, {useState} from 'react';
+import {HeartFillIcon} from '@primer/octicons-v2-react';
+import classnames from 'classnames';
+import equal from 'fast-deep-equal';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {useEffectOnce} from 'react-use';
+import {animated, useSpring, config, useTrail} from 'react-spring';
 
-function Level(props) {
-  const [data, setData] = useState(props.data);
+function PureLevelItem({statistic, total, delta}) {
   const {t} = useTranslation();
+  const spring = useSpring(
+    {
+      total: total,
+      delta: delta,
+      from: {total: total, delta: delta},
+    },
+    config.stiff
+  );
 
-  useEffectOnce(() => {
-    setData({
-      active: +props.data.active,
-      confirmed: +props.data.confirmed,
-      recovered: +props.data.recovered,
-      deaths: +props.data.deaths,
-      deltaconfirmed: +props.data.deltaconfirmed,
-      deltadeaths: +props.data.deltadeaths,
-      deltarecovered: +props.data.deltarecovered,
-    });
-  });
+  return (
+    <React.Fragment>
+      <h5>{capitalize(t(statistic))}</h5>
+      <h4>
+        <animated.span>
+          {delta > 0 ? (
+            spring.delta.interpolate(
+              (delta) => `+${formatNumber(Math.floor(delta))}`
+            )
+          ) : (
+            <HeartFillIcon size={9} verticalAlign={2} />
+          )}
+        </animated.span>
+      </h4>
+      <h1>
+        <animated.span>
+          {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
+        </animated.span>
+      </h1>
+    </React.Fragment>
+  );
+}
+
+const LevelItem = React.memo(PureLevelItem);
+
+function Level({data}) {
+  const [trail, set] = useTrail(4, () => ({
+    transform: 'translate3d(0, 20px, 0)',
+    opacity: 0,
+    config: config.stiff,
+  }));
+
+  set({transform: 'translate3d(0, 0px, 0)', opacity: 1});
 
   return (
     <div className="Level">
-      <div
-        className="level-item is-cherry fadeInUp"
-        style={{animationDelay: '1s'}}
-      >
-        <h5>{t('Confirmed')}</h5>
-        <h4>
-          [
-          {isNaN(data.deltaconfirmed)
-            ? ''
-            : data.deltaconfirmed > 0
-            ? '+' + formatNumber(data.deltaconfirmed)
-            : '+0'}
-          ]
-        </h4>
-        <h1>{formatNumber(data.confirmed)} </h1>
-      </div>
-
-      <div
-        className="level-item is-blue fadeInUp"
-        style={{animationDelay: '1.1s'}}
-      >
-        <h5 className="heading">{t('Active')}</h5>
-        <h4>&nbsp;</h4>
-        <h1 className="title has-text-info">{formatNumber(data.active)}</h1>
-      </div>
-
-      <div
-        className="level-item is-green fadeInUp"
-        style={{animationDelay: '1.2s'}}
-      >
-        <h5 className="heading">{t('Recovered')}</h5>
-        <h4>
-          [
-          {isNaN(data.deltarecovered)
-            ? ''
-            : data.deltarecovered > 0
-            ? '+' + formatNumber(data.deltarecovered)
-            : '+0'}
-          ]
-        </h4>
-        <h1 className="title has-text-success">
-          {formatNumber(data.recovered)}{' '}
-        </h1>
-      </div>
-
-      <div
-        className="level-item is-gray fadeInUp"
-        style={{animationDelay: '1.3s'}}
-      >
-        <h5 className="heading">{t('Deceased')}</h5>
-        <h4>
-          [
-          {isNaN(data.deltadeaths)
-            ? ''
-            : data.deltadeaths > 0
-            ? '+' + formatNumber(data.deltadeaths)
-            : '+0'}
-          ]
-        </h4>
-        <h1 className="title has-text-grey">{formatNumber(data.deaths)}</h1>
-      </div>
+      {PRIMARY_STATISTICS.map((statistic, index) => (
+        <animated.div
+          key={index}
+          className={classnames('level-item', `is-${statistic}`)}
+          style={trail[index]}
+        >
+          <LevelItem
+            {...{statistic}}
+            total={getStatistic(data, 'total', statistic)}
+            delta={getStatistic(data, 'delta', statistic)}
+          />
+        </animated.div>
+      ))}
     </div>
   );
 }
 
-export default React.memo(Level);
+const isEqual = (prevProps, currProps) => {
+  if (
+    !equal(
+      getStatistic(prevProps.data, 'total', 'active'),
+      getStatistic(currProps.data, 'total', 'active')
+    )
+  ) {
+    return false;
+  }
+  return true;
+};
+
+export default React.memo(Level, isEqual);

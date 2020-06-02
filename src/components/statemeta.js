@@ -1,47 +1,51 @@
 import StateMetaCard from './statemetacard';
 
-import {formatNumber} from '../utils/commonfunctions';
+import {
+  STATE_NAMES,
+  STATE_POPULATIONS,
+  STATE_POPULATIONS_MIL,
+} from '../constants';
+import {
+  formatDate,
+  formatNumber,
+  formatLastUpdated,
+  getStatistic,
+  getIndiaDate,
+} from '../utils/commonfunctions';
 
-import {format, parse} from 'date-fns';
+import {format, sub} from 'date-fns';
 import React from 'react';
 import * as Icon from 'react-feather';
 import ReactTooltip from 'react-tooltip';
 
-function StateMeta({
-  stateData,
-  testObject,
-  population,
-  lastSevenDaysData,
-  totalData,
-}) {
-  const confirmed = stateData.confirmed;
-  const active = stateData.active;
-  const deaths = stateData.deaths;
-  const recovered = confirmed - active - deaths;
-  const sevenDayBeforeData = lastSevenDaysData[0].totalconfirmed;
-  const sevenDayBeforeDate = format(lastSevenDaysData[0].date, 'dd MMM');
-  const previousDayData = lastSevenDaysData[6].totalconfirmed;
-  const previousDayDate = format(lastSevenDaysData[6].date, 'dd MMM');
-  const confirmedPerMillion = (confirmed / population) * 1000000;
+function StateMeta({stateCode, data, timeseries}) {
+  const confirmed = getStatistic(data[stateCode], 'total', 'confirmed');
+  const active = getStatistic(data[stateCode], 'total', 'active');
+  const deceased = getStatistic(data[stateCode], 'total', 'deceased');
+  const recovered = getStatistic(data[stateCode], 'total', 'recovered');
+  const tested = getStatistic(data[stateCode], 'total', 'tested');
+
+  const totalConfirmed = getStatistic(data['TT'], 'total', 'confirmed');
+
+  const indiaDate = format(getIndiaDate(), 'yyyy-MM-dd');
+  const prevWeekDate = format(sub(getIndiaDate(), {weeks: 1}), 'yyyy-MM-dd');
+
+  const prevWeekConfirmed = getStatistic(
+    timeseries[stateCode]?.[prevWeekDate],
+    'total',
+    'confirmed'
+  );
+
+  const confirmedPerMillion = confirmed / STATE_POPULATIONS_MIL[stateCode];
+  const testPerMillion = tested / STATE_POPULATIONS_MIL[stateCode];
+  const totalConfirmedPerMillion = totalConfirmed / STATE_POPULATIONS_MIL['TT'];
+
   const recoveryPercent = (recovered / confirmed) * 100;
   const activePercent = (active / confirmed) * 100;
-  const deathPercent = (deaths / confirmed) * 100;
-  const testPerMillion = (testObject?.totaltested / population) * 1000000;
-  const growthRate =
-    ((previousDayData - sevenDayBeforeData) / sevenDayBeforeData) * 100;
-  const totalConfirmedPerMillion =
-    (totalData[0].confirmed / 1332900000) * 1000000;
-  // const doublingRate =
-  // growthRate > 0 ? (70 / Math.round(growthRate)).toFixed(2) : 0;
+  const deathPercent = (deceased / confirmed) * 100;
 
-  const updatedDate = !isNaN(
-    parse(testObject?.updatedon, 'dd/MM/yyyy', new Date())
-  )
-    ? `As of ${format(
-        parse(testObject?.updatedon, 'dd/MM/yyyy', new Date()),
-        'dd MMM'
-      )}`
-    : '';
+  const growthRate =
+    ((confirmed - prevWeekConfirmed) / prevWeekConfirmed) * 100;
 
   return (
     <React.Fragment>
@@ -57,7 +61,7 @@ function StateMeta({
         />
         <div className="meta-item population fadeInUp">
           <h3>Population</h3>
-          <h1>{formatNumber(population)}</h1>
+          <h1>{formatNumber(STATE_POPULATIONS[stateCode])}</h1>
         </div>
         <div className="alert">
           <Icon.Compass />
@@ -77,14 +81,14 @@ function StateMeta({
         <StateMetaCard
           className="confirmed"
           title={'Confirmed Per Million'}
-          statistic={confirmedPerMillion.toFixed(2)}
-          total={totalConfirmedPerMillion.toFixed(2)}
+          statistic={formatNumber(confirmedPerMillion)}
+          total={formatNumber(totalConfirmedPerMillion)}
           formula={'(confirmed / state population) * 1 Million'}
           description={`
-            ${Math.round(
-              confirmedPerMillion
+            ${formatNumber(
+              Math.round(confirmedPerMillion)
             )} out of every 1 million people in ${
-            stateData.state
+            STATE_NAMES[stateCode]
           } have tested positive for the virus.
             `}
         />
@@ -92,101 +96,70 @@ function StateMeta({
         <StateMetaCard
           className="active"
           title={'Active'}
-          statistic={`${activePercent.toFixed(2)}%`}
+          statistic={`${formatNumber(activePercent)}%`}
           formula={'(active / confirmed) * 100'}
-          description={`For every 100 confirmed cases, ${activePercent.toFixed(
-            0
+          description={`For every 100 confirmed cases, ${formatNumber(
+            Math.round(activePercent)
           )} are currently infected.`}
         />
 
         <StateMetaCard
           className="recovery"
           title={'Recovery Rate'}
-          statistic={`${recoveryPercent.toFixed(2)}%`}
+          statistic={`${formatNumber(recoveryPercent)}%`}
           formula={'(recovered / confirmed) * 100'}
-          description={`For every 100 confirmed cases,
-            ${Math.round(
-              recoveryPercent.toFixed(0)
-            )} have recovered from the virus.`}
+          description={`For every 100 confirmed cases, ${formatNumber(
+            Math.round(recoveryPercent)
+          )} have recovered from the virus.`}
         />
 
         <StateMetaCard
           className="mortality"
           title={'Mortality Rate'}
-          statistic={`${deathPercent.toFixed(2)}%`}
+          statistic={`${formatNumber(deathPercent)}%`}
           formula={'(deceased / confirmed) * 100'}
-          description={`For every 100 confirmed cases,
-            ${Math.round(
-              deathPercent.toFixed(0)
-            )} have unfortunately passed away from the virus.`}
+          description={`For every 100 confirmed cases, ${formatNumber(
+            Math.round(deathPercent)
+          )} have unfortunately passed away from the virus.`}
         />
 
         <StateMetaCard
           className="gr"
           title={'Avg. Growth Rate'}
-          statistic={growthRate > 0 ? `${Math.round(growthRate / 7)}%` : '-'}
+          statistic={
+            growthRate > 0
+              ? `${formatNumber(Math.round(growthRate / 7))}%`
+              : '-'
+          }
           formula={
             '(((previousDayData - sevenDayBeforeData) / sevenDayBeforeData) * 100)/7'
           }
-          date={`${sevenDayBeforeDate} - ${previousDayDate}`}
-          description={`In the last one week, the number of new infections has grown by an average of ${Math.round(
-            growthRate / 7
-          )}% every day.`}
+          date={`${formatDate(prevWeekDate, 'dd MMM')} - ${formatDate(
+            indiaDate,
+            'dd MMM'
+          )}`}
+          description={`In the last one week, the number of new infections has
+          grown by an average of ${formatNumber(Math.round(growthRate / 7))}%
+          every day.`}
         />
 
         <StateMetaCard
           className="tpm"
           title={'Tests Per Million'}
-          statistic={`≈ ${Math.round(testPerMillion)}`}
+          statistic={`≈ ${formatNumber(Math.round(testPerMillion))}`}
           formula={
             '(total tests in state / total population of state) * 1 Million'
           }
-          date={updatedDate}
-          description={`For every 1 million people in ${stateData.state},
-            ${Math.round(testPerMillion)} people were tested.`}
+          date={
+            tested
+              ? `As of ${formatLastUpdated(
+                  data[stateCode]?.meta?.tested?.['last_updated']
+                )} ago`
+              : ''
+          }
+          description={`For every 1 million people in ${STATE_NAMES[stateCode]},
+            ${formatNumber(Math.round(testPerMillion))} people were tested.`}
         />
-
-        {/* <div className="meta-item ptr fadeInUp">
-          <div className="meta-item-top">
-            <h3>Positive Test Rate</h3>
-            <span
-              data-tip={
-                'TPM = (total tests in state / total population of state) * 1 Million'
-              }
-              data-event="touchstart mouseover"
-              data-event-off="mouseleave"
-              data-for="stateMeta"
-            >
-              <Icon.Info />
-            </span>
-          </div>
-          <h1>
-            {testObject?.testpositivityrate
-              ? testObject.testpositivityrate
-              : 'N/A'}
-          </h1>
-          {updatedDate}
-          <p>
-            {testObject?.testpositivityrate
-              ? `Out the of total tests conducted till date month, ${testObject.testpositivityrate}% were positive for the virus`
-              : 'N/A'}
-          </p>
-        </div>*/}
-
-        {/*
-          <div className="meta-item dbr fadeInUp">
-            <div className="meta-item-top">
-              <h3>Doubling Rate</h3>
-              <Icon.Info />
-            </div>
-            <h1>
-              {doublingRate > 0 ? Math.round(doublingRate * 7) + ' Days' : '-'}
-            </h1>
-            <h6 style={{margin: '0'}}>
-              {sevenDayBeforeDate} - {previousDayDate}
-            </h6>
-          </div>
-        )*/}
       </div>
     </React.Fragment>
   );
