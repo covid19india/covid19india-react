@@ -33,6 +33,8 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
   }, [dates]);
 
   useEffect(() => {
+    const T = dates.length;
+
     const {width, height} =
       dimensions || wrapperRef.current.getBoundingClientRect();
 
@@ -41,7 +43,6 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
     const chartRight = width - margin.right;
     const chartBottom = height - margin.bottom;
 
-    const T = dates.length;
     const yBufferTop = 1.2;
     const yBufferBottom = 1.1;
 
@@ -230,7 +231,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
         let pathLength;
         svg
           .selectAll('.trend')
-          .data([dates])
+          .data(T ? [dates] : [])
           .join(
             (enter) =>
               enter

@@ -478,6 +478,12 @@ h6 {
     }
   }
 
+  .TimeSeriesExplorer {
+    .anchor {
+      display: none;
+    }
+  }
+
   .__react_component_tooltip {
     font-family: 'archia';
     font-size: 11px;

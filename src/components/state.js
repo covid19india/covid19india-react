@@ -289,7 +289,7 @@ function State(props) {
                         : {}
                     }
                   >
-                    {Object.keys(data[stateCode].districts)
+                    {Object.keys(data[stateCode]?.districts || {})
                       .filter((districtName) => districtName !== 'Unknown')
                       .sort((a, b) => handleSort(a, b))
                       .slice(0, showAllDistricts ? undefined : 5)
@@ -322,7 +322,7 @@ function State(props) {
                       })}
                   </div>
 
-                  {Object.keys(data[stateCode].districts).length > 5 && (
+                  {Object.keys(data[stateCode]?.districts || {}).length > 5 && (
                     <button className="button" onClick={toggleShowAllDistricts}>
                       <span>{showAllDistricts ? `View less` : `View all`}</span>
                     </button>
@@ -333,7 +333,7 @@ function State(props) {
                   {(mapStatistic === 'confirmed' ||
                     mapStatistic === 'deceased') && (
                     <div className="happy-sign">
-                      {Object.keys(timeseries[stateCode])
+                      {Object.keys(timeseries[stateCode] || {})
                         .slice(-NUM_BARS_STATEPAGE)
                         .every(
                           (date) =>

@@ -31,7 +31,7 @@ function StateMeta({stateCode, data, timeseries}) {
   const prevWeekDate = format(sub(getIndiaDate(), {weeks: 1}), 'yyyy-MM-dd');
 
   const prevWeekConfirmed = getStatistic(
-    timeseries[stateCode][prevWeekDate],
+    timeseries[stateCode]?.[prevWeekDate],
     'total',
     'confirmed'
   );
@@ -150,9 +150,13 @@ function StateMeta({stateCode, data, timeseries}) {
           formula={
             '(total tests in state / total population of state) * 1 Million'
           }
-          date={`As of ${formatLastUpdated(
-            data[stateCode]?.meta?.tested?.['last_updated']
-          )} ago`}
+          date={
+            tested
+              ? `As of ${formatLastUpdated(
+                  data[stateCode]?.meta?.tested?.['last_updated']
+                )} ago`
+              : ''
+          }
           description={`For every 1 million people in ${STATE_NAMES[stateCode]},
             ${formatNumber(Math.round(testPerMillion))} people were tested.`}
         />
