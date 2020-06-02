@@ -69,16 +69,18 @@ function TimeSeriesExplorer({
       ref={explorerElement}
     >
       <div className="timeseries-header">
-        <div
-          className={classnames('anchor', {
-            stickied: anchor === 'timeseries',
-          })}
-          onClick={() => {
-            setAnchor(anchor === 'timeseries' ? null : 'timeseries');
-          }}
-        >
-          <PinIcon />
-        </div>
+        {window.innerWidth > 769 && (
+          <div
+            className={classnames('anchor', {
+              stickied: anchor === 'timeseries',
+            })}
+            onClick={() => {
+              setAnchor(anchor === 'timeseries' ? null : 'timeseries');
+            }}
+          >
+            <PinIcon />
+          </div>
+        )}
 
         <h1>{t('Spread Trends')}</h1>
         <div className="tabs">
