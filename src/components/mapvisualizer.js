@@ -26,6 +26,8 @@ import {useTranslation} from 'react-i18next';
 import useSWR from 'swr';
 import * as topojson from 'topojson';
 
+const [width, height] = [432, 488];
+
 const colorInterpolator = {
   confirmed: (t) => d3.interpolateReds(t * 0.85),
   active: (t) => d3.interpolateBlues(t * 0.85),
@@ -101,9 +103,8 @@ function MapVisualizer({
         Object.values(ZONE_COLORS)
       );
     } else if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
-      const {width} = svgRef.current.getBoundingClientRect();
       return d3
-        .scaleSqrt([0, Math.max(statisticMax, 1)], [0, width / 10])
+        .scaleSqrt([0, Math.max(statisticMax, 1)], [0, 40])
         .clamp(true)
         .nice(3);
     } else {
@@ -127,7 +128,6 @@ function MapVisualizer({
 
     const svg = d3.select(svgRef.current);
 
-    const {width, height} = svgRef.current.getBoundingClientRect();
     const projection = d3.geoMercator().fitSize([width, height], topology);
     const path = d3.geoPath(projection);
 
@@ -206,7 +206,7 @@ function MapVisualizer({
           const sel = enter
             .append('path')
             .attr('d', path)
-            .attr('stroke-width', 2)
+            .attr('stroke-width', 1.8)
             .attr('stroke-opacity', 0)
             .style('cursor', 'pointer')
             .on('mouseenter', (d) => {
@@ -351,7 +351,7 @@ function MapVisualizer({
         return mapMeta.mapType === MAP_TYPES.COUNTRY &&
           currentMap.view === MAP_VIEWS.DISTRICTS
           ? 0
-          : width / 250;
+          : 1.5;
       })
       .selectAll('path')
       .data(
@@ -384,7 +384,7 @@ function MapVisualizer({
           .append('path')
           .attr('d', path)
           .attr('fill', 'none')
-          .attr('stroke-width', width / 250)
+          .attr('stroke-width', 1.5)
       )
       .transition(t)
       .attr('stroke', '#343a4050');
@@ -454,8 +454,13 @@ function MapVisualizer({
 
   return (
     <React.Fragment>
-      <div className="svg-parent map-parent">
-        <svg id="chart" preserveAspectRatio="xMidYMid meet" ref={svgRef}>
+      <div className="svg-parent">
+        <svg
+          id="chart"
+          viewBox={`0 0 ${width} ${height}`}
+          preserveAspectRatio="xMidYMid meet"
+          ref={svgRef}
+        >
           <g className="regions" />
           <g className="state-borders" />
           {currentMap.view === MAP_VIEWS.DISTRICTS && (

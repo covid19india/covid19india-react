@@ -2088,19 +2088,6 @@ table {
     position: relative;
     width: 90%;
 
-    &.map-parent {
-      // Based on aspect ratio India map (width * AR)
-      padding-bottom: 101.7%;
-
-      svg {
-        bottom: 0;
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-      }
-    }
-
     &.maplegend {
       margin-top: 0.6rem;
       overflow: visible;
@@ -4738,11 +4725,6 @@ footer {
   .MapExplorer {
     .svg-parent {
       width: 100%;
-
-      &.map-parent {
-        // Based on aspect ratio India map (width * AR)
-        padding-bottom: 113%;
-      }
     }
 
     .header {
