@@ -162,6 +162,35 @@ function MapVisualizer({
       return obj;
     });
 
+    const fillColor = (d) => {
+      const stateCode = STATE_CODES[d.properties.st_nm];
+      const district = d.properties.district;
+      const stateData = data[stateCode];
+      const districtData = stateData?.districts?.[district];
+      let n;
+      if (currentMap.option === MAP_OPTIONS.ZONES) {
+        n = districtData?.zone || 0;
+      } else {
+        if (district) n = getTotalStatistic(districtData, statistic);
+        else
+          n = getTotalStatistic(
+            stateData,
+            statistic,
+            currentMap.option === MAP_OPTIONS.PER_MILLION
+              ? STATE_POPULATIONS_MIL[stateCode]
+              : 1
+          );
+      }
+      const color = n === 0 ? '#ffffff00' : mapScale(n);
+      return color;
+    };
+
+    const strokeColor = (d) => {
+      return currentMap.option === MAP_OPTIONS.ZONES
+        ? '#343a40'
+        : COLORS[statistic];
+    };
+
     /* Draw map */
     const t = d3.transition().duration(D3_TRANSITION_DURATION);
     let onceTouchedRegion = null;
@@ -172,73 +201,54 @@ function MapVisualizer({
         currentMap.option !== MAP_OPTIONS.HOTSPOTS ? features : [],
         (d) => d.id
       )
-      .join((enter) => {
-        const sel = enter
-          .append('path')
-          .attr('d', path)
-          .attr('stroke-width', 2)
-          .attr('stroke-opacity', 0)
-          .style('cursor', 'pointer')
-          .on('mouseenter', (d) => {
-            setRegionHighlighted({
-              stateCode: STATE_CODES[d.properties.st_nm],
-              districtName: d.properties.district,
-            });
-          })
-          .on('mouseleave', (d) => {
-            if (onceTouchedRegion === d) onceTouchedRegion = null;
-          })
-          .on('touchstart', (d) => {
-            if (onceTouchedRegion === d) onceTouchedRegion = null;
-            else onceTouchedRegion = d;
-          })
-          .on('click', (d) => {
-            d3.event.stopPropagation();
-            if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE)
-              return;
-            // Disable pointer events till the new map is rendered
-            svg.attr('pointer-events', 'none');
-            svg
-              .select('.regions')
-              .selectAll('path')
-              .attr('pointer-events', 'none');
-            // Switch map
-            changeMap(STATE_CODES[d.properties.st_nm]);
-          })
-          .attr('fill', '#fff');
-        sel.append('title');
-        return sel;
-      })
+      .join(
+        (enter) => {
+          const sel = enter
+            .append('path')
+            .attr('d', path)
+            .attr('stroke-width', 2)
+            .attr('stroke-opacity', 0)
+            .style('cursor', 'pointer')
+            .on('mouseenter', (d) => {
+              setRegionHighlighted({
+                stateCode: STATE_CODES[d.properties.st_nm],
+                districtName: d.properties.district,
+              });
+            })
+            .on('mouseleave', (d) => {
+              if (onceTouchedRegion === d) onceTouchedRegion = null;
+            })
+            .on('touchstart', (d) => {
+              if (onceTouchedRegion === d) onceTouchedRegion = null;
+              else onceTouchedRegion = d;
+            })
+            .on('click', (d) => {
+              d3.event.stopPropagation();
+              if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE)
+                return;
+              // Disable pointer events till the new map is rendered
+              svg.attr('pointer-events', 'none');
+              svg
+                .select('.regions')
+                .selectAll('path')
+                .attr('pointer-events', 'none');
+              // Switch map
+              changeMap(STATE_CODES[d.properties.st_nm]);
+            })
+            .attr('fill', fillColor)
+            .attr('stroke', strokeColor);
+          sel.append('title');
+          return sel;
+        },
+        (update) =>
+          update.call((update) =>
+            update
+              .transition(t)
+              .attr('fill', fillColor)
+              .attr('stroke', strokeColor)
+          )
+      )
       .attr('pointer-events', 'all');
-
-    regionSelection
-      .transition(t)
-      .attr('fill', (d) => {
-        const stateCode = STATE_CODES[d.properties.st_nm];
-        const district = d.properties.district;
-        const stateData = data[stateCode];
-        const districtData = stateData?.districts?.[district];
-        let n;
-        if (currentMap.option === MAP_OPTIONS.ZONES) {
-          n = districtData?.zone || 0;
-        } else {
-          if (district) n = getTotalStatistic(districtData, statistic);
-          else
-            n = getTotalStatistic(
-              stateData,
-              statistic,
-              currentMap.option === MAP_OPTIONS.PER_MILLION
-                ? STATE_POPULATIONS_MIL[stateCode]
-                : 1
-            );
-        }
-        const color = n === 0 ? '#ffffff00' : mapScale(n);
-        return color;
-      })
-      .attr(
-        'stroke',
-        currentMap.option === MAP_OPTIONS.ZONES ? '#343a40' : COLORS[statistic]
-      );
 
     regionSelection.select('title').text((d) => {
       if (currentMap.option === MAP_OPTIONS.TOTAL) {
