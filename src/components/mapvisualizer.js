@@ -204,7 +204,8 @@ function MapVisualizer({
               .attr('pointer-events', 'none');
             // Switch map
             changeMap(STATE_CODES[d.properties.st_nm]);
-          });
+          })
+          .attr('fill', '#fff');
         sel.append('title');
         return sel;
       })
