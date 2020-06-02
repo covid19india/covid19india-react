@@ -128,7 +128,13 @@ function PureDistrictRow({
           <span className="title-icon">
             {t(districtName)}
             {data?.meta?.notes && (
-              <Tooltip aria-label={data.meta.notes}>
+              <Tooltip
+                className="tooltip"
+                aria-label={data.meta.notes}
+                wrap={true}
+                direction={'e'}
+                noDelay={true}
+              >
                 <Icon.Info />
               </Tooltip>
             )}

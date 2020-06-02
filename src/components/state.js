@@ -324,7 +324,7 @@ function State(props) {
 
                   {Object.keys(data[stateCode].districts).length > 5 && (
                     <button className="button" onClick={toggleShowAllDistricts}>
-                      {showAllDistricts ? `View less` : `View all`}
+                      <span>{showAllDistricts ? `View less` : `View all`}</span>
                     </button>
                   )}
                 </div>
