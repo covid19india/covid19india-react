@@ -1,7 +1,7 @@
 import TimeSeries from './timeseries';
 
 import {STATE_NAMES, TIMESERIES_OPTIONS} from '../constants';
-import {getIndiaYesterdayISO} from '../utils/commonfunctions';
+import {getIndiaYesterdayISO, parseIndiaDate} from '../utils/commonfunctions';
 
 import 'intersection-observer';
 
@@ -40,12 +40,12 @@ function TimeSeriesExplorer({
     );
 
     if (timeseriesOption === TIMESERIES_OPTIONS.TWO_WEEKS) {
-      const cutOffDate = formatISO(sub(new Date(today), {weeks: 2}), {
+      const cutOffDate = formatISO(sub(parseIndiaDate(today), {weeks: 2}), {
         representation: 'date',
       });
       return pastDates.filter((date) => date >= cutOffDate);
     } else if (timeseriesOption === TIMESERIES_OPTIONS.MONTH) {
-      const cutOffDate = formatISO(sub(new Date(today), {months: 1}), {
+      const cutOffDate = formatISO(sub(parseIndiaDate(today), {months: 1}), {
         representation: 'date',
       });
       return pastDates.filter((date) => date >= cutOffDate);

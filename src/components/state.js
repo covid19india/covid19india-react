@@ -164,7 +164,7 @@ function State(props) {
                 <h5>{`Last Updated on ${formatDate(
                   data[stateCode].meta.last_updated,
                   'dd MMM, p'
-                )}`}</h5>
+                )} IST`}</h5>
               </div>
 
               <div className="header-right">

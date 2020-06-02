@@ -25,8 +25,18 @@ export const formatLastUpdated = (unformattedDate) => {
   });
 };
 
+export const parseIndiaDate = (isoDate) => {
+  return new Date(isoDate + 'T00:00:00+0530');
+};
+
 export const formatDate = (unformattedDate, formatString) => {
-  return format(new Date(unformattedDate), formatString, {
+  if (
+    typeof unformattedDate === 'string' &&
+    unformattedDate.match(/^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/g)
+  )
+    unformattedDate += 'T00:00:00+0530';
+  const date = utcToZonedTime(new Date(unformattedDate), 'Asia/Kolkata');
+  return format(date, formatString, {
     locale: LOCALE_SHORTHANDS[i18n.language],
   });
 };

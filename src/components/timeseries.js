@@ -5,10 +5,11 @@ import {
 } from '../constants';
 import {useResizeObserver} from '../hooks/useresizeobserver';
 import {
+  capitalize,
   formatNumber,
   formatDate,
-  capitalize,
   getStatistic,
+  parseIndiaDate,
 } from '../utils/commonfunctions';
 
 import classnames from 'classnames';
@@ -47,7 +48,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
     const xScale = d3
       .scaleTime()
       .clamp(true)
-      .domain([new Date(dates[0]), new Date(dates[T - 1])])
+      .domain([parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])])
       .range([margin.left, chartRight]);
 
     // Number of x-axis ticks
@@ -158,7 +159,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
     function mousemove() {
       const xm = d3.mouse(this)[0];
       const date = xScale.invert(xm);
-      const bisectDate = d3.bisector((date) => new Date(date)).left;
+      const bisectDate = d3.bisector((date) => parseIndiaDate(date)).left;
       const index = bisectDate(dates, date, 1);
       setHighlightedDate(dates[index]);
     }
@@ -202,10 +203,10 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
             .attr('stroke', color)
             .attr('r', 2)
             .attr('cy', chartBottom)
-            .attr('cx', (date) => xScale(new Date(date)))
+            .attr('cx', (date) => xScale(parseIndiaDate(date)))
         )
         .transition(t)
-        .attr('cx', (date) => xScale(new Date(date)))
+        .attr('cx', (date) => xScale(parseIndiaDate(date)))
         .attr('cy', (date) =>
           yScale(getStatistic(timeseries[date], chartType, statistic))
         );
@@ -221,7 +222,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
         const line = d3
           .line()
           .curve(d3.curveMonotoneX)
-          .x((date) => xScale(new Date(date)))
+          .x((date) => xScale(parseIndiaDate(date)))
           .y((date) =>
             yScale(getStatistic(timeseries[date], chartType, statistic))
           );
@@ -271,15 +272,15 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
               .attr('class', 'stem')
               .style('stroke', color + '99')
               .style('stroke-width', 4)
-              .attr('x1', (date) => xScale(new Date(date)))
+              .attr('x1', (date) => xScale(parseIndiaDate(date)))
               .attr('y1', chartBottom)
-              .attr('x2', (date) => xScale(new Date(date)))
+              .attr('x2', (date) => xScale(parseIndiaDate(date)))
               .attr('y2', chartBottom)
           )
           .transition(t)
-          .attr('x1', (date) => xScale(new Date(date)))
+          .attr('x1', (date) => xScale(parseIndiaDate(date)))
           .attr('y1', yScale(0))
-          .attr('x2', (date) => xScale(new Date(date)))
+          .attr('x2', (date) => xScale(parseIndiaDate(date)))
           .attr('y2', (date) =>
             yScale(getStatistic(timeseries[date], chartType, statistic))
           );
