@@ -115,7 +115,10 @@ function State(props) {
   const handleSort = (districtNameA, districtNameB) => {
     const districtA = data[stateCode].districts[districtNameA];
     const districtB = data[stateCode].districts[districtNameB];
-    return districtB[mapStatistic] - districtA[mapStatistic];
+    return (
+      getStatistic(districtB, 'total', mapStatistic) -
+      getStatistic(districtA, 'total', mapStatistic)
+    );
   };
 
   const gridRowCount = useMemo(() => {
@@ -291,29 +294,26 @@ function State(props) {
                       .sort((a, b) => handleSort(a, b))
                       .slice(0, showAllDistricts ? undefined : 5)
                       .map((districtName) => {
+                        const total = getStatistic(
+                          data[stateCode].districts[districtName],
+                          'total',
+                          mapStatistic
+                        );
+                        const delta = getStatistic(
+                          data[stateCode].districts[districtName],
+                          'delta',
+                          mapStatistic
+                        );
                         return (
                           <div key={districtName} className="district">
-                            <h2>
-                              {formatNumber(
-                                getStatistic(
-                                  data[stateCode].districts[districtName],
-                                  'total',
-                                  mapStatistic
-                                )
-                              )}
-                            </h2>
+                            <h2>{formatNumber(total)}</h2>
                             <h5>{t(districtName)}</h5>
                             {mapStatistic !== 'active' && (
                               <div className="delta">
-                                <Icon.ArrowUp className={mapStatistic} />
                                 <h6 className={mapStatistic}>
-                                  {formatNumber(
-                                    getStatistic(
-                                      data[stateCode].districts[districtName],
-                                      'delta',
-                                      mapStatistic
-                                    )
-                                  )}
+                                  {delta > 0
+                                    ? '\u2191' + formatNumber(delta)
+                                    : ''}
                                 </h6>
                               </div>
                             )}
