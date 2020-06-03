@@ -17,6 +17,7 @@ import {
 import Breadcrumb from '@primer/components/lib/Breadcrumb';
 import Dropdown from '@primer/components/lib/Dropdown';
 import anime from 'animejs';
+import equal from 'fast-deep-equal';
 import React, {useState, useMemo} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
@@ -25,7 +26,7 @@ import {Link, useParams, Redirect} from 'react-router-dom';
 import {useMeasure, useEffectOnce} from 'react-use';
 import useSWR from 'swr';
 
-function PureBreadcrumbs({stateName, stateCode, stateCodes}) {
+function PureBreadcrumbs({selectedStateCode, stateCodes}) {
   const {t} = useTranslation();
 
   return (
@@ -34,8 +35,8 @@ function PureBreadcrumbs({stateName, stateCode, stateCodes}) {
         <Breadcrumb.Item href="/">{t('Home')}</Breadcrumb.Item>
         <Dropdown direction="w">
           <summary>
-            <Breadcrumb.Item href={`${stateCode}`} selected>
-              {t(stateName)}
+            <Breadcrumb.Item href={`${selectedStateCode}`} selected>
+              {t(STATE_NAMES[selectedStateCode])}
             </Breadcrumb.Item>
             <Dropdown.Caret className="caret" />
           </summary>
@@ -52,7 +53,15 @@ function PureBreadcrumbs({stateName, stateCode, stateCodes}) {
   );
 }
 
-const Breadcrumbs = React.memo(PureBreadcrumbs);
+const isEqualBreadcrumbs = (prevProps, currProps) => {
+  if (!equal(prevProps.selectedStateCode, currProps.selectedStateCode)) {
+    return false;
+  } else if (!equal(prevProps.stateCodes, currProps.stateCodes)) {
+    return false;
+  } else return true;
+};
+
+const Breadcrumbs = React.memo(PureBreadcrumbs, isEqualBreadcrumbs);
 
 function State(props) {
   const stateCode = useParams().stateCode.toUpperCase();
@@ -148,7 +157,7 @@ function State(props) {
         <div className="State">
           <div className="state-left">
             <Breadcrumbs
-              {...{stateCode, stateName}}
+              selectedStateCode={stateCode}
               stateCodes={Object.keys(data).filter(
                 (stateCode) =>
                   stateCode !== 'TT' &&
@@ -276,10 +285,7 @@ function State(props) {
                 className="district-bar"
                 style={!showAllDistricts ? {display: 'flex'} : {}}
               >
-                <div
-                  className="district-bar-left fadeInUp"
-                  style={{animationDelay: '0.6s'}}
-                >
+                <div className="district-bar-left fadeInUp">
                   <h2 className={mapStatistic}>Top districts</h2>
                   <div
                     className={`districts ${showAllDistricts ? 'is-grid' : ''}`}
