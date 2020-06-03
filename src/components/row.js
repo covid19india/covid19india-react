@@ -150,7 +150,13 @@ function PureDistrictRow({
 }
 
 const isDistrictRowEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.data.last_updated, currProps.data.last_updated)) {
+  if (!equal(prevProps.data?.total, currProps.data?.total)) {
+    return false;
+  } else if (!equal(prevProps.data?.delta, currProps.data?.delta)) {
+    return false;
+  } else if (
+    !equal(prevProps.data?.['last_updated'], currProps.data?.['last_updated'])
+  ) {
     return false;
   } else if (
     !equal(
@@ -381,7 +387,9 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.data.total, currProps.data.total)) {
+  if (!equal(prevProps.data?.total, currProps.data?.total)) {
+    return false;
+  } else if (!equal(prevProps.data?.delta, currProps.data?.delta)) {
     return false;
   } else if (
     (!equal(
