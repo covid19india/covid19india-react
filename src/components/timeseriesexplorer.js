@@ -1,6 +1,10 @@
 import TimeSeries from './timeseries';
 
-import {STATE_NAMES, TIMESERIES_OPTIONS} from '../constants';
+import {
+  STATE_NAMES,
+  TIMESERIES_CHART_TYPES,
+  TIMESERIES_OPTIONS,
+} from '../constants';
 import {getIndiaYesterdayISO, parseIndiaDate} from '../utils/commonfunctions';
 
 import 'intersection-observer';
@@ -82,23 +86,17 @@ function TimeSeriesExplorer({
 
         <h1>{t('Spread Trends')}</h1>
         <div className="tabs">
-          <div
-            className={`tab ${chartType === 'total' ? 'focused' : ''}`}
-            onClick={() => {
-              setChartType('total');
-            }}
-          >
-            <h4>{t('Cumulative')}</h4>
-          </div>
-          <div
-            className={`tab ${chartType === 'delta' ? 'focused' : ''}`}
-            onClick={() => {
-              setChartType('delta');
-              setIsLog(false);
-            }}
-          >
-            <h4>{t('Daily')}</h4>
-          </div>
+          {Object.entries(TIMESERIES_CHART_TYPES).map(([ctype, value]) => (
+            <div
+              className={`tab ${chartType === ctype ? 'focused' : ''}`}
+              key={ctype}
+              onClick={() => {
+                setChartType(ctype);
+              }}
+            >
+              <h4>{t(value)}</h4>
+            </div>
+          ))}
         </div>
 
         <div className="scale-modes">
