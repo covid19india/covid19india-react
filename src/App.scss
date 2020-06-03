@@ -1911,6 +1911,13 @@ table {
         background: transparent !important;
       }
 
+      td {
+
+        &:first-child {
+          padding-bottom: 0 !important;
+        }
+      }
+
       .disclaimer {
         backdrop-filter: saturate(180%) blur(20px);
         background: $gray-light;
@@ -1938,7 +1945,9 @@ table {
         color: $orange;
         font-size: 0.75rem;
         font-weight: 600;
+        padding: 8px;
         text-align: center;
+        width: 1.5rem !important;
 
         &:hover {
           background: $yellow-hover !important;

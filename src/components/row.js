@@ -299,7 +299,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
           </tr>
 
           <tr className={'state-last-update'}>
-            <td colSpan={4} style={{paddingBottom: 0}}>
+            <td colSpan={3}>
               <p className="spacer"></p>
               {data?.meta?.['last_updated'] && (
                 <p>
@@ -318,8 +318,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
             <td
               align="center"
               className="state-page-link"
-              colSpan={1}
-              style={{width: '1.5rem'}}
+              colSpan={2}
               onClick={() => {
                 history.push(`state/${stateCode}`);
               }}
