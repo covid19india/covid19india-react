@@ -268,15 +268,13 @@ function State(props) {
               }}
             />
 
-            {data && (
-              <StateMeta
-                {...{
-                  stateCode,
-                  data,
-                  timeseries,
-                }}
-              />
-            )}
+            <StateMeta
+              {...{
+                stateCode,
+                data,
+                timeseries,
+              }}
+            />
           </div>
 
           <div className="state-right">

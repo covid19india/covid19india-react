@@ -257,7 +257,6 @@ export const MAP_META = {
   },
 };
 
-export const INDIA_ASPECT_RATIO = 0.885;
 export const MAP_LEGEND_HEIGHT = 50;
 
 export const STATE_NAMES = {

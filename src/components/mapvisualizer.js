@@ -54,7 +54,7 @@ function MapVisualizer({
 
   const mapMeta = MAP_META[currentMap.code];
 
-  const geoDataResponse = useSWR(
+  const {data: geoData} = useSWR(
     mapMeta.geoDataFile,
     async (file) => {
       return await d3.json(file);
@@ -118,9 +118,6 @@ function MapVisualizer({
   }, [currentMap.option, statistic, statisticMax]);
 
   useEffect(() => {
-    if (!geoDataResponse.data) return;
-    const geoData = geoDataResponse.data;
-
     const topology = topojson.feature(
       geoData,
       geoData.objects[mapMeta.graphObjectStates || mapMeta.graphObjectDistricts]
@@ -399,7 +396,7 @@ function MapVisualizer({
       }
     });
   }, [
-    geoDataResponse.data,
+    geoData,
     data,
     mapMeta,
     currentMap,
@@ -412,7 +409,6 @@ function MapVisualizer({
   ]);
 
   useEffect(() => {
-    if (!geoDataResponse.data) return;
     const state = STATE_NAMES[regionHighlighted.stateCode];
     const district = regionHighlighted.districtName;
 
@@ -443,7 +439,7 @@ function MapVisualizer({
         });
     }
   }, [
-    geoDataResponse.data,
+    geoData,
     data,
     currentMap.option,
     currentMap.view,
