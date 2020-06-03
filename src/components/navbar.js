@@ -86,21 +86,15 @@ function Navbar({pages, darkMode}) {
       </div>
 
       {expand && (
-        <Expand
-          expand={expand}
-          pages={pages}
-          setExpand={setExpand}
-          darkMode={darkMode}
-        />
+        <Expand {...{expand, pages, setExpand, darkMode, windowSize}} />
       )}
     </animated.div>
   );
 }
 
-function Expand({expand, pages, setExpand, darkMode}) {
+function Expand({expand, pages, setExpand, darkMode, windowSize}) {
   const expandElement = useRef(null);
   const {t} = useTranslation();
-  const windowSize = useWindowSize();
 
   useEffectOnce(() => {
     anime({
