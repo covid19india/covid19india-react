@@ -67,8 +67,8 @@ $dark-m-purple: #7ba1ea;
 $dark-m-blue: #3391ff;
 
 html {
-  width: 100vw;
   overflow-x: hidden;
+  width: 100vw;
 }
 
 body {
@@ -152,7 +152,9 @@ h6 {
 
   .LanguageSwitcher {
     .button {
+      background: transparent;
       border: 0;
+      box-shadow: none;
       color: #6c757d;
       cursor: pointer;
       font-family: 'archia';
@@ -162,8 +164,6 @@ h6 {
       padding: 1.5rem;
       transition: all 0s ease-in-out;
       width: 3rem;
-      box-shadow: none;
-      background: transparent;
 
       &:active {
         border: 0;
@@ -284,6 +284,7 @@ h6 {
 }
 
 .alert {
+  align-items: flex-start;
   background: $gray-light;
   border-radius: 5px;
   color: $gray;
@@ -291,19 +292,18 @@ h6 {
   flex-direction: row;
   font-family: 'archia';
   font-size: 10px;
-  align-items: flex-start;
   padding: 0.5rem;
 
   svg {
     color: $gray-mid;
-    width: 16px;
     height: 16px;
+    width: 16px;
   }
 
   .alert-right {
-    width: 5rem;
     margin-left: .25rem;
     text-align: right;
+    width: 5rem;
 
     a {
       background: $gray-light;
@@ -454,10 +454,6 @@ h6 {
     width: 100%;
   }
 
-  .MapExplorer {
-    width: calc(100% - 3rem);
-  }
-
   .Minigraph {
     .svg-parent {
       width: calc(25%) !important;
@@ -466,6 +462,7 @@ h6 {
 
   .MapExplorer {
     margin-top: 2rem;
+    width: calc(100% - 3rem);
 
     .header,
     .map-stats,
@@ -476,6 +473,12 @@ h6 {
       display: none;
     }
 
+    .anchor {
+      display: none;
+    }
+  }
+
+  .TimeSeriesExplorer {
     .anchor {
       display: none;
     }
@@ -817,7 +820,7 @@ h6 {
     margin-top: 2rem;
     width: 90% !important;
     word-wrap: break-word;
-    
+
     .alert-right {
       text-align: left;
     }
@@ -1276,10 +1279,10 @@ h6 {
         flex-direction: row;
         font-size: 0.75rem;
         height: 1rem;
+        margin-right: .25rem;
         margin-top: 0.5rem;
         padding: 0.25rem;
         text-align: right;
-        margin-right: .25rem;
 
         &:hover {
           background: $gray-hover;
@@ -1349,19 +1352,19 @@ h6 {
     padding: 1rem;
 
     &.timeline {
-      position: absolute;
       display: flex;
       flex-direction: column;
       justify-content: space-around;
       padding: 1rem;
+      position: absolute;
       top: 13.25rem;
 
       .highlight {
+        color: $brown !important;
         position: absolute;
+        text-align: center;
         top: 2.5rem;
         width: 100%;
-        text-align: center;
-        color: $brown !important;
       }
     }
 
@@ -1391,10 +1394,10 @@ h6 {
     .timeline-icon {
       svg {
         display: flex;
+        fill: #a6abb0 !important;
         flex-direction: row;
         justify-content: center;
         stroke: #a6abb0 !important;
-        fill: #a6abb0 !important;
         stroke-width: 0.5 !important;
 
         path {
@@ -1402,8 +1405,8 @@ h6 {
         }
 
         &:hover {
-          stroke: $gray !important;
           fill: $gray !important;
+          stroke: $gray !important;
         }
       }
     }
@@ -1426,16 +1429,16 @@ h6 {
 }
 
 .Timeline {
-  width: 30rem;
   cursor: pointer;
-  will-change: transform;
   height: 3rem;
+  width: 30rem;
+  will-change: transform;
 
   .day {
-    will-change: transform;
+    position: absolute;
     text-align: center;
     width: 70px;
-    position: absolute;
+    will-change: transform;
 
     h5 {
       color: $gray-mid;
@@ -1445,7 +1448,7 @@ h6 {
       }
 
       &::selection {
-      background: transparent !important;
+        background: transparent !important;
       }
     }
   }
@@ -1706,9 +1709,9 @@ table {
   border-collapse: separate;
   border-spacing: 3px 4px;
   font-family: 'archia';
+  margin-bottom: 2.5rem;
   position: relative;
   width: 30rem;
-  margin-bottom: 2.5rem;
 
   thead {
     background: $gray-light;
@@ -2047,9 +2050,9 @@ table {
 }
 
 .MapExplorer {
+  align-self: center;
   position: relative;
   width: 30rem;
-  align-self: center;
 
   &.stickied {
     position: sticky !important;
@@ -2082,18 +2085,8 @@ table {
     margin: auto;
     margin-top: 2rem;
     overflow: hidden;
-    width: 90%;
     position: relative;
-
-    &.map-parent {
-      // Based on aspect ratio India map (width * AR)
-      padding-bottom: 101.7%;
-
-      svg {
-        position: absolute;
-        top: 0; bottom: 0; left: 0; right: 0;
-      }
-    }
+    width: 90%;
 
     &.maplegend {
       margin-top: 0.6rem;
@@ -2107,8 +2100,8 @@ table {
 
     svg {
       align-self: center;
-      width: 100%;
       height: 100%;
+      width: 100%;
 
       text {
         fill: $gray;
@@ -2121,11 +2114,11 @@ table {
   }
 
   .last-update {
-    position: absolute;
-    right: 0;
     align-self: center;
     margin-bottom: auto;
     margin-top: 0.25rem;
+    position: absolute;
+    right: 0;
     text-align: right;
     width: 10rem;
 
@@ -2146,17 +2139,17 @@ table {
   }
 
   .map-button {
-    position: absolute;
-    right: 0;
-    font-family: 'archia';
-    font-weight: 900;
     background: $yellow-light;
     border-radius: 5px;
     color: $orange;
     cursor: pointer;
+    font-family: 'archia';
     font-size: 0.75rem;
-    padding: 0.5rem;
+    font-weight: 900;
     margin-bottom: 0.25rem;
+    padding: 0.5rem;
+    position: absolute;
+    right: 0;
     transition: all 0.2s ease-in-out;
 
     &:hover {
@@ -2174,9 +2167,9 @@ table {
   }
 
   .meta {
-    position: relative;
     height: 4rem;
     justify-content: space-between;
+    position: relative;
 
     h2 {
       font-weight: 900;
@@ -2443,9 +2436,9 @@ table {
     bottom: 50%;
     color: $gray-dark;
     display: flex;
+    flex-direction: row;
     font-family: 'archia';
     font-size: 12px;
-    flex-direction: row;
     left: 0;
     margin-left: auto;
     margin-right: auto;
@@ -2457,9 +2450,9 @@ table {
     z-index: 99;
 
     svg {
-      position: relative !important;
       margin-right: 0.25rem;
       margin-top: -0.9rem;
+      position: relative !important;
       stroke-width: 2px;
       width: 20px;
     }
@@ -2473,10 +2466,6 @@ table {
       z-index: 1;
     }
   }
-}
-
-.MapVisualizer {
-  min-height: 30rem;
 }
 
 .__react_component_tooltip {
@@ -2499,8 +2488,11 @@ table {
   }
 }
 
-.tooltip:after {
-  font-family: 'archia' !important;
+.tooltip {
+  &::after {
+    font-family: 'archia' !important;
+    text-align: left !important;
+  }
 }
 
 .tabs {
@@ -4077,13 +4069,13 @@ footer {
     color: $orange;
     cursor: pointer;
     font-family: 'archia';
+    font-size: 10px !important;
     font-weight: 600;
     margin: 0;
     outline: none;
     padding: 10px 15px;
     text-align: center;
     transition: background 0.25s ease-in-out;
-    font-size: 10px !important;
 
     &:hover {
       background: $yellow-hover;
@@ -4729,11 +4721,6 @@ footer {
   .MapExplorer {
     .svg-parent {
       width: 100%;
-
-      &.map-parent {
-        // Based on aspect ratio India map (width * AR)
-        padding-bottom: 113%;
-      }
     }
 
     .header {
@@ -4977,8 +4964,8 @@ footer {
   }
 
   .timeline {
-    padding-left: 0rem !important;
-    padding-right: 0rem !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   .Timeline {

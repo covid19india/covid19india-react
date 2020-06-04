@@ -29,6 +29,11 @@ export const COLORS = {
   tested: '#4b1eaa',
 };
 
+export const TIMESERIES_CHART_TYPES = {
+  total: 'Cumulative',
+  delta: 'Daily',
+};
+
 export const TIMESERIES_OPTIONS = {
   BEGINNING: 'Beginning',
   MONTH: '1 Month',
@@ -252,7 +257,6 @@ export const MAP_META = {
   },
 };
 
-export const INDIA_ASPECT_RATIO = 0.885;
 export const MAP_LEGEND_HEIGHT = 50;
 
 export const STATE_NAMES = {

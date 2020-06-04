@@ -17,6 +17,7 @@ import {
 import Breadcrumb from '@primer/components/lib/Breadcrumb';
 import Dropdown from '@primer/components/lib/Dropdown';
 import anime from 'animejs';
+import equal from 'fast-deep-equal';
 import React, {useState, useMemo} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
@@ -25,7 +26,7 @@ import {Link, useParams, Redirect} from 'react-router-dom';
 import {useMeasure, useEffectOnce} from 'react-use';
 import useSWR from 'swr';
 
-function PureBreadcrumbs({stateName, stateCode, stateCodes}) {
+function PureBreadcrumbs({selectedStateCode, stateCodes}) {
   const {t} = useTranslation();
 
   return (
@@ -34,8 +35,8 @@ function PureBreadcrumbs({stateName, stateCode, stateCodes}) {
         <Breadcrumb.Item href="/">{t('Home')}</Breadcrumb.Item>
         <Dropdown direction="w">
           <summary>
-            <Breadcrumb.Item href={`${stateCode}`} selected>
-              {t(stateName)}
+            <Breadcrumb.Item href={`${selectedStateCode}`} selected>
+              {t(STATE_NAMES[selectedStateCode])}
             </Breadcrumb.Item>
             <Dropdown.Caret className="caret" />
           </summary>
@@ -52,7 +53,15 @@ function PureBreadcrumbs({stateName, stateCode, stateCodes}) {
   );
 }
 
-const Breadcrumbs = React.memo(PureBreadcrumbs);
+const isEqualBreadcrumbs = (prevProps, currProps) => {
+  if (!equal(prevProps.selectedStateCode, currProps.selectedStateCode)) {
+    return false;
+  } else if (!equal(prevProps.stateCodes, currProps.stateCodes)) {
+    return false;
+  } else return true;
+};
+
+const Breadcrumbs = React.memo(PureBreadcrumbs, isEqualBreadcrumbs);
 
 function State(props) {
   const stateCode = useParams().stateCode.toUpperCase();
@@ -72,7 +81,7 @@ function State(props) {
     anime({
       targets: '.highlight',
       duration: 200,
-      delay: 3000,
+      delay: 500,
       translateX:
         mapStatistic === 'confirmed'
           ? `${width * 0}px`
@@ -148,7 +157,7 @@ function State(props) {
         <div className="State">
           <div className="state-left">
             <Breadcrumbs
-              {...{stateCode, stateName}}
+              selectedStateCode={stateCode}
               stateCodes={Object.keys(data).filter(
                 (stateCode) =>
                   stateCode !== 'TT' &&
@@ -259,15 +268,13 @@ function State(props) {
               }}
             />
 
-            {data && (
-              <StateMeta
-                {...{
-                  stateCode,
-                  data,
-                  timeseries,
-                }}
-              />
-            )}
+            <StateMeta
+              {...{
+                stateCode,
+                data,
+                timeseries,
+              }}
+            />
           </div>
 
           <div className="state-right">
@@ -276,10 +283,7 @@ function State(props) {
                 className="district-bar"
                 style={!showAllDistricts ? {display: 'flex'} : {}}
               >
-                <div
-                  className="district-bar-left fadeInUp"
-                  style={{animationDelay: '0.6s'}}
-                >
+                <div className="district-bar-left fadeInUp">
                   <h2 className={mapStatistic}>Top districts</h2>
                   <div
                     className={`districts ${showAllDistricts ? 'is-grid' : ''}`}
@@ -289,7 +293,7 @@ function State(props) {
                         : {}
                     }
                   >
-                    {Object.keys(data[stateCode].districts)
+                    {Object.keys(data[stateCode]?.districts || {})
                       .filter((districtName) => districtName !== 'Unknown')
                       .sort((a, b) => handleSort(a, b))
                       .slice(0, showAllDistricts ? undefined : 5)
@@ -322,9 +326,9 @@ function State(props) {
                       })}
                   </div>
 
-                  {Object.keys(data[stateCode].districts).length > 5 && (
+                  {Object.keys(data[stateCode]?.districts || {}).length > 5 && (
                     <button className="button" onClick={toggleShowAllDistricts}>
-                      {showAllDistricts ? `View less` : `View all`}
+                      <span>{showAllDistricts ? `View less` : `View all`}</span>
                     </button>
                   )}
                 </div>
@@ -333,7 +337,7 @@ function State(props) {
                   {(mapStatistic === 'confirmed' ||
                     mapStatistic === 'deceased') && (
                     <div className="happy-sign">
-                      {Object.keys(timeseries[stateCode])
+                      {Object.keys(timeseries[stateCode] || {})
                         .slice(-NUM_BARS_STATEPAGE)
                         .every(
                           (date) =>

@@ -21,7 +21,9 @@ function Minigraph({timeseries, date: timelineDate}) {
 
   const dates = useMemo(() => {
     const today = timelineDate || getIndiaYesterdayISO();
-    const pastDates = Object.keys(timeseries).filter((date) => date <= today);
+    const pastDates = Object.keys(timeseries || {}).filter(
+      (date) => date <= today
+    );
     const cutOffDate = formatISO(
       subDays(parseIndiaDate(today), MINIGRAPH_LOOKBACK_DAYS),
       {representation: 'date'}
@@ -78,7 +80,7 @@ function Minigraph({timeseries, date: timelineDate}) {
       let pathLength;
       svg
         .selectAll('path')
-        .data([dates])
+        .data(T ? [dates] : [])
         .join(
           (enter) =>
             enter
@@ -112,7 +114,7 @@ function Minigraph({timeseries, date: timelineDate}) {
 
       svg
         .selectAll('circle')
-        .data([dates[T - 1]])
+        .data(T ? [dates[T - 1]] : [])
         .join(
           (enter) =>
             enter

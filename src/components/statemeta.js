@@ -31,7 +31,7 @@ function StateMeta({stateCode, data, timeseries}) {
   const prevWeekDate = format(sub(getIndiaDate(), {weeks: 1}), 'yyyy-MM-dd');
 
   const prevWeekConfirmed = getStatistic(
-    timeseries[stateCode][prevWeekDate],
+    timeseries[stateCode]?.[prevWeekDate],
     'total',
     'confirmed'
   );
@@ -98,9 +98,13 @@ function StateMeta({stateCode, data, timeseries}) {
           title={'Active'}
           statistic={`${formatNumber(activePercent)}%`}
           formula={'(active / confirmed) * 100'}
-          description={`For every 100 confirmed cases, ${formatNumber(
-            Math.round(activePercent)
-          )} are currently infected.`}
+          description={
+            activePercent > 0
+              ? `For every 100 confirmed cases, ${formatNumber(
+                  Math.round(activePercent)
+                )} are currently infected.`
+              : 'Currently, there are no active cases in this state.'
+          }
         />
 
         <StateMetaCard
@@ -108,9 +112,13 @@ function StateMeta({stateCode, data, timeseries}) {
           title={'Recovery Rate'}
           statistic={`${formatNumber(recoveryPercent)}%`}
           formula={'(recovered / confirmed) * 100'}
-          description={`For every 100 confirmed cases, ${formatNumber(
-            Math.round(recoveryPercent)
-          )} have recovered from the virus.`}
+          description={
+            recoveryPercent > 0
+              ? `For every 100 confirmed cases, ${formatNumber(
+                  Math.round(recoveryPercent)
+                )} have recovered from the virus.`
+              : 'Unfortunately, there are no recoveries in this state yet.'
+          }
         />
 
         <StateMetaCard
@@ -118,9 +126,13 @@ function StateMeta({stateCode, data, timeseries}) {
           title={'Mortality Rate'}
           statistic={`${formatNumber(deathPercent)}%`}
           formula={'(deceased / confirmed) * 100'}
-          description={`For every 100 confirmed cases, ${formatNumber(
-            Math.round(deathPercent)
-          )} have unfortunately passed away from the virus.`}
+          description={
+            deathPercent > 0
+              ? `For every 100 confirmed cases, ${formatNumber(
+                  Math.round(deathPercent)
+                )} have unfortunately passed away from the virus.`
+              : 'Fortunately, no one has passed away from the virus in this state.'
+          }
         />
 
         <StateMetaCard
@@ -138,9 +150,15 @@ function StateMeta({stateCode, data, timeseries}) {
             indiaDate,
             'dd MMM'
           )}`}
-          description={`In the last one week, the number of new infections has grown by an average of ${Math.round(
-            growthRate / 7
-          )}% every day.`}
+          description={
+            growthRate > 0
+              ? `In the last one week, the number of new infections has
+              grown by an average of ${formatNumber(
+                Math.round(growthRate / 7)
+              )}%
+              every day.`
+              : 'There has been no growth in the number of infections in last one week.'
+          }
         />
 
         <StateMetaCard
@@ -150,11 +168,19 @@ function StateMeta({stateCode, data, timeseries}) {
           formula={
             '(total tests in state / total population of state) * 1 Million'
           }
-          date={`As of ${formatLastUpdated(
-            data[stateCode]?.meta?.tested?.['last_updated']
-          )} ago`}
-          description={`For every 1 million people in ${STATE_NAMES[stateCode]},
-            ${formatNumber(Math.round(testPerMillion))} people were tested.`}
+          date={
+            tested
+              ? `As of ${formatLastUpdated(
+                  data[stateCode]?.meta?.tested?.['last_updated']
+                )} ago`
+              : ''
+          }
+          description={
+            testPerMillion > 0
+              ? `For every 1 million people in ${STATE_NAMES[stateCode]},
+                ${formatNumber(Math.round(testPerMillion))} people were tested.`
+              : 'No tests have been conducted in this state yet.'
+          }
         />
       </div>
     </React.Fragment>

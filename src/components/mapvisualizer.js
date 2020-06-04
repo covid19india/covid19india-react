@@ -26,6 +26,8 @@ import {useTranslation} from 'react-i18next';
 import useSWR from 'swr';
 import * as topojson from 'topojson';
 
+const [width, height] = [432, 488];
+
 const colorInterpolator = {
   confirmed: (t) => d3.interpolateReds(t * 0.85),
   active: (t) => d3.interpolateBlues(t * 0.85),
@@ -52,7 +54,7 @@ function MapVisualizer({
 
   const mapMeta = MAP_META[currentMap.code];
 
-  const geoDataResponse = useSWR(
+  const {data: geoData} = useSWR(
     mapMeta.geoDataFile,
     async (file) => {
       return await d3.json(file);
@@ -101,9 +103,8 @@ function MapVisualizer({
         Object.values(ZONE_COLORS)
       );
     } else if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
-      const {width} = svgRef.current.getBoundingClientRect();
       return d3
-        .scaleSqrt([0, Math.max(statisticMax, 1)], [0, width / 10])
+        .scaleSqrt([0, Math.max(statisticMax, 1)], [0, 40])
         .clamp(true)
         .nice(3);
     } else {
@@ -117,9 +118,6 @@ function MapVisualizer({
   }, [currentMap.option, statistic, statisticMax]);
 
   useEffect(() => {
-    if (!geoDataResponse.data) return;
-    const geoData = geoDataResponse.data;
-
     const topology = topojson.feature(
       geoData,
       geoData.objects[mapMeta.graphObjectStates || mapMeta.graphObjectDistricts]
@@ -127,7 +125,6 @@ function MapVisualizer({
 
     const svg = d3.select(svgRef.current);
 
-    const {width, height} = svgRef.current.getBoundingClientRect();
     const projection = d3.geoMercator().fitSize([width, height], topology);
     const path = d3.geoPath(projection);
 
@@ -162,6 +159,35 @@ function MapVisualizer({
       return obj;
     });
 
+    const fillColor = (d) => {
+      const stateCode = STATE_CODES[d.properties.st_nm];
+      const district = d.properties.district;
+      const stateData = data[stateCode];
+      const districtData = stateData?.districts?.[district];
+      let n;
+      if (currentMap.option === MAP_OPTIONS.ZONES) {
+        n = districtData?.zone || 0;
+      } else {
+        if (district) n = getTotalStatistic(districtData, statistic);
+        else
+          n = getTotalStatistic(
+            stateData,
+            statistic,
+            currentMap.option === MAP_OPTIONS.PER_MILLION
+              ? STATE_POPULATIONS_MIL[stateCode]
+              : 1
+          );
+      }
+      const color = n === 0 ? '#ffffff00' : mapScale(n);
+      return color;
+    };
+
+    const strokeColor = (d) => {
+      return currentMap.option === MAP_OPTIONS.ZONES
+        ? '#343a40'
+        : COLORS[statistic];
+    };
+
     /* Draw map */
     const t = d3.transition().duration(D3_TRANSITION_DURATION);
     let onceTouchedRegion = null;
@@ -172,72 +198,54 @@ function MapVisualizer({
         currentMap.option !== MAP_OPTIONS.HOTSPOTS ? features : [],
         (d) => d.id
       )
-      .join((enter) => {
-        const sel = enter
-          .append('path')
-          .attr('d', path)
-          .attr('stroke-width', 2)
-          .attr('stroke-opacity', 0)
-          .style('cursor', 'pointer')
-          .on('mouseenter', (d) => {
-            setRegionHighlighted({
-              stateCode: STATE_CODES[d.properties.st_nm],
-              districtName: d.properties.district,
-            });
-          })
-          .on('mouseleave', (d) => {
-            if (onceTouchedRegion === d) onceTouchedRegion = null;
-          })
-          .on('touchstart', (d) => {
-            if (onceTouchedRegion === d) onceTouchedRegion = null;
-            else onceTouchedRegion = d;
-          })
-          .on('click', (d) => {
-            d3.event.stopPropagation();
-            if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE)
-              return;
-            // Disable pointer events till the new map is rendered
-            svg.attr('pointer-events', 'none');
-            svg
-              .select('.regions')
-              .selectAll('path')
-              .attr('pointer-events', 'none');
-            // Switch map
-            changeMap(STATE_CODES[d.properties.st_nm]);
-          });
-        sel.append('title');
-        return sel;
-      })
+      .join(
+        (enter) => {
+          const sel = enter
+            .append('path')
+            .attr('d', path)
+            .attr('stroke-width', 1.8)
+            .attr('stroke-opacity', 0)
+            .style('cursor', 'pointer')
+            .on('mouseenter', (d) => {
+              setRegionHighlighted({
+                stateCode: STATE_CODES[d.properties.st_nm],
+                districtName: d.properties.district,
+              });
+            })
+            .on('mouseleave', (d) => {
+              if (onceTouchedRegion === d) onceTouchedRegion = null;
+            })
+            .on('touchstart', (d) => {
+              if (onceTouchedRegion === d) onceTouchedRegion = null;
+              else onceTouchedRegion = d;
+            })
+            .on('click', (d) => {
+              d3.event.stopPropagation();
+              if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE)
+                return;
+              // Disable pointer events till the new map is rendered
+              svg.attr('pointer-events', 'none');
+              svg
+                .select('.regions')
+                .selectAll('path')
+                .attr('pointer-events', 'none');
+              // Switch map
+              changeMap(STATE_CODES[d.properties.st_nm]);
+            })
+            .attr('fill', fillColor)
+            .attr('stroke', strokeColor);
+          sel.append('title');
+          return sel;
+        },
+        (update) =>
+          update.call((update) =>
+            update
+              .transition(t)
+              .attr('fill', fillColor)
+              .attr('stroke', strokeColor)
+          )
+      )
       .attr('pointer-events', 'all');
-
-    regionSelection
-      .transition(t)
-      .attr('fill', (d) => {
-        const stateCode = STATE_CODES[d.properties.st_nm];
-        const district = d.properties.district;
-        const stateData = data[stateCode];
-        const districtData = stateData?.districts?.[district];
-        let n;
-        if (currentMap.option === MAP_OPTIONS.ZONES) {
-          n = districtData?.zone || 0;
-        } else {
-          if (district) n = getTotalStatistic(districtData, statistic);
-          else
-            n = getTotalStatistic(
-              stateData,
-              statistic,
-              currentMap.option === MAP_OPTIONS.PER_MILLION
-                ? STATE_POPULATIONS_MIL[stateCode]
-                : 1
-            );
-        }
-        const color = n === 0 ? '#ffffff00' : mapScale(n);
-        return color;
-      })
-      .attr(
-        'stroke',
-        currentMap.option === MAP_OPTIONS.ZONES ? '#343a40' : COLORS[statistic]
-      );
 
     regionSelection.select('title').text((d) => {
       if (currentMap.option === MAP_OPTIONS.TOTAL) {
@@ -340,7 +348,7 @@ function MapVisualizer({
         return mapMeta.mapType === MAP_TYPES.COUNTRY &&
           currentMap.view === MAP_VIEWS.DISTRICTS
           ? 0
-          : width / 250;
+          : 1.5;
       })
       .selectAll('path')
       .data(
@@ -373,7 +381,7 @@ function MapVisualizer({
           .append('path')
           .attr('d', path)
           .attr('fill', 'none')
-          .attr('stroke-width', width / 250)
+          .attr('stroke-width', 1.5)
       )
       .transition(t)
       .attr('stroke', '#343a4050');
@@ -388,7 +396,7 @@ function MapVisualizer({
       }
     });
   }, [
-    geoDataResponse.data,
+    geoData,
     data,
     mapMeta,
     currentMap,
@@ -401,7 +409,6 @@ function MapVisualizer({
   ]);
 
   useEffect(() => {
-    if (!geoDataResponse.data) return;
     const state = STATE_NAMES[regionHighlighted.stateCode];
     const district = regionHighlighted.districtName;
 
@@ -432,7 +439,7 @@ function MapVisualizer({
         });
     }
   }, [
-    geoDataResponse.data,
+    geoData,
     data,
     currentMap.option,
     currentMap.view,
@@ -443,8 +450,13 @@ function MapVisualizer({
 
   return (
     <React.Fragment>
-      <div className="svg-parent map-parent">
-        <svg id="chart" preserveAspectRatio="xMidYMid meet" ref={svgRef}>
+      <div className="svg-parent">
+        <svg
+          id="chart"
+          viewBox={`0 0 ${width} ${height}`}
+          preserveAspectRatio="xMidYMid meet"
+          ref={svgRef}
+        >
           <g className="regions" />
           <g className="state-borders" />
           {currentMap.view === MAP_VIEWS.DISTRICTS && (

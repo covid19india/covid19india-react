@@ -52,12 +52,7 @@ function MapExplorer({
   const {t} = useTranslation();
   const history = useHistory();
 
-  const [width, setWidth] = useState(480);
   const mapExplorerRef = useRef();
-
-  useEffect(() => {
-    setWidth(mapExplorerRef.current.clientWidth);
-  }, []);
 
   const [currentMap, setCurrentMap] = useState({
     code: stateCode,
@@ -415,7 +410,13 @@ function MapExplorer({
         {mapStatistic && (
           <Suspense
             fallback={
-              <MapVisualizerLoader {...{width, statistic: mapStatistic}} />
+              <MapVisualizerLoader
+                className="map-loader"
+                {...{
+                  width: mapExplorerRef.current?.clientWidth,
+                  statistic: mapStatistic,
+                }}
+              />
             }
           >
             <MapVisualizer

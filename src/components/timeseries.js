@@ -15,8 +15,9 @@ import {
 import classnames from 'classnames';
 import * as d3 from 'd3';
 import {interpolatePath} from 'd3-interpolate-path';
+import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
 function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
@@ -33,6 +34,8 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
   }, [dates]);
 
   useEffect(() => {
+    const T = dates.length;
+
     const {width, height} =
       dimensions || wrapperRef.current.getBoundingClientRect();
 
@@ -41,7 +44,6 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
     const chartRight = width - margin.right;
     const chartBottom = height - margin.bottom;
 
-    const T = dates.length;
     const yBufferTop = 1.2;
     const yBufferBottom = 1.1;
 
@@ -230,7 +232,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
         let pathLength;
         svg
           .selectAll('.trend')
-          .data([dates])
+          .data(T ? [dates] : [])
           .join(
             (enter) =>
               enter
@@ -304,47 +306,72 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
     });
   }, [highlightedDate]);
 
+  const getStatisticDelta = useCallback(
+    (statistic) => {
+      if (!highlightedDate) return;
+      const deltaToday = getStatistic(
+        timeseries?.[highlightedDate],
+        'delta',
+        statistic
+      );
+      if (chartType === 'total') return deltaToday;
+      const yesterday = formatISO(subDays(parseIndiaDate(highlightedDate), 1), {
+        representation: 'date',
+      });
+      const deltaYesterday = getStatistic(
+        timeseries?.[yesterday],
+        'delta',
+        statistic
+      );
+      return deltaToday - deltaYesterday;
+    },
+    [timeseries, highlightedDate, chartType]
+  );
+
   return (
     <React.Fragment>
       <div className="TimeSeries">
-        {TIMESERIES_STATISTICS.map((statistic, index) => (
-          <div
-            key={statistic}
-            className={classnames('svg-parent', `is-${statistic}`)}
-            ref={wrapperRef}
-          >
-            {highlightedDate && (
-              <div className={classnames('stats', `is-${statistic}`)}>
-                <h5 className="title">{capitalize(t(statistic))}</h5>
-                <h5 className="title">
-                  {formatDate(highlightedDate, 'dd MMMM')}
-                </h5>
-                <div className="stats-bottom">
-                  <h2>
-                    {formatNumber(
-                      getStatistic(
-                        timeseries?.[highlightedDate],
-                        chartType,
-                        statistic
-                      )
-                    )}
-                  </h2>
-                  {/* <h6>Delta</h6>*/}
-                </div>
-              </div>
-            )}
-            <svg
-              ref={(element) => {
-                refs.current[index] = element;
-              }}
-              preserveAspectRatio="xMidYMid meet"
+        {TIMESERIES_STATISTICS.map((statistic, index) => {
+          const delta = getStatisticDelta(statistic);
+          return (
+            <div
+              key={statistic}
+              className={classnames('svg-parent', `is-${statistic}`)}
+              ref={wrapperRef}
             >
-              <g className="x-axis" />
-              <g className="x-axis2" />
-              <g className="y-axis" />
-            </svg>
-          </div>
-        ))}
+              {highlightedDate && (
+                <div className={classnames('stats', `is-${statistic}`)}>
+                  <h5 className="title">{capitalize(t(statistic))}</h5>
+                  <h5 className="title">
+                    {formatDate(highlightedDate, 'dd MMMM')}
+                  </h5>
+                  <div className="stats-bottom">
+                    <h2>
+                      {formatNumber(
+                        getStatistic(
+                          timeseries?.[highlightedDate],
+                          chartType,
+                          statistic
+                        )
+                      )}
+                    </h2>
+                    <h6>{`${delta > 0 ? '+' : ''}${formatNumber(delta)}`}</h6>
+                  </div>
+                </div>
+              )}
+              <svg
+                ref={(element) => {
+                  refs.current[index] = element;
+                }}
+                preserveAspectRatio="xMidYMid meet"
+              >
+                <g className="x-axis" />
+                <g className="x-axis2" />
+                <g className="y-axis" />
+              </svg>
+            </div>
+          );
+        })}
       </div>
     </React.Fragment>
   );

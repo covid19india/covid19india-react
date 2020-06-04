@@ -171,6 +171,7 @@ const ActionsPanel = ({
           className="timeline-icon"
           onClick={() => {
             setIsTimelineMode(true);
+            if (showUpdates) setShowUpdates(!showUpdates);
           }}
           style={trail[2]}
         >
