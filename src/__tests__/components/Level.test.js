@@ -29,6 +29,6 @@ test('Level renders total state data', () => {
   const {container} = render(<Level {...{data}} />);
 
   expect(container).toHaveTextContent(
-    'Confirmed+153883Active+150872Recovered+25Deceased+13'
+    'Confirmed+153883Active 872Recovered+25Deceased+13'
   );
 });
