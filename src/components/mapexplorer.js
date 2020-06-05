@@ -310,7 +310,7 @@ function MapExplorer({
                   formatNumber(Math.floor(total))
                 )}
               </animated.h1>
-              {statistic !== 'tested' && (
+              {statistic !== 'tested' && statistic !== 'active' && (
                 <animated.h6>
                   {springs[index].delta.interpolate((delta) =>
                     delta > 0 ? `+${formatNumber(Math.floor(delta))}` : '\u00A0'

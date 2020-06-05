@@ -355,7 +355,7 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
                         )
                       )}
                     </h2>
-                    <h6>{`${delta > 0 ? '+' : ''}${formatNumber(delta)}`}</h6>
+                    <h6>{`${delta >= 0 ? '+' : ''}${formatNumber(delta)}`}</h6>
                   </div>
                 </div>
               )}

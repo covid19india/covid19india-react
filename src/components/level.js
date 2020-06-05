@@ -21,18 +21,16 @@ function PureLevelItem({statistic, total, delta}) {
   return (
     <React.Fragment>
       <h5>{capitalize(t(statistic))}</h5>
-      <h4>
-        <animated.span>
-          {spring.delta.interpolate((delta) =>
-            delta > 0 ? `+${formatNumber(Math.floor(delta))}` : '\u2764'
-          )}
-        </animated.span>
-      </h4>
-      <h1>
-        <animated.span>
-          {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
-        </animated.span>
-      </h1>
+      <animated.h4>
+        {statistic !== 'active'
+          ? spring.delta.interpolate((delta) =>
+              delta > 0 ? `+${formatNumber(Math.floor(delta))}` : '\u2764'
+            )
+          : '\u00A0'}
+      </animated.h4>
+      <animated.h1>
+        {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
+      </animated.h1>
     </React.Fragment>
   );
 }
