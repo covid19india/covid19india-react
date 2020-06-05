@@ -1,15 +1,18 @@
 import {
   STATE_CODES_ARRAY,
-  STATE_CODES_REVERSE,
   STATE_CODES,
+  STATE_NAMES,
+  ESSENTIALS_CATEGORIES,
 } from '../constants';
+import {capitalize} from '../utils/commonfunctions';
 
-import classnames from 'classnames';
 import Bloodhound from 'corejs-typeahead';
+import produce from 'immer';
 import React, {useState, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
+import {useTrail, animated, config} from 'react-spring';
 import {useDebounce} from 'react-use';
 
 const engine = new Bloodhound({
@@ -87,7 +90,7 @@ const locationSuggestions = [
   'Ganjam',
 ];
 
-function Search({districtZones}) {
+function Search() {
   const [searchValue, setSearchValue] = useState('');
   const [expand, setExpand] = useState(false);
   const [results, setResults] = useState([]);
@@ -114,7 +117,7 @@ function Search({districtZones}) {
         const districtObj = {
           name: result.district,
           type: 'district',
-          route: STATE_CODES_REVERSE[result.state],
+          route: STATE_CODES[result.state],
         };
         results.push(districtObj);
         return null;
@@ -139,9 +142,14 @@ function Search({districtZones}) {
       setResults([...results]);
     };
 
+    const essentialsAsync = (datums) => {
+      // to handle async remote call on initial launch
+      essentialsEngine.search(searchInput, essentialsSync);
+    };
+
     engine.search(searchInput, sync);
     districtEngine.search(searchInput, districtSync);
-    essentialsEngine.search(searchInput, essentialsSync);
+    essentialsEngine.search(searchInput, essentialsSync, essentialsAsync);
   }, []);
 
   useDebounce(
@@ -149,7 +157,11 @@ function Search({districtZones}) {
       if (searchValue) {
         handleSearch(searchValue);
       } else {
-        setResults([]);
+        setResults(
+          produce(results, (draftResults) => {
+            draftResults.splice(0);
+          })
+        );
       }
     },
     100,
@@ -219,12 +231,22 @@ function Search({districtZones}) {
   const targetInput = document.getElementById('search-placeholder');
   if (targetInput) loopThroughSuggestions(targetInput, 0);*/
 
+  const [trail, set] = useTrail(3, () => ({
+    transform: 'translate3d(0, 10px, 0)',
+    opacity: 0,
+    config: config.stiff,
+  }));
+
+  set({transform: 'translate3d(0, 0px, 0)', opacity: 1});
+
   return (
     <div className="Search">
-      <label>{t('Search your city, resources, etc')}</label>
-      <div className="line"></div>
+      <animated.label style={trail[0]}>
+        {t('Search your city, resources, etc')}
+      </animated.label>
+      <animated.div className="line" style={trail[1]}></animated.div>
 
-      <div className="search-input-wrapper">
+      <animated.div className="search-input-wrapper" style={trail[2]}>
         <input
           type="text"
           value={searchValue}
@@ -256,7 +278,7 @@ function Search({districtZones}) {
             <Icon.X />
           </div>
         )}
-      </div>
+      </animated.div>
 
       {results.length > 0 && (
         <div className="results">
@@ -269,15 +291,8 @@ function Search({districtZones}) {
                       <div className="result-name">
                         {`${result.name}`}
                         {result.type === 'district' &&
-                          `, ${STATE_CODES[result.route]}`}
+                          `, ${STATE_NAMES[result.route]}`}
                       </div>
-                      <div
-                        className={classnames('result-zone', {
-                          [`is-${districtZones[STATE_CODES[result.route]][
-                            result.name
-                          ]?.zone.toLowerCase()}`]: true,
-                        })}
-                      ></div>
                     </div>
                     <div className="result-type">
                       <span>{[result.route]}</span>
@@ -290,7 +305,7 @@ function Search({districtZones}) {
               return (
                 <a
                   key={index}
-                  href={result.website}
+                  href={result.website || null}
                   target="_noblank"
                   className="essential-result"
                 >
@@ -298,22 +313,25 @@ function Search({districtZones}) {
                     <div className="result-top-left">
                       <div className="result-name">{result.name}</div>
                       <div className="result-location">
-                        {result.city}, {result.state}
+                        {result.city && `${result.city}, `}
+                        {result.state}
                       </div>
                     </div>
                     <div className="result-category">
                       <div>
-                        {result.category.match('Delivery')
-                          ? 'Home Delivery'
-                          : result.category}
+                        {capitalize(ESSENTIALS_CATEGORIES[result.category])}
                       </div>
-                      <Icon.ExternalLink />
+                      {result.website && <Icon.ExternalLink />}
                     </div>
                   </div>
                   <div className="result-description">{result.description}</div>
-                  <div className="result-contact">
-                    <Icon.Phone />
-                    <div>{result.contact}</div>
+                  <div className="result-contacts">
+                    {result.contact.split('\n').map((contact) => (
+                      <div key={contact} className="result-contact">
+                        <Icon.Phone />
+                        <a href={`tel:${contact}`}>{contact}</a>
+                      </div>
+                    ))}
                   </div>
                 </a>
               );
@@ -323,53 +341,72 @@ function Search({districtZones}) {
       )}
 
       {expand && (
-        <div className="expanded">
-          <div className="expanded-left">
-            <h3>{t('Essentials')}</h3>
-            <div className="suggestions">
-              {essentialSuggestions.map((suggestion, index) => (
-                <div className="suggestion" key={index}>
-                  <div>-</div>
-                  <h4
-                    onMouseDown={(event) => {
-                      event.preventDefault();
-                      setNativeValue(searchInput.current, suggestion);
-                      searchInput.current.dispatchEvent(
-                        new Event('input', {bubbles: true})
-                      );
-                    }}
-                  >
-                    {t(suggestion)}
-                  </h4>
-                </div>
-              ))}
+        <React.Fragment>
+          <p
+            className="feature"
+            onMouseDown={(event) => {
+              event.preventDefault();
+              setNativeValue(searchInput.current, 'Cyclone Amphan');
+              searchInput.current.dispatchEvent(
+                new Event('input', {bubbles: true})
+              );
+            }}
+          >
+            To those who are in states affected by Cyclone Amphan or have
+            family/friends there, click here to view helplines for assistance.
+          </p>
+          <div className="expanded">
+            <div className="expanded-left">
+              <h3>{t('Essentials')}</h3>
+              <div className="suggestions">
+                {essentialSuggestions.map((suggestion, index) => (
+                  <div className="suggestion" key={index}>
+                    <div>-</div>
+                    <h4
+                      onMouseDown={(event) => {
+                        event.preventDefault();
+                        setNativeValue(searchInput.current, suggestion);
+                        searchInput.current.dispatchEvent(
+                          new Event('input', {bubbles: true})
+                        );
+                      }}
+                    >
+                      {t(suggestion)}
+                    </h4>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="expanded-right">
+              <h3>{t('Locations')}</h3>
+              <div className="suggestions">
+                {locationSuggestions.map((suggestion, index) => (
+                  <div className="suggestion" key={index}>
+                    <div>-</div>
+                    <h4
+                      onMouseDown={(event) => {
+                        event.preventDefault();
+                        setNativeValue(searchInput.current, suggestion);
+                        searchInput.current.dispatchEvent(
+                          new Event('input', {bubbles: true})
+                        );
+                      }}
+                    >
+                      {t(suggestion)}
+                    </h4>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-          <div className="expanded-right">
-            <h3>{t('Locations')}</h3>
-            <div className="suggestions">
-              {locationSuggestions.map((suggestion, index) => (
-                <div className="suggestion" key={index}>
-                  <div>-</div>
-                  <h4
-                    onMouseDown={(event) => {
-                      event.preventDefault();
-                      setNativeValue(searchInput.current, suggestion);
-                      searchInput.current.dispatchEvent(
-                        new Event('input', {bubbles: true})
-                      );
-                    }}
-                  >
-                    {t(suggestion)}
-                  </h4>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        </React.Fragment>
       )}
     </div>
   );
 }
 
-export default React.memo(Search);
+const isEqual = () => {
+  return true;
+};
+
+export default React.memo(Search, isEqual);

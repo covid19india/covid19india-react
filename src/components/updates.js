@@ -1,27 +1,10 @@
-import axios from 'axios';
 import {formatDistance, format} from 'date-fns';
-import React, {useState, useLayoutEffect} from 'react';
-import {useEffectOnce} from 'react-use';
+import React, {useLayoutEffect} from 'react';
 
 const newDate = new Date();
 let currentDate = newDate;
 
-function Updates(props) {
-  const [updates, setUpdates] = useState([]);
-
-  useEffectOnce(() => {
-    axios
-      .get('https://api.covid19india.org/updatelog/log.json')
-      .then((response) => {
-        setUpdates(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-
-  // reset the currentDate after rendering is complete
-  // in case the currentDate was changed during addHeader
+function Updates({updates}) {
   useLayoutEffect(() => {
     currentDate = newDate;
   });
@@ -36,7 +19,7 @@ function Updates(props) {
         .slice(-5)
         .reverse()
         .map(function (activity, index) {
-          activity.update = activity.update.replace('\n', '<br/>');
+          activity.update = activity.update.replace(/\n/g, '<br/>');
           const activityDate = new Date(activity.timestamp * 1000);
           const addHeader = () => {
             currentDate = activityDate;

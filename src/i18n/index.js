@@ -5,7 +5,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-http-backend';
 import {initReactI18next} from 'react-i18next';
 
-const DEBUG = true;
+const DEBUG = false;
 
 i18n
   .use(Backend)
@@ -13,9 +13,8 @@ i18n
   .use(initReactI18next)
   .init({
     debug: isDevelopmentOrTest() && DEBUG,
-    lng: 'english',
-    fallbackLng: 'english',
     keySeparator: false,
+    returnEmptyString: false,
     backend: {
       loadPath: 'https://api.covid19india.org/locales/locale_{{lng}}.json',
       addPath: 'http://localhost:9999/',

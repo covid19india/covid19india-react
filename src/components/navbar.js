@@ -5,49 +5,35 @@ import React, {useState, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
-import {
-  useEffectOnce,
-  useLockBodyScroll,
-  useWindowSize,
-  useLocalStorage,
-} from 'react-use';
+import {useSpring, animated} from 'react-spring';
+import {useEffectOnce, useLockBodyScroll, useWindowSize} from 'react-use';
 
-const navLinkProps = (path, animationDelay) => ({
-  className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
-  style: {
-    animationDelay: `${animationDelay}s`,
-  },
-});
-
-const activeNavIcon = (path) => ({
-  style: {
-    stroke: window.location.pathname === path ? '#4c75f2' : '',
-  },
-});
-
-function Navbar({pages, darkMode, setDarkMode}) {
-  const [expand, setExpand] = useState(false);
-  // eslint-disable-next-line
-  const [isThemeSet, setIsThemeSet] = useLocalStorage('isThemeSet', false);
+function Navbar({pages, darkMode}) {
   const {t} = useTranslation();
 
+  const [expand, setExpand] = useState(false);
   useLockBodyScroll(expand);
   const windowSize = useWindowSize();
 
+  const [spring, set, stop] = useSpring(() => ({opacity: 0}));
+  set({opacity: 1});
+  stop();
+
   return (
-    <div className="Navbar">
+    <animated.div className="Navbar" style={spring}>
       <LanguageSwitcher />
+
       {window.innerWidth > 769 && (
         <div
           className="navbar-left"
           onClick={() => {
-            setDarkMode((prevMode) => !prevMode);
-            setIsThemeSet(true);
+            darkMode.toggle();
           }}
         >
-          {darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
+          {darkMode.value ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
         </div>
       )}
+
       <div className="navbar-middle">
         <Link
           to="/"
@@ -86,11 +72,6 @@ function Navbar({pages, darkMode, setDarkMode}) {
               </Link>
             </span>
             <span>
-              <Link to="/deepdive">
-                <Icon.BarChart2 {...activeNavIcon('/deepdive')} />
-              </Link>
-            </span>
-            <span>
               <Link to="/essentials">
                 <Icon.Package {...activeNavIcon('/essentials')} />
               </Link>
@@ -105,27 +86,13 @@ function Navbar({pages, darkMode, setDarkMode}) {
       </div>
 
       {expand && (
-        <Expand
-          expand={expand}
-          pages={pages}
-          setExpand={setExpand}
-          darkMode={darkMode}
-          setIsThemeSet={setIsThemeSet}
-          setDarkMode={setDarkMode}
-        />
+        <Expand {...{expand, pages, setExpand, darkMode, windowSize}} />
       )}
-    </div>
+    </animated.div>
   );
 }
 
-function Expand({
-  expand,
-  pages,
-  setExpand,
-  darkMode,
-  setIsThemeSet,
-  setDarkMode,
-}) {
+function Expand({expand, pages, setExpand, darkMode, windowSize}) {
   const expandElement = useRef(null);
   const {t} = useTranslation();
 
@@ -143,7 +110,7 @@ function Expand({
       className="expand"
       ref={expandElement}
       onMouseLeave={() => {
-        setExpand(false);
+        if (windowSize.width > 769) setExpand(false);
       }}
     >
       {pages.map((page, i) => {
@@ -172,11 +139,12 @@ function Expand({
           className="fadeInUp"
           style={{animationDelay: '0.9s'}}
           onClick={() => {
-            setDarkMode((prevMode) => !prevMode);
-            setIsThemeSet(true);
+            darkMode.toggle();
           }}
         >
-          <div>{darkMode ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}</div>
+          <div>
+            {darkMode.value ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
+          </div>
         </div>
       )}
 
@@ -188,3 +156,16 @@ function Expand({
 }
 
 export default Navbar;
+
+const navLinkProps = (path, animationDelay) => ({
+  className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
+  style: {
+    animationDelay: `${animationDelay}s`,
+  },
+});
+
+const activeNavIcon = (path) => ({
+  style: {
+    stroke: window.location.pathname === path ? '#4c75f2' : '',
+  },
+});

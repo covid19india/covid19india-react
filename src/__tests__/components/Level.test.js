@@ -3,20 +3,32 @@ import Level from '../../components/level';
 import {render} from '@testing-library/react';
 import React from 'react';
 
-const state = {
-  active: '80',
-  confirmed: '86',
-  recovered: '7',
-  deaths: '4',
-  deltaconfirmed: '10',
-  deltadeaths: '3',
-  deltarecovered: '5',
+const data = {
+  delta: {
+    confirmed: 153,
+    deceased: 1,
+    recovered: 2,
+    tested: 2544,
+  },
+  meta: {
+    tested: {
+      last_updated: '2020-03-27',
+      source: 'ICMR_website_update_27March_9AM_IST.pdf',
+    },
+  },
+  total: {
+    confirmed: 883,
+    deceased: 3,
+    migrated: 3,
+    recovered: 5,
+    tested: 27688,
+  },
 };
 
 test('Level renders total state data', () => {
-  const {container} = render(<Level data={state} />);
+  const {container} = render(<Level {...{data}} />);
 
   expect(container).toHaveTextContent(
-    'Confirmed[+10]86 Active 80Recovered[+5]7 Deceased[+3]4'
+    'Confirmed+153883Active 872Recovered+25Deceased+13'
   );
 });
