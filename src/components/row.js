@@ -136,6 +136,7 @@ function PureDistrictRow({
                 wrap={true}
                 direction={'e'}
                 noDelay={true}
+                onClick={(e) => e.stopPropagation()}
               >
                 <Icon.Info />
               </Tooltip>
@@ -285,6 +286,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
                   wrap={true}
                   direction={'e'}
                   noDelay={true}
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <InfoIcon size={'small'} />
                 </Tooltip>
