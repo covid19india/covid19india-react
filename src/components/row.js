@@ -1,3 +1,5 @@
+import Tooltip from './tooltip';
+
 import {PRIMARY_STATISTICS, STATE_NAMES} from '../constants';
 import {
   abbreviate,
@@ -7,16 +9,12 @@ import {
   getStatistic,
 } from '../utils/commonfunctions';
 
-import Tooltip from '@primer/components/lib/Tooltip';
-import {
-  InfoIcon,
-  TriangleUpIcon,
-  TriangleDownIcon,
-} from '@primer/octicons-v2-react';
+import {TriangleUpIcon, TriangleDownIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {useState, useCallback, useMemo} from 'react';
+import {Info} from 'react-feather';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
@@ -128,17 +126,10 @@ function PureDistrictRow({
       <td>
         <div className="title-chevron">
           <span className="title-icon">
-            {t(districtName)}
+            <span className="title">{t(districtName)}</span>
             {data?.meta?.notes && (
-              <Tooltip
-                className="tooltip"
-                aria-label={data.meta.notes}
-                wrap={true}
-                direction={'e'}
-                noDelay={true}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <Icon.Info />
+              <Tooltip {...{data: data.meta.notes}}>
+                <Info />
               </Tooltip>
             )}
           </span>
@@ -277,18 +268,10 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
           <div className="title-chevron">
             {stateCode !== 'TT' && Chevron}
             <span className="title-icon">
-              {t(STATE_NAMES[stateCode])}
-
+              <span className="title">{t(STATE_NAMES[stateCode])}</span>
               {data?.meta?.notes && (
-                <Tooltip
-                  className="tooltip"
-                  aria-label={data.meta.notes}
-                  wrap={true}
-                  direction={'e'}
-                  noDelay={true}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <InfoIcon size={'small'} />
+                <Tooltip {...{data: data.meta.notes}}>
+                  <Info />
                 </Tooltip>
               )}
             </span>
