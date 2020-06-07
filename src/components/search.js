@@ -342,19 +342,20 @@ function Search() {
 
       {expand && (
         <React.Fragment>
-          <p
-            className="feature"
-            onMouseDown={(event) => {
-              event.preventDefault();
-              setNativeValue(searchInput.current, 'Cyclone Amphan');
-              searchInput.current.dispatchEvent(
-                new Event('input', {bubbles: true})
-              );
-            }}
-          >
-            To those who are in states affected by Cyclone Amphan or have
-            family/friends there, click here to view helplines for assistance.
-          </p>
+          {/* <p
+                className="feature"
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                  setNativeValue(searchInput.current, 'Cyclone Amphan');
+                  searchInput.current.dispatchEvent(
+                    new Event('input', {bubbles: true})
+                  );
+                }}
+              >
+                To those who are in states affected by Cyclone Amphan or have
+                family/friends there, click here to view helplines for assistance.
+              </p>*/}
+
           <div className="expanded">
             <div className="expanded-left">
               <h3>{t('Essentials')}</h3>
