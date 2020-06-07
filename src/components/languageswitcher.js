@@ -4,21 +4,18 @@ import Button from '@primer/components/lib/Button';
 import SelectMenu from '@primer/components/lib/SelectMenu';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {useLocalStorage, useUpdateEffect} from 'react-use';
 
 function LanguageSwitcher() {
-  const [language, setLanguage] = useLocalStorage('i18nextLng', 'english');
   const {i18n} = useTranslation();
-
-  useUpdateEffect(() => {
-    if (i18n) i18n.changeLanguage(language);
-  }, [i18n, language]);
+  const currentLanguage = Object.keys(locales).includes(i18n?.language)
+    ? i18n?.language
+    : i18n?.options?.fallbackLng[0];
 
   return (
     <div className="LanguageSwitcher">
       <SelectMenu>
         <Button as="summary" className="button">
-          {locales[language]}
+          {locales[currentLanguage]}
         </Button>
         <SelectMenu.Modal className="select-menu-modal">
           <SelectMenu.List className="select-menu-list">
@@ -27,8 +24,9 @@ function LanguageSwitcher() {
                 key={key}
                 className="select-menu-item"
                 onClick={() => {
-                  setLanguage(key);
+                  if (i18n) i18n.changeLanguage(key);
                 }}
+                selected={currentLanguage === key}
               >
                 {language}
               </SelectMenu.Item>
