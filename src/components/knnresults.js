@@ -1,4 +1,3 @@
-import {Label, LabelGroup, CounterLabel} from '@primer/components';
 import axios from 'axios';
 import classnames from 'classnames';
 import produce from 'immer';
@@ -171,28 +170,20 @@ function KnnResults({userLocation, userState}) {
     return (
       <div className="results fadeInUp" style={{animationDelay: '0.5s'}}>
         <div className="labels">
-          <LabelGroup>
-            {Object.keys(categories).map((categoryName) => (
-              <Label
-                variant="xl"
-                key={categoryName}
-                className={classnames('label-item', {
-                  'is-selected': categories[categoryName].isSelected,
-                })}
-                onClick={() =>
-                  toggleFilter(
-                    categoryName,
-                    !categories[categoryName].isSelected
-                  )
-                }
-              >
-                {categoryName}
-                <CounterLabel className="counter">
-                  {categories[categoryName].count}
-                </CounterLabel>
-              </Label>
-            ))}
-          </LabelGroup>
+          {Object.keys(categories).map((categoryName) => (
+            <div
+              key={categoryName}
+              className={classnames('label', {
+                'is-selected': categories[categoryName].isSelected,
+              })}
+              onClick={() =>
+                toggleFilter(categoryName, !categories[categoryName].isSelected)
+              }
+            >
+              {categoryName}
+              <div className="count">{categories[categoryName].count}</div>
+            </div>
+          ))}
         </div>
 
         {results?.features

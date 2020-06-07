@@ -1,8 +1,9 @@
 import './App.scss';
+import LanguageSwitcher from './components/languageswitcher';
 import Navbar from './components/navbar';
 import ScrollToTop from './utils/ScrollToTop';
 
-import React, {lazy} from 'react';
+import React, {lazy, useState} from 'react';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
 import {
@@ -40,46 +41,41 @@ const schemaMarkup = {
 
 function App() {
   const {t} = useTranslation();
+  const darkMode = useDarkMode(false);
+  const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
 
   const pages = [
     {
       pageLink: '/',
       view: Home,
       displayName: 'Home',
-      animationDelayForNavbar: 0.2,
       showInNavbar: true,
     },
     {
       pageLink: '/demographics',
       view: Demographics,
       displayName: t('Demographics'),
-      animationDelayForNavbar: 0.3,
       showInNavbar: true,
     },
     {
       pageLink: '/essentials',
       view: Essentials,
       displayName: t('Essentials'),
-      animationDelayForNavbar: 0.5,
       showInNavbar: true,
     },
     {
       pageLink: '/about',
       view: FAQ,
       displayName: t('About'),
-      animationDelayForNavbar: 0.6,
       showInNavbar: true,
     },
     {
       pageLink: '/state/:stateCode',
       view: State,
       displayName: t('State'),
-      animationDelayForNavbar: 0.7,
       showInNavbar: false,
     },
   ];
-
-  const darkMode = useDarkMode(false);
 
   return (
     <div className="App">
@@ -89,12 +85,19 @@ function App() {
         </script>
       </Helmet>
 
+      <LanguageSwitcher {...{showLanguageSwitcher, setShowLanguageSwitcher}} />
+
       <Router>
         <ScrollToTop />
         <Route
           render={({location}) => (
             <React.Fragment>
-              <Navbar pages={pages} {...{darkMode}} />
+              <Navbar
+                pages={pages}
+                {...{darkMode}}
+                {...{showLanguageSwitcher, setShowLanguageSwitcher}}
+              />
+
               <Switch location={location}>
                 {pages.map((page, index) => {
                   return (

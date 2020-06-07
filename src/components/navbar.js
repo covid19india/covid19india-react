@@ -1,4 +1,4 @@
-import LanguageSwitcher from './languageswitcher';
+import locales from '../i18n/locales.json';
 
 import anime from 'animejs';
 import React, {useState, useRef} from 'react';
@@ -8,8 +8,16 @@ import {Link} from 'react-router-dom';
 import {useSpring, animated} from 'react-spring';
 import {useEffectOnce, useLockBodyScroll, useWindowSize} from 'react-use';
 
-function Navbar({pages, darkMode}) {
-  const {t} = useTranslation();
+function Navbar({
+  pages,
+  darkMode,
+  showLanguageSwitcher,
+  setShowLanguageSwitcher,
+}) {
+  const {i18n, t} = useTranslation();
+  const currentLanguage = Object.keys(locales).includes(i18n?.language)
+    ? i18n?.language
+    : i18n?.options?.fallbackLng[0];
 
   const [expand, setExpand] = useState(false);
   useLockBodyScroll(expand);
@@ -21,18 +29,14 @@ function Navbar({pages, darkMode}) {
 
   return (
     <animated.div className="Navbar" style={spring}>
-      <LanguageSwitcher />
-
-      {window.innerWidth > 769 && (
-        <div
-          className="navbar-left"
-          onClick={() => {
-            darkMode.toggle();
-          }}
-        >
-          {darkMode.value ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
-        </div>
-      )}
+      <div
+        className="navbar-left"
+        onClick={() => {
+          setShowLanguageSwitcher((prevState) => !prevState);
+        }}
+      >
+        {locales[currentLanguage]}
+      </div>
 
       <div className="navbar-middle">
         <Link
@@ -59,6 +63,7 @@ function Navbar({pages, darkMode}) {
         {windowSize.width < 769 && (
           <span>{expand ? t('Close') : t('Menu')}</span>
         )}
+
         {windowSize.width > 769 && (
           <React.Fragment>
             <span>
@@ -80,6 +85,9 @@ function Navbar({pages, darkMode}) {
               <Link to="/about">
                 <Icon.HelpCircle {...activeNavIcon('/about')} />
               </Link>
+            </span>
+            <span>
+              {window.innerWidth > 768 && <SunMoon {...{darkMode}} />}
             </span>
           </React.Fragment>
         )}
@@ -134,19 +142,7 @@ function Expand({expand, pages, setExpand, darkMode, windowSize}) {
         return null;
       })}
 
-      {window.innerWidth < 768 && (
-        <div
-          className="fadeInUp"
-          style={{animationDelay: '0.9s'}}
-          onClick={() => {
-            darkMode.toggle();
-          }}
-        >
-          <div>
-            {darkMode.value ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
-          </div>
-        </div>
-      )}
+      {window.innerWidth < 768 && <SunMoon {...{darkMode}} />}
 
       <div className="expand-bottom fadeInUp" style={{animationDelay: '1s'}}>
         <h5>{t('A crowdsourced initiative.')}</h5>
@@ -169,3 +165,18 @@ const activeNavIcon = (path) => ({
     stroke: window.location.pathname === path ? '#4c75f2' : '',
   },
 });
+
+const SunMoon = ({darkMode}) => {
+  return (
+    <div
+      className="SunMoon"
+      onClick={() => {
+        darkMode.toggle();
+      }}
+    >
+      <div>
+        {darkMode.value ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
+      </div>
+    </div>
+  );
+};
