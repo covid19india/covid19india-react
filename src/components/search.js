@@ -329,7 +329,9 @@ function Search() {
                     {result.contact.split('\n').map((contact) => (
                       <div key={contact} className="result-contact">
                         <Icon.Phone />
-                        <a href={`tel:${contact}`}>{contact}</a>
+                        <a href={`tel:${contact}`}>
+                          {contact.replace(',', '')}
+                        </a>
                       </div>
                     ))}
                   </div>

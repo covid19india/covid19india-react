@@ -1235,12 +1235,14 @@ h6 {
       .result-description {
         align-self: flex-start;
         font-size: 0.75rem;
+        margin-bottom: .5rem;
         margin-top: 1rem;
       }
 
       .result-contacts {
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
         width: 100%;
       }
 
@@ -1254,7 +1256,7 @@ h6 {
         font-size: 0.75rem;
         height: 1rem;
         margin-right: .25rem;
-        margin-top: 0.5rem;
+        margin-top: 0.25rem;
         padding: 0.25rem;
         text-align: right;
 
