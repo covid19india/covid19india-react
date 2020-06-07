@@ -1,6 +1,5 @@
 import MapVisualizerLoader from './loaders/mapvisualizer';
 import MapVisualizer from './mapvisualizer';
-import {testedToolTip} from './tooltips';
 
 import {
   MAP_META,
@@ -334,9 +333,6 @@ function MapExplorer({
                 <Icon.Link />
               </a>
             )}
-            {statistic === 'tested' &&
-              panelState.state === 'Total' &&
-              testedToolTip}
           </div>
         ))}
       </div>

@@ -15,4 +15,5 @@ const buildSW = () => {
     })
     .catch(console.error);
 };
+
 buildSW();
