@@ -3070,28 +3070,43 @@ footer {
     }
 }
 
+
+// LEAFLET MAPPING CSS START
+
+// LEAFLET MAP CSS START
+
 .leaflet-container {
-    width: 90%;
+    width: 100%;
     height: 90vh;
-    margin-left: 4rem;
-}
-.custom-popup .leaflet-popup-content-wrapper {
+    
+  }
+  .custom-popup .leaflet-popup-content-wrapper {
     background: $pblue;
     color: $white;
     // font-size:16px;
     line-height:24px;
     font-family: "archia" !important;
-}
-.custom-popup .leaflet-popup-content-wrapper a {
+    svg {
+      color: $yellow;
+      align-content: right;
+      transition: all 0.1s ease-in-out;
+    }
+  }
+  .custom-popup .leaflet-popup-content-wrapper a {
     background: $pblue;
     color: $white;
     // font-size:16px;
     line-height:24px;
     font-family: "archia" !important;
-}
-
-
-.marker-cluster-custom {
+    svg {
+      color: $yellow;
+      align-content:right;
+      transition: all 0.1s ease-in-out;
+    }
+  }
+  
+  
+  .marker-cluster-custom {
     background: $pink;
     border: 5px solid $purple;
     border-radius: 50%;
@@ -3101,67 +3116,66 @@ footer {
     text-align: center;
     font-family: "archia" !important;
     width: 30px;
-} 
-
-.tracker {
-
-    padding: 7px;
-    position: relative;
-    h1 {
-        border-bottom: 2px $pblue solid;
-        display: inline-block;
-        margin: auto;
-        font-family: "archia";
-        border-top: 2px $pblue solid;
-        text-align: center;
-        color: $cyan;
-    }
-
-
+  } 
+  
+  // LEAFLET MAP CSS END
+  
+.Tracker {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+    width: 95%;
+    height: 100%;
+  
     .tracker_bar {
-        margin-top: 3rem;
-        width: 30rem;
-        .close-button {
-            position: absolute;
-            right: 0;
-            stroke: $gray;
-            top: -2rem;
-            svg {
-                width: 16px;
-            }
-        }
-        .button {
-            align-self: center;
-            background: $gray-light;
-            border-radius: 5px;
-            flex-direction: row;
-            justify-content: center;
-            margin: 0;
-            transition: all 0.2s ease-in-out;
-            width: 100%;
-            &:hover {
-                background: $gray-hover;
-                svg {
-                    color: $gray;
-                }
-            }
-            h3 {
-                color: $gray;
-                font-weight: 600;
-                text-align: center;
-                text-transform: none;
-                width: 25rem;
-            }
-            svg {
-                color: $gray-mid;
-                transition: all 0.1s ease-in-out;
-            }
-            & > * {
-                align-self: center;
-            }
-        }
+      // margin-top: 3rem;
+      margin-left: 3rem;
+      width: 100%;
+      .close-button {
+          position: absolute;
+          right: 0;
+          stroke: $gray;
+          top: -2rem;
+          svg {
+              width: 16px;
+          }
+      }
+      .button {
+          align-self: center;
+          background: $gray-light;
+          border-radius: 5px;
+          flex-direction: row;
+          justify-content: center;
+          margin: 0;
+          transition: all 0.2s ease-in-out;
+          width: 100%;
+          &:hover {
+              background: $gray-hover;
+              svg {
+                  color: $gray;
+              }
+          }
+          h3 {
+              color: $gray;
+              font-weight: 600;
+              text-align: center;
+              text-transform: none;
+              width: 25rem;
+          }
+          svg {
+              color: $gray-mid;
+              transition: all 0.1s ease-in-out;
+          }
+          & > * {
+              align-self: center;
+          }
+      }
     }
 }
+
+// LEAFLET MAPPING CSS END
+
 
 .Tracker-table {
     margin-top: 3rem;

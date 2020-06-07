@@ -1,15 +1,12 @@
-import testData from './_pantest.json'
 import axios from 'axios';
 import * as Knn from "leaflet-knn";
 import React, { useState, useEffect } from 'react';
+import * as Icons from 'react-feather';
 import { Map, Marker, Popup, TileLayer, LayerGroup, LayersControl } from "react-leaflet";
-// import {Sidebar, Tab}  from 'react-leaflet-sidebarv2';
-// import 'leaflet-sidebar-v2/css/leaflet-sidebar.css'; // TODO:Import just the .min.css instead of the whole package :|
 import L from 'leaflet';
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import Search from './geosearch';
 import 'leaflet/dist/leaflet.css';
-// import {ExternalLink} from 'react-feather';
 
 const {BaseLayer} = LayersControl;
 
@@ -34,25 +31,40 @@ function othersFilter(feature) {
   return (!feature.properties.priority);
 }
 
-function panFilter(feature){
-  const builder = [feature.properties.city,feature.properties.state].join(" ");
-  return (builder.includes("PAN") || builder.includes("Pan"));
+
+function getDistance(p1, p2) {
+  // p1 and p2 => [lat1, long1], [lat2, long2]
+  const phi1 = (p1[0] * Math.PI) / 180;
+  const phi2 = (p2[0] * Math.PI) / 180;
+  const dLambda = ((p2[1] - p1[1]) * Math.PI) / 180;
+  const R = 6371e3;
+  const d =
+    Math.acos(
+      Math.sin(phi1) * Math.sin(phi2) +
+        Math.cos(phi1) * Math.cos(phi2) * Math.cos(dLambda)
+    ) * R;
+  return Number((d / 1000).toFixed(2));
+}
+
+function generateIcon(result) {
+  return new L.Icon({
+    iconUrl: require('../icons/' + result.layer.feature.properties.icon + '.svg'),
+    iconRetinaUrl: require('../icons/' + result.layer.feature.properties.icon + '.svg'),
+    iconSize: [25, 25],
+  })
 }
 
 export default function MapChart(props) {
   const [geoData, setGeoData] = useState([]);
-  const [panData, setPanData] = useState([]);
-
 
   useEffect(() => {
     getJSON();
-    setPanData(testData);
   }, []);
 
   // Get processed data from forked repo until its pushed to API
   const getJSON = () => {
     axios
-      .get('https://raw.githubusercontent.com/aswaathb/covid19india-react/80922c70bb451cda94cce1e809e54fa72754f05c/newResources/geoResources.json')
+      .get('https://api.covid19india.org/resources/geoResources.json')
       .then((response) => {
         setGeoData(response.data);
       })
@@ -61,24 +73,29 @@ export default function MapChart(props) {
       });
   };
 
-  const center = props.pLocation || props.currentLocation || [21.3041, 77.1025];
-  const zoom = props.radius ? (props.radius > 6 ? 11 : 12) : 5;
+  const center =  props.currentLocation || [21.3041, 77.1025];
+  const zoom = 5;
   let medKnn;
   let restKnn;
   let panKnn
-  let icon;
-  const userLocation = props.pLocation || props.currentLocation
+
+  const userLocation = props.currentLocation
   const hK = 5; // Finds the K nearest hospitals/labs wrt user location
   const rK = 50;// Finds the K nearest essentials wrt user location
   const rad = 100 * 1000; // Max distance of the K points, in meters
 
   if (userLocation) {
     medKnn = new Knn(L.geoJSON(geoData, { filter: medFilter })).nearestLayer([userLocation[1], userLocation[0]], hK);
-    restKnn = new Knn(L.geoJSON(geoData, { filter: othersFilter })).nearest([userLocation[1], userLocation[0]], rK, rad);
-    panKnn = panData["features"].filter(panFilter)
+    restKnn = new Knn(L.geoJSON(geoData, { filter: othersFilter })).nearestLayer([userLocation[1], userLocation[0]], rK, rad);
+    panKnn = geoData?.features?.filter(
+      (feat) =>
+        feat.properties.state === 'PAN India' ||
+        (feat.properties.state.includes('PAN') &&
+          feat.properties.state.includes(props.userState))
+    );
   }
 
-  var gjKnn = {
+  var results = {
     "name": "NearestK-Essentials",
     "type": "FeatureCollection",
     "features": []
@@ -89,7 +106,7 @@ export default function MapChart(props) {
   if (medKnn) {
     let i = 0;
     for (i = 0; i < medKnn.length; i++) {
-      gjKnn.features.push({
+      results.features.push({
         "type": "Feature",
         "geometry": {
           "type": "Point",
@@ -101,12 +118,12 @@ export default function MapChart(props) {
           "addr": medKnn[i].layer.feature.properties.addr,
           "phone": medKnn[i].layer.feature.properties.phone,
           "contact": medKnn[i].layer.feature.properties.contact,
-          "icon": icon = new L.Icon({
-            iconUrl: require('../icons/' + medKnn[i].layer.feature.properties.icon + '.svg'),
-            iconRetinaUrl: require('../icons/' + medKnn[i].layer.feature.properties.icon + '.svg'),
-            iconSize: [25, 25],
-          }),
-          "id": medKnn[i].layer.feature.properties.id
+          "dist": getDistance(
+            userLocation,
+            medKnn[i].layer.feature.geometry.coordinates.reverse()
+          ),
+          "icon": generateIcon(medKnn[i]),
+          "recordid": medKnn[i].layer.feature.properties.recordid,
         }
       });
     }
@@ -116,7 +133,7 @@ export default function MapChart(props) {
   if (restKnn) {
     let j = 0;
     for (j = 0; j < restKnn.length; j++) {
-      gjKnn.features.push({
+      results.features.push({
         "type": "Feature",
         "geometry": {
           "type": "Point",
@@ -128,25 +145,33 @@ export default function MapChart(props) {
           "addr": restKnn[j].layer.feature.properties.addr,
           "phone": restKnn[j].layer.feature.properties.phone,
           "contact": restKnn[j].layer.feature.properties.contact,
-          "icon": icon = new L.Icon({
-            iconUrl: require('../icons/' + restKnn[j].layer.feature.properties.icon + '.svg'),
-            iconRetinaUrl: require('../icons/' + restKnn[j].layer.feature.properties.icon + '.svg'),
-            iconSize: [25, 25],
-          }),
-          "id": restKnn[j].layer.feature.properties.id
+          "dist": getDistance(
+            userLocation,
+            restKnn[j].layer.feature.geometry.coordinates.reverse()
+          ),
+          "icon": generateIcon(restKnn[j]),
+          "recordid": restKnn[j].layer.feature.properties.recordid
         }
       });
     }
   }
 
+  if (panKnn) {
+    let k = 0;
+    for (k = 0; k < panKnn.length; k++) {
+      results.features.push(panKnn[k]);
+    }
+  }
+
   return (
     <div>
+
+
       <Map 
         center={center} 
         zoom={zoom} 
-        minZoom={5}
-        maxZoom={20}
-        zoomControl={true}
+        // minZoom={5}
+        // maxZoom={20}
       >
         <LayersControl position="topright" >
         <BaseLayer checked name="Light Mode">
@@ -170,7 +195,18 @@ export default function MapChart(props) {
           <Marker position={props.currentLocation} icon={user} key="userLoc">
             <Popup>
               <h2>Your current location</h2>
-                {panKnn.map( p => (
+                {results?.features
+                .filter((feature) => {
+                  return (
+                    // Object.keys(categories)
+                    //   .filter(
+                    //     (categoryName) => categories[categoryName].isSelected === true
+                    //   )
+                    //   .includes(feature.properties.icon) && 
+                    !feature.properties.dist
+                  );
+                })
+                .map( p => (
                   <p key={p.properties.id} >
                   <a href={p.properties.contact}>{p.properties.name}</a> <br/>
                   {p.properties.desc} <br/>
@@ -188,10 +224,21 @@ export default function MapChart(props) {
             spiderfyDistanceMultiplier={2}
             iconCreateFunction={createClusterCustomIcon}
         >
-          {gjKnn.features.map(d => (
+          {results?.features
+          .filter((feature) => {
+            return (
+              // Object.keys(categories)
+              //   .filter(
+              //     (categoryName) => categories[categoryName].isSelected === true
+              //   )
+              //   .includes(feature.properties.icon) && 
+              feature.properties.dist
+            );
+          })
+          .map(d => (
             <Marker
               key={d.properties.id}
-              position={[d.geometry.coordinates[1], d.geometry.coordinates[0]]}
+              position={d.geometry.coordinates}
               icon={d.properties.icon}
             >
               <Popup className="custom-popup" >
@@ -200,14 +247,16 @@ export default function MapChart(props) {
                     href={d.properties.contact} 
                     target="_noblank" 
                     >
-                    <h2>{d.properties.name}</h2> 
+                    <h2>{d.properties.name} {"  "}
+                    <Icons.ExternalLink/></h2> 
                     </a>
                     <p>
                     <b>Description:</b> {d.properties.desc}<br />
                     <b>Address:</b> {d.properties.addr}
                     {d.properties.phone?(<><br />
-                    <b>Phone:</b> {d.properties.phone}</>):null
+                    <b>Phone:</b> {d.properties.phone}<br/> </>):null
                     }
+                    {d.properties.dist} km away from your location
                     </p>                  
                 </div>
               </Popup>
