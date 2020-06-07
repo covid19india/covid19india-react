@@ -84,7 +84,7 @@ function DistrictHeaderCell({handleSortClick, statistic, sortData}) {
             ? capitalize(statistic.slice(0, 1))
             : breakpoint === 'L'
             ? capitalize(abbreviate(statistic))
-            : capitalize(t(statistic))}
+            : t(capitalize(statistic))}
         </abbr>
         {sortData.sortColumn === statistic && (
           <div>

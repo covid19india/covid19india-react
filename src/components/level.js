@@ -21,7 +21,7 @@ function PureLevelItem({statistic, total, delta}) {
 
   return (
     <React.Fragment>
-      <h5>{capitalize(t(statistic))}</h5>
+      <h5>{t(capitalize(statistic))}</h5>
       <animated.h4>
         {statistic !== 'active' ? (
           delta > 0 ? (
