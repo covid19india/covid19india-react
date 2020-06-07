@@ -1,6 +1,7 @@
 import {PRIMARY_STATISTICS} from '../constants';
 import {capitalize, formatNumber, getStatistic} from '../utils/commonfunctions';
 
+import {HeartFillIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import React from 'react';
@@ -20,13 +21,19 @@ function PureLevelItem({statistic, total, delta}) {
 
   return (
     <React.Fragment>
-      <h5>{capitalize(t(statistic))}</h5>
+      <h5>{t(capitalize(statistic))}</h5>
       <animated.h4>
-        {statistic !== 'active'
-          ? spring.delta.interpolate((delta) =>
-              delta > 0 ? `+${formatNumber(Math.floor(delta))}` : '\u2764'
+        {statistic !== 'active' ? (
+          delta > 0 ? (
+            spring.delta.interpolate(
+              (delta) => `+${formatNumber(Math.floor(delta))}`
             )
-          : '\u00A0'}
+          ) : (
+            <HeartFillIcon size={9} verticalAlign={2} />
+          )
+        ) : (
+          '\u00A0'
+        )}
       </animated.h4>
       <animated.h1>
         {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}

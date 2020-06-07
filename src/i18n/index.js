@@ -15,6 +15,8 @@ i18n
     debug: isDevelopmentOrTest() && DEBUG,
     keySeparator: false,
     returnEmptyString: false,
+    fallbackLng: 'english',
+    load: 'languageOnly',
     backend: {
       loadPath: 'https://api.covid19india.org/locales/locale_{{lng}}.json',
       addPath: 'http://localhost:9999/',

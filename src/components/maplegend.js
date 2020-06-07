@@ -5,12 +5,15 @@ import {
   // ZONE_COLORS,
 } from '../constants';
 import {useResizeObserver} from '../hooks/useresizeobserver';
-import {capitalizeAll, formatNumber} from '../utils/commonfunctions';
+import {capitalize, formatNumber} from '../utils/commonfunctions';
 
 import * as d3 from 'd3';
 import React, {useEffect, useRef} from 'react';
+import {useTranslation} from 'react-i18next';
 
 function MapLegend({data, mapScale, mapOption, statistic}) {
+  const {t} = useTranslation();
+
   const svgRef = useRef(null);
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
@@ -69,7 +72,8 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
         .transition(t)
         .attr('opacity', 0)
         .remove();
-      svg.selectAll('.axis > *').remove();
+      svg.selectAll('.axis > *:not(.axistext)').remove();
+      svg.select('.axistext').text('');
 
       const domainMax = mapScale.domain()[1];
 
@@ -112,10 +116,9 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
           svg: svg,
           color: mapScale,
           title:
-            capitalizeAll(statistic) +
-            (mapOption === MAP_OPTIONS.PER_MILLION
-              ? ' cases per million'
-              : ' cases'),
+            mapOption === MAP_OPTIONS.PER_MILLION
+              ? `${t(capitalize(statistic))} ${t('cases per million')}`
+              : `${t(capitalize(statistic))} ${t('cases')}`,
           width: width,
           height: height,
           ticks: 5,
@@ -130,7 +133,7 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
       );
     }
     svg.attr('class', mapOption === MAP_OPTIONS.ZONES ? 'zone' : '');
-  }, [dimensions, mapScale, mapOption, statistic]); // totalZones
+  }, [t, dimensions, mapScale, mapOption, statistic]); // totalZones
 
   return (
     <div

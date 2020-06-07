@@ -16,7 +16,6 @@ import {
 import {format, sub} from 'date-fns';
 import React from 'react';
 import * as Icon from 'react-feather';
-import ReactTooltip from 'react-tooltip';
 
 function StateMeta({stateCode, data, timeseries}) {
   const confirmed = getStatistic(data[stateCode], 'total', 'confirmed');
@@ -50,15 +49,6 @@ function StateMeta({stateCode, data, timeseries}) {
   return (
     <React.Fragment>
       <div className="StateMeta population">
-        <ReactTooltip
-          place="top"
-          type="dark"
-          effect="solid"
-          multiline={true}
-          scrollHide={true}
-          globalEventOff="click"
-          id="stateMeta"
-        />
         <div className="meta-item population fadeInUp">
           <h3>Population</h3>
           <h1>{formatNumber(STATE_POPULATIONS[stateCode])}</h1>

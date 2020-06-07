@@ -1,3 +1,5 @@
+import Tooltip from './tooltip';
+
 import React from 'react';
 import * as Icon from 'react-feather';
 
@@ -14,15 +16,9 @@ function StateMetaCard({
     <div className={`meta-item ${className}`}>
       <div className="meta-item-top">
         <h3>{title}</h3>
-        <span
-          data-tip={formula}
-          data-event="touchstart mouseover"
-          data-event-off="mouseleave"
-          data-for="stateMeta"
-          onClick={(e) => e.stopPropagation()}
-        >
+        <Tooltip {...{data: formula}}>
           <Icon.Info />
-        </span>
+        </Tooltip>
       </div>
       <h1>{statistic}</h1>
       <h5>{date}</h5>

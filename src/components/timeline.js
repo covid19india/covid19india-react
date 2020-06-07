@@ -1,4 +1,5 @@
-import {format} from 'date-fns';
+import {formatDate} from '../utils/commonfunctions';
+
 import clamp from 'lodash/clamp';
 import React, {useState} from 'react';
 import {useSprings, useTransition, animated, config} from 'react-spring';
@@ -98,7 +99,7 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
 
   const getDate = (index) => {
     if (index === 0) return 'Today';
-    return format(new Date(dates[index]), 'dd MMM');
+    return formatDate(dates[index], 'dd MMM');
   };
 
   const setClampedDate = (clampedIndex) => {

@@ -25,25 +25,16 @@
       content="A volunteer-driven crowdsourced effort to track the coronavirus in India. A detailed country map shows the extent of the coronavirus outbreak, with tables of the number of cases by state and district."
     />
 
+    <link rel="preload" href="https://www.google-analytics.com" crossorigin />
     <link
-      rel="preconnect"
-      href="https://www.google-analytics.com"
-      crossorigin
+      rel="preload"
+      href="https://api.covid19india.org/v3/min/data.min.json"
     />
-    <link
-      rel="preconnect"
-      href="https://api.covid19india.org/v2/data.min.json"
-    />
-    <link
-      rel="preconnect"
-      href="https://www.googletagmanager.com/"
-      crossorigin
-    />
+    <link rel="preload" href="https://www.googletagmanager.com/" crossorigin />
 
     <!-- Font Preloading -->
     <link
       rel="preload"
-      importance="low"
       href="/fonts/Archia/archia-semibold-webfont.woff2"
       as="font"
       type="font/woff2"
@@ -51,7 +42,6 @@
     />
     <link
       rel="preload"
-      importance="low"
       href="/fonts/Archia/archia-medium-webfont.woff2"
       as="font"
       type="font/woff2"
@@ -59,7 +49,6 @@
     />
     <link
       rel="preload"
-      importance="low"
       href="/fonts/Archia/archia-bold-webfont.woff2"
       as="font"
       type="font/woff2"
@@ -156,45 +145,47 @@
   </body>
 
   <script>
-  // Insert this script in your index.html right after the <body> tag.
-  // This will help to prevent a flash if dark mode is the default.
-  (function() {
-    // Change these if you use something different in your hook.
-    var storageKey = 'darkMode';
-    var classNameDark = 'dark-mode';
-    var classNameLight = 'light-mode';
+    // Insert this script in your index.html right after the <body> tag.
+    // This will help to prevent a flash if dark mode is the default.
+    (function () {
+      // Change these if you use something different in your hook.
+      var storageKey = 'darkMode';
+      var classNameDark = 'dark-mode';
+      var classNameLight = 'light-mode';
 
-    function setClassOnDocumentBody(darkMode) {
-      document.body.classList.add(darkMode ? classNameDark : classNameLight);
-      document.body.classList.remove(darkMode ? classNameLight : classNameDark);
-    }
+      function setClassOnDocumentBody(darkMode) {
+        document.body.classList.add(darkMode ? classNameDark : classNameLight);
+        document.body.classList.remove(
+          darkMode ? classNameLight : classNameDark
+        );
+      }
 
-    var preferDarkQuery = '(prefers-color-scheme: dark)';
-    var mql = window.matchMedia(preferDarkQuery);
-    var supportsColorSchemeQuery = mql.media === preferDarkQuery;
-    var localStorageTheme = null;
-    try {
-      localStorageTheme = localStorage.getItem(storageKey);
-    } catch (err) {}
-    var localStorageExists = localStorageTheme !== null;
-    if (localStorageExists) {
-      localStorageTheme = JSON.parse(localStorageTheme);
-    }
+      var preferDarkQuery = '(prefers-color-scheme: dark)';
+      var mql = window.matchMedia(preferDarkQuery);
+      var supportsColorSchemeQuery = mql.media === preferDarkQuery;
+      var localStorageTheme = null;
+      try {
+        localStorageTheme = localStorage.getItem(storageKey);
+      } catch (err) {}
+      var localStorageExists = localStorageTheme !== null;
+      if (localStorageExists) {
+        localStorageTheme = JSON.parse(localStorageTheme);
+      }
 
-    // Determine the source of truth
-    if (localStorageExists) {
-      // source of truth from localStorage
-      setClassOnDocumentBody(localStorageTheme);
-    } else if (supportsColorSchemeQuery) {
-      // source of truth from system
-      setClassOnDocumentBody(mql.matches);
-      localStorage.setItem(storageKey, mql.matches);
-    } else {
-      // source of truth from document.body
-      var isDarkMode = document.body.classList.contains(classNameDark);
-      localStorage.setItem(storageKey, JSON.stringify(isDarkMode));
-    }
-  })();
+      // Determine the source of truth
+      if (localStorageExists) {
+        // source of truth from localStorage
+        setClassOnDocumentBody(localStorageTheme);
+      } else if (supportsColorSchemeQuery) {
+        // source of truth from system
+        setClassOnDocumentBody(mql.matches);
+        localStorage.setItem(storageKey, mql.matches);
+      } else {
+        // source of truth from document.body
+        var isDarkMode = document.body.classList.contains(classNameDark);
+        localStorage.setItem(storageKey, JSON.stringify(isDarkMode));
+      }
+    })();
   </script>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->

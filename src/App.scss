@@ -483,14 +483,6 @@ h6 {
       display: none;
     }
   }
-
-  .__react_component_tooltip {
-    font-family: 'archia';
-    font-size: 11px;
-    font-weight: 600;
-    padding: 0.25rem;
-    text-align: center;
-  }
 }
 
 .StateMeta {
@@ -511,16 +503,6 @@ h6 {
 
     .alert {
       margin: 0;
-    }
-  }
-
-  .__react_component_tooltip {
-    font-size: 0.8em;
-    padding: 1rem;
-
-    img {
-      filter: invert(1);
-      width: 20rem;
     }
   }
 
@@ -583,8 +565,8 @@ h6 {
       svg {
         align-self: flex-start;
         cursor: pointer;
-        stroke-width: 3;
-        width: 12px;
+        stroke-width: 2.5px;
+        width: 16px;
       }
     }
 
@@ -1882,17 +1864,20 @@ table {
     .title-chevron {
       position: relative;
 
-      & > * {
-        align-self: center;
-      }
-
       .title-icon {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+
+        .title {
+          flex: 1;
+        }
+
         svg {
           color: $gray-mid;
-          padding-left: 2px;
-          stroke-width: 3;
-          vertical-align: -6.5px;
-          width: 12px;
+          margin-left: 0.25rem;
+          stroke-width: 2.5px;
+          width: 16px;
         }
       }
     }
@@ -2385,13 +2370,6 @@ table {
             stroke: $purple;
           }
         }
-
-        .tooltip-tested {
-          svg {
-            bottom: 0.3rem;
-            top: auto;
-          }
-        }
       }
 
       &.is-yellow {
@@ -2465,33 +2443,6 @@ table {
       text-align: left;
       z-index: 1;
     }
-  }
-}
-
-.__react_component_tooltip {
-  font-family: 'archia';
-  font-size: 11px;
-  font-weight: 600;
-  padding: 0.25rem;
-  text-align: center;
-  width: 200px;
-}
-
-.tooltip-tested {
-  pointer-events: all;
-
-  svg {
-    cursor: pointer;
-    height: 0.95em;
-    stroke-width: 3;
-    width: 1em;
-  }
-}
-
-.tooltip {
-  &::after {
-    font-family: 'archia' !important;
-    text-align: left !important;
   }
 }
 
@@ -2856,12 +2807,6 @@ input {
       h2,
       h6 {
         color: $purple;
-      }
-
-      .tooltip-tested {
-        svg {
-          width: 1em;
-        }
       }
     }
   }
@@ -4564,6 +4509,32 @@ footer {
   @media (max-width: 769px) {
     margin-left: unset;
     padding: 1rem;
+  }
+}
+
+.Tooltip {
+  display: flex;
+  flex-direction: column;
+
+  .message {
+    background: #000;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    font-size: 13px;
+    font-weight: 400;
+    justify-content: flex-end;
+    min-width: 15rem;
+    padding: .5rem;
+    pointer-events: none;
+    right: 0;
+    top: 0;
+    transform: translate3d(2rem, 0, 0);
+
+    p {
+      color: $white !important;
+      margin: 0;
+    }
   }
 }
 
