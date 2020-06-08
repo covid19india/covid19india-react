@@ -2,7 +2,7 @@ import locales from '../i18n/locales.json';
 
 import classnames from 'classnames';
 import React, {useRef} from 'react';
-import {XCircle} from 'react-feather';
+import {ArrowUp} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useTransition, animated} from 'react-spring';
 import {useClickAway} from 'react-use';
@@ -51,15 +51,6 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
         style={props}
         ref={languageSwitcherRef}
       >
-        <span
-          className="close-button"
-          onClick={() => {
-            setShowLanguageSwitcher(false);
-          }}
-        >
-          <XCircle width={16} />
-        </span>
-
         <h3>We speak the following languages</h3>
 
         <div className="languages">
@@ -77,9 +68,18 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
             </div>
           ))}
         </div>
+
+        <span
+          className="close-button"
+          onClick={() => {
+            setShowLanguageSwitcher(false);
+          }}
+        >
+          <ArrowUp width={16} />
+        </span>
       </animated.div>
     ) : (
-      <animated.div></animated.div>
+      <animated.div key={key}></animated.div>
     )
   );
 }

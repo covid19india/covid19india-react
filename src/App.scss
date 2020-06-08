@@ -4413,19 +4413,31 @@ footer {
   width: 30rem;
 
   h3 {
+    align-self: center;
     color: $pblue;
     font-weight: 600;
     margin-bottom: 2rem;
   }
 
   .close-button {
-    align-self: flex-end;
-    margin-top: .5rem;
-    position: absolute;
+    align-self: center;
+    background: $pblue-light;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    width: 1rem;
+
+    &:hover {
+      background: $pblue-hover;
+    }
 
     svg {
       color: $pblue-mid;
-      cursor: pointer;
       stroke-width: 2.5px;
 
       &:hover {
