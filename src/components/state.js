@@ -1,11 +1,6 @@
 import DeltaBarGraph from './deltabargraph';
-import Footer from './footer';
-import Level from './level';
-import MapExplorer from './mapexplorer';
-import Minigraph from './minigraph';
 import StateDropdown from './statedropdown';
 import StateMeta from './statemeta';
-import TimeSeriesExplorer from './timeseriesexplorer';
 
 import {NUM_BARS_STATEPAGE, STATE_NAMES} from '../constants';
 import {
@@ -16,13 +11,29 @@ import {
 } from '../utils/commonfunctions';
 
 import anime from 'animejs';
-import React, {useState, useMemo} from 'react';
+import React, {useState, useMemo, lazy, Suspense} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
 import {useMeasure, useEffectOnce} from 'react-use';
 import useSWR from 'swr';
+
+const TimeSeriesExplorer = lazy(() =>
+  import('./timeseriesexplorer' /* webpackChunkName: "TimeSeriesExplorer" */)
+);
+
+const MapExplorer = lazy(() =>
+  import('./mapexplorer' /* webpackChunkName: "MapExplorer" */)
+);
+
+const Footer = lazy(() => import('./footer' /* webpackChunkName: "Footer" */));
+
+const Minigraph = lazy(() =>
+  import('./minigraph' /* webpackChunkName: "Minigraph" */)
+);
+
+const Level = lazy(() => import('./level' /* webpackChunkName: "Level" */));
 
 function State(props) {
   const {t} = useTranslation();
@@ -204,17 +215,19 @@ function State(props) {
           <Level data={data[stateCode]} />
           <Minigraph timeseries={timeseries[stateCode]} />
 
-          <MapExplorer
-            isCountryLoaded={false}
-            {...{
-              stateCode,
-              data,
-              regionHighlighted,
-              setRegionHighlighted,
-              mapStatistic,
-              setMapStatistic,
-            }}
-          />
+          <Suspense fallback={<div />}>
+            <MapExplorer
+              isCountryLoaded={false}
+              {...{
+                stateCode,
+                data,
+                regionHighlighted,
+                setRegionHighlighted,
+                mapStatistic,
+                setMapStatistic,
+              }}
+            />
+          </Suspense>
 
           <StateMeta
             {...{
@@ -315,10 +328,12 @@ function State(props) {
               </div>
             </div>
 
-            <TimeSeriesExplorer
-              timeseries={timeseries[stateCode]}
-              {...{regionHighlighted, setRegionHighlighted}}
-            />
+            <Suspense fallback={<div />}>
+              <TimeSeriesExplorer
+                timeseries={timeseries[stateCode]}
+                {...{regionHighlighted, setRegionHighlighted}}
+              />
+            </Suspense>
           </React.Fragment>
         </div>
       </div>

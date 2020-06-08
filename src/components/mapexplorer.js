@@ -1,5 +1,4 @@
 import MapVisualizerLoader from './loaders/mapvisualizer';
-import MapVisualizer from './mapvisualizer';
 
 import {
   MAP_META,
@@ -30,12 +29,17 @@ import React, {
   useRef,
   useState,
   Suspense,
+  lazy,
 } from 'react';
 import ReactDOM from 'react-dom';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {useSprings, animated} from 'react-spring';
+
+const MapVisualizer = lazy(() =>
+  import('./mapvisualizer' /* webpackChunkName: "MapVisualizer" */)
+);
 
 function MapExplorer({
   stateCode,

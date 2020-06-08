@@ -1368,6 +1368,10 @@ h6 {
     }
 
     .timeline-icon {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
       svg {
         display: flex;
         fill: #a6abb0 !important;

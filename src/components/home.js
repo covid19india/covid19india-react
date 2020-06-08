@@ -1,21 +1,34 @@
-import Actions from './actions';
-import Footer from './footer';
-import Level from './level';
-import MapExplorer from './mapexplorer';
-import Minigraph from './minigraph';
-import Search from './search';
-import Table from './table';
-import TimeSeriesExplorer from './timeseriesexplorer';
-
-import 'intersection-observer';
-
 import {MAP_META} from '../constants';
 import useStickySWR from '../hooks/usestickyswr';
 import {fetcher} from '../utils/commonfunctions';
 
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 import {useIsVisible} from 'react-is-visible';
+
+const TimeSeriesExplorer = lazy(() =>
+  import('./timeseriesexplorer' /* webpackChunkName: "TimeSeriesExplorer" */)
+);
+
+const MapExplorer = lazy(() =>
+  import('./mapexplorer' /* webpackChunkName: "MapExplorer" */)
+);
+
+const Actions = lazy(() =>
+  import('./actions' /* webpackChunkName: "Actions" */)
+);
+
+const Table = lazy(() => import('./table' /* webpackChunkName: "Table" */));
+
+const Minigraph = lazy(() =>
+  import('./minigraph' /* webpackChunkName: "Minigraph" */)
+);
+
+const Footer = lazy(() => import('./footer' /* webpackChunkName: "Footer" */));
+
+const Search = lazy(() => import('./search' /* webpackChunkName: "Search" */));
+
+const Level = lazy(() => import('./level' /* webpackChunkName: "Level" */));
 
 function Home(props) {
   const [regionHighlighted, setRegionHighlighted] = useState({
@@ -63,56 +76,82 @@ function Home(props) {
 
   return (
     <React.Fragment>
-      {data && timeseries && (
-        <div className="Home">
-          <Helmet>
-            <title>Coronavirus Outbreak in India - covid19india.org</title>
-            <meta
-              name="title"
-              content="Coronavirus Outbreak in India: Latest Map and Case Count"
-            />
-          </Helmet>
+      <Helmet>
+        <title>Coronavirus Outbreak in India - covid19india.org</title>
+        <meta
+          name="title"
+          content="Coronavirus Outbreak in India: Latest Map and Case Count"
+        />
+      </Helmet>
 
-          <div className="home-left">
-            <div className="header">
+      <div className="Home">
+        <div className="home-left">
+          <div className="header">
+            <Suspense>
               <Search />
+            </Suspense>
 
-              <Actions
-                {...{
-                  setDate,
-                  dates: Object.keys(timeseries['TT']).reverse(),
-                  date,
-                }}
-              />
-            </div>
-
-            <Level data={data['TT']} />
-            <Minigraph timeseries={timeseries['TT']} {...{date}} />
-            <Table {...{data, regionHighlighted, setRegionHighlighted}} />
+            <Suspense>
+              {timeseries && (
+                <Actions
+                  {...{
+                    setDate,
+                    dates: Object.keys(timeseries['TT']).reverse(),
+                    date,
+                  }}
+                />
+              )}
+            </Suspense>
           </div>
 
-          <div className="home-right" ref={homeRightElement}>
-            {isVisible && (
-              <React.Fragment>
-                <MapExplorer
-                  stateCode="TT"
-                  {...{data}}
-                  {...{mapStatistic, setMapStatistic}}
-                  {...{regionHighlighted, setRegionHighlighted}}
-                  {...{anchor, setAnchor}}
-                />
+          {data && (
+            <Suspense>
+              <Level data={data['TT']} />
+            </Suspense>
+          )}
 
-                <TimeSeriesExplorer
-                  timeseries={timeseries[regionHighlighted.stateCode]}
-                  {...{date, stateCodes}}
-                  {...{regionHighlighted, setRegionHighlighted}}
-                  {...{anchor, setAnchor}}
-                />
-              </React.Fragment>
+          <Suspense>
+            {timeseries && (
+              <Minigraph timeseries={timeseries['TT']} {...{date}} />
             )}
-          </div>
+          </Suspense>
+
+          <Suspense>
+            {data && (
+              <Table {...{data, regionHighlighted, setRegionHighlighted}} />
+            )}
+          </Suspense>
         </div>
-      )}
+
+        <div className="home-right" ref={homeRightElement}>
+          {isVisible && (
+            <React.Fragment>
+              {data && (
+                <Suspense fallback={<div />}>
+                  <MapExplorer
+                    stateCode="TT"
+                    {...{data}}
+                    {...{mapStatistic, setMapStatistic}}
+                    {...{regionHighlighted, setRegionHighlighted}}
+                    {...{anchor, setAnchor}}
+                  />
+                </Suspense>
+              )}
+
+              {timeseries && (
+                <Suspense fallback={<div />}>
+                  <TimeSeriesExplorer
+                    timeseries={timeseries[regionHighlighted.stateCode]}
+                    {...{date, stateCodes}}
+                    {...{regionHighlighted, setRegionHighlighted}}
+                    {...{anchor, setAnchor}}
+                  />
+                </Suspense>
+              )}
+            </React.Fragment>
+          )}
+        </div>
+      </div>
       <Footer />
     </React.Fragment>
   );

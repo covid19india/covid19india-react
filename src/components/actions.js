@@ -1,15 +1,20 @@
-import Timeline from './timeline';
-import Updates from './updates';
-
 import {fetcher} from '../utils/commonfunctions';
 
 import {parse, format} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
-import React, {useMemo, useState, useEffect} from 'react';
+import React, {useMemo, useState, useEffect, lazy, Suspense} from 'react';
 import * as Icon from 'react-feather';
 import {useSpring, animated, useTrail, config} from 'react-spring';
 import {useLocalStorage} from 'react-use';
 import useSWR from 'swr';
+
+const Timeline = lazy(() =>
+  import('./timeline' /* webpackChunkName: "Timeline" */)
+);
+
+const Updates = lazy(() =>
+  import('./updates' /* webpackChunkName: "Updates" */)
+);
 
 const Actions = ({setDate, dates}) => {
   const [showUpdates, setShowUpdates] = useState(false);
@@ -55,7 +60,11 @@ const Actions = ({setDate, dates}) => {
         />
       )}
 
-      {showUpdates && <Updates {...{updates}} />}
+      {showUpdates && (
+        <Suspense fallback={<div />}>
+          <Updates {...{updates}} />
+        </Suspense>
+      )}
     </React.Fragment>
   );
 };
@@ -188,7 +197,9 @@ const ActionsPanel = ({
         }}
       >
         {isTimelineMode && (
-          <Timeline {...{setIsTimelineMode, setDate, dates}} />
+          <Suspense fallback={<div />}>
+            <Timeline {...{setIsTimelineMode, setDate, dates}} />
+          </Suspense>
         )}
       </animated.div>
     </React.Fragment>
