@@ -1,7 +1,7 @@
 import axios from 'axios';
 import classnames from 'classnames';
 import produce from 'immer';
-import L from 'leaflet';
+import {layer} from 'leaflet';
 import * as Knn from 'leaflet-knn';
 import React, {useState, useEffect, useCallback} from 'react';
 import {ExternalLink, Phone} from 'react-feather';
@@ -59,12 +59,11 @@ function KnnResults({userLocation, userState}) {
     const rad = 10 * 1000; // Max distance of the K points, in meters ; aim to be  ~(avg city radius)
 
     if (userLocation) {
-      medKnn = new Knn(L.geoJSON(geoData, {filter: medFilter})).nearestLayer(
-        [userLocation[1], userLocation[0]],
-        hK
-      );
+      medKnn = new Knn(
+        layer.geoJSON(geoData, {filter: medFilter})
+      ).nearestLayer([userLocation[1], userLocation[0]], hK);
       restKnn = new Knn(
-        L.geoJSON(geoData, {filter: othersFilter})
+        layer.geoJSON(geoData, {filter: othersFilter})
       ).nearestLayer([userLocation[1], userLocation[0]], rK, rad);
       panKnn = geoData?.features?.filter(
         (feat) =>

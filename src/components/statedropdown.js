@@ -67,7 +67,7 @@ const StateDropdown = ({stateCode}) => {
               ))}
           </animated.div>
         ) : (
-          <animated.div style={props}></animated.div>
+          <animated.div key={stateCode} style={props}></animated.div>
         )
       )}
 

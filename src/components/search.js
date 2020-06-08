@@ -6,64 +6,13 @@ import {
 } from '../constants';
 import {capitalize} from '../utils/commonfunctions';
 
-import Bloodhound from 'corejs-typeahead';
 import produce from 'immer';
 import React, {useState, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useTrail, animated, config} from 'react-spring';
-import {useDebounce} from 'react-use';
-
-const engine = new Bloodhound({
-  initialize: true,
-  local: STATE_CODES_ARRAY,
-  queryTokenizer: Bloodhound.tokenizers.whitespace,
-  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-});
-
-const districtEngine = new Bloodhound({
-  initialize: true,
-  limit: 5,
-  queryTokenizer: Bloodhound.tokenizers.whitespace,
-  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('district'),
-  indexRemote: true,
-  remote: {
-    url: 'https://api.covid19india.org/state_district_wise.json',
-    transform: function (response) {
-      const districts = [];
-      Object.keys(response).map((stateName) => {
-        const districtData = response[stateName].districtData;
-        Object.keys(districtData).map((districtName) => {
-          return districts.push({district: districtName, state: stateName});
-        });
-        return null;
-      });
-      return districts;
-    },
-  },
-});
-
-const essentialsEngine = new Bloodhound({
-  initialize: true,
-  limit: 5,
-  queryTokenizer: Bloodhound.tokenizers.whitespace,
-  datumTokenizer: Bloodhound.tokenizers.obj.whitespace(
-    'category',
-    'city',
-    'contact',
-    'descriptionandorserviceprovided',
-    'nameoftheorganisation',
-    'state'
-  ),
-  indexRemote: true,
-  remote: {
-    url: 'https://api.covid19india.org/resources/resources.json',
-    transform: function (response) {
-      return response.resources;
-    },
-  },
-});
+import {useDebounce, useUpdateEffect} from 'react-use';
 
 /* let focused = false;
 const suggestions = [
@@ -82,6 +31,7 @@ const essentialSuggestions = [
   'Groceries Chennai',
   'Senior citizen support bangalore',
 ];
+
 const locationSuggestions = [
   'Mumbai',
   'Karnataka',
@@ -97,60 +47,137 @@ function Search() {
   const searchInput = useRef(null);
   const {t} = useTranslation();
 
-  const handleSearch = useCallback((searchInput) => {
-    const results = [];
+  const [engine, setEngine] = useState(null);
+  const [districtEngine, setDistrictEngine] = useState(null);
+  const [essentialsEngine, setEssentialsEngine] = useState(null);
 
-    const sync = (datums) => {
-      datums.map((result, index) => {
-        const stateObj = {
-          name: result.name,
-          type: 'state',
-          route: result.code,
-        };
-        results.push(stateObj);
-        return null;
-      });
-    };
+  useUpdateEffect(() => {
+    import('corejs-typeahead').then((Bloodhound) => {
+      setEngine(
+        // eslint-disable-next-line
+        new Bloodhound.default({
+          initialize: true,
+          local: STATE_CODES_ARRAY,
+          queryTokenizer: Bloodhound.default.tokenizers.whitespace,
+          datumTokenizer: Bloodhound.default.tokenizers.obj.whitespace('name'),
+        })
+      );
 
-    const districtSync = (datums) => {
-      datums.slice(0, 3).map((result, index) => {
-        const districtObj = {
-          name: result.district,
-          type: 'district',
-          route: STATE_CODES[result.state],
-        };
-        results.push(districtObj);
-        return null;
-      });
-    };
+      setDistrictEngine(
+        // eslint-disable-next-line
+        new Bloodhound.default({
+          initialize: true,
+          limit: 5,
+          queryTokenizer: Bloodhound.default.tokenizers.whitespace,
+          datumTokenizer: Bloodhound.default.tokenizers.obj.whitespace(
+            'district'
+          ),
+          indexRemote: true,
+          remote: {
+            url: 'https://api.covid19india.org/state_district_wise.json',
+            transform: function (response) {
+              const districts = [];
+              Object.keys(response).map((stateName) => {
+                const districtData = response[stateName].districtData;
+                Object.keys(districtData).map((districtName) => {
+                  return districts.push({
+                    district: districtName,
+                    state: stateName,
+                  });
+                });
+                return null;
+              });
+              return districts;
+            },
+          },
+        })
+      );
 
-    const essentialsSync = (datums) => {
-      datums.slice(0, 5).map((result, index) => {
-        const essentialsObj = {
-          name: result.nameoftheorganisation,
-          type: 'essentials',
-          category: result.category,
-          website: result.contact,
-          description: result.descriptionandorserviceprovided,
-          city: result.city,
-          state: result.state,
-          contact: result.phonenumber,
-        };
-        results.push(essentialsObj);
-        return null;
-      });
-      setResults([...results]);
-    };
+      setEssentialsEngine(
+        // eslint-disable-next-line
+        new Bloodhound.default({
+          initialize: true,
+          limit: 5,
+          queryTokenizer: Bloodhound.default.tokenizers.whitespace,
+          datumTokenizer: Bloodhound.default.tokenizers.obj.whitespace(
+            'category',
+            'city',
+            'contact',
+            'descriptionandorserviceprovided',
+            'nameoftheorganisation',
+            'state'
+          ),
+          indexRemote: true,
+          remote: {
+            url: 'https://api.covid19india.org/resources/resources.json',
+            transform: function (response) {
+              return response.resources;
+            },
+          },
+        })
+      );
+    });
+  }, [expand]);
 
-    const essentialsAsync = (datums) => {
-      // to handle async remote call on initial launch
-      essentialsEngine.search(searchInput, essentialsSync);
-    };
+  const handleSearch = useCallback(
+    (searchInput) => {
+      if (!engine) return null;
+      const results = [];
 
-    engine.search(searchInput, sync);
-    districtEngine.search(searchInput, districtSync);
-    essentialsEngine.search(searchInput, essentialsSync, essentialsAsync);
-  }, []);
+      const sync = (datums) => {
+        datums.map((result, index) => {
+          const stateObj = {
+            name: result.name,
+            type: 'state',
+            route: result.code,
+          };
+          results.push(stateObj);
+          return null;
+        });
+      };
+
+      const districtSync = (datums) => {
+        datums.slice(0, 3).map((result, index) => {
+          const districtObj = {
+            name: result.district,
+            type: 'district',
+            route: STATE_CODES[result.state],
+          };
+          results.push(districtObj);
+          return null;
+        });
+      };
+
+      const essentialsSync = (datums) => {
+        datums.slice(0, 5).map((result, index) => {
+          const essentialsObj = {
+            name: result.nameoftheorganisation,
+            type: 'essentials',
+            category: result.category,
+            website: result.contact,
+            description: result.descriptionandorserviceprovided,
+            city: result.city,
+            state: result.state,
+            contact: result.phonenumber,
+          };
+          results.push(essentialsObj);
+          return null;
+        });
+
+        setResults([...results]);
+      };
+
+      const essentialsAsync = (datums) => {
+        // to handle async remote call on initial launch
+        essentialsEngine.search(searchInput, essentialsSync);
+      };
+
+      engine.search(searchInput, sync);
+      districtEngine.search(searchInput, districtSync);
+      essentialsEngine.search(searchInput, essentialsSync, essentialsAsync);
+    },
+    [districtEngine, engine, essentialsEngine]
+  );
 
   useDebounce(
     () => {
