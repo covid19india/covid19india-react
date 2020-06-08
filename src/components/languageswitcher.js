@@ -1,10 +1,11 @@
 import locales from '../i18n/locales.json';
 
 import classnames from 'classnames';
-import React from 'react';
+import React, {useRef} from 'react';
 import {XCircle} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useTransition, animated} from 'react-spring';
+import {useClickAway} from 'react-use';
 
 const FADE_IN = {
   opacity: 1,
@@ -37,9 +38,19 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
     },
   });
 
+  const languageSwitcherRef = useRef();
+  useClickAway(languageSwitcherRef, () => {
+    setShowLanguageSwitcher(false);
+  });
+
   return transitions.map(({item, key, props}) =>
     item ? (
-      <animated.div key={key} className="LanguageSwitcher" style={props}>
+      <animated.div
+        key={key}
+        className="LanguageSwitcher"
+        style={props}
+        ref={languageSwitcherRef}
+      >
         <span
           className="close-button"
           onClick={() => {
