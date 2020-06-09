@@ -13,7 +13,7 @@ import {TriangleUpIcon, TriangleDownIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React, {useState, useCallback, useMemo} from 'react';
+import React, {useState, useCallback} from 'react';
 import {Info} from 'react-feather';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
@@ -40,9 +40,9 @@ function PureCell({statistic, data}) {
   );
 
   return (
-    <td>
+    <div className="cell statistic">
       {statistic !== 'active' && (
-        <animated.span className={classnames('delta', `is-${statistic}`)}>
+        <animated.div className={classnames('delta', `is-${statistic}`)}>
           {spring.delta.interpolate((delta) =>
             delta > 0
               ? '\u2191' + formatNumber(Math.floor(delta))
@@ -50,12 +50,12 @@ function PureCell({statistic, data}) {
               ? '\u2193' + formatNumber(Math.floor(Math.abs(delta)))
               : ''
           )}
-        </animated.span>
+        </animated.div>
       )}
-      <animated.span className="total">
+      <animated.div className="total">
         {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
-      </animated.span>
-    </td>
+      </animated.div>
+    </div>
   );
 }
 
@@ -79,7 +79,9 @@ function DistrictHeaderCell({handleSortClick, statistic, sortData}) {
     <td onClick={() => handleSortClick(statistic)}>
       <div className="heading-content">
         <abbr
-          className={classnames({[`is-${statistic}`]: breakpoint === 'S'})}
+          className={classnames({
+            [`is-${statistic}`]: breakpoint === 'S',
+          })}
           title={capitalize(statistic)}
         >
           {breakpoint === 'S'
@@ -180,21 +182,6 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
   const history = useHistory();
   const {t} = useTranslation();
 
-  const Chevron = useMemo(
-    () => (
-      <span
-        className={classnames(
-          'dropdown',
-          {rotateRightDown: showDistricts},
-          {rotateDownRight: !showDistricts}
-        )}
-      >
-        <Icon.ChevronDown />
-      </span>
-    ),
-    [showDistricts]
-  );
-
   const handleSortClick = useCallback(
     (statistic) => {
       setSortData(
@@ -259,33 +246,28 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
 
   return (
     <React.Fragment>
-      <tr
+      <div
         className={classnames(
-          'state',
+          'row',
           {'is-total': stateCode === 'TT'},
           {'is-highlighted': regionHighlighted?.stateCode === stateCode}
         )}
         onMouseEnter={highlightState}
         onClick={_setShowDistrict}
       >
-        <td>
-          <div className="title-chevron">
-            {stateCode !== 'TT' && Chevron}
-            <span className="title-icon">
-              <span className="title">{t(STATE_NAMES[stateCode])}</span>
-              {data?.meta?.notes && (
-                <Tooltip {...{data: data.meta.notes}}>
-                  <Info />
-                </Tooltip>
-              )}
-            </span>
-          </div>
-        </td>
+        <div className="cell">
+          <div className="state-name">{t(STATE_NAMES[stateCode])}</div>
+          {data?.meta?.notes && (
+            <Tooltip {...{data: data.meta.notes}}>
+              <Info size={16} />
+            </Tooltip>
+          )}
+        </div>
 
         {PRIMARY_STATISTICS.map((statistic) => (
           <Cell key={statistic} {...{data, statistic}} />
         ))}
-      </tr>
+      </div>
 
       {showDistricts && (
         <React.Fragment>
