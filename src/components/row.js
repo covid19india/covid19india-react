@@ -263,7 +263,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
         style={spring}
       >
         <div className="cell">
-          <div className="state-name">{t(STATE_NAMES[stateCode])}</div>
+          <span className="state-name">{t(STATE_NAMES[stateCode])}</span>
           {data?.meta?.notes && (
             <Tooltip {...{data: data.meta.notes}}>
               <Info size={16} />

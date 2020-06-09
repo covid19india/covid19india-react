@@ -1661,12 +1661,8 @@ abbr {
 }
 
 .fineprint {
-  align-items: flex-end;
-  align-self: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  width: 28rem;
+  margin: auto;
+  text-align: right;
 
   .text {
     color: $gray-mid;
@@ -1687,21 +1683,18 @@ abbr {
 }
 
 .table {
-  align-self: center;
   border-radius: 3px;
-  display: flex;
-  flex-direction: column;
+  border-spacing: .25rem;
   font-family: 'archia';
   font-size: 12px;
+  margin: auto;
   margin-bottom: 2.5rem;
   margin-top: .25rem;
-  overflow-x: scroll;
-  width: 28rem;
+  overflow-x: auto;
 
   .row {
     cursor: pointer;
-    display: flex;
-    flex-direction: row;
+    display: table-row;
     width: 100%;
 
     &:nth-child(odd) {
@@ -1719,6 +1712,7 @@ abbr {
     &.heading {
       .cell {
         cursor: pointer;
+        display: table-cell;
 
         &:hover {
           background: $gray-hover;
@@ -1730,28 +1724,17 @@ abbr {
       align-items: center;
       border-radius: 3px;
       color: $gray;
-      display: flex;
-      flex-direction: row;
+      display: table-cell;
       margin-bottom: .25rem;
       padding: .5rem;
       position: relative;
 
-      &:not(:first-child) {
-        flex-basis: 13.5%;
-        flex-grow: 1;
-        flex-shrink: 0;
-        justify-content: flex-end;
-      }
-
       &:first-child {
         background: $gray-light-opaque;
-        flex-basis: 30%;
-        flex-grow: 0;
-        flex-shrink: 0;
         justify-content: space-between;
         left: 0;
         position: sticky;
-        z-index: 11;
+        z-index: 2;
       }
 
       svg {
@@ -1766,11 +1749,6 @@ abbr {
       }
 
       &.statistic {
-        align-items: flex-end;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-
         .total {
           font-size: 14px;
         }
@@ -1801,20 +1779,6 @@ abbr {
         font-size: 14px;
         font-weight: 600;
         margin-right: .25rem;
-      }
-
-      &.is-desktop {
-        flex-basis: 17.5%;
-        flex-grow: 0;
-        flex-shrink: 0;
-      }
-    }
-  }
-
-  @media (min-width: 769px) {
-    .cell {
-      &:first-child {
-        flex-basis: 24.5% !important;
       }
     }
   }
