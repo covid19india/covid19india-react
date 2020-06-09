@@ -13,34 +13,32 @@ import {Link} from 'react-router-dom';
 import {useTrail, animated, config} from 'react-spring';
 import {createBreakpoint, useLocalStorage} from 'react-use';
 
-const useBreakpoint = createBreakpoint({XL: 1280, L: 768, S: 350});
+const useBreakpoint = createBreakpoint({S: 768});
 
 function PureStateHeaderCell({handleSort, sortData, statistic}) {
   const breakpoint = useBreakpoint();
   const {t} = useTranslation();
 
   return (
-    <th onClick={() => handleSort(statistic)}>
-      <div className="heading-content">
-        <abbr
-          className={classnames({[`is-${statistic}`]: breakpoint === 'S'})}
-          title={capitalize(statistic)}
-        >
-          {breakpoint === 'S'
-            ? capitalize(statistic.slice(0, 1))
-            : breakpoint === 'L'
-            ? capitalize(abbreviate(statistic))
-            : t(capitalize(statistic))}
-        </abbr>
-        {sortData.sortColumn === statistic && (
-          <div>
-            {sortData.isAscending && <TriangleUpIcon />}
-            {!sortData.isAscending && <TriangleDownIcon />}
-            <div />
-          </div>
-        )}
+    <div className="cell heading" onClick={() => handleSort(statistic)}>
+      {sortData.sortColumn === statistic && (
+        <div className="sort-icon">
+          {sortData.isAscending && <TriangleUpIcon />}
+          {!sortData.isAscending && <TriangleDownIcon />}
+          <div />
+        </div>
+      )}
+      <div
+        className={classnames({
+          [`is-${statistic}`]: breakpoint === 'S',
+        })}
+        title={capitalize(statistic)}
+      >
+        {breakpoint === 'S'
+          ? capitalize(abbreviate(statistic))
+          : t(capitalize(statistic))}
       </div>
-    </th>
+    </div>
   );
 }
 
@@ -59,7 +57,7 @@ function PureFineprintTop() {
 
   return (
     <React.Fragment>
-      <h5 className="table-fineprint">
+      <h5 className="text">
         {t('Compiled from State Govt. numbers')},{' '}
         <Link to="/about" style={{color: '#6c757d'}}>
           {t('know more')}!
@@ -125,66 +123,59 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
 
   return (
     <React.Fragment>
-      <animated.span style={trail[0]}>
+      <animated.div className="fineprint" style={trail[0]}>
         <FineprintTop />
-      </animated.span>
+      </animated.div>
 
-      <animated.table className="table" style={trail[1]}>
-        <thead>
-          <tr>
-            <th
-              className="state-heading"
-              onClick={() => handleSortClick('stateName')}
-            >
-              <div className="heading-content">
-                <abbr title="State">{t('State/UT')}</abbr>
-                {sortData.sortColumn === 'stateName' && (
-                  <div>
-                    {sortData.isAscending && <TriangleDownIcon />}
-                    {!sortData.isAscending && <TriangleUpIcon />}
-                  </div>
-                )}
+      <animated.div className="table" style={trail[1]}>
+        <div className="row heading">
+          <div
+            className="cell heading"
+            onClick={() => handleSortClick('stateName')}
+          >
+            <div>{t('State/UT')}</div>
+            {sortData.sortColumn === 'stateName' && (
+              <div className="sort-icon">
+                {sortData.isAscending && <TriangleDownIcon />}
+                {!sortData.isAscending && <TriangleUpIcon />}
               </div>
-            </th>
-            {PRIMARY_STATISTICS.map((statistic) => (
-              <StateHeaderCell
-                key={statistic}
-                {...{statistic, sortData}}
-                handleSort={() => {
-                  handleSortClick(statistic);
-                }}
+            )}
+          </div>
+
+          {PRIMARY_STATISTICS.map((statistic) => (
+            <StateHeaderCell
+              key={statistic}
+              {...{statistic, sortData}}
+              handleSort={() => {
+                handleSortClick(statistic);
+              }}
+            />
+          ))}
+        </div>
+
+        {Object.keys(data)
+          .filter(
+            (stateCode) =>
+              stateCode !== 'TT' && data[stateCode].total?.confirmed
+          )
+          .sort((a, b) => sortingFunction(a, b))
+          .map((stateCode) => {
+            return (
+              <Row
+                key={stateCode}
+                data={data[stateCode]}
+                {...{stateCode, regionHighlighted, setRegionHighlighted}}
               />
-            ))}
-          </tr>
-        </thead>
+            );
+          })}
 
-        <tbody>
-          {Object.keys(data)
-            .filter(
-              (stateCode) =>
-                stateCode !== 'TT' && data[stateCode].total?.confirmed
-            )
-            .sort((a, b) => sortingFunction(a, b))
-            .map((stateCode) => {
-              return (
-                <Row
-                  key={stateCode}
-                  data={data[stateCode]}
-                  {...{stateCode, regionHighlighted, setRegionHighlighted}}
-                />
-              );
-            })}
-        </tbody>
-
-        <tbody>
-          <Row
-            key={'TT'}
-            data={data['TT']}
-            stateCode={'TT'}
-            {...{regionHighlighted, setRegionHighlighted}}
-          />
-        </tbody>
-      </animated.table>
+        <Row
+          key={'TT'}
+          data={data['TT']}
+          stateCode={'TT'}
+          {...{regionHighlighted, setRegionHighlighted}}
+        />
+      </animated.div>
     </React.Fragment>
   );
 }
