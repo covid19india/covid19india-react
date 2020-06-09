@@ -244,9 +244,15 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
     }
   }, [showDistricts, data]);
 
+  const spring = useSpring({
+    from: {opacity: 0},
+    to: {opacity: 1},
+    config: config.gentle,
+  });
+
   return (
     <React.Fragment>
-      <div
+      <animated.div
         className={classnames(
           'row',
           {'is-total': stateCode === 'TT'},
@@ -254,6 +260,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
         )}
         onMouseEnter={highlightState}
         onClick={_setShowDistrict}
+        style={spring}
       >
         <div className="cell">
           <div className="state-name">{t(STATE_NAMES[stateCode])}</div>
@@ -267,7 +274,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
         {PRIMARY_STATISTICS.map((statistic) => (
           <Cell key={statistic} {...{data, statistic}} />
         ))}
-      </div>
+      </animated.div>
 
       {showDistricts && (
         <React.Fragment>
