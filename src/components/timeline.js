@@ -1,4 +1,4 @@
-import {formatDate} from '../utils/commonfunctions';
+import {formatDate, getIndiaDateISO} from '../utils/commonfunctions';
 
 import clamp from 'lodash/clamp';
 import React, {useState} from 'react';
@@ -98,7 +98,7 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
   };
 
   const getDate = (index) => {
-    if (index === 0) return 'Today';
+    if (dates[index] === getIndiaDateISO()) return 'Today';
     return formatDate(dates[index], 'dd MMM');
   };
 
