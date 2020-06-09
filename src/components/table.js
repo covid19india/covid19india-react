@@ -1,5 +1,3 @@
-import Row from './row';
-
 import {PRIMARY_STATISTICS} from '../constants';
 import {capitalize, abbreviate, getStatistic} from '../utils/commonfunctions';
 
@@ -7,11 +5,14 @@ import {TriangleUpIcon, TriangleDownIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React, {useCallback} from 'react';
+import React, {useCallback, useRef, lazy} from 'react';
 import {useTranslation} from 'react-i18next';
+import {useIsVisible} from 'react-is-visible';
 import {Link} from 'react-router-dom';
 import {useTrail, animated, config} from 'react-spring';
 import {createBreakpoint, useLocalStorage} from 'react-use';
+
+const Row = lazy(() => import('./row' /* webpackChunkName: "Row" */));
 
 const useBreakpoint = createBreakpoint({S: 768});
 
@@ -70,6 +71,7 @@ const FineprintTop = React.memo(PureFineprintTop);
 
 function Table({data, regionHighlighted, setRegionHighlighted}) {
   const {t} = useTranslation();
+  const tableElement = useRef();
 
   const [sortData, setSortData] = useLocalStorage('sortData', {
     sortColumn: 'confirmed',
@@ -121,6 +123,8 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
 
   set({transform: 'translate3d(0, 0px, 0)', opacity: 1});
 
+  const isVisible = useIsVisible(tableElement, {once: true});
+
   return (
     <React.Fragment>
       <animated.div className="fineprint" style={trail[0]}>
@@ -159,6 +163,7 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
               stateCode !== 'TT' && data[stateCode].total?.confirmed
           )
           .sort((a, b) => sortingFunction(a, b))
+          .slice(0, isVisible ? Object.keys(data).length - 1 : 10)
           .map((stateCode) => {
             return (
               <Row
@@ -168,6 +173,8 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
               />
             );
           })}
+
+        {!isVisible && <div className="" ref={tableElement}></div>}
 
         <Row
           key={'TT'}
