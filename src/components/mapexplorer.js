@@ -142,7 +142,7 @@ function MapExplorer({
           setCurrentMap({
             code: 'TT',
             view:
-              currentMap.option === MAP_OPTIONS.ZONES
+              currentMap.option === MAP_OPTIONS.HOTSPOTS
                 ? MAP_VIEWS.DISTRICTS
                 : MAP_VIEWS.STATES,
             option: currentMap.option,
@@ -215,7 +215,6 @@ function MapExplorer({
         });
         return;
       case MAP_OPTIONS.HOTSPOTS:
-        if (currentMapMeta.mapType === MAP_TYPES.STATE) return;
         setCurrentMap({
           code: currentMap.code,
           view: MAP_VIEWS.DISTRICTS,

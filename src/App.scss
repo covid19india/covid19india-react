@@ -2063,23 +2063,20 @@ table {
     display: block;
     margin: auto;
     margin-top: 2rem;
-    overflow: hidden;
+    overflow: visible;
     position: relative;
     width: 90%;
 
     &.maplegend {
       margin-top: 0.6rem;
-      overflow: visible;
       width: 100%;
-
-      svg {
-        overflow: visible;
-      }
+      z-index: 1;
     }
 
     svg {
       align-self: center;
       height: 100%;
+      overflow: visible;
       width: 100%;
 
       text {
