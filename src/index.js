@@ -7,7 +7,7 @@ import React, {Suspense} from 'react';
 import ReactDOM from 'react-dom';
 
 ReactDOM.render(
-  <Suspense fallback={''}>
+  <Suspense fallback={<div />}>
     <App />
   </Suspense>,
   document.getElementById('root')

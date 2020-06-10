@@ -381,6 +381,10 @@ export const RAW_DATA_PARTITIONS = {
   },
   v5: {
     start: new Date(2020, 4, 24),
+    end: new Date(2020, 5, 4),
+  },
+  v6: {
+    start: new Date(2020, 5, 5),
     end: new Date(),
   },
 };

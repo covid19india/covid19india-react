@@ -1,8 +1,7 @@
-import {Label, LabelGroup, CounterLabel} from '@primer/components';
 import axios from 'axios';
 import classnames from 'classnames';
 import produce from 'immer';
-import L from 'leaflet';
+import {layer} from 'leaflet';
 import * as Knn from 'leaflet-knn';
 import React, {useState, useEffect, useCallback} from 'react';
 import {ExternalLink, Phone} from 'react-feather';
@@ -60,12 +59,11 @@ function KnnResults({userLocation, userState}) {
     const rad = 10 * 1000; // Max distance of the K points, in meters ; aim to be  ~(avg city radius)
 
     if (userLocation) {
-      medKnn = new Knn(L.geoJSON(geoData, {filter: medFilter})).nearestLayer(
-        [userLocation[1], userLocation[0]],
-        hK
-      );
+      medKnn = new Knn(
+        layer.geoJSON(geoData, {filter: medFilter})
+      ).nearestLayer([userLocation[1], userLocation[0]], hK);
       restKnn = new Knn(
-        L.geoJSON(geoData, {filter: othersFilter})
+        layer.geoJSON(geoData, {filter: othersFilter})
       ).nearestLayer([userLocation[1], userLocation[0]], rK, rad);
       panKnn = geoData?.features?.filter(
         (feat) =>
@@ -171,28 +169,20 @@ function KnnResults({userLocation, userState}) {
     return (
       <div className="results fadeInUp" style={{animationDelay: '0.5s'}}>
         <div className="labels">
-          <LabelGroup>
-            {Object.keys(categories).map((categoryName) => (
-              <Label
-                variant="xl"
-                key={categoryName}
-                className={classnames('label-item', {
-                  'is-selected': categories[categoryName].isSelected,
-                })}
-                onClick={() =>
-                  toggleFilter(
-                    categoryName,
-                    !categories[categoryName].isSelected
-                  )
-                }
-              >
-                {categoryName}
-                <CounterLabel className="counter">
-                  {categories[categoryName].count}
-                </CounterLabel>
-              </Label>
-            ))}
-          </LabelGroup>
+          {Object.keys(categories).map((categoryName) => (
+            <div
+              key={categoryName}
+              className={classnames('label', {
+                'is-selected': categories[categoryName].isSelected,
+              })}
+              onClick={() =>
+                toggleFilter(categoryName, !categories[categoryName].isSelected)
+              }
+            >
+              {categoryName}
+              <div className="count">{categories[categoryName].count}</div>
+            </div>
+          ))}
         </div>
 
         {results?.features
@@ -236,7 +226,7 @@ function KnnResults({userLocation, userState}) {
                 {result.properties.phone.split('\n').map((contact) => (
                   <div key={contact} className="result-contact">
                     <Phone />
-                    <a href={`tel:${contact}`}>{contact}</a>
+                    <a href={`tel:${contact}`}>{contact.replace(',', '')}</a>
                   </div>
                 ))}
               </div>
@@ -288,7 +278,7 @@ function KnnResults({userLocation, userState}) {
                 {result.properties.phone.split('\n').map((contact) => (
                   <div key={contact} className="result-contact">
                     <Phone />
-                    <a href={`tel:${contact}`}>{contact}</a>
+                    <a href={`tel:${contact}`}>{contact.replace(',', '')}</a>
                   </div>
                 ))}
               </div>

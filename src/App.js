@@ -1,10 +1,10 @@
 import './App.scss';
+import LanguageSwitcher from './components/languageswitcher';
 import Navbar from './components/navbar';
 import ScrollToTop from './utils/ScrollToTop';
 
-import React, {lazy} from 'react';
+import React, {lazy, useState, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
-import {useTranslation} from 'react-i18next';
 import {
   BrowserRouter as Router,
   Route,
@@ -39,47 +39,41 @@ const schemaMarkup = {
 };
 
 function App() {
-  const {t} = useTranslation();
+  const darkMode = useDarkMode(false);
+  const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
 
   const pages = [
     {
       pageLink: '/',
       view: Home,
       displayName: 'Home',
-      animationDelayForNavbar: 0.2,
       showInNavbar: true,
     },
     {
       pageLink: '/demographics',
       view: Demographics,
-      displayName: t('Demographics'),
-      animationDelayForNavbar: 0.3,
+      displayName: 'Demographics',
       showInNavbar: true,
     },
     {
       pageLink: '/essentials',
       view: Essentials,
-      displayName: t('Essentials'),
-      animationDelayForNavbar: 0.5,
+      displayName: 'Essentials',
       showInNavbar: true,
     },
     {
       pageLink: '/about',
       view: FAQ,
-      displayName: t('About'),
-      animationDelayForNavbar: 0.6,
+      displayName: 'About',
       showInNavbar: true,
     },
     {
       pageLink: '/state/:stateCode',
       view: State,
-      displayName: t('State'),
-      animationDelayForNavbar: 0.7,
+      displayName: 'State',
       showInNavbar: false,
     },
   ];
-
-  const darkMode = useDarkMode(false);
 
   return (
     <div className="App">
@@ -89,31 +83,37 @@ function App() {
         </script>
       </Helmet>
 
-      <Router>
-        <ScrollToTop />
-        <Route
-          render={({location}) => (
-            <React.Fragment>
-              <Navbar pages={pages} {...{darkMode}} />
-              <Switch location={location}>
-                {pages.map((page, index) => {
-                  return (
-                    <Route
-                      exact
-                      path={page.pageLink}
-                      render={({match}) => (
-                        <page.view key={match.params.stateCode || index} />
-                      )}
-                      key={index}
-                    />
-                  );
-                })}
-                <Redirect to="/" />
-              </Switch>
-            </React.Fragment>
-          )}
-        />
-      </Router>
+      <LanguageSwitcher {...{showLanguageSwitcher, setShowLanguageSwitcher}} />
+
+      <Suspense fallback={<div />}>
+        <Router>
+          <ScrollToTop />
+          <Navbar
+            pages={pages}
+            {...{darkMode}}
+            {...{showLanguageSwitcher, setShowLanguageSwitcher}}
+          />
+          <Route
+            render={({location}) => (
+              <React.Fragment>
+                <Switch location={location}>
+                  {pages.map((page, index) => {
+                    return (
+                      <Route
+                        exact
+                        path={page.pageLink}
+                        render={({match}) => <page.view />}
+                        key={index}
+                      />
+                    );
+                  })}
+                  <Redirect to="/" />
+                </Switch>
+              </React.Fragment>
+            )}
+          />
+        </Router>
+      </Suspense>
     </div>
   );
 }

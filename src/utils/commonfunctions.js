@@ -15,6 +15,10 @@ export const getIndiaDate = () => {
   return utcToZonedTime(new Date(), 'Asia/Kolkata');
 };
 
+export const getIndiaDateISO = () => {
+  return formatISO(getIndiaDate(), {representation: 'date'});
+};
+
 export const getIndiaYesterdayISO = () => {
   return formatISO(subDays(getIndiaDate(), 1), {representation: 'date'});
 };

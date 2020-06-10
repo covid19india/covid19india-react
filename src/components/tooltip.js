@@ -47,12 +47,12 @@ const Tooltip = ({data, children}) => {
       {transitions.map(({item, key, props}) =>
         item ? (
           <animated.div style={props}>
-            <div className="message">
+            <div key={key} className="message">
               <p>{data}</p>
             </div>
           </animated.div>
         ) : (
-          <animated.div></animated.div>
+          <animated.div key={key}></animated.div>
         )
       )}
     </span>

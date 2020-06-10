@@ -1,5 +1,4 @@
 import MapVisualizerLoader from './loaders/mapvisualizer';
-import MapVisualizer from './mapvisualizer';
 
 import {
   MAP_META,
@@ -30,12 +29,17 @@ import React, {
   useRef,
   useState,
   Suspense,
+  lazy,
 } from 'react';
 import ReactDOM from 'react-dom';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {useSprings, animated} from 'react-spring';
+
+const MapVisualizer = lazy(() =>
+  import('./mapvisualizer' /* webpackChunkName: "MapVisualizer" */)
+);
 
 function MapExplorer({
   stateCode,
@@ -142,7 +146,7 @@ function MapExplorer({
           setCurrentMap({
             code: 'TT',
             view:
-              currentMap.option === MAP_OPTIONS.ZONES
+              currentMap.option === MAP_OPTIONS.HOTSPOTS
                 ? MAP_VIEWS.DISTRICTS
                 : MAP_VIEWS.STATES,
             option: currentMap.option,
@@ -215,7 +219,6 @@ function MapExplorer({
         });
         return;
       case MAP_OPTIONS.HOTSPOTS:
-        if (currentMapMeta.mapType === MAP_TYPES.STATE) return;
         setCurrentMap({
           code: currentMap.code,
           view: MAP_VIEWS.DISTRICTS,

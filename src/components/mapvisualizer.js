@@ -128,29 +128,29 @@ function MapVisualizer({
     const projection = d3.geoMercator().fitSize([width, height], topology);
     const path = d3.geoPath(projection);
 
-    // Add id to each feature
     let features =
-      currentMap.option !== MAP_OPTIONS.HOTSPOTS
-        ? currentMap.view === MAP_VIEWS.STATES
-          ? topojson.feature(
-              geoData,
-              geoData.objects[mapMeta.graphObjectStates]
-            ).features
+      currentMap.view === MAP_VIEWS.STATES
+        ? currentMap.option === MAP_OPTIONS.HOTSPOTS
+          ? [
+              ...topojson.feature(
+                geoData,
+                geoData.objects[mapMeta.graphObjectStates]
+              ).features,
+              ...topojson.feature(
+                geoData,
+                geoData.objects[mapMeta.graphObjectDistricts]
+              ).features,
+            ]
           : topojson.feature(
               geoData,
-              geoData.objects[mapMeta.graphObjectDistricts]
-            ).features
-        : [
-            ...topojson.feature(
-              geoData,
               geoData.objects[mapMeta.graphObjectStates]
-            ).features,
-            ...topojson.feature(
-              geoData,
-              geoData.objects[mapMeta.graphObjectDistricts]
-            ).features,
-          ];
+            ).features
+        : topojson.feature(
+            geoData,
+            geoData.objects[mapMeta.graphObjectDistricts]
+          ).features;
 
+    // Add id to each feature
     features = features.map((f) => {
       const district = f.properties.district;
       const state = f.properties.st_nm;
