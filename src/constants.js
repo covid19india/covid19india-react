@@ -1,15 +1,16 @@
-import {hi, te, gu, ta, bn} from 'date-fns/locale/';
+import { hi, te, gu, ta, bn } from 'date-fns/locale/';
 
 export const PRIMARY_STATISTICS = [
   'confirmed',
   'active',
   'recovered',
   'deceased',
+  'tested'
 ];
 
-export const MAP_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
+export const MAP_STATISTICS = [...PRIMARY_STATISTICS];
 
-export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
+export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS];
 
 export const D3_TRANSITION_DURATION = 300;
 
@@ -304,7 +305,7 @@ const stateCodes = [];
 const stateCodesMap = {};
 Object.keys(STATE_NAMES).map((key, index) => {
   stateCodesMap[STATE_NAMES[key]] = key;
-  stateCodes.push({code: key, name: STATE_NAMES[key]});
+  stateCodes.push({ code: key, name: STATE_NAMES[key] });
   return null;
 });
 export const STATE_CODES = stateCodesMap;
