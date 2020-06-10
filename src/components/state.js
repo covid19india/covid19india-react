@@ -2,7 +2,7 @@ import DeltaBarGraph from './deltabargraph';
 import StateDropdown from './statedropdown';
 import StateMeta from './statemeta';
 
-import {NUM_BARS_STATEPAGE, STATE_NAMES} from '../constants';
+import { NUM_BARS_STATEPAGE, STATE_NAMES } from '../constants';
 import {
   fetcher,
   formatDate,
@@ -11,12 +11,12 @@ import {
 } from '../utils/commonfunctions';
 
 import anime from 'animejs';
-import React, {useState, useMemo, lazy, Suspense} from 'react';
+import React, { useState, useMemo, lazy, Suspense } from 'react';
 import * as Icon from 'react-feather';
-import {Helmet} from 'react-helmet';
-import {useTranslation} from 'react-i18next';
-import {useParams} from 'react-router-dom';
-import {useMeasure, useEffectOnce} from 'react-use';
+import { Helmet } from 'react-helmet';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import { useMeasure, useEffectOnce } from 'react-use';
 import useSWR from 'swr';
 
 const TimeSeriesExplorer = lazy(() =>
@@ -36,12 +36,12 @@ const Minigraph = lazy(() =>
 const Level = lazy(() => import('./level' /* webpackChunkName: "Level" */));
 
 function State(props) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const stateCode = useParams().stateCode.toUpperCase();
 
   const [mapStatistic, setMapStatistic] = useState('confirmed');
-  const [mapSwitcher, {width}] = useMeasure();
+  const [mapSwitcher, { width }] = useMeasure();
   const [showAllDistricts, setShowAllDistricts] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState({
     stateCode: stateCode,
@@ -57,18 +57,18 @@ function State(props) {
         mapStatistic === 'confirmed'
           ? `${width * 0}px`
           : mapStatistic === 'active'
-          ? `${width * 0.25}px`
-          : mapStatistic === 'recovered'
-          ? `${width * 0.5}px`
-          : mapStatistic === 'deceased'
-          ? `${width * 0.75}px`
-          : '0px',
+            ? `${width * 0.25}px`
+            : mapStatistic === 'recovered'
+              ? `${width * 0.5}px`
+              : mapStatistic === 'deceased'
+                ? `${width * 0.75}px`
+                : '0px',
       easing: 'spring(1, 80, 90, 10)',
       opacity: 1,
     });
   });
 
-  const {data: timeseries} = useSWR(
+  const { data: timeseries } = useSWR(
     'https://api.covid19india.org/v3/min/timeseries.min.json',
     fetcher,
     {
@@ -77,7 +77,7 @@ function State(props) {
     }
   );
 
-  const {data} = useSWR(
+  const { data } = useSWR(
     'https://api.covid19india.org/v3/min/data.min.json',
     fetcher,
     {
@@ -126,35 +126,11 @@ function State(props) {
         <div className="state-left">
           <div className="header">
             <div className="header-left">
-              <StateDropdown {...{stateCode}} />
+              <StateDropdown {...{ stateCode }} />
               <h5>{`Last Updated on ${formatDate(
                 data[stateCode].meta.last_updated,
                 'dd MMM, p'
               )} IST`}</h5>
-            </div>
-
-            <div className="header-right">
-              <h5>{t('Tested')}</h5>
-              {data[stateCode]?.total?.tested && (
-                <React.Fragment>
-                  <h2>{formatNumber(data[stateCode].total.tested)}</h2>
-                  <h5 className="timestamp">
-                    {`As of ${formatDate(
-                      data[stateCode].meta.tested.last_updated,
-                      'dd MMMM'
-                    )}`}
-                  </h5>
-                  <h5>
-                    {'per '}
-                    <a
-                      href={data[stateCode].meta.tested.source}
-                      target="_noblank"
-                    >
-                      source
-                    </a>
-                  </h5>
-                </React.Fragment>
-              )}
             </div>
           </div>
 
@@ -162,7 +138,7 @@ function State(props) {
             <div
               className={`highlight ${mapStatistic}`}
               style={{
-                transform: `translateX(${width * 0}px)`,
+                transform: `translateX(${width * 0}px) translateY(-15px)`,
                 opacity: 0,
               }}
             ></div>
@@ -242,7 +218,7 @@ function State(props) {
           <React.Fragment>
             <div
               className="district-bar"
-              style={!showAllDistricts ? {display: 'flex'} : {}}
+              style={!showAllDistricts ? { display: 'flex' } : {}}
             >
               <div className="district-bar-left fadeInUp">
                 <h2 className={mapStatistic}>Top districts</h2>
@@ -250,7 +226,7 @@ function State(props) {
                   className={`districts ${showAllDistricts ? 'is-grid' : ''}`}
                   style={
                     showAllDistricts
-                      ? {gridTemplateRows: `repeat(${gridRowCount}, 2rem)`}
+                      ? { gridTemplateRows: `repeat(${gridRowCount}, 2rem)` }
                       : {}
                   }
                 >
@@ -297,30 +273,30 @@ function State(props) {
               <div className="district-bar-right">
                 {(mapStatistic === 'confirmed' ||
                   mapStatistic === 'deceased') && (
-                  <div className="happy-sign">
-                    {Object.keys(timeseries[stateCode] || {})
-                      .slice(-NUM_BARS_STATEPAGE)
-                      .every(
-                        (date) =>
-                          getStatistic(
-                            timeseries[stateCode][date],
-                            'delta',
-                            mapStatistic
-                          ) === 0
-                      ) && (
-                      <div
-                        className={`alert ${
-                          mapStatistic === 'confirmed' ? 'is-green' : ''
-                        }`}
-                      >
-                        <Icon.Smile />
-                        <div className="alert-right">
-                          No new {mapStatistic} cases in the past five days
+                    <div className="happy-sign">
+                      {Object.keys(timeseries[stateCode] || {})
+                        .slice(-NUM_BARS_STATEPAGE)
+                        .every(
+                          (date) =>
+                            getStatistic(
+                              timeseries[stateCode][date],
+                              'delta',
+                              mapStatistic
+                            ) === 0
+                        ) && (
+                          <div
+                            className={`alert ${
+                              mapStatistic === 'confirmed' ? 'is-green' : ''
+                              }`}
+                          >
+                            <Icon.Smile />
+                            <div className="alert-right">
+                              No new {mapStatistic} cases in the past five days
                         </div>
-                      </div>
-                    )}
-                  </div>
-                )}
+                          </div>
+                        )}
+                    </div>
+                  )}
                 <DeltaBarGraph
                   timeseries={timeseries[stateCode]}
                   statistic={mapStatistic}
@@ -331,7 +307,7 @@ function State(props) {
             <Suspense fallback={<div />}>
               <TimeSeriesExplorer
                 timeseries={timeseries[stateCode]}
-                {...{regionHighlighted, setRegionHighlighted}}
+                {...{ regionHighlighted, setRegionHighlighted }}
               />
             </Suspense>
           </React.Fragment>

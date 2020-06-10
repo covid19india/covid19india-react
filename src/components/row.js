@@ -1,6 +1,6 @@
 import Tooltip from './tooltip';
 
-import {PRIMARY_STATISTICS, STATE_NAMES} from '../constants';
+import { PRIMARY_STATISTICS, STATE_NAMES } from '../constants';
 import {
   abbreviate,
   capitalize,
@@ -9,21 +9,21 @@ import {
   getStatistic,
 } from '../utils/commonfunctions';
 
-import {TriangleUpIcon, TriangleDownIcon} from '@primer/octicons-v2-react';
+import { TriangleUpIcon, TriangleDownIcon } from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React, {useState, useCallback, useMemo} from 'react';
-import {Info} from 'react-feather';
+import React, { useState, useCallback, useMemo } from 'react';
+import { Info } from 'react-feather';
 import * as Icon from 'react-feather';
-import {useTranslation} from 'react-i18next';
-import {useHistory} from 'react-router-dom';
-import {useSpring, animated, config} from 'react-spring';
-import {createBreakpoint, useLocalStorage} from 'react-use';
+import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
+import { useSpring, animated, config } from 'react-spring';
+import { createBreakpoint, useLocalStorage } from 'react-use';
 
-const useBreakpoint = createBreakpoint({L: 768, S: 350});
+const useBreakpoint = createBreakpoint({ L: 768, S: 350 });
 
-function PureCell({statistic, data}) {
+function PureCell({ statistic, data }) {
   const total = getStatistic(data, 'total', statistic);
   const delta = getStatistic(data, 'delta', statistic);
 
@@ -47,8 +47,8 @@ function PureCell({statistic, data}) {
             delta > 0
               ? '\u2191' + formatNumber(Math.floor(delta))
               : delta < 0
-              ? '\u2193' + formatNumber(Math.floor(Math.abs(delta)))
-              : ''
+                ? '\u2193' + formatNumber(Math.floor(Math.abs(delta)))
+                : ''
           )}
         </animated.span>
       )}
@@ -71,22 +71,22 @@ const isCellEqual = (prevProps, currProps) => {
 
 const Cell = React.memo(PureCell, isCellEqual);
 
-function DistrictHeaderCell({handleSortClick, statistic, sortData}) {
+function DistrictHeaderCell({ handleSortClick, statistic, sortData }) {
   const breakpoint = useBreakpoint();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <td onClick={() => handleSortClick(statistic)}>
       <div className="heading-content">
         <abbr
-          className={classnames({[`is-${statistic}`]: breakpoint === 'S'})}
+          className={classnames({ [`is-${statistic}`]: breakpoint === 'S' })}
           title={capitalize(statistic)}
         >
           {breakpoint === 'S'
             ? capitalize(statistic.slice(0, 1))
             : breakpoint === 'L'
-            ? capitalize(abbreviate(statistic))
-            : t(capitalize(statistic))}
+              ? capitalize(abbreviate(statistic))
+              : t(capitalize(statistic))}
         </abbr>
         {sortData.sortColumn === statistic && (
           <div>
@@ -107,7 +107,7 @@ function PureDistrictRow({
   regionHighlighted,
   setRegionHighlighted,
 }) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const highlightDistrict = useCallback(() => {
     if (regionHighlighted.districtName !== districtName) {
@@ -132,7 +132,7 @@ function PureDistrictRow({
           <span className="title-icon">
             <span className="title">{t(districtName)}</span>
             {data?.meta?.notes && (
-              <Tooltip {...{data: data.meta.notes}}>
+              <Tooltip {...{ data: data.meta.notes }}>
                 <Info />
               </Tooltip>
             )}
@@ -141,7 +141,7 @@ function PureDistrictRow({
       </td>
 
       {PRIMARY_STATISTICS.map((statistic) => (
-        <Cell key={statistic} {...{statistic}} data={data} />
+        <Cell key={statistic} {...{ statistic }} data={data} />
       ))}
     </tr>
   );
@@ -170,7 +170,7 @@ const isDistrictRowEqual = (prevProps, currProps) => {
 };
 const DistrictRow = React.memo(PureDistrictRow, isDistrictRowEqual);
 
-function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
+function Row({ stateCode, data, regionHighlighted, setRegionHighlighted }) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useLocalStorage('districtSortData', {
     sortColumn: 'confirmed',
@@ -178,15 +178,15 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
   });
 
   const history = useHistory();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const Chevron = useMemo(
     () => (
       <span
         className={classnames(
           'dropdown',
-          {rotateRightDown: showDistricts},
-          {rotateDownRight: !showDistricts}
+          { rotateRightDown: showDistricts },
+          { rotateDownRight: !showDistricts }
         )}
       >
         <Icon.ChevronDown />
@@ -212,25 +212,25 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
       if (sortData.sortColumn !== 'districtName') {
         return sortData.isAscending
           ? getStatistic(
-              data.districts[districtNameA],
-              'total',
-              sortData.sortColumn
-            ) -
-              getStatistic(
-                data.districts[districtNameB],
-                'total',
-                sortData.sortColumn
-              )
+            data.districts[districtNameA],
+            'total',
+            sortData.sortColumn
+          ) -
+          getStatistic(
+            data.districts[districtNameB],
+            'total',
+            sortData.sortColumn
+          )
           : getStatistic(
-              data.districts[districtNameB],
-              'total',
-              sortData.sortColumn
-            ) -
-              getStatistic(
-                data.districts[districtNameA],
-                'total',
-                sortData.sortColumn
-              );
+            data.districts[districtNameB],
+            'total',
+            sortData.sortColumn
+          ) -
+          getStatistic(
+            data.districts[districtNameA],
+            'total',
+            sortData.sortColumn
+          );
       } else {
         return sortData.isAscending
           ? districtNameA.localeCompare(districtNameB)
@@ -262,8 +262,8 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
       <tr
         className={classnames(
           'state',
-          {'is-total': stateCode === 'TT'},
-          {'is-highlighted': regionHighlighted?.stateCode === stateCode}
+          { 'is-total': stateCode === 'TT' },
+          { 'is-highlighted': regionHighlighted?.stateCode === stateCode }
         )}
         onMouseEnter={highlightState}
         onClick={_setShowDistrict}
@@ -274,7 +274,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
             <span className="title-icon">
               <span className="title">{t(STATE_NAMES[stateCode])}</span>
               {data?.meta?.notes && (
-                <Tooltip {...{data: data.meta.notes}}>
+                <Tooltip {...{ data: data.meta.notes }}>
                   <Info />
                 </Tooltip>
               )}
@@ -283,7 +283,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
         </td>
 
         {PRIMARY_STATISTICS.map((statistic) => (
-          <Cell key={statistic} {...{data, statistic}} />
+          <Cell key={statistic} {...{ data, statistic }} />
         ))}
       </tr>
 
@@ -296,7 +296,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
           </tr>
 
           <tr className={'state-last-update'}>
-            <td colSpan={4} style={{paddingBottom: 0}}>
+            <td colSpan={4} style={{ paddingBottom: 0 }}>
               <p className="spacer"></p>
               {data?.meta?.['last_updated'] && (
                 <p>
@@ -315,8 +315,8 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
             <td
               align="center"
               className="state-page-link"
-              colSpan={1}
-              style={{width: '1.5rem'}}
+              colSpan={2}
+              style={{ width: '1.5rem' }}
               onClick={() => {
                 history.push(`state/${stateCode}`);
               }}
@@ -343,7 +343,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
             {PRIMARY_STATISTICS.map((statistic) => (
               <DistrictHeaderCell
                 key={statistic}
-                {...{statistic, sortData, handleSortClick}}
+                {...{ statistic, sortData, handleSortClick }}
               />
             ))}
           </tr>

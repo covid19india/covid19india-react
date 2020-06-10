@@ -81,37 +81,37 @@ body {
 }
 
 h1 {
-  font-family: 'archia';
+  font-family: "archia";
   font-size: 24px !important;
   font-weight: 900;
 }
 
 h2 {
-  font-family: 'archia';
+  font-family: "archia";
   font-size: 18px !important;
   font-weight: 400;
 }
 
 h3 {
-  font-family: 'archia';
+  font-family: "archia";
   font-size: 14px !important;
   font-weight: 400;
 }
 
 h4 {
-  font-family: 'archia';
+  font-family: "archia";
   font-size: 13px !important;
   font-weight: 900;
 }
 
 h5 {
-  font-family: 'archia';
+  font-family: "archia";
   font-size: 12px !important;
   font-weight: 900;
 }
 
 h6 {
-  font-family: 'archia';
+  font-family: "archia";
   font-size: 11px !important;
   font-weight: 600;
 }
@@ -152,7 +152,7 @@ h6 {
   .navbar-left {
     color: $gray-mid;
     cursor: pointer;
-    font-family: 'archia';
+    font-family: "archia";
     font-size: 12px;
     font-weight: 600;
     padding: 1.5rem;
@@ -166,7 +166,7 @@ h6 {
 
   .navbar-middle {
     color: $gray;
-    font-family: 'archia';
+    font-family: "archia";
     font-size: 18px;
     font-weight: 900;
     text-transform: uppercase;
@@ -179,7 +179,7 @@ h6 {
   .navbar-right {
     color: $gray-mid;
     cursor: pointer;
-    font-family: 'archia';
+    font-family: "archia";
     font-size: 12px;
     font-weight: 600;
     padding: 1.5rem;
@@ -193,7 +193,7 @@ h6 {
 
   .language-toggle {
     cursor: pointer;
-    font-family: 'archia';
+    font-family: "archia";
     font-weight: 900;
     text-transform: uppercase;
   }
@@ -203,7 +203,7 @@ h6 {
     color: $gray;
     display: flex;
     flex-direction: column;
-    font-family: 'archia';
+    font-family: "archia";
     height: 100vh;
     position: absolute;
     top: 3.85rem;
@@ -260,7 +260,7 @@ h6 {
   .home-right {
     display: flex;
     flex-direction: column;
-    width: 30rem;
+    width: 35rem;
   }
 
   .home-left {
@@ -286,7 +286,7 @@ h6 {
   color: $gray;
   display: flex;
   flex-direction: row;
-  font-family: 'archia';
+  font-family: "archia";
   font-size: 10px;
   padding: 0.5rem;
 
@@ -297,7 +297,7 @@ h6 {
   }
 
   .alert-right {
-    margin-left: .25rem;
+    margin-left: 0.25rem;
     text-align: right;
     width: 5rem;
 
@@ -361,7 +361,7 @@ h6 {
       h5 {
         color: $gray;
         font-weight: 600;
-        margin-top: .5rem;
+        margin-top: 0.5rem;
       }
     }
 
@@ -401,7 +401,7 @@ h6 {
   .state-right {
     display: flex;
     flex-direction: column;
-    width: 30rem;
+    width: 35rem;
   }
 
   .state-left {
@@ -454,7 +454,7 @@ h6 {
 
   .Minigraph {
     .svg-parent {
-      width: calc(25%) !important;
+      width: calc(20%) !important;
     }
   }
 
@@ -584,7 +584,7 @@ h6 {
     }
 
     p {
-      font-family: 'archia';
+      font-family: "archia";
       font-weight: 600;
       margin-bottom: 1.25rem;
       padding-right: 1rem;
@@ -721,15 +721,15 @@ h6 {
     background: $brick-light;
     border-radius: 5px;
     cursor: pointer;
-    padding: .25rem;
-    transform: translate3d(-.25rem, 0, 0);
+    padding: 0.25rem;
+    transform: translate3d(-0.25rem, 0, 0);
   }
 
   .dropdown {
     background: $white;
     border-radius: 5px;
     height: 25rem;
-    left: -.25rem;
+    left: -0.25rem;
     overflow-y: scroll;
     position: absolute;
     top: 2.75rem;
@@ -739,7 +739,7 @@ h6 {
     .item {
       color: $red;
       cursor: pointer;
-      font-family: 'archia';
+      font-family: "archia";
       padding: 0.75rem;
 
       &:hover {
@@ -796,7 +796,7 @@ h6 {
     font-weight: 400;
     justify-content: center;
     margin: 0;
-    padding: .75rem;
+    padding: 0.75rem;
     text-transform: unset;
 
     * {
@@ -804,7 +804,7 @@ h6 {
     }
 
     svg {
-      margin-left: .5rem;
+      margin-left: 0.5rem;
       padding-right: 0;
     }
 
@@ -859,11 +859,11 @@ h6 {
     cursor: pointer;
     display: flex;
     flex-direction: row;
-    font-family: 'archia' !important;
+    font-family: "archia" !important;
     font-size: 14px;
     margin-bottom: 0.25rem;
-    margin-right: .25rem;
-    padding: .25rem .5rem;
+    margin-right: 0.25rem;
+    padding: 0.25rem 0.5rem;
     text-transform: capitalize;
 
     &.is-selected {
@@ -904,7 +904,7 @@ h6 {
   color: $purple;
   display: flex;
   flex-direction: row;
-  font-family: 'Archia';
+  font-family: "Archia";
   font-size: 0.8rem;
   font-weight: 600;
   justify-content: center;
@@ -933,7 +933,7 @@ h6 {
 
   label {
     color: $gray;
-    font-family: 'archia';
+    font-family: "archia";
     font-size: 0.75rem;
     margin-bottom: 1rem;
   }
@@ -953,7 +953,7 @@ h6 {
     border-radius: 5px;
     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
     color: $gray;
-    font-family: 'archia';
+    font-family: "archia";
     font-size: 1rem;
     height: 2rem;
     outline: none;
@@ -969,7 +969,7 @@ h6 {
 
   .search-placeholder {
     color: $gray-mid;
-    font-family: 'archia';
+    font-family: "archia";
     font-size: 1rem;
     left: 3rem;
     opacity: 0.8;
@@ -1045,9 +1045,9 @@ h6 {
     border-radius: 5px;
     color: $pink;
     cursor: pointer;
-    font-family: 'archia';
-    font-size: .75rem;
-    padding: .75rem;
+    font-family: "archia";
+    font-size: 0.75rem;
+    padding: 0.75rem;
     text-align: center;
   }
 
@@ -1100,7 +1100,7 @@ h6 {
       cursor: pointer;
       display: flex;
       flex-direction: row;
-      font-family: 'archia';
+      font-family: "archia";
       font-size: 0.9rem;
       justify-content: space-between;
       min-height: 2rem;
@@ -1235,7 +1235,7 @@ h6 {
       .result-description {
         align-self: flex-start;
         font-size: 0.75rem;
-        margin-bottom: .5rem;
+        margin-bottom: 0.5rem;
         margin-top: 1rem;
       }
 
@@ -1255,7 +1255,7 @@ h6 {
         flex-direction: row;
         font-size: 0.75rem;
         height: 1rem;
-        margin-right: .25rem;
+        margin-right: 0.25rem;
         margin-top: 0.25rem;
         padding: 0.25rem;
         text-align: right;
@@ -1291,7 +1291,7 @@ h6 {
       color: $gray-mid;
       display: flex;
       flex-direction: row;
-      font-family: 'archia';
+      font-family: "archia";
 
       div {
         padding-top: 1px;
@@ -1442,7 +1442,7 @@ h6 {
   cursor: pointer;
   display: flex;
   flex-direction: row;
-  font-family: 'archia';
+  font-family: "archia";
   font-size: 0.75rem;
   font-weight: 900;
   margin-bottom: 0.5rem;
@@ -1531,12 +1531,12 @@ h6 {
   justify-content: space-between;
   position: absolute;
   top: 12rem;
-  width: 30rem;
+  width: 35rem;
 
   .highlight {
     background: $cherry-light;
     position: absolute;
-    width: calc(25%) !important;
+    width: calc(20%) !important;
     z-index: -1;
 
     &.active {
@@ -1549,6 +1549,10 @@ h6 {
 
     &.deceased {
       background: $gray-light;
+    }
+
+    &.tested {
+      background: $purple-light;
     }
   }
 
@@ -1567,7 +1571,7 @@ h6 {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 30rem;
+  width: 35rem;
 
   .level-item {
     display: flex;
@@ -1642,6 +1646,17 @@ h6 {
       color: $gray-mid;
     }
   }
+
+  .is-tested {
+    h1,
+    h5 {
+      color: $purple;
+    }
+
+    h4 {
+      color: $purple-mid;
+    }
+  }
 }
 
 abbr {
@@ -1688,10 +1703,10 @@ table {
   align-self: center;
   border-collapse: separate;
   border-spacing: 3px 4px;
-  font-family: 'archia';
+  font-family: "archia";
   margin-bottom: 2.5rem;
   position: relative;
-  width: 30rem;
+  width: 35rem;
 
   thead {
     background: $gray-light;
@@ -1739,6 +1754,10 @@ table {
 
       &.is-deaths {
         color: $gray;
+      }
+
+      &.is-tested {
+        color: $purple;
       }
     }
   }
@@ -1817,6 +1836,10 @@ table {
 
         &.is-deaths {
           color: $gray;
+        }
+
+        &.is-tested {
+          color: $purple;
         }
       }
 
@@ -1901,7 +1924,7 @@ table {
         color: $gray;
         display: flex;
         flex-direction: row;
-        font-family: 'archia';
+        font-family: "archia";
         font-size: 12px;
         left: 0;
         margin-top: 0.5rem;
@@ -2085,7 +2108,7 @@ table {
 
       text {
         fill: $gray;
-        font-family: 'archia';
+        font-family: "archia";
         font-size: 10px;
         font-weight: 600;
         text-align: right;
@@ -2123,7 +2146,7 @@ table {
     border-radius: 5px;
     color: $orange;
     cursor: pointer;
-    font-family: 'archia';
+    font-family: "archia";
     font-size: 0.75rem;
     font-weight: 900;
     margin-bottom: 0.25rem;
@@ -2410,7 +2433,7 @@ table {
     color: $gray-dark;
     display: flex;
     flex-direction: row;
-    font-family: 'archia';
+    font-family: "archia";
     font-size: 12px;
     left: 0;
     margin-left: auto;
@@ -2480,7 +2503,7 @@ table {
 
   h4 {
     display: table-cell;
-    font-family: 'archia';
+    font-family: "archia";
     font-size: 12px !important;
     font-weight: 900;
     height: 2rem;
@@ -2581,7 +2604,7 @@ table {
 
     label {
       color: $gray-mid;
-      font-family: 'archia';
+      font-family: "archia";
       font-size: 0.75rem;
       font-weight: 900;
       margin-right: 0.25rem;
@@ -2641,7 +2664,7 @@ input {
     &::after {
       background-color: $gray-mid;
       border-radius: 50%;
-      content: '';
+      content: "";
       height: 10px;
       left: 0;
       position: absolute;
@@ -2673,7 +2696,7 @@ input {
     background-color: #eee;
 
     background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
-    linear-gradient(135deg, #808080 50%, transparent 50%);
+      linear-gradient(135deg, #808080 50%, transparent 50%);
     background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
     background-repeat: no-repeat;
     background-size: 5px 5px, 5px 5px;
@@ -2681,7 +2704,7 @@ input {
     border-radius: 4px;
     color: $gray;
     cursor: pointer;
-    font-family: 'archia';
+    font-family: "archia";
     font-weight: 900;
     margin-left: -1px;
     margin-top: 1rem;
@@ -2811,7 +2834,7 @@ input {
     border-radius: 5px;
     display: flex;
     position: relative;
-    width: 30rem;
+    width: 35rem;
 
     svg {
       width: 100%;
@@ -2825,7 +2848,7 @@ input {
 
       text {
         color: $cherry-mid;
-        font-family: 'archia';
+        font-family: "archia";
         font-size: 9px;
         font-weight: 600;
         stroke: transparent;
@@ -2910,7 +2933,7 @@ input {
   margin: 0;
   margin-bottom: 1rem;
   margin-top: 1rem;
-  width: 30rem;
+  width: 35rem;
 
   .svg-parent {
     background: transparent !important;
@@ -2972,7 +2995,7 @@ input {
   a {
     background: $blue-light;
     color: $blue;
-    font-family: 'archia';
+    font-family: "archia";
     font-weight: 900;
     text-decoration: none;
     text-transform: uppercase;
@@ -3152,7 +3175,7 @@ footer {
       border-radius: 4px;
       color: #6c757d;
       cursor: default;
-      font-family: 'archia';
+      font-family: "archia";
       font-size: 12px;
       font-weight: 900;
       height: 2.19rem;
@@ -3183,7 +3206,7 @@ footer {
 
       button {
         border-radius: 5px;
-        font-family: 'archia';
+        font-family: "archia";
         padding: 1rem;
         transition: all 0.1s ease-in-out;
 
@@ -3224,7 +3247,7 @@ footer {
     }
 
     .react-calendar__month-view__weekdays__weekday {
-      font-family: 'archia';
+      font-family: "archia";
       margin-bottom: 0.5rem;
     }
 
@@ -3276,7 +3299,7 @@ footer {
       background-color: #eee;
 
       background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
-      linear-gradient(135deg, #808080 50%, transparent 50%);
+        linear-gradient(135deg, #808080 50%, transparent 50%);
       background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
       background-repeat: no-repeat;
       background-size: 5px 5px, 5px 5px;
@@ -3284,7 +3307,7 @@ footer {
       border-radius: 4px;
       color: $gray;
       cursor: pointer;
-      font-family: 'archia';
+      font-family: "archia";
       font-weight: 900;
       margin: 0.2rem 0.1rem;
       padding: 0.5rem;
@@ -3301,7 +3324,7 @@ footer {
     background: $pblue-light;
     border-radius: 5px;
     color: $pblue;
-    font-family: 'archia';
+    font-family: "archia";
     font-size: 0.9rem;
     font-weight: 600;
     line-height: 23px;
@@ -3525,7 +3548,7 @@ footer {
     }
 
     &.is-in {
-      background: url('/flags/india.png');
+      background: url("/flags/india.png");
       background-size: cover !important;
 
       h3 {
@@ -3542,7 +3565,7 @@ footer {
     }
 
     &.is-uk {
-      background: url('/flags/uk.png');
+      background: url("/flags/uk.png");
       background-size: cover !important;
 
       h3 {
@@ -3559,7 +3582,7 @@ footer {
     }
 
     &.is-us {
-      background: url('/flags/usa.png');
+      background: url("/flags/usa.png");
       background-size: cover !important;
 
       h3 {
@@ -3576,7 +3599,7 @@ footer {
     }
 
     &.is-th {
-      background: url('/flags/thailand.png');
+      background: url("/flags/thailand.png");
       background-size: cover !important;
 
       h3 {
@@ -3593,7 +3616,7 @@ footer {
     }
 
     &.is-ph {
-      background: url('/flags/philippines.png');
+      background: url("/flags/philippines.png");
       background-size: cover !important;
 
       h3 {
@@ -3610,7 +3633,7 @@ footer {
     }
 
     &.is-it {
-      background: url('/flags/italy.png');
+      background: url("/flags/italy.png");
       background-size: cover !important;
 
       h3 {
@@ -3627,7 +3650,7 @@ footer {
     }
 
     &.is-ca {
-      background: url('/flags/canada.png');
+      background: url("/flags/canada.png");
       background-size: cover !important;
 
       h3 {
@@ -3644,7 +3667,7 @@ footer {
     }
 
     &.is-id {
-      background: url('/flags/indonesia.png');
+      background: url("/flags/indonesia.png");
       background-size: cover !important;
 
       h3 {
@@ -3661,7 +3684,7 @@ footer {
     }
 
     &.is-mm {
-      background: url('/flags/myanmar.png');
+      background: url("/flags/myanmar.png");
       background-size: cover !important;
 
       h3 {
@@ -3725,7 +3748,7 @@ footer {
 
   code {
     color: $orange-mid;
-    font-family: 'archia';
+    font-family: "archia";
   }
 
   a {
@@ -4007,7 +4030,7 @@ footer {
     border-top: 0;
     color: $orange;
     cursor: pointer;
-    font-family: 'archia';
+    font-family: "archia";
     font-size: 10px !important;
     font-weight: 600;
     margin: 0;
@@ -4111,47 +4134,47 @@ footer {
     }
 
     &.is-in {
-      background: url('/flags/india.png');
+      background: url("/flags/india.png");
       background-size: cover !important;
     }
 
     &.is-uk {
-      background: url('/flags/uk.png');
+      background: url("/flags/uk.png");
       background-size: cover !important;
     }
 
     &.is-us {
-      background: url('/flags/usa.png');
+      background: url("/flags/usa.png");
       background-size: cover !important;
     }
 
     &.is-th {
-      background: url('/flags/thailand.png');
+      background: url("/flags/thailand.png");
       background-size: cover !important;
     }
 
     &.is-ph {
-      background: url('/flags/philippines.png');
+      background: url("/flags/philippines.png");
       background-size: cover !important;
     }
 
     &.is-it {
-      background: url('/flags/italy.png');
+      background: url("/flags/italy.png");
       background-size: cover !important;
     }
 
     &.is-ca {
-      background: url('/flags/canada.png');
+      background: url("/flags/canada.png");
       background-size: cover !important;
     }
 
     &.is-id {
-      background: url('/flags/indonesia.png');
+      background: url("/flags/indonesia.png");
       background-size: cover !important;
     }
 
     &.is-mm {
-      background: url('/flags/myanmar.png');
+      background: url("/flags/myanmar.png");
       background-size: cover !important;
     }
   }
@@ -4298,7 +4321,7 @@ footer {
         width: 100%;
 
         text {
-          font-family: 'archia';
+          font-family: "archia";
         }
 
         .label {
@@ -4326,7 +4349,7 @@ footer {
     .district {
       display: flex;
       flex-direction: row;
-      font-family: 'archia';
+      font-family: "archia";
       height: 2.5rem;
       justify-content: flex-start;
       margin-right: 1rem;
@@ -4459,7 +4482,7 @@ footer {
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      font-family: 'archia';
+      font-family: "archia";
       font-weight: 600;
       justify-content: center;
       padding: 1rem;
@@ -4504,7 +4527,7 @@ footer {
 
         .chart-title {
           color: #6c757d;
-          font-family: 'archia';
+          font-family: "archia";
           font-size: 1.5rem !important;
           font-weight: 900;
           padding: 20px 0;
@@ -4518,7 +4541,7 @@ footer {
 
         .chart-note {
           color: $gray;
-          font-family: 'archia';
+          font-family: "archia";
           font-size: 0.8rem;
           height: 50px;
           margin-top: 5px;
@@ -4546,7 +4569,7 @@ footer {
     font-weight: 400;
     justify-content: flex-end;
     min-width: 15rem;
-    padding: .5rem;
+    padding: 0.5rem;
     pointer-events: none;
     right: 0;
     top: 0;
@@ -4575,7 +4598,7 @@ footer {
     z-index: 999;
 
     .navbar-left {
-      margin-bottom: .5rem;
+      margin-bottom: 0.5rem;
       margin-top: auto;
       order: 3;
       text-align: center;
@@ -4671,7 +4694,7 @@ footer {
   }
 
   .Home,
-  .State, {
+  .State {
     display: flex;
     flex-direction: column;
     margin-left: 0;
@@ -4685,7 +4708,7 @@ footer {
       display: flex;
       flex-direction: column;
       margin: 0;
-      width: 100%;
+      width: auto;
     }
   }
 
@@ -4772,7 +4795,7 @@ footer {
   }
 
   .cards-container {
-    padding: .5rem;
+    padding: 0.5rem;
 
     .cards {
       .card {
@@ -5046,7 +5069,7 @@ footer {
       }
 
       &:not(.zone) {
-        filter: invert(1) hue-rotate(180deg) saturate(1.5) url('#balance-color');
+        filter: invert(1) hue-rotate(180deg) saturate(1.5) url("#balance-color");
       }
     }
 
@@ -5179,7 +5202,7 @@ footer {
     select {
       background: #1e1e30;
       background-image: linear-gradient(45deg, transparent 50%, $gray 50%),
-      linear-gradient(135deg, $gray 50%, transparent 50%);
+        linear-gradient(135deg, $gray 50%, transparent 50%);
       background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
       background-repeat: no-repeat;
       background-size: 5px 5px, 5px 5px;
