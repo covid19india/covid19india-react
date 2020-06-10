@@ -1,9 +1,9 @@
 import Row from '../../components/row';
-import {STATE_NAMES} from '../../constants';
+import { STATE_NAMES } from '../../constants';
 
-import {mount} from 'enzyme';
+import { mount } from 'enzyme';
 import React from 'react';
-import {MemoryRouter} from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 
 const stateCode = 'AN';
 const data = {
@@ -42,7 +42,7 @@ describe('Row component', () => {
     <MemoryRouter>
       <table>
         <tbody>
-          <Row {...{stateCode, data}} />
+          <Row {...{ stateCode, data }} />
         </tbody>
       </table>
     </MemoryRouter>
@@ -73,7 +73,7 @@ describe('Row component', () => {
     const deaths = cells.at(4).text();
 
     expect(stateSelector).toHaveLength(1);
-    expect(cells).toHaveLength(5);
+    expect(cells).toHaveLength(6);
     expect(stateName).toContain(STATE_NAMES[stateCode]);
     expect(confirmed).toEqual('33');
     expect(active).toEqual('0');
