@@ -130,21 +130,20 @@ function MapVisualizer({
 
     let features =
       currentMap.view === MAP_VIEWS.STATES
-        ? currentMap.option === MAP_OPTIONS.HOTSPOTS
-          ? [
-              ...topojson.feature(
-                geoData,
-                geoData.objects[mapMeta.graphObjectStates]
-              ).features,
-              ...topojson.feature(
-                geoData,
-                geoData.objects[mapMeta.graphObjectDistricts]
-              ).features,
-            ]
-          : topojson.feature(
+        ? topojson.feature(geoData, geoData.objects[mapMeta.graphObjectStates])
+            .features
+        : mapMeta.mapType === MAP_TYPES.COUNTRY &&
+          currentMap.option === MAP_OPTIONS.HOTSPOTS
+        ? [
+            ...topojson.feature(
               geoData,
               geoData.objects[mapMeta.graphObjectStates]
-            ).features
+            ).features,
+            ...topojson.feature(
+              geoData,
+              geoData.objects[mapMeta.graphObjectDistricts]
+            ).features,
+          ]
         : topojson.feature(
             geoData,
             geoData.objects[mapMeta.graphObjectDistricts]
