@@ -138,7 +138,7 @@ function State(props) {
             <div
               className={`highlight ${mapStatistic}`}
               style={{
-                transform: `translateX(${width * 0}px) translateY(-12px)`,
+                transform: `translateX(${width * 0}px) translateY(-15px)`,
                 opacity: 0,
               }}
             ></div>
