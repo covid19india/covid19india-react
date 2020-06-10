@@ -187,6 +187,7 @@ function MapVisualizer({
         : COLORS[statistic];
     };
 
+    console.log(data);
     /* Draw map */
     const t = d3.transition().duration(D3_TRANSITION_DURATION);
     let onceTouchedRegion = null;
@@ -218,19 +219,6 @@ function MapVisualizer({
               if (onceTouchedRegion === d) onceTouchedRegion = null;
               else onceTouchedRegion = d;
             })
-            .on('click', (d) => {
-              d3.event.stopPropagation();
-              if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE)
-                return;
-              // Disable pointer events till the new map is rendered
-              svg.attr('pointer-events', 'none');
-              svg
-                .select('.regions')
-                .selectAll('path')
-                .attr('pointer-events', 'none');
-              // Switch map
-              changeMap(STATE_CODES[d.properties.st_nm]);
-            })
             .attr('fill', fillColor)
             .attr('stroke', strokeColor);
           sel.append('title');
@@ -244,7 +232,23 @@ function MapVisualizer({
               .attr('stroke', strokeColor)
           )
       )
-      .attr('pointer-events', 'all');
+      .attr('pointer-events', 'all')
+      .on('click', (d) => {
+        d3.event.stopPropagation();
+        const stateCode = STATE_CODES[d.properties.st_nm];
+        console.log(data);
+        if (
+          onceTouchedRegion ||
+          mapMeta.mapType === MAP_TYPES.STATE ||
+          !data[stateCode]?.districts
+        )
+          return;
+        // Disable pointer events till the new map is rendered
+        svg.attr('pointer-events', 'none');
+        svg.select('.regions').selectAll('path').attr('pointer-events', 'none');
+        // Switch map
+        changeMap(STATE_CODES[d.properties.st_nm]);
+      });
 
     regionSelection.select('title').text((d) => {
       if (currentMap.option === MAP_OPTIONS.TOTAL) {
