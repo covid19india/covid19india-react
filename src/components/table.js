@@ -1,7 +1,7 @@
 import {PRIMARY_STATISTICS} from '../constants';
-import {capitalize, abbreviate, getStatistic} from '../utils/commonfunctions';
+import {capitalize, getStatistic} from '../utils/commonfunctions';
 
-import {TriangleUpIcon, TriangleDownIcon} from '@primer/octicons-v2-react';
+import {FilterIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
@@ -23,10 +23,12 @@ function PureStateHeaderCell({handleSort, sortData, statistic}) {
   return (
     <div className="cell heading" onClick={() => handleSort(statistic)}>
       {sortData.sortColumn === statistic && (
-        <div className="sort-icon">
-          {sortData.isAscending && <TriangleUpIcon />}
-          {!sortData.isAscending && <TriangleDownIcon />}
-          <div />
+        <div
+          className={classnames('sort-icon', {
+            invert: sortData.isAscending,
+          })}
+        >
+          <FilterIcon size={10} />
         </div>
       )}
       <div
@@ -36,7 +38,7 @@ function PureStateHeaderCell({handleSort, sortData, statistic}) {
         title={capitalize(statistic)}
       >
         {breakpoint === 'S'
-          ? capitalize(abbreviate(statistic))
+          ? capitalize(statistic.slice(0, 1))
           : t(capitalize(statistic))}
       </div>
     </div>
@@ -71,8 +73,6 @@ const FineprintTop = React.memo(PureFineprintTop);
 
 function Table({data, regionHighlighted, setRegionHighlighted}) {
   const {t} = useTranslation();
-  const tableElement = useRef();
-
   const [sortData, setSortData] = useLocalStorage('sortData', {
     sortColumn: 'confirmed',
     isAscending: false,
@@ -123,7 +123,8 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
 
   set({transform: 'translate3d(0, 0px, 0)', opacity: 1});
 
-  const isVisible = useIsVisible(tableElement, {once: true});
+  const tableElement = useRef();
+  const isVisible = useIsVisible(tableElement);
 
   return (
     <React.Fragment>
@@ -139,9 +140,12 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
           >
             <div>{t('State/UT')}</div>
             {sortData.sortColumn === 'stateName' && (
-              <div className="sort-icon">
-                {sortData.isAscending && <TriangleDownIcon />}
-                {!sortData.isAscending && <TriangleUpIcon />}
+              <div
+                className={classnames('sort-icon', {
+                  invert: !sortData.isAscending,
+                })}
+              >
+                <FilterIcon size={10} />
               </div>
             )}
           </div>
@@ -174,7 +178,9 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
             );
           })}
 
-        {!isVisible && <div className="" ref={tableElement}></div>}
+        {!isVisible && (
+          <span className="intersection" ref={tableElement}></span>
+        )}
 
         <Row
           key={'TT'}

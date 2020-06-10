@@ -43,6 +43,8 @@ $gray-hover: #6c757d20;
 $gray-mid: #6c757d99;
 $gray-dark: #343a40;
 $gray-opaque: #f1f1f1;
+$gray-hover-opaque: #edeeef;
+$gray-hover-darker-opaque: #f6f6f7;
 $light: #f8f9fa;
 $dark: #343a40;
 $purple: #201aa2dd;
@@ -1699,8 +1701,52 @@ abbr {
   font-size: 12px;
   margin-bottom: 2.5rem;
   margin-top: .25rem;
-  overflow-x: scroll;
+  overflow-x: auto;
   width: 28rem;
+
+  .state-meta {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    left: 0;
+    margin-bottom: 1 + .25rem;
+    margin-top: 1rem;
+    position: sticky;
+
+    svg {
+      margin-right: .5rem;
+    }
+
+    .last-updated {
+      align-items: center;
+      color: $green;
+      display: flex;
+      flex-direction: row;
+    }
+
+    .state-page {
+      align-items: center;
+      background: $yellow-light;
+      border-radius: 5px;
+      color: $orange;
+      cursor: pointer;
+      display: flex;
+      flex-direction: row;
+      padding: .75rem;
+
+      p {
+        align-self: flex-end;
+        flex: 1;
+        margin: 0;
+        text-align: right;
+      }
+
+      &:hover {
+        background: $yellow-hover;
+      }
+    }
+  }
 
   .row {
     cursor: pointer;
@@ -1716,7 +1762,7 @@ abbr {
 
     &.is-highlighted {
       .cell {
-        background: $gray-hover;
+        background: $gray-hover-opaque !important;
       }
     }
 
@@ -1727,6 +1773,12 @@ abbr {
         &:hover {
           background: $gray-hover;
         }
+      }
+    }
+
+    &.is-total {
+      .cell {
+        background: $gray-hover-opaque !important;
       }
     }
 
@@ -1741,21 +1793,26 @@ abbr {
       position: relative;
 
       &:not(:first-child) {
-        flex-basis: 13.5%;
+        flex-basis: 3.5rem;
         flex-grow: 1;
         flex-shrink: 0;
         justify-content: flex-end;
       }
 
       &:first-child {
-        background: $gray-light-opaque;
-        flex-basis: 30%;
+        background: $gray-hover-darker-opaque;
+        flex-basis: 7.5rem;
         flex-grow: 0;
         flex-shrink: 0;
         justify-content: space-between;
         left: 0;
         position: sticky;
         z-index: 11;
+
+        .sort-icon {
+          left: unset;
+          right: 0;
+        }
       }
 
       svg {
@@ -1765,8 +1822,15 @@ abbr {
 
       .sort-icon {
         left: 0;
+        margin-left: .25rem;
+        margin-right: .25rem;
         position: absolute;
         top: 0;
+
+        &.invert {
+          margin-top: .25rem;
+          transform: rotate(180deg);
+        }
       }
 
       &.statistic {
@@ -1797,28 +1861,54 @@ abbr {
       }
 
       &.heading {
+        background: $gray-light-opaque;
         font-size: 13px;
         font-weight: 900;
       }
 
-      .state-name {
+      .state-name,
+      .district-name {
         font-size: 14px;
         font-weight: 600;
         margin-right: .25rem;
-      }
-
-      &.is-desktop {
-        flex-basis: 17.5%;
-        flex-grow: 0;
-        flex-shrink: 0;
+        width: 6rem;
+        word-wrap: break-word;
       }
     }
+  }
+
+  .spacer {
+    color: $gray-mid;
+    left: 0;
+    margin-bottom: 1 + .25rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1rem;
+    position: sticky;
+    text-align: center;
+    width: 10rem;
+
+    .fold {
+      cursor: pointer;
+
+      &:hover {
+        color: $gray;
+      }
+    }
+  }
+
+  .intersection {
+    display: block;
   }
 
   @media (min-width: 769px) {
     .cell {
       &:first-child {
-        flex-basis: 24.5% !important;
+        flex-basis: 3rem;
+      }
+
+      &:not(:first-child) {
+        flex-basis: 4rem;
       }
     }
   }
@@ -2253,11 +2343,19 @@ abbr {
   }
 
   .footnote {
-    &.table-fineprint {
-      margin-bottom: 0;
-      margin-top: 1em;
-      text-align: left;
-      z-index: 1;
+    color: $gray;
+    margin-bottom: 0;
+    margin-top: 1em;
+    text-align: left;
+    z-index: 1;
+
+    a {
+      border-bottom: 2px solid $gray-hover;
+      text-decoration: none;
+
+      &:hover {
+        background: $gray-hover;
+      }
     }
   }
 }
@@ -4366,7 +4464,8 @@ footer {
     font-size: 13px;
     font-weight: 400;
     justify-content: flex-end;
-    min-width: 15rem;
+    max-width: 30vw;
+    min-width: 10rem;
     padding: .5rem;
     pointer-events: none;
     right: 0;
@@ -4515,14 +4614,6 @@ footer {
     h1 {
       font-size: 5vw !important;
     }
-
-    h5 {
-      font-size: 2.75vw !important;
-    }
-
-    h4 {
-      font-size: 3vw !important;
-    }
   }
 
   .MapExplorer {
@@ -4584,12 +4675,6 @@ footer {
       margin-left: 1rem;
       margin-right: 1rem;
       width: 100%;
-    }
-  }
-
-  table {
-    td {
-      max-width: 6.75rem;
     }
   }
 
@@ -4792,25 +4877,22 @@ footer {
     }
   }
 
-  table {
-    th {
-      background: #1e1e30 !important;
+  .table {
+    .cell {
+      &:first-child {
+        background: #1e1e30 !important;
+      }
+
+      &.heading {
+        background: #1e1e30 !important;
+      }
     }
 
-    .is-odd {
-      background: #1e1e30 !important;
-    }
-
-    .state-page-link {
-      background: #161625 !important;
-    }
-
-    .heading-content {
-      color: #bdbdbd !important;
-    }
-
-    .spacer {
-      background: #161625 !important;
+    .is-highlighted,
+    .is-total {
+      .cell {
+        background: #1e1e30 !important;
+      }
     }
   }
 
