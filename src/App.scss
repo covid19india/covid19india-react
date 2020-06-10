@@ -5140,13 +5140,15 @@ footer {
 
     .svg-parent {
       &.is-tested {
-        background: #40008050 !important;
-
         svg {
           circle,
           .domain,
           .tick {
             stroke: #9673b9 !important;
+          }
+
+          path {
+            stroke: #9673b9bb !important;
           }
 
           circle {
@@ -5280,6 +5282,25 @@ footer {
 
     .modal {
       background: #1e1e30bb !important;
+    }
+  }
+
+  .Level {
+    .is-tested {
+      h1,
+      h5 {
+        color: #9673b9 !important;
+      }
+
+      h4 {
+        color: #9673b9bb !important;
+      }
+    }
+  }
+
+  .delta {
+    &.is-tested {
+      color: #9673b9;
     }
   }
 }

@@ -11,12 +11,12 @@ import {
 
 import classnames from 'classnames';
 import * as d3 from 'd3';
-import {interpolatePath} from 'd3-interpolate-path';
-import {formatISO, subDays} from 'date-fns';
+import { interpolatePath } from 'd3-interpolate-path';
+import { formatISO, subDays } from 'date-fns';
 import equal from 'fast-deep-equal';
-import React, {useEffect, useRef, useMemo} from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 
-function Minigraph({timeseries, date: timelineDate}) {
+function Minigraph({ timeseries, date: timelineDate }) {
   const refs = useRef([]);
 
   const dates = useMemo(() => {
@@ -26,7 +26,7 @@ function Minigraph({timeseries, date: timelineDate}) {
     );
     const cutOffDate = formatISO(
       subDays(parseIndiaDate(today), MINIGRAPH_LOOKBACK_DAYS),
-      {representation: 'date'}
+      { representation: 'date' }
     );
     return pastDates.filter((date) => date >= cutOffDate);
   }, [timeseries, timelineDate]);
@@ -34,7 +34,7 @@ function Minigraph({timeseries, date: timelineDate}) {
   useEffect(() => {
     const T = dates.length;
 
-    const margin = {top: 10, right: 5, bottom: 20, left: 5};
+    const margin = { top: 10, right: 5, bottom: 20, left: 5 };
     const chartRight = 100 - margin.right;
     const chartBottom = 100 - margin.bottom;
 
@@ -152,7 +152,7 @@ function Minigraph({timeseries, date: timelineDate}) {
   return (
     <div className="Minigraph">
       {PRIMARY_STATISTICS.map((statistic, index) => (
-        <div key={statistic} className={classnames('svg-parent')}>
+        <div key={statistic} className={classnames(`svg-parent is-${statistic}`)}>
           <svg
             ref={(el) => {
               refs.current[index] = el;
