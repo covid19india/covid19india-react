@@ -69,6 +69,20 @@ function State(props) {
     }
   );
 
+  useEffect(() => {
+    const districts = data[stateCode].districts;
+    const topDistrict = Object.keys(districts).sort(
+      (a, b) =>
+        getStatistic(districts[b], 'total', mapStatistic) -
+        getStatistic(districts[a], 'total', mapStatistic)
+    )[0];
+    setRegionHighlighted({
+      stateCode: stateCode,
+      districtName: topDistrict,
+    });
+    setShowAllDistricts(false);
+  }, [stateCode]);
+
   const toggleShowAllDistricts = () => {
     setShowAllDistricts(!showAllDistricts);
   };
@@ -85,7 +99,9 @@ function State(props) {
   const gridRowCount = useMemo(() => {
     const gridColumnCount = window.innerWidth >= 540 ? 3 : 2;
     const districtCount = data[stateCode]?.districts
-      ? Object.keys(data[stateCode].districts).length
+      ? Object.keys(data[stateCode].districts).filter(
+          (districtName) => districtName !== 'Unknown'
+        ).length
       : 0;
     const gridRowCount = Math.ceil(districtCount / gridColumnCount);
     return gridRowCount;

@@ -36,6 +36,7 @@ const StateDropdown = ({stateCode}) => {
       friction: 20,
     },
   });
+  const propsStateCode = stateCode;
 
   return (
     <div className="StateDropdown">
@@ -50,9 +51,19 @@ const StateDropdown = ({stateCode}) => {
 
       {transitions.map(({item, key, props}) =>
         item ? (
-          <animated.div className="dropdown" style={props} ref={dropdownRef}>
+          <animated.div
+            className="dropdown"
+            style={props}
+            ref={dropdownRef}
+            key={key}
+          >
             {Object.keys(STATE_NAMES)
-              .filter((stateCode) => stateCode !== 'UN' && stateCode !== 'TT')
+              .filter(
+                (stateCode) =>
+                  stateCode !== 'UN' &&
+                  stateCode !== 'TT' &&
+                  stateCode !== propsStateCode
+              )
               .map((stateCode) => (
                 <h1
                   key={stateCode}
