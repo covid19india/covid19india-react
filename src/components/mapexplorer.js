@@ -59,11 +59,11 @@ function MapExplorer({
 
   const [currentMap, setCurrentMap] = useState({
     code: stateCode,
-    view:
+    view: MAP_VIEWS.DISTRICTS,
+    option:
       MAP_META[stateCode].mapType === MAP_TYPES.COUNTRY
-        ? MAP_VIEWS.STATES
-        : MAP_VIEWS.DISTRICTS,
-    option: MAP_OPTIONS.TOTAL,
+        ? MAP_OPTIONS.HOTSPOTS
+        : MAP_OPTIONS.TOTAL,
   });
   const currentMapMeta = MAP_META[currentMap.code];
 

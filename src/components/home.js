@@ -37,7 +37,7 @@ function Home(props) {
   });
 
   const [anchor, setAnchor] = useState(null);
-  const [mapStatistic, setMapStatistic] = useState('confirmed');
+  const [mapStatistic, setMapStatistic] = useState('active');
 
   const [date, setDate] = useState('');
 
