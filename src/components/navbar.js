@@ -32,6 +32,7 @@ function Navbar({
       <div
         className="navbar-left"
         onClick={() => {
+          window.scrollTo({top: 0, behavior: 'smooth'});
           setShowLanguageSwitcher((prevState) => !prevState);
         }}
       >
