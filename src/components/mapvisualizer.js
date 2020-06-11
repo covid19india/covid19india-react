@@ -187,7 +187,6 @@ function MapVisualizer({
         : COLORS[statistic];
     };
 
-    console.log(data);
     /* Draw map */
     const t = d3.transition().duration(D3_TRANSITION_DURATION);
     let onceTouchedRegion = null;
@@ -236,7 +235,6 @@ function MapVisualizer({
       .on('click', (d) => {
         d3.event.stopPropagation();
         const stateCode = STATE_CODES[d.properties.st_nm];
-        console.log(data);
         if (
           onceTouchedRegion ||
           mapMeta.mapType === MAP_TYPES.STATE ||
