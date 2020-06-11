@@ -59,11 +59,11 @@ function MapExplorer({
 
   const [currentMap, setCurrentMap] = useState({
     code: stateCode,
-    view:
+    view: MAP_VIEWS.DISTRICTS,
+    option:
       MAP_META[stateCode].mapType === MAP_TYPES.COUNTRY
-        ? MAP_VIEWS.STATES
-        : MAP_VIEWS.DISTRICTS,
-    option: MAP_OPTIONS.TOTAL,
+        ? MAP_OPTIONS.HOTSPOTS
+        : MAP_OPTIONS.TOTAL,
   });
   const currentMapMeta = MAP_META[currentMap.code];
 
@@ -448,8 +448,8 @@ function MapExplorer({
         ))}
       </div>
 
-      <h6 className={classnames('footnote', 'table-fineprint')}>
-        &dagger; {`${t('Based on 2019 population projection by NCP')} (`}
+      <h6 className={classnames('footnote')}>
+        &dagger; {`${t('Based on 2019 population projection by NCP, see ')}`}
         <a
           href="https://nhm.gov.in/New_Updates_2018/Report_Population_Projection_2019.pdf"
           target="_noblank"
@@ -457,7 +457,6 @@ function MapExplorer({
         >
           {t('source')}
         </a>
-        )
       </h6>
     </div>
   );

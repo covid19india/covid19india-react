@@ -130,21 +130,20 @@ function MapVisualizer({
 
     let features =
       currentMap.view === MAP_VIEWS.STATES
-        ? currentMap.option === MAP_OPTIONS.HOTSPOTS
-          ? [
-              ...topojson.feature(
-                geoData,
-                geoData.objects[mapMeta.graphObjectStates]
-              ).features,
-              ...topojson.feature(
-                geoData,
-                geoData.objects[mapMeta.graphObjectDistricts]
-              ).features,
-            ]
-          : topojson.feature(
+        ? topojson.feature(geoData, geoData.objects[mapMeta.graphObjectStates])
+            .features
+        : mapMeta.mapType === MAP_TYPES.COUNTRY &&
+          currentMap.option === MAP_OPTIONS.HOTSPOTS
+        ? [
+            ...topojson.feature(
               geoData,
               geoData.objects[mapMeta.graphObjectStates]
-            ).features
+            ).features,
+            ...topojson.feature(
+              geoData,
+              geoData.objects[mapMeta.graphObjectDistricts]
+            ).features,
+          ]
         : topojson.feature(
             geoData,
             geoData.objects[mapMeta.graphObjectDistricts]
@@ -219,19 +218,6 @@ function MapVisualizer({
               if (onceTouchedRegion === d) onceTouchedRegion = null;
               else onceTouchedRegion = d;
             })
-            .on('click', (d) => {
-              d3.event.stopPropagation();
-              if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE)
-                return;
-              // Disable pointer events till the new map is rendered
-              svg.attr('pointer-events', 'none');
-              svg
-                .select('.regions')
-                .selectAll('path')
-                .attr('pointer-events', 'none');
-              // Switch map
-              changeMap(STATE_CODES[d.properties.st_nm]);
-            })
             .attr('fill', fillColor)
             .attr('stroke', strokeColor);
           sel.append('title');
@@ -245,7 +231,22 @@ function MapVisualizer({
               .attr('stroke', strokeColor)
           )
       )
-      .attr('pointer-events', 'all');
+      .attr('pointer-events', 'all')
+      .on('click', (d) => {
+        d3.event.stopPropagation();
+        const stateCode = STATE_CODES[d.properties.st_nm];
+        if (
+          onceTouchedRegion ||
+          mapMeta.mapType === MAP_TYPES.STATE ||
+          !data[stateCode]?.districts
+        )
+          return;
+        // Disable pointer events till the new map is rendered
+        svg.attr('pointer-events', 'none');
+        svg.select('.regions').selectAll('path').attr('pointer-events', 'none');
+        // Switch map
+        changeMap(STATE_CODES[d.properties.st_nm]);
+      });
 
     regionSelection.select('title').text((d) => {
       if (currentMap.option === MAP_OPTIONS.TOTAL) {

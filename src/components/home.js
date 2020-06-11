@@ -2,6 +2,8 @@ import {MAP_META} from '../constants';
 import useStickySWR from '../hooks/usestickyswr';
 import {fetcher} from '../utils/commonfunctions';
 
+import 'intersection-observer';
+
 import React, {useState, useRef, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 import {useIsVisible} from 'react-is-visible';
@@ -37,7 +39,7 @@ function Home(props) {
   });
 
   const [anchor, setAnchor] = useState(null);
-  const [mapStatistic, setMapStatistic] = useState('confirmed');
+  const [mapStatistic, setMapStatistic] = useState('active');
 
   const [date, setDate] = useState('');
 

@@ -3,7 +3,7 @@ import {useTransition, animated} from 'react-spring';
 
 const FADE_IN = {
   opacity: 1,
-  transform: 'translate3d(0, 0px, 0)',
+  transform: 'translate3d(0, 0px, 0) scale(1)',
   zIndex: 999,
   position: 'absolute',
   pointerEvents: 'none',
@@ -11,7 +11,7 @@ const FADE_IN = {
 
 const FADE_OUT = {
   opacity: 0,
-  transform: 'translate3d(0, 2px, 0)',
+  transform: 'translate3d(0, 0px, 0) scale(0.99)',
   zIndex: 999,
   position: 'absolute',
   pointerEvents: 'none',
@@ -46,9 +46,13 @@ const Tooltip = ({data, children}) => {
 
       {transitions.map(({item, key, props}) =>
         item ? (
-          <animated.div style={props}>
-            <div key={key} className="message">
-              <p>{data}</p>
+          <animated.div key={key} style={props}>
+            <div className="message">
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: data.replace(/\n/g, '<br/>'),
+                }}
+              ></p>
             </div>
           </animated.div>
         ) : (
