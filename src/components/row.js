@@ -125,7 +125,7 @@ function PureDistrictRow({
 
   return (
     <div
-      className={classnames('row', {
+      className={classnames('row', 'district', {
         'is-highlighted': regionHighlighted?.districtName === districtName,
       })}
       onMouseEnter={highlightDistrict}
