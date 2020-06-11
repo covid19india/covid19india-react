@@ -1860,6 +1860,10 @@ abbr {
         background: $gray-light-opaque;
         font-size: 13px;
         font-weight: 900;
+
+        &:hover {
+          background: $gray-hover !important;
+        }
       }
 
       .state-name,
@@ -5142,6 +5146,12 @@ footer {
 
     .modal {
       background: #1e1e30bb !important;
+    }
+  }
+
+  .StateDropdown {
+    .dropdown {
+      background: #1e1e30 !important;
     }
   }
 }
