@@ -8,7 +8,6 @@
     "@primer/octicons-v2-react": "0.0.0-53e900d",
     "@testing-library/jest-dom": "^5.9.0",
     "@testing-library/react": "^10.0.6",
-    "animejs": "^3.2.0",
     "axios": "^0.19.2",
     "classnames": "^2.2.6",
     "corejs-typeahead": "^1.3.1",

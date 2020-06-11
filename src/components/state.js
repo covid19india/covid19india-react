@@ -2,7 +2,7 @@ import DeltaBarGraph from './deltabargraph';
 import StateDropdown from './statedropdown';
 import StateMeta from './statemeta';
 
-import {PRIMARY_STATISTICS} from '../constants';
+import {PRIMARY_STATISTICS, COLORS} from '../constants';
 import {NUM_BARS_STATEPAGE, STATE_NAMES} from '../constants';
 import {
   fetcher,
@@ -11,13 +11,13 @@ import {
   getStatistic,
 } from '../utils/commonfunctions';
 
-import anime from 'animejs';
 import React, {useState, useMemo, lazy, Suspense} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
-import {useMeasure, useEffectOnce} from 'react-use';
+import {useSpring, animated, config} from 'react-spring';
+import {useMeasure} from 'react-use';
 import useSWR from 'swr';
 
 const TimeSeriesExplorer = lazy(() =>
@@ -47,26 +47,6 @@ function State(props) {
   const [regionHighlighted, setRegionHighlighted] = useState({
     stateCode: stateCode,
     districtName: null,
-  });
-
-  useEffectOnce(() => {
-    anime({
-      targets: '.highlight',
-      duration: 200,
-      delay: 500,
-      translateX:
-        mapStatistic === 'confirmed'
-          ? `${width * 0}px`
-          : mapStatistic === 'active'
-          ? `${width * 0.25}px`
-          : mapStatistic === 'recovered'
-          ? `${width * 0.5}px`
-          : mapStatistic === 'deceased'
-          ? `${width * 0.75}px`
-          : '0px',
-      easing: 'spring(1, 80, 90, 10)',
-      opacity: 1,
-    });
   });
 
   const {data: timeseries} = useSWR(
@@ -110,6 +90,16 @@ function State(props) {
     const gridRowCount = Math.ceil(districtCount / gridColumnCount);
     return gridRowCount;
   }, [data, stateCode]);
+
+  const [spring, set] = useSpring(() => ({
+    transform: `translateX(${width * 0}px)`,
+    opacity: 0,
+    config: config.stiff,
+  }));
+
+  setTimeout(() => {
+    set({opacity: 1});
+  }, 1500);
 
   return (
     <React.Fragment>
@@ -160,23 +150,16 @@ function State(props) {
           </div>
 
           <div className="map-switcher" ref={mapSwitcher}>
-            <div
-              className={`highlight ${mapStatistic}`}
-              style={{
-                transform: `translateX(${width * 0}px)`,
-                opacity: 0,
-              }}
-            ></div>
+            <animated.div className="highlight" style={spring}></animated.div>
             {PRIMARY_STATISTICS.map((statistic, index) => (
               <div
                 key={index}
                 className="clickable"
                 onClick={() => {
                   setMapStatistic(statistic);
-                  anime({
-                    targets: '.highlight',
-                    translateX: `${width * index * 0.25}px`,
-                    easing: 'spring(1, 80, 90, 10)',
+                  set({
+                    background: `${COLORS[statistic]}20`,
+                    transform: `translateX(${width * index * 0.25}px)`,
                   });
                 }}
               ></div>
