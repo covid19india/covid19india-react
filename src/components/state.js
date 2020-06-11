@@ -2,6 +2,7 @@ import DeltaBarGraph from './deltabargraph';
 import StateDropdown from './statedropdown';
 import StateMeta from './statemeta';
 
+import {PRIMARY_STATISTICS} from '../constants';
 import {NUM_BARS_STATEPAGE, STATE_NAMES} from '../constants';
 import {
   fetcher,
@@ -166,50 +167,20 @@ function State(props) {
                 opacity: 0,
               }}
             ></div>
-            <div
-              className="clickable"
-              onClick={() => {
-                setMapStatistic('confirmed');
-                anime({
-                  targets: '.highlight',
-                  translateX: `${width * 0}px`,
-                  easing: 'spring(1, 80, 90, 10)',
-                });
-              }}
-            ></div>
-            <div
-              className="clickable"
-              onClick={() => {
-                setMapStatistic('active');
-                anime({
-                  targets: '.highlight',
-                  translateX: `${width * 0.25}px`,
-                  easing: 'spring(1, 80, 90, 10)',
-                });
-              }}
-            ></div>
-            <div
-              className="clickable"
-              onClick={() => {
-                setMapStatistic('recovered');
-                anime({
-                  targets: '.highlight',
-                  translateX: `${width * 0.5}px`,
-                  easing: 'spring(1, 80, 90, 10)',
-                });
-              }}
-            ></div>
-            <div
-              className="clickable"
-              onClick={() => {
-                setMapStatistic('deceased');
-                anime({
-                  targets: '.highlight',
-                  translateX: `${width * 0.75}px`,
-                  easing: 'spring(1, 80, 90, 10)',
-                });
-              }}
-            ></div>
+            {PRIMARY_STATISTICS.map((statistic, index) => (
+              <div
+                key={index}
+                className="clickable"
+                onClick={() => {
+                  setMapStatistic(statistic);
+                  anime({
+                    targets: '.highlight',
+                    translateX: `${width * index * 0.25}px`,
+                    easing: 'spring(1, 80, 90, 10)',
+                  });
+                }}
+              ></div>
+            ))}
           </div>
 
           <Level data={data[stateCode]} />

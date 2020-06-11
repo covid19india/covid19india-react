@@ -409,6 +409,7 @@ h6 {
   .state-left {
     margin-left: 2.5rem;
     margin-right: 2.5rem;
+    position: relative;
   }
 
   .state-right {
@@ -1532,7 +1533,7 @@ h6 {
   flex-direction: row;
   justify-content: space-between;
   position: absolute;
-  top: 12rem;
+  top: 7rem;
   width: 30rem;
 
   .highlight {
