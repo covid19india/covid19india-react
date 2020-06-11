@@ -1327,23 +1327,6 @@ h6 {
     justify-content: space-around;
     padding: 1rem;
 
-    &.timeline {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      padding: 1rem;
-      position: absolute;
-      top: 13.25rem;
-
-      .highlight {
-        color: $brown !important;
-        position: absolute;
-        text-align: center;
-        top: 2.5rem;
-        width: 100%;
-      }
-    }
-
     & > * {
       align-self: center;
       margin-left: 0.5rem;
@@ -1367,26 +1350,88 @@ h6 {
       }
     }
 
-    .timeline-icon {
+    .calendar-icon {
       display: flex;
       flex-direction: column;
       justify-content: center;
 
-      svg {
-        display: flex;
-        fill: #a6abb0 !important;
-        flex-direction: row;
-        justify-content: center;
-        stroke: #a6abb0 !important;
-        stroke-width: 0.5 !important;
+      .react-date-picker {
+        &__calendar-button {
+          background: none;
+          outline: none;
+        }
+        &__wrapper {
+          border: none
+        }
+        &__inputGroup {
+          display: none;
+        }
+      }
 
-        path {
-          align-self: center;
+      .react-date-picker,
+      .react-date-picker *,
+      .react-date-picker *::before,
+      .react-date-picker *::after {
+        border: 0;
+      }
+
+      .react-calendar {
+        background: $gray-light-opaque;
+        border: 2px solid $gray-light;
+        border-radius: 5px;
+
+        button:not(.react-date-picker__calendar-button) {
+          border-radius: 5px;
+          font-family: 'archia';
+          padding: 1rem;
+          transition: all 0.1s ease-in-out;
+
+          &:disabled {
+            border-radius: 0 !important;
+            color: $gray-mid;
+            cursor: not-allowed;
+          }
         }
 
-        &:hover {
-          fill: $gray !important;
-          stroke: $gray !important;
+        &__tile--now {
+          background: inherit;
+        }
+
+        &__tile--active {
+          background: $pblue-light;
+          color: $pblue !important;
+
+          &:hover {
+            background: $pblue-hover;
+            color: $pblue !important;
+          }
+        }
+
+        &__month-view__weekdays__weekday {
+          font-family: 'archia';
+          margin-bottom: 0.5rem;
+        }
+
+        &__month-view__days__day--weekend,
+        &__month-view__days__day {
+          color: $gray;
+        }
+
+        &__navigation__label {
+          color: $gray !important;
+        }
+
+        &__navigation__arrow {
+          color: $gray;
+        }
+      }
+
+      svg {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        path {
+          align-self: center;
         }
       }
     }

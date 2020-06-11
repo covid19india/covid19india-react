@@ -91,8 +91,8 @@ function Home(props) {
               <Search />
             </Suspense>
 
-            <Suspense>
-              {timeseries && (
+            <Suspense fallback={<div />}>
+            {timeseries && (
                 <Actions
                   {...{
                     setDate,
@@ -100,8 +100,9 @@ function Home(props) {
                     date,
                   }}
                 />
-              )}
+            )}
             </Suspense>
+
           </div>
 
           {data && (

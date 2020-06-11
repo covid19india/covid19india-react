@@ -187,7 +187,6 @@ function MapVisualizer({
         : COLORS[statistic];
     };
 
-    console.log(data);
     /* Draw map */
     const t = d3.transition().duration(D3_TRANSITION_DURATION);
     let onceTouchedRegion = null;
