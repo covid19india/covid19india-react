@@ -1,4 +1,16 @@
-import {hi, te, gu, ta, bn} from 'date-fns/locale/';
+export const LOCALE_SHORTHANDS = {
+  english: 'en-US',
+  hindi: 'hi',
+  telugu: 'te',
+  kannada: 'en-US',
+  gujarati: 'gu',
+  marathi: 'en-US',
+  tamil: 'ta',
+  bengali: 'bn',
+  punjabi: 'en-US',
+  malayalam: 'en-US',
+  odiya: 'en-US',
+};
 
 export const PRIMARY_STATISTICS = [
   'confirmed',
@@ -389,20 +401,6 @@ export const RAW_DATA_PARTITIONS = {
     start: new Date(2020, 5, 5),
     end: new Date(),
   },
-};
-
-export const LOCALE_SHORTHANDS = {
-  english: null,
-  hindi: hi,
-  telugu: te,
-  kannada: null,
-  gujarati: gu,
-  marathi: null,
-  tamil: ta,
-  bengali: bn,
-  punjabi: null,
-  malayalam: null,
-  odiya: null,
 };
 
 export const ESSENTIALS_CATEGORIES = {

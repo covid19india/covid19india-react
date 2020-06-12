@@ -5,6 +5,17 @@ import {format, formatDistance, formatISO, subDays} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
 import i18n from 'i18next';
 
+let locale = null;
+
+const getLocale = () => {
+  import('date-fns/locale/').then((localePackage) => {
+    locale =
+      localePackage[
+        LOCALE_SHORTHANDS[i18n.language || window.localStorage.i18nextLng]
+      ];
+  });
+};
+
 export const isDevelopmentOrTest = () => {
   if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')
     return true;
@@ -24,8 +35,9 @@ export const getIndiaYesterdayISO = () => {
 };
 
 export const formatLastUpdated = (unformattedDate) => {
+  getLocale();
   return formatDistance(new Date(unformattedDate), new Date(), {
-    locale: LOCALE_SHORTHANDS[i18n.language],
+    locale: locale,
   });
 };
 
@@ -41,7 +53,7 @@ export const formatDate = (unformattedDate, formatString) => {
     unformattedDate += INDIA_ISO_SUFFIX;
   const date = utcToZonedTime(new Date(unformattedDate), 'Asia/Kolkata');
   return format(date, formatString, {
-    locale: LOCALE_SHORTHANDS[i18n.language],
+    locale: locale,
   });
 };
 

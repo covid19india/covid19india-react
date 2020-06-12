@@ -3,7 +3,7 @@ import {useTransition, animated} from 'react-spring';
 
 const FADE_IN = {
   opacity: 1,
-  transform: 'translate3d(0, 0px, 0) scale(1)',
+  transform: 'translate3d(0, 0px, 0)',
   zIndex: 999,
   position: 'absolute',
   pointerEvents: 'none',
@@ -11,7 +11,7 @@ const FADE_IN = {
 
 const FADE_OUT = {
   opacity: 0,
-  transform: 'translate3d(0, 0px, 0) scale(0.99)',
+  transform: 'translate3d(0, 2px, 0)',
   zIndex: 999,
   position: 'absolute',
   pointerEvents: 'none',
