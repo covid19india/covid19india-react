@@ -171,7 +171,9 @@ function Minigraph({timeseries, date: timelineDate}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(currProps.date, prevProps.date)) {
+  if (!equal(currProps.stateCode, prevProps.stateCode)) {
+    return false;
+  } else if (!equal(currProps.date, prevProps.date)) {
     return false;
   }
   return true;

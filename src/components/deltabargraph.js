@@ -61,6 +61,7 @@ function DeltaBarGraph({timeseries, statistic}) {
       .tickFormat((date) => formatDate(date, 'dd MMM'));
 
     const t = svg.transition().duration(D3_TRANSITION_DURATION);
+
     svg
       .select('.x-axis')
       .transition(t)
@@ -161,7 +162,12 @@ function DeltaBarGraph({timeseries, statistic}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.statistic, currProps.statistic)) return false;
+  if (!equal(prevProps.stateCode, currProps.stateCode)) {
+    return false;
+  } else if (!equal(prevProps.statistic, currProps.statistic)) {
+    return false;
+  }
+
   return true;
 };
 
