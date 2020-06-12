@@ -1,6 +1,7 @@
-import {STATE_NAMES} from '../constants';
+import {MAP_META, STATE_NAMES} from '../constants';
 
 import React, {useState, useRef} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {useTransition, animated} from 'react-spring';
 import {useClickAway} from 'react-use';
@@ -9,6 +10,7 @@ const StateDropdown = ({stateCode}) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef();
   const history = useHistory();
+  const {t} = useTranslation();
 
   useClickAway(dropdownRef, () => {
     setShowDropdown(false);
@@ -36,7 +38,6 @@ const StateDropdown = ({stateCode}) => {
       friction: 20,
     },
   });
-  const propsStateCode = stateCode;
 
   return (
     <div className="StateDropdown">
@@ -45,35 +46,30 @@ const StateDropdown = ({stateCode}) => {
         onClick={() => {
           setShowDropdown((prevData) => !prevData);
         }}
+        ref={dropdownRef}
       >
-        {STATE_NAMES[stateCode]}
+        {t(STATE_NAMES[stateCode])}
       </h1>
 
       {transitions.map(({item, key, props}) =>
         item ? (
-          <animated.div
-            className="dropdown"
-            style={props}
-            ref={dropdownRef}
-            key={key}
-          >
-            {Object.keys(STATE_NAMES)
+          <animated.div className="dropdown" style={props} key={key}>
+            {Object.keys(MAP_META)
               .filter(
-                (stateCode) =>
-                  stateCode !== 'UN' &&
-                  stateCode !== 'TT' &&
-                  stateCode !== propsStateCode
+                (stateCodeItr) =>
+                  stateCodeItr !== 'TT' && stateCodeItr !== stateCode
               )
-              .map((stateCode) => (
+              .sort()
+              .map((stateCodeItr) => (
                 <h1
-                  key={stateCode}
+                  key={stateCodeItr}
                   className="item"
                   onClick={() => {
                     setShowDropdown(false);
-                    history.push(`/state/${stateCode}`);
+                    history.push(`/state/${stateCodeItr}`);
                   }}
                 >
-                  {STATE_NAMES[stateCode]}
+                  {t(STATE_NAMES[stateCodeItr])}
                 </h1>
               ))}
           </animated.div>

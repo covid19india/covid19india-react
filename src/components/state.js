@@ -11,7 +11,7 @@ import {
   getStatistic,
 } from '../utils/commonfunctions';
 
-import React, {useState, useMemo, lazy, Suspense} from 'react';
+import React, {useMemo, useState, lazy, Suspense} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
@@ -68,20 +68,6 @@ function State(props) {
       revalidateOnFocus: false,
     }
   );
-
-  useEffect(() => {
-    const districts = data[stateCode].districts;
-    const topDistrict = Object.keys(districts).sort(
-      (a, b) =>
-        getStatistic(districts[b], 'total', mapStatistic) -
-        getStatistic(districts[a], 'total', mapStatistic)
-    )[0];
-    setRegionHighlighted({
-      stateCode: stateCode,
-      districtName: topDistrict,
-    });
-    setShowAllDistricts(false);
-  }, [stateCode]);
 
   const toggleShowAllDistricts = () => {
     setShowAllDistricts(!showAllDistricts);
@@ -183,7 +169,7 @@ function State(props) {
           </div>
 
           <Level data={data[stateCode]} />
-          <Minigraph timeseries={timeseries[stateCode]} />
+          <Minigraph timeseries={timeseries[stateCode]} {...{stateCode}} />
 
           <Suspense fallback={<div />}>
             <MapExplorer
@@ -292,7 +278,8 @@ function State(props) {
                   </div>
                 )}
                 <DeltaBarGraph
-                  timeseries={timeseries[stateCode]}
+                  timeseries={timeseries[stateCode] || {}}
+                  {...{stateCode}}
                   statistic={mapStatistic}
                 />
               </div>

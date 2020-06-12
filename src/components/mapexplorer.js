@@ -121,7 +121,7 @@ function MapExplorer({
         return;
       }
       if (newMapMeta.mapType === MAP_TYPES.STATE) {
-        const districts = data[stateCode].districts;
+        const districts = data[stateCode].districts || {};
         const topDistrict = Object.keys(districts).sort(
           (a, b) =>
             getStatistic(districts[b], 'total', mapStatistic) -
@@ -160,6 +160,10 @@ function MapExplorer({
     },
     [data, currentMap.option, mapStatistic, setRegionHighlighted]
   );
+
+  useEffect(() => {
+    switchMap(stateCode);
+  }, [stateCode, switchMap]);
 
   const panelState = useMemo(() => {
     const stateCode =
@@ -463,24 +467,22 @@ function MapExplorer({
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.regionHighlighted, currProps.regionHighlighted)) {
+  if (!equal(prevProps.stateCode, currProps.stateCode)) {
     return false;
-  }
-  if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
+  } else if (!equal(prevProps.regionHighlighted, currProps.regionHighlighted)) {
     return false;
-  }
-  if (!equal(prevProps.anchor, currProps.anchor)) {
+  } else if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
     return false;
-  }
-  if (
+  } else if (!equal(prevProps.anchor, currProps.anchor)) {
+    return false;
+  } else if (
     !equal(
       prevProps.data?.TT?.meta?.['last_updated'],
       currProps.data?.TT?.meta?.['last_updated']
     )
   ) {
     return false;
-  }
-  if (!equal(prevProps.data?.TT?.total, currProps.data?.TT?.total)) {
+  } else if (!equal(prevProps.data?.TT?.total, currProps.data?.TT?.total)) {
     return false;
   }
   return true;
