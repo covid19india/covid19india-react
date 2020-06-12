@@ -142,9 +142,8 @@ h6 {
   align-items: center;
   display: flex;
   flex-direction: row;
-  height: 3.9rem;
+  height: 4rem;
   justify-content: space-between;
-  padding-bottom: 1rem;
 
   a {
     color: inherit;
@@ -206,10 +205,6 @@ h6 {
     display: flex;
     flex-direction: column;
     font-family: 'archia';
-    height: 100vh;
-    position: absolute;
-    top: 3.85rem;
-    transform: none;
     width: 100vw;
     z-index: 9999;
 
@@ -409,6 +404,7 @@ h6 {
   .state-left {
     margin-left: 2.5rem;
     margin-right: 2.5rem;
+    position: relative;
   }
 
   .state-right {
@@ -1532,7 +1528,7 @@ h6 {
   flex-direction: row;
   justify-content: space-between;
   position: absolute;
-  top: 12rem;
+  top: 7rem;
   width: 30rem;
 
   .highlight {
@@ -1864,6 +1860,10 @@ abbr {
         background: $gray-light-opaque;
         font-size: 13px;
         font-weight: 900;
+
+        &:hover {
+          background: $gray-hover !important;
+        }
       }
 
       .state-name,
@@ -4519,10 +4519,6 @@ footer {
       padding-bottom: 0;
       padding-top: 0;
 
-      &:hover {
-        background: $gray-light-opaque !important;
-      }
-
       & > span {
         display: flex;
         flex-direction: row;
@@ -4545,7 +4541,6 @@ footer {
       padding-top: 5.75rem;
       top: 0;
       width: 15rem;
-      z-index: -1 !important;
 
       & > * {
         border: 0;
@@ -4559,10 +4554,7 @@ footer {
 
   .dark-mode {
     .Navbar,
-    .expand {
-      background: #1e1e30 !important;
-    }
-
+    .expand,
     .navbar-right {
       background: #1e1e30 !important;
     }
@@ -4597,6 +4589,7 @@ footer {
     flex-direction: column;
     margin-left: 0;
     margin-right: 0;
+    padding-top: 1rem;
     width: 100%;
 
     .home-left,
@@ -4783,7 +4776,7 @@ footer {
 
   .Navbar {
     .expand {
-      height: calc(100% - 3.9rem);
+      height: calc(100% - 4rem);
       overflow: auto;
       transform: none !important;
     }
@@ -4870,10 +4863,6 @@ footer {
 
     .navbar-middle {
       color: #bdbdbd;
-    }
-
-    .navbar-right {
-      background: #1e1e30 !important;
     }
   }
 
@@ -5157,6 +5146,12 @@ footer {
 
     .modal {
       background: #1e1e30bb !important;
+    }
+  }
+
+  .StateDropdown {
+    .dropdown {
+      background: #1e1e30 !important;
     }
   }
 }

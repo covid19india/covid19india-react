@@ -164,7 +164,13 @@ function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
       const date = xScale.invert(xm);
       const bisectDate = d3.bisector((date) => parseIndiaDate(date)).left;
       const index = bisectDate(dates, date, 1);
-      setHighlightedDate(dates[index]);
+      const dateLeft = dates[index - 1];
+      const dateRight = dates[index];
+      setHighlightedDate(
+        date - parseIndiaDate(dateLeft) < parseIndiaDate(dateRight) - date
+          ? dateLeft
+          : dateRight
+      );
     }
 
     function mouseout() {
