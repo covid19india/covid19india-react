@@ -7,7 +7,12 @@ import {
 import {useResizeObserver} from '../hooks/useresizeobserver';
 import {capitalize, formatNumber} from '../utils/commonfunctions';
 
-import * as d3 from 'd3';
+import {range, quantile} from 'd3-array';
+import {axisRight, axisBottom} from 'd3-axis';
+import {format} from 'd3-format';
+import {interpolate, interpolateRound, quantize} from 'd3-interpolate';
+import {scaleLinear, scaleOrdinal, scaleBand} from 'd3-scale';
+import {select} from 'd3-selection';
 import React, {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 
@@ -37,7 +42,7 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
   // }, [data]);
 
   useEffect(() => {
-    const svg = d3.select(svgRef.current);
+    const svg = select(svgRef.current);
     let {width, height} =
       dimensions || wrapperRef.current.getBoundingClientRect();
 
@@ -99,12 +104,11 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
         .attr('transform', `translate(48,50)`)
         .transition(t)
         .call(
-          d3
-            .axisRight(yScale)
+          axisRight(yScale)
             .tickSize(0)
             .tickPadding(0)
             .tickValues([domainMax / 10, (domainMax * 2) / 5, domainMax])
-            .tickFormat(d3.format('0~s'))
+            .tickFormat(format('0~s'))
         )
         .selectAll('.tick text')
         .style('text-anchor', 'middle');
@@ -183,7 +187,7 @@ function legend({
   let tickAdjust = (g) => {
     const ticks = g.selectAll('.tick line');
     ticks.attr('y1', marginTop + marginBottom - height);
-    // d3.select(ticks.nodes()[ticks.size() - 1]).remove();
+    // select(ticks.nodes()[ticks.size() - 1]).remove();
   };
   let x;
 
@@ -193,9 +197,7 @@ function legend({
 
     x = color
       .copy()
-      .rangeRound(
-        d3.quantize(d3.interpolate(marginLeft, width - marginRight), n)
-      );
+      .rangeRound(quantize(interpolate(marginLeft, width - marginRight), n));
 
     svg
       .select('.ramp')
@@ -207,9 +209,7 @@ function legend({
       .attr('preserveAspectRatio', 'none')
       .attr(
         'xlink:href',
-        ramp(
-          color.copy().domain(d3.quantize(d3.interpolate(0, 1), n))
-        ).toDataURL()
+        ramp(color.copy().domain(quantize(interpolate(0, 1), n))).toDataURL()
       );
   }
 
@@ -225,7 +225,7 @@ function legend({
     x = Object.assign(
       color
         .copy()
-        .interpolator(d3.interpolateRound(marginLeft, width - marginRight)),
+        .interpolator(interpolateRound(marginLeft, width - marginRight)),
       {
         range() {
           return [marginLeft, width - marginRight];
@@ -249,12 +249,10 @@ function legend({
     if (!x.ticks) {
       if (tickValues === undefined) {
         const n = Math.round(ticks + 1);
-        tickValues = d3
-          .range(n)
-          .map((i) => d3.quantile(color.domain(), i / (n - 1)));
+        tickValues = range(n).map((i) => quantile(color.domain(), i / (n - 1)));
       }
       if (typeof tickFormat !== 'function') {
-        tickFormat = d3.format(tickFormat === undefined ? ',f' : tickFormat);
+        tickFormat = format(tickFormat === undefined ? ',f' : tickFormat);
       }
     }
   }
@@ -271,11 +269,10 @@ function legend({
       tickFormat === undefined
         ? (d) => d
         : typeof tickFormat === 'string'
-        ? d3.format(tickFormat)
+        ? format(tickFormat)
         : tickFormat;
 
-    x = d3
-      .scaleLinear()
+    x = scaleLinear()
       .domain([-1, color.range().length - 1])
       .rangeRound([marginLeft, width - marginRight]);
 
@@ -290,7 +287,7 @@ function legend({
       .attr('height', height - marginTop - marginBottom)
       .attr('fill', (d) => d);
 
-    tickValues = d3.range(-1, thresholds.length);
+    tickValues = range(-1, thresholds.length);
     tickFormat = (i) => {
       if (i === -1) return thresholdFormat(1);
       else if (i === thresholds.length - 1) return;
@@ -308,8 +305,7 @@ function legend({
       .attr('opacity', 0)
       .attr('xlink:href', null);
     if (!ordinalWeights) {
-      x = d3
-        .scaleBand()
+      x = scaleBand()
         .domain(color.domain())
         .rangeRound([marginLeft, width - marginRight]);
       svg
@@ -322,8 +318,7 @@ function legend({
         .attr('height', height - marginTop - marginBottom)
         .attr('fill', color);
     } else {
-      const widthScale = d3
-        .scaleLinear()
+      const widthScale = scaleLinear()
         .domain([0, ordinalWeights.reduce((a, b) => a + b)])
         .rangeRound([0, width - marginLeft - marginRight]);
 
@@ -333,7 +328,7 @@ function legend({
           .reduce((acc, w) => acc + widthScale(w), marginLeft)
       );
 
-      x = d3.scaleOrdinal().domain(color.domain()).range(xPos);
+      x = scaleOrdinal().domain(color.domain()).range(xPos);
 
       svg
         .select('.bars')
@@ -363,8 +358,7 @@ function legend({
     .transition(t)
     .attr('class', 'axis')
     .call(
-      d3
-        .axisBottom(x)
+      axisBottom(x)
         .ticks(ticks, typeof tickFormat === 'string' ? tickFormat : undefined)
         .tickFormat(typeof tickFormat === 'function' ? tickFormat : undefined)
         .tickSize(tickSize)
@@ -390,7 +384,7 @@ function legend({
 
 function ramp(color, n = 256) {
   // const canvas = document.createElement('canvas');
-  const canvas = d3.select('.color-scale').node();
+  const canvas = select('.color-scale').node();
   const context = ((canvas.width = n), (canvas.height = 1), canvas).getContext(
     '2d'
   );

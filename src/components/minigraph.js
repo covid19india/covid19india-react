@@ -10,8 +10,13 @@ import {
 } from '../utils/commonfunctions';
 
 import classnames from 'classnames';
-import * as d3 from 'd3';
+import {min, max} from 'd3-array';
 import {interpolatePath} from 'd3-interpolate-path';
+import {scaleTime, scaleLinear} from 'd3-scale';
+import {select} from 'd3-selection';
+import {line, curveMonotoneX} from 'd3-shape';
+// eslint-disable-next-line
+import {transition} from 'd3-transition';
 import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useEffect, useRef, useMemo} from 'react';
@@ -38,17 +43,16 @@ function Minigraph({timeseries, date: timelineDate}) {
     const chartRight = 100 - margin.right;
     const chartBottom = 100 - margin.bottom;
 
-    const xScale = d3
-      .scaleTime()
+    const xScale = scaleTime()
       .clamp(true)
       .domain([parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])])
       .range([margin.left, chartRight]);
 
-    const dailyMin = d3.min(dates, (date) =>
+    const dailyMin = min(dates, (date) =>
       getStatistic(timeseries[date], 'delta', 'active')
     );
 
-    const dailyMax = d3.max(dates, (date) =>
+    const dailyMax = max(dates, (date) =>
       Math.max(
         getStatistic(timeseries[date], 'delta', 'confirmed'),
         getStatistic(timeseries[date], 'delta', 'recovered'),
@@ -58,20 +62,18 @@ function Minigraph({timeseries, date: timelineDate}) {
 
     const domainMinMax = Math.max(-dailyMin, dailyMax);
 
-    const yScale = d3
-      .scaleLinear()
+    const yScale = scaleLinear()
       .clamp(true)
       .domain([-domainMinMax, domainMinMax])
       .range([chartBottom, margin.top]);
 
     refs.current.forEach((ref, index) => {
-      const svg = d3.select(ref);
+      const svg = select(ref);
       const statistic = PRIMARY_STATISTICS[index];
       const color = COLORS[statistic];
 
-      const line = d3
-        .line()
-        .curve(d3.curveMonotoneX)
+      const linePath = line()
+        .curve(curveMonotoneX)
         .x((date) => xScale(parseIndiaDate(date)))
         .y((date) =>
           yScale(getStatistic(timeseries[date], 'delta', statistic))
@@ -88,7 +90,7 @@ function Minigraph({timeseries, date: timelineDate}) {
               .attr('fill', 'none')
               .attr('stroke', color + '99')
               .attr('stroke-width', 2.5)
-              .attr('d', line)
+              .attr('d', linePath)
               .attr('stroke-dasharray', function () {
                 return (pathLength = this.getTotalLength());
               })
@@ -106,8 +108,8 @@ function Minigraph({timeseries, date: timelineDate}) {
               .transition()
               .duration(500)
               .attrTween('d', function (date) {
-                const previous = d3.select(this).attr('d');
-                const current = line(date);
+                const previous = select(this).attr('d');
+                const current = linePath(date);
                 return interpolatePath(previous, current);
               })
         );
