@@ -256,11 +256,11 @@ function Demographics(props) {
               maxDate={subDays(new Date(), 1)}
               format="dd/MM/y"
               calendarIcon={<Icon.Calendar />}
-              inputProps={
-                (onkeydown = (e) => {
-                  e.preventDefault();
-                })
-              }
+              // inputProps={
+              //   (onkeydown = (e) => {
+              //     e.preventDefault();
+              //   })
+              // }
               clearIcon={<Icon.XCircle />}
               onChange={(date) => {
                 setFilterDate(date);
