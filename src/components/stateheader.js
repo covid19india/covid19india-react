@@ -9,7 +9,7 @@ function StateHeader({data, stateCode}) {
   const {t} = useTranslation();
 
   return (
-    <div className="header">
+    <div className="StateHeader">
       <div className="header-left">
         <StateDropdown {...{stateCode}} />
         <h5>{`Last Updated on ${formatDate(
