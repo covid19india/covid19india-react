@@ -1,15 +1,10 @@
 import DeltaBarGraph from './deltabargraph';
 import MapSwitcher from './mapswitcher';
-import StateDropdown from './statedropdown';
+import StateHeader from './stateheader';
 import StateMeta from './statemeta';
 
 import {NUM_BARS_STATEPAGE, STATE_NAMES} from '../constants';
-import {
-  fetcher,
-  formatDate,
-  formatNumber,
-  getStatistic,
-} from '../utils/commonfunctions';
+import {fetcher, formatNumber, getStatistic} from '../utils/commonfunctions';
 
 import React, {useMemo, useState, lazy, Suspense} from 'react';
 import * as Icon from 'react-feather';
@@ -104,40 +99,7 @@ function State(props) {
 
       <div className="State">
         <div className="state-left">
-          <div className="header">
-            <div className="header-left">
-              <StateDropdown {...{stateCode}} />
-              <h5>{`Last Updated on ${formatDate(
-                data[stateCode].meta.last_updated,
-                'dd MMM, p'
-              )} IST`}</h5>
-            </div>
-
-            <div className="header-right">
-              <h5>{t('Tested')}</h5>
-              {data[stateCode]?.total?.tested && (
-                <React.Fragment>
-                  <h2>{formatNumber(data[stateCode].total.tested)}</h2>
-                  <h5 className="timestamp">
-                    {`As of ${formatDate(
-                      data[stateCode].meta.tested.last_updated,
-                      'dd MMMM'
-                    )}`}
-                  </h5>
-                  <h5>
-                    {'per '}
-                    <a
-                      href={data[stateCode].meta.tested.source}
-                      target="_noblank"
-                    >
-                      source
-                    </a>
-                  </h5>
-                </React.Fragment>
-              )}
-            </div>
-          </div>
-
+          <StateHeader data={data[stateCode]} {...{stateCode}} />
           <MapSwitcher {...{setMapStatistic}} />
           <Level data={data[stateCode]} />
           <Minigraph timeseries={timeseries[stateCode]} {...{stateCode}} />
