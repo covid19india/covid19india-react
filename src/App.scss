@@ -325,6 +325,68 @@ h6 {
   }
 }
 
+.StateHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  position: relative;
+  width: 100%;
+
+  & > * {
+    align-self: flex-start;
+  }
+
+  .header-left {
+    h1,
+    h5 {
+      margin: 0;
+    }
+
+    h1 {
+      color: $brick;
+      max-width: 20rem;
+    }
+
+    h5 {
+      color: $gray;
+      font-weight: 600;
+      margin-top: .5rem;
+    }
+  }
+
+  .header-right {
+    color: $purple-mid;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.1rem;
+    text-align: right;
+
+    h2,
+    h5 {
+      font-weight: 600;
+      margin: 0;
+    }
+
+    h2 {
+      color: $purple;
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+
+    a {
+      background: $purple-light;
+      color: inherit;
+      text-decoration: none;
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        background: $purple-hover;
+      }
+    }
+  }
+}
+
 .State {
   display: flex;
   flex-direction: row;
@@ -332,68 +394,6 @@ h6 {
   justify-content: center;
   margin-left: 10rem;
   margin-right: 5rem;
-
-  .header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-top: 1.5rem;
-    position: relative;
-    width: calc(100% - 3rem);
-
-    & > * {
-      align-self: flex-start;
-    }
-
-    .header-left {
-      h1,
-      h5 {
-        margin: 0;
-      }
-
-      h1 {
-        color: $brick;
-        max-width: 20rem;
-      }
-
-      h5 {
-        color: $gray;
-        font-weight: 600;
-        margin-top: .5rem;
-      }
-    }
-
-    .header-right {
-      color: $purple-mid;
-      display: flex;
-      flex-direction: column;
-      margin-top: 0.1rem;
-      text-align: right;
-
-      h2,
-      h5 {
-        font-weight: 600;
-        margin: 0;
-      }
-
-      h2 {
-        color: $purple;
-        font-weight: 900;
-        margin-bottom: 1rem;
-      }
-
-      a {
-        background: $purple-light;
-        color: inherit;
-        text-decoration: none;
-        transition: all 0.2s ease-in-out;
-
-        &:hover {
-          background: $purple-hover;
-        }
-      }
-    }
-  }
 
   .state-left,
   .state-right {
@@ -1958,20 +1958,10 @@ abbr {
     display: none;
   }
 
-  .header {
-    align-self: flex-start;
-    color: $gray;
-    display: flex;
-    flex-direction: column;
-
-    h1,
-    h6 {
-      margin: 0;
-    }
-
-    h6 {
-      margin-bottom: 2rem;
-      margin-top: 0.75rem;
+  .map-switcher {
+    .highlight,
+    .clickable {
+      height: 7rem;
     }
   }
 
@@ -2002,31 +1992,6 @@ abbr {
         font-weight: 600;
         text-align: right;
       }
-    }
-  }
-
-  .last-update {
-    align-self: center;
-    margin-bottom: auto;
-    margin-top: 0.25rem;
-    position: absolute;
-    right: 0;
-    text-align: right;
-    width: 10rem;
-
-    h6 {
-      color: $green-mid;
-      font-weight: 900;
-    }
-
-    h3 {
-      color: $green;
-      font-weight: 600;
-    }
-
-    h3,
-    h6 {
-      margin: 0;
     }
   }
 
@@ -2061,6 +2026,7 @@ abbr {
   .meta {
     height: 4rem;
     justify-content: space-between;
+    margin-top: 3rem;
     position: relative;
 
     h2 {

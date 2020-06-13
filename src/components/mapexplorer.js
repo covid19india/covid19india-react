@@ -1,22 +1,18 @@
+import Level from './level';
 import MapVisualizerLoader from './loaders/mapvisualizer';
+import MapSwitcher from './mapswitcher';
+import StateHeader from './stateheader';
 
 import {
   MAP_META,
   MAP_OPTIONS,
-  MAP_STATISTICS,
   MAP_TYPES,
   MAP_VIEWS,
   STATE_NAMES,
   STATE_POPULATIONS_MIL,
   UNKNOWN_DISTRICT_KEY,
 } from '../constants';
-import {
-  capitalize,
-  formatNumber,
-  formatDate,
-  formatLastUpdated,
-  getStatistic,
-} from '../utils/commonfunctions';
+import {formatNumber, getStatistic} from '../utils/commonfunctions';
 
 import {PinIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
@@ -35,7 +31,6 @@ import ReactDOM from 'react-dom';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
-import {useSprings, animated} from 'react-spring';
 
 const MapVisualizer = lazy(() =>
   import('./mapvisualizer' /* webpackChunkName: "MapVisualizer" */)
@@ -165,17 +160,6 @@ function MapExplorer({
     switchMap(stateCode);
   }, [stateCode, switchMap]);
 
-  const panelState = useMemo(() => {
-    const stateCode =
-      currentMap.view === MAP_VIEWS.STATES
-        ? regionHighlighted.stateCode
-        : currentMap.code;
-    const stateData = data[stateCode] || {};
-    return produce(stateData, (draft) => {
-      draft.state = STATE_NAMES[stateCode];
-    });
-  }, [data, regionHighlighted.stateCode, currentMap.view, currentMap.code]);
-
   const hoveredRegion = useMemo(() => {
     const hoveredData =
       (regionHighlighted.districtName
@@ -246,22 +230,6 @@ function MapExplorer({
     }
   };
 
-  const springs = useSprings(
-    MAP_STATISTICS.length,
-    MAP_STATISTICS.map((statistic) => ({
-      total: getStatistic(panelState, 'total', statistic),
-      delta: getStatistic(panelState, 'delta', statistic),
-      from: {
-        total: getStatistic(panelState, 'total', statistic),
-        delta: getStatistic(panelState, 'delta', statistic),
-      },
-      config: {
-        tension: 500,
-        clamp: true,
-      },
-    }))
-  );
-
   return (
     <div
       className={classnames(
@@ -281,68 +249,9 @@ function MapExplorer({
         </div>
       )}
 
-      <div className="header">
-        <h1>
-          {currentMap.code === 'TT'
-            ? t('India')
-            : t(STATE_NAMES[currentMap.code])}{' '}
-          {t('Map')}
-        </h1>
-        <h6>
-          {t('{{action}} over a {{mapType}} for more details', {
-            action: t(window.innerWidth <= 769 ? 'Tap' : 'Hover'),
-            mapType: t(
-              currentMapMeta.mapType === MAP_TYPES.COUNTRY
-                ? 'state/UT'
-                : 'District'
-            ),
-          })}
-        </h6>
-      </div>
-
-      <div className="map-stats">
-        {MAP_STATISTICS.map((statistic, index) => (
-          <div
-            key={statistic}
-            className={classnames('stats', statistic, {
-              focused: statistic === mapStatistic,
-            })}
-            onClick={() => setMapStatistic(statistic)}
-          >
-            <h5>{t(capitalize(statistic))}</h5>
-            <div className="stats-bottom">
-              <animated.h1>
-                {springs[index].total.interpolate((total) =>
-                  formatNumber(Math.floor(total))
-                )}
-              </animated.h1>
-              {statistic !== 'tested' && statistic !== 'active' && (
-                <animated.h6>
-                  {springs[index].delta.interpolate((delta) =>
-                    delta > 0 ? `+${formatNumber(Math.floor(delta))}` : '\u00A0'
-                  )}
-                </animated.h6>
-              )}
-              {statistic === 'tested' && (
-                <h6>
-                  {panelState?.total?.tested &&
-                    t('As of {{date}}', {
-                      date: formatDate(
-                        panelState.meta.tested['last_updated'],
-                        'dd MMM'
-                      ),
-                    })}
-                </h6>
-              )}
-            </div>
-            {statistic === 'tested' && panelState?.total?.tested && (
-              <a href={panelState.meta.tested.source} target="_noblank">
-                <Icon.Link />
-              </a>
-            )}
-          </div>
-        ))}
-      </div>
+      <StateHeader data={data[currentMap.code]} stateCode={currentMap.code} />
+      <MapSwitcher {...{setMapStatistic}} />
+      <Level data={data[currentMap.code]} />
 
       <div className="meta">
         {currentMapMeta.mapType === MAP_TYPES.STATE && (
@@ -354,18 +263,6 @@ function MapExplorer({
             <Icon.ArrowRightCircle />
           </div>
         )}
-
-        {currentMapMeta.mapType !== MAP_TYPES.STATE &&
-          panelState?.meta?.['last_updated'] && (
-            <div className="last-update">
-              <h6>{t('Last updated')}</h6>
-              <h3>
-                {`${formatLastUpdated(panelState.meta['last_updated'])} ${t(
-                  'ago'
-                )}`}
-              </h3>
-            </div>
-          )}
 
         <h2
           className={classnames(mapStatistic, {
