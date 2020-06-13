@@ -2,6 +2,8 @@ import {MAP_META} from '../constants';
 import useStickySWR from '../hooks/usestickyswr';
 import {fetcher} from '../utils/commonfunctions';
 
+import 'intersection-observer';
+
 import React, {useState, useRef, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 import {useIsVisible} from 'react-is-visible';
@@ -37,7 +39,7 @@ function Home(props) {
   });
 
   const [anchor, setAnchor] = useState(null);
-  const [mapStatistic, setMapStatistic] = useState('confirmed');
+  const [mapStatistic, setMapStatistic] = useState('active');
 
   const [date, setDate] = useState('');
 
@@ -87,12 +89,12 @@ function Home(props) {
       <div className="Home">
         <div className="home-left">
           <div className="header">
-            <Suspense>
+            <Suspense fallback={<div />}>
               <Search />
             </Suspense>
 
-            <Suspense>
-              {timeseries && (
+            {timeseries && (
+              <Suspense fallback={<div style={{minHeight: '56px'}} />}>
                 <Actions
                   {...{
                     setDate,
@@ -100,23 +102,23 @@ function Home(props) {
                     date,
                   }}
                 />
-              )}
-            </Suspense>
+              </Suspense>
+            )}
           </div>
 
           {data && (
-            <Suspense>
+            <Suspense fallback={<div />}>
               <Level data={data['TT']} />
             </Suspense>
           )}
 
-          <Suspense>
+          <Suspense fallback={<div />}>
             {timeseries && (
               <Minigraph timeseries={timeseries['TT']} {...{date}} />
             )}
           </Suspense>
 
-          <Suspense>
+          <Suspense fallback={<div />}>
             {data && (
               <Table {...{data, regionHighlighted, setRegionHighlighted}} />
             )}
@@ -152,7 +154,11 @@ function Home(props) {
           )}
         </div>
       </div>
-      <Footer />
+      {isVisible && (
+        <Suspense fallback={<div />}>
+          <Footer />
+        </Suspense>
+      )}
     </React.Fragment>
   );
 }

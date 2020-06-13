@@ -9,16 +9,15 @@ import {useClickAway} from 'react-use';
 
 const FADE_IN = {
   opacity: 1,
-  height: '12.5rem',
-  paddingTop: '7.5rem',
-  paddingBottom: '7.5rem',
+  marginTop: '7.5rem',
+  marginBottom: '30rem',
 };
 
 const FADE_OUT = {
   opacity: 0,
   height: '0rem',
-  paddingTop: '0rem',
-  paddingBottom: '0rem',
+  marginTop: '0rem',
+  marginBottom: '0rem',
 };
 
 function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
@@ -33,8 +32,8 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
     leave: FADE_OUT,
     config: {
       mass: 1,
-      tension: 210,
-      friction: 25,
+      tension: 100,
+      friction: 15,
     },
   });
 
@@ -69,14 +68,14 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
           ))}
         </div>
 
-        <span
+        <div
           className="close-button"
           onClick={() => {
             setShowLanguageSwitcher(false);
           }}
         >
           <ArrowUp width={16} />
-        </span>
+        </div>
       </animated.div>
     ) : (
       <animated.div key={key}></animated.div>

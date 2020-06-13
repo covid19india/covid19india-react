@@ -1,12 +1,39 @@
 import locales from '../i18n/locales.json';
 
-import anime from 'animejs';
 import React, {useState, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
-import {useSpring, animated} from 'react-spring';
-import {useEffectOnce, useLockBodyScroll, useWindowSize} from 'react-use';
+import {useSpring, useTransition, animated} from 'react-spring';
+import {useLockBodyScroll, useWindowSize} from 'react-use';
+
+const SLIDE_IN = {
+  position: 'absolute',
+  transform: 'translate3d(-20rem, 0, 0)',
+  height: '100vh',
+  zIndex: -1,
+};
+
+const SLIDE_OUT = {
+  position: 'absolute',
+  transform: 'translate3d(10rem, 0, 0)',
+};
+
+const SLIDE_IN_MOBILE = {
+  opacity: 1,
+  position: 'absolute',
+  height: '100vh',
+  top: 64,
+  zIndex: 999,
+};
+
+const SLIDE_OUT_MOBILE = {
+  opacity: 1,
+  position: 'absolute',
+  height: '100vh',
+  top: 64,
+  zIndex: 999,
+};
 
 function Navbar({
   pages,
@@ -20,12 +47,20 @@ function Navbar({
     : i18n?.options?.fallbackLng[0];
 
   const [expand, setExpand] = useState(false);
+
   useLockBodyScroll(expand);
   const windowSize = useWindowSize();
 
   const [spring, set, stop] = useSpring(() => ({opacity: 0}));
   set({opacity: 1});
   stop();
+
+  const transitions = useTransition(expand, null, {
+    from: windowSize.width < 769 ? SLIDE_IN_MOBILE : SLIDE_IN,
+    enter: windowSize.width < 769 ? SLIDE_OUT_MOBILE : SLIDE_OUT,
+    leave: windowSize.width < 769 ? SLIDE_IN_MOBILE : SLIDE_IN,
+    config: {mass: 1, tension: 210, friction: 26},
+  });
 
   return (
     <animated.div className="Navbar" style={spring}>
@@ -55,7 +90,7 @@ function Navbar({
           setExpand(!expand);
         }}
         onMouseEnter={() => {
-          if (window.innerWidth > 769) {
+          if (windowSize.width > 769) {
             setExpand(true);
           }
         }}
@@ -86,39 +121,34 @@ function Navbar({
                 <Icon.HelpCircle {...activeNavIcon('/about')} />
               </Link>
             </span>
-            <span>
-              {window.innerWidth > 768 && <SunMoon {...{darkMode}} />}
-            </span>
+            <span>{windowSize.width > 768 && <SunMoon {...{darkMode}} />}</span>
           </React.Fragment>
         )}
       </div>
 
-      {expand && (
-        <Expand {...{expand, pages, setExpand, darkMode, windowSize}} />
+      {transitions.map(({item, key, props}) =>
+        item ? (
+          <animated.div key={key} style={props}>
+            <Expand {...{pages, setExpand, darkMode, windowSize}} />
+          </animated.div>
+        ) : (
+          <animated.div key={key} style={props}></animated.div>
+        )
       )}
     </animated.div>
   );
 }
 
-function Expand({expand, pages, setExpand, darkMode, windowSize}) {
+function Expand({pages, setExpand, darkMode, windowSize}) {
   const expandElement = useRef(null);
   const {t} = useTranslation();
-
-  useEffectOnce(() => {
-    anime({
-      targets: expandElement.current,
-      translateX: '10.5rem',
-      easing: 'easeOutExpo',
-      duration: 250,
-    });
-  });
 
   return (
     <div
       className="expand"
       ref={expandElement}
       onMouseLeave={() => {
-        if (windowSize.width > 769) setExpand(false);
+        windowSize.width > 768 && setExpand(false);
       }}
     >
       {pages.map((page, i) => {
@@ -142,9 +172,9 @@ function Expand({expand, pages, setExpand, darkMode, windowSize}) {
         return null;
       })}
 
-      {window.innerWidth < 768 && <SunMoon {...{darkMode}} />}
+      {windowSize.width < 768 && <SunMoon {...{darkMode}} />}
 
-      <div className="expand-bottom fadeInUp" style={{animationDelay: '1s'}}>
+      <div className="expand-bottom">
         <h5>{t('A crowdsourced initiative.')}</h5>
       </div>
     </div>
@@ -154,10 +184,7 @@ function Expand({expand, pages, setExpand, darkMode, windowSize}) {
 export default Navbar;
 
 const navLinkProps = (path, animationDelay) => ({
-  className: `fadeInUp ${window.location.pathname === path ? 'focused' : ''}`,
-  style: {
-    animationDelay: `${animationDelay}s`,
-  },
+  className: `${window.location.pathname === path ? 'focused' : ''}`,
 });
 
 const activeNavIcon = (path) => ({

@@ -2,26 +2,29 @@ import Tooltip from './tooltip';
 
 import { PRIMARY_STATISTICS, STATE_NAMES } from '../constants';
 import {
-  abbreviate,
   capitalize,
   formatLastUpdated,
   formatNumber,
   getStatistic,
 } from '../utils/commonfunctions';
 
-import { TriangleUpIcon, TriangleDownIcon } from '@primer/octicons-v2-react';
+import {
+  ClockIcon,
+  GraphIcon,
+  FilterIcon,
+  FoldUpIcon,
+} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { Info } from 'react-feather';
-import * as Icon from 'react-feather';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { useSpring, animated, config } from 'react-spring';
 import { createBreakpoint, useLocalStorage } from 'react-use';
 
-const useBreakpoint = createBreakpoint({ L: 768, S: 350 });
+const useBreakpoint = createBreakpoint({ S: 768 });
 
 function PureCell({ statistic, data }) {
   const total = getStatistic(data, 'total', statistic);
@@ -40,9 +43,9 @@ function PureCell({ statistic, data }) {
   );
 
   return (
-    <td>
+    <div className="cell statistic">
       {statistic !== 'active' && (
-        <animated.span className={classnames('delta', `is-${statistic}`)}>
+        <animated.div className={classnames('delta', `is-${statistic}`)}>
           {spring.delta.interpolate((delta) =>
             delta > 0
               ? '\u2191' + formatNumber(Math.floor(delta))
@@ -50,12 +53,12 @@ function PureCell({ statistic, data }) {
                 ? '\u2193' + formatNumber(Math.floor(Math.abs(delta)))
                 : ''
           )}
-        </animated.span>
+        </animated.div>
       )}
-      <animated.span className="total">
+      <animated.div className="total">
         {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
-      </animated.span>
-    </td>
+      </animated.div>
+    </div>
   );
 }
 
@@ -76,27 +79,27 @@ function DistrictHeaderCell({ handleSortClick, statistic, sortData }) {
   const { t } = useTranslation();
 
   return (
-    <td onClick={() => handleSortClick(statistic)}>
-      <div className="heading-content">
-        <abbr
-          className={classnames({ [`is-${statistic}`]: breakpoint === 'S' })}
-          title={capitalize(statistic)}
+    <div className="cell heading" onClick={() => handleSortClick(statistic)}>
+      {sortData.sortColumn === statistic && (
+        <div
+          className={classnames('sort-icon', {
+            invert: sortData.isAscending,
+          })}
         >
-          {breakpoint === 'S'
-            ? capitalize(statistic.slice(0, 1))
-            : breakpoint === 'L'
-              ? capitalize(abbreviate(statistic))
-              : t(capitalize(statistic))}
-        </abbr>
-        {sortData.sortColumn === statistic && (
-          <div>
-            {sortData.isAscending && <TriangleUpIcon />}
-            {!sortData.isAscending && <TriangleDownIcon />}
-            <div />
-          </div>
-        )}
+          <FilterIcon size={10} />
+        </div>
+      )}
+      <div
+        className={classnames({
+          [`is-${statistic}`]: breakpoint === 'S',
+        })}
+        title={capitalize(statistic)}
+      >
+        {breakpoint === 'S'
+          ? capitalize(statistic.slice(0, 1))
+          : t(capitalize(statistic))}
       </div>
-    </td>
+    </div>
   );
 }
 
@@ -121,29 +124,25 @@ function PureDistrictRow({
   }, [regionHighlighted, districtName, setRegionHighlighted, stateCode]);
 
   return (
-    <tr
-      className={classnames('district', {
+    <div
+      className={classnames('row', 'district', {
         'is-highlighted': regionHighlighted?.districtName === districtName,
       })}
       onMouseEnter={highlightDistrict}
     >
-      <td>
-        <div className="title-chevron">
-          <span className="title-icon">
-            <span className="title">{t(districtName)}</span>
-            {data?.meta?.notes && (
-              <Tooltip {...{ data: data.meta.notes }}>
-                <Info />
-              </Tooltip>
-            )}
-          </span>
-        </div>
-      </td>
+      <div className="cell">
+        <div className="state-name">{t(districtName)}</div>
+        {data?.meta?.notes && (
+          <Tooltip {...{ data: data.meta.notes }}>
+            <Info size={16} />
+          </Tooltip>
+        )}
+      </div>
 
       {PRIMARY_STATISTICS.map((statistic) => (
         <Cell key={statistic} {...{ statistic }} data={data} />
       ))}
-    </tr>
+    </div>
   );
 }
 
@@ -180,20 +179,7 @@ function Row({ stateCode, data, regionHighlighted, setRegionHighlighted }) {
   const history = useHistory();
   const { t } = useTranslation();
 
-  const Chevron = useMemo(
-    () => (
-      <span
-        className={classnames(
-          'dropdown',
-          { rotateRightDown: showDistricts },
-          { rotateDownRight: !showDistricts }
-        )}
-      >
-        <Icon.ChevronDown />
-      </span>
-    ),
-    [showDistricts]
-  );
+  const rowElement = useRef();
 
   const handleSortClick = useCallback(
     (statistic) => {
@@ -257,88 +243,81 @@ function Row({ stateCode, data, regionHighlighted, setRegionHighlighted }) {
     }
   }, [showDistricts, data]);
 
+  const spring = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+    config: config.gentle,
+  });
+
   return (
     <React.Fragment>
-      <tr
+      <animated.div
         className={classnames(
-          'state',
+          'row',
           { 'is-total': stateCode === 'TT' },
           { 'is-highlighted': regionHighlighted?.stateCode === stateCode }
         )}
         onMouseEnter={highlightState}
         onClick={_setShowDistrict}
+        style={spring}
+        ref={rowElement}
       >
-        <td>
-          <div className="title-chevron">
-            {stateCode !== 'TT' && Chevron}
-            <span className="title-icon">
-              <span className="title">{t(STATE_NAMES[stateCode])}</span>
-              {data?.meta?.notes && (
-                <Tooltip {...{ data: data.meta.notes }}>
-                  <Info />
-                </Tooltip>
-              )}
-            </span>
-          </div>
-        </td>
+        <div className="cell">
+          <div className="state-name">{t(STATE_NAMES[stateCode])}</div>
+          {data?.meta?.notes && (
+            <Tooltip {...{ data: data.meta.notes }}>
+              <Info size={16} />
+            </Tooltip>
+          )}
+        </div>
 
         {PRIMARY_STATISTICS.map((statistic) => (
           <Cell key={statistic} {...{ data, statistic }} />
         ))}
-      </tr>
+      </animated.div>
 
       {showDistricts && (
         <React.Fragment>
-          <tr className="is-spacer">
-            <td colSpan={5}>
-              <p />
-            </td>
-          </tr>
-
-          <tr className={'state-last-update'}>
-            <td colSpan={4} style={{ paddingBottom: 0 }}>
-              <p className="spacer"></p>
-              {data?.meta?.['last_updated'] && (
-                <p>
-                  {`Last updated ${formatLastUpdated(
-                    data.meta.last_updated
-                  )} ${t('ago')}`}
-                </p>
-              )}
-              {data.districts['Unknown'] && (
-                <div className="disclaimer">
-                  <Icon.AlertCircle />
-                  {t('District-wise numbers are under reconciliation')}
-                </div>
-              )}
-            </td>
-            <td
-              align="center"
-              className="state-page-link"
-              colSpan={2}
-              style={{ width: '1.5rem' }}
+          <div className="state-meta">
+            {data?.meta?.['last_updated'] && (
+              <p className="last-updated">
+                <ClockIcon />
+                {capitalize(
+                  `${formatLastUpdated(data.meta.last_updated)} ${t('ago')}`
+                )}
+              </p>
+            )}
+            <div
+              className="state-page"
               onClick={() => {
                 history.push(`state/${stateCode}`);
               }}
             >
-              {t('See more details on {{state}}', {
-                state: t(STATE_NAMES[stateCode]),
-              })}
-            </td>
-          </tr>
+              <GraphIcon />
+              <span>
+                {t('See more details on {{state}}', {
+                  state: stateCode,
+                })}
+              </span>
+            </div>
+          </div>
 
-          <tr className={classnames('district-heading')}>
-            <td onClick={() => handleSortClick('districtName')}>
-              <div className="heading-content">
-                <abbr title="District">{t('District')}</abbr>
-                {sortData.sortColumn === 'districtName' && (
-                  <div>
-                    {sortData.isAscending && <TriangleDownIcon />}
-                    {!sortData.isAscending && <TriangleUpIcon />}
-                  </div>
-                )}
-              </div>
-            </td>
+          <div className={classnames('row', 'heading')}>
+            <div
+              className="cell heading"
+              onClick={() => handleSortClick('districtName')}
+            >
+              <div className="district-name">{t('District')}</div>
+              {sortData.sortColumn === 'districtName' && (
+                <div
+                  className={classnames('sort-icon', {
+                    invert: !sortData.isAscending,
+                  })}
+                >
+                  <FilterIcon size={10} />
+                </div>
+              )}
+            </div>
 
             {PRIMARY_STATISTICS.map((statistic) => (
               <DistrictHeaderCell
@@ -346,7 +325,7 @@ function Row({ stateCode, data, regionHighlighted, setRegionHighlighted }) {
                 {...{ statistic, sortData, handleSortClick }}
               />
             ))}
-          </tr>
+          </div>
         </React.Fragment>
       )}
 
@@ -367,11 +346,21 @@ function Row({ stateCode, data, regionHighlighted, setRegionHighlighted }) {
           ))}
 
       {showDistricts && (
-        <tr className="is-spacer">
-          <td colSpan={5}>
-            <p />
-          </td>
-        </tr>
+        <div className="spacer">
+          <p>{`End of ${STATE_NAMES[stateCode]}'s districts`}</p>
+          <div
+            className="fold"
+            onClick={() => {
+              setShowDistricts(false);
+              rowElement.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+              });
+            }}
+          >
+            <FoldUpIcon />
+          </div>
+        </div>
       )}
     </React.Fragment>
   );

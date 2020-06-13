@@ -1,46 +1,47 @@
-import Row from './row';
-
 import { PRIMARY_STATISTICS } from '../constants';
-import { capitalize, abbreviate, getStatistic } from '../utils/commonfunctions';
+import { capitalize, getStatistic } from '../utils/commonfunctions';
 
-import { TriangleUpIcon, TriangleDownIcon } from '@primer/octicons-v2-react';
+import { FilterIcon } from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useIsVisible } from 'react-is-visible';
 import { Link } from 'react-router-dom';
 import { useTrail, animated, config } from 'react-spring';
 import { createBreakpoint, useLocalStorage } from 'react-use';
 
-const useBreakpoint = createBreakpoint({ XL: 1280, L: 768, S: 350 });
+const Row = lazy(() => import('./row' /* webpackChunkName: "Row" */));
+
+const useBreakpoint = createBreakpoint({ S: 768 });
 
 function PureStateHeaderCell({ handleSort, sortData, statistic }) {
   const breakpoint = useBreakpoint();
   const { t } = useTranslation();
 
   return (
-    <th onClick={() => handleSort(statistic)}>
-      <div className="heading-content">
-        <abbr
-          className={classnames({ [`is-${statistic}`]: breakpoint === 'S' })}
-          title={capitalize(statistic)}
+    <div className="cell heading" onClick={() => handleSort(statistic)}>
+      {sortData.sortColumn === statistic && (
+        <div
+          className={classnames('sort-icon', {
+            invert: sortData.isAscending,
+          })}
         >
-          {breakpoint === 'S'
-            ? capitalize(statistic.slice(0, 1))
-            : breakpoint === 'L'
-              ? capitalize(abbreviate(statistic))
-              : t(capitalize(statistic))}
-        </abbr>
-        {sortData.sortColumn === statistic && (
-          <div>
-            {sortData.isAscending && <TriangleUpIcon />}
-            {!sortData.isAscending && <TriangleDownIcon />}
-            <div />
-          </div>
-        )}
+          <FilterIcon size={10} />
+        </div>
+      )}
+      <div
+        className={classnames({
+          [`is-${statistic}`]: breakpoint === 'S',
+        })}
+        title={capitalize(statistic)}
+      >
+        {breakpoint === 'S'
+          ? capitalize(statistic.slice(0, 1))
+          : t(capitalize(statistic))}
       </div>
-    </th>
+    </div>
   );
 }
 
@@ -59,7 +60,7 @@ function PureFineprintTop() {
 
   return (
     <React.Fragment>
-      <h5 className="table-fineprint">
+      <h5 className="text">
         {t('Compiled from State Govt. numbers')},{' '}
         <Link to="/about" style={{ color: '#6c757d' }}>
           {t('know more')}!
@@ -72,7 +73,6 @@ const FineprintTop = React.memo(PureFineprintTop);
 
 function Table({ data, regionHighlighted, setRegionHighlighted }) {
   const { t } = useTranslation();
-
   const [sortData, setSortData] = useLocalStorage('sortData', {
     sortColumn: 'confirmed',
     isAscending: false,
@@ -123,68 +123,72 @@ function Table({ data, regionHighlighted, setRegionHighlighted }) {
 
   set({ transform: 'translate3d(0, 0px, 0)', opacity: 1 });
 
+  const tableElement = useRef();
+  const isVisible = useIsVisible(tableElement);
+
   return (
     <React.Fragment>
-      <animated.span style={trail[0]}>
+      <animated.div className="fineprint" style={trail[0]}>
         <FineprintTop />
-      </animated.span>
+      </animated.div>
 
-      <animated.table className="table" style={trail[1]}>
-        <thead>
-          <tr>
-            <th
-              className="state-heading"
-              onClick={() => handleSortClick('stateName')}
-            >
-              <div className="heading-content">
-                <abbr title="State">{t('State/UT')}</abbr>
-                {sortData.sortColumn === 'stateName' && (
-                  <div>
-                    {sortData.isAscending && <TriangleDownIcon />}
-                    {!sortData.isAscending && <TriangleUpIcon />}
-                  </div>
-                )}
+      <animated.div className="table" style={trail[1]}>
+        <div className="row heading">
+          <div
+            className="cell heading"
+            onClick={() => handleSortClick('stateName')}
+          >
+            <div>{t('State/UT')}</div>
+            {sortData.sortColumn === 'stateName' && (
+              <div
+                className={classnames('sort-icon', {
+                  invert: !sortData.isAscending,
+                })}
+              >
+                <FilterIcon size={10} />
               </div>
-            </th>
-            {PRIMARY_STATISTICS.map((statistic) => (
-              <StateHeaderCell
-                key={statistic}
-                {...{ statistic, sortData }}
-                handleSort={() => {
-                  handleSortClick(statistic);
-                }}
+            )}
+          </div>
+
+          {PRIMARY_STATISTICS.map((statistic) => (
+            <StateHeaderCell
+              key={statistic}
+              {...{ statistic, sortData }}
+              handleSort={() => {
+                handleSortClick(statistic);
+              }}
+            />
+          ))}
+        </div>
+
+        {Object.keys(data)
+          .filter(
+            (stateCode) =>
+              stateCode !== 'TT' && data[stateCode].total?.confirmed
+          )
+          .sort((a, b) => sortingFunction(a, b))
+          .slice(0, isVisible ? Object.keys(data).length - 1 : 10)
+          .map((stateCode) => {
+            return (
+              <Row
+                key={stateCode}
+                data={data[stateCode]}
+                {...{ stateCode, regionHighlighted, setRegionHighlighted }}
               />
-            ))}
-          </tr>
-        </thead>
+            );
+          })}
 
-        <tbody>
-          {Object.keys(data)
-            .filter(
-              (stateCode) =>
-                stateCode !== 'TT' && data[stateCode].total?.confirmed
-            )
-            .sort((a, b) => sortingFunction(a, b))
-            .map((stateCode) => {
-              return (
-                <Row
-                  key={stateCode}
-                  data={data[stateCode]}
-                  {...{ stateCode, regionHighlighted, setRegionHighlighted }}
-                />
-              );
-            })}
-        </tbody>
+        {!isVisible && (
+          <span className="intersection" ref={tableElement}></span>
+        )}
 
-        <tbody>
-          <Row
-            key={'TT'}
-            data={data['TT']}
-            stateCode={'TT'}
-            {...{ regionHighlighted, setRegionHighlighted }}
-          />
-        </tbody>
-      </animated.table>
+        <Row
+          key={'TT'}
+          data={data['TT']}
+          stateCode={'TT'}
+          {...{ regionHighlighted, setRegionHighlighted }}
+        />
+      </animated.div>
     </React.Fragment>
   );
 }
