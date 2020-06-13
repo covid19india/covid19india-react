@@ -63,10 +63,10 @@ function PureCell({statistic, data}) {
 }
 
 const isCellEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.data.total, currProps.data.total)) {
+  if (!equal(prevProps.data?.total, currProps.data?.total)) {
     return false;
   }
-  if (!equal(prevProps.data.delta, currProps.data.delta)) {
+  if (!equal(prevProps.data?.delta, currProps.data?.delta)) {
     return false;
   }
   return true;
@@ -169,7 +169,13 @@ const isDistrictRowEqual = (prevProps, currProps) => {
 };
 const DistrictRow = React.memo(PureDistrictRow, isDistrictRowEqual);
 
-function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
+function Row({
+  stateCode,
+  districtName,
+  data,
+  regionHighlighted,
+  setRegionHighlighted,
+}) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useLocalStorage('districtSortData', {
     sortColumn: 'confirmed',
@@ -255,7 +261,10 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
         className={classnames(
           'row',
           {'is-total': stateCode === 'TT'},
-          {'is-highlighted': regionHighlighted?.stateCode === stateCode}
+          {
+            'is-highlighted':
+              stateCode && regionHighlighted?.stateCode === stateCode,
+          }
         )}
         onMouseEnter={highlightState}
         onClick={_setShowDistrict}
@@ -263,7 +272,9 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
         ref={rowElement}
       >
         <div className="cell">
-          <div className="state-name">{t(STATE_NAMES[stateCode])}</div>
+          <div className="state-name">
+            {t(STATE_NAMES[stateCode] || districtName)}
+          </div>
           {data?.meta?.notes && (
             <Tooltip {...{data: data.meta.notes}}>
               <Info size={16} />
