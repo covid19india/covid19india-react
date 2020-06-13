@@ -1709,25 +1709,53 @@ abbr {
     border-radius: 5px;
     color: $gray-mid;
     cursor: pointer;
-    display: flex;
-    flex-direction: row;
-    font-size: 12px;
-    line-height: 18px;
+    margin-right: .25rem;
     padding: .5rem;
-    text-align: center;
-    width: 5rem;
 
     svg {
-      margin-right: .25rem;
-    }
-
-    .text {
-      flex: 1;
+      align-self: center;
+      margin: .25rem;
     }
 
     &.is-highlighted {
       background: $green-light;
       color: $green;
+    }
+  }
+
+  .info-toggle {
+    background: none;
+
+    &.is-highlighted {
+      background: $yellow-light;
+      color: $yellow;
+    }
+  }
+
+  .million-toggle {
+    font-size: 13px;
+    font-weight: 400;
+    padding: 11.5px 10px;
+    text-align: center;
+  }
+}
+
+.table-helper {
+  align-self: center;
+  color: $gray;
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 2rem);
+
+  .info-item {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    font-family: 'archia';
+    font-size: 12px;
+
+    svg {
+      margin-right: .25rem;
     }
   }
 }
