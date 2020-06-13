@@ -1,15 +1,20 @@
 import {PRIMARY_STATISTICS} from '../constants';
 import {capitalize, getStatistic} from '../utils/commonfunctions';
 
-import {FilterIcon, OrganizationIcon} from '@primer/octicons-v2-react';
+import {
+  FilterIcon,
+  OrganizationIcon,
+  QuestionIcon,
+} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {useCallback, useState, useMemo, useRef, lazy} from 'react';
+import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useIsVisible} from 'react-is-visible';
 import {Link} from 'react-router-dom';
-import {useTrail, animated, config} from 'react-spring';
+import {useTrail, useTransition, animated, config} from 'react-spring';
 import {createBreakpoint, useLocalStorage} from 'react-use';
 
 const Row = lazy(() => import('./row' /* webpackChunkName: "Row" */));
@@ -102,6 +107,7 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
   const isVisible = useIsVisible(tableElement);
 
   const [tableOption, setTableOption] = useState('states');
+  const [isInfoVisible, setIsInfoVisible] = useState(false);
 
   const districts = useMemo(() => {
     if (tableOption === 'states') return null;
@@ -152,6 +158,24 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
     );
   };
 
+  const FADE_IN = {
+    opacity: 1,
+    transform: 'translate3d(0, 0px, 0)',
+    height: 80,
+  };
+
+  const FADE_OUT = {
+    opacity: 0,
+    transform: 'translate3d(0, 2px, 0)',
+    height: 0,
+  };
+
+  const transitions = useTransition(isInfoVisible, null, {
+    from: FADE_OUT,
+    enter: FADE_IN,
+    leave: FADE_OUT,
+  });
+
   return (
     <React.Fragment>
       <div className="table-top">
@@ -162,15 +186,50 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
           onClick={_setTableOption}
           style={trail[0]}
         >
-          <span className="text">
-            <OrganizationIcon size={14} />
-            Show Top 50 Districts
-          </span>
+          <OrganizationIcon size={14} />
         </animated.div>
+
+        <animated.div
+          className={classnames('million-toggle', {
+            'is-highlighted': tableOption === 'districts',
+          })}
+          onClick={_setTableOption}
+          style={trail[0]}
+        >
+          1M
+        </animated.div>
+
+        <animated.div
+          className={classnames('info-toggle', {
+            'is-highlighted': isInfoVisible,
+          })}
+          onClick={() => {
+            setIsInfoVisible((prevState) => !prevState);
+          }}
+          style={trail[0]}
+        >
+          <QuestionIcon size={14} />
+        </animated.div>
+
         <animated.div className="fineprint" style={trail[1]}>
           <FineprintTop />
         </animated.div>
       </div>
+
+      {transitions.map(({item, key, props}) =>
+        item ? (
+          <animated.div key={key} className="table-helper" style={props}>
+            <div className="info-item">
+              <OrganizationIcon size={14} />
+              <p>Show/Hide Top 50 Cities/Districts</p>
+            </div>
+            <div className="info-item">
+              <Info size={15} />
+              <p>Extra notes</p>
+            </div>
+          </animated.div>
+        ) : null
+      )}
 
       <animated.div className="table" style={trail[2]}>
         <div className="row heading">
@@ -178,7 +237,9 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
             className="cell heading"
             onClick={() => handleSortClick('stateName')}
           >
-            <div>{t('State/UT')}</div>
+            <div>
+              {t(tableOption === 'states' ? 'State/UT' : 'City/District')}
+            </div>
             {sortData.sortColumn === 'stateName' && (
               <div
                 className={classnames('sort-icon', {
