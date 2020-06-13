@@ -143,10 +143,9 @@ function StateMeta({stateCode, data, timeseries}) {
           description={
             growthRate > 0
               ? `In the last one week, the number of new infections has
-              grown by an average of ${formatNumber(
+              grown by ${formatNumber(
                 Math.round(growthRate / 7)
-              )}%
-              every day.`
+              )}%`
               : 'There has been no growth in the number of infections in last one week.'
           }
         />
