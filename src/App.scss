@@ -1665,17 +1665,16 @@ abbr {
 
 .fineprint {
   align-items: flex-end;
-  align-self: center;
   display: flex;
+  flex-basis: 80%;
   flex-direction: row;
   justify-content: flex-end;
-  margin-bottom: .25rem;
-  width: 28rem;
+  text-align: right;
 
   .text {
     color: $gray-mid;
     font-weight: 600;
-    margin-bottom: 0.25rem;
+    margin: 0;
 
     a {
       border-bottom: 2px solid $gray-hover;
@@ -1686,6 +1685,45 @@ abbr {
       &:hover {
         background: $gray-hover;
       }
+    }
+  }
+}
+
+.table-top {
+  align-items: flex-end;
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  font-family: 'archia';
+  font-weight: 600;
+  justify-content: space-between;
+  margin-bottom: .5rem;
+  width: calc(100% - 2rem);
+
+  .option-toggle {
+    background: $gray-light;
+    border-radius: 5px;
+    color: $gray-mid;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    font-size: 12px;
+    line-height: 18px;
+    padding: .5rem;
+    text-align: center;
+    width: 5rem;
+
+    svg {
+      margin-right: .25rem;
+    }
+
+    .text {
+      flex: 1;
+    }
+
+    &.is-highlighted {
+      background: $green-light;
+      color: $green;
     }
   }
 }
@@ -1861,6 +1899,7 @@ abbr {
         background: $gray-light-opaque;
         font-size: 13px;
         font-weight: 900;
+        padding: .75rem .5rem;
 
         &:hover {
           background: $gray-hover !important;
