@@ -10,6 +10,8 @@ import {min, max} from 'd3-array';
 import {axisBottom} from 'd3-axis';
 import {scaleBand, scaleLinear} from 'd3-scale';
 import {select} from 'd3-selection';
+// eslint-disable-next-line
+import {transition} from 'd3-transition';
 import equal from 'fast-deep-equal';
 import React, {useEffect, useRef} from 'react';
 
