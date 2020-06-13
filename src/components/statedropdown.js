@@ -40,13 +40,12 @@ const StateDropdown = ({stateCode}) => {
   });
 
   return (
-    <div className="StateDropdown">
+    <div className="StateDropdown" ref={dropdownRef}>
       <h1
         className="state-name"
         onClick={() => {
           setShowDropdown((prevData) => !prevData);
         }}
-        ref={dropdownRef}
       >
         {t(STATE_NAMES[stateCode])}
       </h1>
