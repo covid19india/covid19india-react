@@ -1,7 +1,7 @@
 import axios from 'axios';
 import classnames from 'classnames';
 import produce from 'immer';
-import {layer} from 'leaflet';
+import Leaflet from 'leaflet';
 import * as Knn from 'leaflet-knn';
 import React, {useState, useEffect, useCallback} from 'react';
 import {ExternalLink, Phone} from 'react-feather';
@@ -60,10 +60,10 @@ function KnnResults({userLocation, userState}) {
 
     if (userLocation) {
       medKnn = new Knn(
-        layer.geoJSON(geoData, {filter: medFilter})
+        Leaflet.geoJSON(geoData, {filter: medFilter})
       ).nearestLayer([userLocation[1], userLocation[0]], hK);
       restKnn = new Knn(
-        layer.geoJSON(geoData, {filter: othersFilter})
+        Leaflet.geoJSON(geoData, {filter: othersFilter})
       ).nearestLayer([userLocation[1], userLocation[0]], rK, rad);
       panKnn = geoData?.features?.filter(
         (feat) =>
