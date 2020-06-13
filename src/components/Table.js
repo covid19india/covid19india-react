@@ -3,11 +3,11 @@ import StateHeaderCell from './StateHeaderCell';
 import {PRIMARY_STATISTICS} from '../constants';
 import {getStatistic} from '../utils/commonFunctions';
 
-import {FilterIcon} from '@primer/octicons-v2-react';
+import {FilterIcon, OrganizationIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React, {useCallback, useRef, lazy} from 'react';
+import React, {useCallback, useState, useMemo, useRef, lazy} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useIsVisible} from 'react-is-visible';
 import {Link} from 'react-router-dom';
@@ -35,16 +35,47 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
     [sortData, setSortData]
   );
 
+  const [trail, set] = useTrail(3, () => ({
+    transform: 'translate3d(0, 10px, 0)',
+    opacity: 0,
+    config: config.wobbly,
+  }));
+
+  set({transform: 'translate3d(0, 0px, 0)', opacity: 1});
+
+  const tableElement = useRef();
+  const isVisible = useIsVisible(tableElement);
+
+  const [tableOption, setTableOption] = useState('states');
+
+  const districts = useMemo(() => {
+    if (tableOption === 'states') return null;
+    else if (tableOption === 'districts') {
+      let districtsData = {};
+      Object.keys(data).map((stateCode) => {
+        Object.keys(data[stateCode]?.districts || {}).map((districtName) => {
+          districtsData = produce(districtsData, (draftDistricts) => {
+            draftDistricts[districtName] =
+              data[stateCode].districts[districtName];
+          });
+          return null;
+        });
+        return null;
+      });
+      return districtsData;
+    }
+  }, [data, tableOption]);
+
   const sortingFunction = useCallback(
     (stateCodeA, stateCodeB) => {
       if (sortData.sortColumn !== 'stateName') {
         const statisticA = getStatistic(
-          data[stateCodeA],
+          districts?.[stateCodeA] || data[stateCodeA],
           'total',
           sortData.sortColumn
         );
         const statisticB = getStatistic(
-          data[stateCodeB],
+          districts?.[stateCodeB] || data[stateCodeB],
           'total',
           sortData.sortColumn
         );
@@ -57,23 +88,34 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
           : stateCodeB.localeCompare(stateCodeA);
       }
     },
-    [sortData, data]
+    [sortData.sortColumn, sortData.isAscending, data, districts]
   );
 
-  const [trail, set] = useTrail(2, () => ({
-    transform: 'translate3d(0, 10px, 0)',
-    opacity: 0,
-    config: config.wobbly,
-  }));
-
-  set({transform: 'translate3d(0, 0px, 0)', opacity: 1});
-
-  const tableElement = useRef();
-  const isVisible = useIsVisible(tableElement);
+  const _setTableOption = () => {
+    setTableOption((prevTableOption) =>
+      prevTableOption === 'states' ? 'districts' : 'states'
+    );
+  };
 
   return (
     <React.Fragment>
-      <animated.div className="table" style={trail[1]}>
+      <div className="table-top">
+        <animated.div
+          className={classnames('option-toggle', {
+            'is-highlighted': tableOption === 'districts',
+          })}
+          onClick={_setTableOption}
+          style={trail[0]}
+        >
+          <span className="text">
+            <OrganizationIcon size={14} />
+            Show Top 50 Districts
+          </span>
+        </animated.div>
+        <animated.div className="fineprint" style={trail[1]}></animated.div>
+      </div>
+
+      <animated.div className="table" style={trail[2]}>
         <div className="row heading">
           <div
             className="cell heading"
@@ -102,22 +144,41 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
           ))}
         </div>
 
-        {Object.keys(data)
-          .filter(
-            (stateCode) =>
-              stateCode !== 'TT' && data[stateCode].total?.confirmed
-          )
-          .sort((a, b) => sortingFunction(a, b))
-          .slice(0, isVisible ? Object.keys(data).length - 1 : 10)
-          .map((stateCode) => {
-            return (
-              <Row
-                key={stateCode}
-                data={data[stateCode]}
-                {...{stateCode, regionHighlighted, setRegionHighlighted}}
-              />
-            );
-          })}
+        {tableOption === 'states' &&
+          Object.keys(data)
+            .filter(
+              (stateCode) =>
+                stateCode !== 'TT' && data[stateCode].total?.confirmed
+            )
+            .sort((a, b) => sortingFunction(a, b))
+            .slice(0, isVisible ? Object.keys(data).length - 1 : 10)
+            .map((stateCode) => {
+              return (
+                <Row
+                  key={stateCode}
+                  data={data[stateCode]}
+                  {...{stateCode, regionHighlighted, setRegionHighlighted}}
+                />
+              );
+            })}
+
+        {tableOption === 'districts' &&
+          Object.keys(districts)
+            .sort((a, b) => sortingFunction(a, b))
+            .slice(0, 50)
+            .map((districtName) => {
+              return (
+                <Row
+                  key={districtName}
+                  data={districts[districtName]}
+                  {...{
+                    districtName,
+                    regionHighlighted,
+                    setRegionHighlighted,
+                  }}
+                />
+              );
+            })}
 
         {!isVisible && (
           <span className="intersection" ref={tableElement}></span>
