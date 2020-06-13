@@ -1,8 +1,8 @@
 import DeltaBarGraph from './deltabargraph';
+import MapSwitcher from './mapswitcher';
 import StateDropdown from './statedropdown';
 import StateMeta from './statemeta';
 
-import {PRIMARY_STATISTICS, COLORS} from '../constants';
 import {NUM_BARS_STATEPAGE, STATE_NAMES} from '../constants';
 import {
   fetcher,
@@ -16,8 +16,6 @@ import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
-import {useSpring, animated, config} from 'react-spring';
-import {useMeasure} from 'react-use';
 import useSWR from 'swr';
 
 const TimeSeriesExplorer = lazy(() =>
@@ -42,7 +40,6 @@ function State(props) {
   const stateCode = useParams().stateCode.toUpperCase();
 
   const [mapStatistic, setMapStatistic] = useState('confirmed');
-  const [mapSwitcher, {width}] = useMeasure();
   const [showAllDistricts, setShowAllDistricts] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState({
     stateCode: stateCode,
@@ -93,16 +90,6 @@ function State(props) {
     return gridRowCount;
   }, [data, stateCode]);
 
-  const [spring, set] = useSpring(() => ({
-    transform: `translateX(${width * 0}px)`,
-    opacity: 0,
-    config: config.stiff,
-  }));
-
-  setTimeout(() => {
-    set({opacity: 1});
-  }, 1500);
-
   return (
     <React.Fragment>
       <Helmet>
@@ -151,23 +138,7 @@ function State(props) {
             </div>
           </div>
 
-          <div className="map-switcher" ref={mapSwitcher}>
-            <animated.div className="highlight" style={spring}></animated.div>
-            {PRIMARY_STATISTICS.map((statistic, index) => (
-              <div
-                key={index}
-                className="clickable"
-                onClick={() => {
-                  setMapStatistic(statistic);
-                  set({
-                    background: `${COLORS[statistic]}20`,
-                    transform: `translateX(${width * index * 0.25}px)`,
-                  });
-                }}
-              ></div>
-            ))}
-          </div>
-
+          <MapSwitcher {...{setMapStatistic}} />
           <Level data={data[stateCode]} />
           <Minigraph timeseries={timeseries[stateCode]} {...{stateCode}} />
 
