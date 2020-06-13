@@ -12,9 +12,13 @@ const StateDropdown = ({stateCode}) => {
   const history = useHistory();
   const {t} = useTranslation();
 
-  useClickAway(dropdownRef, () => {
-    setShowDropdown(false);
-  });
+  useClickAway(
+    dropdownRef,
+    () => {
+      setShowDropdown(false);
+    },
+    ['click']
+  );
 
   const transitions = useTransition(showDropdown, null, {
     from: {
@@ -40,12 +44,13 @@ const StateDropdown = ({stateCode}) => {
   });
 
   return (
-    <div className="StateDropdown" ref={dropdownRef}>
+    <div className="StateDropdown">
       <h1
         className="state-name"
         onClick={() => {
           setShowDropdown((prevData) => !prevData);
         }}
+        ref={dropdownRef}
       >
         {t(STATE_NAMES[stateCode])}
       </h1>
