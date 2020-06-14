@@ -1,6 +1,6 @@
-import StateDropdown from './statedropdown';
+import StateDropdown from './StateDropdown';
 
-import {formatDate, formatNumber} from '../utils/commonfunctions';
+import {formatDate, formatNumber} from '../utils/commonFunctions';
 
 import React from 'react';
 import {useTranslation} from 'react-i18next';

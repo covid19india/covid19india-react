@@ -3,14 +3,14 @@ import {
   D3_TRANSITION_DURATION,
   TIMESERIES_STATISTICS,
 } from '../constants';
-import {useResizeObserver} from '../hooks/useresizeobserver';
+import {useResizeObserver} from '../hooks/useResizeObserver';
 import {
   capitalize,
   formatNumber,
   formatDate,
   getStatistic,
   parseIndiaDate,
-} from '../utils/commonfunctions';
+} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
 import {min, max, bisector} from 'd3-array';
@@ -26,7 +26,7 @@ import equal from 'fast-deep-equal';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
-function TimeSeries({timeseries, dates, chartType, isUniform, isLog}) {
+function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   const {t} = useTranslation();
   const refs = useRef([]);
 
@@ -402,4 +402,4 @@ const isEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(TimeSeries, isEqual);
+export default React.memo(Timeseries, isEqual);

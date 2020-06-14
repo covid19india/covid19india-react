@@ -4,7 +4,7 @@ import {
   STATE_NAMES,
   ESSENTIALS_CATEGORIES,
 } from '../constants';
-import {capitalize} from '../utils/commonfunctions';
+import {capitalize} from '../utils/commonFunctions';
 
 import produce from 'immer';
 import React, {useState, useCallback, useRef} from 'react';

@@ -7,7 +7,7 @@ import {
   getStatistic,
   getIndiaYesterdayISO,
   parseIndiaDate,
-} from '../utils/commonfunctions';
+} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
 import {min, max} from 'd3-array';
@@ -21,7 +21,7 @@ import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useEffect, useRef, useMemo} from 'react';
 
-function Minigraph({timeseries, date: timelineDate}) {
+function Minigraphs({timeseries, date: timelineDate}) {
   const refs = useRef([]);
 
   const dates = useMemo(() => {
@@ -179,4 +179,4 @@ const isEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(Minigraph, isEqual);
+export default React.memo(Minigraphs, isEqual);

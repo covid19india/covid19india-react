@@ -1,4 +1,4 @@
-import KnnResults from './knnresults';
+import KnnResults from './KnnResults';
 
 import React, {useState, useEffect} from 'react';
 import ContentLoader from 'react-content-loader';

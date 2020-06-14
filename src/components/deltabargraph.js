@@ -4,7 +4,7 @@ import {
   formatNumber,
   getIndiaYesterdayISO,
   getStatistic,
-} from '../utils/commonfunctions';
+} from '../utils/commonFunctions';
 
 import {min, max} from 'd3-array';
 import {axisBottom} from 'd3-axis';

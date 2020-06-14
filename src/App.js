@@ -1,6 +1,6 @@
 import './App.scss';
-import Blog from './components/blog';
-import Navbar from './components/navbar';
+import Blog from './components/Blog';
+import Navbar from './components/Navbar';
 import ScrollToTop from './utils/ScrollToTop';
 
 import React, {lazy, useState, Suspense} from 'react';
@@ -13,27 +13,12 @@ import {
 } from 'react-router-dom';
 import useDarkMode from 'use-dark-mode';
 
-const Home = lazy(() =>
-  import('./components/home' /* webpackChunkName: "Home" */)
-);
-const FAQ = lazy(() =>
-  import('./components/faq' /* webpackChunkName: "About" */)
-);
-const Demographics = lazy(() =>
-  import('./components/demographics' /* webpackChunkName: "Demographics" */)
-);
-const State = lazy(() =>
-  import('./components/state' /* webpackChunkName: "State" */)
-);
-const Essentials = lazy(() =>
-  import('./components/essentials' /* webpackChunkName: "Essentials" */)
-);
-
-const LanguageSwitcher = lazy(() =>
-  import(
-    './components/languageswitcher' /* webpackChunkName: "LanguageSwitcher" */
-  )
-);
+const Home = lazy(() => import('./components/Home'));
+const About = lazy(() => import('./components/About'));
+const Demographics = lazy(() => import('./components/Demographics'));
+const State = lazy(() => import('./components/State'));
+const Essentials = lazy(() => import('./components/Essentials'));
+const LanguageSwitcher = lazy(() => import('./components/LanguageSwitcher'));
 
 const schemaMarkup = {
   '@context': 'http://schema.org/',
@@ -69,7 +54,7 @@ function App() {
     },
     {
       pageLink: '/about',
-      view: FAQ,
+      view: About,
       displayName: 'About',
       showInNavbar: true,
     },
