@@ -14,7 +14,7 @@ import {
 } from '../constants';
 import {formatNumber, getStatistic} from '../utils/commonFunctions';
 
-import {PinIcon, DotFillIcon} from '@primer/octicons-v2-react';
+import {DotFillIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
@@ -29,7 +29,6 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 import {useTranslation} from 'react-i18next';
-import {useHistory} from 'react-router-dom';
 
 const MapVisualizer = lazy(() => import('./MapVisualizer'));
 
@@ -46,7 +45,6 @@ function MapExplorer({
   children: Minigraphs,
 }) {
   const {t} = useTranslation();
-  const history = useHistory();
 
   const mapExplorerRef = useRef();
 
