@@ -1,34 +1,19 @@
 import {MAP_META} from '../constants';
-import useStickySWR from '../hooks/usestickyswr';
-import {fetcher} from '../utils/commonfunctions';
+import useStickySWR from '../hooks/useStickySWR';
+import {fetcher} from '../utils/commonFunctions';
 
 import React, {useState, useRef, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 import {useIsVisible} from 'react-is-visible';
 
-const TimeSeriesExplorer = lazy(() =>
-  import('./timeseriesexplorer' /* webpackChunkName: "TimeSeriesExplorer" */)
-);
-
-const MapExplorer = lazy(() =>
-  import('./mapexplorer' /* webpackChunkName: "MapExplorer" */)
-);
-
-const Actions = lazy(() =>
-  import('./actions' /* webpackChunkName: "Actions" */)
-);
-
-const Table = lazy(() => import('./table' /* webpackChunkName: "Table" */));
-
-const Minigraph = lazy(() =>
-  import('./minigraph' /* webpackChunkName: "Minigraph" */)
-);
-
-const Footer = lazy(() => import('./footer' /* webpackChunkName: "Footer" */));
-
-const Search = lazy(() => import('./search' /* webpackChunkName: "Search" */));
-
-const Level = lazy(() => import('./level' /* webpackChunkName: "Level" */));
+const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
+const MapExplorer = lazy(() => import('./MapExplorer'));
+const Actions = lazy(() => import('./Actions'));
+const Table = lazy(() => import('./Table'));
+const Minigraphs = lazy(() => import('./Minigraphs'));
+const Footer = lazy(() => import('./Footer'));
+const Search = lazy(() => import('./Search'));
+const Level = lazy(() => import('./Level'));
 
 function Home(props) {
   const [regionHighlighted, setRegionHighlighted] = useState({
@@ -37,7 +22,7 @@ function Home(props) {
   });
 
   const [anchor, setAnchor] = useState(null);
-  const [mapStatistic, setMapStatistic] = useState('active');
+  const [mapStatistic, setMapStatistic] = useState('confirmed');
 
   const [date, setDate] = useState('');
 
@@ -112,7 +97,7 @@ function Home(props) {
 
           <Suspense fallback={<div />}>
             {timeseries && (
-              <Minigraph timeseries={timeseries['TT']} {...{date}} />
+              <Minigraphs timeseries={timeseries['TT']} {...{date}} />
             )}
           </Suspense>
 
@@ -140,7 +125,7 @@ function Home(props) {
 
               {timeseries && (
                 <Suspense fallback={<div />}>
-                  <TimeSeriesExplorer
+                  <TimeseriesExplorer
                     timeseries={timeseries[regionHighlighted.stateCode]}
                     {...{date, stateCodes}}
                     {...{regionHighlighted, setRegionHighlighted}}

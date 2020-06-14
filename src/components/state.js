@@ -1,10 +1,8 @@
-import DeltaBarGraph from './deltabargraph';
-import MapSwitcher from './mapswitcher';
-import StateHeader from './stateheader';
-import StateMeta from './statemeta';
+import DeltaBarGraph from './DeltaBarGraph';
+import StateMeta from './StateMeta';
 
 import {NUM_BARS_STATEPAGE, STATE_NAMES} from '../constants';
-import {fetcher, formatNumber, getStatistic} from '../utils/commonfunctions';
+import {fetcher, formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import React, {useMemo, useState, lazy, Suspense} from 'react';
 import * as Icon from 'react-feather';
@@ -13,21 +11,10 @@ import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
 import useSWR from 'swr';
 
-const TimeSeriesExplorer = lazy(() =>
-  import('./timeseriesexplorer' /* webpackChunkName: "TimeSeriesExplorer" */)
-);
-
-const MapExplorer = lazy(() =>
-  import('./mapexplorer' /* webpackChunkName: "MapExplorer" */)
-);
-
-const Footer = lazy(() => import('./footer' /* webpackChunkName: "Footer" */));
-
-const Minigraph = lazy(() =>
-  import('./minigraph' /* webpackChunkName: "Minigraph" */)
-);
-
-const Level = lazy(() => import('./level' /* webpackChunkName: "Level" */));
+const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
+const MapExplorer = lazy(() => import('./MapExplorer'));
+const Footer = lazy(() => import('./Footer'));
+const Minigraphs = lazy(() => import('./Minigraphs'));
 
 function State(props) {
   const {t} = useTranslation();
@@ -99,11 +86,6 @@ function State(props) {
 
       <div className="State">
         <div className="state-left">
-          <StateHeader data={data[stateCode]} {...{stateCode}} />
-          <MapSwitcher {...{setMapStatistic}} />
-          <Level data={data[stateCode]} />
-          <Minigraph timeseries={timeseries[stateCode]} {...{stateCode}} />
-
           <Suspense fallback={<div />}>
             <MapExplorer
               isCountryLoaded={false}
@@ -115,7 +97,9 @@ function State(props) {
                 mapStatistic,
                 setMapStatistic,
               }}
-            />
+            >
+              <Minigraphs timeseries={timeseries[stateCode]} />
+            </MapExplorer>
           </Suspense>
 
           <StateMeta
@@ -219,7 +203,7 @@ function State(props) {
             </div>
 
             <Suspense fallback={<div />}>
-              <TimeSeriesExplorer
+              <TimeseriesExplorer
                 timeseries={timeseries[stateCode]}
                 {...{regionHighlighted, setRegionHighlighted}}
               />

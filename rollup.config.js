@@ -1,7 +1,7 @@
 import copy from 'rollup-plugin-copy';
 
 export default {
-  input: 'placeholder.js',
+  input: './src/placeholder.js',
   plugins: [
     copy({
       targets: [

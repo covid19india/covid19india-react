@@ -1,4 +1,4 @@
-import Tooltip from './tooltip';
+import Tooltip from './Tooltip';
 
 import React from 'react';
 import * as Icon from 'react-feather';

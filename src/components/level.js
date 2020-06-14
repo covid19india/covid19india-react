@@ -1,5 +1,5 @@
 import {PRIMARY_STATISTICS} from '../constants';
-import {capitalize, formatNumber, getStatistic} from '../utils/commonfunctions';
+import {capitalize, formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import {HeartFillIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';

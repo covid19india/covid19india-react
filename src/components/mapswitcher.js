@@ -1,39 +1,63 @@
 import {PRIMARY_STATISTICS, COLORS} from '../constants';
 
-import React from 'react';
+import classnames from 'classnames';
+import React, {useState, useEffect} from 'react';
 import {useSpring, animated, config} from 'react-spring';
 import {useMeasure} from 'react-use';
 
-function MapSwitcher({setMapStatistic}) {
+const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
   const [mapSwitcher, {width}] = useMeasure();
+  const [clicked, setClicked] = useState(false);
   const [spring, set] = useSpring(() => ({
-    transform: `translateX(${width * 0}px)`,
     opacity: 0,
-    config: config.stiff,
+    background: `${COLORS[mapStatistic]}20`,
+    config: config.gentle,
+    onStart: () => {
+      setClicked(true);
+    },
+    onRest: () => {
+      setClicked(false);
+    },
   }));
 
-  setTimeout(() => {
-    set({opacity: 1});
-  }, 1500);
+  useEffect(() => {
+    if (width > 0) {
+      setTimeout(() => {
+        set({
+          transform: `translateX(${
+            width * PRIMARY_STATISTICS.indexOf(mapStatistic) * 0.25
+          }px)`,
+          opacity: 1,
+        });
+      }, 1000);
+    }
+  }, [mapStatistic, set, width]);
 
   return (
-    <div className="map-switcher" ref={mapSwitcher}>
-      <animated.div className="highlight" style={spring}></animated.div>
-      {PRIMARY_STATISTICS.map((statistic, index) => (
-        <div
-          key={index}
-          className="clickable"
-          onClick={() => {
-            setMapStatistic(statistic);
-            set({
-              background: `${COLORS[statistic]}20`,
-              transform: `translateX(${width * index * 0.25}px)`,
-            });
-          }}
-        ></div>
-      ))}
-    </div>
-  );
-}
+    <React.Fragment>
+      <div className="MapSwitcher" ref={mapSwitcher}>
+        <animated.div className="highlight" style={spring}></animated.div>
 
-export default React.memo(MapSwitcher);
+        {PRIMARY_STATISTICS.map((statistic, index) => (
+          <div
+            key={index}
+            className={classnames('clickable', {[`is-${statistic}`]: !clicked})}
+            onClick={() => {
+              setMapStatistic(statistic);
+              set({
+                background: `${COLORS[statistic]}20`,
+                transform: `translateX(${width * index * 0.25}px)`,
+              });
+            }}
+          ></div>
+        ))}
+      </div>
+    </React.Fragment>
+  );
+};
+
+const isEqual = (prevProps, currProps) => {
+  return true;
+};
+
+export default React.memo(MapSwitcher, isEqual);

@@ -52,19 +52,20 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && npm run compress_maps && cp build/index.html build/404.html && npm run build-sw",
-    "map_test": "react-scripts test src/__tests__/mapAndApiStateNames.test.js",
+    "build": "react-scripts build",
+    "postbuild": "npm run compress_maps && cp build/index.html build/404.html && npm run build:sw",
     "compress_maps": "rollup -c",
-    "test": "react-scripts test --testPathIgnorePatterns=src/__tests__/mapAndApiStateNames.test.js",
-    "eject": "react-scripts eject",
+    "test": "react-scripts test --testPathIgnorePatterns=src/tests/mapAndApiStateNames.test.js",
+    "test:map": "react-scripts test src/tests/mapAndApiStateNames.test.js",
     "eslint": "eslint .",
     "eslint:fix": "eslint --fix --max-warnings=0",
     "format": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|md|html)\"",
     "scss-lint": "sass-lint 'src/**/*.scss' -v -f table --max-warnings 0",
     "scss-lint:fix": "sass-lint-auto-fix 'src/**/*.scss' -d -h -c '.sass-lint-auto-fix.yml'",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "build-sw": "node ./src/sw-build.js",
-    "start-sw": "http-server ./build -c 0"
+    "build:sw": "node ./src/swBuild.js",
+    "start:sw": "http-server ./build -c 0",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"

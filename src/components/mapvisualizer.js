@@ -1,4 +1,4 @@
-import MapLegend from './maplegend';
+import MapLegend from './MapLegend';
 
 import {
   COLORS,
@@ -17,7 +17,7 @@ import {
   capitalizeAll,
   formatNumber,
   getStatistic,
-} from '../utils/commonfunctions';
+} from '../utils/commonFunctions';
 
 import {max} from 'd3-array';
 import {json} from 'd3-fetch';
@@ -71,7 +71,7 @@ function MapVisualizer({
     async (file) => {
       return await json(file);
     },
-    {revalidateOnFocus: false, suspense: true}
+    {suspense: true}
   );
 
   const statisticMax = useMemo(() => {

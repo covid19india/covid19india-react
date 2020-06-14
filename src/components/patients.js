@@ -1,4 +1,4 @@
-import PatientsView from './patientsview';
+import PatientsView from './PatientsView';
 
 import {parse} from 'date-fns';
 import React, {useState, useEffect, useCallback} from 'react';

@@ -4,7 +4,7 @@ import {Helmet} from 'react-helmet';
 // TODO(slightlyoff): factor out common JSON parsing & caching of this file
 const DATA_URL = 'https://api.covid19india.org/website_data.json';
 
-function FAQ(props) {
+function About(props) {
   const [faq, setFaq] = useState([]);
 
   useEffect(() => {
@@ -56,4 +56,4 @@ function FAQ(props) {
   );
 }
 
-export default FAQ;
+export default About;

@@ -1,4 +1,4 @@
-import Tooltip from './tooltip';
+import Tooltip from './Tooltip';
 
 import {PRIMARY_STATISTICS, STATE_NAMES} from '../constants';
 import {
@@ -6,7 +6,7 @@ import {
   formatLastUpdated,
   formatNumber,
   getStatistic,
-} from '../utils/commonfunctions';
+} from '../utils/commonFunctions';
 
 import {
   ClockIcon,
@@ -288,7 +288,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
               </p>
             )}
             <div
-              className="state-page"
+              className="visit-state-page"
               onClick={() => {
                 history.push(`state/${stateCode}`);
               }}

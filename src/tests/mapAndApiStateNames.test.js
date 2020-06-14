@@ -1,7 +1,7 @@
 import {
   getStatesAndDistrictsFromAPI,
   getStatesAndDistrictsFromMaps,
-} from '../testUtils/index';
+} from './utils/index';
 
 describe('Compare the map and the API states and districts', () => {
   test('for any discrepancies', async () => {
