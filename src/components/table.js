@@ -1,5 +1,7 @@
+import StateHeaderCell from './StateHeaderCell';
+
 import {PRIMARY_STATISTICS} from '../constants';
-import {capitalize, getStatistic} from '../utils/commonfunctions';
+import {getStatistic} from '../utils/commonFunctions';
 
 import {
   FilterIcon,
@@ -15,66 +17,9 @@ import {useTranslation} from 'react-i18next';
 import {useIsVisible} from 'react-is-visible';
 import {Link} from 'react-router-dom';
 import {useTrail, useTransition, animated, config} from 'react-spring';
-import {createBreakpoint, useLocalStorage} from 'react-use';
+import {useLocalStorage} from 'react-use';
 
-const Row = lazy(() => import('./row' /* webpackChunkName: "Row" */));
-
-const useBreakpoint = createBreakpoint({S: 768});
-
-function PureStateHeaderCell({handleSort, sortData, statistic}) {
-  const breakpoint = useBreakpoint();
-  const {t} = useTranslation();
-
-  return (
-    <div className="cell heading" onClick={() => handleSort(statistic)}>
-      {sortData.sortColumn === statistic && (
-        <div
-          className={classnames('sort-icon', {
-            invert: sortData.isAscending,
-          })}
-        >
-          <FilterIcon size={10} />
-        </div>
-      )}
-      <div
-        className={classnames({
-          [`is-${statistic}`]: breakpoint === 'S',
-        })}
-        title={capitalize(statistic)}
-      >
-        {breakpoint === 'S'
-          ? capitalize(statistic.slice(0, 1))
-          : t(capitalize(statistic))}
-      </div>
-    </div>
-  );
-}
-
-const isStateHeaderCellEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.sortData, currProps.sortData)) {
-    return false;
-  } else {
-    return true;
-  }
-};
-
-const StateHeaderCell = React.memo(PureStateHeaderCell, isStateHeaderCellEqual);
-
-function PureFineprintTop() {
-  const {t} = useTranslation();
-
-  return (
-    <React.Fragment>
-      <h5 className="text">
-        {t('Compiled from State Govt. numbers')},{' '}
-        <Link to="/about" style={{color: '#6c757d'}}>
-          {t('know more')}!
-        </Link>
-      </h5>
-    </React.Fragment>
-  );
-}
-const FineprintTop = React.memo(PureFineprintTop);
+const Row = lazy(() => import('./Row'));
 
 function Table({data, regionHighlighted, setRegionHighlighted}) {
   const {t} = useTranslation();
@@ -212,7 +157,12 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
         </animated.div>
 
         <animated.div className="fineprint" style={trail[1]}>
-          <FineprintTop />
+          <h5 className="text">
+            {t('Compiled from State Govt. numbers')},{' '}
+            <Link to="/about" style={{color: '#6c757d'}}>
+              {t('know more')}!
+            </Link>
+          </h5>
         </animated.div>
       </div>
 

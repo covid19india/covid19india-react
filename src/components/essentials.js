@@ -1,4 +1,4 @@
-import KnnResults from './knnresults';
+import KnnResults from './KnnResults';
 
 import axios from 'axios';
 import React, {useState, useEffect} from 'react';

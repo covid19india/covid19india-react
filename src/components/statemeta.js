@@ -1,4 +1,4 @@
-import StateMetaCard from './statemetacard';
+import StateMetaCard from './StateMetaCard';
 
 import {
   STATE_NAMES,
@@ -11,7 +11,7 @@ import {
   formatLastUpdated,
   getStatistic,
   getIndiaDate,
-} from '../utils/commonfunctions';
+} from '../utils/commonFunctions';
 
 import {format, sub} from 'date-fns';
 import React from 'react';

@@ -1,4 +1,4 @@
-import {formatDate, getIndiaDateISO} from '../utils/commonfunctions';
+import {formatDate, getIndiaDateISO} from '../utils/commonFunctions';
 
 import clamp from 'lodash/clamp';
 import React, {useState} from 'react';

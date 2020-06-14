@@ -1,7 +1,7 @@
-import Level from './level';
-import MapVisualizerLoader from './loaders/mapvisualizer';
-import MapSwitcher from './mapswitcher';
-import StateHeader from './stateheader';
+import Level from './Level';
+import MapVisualizerLoader from './loaders/MapVisualizer';
+import MapSwitcher from './MapSwitcher';
+import StateHeader from './StateHeader';
 
 import {
   MAP_META,
@@ -12,9 +12,9 @@ import {
   STATE_POPULATIONS_MIL,
   UNKNOWN_DISTRICT_KEY,
 } from '../constants';
-import {formatNumber, getStatistic} from '../utils/commonfunctions';
+import {formatNumber, getStatistic} from '../utils/commonFunctions';
 
-import {PinIcon} from '@primer/octicons-v2-react';
+import {PinIcon, DotFillIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
@@ -28,13 +28,10 @@ import React, {
   lazy,
 } from 'react';
 import ReactDOM from 'react-dom';
-import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 
-const MapVisualizer = lazy(() =>
-  import('./mapvisualizer' /* webpackChunkName: "MapVisualizer" */)
-);
+const MapVisualizer = lazy(() => import('./MapVisualizer'));
 
 function MapExplorer({
   stateCode,
@@ -46,6 +43,7 @@ function MapExplorer({
   mapStatistic,
   setMapStatistic,
   isCountryLoaded = true,
+  children: Minigraphs,
 }) {
   const {t} = useTranslation();
   const history = useHistory();
@@ -57,8 +55,8 @@ function MapExplorer({
     view: MAP_VIEWS.DISTRICTS,
     option:
       MAP_META[stateCode].mapType === MAP_TYPES.COUNTRY
-        ? MAP_OPTIONS.HOTSPOTS
-        : MAP_OPTIONS.TOTAL,
+        ? MAP_OPTIONS.TOTAL
+        : MAP_OPTIONS.HOTSPOTS,
   });
   const currentMapMeta = MAP_META[currentMap.code];
 
@@ -230,6 +228,26 @@ function MapExplorer({
     }
   };
 
+  const BubblesIcon = useMemo(
+    () => (
+      <svg
+        width="22"
+        height="27"
+        viewBox="-1 -5 22 27"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="5.5" cy="5.5" r="5.5" fillOpacity="0.4" />
+        <circle cx="5.5" cy="5.5" r="5" strokeOpacity="0.5" />
+        <circle cx="6.5" cy="11.5" r="3.5" fillOpacity="0.4" />
+        <circle cx="6.5" cy="11.5" r="3" strokeOpacity="0.5" />
+        <circle cx="13.5" cy="9.5" r="6.5" fillOpacity="0.4" />
+        <circle cx="13.5" cy="9.5" r="6" strokeOpacity="0.5" />
+      </svg>
+    ),
+    []
+  );
+
   return (
     <div
       className={classnames(
@@ -238,72 +256,67 @@ function MapExplorer({
         {hidden: anchor && anchor !== 'mapexplorer'}
       )}
     >
-      {window.innerWidth > 769 && (
-        <div
-          className={classnames('anchor', {stickied: anchor === 'mapexplorer'})}
-          onClick={() => {
-            setAnchor(anchor === 'mapexplorer' ? null : 'mapexplorer');
-          }}
-        >
-          <PinIcon />
-        </div>
-      )}
-
       <StateHeader data={data[currentMap.code]} stateCode={currentMap.code} />
-      <MapSwitcher {...{setMapStatistic}} />
+      <MapSwitcher {...{mapStatistic, setMapStatistic}} />
       <Level data={data[currentMap.code]} />
+      {Minigraphs}
 
-      <div className="meta">
-        {currentMapMeta.mapType === MAP_TYPES.STATE && (
-          <div
-            className="map-button"
-            onClick={() => history.push(`state/${currentMap.code}`)}
+      <div className="panel">
+        <div className="panel-left">
+          <h2
+            className={classnames(mapStatistic, {
+              [hoveredRegion?.zone]: currentMap.option === MAP_OPTIONS.ZONES,
+            })}
           >
-            {t('Visit state page')}
-            <Icon.ArrowRightCircle />
-          </div>
-        )}
+            {t(hoveredRegion.name)}
+            {hoveredRegion.name === UNKNOWN_DISTRICT_KEY &&
+              ` (${t(STATE_NAMES[regionHighlighted.stateCode])})`}
+          </h2>
 
-        <h2
-          className={classnames(mapStatistic, {
-            [hoveredRegion?.zone]: currentMap.option === MAP_OPTIONS.ZONES,
-          })}
-        >
-          {t(hoveredRegion.name)}
-          {hoveredRegion.name === UNKNOWN_DISTRICT_KEY &&
-            ` (${t(STATE_NAMES[regionHighlighted.stateCode])})`}
-        </h2>
-
-        {currentMapMeta.mapType === MAP_TYPES.STATE && (
+          {/* currentMapMeta.mapType === MAP_TYPES.STATE && (
           <div className="map-button" onClick={() => switchMap('TT')}>
             {t('Back')}
           </div>
-        )}
+        )*/}
 
-        {currentMap.option !== MAP_OPTIONS.ZONES &&
-          ((currentMap.view === MAP_VIEWS.DISTRICTS &&
-            regionHighlighted.districtName) ||
-            (currentMap.view === MAP_VIEWS.STATES &&
-              currentMap.option !== MAP_OPTIONS.TOTAL)) && (
-            <h1 className={classnames('district', mapStatistic)}>
-              {formatNumber(
-                getStatistic(
-                  hoveredRegion,
-                  'total',
-                  mapStatistic,
-                  currentMap.option === MAP_OPTIONS.PER_MILLION
-                    ? hoveredRegion.population_millions
-                    : 1
-                )
-              )}
-              <br />
-              <span>
-                {t(mapStatistic)}
-                {currentMap.option === MAP_OPTIONS.PER_MILLION &&
-                  ` ${t('per million')}`}
-              </span>
-            </h1>
-          )}
+          {currentMap.option !== MAP_OPTIONS.ZONES &&
+            ((currentMap.view === MAP_VIEWS.DISTRICTS &&
+              regionHighlighted.districtName) ||
+              (currentMap.view === MAP_VIEWS.STATES &&
+                currentMap.option !== MAP_OPTIONS.TOTAL)) && (
+              <h1 className={classnames('district', mapStatistic)}>
+                {formatNumber(
+                  getStatistic(
+                    hoveredRegion,
+                    'total',
+                    mapStatistic,
+                    currentMap.option === MAP_OPTIONS.PER_MILLION
+                      ? hoveredRegion.population_millions
+                      : 1
+                  )
+                )}
+                <br />
+                <span>
+                  {t(mapStatistic)}
+                  {currentMap.option === MAP_OPTIONS.PER_MILLION &&
+                    ` ${t('per million')}`}
+                </span>
+              </h1>
+            )}
+        </div>
+
+        <div className={classnames('panel-right', `is-${mapStatistic}`)}>
+          <div className="map-type">
+            <div
+              className={classnames('choropleth', {'is-highlighted': false})}
+            >
+              <DotFillIcon size={36} />
+            </div>
+            <div className={classnames('bubble', {'is-highlighted': false})}>
+              {BubblesIcon}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div ref={mapExplorerRef}>

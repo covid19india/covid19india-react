@@ -1,6 +1,6 @@
-import DownloadBlock from './downloadblock';
-import Footer from './footer';
-import Patients from './patients';
+import DownloadBlock from './DownloadBlock';
+import Footer from './Footer';
+import Patients from './Patients';
 
 import {RAW_DATA_PARTITIONS} from '../constants';
 

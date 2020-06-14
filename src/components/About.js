@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, {useState, useEffect} from 'react';
 import {Helmet} from 'react-helmet';
 
-function FAQ(props) {
+function About(props) {
   const [faq, setFaq] = useState([]);
 
   useEffect(() => {
@@ -52,4 +52,4 @@ function FAQ(props) {
   );
 }
 
-export default FAQ;
+export default About;

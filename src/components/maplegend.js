@@ -4,8 +4,8 @@ import {
   MAP_OPTIONS,
   // ZONE_COLORS,
 } from '../constants';
-import {useResizeObserver} from '../hooks/useresizeobserver';
-import {capitalize, formatNumber} from '../utils/commonfunctions';
+import {useResizeObserver} from '../hooks/useResizeObserver';
+import {capitalize, formatNumber} from '../utils/commonFunctions';
 
 import {range, quantile} from 'd3-array';
 import {axisRight, axisBottom} from 'd3-axis';

@@ -1,11 +1,11 @@
-import TimeseriesLoader from './loaders/timeseries';
+import TimeseriesLoader from './loaders/Timeseries';
 
 import {
   STATE_NAMES,
   TIMESERIES_CHART_TYPES,
   TIMESERIES_OPTIONS,
 } from '../constants';
-import {getIndiaYesterdayISO, parseIndiaDate} from '../utils/commonfunctions';
+import {getIndiaYesterdayISO, parseIndiaDate} from '../utils/commonFunctions';
 
 import 'intersection-observer';
 
@@ -18,11 +18,9 @@ import {useTranslation} from 'react-i18next';
 import {useIsVisible} from 'react-is-visible';
 import {useLocalStorage} from 'react-use';
 
-const TimeSeries = lazy(() =>
-  import('./timeseries' /* webpackChunkName: "TimeSeries" */)
-);
+const Timeseries = lazy(() => import('./Timeseries'));
 
-function TimeSeriesExplorer({
+function TimeseriesExplorer({
   timeseries,
   date: timelineDate,
   regionHighlighted,
@@ -156,7 +154,7 @@ function TimeSeriesExplorer({
 
       {isVisible && (
         <Suspense fallback={<TimeseriesLoader />}>
-          <TimeSeries
+          <Timeseries
             stateCode={regionHighlighted.stateCode}
             {...{timeseries, dates, chartType, isUniform, isLog}}
           />
@@ -204,4 +202,4 @@ const isEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(TimeSeriesExplorer, isEqual);
+export default React.memo(TimeseriesExplorer, isEqual);
