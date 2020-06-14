@@ -288,7 +288,7 @@ function Row({stateCode, data, regionHighlighted, setRegionHighlighted}) {
               </p>
             )}
             <div
-              className="visit-state-page"
+              className="state-page"
               onClick={() => {
                 history.push(`state/${stateCode}`);
               }}

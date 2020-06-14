@@ -11,7 +11,7 @@ function StateHeader({data, stateCode}) {
   return (
     <div className="StateHeader">
       <div className="header-left">
-        <StateDropdown {...{stateCode}} />
+        <StateDropdown {...{stateCode}} hyperlink={false} />
         <h5>{`Last Updated on ${formatDate(
           data.meta.last_updated,
           'dd MMM, p'
