@@ -61,10 +61,12 @@ const Essentials = (props) => {
 
   const getCurrentAddress = (lat, lng) => {
     try {
-      let base = 'https://api.bigdatacloud.net/data/reverse-geocode-client';
-      let url = `${base}?latitude=${lat}&longitude=${lng}&localityLanguage=en`;
+      const base = 'https://api.bigdatacloud.net/data/reverse-geocode-client';
+      const url = `${base}?latitude=${lat}&longitude=${lng}&localityLanguage=en`;
       fetch(url)
-        .then((response) => { return response.json(); })
+        .then((response) => {
+          return response.json();
+        })
         .then((data) => {
           setCurrentAddress(data.locality);
           setCurrentState(data.principalSubdivision);

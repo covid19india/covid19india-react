@@ -62,10 +62,12 @@ function Demographics(props) {
   }, [filters.dateannounced]);
 
   useEffect(() => {
-    let url = `https://api.covid19india.org/raw_data${getPartition()}.json`;
+    const url = `https://api.covid19india.org/raw_data${getPartition()}.json`;
     try {
       fetch(url)
-        .then((response) => { return response.json(); })
+        .then((response) => {
+          return response.json();
+        })
         .then((data) => {
           setPatients(data.raw_data.reverse());
           setFetched(true);

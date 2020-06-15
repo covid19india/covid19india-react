@@ -17,7 +17,9 @@ function FAQ(props) {
 
   const getFAQs = () => {
     fetch(DATA_URL)
-      .then((response) => { return response.json(); })
+      .then((response) => {
+        return response.json();
+      })
       .then((data) => {
         setFaq(data.faq);
       })

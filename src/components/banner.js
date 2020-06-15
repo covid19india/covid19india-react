@@ -10,14 +10,14 @@ function Banner(props) {
 
   useEffect(() => {
     fetch(DATA_URL)
-      .then((response) => { return response.json(); })
+      .then((response) => {
+        return response.json();
+      })
       .then((data) => {
         setSnippets(data.factoids || []);
         setSnippet(
           data.factoids[
-            Math.floor(
-              Math.random() * (data.factoids.length - 1 - 0) + 0
-            )
+            Math.floor(Math.random() * (data.factoids.length - 1 - 0) + 0)
           ] || ''
         );
       })

@@ -106,5 +106,7 @@ export const getStatistic = (data, type, statistic, normalizer = 1) => {
 };
 
 export const fetcher = (url) => {
-  return fetch(url).then((response) => { return response.json() }); 
-}
+  return fetch(url).then((response) => {
+    return response.json();
+  });
+};

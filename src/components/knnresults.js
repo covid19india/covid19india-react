@@ -38,9 +38,11 @@ function KnnResults({userLocation, userState}) {
   }, []);
 
   const getJSON = useCallback(() => {
-    let url = 'https://api.covid19india.org/resources/geoResources.json';
+    const url = 'https://api.covid19india.org/resources/geoResources.json';
     fetch(url)
-      .then((response) => { return response.json(); })
+      .then((response) => {
+        return response.json();
+      })
       .then(setGeoData)
       .catch((error) => {
         console.log(error);
