@@ -1,3 +1,5 @@
+import TableLoader from './loaders/table';
+
 import {PRIMARY_STATISTICS} from '../constants';
 import {capitalize, getStatistic} from '../utils/commonfunctions';
 
@@ -10,16 +12,16 @@ import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {useCallback, useState, useRef, lazy} from 'react';
-import ReactDOM from 'react-dom';
 import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useIsVisible} from 'react-is-visible';
 import {Link} from 'react-router-dom';
 import {useTrail, useTransition, animated, config} from 'react-spring';
 import {createBreakpoint, useLocalStorage} from 'react-use';
+// eslint-disable-next-line
+import worker from 'workerize-loader!../workers/getDistricts';
 
 const Row = lazy(() => import('./row' /* webpackChunkName: "Row" */));
-
 const useBreakpoint = createBreakpoint({S: 768});
 
 function PureStateHeaderCell({handleSort, sortData, statistic}) {
@@ -109,6 +111,7 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
   const isVisible = useIsVisible(tableElement);
 
   const [tableOption, setTableOption] = useState('states');
+  const [isPerMillion, setIsPerMillion] = useState(false);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
 
   const sortingFunction = useCallback(
@@ -133,28 +136,20 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
           : stateCodeB.localeCompare(stateCodeA);
       }
     },
-    [sortData.sortColumn, sortData.isAscending, data, districts]
+    [sortData.sortColumn, sortData.isAscending, districts, data]
   );
 
   const _setTableOption = () => {
-    ReactDOM.unstable_batchedUpdates(() => {
-      setTableOption((prevTableOption) =>
-        prevTableOption === 'states' ? 'districts' : 'states'
-      );
+    setTableOption((prevTableOption) =>
+      prevTableOption === 'states' ? 'districts' : 'states'
+    );
 
-      if (!districts) {
-        Object.keys(data).map((stateCode) => {
-          Object.keys(data[stateCode]?.districts || {}).map((districtName) => {
-            setDistricts((prevDistricts) =>
-              produce(prevDistricts || {}, (draftDistricts) => {
-                draftDistricts[districtName] =
-                  data[stateCode].districts[districtName];
-              })
-            );
-            return null;
-          });
-          return null;
-        });
+    const workerInstance = worker();
+    workerInstance.getDistricts(data);
+    workerInstance.addEventListener('message', (message) => {
+      if (message.data.type !== 'RPC') {
+        setDistricts(message.data);
+        workerInstance.terminate();
       }
     });
   };
@@ -192,9 +187,11 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
 
         <animated.div
           className={classnames('million-toggle', {
-            'is-highlighted': tableOption === 'districts',
+            'is-highlighted': isPerMillion,
           })}
-          onClick={_setTableOption}
+          onClick={() => {
+            setIsPerMillion((prevState) => !prevState);
+          }}
           style={trail[0]}
         >
           1M
@@ -222,7 +219,7 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
           <animated.div key={key} className="table-helper" style={props}>
             <div className="info-item">
               <OrganizationIcon size={14} />
-              <p>Show/Hide Top 50 Cities/Districts</p>
+              <p>Show/Hide Top 50 Districts</p>
             </div>
             <div className="info-item">
               <Info size={15} />
@@ -238,9 +235,7 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
             className="cell heading"
             onClick={() => handleSortClick('stateName')}
           >
-            <div>
-              {t(tableOption === 'states' ? 'State/UT' : 'City/District')}
-            </div>
+            <div>{t(tableOption === 'states' ? 'State/UT' : 'District')}</div>
             {sortData.sortColumn === 'stateName' && (
               <div
                 className={classnames('sort-icon', {
@@ -276,12 +271,15 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
                 <Row
                   key={stateCode}
                   data={data[stateCode]}
+                  {...{isPerMillion}}
                   {...{stateCode, regionHighlighted, setRegionHighlighted}}
                 />
               );
             })}
 
-        {tableOption === 'districts' &&
+        {tableOption === 'districts' && !districts && <TableLoader />}
+
+        {districts &&
           Object.keys(districts)
             .sort((a, b) => sortingFunction(a, b))
             .slice(0, 50)

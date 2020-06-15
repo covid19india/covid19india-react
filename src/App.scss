@@ -1697,7 +1697,7 @@ abbr {
   font-family: 'archia';
   font-weight: 600;
   justify-content: space-between;
-  margin-bottom: .5rem;
+  margin-bottom: .25rem;
   width: calc(100% - 2rem);
 
   .option-toggle,
@@ -1735,6 +1735,11 @@ abbr {
     font-weight: 400;
     padding: 11.5px 10px;
     text-align: center;
+
+    &.is-highlighted {
+      background: $brown-light;
+      color: $brown;
+    }
   }
 }
 
