@@ -1,16 +1,11 @@
 import './App.scss';
 import Blog from './components/Blog';
 import Navbar from './components/Navbar';
-import ScrollToTop from './utils/ScrollToTop';
 
 import React, {lazy, useState, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
-import {
-  BrowserRouter as Router,
-  Route,
-  Redirect,
-  Switch,
-} from 'react-router-dom';
+import {Route, Redirect, Switch, useLocation} from 'react-router-dom';
+import {useTransition, animated, config} from 'react-spring';
 import useDarkMode from 'use-dark-mode';
 
 const Home = lazy(() => import('./components/Home'));
@@ -32,6 +27,7 @@ const schemaMarkup = {
 function App() {
   const darkMode = useDarkMode(false);
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
+  const location = useLocation();
 
   const pages = [
     {
@@ -87,33 +83,24 @@ function App() {
       </Suspense>
 
       <Suspense fallback={<div />}>
-        <Router>
-          <ScrollToTop />
-          <Navbar
-            pages={pages}
-            {...{darkMode}}
-            {...{showLanguageSwitcher, setShowLanguageSwitcher}}
-          />
-          <Route
-            render={({location}) => (
-              <React.Fragment>
-                <Switch location={location}>
-                  {pages.map((page, index) => {
-                    return (
-                      <Route
-                        exact
-                        path={page.pageLink}
-                        render={({match}) => <page.view />}
-                        key={index}
-                      />
-                    );
-                  })}
-                  <Redirect to="/" />
-                </Switch>
-              </React.Fragment>
-            )}
-          />
-        </Router>
+        <Navbar
+          pages={pages}
+          {...{darkMode}}
+          {...{showLanguageSwitcher, setShowLanguageSwitcher}}
+        />
+        <Switch location={location}>
+          {pages.map((page, index) => {
+            return (
+              <Route
+                exact
+                path={page.pageLink}
+                render={({match}) => <page.view />}
+                key={index}
+              />
+            );
+          })}
+          <Redirect to="/" />
+        </Switch>
       </Suspense>
     </div>
   );

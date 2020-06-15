@@ -1,3 +1,6 @@
+import MapSwitcher from './MapSwitcher';
+import StateHeader from './StateHeader';
+
 import {MAP_META} from '../constants';
 import useStickySWR from '../hooks/useStickySWR';
 import {fetcher} from '../utils/commonFunctions';
@@ -5,6 +8,7 @@ import {fetcher} from '../utils/commonFunctions';
 import React, {useState, useRef, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 import {useIsVisible} from 'react-is-visible';
+import {useLocation} from 'react-router-dom';
 
 const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
 const MapExplorer = lazy(() => import('./MapExplorer'));
@@ -17,12 +21,12 @@ const Level = lazy(() => import('./Level'));
 
 function Home(props) {
   const [regionHighlighted, setRegionHighlighted] = useState({
-    stateCode: 'TT',
+    stateCode: 'KA',
     districtName: null,
   });
 
   const [anchor, setAnchor] = useState(null);
-  const [mapStatistic, setMapStatistic] = useState('confirmed');
+  const [mapStatistic, setMapStatistic] = useState('recovered');
 
   const [date, setDate] = useState('');
 
@@ -59,6 +63,8 @@ function Home(props) {
     ].sort(),
   ];
 
+  const location = useLocation();
+
   return (
     <React.Fragment>
       <Helmet>
@@ -89,30 +95,35 @@ function Home(props) {
             )}
           </div>
 
+          <div style={{position: 'relative'}}>
+            <MapSwitcher {...{mapStatistic, setMapStatistic}} />
+
+            {data && (
+              <Suspense fallback={<div />}>
+                <Level data={data['TT']} />
+              </Suspense>
+            )}
+
+            {timeseries && (
+              <Suspense fallback={<div />}>
+                <Minigraphs timeseries={timeseries['TT']} {...{date}} />
+              </Suspense>
+            )}
+          </div>
+
           {data && (
             <Suspense fallback={<div />}>
-              <Level data={data['TT']} />
+              <Table {...{data, regionHighlighted, setRegionHighlighted}} />
             </Suspense>
           )}
-
-          <Suspense fallback={<div />}>
-            {timeseries && (
-              <Minigraphs timeseries={timeseries['TT']} {...{date}} />
-            )}
-          </Suspense>
-
-          <Suspense fallback={<div />}>
-            {data && (
-              <Table {...{data, regionHighlighted, setRegionHighlighted}} />
-            )}
-          </Suspense>
         </div>
 
         <div className="home-right" ref={homeRightElement}>
-          {isVisible && (
+          {(isVisible || location.hash) && (
             <React.Fragment>
               {data && (
                 <Suspense fallback={<div />}>
+                  <StateHeader data={data['TT']} stateCode={'TT'} />
                   <MapExplorer
                     stateCode="TT"
                     {...{data}}

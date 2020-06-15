@@ -1,4 +1,7 @@
 import DeltaBarGraph from './DeltaBarGraph';
+import Level from './Level';
+import MapSwitcher from './MapSwitcher';
+import StateHeader from './StateHeader';
 import StateMeta from './StateMeta';
 
 import {NUM_BARS_STATEPAGE, STATE_NAMES} from '../constants';
@@ -13,7 +16,6 @@ import useSWR from 'swr';
 
 const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
 const MapExplorer = lazy(() => import('./MapExplorer'));
-const Footer = lazy(() => import('./Footer'));
 const Minigraphs = lazy(() => import('./Minigraphs'));
 
 function State(props) {
@@ -21,7 +23,7 @@ function State(props) {
 
   const stateCode = useParams().stateCode.toUpperCase();
 
-  const [mapStatistic, setMapStatistic] = useState('confirmed');
+  const [mapStatistic, setMapStatistic] = useState('recovered');
   const [showAllDistricts, setShowAllDistricts] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState({
     stateCode: stateCode,
@@ -86,7 +88,15 @@ function State(props) {
 
       <div className="State">
         <div className="state-left">
-          <Suspense fallback={<div />}>
+          <StateHeader data={data[stateCode]} stateCode={stateCode} />
+
+          <div style={{position: 'relative'}}>
+            <MapSwitcher {...{mapStatistic, setMapStatistic}} />
+            <Level data={data[stateCode]} />
+            <Minigraphs timeseries={timeseries[stateCode]} />
+          </div>
+
+          <Suspense fallback={<div style={{minHeight: '50rem'}} />}>
             <MapExplorer
               isCountryLoaded={false}
               {...{
@@ -97,9 +107,7 @@ function State(props) {
                 mapStatistic,
                 setMapStatistic,
               }}
-            >
-              <Minigraphs timeseries={timeseries[stateCode]} />
-            </MapExplorer>
+            ></MapExplorer>
           </Suspense>
 
           <StateMeta
@@ -211,7 +219,6 @@ function State(props) {
           </React.Fragment>
         </div>
       </div>
-      <Footer />
     </React.Fragment>
   );
 }
