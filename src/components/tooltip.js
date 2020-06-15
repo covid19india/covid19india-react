@@ -46,9 +46,13 @@ const Tooltip = ({data, children}) => {
 
       {transitions.map(({item, key, props}) =>
         item ? (
-          <animated.div style={props}>
-            <div key={key} className="message">
-              <p>{data}</p>
+          <animated.div key={key} style={props}>
+            <div className="message">
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: data.replace(/\n/g, '<br/>'),
+                }}
+              ></p>
             </div>
           </animated.div>
         ) : (
