@@ -11,7 +11,8 @@ import {
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React, {useCallback, useState, useMemo, useRef, lazy} from 'react';
+import React, {useCallback, useState, useRef, lazy} from 'react';
+import ReactDOM from 'react-dom';
 import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useIsVisible} from 'react-is-visible';
@@ -27,6 +28,7 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
     sortColumn: 'confirmed',
     isAscending: false,
   });
+  const [districts, setDistricts] = useState();
 
   const handleSortClick = useCallback(
     (statistic) => {
@@ -54,24 +56,6 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
   const [tableOption, setTableOption] = useState('states');
   const [isInfoVisible, setIsInfoVisible] = useState(false);
 
-  const districts = useMemo(() => {
-    if (tableOption === 'states') return null;
-    else if (tableOption === 'districts') {
-      let districtsData = {};
-      Object.keys(data).map((stateCode) => {
-        Object.keys(data[stateCode]?.districts || {}).map((districtName) => {
-          districtsData = produce(districtsData, (draftDistricts) => {
-            draftDistricts[districtName] =
-              data[stateCode].districts[districtName];
-          });
-          return null;
-        });
-        return null;
-      });
-      return districtsData;
-    }
-  }, [data, tableOption]);
-
   const sortingFunction = useCallback(
     (stateCodeA, stateCodeB) => {
       if (sortData.sortColumn !== 'stateName') {
@@ -98,9 +82,26 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
   );
 
   const _setTableOption = () => {
-    setTableOption((prevTableOption) =>
-      prevTableOption === 'states' ? 'districts' : 'states'
-    );
+    ReactDOM.unstable_batchedUpdates(() => {
+      setTableOption((prevTableOption) =>
+        prevTableOption === 'states' ? 'districts' : 'states'
+      );
+
+      if (!districts) {
+        Object.keys(data).map((stateCode) => {
+          Object.keys(data[stateCode]?.districts || {}).map((districtName) => {
+            setDistricts((prevDistricts) =>
+              produce(prevDistricts || {}, (draftDistricts) => {
+                draftDistricts[districtName] =
+                  data[stateCode].districts[districtName];
+              })
+            );
+            return null;
+          });
+          return null;
+        });
+      }
+    });
   };
 
   const FADE_IN = {
