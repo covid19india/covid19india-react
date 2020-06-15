@@ -42,7 +42,7 @@ const Actions = ({setDate, dates, date}) => {
 
   return (
     <React.Fragment>
-      {!updates && <div style={{minHeight: '5rem'}} />}
+
 
       {updates && (
         <ActionsPanel
