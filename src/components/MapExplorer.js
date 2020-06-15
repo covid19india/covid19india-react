@@ -1,7 +1,4 @@
-import Level from './Level';
 import MapVisualizerLoader from './loaders/MapVisualizer';
-import MapSwitcher from './MapSwitcher';
-import StateHeader from './StateHeader';
 
 import {
   MAP_META,
@@ -11,10 +8,11 @@ import {
   STATE_NAMES,
   STATE_POPULATIONS_MIL,
   UNKNOWN_DISTRICT_KEY,
+  PRIMARY_STATISTICS,
 } from '../constants';
 import {formatNumber, getStatistic} from '../utils/commonFunctions';
 
-import {DotFillIcon} from '@primer/octicons-v2-react';
+import {DotFillIcon, ArrowLeftIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
@@ -29,6 +27,7 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 import {useTranslation} from 'react-i18next';
+import {useHistory} from 'react-router-dom';
 
 const MapVisualizer = lazy(() => import('./MapVisualizer'));
 
@@ -246,6 +245,17 @@ function MapExplorer({
     []
   );
 
+  const history = useHistory();
+  const panelRef = useRef();
+
+  useEffect(() => {
+    if (history.location.hash === '#MapExplorer') {
+      panelRef.current.scrollIntoView();
+    } else {
+      window.scroll(0, 0);
+    }
+  }, [history]);
+
   return (
     <div
       className={classnames(
@@ -254,12 +264,7 @@ function MapExplorer({
         {hidden: anchor && anchor !== 'mapexplorer'}
       )}
     >
-      <StateHeader data={data[currentMap.code]} stateCode={currentMap.code} />
-      <MapSwitcher {...{mapStatistic, setMapStatistic}} />
-      <Level data={data[currentMap.code]} />
-      {Minigraphs}
-
-      <div className="panel">
+      <div className="panel" ref={panelRef}>
         <div className="panel-left">
           <h2
             className={classnames(mapStatistic, {
@@ -277,43 +282,68 @@ function MapExplorer({
           </div>
         )*/}
 
-          {currentMap.option !== MAP_OPTIONS.ZONES &&
-            ((currentMap.view === MAP_VIEWS.DISTRICTS &&
-              regionHighlighted.districtName) ||
-              (currentMap.view === MAP_VIEWS.STATES &&
-                currentMap.option !== MAP_OPTIONS.TOTAL)) && (
-              <h1 className={classnames('district', mapStatistic)}>
-                {formatNumber(
-                  getStatistic(
-                    hoveredRegion,
-                    'total',
-                    mapStatistic,
-                    currentMap.option === MAP_OPTIONS.PER_MILLION
-                      ? hoveredRegion.population_millions
-                      : 1
-                  )
-                )}
-                <br />
-                <span>
-                  {t(mapStatistic)}
-                  {currentMap.option === MAP_OPTIONS.PER_MILLION &&
-                    ` ${t('per million')}`}
-                </span>
-              </h1>
-            )}
+          {((currentMap.view === MAP_VIEWS.DISTRICTS &&
+            regionHighlighted.districtName) ||
+            (currentMap.view === MAP_VIEWS.STATES && true)) && (
+            <h1 className={classnames('district', mapStatistic)}>
+              {formatNumber(
+                getStatistic(
+                  hoveredRegion,
+                  'total',
+                  mapStatistic,
+                  currentMap.option === MAP_OPTIONS.PER_MILLION
+                    ? hoveredRegion.population_millions
+                    : 1
+                )
+              )}
+              <br />
+              <span>
+                {t(mapStatistic)}
+                {currentMap.option === MAP_OPTIONS.PER_MILLION &&
+                  ` ${t('per million')}`}
+              </span>
+            </h1>
+          )}
         </div>
 
         <div className={classnames('panel-right', `is-${mapStatistic}`)}>
-          <div className="map-type">
+          <div className="switch-type">
             <div
-              className={classnames('choropleth', {'is-highlighted': false})}
+              className={classnames('choropleth', {
+                'is-highlighted': false,
+              })}
             >
               <DotFillIcon size={36} />
             </div>
-            <div className={classnames('bubble', {'is-highlighted': false})}>
+            <div
+              className={classnames('bubble', {
+                'is-highlighted': false,
+              })}
+            >
               {BubblesIcon}
             </div>
           </div>
+
+          <div className="switch-statistic">
+            {PRIMARY_STATISTICS.map((statistic) => (
+              <div key={statistic} className={`is-${statistic}`}>
+                <DotFillIcon />
+              </div>
+            ))}
+          </div>
+
+          {history.location.pathname !== '/' && (
+            <div className="buttons">
+              <div
+                className="back"
+                onClick={() => {
+                  history.push('/#MapExplorer');
+                }}
+              >
+                <ArrowLeftIcon />
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -338,7 +368,7 @@ function MapExplorer({
               setRegionHighlighted={setRegionHighlighted}
               statistic={mapStatistic}
               isCountryLoaded={isCountryLoaded}
-            />
+            ></MapVisualizer>
           </Suspense>
         )}
       </div>

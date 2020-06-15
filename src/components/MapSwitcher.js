@@ -34,25 +34,23 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
   }, [mapStatistic, set, width]);
 
   return (
-    <React.Fragment>
-      <div className="MapSwitcher" ref={mapSwitcher}>
-        <animated.div className="highlight" style={spring}></animated.div>
+    <div className="MapSwitcher" ref={mapSwitcher}>
+      <animated.div className="highlight" style={spring}></animated.div>
 
-        {PRIMARY_STATISTICS.map((statistic, index) => (
-          <div
-            key={index}
-            className={classnames('clickable', {[`is-${statistic}`]: !clicked})}
-            onClick={() => {
-              setMapStatistic(statistic);
-              set({
-                background: `${COLORS[statistic]}20`,
-                transform: `translateX(${width * index * 0.25}px)`,
-              });
-            }}
-          ></div>
-        ))}
-      </div>
-    </React.Fragment>
+      {PRIMARY_STATISTICS.map((statistic, index) => (
+        <div
+          key={index}
+          className={classnames('clickable', {[`is-${statistic}`]: !clicked})}
+          onClick={() => {
+            setMapStatistic(statistic);
+            set({
+              background: `${COLORS[statistic]}20`,
+              transform: `translateX(${width * index * 0.25}px)`,
+            });
+          }}
+        ></div>
+      ))}
+    </div>
   );
 };
 

@@ -449,18 +449,9 @@ h6 {
     width: 100%;
   }
 
-  .MapSwitcher {
-    .clickable,
-    .highlight {
-      height: 12rem;
-    }
-  }
-
   .Minigraph {
-    margin-top: -1rem;
-
     .svg-parent {
-      width: calc(20%) !important;
+      width: calc(25%) !important;
     }
   }
 
@@ -1532,7 +1523,6 @@ h6 {
   flex-direction: row;
   justify-content: space-between;
   position: absolute;
-  top: 5rem;
   width: 100%;
 
   .highlight {
@@ -1545,7 +1535,7 @@ h6 {
   .clickable {
     border-radius: 5px;
     cursor: pointer;
-    height: 8rem;
+    height: 12rem;
     width: calc(25%);
     z-index: 10;
   }
@@ -1858,6 +1848,9 @@ abbr {
       .cell {
         background: $gray-hover-opaque !important;
       }
+
+      position: sticky;
+      top: 0;
     }
 
     .cell {
@@ -2101,14 +2094,16 @@ abbr {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 3rem;
     position: relative;
+    min-height: 6rem;
+    padding-top: 1rem;
 
     h2 {
       font-weight: 900;
       margin-top: 0;
       width: calc(100% - 10rem);
       word-wrap: break-word;
+      transition: color 0.3s ease-in-out;
 
       &.confirmed {
         color: $brick;
@@ -2205,11 +2200,14 @@ abbr {
         }
       }
 
-      .map-type {
+      .switch-type,
+      .switch-statistic {
         display: flex;
         flex-direction: row;
+        justify-content: flex-end;
+        margin-bottom: .25rem;
 
-        & > div {
+        div {
           border-radius: 5px;
           background: $gray-light;
           width: 2.5rem;
@@ -2220,15 +2218,73 @@ abbr {
           justify-content: center;
           align-items: center;
 
+          &.back {
+            margin-top: .25rem;
+            margin-right: 0 !important;
+
+            svg {
+              stroke: transparent;
+              fill: $gray;
+            }
+          }
+
           &:hover {
             background: $gray-hover;
           }
 
-          &:first-child {
+          &:not(:last-child) {
             margin-right: .25rem;
           }
         }
       }
+
+      .switch-statistic {
+        flex-direction: column;
+        align-self: flex-end;
+        position: absolute;
+        top: 3.75rem;
+
+        div {
+          background: none;
+          margin-bottom: .25rem;
+          margin-right: 0 !important;
+          width: 1rem;
+          height: 1rem;
+
+          &.is-confirmed {
+            svg{
+              stroke: $cherry;
+              fill: $cherry;
+            }
+          }
+
+          &.is-active {
+            svg {
+              stroke: $blue;
+              fill: $blue;
+            }
+          }
+
+          &.is-recovered {
+            svg {
+              stroke: $green;
+              fill: $green;
+            }
+          }
+
+          &.is-deceased {
+            svg {
+              stroke: $gray;
+              fill: $gray;
+            }
+          }
+        }
+      }
+    }
+
+    &.bottom {
+      margin-top: 0;
+      padding-top: 0;
     }
   }
 
@@ -2239,10 +2295,8 @@ abbr {
 
   .disclaimer {
     backdrop-filter: saturate(180%) blur(20px);
-    background: $gray-light;
     border-radius: 5px;
     bottom: 50%;
-    color: $gray-dark;
     display: flex;
     flex-direction: row;
     font-family: 'archia';
@@ -2254,13 +2308,38 @@ abbr {
     pointer-events: none;
     position: absolute;
     right: 0;
-    width: 14rem;
+    align-items: center;
+    width: 10rem;
     z-index: 99;
+    transition: background, color 0.3s ease-in-out;
+
+    &.is-confirmed {
+      background: $cherry-light;
+      color: $cherry;
+    }
+
+    &.is-active {
+      background: $blue-light;
+      color: $blue;
+    }
+
+    &.is-recovered {
+      background: $green-light;
+      color: $green;
+    }
+
+    &.is-deceased {
+      background: $gray-light;
+      color: $gray;
+    }
+
+    span {
+      flex: 1;
+    }
 
     svg {
-      margin-right: 0.25rem;
-      margin-top: -0.9rem;
-      position: relative !important;
+      align-self: flex-start;
+      margin-right: 0.5rem;
       stroke-width: 2px;
       width: 20px;
     }
@@ -2753,7 +2832,6 @@ input {
   margin: 0;
   margin-bottom: 1rem;
   margin-top: 1rem;
-  width: 30rem;
 
   .svg-parent {
     background: transparent !important;
@@ -4492,8 +4570,8 @@ footer {
   .fineprint,
   .header,
   .TimeSeriesExplorer,
+  .StateHeader,
   .Links,
-  .Minigraph,
   .Summary,
   .FAQ,
   .MapExplorer,

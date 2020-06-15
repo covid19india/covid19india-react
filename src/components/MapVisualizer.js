@@ -19,6 +19,7 @@ import {
   getStatistic,
 } from '../utils/commonFunctions';
 
+import classnames from 'classnames';
 import {max} from 'd3-array';
 import {json} from 'd3-fetch';
 import {geoMercator, geoPath} from 'd3-geo';
@@ -35,6 +36,7 @@ import {transition} from 'd3-transition';
 import React, {useEffect, useMemo, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
+import {useHistory} from 'react-router-dom';
 import useSWR from 'swr';
 import * as topojson from 'topojson';
 
@@ -60,11 +62,13 @@ function MapVisualizer({
   setRegionHighlighted,
   statistic,
   isCountryLoaded,
+  children: Panel,
 }) {
   const {t} = useTranslation();
   const svgRef = useRef(null);
 
   const mapMeta = MAP_META[currentMap.code];
+  const history = useHistory();
 
   const {data: geoData} = useSWR(
     mapMeta.geoDataFile,
@@ -251,7 +255,10 @@ function MapVisualizer({
         svg.attr('pointer-events', 'none');
         svg.select('.regions').selectAll('path').attr('pointer-events', 'none');
         // Switch map
-        changeMap(STATE_CODES[d.properties.st_nm]);
+        history.push(
+          `/state/${stateCode}${window.innerWidth < 769 ? '#MapExplorer' : ''}`
+        );
+        // changeMap(STATE_CODES[d.properties.st_nm]);
       });
 
     regionSelection.select('title').text((d) => {
@@ -413,6 +420,7 @@ function MapVisualizer({
     mapScale,
     statistic,
     statisticTotal,
+    history,
   ]);
 
   useEffect(() => {
@@ -478,14 +486,18 @@ function MapVisualizer({
             data[currentMap.code]?.districts?.[UNKNOWN_DISTRICT_KEY],
             statistic
           ) && (
-            <div className="disclaimer">
+            <div className={classnames('disclaimer', `is-${statistic}`)}>
               <Icon.AlertCircle />
-              {t('District-wise {{statistic}} numbers need reconciliation', {
-                statistic: t(statistic),
-              })}
+              <span>
+                {t('District-wise {{statistic}} numbers need reconciliation', {
+                  statistic: t(statistic),
+                })}
+              </span>
             </div>
           )}
       </div>
+
+      {Panel}
 
       {mapScale && (
         <MapLegend
