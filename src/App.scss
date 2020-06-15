@@ -1737,6 +1737,11 @@ abbr {
     font-weight: 400;
     padding: 11.5px 10px;
     text-align: center;
+
+    &.is-highlighted {
+      background: $brown-light;
+      color: $brown;
+    }
   }
 }
 
