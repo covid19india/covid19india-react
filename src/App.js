@@ -1,4 +1,5 @@
 import './App.scss';
+import Blog from './components/blog';
 import Navbar from './components/navbar';
 import ScrollToTop from './utils/ScrollToTop';
 
@@ -70,6 +71,12 @@ function App() {
       pageLink: '/about',
       view: FAQ,
       displayName: 'About',
+      showInNavbar: true,
+    },
+    {
+      pageLink: '/blog',
+      view: Blog,
+      displayName: 'Blog',
       showInNavbar: true,
     },
     {
