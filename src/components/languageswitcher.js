@@ -39,7 +39,11 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
 
   const languageSwitcherRef = useRef();
   useClickAway(languageSwitcherRef, () => {
-    setShowLanguageSwitcher(false);
+    setTimeout(() => {
+      if (showLanguageSwitcher) {
+        setShowLanguageSwitcher(false);
+      }
+    }, 200);
   });
 
   return transitions.map(({item, key, props}) =>
