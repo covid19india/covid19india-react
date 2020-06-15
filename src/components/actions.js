@@ -43,21 +43,18 @@ const Actions = ({setDate, dates, date}) => {
   return (
     <React.Fragment>
 
-
-      {updates && (
-        <ActionsPanel
-          {...{
-            lastViewedLog,
-            newUpdate,
-            showUpdates,
-            setDate,
-            dates,
-            setNewUpdate,
-            setShowUpdates,
-            date
-          }}
-        />
-      )}
+      <ActionsPanel
+        {...{
+          lastViewedLog,
+          newUpdate,
+          showUpdates,
+          setDate,
+          dates,
+          setNewUpdate,
+          setShowUpdates,
+          date
+        }}
+      />
 
       {showUpdates && (
         <Suspense fallback={<div />}>
