@@ -1,4 +1,3 @@
-import axios from 'axios';
 import classnames from 'classnames';
 import produce from 'immer';
 import {layer} from 'leaflet';
@@ -39,11 +38,10 @@ function KnnResults({userLocation, userState}) {
   }, []);
 
   const getJSON = useCallback(() => {
-    axios
-      .get('https://api.covid19india.org/resources/geoResources.json')
-      .then((response) => {
-        setGeoData(response.data);
-      })
+    let url = 'https://api.covid19india.org/resources/geoResources.json';
+    fetch(url)
+      .then((response) => { return response.json(); })
+      .then(setGeoData)
       .catch((error) => {
         console.log(error);
       });

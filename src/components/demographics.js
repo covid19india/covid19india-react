@@ -4,7 +4,6 @@ import Patients from './patients';
 
 import {RAW_DATA_PARTITIONS} from '../constants';
 
-import axios from 'axios';
 import {format, subDays, isWithinInterval, parse} from 'date-fns';
 import React, {useState, useEffect, useCallback} from 'react';
 import DatePicker from 'react-date-picker';
@@ -63,11 +62,12 @@ function Demographics(props) {
   }, [filters.dateannounced]);
 
   useEffect(() => {
+    let url = `https://api.covid19india.org/raw_data${getPartition()}.json`;
     try {
-      axios
-        .get(`https://api.covid19india.org/raw_data${getPartition()}.json`)
-        .then((response) => {
-          setPatients(response.data.raw_data.reverse());
+      fetch(url)
+        .then((response) => { return response.json(); })
+        .then((data) => {
+          setPatients(data.raw_data.reverse());
           setFetched(true);
         });
     } catch (err) {
