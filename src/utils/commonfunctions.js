@@ -1,6 +1,5 @@
 import {INDIA_ISO_SUFFIX, LOCALE_SHORTHANDS} from '../constants';
 
-import axios from 'axios';
 import {format, formatDistance, formatISO, subDays} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
 import i18n from 'i18next';
@@ -106,4 +105,8 @@ export const getStatistic = (data, type, statistic, normalizer = 1) => {
   return count / normalizer;
 };
 
-export const fetcher = (url) => axios(url).then((response) => response.data);
+export const fetcher = (url) => {
+  return fetch(url).then((response) => {
+    return response.json();
+  });
+};

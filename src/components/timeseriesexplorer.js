@@ -7,8 +7,6 @@ import {
 } from '../constants';
 import {getIndiaYesterdayISO, parseIndiaDate} from '../utils/commonfunctions';
 
-import 'intersection-observer';
-
 import {PinIcon, IssueOpenedIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import {formatISO, sub} from 'date-fns';
