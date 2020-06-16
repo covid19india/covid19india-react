@@ -332,7 +332,7 @@ function MapExplorer({
               <div
                 key={statistic}
                 className={classnames('statistic-option', `is-${statistic}`, {
-                  'is-highlighted': mapStatistic == statistic,
+                  'is-highlighted': mapStatistic === statistic,
                 })}
                 onClick={() => {
                   setMapStatistic(statistic);

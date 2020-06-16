@@ -24,7 +24,7 @@ import {json} from 'd3-fetch';
 import {geoMercator, geoPath} from 'd3-geo';
 import {scaleSqrt, scaleSequential} from 'd3-scale';
 // eslint-disable-next-line
-import worker from 'workerize-loader!../workers/mapVisualizer';
+// import worker from 'workerize-loader!../workers/mapVisualizer';
 import {
   interpolateReds,
   interpolateBlues,
@@ -34,7 +34,7 @@ import {
 } from 'd3-scale-chromatic';
 import {select, event} from 'd3-selection';
 import {transition} from 'd3-transition';
-import React, {useEffect, useMemo, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
@@ -140,10 +140,37 @@ function MapVisualizer({
     return geoPath(projection);
   }, [projection]);
 
-  useEffect(() => {
-    const svg = select(svgRef.current);
+  const fillColor = useCallback((d) => {
+    const stateCode = STATE_CODES[d.properties.st_nm];
+    const district = d.properties.district;
+    const stateData = data[stateCode];
+    const districtData = stateData?.districts?.[district];
+    let n;
+    if (currentMap.option === MAP_OPTIONS.ZONES) {
+      n = districtData?.zone || 0;
+    } else {
+      if (district) n = getTotalStatistic(districtData, statistic);
+      else
+        n = getTotalStatistic(
+          stateData,
+          statistic,
+          currentMap.option === MAP_OPTIONS.PER_MILLION
+            ? STATE_POPULATIONS_MIL[stateCode]
+            : 1
+        );
+    }
+    const color = n === 0 ? '#ffffff00' : mapScale(n);
+    return color;
+  }, [currentMap.option, data, mapScale, statistic]);
 
-    let features =
+  const strokeColor = useCallback((d) => {
+    return currentMap.option === MAP_OPTIONS.ZONES
+      ? '#343a40'
+      : COLORS[statistic];
+  }, [currentMap.option, statistic]);
+
+  const features = useMemo(() => {
+    let featuresWrap =
       currentMap.view === MAP_VIEWS.STATES
         ? topojson.feature(geoData, geoData.objects[mapMeta.graphObjectStates])
             .features
@@ -165,45 +192,18 @@ function MapVisualizer({
           ).features;
 
     // Add id to each feature
-    features = features.map((feature) => {
+    return featuresWrap.map((feature) => {
       const district = feature.properties.district;
       const state = feature.properties.st_nm;
       const obj = Object.assign({}, feature);
       obj.id = `${currentMap.code}-${state}${district ? '-' + district : ''}`;
       return obj;
     });
+  }, [geoData, currentMap.code, currentMap.view, currentMap.option, mapMeta]);
 
-    const fillColor = (d) => {
-      const stateCode = STATE_CODES[d.properties.st_nm];
-      const district = d.properties.district;
-      const stateData = data[stateCode];
-      const districtData = stateData?.districts?.[district];
-      let n;
-      if (currentMap.option === MAP_OPTIONS.ZONES) {
-        n = districtData?.zone || 0;
-      } else {
-        if (district) n = getTotalStatistic(districtData, statistic);
-        else
-          n = getTotalStatistic(
-            stateData,
-            statistic,
-            currentMap.option === MAP_OPTIONS.PER_MILLION
-              ? STATE_POPULATIONS_MIL[stateCode]
-              : 1
-          );
-      }
-      const color = n === 0 ? '#ffffff00' : mapScale(n);
-      return color;
-    };
-
-    const strokeColor = (d) => {
-      return currentMap.option === MAP_OPTIONS.ZONES
-        ? '#343a40'
-        : COLORS[statistic];
-    };
-
-    /* Draw map */
-    const t = transition().duration(D3_TRANSITION_DURATION);
+  useEffect(() => {
+    const svg = select(svgRef.current);
+    const T = transition().duration(D3_TRANSITION_DURATION);
     let onceTouchedRegion = null;
     const regionSelection = svg
       .select('.regions')
@@ -241,7 +241,7 @@ function MapVisualizer({
         (update) =>
           update.call((update) =>
             update
-              .transition(t)
+              .transition(T)
               .attr('fill', fillColor)
               .attr('stroke', strokeColor)
           )
@@ -284,15 +284,24 @@ function MapVisualizer({
         );
       }
     });
+  }, [
+    data,
+    mapMeta,
+    currentMap.option,
+    setRegionHighlighted,
+    // changeMap,
+    statistic,
+    statisticTotal,
+    history,
+    path,
+    features,
+    fillColor,
+    strokeColor,
+  ]);
 
-    svg
-      .transition()
-      .duration(mapMeta.mapType === MAP_TYPES.STATE ? t.duration() / 2 : 0)
-      .on('end', () =>
-        svg.attr('class', currentMap.option === MAP_OPTIONS.ZONES ? 'zone' : '')
-      );
-
-    /* ----------BUBBLE MAP----------*/
+  useEffect(() => {
+    const svg = select(svgRef.current);
+    const T = transition().duration(D3_TRANSITION_DURATION);
     let circlesData = [];
     if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
       circlesData = features
@@ -334,12 +343,24 @@ function MapVisualizer({
             event.stopPropagation();
           })
       )
-      .transition(t)
+      .transition(T)
       .attr('fill', COLORS[statistic] + '70')
       .attr('stroke', COLORS[statistic] + '70')
       .attr('r', (d) => mapScale(d.value));
-    /* ------------------------------*/
+  }, [
+    data,
+    mapMeta,
+    currentMap.option,
+    setRegionHighlighted,
+    mapScale,
+    statistic,
+    path,
+    features,
+  ]);
 
+  useEffect(() => {
+    const svg = select(svgRef.current);
+    const T = transition().duration(D3_TRANSITION_DURATION);
     let meshStates = [];
     if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
       meshStates = [
@@ -375,7 +396,7 @@ function MapVisualizer({
         (d) => d.id
       )
       .join((enter) => enter.append('path').attr('d', path))
-      .transition(t)
+      .transition(T)
       .attr('stroke', () => {
         if (currentMap.option === MAP_OPTIONS.ZONES) {
           return '#00000060';
@@ -402,21 +423,14 @@ function MapVisualizer({
           .attr('fill', 'none')
           .attr('stroke-width', 1.5)
       )
-      .transition(t)
+      .transition(T)
       .attr('stroke', '#343a4050');
   }, [
     geoData,
-    data,
     mapMeta,
-    currentMap,
-    setRegionHighlighted,
-    changeMap,
-    isCountryLoaded,
-    mapScale,
+    currentMap.option,
+    currentMap.view,
     statistic,
-    statisticTotal,
-    history,
-    projection,
     path,
   ]);
 
