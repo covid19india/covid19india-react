@@ -11,25 +11,28 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
   const [spring, set] = useSpring(() => ({
     opacity: 0,
     background: `${COLORS[mapStatistic]}20`,
+    transform: `translateX(${
+      width * PRIMARY_STATISTICS.indexOf(mapStatistic) * 0.25
+    }px)`,
     config: config.gentle,
-    onStart: () => {
-      setClicked(true);
-    },
-    onRest: () => {
-      setClicked(false);
-    },
   }));
 
   useEffect(() => {
     if (width > 0) {
-      setTimeout(() => {
-        set({
-          transform: `translateX(${
-            width * PRIMARY_STATISTICS.indexOf(mapStatistic) * 0.25
-          }px)`,
-          opacity: 1,
-        });
-      }, 1000);
+      set({
+        transform: `translateX(${
+          width * PRIMARY_STATISTICS.indexOf(mapStatistic) * 0.25
+        }px)`,
+        opacity: 1,
+        background: `${COLORS[mapStatistic]}20`,
+        delay: 0,
+        onStart: () => {
+          setClicked(true);
+        },
+        onRest: () => {
+          setClicked(false);
+        },
+      });
     }
   }, [mapStatistic, set, width]);
 
@@ -43,10 +46,6 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
           className={classnames('clickable', {[`is-${statistic}`]: !clicked})}
           onClick={() => {
             setMapStatistic(statistic);
-            set({
-              background: `${COLORS[statistic]}20`,
-              transform: `translateX(${width * index * 0.25}px)`,
-            });
           }}
         ></div>
       ))}
@@ -55,6 +54,9 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
 };
 
 const isEqual = (prevProps, currProps) => {
+  if (prevProps.mapStatistic !== currProps.mapStatistic) {
+    return false;
+  }
   return true;
 };
 

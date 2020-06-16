@@ -6,7 +6,7 @@ import {useHistory} from 'react-router-dom';
 import {useTransition, animated} from 'react-spring';
 import {useClickAway} from 'react-use';
 
-const StateDropdown = ({stateCode}) => {
+const StateDropdown = ({stateCode, trail}) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef();
   const history = useHistory();
@@ -41,15 +41,16 @@ const StateDropdown = ({stateCode}) => {
 
   return (
     <div className="StateDropdown">
-      <h1
+      <animated.h1
         className="state-name"
+        style={trail}
         onClick={() => {
           setShowDropdown((prevData) => !prevData);
         }}
         ref={dropdownRef}
       >
         {t(STATE_NAMES[stateCode])}
-      </h1>
+      </animated.h1>
 
       {transitions.map(({item, key, props}) =>
         item ? (

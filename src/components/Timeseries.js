@@ -278,8 +278,6 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
             enter
               .append('line')
               .attr('class', 'stem')
-              .style('stroke', color + '99')
-              .style('stroke-width', 4)
               .attr('x1', (date) => xScale(parseIndiaDate(date)))
               .attr('y1', chartBottom)
               .attr('x2', (date) => xScale(parseIndiaDate(date)))
@@ -336,7 +334,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
 
   return (
     <React.Fragment>
-      <div className="TimeSeries">
+      <div className="Timeseries">
         {TIMESERIES_STATISTICS.map((statistic, index) => {
           const delta = getStatisticDelta(statistic);
           return (

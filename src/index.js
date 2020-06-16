@@ -7,14 +7,14 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter as Router} from 'react-router-dom';
 
 const App = lazy(() => import('./App' /* webpackChunkName: "App" */));
+const rootElement = document.getElementById('root');
 
-ReactDOM.render(
+ReactDOM.unstable_createRoot(rootElement).render(
   <Suspense fallback={<div />}>
     <Router>
       <App />
     </Router>
-  </Suspense>,
-  document.getElementById('root')
+  </Suspense>
 );
 
 serviceWorker.register();

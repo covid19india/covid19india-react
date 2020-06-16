@@ -45,13 +45,14 @@ function PureLevelItem({statistic, total, delta}) {
 const LevelItem = React.memo(PureLevelItem);
 
 function Level({data}) {
-  const [trail, set] = useTrail(4, () => ({
-    transform: 'translate3d(0, 20px, 0)',
-    opacity: 0,
+  const trail = useTrail(4, {
+    from: {
+      transform: 'translate3d(0, 20px, 0)',
+      opacity: 0,
+    },
+    to: {transform: 'translate3d(0, 0px, 0)', opacity: 1},
     config: config.stiff,
-  }));
-
-  set({transform: 'translate3d(0, 0px, 0)', opacity: 1});
+  });
 
   return (
     <div className="Level">

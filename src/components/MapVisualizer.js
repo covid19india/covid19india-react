@@ -11,7 +11,6 @@ import {
   STATE_NAMES,
   STATE_POPULATIONS_MIL,
   UNKNOWN_DISTRICT_KEY,
-  ZONE_COLORS,
 } from '../constants';
 import {
   capitalizeAll,
@@ -23,7 +22,9 @@ import classnames from 'classnames';
 import {max} from 'd3-array';
 import {json} from 'd3-fetch';
 import {geoMercator, geoPath} from 'd3-geo';
-import {scaleOrdinal, scaleSqrt, scaleSequential} from 'd3-scale';
+import {scaleSqrt, scaleSequential} from 'd3-scale';
+// eslint-disable-next-line
+import worker from 'workerize-loader!../workers/mapVisualizer';
 import {
   interpolateReds,
   interpolateBlues,
@@ -83,6 +84,7 @@ function MapVisualizer({
       (stateCode) =>
         stateCode !== 'TT' && Object.keys(MAP_META).includes(stateCode)
     );
+
     return currentMap.view === MAP_VIEWS.STATES
       ? max(stateCodes, (stateCode) =>
           getTotalStatistic(
@@ -113,9 +115,7 @@ function MapVisualizer({
   }, [data, currentMap.code, currentMap.option, statistic]);
 
   const mapScale = useMemo(() => {
-    if (currentMap.option === MAP_OPTIONS.ZONES) {
-      return scaleOrdinal(Object.keys(ZONE_COLORS), Object.values(ZONE_COLORS));
-    } else if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
+    if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
       return scaleSqrt([0, Math.max(statisticMax, 1)], [0, 40])
         .clamp(true)
         .nice(3);
@@ -127,16 +127,21 @@ function MapVisualizer({
     }
   }, [currentMap.option, statistic, statisticMax]);
 
-  useEffect(() => {
+  const projection = useMemo(() => {
     const topology = topojson.feature(
       geoData,
       geoData.objects[mapMeta.graphObjectStates || mapMeta.graphObjectDistricts]
     );
 
-    const svg = select(svgRef.current);
+    return geoMercator().fitSize([width, height], topology);
+  }, [geoData, mapMeta.graphObjectDistricts, mapMeta.graphObjectStates]);
 
-    const projection = geoMercator().fitSize([width, height], topology);
-    const path = geoPath(projection);
+  const path = useMemo(() => {
+    return geoPath(projection);
+  }, [projection]);
+
+  useEffect(() => {
+    const svg = select(svgRef.current);
 
     let features =
       currentMap.view === MAP_VIEWS.STATES
@@ -160,10 +165,10 @@ function MapVisualizer({
           ).features;
 
     // Add id to each feature
-    features = features.map((f) => {
-      const district = f.properties.district;
-      const state = f.properties.st_nm;
-      const obj = Object.assign({}, f);
+    features = features.map((feature) => {
+      const district = feature.properties.district;
+      const state = feature.properties.st_nm;
+      const obj = Object.assign({}, feature);
       obj.id = `${currentMap.code}-${state}${district ? '-' + district : ''}`;
       return obj;
     });
@@ -399,16 +404,6 @@ function MapVisualizer({
       )
       .transition(t)
       .attr('stroke', '#343a4050');
-
-    // Reset on tapping outside map
-    svg.attr('pointer-events', 'auto').on('click', () => {
-      if (mapMeta.mapType !== MAP_TYPES.STATE) {
-        setRegionHighlighted({
-          stateCode: 'TT',
-          districtName: null,
-        });
-      }
-    });
   }, [
     geoData,
     data,
@@ -421,6 +416,8 @@ function MapVisualizer({
     statistic,
     statisticTotal,
     history,
+    projection,
+    path,
   ]);
 
   useEffect(() => {
@@ -498,15 +495,6 @@ function MapVisualizer({
       </div>
 
       {Panel}
-
-      {mapScale && (
-        <MapLegend
-          data={data}
-          mapScale={mapScale}
-          mapOption={currentMap.option}
-          statistic={statistic}
-        />
-      )}
 
       <svg style={{position: 'absolute', height: 0}}>
         <defs>

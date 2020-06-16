@@ -58,7 +58,6 @@ export const MAP_OPTIONS = {
   TOTAL: 'Total',
   PER_MILLION: 'Per million',
   HOTSPOTS: 'Hotspots',
-  // ZONES: 'Zones',
 };
 
 export const MAP_VIEWS = {
@@ -69,12 +68,6 @@ export const MAP_VIEWS = {
 export const MAP_TYPES = {
   COUNTRY: 0,
   STATE: 1,
-};
-
-export const ZONE_COLORS = {
-  Red: '#d73027',
-  Orange: '#fee08b',
-  Green: '#66bd63',
 };
 
 export const MAPS_DIR =
@@ -310,7 +303,7 @@ export const STATE_NAMES = {
   LA: 'Ladakh',
   LD: 'Lakshadweep',
   PY: 'Puducherry',
-  TT: 'Total',
+  TT: 'India',
   UN: 'Unassigned',
 };
 
