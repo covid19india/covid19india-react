@@ -27,14 +27,15 @@ function Home(props) {
 
   const [anchor, setAnchor] = useState(null);
   const [mapStatistic, setMapStatistic] = useState('recovered');
-
   const [date, setDate] = useState('');
+  const location = useLocation();
 
   const {data: timeseries} = useStickySWR(
     'https://api.covid19india.org/v3/min/timeseries.min.json',
     fetcher,
     {
-      revalidateOnFocus: false,
+      revalidateOnMount: true,
+      refreshInterval: 100000,
     }
   );
 
@@ -46,7 +47,6 @@ function Home(props) {
     {
       revalidateOnMount: true,
       refreshInterval: 100000,
-      revalidateOnFocus: false,
     }
   );
 
@@ -62,8 +62,6 @@ function Home(props) {
       ]),
     ].sort(),
   ];
-
-  const location = useLocation();
 
   return (
     <React.Fragment>

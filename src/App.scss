@@ -470,7 +470,7 @@ h6 {
     }
   }
 
-  .TimeSeriesExplorer {
+  .TimeseriesExplorer {
     .anchor {
       display: none;
     }
@@ -1535,7 +1535,7 @@ h6 {
   .clickable {
     border-radius: 5px;
     cursor: pointer;
-    height: 12rem;
+    height: 13rem;
     width: calc(25%);
     z-index: 10;
   }
@@ -1734,7 +1734,7 @@ abbr {
 
   .million-toggle {
     font-size: 13px;
-    font-weight: 400;
+    font-weight: 600;
     padding: 11.5px 10px;
     text-align: center;
 
@@ -2141,6 +2141,7 @@ abbr {
       .district {
         line-height: 15px;
         margin: 0;
+        transition: color 0.3s ease-in-out;
 
         span {
           font-size: 0.75rem;
@@ -2206,7 +2207,7 @@ abbr {
       }
 
       .switch-type,
-      .switch-statistic {
+      .switch-statistic, {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
@@ -2224,7 +2225,6 @@ abbr {
           align-items: center;
 
           &.back {
-            margin-top: .25rem;
             margin-right: 0 !important;
 
             svg {
@@ -2244,43 +2244,73 @@ abbr {
       }
 
       .switch-statistic {
-        flex-direction: column;
+        flex-direction: row;
         align-self: flex-end;
         position: absolute;
         top: 3.75rem;
 
         div {
+          display: flex;
+          flex-direction: row;
           background: none;
           margin-bottom: .25rem;
-          margin-right: 0 !important;
+          margin-right: .65rem !important;
           width: 1rem;
           height: 1rem;
 
+          &:hover {
+            background: none;
+          }
+
           &.is-confirmed {
             svg{
-              stroke: $cherry;
-              fill: $cherry;
+              stroke: none;
+              fill: $cherry-hover;
+            }
+
+            &.is-highlighted {
+              svg {
+                fill: $cherry;
+              }
             }
           }
 
           &.is-active {
             svg {
-              stroke: $blue;
-              fill: $blue;
+              stroke: none;
+              fill: $blue-hover;
+            }
+
+            &.is-highlighted {
+              svg {
+                fill: $blue;
+              }
             }
           }
 
           &.is-recovered {
             svg {
-              stroke: $green;
-              fill: $green;
+              stroke: none;
+              fill: $green-hover;
+            }
+
+            &.is-highlighted {
+              svg {
+                fill: $green;
+              }
             }
           }
 
           &.is-deceased {
             svg {
-              stroke: $gray;
-              fill: $gray;
+              stroke: none;
+              fill: $gray-hover;
+            }
+
+            &.is-highlighted {
+              svg {
+                fill: $gray;
+              }
             }
           }
         }
@@ -2455,7 +2485,7 @@ abbr {
   }
 }
 
-.TimeSeriesExplorer {
+.TimeseriesExplorer {
   align-self: center;
   display: flex;
   flex-direction: column;
@@ -2474,13 +2504,48 @@ abbr {
   }
 }
 
-.TimeSeries {
+.Timeseries {
   align-self: center;
   width: 100%;
 
   .svg-parent {
     height: 10rem;
     margin-bottom: 1rem;
+    cursor: col-resize;
+
+    line.stem {
+      stroke-width: 4px;
+    }
+
+    &.is-confirmed {
+      line.stem {
+        stroke: $cherry-mid;
+      }
+    }
+
+    &.is-active {
+      line.stem {
+        stroke: $blue-mid;
+      }
+    }
+
+    &.is-recovered {
+      line.stem {
+        stroke: $green-mid;
+      }
+    }
+
+    &.is-deceased {
+      line.stem {
+        stroke: $gray-mid;
+      }
+    }
+
+    &.is-tested {
+      line.stem {
+        stroke: $purple-mid;
+      }
+    }
   }
 }
 
@@ -2621,7 +2686,7 @@ input {
   }
 }
 
-.TimeSeries,
+.Timeseries,
 .Minigraph {
   display: flex;
   flex-direction: column;
@@ -4574,7 +4639,7 @@ footer {
   .table,
   .fineprint,
   .header,
-  .TimeSeriesExplorer,
+  .TimeseriesExplorer,
   .StateHeader,
   .Links,
   .Summary,
@@ -4632,7 +4697,7 @@ footer {
     width: calc(100% - 2rem);
   }
 
-  .TimeSeries {
+  .Timeseries {
     .svg-parent {
       width: 100%;
     }
@@ -4993,7 +5058,7 @@ footer {
     }
   }
 
-  .TimeSeries,
+  .Timeseries,
   .Minigraph {
     .stats {
       &.is-tested {

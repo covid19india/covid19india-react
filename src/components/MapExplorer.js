@@ -44,7 +44,6 @@ function MapExplorer({
   children: Minigraphs,
 }) {
   const {t} = useTranslation();
-
   const mapExplorerRef = useRef();
 
   const [currentMap, setCurrentMap] = useState({
@@ -276,12 +275,6 @@ function MapExplorer({
               ` (${t(STATE_NAMES[regionHighlighted.stateCode])})`}
           </h2>
 
-          {/* currentMapMeta.mapType === MAP_TYPES.STATE && (
-          <div className="map-button" onClick={() => switchMap('TT')}>
-            {t('Back')}
-          </div>
-        )*/}
-
           {((currentMap.view === MAP_VIEWS.DISTRICTS &&
             regionHighlighted.districtName) ||
             (currentMap.view === MAP_VIEWS.STATES && true)) && (
@@ -322,18 +315,7 @@ function MapExplorer({
             >
               {BubblesIcon}
             </div>
-          </div>
-
-          <div className="switch-statistic">
-            {PRIMARY_STATISTICS.map((statistic) => (
-              <div key={statistic} className={`is-${statistic}`}>
-                <DotFillIcon />
-              </div>
-            ))}
-          </div>
-
-          {history.location.pathname !== '/' && (
-            <div className="buttons">
+            {currentMapMeta.mapType === MAP_TYPES.STATE && (
               <div
                 className="back"
                 onClick={() => {
@@ -342,8 +324,24 @@ function MapExplorer({
               >
                 <ArrowLeftIcon />
               </div>
-            </div>
-          )}
+            )}
+          </div>
+
+          <div className="switch-statistic">
+            {PRIMARY_STATISTICS.map((statistic) => (
+              <div
+                key={statistic}
+                className={classnames('statistic-option', `is-${statistic}`, {
+                  'is-highlighted': mapStatistic == statistic,
+                })}
+                onClick={() => {
+                  setMapStatistic(statistic);
+                }}
+              >
+                <DotFillIcon />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -389,17 +387,6 @@ function MapExplorer({
           </div>
         ))}
       </div>
-
-      <h6 className={classnames('footnote')}>
-        &dagger; {`${t('Based on 2019 population projection by NCP, see ')}`}
-        <a
-          href="https://nhm.gov.in/New_Updates_2018/Report_Population_Projection_2019.pdf"
-          target="_noblank"
-          style={{color: '#6c757d'}}
-        >
-          {t('source')}
-        </a>
-      </h6>
     </div>
   );
 }
