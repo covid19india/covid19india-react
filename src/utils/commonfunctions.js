@@ -72,6 +72,11 @@ export const capitalize = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
+export const getPercentageText = (confirmed, total) => {
+  const percentage = (total * 100) / confirmed;
+  return '(' + Math.round(percentage * 100) / 100 + '%' + ')';
+};
+
 export const capitalizeAll = (s) => {
   if (typeof s !== 'string') return '';
   const str = s.toLowerCase().split(' ');

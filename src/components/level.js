@@ -1,15 +1,18 @@
 import {PRIMARY_STATISTICS} from '../constants';
-import {capitalize, formatNumber, getStatistic} from '../utils/commonfunctions';
+import {
+  capitalize,
+  formatNumber,
+  getPercentageText,
+  getStatistic,
+} from '../utils/commonfunctions';
 
 import {HeartFillIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import React from 'react';
-import {useTranslation} from 'react-i18next';
 import {animated, useSpring, config, useTrail} from 'react-spring';
 
-function PureLevelItem({statistic, total, delta}) {
-  const {t} = useTranslation();
+function PureLevelItem({statistic, total, delta, confirmed}) {
   const spring = useSpring(
     {
       total: total,
@@ -21,7 +24,13 @@ function PureLevelItem({statistic, total, delta}) {
 
   return (
     <React.Fragment>
-      <h5>{t(capitalize(statistic))}</h5>
+      <h5>
+        {capitalize(statistic) +
+          ' ' +
+          (statistic !== 'confirmed'
+            ? getPercentageText(confirmed, total)
+            : '')}
+      </h5>
       <animated.h4>
         {statistic !== 'active' ? (
           delta > 0 ? (
@@ -65,6 +74,7 @@ function Level({data}) {
             {...{statistic}}
             total={getStatistic(data, 'total', statistic)}
             delta={getStatistic(data, 'delta', statistic)}
+            confirmed={getStatistic(data, 'total', 'confirmed')}
           />
         </animated.div>
       ))}
