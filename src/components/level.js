@@ -10,9 +10,11 @@ import {HeartFillIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {animated, useSpring, config, useTrail} from 'react-spring';
 
 function PureLevelItem({statistic, total, delta, confirmed}) {
+  const {t} = useTranslation();
   const spring = useSpring(
     {
       total: total,
@@ -25,7 +27,7 @@ function PureLevelItem({statistic, total, delta, confirmed}) {
   return (
     <React.Fragment>
       <h5>
-        {capitalize(statistic) +
+        {t(capitalize(statistic)) +
           ' ' +
           (statistic !== 'confirmed'
             ? getPercentageText(confirmed, total)
