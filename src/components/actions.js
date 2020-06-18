@@ -42,23 +42,19 @@ const Actions = ({setDate, dates}) => {
 
   return (
     <React.Fragment>
-      {!updates && <div style={{minHeight: '5rem'}} />}
-
-      {updates && (
-        <ActionsPanel
-          {...{
-            lastViewedLog,
-            newUpdate,
-            isTimelineMode,
-            setIsTimelineMode,
-            showUpdates,
-            setDate,
-            dates,
-            setNewUpdate,
-            setShowUpdates,
-          }}
-        />
-      )}
+      <ActionsPanel
+        {...{
+          lastViewedLog,
+          newUpdate,
+          isTimelineMode,
+          setIsTimelineMode,
+          showUpdates,
+          setDate,
+          dates,
+          setNewUpdate,
+          setShowUpdates,
+        }}
+      />
 
       {showUpdates && (
         <Suspense fallback={<div />}>

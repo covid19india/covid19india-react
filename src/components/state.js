@@ -11,7 +11,7 @@ import {
   getStatistic,
 } from '../utils/commonfunctions';
 
-import React, {useState, useMemo, lazy, Suspense} from 'react';
+import React, {useMemo, useState, lazy, Suspense} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
@@ -85,7 +85,9 @@ function State(props) {
   const gridRowCount = useMemo(() => {
     const gridColumnCount = window.innerWidth >= 540 ? 3 : 2;
     const districtCount = data[stateCode]?.districts
-      ? Object.keys(data[stateCode].districts).length
+      ? Object.keys(data[stateCode].districts).filter(
+          (districtName) => districtName !== 'Unknown'
+        ).length
       : 0;
     const gridRowCount = Math.ceil(districtCount / gridColumnCount);
     return gridRowCount;
@@ -167,7 +169,7 @@ function State(props) {
           </div>
 
           <Level data={data[stateCode]} />
-          <Minigraph timeseries={timeseries[stateCode]} />
+          <Minigraph timeseries={timeseries[stateCode]} {...{stateCode}} />
 
           <Suspense fallback={<div />}>
             <MapExplorer
@@ -276,7 +278,8 @@ function State(props) {
                   </div>
                 )}
                 <DeltaBarGraph
-                  timeseries={timeseries[stateCode]}
+                  timeseries={timeseries[stateCode] || {}}
+                  {...{stateCode}}
                   statistic={mapStatistic}
                 />
               </div>

@@ -19,7 +19,19 @@ import {
   getStatistic,
 } from '../utils/commonfunctions';
 
-import * as d3 from 'd3';
+import {max} from 'd3-array';
+import {json} from 'd3-fetch';
+import {geoMercator, geoPath} from 'd3-geo';
+import {scaleOrdinal, scaleSqrt, scaleSequential} from 'd3-scale';
+import {
+  interpolateReds,
+  interpolateBlues,
+  interpolateGreens,
+  interpolateGreys,
+  interpolatePurples,
+} from 'd3-scale-chromatic';
+import {select, event} from 'd3-selection';
+import {transition} from 'd3-transition';
 import React, {useEffect, useMemo, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
@@ -29,11 +41,11 @@ import * as topojson from 'topojson';
 const [width, height] = [432, 488];
 
 const colorInterpolator = {
-  confirmed: (t) => d3.interpolateReds(t * 0.85),
-  active: (t) => d3.interpolateBlues(t * 0.85),
-  recovered: (t) => d3.interpolateGreens(t * 0.85),
-  deceased: (t) => d3.interpolateGreys(t * 0.85),
-  tested: (t) => d3.interpolatePurples(t * 0.85),
+  confirmed: (t) => interpolateReds(t * 0.85),
+  active: (t) => interpolateBlues(t * 0.85),
+  recovered: (t) => interpolateGreens(t * 0.85),
+  deceased: (t) => interpolateGreys(t * 0.85),
+  tested: (t) => interpolatePurples(t * 0.85),
 };
 
 const getTotalStatistic = (data, statistic, normalizer = 1) => {
@@ -57,7 +69,7 @@ function MapVisualizer({
   const {data: geoData} = useSWR(
     mapMeta.geoDataFile,
     async (file) => {
-      return await d3.json(file);
+      return await json(file);
     },
     {revalidateOnFocus: false, suspense: true}
   );
@@ -68,7 +80,7 @@ function MapVisualizer({
         stateCode !== 'TT' && Object.keys(MAP_META).includes(stateCode)
     );
     return currentMap.view === MAP_VIEWS.STATES
-      ? d3.max(stateCodes, (stateCode) =>
+      ? max(stateCodes, (stateCode) =>
           getTotalStatistic(
             data[stateCode],
             statistic,
@@ -77,9 +89,9 @@ function MapVisualizer({
               : 1
           )
         )
-      : d3.max(stateCodes, (stateCode) =>
+      : max(stateCodes, (stateCode) =>
           data[stateCode]?.districts
-            ? d3.max(Object.values(data[stateCode].districts), (districtData) =>
+            ? max(Object.values(data[stateCode].districts), (districtData) =>
                 getTotalStatistic(districtData, statistic)
               )
             : 0
@@ -98,22 +110,16 @@ function MapVisualizer({
 
   const mapScale = useMemo(() => {
     if (currentMap.option === MAP_OPTIONS.ZONES) {
-      return d3.scaleOrdinal(
-        Object.keys(ZONE_COLORS),
-        Object.values(ZONE_COLORS)
-      );
+      return scaleOrdinal(Object.keys(ZONE_COLORS), Object.values(ZONE_COLORS));
     } else if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
-      return d3
-        .scaleSqrt([0, Math.max(statisticMax, 1)], [0, 40])
+      return scaleSqrt([0, Math.max(statisticMax, 1)], [0, 40])
         .clamp(true)
         .nice(3);
     } else {
-      return d3
-        .scaleSequential(
-          [0, Math.max(1, statisticMax)],
-          colorInterpolator[statistic]
-        )
-        .clamp(true);
+      return scaleSequential(
+        [0, Math.max(1, statisticMax)],
+        colorInterpolator[statistic]
+      ).clamp(true);
     }
   }, [currentMap.option, statistic, statisticMax]);
 
@@ -123,10 +129,10 @@ function MapVisualizer({
       geoData.objects[mapMeta.graphObjectStates || mapMeta.graphObjectDistricts]
     );
 
-    const svg = d3.select(svgRef.current);
+    const svg = select(svgRef.current);
 
-    const projection = d3.geoMercator().fitSize([width, height], topology);
-    const path = d3.geoPath(projection);
+    const projection = geoMercator().fitSize([width, height], topology);
+    const path = geoPath(projection);
 
     let features =
       currentMap.view === MAP_VIEWS.STATES
@@ -188,7 +194,7 @@ function MapVisualizer({
     };
 
     /* Draw map */
-    const t = d3.transition().duration(D3_TRANSITION_DURATION);
+    const t = transition().duration(D3_TRANSITION_DURATION);
     let onceTouchedRegion = null;
     const regionSelection = svg
       .select('.regions')
@@ -233,7 +239,7 @@ function MapVisualizer({
       )
       .attr('pointer-events', 'all')
       .on('click', (d) => {
-        d3.event.stopPropagation();
+        event.stopPropagation();
         const stateCode = STATE_CODES[d.properties.st_nm];
         if (
           onceTouchedRegion ||
@@ -313,7 +319,7 @@ function MapVisualizer({
             });
           })
           .on('click', () => {
-            d3.event.stopPropagation();
+            event.stopPropagation();
           })
       )
       .transition(t)
@@ -413,7 +419,7 @@ function MapVisualizer({
     const state = STATE_NAMES[regionHighlighted.stateCode];
     const district = regionHighlighted.districtName;
 
-    const svg = d3.select(svgRef.current);
+    const svg = select(svgRef.current);
     if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
       svg
         .select('.circles')
@@ -436,7 +442,7 @@ function MapVisualizer({
             (currentMap.view === MAP_VIEWS.STATES ||
               district === d.properties?.district);
           if (highlighted) this.parentNode.appendChild(this);
-          d3.select(this).attr('stroke-opacity', highlighted ? 1 : 0);
+          select(this).attr('stroke-opacity', highlighted ? 1 : 0);
         });
     }
   }, [

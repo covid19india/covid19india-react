@@ -1,6 +1,7 @@
-import axios from 'axios';
 import React, {useState, useEffect, useCallback} from 'react';
 // import {useTranslation} from 'react-i18next';
+
+const DATA_URL = 'https://api.covid19india.org/website_data.json';
 
 function Banner(props) {
   // const {t} = useTranslation();
@@ -8,15 +9,15 @@ function Banner(props) {
   const [snippet, setSnippet] = useState();
 
   useEffect(() => {
-    axios
-      .get('https://api.covid19india.org/website_data.json')
+    fetch(DATA_URL)
       .then((response) => {
-        setSnippets(response.data.factoids || []);
+        return response.json();
+      })
+      .then((data) => {
+        setSnippets(data.factoids || []);
         setSnippet(
-          response.data.factoids[
-            Math.floor(
-              Math.random() * (response.data.factoids.length - 1 - 0) + 0
-            )
+          data.factoids[
+            Math.floor(Math.random() * (data.factoids.length - 1 - 0) + 0)
           ] || ''
         );
       })

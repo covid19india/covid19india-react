@@ -1,5 +1,5 @@
 import './App.scss';
-import LanguageSwitcher from './components/languageswitcher';
+import Blog from './components/blog';
 import Navbar from './components/navbar';
 import ScrollToTop from './utils/ScrollToTop';
 
@@ -27,6 +27,12 @@ const State = lazy(() =>
 );
 const Essentials = lazy(() =>
   import('./components/essentials' /* webpackChunkName: "Essentials" */)
+);
+
+const LanguageSwitcher = lazy(() =>
+  import(
+    './components/languageswitcher' /* webpackChunkName: "LanguageSwitcher" */
+  )
 );
 
 const schemaMarkup = {
@@ -68,6 +74,12 @@ function App() {
       showInNavbar: true,
     },
     {
+      pageLink: '/blog',
+      view: Blog,
+      displayName: 'Blog',
+      showInNavbar: true,
+    },
+    {
       pageLink: '/state/:stateCode',
       view: State,
       displayName: 'State',
@@ -83,7 +95,11 @@ function App() {
         </script>
       </Helmet>
 
-      <LanguageSwitcher {...{showLanguageSwitcher, setShowLanguageSwitcher}} />
+      <Suspense fallback={<div />}>
+        <LanguageSwitcher
+          {...{showLanguageSwitcher, setShowLanguageSwitcher}}
+        />
+      </Suspense>
 
       <Suspense fallback={<div />}>
         <Router>

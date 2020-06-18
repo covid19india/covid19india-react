@@ -263,6 +263,7 @@ h6 {
   .home-left {
     margin-left: 2.5rem;
     margin-right: 2.5rem;
+    min-height: 60rem;
   }
 
   .home-right {
@@ -1668,6 +1669,7 @@ abbr {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  margin-bottom: .25rem;
   width: 28rem;
 
   .text {
@@ -1696,7 +1698,6 @@ abbr {
   font-family: 'archia';
   font-size: 12px;
   margin-bottom: 2.5rem;
-  margin-top: .25rem;
   overflow-x: auto;
   width: 28rem;
 
@@ -4346,10 +4347,10 @@ footer {
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    height: 1rem;
     justify-content: center;
+    min-height: 1rem;
+    min-width: 1rem;
     padding: 1rem;
-    width: 1rem;
 
     &:hover {
       background: $pblue-hover;
@@ -4371,6 +4372,7 @@ footer {
     flex-wrap: wrap;
     justify-content: center;
     margin-bottom: 2.5rem;
+    min-height: 10rem;
 
     .language {
       border-radius: 5px;
@@ -4573,7 +4575,6 @@ footer {
   .FAQ,
   .MapExplorer,
   .filters,
-  .updates,
   .map-switcher,
   .updates-header,
   .StateMeta,
