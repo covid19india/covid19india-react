@@ -49,7 +49,7 @@ function StateMeta({stateCode, data, timeseries}) {
   return (
     <React.Fragment>
       <div className="StateMeta population">
-        <div className="meta-item population fadeInUp">
+        <div className="meta-item population">
           <h3>Population</h3>
           <h1>{formatNumber(STATE_POPULATIONS[stateCode])}</h1>
         </div>
@@ -177,4 +177,11 @@ function StateMeta({stateCode, data, timeseries}) {
   );
 }
 
-export default StateMeta;
+const isEqual = (prevProps, currProps) => {
+  if (prevProps.stateCode !== currProps.stateCode) {
+    return false;
+  }
+  return true;
+};
+
+export default React.memo(StateMeta, isEqual);

@@ -2,13 +2,14 @@ import MapSwitcher from './MapSwitcher';
 import StateHeader from './StateHeader';
 
 import {MAP_META} from '../constants';
+import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
 import {fetcher} from '../utils/commonFunctions';
 
 import React, {useState, useRef, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
-import {useIsVisible} from 'react-is-visible';
 import {useLocation} from 'react-router-dom';
+import {useWindowSize} from 'react-use';
 
 const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
 const MapExplorer = lazy(() => import('./MapExplorer'));
@@ -51,7 +52,8 @@ function Home(props) {
   );
 
   const homeRightElement = useRef();
-  const isVisible = useIsVisible(homeRightElement, {once: true});
+  const isVisible = useIsVisible(homeRightElement);
+  const {width} = useWindowSize();
 
   const stateCodes = [
     'TT',
@@ -94,10 +96,11 @@ function Home(props) {
           </div>
 
           <div style={{position: 'relative'}}>
-            <MapSwitcher {...{mapStatistic, setMapStatistic}} />
-
             {data && (
-              <Suspense fallback={<div />}>
+              <Suspense fallback={<div style={{height: '50rem'}} />}>
+                {width > 769 && (
+                  <MapSwitcher {...{mapStatistic, setMapStatistic}} />
+                )}
                 <Level data={data['TT']} />
               </Suspense>
             )}
@@ -146,6 +149,7 @@ function Home(props) {
           )}
         </div>
       </div>
+
       {isVisible && (
         <Suspense fallback={<div />}>
           <Footer />

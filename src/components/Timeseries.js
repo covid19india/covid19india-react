@@ -25,6 +25,7 @@ import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import {animated, config, useTrail} from 'react-spring';
 
 function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   const {t} = useTranslation();
@@ -178,126 +179,162 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
     }
 
     /* Begin drawing charts */
-    refs.current.forEach((ref, i) => {
-      const svg = select(ref);
-      const t = svg.transition().duration(D3_TRANSITION_DURATION);
+    requestIdleCallback(() => {
+      refs.current.forEach((ref, i) => {
+        const svg = select(ref);
+        const t = svg.transition().duration(D3_TRANSITION_DURATION);
 
-      const statistic = TIMESERIES_STATISTICS[i];
-      const yScale = generateYScale(statistic);
-      const color = COLORS[statistic];
+        const statistic = TIMESERIES_STATISTICS[i];
+        const yScale = generateYScale(statistic);
+        const color = COLORS[statistic];
 
-      /* X axis */
-      svg
-        .select('.x-axis')
-        .style('transform', `translateY(${chartBottom}px)`)
-        .transition(t)
-        .call(xAxis);
-      svg.select('.x-axis2').transition(t).call(xAxis2, yScale);
-
-      /* Y axis */
-      svg
-        .select('.y-axis')
-        .style('transform', `translateX(${chartRight}px)`)
-        .transition(t)
-        .call(yAxis, yScale);
-
-      /* Path dots */
-      svg
-        .selectAll('circle')
-        .data(dates, (date) => date)
-        .join((enter) =>
-          enter
-            .append('circle')
-            .attr('fill', color)
-            .attr('stroke', color)
-            .attr('r', 2)
-            .attr('cy', chartBottom)
-            .attr('cx', (date) => xScale(parseIndiaDate(date)))
-        )
-        .transition(t)
-        .attr('cx', (date) => xScale(parseIndiaDate(date)))
-        .attr('cy', (date) =>
-          yScale(getStatistic(timeseries[date], chartType, statistic))
-        );
-
-      if (chartType === 'total') {
+        /* X axis */
         svg
-          .selectAll('.stem')
+          .select('.x-axis')
+          .style('transform', `translateY(${chartBottom}px)`)
           .transition(t)
-          .attr('y1', yScale(0))
-          .attr('y2', yScale(0))
-          .remove();
+          .call(xAxis);
 
-        const linePath = line()
-          .curve(curveMonotoneX)
-          .x((date) => xScale(parseIndiaDate(date)))
-          .y((date) =>
-            yScale(getStatistic(timeseries[date], chartType, statistic))
-          );
+        svg.select('.x-axis2').transition(t).call(xAxis2, yScale);
 
-        let pathLength;
+        /* Y axis */
         svg
-          .selectAll('.trend')
-          .data(T ? [dates] : [])
-          .join(
-            (enter) =>
-              enter
-                .append('path')
-                .attr('class', 'trend')
-                .attr('fill', 'none')
-                .attr('stroke', color + '50')
-                .attr('stroke-width', 4)
-                .attr('d', linePath)
-                .attr('stroke-dasharray', function () {
-                  return (pathLength = this.getTotalLength());
-                })
-                .call((enter) =>
-                  enter
-                    .attr('stroke-dashoffset', pathLength)
-                    .transition(t)
-                    .attr('stroke-dashoffset', 0)
-                ),
-            (update) =>
-              update
-                .attr('stroke-dasharray', null)
-                .transition(t)
-                .attrTween('d', function (date) {
-                  const previous = select(this).attr('d');
-                  const current = linePath(date);
-                  return interpolatePath(previous, current);
-                })
-          );
-      } else {
-        /* DAILY TRENDS */
-        svg.selectAll('.trend').remove();
+          .select('.y-axis')
+          .style('transform', `translateX(${chartRight}px)`)
+          .transition(t)
+          .call(yAxis, yScale);
 
+        /* Path dots */
         svg
-          .selectAll('.stem')
+          .selectAll('circle')
           .data(dates, (date) => date)
           .join((enter) =>
             enter
-              .append('line')
-              .attr('class', 'stem')
-              .attr('x1', (date) => xScale(parseIndiaDate(date)))
-              .attr('y1', chartBottom)
-              .attr('x2', (date) => xScale(parseIndiaDate(date)))
-              .attr('y2', chartBottom)
+              .append('circle')
+              .attr('fill', color)
+              .attr('stroke', color)
+              .attr('r', 2)
+              .attr('cy', chartBottom)
+              .attr('cx', (date) => xScale(parseIndiaDate(date)))
           )
           .transition(t)
-          .attr('x1', (date) => xScale(parseIndiaDate(date)))
-          .attr('y1', yScale(0))
-          .attr('x2', (date) => xScale(parseIndiaDate(date)))
-          .attr('y2', (date) =>
+          .attr('cx', (date) => xScale(parseIndiaDate(date)))
+          .attr('cy', (date) =>
             yScale(getStatistic(timeseries[date], chartType, statistic))
           );
-      }
 
-      svg.selectAll('*').attr('pointer-events', 'none');
-      svg
-        .on('mousemove', mousemove)
-        .on('touchmove', mousemove)
-        .on('mouseout', mouseout)
-        .on('touchend', mouseout);
+        if (chartType === 'total') {
+          svg
+            .selectAll('.stem')
+            .transition(t)
+            .attr('y1', yScale(0))
+            .attr('y2', yScale(0))
+            .remove();
+
+          const linePath = line()
+            .curve(curveMonotoneX)
+            .x((date) => xScale(parseIndiaDate(date)))
+            .y((date) =>
+              yScale(getStatistic(timeseries[date], chartType, statistic))
+            );
+
+          let pathLength;
+
+          svg
+            .selectAll('.trend')
+            .data(T ? [dates] : [])
+            .join(
+              (enter) =>
+                enter
+                  .append('path')
+                  .attr('class', 'trend')
+                  .attr('fill', 'none')
+                  .attr('stroke', color + '50')
+                  .attr('stroke-width', 4)
+                  .attr('d', linePath)
+                  .attr('stroke-dasharray', function () {
+                    return (pathLength = this.getTotalLength());
+                  })
+                  .call((enter) =>
+                    enter
+                      .attr('stroke-dashoffset', pathLength)
+                      .transition(t)
+                      .attr('stroke-dashoffset', 0)
+                  ),
+              (update) =>
+                update
+                  .attr('stroke-dasharray', null)
+                  .transition(t)
+                  .attrTween('d', function (date) {
+                    const previous = select(this).attr('d');
+                    const current = linePath(date);
+                    return interpolatePath(previous, current);
+                  })
+            );
+
+          svg
+            .selectAll('.trend')
+            .data(T ? [dates] : [])
+            .join(
+              (enter) =>
+                enter
+                  .append('path')
+                  .attr('class', 'trend')
+                  .attr('fill', 'none')
+                  .attr('stroke', color + '50')
+                  .attr('stroke-width', 4)
+                  .attr('d', linePath)
+                  .attr('stroke-dasharray', function () {
+                    return (pathLength = this.getTotalLength());
+                  })
+                  .call((enter) =>
+                    enter
+                      .attr('stroke-dashoffset', pathLength)
+                      .transition(t)
+                      .attr('stroke-dashoffset', 0)
+                  ),
+              (update) =>
+                update
+                  .attr('stroke-dasharray', null)
+                  .transition(t)
+                  .attrTween('d', function (date) {
+                    const previous = select(this).attr('d');
+                    const current = linePath(date);
+                    return interpolatePath(previous, current);
+                  })
+            );
+        } else {
+          /* DAILY TRENDS */
+          svg.selectAll('.trend').remove();
+
+          svg
+            .selectAll('.stem')
+            .data(dates, (date) => date)
+            .join((enter) =>
+              enter
+                .append('line')
+                .attr('class', 'stem')
+                .attr('x1', (date) => xScale(parseIndiaDate(date)))
+                .attr('y1', chartBottom)
+                .attr('x2', (date) => xScale(parseIndiaDate(date)))
+                .attr('y2', chartBottom)
+            )
+            .transition(t)
+            .attr('x1', (date) => xScale(parseIndiaDate(date)))
+            .attr('y1', yScale(0))
+            .attr('x2', (date) => xScale(parseIndiaDate(date)))
+            .attr('y2', (date) =>
+              yScale(getStatistic(timeseries[date], chartType, statistic))
+            );
+        }
+
+        svg.selectAll('*').attr('pointer-events', 'none');
+        svg
+          .on('mousemove', mousemove)
+          .on('touchmove', mousemove)
+          .on('mouseout', mouseout)
+          .on('touchend', mouseout);
+      });
     });
   }, [chartType, dimensions, isUniform, isLog, timeseries, dates]);
 
@@ -332,16 +369,27 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
     [timeseries, highlightedDate, chartType]
   );
 
+  const trail = useTrail(5, {
+    from: {transform: 'translate3d(0, 10px, 0)', opacity: 0},
+    to: {
+      transform: 'translate3d(0, 0px, 0)',
+      opacity: 1,
+    },
+    delay: 350,
+    config: config.gentle,
+  });
+
   return (
     <React.Fragment>
-      <div className="Timeseries">
+      <div className="Timeseries" style={trail[0]}>
         {TIMESERIES_STATISTICS.map((statistic, index) => {
-          const delta = getStatisticDelta(statistic);
+          const delta = getStatisticDelta(statistic, index);
           return (
-            <div
+            <animated.div
               key={statistic}
               className={classnames('svg-parent', `is-${statistic}`)}
               ref={wrapperRef}
+              style={trail[index]}
             >
               {highlightedDate && (
                 <div className={classnames('stats', `is-${statistic}`)}>
@@ -373,7 +421,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
                 <g className="x-axis2" />
                 <g className="y-axis" />
               </svg>
-            </div>
+            </animated.div>
           );
         })}
       </div>

@@ -5,6 +5,7 @@ import {
   TIMESERIES_CHART_TYPES,
   TIMESERIES_OPTIONS,
 } from '../constants';
+import useIsVisible from '../hooks/useIsVisible';
 import {getIndiaYesterdayISO, parseIndiaDate} from '../utils/commonFunctions';
 
 import {PinIcon, IssueOpenedIcon} from '@primer/octicons-v2-react';
@@ -13,7 +14,7 @@ import {formatISO, sub} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useMemo, useRef, useState, lazy, Suspense} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useIsVisible} from 'react-is-visible';
+import {animated, config, useTrail} from 'react-spring';
 import {useLocalStorage} from 'react-use';
 
 const Timeseries = lazy(() => import('./Timeseries'));
@@ -29,7 +30,7 @@ function TimeseriesExplorer({
 }) {
   const {t} = useTranslation();
   const [timeseriesOption, setTimeseriesOption] = useState(
-    TIMESERIES_OPTIONS.MONTH
+    TIMESERIES_OPTIONS.TWO_WEEKS
   );
   const [chartType, setChartType] = useLocalStorage('chartType', 'total');
   const [isUniform, setIsUniform] = useLocalStorage('isUniform', true);
@@ -64,6 +65,16 @@ function TimeseriesExplorer({
     });
   };
 
+  const trail = useTrail(5, {
+    from: {transform: 'translate3d(0, 10px, 0)', opacity: 0},
+    to: {
+      transform: 'translate3d(0, 0px, 0)',
+      opacity: 1,
+    },
+    delay: 250,
+    config: config.gentle,
+  });
+
   return (
     <div
       className={classnames('TimeseriesExplorer', {
@@ -84,24 +95,29 @@ function TimeseriesExplorer({
           <PinIcon />
         </div>
 
-        <h1>{t('Spread Trends')}</h1>
+        <animated.h1 style={trail[0]}>{t('Spread Trends')}</animated.h1>
         <div className="tabs">
-          {Object.entries(TIMESERIES_CHART_TYPES).map(([ctype, value]) => (
-            <div
-              className={`tab ${chartType === ctype ? 'focused' : ''}`}
-              key={ctype}
-              onClick={() => {
-                setChartType(ctype);
-              }}
-            >
-              <h4>{t(value)}</h4>
-            </div>
-          ))}
+          {Object.entries(TIMESERIES_CHART_TYPES).map(
+            ([ctype, value], index) => (
+              <animated.div
+                className={`tab ${chartType === ctype ? 'focused' : ''}`}
+                key={ctype}
+                onClick={() => {
+                  setChartType(ctype);
+                }}
+                style={trail[index]}
+              >
+                <h4>{t(value)}</h4>
+              </animated.div>
+            )
+          )}
         </div>
 
         <div className="scale-modes">
-          <label className="main">{t('Scale Modes')}</label>
-          <div className="timeseries-mode">
+          <animated.label className="main" style={trail[2]}>
+            {t('Scale Modes')}
+          </animated.label>
+          <animated.div className="timeseries-mode" style={trail[3]}>
             <label htmlFor="timeseries-mode">{t('Uniform')}</label>
             <input
               id="timeseries-mode"
@@ -113,11 +129,12 @@ function TimeseriesExplorer({
                 setIsUniform(!isUniform);
               }}
             />
-          </div>
-          <div
+          </animated.div>
+          <animated.div
             className={`timeseries-logmode ${
               chartType !== 'total' ? 'disabled' : ''
             }`}
+            style={trail[4]}
           >
             <label htmlFor="timeseries-logmode">{t('Logarithmic')}</label>
             <input
@@ -130,24 +147,8 @@ function TimeseriesExplorer({
                 setIsLog(!isLog);
               }}
             />
-          </div>
+          </animated.div>
         </div>
-
-        {stateCodes && (
-          <div className="trends-state-name">
-            <select value={regionHighlighted.stateCode} onChange={handleChange}>
-              {stateCodes.map((stateCode) => {
-                return (
-                  <option value={stateCode} key={stateCode}>
-                    {stateCode === 'TT'
-                      ? t('All States')
-                      : t(STATE_NAMES[stateCode])}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-        )}
       </div>
 
       {isVisible && (
@@ -158,6 +159,8 @@ function TimeseriesExplorer({
           />
         </Suspense>
       )}
+
+      {!isVisible && <div style={{height: '50rem'}} />}
 
       <div className="pills">
         {Object.values(TIMESERIES_OPTIONS).map((option) => (

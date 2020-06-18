@@ -2,6 +2,7 @@ import TableLoader from './loaders/table';
 import StateHeaderCell from './StateHeaderCell';
 
 import {PRIMARY_STATISTICS} from '../constants';
+import useIsVisible from '../hooks/useIsVisible';
 import {getStatistic} from '../utils/commonFunctions';
 
 import {
@@ -15,7 +16,6 @@ import produce from 'immer';
 import React, {useCallback, useState, useRef, lazy} from 'react';
 import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
-import {useIsVisible} from 'react-is-visible';
 import {Link} from 'react-router-dom';
 import {useTrail, useTransition, animated, config} from 'react-spring';
 import {createBreakpoint, useLocalStorage} from 'react-use';
@@ -257,9 +257,7 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
               );
             })}
 
-        {!isVisible && (
-          <span className="intersection" ref={tableElement}></span>
-        )}
+        <span className="intersection" ref={tableElement}></span>
 
         <Row
           key={'TT'}

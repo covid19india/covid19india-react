@@ -82,12 +82,12 @@ function App() {
         />
       </Suspense>
 
+      <Navbar
+        pages={pages}
+        {...{darkMode}}
+        {...{showLanguageSwitcher, setShowLanguageSwitcher}}
+      />
       <Suspense fallback={<div />}>
-        <Navbar
-          pages={pages}
-          {...{darkMode}}
-          {...{showLanguageSwitcher, setShowLanguageSwitcher}}
-        />
         <Switch location={location}>
           {pages.map((page, index) => {
             return (

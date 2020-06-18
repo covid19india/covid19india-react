@@ -76,7 +76,7 @@ function MapVisualizer({
     async (file) => {
       return await json(file);
     },
-    {suspense: true}
+    {suspense: false, revalidateOnFocus: false}
   );
 
   const statisticMax = useMemo(() => {
@@ -127,50 +127,55 @@ function MapVisualizer({
     }
   }, [currentMap.option, statistic, statisticMax]);
 
-  const projection = useMemo(() => {
+  const path = useMemo(() => {
+    if (!geoData) return null;
+
     const topology = topojson.feature(
       geoData,
       geoData.objects[mapMeta.graphObjectStates || mapMeta.graphObjectDistricts]
     );
 
-    return geoMercator().fitSize([width, height], topology);
+    return geoPath(geoMercator().fitSize([width, height], topology));
   }, [geoData, mapMeta.graphObjectDistricts, mapMeta.graphObjectStates]);
 
-  const path = useMemo(() => {
-    return geoPath(projection);
-  }, [projection]);
+  const fillColor = useCallback(
+    (d) => {
+      const stateCode = STATE_CODES[d.properties.st_nm];
+      const district = d.properties.district;
+      const stateData = data[stateCode];
+      const districtData = stateData?.districts?.[district];
+      let n;
+      if (currentMap.option === MAP_OPTIONS.ZONES) {
+        n = districtData?.zone || 0;
+      } else {
+        if (district) n = getTotalStatistic(districtData, statistic);
+        else
+          n = getTotalStatistic(
+            stateData,
+            statistic,
+            currentMap.option === MAP_OPTIONS.PER_MILLION
+              ? STATE_POPULATIONS_MIL[stateCode]
+              : 1
+          );
+      }
+      const color = n === 0 ? '#ffffff00' : mapScale(n);
+      return color;
+    },
+    [currentMap.option, data, mapScale, statistic]
+  );
 
-  const fillColor = useCallback((d) => {
-    const stateCode = STATE_CODES[d.properties.st_nm];
-    const district = d.properties.district;
-    const stateData = data[stateCode];
-    const districtData = stateData?.districts?.[district];
-    let n;
-    if (currentMap.option === MAP_OPTIONS.ZONES) {
-      n = districtData?.zone || 0;
-    } else {
-      if (district) n = getTotalStatistic(districtData, statistic);
-      else
-        n = getTotalStatistic(
-          stateData,
-          statistic,
-          currentMap.option === MAP_OPTIONS.PER_MILLION
-            ? STATE_POPULATIONS_MIL[stateCode]
-            : 1
-        );
-    }
-    const color = n === 0 ? '#ffffff00' : mapScale(n);
-    return color;
-  }, [currentMap.option, data, mapScale, statistic]);
-
-  const strokeColor = useCallback((d) => {
-    return currentMap.option === MAP_OPTIONS.ZONES
-      ? '#343a40'
-      : COLORS[statistic];
-  }, [currentMap.option, statistic]);
+  const strokeColor = useCallback(
+    (d) => {
+      return currentMap.option === MAP_OPTIONS.ZONES
+        ? '#343a40'
+        : COLORS[statistic];
+    },
+    [currentMap.option, statistic]
+  );
 
   const features = useMemo(() => {
-    let featuresWrap =
+    if (!geoData) return null;
+    const featuresWrap =
       currentMap.view === MAP_VIEWS.STATES
         ? topojson.feature(geoData, geoData.objects[mapMeta.graphObjectStates])
             .features
@@ -201,107 +206,122 @@ function MapVisualizer({
     });
   }, [geoData, currentMap.code, currentMap.view, currentMap.option, mapMeta]);
 
+  const populateTexts = useCallback(
+    (regionSelection) => {
+      regionSelection.select('title').text((d) => {
+        if (currentMap.option === MAP_OPTIONS.TOTAL) {
+          const state = d.properties.st_nm;
+          const stateCode = STATE_CODES[state];
+          const district = d.properties.district;
+
+          const stateData = data[stateCode];
+          const districtData = stateData?.districts?.[district];
+          let n;
+          if (district) n = getTotalStatistic(districtData, statistic);
+          else n = getTotalStatistic(stateData, statistic);
+          return (
+            formatNumber(100 * (n / (statisticTotal || 0.001))) +
+            '% from ' +
+            capitalizeAll(district ? district : state)
+          );
+        }
+      });
+    },
+    [currentMap.option, data, statistic, statisticTotal]
+  );
+
   useEffect(() => {
+    if (!geoData) return;
     const svg = select(svgRef.current);
     const T = transition().duration(D3_TRANSITION_DURATION);
-    let onceTouchedRegion = null;
-    const regionSelection = svg
-      .select('.regions')
-      .selectAll('path')
-      .data(
-        currentMap.option !== MAP_OPTIONS.HOTSPOTS ? features : [],
-        (d) => d.id
-      )
-      .join(
-        (enter) => {
-          const sel = enter
-            .append('path')
-            .attr('d', path)
-            .attr('stroke-width', 1.8)
-            .attr('stroke-opacity', 0)
-            .style('cursor', 'pointer')
-            .on('mouseenter', (d) => {
-              setRegionHighlighted({
-                stateCode: STATE_CODES[d.properties.st_nm],
-                districtName: d.properties.district,
-              });
-            })
-            .on('mouseleave', (d) => {
-              if (onceTouchedRegion === d) onceTouchedRegion = null;
-            })
-            .on('touchstart', (d) => {
-              if (onceTouchedRegion === d) onceTouchedRegion = null;
-              else onceTouchedRegion = d;
-            })
-            .attr('fill', fillColor)
-            .attr('stroke', strokeColor);
-          sel.append('title');
-          return sel;
-        },
-        (update) =>
-          update.call((update) =>
-            update
-              .transition(T)
-              .attr('fill', fillColor)
-              .attr('stroke', strokeColor)
-          )
-      )
-      .attr('pointer-events', 'all')
-      .on('click', (d) => {
-        event.stopPropagation();
-        const stateCode = STATE_CODES[d.properties.st_nm];
-        if (
-          onceTouchedRegion ||
-          mapMeta.mapType === MAP_TYPES.STATE ||
-          !data[stateCode]?.districts
+
+    window.requestIdleCallback(() => {
+      const regionSelection = svg
+        .select('.regions')
+        .selectAll('path')
+        .data(
+          currentMap.option !== MAP_OPTIONS.HOTSPOTS ? features : [],
+          (d) => d.id
         )
-          return;
-        // Disable pointer events till the new map is rendered
-        svg.attr('pointer-events', 'none');
-        svg.select('.regions').selectAll('path').attr('pointer-events', 'none');
-        // Switch map
-        history.push(
-          `/state/${stateCode}${window.innerWidth < 769 ? '#MapExplorer' : ''}`
-        );
-        // changeMap(STATE_CODES[d.properties.st_nm]);
+        .join(
+          (enter) => {
+            const sel = enter
+              .append('path')
+              .attr('d', path)
+              .attr('stroke-width', 1.8)
+              .attr('stroke-opacity', 0)
+              .style('cursor', 'pointer')
+              .on('mouseenter', (d) => {
+                setRegionHighlighted({
+                  stateCode: STATE_CODES[d.properties.st_nm],
+                  districtName: d.properties.district,
+                });
+              })
+              .on('mouseleave', (d) => {
+                setRegionHighlighted({
+                  stateCode: 'TT',
+                  districtName: null,
+                });
+              })
+              .attr('fill', fillColor)
+              .attr('stroke', strokeColor);
+            sel.append('title');
+            return sel;
+          },
+          (update) =>
+            update.call((update) =>
+              update
+                .transition(T)
+                .attr('fill', fillColor)
+                .attr('stroke', strokeColor)
+            )
+        )
+        .attr('pointer-events', 'all')
+        .on('click', (d) => {
+          event.stopPropagation();
+          const stateCode = STATE_CODES[d.properties.st_nm];
+          if (
+            mapMeta.mapType === MAP_TYPES.STATE ||
+            !data[stateCode]?.districts
+          )
+            return;
+          // Disable pointer events till the new map is rendered
+          svg.attr('pointer-events', 'none');
+          svg
+            .select('.regions')
+            .selectAll('path')
+            .attr('pointer-events', 'none');
+          // Switch map
+          history.push(
+            `/state/${stateCode}${
+              window.innerWidth < 769 ? '#MapExplorer' : ''
+            }`
+          );
+        });
+
+      window.requestIdleCallback(() => {
+        populateTexts(regionSelection);
       });
-
-    regionSelection.select('title').text((d) => {
-      if (currentMap.option === MAP_OPTIONS.TOTAL) {
-        const state = d.properties.st_nm;
-        const stateCode = STATE_CODES[state];
-        const district = d.properties.district;
-
-        const stateData = data[stateCode];
-        const districtData = stateData?.districts?.[district];
-        let n;
-        if (district) n = getTotalStatistic(districtData, statistic);
-        else n = getTotalStatistic(stateData, statistic);
-        return (
-          formatNumber(100 * (n / (statisticTotal || 0.001))) +
-          '% from ' +
-          capitalizeAll(district ? district : state)
-        );
-      }
     });
   }, [
-    data,
-    mapMeta,
     currentMap.option,
-    setRegionHighlighted,
-    // changeMap,
-    statistic,
-    statisticTotal,
-    history,
-    path,
+    data,
     features,
     fillColor,
+    geoData,
+    history,
+    mapMeta.mapType,
+    path,
+    populateTexts,
+    setRegionHighlighted,
     strokeColor,
   ]);
 
   useEffect(() => {
+    if (!features) return;
     const svg = select(svgRef.current);
     const T = transition().duration(D3_TRANSITION_DURATION);
+
     let circlesData = [];
     if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
       circlesData = features
@@ -322,31 +342,33 @@ function MapVisualizer({
         .sort((a, b) => b.value - a.value);
     }
 
-    svg
-      .select('.circles')
-      .selectAll('circle')
-      .data(circlesData, (d) => d.id)
-      .join((enter) =>
-        enter
-          .append('circle')
-          .attr('transform', (d) => `translate(${path.centroid(d)})`)
-          .attr('fill-opacity', 0.5)
-          .style('cursor', 'pointer')
-          .attr('pointer-events', 'all')
-          .on('mouseenter', (d) => {
-            setRegionHighlighted({
-              stateCode: STATE_CODES[d.properties.st_nm],
-              districtName: d.properties.district || UNKNOWN_DISTRICT_KEY,
-            });
-          })
-          .on('click', () => {
-            event.stopPropagation();
-          })
-      )
-      .transition(T)
-      .attr('fill', COLORS[statistic] + '70')
-      .attr('stroke', COLORS[statistic] + '70')
-      .attr('r', (d) => mapScale(d.value));
+    window.requestIdleCallback(() => {
+      svg
+        .select('.circles')
+        .selectAll('circle')
+        .data(circlesData, (d) => d.id)
+        .join((enter) =>
+          enter
+            .append('circle')
+            .attr('transform', (d) => `translate(${path.centroid(d)})`)
+            .attr('fill-opacity', 0.5)
+            .style('cursor', 'pointer')
+            .attr('pointer-events', 'all')
+            .on('mouseenter', (d) => {
+              setRegionHighlighted({
+                stateCode: STATE_CODES[d.properties.st_nm],
+                districtName: d.properties.district || UNKNOWN_DISTRICT_KEY,
+              });
+            })
+            .on('click', () => {
+              event.stopPropagation();
+            })
+        )
+        .transition(T)
+        .attr('fill', COLORS[statistic] + '70')
+        .attr('stroke', COLORS[statistic] + '70')
+        .attr('r', (d) => mapScale(d.value));
+    });
   }, [
     data,
     mapMeta,
@@ -359,8 +381,10 @@ function MapVisualizer({
   ]);
 
   useEffect(() => {
+    if (!geoData) return;
     const svg = select(svgRef.current);
     const T = transition().duration(D3_TRANSITION_DURATION);
+
     let meshStates = [];
     if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
       meshStates = [
@@ -384,7 +408,7 @@ function MapVisualizer({
           : '.district-borders'
       )
       .attr('fill', 'none')
-      .attr('stroke-width', function () {
+      .attr('stroke-width', () => {
         return mapMeta.mapType === MAP_TYPES.COUNTRY &&
           currentMap.view === MAP_VIEWS.DISTRICTS
           ? 0
@@ -398,47 +422,16 @@ function MapVisualizer({
       .join((enter) => enter.append('path').attr('d', path))
       .transition(T)
       .attr('stroke', () => {
-        if (currentMap.option === MAP_OPTIONS.ZONES) {
-          return '#00000060';
-        } else {
-          return COLORS[statistic] + '30';
-        }
+        return COLORS[statistic] + '30';
       });
-
-    svg
-      .select(
-        currentMap.view === MAP_VIEWS.STATES
-          ? '.district-borders'
-          : '.state-borders'
-      )
-      .selectAll('path')
-      .data(
-        currentMap.view === MAP_VIEWS.STATES ? meshDistricts : meshStates,
-        (d) => d.id
-      )
-      .join((enter) =>
-        enter
-          .append('path')
-          .attr('d', path)
-          .attr('fill', 'none')
-          .attr('stroke-width', 1.5)
-      )
-      .transition(T)
-      .attr('stroke', '#343a4050');
-  }, [
-    geoData,
-    mapMeta,
-    currentMap.option,
-    currentMap.view,
-    statistic,
-    path,
-  ]);
+  }, [geoData, mapMeta, currentMap.option, currentMap.view, statistic, path]);
 
   useEffect(() => {
     const state = STATE_NAMES[regionHighlighted.stateCode];
     const district = regionHighlighted.districtName;
 
     const svg = select(svgRef.current);
+
     if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
       svg
         .select('.circles')

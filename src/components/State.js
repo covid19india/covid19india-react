@@ -5,13 +5,15 @@ import StateHeader from './StateHeader';
 import StateMeta from './StateMeta';
 
 import {NUM_BARS_STATEPAGE, STATE_NAMES} from '../constants';
+import useIsVisible from '../hooks/useIsVisible';
 import {fetcher, formatNumber, getStatistic} from '../utils/commonFunctions';
 
-import React, {useMemo, useState, lazy, Suspense} from 'react';
+import React, {useMemo, useState, lazy, Suspense, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
+import {animated, config, useTrail} from 'react-spring';
 import useSWR from 'swr';
 
 const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
@@ -74,6 +76,19 @@ function State(props) {
     return gridRowCount;
   }, [data, stateCode]);
 
+  const stateMetaElement = useRef();
+  const isStateMetaVisible = useIsVisible(stateMetaElement, {once: true});
+
+  const trail = useTrail(4, {
+    from: {transform: 'translate3d(0, 10px, 0)', opacity: 0},
+    to: {
+      transform: 'translate3d(0, 0px, 0)',
+      opacity: 1,
+    },
+    delay: 150,
+    config: config.gentle,
+  });
+
   return (
     <React.Fragment>
       <Helmet>
@@ -110,13 +125,17 @@ function State(props) {
             ></MapExplorer>
           </Suspense>
 
-          <StateMeta
-            {...{
-              stateCode,
-              data,
-              timeseries,
-            }}
-          />
+          <span ref={stateMetaElement} />
+
+          {data && timeseries && isStateMetaVisible && (
+            <StateMeta
+              {...{
+                stateCode,
+                data,
+                timeseries,
+              }}
+            />
+          )}
         </div>
 
         <div className="state-right">
@@ -125,88 +144,104 @@ function State(props) {
               className="district-bar"
               style={!showAllDistricts ? {display: 'flex'} : {}}
             >
-              <div className="district-bar-left fadeInUp">
-                <h2 className={mapStatistic}>Top districts</h2>
-                <div
-                  className={`districts ${showAllDistricts ? 'is-grid' : ''}`}
-                  style={
-                    showAllDistricts
-                      ? {gridTemplateRows: `repeat(${gridRowCount}, 2rem)`}
-                      : {}
-                  }
-                >
-                  {Object.keys(data[stateCode]?.districts || {})
-                    .filter((districtName) => districtName !== 'Unknown')
-                    .sort((a, b) => handleSort(a, b))
-                    .slice(0, showAllDistricts ? undefined : 5)
-                    .map((districtName) => {
-                      const total = getStatistic(
-                        data[stateCode].districts[districtName],
-                        'total',
-                        mapStatistic
-                      );
-                      const delta = getStatistic(
-                        data[stateCode].districts[districtName],
-                        'delta',
-                        mapStatistic
-                      );
-                      return (
-                        <div key={districtName} className="district">
-                          <h2>{formatNumber(total)}</h2>
-                          <h5>{t(districtName)}</h5>
-                          {mapStatistic !== 'active' && (
-                            <div className="delta">
-                              <h6 className={mapStatistic}>
-                                {delta > 0
-                                  ? '\u2191' + formatNumber(delta)
-                                  : ''}
-                              </h6>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
+              <div className="district-bar-top">
+                <div className="district-bar-left">
+                  <animated.h2 className={mapStatistic} style={trail[0]}>
+                    Top districts
+                  </animated.h2>
+                  <animated.div
+                    className={`districts ${showAllDistricts ? 'is-grid' : ''}`}
+                    style={
+                      showAllDistricts
+                        ? {
+                            gridTemplateRows: `repeat(${gridRowCount}, 2rem)`,
+                            ...trail[1],
+                          }
+                        : trail[1]
+                    }
+                  >
+                    {Object.keys(data[stateCode]?.districts || {})
+                      .filter((districtName) => districtName !== 'Unknown')
+                      .sort((a, b) => handleSort(a, b))
+                      .slice(0, showAllDistricts ? undefined : 5)
+                      .map((districtName) => {
+                        const total = getStatistic(
+                          data[stateCode].districts[districtName],
+                          'total',
+                          mapStatistic
+                        );
+                        const delta = getStatistic(
+                          data[stateCode].districts[districtName],
+                          'delta',
+                          mapStatistic
+                        );
+                        return (
+                          <div key={districtName} className="district">
+                            <h2>{formatNumber(total)}</h2>
+                            <h5>{t(districtName)}</h5>
+                            {mapStatistic !== 'active' && (
+                              <div className="delta">
+                                <h6 className={mapStatistic}>
+                                  {delta > 0
+                                    ? '\u2191' + formatNumber(delta)
+                                    : ''}
+                                </h6>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                  </animated.div>
                 </div>
 
-                {Object.keys(data[stateCode]?.districts || {}).length > 5 && (
-                  <button className="button" onClick={toggleShowAllDistricts}>
-                    <span>{showAllDistricts ? `View less` : `View all`}</span>
-                  </button>
-                )}
+                <animated.div className="district-bar-right" style={trail[2]}>
+                  {(mapStatistic === 'confirmed' ||
+                    mapStatistic === 'deceased') && (
+                    <div className="happy-sign">
+                      {Object.keys(timeseries[stateCode] || {})
+                        .slice(-NUM_BARS_STATEPAGE)
+                        .every(
+                          (date) =>
+                            getStatistic(
+                              timeseries[stateCode][date],
+                              'delta',
+                              mapStatistic
+                            ) === 0
+                        ) && (
+                        <div
+                          className={`alert ${
+                            mapStatistic === 'confirmed' ? 'is-green' : ''
+                          }`}
+                        >
+                          <Icon.Smile />
+                          <div className="alert-right">
+                            No new {mapStatistic} cases in the past five days
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  <DeltaBarGraph
+                    timeseries={timeseries[stateCode] || {}}
+                    {...{stateCode}}
+                    lookback={showAllDistricts ? 10 : 6}
+                    statistic={mapStatistic}
+                  />
+                </animated.div>
               </div>
 
-              <div className="district-bar-right">
-                {(mapStatistic === 'confirmed' ||
-                  mapStatistic === 'deceased') && (
-                  <div className="happy-sign">
-                    {Object.keys(timeseries[stateCode] || {})
-                      .slice(-NUM_BARS_STATEPAGE)
-                      .every(
-                        (date) =>
-                          getStatistic(
-                            timeseries[stateCode][date],
-                            'delta',
-                            mapStatistic
-                          ) === 0
-                      ) && (
-                      <div
-                        className={`alert ${
-                          mapStatistic === 'confirmed' ? 'is-green' : ''
-                        }`}
-                      >
-                        <Icon.Smile />
-                        <div className="alert-right">
-                          No new {mapStatistic} cases in the past five days
-                        </div>
-                      </div>
-                    )}
-                  </div>
+              <div className="district-bar-bottom">
+                {Object.keys(data[stateCode]?.districts || {}).length > 5 ? (
+                  <animated.button
+                    className="button"
+                    onClick={toggleShowAllDistricts}
+                    style={trail[3]}
+                  >
+                    <span>{showAllDistricts ? `View less` : `View all`}</span>
+                  </animated.button>
+                ) : (
+                  <div style={{height: '3.75rem', flexBasis: '15%'}} />
                 )}
-                <DeltaBarGraph
-                  timeseries={timeseries[stateCode] || {}}
-                  {...{stateCode}}
-                  statistic={mapStatistic}
-                />
               </div>
             </div>
 
