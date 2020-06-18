@@ -330,7 +330,7 @@
     "translate": [76.839559, 28.40471312524036]
   },
   "objects": {
-    "delhi_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

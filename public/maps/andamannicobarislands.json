@@ -2322,7 +2322,7 @@
     "translate": [92.20386, 6.754368]
   },
   "objects": {
-    "andamannicobarislands_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

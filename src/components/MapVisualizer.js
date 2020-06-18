@@ -132,11 +132,11 @@ function MapVisualizer({
 
     const topology = topojson.feature(
       geoData,
-      geoData.objects[mapMeta.graphObjectStates || mapMeta.graphObjectDistricts]
+      geoData.objects.states || geoData.objects.districts
     );
 
     return geoPath(geoMercator().fitSize([width, height], topology));
-  }, [geoData, mapMeta.graphObjectDistricts, mapMeta.graphObjectStates]);
+  }, [geoData]);
 
   const fillColor = useCallback(
     (d) => {
@@ -177,23 +177,23 @@ function MapVisualizer({
     if (!geoData) return null;
     const featuresWrap =
       currentMap.view === MAP_VIEWS.STATES
-        ? topojson.feature(geoData, geoData.objects[mapMeta.graphObjectStates])
+        ? topojson.feature(geoData, geoData.objects.states)
             .features
         : mapMeta.mapType === MAP_TYPES.COUNTRY &&
           currentMap.option === MAP_OPTIONS.HOTSPOTS
         ? [
             ...topojson.feature(
               geoData,
-              geoData.objects[mapMeta.graphObjectStates]
+              geoData.objects.states
             ).features,
             ...topojson.feature(
               geoData,
-              geoData.objects[mapMeta.graphObjectDistricts]
+              geoData.objects.districts
             ).features,
           ]
         : topojson.feature(
             geoData,
-            geoData.objects[mapMeta.graphObjectDistricts]
+            geoData.objects.districts
           ).features;
 
     // Add id to each feature
@@ -388,17 +388,17 @@ function MapVisualizer({
     let meshStates = [];
     if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
       meshStates = [
-        topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectStates]),
+        topojson.mesh(geoData, geoData.objects.states),
       ];
-      meshStates[0].id = mapMeta.graphObjectStates;
+      meshStates[0].id = `${currentMap.code}-states`;
     }
     let meshDistricts = [];
     if (currentMap.view === MAP_VIEWS.DISTRICTS) {
       // Add id to mesh
       meshDistricts = [
-        topojson.mesh(geoData, geoData.objects[mapMeta.graphObjectDistricts]),
+        topojson.mesh(geoData, geoData.objects.districts),
       ];
-      meshDistricts[0].id = mapMeta.graphObjectDistricts;
+      meshDistricts[0].id = `${currentMap.code}-districts`;
     }
 
     svg
