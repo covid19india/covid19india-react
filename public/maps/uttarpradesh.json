@@ -7798,7 +7798,7 @@
     "translate": [77.08732627947595, 23.871438]
   },
   "objects": {
-    "uttarpradesh_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

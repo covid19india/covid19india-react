@@ -16699,7 +16699,7 @@
     "translate": [68.10055226476403, 6.766373153037801]
   },
   "objects": {
-    "india-districts-2019-734": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {
@@ -24940,7 +24940,7 @@
         }
       ]
     },
-    "india-states": {
+    "states": {
       "type": "GeometryCollection",
       "geometries": [
         {

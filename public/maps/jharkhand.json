@@ -2450,7 +2450,7 @@
     "translate": [83.3301316194849, 21.974665795660215]
   },
   "objects": {
-    "jharkhand_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

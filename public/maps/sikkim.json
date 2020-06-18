@@ -230,7 +230,7 @@
     "translate": [88.014119, 27.071388996660787]
   },
   "objects": {
-    "sikkim_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {
