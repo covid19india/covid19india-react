@@ -21,7 +21,7 @@ import {
 import classnames from 'classnames';
 import {max} from 'd3-array';
 import {json} from 'd3-fetch';
-import {geoMercator, geoPath} from 'd3-geo';
+import {geoIdentity, geoPath} from 'd3-geo';
 import {scaleSqrt, scaleSequential} from 'd3-scale';
 // eslint-disable-next-line
 // import worker from 'workerize-loader!../workers/mapVisualizer';
@@ -129,13 +129,7 @@ function MapVisualizer({
 
   const path = useMemo(() => {
     if (!geoData) return null;
-
-    const topology = topojson.feature(
-      geoData,
-      geoData.objects.states || geoData.objects.districts
-    );
-
-    return geoPath(geoMercator().fitSize([width, height], topology));
+    return geoPath(geoIdentity());
   }, [geoData]);
 
   const fillColor = useCallback(
