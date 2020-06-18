@@ -28,6 +28,8 @@ import React, {
 import ReactDOM from 'react-dom';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
+import {animated, config, useTrail} from 'react-spring';
+import {useWindowSize} from 'react-use';
 
 const MapVisualizer = lazy(() => import('./MapVisualizer'));
 
@@ -45,6 +47,7 @@ function MapExplorer({
 }) {
   const {t} = useTranslation();
   const mapExplorerRef = useRef();
+  const {width} = useWindowSize();
 
   const [currentMap, setCurrentMap] = useState({
     code: stateCode,
@@ -250,10 +253,17 @@ function MapExplorer({
   useEffect(() => {
     if (history.location.hash === '#MapExplorer') {
       panelRef.current.scrollIntoView();
-    } else {
-      window.scroll(0, 0);
     }
   }, [history]);
+
+  const trail = useTrail(7, {
+    from: {transform: 'translate3d(0, 10px, 0)', opacity: 0},
+    to: {
+      transform: 'translate3d(0, 0px, 0)',
+      opacity: 1,
+    },
+    config: config.stiff,
+  });
 
   return (
     <div
@@ -264,7 +274,7 @@ function MapExplorer({
       )}
     >
       <div className="panel" ref={panelRef}>
-        <div className="panel-left">
+        <animated.div className="panel-left" style={trail[0]}>
           <h2
             className={classnames(mapStatistic, {
               [hoveredRegion?.zone]: currentMap.option === MAP_OPTIONS.ZONES,
@@ -297,55 +307,63 @@ function MapExplorer({
               </span>
             </h1>
           )}
-        </div>
+        </animated.div>
 
         <div className={classnames('panel-right', `is-${mapStatistic}`)}>
           <div className="switch-type">
-            <div
+            <animated.div
               className={classnames('choropleth', {
-                'is-highlighted': false,
+                'is-highlighted': currentMap.option === MAP_OPTIONS.TOTAL,
               })}
+              onClick={() => handleTabClick(MAP_OPTIONS.TOTAL)}
+              style={trail[1]}
             >
               <DotFillIcon size={36} />
-            </div>
-            <div
+            </animated.div>
+            <animated.div
               className={classnames('bubble', {
-                'is-highlighted': false,
+                'is-highlighted': currentMap.option === MAP_OPTIONS.HOTSPOTS,
               })}
+              onClick={() => handleTabClick(MAP_OPTIONS.HOTSPOTS)}
+              style={trail[2]}
             >
               {BubblesIcon}
-            </div>
+            </animated.div>
+
             {currentMapMeta.mapType === MAP_TYPES.STATE && (
-              <div
+              <animated.div
                 className="back"
                 onClick={() => {
                   history.push('/#MapExplorer');
                 }}
+                style={trail[3]}
               >
                 <ArrowLeftIcon />
-              </div>
+              </animated.div>
             )}
           </div>
 
-          <div className="switch-statistic">
-            {PRIMARY_STATISTICS.map((statistic) => (
-              <div
-                key={statistic}
-                className={classnames('statistic-option', `is-${statistic}`, {
-                  'is-highlighted': mapStatistic === statistic,
-                })}
-                onClick={() => {
-                  setMapStatistic(statistic);
-                }}
-              >
-                <DotFillIcon />
-              </div>
-            ))}
-          </div>
+          {width < 769 && (
+            <animated.div className="switch-statistic" style={trail[5]}>
+              {PRIMARY_STATISTICS.map((statistic) => (
+                <div
+                  key={statistic}
+                  className={classnames('statistic-option', `is-${statistic}`, {
+                    'is-highlighted': mapStatistic === statistic,
+                  })}
+                  onClick={() => {
+                    setMapStatistic(statistic);
+                  }}
+                >
+                  <DotFillIcon />
+                </div>
+              ))}
+            </animated.div>
+          )}
         </div>
       </div>
 
-      <div ref={mapExplorerRef}>
+      <animated.div ref={mapExplorerRef} style={trail[3]}>
         {mapStatistic && (
           <Suspense
             fallback={
@@ -369,24 +387,7 @@ function MapExplorer({
             ></MapVisualizer>
           </Suspense>
         )}
-      </div>
-
-      <div className="tabs-map">
-        {Object.values(MAP_OPTIONS).map((option) => (
-          <div
-            key={option}
-            className={classnames('tab', {
-              focused: currentMap.option === option,
-            })}
-            onClick={() => handleTabClick(option)}
-          >
-            <h4>
-              {t(option)}
-              {option === MAP_OPTIONS.PER_MILLION && <sup>&dagger;</sup>}
-            </h4>
-          </div>
-        ))}
-      </div>
+      </animated.div>
     </div>
   );
 }

@@ -332,6 +332,7 @@ h6 {
   position: relative;
   width: 100%;
   align-self: center;
+  height: 5.25rem;
   margin-bottom: 1rem;
 
   & > * {
@@ -2183,12 +2184,28 @@ abbr {
           stroke: $cherry-mid;
           fill: $cherry-light;
         }
+
+        .is-highlighted {
+          background: $cherry-light;
+
+          &:hover {
+            background: $cherry-hover;
+          }
+        }
       }
 
       &.is-active {
         svg {
           stroke: $blue-mid;
           fill: $blue-light;
+        }
+
+        .is-highlighted {
+          background: $blue-light;
+
+          &:hover {
+            background: $blue-hover;
+          }
         }
       }
 
@@ -2197,12 +2214,28 @@ abbr {
           stroke: $green-mid;
           fill: $green-light;
         }
+
+        .is-highlighted {
+          background: $green-light;
+
+          &:hover {
+            background: $green-hover;
+          }
+        }
       }
 
       &.is-deceased {
         svg {
           stroke: $gray-mid;
           fill: $gray-light;
+        }
+
+        .is-highlighted {
+          background: $gray-light;
+
+          &:hover {
+            background: $gray-hover;
+          }
         }
       }
 
@@ -2247,16 +2280,21 @@ abbr {
         flex-direction: row;
         align-self: flex-end;
         position: absolute;
-        top: 3.75rem;
+        top: 5rem;
+        font-family: 'archia';
 
         div {
           display: flex;
           flex-direction: row;
           background: none;
           margin-bottom: .25rem;
-          margin-right: .65rem !important;
-          width: 1rem;
-          height: 1rem;
+          margin-left: .65rem !important;
+          width: 1.25rem;
+          height: 1.25rem;
+
+          span {
+            position: absolute;
+          }
 
           &:hover {
             background: none;
@@ -2271,6 +2309,7 @@ abbr {
             &.is-highlighted {
               svg {
                 fill: $cherry;
+                transform: scale(1.25);
               }
             }
           }
@@ -2284,6 +2323,7 @@ abbr {
             &.is-highlighted {
               svg {
                 fill: $blue;
+                transform: scale(1.25);
               }
             }
           }
@@ -2297,6 +2337,7 @@ abbr {
             &.is-highlighted {
               svg {
                 fill: $green;
+                transform: scale(1.25);
               }
             }
           }
@@ -2310,6 +2351,7 @@ abbr {
             &.is-highlighted {
               svg {
                 fill: $gray;
+                transform: scale(1.25);
               }
             }
           }
@@ -2415,7 +2457,6 @@ abbr {
     padding-left: 1rem;
     padding-right: 1rem;
     text-align: center;
-    transition: all 0.3s ease-in-out;
 
     &:hover {
       background: $gray-hover;
@@ -2486,11 +2527,11 @@ abbr {
 }
 
 .TimeseriesExplorer {
-  align-self: center;
   display: flex;
   flex-direction: column;
   margin-top: 3rem;
   width: 30rem;
+  align-self: center;
 
   &.stickied {
     position: sticky !important;
@@ -2577,7 +2618,6 @@ abbr {
       font-size: 0.75rem;
       font-weight: 900;
       margin-right: 0.25rem;
-      transition: all 0.2s ease-in-out;
       z-index: 99;
     }
 
@@ -4224,29 +4264,56 @@ footer {
 }
 
 .district-bar {
+  display: flex;
+  flex-direction: column;
   align-self: center;
-  flex-direction: row;
-  justify-content: space-between;
 
-  h2 {
-    font-weight: 900;
-    margin-top: 0;
-    margin-bottom: 0.5rem;
+    .district-bar-bottom {
+      .button {
+        background: $gray-light;
+        color: $gray;
+        font-weight: 600;
+        height: 2.5rem;
+        justify-content: center;
+        margin-top: 0.75rem;
+        text-transform: unset;
+        width: 5rem;
+        flex-basis: 15%;
 
-    &.confirmed {
-      color: $red;
+        &:hover {
+          background: $gray-hover;
+        }
+      }
     }
 
-    &.active {
-      color: $blue;
-    }
+    .district-bar-top {
+      display: flex;
+      align-self: center;
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      width: 100%;
 
-    &.recovered {
-      color: $green;
-    }
+      h2 {
+        font-weight: 900;
+        margin-top: 0;
+        margin-bottom: 0.5rem;
 
-    &.deceased {
-      color: $gray;
+        &.confirmed {
+          color: $red;
+        }
+
+        &.active {
+          color: $blue;
+        }
+
+        &.recovered {
+          color: $green;
+        }
+
+        &.deceased {
+          color: $gray;
+        }
     }
   }
 
@@ -4254,27 +4321,16 @@ footer {
     display: flex;
     flex-direction: column;
     margin-right: 1rem;
-
-    .button {
-      background: $gray-light;
-      color: $gray;
-      font-weight: 600;
-      height: 2.5rem;
-      justify-content: center;
-      margin-top: 0.75rem;
-      text-transform: unset;
-      width: 5rem;
-
-      &:hover {
-        background: $gray-hover;
-      }
-    }
+    flex-grow: 1;
+    flex-basis: 20%;
   }
 
   .district-bar-right {
     display: flex;
     justify-content: center;
     position: relative;
+    flex-grow: 1;
+    flex-basis: 60%;
 
     .happy-sign {
       display: flex;
@@ -4285,6 +4341,7 @@ footer {
 
     .DeltaBarGraph {
       margin-top: 1rem;
+      width: 100%;
 
       svg {
         width: 100%;

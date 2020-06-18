@@ -79,75 +79,77 @@ function Minigraphs({timeseries, date: timelineDate}) {
           yScale(getStatistic(timeseries[date], 'delta', statistic))
         );
 
-      let pathLength;
-      svg
-        .selectAll('path')
-        .data(T ? [dates] : [])
-        .join(
-          (enter) =>
-            enter
-              .append('path')
-              .attr('fill', 'none')
-              .attr('stroke', color + '99')
-              .attr('stroke-width', 2.5)
-              .attr('d', linePath)
-              .attr('stroke-dasharray', function () {
-                return (pathLength = this.getTotalLength());
-              })
-              .call((enter) =>
-                enter
-                  .attr('stroke-dashoffset', pathLength)
-                  .transition()
-                  .delay(100)
-                  .duration(2500)
-                  .attr('stroke-dashoffset', 0)
-              ),
-          (update) =>
-            update
-              .attr('stroke-dasharray', null)
-              .transition()
-              .duration(500)
-              .attrTween('d', function (date) {
-                const previous = select(this).attr('d');
-                const current = linePath(date);
-                return interpolatePath(previous, current);
-              })
-        );
+      window.requestIdleCallback(() => {
+        let pathLength;
+        svg
+          .selectAll('path')
+          .data(T ? [dates] : [])
+          .join(
+            (enter) =>
+              enter
+                .append('path')
+                .attr('fill', 'none')
+                .attr('stroke', color + '99')
+                .attr('stroke-width', 2.5)
+                .attr('d', linePath)
+                .attr('stroke-dasharray', function () {
+                  return (pathLength = this.getTotalLength());
+                })
+                .call((enter) =>
+                  enter
+                    .attr('stroke-dashoffset', pathLength)
+                    .transition()
+                    .delay(100)
+                    .duration(2500)
+                    .attr('stroke-dashoffset', 0)
+                ),
+            (update) =>
+              update
+                .attr('stroke-dasharray', null)
+                .transition()
+                .duration(500)
+                .attrTween('d', function (date) {
+                  const previous = select(this).attr('d');
+                  const current = linePath(date);
+                  return interpolatePath(previous, current);
+                })
+          );
 
-      svg
-        .selectAll('circle')
-        .data(T ? [dates[T - 1]] : [])
-        .join(
-          (enter) =>
-            enter
-              .append('circle')
-              .attr('fill', color)
-              .attr('r', 2.5)
-              .attr('cx', (date) => xScale(parseIndiaDate(date)))
-              .attr('cy', (date) =>
-                yScale(getStatistic(timeseries[date], 'delta', statistic))
-              )
-              .style('opacity', 0)
-              .call((enter) =>
-                enter
-                  .transition()
-                  .delay(2100)
-                  .duration(500)
-                  .style('opacity', 1)
-                  .attr('cx', (date) => xScale(parseIndiaDate(date)))
-                  .attr('cy', (date) =>
-                    yScale(getStatistic(timeseries[date], 'delta', statistic))
-                  )
-              ),
-          (update) =>
-            update
-              .transition()
-              .duration(500)
-              .attr('cx', (date) => xScale(parseIndiaDate(date)))
-              .attr('cy', (date) =>
-                yScale(getStatistic(timeseries[date], 'delta', statistic))
-              )
-        );
+        svg
+          .selectAll('circle')
+          .data(T ? [dates[T - 1]] : [])
+          .join(
+            (enter) =>
+              enter
+                .append('circle')
+                .attr('fill', color)
+                .attr('r', 2.5)
+                .attr('cx', (date) => xScale(parseIndiaDate(date)))
+                .attr('cy', (date) =>
+                  yScale(getStatistic(timeseries[date], 'delta', statistic))
+                )
+                .style('opacity', 0)
+                .call((enter) =>
+                  enter
+                    .transition()
+                    .delay(2100)
+                    .duration(500)
+                    .style('opacity', 1)
+                    .attr('cx', (date) => xScale(parseIndiaDate(date)))
+                    .attr('cy', (date) =>
+                      yScale(getStatistic(timeseries[date], 'delta', statistic))
+                    )
+                ),
+            (update) =>
+              update
+                .transition()
+                .duration(500)
+                .attr('cx', (date) => xScale(parseIndiaDate(date)))
+                .attr('cy', (date) =>
+                  yScale(getStatistic(timeseries[date], 'delta', statistic))
+                )
+          );
+      });
     });
   }, [dates, timeseries]);
 

@@ -14,21 +14,21 @@ import {select} from 'd3-selection';
 import {transition} from 'd3-transition';
 import equal from 'fast-deep-equal';
 import React, {useEffect, useRef} from 'react';
-
+import {useMeasure} from 'react-use';
 const getDeltaStatistic = (data, statistic) => {
   return getStatistic(data, 'delta', statistic);
 };
 
-const [width, height] = [250, 250];
 const margin = {top: 50, right: 0, bottom: 50, left: 0};
 
-function DeltaBarGraph({timeseries, statistic}) {
+function DeltaBarGraph({timeseries, statistic, lookback}) {
   const svgRef = useRef();
+  const [wrapperRef, {width, height}] = useMeasure();
 
   const pastDates = Object.keys(timeseries || {}).filter(
     (date) => date <= getIndiaYesterdayISO()
   );
-  const dates = pastDates.slice(-NUM_BARS_STATEPAGE);
+  const dates = pastDates.slice(-lookback);
 
   useEffect(() => {
     const svg = select(svgRef.current);
@@ -41,7 +41,7 @@ function DeltaBarGraph({timeseries, statistic}) {
     const xScale = scaleBand()
       .domain(dates)
       .range([margin.left, chartRight])
-      .paddingInner(0.33);
+      .paddingInner(width / 1000);
 
     const yScale = scaleLinear()
       .domain([
@@ -140,21 +140,18 @@ function DeltaBarGraph({timeseries, statistic}) {
       })
       .transition(t)
       .attr('fill', COLORS[statistic] + '90');
-  }, [dates, timeseries, statistic]);
+  }, [dates, height, statistic, timeseries, width]);
 
   return (
-    <div className="DeltaBarGraph">
+    <div className="DeltaBarGraph" ref={wrapperRef}>
       <svg
         ref={svgRef}
-        width="250"
-        height="250"
-        viewBox="0 0 250 250"
+        width={width}
+        height={250}
+        viewBox={`0 0 ${width} ${height}`}
         preserveAspectRatio="xMidYMid meet"
       >
-        <g
-          className="x-axis"
-          transform={`translate(0, ${height - margin.bottom})`}
-        />
+        <g className="x-axis" />
         <g className="y-axis" />
       </svg>
     </div>
@@ -163,6 +160,9 @@ function DeltaBarGraph({timeseries, statistic}) {
 
 const isEqual = (prevProps, currProps) => {
   if (!equal(prevProps.stateCode, currProps.stateCode)) {
+    return false;
+  }
+  if (!equal(prevProps.lookback, currProps.lookback)) {
     return false;
   } else if (!equal(prevProps.statistic, currProps.statistic)) {
     return false;
