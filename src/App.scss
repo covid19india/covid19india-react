@@ -2465,6 +2465,15 @@ abbr {
     margin: 0;
     margin-top: 1rem;
   }
+
+  .info {
+    margin: 1rem 0 0;
+    align-self: flex-start;
+    .text {
+      margin-top: .15rem;
+      margin-left: .25rem;
+    }
+  }
 }
 
 .TimeSeries {

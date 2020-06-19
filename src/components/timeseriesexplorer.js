@@ -20,6 +20,70 @@ const TimeSeries = lazy(() =>
   import('./timeseries' /* webpackChunkName: "TimeSeries" */)
 );
 
+function Chart({
+  isVisible,
+  stateCode,
+  timeseries,
+  dates,
+  chartType,
+  isUniform,
+  isLog,
+}) {
+  return (
+    isVisible && (
+      <Suspense fallback={<TimeseriesLoader />}>
+        <TimeSeries
+          {...{timeseries, dates, chartType, isUniform, isLog, stateCode}}
+        />
+      </Suspense>
+    )
+  );
+}
+
+function Pills(props) {
+  const {t} = useTranslation();
+  return (
+    <div className="pills">
+      {Object.values(TIMESERIES_OPTIONS).map((option) => (
+        <button
+          key={option}
+          type="button"
+          className={classnames({selected: props.timeseriesOption === option})}
+          onClick={() => props.setTimeseriesOption(option)}
+        >
+          {t(option)}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function Alert() {
+  const {t} = useTranslation();
+  return (
+    <div className="alert">
+      <IssueOpenedIcon size={24} />
+      <div className="alert-right">
+        {t('Tested chart is independent of uniform scaling')}
+      </div>
+    </div>
+  );
+}
+
+function Info() {
+  const {t} = useTranslation();
+  return (
+    <div className="alert info">
+      <IssueOpenedIcon size={24} />
+      <div className="text">
+        {t(
+          'There is no COVID-19 reports or data available at this point of time'
+        )}
+      </div>
+    </div>
+  );
+}
+
 function TimeSeriesExplorer({
   timeseries,
   date: timelineDate,
@@ -152,34 +216,28 @@ function TimeSeriesExplorer({
         )}
       </div>
 
-      {isVisible && (
-        <Suspense fallback={<TimeseriesLoader />}>
-          <TimeSeries
-            stateCode={regionHighlighted.stateCode}
-            {...{timeseries, dates, chartType, isUniform, isLog}}
+      {timeseries ? (
+        <>
+          <Chart
+            {...{
+              timeseries,
+              dates,
+              chartType,
+              isUniform,
+              isLog,
+              isVisible,
+              stateCode: regionHighlighted.stateCode,
+            }}
           />
-        </Suspense>
+          <Pills
+            timeseriesOption={timeseriesOption}
+            setTimeseriesOption={setTimeseriesOption}
+          />
+          <Alert />
+        </>
+      ) : (
+        <Info />
       )}
-
-      <div className="pills">
-        {Object.values(TIMESERIES_OPTIONS).map((option) => (
-          <button
-            key={option}
-            type="button"
-            className={classnames({selected: timeseriesOption === option})}
-            onClick={() => setTimeseriesOption(option)}
-          >
-            {t(option)}
-          </button>
-        ))}
-      </div>
-
-      <div className="alert">
-        <IssueOpenedIcon size={24} />
-        <div className="alert-right">
-          {t('Tested chart is independent of uniform scaling')}
-        </div>
-      </div>
     </div>
   );
 }
