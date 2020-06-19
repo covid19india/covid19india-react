@@ -77,7 +77,7 @@ function Info() {
       <IssueOpenedIcon size={24} />
       <div className="text">
         {t(
-          'There is no COVID-19 reports or data available at this point of time'
+          'There are no COVID-19 reports or data available at this point of time'
         )}
       </div>
     </div>
