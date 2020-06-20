@@ -373,9 +373,9 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   );
 
   const trail = useTrail(5, {
-    from: {transform: 'translate3d(0, 10px, 0)', opacity: 0},
+    from: {transform: 'translate3d(0, 10px, 0) scale(0.95)', opacity: 0},
     to: {
-      transform: 'translate3d(0, 0px, 0)',
+      transform: 'translate3d(0, 0px, 0) scale(1)',
       opacity: 1,
     },
     delay: 350,

@@ -2,7 +2,7 @@ import HeaderCell from './HeaderCell';
 import TableLoader from './loaders/Table';
 
 import {FADE_IN, FADE_OUT} from '../animations';
-import {PRIMARY_STATISTICS} from '../constants';
+import {TABLE_STATISTICS, STATE_POPULATIONS_MIL} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {getStatistic} from '../utils/commonFunctions';
 
@@ -64,12 +64,14 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
         const statisticA = getStatistic(
           districts?.[regionKeyA] || states[regionKeyA],
           'total',
-          sortData.sortColumn
+          sortData.sortColumn,
+          isPerMillion ? STATE_POPULATIONS_MIL[regionKeyA] : 1
         );
         const statisticB = getStatistic(
           districts?.[regionKeyB] || states[regionKeyB],
           'total',
-          sortData.sortColumn
+          sortData.sortColumn,
+          isPerMillion ? STATE_POPULATIONS_MIL[regionKeyB] : 1
         );
         return sortData.isAscending
           ? statisticA - statisticB
@@ -80,7 +82,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
           : regionKeyB.localeCompare(regionKeyA);
       }
     },
-    [districts, sortData.isAscending, sortData.sortColumn, states]
+    [districts, isPerMillion, sortData.isAscending, sortData.sortColumn, states]
   );
 
   const _setTableOption = () => {
@@ -183,7 +185,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
             )}
           </div>
 
-          {PRIMARY_STATISTICS.map((statistic) => (
+          {TABLE_STATISTICS.map((statistic) => (
             <HeaderCell
               key={statistic}
               {...{statistic, sortData}}
@@ -198,7 +200,9 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
           Object.keys(states)
             .filter(
               (stateCode) =>
-                stateCode !== 'TT' && states[stateCode].total?.confirmed
+                stateCode !== 'TT' &&
+                states[stateCode].total?.confirmed &&
+                !(stateCode === 'UN' && isPerMillion)
             )
             .sort((a, b) => sortingFunction(a, b))
             .slice(0, isVisible ? Object.keys(states).length - 1 : 10)
