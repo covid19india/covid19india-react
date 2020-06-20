@@ -58,13 +58,6 @@ function TimeseriesExplorer({
     return pastDates;
   }, [timeseries, timelineDate, timeseriesOption]);
 
-  const handleChange = ({target}) => {
-    setRegionHighlighted({
-      stateCode: target.value,
-      districtName: null,
-    });
-  };
-
   const trail = useTrail(5, {
     from: {transform: 'translate3d(0, 10px, 0)', opacity: 0},
     to: {

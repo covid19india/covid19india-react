@@ -1,29 +1,15 @@
+import {TOOLTIP_FADE_IN, TOOLTIP_FADE_OUT} from '../animations';
+
 import React, {useState} from 'react';
 import {useTransition, animated} from 'react-spring';
-
-const FADE_IN = {
-  opacity: 1,
-  transform: 'translate3d(0, 0px, 0)',
-  zIndex: 999,
-  position: 'absolute',
-  pointerEvents: 'none',
-};
-
-const FADE_OUT = {
-  opacity: 0,
-  transform: 'translate3d(0, 2px, 0)',
-  zIndex: 999,
-  position: 'absolute',
-  pointerEvents: 'none',
-};
 
 const Tooltip = ({data, children}) => {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
   const transitions = useTransition(isTooltipVisible, null, {
-    from: FADE_OUT,
-    enter: FADE_IN,
-    leave: FADE_OUT,
+    from: TOOLTIP_FADE_OUT,
+    enter: TOOLTIP_FADE_IN,
+    leave: TOOLTIP_FADE_OUT,
     config: {
       mass: 1,
       tension: 210,

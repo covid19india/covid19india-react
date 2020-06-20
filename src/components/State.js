@@ -4,7 +4,7 @@ import MapSwitcher from './MapSwitcher';
 import StateHeader from './StateHeader';
 import StateMeta from './StateMeta';
 
-import {NUM_BARS_STATEPAGE, STATE_NAMES} from '../constants';
+import {STATE_NAMES} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {fetcher, formatNumber, getStatistic} from '../utils/commonFunctions';
 
@@ -198,16 +198,14 @@ function State(props) {
                   {(mapStatistic === 'confirmed' ||
                     mapStatistic === 'deceased') && (
                     <div className="happy-sign">
-                      {Object.keys(timeseries[stateCode] || {})
-                        .slice(-NUM_BARS_STATEPAGE)
-                        .every(
-                          (date) =>
-                            getStatistic(
-                              timeseries[stateCode][date],
-                              'delta',
-                              mapStatistic
-                            ) === 0
-                        ) && (
+                      {Object.keys(timeseries[stateCode] || {}).every(
+                        (date) =>
+                          getStatistic(
+                            timeseries[stateCode][date],
+                            'delta',
+                            mapStatistic
+                          ) === 0
+                      ) && (
                         <div
                           className={`alert ${
                             mapStatistic === 'confirmed' ? 'is-green' : ''

@@ -1,4 +1,4 @@
-import {COLORS, D3_TRANSITION_DURATION, NUM_BARS_STATEPAGE} from '../constants';
+import {COLORS, D3_TRANSITION_DURATION} from '../constants';
 import {
   formatDate,
   formatNumber,

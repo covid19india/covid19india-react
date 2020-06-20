@@ -29,8 +29,6 @@ export const D3_TRANSITION_DURATION = 300;
 
 export const MINIGRAPH_LOOKBACK_DAYS = 20;
 
-export const NUM_BARS_STATEPAGE = 5;
-
 export const UNKNOWN_DISTRICT_KEY = 'Unknown';
 
 export const INDIA_ISO_SUFFIX = 'T00:00:00+05:30';

@@ -1,6 +1,7 @@
 import HeaderCell from './HeaderCell';
 import TableLoader from './loaders/Table';
 
+import {FADE_IN, FADE_OUT} from '../animations';
 import {PRIMARY_STATISTICS} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {getStatistic} from '../utils/commonFunctions';
@@ -95,18 +96,6 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
         workerInstance.terminate();
       }
     });
-  };
-
-  const FADE_IN = {
-    opacity: 1,
-    transform: 'translate3d(0, 0px, 0)',
-    height: 80,
-  };
-
-  const FADE_OUT = {
-    opacity: 0,
-    transform: 'translate3d(0, 2px, 0)',
-    height: 0,
   };
 
   const transition = useTransition(isInfoVisible, null, {
