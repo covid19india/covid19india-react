@@ -107,23 +107,13 @@ function Navbar({
               </Link>
             </span>
             <span>
-              <Link to="/demographics">
-                <Icon.Users {...activeNavIcon('/demographics')} />
-              </Link>
-            </span>
-            <span>
-              <Link to="/essentials">
-                <Icon.Package {...activeNavIcon('/essentials')} />
+              <Link to="/blog">
+                <Icon.Book {...activeNavIcon('/blog')} />
               </Link>
             </span>
             <span>
               <Link to="/about">
                 <Icon.HelpCircle {...activeNavIcon('/about')} />
-              </Link>
-            </span>
-            <span>
-              <Link to="/blog">
-                <Icon.Book {...activeNavIcon('/about')} />
               </Link>
             </span>
             <span>{windowSize.width > 768 && <SunMoon {...{darkMode}} />}</span>

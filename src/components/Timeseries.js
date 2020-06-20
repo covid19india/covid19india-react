@@ -26,6 +26,7 @@ import equal from 'fast-deep-equal';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {animated, config, useTrail} from 'react-spring';
+import 'requestidlecallback';
 
 function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   const {t} = useTranslation();
@@ -35,6 +36,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   const dimensions = useResizeObserver(wrapperRef);
 
   const [highlightedDate, setHighlightedDate] = useState();
+  const threadId = useRef();
 
   useEffect(() => {
     setHighlightedDate(dates[dates.length - 1]);
@@ -179,7 +181,8 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
     }
 
     /* Begin drawing charts */
-    requestIdleCallback(() => {
+    cancelIdleCallback(threadId.current);
+    threadId.current = requestIdleCallback(() => {
       refs.current.forEach((ref, i) => {
         const svg = select(ref);
         const t = svg.transition().duration(D3_TRANSITION_DURATION);

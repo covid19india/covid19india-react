@@ -20,6 +20,7 @@ import {transition} from 'd3-transition';
 import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useEffect, useRef, useMemo} from 'react';
+import 'requestidlecallback';
 
 function Minigraphs({timeseries, date: timelineDate}) {
   const refs = useRef([]);

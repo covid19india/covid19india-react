@@ -9,7 +9,7 @@ import {createBreakpoint} from 'react-use';
 
 const useBreakpoint = createBreakpoint({S: 768});
 
-function PureStateHeaderCell({handleSort, sortData, statistic}) {
+function StateHeaderCell({handleSort, sortData, statistic}) {
   const breakpoint = useBreakpoint();
   const {t} = useTranslation();
 
@@ -46,4 +46,4 @@ const isStateHeaderCellEqual = (prevProps, currProps) => {
   }
 };
 
-export default React.memo(PureStateHeaderCell, isStateHeaderCellEqual);
+export default React.memo(StateHeaderCell, isStateHeaderCellEqual);

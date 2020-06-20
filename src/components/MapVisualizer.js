@@ -40,6 +40,7 @@ import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import useSWR from 'swr';
 import * as topojson from 'topojson';
+import 'requestidlecallback';
 
 const [width, height] = [432, 488];
 
@@ -171,24 +172,14 @@ function MapVisualizer({
     if (!geoData) return null;
     const featuresWrap =
       currentMap.view === MAP_VIEWS.STATES
-        ? topojson.feature(geoData, geoData.objects.states)
-            .features
+        ? topojson.feature(geoData, geoData.objects.states).features
         : mapMeta.mapType === MAP_TYPES.COUNTRY &&
           currentMap.option === MAP_OPTIONS.HOTSPOTS
         ? [
-            ...topojson.feature(
-              geoData,
-              geoData.objects.states
-            ).features,
-            ...topojson.feature(
-              geoData,
-              geoData.objects.districts
-            ).features,
+            ...topojson.feature(geoData, geoData.objects.states).features,
+            ...topojson.feature(geoData, geoData.objects.districts).features,
           ]
-        : topojson.feature(
-            geoData,
-            geoData.objects.districts
-          ).features;
+        : topojson.feature(geoData, geoData.objects.districts).features;
 
     // Add id to each feature
     return featuresWrap.map((feature) => {
@@ -381,17 +372,13 @@ function MapVisualizer({
 
     let meshStates = [];
     if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
-      meshStates = [
-        topojson.mesh(geoData, geoData.objects.states),
-      ];
+      meshStates = [topojson.mesh(geoData, geoData.objects.states)];
       meshStates[0].id = `${currentMap.code}-states`;
     }
     let meshDistricts = [];
     if (currentMap.view === MAP_VIEWS.DISTRICTS) {
       // Add id to mesh
-      meshDistricts = [
-        topojson.mesh(geoData, geoData.objects.districts),
-      ];
+      meshDistricts = [topojson.mesh(geoData, geoData.objects.districts)];
       meshDistricts[0].id = `${currentMap.code}-districts`;
     }
 
@@ -418,7 +405,15 @@ function MapVisualizer({
       .attr('stroke', () => {
         return COLORS[statistic] + '30';
       });
-  }, [geoData, mapMeta, currentMap.option, currentMap.view, statistic, path]);
+  }, [
+    geoData,
+    mapMeta,
+    currentMap.option,
+    currentMap.view,
+    statistic,
+    path,
+    currentMap.code,
+  ]);
 
   useEffect(() => {
     const state = STATE_NAMES[regionHighlighted.stateCode];
