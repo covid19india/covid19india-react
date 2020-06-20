@@ -1,3 +1,4 @@
+import {STATE_POPULATIONS_MIL} from '../constants';
 import {formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
@@ -5,9 +6,19 @@ import equal from 'fast-deep-equal';
 import React from 'react';
 import {animated, useSpring, config} from 'react-spring';
 
-const Cell = ({statistic, data}) => {
-  const total = getStatistic(data, 'total', statistic);
-  const delta = getStatistic(data, 'delta', statistic);
+const Cell = ({statistic, data, regionKey}) => {
+  const total = getStatistic(
+    data,
+    'total',
+    statistic,
+    STATE_POPULATIONS_MIL[regionKey]
+  );
+  const delta = getStatistic(
+    data,
+    'delta',
+    statistic,
+    STATE_POPULATIONS_MIL[regionKey]
+  );
 
   const spring = useSpring(
     {
@@ -46,6 +57,9 @@ const isCellEqual = (prevProps, currProps) => {
     return false;
   }
   if (!equal(prevProps.data?.delta, currProps.data?.delta)) {
+    return false;
+  }
+  if (!equal(prevProps.regionKey, currProps.regionKey)) {
     return false;
   }
   return true;

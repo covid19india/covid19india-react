@@ -19,7 +19,7 @@ export const PRIMARY_STATISTICS = [
   'deceased',
 ];
 
-export const BIG_TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
+export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
 export const MAP_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 

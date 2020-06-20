@@ -3,7 +3,7 @@ import DistrictRow from './DistrictRow';
 import HeaderCell from './HeaderCell';
 import Tooltip from './Tooltip';
 
-import {PRIMARY_STATISTICS, STATE_NAMES} from '../constants';
+import {PRIMARY_STATISTICS, TABLE_STATISTICS, STATE_NAMES} from '../constants';
 import {
   capitalize,
   formatLastUpdated,
@@ -30,6 +30,7 @@ function Row({
   data,
   stateCode,
   districtName,
+  isPerMillion,
   regionHighlighted,
   setRegionHighlighted,
 }) {
@@ -139,8 +140,11 @@ function Row({
           )}
         </div>
 
-        {PRIMARY_STATISTICS.map((statistic) => (
-          <Cell key={statistic} {...{data, statistic}} />
+        {TABLE_STATISTICS.map((statistic) => (
+          <Cell
+            key={statistic}
+            {...{data, statistic, regionKey: isPerMillion ? stateCode : null}}
+          />
         ))}
       </animated.div>
 
@@ -240,6 +244,8 @@ const isEqual = (prevProps, currProps) => {
   if (!equal(prevProps.data?.total, currProps.data?.total)) {
     return false;
   } else if (!equal(prevProps.data?.delta, currProps.data?.delta)) {
+    return false;
+  } else if (!equal(prevProps.isPerMillion, currProps.isPerMillion)) {
     return false;
   } else if (
     (!equal(

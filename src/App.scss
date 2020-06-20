@@ -70,6 +70,10 @@ $dark-m-white: #e1e1e1;
 $dark-m-purple: #7ba1ea;
 $dark-m-blue: #3391ff;
 
+* {
+  font-family: 'archia';
+}
+
 html {
   overflow-x: hidden;
   width: 100vw;
@@ -83,37 +87,31 @@ body {
 }
 
 h1 {
-  font-family: 'archia';
   font-size: 24px !important;
   font-weight: 900;
 }
 
 h2 {
-  font-family: 'archia';
   font-size: 18px !important;
   font-weight: 400;
 }
 
 h3 {
-  font-family: 'archia';
   font-size: 14px !important;
   font-weight: 400;
 }
 
 h4 {
-  font-family: 'archia';
   font-size: 13px !important;
   font-weight: 900;
 }
 
 h5 {
-  font-family: 'archia';
   font-size: 12px !important;
   font-weight: 900;
 }
 
 h6 {
-  font-family: 'archia';
   font-size: 11px !important;
   font-weight: 600;
 }
@@ -153,7 +151,6 @@ h6 {
   .navbar-left {
     color: $gray-mid;
     cursor: pointer;
-    font-family: 'archia';
     font-size: 12px;
     font-weight: 600;
     padding: 1.5rem;
@@ -167,7 +164,6 @@ h6 {
 
   .navbar-middle {
     color: $gray;
-    font-family: 'archia';
     font-size: 18px;
     font-weight: 900;
     text-transform: uppercase;
@@ -180,7 +176,6 @@ h6 {
   .navbar-right {
     color: $gray-mid;
     cursor: pointer;
-    font-family: 'archia';
     font-size: 12px;
     font-weight: 600;
     padding: 1.5rem;
@@ -194,7 +189,6 @@ h6 {
 
   .language-toggle {
     cursor: pointer;
-    font-family: 'archia';
     font-weight: 900;
     text-transform: uppercase;
   }
@@ -204,7 +198,6 @@ h6 {
     color: $gray;
     display: flex;
     flex-direction: column;
-    font-family: 'archia';
     width: 100vw;
     z-index: 9999;
 
@@ -284,7 +277,6 @@ h6 {
   color: $gray;
   display: flex;
   flex-direction: row;
-  font-family: 'archia';
   font-size: 10px;
   padding: 0.5rem;
 
@@ -579,7 +571,6 @@ h6 {
     }
 
     p {
-      font-family: 'archia';
       font-weight: 600;
       margin-bottom: 1.25rem;
       padding-right: 1rem;
@@ -733,7 +724,6 @@ h6 {
     .item {
       color: $red;
       cursor: pointer;
-      font-family: 'archia';
       padding: 0.75rem;
 
       &:hover {
@@ -853,7 +843,6 @@ h6 {
     cursor: pointer;
     display: flex;
     flex-direction: row;
-    font-family: 'archia' !important;
     font-size: 14px;
     margin-bottom: 0.25rem;
     margin-right: .25rem;
@@ -898,7 +887,6 @@ h6 {
   color: $purple;
   display: flex;
   flex-direction: row;
-  font-family: 'Archia';
   font-size: 0.8rem;
   font-weight: 600;
   justify-content: center;
@@ -927,7 +915,6 @@ h6 {
 
   label {
     color: $gray;
-    font-family: 'archia';
     font-size: 0.75rem;
     margin-bottom: 1rem;
   }
@@ -947,7 +934,6 @@ h6 {
     border-radius: 5px;
     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
     color: $gray;
-    font-family: 'archia';
     font-size: 1rem;
     height: 2rem;
     outline: none;
@@ -963,7 +949,6 @@ h6 {
 
   .search-placeholder {
     color: $gray-mid;
-    font-family: 'archia';
     font-size: 1rem;
     left: 3rem;
     opacity: 0.8;
@@ -1039,7 +1024,6 @@ h6 {
     border-radius: 5px;
     color: $pink;
     cursor: pointer;
-    font-family: 'archia';
     font-size: .75rem;
     padding: .75rem;
     text-align: center;
@@ -1094,7 +1078,6 @@ h6 {
       cursor: pointer;
       display: flex;
       flex-direction: row;
-      font-family: 'archia';
       font-size: 0.9rem;
       justify-content: space-between;
       min-height: 2rem;
@@ -1285,7 +1268,6 @@ h6 {
       color: $gray-mid;
       display: flex;
       flex-direction: row;
-      font-family: 'archia';
 
       div {
         padding-top: 1px;
@@ -1436,7 +1418,6 @@ h6 {
   cursor: pointer;
   display: flex;
   flex-direction: row;
-  font-family: 'archia';
   font-size: 0.75rem;
   font-weight: 900;
   margin-bottom: 0.5rem;
@@ -1701,7 +1682,6 @@ abbr {
   align-self: center;
   display: flex;
   flex-direction: row;
-  font-family: 'archia';
   font-weight: 600;
   justify-content: space-between;
   margin-bottom: .25rem;
@@ -1748,6 +1728,10 @@ abbr {
       color: $pink;
     }
   }
+
+  @media (min-width: 769px) {
+    margin-top: 1rem;
+  }
 }
 
 .table-helper {
@@ -1761,7 +1745,6 @@ abbr {
     align-items: center;
     display: flex;
     flex-direction: row;
-    font-family: 'archia';
     font-size: 12px;
 
     svg {
@@ -1775,11 +1758,11 @@ abbr {
   border-radius: 3px;
   display: flex;
   flex-direction: column;
-  font-family: 'archia';
   font-size: 12px;
   margin-bottom: 2.5rem;
   overflow-x: auto;
   width: 28rem;
+  border-right: 2px dashed $gray-hover;
 
   .state-meta {
     align-items: center;
@@ -1934,6 +1917,10 @@ abbr {
         .is-deceased {
           color: $gray;
         }
+
+        .is-tested {
+          color: $purple;
+        }
       }
 
       &:not(:last-child) {
@@ -2064,7 +2051,6 @@ abbr {
 
       text {
         fill: $gray;
-        font-family: 'archia';
         font-size: 10px;
         font-weight: 600;
         text-align: right;
@@ -2077,7 +2063,6 @@ abbr {
     border-radius: 5px;
     color: $orange;
     cursor: pointer;
-    font-family: 'archia';
     font-size: 0.75rem;
     font-weight: 900;
     margin-bottom: 0.25rem;
@@ -2285,7 +2270,6 @@ abbr {
         align-self: flex-end;
         position: absolute;
         top: 5rem;
-        font-family: 'archia';
 
         div {
           display: flex;
@@ -2380,7 +2364,6 @@ abbr {
     bottom: 50%;
     display: flex;
     flex-direction: row;
-    font-family: 'archia';
     font-size: 12px;
     left: 0;
     margin-left: auto;
@@ -2482,7 +2465,6 @@ abbr {
 
   h4 {
     display: table-cell;
-    font-family: 'archia';
     font-size: 12px !important;
     font-weight: 900;
     height: 2rem;
@@ -2618,7 +2600,6 @@ abbr {
 
     label {
       color: $gray-mid;
-      font-family: 'archia';
       font-size: 0.75rem;
       font-weight: 900;
       margin-right: 0.25rem;
@@ -2717,7 +2698,6 @@ input {
     border-radius: 4px;
     color: $gray;
     cursor: pointer;
-    font-family: 'archia';
     font-weight: 900;
     margin-left: -1px;
     margin-top: 1rem;
@@ -2861,7 +2841,6 @@ input {
 
       text {
         color: $cherry-mid;
-        font-family: 'archia';
         font-size: 9px;
         font-weight: 600;
         stroke: transparent;
@@ -3007,7 +2986,6 @@ input {
   a {
     background: $blue-light;
     color: $blue;
-    font-family: 'archia';
     font-weight: 900;
     text-decoration: none;
     text-transform: uppercase;
@@ -3187,7 +3165,6 @@ footer {
       border-radius: 4px;
       color: #6c757d;
       cursor: default;
-      font-family: 'archia';
       font-size: 12px;
       font-weight: 900;
       height: 2.19rem;
@@ -3218,7 +3195,6 @@ footer {
 
       button {
         border-radius: 5px;
-        font-family: 'archia';
         padding: 1rem;
         transition: all 0.1s ease-in-out;
 
@@ -3259,7 +3235,6 @@ footer {
     }
 
     .react-calendar__month-view__weekdays__weekday {
-      font-family: 'archia';
       margin-bottom: 0.5rem;
     }
 
@@ -3319,7 +3294,6 @@ footer {
       border-radius: 4px;
       color: $gray;
       cursor: pointer;
-      font-family: 'archia';
       font-weight: 900;
       margin: 0.2rem 0.1rem;
       padding: 0.5rem;
@@ -3336,7 +3310,6 @@ footer {
     background: $pblue-light;
     border-radius: 5px;
     color: $pblue;
-    font-family: 'archia';
     font-size: 0.9rem;
     font-weight: 600;
     line-height: 23px;
@@ -3760,7 +3733,6 @@ footer {
 
   code {
     color: $orange-mid;
-    font-family: 'archia';
   }
 
   a {
@@ -4013,7 +3985,6 @@ footer {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  font-family: archia;
   justify-content: space-between;
   padding: 0.5rem;
   position: sticky;
@@ -4042,7 +4013,6 @@ footer {
     border-top: 0;
     color: $orange;
     cursor: pointer;
-    font-family: 'archia';
     font-size: 10px !important;
     font-weight: 600;
     margin: 0;
@@ -4083,7 +4053,6 @@ footer {
   background: #fff;
   display: flex;
   flex-wrap: wrap;
-  font-family: archia;
   justify-content: center;
   z-index: 101;
 
@@ -4351,7 +4320,6 @@ footer {
         width: 100%;
 
         text {
-          font-family: 'archia';
         }
 
         .label {
@@ -4379,7 +4347,6 @@ footer {
     .district {
       display: flex;
       flex-direction: row;
-      font-family: 'archia';
       height: 2.5rem;
       justify-content: flex-start;
       margin-right: 1rem;
@@ -4513,7 +4480,6 @@ footer {
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      font-family: 'archia';
       font-weight: 600;
       justify-content: center;
       padding: 1rem;
@@ -4558,7 +4524,6 @@ footer {
 
         .chart-title {
           color: #6c757d;
-          font-family: 'archia';
           font-size: 1.5rem !important;
           font-weight: 900;
           padding: 20px 0;
@@ -4572,7 +4537,6 @@ footer {
 
         .chart-note {
           color: $gray;
-          font-family: 'archia';
           font-size: 0.8rem;
           height: 50px;
           margin-top: 5px;
