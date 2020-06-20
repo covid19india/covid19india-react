@@ -522,7 +522,7 @@ h6 {
     }
 
     h3 {
-      font-weight: 900;
+      font-weight: 600;
       width: 10rem;
       word-wrap: break-word;
     }
@@ -1692,6 +1692,10 @@ abbr {
   }
 }
 
+.TableLoader {
+  margin-bottom: -.25rem;
+}
+
 .table-top {
   align-items: flex-end;
   align-self: center;
@@ -1740,8 +1744,8 @@ abbr {
     text-align: center;
 
     &.is-highlighted {
-      background: $brown-light;
-      color: $brown;
+      background: $pink-light;
+      color: $pink;
     }
   }
 }
@@ -5282,6 +5286,14 @@ footer {
   .StateDropdown {
     .dropdown {
       background: #1e1e30 !important;
+    }
+  }
+
+  .TableLoader {
+    svg {
+      rect {
+        fill: #1e1e30 !important;
+      }
     }
   }
 }

@@ -1,10 +1,12 @@
+import Cell from './Cell';
+import DistrictRow from './DistrictRow';
+import HeaderCell from './HeaderCell';
 import Tooltip from './Tooltip';
 
 import {PRIMARY_STATISTICS, STATE_NAMES} from '../constants';
 import {
   capitalize,
   formatLastUpdated,
-  formatNumber,
   getStatistic,
 } from '../utils/commonFunctions';
 
@@ -22,157 +24,12 @@ import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {useSpring, animated, config} from 'react-spring';
-import {createBreakpoint, useLocalStorage} from 'react-use';
-
-const useBreakpoint = createBreakpoint({S: 768});
-
-function PureCell({statistic, data}) {
-  const total = getStatistic(data, 'total', statistic);
-  const delta = getStatistic(data, 'delta', statistic);
-
-  const spring = useSpring(
-    {
-      total: total,
-      delta: delta,
-      from: {
-        total: total,
-        delta: delta,
-      },
-    },
-    config.gentle
-  );
-
-  return (
-    <div className="cell statistic">
-      {statistic !== 'active' && (
-        <animated.div className={classnames('delta', `is-${statistic}`)}>
-          {spring.delta.interpolate((delta) =>
-            delta > 0
-              ? '\u2191' + formatNumber(Math.floor(delta))
-              : delta < 0
-              ? '\u2193' + formatNumber(Math.floor(Math.abs(delta)))
-              : ''
-          )}
-        </animated.div>
-      )}
-      <animated.div className="total">
-        {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
-      </animated.div>
-    </div>
-  );
-}
-
-const isCellEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.data?.total, currProps.data?.total)) {
-    return false;
-  }
-  if (!equal(prevProps.data?.delta, currProps.data?.delta)) {
-    return false;
-  }
-  return true;
-};
-
-const Cell = React.memo(PureCell, isCellEqual);
-
-function DistrictHeaderCell({handleSortClick, statistic, sortData}) {
-  const breakpoint = useBreakpoint();
-  const {t} = useTranslation();
-
-  return (
-    <div className="cell heading" onClick={() => handleSortClick(statistic)}>
-      {sortData.sortColumn === statistic && (
-        <div
-          className={classnames('sort-icon', {
-            invert: sortData.isAscending,
-          })}
-        >
-          <FilterIcon size={10} />
-        </div>
-      )}
-      <div
-        className={classnames({
-          [`is-${statistic}`]: breakpoint === 'S',
-        })}
-        title={capitalize(statistic)}
-      >
-        {breakpoint === 'S'
-          ? capitalize(statistic.slice(0, 1))
-          : t(capitalize(statistic))}
-      </div>
-    </div>
-  );
-}
-
-function PureDistrictRow({
-  stateCode,
-  districtName,
-  data,
-  regionHighlighted,
-  setRegionHighlighted,
-}) {
-  const {t} = useTranslation();
-
-  const highlightDistrict = useCallback(() => {
-    if (regionHighlighted.districtName !== districtName) {
-      setRegionHighlighted(
-        produce(regionHighlighted, (draftRegionHighlighted) => {
-          draftRegionHighlighted.stateCode = stateCode;
-          draftRegionHighlighted.districtName = districtName;
-        })
-      );
-    }
-  }, [regionHighlighted, districtName, setRegionHighlighted, stateCode]);
-
-  return (
-    <div
-      className={classnames('row', 'district', {
-        'is-highlighted': regionHighlighted?.districtName === districtName,
-      })}
-      onMouseEnter={highlightDistrict}
-    >
-      <div className="cell">
-        <div className="state-name">{t(districtName)}</div>
-        {data?.meta?.notes && (
-          <Tooltip {...{data: data.meta.notes}}>
-            <Info size={16} />
-          </Tooltip>
-        )}
-      </div>
-
-      {PRIMARY_STATISTICS.map((statistic) => (
-        <Cell key={statistic} {...{statistic}} data={data} />
-      ))}
-    </div>
-  );
-}
-
-const isDistrictRowEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.data?.total, currProps.data?.total)) {
-    return false;
-  } else if (!equal(prevProps.data?.delta, currProps.data?.delta)) {
-    return false;
-  } else if (
-    !equal(prevProps.data?.['last_updated'], currProps.data?.['last_updated'])
-  ) {
-    return false;
-  } else if (
-    !equal(
-      prevProps.regionHighlighted.districtName,
-      currProps.regionHighlighted.districtName
-    ) &&
-    (equal(prevProps.regionHighlighted.districtName, prevProps.districtName) ||
-      equal(currProps.regionHighlighted.districtName, currProps.districtName))
-  ) {
-    return false;
-  }
-  return true;
-};
-const DistrictRow = React.memo(PureDistrictRow, isDistrictRowEqual);
+import {useLocalStorage} from 'react-use';
 
 function Row({
+  data,
   stateCode,
   districtName,
-  data,
   regionHighlighted,
   setRegionHighlighted,
 }) {
@@ -331,9 +188,12 @@ function Row({
             </div>
 
             {PRIMARY_STATISTICS.map((statistic) => (
-              <DistrictHeaderCell
+              <HeaderCell
                 key={statistic}
-                {...{statistic, sortData, handleSortClick}}
+                {...{statistic, sortData}}
+                handleSort={() => {
+                  handleSortClick(statistic);
+                }}
               />
             ))}
           </div>
@@ -364,7 +224,6 @@ function Row({
             onClick={() => {
               setShowDistricts(false);
               rowElement.current.scrollIntoView({
-                behavior: 'smooth',
                 block: 'start',
               });
             }}

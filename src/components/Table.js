@@ -1,5 +1,5 @@
-import TableLoader from './loaders/table';
-import StateHeaderCell from './StateHeaderCell';
+import HeaderCell from './HeaderCell';
+import TableLoader from './loaders/Table';
 
 import {PRIMARY_STATISTICS} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
@@ -18,36 +18,18 @@ import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useTrail, useTransition, animated, config} from 'react-spring';
-import {createBreakpoint, useLocalStorage} from 'react-use';
+import {useLocalStorage} from 'react-use';
 // eslint-disable-next-line
 import worker from 'workerize-loader!../workers/getDistricts';
 
 const Row = lazy(() => import('./Row'));
-const useBreakpoint = createBreakpoint({S: 768});
 
-function PureFineprintTop() {
-  const {t} = useTranslation();
-
-  return (
-    <React.Fragment>
-      <h5 className="text">
-        {t('Compiled from State Govt. numbers')},{' '}
-        <Link to="/about" style={{color: '#6c757d'}}>
-          {t('know more')}!
-        </Link>
-      </h5>
-    </React.Fragment>
-  );
-}
-const FineprintTop = React.memo(PureFineprintTop);
-
-function Table({data, regionHighlighted, setRegionHighlighted}) {
+function Table({data: states, regionHighlighted, setRegionHighlighted}) {
   const {t} = useTranslation();
   const [sortData, setSortData] = useLocalStorage('sortData', {
     sortColumn: 'confirmed',
     isAscending: false,
   });
-  const [districts, setDistricts] = useState();
 
   const handleSortClick = useCallback(
     (statistic) => {
@@ -61,31 +43,30 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
     [sortData, setSortData]
   );
 
-  const [trail, set] = useTrail(3, () => ({
-    transform: 'translate3d(0, 10px, 0)',
-    opacity: 0,
+  const trail = useTrail(3, {
+    from: {transform: 'translate3d(0, 10px, 0)', opacity: 0},
+    to: {transform: 'translate3d(0, 0px, 0)', opacity: 1},
     config: config.wobbly,
-  }));
-
-  set({transform: 'translate3d(0, 0px, 0)', opacity: 1});
+  });
 
   const tableElement = useRef();
   const isVisible = useIsVisible(tableElement);
+  const [districts, setDistricts] = useState();
 
-  const [tableOption, setTableOption] = useState('states');
+  const [tableOption, setTableOption] = useState('States');
   const [isPerMillion, setIsPerMillion] = useState(false);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
 
   const sortingFunction = useCallback(
-    (stateCodeA, stateCodeB) => {
-      if (sortData.sortColumn !== 'stateName') {
+    (regionKeyA, regionKeyB) => {
+      if (sortData.sortColumn !== 'regionName') {
         const statisticA = getStatistic(
-          districts?.[stateCodeA] || data[stateCodeA],
+          districts?.[regionKeyA] || states[regionKeyA],
           'total',
           sortData.sortColumn
         );
         const statisticB = getStatistic(
-          districts?.[stateCodeB] || data[stateCodeB],
+          districts?.[regionKeyB] || states[regionKeyB],
           'total',
           sortData.sortColumn
         );
@@ -94,20 +75,20 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
           : statisticB - statisticA;
       } else {
         return sortData.isAscending
-          ? stateCodeA.localeCompare(stateCodeB)
-          : stateCodeB.localeCompare(stateCodeA);
+          ? regionKeyA.localeCompare(regionKeyB)
+          : regionKeyB.localeCompare(regionKeyA);
       }
     },
-    [sortData.sortColumn, sortData.isAscending, districts, data]
+    [districts, sortData.isAscending, sortData.sortColumn, states]
   );
 
   const _setTableOption = () => {
     setTableOption((prevTableOption) =>
-      prevTableOption === 'states' ? 'districts' : 'states'
+      prevTableOption === 'States' ? 'Districts' : 'States'
     );
 
     const workerInstance = worker();
-    workerInstance.getDistricts(data);
+    workerInstance.getDistricts(states);
     workerInstance.addEventListener('message', (message) => {
       if (message.data.type !== 'RPC') {
         setDistricts(message.data);
@@ -128,7 +109,7 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
     height: 0,
   };
 
-  const transitions = useTransition(isInfoVisible, null, {
+  const transition = useTransition(isInfoVisible, null, {
     from: FADE_OUT,
     enter: FADE_IN,
     leave: FADE_OUT,
@@ -139,7 +120,7 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
       <div className="table-top">
         <animated.div
           className={classnames('option-toggle', {
-            'is-highlighted': tableOption === 'districts',
+            'is-highlighted': tableOption === 'Districts',
           })}
           onClick={_setTableOption}
           style={trail[0]}
@@ -156,7 +137,7 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
           }}
           style={trail[0]}
         >
-          1M
+          <span>1M</span>
         </animated.div>
 
         <animated.div
@@ -174,7 +155,7 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
         <animated.div className="fineprint" style={trail[1]}></animated.div>
       </div>
 
-      {transitions.map(({item, key, props}) =>
+      {transition.map(({item, key, props}) =>
         item ? (
           <animated.div key={key} className="table-helper" style={props}>
             <div className="info-item">
@@ -185,6 +166,12 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
               <Info size={15} />
               <p>Extra notes</p>
             </div>
+            <h5 className="text">
+              {t('Compiled from State Govt. numbers')},{' '}
+              <Link to="/about" style={{color: '#6c757d'}}>
+                {t('know more')}!
+              </Link>
+            </h5>
           </animated.div>
         ) : null
       )}
@@ -193,10 +180,10 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
         <div className="row heading">
           <div
             className="cell heading"
-            onClick={() => handleSortClick('stateName')}
+            onClick={() => handleSortClick('regionName')}
           >
-            <div>{t(tableOption === 'states' ? 'State/UT' : 'District')}</div>
-            {sortData.sortColumn === 'stateName' && (
+            <div>{t(tableOption === 'States' ? 'State/UT' : 'District')}</div>
+            {sortData.sortColumn === 'regionName' && (
               <div
                 className={classnames('sort-icon', {
                   invert: !sortData.isAscending,
@@ -208,7 +195,7 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
           </div>
 
           {PRIMARY_STATISTICS.map((statistic) => (
-            <StateHeaderCell
+            <HeaderCell
               key={statistic}
               {...{statistic, sortData}}
               handleSort={() => {
@@ -218,26 +205,26 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
           ))}
         </div>
 
-        {tableOption === 'states' &&
-          Object.keys(data)
+        {tableOption === 'States' &&
+          Object.keys(states)
             .filter(
               (stateCode) =>
-                stateCode !== 'TT' && data[stateCode].total?.confirmed
+                stateCode !== 'TT' && states[stateCode].total?.confirmed
             )
             .sort((a, b) => sortingFunction(a, b))
-            .slice(0, isVisible ? Object.keys(data).length - 1 : 10)
+            .slice(0, isVisible ? Object.keys(states).length - 1 : 10)
             .map((stateCode) => {
               return (
                 <Row
                   key={stateCode}
-                  data={data[stateCode]}
+                  data={states[stateCode]}
                   {...{isPerMillion}}
                   {...{stateCode, regionHighlighted, setRegionHighlighted}}
                 />
               );
             })}
 
-        {tableOption === 'districts' && !districts && <TableLoader />}
+        {tableOption === 'Districts' && !districts && <TableLoader />}
 
         {districts &&
           Object.keys(districts)
@@ -261,7 +248,7 @@ function Table({data, regionHighlighted, setRegionHighlighted}) {
 
         <Row
           key={'TT'}
-          data={data['TT']}
+          data={states['TT']}
           stateCode={'TT'}
           {...{regionHighlighted, setRegionHighlighted}}
         />

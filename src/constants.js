@@ -43,6 +43,11 @@ export const COLORS = {
   tested: '#4b1eaa',
 };
 
+export const KEYS = {
+  State: 'stateCode',
+  District: 'districtName',
+};
+
 export const TIMESERIES_CHART_TYPES = {
   total: 'Cumulative',
   delta: 'Daily',

@@ -5,14 +5,11 @@ import Navbar from './components/Navbar';
 import React, {lazy, useState, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 import {Route, Redirect, Switch, useLocation} from 'react-router-dom';
-import {useTransition, animated, config} from 'react-spring';
 import useDarkMode from 'use-dark-mode';
 
 const Home = lazy(() => import('./components/Home'));
 const About = lazy(() => import('./components/About'));
-const Demographics = lazy(() => import('./components/Demographics'));
 const State = lazy(() => import('./components/State'));
-const Essentials = lazy(() => import('./components/Essentials'));
 const LanguageSwitcher = lazy(() => import('./components/LanguageSwitcher'));
 
 const schemaMarkup = {
@@ -37,27 +34,15 @@ function App() {
       showInNavbar: true,
     },
     {
-      pageLink: '/demographics',
-      view: Demographics,
-      displayName: 'Demographics',
-      showInNavbar: true,
-    },
-    {
-      pageLink: '/essentials',
-      view: Essentials,
-      displayName: 'Essentials',
+      pageLink: '/blog',
+      view: Blog,
+      displayName: 'Blog',
       showInNavbar: true,
     },
     {
       pageLink: '/about',
       view: About,
       displayName: 'About',
-      showInNavbar: true,
-    },
-    {
-      pageLink: '/blog',
-      view: Blog,
-      displayName: 'Blog',
       showInNavbar: true,
     },
     {
