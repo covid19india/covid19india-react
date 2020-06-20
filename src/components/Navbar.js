@@ -1,3 +1,9 @@
+import {
+  SLIDE_IN,
+  SLIDE_OUT,
+  SLIDE_IN_MOBILE,
+  SLIDE_OUT_MOBILE,
+} from '../animations';
 import locales from '../i18n/locales.json';
 
 import React, {useState, useRef} from 'react';
@@ -6,34 +12,6 @@ import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useSpring, useTransition, animated} from 'react-spring';
 import {useLockBodyScroll, useWindowSize} from 'react-use';
-
-const SLIDE_IN = {
-  position: 'absolute',
-  transform: 'translate3d(-20rem, 0, 0)',
-  height: '100vh',
-  zIndex: -1,
-};
-
-const SLIDE_OUT = {
-  position: 'absolute',
-  transform: 'translate3d(10rem, 0, 0)',
-};
-
-const SLIDE_IN_MOBILE = {
-  opacity: 1,
-  position: 'absolute',
-  height: '100vh',
-  top: 64,
-  zIndex: 999,
-};
-
-const SLIDE_OUT_MOBILE = {
-  opacity: 1,
-  position: 'absolute',
-  height: '100vh',
-  top: 64,
-  zIndex: 999,
-};
 
 function Navbar({
   pages,

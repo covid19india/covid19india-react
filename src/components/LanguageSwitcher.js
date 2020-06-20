@@ -1,3 +1,4 @@
+import {ENTER_IN, ENTER_OUT} from '../animations';
 import locales from '../i18n/locales.json';
 
 import classnames from 'classnames';
@@ -7,19 +8,6 @@ import {useTranslation} from 'react-i18next';
 import {useTransition, animated} from 'react-spring';
 import {useClickAway} from 'react-use';
 
-const FADE_IN = {
-  opacity: 1,
-  marginTop: '7.5rem',
-  marginBottom: '30rem',
-};
-
-const FADE_OUT = {
-  opacity: 0,
-  height: '0rem',
-  marginTop: '0rem',
-  marginBottom: '0rem',
-};
-
 function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
   const {i18n} = useTranslation();
   const currentLanguage = Object.keys(locales).includes(i18n?.language)
@@ -27,9 +15,9 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
     : i18n?.options?.fallbackLng[0];
 
   const transitions = useTransition(showLanguageSwitcher, null, {
-    from: FADE_OUT,
-    enter: FADE_IN,
-    leave: FADE_OUT,
+    from: ENTER_OUT,
+    enter: ENTER_IN,
+    leave: ENTER_OUT,
     config: {
       mass: 1,
       tension: 100,
