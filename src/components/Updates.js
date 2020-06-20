@@ -1,3 +1,5 @@
+import {capitalize} from '../utils/commonFunctions';
+
 import {formatDistance, format} from 'date-fns';
 import React, {useLayoutEffect} from 'react';
 
@@ -47,9 +49,11 @@ function Updates({updates}) {
                 : ' '}
               <div key={index} className="update">
                 <h5>
-                  {formatDistance(
-                    new Date(activity.timestamp * 1000),
-                    new Date()
+                  {capitalize(
+                    formatDistance(
+                      new Date(activity.timestamp * 1000),
+                      new Date()
+                    )
                   ) + ' ago'}
                 </h5>
                 <h4

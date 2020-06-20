@@ -954,7 +954,7 @@ h6 {
     opacity: 0.8;
     pointer-events: none;
     position: absolute;
-    top: 4.3rem;
+    top: 1.5rem;
     transition: opacity 1s;
 
     &.disappear {
@@ -1268,6 +1268,7 @@ h6 {
       color: $gray-mid;
       display: flex;
       flex-direction: row;
+      padding: .1rem;
 
       div {
         padding-top: 1px;
