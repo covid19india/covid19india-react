@@ -68,6 +68,16 @@ $dark-m-white: #e1e1e1;
 $dark-m-purple: #7ba1ea;
 $dark-m-blue: #3391ff;
 
+@mixin root-prop($prop: null, $value: null) {
+  @if ($prop and $value) {
+    #{$prop}: $value;
+  }
+}
+
+:root {
+  @include root-prop(--primary-color, $pblue);
+}
+
 html {
   overflow-x: hidden;
   width: 100vw;
@@ -172,7 +182,7 @@ h6 {
     text-transform: uppercase;
 
     span {
-      color: $pblue;
+      color: var(--primary-color);
     }
   }
 
@@ -224,7 +234,7 @@ h6 {
       span {
         &.focused {
           background: $pblue-light;
-          color: $pblue;
+          color: var(--primary-color);
           padding: 0.25rem;
         }
       }
@@ -297,7 +307,7 @@ h6 {
   }
 
   .alert-right {
-    margin-left: .25rem;
+    margin-left: 0.25rem;
     text-align: right;
     width: 5rem;
 
@@ -361,7 +371,7 @@ h6 {
       h5 {
         color: $gray;
         font-weight: 600;
-        margin-top: .5rem;
+        margin-top: 0.5rem;
       }
     }
 
@@ -721,15 +731,15 @@ h6 {
     background: $brick-light;
     border-radius: 5px;
     cursor: pointer;
-    padding: .25rem;
-    transform: translate3d(-.25rem, 0, 0);
+    padding: 0.25rem;
+    transform: translate3d(-0.25rem, 0, 0);
   }
 
   .dropdown {
     background: $white;
     border-radius: 5px;
     height: 25rem;
-    left: -.25rem;
+    left: -0.25rem;
     overflow-y: scroll;
     position: absolute;
     top: 2.75rem;
@@ -796,7 +806,7 @@ h6 {
     font-weight: 400;
     justify-content: center;
     margin: 0;
-    padding: .75rem;
+    padding: 0.75rem;
     text-transform: unset;
 
     * {
@@ -804,7 +814,7 @@ h6 {
     }
 
     svg {
-      margin-left: .5rem;
+      margin-left: 0.5rem;
       padding-right: 0;
     }
 
@@ -862,8 +872,8 @@ h6 {
     font-family: 'archia' !important;
     font-size: 14px;
     margin-bottom: 0.25rem;
-    margin-right: .25rem;
-    padding: .25rem .5rem;
+    margin-right: 0.25rem;
+    padding: 0.25rem 0.5rem;
     text-transform: capitalize;
 
     &.is-selected {
@@ -1046,8 +1056,8 @@ h6 {
     color: $pink;
     cursor: pointer;
     font-family: 'archia';
-    font-size: .75rem;
-    padding: .75rem;
+    font-size: 0.75rem;
+    padding: 0.75rem;
     text-align: center;
   }
 
@@ -1072,7 +1082,7 @@ h6 {
     }
 
     h3 {
-      color: $pblue;
+      color: var(--primary-color);
       margin-bottom: 0.75rem;
     }
   }
@@ -1235,7 +1245,7 @@ h6 {
       .result-description {
         align-self: flex-start;
         font-size: 0.75rem;
-        margin-bottom: .5rem;
+        margin-bottom: 0.5rem;
         margin-top: 1rem;
       }
 
@@ -1255,7 +1265,7 @@ h6 {
         flex-direction: row;
         font-size: 0.75rem;
         height: 1rem;
-        margin-right: .25rem;
+        margin-right: 0.25rem;
         margin-top: 0.25rem;
         padding: 0.25rem;
         text-align: right;
@@ -1396,7 +1406,7 @@ h6 {
       position: relative;
 
       .indicator {
-        background: $pblue;
+        background: var(--primary-color);
         border-radius: 50%;
         height: 7px;
         position: absolute;
@@ -3300,7 +3310,7 @@ footer {
     align-self: center !important;
     background: $pblue-light;
     border-radius: 5px;
-    color: $pblue;
+    color: var(--primary-color);
     font-family: 'archia';
     font-size: 0.9rem;
     font-weight: 600;
@@ -3324,7 +3334,7 @@ footer {
       width: 16px;
 
       &:hover {
-        stroke: $pblue;
+        stroke: var(--primary-color);
       }
     }
   }
@@ -3338,7 +3348,7 @@ footer {
     width: calc(100% - 10rem);
 
     h1 {
-      color: $pblue;
+      color: var(--primary-color);
     }
 
     h3 {
@@ -3414,7 +3424,7 @@ footer {
 
   h5 {
     &.daylabel {
-      color: $pblue;
+      color: var(--primary-color);
     }
   }
 
@@ -3464,7 +3474,7 @@ footer {
       }
 
       &.is-male {
-        background: $pblue;
+        background: var(--primary-color);
       }
 
       &.is-local {
@@ -3492,7 +3502,7 @@ footer {
       background: $pblue-light;
 
       h3 {
-        color: $pblue;
+        color: var(--primary-color);
       }
 
       &:hover {
@@ -3789,7 +3799,7 @@ footer {
       width: 20px;
 
       &:hover {
-        stroke: $pblue;
+        stroke: var(--primary-color);
       }
     }
 
@@ -3800,7 +3810,7 @@ footer {
     }
 
     h1 {
-      color: $pblue;
+      color: var(--primary-color);
     }
 
     h5,
@@ -3810,7 +3820,7 @@ footer {
     }
 
     h3 {
-      color: $pblue;
+      color: var(--primary-color);
       margin-bottom: 0.5rem;
     }
 
@@ -3865,7 +3875,7 @@ footer {
 
       a {
         background: $pblue-light;
-        color: $pblue;
+        color: var(--primary-color);
         transition: background 0.2s ease-in-out;
 
         &:hover {
@@ -3913,7 +3923,7 @@ footer {
 
   .button {
     background: $pblue-light;
-    color: $pblue;
+    color: var(--primary-color);
     display: flex;
     flex-direction: row;
     height: 3rem;
@@ -4075,7 +4085,7 @@ footer {
     }
 
     &.is-male {
-      color: $pblue;
+      color: var(--primary-color);
     }
 
     &.is-local {
@@ -4099,7 +4109,7 @@ footer {
     }
 
     &.is-male {
-      background: $pblue;
+      background: var(--primary-color);
     }
 
     &.is-local {
@@ -4163,7 +4173,7 @@ footer {
   width: 30rem;
 
   h2 {
-    color: $pblue;
+    color: var(--primary-color);
     font-weight: 900;
   }
 }
@@ -4205,7 +4215,7 @@ footer {
 
   .button {
     background: $pblue-light;
-    color: $pblue;
+    color: var(--primary-color);
     display: flex;
     flex-direction: row;
     height: 3rem;
@@ -4415,7 +4425,7 @@ footer {
 
   h3 {
     align-self: center;
-    color: $pblue;
+    color: var(--primary-color);
     font-weight: 600;
     margin-bottom: 2rem;
   }
@@ -4442,7 +4452,7 @@ footer {
       stroke-width: 2.5px;
 
       &:hover {
-        color: $pblue;
+        color: var(--primary-color);
       }
     }
   }
@@ -4466,12 +4476,12 @@ footer {
       user-select: none;
 
       &:hover {
-        color: $pblue;
+        color: var(--primary-color);
       }
 
       &.is-highlighted {
         background: $pblue-light;
-        color: $pblue;
+        color: var(--primary-color);
       }
     }
   }
@@ -4546,7 +4556,7 @@ footer {
     font-weight: 400;
     justify-content: flex-end;
     min-width: 15rem;
-    padding: .5rem;
+    padding: 0.5rem;
     pointer-events: none;
     right: 0;
     top: 0;
@@ -4575,7 +4585,7 @@ footer {
     z-index: 999;
 
     .navbar-left {
-      margin-bottom: .5rem;
+      margin-bottom: 0.5rem;
       margin-top: auto;
       order: 3;
       text-align: center;
@@ -4637,14 +4647,26 @@ footer {
     }
   }
 
-  .dark-mode {
+  .dim {
     .Navbar,
     .expand {
-      background: #1e1e30 !important;
+      background: #1b1f23 !important;
     }
 
     .navbar-right {
-      background: #1e1e30 !important;
+      background: #1b1f23 !important;
+    }
+  }
+
+  .lights-out {
+    .Navbar {
+      .expand {
+        background-color: #000 !important;
+      }
+    }
+
+    .navbar-right {
+      background-color: #000 !important;
     }
   }
 }
@@ -4671,7 +4693,7 @@ footer {
   }
 
   .Home,
-  .State, {
+  .State {
     display: flex;
     flex-direction: column;
     margin-left: 0;
@@ -4772,7 +4794,7 @@ footer {
   }
 
   .cards-container {
-    padding: .5rem;
+    padding: 0.5rem;
 
     .cards {
       .card {
@@ -4944,320 +4966,6 @@ footer {
 
   .LanguageSwitcher {
     margin-left: 0;
-  }
-}
-
-// Dark Mode
-
-.dark-mode {
-  background: #161625 !important;
-  color: #bdbdbd;
-
-  .switch-wrapper > div {
-    background: #161625 !important;
-  }
-
-  .expand {
-    background: #1e1e30 !important;
-  }
-
-  .Navbar,
-  .expand {
-    border-right: 0;
-
-    .navbar-middle {
-      color: #bdbdbd;
-    }
-
-    .navbar-right {
-      background: #1e1e30 !important;
-    }
-  }
-
-  table {
-    th {
-      background: #1e1e30 !important;
-    }
-
-    .is-odd {
-      background: #1e1e30 !important;
-    }
-
-    .state-page-link {
-      background: #161625 !important;
-    }
-
-    .heading-content {
-      color: #bdbdbd !important;
-    }
-
-    .spacer {
-      background: #161625 !important;
-    }
-  }
-
-  .Search {
-    input {
-      background: #1e1e30 !important;
-    }
-  }
-
-  .State {
-    .header-right {
-      h5 {
-        color: #9673b9bb !important;
-      }
-
-      h2 {
-        color: #9673b9 !important;
-      }
-
-      a {
-        background: #40008050 !important;
-      }
-    }
-
-    .breadcrumb {
-      ul {
-        background: #1e1e30 !important;
-
-        &::after {
-          border-bottom-color: #1e1e30 !important;
-        }
-
-        li {
-          a {
-            color: $gray !important;
-
-            &:hover {
-              color: $white !important;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  .MapExplorer {
-    #chart,
-    #legend {
-      &.zone {
-        filter: none;
-      }
-
-      &:not(.zone) {
-        filter: invert(1) hue-rotate(180deg) saturate(1.5) url('#balance-color');
-      }
-    }
-
-    .maplegend {
-      background: #161625 !important;
-    }
-
-    .meta {
-      h1 {
-        &.tested {
-          color: #9673b9 !important;
-        }
-      }
-
-      h2 {
-        &.tested {
-          color: #9673b9 !important;
-        }
-      }
-    }
-
-    .stats {
-      &.tested {
-        background: #40008050 !important;
-
-        h1 {
-          color: #9673b9 !important;
-        }
-
-        h5,
-        h6 {
-          color: #9673b9bb !important;
-        }
-
-        svg {
-          stroke: #9673b9bb !important;
-
-          &:hover {
-            stroke: #9673b9 !important;
-          }
-        }
-      }
-    }
-
-    .disclaimer {
-      color: $gray-light-opaque;
-    }
-  }
-
-  .TimeSeries,
-  .Minigraph {
-    .stats {
-      &.is-tested {
-        h5 {
-          color: #9673b9bb !important;
-
-          &.title {
-            color: #9673b9 !important;
-          }
-        }
-
-        h2,
-        h6 {
-          color: #9673b9 !important;
-        }
-      }
-    }
-
-    .svg-parent {
-      &.is-tested {
-        background: #40008050 !important;
-
-        svg {
-          circle,
-          .domain,
-          .tick {
-            stroke: #9673b9 !important;
-          }
-
-          circle {
-            fill: #9673b9 !important;
-          }
-
-          .trend,
-          line {
-            stroke: #9673b999 !important;
-          }
-
-          text {
-            color: #9673b9bb !important;
-            stroke: transparent;
-          }
-        }
-      }
-    }
-  }
-
-  .tpm {
-    background: #40008050 !important;
-
-    h3,
-    h5,
-    svg,
-    p {
-      color: #9673b9bb !important;
-    }
-
-    h1 {
-      color: #9673b9 !important;
-    }
-  }
-
-  .tab {
-    &.focused {
-      background: #1e1e30 !important;
-      color: #bdbdbd !important;
-    }
-  }
-
-  .pills {
-    button {
-      &.selected {
-        background: #{$yellow}50;
-      }
-    }
-  }
-
-  .trends-state-name,
-  .select {
-    select {
-      background: #1e1e30;
-      background-image: linear-gradient(45deg, transparent 50%, $gray 50%),
-      linear-gradient(135deg, $gray 50%, transparent 50%);
-      background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
-      background-repeat: no-repeat;
-      background-size: 5px 5px, 5px 5px;
-      border-color: #9494941a;
-    }
-  }
-
-  input {
-    &.switch {
-      background-color: #161625 !important;
-      border: 2px solid $gray-mid !important;
-
-      &:checked {
-        background-color: #6c757d99 !important;
-
-        &::after {
-          background-color: #cfcfcf !important;
-        }
-      }
-
-      &::after {
-        background-color: #cfcfcf !important;
-      }
-    }
-  }
-
-  .disabled {
-    input {
-      &.switch {
-        background: $dark !important;
-        border: $gray-light 2px solid !important;
-        opacity: 0.7;
-
-        &::after {
-          background: $gray !important;
-        }
-      }
-    }
-  }
-
-  .button {
-    &.github {
-      color: #bdbdbd !important;
-
-      svg {
-        stroke: #bdbdbd !important;
-      }
-    }
-  }
-
-  .FAQ {
-    .question {
-      color: $gray !important;
-    }
-  }
-
-  .Demographics {
-    .filters {
-      background: #1e1e30 !important;
-      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 #1e1e30;
-    }
-
-    .legend {
-      background: #1e1e30 !important;
-    }
-
-    .react-date-picker {
-      background: #1e1e30;
-      border-color: #9494941a !important;
-    }
-
-    .modal-content {
-      background: #1e1e30 !important;
-    }
-
-    .modal {
-      background: #1e1e30bb !important;
-    }
   }
 }
 
