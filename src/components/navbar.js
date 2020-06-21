@@ -10,7 +10,7 @@ import {useEffectOnce, useLockBodyScroll, useWindowSize} from 'react-use';
 
 function Navbar({
   pages,
-  darkMode,
+  setShowThemeChooser,
   showLanguageSwitcher,
   setShowLanguageSwitcher,
 }) {
@@ -87,20 +87,24 @@ function Navbar({
               </Link>
             </span>
             <span>
-              {window.innerWidth > 768 && <SunMoon {...{darkMode}} />}
+              {window.innerWidth > 768 && (
+                <SunMoon {...{setShowThemeChooser}} />
+              )}
             </span>
           </React.Fragment>
         )}
       </div>
 
       {expand && (
-        <Expand {...{expand, pages, setExpand, darkMode, windowSize}} />
+        <Expand
+          {...{expand, pages, setExpand, setShowThemeChooser, windowSize}}
+        />
       )}
     </animated.div>
   );
 }
 
-function Expand({expand, pages, setExpand, darkMode, windowSize}) {
+function Expand({expand, pages, setExpand, setShowThemeChooser, windowSize}) {
   const expandElement = useRef(null);
   const {t} = useTranslation();
 
@@ -142,7 +146,7 @@ function Expand({expand, pages, setExpand, darkMode, windowSize}) {
         return null;
       })}
 
-      {window.innerWidth < 768 && <SunMoon {...{darkMode}} />}
+      {window.innerWidth < 768 && <SunMoon {...{setShowThemeChooser}} />}
 
       <div className="expand-bottom fadeInUp" style={{animationDelay: '1s'}}>
         <h5>{t('A crowdsourced initiative.')}</h5>
@@ -162,20 +166,20 @@ const navLinkProps = (path, animationDelay) => ({
 
 const activeNavIcon = (path) => ({
   style: {
-    stroke: window.location.pathname === path ? '#4c75f2' : '',
+    stroke: window.location.pathname === path ? 'var(--primary-color)' : '',
   },
 });
 
-const SunMoon = ({darkMode}) => {
+const SunMoon = ({setShowThemeChooser}) => {
   return (
     <div
       className="SunMoon"
       onClick={() => {
-        darkMode.toggle();
+        setShowThemeChooser(true);
       }}
     >
       <div>
-        {darkMode.value ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
+        <Icon.Sun color={'#ffc107'} />
       </div>
     </div>
   );

@@ -1,9 +1,12 @@
 import './App.scss';
+import './dark-theme.scss';
 import LanguageSwitcher from './components/languageswitcher';
 import Navbar from './components/navbar';
+import ThemeChooser from './components/themechooser';
+import {PRIMARY_COLORS, BACKGROUND_COLORS} from './constants';
 import ScrollToTop from './utils/ScrollToTop';
 
-import React, {lazy, useState, Suspense} from 'react';
+import React, {lazy, useState, Suspense, useEffect, useCallback} from 'react';
 import {Helmet} from 'react-helmet';
 import {
   BrowserRouter as Router,
@@ -11,7 +14,6 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
-import useDarkMode from 'use-dark-mode';
 
 const Home = lazy(() =>
   import('./components/home' /* webpackChunkName: "Home" */)
@@ -38,9 +40,68 @@ const schemaMarkup = {
   image: 'https://www.covid19india.org/thumbnail.png',
 };
 
+const colorKeys = Object.freeze({
+  P_COLOR: 'p-color',
+  BG_COLOR: 'bg-color',
+});
+
 function App() {
-  const darkMode = useDarkMode(false);
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
+  const [showThemeChooser, setShowThemeChooser] = useState(false);
+  const [pColor, setPColor] = useState('');
+  const [bgColor, setBgColor] = useState('');
+
+  useEffect(() => {
+    const cachedPColor =
+      localStorage?.getItem(colorKeys.P_COLOR) ?? PRIMARY_COLORS[0];
+    const cachedBgColor =
+      localStorage?.getItem(colorKeys.BG_COLOR) ??
+      BACKGROUND_COLORS.DEFAULT.color;
+
+    setPColor(cachedPColor);
+    setBgColor(cachedBgColor);
+  }, []);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty('--primary-color', pColor);
+  }, [pColor]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty('--background-color', bgColor);
+    let className;
+
+    if (bgColor === BACKGROUND_COLORS.LIGHTS_OUT.color) {
+      className = 'dark-mode dim';
+    } else if (bgColor === BACKGROUND_COLORS.DIM.color) {
+      className = 'dark-mode lights-out';
+    } else {
+      className = 'light-theme';
+    }
+
+    document.getElementsByTagName('body')[0].className = className;
+  }, [bgColor]);
+
+  const cacheColor = (key, color) => {
+    localStorage.setItem(key, color);
+  };
+
+  const handleOnPColorChange = useCallback(
+    (newColor) => {
+      setPColor(newColor);
+      cacheColor(colorKeys.P_COLOR, newColor);
+    },
+    [setPColor]
+  );
+
+  const handleOnBgColorChange = useCallback(
+    (newColor) => {
+      setBgColor(newColor);
+      cacheColor(colorKeys.BG_COLOR, newColor);
+    },
+    [setBgColor]
+  );
 
   const pages = [
     {
@@ -76,45 +137,58 @@ function App() {
   ];
 
   return (
-    <div className="App">
-      <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify(schemaMarkup)}
-        </script>
-      </Helmet>
+    <>
+      {showThemeChooser && (
+        <ThemeChooser
+          isOpen={showThemeChooser}
+          onClose={() => setShowThemeChooser(false)}
+          onPColorChange={handleOnPColorChange}
+          onBgColorChange={handleOnBgColorChange}
+          {...{pColor, bgColor}}
+        />
+      )}
+      <div className="App">
+        <Helmet>
+          <script type="application/ld+json">
+            {JSON.stringify(schemaMarkup)}
+          </script>
+        </Helmet>
 
-      <LanguageSwitcher {...{showLanguageSwitcher, setShowLanguageSwitcher}} />
+        <LanguageSwitcher
+          {...{showLanguageSwitcher, setShowLanguageSwitcher}}
+        />
 
-      <Suspense fallback={<div />}>
-        <Router>
-          <ScrollToTop />
-          <Navbar
-            pages={pages}
-            {...{darkMode}}
-            {...{showLanguageSwitcher, setShowLanguageSwitcher}}
-          />
-          <Route
-            render={({location}) => (
-              <React.Fragment>
-                <Switch location={location}>
-                  {pages.map((page, index) => {
-                    return (
-                      <Route
-                        exact
-                        path={page.pageLink}
-                        render={({match}) => <page.view />}
-                        key={index}
-                      />
-                    );
-                  })}
-                  <Redirect to="/" />
-                </Switch>
-              </React.Fragment>
-            )}
-          />
-        </Router>
-      </Suspense>
-    </div>
+        <Suspense fallback={<div />}>
+          <Router>
+            <ScrollToTop />
+            <Navbar
+              pages={pages}
+              setShowThemeChooser={setShowThemeChooser}
+              {...{showLanguageSwitcher, setShowLanguageSwitcher}}
+            />
+            <Route
+              render={({location}) => (
+                <React.Fragment>
+                  <Switch location={location}>
+                    {pages.map((page, index) => {
+                      return (
+                        <Route
+                          exact
+                          path={page.pageLink}
+                          render={({match}) => <page.view />}
+                          key={index}
+                        />
+                      );
+                    })}
+                    <Redirect to="/" />
+                  </Switch>
+                </React.Fragment>
+              )}
+            />
+          </Router>
+        </Suspense>
+      </div>
+    </>
   );
 }
 
