@@ -746,14 +746,27 @@ $default-primary: var(--primary-color);
     }
   }
 
-  .table-fineprint {
-    color: $gray-mid;
+  .fineprint {
+    .text {
+      color: #eee;
+    }
+  }
 
-    a {
-      border-bottom: 2px solid $gray-hover;
+  .table {
+    .cell {
+      &:first-child {
+        background: var(--background-color) !important;
+      }
 
-      &:hover {
-        background: $gray-hover;
+      &.heading {
+        background: var(--background-color) !important;
+      }
+    }
+
+    .is-highlighted,
+    .is-total {
+      .cell {
+        background: var(--background-color) !important;
       }
     }
   }
