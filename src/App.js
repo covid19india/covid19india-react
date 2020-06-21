@@ -1,6 +1,6 @@
 import './App.scss';
 import './dark-theme.scss';
-import LanguageSwitcher from './components/languageswitcher';
+import Blog from './components/blog';
 import Navbar from './components/navbar';
 import ThemeChooser from './components/themechooser';
 import {PRIMARY_COLORS, BACKGROUND_COLORS} from './constants';
@@ -29,6 +29,12 @@ const State = lazy(() =>
 );
 const Essentials = lazy(() =>
   import('./components/essentials' /* webpackChunkName: "Essentials" */)
+);
+
+const LanguageSwitcher = lazy(() =>
+  import(
+    './components/languageswitcher' /* webpackChunkName: "LanguageSwitcher" */
+  )
 );
 
 const schemaMarkup = {
@@ -129,6 +135,12 @@ function App() {
       showInNavbar: true,
     },
     {
+      pageLink: '/blog',
+      view: Blog,
+      displayName: 'Blog',
+      showInNavbar: true,
+    },
+    {
       pageLink: '/state/:stateCode',
       view: State,
       displayName: 'State',
@@ -154,9 +166,11 @@ function App() {
           </script>
         </Helmet>
 
-        <LanguageSwitcher
-          {...{showLanguageSwitcher, setShowLanguageSwitcher}}
-        />
+        <Suspense fallback={<div />}>
+          <LanguageSwitcher
+            {...{showLanguageSwitcher, setShowLanguageSwitcher}}
+          />
+        </Suspense>
 
         <Suspense fallback={<div />}>
           <Router>

@@ -1,6 +1,5 @@
 import KnnResults from './knnresults';
 
-import axios from 'axios';
 import React, {useState, useEffect} from 'react';
 import ContentLoader from 'react-content-loader';
 import * as Icon from 'react-feather';
@@ -62,17 +61,15 @@ const Essentials = (props) => {
 
   const getCurrentAddress = (lat, lng) => {
     try {
-      axios
-        .get(
-          'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=' +
-            lat +
-            '&longitude=' +
-            lng +
-            '&localityLanguage=en'
-        )
+      const base = 'https://api.bigdatacloud.net/data/reverse-geocode-client';
+      const url = `${base}?latitude=${lat}&longitude=${lng}&localityLanguage=en`;
+      fetch(url)
         .then((response) => {
-          setCurrentAddress(response.data.locality);
-          setCurrentState(response.data.principalSubdivision);
+          return response.json();
+        })
+        .then((data) => {
+          setCurrentAddress(data.locality);
+          setCurrentState(data.principalSubdivision);
         });
     } catch (err) {
       console.log(err);

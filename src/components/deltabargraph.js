@@ -6,7 +6,12 @@ import {
   getStatistic,
 } from '../utils/commonfunctions';
 
-import * as d3 from 'd3';
+import {min, max} from 'd3-array';
+import {axisBottom} from 'd3-axis';
+import {scaleBand, scaleLinear} from 'd3-scale';
+import {select} from 'd3-selection';
+// eslint-disable-next-line
+import {transition} from 'd3-transition';
 import equal from 'fast-deep-equal';
 import React, {useEffect, useRef} from 'react';
 
@@ -26,43 +31,37 @@ function DeltaBarGraph({timeseries, statistic}) {
   const dates = pastDates.slice(-NUM_BARS_STATEPAGE);
 
   useEffect(() => {
-    const svg = d3.select(svgRef.current);
+    const svg = select(svgRef.current);
 
     const chartRight = width - margin.right;
     const chartBottom = height - margin.bottom;
     const r = 5;
 
-    // const formatTime = d3.timeFormat('%e %b');
-    const xScale = d3
-      .scaleBand()
+    // const formatTime = timeFormat('%e %b');
+    const xScale = scaleBand()
       .domain(dates)
       .range([margin.left, chartRight])
       .paddingInner(0.33);
 
-    const yScale = d3
-      .scaleLinear()
+    const yScale = scaleLinear()
       .domain([
         Math.min(
           0,
-          d3.min(dates, (date) =>
-            getDeltaStatistic(timeseries[date], statistic)
-          )
+          min(dates, (date) => getDeltaStatistic(timeseries[date], statistic))
         ),
         Math.max(
           1,
-          d3.max(dates, (date) =>
-            getDeltaStatistic(timeseries[date], statistic)
-          )
+          max(dates, (date) => getDeltaStatistic(timeseries[date], statistic))
         ),
       ])
       .range([chartBottom, margin.top]);
 
-    const xAxis = d3
-      .axisBottom(xScale)
+    const xAxis = axisBottom(xScale)
       .tickSize(0)
       .tickFormat((date) => formatDate(date, 'dd MMM'));
 
     const t = svg.transition().duration(D3_TRANSITION_DURATION);
+
     svg
       .select('.x-axis')
       .transition(t)
@@ -163,7 +162,12 @@ function DeltaBarGraph({timeseries, statistic}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.statistic, currProps.statistic)) return false;
+  if (!equal(prevProps.stateCode, currProps.stateCode)) {
+    return false;
+  } else if (!equal(prevProps.statistic, currProps.statistic)) {
+    return false;
+  }
+
   return true;
 };
 

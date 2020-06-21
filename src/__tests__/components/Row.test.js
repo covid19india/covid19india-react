@@ -40,11 +40,7 @@ describe('Row component', () => {
 
   const wrapper = mount(
     <MemoryRouter>
-      <table>
-        <tbody>
-          <Row {...{stateCode, data}} />
-        </tbody>
-      </table>
+      <Row {...{stateCode, data}} />
     </MemoryRouter>
   );
 
@@ -63,8 +59,8 @@ describe('Row component', () => {
   });
 
   test('State/UT details', () => {
-    const stateSelector = wrapper.find('tr.state');
-    const cells = stateSelector.find('td');
+    const stateSelector = wrapper.find('.row').hostNodes();
+    const cells = stateSelector.find('.cell');
 
     const stateName = cells.at(0).text();
     const confirmed = cells.at(1).text();
@@ -82,22 +78,19 @@ describe('Row component', () => {
   });
 
   test('Districts and the confirmed cases', () => {
-    const stateRow = wrapper.find('tr.state');
+    const stateRow = wrapper.find('.row').hostNodes();
     expect(stateRow).toHaveLength(1);
 
     stateRow.simulate('click');
 
-    const districtsSelector = wrapper.find('tr.district');
-    const stateLastUpdate = wrapper.find('tr.state-last-update');
-    const stateLastUpdateTime = stateLastUpdate.find('td > p');
+    const stateLastUpdate = wrapper.find('.last-updated');
+    expect(stateLastUpdate.text()).toMatch(/2 days ago/i);
 
-    console.log(stateLastUpdateTime);
-
+    const districtsSelector = wrapper.find('.district');
     expect(districtsSelector).toHaveLength(2);
-    expect(stateLastUpdateTime.at(1).text()).toMatch(/2 days ago/i);
 
     districtsSelector.forEach((e, index) => {
-      const cells = e.find('td');
+      const cells = e.find('.cell');
       const district = cells.at(0).childAt(0).text();
       const confirmedNumber = cells.at(1).text();
 

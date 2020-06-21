@@ -59,11 +59,11 @@ function MapExplorer({
 
   const [currentMap, setCurrentMap] = useState({
     code: stateCode,
-    view:
+    view: MAP_VIEWS.DISTRICTS,
+    option:
       MAP_META[stateCode].mapType === MAP_TYPES.COUNTRY
-        ? MAP_VIEWS.STATES
-        : MAP_VIEWS.DISTRICTS,
-    option: MAP_OPTIONS.TOTAL,
+        ? MAP_OPTIONS.HOTSPOTS
+        : MAP_OPTIONS.TOTAL,
   });
   const currentMapMeta = MAP_META[currentMap.code];
 
@@ -121,7 +121,7 @@ function MapExplorer({
         return;
       }
       if (newMapMeta.mapType === MAP_TYPES.STATE) {
-        const districts = data[stateCode].districts;
+        const districts = data[stateCode].districts || {};
         const topDistrict = Object.keys(districts).sort(
           (a, b) =>
             getStatistic(districts[b], 'total', mapStatistic) -
@@ -160,6 +160,10 @@ function MapExplorer({
     },
     [data, currentMap.option, mapStatistic, setRegionHighlighted]
   );
+
+  useEffect(() => {
+    switchMap(stateCode);
+  }, [stateCode, switchMap]);
 
   const panelState = useMemo(() => {
     const stateCode =
@@ -448,8 +452,8 @@ function MapExplorer({
         ))}
       </div>
 
-      <h6 className={classnames('footnote', 'table-fineprint')}>
-        &dagger; {`${t('Based on 2019 population projection by NCP')} (`}
+      <h6 className={classnames('footnote')}>
+        &dagger; {`${t('Based on 2019 population projection by NCP, see ')}`}
         <a
           href="https://nhm.gov.in/New_Updates_2018/Report_Population_Projection_2019.pdf"
           target="_noblank"
@@ -457,31 +461,28 @@ function MapExplorer({
         >
           {t('source')}
         </a>
-        )
       </h6>
     </div>
   );
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.regionHighlighted, currProps.regionHighlighted)) {
+  if (!equal(prevProps.stateCode, currProps.stateCode)) {
     return false;
-  }
-  if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
+  } else if (!equal(prevProps.regionHighlighted, currProps.regionHighlighted)) {
     return false;
-  }
-  if (!equal(prevProps.anchor, currProps.anchor)) {
+  } else if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
     return false;
-  }
-  if (
+  } else if (!equal(prevProps.anchor, currProps.anchor)) {
+    return false;
+  } else if (
     !equal(
       prevProps.data?.TT?.meta?.['last_updated'],
       currProps.data?.TT?.meta?.['last_updated']
     )
   ) {
     return false;
-  }
-  if (!equal(prevProps.data?.TT?.total, currProps.data?.TT?.total)) {
+  } else if (!equal(prevProps.data?.TT?.total, currProps.data?.TT?.total)) {
     return false;
   }
   return true;
