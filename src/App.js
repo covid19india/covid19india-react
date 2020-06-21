@@ -101,17 +101,17 @@ function App() {
         />
       </Suspense>
 
-      <Suspense fallback={<div />}>
-        <Router>
-          <ScrollToTop />
-          <Navbar
-            pages={pages}
-            {...{darkMode}}
-            {...{showLanguageSwitcher, setShowLanguageSwitcher}}
-          />
-          <Route
-            render={({location}) => (
-              <React.Fragment>
+      <Router>
+        <ScrollToTop />
+        <Route
+          render={({location}) => (
+            <React.Fragment>
+              <Navbar
+                pages={pages}
+                {...{darkMode}}
+                {...{showLanguageSwitcher, setShowLanguageSwitcher}}
+              />
+              <Suspense fallback={<div />}>
                 <Switch location={location}>
                   {pages.map((page, index) => {
                     return (
@@ -125,11 +125,11 @@ function App() {
                   })}
                   <Redirect to="/" />
                 </Switch>
-              </React.Fragment>
-            )}
-          />
-        </Router>
-      </Suspense>
+              </Suspense>
+            </React.Fragment>
+          )}
+        />
+      </Router>
     </div>
   );
 }
