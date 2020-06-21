@@ -439,3 +439,17 @@ export const INITIAL_DATA = {
     notes: '',
   },
 };
+
+export const DARK_BACKGROUND_COLORS = Object.freeze({
+  DIM: '#1B1F23',
+  LIGHTS_OUT: '#000',
+});
+
+export const PRIMARY_COLORS = Object.freeze([
+  'rgb(29, 161, 242)',
+  'rgb(255, 173, 31)',
+  '#E43f5A',
+  'rgb(121, 75, 196)',
+  'rgb(255, 127, 80)',
+  '#17b794',
+]);
