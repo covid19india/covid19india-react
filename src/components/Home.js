@@ -22,7 +22,7 @@ const Level = lazy(() => import('./Level'));
 
 function Home(props) {
   const [regionHighlighted, setRegionHighlighted] = useState({
-    stateCode: 'KA',
+    stateCode: 'TT',
     districtName: null,
   });
 

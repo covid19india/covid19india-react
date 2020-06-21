@@ -71,13 +71,13 @@ export const ENTER_OUT = {
  * Table
  */
 
-export const FADE_IN = {
+export const TABLE_FADE_IN = {
   opacity: 1,
   transform: 'translate3d(0, 0px, 0)',
-  height: 80,
+  height: 175,
 };
 
-export const FADE_OUT = {
+export const TABLE_FADE_OUT = {
   opacity: 0,
   transform: 'translate3d(0, 2px, 0)',
   height: 0,

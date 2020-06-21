@@ -1,7 +1,7 @@
 import HeaderCell from './HeaderCell';
 import TableLoader from './loaders/Table';
 
-import {FADE_IN, FADE_OUT} from '../animations';
+import {TABLE_FADE_IN, TABLE_FADE_OUT} from '../animations';
 import {TABLE_STATISTICS, STATE_POPULATIONS_MIL} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {getStatistic} from '../utils/commonFunctions';
@@ -101,9 +101,9 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
   };
 
   const transition = useTransition(isInfoVisible, null, {
-    from: FADE_OUT,
-    enter: FADE_IN,
-    leave: FADE_OUT,
+    from: TABLE_FADE_OUT,
+    enter: TABLE_FADE_IN,
+    leave: TABLE_FADE_OUT,
   });
 
   return (
@@ -143,25 +143,73 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
           <QuestionIcon size={14} />
         </animated.div>
 
-        <animated.div className="fineprint" style={trail[1]}></animated.div>
+        <animated.div className="scroll-right-helper" style={trail[1]}>
+          <span>{'Scroll Right \u2192'}</span>
+        </animated.div>
       </div>
 
       {transition.map(({item, key, props}) =>
         item ? (
           <animated.div key={key} className="table-helper" style={props}>
-            <div className="info-item">
-              <OrganizationIcon size={14} />
-              <p>Show/Hide Top 50 Districts</p>
+            <div className="helper-top">
+              <div className="helper-left">
+                <div className="info-item">
+                  <OrganizationIcon size={14} />
+                  <p>Show/Hide Top 50 Districts</p>
+                </div>
+
+                <div className="info-item notes">
+                  <Info size={15} />
+                  <p>Extra notes</p>
+                </div>
+
+                <div className="info-item">
+                  <h5>1M</h5>
+                  <p>Per Million of Population</p>
+                </div>
+
+                <div className="info-item sort">
+                  <FilterIcon size={14} />
+                  <p>Sort by Descending</p>
+                </div>
+
+                <div className="info-item invert">
+                  <FilterIcon size={14} />
+                  <p>Sort by Ascending</p>
+                </div>
+              </div>
+
+              <div className="helper-right">
+                <div className="info-item">
+                  <h5>C</h5>
+                  <p>Confirmed</p>
+                </div>
+
+                <div className="info-item notes">
+                  <h5>A</h5>
+                  <p>Active</p>
+                </div>
+
+                <div className="info-item">
+                  <h5>R</h5>
+                  <p>Recovered</p>
+                </div>
+
+                <div className="info-item notes">
+                  <h5>D</h5>
+                  <p>Deceased</p>
+                </div>
+
+                <div className="info-item notes">
+                  <h5>T</h5>
+                  <p>Tested</p>
+                </div>
+              </div>
             </div>
-            <div className="info-item">
-              <Info size={15} />
-              <p>Extra notes</p>
-            </div>
+
             <h5 className="text">
               {t('Compiled from State Govt. numbers')},{' '}
-              <Link to="/about" style={{color: '#6c757d'}}>
-                {t('know more')}!
-              </Link>
+              <Link to="/about">{t('know more')}!</Link>
             </h5>
           </animated.div>
         ) : null
@@ -253,15 +301,15 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
 const isEqual = (prevProps, currProps) => {
   if (
     !equal(
-      prevProps.regionHighlighted.districtName,
-      currProps.regionHighlighted.districtName
+      prevProps.regionHighlighted?.districtName,
+      currProps.regionHighlighted?.districtName
     )
   ) {
     return false;
   } else if (
     !equal(
-      prevProps.regionHighlighted.stateCode,
-      currProps.regionHighlighted.stateCode
+      prevProps.regionHighlighted?.stateCode,
+      currProps.regionHighlighted?.stateCode
     )
   ) {
     return false;

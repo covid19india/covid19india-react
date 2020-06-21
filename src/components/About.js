@@ -29,7 +29,7 @@ function About(props) {
   };
 
   return (
-    <div className="FAQ">
+    <div className="About">
       <Helmet>
         <title>FAQ - covid19india.org</title>
         <meta
