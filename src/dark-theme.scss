@@ -36,7 +36,7 @@ $cyan: #17a2b8;
 $white: #fff;
 $gray: #ababab;
 $gray-light: #ababab10;
-$gray-light-opaque: var(--dark-background);
+$gray-light-opaque: var(--background-color);
 $gray-hover: #ababab20;
 $gray-mid: #abababdd;
 $gray-dark: #343a40;
@@ -62,7 +62,7 @@ $brick-light: #e2302810;
 $default-primary: var(--primary-color);
 
 .dark-mode {
-  background-color: var(--dark-background);
+  background-color: var(--background-color);
   color: #fff;
 
   .dark-hotspot-border > path {
@@ -103,7 +103,7 @@ $default-primary: var(--primary-color);
     }
 
     .expand {
-      background: var(--dark-background);
+      background: var(--background-color);
       color: $gray;
 
       & > * {
@@ -418,9 +418,9 @@ $default-primary: var(--primary-color);
     }
 
     input {
-      background: var(--dark-background);
+      background: var(--background-color);
       border: 1px solid;
-      color: $gray;
+      color: #fff;
     }
 
     .search-placeholder {
@@ -1486,18 +1486,18 @@ $default-primary: var(--primary-color);
   .Demographics {
     .select {
       .react-date-picker {
-        background-color: var(--dark-background);
+        background-color: var(--background-color);
         // border: 2px solid #e8e8e9 !important;
 
         color: #ababab;
       }
 
       .react-calendar {
-        background: var(--dark-background);
+        background: var(--background-color);
 
         button {
           &:disabled {
-            background: var(--dark-background);
+            background: var(--background-color);
             color: $gray-mid;
           }
         }
@@ -1541,7 +1541,7 @@ $default-primary: var(--primary-color);
       }
 
       select {
-        background-color: var(--dark-background);
+        background-color: var(--background-color);
 
         background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
         linear-gradient(135deg, #808080 50%, transparent 50%);
@@ -1850,7 +1850,7 @@ $default-primary: var(--primary-color);
     background: $pblue-mid;
 
     .modal-content {
-      background: var(--dark-background);
+      background: var(--background-color);
 
       svg {
         stroke: $pblue-mid;
@@ -1926,7 +1926,7 @@ $default-primary: var(--primary-color);
   }
 
   .filters {
-    background: var(--dark-background) !important;
+    background: var(--background-color) !important;
     border-radius: 5px;
     box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 #1a1a1a;
   }
@@ -1950,7 +1950,7 @@ $default-primary: var(--primary-color);
   }
 
   .legend {
-    background: var(--dark-background);
+    background: var(--background-color);
 
     h5 {
       color: $gray;
@@ -2193,6 +2193,14 @@ $default-primary: var(--primary-color);
         & > * {
           color: $gray;
         }
+      }
+    }
+  }
+
+  .theme-chooser-modal {
+    .color-chooser {
+      .colors {
+        background: #aeaeae10;
       }
     }
   }

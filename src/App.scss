@@ -76,6 +76,7 @@ $dark-m-blue: #3391ff;
 
 :root {
   @include root-prop(--primary-color, $pblue);
+  @include root-prop(--background-color, #fff);
 }
 
 html {
@@ -248,6 +249,7 @@ h6 {
       justify-content: center;
 
       h5 {
+        color: var(--primary-color);
         margin: 0;
       }
 
@@ -4646,29 +4648,6 @@ footer {
       }
     }
   }
-
-  .dim {
-    .Navbar,
-    .expand {
-      background: #1b1f23 !important;
-    }
-
-    .navbar-right {
-      background: #1b1f23 !important;
-    }
-  }
-
-  .lights-out {
-    .Navbar {
-      .expand {
-        background-color: #000 !important;
-      }
-    }
-
-    .navbar-right {
-      background-color: #000 !important;
-    }
-  }
 }
 
 @media (max-width: 769px) {
@@ -5029,4 +5008,93 @@ footer {
     opacity: 0;
     transform: translateY(20px);
   }
+}
+
+.ReactModal__Overlay--after-open {
+  z-index: 99999;
+}
+
+.theme-chooser-modal {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .title {
+    font-family: 'archia';
+    text-align: center;
+  }
+
+  .done-btn {
+    background: var(--primary-color);
+    border-radius: 12px;
+    color: #000;
+    cursor: pointer;
+    font-family: 'archia';
+    margin-top: 16px;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .color-chooser {
+    margin-top: 16px;
+
+    .title {
+      font-family: 'archia';
+    }
+
+    .colors {
+      background: rgb(245, 248, 250);
+      cursor: pointer;
+      display: flex;
+      flex: 1;
+      flex-wrap: wrap;
+      height: 20%;
+      justify-content: center;
+      margin-top: 8px;
+
+      .circle {
+        align-items: center;
+        border-radius: 50%;
+        display: flex;
+        height: 50px;
+        justify-content: center;
+        margin: 8px;
+        width: 50px;
+
+        .checked-icon {
+          color: #000;
+        }
+
+        .selected {
+          fill: var(--primary-color);
+        }
+
+        &:hover {
+          transform: scale(1.1);
+          transition-duration: 0.2s;
+        }
+      }
+
+      .outlined {
+        border-radius: 4px;
+        justify-content: space-evenly;
+        width: 30%;
+
+        .bg-color-name {
+          color: #fff;
+          font-family: 'archia';
+        }
+
+        .light {
+          color: #000 !important;
+        }
+      }
+    }
+  }
+}
+
+.moto {
+  border-color: var(--primary-color);
+  width: 30%;
 }
