@@ -1684,6 +1684,10 @@ abbr {
   flex-direction: column;
   width: calc(100% - 2rem);
 
+  h5 {
+    color: $gray-mid;
+  }
+
   .helper-top {
     display: flex;
     flex-direction: row;
@@ -1691,8 +1695,12 @@ abbr {
 
     .helper-left {
       h5 {
-        margin-right: .15rem;
+        margin-right: .4rem;
       }
+
+      p {
+        margin-right: 1rem;
+      } 
     }
 
     .helper-right {
@@ -1711,6 +1719,36 @@ abbr {
     color: $gray;
     height: 1.5rem;
 
+    .is-confirmed {
+      svg {
+        color: $cherry;
+      }
+    }
+
+    .is-active {
+      svg {
+        color: $blue;
+      }
+    }
+
+    .is-recovered {
+      svg {
+        color: $green;
+      }
+    }
+
+    .is-deceased {
+      svg {
+        color: $gray;
+      }
+    }
+
+    .is-tested {
+      svg {
+        color: $purple;
+      }
+    }
+
     &:first-child {
       margin-top: 1rem;
     }
@@ -1719,6 +1757,7 @@ abbr {
       margin-right: .25rem;
       margin-bottom: .25rem;
       color: $gray-mid;
+      margin-right: .5rem;
     }
 
     &.notes {
@@ -1730,6 +1769,7 @@ abbr {
     &.sort {
       svg {
         margin-bottom: 0;
+        margin-right: .55rem;
       }
     }
 
@@ -1894,6 +1934,30 @@ abbr {
         margin-right: .25rem;
         position: absolute;
         top: 0;
+
+        &.is-confirmed {
+          svg {
+            color: $cherry;
+          }
+        }
+
+        &.is-active {
+          svg {
+            color: $blue;
+          }
+        }
+
+        &.is-recovered {
+          svg {
+            color: $green;
+          }
+        }
+
+        &.is-deceased {
+          svg {
+            color: $gray;
+          }
+        }
 
         &.invert {
           margin-top: .25rem;

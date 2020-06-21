@@ -19,6 +19,7 @@ function StateHeaderCell({handleSort, sortData, statistic}) {
         <div
           className={classnames('sort-icon', {
             invert: sortData.isAscending,
+            [`is-${statistic}`]: sortData.delta,
           })}
         >
           <FilterIcon size={10} />

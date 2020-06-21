@@ -1,5 +1,6 @@
 import HeaderCell from './HeaderCell';
 import TableLoader from './loaders/Table';
+import TableDeltaHelper from './snippets/TableDeltaHelper';
 
 import {TABLE_FADE_IN, TABLE_FADE_OUT} from '../animations';
 import {TABLE_STATISTICS, STATE_POPULATIONS_MIL} from '../constants';
@@ -30,16 +31,36 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
   const [sortData, setSortData] = useLocalStorage('sortData', {
     sortColumn: 'confirmed',
     isAscending: false,
+    delta: false,
   });
 
   const handleSortClick = useCallback(
     (statistic) => {
-      setSortData(
-        produce(sortData, (draftSortData) => {
-          draftSortData.isAscending = !sortData.isAscending;
-          draftSortData.sortColumn = statistic;
-        })
-      );
+      if (sortData.sortColumn !== statistic) {
+        setSortData(
+          produce(sortData, (draftSortData) => {
+            draftSortData.sortColumn = statistic;
+          })
+        );
+      } else if (sortData.isAscending && !sortData.delta) {
+        setSortData(
+          produce(sortData, (draftSortData) => {
+            draftSortData.delta = !sortData.delta;
+          })
+        );
+      } else if (!sortData.isAscending && sortData.delta) {
+        setSortData(
+          produce(sortData, (draftSortData) => {
+            draftSortData.delta = !sortData.delta;
+          })
+        );
+      } else {
+        setSortData(
+          produce(sortData, (draftSortData) => {
+            draftSortData.isAscending = !sortData.isAscending;
+          })
+        );
+      }
     },
     [sortData, setSortData]
   );
@@ -63,13 +84,13 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
       if (sortData.sortColumn !== 'regionName') {
         const statisticA = getStatistic(
           districts?.[regionKeyA] || states[regionKeyA],
-          'total',
+          sortData.delta ? 'delta' : 'total',
           sortData.sortColumn,
           isPerMillion ? STATE_POPULATIONS_MIL[regionKeyA] : 1
         );
         const statisticB = getStatistic(
           districts?.[regionKeyB] || states[regionKeyB],
-          'total',
+          sortData.delta ? 'delta' : 'total',
           sortData.sortColumn,
           isPerMillion ? STATE_POPULATIONS_MIL[regionKeyB] : 1
         );
@@ -82,7 +103,14 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
           : regionKeyB.localeCompare(regionKeyA);
       }
     },
-    [districts, isPerMillion, sortData.isAscending, sortData.sortColumn, states]
+    [
+      districts,
+      isPerMillion,
+      sortData.delta,
+      sortData.isAscending,
+      sortData.sortColumn,
+      states,
+    ]
   );
 
   const _setTableOption = () => {
@@ -171,9 +199,10 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
                 <div className="info-item sort">
                   <FilterIcon size={14} />
                   <p>Sort by Descending</p>
+                  <TableDeltaHelper />
                 </div>
 
-                <div className="info-item invert">
+                <div className="info-item sort invert">
                   <FilterIcon size={14} />
                   <p>Sort by Ascending</p>
                 </div>
