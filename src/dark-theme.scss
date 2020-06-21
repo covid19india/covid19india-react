@@ -1,0 +1,2219 @@
+$blue: #007bff;
+$blue-light: #007bff10;
+$blue-hover: #007bff30;
+$blue-light-opaque: #eff7ff;
+$blue-mid: #007bff99;
+$pblue: #4c75f2;
+$pblue-light: #4c75f230;
+$pblue-hover: #4c75f250;
+$pblue-light-opaque: #eff7ff;
+$pblue-mid: #4c75f299;
+$cherry: #ff073a;
+$cherry-mid: #ff073add;
+$cherry-light: #ff073a20;
+$cherry-hover: #ff073a30;
+$cherry-light-opaque: #ffe0e6;
+$red: #dc3545;
+$red-light: #dc354520;
+$red-mid: #dc354599;
+$red-hover: #dc354530;
+$orange: #fd7e14;
+$orange-mid: #fd7e1499;
+$orange-light: #fd7e1420;
+$orange-hover: #fd7e1430;
+$orange-light-opaque: #ffefe2;
+$yellow: #ffc107;
+$yellow-light: #ffc10720;
+$yellow-hover: #ffc10730;
+$yellow-mid: #ffc10799;
+$yellow-light-opaque: #fff7e0;
+$green: #28a745;
+$green-light: #28a74520;
+$green-hover: #28a74530;
+$green-mid: #28a745dd;
+$teal: #20c997;
+$cyan: #17a2b8;
+$white: #fff;
+$gray: #ababab;
+$gray-light: #ababab10;
+$gray-light-opaque: var(--dark-background);
+$gray-hover: #ababab20;
+$gray-mid: #abababdd;
+$gray-dark: #343a40;
+$gray-opaque: #f0ffff;
+$light: #f8f9fa;
+$dark: #343a40;
+$purple: #9370dbdd;
+$purple-light: #9370db20;
+$purple-hover: #9370db30;
+$purple-mid: #9370db99;
+$purple-light-opaque: #e3e2f3;
+$pink: #fb5581;
+$pink-light: #ffa8cb30;
+$pink-hover: #ffa8cb60;
+$pink-mid: #fb558199;
+$brown: #b6854d;
+$brown-light: #b6854d10;
+$brown-hover: #b6854d30;
+$brown-mid: #b6854d99;
+$brick: #e23028;
+$brick-light: #e2302810;
+
+$default-primary: var(--primary-color);
+
+.dark-mode {
+  background-color: var(--dark-background);
+  color: #fff;
+
+  .dark-hotspot-border > path {
+    stroke: #f0ffffaa;
+  }
+
+  .arrow-up {
+    border-bottom: 5px solid $gray-mid;
+  }
+
+  .arrow-down {
+    border-top: 5px solid $gray-mid;
+  }
+
+  .Navbar {
+    .navbar-left {
+      color: $gray-mid;
+
+      &:hover {
+        color: $gray;
+      }
+    }
+
+    .navbar-middle {
+      color: $gray;
+
+      span {
+        color: var(--primary-color);
+      }
+    }
+
+    .navbar-right {
+      color: $gray-mid;
+
+      &:hover {
+        color: $gray;
+      }
+    }
+
+    .expand {
+      background: var(--dark-background);
+      color: $gray;
+
+      & > * {
+        // border-bottom: 1px solid $gray-light;
+        // border-top: 1px solid $gray-light;
+        border: 0;
+
+        &:hover {
+          background: $gray-hover;
+        }
+
+        span {
+          &.focused {
+            background: none !important;
+            color: var(--primary-color);
+          }
+        }
+      }
+
+      .expand-bottom {
+        &:hover {
+          background: none;
+        }
+      }
+    }
+  }
+
+  .alert {
+    background: $gray-light;
+    color: $gray;
+
+    svg {
+      color: $gray-mid;
+    }
+
+    .alert-right {
+      a {
+        background: $gray-light;
+        color: $gray;
+
+        &:hover {
+          background: $gray-hover;
+        }
+      }
+    }
+
+    &.is-green {
+      background: $green-light;
+      color: $green;
+
+      svg {
+        stroke: $green-mid;
+      }
+    }
+  }
+
+  .State {
+    .header {
+      .header-left {
+        h1 {
+          color: $brick;
+        }
+
+        h5 {
+          color: $gray;
+        }
+      }
+
+      .header-right {
+        color: $purple-mid;
+
+        h2 {
+          color: $purple;
+        }
+
+        a {
+          background: $purple-light;
+
+          &:hover {
+            background: $purple-hover;
+          }
+        }
+      }
+    }
+
+    .to-essentials {
+      background: $gray-light;
+
+      &:hover {
+        background: $gray-hover;
+      }
+
+      h2 {
+        color: $gray-mid;
+      }
+
+      svg {
+        color: $gray-mid;
+      }
+    }
+  }
+
+  .StateMeta {
+    &.population {
+      h1,
+      h3 {
+        color: $gray;
+      }
+    }
+
+    &.confirmed {
+      background: $cherry-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $cherry-mid;
+      }
+
+      h1 {
+        color: $cherry;
+      }
+    }
+
+    &.active {
+      background: $blue-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $blue-mid;
+      }
+
+      h1 {
+        color: $blue;
+      }
+    }
+
+    &.recovery {
+      background: $green-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $green-mid;
+      }
+
+      h1 {
+        color: $green;
+      }
+    }
+
+    &.mortality {
+      background: $gray-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $gray-mid;
+      }
+
+      h1 {
+        color: $gray;
+      }
+    }
+
+    &.cpm {
+      background: $yellow-light;
+
+      h3,
+      h5,
+      svg {
+        color: $orange-mid;
+      }
+
+      h1 {
+        color: $orange;
+      }
+    }
+
+    &.tpm {
+      background: $purple-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $purple-mid;
+      }
+
+      h1 {
+        color: $purple;
+      }
+    }
+
+    &.ptr {
+      background: $pink-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $pink-mid;
+      }
+
+      h1 {
+        color: $pink;
+      }
+    }
+
+    &.gr {
+      background: $brown-light;
+
+      h3,
+      h5,
+      p,
+      svg {
+        color: $brown-mid;
+      }
+
+      h1 {
+        color: $brown;
+      }
+    }
+  }
+
+  .StateDropdown {
+    .state-name {
+      background: $brick-light;
+    }
+
+    .dropdown {
+      background: $white;
+
+      .item {
+        color: $red;
+
+        &:hover {
+          background: $red-hover;
+        }
+      }
+    }
+
+    .backdrop {
+      background: $red-light;
+    }
+  }
+
+  .Essentials {
+    button {
+      background: $yellow-light;
+      color: $orange;
+
+      &:hover {
+        background: $yellow-hover;
+      }
+    }
+
+    .address {
+      color: $gray;
+
+      svg {
+        stroke: $gray-mid;
+      }
+    }
+
+    .essential-result {
+      background: $gray-light;
+    }
+  }
+
+  .labels {
+    .label {
+      background: $gray-light !important;
+      color: $gray-mid !important;
+
+      &.is-selected {
+        background: $yellow-hover !important;
+        color: $orange-mid !important;
+
+        &:hover {
+          background: $yellow-hover !important;
+          color: $orange-mid !important;
+        }
+      }
+
+      @media not all and (pointer: coarse) {
+        &:hover {
+          background: $yellow-light !important;
+          color: $orange-mid !important;
+        }
+      }
+    }
+  }
+
+  .Banner {
+    background: $purple-light;
+    color: $purple;
+  }
+
+  .Search {
+    label {
+      color: $gray;
+    }
+
+    .line {
+      background: $gray-light;
+    }
+
+    input {
+      background: var(--dark-background);
+      border: 1px solid;
+      color: $gray;
+    }
+
+    .search-placeholder {
+      color: $gray-mid;
+    }
+
+    .search-button {
+      svg {
+        color: var(--primary-color);
+      }
+    }
+
+    .close-button {
+      background: $gray-light !important;
+
+      &:hover {
+        background: $gray-hover !important;
+      }
+
+      svg {
+        stroke: $gray-mid;
+      }
+
+      &.custom {
+        background: $pink-light !important;
+
+        svg {
+          stroke: $pink !important;
+        }
+      }
+    }
+
+    .feature {
+      background: $pink-light;
+      color: $pink;
+    }
+
+    .expanded {
+      h4,
+      h3 {
+        color: $gray;
+      }
+
+      h3 {
+        color: var(--primary-color);
+      }
+    }
+
+    .results {
+      .pan-divider {
+        color: $gray;
+      }
+
+      .result,
+      .essential-result {
+        border-bottom: 2px solid $gray-light;
+        color: $gray;
+
+        &:hover {
+          background: $gray-light;
+        }
+
+        .result-type {
+          background: $yellow-light;
+          color: $orange;
+
+          &:hover {
+            background: $yellow-hover;
+          }
+
+          svg {
+            stroke: $orange-mid;
+          }
+        }
+
+        .result-zone {
+          &.is-red {
+            background: $cherry-light;
+            border: 2px solid $cherry-mid;
+          }
+
+          &.is-orange {
+            background: $orange-light;
+            border: 2px solid $orange-mid;
+          }
+
+          &.is-green {
+            background: $green-light;
+            border: 2px solid $green-mid;
+          }
+        }
+      }
+
+      .essential-result {
+        .result-top {
+          .result-top-left {
+            .result-distance {
+              color: $green;
+            }
+          }
+        }
+
+        .result-category {
+          background: $pink-light;
+          color: $pink;
+
+          &:hover {
+            background: $pink-hover;
+          }
+        }
+
+        .result-contact {
+          background: $gray-light;
+          color: $gray;
+
+          &:hover {
+            background: $gray-hover;
+          }
+
+          svg {
+            stroke: $gray-mid;
+          }
+        }
+      }
+    }
+
+    .suggestions {
+      .suggestion {
+        color: $gray-mid;
+      }
+    }
+  }
+
+  .header {
+    .actions {
+      &.timeline {
+        .highlight {
+          color: $brown !important;
+        }
+      }
+
+      h5 {
+        color: $gray;
+      }
+
+      svg {
+        color: $gray-mid;
+
+        &:hover {
+          stroke: $gray;
+        }
+      }
+
+      .timeline-icon {
+        svg {
+          fill: #a6abb0 !important;
+
+          stroke: #a6abb0 !important;
+
+          &:hover {
+            fill: $gray !important;
+            stroke: $gray !important;
+          }
+        }
+      }
+
+      .bell-icon {
+        .indicator {
+          background: var(--primary-color);
+        }
+      }
+    }
+  }
+
+  .Timeline {
+    .day {
+      h5 {
+        color: $gray-mid;
+
+        &:hover {
+          color: $gray !important;
+        }
+      }
+    }
+  }
+
+  .button {
+    background: $blue-light;
+
+    color: $blue-mid;
+
+    &.is-purple {
+      background: $purple-light;
+      color: $purple-mid;
+
+      &:hover {
+        background: $purple-hover;
+      }
+    }
+
+    &.is-green {
+      background: $green-light;
+      color: $green-mid;
+
+      &:hover {
+        background: $green-hover;
+      }
+    }
+
+    &:hover {
+      background: $blue-hover;
+    }
+  }
+
+  .telegram {
+    background: $gray-light !important;
+    color: #08c !important;
+
+    &:hover {
+      background: $gray-hover !important;
+    }
+  }
+
+  .github {
+    background: #000 !important;
+    color: #fff !important;
+
+    &:hover {
+      background: $gray-dark !important;
+    }
+  }
+
+  .excel {
+    background: #33a66730;
+    color: #33a667;
+
+    &:hover {
+      background: #33a66750;
+    }
+  }
+
+  .map-switcher {
+    .highlight {
+      background: $cherry-light;
+
+      &.active {
+        background: $blue-light;
+      }
+
+      &.recovered {
+        background: $green-light;
+      }
+
+      &.deceased {
+        background: $gray-light;
+      }
+    }
+  }
+
+  .Level {
+    .is-confirmed {
+      h1,
+      h5 {
+        color: $cherry;
+      }
+
+      h4 {
+        color: $cherry-mid;
+      }
+    }
+
+    .is-active {
+      h1,
+      h5 {
+        color: $blue;
+      }
+
+      h4 {
+        color: $blue-mid;
+      }
+    }
+
+    .is-recovered {
+      h1,
+      h5 {
+        color: $green;
+      }
+
+      h4 {
+        color: $green-mid;
+      }
+    }
+
+    .is-deceased {
+      h1,
+      h5 {
+        color: $gray;
+      }
+
+      h4 {
+        color: $gray-mid;
+      }
+    }
+  }
+
+  abbr {
+    text-decoration: none;
+
+    &.is-cherry {
+      color: $cherry;
+    }
+
+    &.is-blue {
+      color: $blue;
+    }
+
+    &.is-green {
+      color: $green;
+    }
+
+    &.is-gray {
+      color: $gray;
+    }
+  }
+
+  .table-fineprint {
+    color: $gray-mid;
+
+    a {
+      border-bottom: 2px solid $gray-hover;
+
+      &:hover {
+        background: $gray-hover;
+      }
+    }
+  }
+
+  table {
+    thead {
+      background: $gray-light;
+      color: $gray;
+
+      th {
+        background: $gray-light-opaque;
+
+        &:hover {
+          background: #ecedee;
+        }
+      }
+    }
+
+    .heading-content {
+      abbr {
+        color: $gray;
+
+        &.is-confirmed {
+          color: $cherry;
+        }
+
+        &.is-active {
+          color: $blue;
+        }
+
+        &.is-recovered {
+          color: $green;
+        }
+
+        &.is-deaths {
+          color: $gray;
+        }
+      }
+    }
+
+    tbody {
+      color: $gray;
+
+      tr {
+        &:nth-child(odd) {
+          background: $gray-light;
+        }
+
+        &.is-highlighted {
+          background: $gray-hover !important;
+        }
+
+        &.is-odd {
+          background: $gray-light !important;
+        }
+
+        &.is-total {
+          background: $gray-hover;
+        }
+
+        &:hover {
+          background: $gray-hover !important;
+
+          .dropdown {
+            background: $gray-hover;
+          }
+        }
+      }
+
+      td {
+        .delta {
+          &.is-confirmed {
+            color: $cherry;
+          }
+
+          &.is-active {
+            color: $blue;
+          }
+
+          &.is-recovered {
+            color: $green;
+          }
+
+          &.is-deaths {
+            color: $gray;
+          }
+        }
+
+        &.is-Orange {
+          background: $yellow-light;
+          border-left: 5px solid $orange-mid;
+          color: $orange;
+
+          svg {
+            color: $orange !important;
+          }
+        }
+
+        &.is-Red {
+          background: $cherry-light;
+          border-left: 5px solid $cherry-mid;
+          color: $cherry;
+
+          svg {
+            color: $cherry !important;
+          }
+        }
+
+        &.is-Green {
+          background: $green-light;
+          border-left: 5px solid $green-mid;
+          color: $green;
+
+          svg {
+            color: $green !important;
+          }
+        }
+      }
+
+      .title-chevron {
+        .title-icon {
+          svg {
+            color: $gray-mid;
+          }
+        }
+      }
+
+      .state-last-update {
+        color: $green !important;
+
+        .disclaimer {
+          background: $gray-light;
+
+          color: $gray;
+        }
+
+        .state-page-link {
+          background: $yellow-light !important;
+          color: $orange;
+
+          &:hover {
+            background: $yellow-hover !important;
+          }
+        }
+      }
+
+      .district-heading {
+        background: $gray-light;
+
+        &:hover {
+          background: $gray-light !important;
+        }
+
+        td {
+          background: $gray-light;
+          color: $gray-dark;
+        }
+      }
+    }
+
+    .affected-count {
+      color: $gray-mid;
+    }
+
+    .unknown {
+      svg {
+        color: $gray-mid;
+      }
+    }
+
+    .dropdown {
+      background: $gray-light;
+
+      &:hover {
+        background: $gray-hover;
+      }
+    }
+  }
+
+  .anchor {
+    svg {
+      color: $gray-mid;
+
+      &:hover {
+        color: $gray;
+      }
+    }
+
+    &.stickied {
+      svg {
+        color: $gray;
+      }
+    }
+  }
+
+  .MapExplorer {
+    .header {
+      color: $gray;
+    }
+
+    .svg-parent {
+      svg {
+        text {
+          fill: $gray;
+        }
+      }
+    }
+
+    .last-update {
+      h6 {
+        color: $green-mid;
+      }
+
+      h3 {
+        color: $green;
+      }
+    }
+
+    .map-button {
+      background: $yellow-light;
+
+      color: $orange;
+
+      &:hover {
+        background: $yellow-hover;
+      }
+
+      svg {
+        stroke: $orange-mid;
+      }
+    }
+
+    .meta {
+      h2 {
+        &.confirmed {
+          color: $brick;
+        }
+
+        &.active {
+          color: $blue;
+        }
+
+        &.recovered {
+          color: $green;
+        }
+
+        &.deceased {
+          color: $gray;
+        }
+
+        &.tested {
+          color: $purple;
+        }
+
+        &.Red {
+          color: #d73027;
+        }
+
+        &.Orange {
+          color: #fee08b;
+        }
+
+        &.Green {
+          color: #66bd63;
+        }
+      }
+
+      h4 {
+        color: $gray-mid;
+      }
+
+      .district {
+        &.confirmed {
+          color: $brick;
+        }
+
+        &.active {
+          color: $blue;
+        }
+
+        &.recovered {
+          color: $green;
+        }
+
+        &.deceased {
+          color: $gray;
+        }
+
+        &.tested {
+          color: $purple;
+        }
+      }
+    }
+
+    .map-stats {
+      h3 {
+        color: $gray-mid;
+      }
+
+      .stats {
+        &.confirmed {
+          background: $cherry-light;
+
+          h5,
+          h6 {
+            color: $cherry-mid;
+          }
+
+          h1 {
+            color: $cherry;
+          }
+        }
+
+        &.recovered {
+          background: $green-light;
+
+          h5,
+          h6 {
+            color: $green-mid;
+          }
+
+          h1 {
+            color: $green;
+          }
+        }
+
+        &.active {
+          background: $blue-light;
+
+          h5,
+          h6 {
+            color: $blue-mid;
+          }
+
+          h1 {
+            color: $blue;
+          }
+        }
+
+        &.deceased {
+          background: $gray-light;
+
+          h5,
+          h6 {
+            color: $gray-mid;
+          }
+
+          h1 {
+            color: $gray;
+          }
+        }
+
+        &.tested {
+          background: $purple-light;
+
+          h5,
+          h6 {
+            color: $purple-mid;
+          }
+
+          h1 {
+            color: $purple;
+          }
+
+          svg {
+            stroke: $purple-mid;
+
+            &:hover {
+              stroke: $purple;
+            }
+          }
+        }
+
+        &.is-yellow {
+          background: $yellow;
+
+          h5,
+          h6 {
+            color: $white;
+          }
+
+          h1 {
+            color: $white;
+          }
+        }
+      }
+    }
+
+    .disclaimer {
+      background: $gray-light;
+
+      color: $gray-dark;
+    }
+  }
+
+  .tabs {
+    .tab {
+      background: $gray-light;
+
+      color: $gray-mid;
+
+      &:hover {
+        background: $gray-hover;
+      }
+
+      &.focused {
+        background: $gray-opaque;
+        color: #000;
+      }
+    }
+  }
+
+  .tabs-map {
+    .tab {
+      background: $gray-light;
+
+      color: $gray-mid;
+
+      &:hover {
+        background: $gray-hover;
+      }
+
+      &.focused {
+        background: $gray-opaque;
+        color: #000;
+      }
+
+      &.disabled {
+        background: $gray-opaque;
+        color: $gray-mid;
+      }
+    }
+  }
+
+  .timeseries-header {
+    h1 {
+      color: $gray;
+    }
+
+    .scale-modes {
+      color: $gray;
+      font-weight: 500;
+
+      label {
+        color: $gray-mid;
+      }
+
+      &:hover {
+        label {
+          &.main {
+            color: $gray;
+          }
+        }
+      }
+    }
+  }
+
+  .disabled {
+    input {
+      &.switch {
+        background: $gray-light !important;
+        border: $gray-light 2px solid !important;
+      }
+    }
+  }
+
+  input {
+    &.switch {
+      background-color: #fff;
+      border: 2px solid #d9dadc;
+
+      &::after {
+        background-color: $gray-mid;
+      }
+
+      &:checked {
+        background-color: $gray-light;
+
+        &::after {
+          background-color: $light;
+        }
+      }
+    }
+  }
+
+  .trends-state-name {
+    select {
+      background-color: $gray-opaque;
+
+      background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
+      linear-gradient(135deg, #808080 50%, transparent 50%);
+
+      border: 2px solid #e8e8e9;
+
+      color: #000;
+    }
+  }
+
+  .TimeSeries,
+  .Minigraph {
+    .stats {
+      h2,
+      h5,
+      h6 {
+        color: $cherry-mid;
+      }
+
+      h5 {
+        &.title {
+          color: $cherry;
+        }
+      }
+
+      h2,
+      h6 {
+        color: $cherry;
+      }
+
+      &.is-recovered {
+        h5 {
+          color: $green-mid;
+
+          &.title {
+            color: $green;
+          }
+        }
+
+        h2,
+        h6 {
+          color: $green;
+        }
+      }
+
+      &.is-deceased {
+        h5 {
+          color: $gray-mid;
+
+          &.title {
+            color: $gray;
+          }
+        }
+
+        h2,
+        h6 {
+          color: $gray;
+        }
+      }
+
+      &.is-active {
+        h5 {
+          color: $blue-mid;
+
+          &.title {
+            color: $blue;
+          }
+        }
+
+        h2,
+        h6 {
+          color: $blue;
+        }
+      }
+
+      &.is-tested {
+        h5 {
+          color: $purple-mid;
+
+          &.title {
+            color: $purple;
+          }
+        }
+
+        h2,
+        h6 {
+          color: $purple;
+        }
+      }
+    }
+  }
+
+  .svg-parent {
+    svg {
+      .domain,
+      .tick,
+      line {
+        stroke: $cherry;
+      }
+
+      text {
+        color: $cherry-mid;
+      }
+    }
+
+    &.is-recovered {
+      background: $green-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $green;
+        }
+
+        text {
+          color: $green-mid;
+        }
+      }
+    }
+
+    &.is-deceased {
+      background: $gray-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $gray;
+        }
+
+        text {
+          color: $gray-mid;
+        }
+      }
+    }
+
+    &.is-active {
+      background: $blue-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $blue;
+        }
+
+        text {
+          color: $blue-mid;
+        }
+      }
+    }
+
+    &.is-tested {
+      background: $purple-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $purple-mid !important;
+        }
+
+        circle {
+          stroke: $purple !important;
+        }
+
+        text {
+          color: $purple-mid;
+        }
+      }
+    }
+  }
+
+  .floating-buttons {
+    button {
+      background: $yellow-mid;
+      color: $orange;
+
+      &:hover {
+        background: #ffa500;
+
+        svg {
+          stroke: #ffa500;
+        }
+      }
+
+      svg {
+        stroke: $orange;
+      }
+    }
+  }
+
+  .link {
+    a {
+      background: $blue-light;
+      color: $blue;
+
+      &:hover {
+        background: $blue-hover;
+      }
+    }
+
+    h3 {
+      color: $gray-dark;
+    }
+  }
+
+  footer {
+    h5 {
+      color: $gray;
+    }
+  }
+
+  .Summary {
+    h5 {
+      color: $gray;
+    }
+
+    .summary-bottom {
+      & > * {
+        align-self: center;
+      }
+    }
+  }
+
+  .FAQ {
+    .question {
+      color: $gray-dark;
+    }
+
+    .answer {
+      color: $blue;
+    }
+
+    a {
+      background: $blue-light;
+      color: $blue;
+    }
+  }
+
+  .Demographics {
+    .select {
+      .react-date-picker {
+        background-color: var(--dark-background);
+        // border: 2px solid #e8e8e9 !important;
+
+        color: #ababab;
+      }
+
+      .react-calendar {
+        background: var(--dark-background);
+
+        button {
+          &:disabled {
+            background: var(--dark-background);
+            color: $gray-mid;
+          }
+        }
+      }
+
+      .react-date-picker__wrapper {
+        svg {
+          stroke: $gray-mid;
+
+          &:hover {
+            stroke: $gray;
+          }
+        }
+      }
+
+      .react-calendar__tile--active {
+        background: $pblue-light;
+        color: $pblue !important;
+
+        &:hover {
+          background: $pblue-hover;
+          color: $pblue !important;
+        }
+      }
+
+      .react-calendar__month-view__days__day--weekend,
+      .react-calendar__month-view__days__day {
+        color: $gray;
+      }
+
+      .react-calendar__navigation__label {
+        color: $gray !important;
+      }
+
+      .react-calendar__navigation__arrow {
+        color: $gray;
+      }
+
+      .react-date-picker__inputGroup > * {
+        color: $gray !important;
+      }
+
+      select {
+        background-color: var(--dark-background);
+
+        background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
+        linear-gradient(135deg, #808080 50%, transparent 50%);
+
+        border: 2px solid #e8e8e9;
+
+        color: $gray;
+      }
+    }
+
+    .reminder {
+      background: $pblue-light;
+
+      color: var(--primary-color);
+
+      svg {
+        stroke: $pblue-mid;
+
+        &:hover {
+          stroke: var(--primary-color);
+        }
+      }
+    }
+
+    .header {
+      h1 {
+        color: var(--primary-color);
+      }
+
+      h3 {
+        color: $pblue-mid;
+      }
+
+      h6 {
+        &.disclaimer {
+          color: $gray-mid;
+        }
+      }
+
+      .deep-dive {
+        h5 {
+          color: $gray;
+        }
+      }
+    }
+
+    .patientdb-wrapper {
+      .no-result {
+        h5 {
+          color: $gray;
+
+          span {
+            color: $pblue !important;
+          }
+        }
+      }
+    }
+  }
+
+  .Patients {
+    h5 {
+      &.daylabel {
+        color: var(--primary-color);
+      }
+    }
+
+    .patient-card {
+      background: $gray-light;
+
+      &:hover {
+        background: $gray-hover;
+      }
+
+      h3 {
+        color: $gray-mid;
+      }
+
+      &.is-small {
+        background: $gray-hover;
+
+        &:hover {
+          background: $gray-mid;
+        }
+
+        &.is-femme {
+          background: $pink;
+        }
+
+        &.is-male {
+          background: var(--primary-color);
+        }
+
+        &.is-local {
+          background: $cherry;
+        }
+
+        &.is-imported {
+          background: $purple;
+        }
+      }
+
+      &.is-femme {
+        background: $pink-mid;
+
+        h3 {
+          color: $pink;
+        }
+
+        &:hover {
+          background: $pink-hover;
+        }
+      }
+
+      &.is-male {
+        background: $pblue-light;
+
+        h3 {
+          color: var(--primary-color);
+        }
+
+        &:hover {
+          background: $pblue-hover;
+        }
+      }
+
+      &.is-local {
+        background: $cherry-light;
+
+        h3 {
+          color: $cherry;
+        }
+
+        &:hover {
+          background: $cherry-hover;
+        }
+      }
+
+      &.is-imported {
+        background: $purple-light;
+
+        h3 {
+          color: $purple;
+        }
+
+        &:hover {
+          background: $purple-hover;
+        }
+      }
+
+      &.is-in {
+        &:hover {
+          background: $gray-light;
+
+          h3 {
+            color: $gray-mid;
+          }
+        }
+      }
+
+      &.is-uk {
+        &:hover {
+          background: $gray-light;
+
+          h3 {
+            color: $gray-mid;
+          }
+        }
+      }
+
+      &.is-us {
+        &:hover {
+          background: $gray-light;
+
+          h3 {
+            color: $gray-mid;
+          }
+        }
+      }
+
+      &.is-th {
+        &:hover {
+          background: $gray-light;
+
+          h3 {
+            color: $gray-mid;
+          }
+        }
+      }
+
+      &.is-ph {
+        &:hover {
+          background: $gray-light;
+
+          h3 {
+            color: $gray-mid;
+          }
+        }
+      }
+
+      &.is-it {
+        &:hover {
+          background: $gray-light;
+
+          h3 {
+            color: $gray-mid;
+          }
+        }
+      }
+
+      &.is-ca {
+        &:hover {
+          background: $gray-light;
+
+          h3 {
+            color: $gray-mid;
+          }
+        }
+      }
+
+      &.is-id {
+        &:hover {
+          background: $gray-light;
+
+          h3 {
+            color: $gray-mid;
+          }
+        }
+      }
+
+      &.is-mm {
+        &:hover {
+          background: $gray-light;
+
+          h3 {
+            color: $gray-mid;
+          }
+        }
+      }
+
+      &.age1-9 {
+        background: #006400;
+      }
+
+      &.age10-19 {
+        background: #00008b;
+      }
+
+      &.age20-29 {
+        background: #b03060;
+      }
+
+      &.age30-39 {
+        background: #ff4500;
+      }
+
+      &.age40-49 {
+        background: #ff0;
+      }
+
+      &.age50-59 {
+        background: #deb887;
+      }
+
+      &.age60-69 {
+        background: #0f0;
+      }
+
+      &.age70-79 {
+        background: #0ff;
+      }
+
+      &.age80-89 {
+        background: #f0f;
+      }
+
+      &.age90-99 {
+        background: #6495ed;
+      }
+    }
+  }
+
+  .DownloadBlock {
+    code {
+      color: $orange-mid;
+      font-family: 'archia';
+    }
+
+    a {
+      color: $orange-mid;
+    }
+
+    .button {
+      background: $orange-light;
+
+      &:hover {
+        background: $orange-hover;
+      }
+    }
+
+    svg {
+      stroke: $orange-mid;
+    }
+  }
+
+  .modal {
+    background: $pblue-mid;
+
+    .modal-content {
+      background: var(--dark-background);
+
+      svg {
+        stroke: $pblue-mid;
+
+        &:hover {
+          stroke: var(--primary-color);
+        }
+      }
+
+      h1 {
+        color: var(--primary-color);
+      }
+
+      h3 {
+        color: var(--primary-color);
+      }
+
+      h5 {
+        color: $pblue-mid;
+      }
+
+      .meta {
+        h3 {
+          &:hover {
+            background: $pblue-light;
+          }
+        }
+      }
+    }
+
+    .link {
+      a {
+        background: $pblue-light;
+        color: var(--primary-color);
+
+        &:hover {
+          background: $pblue-hover;
+        }
+      }
+    }
+  }
+
+  .patients-summary {
+    h1 {
+      color: $gray-dark;
+    }
+
+    h6 {
+      color: $gray;
+    }
+
+    .button {
+      background: $pblue-light;
+      color: var(--primary-color);
+
+      &:hover {
+        background: $pblue-hover;
+      }
+    }
+  }
+
+  .select {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      color: $gray-mid;
+      font-size: 0.75rem;
+      font-weight: 900;
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+    }
+  }
+
+  .filters {
+    background: var(--dark-background) !important;
+    border-radius: 5px;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 #1a1a1a;
+  }
+
+  .pills {
+    > button {
+      background-color: $yellow-light;
+      border: 2px $yellow-light solid;
+
+      color: $orange;
+
+      &:hover {
+        background: $yellow-hover;
+      }
+
+      &.selected {
+        background-color: $yellow-mid;
+        color: #000;
+      }
+    }
+  }
+
+  .legend {
+    background: var(--dark-background);
+
+    h5 {
+      color: $gray;
+
+      &.is-female {
+        color: $pink;
+      }
+
+      &.is-male {
+        color: var(--primary-color);
+      }
+
+      &.is-local {
+        color: $cherry;
+      }
+
+      &.is-imported {
+        color: $purple;
+      }
+    }
+
+    .circle {
+      background: $gray-mid;
+
+      &.is-female {
+        background: $pink;
+      }
+
+      &.is-male {
+        background: var(--primary-color);
+      }
+
+      &.is-local {
+        background: $cherry;
+      }
+
+      &.is-imported {
+        background: $purple;
+      }
+    }
+  }
+
+  .updates-header {
+    color: $gray-dark;
+
+    h2 {
+      color: var(--primary-color);
+    }
+  }
+
+  .updates {
+    .update {
+      background: $gray-light;
+
+      &:hover {
+        background: $gray-hover;
+      }
+
+      h5 {
+        color: $gray-mid;
+      }
+
+      h4 {
+        color: $gray;
+      }
+    }
+
+    .button {
+      background: $pblue-light;
+      color: var(--primary-color);
+
+      &:hover {
+        background: $pblue-hover;
+      }
+    }
+  }
+
+  .district-bar {
+    h2 {
+      &.confirmed {
+        color: $red;
+      }
+
+      &.active {
+        color: $blue;
+      }
+
+      &.recovered {
+        color: $green;
+      }
+
+      &.deceased {
+        color: $gray;
+      }
+    }
+
+    .district-bar-left {
+      .button {
+        background: $gray-light;
+        color: $gray;
+
+        &:hover {
+          background: $gray-hover;
+        }
+      }
+    }
+
+    .districts {
+      .district {
+        h2,
+        h5 {
+          color: $gray;
+        }
+
+        .delta {
+          h6 {
+            &.confirmed {
+              color: $red-mid;
+            }
+
+            &.active {
+              color: $blue-mid;
+            }
+
+            &.recovered {
+              color: $green-mid;
+            }
+
+            &.deceased {
+              color: $gray-mid;
+            }
+          }
+
+          svg {
+            &.confirmed {
+              color: $red-mid;
+            }
+
+            &.active {
+              color: $blue-mid;
+            }
+
+            &.recovered {
+              color: $green-mid;
+            }
+
+            &.deceased {
+              color: $gray-mid;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .LanguageSwitcher {
+    h3 {
+      color: var(--primary-color);
+    }
+
+    .close-button {
+      background: $pblue-light;
+
+      &:hover {
+        background: $pblue-hover;
+      }
+
+      svg {
+        color: $pblue-mid;
+
+        &:hover {
+          color: var(--primary-color);
+        }
+      }
+    }
+
+    .languages {
+      .language {
+        color: $pblue-mid;
+
+        &:hover {
+          color: var(--primary-color);
+        }
+
+        &.is-highlighted {
+          background: $pblue-light;
+          color: var(--primary-color);
+        }
+      }
+    }
+  }
+
+  .cards-container {
+    .cards {
+      .card {
+        .charts-header {
+          .chart-title {
+            color: #ababab;
+          }
+
+          .chart-note {
+            color: $gray;
+          }
+        }
+      }
+    }
+  }
+
+  .Tooltip {
+    .message {
+      background: #000;
+
+      p {
+        color: $white !important;
+      }
+    }
+  }
+
+  @media (min-width: 769px) {
+    .Navbar {
+      background: $gray-light-opaque;
+
+      .navbar-right {
+        background: $gray-light-opaque;
+
+        &:hover {
+          background: $gray-light-opaque !important;
+        }
+
+        & > span {
+          svg {
+            stroke: $gray;
+          }
+        }
+      }
+
+      .expand {
+        background: $gray-light-opaque;
+
+        & > * {
+          color: $gray;
+        }
+      }
+    }
+  }
+}
+
+.lights-out {
+  .Patients {
+    .patient-card {
+      background: $gray-hover;
+
+      &:hover {
+        background: $gray-light !important;
+      }
+
+      .is-small {
+        background: $gray-dark !important;
+
+        &:hover {
+          background: $gray !important;
+        }
+      }
+    }
+  }
+}
