@@ -9,12 +9,12 @@ import {useTrail, animated, config} from 'react-spring';
 import {useDebounce, useUpdateEffect} from 'react-use';
 
 const suggestions = [
+  'Madurai',
   'Karnataka',
-  'West Bengal',
+  'Ladakh',
+  'Mumbai',
+  'Andhra Pradesh',
   'Alappuzha',
-  'Senior citizen support bangalore',
-  'Community Kitchen in Kerala',
-  'Groceries Chennai',
 ];
 
 const districtSuggestions = [
@@ -197,7 +197,7 @@ function Search() {
       }
 
       fillPlaceholder(target, index, 0, function () {
-        window.setTimeout(function () {
+        setTimeout(function () {
           clearPlaceholder(target, function () {
             loopThroughSuggestions(target, (index + 1) % suggestions.length);
           });
@@ -214,7 +214,7 @@ function Search() {
       )[0];
 
       if (targetInput) {
-        window.requestIdleCallback(() => {
+        requestIdleCallback(() => {
           loopThroughSuggestions(targetInput, 0);
         });
       }

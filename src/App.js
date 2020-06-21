@@ -3,7 +3,6 @@ import Blog from './components/Blog';
 import Navbar from './components/Navbar';
 
 import React, {lazy, useState, Suspense} from 'react';
-import {Helmet} from 'react-helmet';
 import {Route, Redirect, Switch, useLocation} from 'react-router-dom';
 import useDarkMode from 'use-dark-mode';
 
@@ -12,16 +11,7 @@ const About = lazy(() => import('./components/About'));
 const State = lazy(() => import('./components/State'));
 const LanguageSwitcher = lazy(() => import('./components/LanguageSwitcher'));
 
-const schemaMarkup = {
-  '@context': 'http://schema.org/',
-  '@type': 'NGO',
-  name: 'Coronavirus Outbreak in India: Latest Map and Case Count',
-  alternateName: 'COVID-19 Tracker',
-  url: 'https://www.covid19india.org/',
-  image: 'https://www.covid19india.org/thumbnail.png',
-};
-
-function App() {
+const App = () => {
   const darkMode = useDarkMode(false);
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
   const location = useLocation();
@@ -55,12 +45,6 @@ function App() {
 
   return (
     <div className="App">
-      <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify(schemaMarkup)}
-        </script>
-      </Helmet>
-
       <Suspense fallback={<div />}>
         <LanguageSwitcher
           {...{showLanguageSwitcher, setShowLanguageSwitcher}}
@@ -72,6 +56,7 @@ function App() {
         {...{darkMode}}
         {...{showLanguageSwitcher, setShowLanguageSwitcher}}
       />
+
       <Suspense fallback={<div />}>
         <Switch location={location}>
           {pages.map((page, index) => {
@@ -89,6 +74,6 @@ function App() {
       </Suspense>
     </div>
   );
-}
+};
 
 export default App;

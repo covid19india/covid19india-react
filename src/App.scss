@@ -33,9 +33,6 @@ $green: #28a745;
 $green-light: #28a74520;
 $green-hover: #28a74530;
 $green-mid: #28a74599;
-$teal: #20c997;
-$cyan: #17a2b8;
-$white: #fff;
 $gray: #6c757d;
 $gray-light: #6c757d10;
 $gray-light-opaque: #f6f6f7;
@@ -45,8 +42,6 @@ $gray-dark: #343a40;
 $gray-opaque: #f1f1f1;
 $gray-hover-opaque: #edeeef;
 $gray-hover-darker-opaque: #f6f6f7;
-$light: #f8f9fa;
-$dark: #343a40;
 $purple: #201aa2dd;
 $purple-light: #201aa220;
 $purple-hover: #201aa230;
@@ -62,6 +57,10 @@ $brown-hover: #b6854d30;
 $brown-mid: #b6854d99;
 $brick: #e23028;
 $brick-light: #e2302810;
+$white: #fff;
+$light: #f8f9fa;
+$dark: #343a40;
+$black: #000;
 
 // Dark mode variables
 $dark-m-gray: #161625;
@@ -954,7 +953,7 @@ h6 {
     opacity: 0.8;
     pointer-events: none;
     position: absolute;
-    top: 1.5rem;
+    top: 1.4rem;
     transition: opacity 1s;
 
     &.disappear {
@@ -1462,44 +1461,6 @@ h6 {
   }
 }
 
-.telegram {
-  background: $gray-light !important;
-  color: #08c !important;
-  justify-content: center;
-  padding-left: 0.65rem;
-  width: 15.5rem;
-
-  &:hover {
-    background: $gray-hover !important;
-  }
-}
-
-.github {
-  background: #000 !important;
-  color: #fff !important;
-  justify-content: center;
-  padding-left: 0.65rem;
-  transition: all 0.2s ease-in-out;
-  width: 15.5rem;
-
-  &:hover {
-    background: $gray-dark !important;
-  }
-}
-
-.twitter {
-  width: 15.5rem;
-}
-
-.excel {
-  background: #33a66730;
-  color: #33a667;
-
-  &:hover {
-    background: #33a66750;
-  }
-}
-
 .MapSwitcher {
   align-self: center;
   display: flex;
@@ -1648,32 +1609,6 @@ abbr {
   }
 }
 
-.fineprint {
-  align-items: flex-end;
-  display: flex;
-  flex-basis: 80%;
-  flex-direction: row;
-  justify-content: flex-end;
-  text-align: right;
-
-  .text {
-    color: $gray-mid;
-    font-weight: 600;
-    margin: 0;
-
-    a {
-      border-bottom: 2px solid $gray-hover;
-      color: inherit;
-      text-decoration: none;
-      transition: all 0.2s ease-in-out;
-
-      &:hover {
-        background: $gray-hover;
-      }
-    }
-  }
-}
-
 .TableLoader {
   margin-bottom: -.25rem;
 }
@@ -1710,8 +1645,6 @@ abbr {
   }
 
   .info-toggle {
-    background: none;
-
     &.is-highlighted {
       background: $yellow-light;
       color: $yellow;
@@ -1730,6 +1663,15 @@ abbr {
     }
   }
 
+  .scroll-right-helper {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    font-size: 12px;
+    color: $gray-mid;
+    justify-content: flex-end;
+  }
+
   @media (min-width: 769px) {
     margin-top: 1rem;
   }
@@ -1742,14 +1684,76 @@ abbr {
   flex-direction: column;
   width: calc(100% - 2rem);
 
+  .helper-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .helper-left {
+      h5 {
+        margin-right: .15rem;
+      }
+    }
+
+    .helper-right {
+      h5 {
+        margin-right: 1rem;
+      }
+    }
+  }
+
   .info-item {
     align-items: center;
     display: flex;
     flex-direction: row;
     font-size: 12px;
+    font-weight: 600;
+    color: $gray;
+    height: 1.5rem;
+
+    &:first-child {
+      margin-top: 1rem;
+    }
 
     svg {
       margin-right: .25rem;
+      margin-bottom: .25rem;
+      color: $gray-mid;
+    }
+
+    &.notes {
+      svg {
+        margin-bottom: .15rem;
+      }
+    }
+
+    &.sort {
+      svg {
+        margin-bottom: 0;
+      }
+    }
+
+    &.invert {
+      svg {
+        transform: rotate(180deg);
+        margin-bottom: 0rem;
+      }
+    }
+  }
+
+  .text {
+    color: $gray-mid;
+    font-weight: 600;
+
+    a {
+      background: $gray-light;
+      color: $gray;
+      text-decoration: none;
+      border-bottom: 2px solid $gray-hover;
+
+      &:hover {
+        background: $gray-hover;
+      }
     }
   }
 }
@@ -3011,6 +3015,7 @@ footer {
   justify-content: center;
   margin-bottom: 5rem;
   margin-top: 5rem;
+  width: 100%;
 
   & > * {
     align-self: center;
@@ -3021,89 +3026,47 @@ footer {
     color: $gray;
     font-weight: 600;
     margin: 0;
-    margin-bottom: 0.5rem;
-    margin-top: 1rem;
+    margin-bottom: 1rem;
   }
 
-  img {
-    height: 2rem;
-    width: 2rem;
-  }
-}
-
-.Summary {
-  display: flex;
-  flex-direction: column;
-  height: 600px;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  position: relative;
-  width: 600px;
-
-  img {
-    height: 2rem;
-    width: 2rem;
+  svg {
+    padding: 1rem;
   }
 
-  .link {
-    margin: 0;
-  }
+  .github {
+    color: #00000050;
 
-  .header {
-    h1 {
-      margin-top: -1rem;
+    &:hover {
+      color: #000;
     }
   }
 
-  h5 {
-    color: $gray;
-    margin: 0;
-  }
+  .twitter {
+    color: $pblue-mid;
 
-  .Minigraph {
-    align-self: center;
-    margin-bottom: -3.25rem;
-  }
-
-  .summary-bottom {
-    align-self: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: calc(100% - 0);
-
-    .link {
-      margin-right: -0.75rem;
-      width: 12rem;
-    }
-
-    & > * {
-      align-self: center;
-    }
-
-    img {
-      margin-bottom: 0.25rem;
-      margin-left: 1rem;
-      margin-right: 0.25rem;
-    }
-
-    h5 {
-      width: 15rem;
+    &:hover {
+      color: $pblue;
     }
   }
 
-  .summary-bottom-left {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+  .api {
+    color: $yellow-mid;
 
-    & > * {
-      align-self: center;
+    &:hover {
+      color: $yellow;
+    }
+  }
+
+  .mail {
+    color: $brown-mid;
+
+    &:hover {
+      color: $brown;
     }
   }
 }
 
-.FAQ {
+.About {
   display: flex;
   flex-direction: column;
   min-height: 30rem;
@@ -3144,861 +3107,6 @@ footer {
     &:hover {
       text-decoration: underline;
     }
-  }
-}
-
-.Demographics {
-  align-self: center;
-  display: flex;
-  flex-direction: column;
-  margin-left: 6rem;
-  width: calc(100% - 6rem);
-
-  .select {
-    display: flex;
-    flex-direction: row;
-    text-align: center;
-
-    .react-date-picker {
-      align-items: center;
-      background-color: #eee;
-      border: 2px solid #e8e8e9 !important;
-      border-radius: 4px;
-      color: #6c757d;
-      cursor: default;
-      font-size: 12px;
-      font-weight: 900;
-      height: 2.19rem;
-      margin: 0.2rem 0.1rem;
-      padding: 0.5rem;
-      padding-inline-start: 1px;
-      width: auto;
-
-      input,
-      button {
-        &:focus {
-          outline: none;
-        }
-      }
-    }
-
-    .react-date-picker,
-    .react-date-picker *,
-    .react-date-picker *::before,
-    .react-date-picker *::after {
-      border: 0;
-    }
-
-    .react-calendar {
-      background: $gray-light-opaque;
-      border: 2px solid $gray-light;
-      border-radius: 5px;
-
-      button {
-        border-radius: 5px;
-        padding: 1rem;
-        transition: all 0.1s ease-in-out;
-
-        &:disabled {
-          border-radius: 0 !important;
-          color: $gray-mid;
-          cursor: not-allowed;
-        }
-      }
-    }
-
-    .react-date-picker__inputGroup__input {
-      &:invalid {
-        background: transparent;
-      }
-    }
-
-    .react-date-picker__wrapper {
-      border: unset;
-
-      svg {
-        stroke: $gray-mid;
-
-        &:hover {
-          stroke: $gray;
-        }
-      }
-    }
-
-    .react-calendar__tile--active {
-      background: $pblue-light;
-      color: $pblue !important;
-
-      &:hover {
-        background: $pblue-hover;
-        color: $pblue !important;
-      }
-    }
-
-    .react-calendar__month-view__weekdays__weekday {
-      margin-bottom: 0.5rem;
-    }
-
-    .react-calendar__month-view__days__day--weekend,
-    .react-calendar__month-view__days__day {
-      color: $gray;
-    }
-
-    .react-date-picker__calendar {
-      top: 3.5rem !important;
-    }
-
-    .react-calendar__navigation__label {
-      color: $gray !important;
-    }
-
-    .react-calendar__navigation__arrow {
-      color: $gray;
-    }
-
-    .react-date-picker__inputGroup > * {
-      color: $gray !important;
-    }
-
-    .react-date-picker__clear-button {
-      margin: 0 !important;
-      padding: 0 !important;
-
-      svg {
-        stroke-width: 3px;
-        width: 16px;
-      }
-    }
-
-    .react-date-picker__calendar-button {
-      margin: 0 !important;
-      margin-left: 0.25rem !important;
-      padding: 0 !important;
-
-      svg {
-        height: 16px;
-        stroke-width: 3px;
-        width: 16px;
-      }
-    }
-
-    select {
-      appearance: none;
-      background-color: #eee;
-
-      background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
-      linear-gradient(135deg, #808080 50%, transparent 50%);
-      background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
-      background-repeat: no-repeat;
-      background-size: 5px 5px, 5px 5px;
-      border: 2px solid #e8e8e9;
-      border-radius: 4px;
-      color: $gray;
-      cursor: pointer;
-      font-weight: 900;
-      margin: 0.2rem 0.1rem;
-      padding: 0.5rem;
-      width: 130px;
-
-      &:focus {
-        outline: none;
-      }
-    }
-  }
-
-  .reminder {
-    align-self: center !important;
-    background: $pblue-light;
-    border-radius: 5px;
-    color: $pblue;
-    font-size: 0.9rem;
-    font-weight: 600;
-    line-height: 23px;
-    margin-bottom: 3rem;
-    margin-top: 3rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 1rem;
-    text-align: center;
-    width: 30rem;
-
-    svg {
-      cursor: pointer;
-      padding: 0.5rem;
-      position: absolute;
-      right: 0;
-      stroke: $pblue-mid;
-      stroke-width: 3px;
-      top: -0.25rem;
-      width: 16px;
-
-      &:hover {
-        stroke: $pblue;
-      }
-    }
-  }
-
-  .header {
-    align-self: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-top: 1.75rem;
-    width: calc(100% - 10rem);
-
-    h1 {
-      color: $pblue;
-    }
-
-    h3 {
-      color: $pblue-mid;
-      font-weight: 900;
-      margin-top: 0;
-    }
-
-    h6 {
-      &.disclaimer {
-        color: $gray-mid;
-        margin-bottom: 1rem;
-        text-align: right;
-        width: 10rem;
-      }
-    }
-
-    .deep-dive {
-      align-self: flex-start;
-      display: flex;
-      flex-direction: row;
-
-      h5 {
-        color: $gray;
-        margin: 0;
-        margin-right: 1rem;
-      }
-    }
-  }
-
-  .patientdb-wrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding-left: 5rem;
-    padding-right: 5rem;
-
-    .no-result {
-      align-self: center;
-      display: flex;
-      flex-direction: column;
-      height: 20rem;
-      justify-content: center;
-
-      h5 {
-        color: $gray;
-        font-weight: 600;
-        text-align: center;
-
-        span {
-          color: $pblue !important;
-          font-weight: 900;
-        }
-      }
-    }
-  }
-
-  .legend {
-    z-index: unset;
-  }
-}
-
-.Patients {
-  align-self: center;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  width: 100%;
-
-  & > * {
-    align-self: center;
-  }
-
-  h5 {
-    &.daylabel {
-      color: $pblue;
-    }
-  }
-
-  .day {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .patient-card {
-    background: $gray-light;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: row;
-    height: 3.25rem;
-    justify-content: center;
-    margin: 0.25rem;
-    transition: background 0.3s ease-in-out;
-    width: 3.25rem;
-
-    & > * {
-      align-self: center;
-    }
-
-    &:hover {
-      background: $gray-hover;
-    }
-
-    h3 {
-      color: $gray-mid;
-      font-size: 11px !important;
-      font-weight: 900;
-    }
-
-    &.is-small {
-      background: $gray-hover;
-      height: 1rem;
-      width: 1rem;
-
-      &:hover {
-        background: $gray-mid;
-      }
-
-      &.is-femme {
-        background: $pink;
-      }
-
-      &.is-male {
-        background: $pblue;
-      }
-
-      &.is-local {
-        background: $cherry;
-      }
-
-      &.is-imported {
-        background: $purple;
-      }
-    }
-
-    &.is-femme {
-      background: $pink-mid;
-
-      h3 {
-        color: $pink;
-      }
-
-      &:hover {
-        background: $pink-hover;
-      }
-    }
-
-    &.is-male {
-      background: $pblue-light;
-
-      h3 {
-        color: $pblue;
-      }
-
-      &:hover {
-        background: $pblue-hover;
-      }
-    }
-
-    &.is-local {
-      background: $cherry-light;
-
-      h3 {
-        color: $cherry;
-      }
-
-      &:hover {
-        background: $cherry-hover;
-      }
-    }
-
-    &.is-imported {
-      background: $purple-light;
-
-      h3 {
-        color: $purple;
-      }
-
-      &:hover {
-        background: $purple-hover;
-      }
-    }
-
-    &.is-in {
-      background: url('/flags/india.png');
-      background-size: cover !important;
-
-      h3 {
-        color: transparent;
-      }
-
-      &:hover {
-        background: $gray-light;
-
-        h3 {
-          color: $gray-mid;
-        }
-      }
-    }
-
-    &.is-uk {
-      background: url('/flags/uk.png');
-      background-size: cover !important;
-
-      h3 {
-        color: transparent;
-      }
-
-      &:hover {
-        background: $gray-light;
-
-        h3 {
-          color: $gray-mid;
-        }
-      }
-    }
-
-    &.is-us {
-      background: url('/flags/usa.png');
-      background-size: cover !important;
-
-      h3 {
-        color: transparent;
-      }
-
-      &:hover {
-        background: $gray-light;
-
-        h3 {
-          color: $gray-mid;
-        }
-      }
-    }
-
-    &.is-th {
-      background: url('/flags/thailand.png');
-      background-size: cover !important;
-
-      h3 {
-        color: transparent;
-      }
-
-      &:hover {
-        background: $gray-light;
-
-        h3 {
-          color: $gray-mid;
-        }
-      }
-    }
-
-    &.is-ph {
-      background: url('/flags/philippines.png');
-      background-size: cover !important;
-
-      h3 {
-        color: transparent;
-      }
-
-      &:hover {
-        background: $gray-light;
-
-        h3 {
-          color: $gray-mid;
-        }
-      }
-    }
-
-    &.is-it {
-      background: url('/flags/italy.png');
-      background-size: cover !important;
-
-      h3 {
-        color: transparent;
-      }
-
-      &:hover {
-        background: $gray-light;
-
-        h3 {
-          color: $gray-mid;
-        }
-      }
-    }
-
-    &.is-ca {
-      background: url('/flags/canada.png');
-      background-size: cover !important;
-
-      h3 {
-        color: transparent;
-      }
-
-      &:hover {
-        background: $gray-light;
-
-        h3 {
-          color: $gray-mid;
-        }
-      }
-    }
-
-    &.is-id {
-      background: url('/flags/indonesia.png');
-      background-size: cover !important;
-
-      h3 {
-        color: transparent;
-      }
-
-      &:hover {
-        background: $gray-light;
-
-        h3 {
-          color: $gray-mid;
-        }
-      }
-    }
-
-    &.is-mm {
-      background: url('/flags/myanmar.png');
-      background-size: cover !important;
-
-      h3 {
-        color: transparent;
-      }
-
-      &:hover {
-        background: $gray-light;
-
-        h3 {
-          color: $gray-mid;
-        }
-      }
-    }
-
-    &.age1-9 {
-      background: #006400;
-    }
-
-    &.age10-19 {
-      background: #00008b;
-    }
-
-    &.age20-29 {
-      background: #b03060;
-    }
-
-    &.age30-39 {
-      background: #ff4500;
-    }
-
-    &.age40-49 {
-      background: #ff0;
-    }
-
-    &.age50-59 {
-      background: #deb887;
-    }
-
-    &.age60-69 {
-      background: #0f0;
-    }
-
-    &.age70-79 {
-      background: #0ff;
-    }
-
-    &.age80-89 {
-      background: #f0f;
-    }
-
-    &.age90-99 {
-      background: #6495ed;
-    }
-  }
-}
-
-.DownloadBlock {
-  align-self: center;
-  margin-top: 7rem;
-
-  code {
-    color: $orange-mid;
-  }
-
-  a {
-    color: $orange-mid;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    text-decoration: none !important;
-  }
-
-  .button {
-    background: $orange-light;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    text-align: center;
-
-    & > * {
-      align-self: center !important;
-    }
-
-    &:hover {
-      background: $orange-hover;
-    }
-  }
-
-  svg {
-    stroke: $orange-mid;
-    stroke-width: 3;
-  }
-}
-
-.modal {
-  background: $pblue-mid;
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-  justify-content: center;
-  left: 0;
-  position: fixed;
-  top: 0;
-  width: 100vw;
-  z-index: 9999;
-
-  .modal-content {
-    align-self: center;
-    background: #fff;
-    border-radius: 5px;
-    cursor: default;
-    height: 30rem;
-    overflow-y: auto;
-    padding: 1rem;
-    position: fixed;
-    width: 30rem;
-
-    svg {
-      stroke: $pblue-mid;
-      stroke-width: 3;
-      transition: all 0.1s ease-in-out;
-      width: 20px;
-
-      &:hover {
-        stroke: $pblue;
-      }
-    }
-
-    .close-button {
-      cursor: pointer;
-      position: absolute;
-      right: 1rem;
-    }
-
-    h1 {
-      color: $pblue;
-    }
-
-    h5,
-    h3 {
-      font-weight: 900;
-      margin: 0;
-    }
-
-    h3 {
-      color: $pblue;
-      margin-bottom: 0.5rem;
-    }
-
-    h5 {
-      color: $pblue-mid;
-    }
-
-    .meta {
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-      height: 10rem;
-
-      & > * {
-        width: 10rem;
-      }
-
-      h3 {
-        &.contracted-from {
-          cursor: pointer;
-          text-decoration: underline;
-          text-decoration-style: dotted;
-          transition: all 0.1s ease-in-out;
-          width: 2rem;
-
-          &:hover {
-            background: $pblue-light;
-          }
-        }
-      }
-    }
-
-    .modal-top {
-      display: flex;
-      flex-direction: row;
-
-      & > {
-        align-self: center;
-      }
-    }
-
-    .notes {
-      margin-bottom: 2rem;
-      margin-top: 2rem;
-      width: 10rem;
-    }
-
-    .link {
-      margin: 0;
-      margin-bottom: 0.5rem;
-      margin-top: 0.25rem;
-
-      a {
-        background: $pblue-light;
-        color: $pblue;
-        transition: background 0.2s ease-in-out;
-
-        &:hover {
-          background: $pblue-hover;
-        }
-      }
-    }
-  }
-}
-
-.patients-summary {
-  align-self: center;
-  width: 30rem;
-
-  .Patients {
-    min-height: 5rem;
-  }
-
-  h1 {
-    color: $gray-dark;
-    margin-bottom: 0.25rem;
-  }
-
-  h6 {
-    color: $gray;
-    font-weight: 600;
-    margin: 0;
-    margin-top: 0;
-  }
-
-  .summary {
-    flex-direction: row-reverse;
-    flex-wrap: wrap-reverse;
-  }
-
-  .patients-summary-wrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-
-    & > * {
-      align-self: center;
-    }
-  }
-
-  .button {
-    background: $pblue-light;
-    color: $pblue;
-    display: flex;
-    flex-direction: row;
-    height: 3rem;
-    margin-top: 1rem;
-
-    & > * {
-      align-self: center;
-    }
-
-    &:hover {
-      background: $pblue-hover;
-    }
-  }
-
-  a {
-    color: inherit;
-    display: flex;
-    flex-direction: row;
-    text-decoration: none;
-
-    & > * {
-      align-self: center;
-    }
-  }
-
-  .daylabel {
-    align-self: flex-start;
-  }
-
-  .link {
-    a {
-      display: inline !important;
-      padding-bottom: 0;
-    }
-  }
-
-  .legend {
-    justify-content: flex-start;
-    padding: 1rem;
-    padding-bottom: 0.25rem;
-    padding-left: 0;
-  }
-}
-
-.select {
-  display: flex;
-  flex-direction: column;
-
-  label {
-    color: $gray-mid;
-    font-size: 0.75rem;
-    font-weight: 900;
-    margin-bottom: 0.25rem;
-    text-transform: uppercase;
-  }
-}
-
-.filters {
-  background: #fff !important;
-  border-radius: 5px;
-  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 #dadce0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 0.5rem;
-  position: sticky;
-  top: 0;
-  z-index: 101;
-
-  & > * {
-    align-self: center;
-  }
-
-  .filters-left {
-    display: flex;
-    flex-direction: row;
   }
 }
 
@@ -4046,118 +3154,6 @@ footer {
       border: 0;
       border-bottom-right-radius: 5px;
       border-top-right-radius: 5px;
-    }
-  }
-}
-
-.legend {
-  background: #fff;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  z-index: 101;
-
-  & > * {
-    align-self: center;
-  }
-
-  .legend-left {
-    display: flex;
-    flex-direction: row;
-  }
-
-  select {
-    margin-left: 1rem;
-  }
-
-  h5 {
-    color: $gray;
-    margin: 0;
-    margin-right: 0.5rem;
-
-    &.is-female {
-      color: $pink;
-    }
-
-    &.is-male {
-      color: $pblue;
-    }
-
-    &.is-local {
-      color: $cherry;
-    }
-
-    &.is-imported {
-      color: $purple;
-    }
-  }
-
-  .circle {
-    background: $gray-mid;
-    border-radius: 50%;
-    height: 0.8rem;
-    margin-right: 0.25rem;
-    width: 0.8rem;
-
-    &.is-female {
-      background: $pink;
-    }
-
-    &.is-male {
-      background: $pblue;
-    }
-
-    &.is-local {
-      background: $cherry;
-    }
-
-    &.is-imported {
-      background: $purple;
-    }
-
-    &.is-in {
-      background: url('/flags/india.png');
-      background-size: cover !important;
-    }
-
-    &.is-uk {
-      background: url('/flags/uk.png');
-      background-size: cover !important;
-    }
-
-    &.is-us {
-      background: url('/flags/usa.png');
-      background-size: cover !important;
-    }
-
-    &.is-th {
-      background: url('/flags/thailand.png');
-      background-size: cover !important;
-    }
-
-    &.is-ph {
-      background: url('/flags/philippines.png');
-      background-size: cover !important;
-    }
-
-    &.is-it {
-      background: url('/flags/italy.png');
-      background-size: cover !important;
-    }
-
-    &.is-ca {
-      background: url('/flags/canada.png');
-      background-size: cover !important;
-    }
-
-    &.is-id {
-      background: url('/flags/indonesia.png');
-      background-size: cover !important;
-    }
-
-    &.is-mm {
-      background: url('/flags/myanmar.png');
-      background-size: cover !important;
     }
   }
 }
@@ -4502,56 +3498,6 @@ footer {
   cursor: pointer;
 }
 
-.cards-container {
-  margin-left: 5rem;
-  padding: 2rem;
-
-  .cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-
-    .card {
-      flex: 0 1 calc(33% - 1em);
-      height: 30rem;
-      margin-bottom: 2em;
-
-      .charts-header {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        justify-content: flex-start;
-
-        .chart-title {
-          color: #6c757d;
-          font-size: 1.5rem !important;
-          font-weight: 900;
-          padding: 20px 0;
-          text-transform: uppercase;
-        }
-
-        .chart-content {
-          height: 100%;
-          width: 100%;
-        }
-
-        .chart-note {
-          color: $gray;
-          font-size: 0.8rem;
-          height: 50px;
-          margin-top: 5px;
-        }
-      }
-    }
-  }
-
-  @media (max-width: 769px) {
-    margin-left: unset;
-    padding: 1rem;
-  }
-}
-
 .Tooltip {
   display: flex;
   flex-direction: column;
@@ -4663,20 +3609,16 @@ footer {
 
 @media (max-width: 769px) {
   .table,
-  .fineprint,
   .header,
   .TimeseriesExplorer,
   .StateHeader,
   .Links,
   .Summary,
-  .FAQ,
+  .About,
   .MapExplorer,
-  .filters,
-  .map-switcher,
   .updates,
   .updates-header,
   .StateMeta,
-  .Essentials,
   .timeline,
   .LanguageSwitcher {
     width: calc(100% - 2rem);
@@ -5218,7 +4160,7 @@ footer {
     }
   }
 
-  .FAQ {
+  .About {
     .question {
       color: $gray !important;
     }
