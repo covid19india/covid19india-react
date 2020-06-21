@@ -440,9 +440,19 @@ export const INITIAL_DATA = {
   },
 };
 
-export const DARK_BACKGROUND_COLORS = Object.freeze({
-  DIM: '#1B1F23',
-  LIGHTS_OUT: '#000',
+export const BACKGROUND_COLORS = Object.freeze({
+  DEFAULT: {
+    name: 'Default',
+    color: '#FFF',
+  },
+  DIM: {
+    name: 'Dim',
+    color: '#1B1F23',
+  },
+  LIGHTS_OUT: {
+    name: 'Lights out',
+    color: '#000',
+  },
 });
 
 export const PRIMARY_COLORS = Object.freeze([
