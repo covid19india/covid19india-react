@@ -457,7 +457,13 @@ function MapVisualizer({
           ref={svgRef}
         >
           <g className="regions" />
-          <g className="state-borders" />
+          <g
+            className={`state-borders ${
+              currentMap.option === MAP_OPTIONS.HOTSPOTS
+                ? 'dark-hotspot-border'
+                : null
+            }`}
+          />
           {currentMap.view === MAP_VIEWS.DISTRICTS && (
             <g className="district-borders" />
           )}
