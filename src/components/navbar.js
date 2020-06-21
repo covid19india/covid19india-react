@@ -123,7 +123,7 @@ function Navbar({
             </span>
             <span>
               <Link to="/blog">
-                <Icon.Book {...activeNavIcon('/about')} />
+                <Icon.Book {...activeNavIcon('/blog')} />
               </Link>
             </span>
             <span>{windowSize.width > 768 && <SunMoon {...{darkMode}} />}</span>
