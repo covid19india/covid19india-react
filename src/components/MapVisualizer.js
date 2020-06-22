@@ -64,7 +64,6 @@ function MapVisualizer({
   setRegionHighlighted,
   statistic,
   isCountryLoaded,
-  children: Panel,
 }) {
   const {t} = useTranslation();
   const svgRef = useRef(null);
@@ -229,8 +228,8 @@ function MapVisualizer({
           (d) => d.id
         )
         .join(
-          (enter) => {
-            const sel = enter
+          (enter) =>
+            enter
               .append('path')
               .attr('d', path)
               .attr('stroke-width', 1.8)
@@ -244,22 +243,22 @@ function MapVisualizer({
               })
               .on('mouseleave', (d) => {
                 setRegionHighlighted({
-                  stateCode: 'TT',
+                  stateCode: currentMap.code,
                   districtName: null,
                 });
               })
-              .attr('fill', fillColor)
-              .attr('stroke', strokeColor);
-            sel.append('title');
-            return sel;
-          },
-          (update) =>
-            update.call((update) =>
-              update
-                .transition(T)
-                .attr('fill', fillColor)
-                .attr('stroke', strokeColor)
-            )
+              .attr('fill', '#fff0')
+              .attr('stroke', '#fff0')
+              .call((enter) => {
+                enter.append('title');
+              }),
+          (update) => update,
+          (exit) =>
+            exit
+              .transition(T)
+              .attr('stroke', '#fff0')
+              .attr('fill', '#fff0')
+              .remove()
         )
         .attr('pointer-events', 'all')
         .on('click', (d) => {
@@ -282,13 +281,16 @@ function MapVisualizer({
               window.innerWidth < 769 ? '#MapExplorer' : ''
             }`
           );
+        })
+        .call((sel) => {
+          sel.transition(T).attr('fill', fillColor).attr('stroke', strokeColor);
         });
-
       window.requestIdleCallback(() => {
         populateTexts(regionSelection);
       });
     });
   }, [
+    currentMap.code,
     currentMap.option,
     data,
     features,
@@ -332,22 +334,26 @@ function MapVisualizer({
         .select('.circles')
         .selectAll('circle')
         .data(circlesData, (d) => d.id)
-        .join((enter) =>
-          enter
-            .append('circle')
-            .attr('transform', (d) => `translate(${path.centroid(d)})`)
-            .attr('fill-opacity', 0.5)
-            .style('cursor', 'pointer')
-            .attr('pointer-events', 'all')
-            .on('mouseenter', (d) => {
-              setRegionHighlighted({
-                stateCode: STATE_CODES[d.properties.st_nm],
-                districtName: d.properties.district || UNKNOWN_DISTRICT_KEY,
-              });
-            })
-            .on('click', () => {
-              event.stopPropagation();
-            })
+        .join(
+          (enter) =>
+            enter
+              .append('circle')
+              .attr('transform', (d) => `translate(${path.centroid(d)})`)
+              .attr('fill-opacity', 0.5)
+              .style('cursor', 'pointer')
+              .attr('pointer-events', 'all')
+              .on('mouseenter', (d) => {
+                setRegionHighlighted({
+                  stateCode: STATE_CODES[d.properties.st_nm],
+                  districtName: d.properties.district || UNKNOWN_DISTRICT_KEY,
+                });
+              })
+              .on('click', () => {
+                event.stopPropagation();
+              }),
+          (update) => update,
+          (exit) =>
+            exit.call((exit) => exit.transition(T).attr('r', 0).remove())
         )
         .transition(T)
         .attr('fill', COLORS[statistic] + '70')
@@ -408,11 +414,11 @@ function MapVisualizer({
   }, [
     geoData,
     mapMeta,
+    currentMap.code,
     currentMap.option,
     currentMap.view,
     statistic,
     path,
-    currentMap.code,
   ]);
 
   useEffect(() => {
@@ -470,9 +476,7 @@ function MapVisualizer({
           {currentMap.view === MAP_VIEWS.DISTRICTS && (
             <g className="district-borders" />
           )}
-          {currentMap.option === MAP_OPTIONS.HOTSPOTS && (
-            <g className="circles" />
-          )}
+          <g className="circles" />
         </svg>
         {mapMeta.mapType === MAP_TYPES.STATE &&
           !!getTotalStatistic(
@@ -490,7 +494,12 @@ function MapVisualizer({
           )}
       </div>
 
-      {Panel}
+      {mapScale && (
+        <MapLegend
+          mapOption={currentMap.option}
+          {...{data, mapScale, statistic}}
+        />
+      )}
 
       <svg style={{position: 'absolute', height: 0}}>
         <defs>

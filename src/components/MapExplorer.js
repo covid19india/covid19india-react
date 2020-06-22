@@ -43,7 +43,6 @@ function MapExplorer({
   mapStatistic,
   setMapStatistic,
   isCountryLoaded = true,
-  children: Minigraphs,
 }) {
   const {t} = useTranslation();
   const mapExplorerRef = useRef();
