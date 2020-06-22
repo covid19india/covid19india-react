@@ -1,10 +1,6 @@
 import TimeseriesLoader from './loaders/Timeseries';
 
-import {
-  STATE_NAMES,
-  TIMESERIES_CHART_TYPES,
-  TIMESERIES_OPTIONS,
-} from '../constants';
+import {TIMESERIES_CHART_TYPES, TIMESERIES_OPTIONS} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {getIndiaYesterdayISO, parseIndiaDate} from '../utils/commonFunctions';
 

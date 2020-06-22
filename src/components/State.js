@@ -89,6 +89,8 @@ function State(props) {
     config: config.gentle,
   });
 
+  const lookback = showAllDistricts ? 10 : 6;
+
   return (
     <React.Fragment>
       <Helmet>
@@ -198,14 +200,16 @@ function State(props) {
                   {(mapStatistic === 'confirmed' ||
                     mapStatistic === 'deceased') && (
                     <div className="happy-sign">
-                      {Object.keys(timeseries[stateCode] || {}).every(
-                        (date) =>
-                          getStatistic(
-                            timeseries[stateCode][date],
-                            'delta',
-                            mapStatistic
-                          ) === 0
-                      ) && (
+                      {Object.keys(timeseries[stateCode] || {})
+                        .slice(-lookback)
+                        .every(
+                          (date) =>
+                            getStatistic(
+                              timeseries[stateCode][date],
+                              'delta',
+                              mapStatistic
+                            ) === 0
+                        ) && (
                         <div
                           className={`alert ${
                             mapStatistic === 'confirmed' ? 'is-green' : ''
@@ -221,8 +225,7 @@ function State(props) {
                   )}
                   <DeltaBarGraph
                     timeseries={timeseries[stateCode] || {}}
-                    {...{stateCode}}
-                    lookback={showAllDistricts ? 10 : 6}
+                    {...{stateCode, lookback}}
                     statistic={mapStatistic}
                   />
                 </animated.div>
