@@ -121,6 +121,11 @@ function Navbar({
                 <Icon.HelpCircle {...activeNavIcon('/about')} />
               </Link>
             </span>
+            <span>
+              <Link to="/blog">
+                <Icon.Book {...activeNavIcon('/about')} />
+              </Link>
+            </span>
             <span>{windowSize.width > 768 && <SunMoon {...{darkMode}} />}</span>
           </React.Fragment>
         )}
