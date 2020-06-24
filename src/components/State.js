@@ -8,7 +8,15 @@ import {STATE_NAMES} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {fetcher, formatNumber, getStatistic} from '../utils/commonFunctions';
 
-import React, {useMemo, useState, lazy, Suspense, useRef} from 'react';
+import produce from 'immer';
+import React, {
+  useMemo,
+  useState,
+  useEffect,
+  lazy,
+  Suspense,
+  useRef,
+} from 'react';
 import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
@@ -31,6 +39,14 @@ function State(props) {
     stateCode: stateCode,
     districtName: null,
   });
+
+  useEffect(() => {
+    setRegionHighlighted(
+      produce(regionHighlighted, (draftRegionHighlighted) => {
+        draftRegionHighlighted.stateCode = stateCode;
+      })
+    );
+  }, [regionHighlighted, stateCode]);
 
   const {data: timeseries} = useSWR(
     'https://api.covid19india.org/v3/min/timeseries.min.json',

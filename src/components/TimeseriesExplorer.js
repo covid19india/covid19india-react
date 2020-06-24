@@ -1,6 +1,10 @@
 import TimeseriesLoader from './loaders/Timeseries';
 
-import {TIMESERIES_CHART_TYPES, TIMESERIES_OPTIONS} from '../constants';
+import {
+  TIMESERIES_CHART_TYPES,
+  TIMESERIES_OPTIONS,
+  STATE_NAMES,
+} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {getIndiaYesterdayISO, parseIndiaDate} from '../utils/commonFunctions';
 
@@ -138,6 +142,10 @@ function TimeseriesExplorer({
             />
           </animated.div>
         </div>
+      </div>
+
+      <div className="region-highlighted">
+        {STATE_NAMES[regionHighlighted.stateCode]}
       </div>
 
       {isVisible && (

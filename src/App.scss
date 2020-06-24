@@ -2631,6 +2631,13 @@ abbr {
     margin: 0;
     margin-top: 1rem;
   }
+
+  .region-highlighted {
+    color: $brick;
+    font-weight: 900;
+    margin-top: .75rem;
+    font-size: 14px;
+  }
 }
 
 .Timeseries {
@@ -2839,7 +2846,7 @@ input {
 
     h5 {
       &.title {
-        color: $cherry;
+        color: $cherry-mid;
       }
     }
 
@@ -2867,7 +2874,7 @@ input {
         color: $green-mid;
 
         &.title {
-          color: $green;
+          color: $green-mid;
         }
       }
 
@@ -2882,7 +2889,7 @@ input {
         color: $gray-mid;
 
         &.title {
-          color: $gray;
+          color: $gray-mid;
         }
       }
 
@@ -2897,7 +2904,7 @@ input {
         color: $blue-mid;
 
         &.title {
-          color: $blue;
+          color: $blue-mid;
         }
       }
 
@@ -2912,7 +2919,7 @@ input {
         color: $purple-mid;
 
         &.title {
-          color: $purple;
+          color: $purple-mid;
         }
       }
 
@@ -3109,7 +3116,6 @@ input {
 footer {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   margin-bottom: 5rem;
   margin-top: 5rem;
   width: 100%;
@@ -3123,11 +3129,11 @@ footer {
     color: $gray;
     font-weight: 600;
     margin: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 3.5rem;
   }
 
   svg {
-    padding: 1rem;
+    padding: .25rem;
   }
 
   .github {
