@@ -202,9 +202,7 @@ function MapExplorer({
               ` (${t(STATE_NAMES[regionHighlighted.stateCode])})`}
           </h2>
 
-          {((currentMap.view === MAP_VIEWS.DISTRICTS &&
-            regionHighlighted.districtName) ||
-            (currentMap.view === MAP_VIEWS.STATES && true)) && (
+          {regionHighlighted.stateCode && (
             <h1 className={classnames('district', mapStatistic)}>
               {formatNumber(
                 getStatistic(

@@ -24,87 +24,90 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
   const dimensions = useResizeObserver(wrapperRef);
 
   useEffect(() => {
-    const svg = select(svgRef.current);
-    let {width, height} =
-      dimensions || wrapperRef.current.getBoundingClientRect();
+    window.requestIdleCallback(() => {
+      const svg = select(svgRef.current);
+      let {width, height} =
+        dimensions || wrapperRef.current.getBoundingClientRect();
 
-    if (!width || !height)
-      ({width, height} = wrapperRef.current.getBoundingClientRect());
+      if (!width || !height)
+        ({width, height} = wrapperRef.current.getBoundingClientRect());
 
-    if (mapOption === MAP_OPTIONS.HOTSPOTS) {
-      const t = svg.transition().duration(D3_TRANSITION_DURATION);
-      svg
-        .select('.ramp')
-        .transition(t)
-        .attr('opacity', 0)
-        .attr('xlink:href', null);
+      if (mapOption === MAP_OPTIONS.HOTSPOTS) {
+        const t = svg.transition().duration(D3_TRANSITION_DURATION);
+        svg
+          .select('.ramp')
+          .transition(t)
+          .attr('opacity', 0)
+          .attr('xlink:href', null);
 
-      svg
-        .select('.bars')
-        .selectAll('rect')
-        .transition(t)
-        .attr('opacity', 0)
-        .remove();
-      svg.selectAll('.axis > *:not(.axistext)').remove();
-      svg.select('.axistext').text('');
+        svg
+          .select('.bars')
+          .selectAll('rect')
+          .transition(t)
+          .attr('opacity', 0)
+          .remove();
+        svg.selectAll('.axis > *:not(.axistext)').remove();
+        svg.select('.axistext').text('');
 
-      const domainMax = mapScale.domain()[1];
+        const domainMax = mapScale.domain()[1];
 
-      const legend = svg
-        .select('.circles')
-        .attr('transform', `translate(48,40)`)
-        .attr('text-anchor', 'middle');
+        const legend = svg
+          .select('.circles')
+          .attr('transform', `translate(48,40)`)
+          .attr('text-anchor', 'middle');
 
-      legend
-        .selectAll('circle')
-        .data([domainMax / 10, (domainMax * 2) / 5, domainMax])
-        .join('circle')
-        .attr('fill', 'none')
-        .attr('stroke', '#ccc')
-        .transition(t)
-        .attr('cy', (d) => -mapScale(d))
-        .attr('r', mapScale);
+        legend
+          .selectAll('circle')
+          .data([domainMax / 10, (domainMax * 2) / 5, domainMax])
+          .join('circle')
+          .attr('fill', 'none')
+          .attr('stroke', '#ccc')
+          .transition(t)
+          .attr('cy', (d) => -mapScale(d))
+          .attr('r', mapScale);
 
-      const yScale = mapScale.copy().range([0, -2 * mapScale(domainMax)]);
+        const yScale = mapScale.copy().range([0, -2 * mapScale(domainMax)]);
 
-      svg
-        .select('.circleAxis')
-        .attr('transform', `translate(48,50)`)
-        .transition(t)
-        .call(
-          axisRight(yScale)
-            .tickSize(0)
-            .tickPadding(0)
-            .tickValues([domainMax / 10, (domainMax * 2) / 5, domainMax])
-            .tickFormat(format('0~s'))
-        )
-        .selectAll('.tick text')
-        .style('text-anchor', 'middle');
+        svg
+          .select('.circleAxis')
+          .attr('transform', `translate(48,50)`)
+          .transition(t)
+          .call(
+            axisRight(yScale)
+              .tickSize(0)
+              .tickPadding(0)
+              .tickValues([domainMax / 10, (domainMax * 2) / 5, domainMax])
+              .tickFormat(format('0~s'))
+          )
+          .selectAll('.tick text')
+          .style('text-anchor', 'middle');
 
-      svg.select('.circleAxis').call((g) => g.select('.domain').remove());
-    } else {
-      svg.call(() =>
-        legend({
-          svg: svg,
-          color: mapScale,
-          title:
-            mapOption === MAP_OPTIONS.PER_MILLION
-              ? `${t(capitalize(statistic))} ${t('cases per million')}`
-              : `${t(capitalize(statistic))} ${t('cases')}`,
-          width: width,
-          height: height,
-          ticks: 5,
-          tickFormat: function (d, i, n) {
-            if (mapOption === MAP_OPTIONS.TOTAL && !Number.isInteger(d)) return;
-            if (i === n.length - 1) return formatNumber(d) + '+';
-            return formatNumber(d);
-          },
-          marginLeft: 2,
-          marginRight: 0,
-        })
-      );
-    }
-    svg.attr('class', mapOption === MAP_OPTIONS.ZONES ? 'zone' : '');
+        svg.select('.circleAxis').call((g) => g.select('.domain').remove());
+      } else {
+        svg.call(() =>
+          legend({
+            svg: svg,
+            color: mapScale,
+            title:
+              mapOption === MAP_OPTIONS.PER_MILLION
+                ? `${t(capitalize(statistic))} ${t('cases per million')}`
+                : `${t(capitalize(statistic))} ${t('cases')}`,
+            width: width,
+            height: height,
+            ticks: 5,
+            tickFormat: function (d, i, n) {
+              if (mapOption === MAP_OPTIONS.TOTAL && !Number.isInteger(d))
+                return;
+              if (i === n.length - 1) return formatNumber(d) + '+';
+              return formatNumber(d);
+            },
+            marginLeft: 2,
+            marginRight: 0,
+          })
+        );
+      }
+      svg.attr('class', mapOption === MAP_OPTIONS.ZONES ? 'zone' : '');
+    });
   }, [t, dimensions, mapScale, mapOption, statistic]); // totalZones
 
   return (

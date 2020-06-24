@@ -4,7 +4,6 @@ import TableDeltaHelper from './snippets/TableDeltaHelper';
 
 import {TABLE_FADE_IN, TABLE_FADE_OUT} from '../animations';
 import {TABLE_STATISTICS, STATE_POPULATIONS_MIL} from '../constants';
-import useIsVisible from '../hooks/useIsVisible';
 import {getStatistic} from '../utils/commonFunctions';
 
 import {
@@ -15,7 +14,7 @@ import {
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React, {useCallback, useState, useRef, lazy} from 'react';
+import React, {useCallback, useState, lazy} from 'react';
 import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
@@ -71,8 +70,6 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
     config: config.wobbly,
   });
 
-  const tableElement = useRef();
-  const isVisible = useIsVisible(tableElement);
   const [districts, setDistricts] = useState();
 
   const [tableOption, setTableOption] = useState('States');
@@ -282,7 +279,6 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
                 !(stateCode === 'UN' && isPerMillion)
             )
             .sort((a, b) => sortingFunction(a, b))
-            .slice(0, isVisible ? Object.keys(states).length - 1 : 10)
             .map((stateCode) => {
               return (
                 <Row
@@ -299,7 +295,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
         {districts &&
           Object.keys(districts)
             .sort((a, b) => sortingFunction(a, b))
-            .slice(0, 50)
+            .slice(0, 30)
             .map((districtName) => {
               return (
                 <Row
@@ -313,8 +309,6 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
                 />
               );
             })}
-
-        <span className="intersection" ref={tableElement}></span>
 
         <Row
           key={'TT'}

@@ -429,6 +429,7 @@ function MapVisualizer({
     path,
   ]);
 
+  const highlightThreadId = useRef();
   // Highlight
   useEffect(() => {
     const stateName = STATE_NAMES[regionHighlighted.stateCode];
@@ -436,31 +437,35 @@ function MapVisualizer({
 
     const svg = select(svgRef.current);
 
-    if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
-      svg
-        .select('.circles')
-        .selectAll('circle')
-        .attr('fill-opacity', (d) => {
-          const highlighted =
-            stateName === d.properties.st_nm &&
-            (!district ||
-              district === d.properties?.district ||
-              (district === UNKNOWN_DISTRICT_KEY && !d.properties.district));
-          return highlighted ? 1 : 0.5;
-        });
-    } else {
-      svg
-        .select('.regions')
-        .selectAll('path')
-        .each(function (d) {
-          const highlighted =
-            stateName === d.properties.st_nm &&
-            (currentMap.view === MAP_VIEWS.STATES ||
-              district === d.properties?.district);
-          if (highlighted) this.parentNode.appendChild(this);
-          select(this).attr('stroke-opacity', highlighted ? 1 : 0);
-        });
-    }
+    window.cancelIdleCallback(highlightThreadId.current);
+
+    highlightThreadId.current = window.requestIdleCallback(() => {
+      if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
+        svg
+          .select('.circles')
+          .selectAll('circle')
+          .attr('fill-opacity', (d) => {
+            const highlighted =
+              stateName === d.properties.st_nm &&
+              (!district ||
+                district === d.properties?.district ||
+                (district === UNKNOWN_DISTRICT_KEY && !d.properties.district));
+            return highlighted ? 1 : 0.25;
+          });
+      } else {
+        svg
+          .select('.regions')
+          .selectAll('path')
+          .each(function (d) {
+            const highlighted =
+              stateName === d.properties.st_nm &&
+              (currentMap.view === MAP_VIEWS.STATES ||
+                district === d.properties?.district);
+            if (highlighted) this.parentNode.appendChild(this);
+            select(this).attr('stroke-opacity', highlighted ? 1 : 0);
+          });
+      }
+    });
   }, [
     geoData,
     data,

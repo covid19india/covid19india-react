@@ -14,8 +14,10 @@ const useIsVisible = (elementRef) => {
       const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.unobserve(elementRef.current);
+            window.requestIdleCallback(() => {
+              setIsVisible(true);
+              observer.unobserve(elementRef.current);
+            });
           }
         });
       }, OPTIONS);
