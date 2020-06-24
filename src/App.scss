@@ -2243,6 +2243,13 @@ abbr {
           fill: $cherry-light;
         }
 
+        .boundary {
+          svg {
+            fill: $cherry-mid;
+            stroke: none;
+          }
+        }
+
         .is-highlighted {
           background: $cherry-light;
 
@@ -2256,6 +2263,13 @@ abbr {
         svg {
           stroke: $blue-mid;
           fill: $blue-light;
+        }
+
+        .boundary {
+          svg {
+            fill: $blue-mid;
+            stroke: none;
+          }
         }
 
         .is-highlighted {
@@ -2273,6 +2287,13 @@ abbr {
           fill: $green-light;
         }
 
+        .boundary {
+          svg {
+            fill: $green-mid;
+            stroke: none;
+          }
+        }
+
         .is-highlighted {
           background: $green-light;
 
@@ -2286,6 +2307,13 @@ abbr {
         svg {
           stroke: $gray-mid;
           fill: $gray-light;
+        }
+
+        .boundary {
+          svg {
+            fill: $gray-mid;
+            stroke: none;
+          }
         }
 
         .is-highlighted {
@@ -2331,6 +2359,11 @@ abbr {
           &:not(:last-child) {
             margin-right: .25rem;
           }
+        }
+
+        .divider {
+          width: 2px !important;
+          border-radius: 5px;
         }
       }
 

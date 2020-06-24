@@ -1,6 +1,3 @@
-import MapSwitcher from './MapSwitcher';
-import StateHeader from './StateHeader';
-
 import {MAP_META} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
@@ -19,6 +16,8 @@ const Minigraphs = lazy(() => import('./Minigraphs'));
 const Footer = lazy(() => import('./Footer'));
 const Search = lazy(() => import('./Search'));
 const Level = lazy(() => import('./Level'));
+const MapSwitcher = lazy(() => import('./MapSwitcher'));
+const StateHeader = lazy(() => import('./StateHeader'));
 
 function Home(props) {
   const [regionHighlighted, setRegionHighlighted] = useState({
@@ -27,7 +26,7 @@ function Home(props) {
   });
 
   const [anchor, setAnchor] = useState(null);
-  const [mapStatistic, setMapStatistic] = useState('recovered');
+  const [mapStatistic, setMapStatistic] = useState('confirmed');
   const [date, setDate] = useState('');
   const location = useLocation();
 
