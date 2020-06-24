@@ -10,14 +10,17 @@ import {
   UNKNOWN_DISTRICT_KEY,
   PRIMARY_STATISTICS,
 } from '../constants';
-import {formatNumber, getStatistic} from '../utils/commonFunctions';
+import {formatNumber, getStatistic, capitalize} from '../utils/commonFunctions';
 
-import {DotFillIcon, ArrowLeftIcon} from '@primer/octicons-v2-react';
+import {
+  DotFillIcon,
+  ArrowLeftIcon,
+  OrganizationIcon,
+} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {
-  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -25,7 +28,6 @@ import React, {
   Suspense,
   lazy,
 } from 'react';
-import ReactDOM from 'react-dom';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {animated, config, useTrail} from 'react-spring';
@@ -34,7 +36,7 @@ import {useWindowSize} from 'react-use';
 const MapVisualizer = lazy(() => import('./MapVisualizer'));
 
 function MapExplorer({
-  stateCode,
+  stateCode = 'TT',
   data,
   regionHighlighted,
   setRegionHighlighted,
@@ -53,108 +55,15 @@ function MapExplorer({
     view: MAP_VIEWS.DISTRICTS,
     option:
       MAP_META[stateCode].mapType === MAP_TYPES.COUNTRY
-        ? MAP_OPTIONS.TOTAL
-        : MAP_OPTIONS.HOTSPOTS,
+        ? MAP_OPTIONS.HOTSPOTS
+        : MAP_OPTIONS.TOTAL,
   });
-  const currentMapMeta = MAP_META[currentMap.code];
 
+  const currentMapMeta = MAP_META[currentMap.code];
   const currentMapData =
     currentMapMeta.mapType === MAP_TYPES.COUNTRY
       ? data
       : {[currentMap.code]: data[currentMap.code]};
-
-  useEffect(() => {
-    if (regionHighlighted.districtName) {
-      if (
-        currentMap.code !== regionHighlighted.stateCode &&
-        !(
-          currentMapMeta.mapType === MAP_TYPES.COUNTRY &&
-          currentMap.view === MAP_VIEWS.DISTRICTS
-        )
-      ) {
-        const newMapMeta = MAP_META[regionHighlighted.stateCode];
-        if (!newMapMeta) {
-          return;
-        }
-        setCurrentMap({
-          code: regionHighlighted.stateCode,
-          view: MAP_VIEWS.DISTRICTS,
-          option:
-            currentMap.option === MAP_OPTIONS.PER_MILLION
-              ? MAP_OPTIONS.TOTAL
-              : currentMap.option,
-        });
-      }
-    } else if (isCountryLoaded && currentMapMeta.mapType === MAP_TYPES.STATE) {
-      setCurrentMap({
-        code: 'TT',
-        view:
-          currentMap.option === MAP_OPTIONS.ZONES
-            ? MAP_VIEWS.DISTRICTS
-            : MAP_VIEWS.STATES,
-        option: currentMap.option,
-      });
-    }
-  }, [
-    isCountryLoaded,
-    regionHighlighted.stateCode,
-    regionHighlighted.districtName,
-    currentMap.code,
-    currentMap.option,
-    currentMap.view,
-    currentMapMeta.mapType,
-  ]);
-
-  const switchMap = useCallback(
-    (stateCode) => {
-      const newMapMeta = MAP_META[stateCode];
-      if (!newMapMeta) {
-        return;
-      }
-      if (newMapMeta.mapType === MAP_TYPES.STATE) {
-        const districts = data[stateCode].districts || {};
-        const topDistrict = Object.keys(districts).sort(
-          (a, b) =>
-            getStatistic(districts[b], 'total', mapStatistic) -
-            getStatistic(districts[a], 'total', mapStatistic)
-        )[0];
-        ReactDOM.unstable_batchedUpdates(() => {
-          setRegionHighlighted({
-            stateCode: stateCode,
-            districtName: topDistrict,
-          });
-          setCurrentMap({
-            code: stateCode,
-            view: MAP_VIEWS.DISTRICTS,
-            option:
-              currentMap.option === MAP_OPTIONS.PER_MILLION
-                ? MAP_OPTIONS.TOTAL
-                : currentMap.option,
-          });
-        });
-      } else {
-        ReactDOM.unstable_batchedUpdates(() => {
-          setCurrentMap({
-            code: 'TT',
-            view:
-              currentMap.option === MAP_OPTIONS.HOTSPOTS
-                ? MAP_VIEWS.DISTRICTS
-                : MAP_VIEWS.STATES,
-            option: currentMap.option,
-          });
-          setRegionHighlighted({
-            stateCode: 'TT',
-            districtName: null,
-          });
-        });
-      }
-    },
-    [data, currentMap.option, mapStatistic, setRegionHighlighted]
-  );
-
-  useEffect(() => {
-    switchMap(stateCode);
-  }, [stateCode, switchMap]);
 
   const hoveredRegion = useMemo(() => {
     const hoveredData =
@@ -163,6 +72,7 @@ function MapExplorer({
             regionHighlighted.districtName
           ]
         : data[regionHighlighted.stateCode]) || {};
+
     return produce(hoveredData, (draft) => {
       draft.name =
         regionHighlighted.districtName ||
@@ -178,10 +88,7 @@ function MapExplorer({
       case MAP_OPTIONS.TOTAL:
         setCurrentMap({
           code: currentMap.code,
-          view:
-            currentMapMeta.mapType === MAP_TYPES.COUNTRY
-              ? MAP_VIEWS.STATES
-              : MAP_VIEWS.DISTRICTS,
+          view: currentMap.view,
           option: MAP_OPTIONS.TOTAL,
         });
         if (currentMapMeta.mapType === MAP_TYPES.COUNTRY)
@@ -190,6 +97,7 @@ function MapExplorer({
             districtName: null,
           });
         return;
+
       case MAP_OPTIONS.PER_MILLION:
         if (currentMapMeta.mapType === MAP_TYPES.STATE) return;
         setCurrentMap({
@@ -202,29 +110,39 @@ function MapExplorer({
           districtName: null,
         });
         return;
+
       case MAP_OPTIONS.HOTSPOTS:
         setCurrentMap({
           code: currentMap.code,
-          view: MAP_VIEWS.DISTRICTS,
+          view: currentMap.view,
           option: MAP_OPTIONS.HOTSPOTS,
         });
         return;
-      case MAP_OPTIONS.ZONES:
-        setCurrentMap({
-          code: currentMap.code,
-          view: MAP_VIEWS.DISTRICTS,
-          option: MAP_OPTIONS.ZONES,
-        });
-        if (currentMapMeta.mapType === MAP_TYPES.COUNTRY)
-          setRegionHighlighted({
-            stateCode: 'TT',
-            districtName: null,
-          });
-        return;
+
       default:
         return;
     }
   };
+
+  const ChoroplethIcon = useMemo(
+    () => (
+      <svg
+        width="314"
+        height="314"
+        viewBox="0 0 314 314"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M78.2861 145.778C80.6671 155.387 84.6108 164.28 92.421 170.488C94.5409 174.766 93.7381 180.115 96.2412 184.535C99.7619 190.751 102.898 195.156 110.758 195.156C119.259 195.156 127.582 192.241 132.576 184.963C136.539 179.187 143.562 174.194 150.658 178.968C156.039 182.587 157.864 191.253 161.949 196.312C168.044 203.859 175.962 212.131 184.107 217.339C190.795 221.615 199.602 221.297 207.368 220.551C214.111 219.903 220.088 212.137 223.71 207.189C227.102 202.555 230.602 198.075 233.006 192.843C238.463 180.961 236.721 162.008 225.62 153.958C213.23 144.974 196.881 145.725 183.343 139.654C175.796 136.27 175.843 122.587 174.174 115.758C172.492 108.876 170.655 99.867 164.581 95.3733C155.36 88.5509 146.436 93.7458 137.075 96.444C133.325 97.525 131.816 100.817 129.095 103.424L129.093 103.426C126.105 106.29 121.531 110.674 117.974 112.632C113.709 114.979 111.262 119.456 105.834 119.612C104.487 119.651 98.6801 120.375 97.7693 119.227C94.2704 114.814 92.1979 113.445 86.6906 113.445C83.0636 113.445 77.14 118.241 77.14 122.31C77.14 130.086 76.4094 138.205 78.2861 145.778Z"
+          strokeWidth="10"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+    []
+  );
 
   const BubblesIcon = useMemo(
     () => (
@@ -300,7 +218,7 @@ function MapExplorer({
               )}
               <br />
               <span>
-                {t(mapStatistic)}
+                {t(capitalize(mapStatistic))}
                 {currentMap.option === MAP_OPTIONS.PER_MILLION &&
                   ` ${t('per million')}`}
               </span>
@@ -317,7 +235,7 @@ function MapExplorer({
               onClick={() => handleTabClick(MAP_OPTIONS.TOTAL)}
               style={trail[1]}
             >
-              <DotFillIcon size={36} />
+              {ChoroplethIcon}
             </animated.div>
             <animated.div
               className={classnames('bubble', {
@@ -328,6 +246,30 @@ function MapExplorer({
             >
               {BubblesIcon}
             </animated.div>
+
+            {currentMapMeta.mapType === MAP_TYPES.COUNTRY && (
+              <React.Fragment>
+                <div className="divider" />
+                <animated.div
+                  className={classnames('boundary', {
+                    'is-highlighted': currentMap.view === MAP_VIEWS.DISTRICTS,
+                  })}
+                  onClick={() => {
+                    setCurrentMap(
+                      produce(currentMap, (currentMapDraft) => {
+                        currentMapDraft.view =
+                          currentMap.view === MAP_VIEWS.DISTRICTS
+                            ? MAP_VIEWS.STATES
+                            : MAP_VIEWS.DISTRICTS;
+                      })
+                    );
+                  }}
+                  style={trail[2]}
+                >
+                  <OrganizationIcon />
+                </animated.div>
+              </React.Fragment>
+            )}
 
             {currentMapMeta.mapType === MAP_TYPES.STATE && (
               <animated.div
@@ -378,7 +320,6 @@ function MapExplorer({
             <MapVisualizer
               currentMap={currentMap}
               data={currentMapData}
-              changeMap={switchMap}
               regionHighlighted={regionHighlighted}
               setRegionHighlighted={setRegionHighlighted}
               statistic={mapStatistic}

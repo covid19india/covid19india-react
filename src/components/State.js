@@ -25,7 +25,7 @@ function State(props) {
 
   const stateCode = useParams().stateCode.toUpperCase();
 
-  const [mapStatistic, setMapStatistic] = useState('recovered');
+  const [mapStatistic, setMapStatistic] = useState('active');
   const [showAllDistricts, setShowAllDistricts] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState({
     stateCode: stateCode,
@@ -115,7 +115,6 @@ function State(props) {
 
           <Suspense fallback={<div style={{minHeight: '50rem'}} />}>
             <MapExplorer
-              isCountryLoaded={false}
               {...{
                 stateCode,
                 data,

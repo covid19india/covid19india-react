@@ -23,24 +23,6 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
 
-  // const totalZones = useMemo(() => {
-  //   return Object.values(data).reduce(
-  //     (counts, stateData) => {
-  //       if (stateData?.districts) {
-  //         Object.values(stateData.districts).forEach((districtData) => {
-  //           if (districtData?.zone?.status)
-  //             counts[districtData.zone.status] += 1;
-  //         });
-  //       }
-  //       return counts;
-  //     },
-  //     Object.keys(ZONE_COLORS).reduce((count, zone) => {
-  //       count[zone] = 0;
-  //       return count;
-  //     }, {})
-  //   );
-  // }, [data]);
-
   useEffect(() => {
     const svg = select(svgRef.current);
     let {width, height} =
@@ -49,20 +31,6 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
     if (!width || !height)
       ({width, height} = wrapperRef.current.getBoundingClientRect());
 
-    // if (mapOption === MAP_OPTIONS.ZONES) {
-    //   svg.call(() =>
-    //     legend({
-    //       svg: svg,
-    //       color: mapScale,
-    //       width: width,
-    //       height: height,
-    //       tickValues: [],
-    //       marginLeft: 2,
-    //       marginRight: 20,
-    //       ordinalWeights: Object.values(totalZones),
-    //     })
-    //   );
-    // }
     if (mapOption === MAP_OPTIONS.HOTSPOTS) {
       const t = svg.transition().duration(D3_TRANSITION_DURATION);
       svg
@@ -132,7 +100,7 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
             return formatNumber(d);
           },
           marginLeft: 2,
-          marginRight: 20,
+          marginRight: 0,
         })
       );
     }

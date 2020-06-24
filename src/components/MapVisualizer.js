@@ -158,14 +158,9 @@ function MapVisualizer({
     [currentMap.option, data, mapScale, statistic]
   );
 
-  const strokeColor = useCallback(
-    (d) => {
-      return currentMap.option === MAP_OPTIONS.ZONES
-        ? '#343a40'
-        : COLORS[statistic];
-    },
-    [currentMap.option, statistic]
-  );
+  const strokeColor = useCallback(() => {
+    return COLORS[statistic];
+  }, [statistic]);
 
   const features = useMemo(() => {
     if (!geoData) return null;
@@ -214,6 +209,7 @@ function MapVisualizer({
     [currentMap.option, data, statistic, statisticTotal]
   );
 
+  // Choropleth
   useEffect(() => {
     if (!geoData) return;
     const svg = select(svgRef.current);
@@ -239,12 +235,6 @@ function MapVisualizer({
                 setRegionHighlighted({
                   stateCode: STATE_CODES[d.properties.st_nm],
                   districtName: d.properties.district,
-                });
-              })
-              .on('mouseleave', (d) => {
-                setRegionHighlighted({
-                  stateCode: currentMap.code,
-                  districtName: null,
                 });
               })
               .attr('fill', '#fff0')
@@ -304,52 +294,71 @@ function MapVisualizer({
     strokeColor,
   ]);
 
+  // Bubble
   useEffect(() => {
     if (!features) return;
+
     const svg = select(svgRef.current);
     const T = transition().duration(D3_TRANSITION_DURATION);
 
     let circlesData = [];
     if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
       circlesData = features
-        .map((d) => {
-          const stateCode = STATE_CODES[d.properties.st_nm];
-          const district = d.properties.district;
-
+        .map((feature) => {
+          const stateCode = STATE_CODES[feature.properties.st_nm];
+          const districtName = feature.properties.district;
           const stateData = data[stateCode];
-          const districtData = stateData?.districts?.[district];
-          if (district) d.value = getTotalStatistic(districtData, statistic);
-          else
-            d.value = getTotalStatistic(
-              stateData?.districts?.[UNKNOWN_DISTRICT_KEY],
-              statistic
-            );
-          return d;
+
+          if (currentMap.view === MAP_VIEWS.STATES) {
+            feature.value = getTotalStatistic(stateData, statistic);
+          } else if (currentMap.view === MAP_VIEWS.DISTRICTS) {
+            const districtData = stateData?.districts?.[districtName];
+
+            if (districtName)
+              feature.value = getTotalStatistic(districtData, statistic);
+            else
+              feature.value = getTotalStatistic(
+                stateData?.districts?.[UNKNOWN_DISTRICT_KEY],
+                statistic
+              );
+          }
+
+          return feature;
         })
-        .sort((a, b) => b.value - a.value);
+        .sort((featureA, featureB) => featureB.value - featureB.value);
     }
 
     window.requestIdleCallback(() => {
       svg
         .select('.circles')
         .selectAll('circle')
-        .data(circlesData, (d) => d.id)
+        .data(circlesData, (feature) => feature.id)
         .join(
           (enter) =>
             enter
               .append('circle')
-              .attr('transform', (d) => `translate(${path.centroid(d)})`)
+              .attr(
+                'transform',
+                (feature) => `translate(${path.centroid(feature)})`
+              )
               .attr('fill-opacity', 0.5)
               .style('cursor', 'pointer')
               .attr('pointer-events', 'all')
-              .on('mouseenter', (d) => {
+              .on('mouseenter', (feature) => {
                 setRegionHighlighted({
-                  stateCode: STATE_CODES[d.properties.st_nm],
-                  districtName: d.properties.district || UNKNOWN_DISTRICT_KEY,
+                  stateCode: STATE_CODES[feature.properties.st_nm],
+                  districtName:
+                    currentMap.view === MAP_VIEWS.STATES
+                      ? null
+                      : feature.properties.district || UNKNOWN_DISTRICT_KEY,
                 });
               })
-              .on('click', () => {
-                event.stopPropagation();
+              .on('click', (feature) => {
+                history.push(
+                  `/state/${STATE_CODES[feature.properties.st_nm]}${
+                    window.innerWidth < 769 ? '#MapExplorer' : ''
+                  }`
+                );
               }),
           (update) => update,
           (exit) =>
@@ -358,30 +367,34 @@ function MapVisualizer({
         .transition(T)
         .attr('fill', COLORS[statistic] + '70')
         .attr('stroke', COLORS[statistic] + '70')
-        .attr('r', (d) => mapScale(d.value));
+        .attr('r', (feature) => mapScale(feature.value));
     });
   }, [
-    data,
-    mapMeta,
     currentMap.option,
-    setRegionHighlighted,
-    mapScale,
-    statistic,
-    path,
+    currentMap.view,
+    data,
     features,
+    history,
+    mapScale,
+    path,
+    setRegionHighlighted,
+    statistic,
   ]);
 
+  // Boundaries
   useEffect(() => {
     if (!geoData) return;
     const svg = select(svgRef.current);
     const T = transition().duration(D3_TRANSITION_DURATION);
 
     let meshStates = [];
+    let meshDistricts = [];
+
     if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
       meshStates = [topojson.mesh(geoData, geoData.objects.states)];
       meshStates[0].id = `${currentMap.code}-states`;
     }
-    let meshDistricts = [];
+
     if (currentMap.view === MAP_VIEWS.DISTRICTS) {
       // Add id to mesh
       meshDistricts = [topojson.mesh(geoData, geoData.objects.districts)];
@@ -395,12 +408,7 @@ function MapVisualizer({
           : '.district-borders'
       )
       .attr('fill', 'none')
-      .attr('stroke-width', () => {
-        return mapMeta.mapType === MAP_TYPES.COUNTRY &&
-          currentMap.view === MAP_VIEWS.DISTRICTS
-          ? 0
-          : 1.5;
-      })
+      .attr('stroke-width', 1.5)
       .selectAll('path')
       .data(
         currentMap.view === MAP_VIEWS.STATES ? meshStates : meshDistricts,
@@ -421,8 +429,9 @@ function MapVisualizer({
     path,
   ]);
 
+  // Highlight
   useEffect(() => {
-    const state = STATE_NAMES[regionHighlighted.stateCode];
+    const stateName = STATE_NAMES[regionHighlighted.stateCode];
     const district = regionHighlighted.districtName;
 
     const svg = select(svgRef.current);
@@ -433,7 +442,7 @@ function MapVisualizer({
         .selectAll('circle')
         .attr('fill-opacity', (d) => {
           const highlighted =
-            state === d.properties.st_nm &&
+            stateName === d.properties.st_nm &&
             (!district ||
               district === d.properties?.district ||
               (district === UNKNOWN_DISTRICT_KEY && !d.properties.district));
@@ -445,7 +454,7 @@ function MapVisualizer({
         .selectAll('path')
         .each(function (d) {
           const highlighted =
-            state === d.properties.st_nm &&
+            stateName === d.properties.st_nm &&
             (currentMap.view === MAP_VIEWS.STATES ||
               district === d.properties?.district);
           if (highlighted) this.parentNode.appendChild(this);
