@@ -1,8 +1,7 @@
 import {
   D3_TRANSITION_DURATION,
   MAP_LEGEND_HEIGHT,
-  MAP_OPTIONS,
-  // ZONE_COLORS,
+  MAP_VIZS,
 } from '../constants';
 import {useResizeObserver} from '../hooks/useResizeObserver';
 import {capitalize, formatNumber} from '../utils/commonFunctions';
@@ -32,7 +31,7 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
       if (!width || !height)
         ({width, height} = wrapperRef.current.getBoundingClientRect());
 
-      if (mapOption === MAP_OPTIONS.HOTSPOTS) {
+      if (mapOption === MAP_VIZS.BUBBLES) {
         const t = svg.transition().duration(D3_TRANSITION_DURATION);
         svg
           .select('.ramp')
@@ -88,15 +87,12 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
           legend({
             svg: svg,
             color: mapScale,
-            title:
-              mapOption === MAP_OPTIONS.PER_MILLION
-                ? `${t(capitalize(statistic))} ${t('cases per million')}`
-                : `${t(capitalize(statistic))} ${t('cases')}`,
+            title: `${t(capitalize(statistic))} ${t('cases')}`,
             width: width,
             height: height,
             ticks: 5,
             tickFormat: function (d, i, n) {
-              if (mapOption === MAP_OPTIONS.TOTAL && !Number.isInteger(d))
+              if (mapOption === MAP_VIZS.CHOROPLETH && !Number.isInteger(d))
                 return;
               if (i === n.length - 1) return formatNumber(d) + '+';
               return formatNumber(d);
@@ -106,9 +102,8 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
           })
         );
       }
-      svg.attr('class', mapOption === MAP_OPTIONS.ZONES ? 'zone' : '');
     });
-  }, [t, dimensions, mapScale, mapOption, statistic]); // totalZones
+  }, [t, dimensions, mapScale, mapOption, statistic]);
 
   return (
     <div

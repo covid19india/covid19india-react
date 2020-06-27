@@ -5,8 +5,8 @@ import {
   D3_TRANSITION_DURATION,
   MAP_META,
   MAP_TYPES,
-  MAP_OPTIONS,
   MAP_VIEWS,
+  MAP_VIZS,
   STATE_CODES,
   STATE_NAMES,
   UNKNOWN_DISTRICT_KEY,
@@ -102,7 +102,7 @@ function MapVisualizer({
   }, [data, currentMap.code, statistic]);
 
   const mapScale = useMemo(() => {
-    if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
+    if (currentMap.viz === MAP_VIZS.BUBBLES) {
       return scaleSqrt([0, Math.max(statisticMax, 1)], [0, 40])
         .clamp(true)
         .nice(3);
@@ -112,7 +112,7 @@ function MapVisualizer({
         colorInterpolator[statistic]
       ).clamp(true);
     }
-  }, [currentMap.option, statistic, statisticMax]);
+  }, [currentMap.viz, statistic, statisticMax]);
 
   const path = useMemo(() => {
     if (!geoData) return null;
@@ -144,7 +144,7 @@ function MapVisualizer({
       currentMap.view === MAP_VIEWS.STATES
         ? topojson.feature(geoData, geoData.objects.states).features
         : mapMeta.mapType === MAP_TYPES.COUNTRY &&
-          currentMap.option === MAP_OPTIONS.HOTSPOTS
+          currentMap.viz === MAP_VIZS.BUBBLES
         ? [
             ...topojson.feature(geoData, geoData.objects.states).features,
             ...topojson.feature(geoData, geoData.objects.districts).features,
@@ -159,12 +159,12 @@ function MapVisualizer({
       obj.id = `${currentMap.code}-${state}${district ? '-' + district : ''}`;
       return obj;
     });
-  }, [geoData, currentMap.code, currentMap.view, currentMap.option, mapMeta]);
+  }, [geoData, currentMap.code, currentMap.view, currentMap.viz, mapMeta]);
 
   const populateTexts = useCallback(
     (regionSelection) => {
       regionSelection.select('title').text((d) => {
-        if (currentMap.option === MAP_OPTIONS.TOTAL) {
+        if (currentMap.viz === MAP_VIZS.CHOROPLETH) {
           const state = d.properties.st_nm;
           const stateCode = STATE_CODES[state];
           const district = d.properties.district;
@@ -182,7 +182,7 @@ function MapVisualizer({
         }
       });
     },
-    [currentMap.option, data, statistic, statisticTotal]
+    [currentMap.viz, data, statistic, statisticTotal]
   );
 
   // Choropleth
@@ -195,10 +195,7 @@ function MapVisualizer({
       const regionSelection = svg
         .select('.regions')
         .selectAll('path')
-        .data(
-          currentMap.option !== MAP_OPTIONS.HOTSPOTS ? features : [],
-          (d) => d.id
-        )
+        .data(currentMap.viz !== MAP_VIZS.BUBBLES ? features : [], (d) => d.id)
         .join(
           (enter) =>
             enter
@@ -257,7 +254,7 @@ function MapVisualizer({
     });
   }, [
     currentMap.code,
-    currentMap.option,
+    currentMap.viz,
     data,
     features,
     fillColor,
@@ -278,7 +275,7 @@ function MapVisualizer({
     const T = transition().duration(D3_TRANSITION_DURATION);
 
     let circlesData = [];
-    if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
+    if (currentMap.viz === MAP_VIZS.BUBBLES) {
       circlesData = features
         .map((feature) => {
           const stateCode = STATE_CODES[feature.properties.st_nm];
@@ -320,15 +317,6 @@ function MapVisualizer({
               .attr('fill-opacity', 0.5)
               .style('cursor', 'pointer')
               .attr('pointer-events', 'all')
-              .on('mouseenter', (feature) => {
-                setRegionHighlighted({
-                  stateCode: STATE_CODES[feature.properties.st_nm],
-                  districtName:
-                    currentMap.view === MAP_VIEWS.STATES
-                      ? null
-                      : feature.properties.district || UNKNOWN_DISTRICT_KEY,
-                });
-              })
               .on('click', (feature) => {
                 history.push(
                   `/state/${STATE_CODES[feature.properties.st_nm]}${
@@ -340,13 +328,22 @@ function MapVisualizer({
           (exit) =>
             exit.call((exit) => exit.transition(T).attr('r', 0).remove())
         )
+        .on('mouseenter', (feature) => {
+          setRegionHighlighted({
+            stateCode: STATE_CODES[feature.properties.st_nm],
+            districtName:
+              currentMap.view === MAP_VIEWS.STATES
+                ? null
+                : feature.properties.district || UNKNOWN_DISTRICT_KEY,
+          });
+        })
         .transition(T)
         .attr('fill', COLORS[statistic] + '70')
         .attr('stroke', COLORS[statistic] + '70')
         .attr('r', (feature) => mapScale(feature.value));
     });
   }, [
-    currentMap.option,
+    currentMap.viz,
     currentMap.view,
     data,
     features,
@@ -399,7 +396,7 @@ function MapVisualizer({
     geoData,
     mapMeta,
     currentMap.code,
-    currentMap.option,
+    currentMap.viz,
     currentMap.view,
     statistic,
     path,
@@ -416,7 +413,7 @@ function MapVisualizer({
     window.cancelIdleCallback(highlightThreadId.current);
 
     highlightThreadId.current = window.requestIdleCallback(() => {
-      if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
+      if (currentMap.viz === MAP_VIZS.BUBBLES) {
         svg
           .select('.circles')
           .selectAll('circle')
@@ -445,8 +442,8 @@ function MapVisualizer({
   }, [
     geoData,
     data,
-    currentMap.option,
     currentMap.view,
+    currentMap.viz,
     regionHighlighted.stateCode,
     regionHighlighted.districtName,
     statistic,
@@ -486,7 +483,7 @@ function MapVisualizer({
 
       {mapScale && (
         <MapLegend
-          mapOption={currentMap.option}
+          mapOption={currentMap.viz}
           {...{data, mapScale, statistic}}
         />
       )}

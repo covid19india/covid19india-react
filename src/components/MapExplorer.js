@@ -2,9 +2,9 @@ import MapVisualizerLoader from './loaders/MapVisualizer';
 
 import {
   MAP_META,
-  MAP_OPTIONS,
   MAP_TYPES,
   MAP_VIEWS,
+  MAP_VIZS,
   STATE_NAMES,
   UNKNOWN_DISTRICT_KEY,
   PRIMARY_STATISTICS,
@@ -43,7 +43,6 @@ function MapExplorer({
   setAnchor,
   mapStatistic,
   setMapStatistic,
-  isCountryLoaded = true,
 }) {
   const {t} = useTranslation();
   const mapExplorerRef = useRef();
@@ -52,10 +51,10 @@ function MapExplorer({
   const [currentMap, setCurrentMap] = useState({
     code: stateCode,
     view: MAP_VIEWS.DISTRICTS,
-    option:
+    viz:
       MAP_META[stateCode].mapType === MAP_TYPES.COUNTRY
-        ? MAP_OPTIONS.HOTSPOTS
-        : MAP_OPTIONS.TOTAL,
+        ? MAP_VIZS.BUBBLES
+        : MAP_VIZS.CHOROPLETH,
   });
 
   const currentMapMeta = MAP_META[currentMap.code];
@@ -81,11 +80,11 @@ function MapExplorer({
 
   const handleTabClick = (option) => {
     switch (option) {
-      case MAP_OPTIONS.TOTAL:
+      case MAP_VIZS.CHOROPLETH:
         setCurrentMap({
           code: currentMap.code,
           view: currentMap.view,
-          option: MAP_OPTIONS.TOTAL,
+          viz: MAP_VIZS.CHOROPLETH,
         });
         if (currentMapMeta.mapType === MAP_TYPES.COUNTRY)
           setRegionHighlighted({
@@ -94,24 +93,11 @@ function MapExplorer({
           });
         return;
 
-      case MAP_OPTIONS.PER_MILLION:
-        if (currentMapMeta.mapType === MAP_TYPES.STATE) return;
-        setCurrentMap({
-          code: currentMap.code,
-          view: MAP_VIEWS.STATES,
-          option: MAP_OPTIONS.PER_MILLION,
-        });
-        setRegionHighlighted({
-          stateCode: regionHighlighted.stateCode,
-          districtName: null,
-        });
-        return;
-
-      case MAP_OPTIONS.HOTSPOTS:
+      case MAP_VIZS.BUBBLES:
         setCurrentMap({
           code: currentMap.code,
           view: currentMap.view,
-          option: MAP_OPTIONS.HOTSPOTS,
+          viz: MAP_VIZS.BUBBLES,
         });
         return;
 
@@ -188,11 +174,7 @@ function MapExplorer({
     >
       <div className="panel" ref={panelRef}>
         <animated.div className="panel-left" style={trail[0]}>
-          <h2
-            className={classnames(mapStatistic, {
-              [hoveredRegion?.zone]: currentMap.option === MAP_OPTIONS.ZONES,
-            })}
-          >
+          <h2 className={classnames(mapStatistic)}>
             {t(hoveredRegion.name)}
             {hoveredRegion.name === UNKNOWN_DISTRICT_KEY &&
               ` (${t(STATE_NAMES[regionHighlighted.stateCode])})`}
@@ -202,11 +184,7 @@ function MapExplorer({
             <h1 className={classnames('district', mapStatistic)}>
               {formatNumber(getStatistic(hoveredRegion, 'total', mapStatistic))}
               <br />
-              <span>
-                {t(capitalize(mapStatistic))}
-                {currentMap.option === MAP_OPTIONS.PER_MILLION &&
-                  ` ${t('per million')}`}
-              </span>
+              <span>{t(capitalize(mapStatistic))}</span>
             </h1>
           )}
         </animated.div>
@@ -215,18 +193,18 @@ function MapExplorer({
           <div className="switch-type">
             <animated.div
               className={classnames('choropleth', {
-                'is-highlighted': currentMap.option === MAP_OPTIONS.TOTAL,
+                'is-highlighted': currentMap.viz === MAP_VIZS.CHOROPLETH,
               })}
-              onClick={() => handleTabClick(MAP_OPTIONS.TOTAL)}
+              onClick={() => handleTabClick(MAP_VIZS.CHOROPLETH)}
               style={trail[1]}
             >
               {ChoroplethIcon}
             </animated.div>
             <animated.div
               className={classnames('bubble', {
-                'is-highlighted': currentMap.option === MAP_OPTIONS.HOTSPOTS,
+                'is-highlighted': currentMap.viz === MAP_VIZS.BUBBLES,
               })}
-              onClick={() => handleTabClick(MAP_OPTIONS.HOTSPOTS)}
+              onClick={() => handleTabClick(MAP_VIZS.BUBBLES)}
               style={trail[2]}
             >
               {BubblesIcon}
@@ -303,12 +281,10 @@ function MapExplorer({
             }
           >
             <MapVisualizer
-              currentMap={currentMap}
+              {...{currentMap}}
               data={currentMapData}
-              regionHighlighted={regionHighlighted}
-              setRegionHighlighted={setRegionHighlighted}
+              {...{regionHighlighted, setRegionHighlighted}}
               statistic={mapStatistic}
-              isCountryLoaded={isCountryLoaded}
             ></MapVisualizer>
           </Suspense>
         )}

@@ -57,10 +57,9 @@ export const TIMESERIES_OPTIONS = {
   TWO_WEEKS: '2 Weeks',
 };
 
-export const MAP_OPTIONS = {
-  TOTAL: 'Total',
-  PER_MILLION: 'Per million',
-  HOTSPOTS: 'Hotspots',
+export const MAP_VIZS = {
+  CHOROPLETH: 0,
+  BUBBLES: 1,
 };
 
 export const MAP_VIEWS = {
