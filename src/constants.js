@@ -21,8 +21,6 @@ export const PRIMARY_STATISTICS = [
 
 export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
-export const MAP_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
-
 export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
 export const D3_TRANSITION_DURATION = 300;

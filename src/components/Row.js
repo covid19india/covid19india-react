@@ -3,7 +3,7 @@ import DistrictRow from './DistrictRow';
 import HeaderCell from './HeaderCell';
 import Tooltip from './Tooltip';
 
-import {PRIMARY_STATISTICS, TABLE_STATISTICS, STATE_NAMES} from '../constants';
+import {TABLE_STATISTICS, STATE_NAMES} from '../constants';
 import {
   capitalize,
   formatLastUpdated,
@@ -220,7 +220,7 @@ function Row({
                 )}
               </div>
 
-              {PRIMARY_STATISTICS.map((statistic) => (
+              {TABLE_STATISTICS.map((statistic) => (
                 <HeaderCell
                   key={statistic}
                   {...{statistic, sortData}}
