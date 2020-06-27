@@ -23,10 +23,14 @@ function StateHeader({data, stateCode}) {
     <div className="StateHeader">
       <div className="header-left">
         <StateDropdown {...{stateCode}} hyperlink={false} trail={trail[0]} />
-        <animated.h5 style={trail[1]}>{`Last Updated on ${formatDate(
-          data.meta.last_updated,
-          'dd MMM, p'
-        )} IST`}</animated.h5>
+        {data?.meta?.['last_updated'] && (
+          <animated.h5 style={trail[1]}>
+            {`Last Updated on ${formatDate(
+              data.meta.last_updated,
+              'dd MMM, p'
+            )} IST`}
+          </animated.h5>
+        )}
       </div>
 
       <animated.div className="header-right" style={trail[2]}>
