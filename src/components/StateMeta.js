@@ -1,10 +1,6 @@
 import StateMetaCard from './StateMetaCard';
 
-import {
-  STATE_NAMES,
-  STATE_POPULATIONS,
-  STATE_POPULATIONS_MIL,
-} from '../constants';
+import {STATE_NAMES} from '../constants';
 import {
   formatDate,
   formatNumber,
@@ -24,8 +20,6 @@ function StateMeta({stateCode, data, timeseries}) {
   const recovered = getStatistic(data[stateCode], 'total', 'recovered');
   const tested = getStatistic(data[stateCode], 'total', 'tested');
 
-  const totalConfirmed = getStatistic(data['TT'], 'total', 'confirmed');
-
   const indiaDate = format(getIndiaDate(), 'yyyy-MM-dd');
   const prevWeekDate = format(sub(getIndiaDate(), {weeks: 1}), 'yyyy-MM-dd');
 
@@ -35,9 +29,19 @@ function StateMeta({stateCode, data, timeseries}) {
     'confirmed'
   );
 
-  const confirmedPerMillion = confirmed / STATE_POPULATIONS_MIL[stateCode];
-  const testPerMillion = tested / STATE_POPULATIONS_MIL[stateCode];
-  const totalConfirmedPerMillion = totalConfirmed / STATE_POPULATIONS_MIL['TT'];
+  const confirmedPerMillion = getStatistic(
+    data[stateCode],
+    'total',
+    'confirmed',
+    true
+  );
+  const testPerMillion = getStatistic(data[stateCode], 'total', 'tested', true);
+  const totalConfirmedPerMillion = getStatistic(
+    data['TT'],
+    'total',
+    'confirmed',
+    true
+  );
 
   const recoveryPercent = (recovered / confirmed) * 100;
   const activePercent = (active / confirmed) * 100;
@@ -51,7 +55,7 @@ function StateMeta({stateCode, data, timeseries}) {
       <div className="StateMeta population">
         <div className="meta-item population">
           <h3>Population</h3>
-          <h1>{formatNumber(STATE_POPULATIONS[stateCode])}</h1>
+          <h1>{formatNumber(data[stateCode]?.meta?.population)}</h1>
         </div>
         <div className="alert">
           <Icon.Compass />

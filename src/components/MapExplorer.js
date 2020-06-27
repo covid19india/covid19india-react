@@ -6,7 +6,6 @@ import {
   MAP_TYPES,
   MAP_VIEWS,
   STATE_NAMES,
-  STATE_POPULATIONS_MIL,
   UNKNOWN_DISTRICT_KEY,
   PRIMARY_STATISTICS,
 } from '../constants';
@@ -77,9 +76,6 @@ function MapExplorer({
       draft.name =
         regionHighlighted.districtName ||
         STATE_NAMES[regionHighlighted.stateCode];
-      if (!regionHighlighted.districtName)
-        draft.population_millions =
-          STATE_POPULATIONS_MIL[regionHighlighted.stateCode];
     });
   }, [data, regionHighlighted.stateCode, regionHighlighted.districtName]);
 
@@ -204,16 +200,7 @@ function MapExplorer({
 
           {regionHighlighted.stateCode && (
             <h1 className={classnames('district', mapStatistic)}>
-              {formatNumber(
-                getStatistic(
-                  hoveredRegion,
-                  'total',
-                  mapStatistic,
-                  currentMap.option === MAP_OPTIONS.PER_MILLION
-                    ? hoveredRegion.population_millions
-                    : 1
-                )
-              )}
+              {formatNumber(getStatistic(hoveredRegion, 'total', mapStatistic))}
               <br />
               <span>
                 {t(capitalize(mapStatistic))}
