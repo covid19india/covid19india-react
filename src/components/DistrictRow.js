@@ -1,7 +1,7 @@
 import Cell from './Cell';
 import Tooltip from './Tooltip';
 
-import {PRIMARY_STATISTICS} from '../constants';
+import {TABLE_STATISTICS} from '../constants';
 
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
@@ -47,7 +47,7 @@ function DistrictRow({
         )}
       </div>
 
-      {PRIMARY_STATISTICS.map((statistic) => (
+      {TABLE_STATISTICS.map((statistic) => (
         <Cell key={statistic} {...{statistic, data, isPerMillion}} />
       ))}
     </div>
