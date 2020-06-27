@@ -14,6 +14,7 @@ function DistrictRow({
   stateCode,
   districtName,
   data,
+  isPerMillion,
   regionHighlighted,
   setRegionHighlighted,
 }) {
@@ -47,7 +48,7 @@ function DistrictRow({
       </div>
 
       {PRIMARY_STATISTICS.map((statistic) => (
-        <Cell key={statistic} {...{statistic}} data={data} />
+        <Cell key={statistic} {...{statistic, data, isPerMillion}} />
       ))}
     </div>
   );
@@ -61,6 +62,8 @@ const isDistrictRowEqual = (prevProps, currProps) => {
   } else if (
     !equal(prevProps.data?.['last_updated'], currProps.data?.['last_updated'])
   ) {
+    return false;
+  } else if (!equal(prevProps.isPerMillion, currProps.isPerMillion)) {
     return false;
   } else if (
     !equal(

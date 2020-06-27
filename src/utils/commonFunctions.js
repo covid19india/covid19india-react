@@ -106,7 +106,7 @@ export const toTitleCase = (str) => {
   });
 };
 
-export const getStatistic = (data, type, statistic, normalizer = 1) => {
+export const getStatistic = (data, type, statistic, perMillion = false) => {
   let count;
   if (statistic === 'active') {
     const confirmed = data?.[type]?.confirmed || 0;
@@ -117,7 +117,7 @@ export const getStatistic = (data, type, statistic, normalizer = 1) => {
   } else {
     count = data?.[type]?.[statistic] || 0;
   }
-  return count / normalizer;
+  return perMillion ? (1e6 * count) / data?.meta?.population || 0 : count;
 };
 
 export const fetcher = (url) => {

@@ -9,7 +9,6 @@ import {
   MAP_VIEWS,
   STATE_CODES,
   STATE_NAMES,
-  STATE_POPULATIONS_MIL,
   UNKNOWN_DISTRICT_KEY,
 } from '../constants';
 import {
@@ -52,8 +51,8 @@ const colorInterpolator = {
   tested: (t) => interpolatePurples(t * 0.85),
 };
 
-const getTotalStatistic = (data, statistic, normalizer = 1) => {
-  return getStatistic(data, 'total', statistic, normalizer);
+const getTotalStatistic = (data, statistic) => {
+  return getStatistic(data, 'total', statistic);
 };
 
 function MapVisualizer({
@@ -87,13 +86,7 @@ function MapVisualizer({
 
     return currentMap.view === MAP_VIEWS.STATES
       ? max(stateCodes, (stateCode) =>
-          getTotalStatistic(
-            data[stateCode],
-            statistic,
-            currentMap.option === MAP_OPTIONS.PER_MILLION
-              ? STATE_POPULATIONS_MIL[stateCode]
-              : 1
-          )
+          getTotalStatistic(data[stateCode], statistic)
         )
       : max(stateCodes, (stateCode) =>
           data[stateCode]?.districts
@@ -102,17 +95,11 @@ function MapVisualizer({
               )
             : 0
         );
-  }, [data, currentMap.option, currentMap.view, statistic]);
+  }, [data, currentMap.view, statistic]);
 
   const statisticTotal = useMemo(() => {
-    return getTotalStatistic(
-      data[currentMap.code],
-      statistic,
-      currentMap.option === MAP_OPTIONS.PER_MILLION
-        ? STATE_POPULATIONS_MIL[currentMap.code]
-        : 1
-    );
-  }, [data, currentMap.code, currentMap.option, statistic]);
+    return getTotalStatistic(data[currentMap.code], statistic);
+  }, [data, currentMap.code, statistic]);
 
   const mapScale = useMemo(() => {
     if (currentMap.option === MAP_OPTIONS.HOTSPOTS) {
@@ -139,23 +126,12 @@ function MapVisualizer({
       const stateData = data[stateCode];
       const districtData = stateData?.districts?.[district];
       let n;
-      if (currentMap.option === MAP_OPTIONS.ZONES) {
-        n = districtData?.zone || 0;
-      } else {
-        if (district) n = getTotalStatistic(districtData, statistic);
-        else
-          n = getTotalStatistic(
-            stateData,
-            statistic,
-            currentMap.option === MAP_OPTIONS.PER_MILLION
-              ? STATE_POPULATIONS_MIL[stateCode]
-              : 1
-          );
-      }
+      if (district) n = getTotalStatistic(districtData, statistic);
+      else n = getTotalStatistic(stateData, statistic);
       const color = n === 0 ? '#ffffff00' : mapScale(n);
       return color;
     },
-    [currentMap.option, data, mapScale, statistic]
+    [data, mapScale, statistic]
   );
 
   const strokeColor = useCallback(() => {

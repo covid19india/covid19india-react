@@ -3,7 +3,7 @@ import TableLoader from './loaders/Table';
 import TableDeltaHelper from './snippets/TableDeltaHelper';
 
 import {TABLE_FADE_IN, TABLE_FADE_OUT} from '../animations';
-import {TABLE_STATISTICS, STATE_POPULATIONS_MIL} from '../constants';
+import {TABLE_STATISTICS} from '../constants';
 import {getStatistic} from '../utils/commonFunctions';
 
 import {
@@ -83,13 +83,13 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
           districts?.[regionKeyA] || states[regionKeyA],
           sortData.delta ? 'delta' : 'total',
           sortData.sortColumn,
-          isPerMillion ? STATE_POPULATIONS_MIL[regionKeyA] : 1
+          isPerMillion
         );
         const statisticB = getStatistic(
           districts?.[regionKeyB] || states[regionKeyB],
           sortData.delta ? 'delta' : 'total',
           sortData.sortColumn,
-          isPerMillion ? STATE_POPULATIONS_MIL[regionKeyB] : 1
+          isPerMillion
         );
         return sortData.isAscending
           ? statisticA - statisticB
@@ -284,15 +284,20 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
                 <Row
                   key={stateCode}
                   data={states[stateCode]}
-                  {...{isPerMillion}}
-                  {...{stateCode, regionHighlighted, setRegionHighlighted}}
+                  {...{
+                    stateCode,
+                    isPerMillion,
+                    regionHighlighted,
+                    setRegionHighlighted,
+                  }}
                 />
               );
             })}
 
         {tableOption === 'Districts' && !districts && <TableLoader />}
 
-        {districts &&
+        {tableOption === 'Districts' &&
+          districts &&
           Object.keys(districts)
             .sort((a, b) => sortingFunction(a, b))
             .slice(0, 30)
@@ -303,6 +308,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
                   data={districts[districtName]}
                   {...{
                     districtName,
+                    isPerMillion,
                     regionHighlighted,
                     setRegionHighlighted,
                   }}

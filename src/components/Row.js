@@ -64,22 +64,26 @@ function Row({
           ? getStatistic(
               data.districts[districtNameA],
               'total',
-              sortData.sortColumn
+              sortData.sortColumn,
+              isPerMillion
             ) -
               getStatistic(
                 data.districts[districtNameB],
                 'total',
-                sortData.sortColumn
+                sortData.sortColumn,
+                isPerMillion
               )
           : getStatistic(
               data.districts[districtNameB],
               'total',
-              sortData.sortColumn
+              sortData.sortColumn,
+              isPerMillion
             ) -
               getStatistic(
                 data.districts[districtNameA],
                 'total',
-                sortData.sortColumn
+                sortData.sortColumn,
+                isPerMillion
               );
       } else {
         return sortData.isAscending
@@ -87,7 +91,7 @@ function Row({
           : districtNameB.localeCompare(districtNameA);
       }
     },
-    [sortData, data]
+    [sortData, data, isPerMillion]
   );
 
   const highlightState = useCallback(() => {
@@ -169,10 +173,7 @@ function Row({
           </div>
 
           {TABLE_STATISTICS.map((statistic) => (
-            <Cell
-              key={statistic}
-              {...{data, statistic, regionKey: isPerMillion ? stateCode : null}}
-            />
+            <Cell key={statistic} {...{data, statistic, isPerMillion}} />
           ))}
         </animated.div>
 
@@ -243,6 +244,7 @@ function Row({
                   regionHighlighted,
                   setRegionHighlighted,
                   stateCode,
+                  isPerMillion,
                 }}
                 data={data.districts[districtName]}
               />
