@@ -25,12 +25,7 @@ function StateHeaderCell({handleSort, sortData, statistic}) {
           <FilterIcon size={10} />
         </div>
       )}
-      <div
-        className={classnames({
-          [`is-${statistic}`]: breakpoint === 'S',
-        })}
-        title={capitalize(statistic)}
-      >
+      <div title={capitalize(statistic)}>
         {breakpoint === 'S'
           ? capitalize(statistic.slice(0, 1))
           : t(capitalize(statistic))}
