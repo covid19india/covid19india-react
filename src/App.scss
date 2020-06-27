@@ -66,8 +66,10 @@ $black: #000;
 $dark-m-gray: #161625;
 $dark-mid-subtext: #bdb8ae;
 $dark-m-white: #e1e1e1;
-$dark-m-purple: #7ba1ea;
 $dark-m-blue: #3391ff;
+$dark-m-purple: #9673b9;
+$dark-m-purple-mid: #9673b9bb;
+$dark-m-purple-light: #40008050;
 
 * {
   font-family: 'archia';
@@ -317,14 +319,14 @@ h6 {
 }
 
 .StateHeader {
+  align-self: center;
   display: flex;
   flex-direction: row;
+  height: 5.25rem;
   justify-content: space-between;
+  margin-bottom: 1rem;
   position: relative;
   width: 100%;
-  align-self: center;
-  height: 5.25rem;
-  margin-bottom: 1rem;
 
   & > * {
     align-self: flex-start;
@@ -1470,9 +1472,9 @@ h6 {
   width: 100%;
 
   .highlight {
+    pointer-events: none;
     position: absolute;
     width: calc(25%) !important;
-    pointer-events: none;
   }
 
   .highlight,
@@ -1664,11 +1666,11 @@ abbr {
   }
 
   .scroll-right-helper {
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    font-size: 12px;
     color: $gray-mid;
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    font-size: 12px;
     justify-content: flex-end;
   }
 
@@ -1700,7 +1702,7 @@ abbr {
 
       p {
         margin-right: 1rem;
-      } 
+      }
     }
 
     .helper-right {
@@ -1712,11 +1714,11 @@ abbr {
 
   .info-item {
     align-items: center;
+    color: $gray;
     display: flex;
     flex-direction: row;
     font-size: 12px;
     font-weight: 600;
-    color: $gray;
     height: 1.5rem;
 
     .is-confirmed {
@@ -1754,9 +1756,8 @@ abbr {
     }
 
     svg {
-      margin-right: .25rem;
-      margin-bottom: .25rem;
       color: $gray-mid;
+      margin-bottom: .25rem;
       margin-right: .5rem;
     }
 
@@ -1775,8 +1776,8 @@ abbr {
 
     &.invert {
       svg {
+        margin-bottom: 0;
         transform: rotate(180deg);
-        margin-bottom: 0rem;
       }
     }
   }
@@ -1787,9 +1788,9 @@ abbr {
 
     a {
       background: $gray-light;
+      border-bottom: 2px solid $gray-hover;
       color: $gray;
       text-decoration: none;
-      border-bottom: 2px solid $gray-hover;
 
       &:hover {
         background: $gray-hover;
@@ -1801,13 +1802,13 @@ abbr {
 .table {
   align-self: center;
   border-radius: 3px;
+  border-right: 2px dashed $gray-hover;
   display: flex;
   flex-direction: column;
   font-size: 12px;
   margin-bottom: 2.5rem;
   overflow-x: auto;
   width: 28rem;
-  border-right: 2px dashed $gray-hover;
 
   .state-meta {
     align-items: center;
@@ -1882,12 +1883,12 @@ abbr {
     }
 
     &.is-total {
+      position: sticky;
+      top: 0;
+
       .cell {
         background: $gray-hover-opaque !important;
       }
-
-      position: sticky;
-      top: 0;
     }
 
     .cell {
@@ -1956,6 +1957,12 @@ abbr {
         &.is-deceased {
           svg {
             color: $gray;
+          }
+        }
+
+        &.is-tested {
+          svg {
+            color: $purple;
           }
         }
 
@@ -2158,16 +2165,16 @@ abbr {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    position: relative;
     min-height: 6rem;
     padding-top: 1rem;
+    position: relative;
 
     h2 {
       font-weight: 900;
       margin-top: 0;
+      transition: color 0.3s ease-in-out;
       width: calc(100% - 10rem);
       word-wrap: break-word;
-      transition: color 0.3s ease-in-out;
 
       &.confirmed {
         color: $brick;
@@ -2194,8 +2201,8 @@ abbr {
 
     .panel-left {
       display: flex;
-      flex-direction: column;
       flex: 1;
+      flex-direction: column;
 
       .district {
         line-height: 15px;
@@ -2238,9 +2245,9 @@ abbr {
       }
 
       &.is-confirmed {
-        svg{
-          stroke: $cherry-mid;
+        svg {
           fill: $cherry-light;
+          stroke: $cherry-mid;
         }
 
         .boundary {
@@ -2261,8 +2268,8 @@ abbr {
 
       &.is-active {
         svg {
-          stroke: $blue-mid;
           fill: $blue-light;
+          stroke: $blue-mid;
         }
 
         .boundary {
@@ -2283,8 +2290,8 @@ abbr {
 
       &.is-recovered {
         svg {
-          stroke: $green-mid;
           fill: $green-light;
+          stroke: $green-mid;
         }
 
         .boundary {
@@ -2305,8 +2312,8 @@ abbr {
 
       &.is-deceased {
         svg {
-          stroke: $gray-mid;
           fill: $gray-light;
+          stroke: $gray-mid;
         }
 
         .boundary {
@@ -2333,22 +2340,22 @@ abbr {
         margin-bottom: .25rem;
 
         div {
-          border-radius: 5px;
+          align-items: center;
           background: $gray-light;
-          width: 2.5rem;
-          height: 2.5rem;
+          border-radius: 5px;
           cursor: pointer;
           display: flex;
           flex-direction: row;
+          height: 2.5rem;
           justify-content: center;
-          align-items: center;
+          width: 2.5rem;
 
           &.back {
             margin-right: 0 !important;
 
             svg {
-              stroke: transparent;
               fill: $gray;
+              stroke: transparent;
             }
           }
 
@@ -2362,25 +2369,25 @@ abbr {
         }
 
         .divider {
-          width: 2px !important;
           border-radius: 5px;
+          width: 2px !important;
         }
       }
 
       .switch-statistic {
-        flex-direction: row;
         align-self: flex-end;
+        flex-direction: row;
         position: absolute;
         top: 5rem;
 
         div {
+          background: none;
           display: flex;
           flex-direction: row;
-          background: none;
+          height: 1.25rem;
           margin-bottom: .25rem;
           margin-left: .65rem !important;
           width: 1.25rem;
-          height: 1.25rem;
 
           span {
             position: absolute;
@@ -2391,9 +2398,9 @@ abbr {
           }
 
           &.is-confirmed {
-            svg{
-              stroke: none;
+            svg {
               fill: $cherry-hover;
+              stroke: none;
             }
 
             &.is-highlighted {
@@ -2406,8 +2413,8 @@ abbr {
 
           &.is-active {
             svg {
-              stroke: none;
               fill: $blue-hover;
+              stroke: none;
             }
 
             &.is-highlighted {
@@ -2420,8 +2427,8 @@ abbr {
 
           &.is-recovered {
             svg {
-              stroke: none;
               fill: $green-hover;
+              stroke: none;
             }
 
             &.is-highlighted {
@@ -2434,8 +2441,8 @@ abbr {
 
           &.is-deceased {
             svg {
-              stroke: none;
               fill: $gray-hover;
+              stroke: none;
             }
 
             &.is-highlighted {
@@ -2461,6 +2468,7 @@ abbr {
   }
 
   .disclaimer {
+    align-items: center;
     backdrop-filter: saturate(180%) blur(20px);
     border-radius: 5px;
     bottom: 50%;
@@ -2474,10 +2482,9 @@ abbr {
     pointer-events: none;
     position: absolute;
     right: 0;
-    align-items: center;
+    transition: background, color 0.3s ease-in-out;
     width: 10rem;
     z-index: 99;
-    transition: background, color 0.3s ease-in-out;
 
     &.is-confirmed {
       background: $cherry-light;
@@ -2615,11 +2622,11 @@ abbr {
 }
 
 .TimeseriesExplorer {
+  align-self: center;
   display: flex;
   flex-direction: column;
   margin-top: 3rem;
   width: 30rem;
-  align-self: center;
 
   &.stickied {
     position: sticky !important;
@@ -2634,9 +2641,9 @@ abbr {
 
   .region-highlighted {
     color: $brick;
+    font-size: 14px;
     font-weight: 900;
     margin-top: .75rem;
-    font-size: 14px;
   }
 }
 
@@ -2645,41 +2652,53 @@ abbr {
   width: 100%;
 
   .svg-parent {
+    cursor: col-resize;
     height: 10rem;
     margin-bottom: 1rem;
-    cursor: col-resize;
 
-    line.stem {
-      stroke-width: 4px;
+    line {
+      &.stem {
+        stroke-width: 4px;
+      }
     }
 
     &.is-confirmed {
-      line.stem {
-        stroke: $cherry-mid;
+      line {
+        &.stem {
+          stroke: $cherry-mid;
+        }
       }
     }
 
     &.is-active {
-      line.stem {
-        stroke: $blue-mid;
+      line {
+        &.stem {
+          stroke: $blue-mid;
+        }
       }
     }
 
     &.is-recovered {
-      line.stem {
-        stroke: $green-mid;
+      line {
+        &.stem {
+          stroke: $green-mid;
+        }
       }
     }
 
     &.is-deceased {
-      line.stem {
-        stroke: $gray-mid;
+      line {
+        &.stem {
+          stroke: $gray-mid;
+        }
       }
     }
 
     &.is-tested {
-      line.stem {
-        stroke: $purple-mid;
+      line {
+        &.stem {
+          stroke: $purple-mid;
+        }
       }
     }
   }
@@ -3337,73 +3356,73 @@ footer {
 }
 
 .district-bar {
+  align-self: center;
   display: flex;
   flex-direction: column;
-  align-self: center;
 
-    .district-bar-bottom {
-      .button {
-        background: $gray-light;
-        color: $gray;
-        font-weight: 600;
-        height: 2.5rem;
-        justify-content: center;
-        margin-top: 0.75rem;
-        text-transform: unset;
-        width: 5rem;
-        flex-basis: 15%;
+  .district-bar-bottom {
+    .button {
+      background: $gray-light;
+      color: $gray;
+      flex-basis: 15%;
+      font-weight: 600;
+      height: 2.5rem;
+      justify-content: center;
+      margin-top: 0.75rem;
+      text-transform: unset;
+      width: 5rem;
 
-        &:hover {
-          background: $gray-hover;
-        }
+      &:hover {
+        background: $gray-hover;
       }
     }
+  }
 
-    .district-bar-top {
-      display: flex;
-      align-self: center;
-      flex-direction: row;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      width: 100%;
+  .district-bar-top {
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
 
-      h2 {
-        font-weight: 900;
-        margin-top: 0;
-        margin-bottom: 0.5rem;
+    h2 {
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+      margin-top: 0;
 
-        &.confirmed {
-          color: $red;
-        }
+      &.confirmed {
+        color: $red;
+      }
 
-        &.active {
-          color: $blue;
-        }
+      &.active {
+        color: $blue;
+      }
 
-        &.recovered {
-          color: $green;
-        }
+      &.recovered {
+        color: $green;
+      }
 
-        &.deceased {
-          color: $gray;
-        }
+      &.deceased {
+        color: $gray;
+      }
     }
   }
 
   .district-bar-left {
     display: flex;
-    flex-direction: column;
-    margin-right: 1rem;
-    flex-grow: 1;
     flex-basis: 20%;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-right: 1rem;
   }
 
   .district-bar-right {
     display: flex;
+    flex-basis: 60%;
+    flex-grow: 1;
     justify-content: center;
     position: relative;
-    flex-grow: 1;
-    flex-basis: 60%;
 
     .happy-sign {
       display: flex;
@@ -3418,9 +3437,6 @@ footer {
 
       svg {
         width: 100%;
-
-        text {
-        }
 
         .label {
           font-size: 11px;
@@ -3997,6 +4013,14 @@ footer {
     background: #161625 !important;
   }
 
+  .is-tested {
+    color: $dark-m-purple !important;
+
+    svg {
+      color: $dark-m-purple !important;
+    }
+  }
+
   .expand {
     background: #1e1e30 !important;
   }
@@ -4046,7 +4070,7 @@ footer {
       }
 
       a {
-        background: #40008050 !important;
+        background: $dark-m-purple-light !important;
       }
     }
 
@@ -4067,6 +4091,20 @@ footer {
             }
           }
         }
+      }
+    }
+  }
+
+  .StateHeader {
+    .header-right {
+      color: $dark-m-purple-mid;
+
+      h2 {
+        color: $dark-m-purple;
+      }
+
+      a {
+        background: $dark-m-purple-light;
       }
     }
   }
@@ -4103,7 +4141,7 @@ footer {
 
     .stats {
       &.tested {
-        background: #40008050 !important;
+        background: $dark-m-purple-light !important;
 
         h1 {
           color: #9673b9 !important;
@@ -4134,33 +4172,33 @@ footer {
     .stats {
       &.is-tested {
         h5 {
-          color: #9673b9bb !important;
+          color: $dark-m-purple-mid !important;
 
           &.title {
-            color: #9673b9 !important;
+            color: $dark-m-purple-mid !important;
           }
         }
 
         h2,
         h6 {
-          color: #9673b9 !important;
+          color: $dark-m-purple !important;
         }
       }
     }
 
     .svg-parent {
       &.is-tested {
-        background: #40008050 !important;
+        background: $dark-m-purple-light !important;
 
         svg {
           circle,
           .domain,
           .tick {
-            stroke: #9673b9 !important;
+            stroke: $dark-m-purple !important;
           }
 
           circle {
-            fill: #9673b9 !important;
+            fill: $dark-m-purple !important;
           }
 
           .trend,
@@ -4169,7 +4207,7 @@ footer {
           }
 
           text {
-            color: #9673b9bb !important;
+            color: $dark-m-purple-mid !important;
             stroke: transparent;
           }
         }
@@ -4178,7 +4216,7 @@ footer {
   }
 
   .tpm {
-    background: #40008050 !important;
+    background: $dark-m-purple-light !important;
 
     h3,
     h5,

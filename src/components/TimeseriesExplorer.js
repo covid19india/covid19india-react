@@ -30,7 +30,7 @@ function TimeseriesExplorer({
 }) {
   const {t} = useTranslation();
   const [timeseriesOption, setTimeseriesOption] = useState(
-    TIMESERIES_OPTIONS.TWO_WEEKS
+    TIMESERIES_OPTIONS.MONTH
   );
   const [chartType, setChartType] = useLocalStorage('chartType', 'total');
   const [isUniform, setIsUniform] = useLocalStorage('isUniform', true);
