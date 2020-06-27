@@ -98,7 +98,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
         )
       )
       .attr('fill', (date, i) => {
-        return i < date.length - 1
+        return i < dates.length - 1
           ? COLORS[statistic] + '90'
           : COLORS[statistic];
       });

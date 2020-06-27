@@ -465,7 +465,8 @@ h6 {
   }
 
   .TimeseriesExplorer {
-    .anchor {
+    .anchor,
+    .region-highlighted {
       display: none;
     }
   }
@@ -2366,6 +2367,10 @@ abbr {
           &:not(:last-child) {
             margin-right: .25rem;
           }
+
+          svg {
+            height: 100%;
+          }
         }
 
         .divider {
@@ -2652,7 +2657,6 @@ abbr {
   width: 100%;
 
   .svg-parent {
-    cursor: col-resize;
     height: 10rem;
     margin-bottom: 1rem;
 
