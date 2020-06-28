@@ -2011,7 +2011,7 @@ abbr {
         padding: .75rem .5rem;
 
         &:hover {
-          background: $gray-hover !important;
+          background: $gray-hover-opaque !important;
         }
       }
 
@@ -4045,6 +4045,10 @@ footer {
 
       &.heading {
         background: #1e1e30 !important;
+
+        &:hover {
+          background: #212130 !important;
+        }
       }
     }
 
