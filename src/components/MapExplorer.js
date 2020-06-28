@@ -35,7 +35,7 @@ import {useWindowSize} from 'react-use';
 const MapVisualizer = lazy(() => import('./MapVisualizer'));
 
 function MapExplorer({
-  stateCode = 'TT',
+  stateCode: mapCode = 'TT',
   data,
   regionHighlighted,
   setRegionHighlighted,
@@ -48,10 +48,9 @@ function MapExplorer({
   const mapExplorerRef = useRef();
   const {width} = useWindowSize();
 
-  const [mapCode] = useState(stateCode);
   const [mapView, setMapView] = useState(MAP_VIEWS.DISTRICTS);
   const [mapViz, setMapViz] = useState(
-    MAP_META[stateCode].mapType === MAP_TYPES.COUNTRY
+    MAP_META[mapCode].mapType === MAP_TYPES.COUNTRY
       ? MAP_VIZS.BUBBLES
       : MAP_VIZS.CHOROPLETH
   );
