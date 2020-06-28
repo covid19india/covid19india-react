@@ -29,7 +29,7 @@ import React, {
 } from 'react';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
-import {animated, config, useTrail} from 'react-spring';
+import {animated, config, useSpring, useTrail} from 'react-spring';
 import {useWindowSize} from 'react-use';
 
 const MapVisualizer = lazy(() => import('./MapVisualizer'));
@@ -152,6 +152,14 @@ function MapExplorer({
     config: config.stiff,
   });
 
+  const spring = useSpring({
+    total: getStatistic(hoveredRegion, 'total', mapStatistic),
+    config: {
+      tension: 250,
+      clamp: true,
+    },
+  });
+
   return (
     <div
       className={classnames(
@@ -170,8 +178,11 @@ function MapExplorer({
 
           {regionHighlighted.stateCode && (
             <h1 className={classnames('district', mapStatistic)}>
-              {formatNumber(getStatistic(hoveredRegion, 'total', mapStatistic))}
-              <br />
+              <animated.div>
+                {spring.total.interpolate((total) =>
+                  formatNumber(Math.floor(total))
+                )}
+              </animated.div>
               <span>{t(capitalize(mapStatistic))}</span>
             </h1>
           )}

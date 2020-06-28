@@ -1,10 +1,10 @@
 import StateDropdown from './StateDropdown';
 
-import {formatDate, formatNumber} from '../utils/commonFunctions';
+import {formatDate, formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {animated, config, useTrail} from 'react-spring';
+import {animated, config, useSpring, useTrail} from 'react-spring';
 
 function StateHeader({data, stateCode}) {
   const {t} = useTranslation();
@@ -16,6 +16,11 @@ function StateHeader({data, stateCode}) {
       opacity: 1,
       delay: 1000,
     },
+    config: config.gentle,
+  });
+
+  const spring = useSpring({
+    total: getStatistic(data, 'total', 'tested'),
     config: config.gentle,
   });
 
@@ -35,19 +40,21 @@ function StateHeader({data, stateCode}) {
 
       <animated.div className="header-right" style={trail[2]}>
         <h5>{t('Tested')}</h5>
-        {data?.total?.tested && (
-          <React.Fragment>
-            <h2>{formatNumber(data.total.tested)}</h2>
-            <h5 className="timestamp">
-              {`As of ${formatDate(data.meta.tested.last_updated, 'dd MMMM')}`}
-            </h5>
-            <h5>
-              {'per '}
-              <a href={data.meta.tested.source} target="_noblank">
-                source
-              </a>
-            </h5>
-          </React.Fragment>
+        <animated.h2>
+          {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
+        </animated.h2>
+        {data?.meta?.tested?.['last_updated'] && (
+          <h5 className="timestamp">
+            {`As of ${formatDate(data.meta.tested.last_updated, 'dd MMMM')}`}
+          </h5>
+        )}
+        {data?.meta?.tested?.source && (
+          <h5>
+            {'per '}
+            <a href={data.meta.tested.source} target="_noblank">
+              source
+            </a>
+          </h5>
         )}
       </animated.div>
     </div>
