@@ -6,7 +6,7 @@ import {fetcher} from '../utils/commonFunctions';
 import React, {useState, useRef, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 import {useLocation} from 'react-router-dom';
-import {useWindowSize} from 'react-use';
+import {useSessionStorage, useWindowSize} from 'react-use';
 
 const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
 const MapExplorer = lazy(() => import('./MapExplorer'));
@@ -26,7 +26,10 @@ function Home(props) {
   });
 
   const [anchor, setAnchor] = useState(null);
-  const [mapStatistic, setMapStatistic] = useState('confirmed');
+  const [mapStatistic, setMapStatistic] = useSessionStorage(
+    'mapStatistic',
+    'active'
+  );
   const [date, setDate] = useState('');
   const location = useLocation();
 

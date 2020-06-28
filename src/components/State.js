@@ -22,6 +22,7 @@ import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
 import {animated, config, useTrail} from 'react-spring';
+import {useSessionStorage} from 'react-use';
 import useSWR from 'swr';
 
 const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
@@ -33,7 +34,10 @@ function State(props) {
 
   const stateCode = useParams().stateCode.toUpperCase();
 
-  const [mapStatistic, setMapStatistic] = useState('active');
+  const [mapStatistic, setMapStatistic] = useSessionStorage(
+    'mapStatistic',
+    'active'
+  );
   const [showAllDistricts, setShowAllDistricts] = useState(false);
   const [regionHighlighted, setRegionHighlighted] = useState({
     stateCode: stateCode,
