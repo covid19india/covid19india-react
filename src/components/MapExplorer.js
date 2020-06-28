@@ -173,7 +173,7 @@ function MapExplorer({
           <h2 className={classnames(mapStatistic)}>
             {t(hoveredRegion.name)}
             {hoveredRegion.name === UNKNOWN_DISTRICT_KEY &&
-              ` (${t(STATE_NAMES[regionHighlighted.stateCode])})`}
+              ` [${t(STATE_NAMES[regionHighlighted.stateCode])}]`}
           </h2>
 
           {regionHighlighted.stateCode && (
