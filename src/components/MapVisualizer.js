@@ -383,7 +383,11 @@ function MapVisualizer({
       .attr('stroke-width', 1.5)
       .selectAll('path')
       .data(meshStates, (d) => d.id)
-      .join((enter) => enter.append('path').attr('d', path))
+      .join(
+        (enter) => enter.append('path').attr('d', path).attr('stroke', '#fff0'),
+        (update) => update,
+        (exit) => exit.transition(T).attr('stroke', '#fff0').remove()
+      )
       .transition(T)
       .attr('stroke', () => {
         return COLORS[statistic] + '40';
@@ -395,7 +399,16 @@ function MapVisualizer({
       .attr('stroke-width', 1.5)
       .selectAll('path')
       .data(meshDistricts, (d) => d.id)
-      .join((enter) => enter.append('path').attr('d', path))
+      .join(
+        (enter) =>
+          enter
+            .append('path')
+            .attr('d', path)
+            .attr('d', path)
+            .attr('stroke', '#fff0'),
+        (update) => update,
+        (exit) => exit.transition(T).attr('stroke', '#fff0').remove()
+      )
       .transition(T)
       .attr('stroke', () => {
         return COLORS[statistic] + '30';
