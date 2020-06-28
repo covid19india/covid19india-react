@@ -314,7 +314,7 @@ function MapVisualizer({
                 'transform',
                 (feature) => `translate(${path.centroid(feature)})`
               )
-              .attr('fill-opacity', 0.5)
+              .attr('fill-opacity', 0.25)
               .style('cursor', 'pointer')
               .attr('pointer-events', 'all')
               .on('click', (feature) => {
@@ -368,25 +368,34 @@ function MapVisualizer({
       meshStates[0].id = `${currentMap.code}-states`;
     }
 
-    if (currentMap.view === MAP_VIEWS.DISTRICTS) {
+    if (
+      mapMeta.mapType === MAP_TYPES.STATE ||
+      (currentMap.view === MAP_VIEWS.DISTRICTS &&
+        currentMap.viz === MAP_VIZS.CHOROPLETH)
+    ) {
       // Add id to mesh
       meshDistricts = [topojson.mesh(geoData, geoData.objects.districts)];
       meshDistricts[0].id = `${currentMap.code}-districts`;
     }
 
     svg
-      .select(
-        currentMap.view === MAP_VIEWS.STATES
-          ? '.state-borders'
-          : '.district-borders'
-      )
+      .select('.state-borders')
       .attr('fill', 'none')
       .attr('stroke-width', 1.5)
       .selectAll('path')
-      .data(
-        currentMap.view === MAP_VIEWS.STATES ? meshStates : meshDistricts,
-        (d) => d.id
-      )
+      .data(meshStates, (d) => d.id)
+      .join((enter) => enter.append('path').attr('d', path))
+      .transition(T)
+      .attr('stroke', () => {
+        return COLORS[statistic] + '40';
+      });
+
+    svg
+      .select('.district-borders')
+      .attr('fill', 'none')
+      .attr('stroke-width', 1.5)
+      .selectAll('path')
+      .data(meshDistricts, (d) => d.id)
       .join((enter) => enter.append('path').attr('d', path))
       .transition(T)
       .attr('stroke', () => {
@@ -460,9 +469,7 @@ function MapVisualizer({
         >
           <g className="regions" />
           <g className="state-borders" />
-          {currentMap.view === MAP_VIEWS.DISTRICTS && (
-            <g className="district-borders" />
-          )}
+          <g className="district-borders" />
           <g className="circles" />
         </svg>
         {mapMeta.mapType === MAP_TYPES.STATE &&
