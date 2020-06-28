@@ -204,6 +204,7 @@ function MapVisualizer({
     const T = transition().duration(D3_TRANSITION_DURATION);
 
     window.requestIdleCallback(() => {
+      let onceTouchedRegion = null;
       const regionSelection = svg
         .select('.regions')
         .selectAll('path')
@@ -236,10 +237,15 @@ function MapVisualizer({
               .remove()
         )
         .attr('pointer-events', 'all')
+        .on('touchstart', (d) => {
+          if (onceTouchedRegion === d) onceTouchedRegion = null;
+          else onceTouchedRegion = d;
+        })
         .on('click', (d) => {
           event.stopPropagation();
           const stateCode = STATE_CODES[d.properties.st_nm];
           if (
+            onceTouchedRegion ||
             mapMeta.mapType === MAP_TYPES.STATE ||
             !data[stateCode]?.districts
           )
@@ -313,6 +319,7 @@ function MapVisualizer({
     }
 
     window.requestIdleCallback(() => {
+      let onceTouchedRegion = null;
       svg
         .select('.circles')
         .selectAll('circle')
@@ -327,14 +334,7 @@ function MapVisualizer({
               )
               .attr('fill-opacity', 0.25)
               .style('cursor', 'pointer')
-              .attr('pointer-events', 'all')
-              .on('click', (feature) => {
-                history.push(
-                  `/state/${STATE_CODES[feature.properties.st_nm]}${
-                    window.innerWidth < 769 ? '#MapExplorer' : ''
-                  }`
-                );
-              }),
+              .attr('pointer-events', 'all'),
           (update) => update,
           (exit) =>
             exit.call((exit) => exit.transition(T).attr('r', 0).remove())
@@ -348,12 +348,26 @@ function MapVisualizer({
                 : feature.properties.district || UNKNOWN_DISTRICT_KEY,
           });
         })
+        .on('touchstart', (feature) => {
+          if (onceTouchedRegion === feature) onceTouchedRegion = null;
+          else onceTouchedRegion = feature;
+        })
+        .on('click', (feature) => {
+          event.stopPropagation();
+          if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE) return;
+          history.push(
+            `/state/${STATE_CODES[feature.properties.st_nm]}${
+              window.innerWidth < 769 ? '#MapExplorer' : ''
+            }`
+          );
+        })
         .transition(T)
         .attr('fill', COLORS[statistic] + '70')
         .attr('stroke', COLORS[statistic] + '70')
         .attr('r', (feature) => mapScale(feature.value));
     });
   }, [
+    mapMeta.mapType,
     mapViz,
     mapView,
     data,
