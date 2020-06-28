@@ -190,14 +190,12 @@ function MapVisualizer({
   useEffect(() => {
     const svg = select(svgRef.current);
     svg.attr('pointer-events', 'auto').on('click', () => {
-      if (mapMeta.mapType !== MAP_TYPES.STATE) {
-        setRegionHighlighted({
-          stateCode: 'TT',
-          districtName: null,
-        });
-      }
+      setRegionHighlighted({
+        stateCode: mapCode,
+        districtName: null,
+      });
     });
-  }, [mapMeta.mapType, setRegionHighlighted]);
+  }, [mapCode, setRegionHighlighted]);
 
   // Choropleth
   useEffect(() => {
