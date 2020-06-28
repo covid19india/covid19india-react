@@ -56,7 +56,9 @@ const getTotalStatistic = (data, statistic) => {
 };
 
 function MapVisualizer({
-  currentMap,
+  mapCode,
+  mapView,
+  mapViz,
   data,
   changeMap,
   regionHighlighted,
@@ -67,7 +69,7 @@ function MapVisualizer({
   const {t} = useTranslation();
   const svgRef = useRef(null);
 
-  const mapMeta = MAP_META[currentMap.code];
+  const mapMeta = MAP_META[mapCode];
   const history = useHistory();
 
   const {data: geoData} = useSWR(
@@ -84,7 +86,7 @@ function MapVisualizer({
         stateCode !== 'TT' && Object.keys(MAP_META).includes(stateCode)
     );
 
-    return currentMap.view === MAP_VIEWS.STATES
+    return mapView === MAP_VIEWS.STATES
       ? max(stateCodes, (stateCode) =>
           getTotalStatistic(data[stateCode], statistic)
         )
@@ -95,14 +97,14 @@ function MapVisualizer({
               )
             : 0
         );
-  }, [data, currentMap.view, statistic]);
+  }, [data, mapView, statistic]);
 
   const statisticTotal = useMemo(() => {
-    return getTotalStatistic(data[currentMap.code], statistic);
-  }, [data, currentMap.code, statistic]);
+    return getTotalStatistic(data[mapCode], statistic);
+  }, [data, mapCode, statistic]);
 
   const mapScale = useMemo(() => {
-    if (currentMap.viz === MAP_VIZS.BUBBLES) {
+    if (mapViz === MAP_VIZS.BUBBLES) {
       return scaleSqrt([0, Math.max(statisticMax, 1)], [0, 40])
         .clamp(true)
         .nice(3);
@@ -112,7 +114,7 @@ function MapVisualizer({
         colorInterpolator[statistic]
       ).clamp(true);
     }
-  }, [currentMap.viz, statistic, statisticMax]);
+  }, [mapViz, statistic, statisticMax]);
 
   const path = useMemo(() => {
     if (!geoData) return null;
@@ -141,10 +143,9 @@ function MapVisualizer({
   const features = useMemo(() => {
     if (!geoData) return null;
     const featuresWrap =
-      currentMap.view === MAP_VIEWS.STATES
+      mapView === MAP_VIEWS.STATES
         ? topojson.feature(geoData, geoData.objects.states).features
-        : mapMeta.mapType === MAP_TYPES.COUNTRY &&
-          currentMap.viz === MAP_VIZS.BUBBLES
+        : mapMeta.mapType === MAP_TYPES.COUNTRY && mapViz === MAP_VIZS.BUBBLES
         ? [
             ...topojson.feature(geoData, geoData.objects.states).features,
             ...topojson.feature(geoData, geoData.objects.districts).features,
@@ -156,15 +157,15 @@ function MapVisualizer({
       const district = feature.properties.district;
       const state = feature.properties.st_nm;
       const obj = Object.assign({}, feature);
-      obj.id = `${currentMap.code}-${state}${district ? '-' + district : ''}`;
+      obj.id = `${mapCode}-${state}${district ? '-' + district : ''}`;
       return obj;
     });
-  }, [geoData, currentMap.code, currentMap.view, currentMap.viz, mapMeta]);
+  }, [geoData, mapCode, mapView, mapViz, mapMeta]);
 
   const populateTexts = useCallback(
     (regionSelection) => {
       regionSelection.select('title').text((d) => {
-        if (currentMap.viz === MAP_VIZS.CHOROPLETH) {
+        if (mapViz === MAP_VIZS.CHOROPLETH) {
           const state = d.properties.st_nm;
           const stateCode = STATE_CODES[state];
           const district = d.properties.district;
@@ -182,7 +183,7 @@ function MapVisualizer({
         }
       });
     },
-    [currentMap.viz, data, statistic, statisticTotal]
+    [mapViz, data, statistic, statisticTotal]
   );
 
   // Choropleth
@@ -195,7 +196,7 @@ function MapVisualizer({
       const regionSelection = svg
         .select('.regions')
         .selectAll('path')
-        .data(currentMap.viz !== MAP_VIZS.BUBBLES ? features : [], (d) => d.id)
+        .data(mapViz !== MAP_VIZS.BUBBLES ? features : [], (d) => d.id)
         .join(
           (enter) =>
             enter
@@ -253,8 +254,7 @@ function MapVisualizer({
       });
     });
   }, [
-    currentMap.code,
-    currentMap.viz,
+    mapViz,
     data,
     features,
     fillColor,
@@ -275,16 +275,16 @@ function MapVisualizer({
     const T = transition().duration(D3_TRANSITION_DURATION);
 
     let circlesData = [];
-    if (currentMap.viz === MAP_VIZS.BUBBLES) {
+    if (mapViz === MAP_VIZS.BUBBLES) {
       circlesData = features
         .map((feature) => {
           const stateCode = STATE_CODES[feature.properties.st_nm];
           const districtName = feature.properties.district;
           const stateData = data[stateCode];
 
-          if (currentMap.view === MAP_VIEWS.STATES) {
+          if (mapView === MAP_VIEWS.STATES) {
             feature.value = getTotalStatistic(stateData, statistic);
-          } else if (currentMap.view === MAP_VIEWS.DISTRICTS) {
+          } else if (mapView === MAP_VIEWS.DISTRICTS) {
             const districtData = stateData?.districts?.[districtName];
 
             if (districtName)
@@ -332,7 +332,7 @@ function MapVisualizer({
           setRegionHighlighted({
             stateCode: STATE_CODES[feature.properties.st_nm],
             districtName:
-              currentMap.view === MAP_VIEWS.STATES
+              mapView === MAP_VIEWS.STATES
                 ? null
                 : feature.properties.district || UNKNOWN_DISTRICT_KEY,
           });
@@ -343,8 +343,8 @@ function MapVisualizer({
         .attr('r', (feature) => mapScale(feature.value));
     });
   }, [
-    currentMap.viz,
-    currentMap.view,
+    mapViz,
+    mapView,
     data,
     features,
     history,
@@ -365,17 +365,16 @@ function MapVisualizer({
 
     if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
       meshStates = [topojson.mesh(geoData, geoData.objects.states)];
-      meshStates[0].id = `${currentMap.code}-states`;
+      meshStates[0].id = `${mapCode}-states`;
     }
 
     if (
       mapMeta.mapType === MAP_TYPES.STATE ||
-      (currentMap.view === MAP_VIEWS.DISTRICTS &&
-        currentMap.viz === MAP_VIZS.CHOROPLETH)
+      (mapView === MAP_VIEWS.DISTRICTS && mapViz === MAP_VIZS.CHOROPLETH)
     ) {
       // Add id to mesh
       meshDistricts = [topojson.mesh(geoData, geoData.objects.districts)];
-      meshDistricts[0].id = `${currentMap.code}-districts`;
+      meshDistricts[0].id = `${mapCode}-districts`;
     }
 
     svg
@@ -401,15 +400,7 @@ function MapVisualizer({
       .attr('stroke', () => {
         return COLORS[statistic] + '30';
       });
-  }, [
-    geoData,
-    mapMeta,
-    currentMap.code,
-    currentMap.viz,
-    currentMap.view,
-    statistic,
-    path,
-  ]);
+  }, [geoData, mapMeta, mapCode, mapViz, mapView, statistic, path]);
 
   const highlightThreadId = useRef();
   // Highlight
@@ -422,7 +413,7 @@ function MapVisualizer({
     window.cancelIdleCallback(highlightThreadId.current);
 
     highlightThreadId.current = window.requestIdleCallback(() => {
-      if (currentMap.viz === MAP_VIZS.BUBBLES) {
+      if (mapViz === MAP_VIZS.BUBBLES) {
         svg
           .select('.circles')
           .selectAll('circle')
@@ -441,7 +432,7 @@ function MapVisualizer({
           .each(function (d) {
             const highlighted =
               stateName === d.properties.st_nm &&
-              (currentMap.view === MAP_VIEWS.STATES ||
+              (mapView === MAP_VIEWS.STATES ||
                 district === d.properties?.district);
             if (highlighted) this.parentNode.appendChild(this);
             select(this).attr('stroke-opacity', highlighted ? 1 : 0);
@@ -451,8 +442,8 @@ function MapVisualizer({
   }, [
     geoData,
     data,
-    currentMap.view,
-    currentMap.viz,
+    mapView,
+    mapViz,
     regionHighlighted.stateCode,
     regionHighlighted.districtName,
     statistic,
@@ -474,7 +465,7 @@ function MapVisualizer({
         </svg>
         {mapMeta.mapType === MAP_TYPES.STATE &&
           !!getTotalStatistic(
-            data[currentMap.code]?.districts?.[UNKNOWN_DISTRICT_KEY],
+            data[mapCode]?.districts?.[UNKNOWN_DISTRICT_KEY],
             statistic
           ) && (
             <div className={classnames('disclaimer', `is-${statistic}`)}>
@@ -488,12 +479,7 @@ function MapVisualizer({
           )}
       </div>
 
-      {mapScale && (
-        <MapLegend
-          mapOption={currentMap.viz}
-          {...{data, mapScale, statistic}}
-        />
-      )}
+      {mapScale && <MapLegend {...{data, mapViz, mapScale, statistic}} />}
 
       <svg style={{position: 'absolute', height: 0}}>
         <defs>

@@ -15,7 +15,7 @@ import {select} from 'd3-selection';
 import React, {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 
-function MapLegend({data, mapScale, mapOption, statistic}) {
+function MapLegend({data, mapViz, mapScale, statistic}) {
   const {t} = useTranslation();
 
   const svgRef = useRef(null);
@@ -31,7 +31,7 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
       if (!width || !height)
         ({width, height} = wrapperRef.current.getBoundingClientRect());
 
-      if (mapOption === MAP_VIZS.BUBBLES) {
+      if (mapViz === MAP_VIZS.BUBBLES) {
         const t = svg.transition().duration(D3_TRANSITION_DURATION);
         svg
           .select('.ramp')
@@ -92,7 +92,7 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
             height: height,
             ticks: 5,
             tickFormat: function (d, i, n) {
-              if (mapOption === MAP_VIZS.CHOROPLETH && !Number.isInteger(d))
+              if (mapViz === MAP_VIZS.CHOROPLETH && !Number.isInteger(d))
                 return;
               if (i === n.length - 1) return formatNumber(d) + '+';
               return formatNumber(d);
@@ -103,7 +103,7 @@ function MapLegend({data, mapScale, mapOption, statistic}) {
         );
       }
     });
-  }, [t, dimensions, mapScale, mapOption, statistic]);
+  }, [t, dimensions, mapScale, mapViz, statistic]);
 
   return (
     <div

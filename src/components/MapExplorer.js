@@ -48,20 +48,17 @@ function MapExplorer({
   const mapExplorerRef = useRef();
   const {width} = useWindowSize();
 
-  const [currentMap, setCurrentMap] = useState({
-    code: stateCode,
-    view: MAP_VIEWS.DISTRICTS,
-    viz:
-      MAP_META[stateCode].mapType === MAP_TYPES.COUNTRY
-        ? MAP_VIZS.BUBBLES
-        : MAP_VIZS.CHOROPLETH,
-  });
+  const [mapCode] = useState(stateCode);
+  const [mapView, setMapView] = useState(MAP_VIEWS.DISTRICTS);
+  const [mapViz, setMapViz] = useState(
+    MAP_META[stateCode].mapType === MAP_TYPES.COUNTRY
+      ? MAP_VIZS.BUBBLES
+      : MAP_VIZS.CHOROPLETH
+  );
 
-  const currentMapMeta = MAP_META[currentMap.code];
-  const currentMapData =
-    currentMapMeta.mapType === MAP_TYPES.COUNTRY
-      ? data
-      : {[currentMap.code]: data[currentMap.code]};
+  const mapMeta = MAP_META[mapCode];
+  const mapData =
+    mapMeta.mapType === MAP_TYPES.COUNTRY ? data : {[mapCode]: data[mapCode]};
 
   const hoveredRegion = useMemo(() => {
     const hoveredData =
@@ -81,12 +78,8 @@ function MapExplorer({
   const handleTabClick = (option) => {
     switch (option) {
       case MAP_VIZS.CHOROPLETH:
-        setCurrentMap({
-          code: currentMap.code,
-          view: currentMap.view,
-          viz: MAP_VIZS.CHOROPLETH,
-        });
-        if (currentMapMeta.mapType === MAP_TYPES.COUNTRY)
+        setMapViz(MAP_VIZS.CHOROPLETH);
+        if (mapMeta.mapType === MAP_TYPES.COUNTRY)
           setRegionHighlighted({
             stateCode: regionHighlighted.stateCode,
             districtName: null,
@@ -94,11 +87,7 @@ function MapExplorer({
         return;
 
       case MAP_VIZS.BUBBLES:
-        setCurrentMap({
-          code: currentMap.code,
-          view: currentMap.view,
-          viz: MAP_VIZS.BUBBLES,
-        });
+        setMapViz(MAP_VIZS.BUBBLES);
         return;
 
       default:
@@ -193,7 +182,7 @@ function MapExplorer({
           <div className="switch-type">
             <animated.div
               className={classnames('choropleth', {
-                'is-highlighted': currentMap.viz === MAP_VIZS.CHOROPLETH,
+                'is-highlighted': mapViz === MAP_VIZS.CHOROPLETH,
               })}
               onClick={() => handleTabClick(MAP_VIZS.CHOROPLETH)}
               style={trail[1]}
@@ -202,7 +191,7 @@ function MapExplorer({
             </animated.div>
             <animated.div
               className={classnames('bubble', {
-                'is-highlighted': currentMap.viz === MAP_VIZS.BUBBLES,
+                'is-highlighted': mapViz === MAP_VIZS.BUBBLES,
               })}
               onClick={() => handleTabClick(MAP_VIZS.BUBBLES)}
               style={trail[2]}
@@ -210,21 +199,18 @@ function MapExplorer({
               {BubblesIcon}
             </animated.div>
 
-            {currentMapMeta.mapType === MAP_TYPES.COUNTRY && (
+            {mapMeta.mapType === MAP_TYPES.COUNTRY && (
               <React.Fragment>
                 <div className="divider" />
                 <animated.div
                   className={classnames('boundary', {
-                    'is-highlighted': currentMap.view === MAP_VIEWS.DISTRICTS,
+                    'is-highlighted': mapView === MAP_VIEWS.DISTRICTS,
                   })}
                   onClick={() => {
-                    setCurrentMap(
-                      produce(currentMap, (currentMapDraft) => {
-                        currentMapDraft.view =
-                          currentMap.view === MAP_VIEWS.DISTRICTS
-                            ? MAP_VIEWS.STATES
-                            : MAP_VIEWS.DISTRICTS;
-                      })
+                    setMapView(
+                      mapView === MAP_VIEWS.DISTRICTS
+                        ? MAP_VIEWS.STATES
+                        : MAP_VIEWS.DISTRICTS
                     );
                   }}
                   style={trail[2]}
@@ -234,7 +220,7 @@ function MapExplorer({
               </React.Fragment>
             )}
 
-            {currentMapMeta.mapType === MAP_TYPES.STATE && (
+            {mapMeta.mapType === MAP_TYPES.STATE && (
               <animated.div
                 className="back"
                 onClick={() => {
@@ -281,8 +267,8 @@ function MapExplorer({
             }
           >
             <MapVisualizer
-              {...{currentMap}}
-              data={currentMapData}
+              {...{mapCode, mapView, mapViz}}
+              data={mapData}
               {...{regionHighlighted, setRegionHighlighted}}
               statistic={mapStatistic}
             ></MapVisualizer>
