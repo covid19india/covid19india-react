@@ -301,13 +301,13 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
           Object.keys(districts)
             .sort((a, b) => sortingFunction(a, b))
             .slice(0, 30)
-            .map((districtName) => {
+            .map((districtKey) => {
               return (
                 <Row
-                  key={districtName}
-                  data={districts[districtName]}
+                  key={districtKey}
+                  data={districts[districtKey]}
+                  districtName={districts[districtKey].districtName}
                   {...{
-                    districtName,
                     isPerMillion,
                     regionHighlighted,
                     setRegionHighlighted,

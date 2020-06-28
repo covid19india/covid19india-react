@@ -6,8 +6,10 @@ export const getDistricts = (data) => {
   Object.keys(data).map((stateCode) => {
     Object.keys(data[stateCode]?.districts || {}).map((districtName) => {
       districts = produce(districts || {}, (draftDistricts) => {
-        draftDistricts[districtName] = data[stateCode].districts[districtName];
-        draftDistricts[districtName].stateCode = stateCode;
+        const districtKey = `${districtName}-${stateCode}`;
+        draftDistricts[districtKey] = data[stateCode].districts[districtName];
+        draftDistricts[districtKey].districtName = districtName;
+        draftDistricts[districtKey].stateCode = stateCode;
       });
       return null;
     });

@@ -3,7 +3,11 @@ import DistrictRow from './DistrictRow';
 import HeaderCell from './HeaderCell';
 import Tooltip from './Tooltip';
 
-import {TABLE_STATISTICS, STATE_NAMES} from '../constants';
+import {
+  TABLE_STATISTICS,
+  STATE_NAMES,
+  UNKNOWN_DISTRICT_KEY,
+} from '../constants';
 import {
   capitalize,
   formatLastUpdated,
@@ -105,7 +109,10 @@ function Row({
         );
       }
     } else if (districtName) {
-      if (regionHighlighted.districtName !== districtName) {
+      if (
+        regionHighlighted.districtName !== districtName ||
+        regionHighlighted.stateCode !== data.stateCode
+      ) {
         setRegionHighlighted(
           produce(regionHighlighted, (draftRegionHighlighted) => {
             draftRegionHighlighted.stateCode = data.stateCode;
@@ -142,6 +149,13 @@ function Row({
     config: config.gentle,
   });
 
+  let districtNameStr = districtName;
+  if (districtName === UNKNOWN_DISTRICT_KEY) {
+    districtNameStr = `${t(UNKNOWN_DISTRICT_KEY)} [${t(
+      STATE_NAMES[data.stateCode]
+    )}]`;
+  }
+
   if (mount)
     return (
       <React.Fragment>
@@ -153,7 +167,8 @@ function Row({
               'is-highlighted':
                 (stateCode && regionHighlighted?.stateCode === stateCode) ||
                 (districtName &&
-                  regionHighlighted?.districtName === districtName),
+                  regionHighlighted?.districtName === districtName &&
+                  regionHighlighted?.stateCode === data.stateCode),
             }
           )}
           onMouseEnter={highlightState}
@@ -163,7 +178,7 @@ function Row({
         >
           <div className="cell">
             <div className="state-name">
-              {t(STATE_NAMES[stateCode] || districtName)}
+              {t(STATE_NAMES[stateCode]) || districtNameStr}
             </div>
             {data?.meta?.notes && (
               <Tooltip {...{data: data.meta.notes}}>
@@ -252,7 +267,7 @@ function Row({
 
         {showDistricts && (
           <div className="spacer">
-            <p>{`End of ${STATE_NAMES[stateCode]}'s districts`}</p>
+            <p>{`End of ${t(STATE_NAMES[stateCode])}'s districts`}</p>
             <div
               className="fold"
               onClick={() => {
