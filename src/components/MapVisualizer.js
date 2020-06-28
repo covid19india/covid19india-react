@@ -186,6 +186,19 @@ function MapVisualizer({
     [mapViz, data, statistic, statisticTotal]
   );
 
+  // Reset on tapping outside map
+  useEffect(() => {
+    const svg = select(svgRef.current);
+    svg.attr('pointer-events', 'auto').on('click', () => {
+      if (mapMeta.mapType !== MAP_TYPES.STATE) {
+        setRegionHighlighted({
+          stateCode: 'TT',
+          districtName: null,
+        });
+      }
+    });
+  }, [mapMeta.mapType, setRegionHighlighted]);
+
   // Choropleth
   useEffect(() => {
     if (!geoData) return;
