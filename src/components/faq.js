@@ -41,7 +41,7 @@ function FAQ(props) {
             className="faq fadeInUp"
             style={{animationDelay: `${0.5 + index * 0.1}s`}}
           >
-            
+            <h6 className="question">About</h6>
             <h2 className="question">{faq.question}</h2>
             <h2
               className="answer"
