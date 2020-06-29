@@ -39,7 +39,6 @@ import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import useSWR from 'swr';
 import * as topojson from 'topojson';
-import 'requestidlecallback';
 
 const [width, height] = [432, 488];
 

@@ -31,6 +31,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
   const dates = pastDates.slice(-lookback);
 
   useEffect(() => {
+    if (!width) return;
     const svg = select(svgRef.current);
 
     const chartRight = width - margin.right;

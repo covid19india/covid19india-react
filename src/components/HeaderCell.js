@@ -3,18 +3,33 @@ import {capitalize} from '../utils/commonFunctions';
 import {FilterIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
+import produce from 'immer';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {createBreakpoint} from 'react-use';
+import {useLongPress} from 'react-use';
 
 const useBreakpoint = createBreakpoint({S: 768});
 
-function StateHeaderCell({handleSort, sortData, statistic}) {
+function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
   const breakpoint = useBreakpoint();
   const {t} = useTranslation();
 
+  const onLongPress = () => {
+    setSortData(
+      produce(sortData, (sortDataDraft) => {
+        sortDataDraft.delta = !sortData.delta;
+      })
+    );
+  };
+  const longPressEvent = useLongPress(onLongPress, {isPreventDefault: false});
+
   return (
-    <div className="cell heading" onClick={() => handleSort(statistic)}>
+    <div
+      className="cell heading"
+      onClick={() => handleSort(statistic)}
+      {...longPressEvent}
+    >
       {sortData.sortColumn === statistic && (
         <div
           className={classnames('sort-icon', {

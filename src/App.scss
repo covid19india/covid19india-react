@@ -38,6 +38,7 @@ $gray-light: #6c757d10;
 $gray-light-opaque: #f6f6f7;
 $gray-hover: #6c757d20;
 $gray-mid: #6c757d99;
+$gray-middark: #6c757d30;
 $gray-dark: #343a40;
 $gray-opaque: #f1f1f1;
 $gray-hover-opaque: #edeeef;
@@ -73,6 +74,7 @@ $dark-m-purple-light: #40008050;
 
 * {
   font-family: 'archia';
+  user-select: none;
 }
 
 html {
@@ -2324,7 +2326,7 @@ abbr {
         }
 
         .is-highlighted {
-          background: $gray-light;
+          background: $gray-middark;
 
           &:hover {
             background: $gray-hover;
@@ -3417,6 +3419,7 @@ footer {
     flex-basis: 20%;
     flex-direction: column;
     flex-grow: 1;
+    flex-shrink: 0;
     margin-right: 1rem;
   }
 
