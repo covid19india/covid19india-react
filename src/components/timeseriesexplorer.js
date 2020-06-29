@@ -40,7 +40,7 @@ function Chart({
   );
 }
 
-function Pills(props) {
+function Pills({timeseriesOption, setTimeseriesOption}) {
   const {t} = useTranslation();
   return (
     <div className="pills">
@@ -48,8 +48,8 @@ function Pills(props) {
         <button
           key={option}
           type="button"
-          className={classnames({selected: props.timeseriesOption === option})}
-          onClick={() => props.setTimeseriesOption(option)}
+          className={classnames({selected: timeseriesOption === option})}
+          onClick={() => setTimeseriesOption(option)}
         >
           {t(option)}
         </button>
