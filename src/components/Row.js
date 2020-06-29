@@ -23,11 +23,10 @@ import {
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React, {useState, useEffect, useCallback, useRef} from 'react';
+import React, {useState, useCallback, useRef} from 'react';
 import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
-import {useSpring, animated, config} from 'react-spring';
 import {useLocalStorage} from 'react-use';
 
 function Row({
@@ -135,20 +134,6 @@ function Row({
     }
   }, [showDistricts, data]);
 
-  const [mount, setMount] = useState(false);
-
-  useEffect(() => {
-    requestIdleCallback(() => {
-      setMount(true);
-    });
-  });
-
-  const spring = useSpring({
-    from: {opacity: 0},
-    to: {opacity: mount ? 1 : 0},
-    config: config.gentle,
-  });
-
   let districtNameStr = districtName;
   if (districtName === UNKNOWN_DISTRICT_KEY) {
     districtNameStr = `${t(UNKNOWN_DISTRICT_KEY)} [${t(
@@ -156,134 +141,131 @@ function Row({
     )}]`;
   }
 
-  if (mount)
-    return (
-      <React.Fragment>
-        <animated.div
-          className={classnames(
-            'row',
-            {'is-total': stateCode === 'TT'},
-            {
-              'is-highlighted':
-                (stateCode && regionHighlighted?.stateCode === stateCode) ||
-                (districtName &&
-                  regionHighlighted?.districtName === districtName &&
-                  regionHighlighted?.stateCode === data.stateCode),
-            }
-          )}
-          onMouseEnter={highlightState}
-          onClick={_setShowDistrict}
-          style={spring}
-          ref={rowElement}
-        >
-          <div className="cell">
-            <div className="state-name">
-              {t(STATE_NAMES[stateCode]) || districtNameStr}
-            </div>
-            {data?.meta?.notes && (
-              <Tooltip {...{data: data.meta.notes}}>
-                <Info size={16} />
-              </Tooltip>
-            )}
-          </div>
-
-          {TABLE_STATISTICS.map((statistic) => (
-            <Cell key={statistic} {...{data, statistic, isPerMillion}} />
-          ))}
-        </animated.div>
-
-        {showDistricts && (
-          <React.Fragment>
-            <div className="state-meta">
-              {data?.meta?.['last_updated'] && (
-                <p className="last-updated">
-                  <ClockIcon />
-                  {capitalize(
-                    `${formatLastUpdated(data.meta.last_updated)} ${t('ago')}`
-                  )}
-                </p>
-              )}
-              <div
-                className="state-page"
-                onClick={() => {
-                  history.push(`state/${stateCode}`);
-                }}
-              >
-                <GraphIcon />
-                <span>
-                  {t('See more details on {{state}}', {
-                    state: stateCode,
-                  })}
-                </span>
-              </div>
-            </div>
-
-            <div className={classnames('row', 'heading')}>
-              <div
-                className="cell heading"
-                onClick={() => handleSortClick('districtName')}
-              >
-                <div className="district-name">{t('District')}</div>
-                {sortData.sortColumn === 'districtName' && (
-                  <div
-                    className={classnames('sort-icon', {
-                      invert: !sortData.isAscending,
-                    })}
-                  >
-                    <FilterIcon size={10} />
-                  </div>
-                )}
-              </div>
-
-              {TABLE_STATISTICS.map((statistic) => (
-                <HeaderCell
-                  key={statistic}
-                  {...{statistic, sortData}}
-                  handleSort={() => {
-                    handleSortClick(statistic);
-                  }}
-                />
-              ))}
-            </div>
-          </React.Fragment>
+  return (
+    <React.Fragment>
+      <div
+        className={classnames(
+          'row',
+          {'is-total': stateCode === 'TT'},
+          {
+            'is-highlighted':
+              (stateCode && regionHighlighted?.stateCode === stateCode) ||
+              (districtName &&
+                regionHighlighted?.districtName === districtName &&
+                regionHighlighted?.stateCode === data.stateCode),
+          }
         )}
+        onMouseEnter={highlightState}
+        onClick={_setShowDistrict}
+        ref={rowElement}
+      >
+        <div className="cell">
+          <div className="state-name">
+            {t(STATE_NAMES[stateCode]) || districtNameStr}
+          </div>
+          {data?.meta?.notes && (
+            <Tooltip {...{data: data.meta.notes}}>
+              <Info size={16} />
+            </Tooltip>
+          )}
+        </div>
 
-        {showDistricts &&
-          Object.keys(data.districts)
-            .sort((a, b) => sortingFunction(a, b))
-            .map((districtName) => (
-              <DistrictRow
-                key={districtName}
-                {...{
-                  districtName,
-                  regionHighlighted,
-                  setRegionHighlighted,
-                  stateCode,
-                  isPerMillion,
-                }}
-                data={data.districts[districtName]}
-              />
-            ))}
+        {TABLE_STATISTICS.map((statistic) => (
+          <Cell key={statistic} {...{data, statistic, isPerMillion}} />
+        ))}
+      </div>
 
-        {showDistricts && (
-          <div className="spacer">
-            <p>{`End of ${t(STATE_NAMES[stateCode])}'s districts`}</p>
+      {showDistricts && (
+        <React.Fragment>
+          <div className="state-meta">
+            {data?.meta?.['last_updated'] && (
+              <p className="last-updated">
+                <ClockIcon />
+                {capitalize(
+                  `${formatLastUpdated(data.meta.last_updated)} ${t('ago')}`
+                )}
+              </p>
+            )}
             <div
-              className="fold"
+              className="state-page"
               onClick={() => {
-                setShowDistricts(false);
-                rowElement.current.scrollIntoView({
-                  block: 'start',
-                });
+                history.push(`state/${stateCode}`);
               }}
             >
-              <FoldUpIcon />
+              <GraphIcon />
+              <span>
+                {t('See more details on {{state}}', {
+                  state: stateCode,
+                })}
+              </span>
             </div>
           </div>
-        )}
-      </React.Fragment>
-    );
-  else return null;
+
+          <div className={classnames('row', 'heading')}>
+            <div
+              className="cell heading"
+              onClick={() => handleSortClick('districtName')}
+            >
+              <div className="district-name">{t('District')}</div>
+              {sortData.sortColumn === 'districtName' && (
+                <div
+                  className={classnames('sort-icon', {
+                    invert: !sortData.isAscending,
+                  })}
+                >
+                  <FilterIcon size={10} />
+                </div>
+              )}
+            </div>
+
+            {TABLE_STATISTICS.map((statistic) => (
+              <HeaderCell
+                key={statistic}
+                {...{statistic, sortData}}
+                handleSort={() => {
+                  handleSortClick(statistic);
+                }}
+              />
+            ))}
+          </div>
+        </React.Fragment>
+      )}
+
+      {showDistricts &&
+        Object.keys(data.districts)
+          .sort((a, b) => sortingFunction(a, b))
+          .map((districtName) => (
+            <DistrictRow
+              key={districtName}
+              {...{
+                districtName,
+                regionHighlighted,
+                setRegionHighlighted,
+                stateCode,
+                isPerMillion,
+              }}
+              data={data.districts[districtName]}
+            />
+          ))}
+
+      {showDistricts && (
+        <div className="spacer">
+          <p>{`End of ${t(STATE_NAMES[stateCode])}'s districts`}</p>
+          <div
+            className="fold"
+            onClick={() => {
+              setShowDistricts(false);
+              rowElement.current.scrollIntoView({
+                block: 'start',
+              });
+            }}
+          >
+            <FoldUpIcon />
+          </div>
+        </div>
+      )}
+    </React.Fragment>
+  );
 }
 
 const isEqual = (prevProps, currProps) => {
