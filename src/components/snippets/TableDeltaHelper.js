@@ -23,7 +23,7 @@ const TableDeltaHelper = () => {
       <span className={classnames(`is-${TABLE_STATISTICS[statisticIndex]}`)}>
         <FilterIcon size={14} />
       </span>
-      <p>Sort by Delta</p>
+      <p>Sort by Delta [long press]</p>
     </React.Fragment>
   );
 };

@@ -41,18 +41,6 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
             draftSortData.sortColumn = statistic;
           })
         );
-      } else if (sortData.isAscending && !sortData.delta) {
-        setSortData(
-          produce(sortData, (draftSortData) => {
-            draftSortData.delta = !sortData.delta;
-          })
-        );
-      } else if (!sortData.isAscending && sortData.delta) {
-        setSortData(
-          produce(sortData, (draftSortData) => {
-            draftSortData.delta = !sortData.delta;
-          })
-        );
       } else {
         setSortData(
           produce(sortData, (draftSortData) => {
@@ -196,12 +184,14 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
                 <div className="info-item sort">
                   <FilterIcon size={14} />
                   <p>Sort by Descending</p>
-                  <TableDeltaHelper />
                 </div>
 
                 <div className="info-item sort invert">
                   <FilterIcon size={14} />
                   <p>Sort by Ascending</p>
+                </div>
+                <div className="info-item sort">
+                  <TableDeltaHelper />
                 </div>
               </div>
 
@@ -262,7 +252,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
           {TABLE_STATISTICS.map((statistic) => (
             <HeaderCell
               key={statistic}
-              {...{statistic, sortData}}
+              {...{statistic, sortData, setSortData}}
               handleSort={() => {
                 handleSortClick(statistic);
               }}
