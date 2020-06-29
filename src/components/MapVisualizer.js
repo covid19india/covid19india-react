@@ -202,73 +202,64 @@ function MapVisualizer({
     const svg = select(svgRef.current);
     const T = transition().duration(D3_TRANSITION_DURATION);
 
-    window.requestIdleCallback(() => {
-      let onceTouchedRegion = null;
-      const regionSelection = svg
-        .select('.regions')
-        .selectAll('path')
-        .data(mapViz !== MAP_VIZS.BUBBLES ? features : [], (d) => d.id)
-        .join(
-          (enter) =>
-            enter
-              .append('path')
-              .attr('d', path)
-              .attr('stroke-width', 1.8)
-              .attr('stroke-opacity', 0)
-              .style('cursor', 'pointer')
-              .on('mouseenter', (d) => {
-                setRegionHighlighted({
-                  stateCode: STATE_CODES[d.properties.st_nm],
-                  districtName: d.properties.district,
-                });
-              })
-              .attr('fill', '#fff0')
-              .attr('stroke', '#fff0')
-              .call((enter) => {
-                enter.append('title');
-              }),
-          (update) => update,
-          (exit) =>
-            exit
-              .transition(T)
-              .attr('stroke', '#fff0')
-              .attr('fill', '#fff0')
-              .remove()
+    let onceTouchedRegion = null;
+    const regionSelection = svg
+      .select('.regions')
+      .selectAll('path')
+      .data(mapViz !== MAP_VIZS.BUBBLES ? features : [], (d) => d.id)
+      .join(
+        (enter) =>
+          enter
+            .append('path')
+            .attr('d', path)
+            .attr('stroke-width', 1.8)
+            .attr('stroke-opacity', 0)
+            .style('cursor', 'pointer')
+            .on('mouseenter', (d) => {
+              setRegionHighlighted({
+                stateCode: STATE_CODES[d.properties.st_nm],
+                districtName: d.properties.district,
+              });
+            })
+            .attr('fill', '#fff0')
+            .attr('stroke', '#fff0')
+            .call((enter) => {
+              enter.append('title');
+            }),
+        (update) => update,
+        (exit) =>
+          exit
+            .transition(T)
+            .attr('stroke', '#fff0')
+            .attr('fill', '#fff0')
+            .remove()
+      )
+      .attr('pointer-events', 'all')
+      .on('touchstart', (d) => {
+        if (onceTouchedRegion === d) onceTouchedRegion = null;
+        else onceTouchedRegion = d;
+      })
+      .on('click', (d) => {
+        event.stopPropagation();
+        const stateCode = STATE_CODES[d.properties.st_nm];
+        if (
+          onceTouchedRegion ||
+          mapMeta.mapType === MAP_TYPES.STATE ||
+          !data[stateCode]?.districts
         )
-        .attr('pointer-events', 'all')
-        .on('touchstart', (d) => {
-          if (onceTouchedRegion === d) onceTouchedRegion = null;
-          else onceTouchedRegion = d;
-        })
-        .on('click', (d) => {
-          event.stopPropagation();
-          const stateCode = STATE_CODES[d.properties.st_nm];
-          if (
-            onceTouchedRegion ||
-            mapMeta.mapType === MAP_TYPES.STATE ||
-            !data[stateCode]?.districts
-          )
-            return;
-          // Disable pointer events till the new map is rendered
-          svg.attr('pointer-events', 'none');
-          svg
-            .select('.regions')
-            .selectAll('path')
-            .attr('pointer-events', 'none');
-          // Switch map
-          history.push(
-            `/state/${stateCode}${
-              window.innerWidth < 769 ? '#MapExplorer' : ''
-            }`
-          );
-        })
-        .call((sel) => {
-          sel.transition(T).attr('fill', fillColor).attr('stroke', strokeColor);
-        });
-      window.requestIdleCallback(() => {
-        populateTexts(regionSelection);
+          return;
+        // Disable pointer events till the new map is rendered
+        svg.attr('pointer-events', 'none');
+        svg.select('.regions').selectAll('path').attr('pointer-events', 'none');
+        // Switch map
+        history.push(
+          `/state/${stateCode}${window.innerWidth < 769 ? '#MapExplorer' : ''}`
+        );
+      })
+      .call((sel) => {
+        sel.transition(T).attr('fill', fillColor).attr('stroke', strokeColor);
       });
-    });
+    populateTexts(regionSelection);
   }, [
     mapViz,
     data,
@@ -317,54 +308,51 @@ function MapVisualizer({
         .sort((featureA, featureB) => featureB.value - featureB.value);
     }
 
-    window.requestIdleCallback(() => {
-      let onceTouchedRegion = null;
-      svg
-        .select('.circles')
-        .selectAll('circle')
-        .data(circlesData, (feature) => feature.id)
-        .join(
-          (enter) =>
-            enter
-              .append('circle')
-              .attr(
-                'transform',
-                (feature) => `translate(${path.centroid(feature)})`
-              )
-              .attr('fill-opacity', 0.25)
-              .style('cursor', 'pointer')
-              .attr('pointer-events', 'all'),
-          (update) => update,
-          (exit) =>
-            exit.call((exit) => exit.transition(T).attr('r', 0).remove())
-        )
-        .on('mouseenter', (feature) => {
-          setRegionHighlighted({
-            stateCode: STATE_CODES[feature.properties.st_nm],
-            districtName:
-              mapView === MAP_VIEWS.STATES
-                ? null
-                : feature.properties.district || UNKNOWN_DISTRICT_KEY,
-          });
-        })
-        .on('touchstart', (feature) => {
-          if (onceTouchedRegion === feature) onceTouchedRegion = null;
-          else onceTouchedRegion = feature;
-        })
-        .on('click', (feature) => {
-          event.stopPropagation();
-          if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE) return;
-          history.push(
-            `/state/${STATE_CODES[feature.properties.st_nm]}${
-              window.innerWidth < 769 ? '#MapExplorer' : ''
-            }`
-          );
-        })
-        .transition(T)
-        .attr('fill', COLORS[statistic] + '70')
-        .attr('stroke', COLORS[statistic] + '70')
-        .attr('r', (feature) => mapScale(feature.value));
-    });
+    let onceTouchedRegion = null;
+    svg
+      .select('.circles')
+      .selectAll('circle')
+      .data(circlesData, (feature) => feature.id)
+      .join(
+        (enter) =>
+          enter
+            .append('circle')
+            .attr(
+              'transform',
+              (feature) => `translate(${path.centroid(feature)})`
+            )
+            .attr('fill-opacity', 0.25)
+            .style('cursor', 'pointer')
+            .attr('pointer-events', 'all'),
+        (update) => update,
+        (exit) => exit.call((exit) => exit.transition(T).attr('r', 0).remove())
+      )
+      .on('mouseenter', (feature) => {
+        setRegionHighlighted({
+          stateCode: STATE_CODES[feature.properties.st_nm],
+          districtName:
+            mapView === MAP_VIEWS.STATES
+              ? null
+              : feature.properties.district || UNKNOWN_DISTRICT_KEY,
+        });
+      })
+      .on('touchstart', (feature) => {
+        if (onceTouchedRegion === feature) onceTouchedRegion = null;
+        else onceTouchedRegion = feature;
+      })
+      .on('click', (feature) => {
+        event.stopPropagation();
+        if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE) return;
+        history.push(
+          `/state/${STATE_CODES[feature.properties.st_nm]}${
+            window.innerWidth < 769 ? '#MapExplorer' : ''
+          }`
+        );
+      })
+      .transition(T)
+      .attr('fill', COLORS[statistic] + '70')
+      .attr('stroke', COLORS[statistic] + '70')
+      .attr('r', (feature) => mapScale(feature.value));
   }, [
     mapMeta.mapType,
     mapViz,
@@ -439,7 +427,6 @@ function MapVisualizer({
       });
   }, [geoData, mapMeta, mapCode, mapViz, mapView, statistic, path]);
 
-  const highlightThreadId = useRef();
   // Highlight
   useEffect(() => {
     const stateName = STATE_NAMES[regionHighlighted.stateCode];
@@ -447,35 +434,31 @@ function MapVisualizer({
 
     const svg = select(svgRef.current);
 
-    window.cancelIdleCallback(highlightThreadId.current);
-
-    highlightThreadId.current = window.requestIdleCallback(() => {
-      if (mapViz === MAP_VIZS.BUBBLES) {
-        svg
-          .select('.circles')
-          .selectAll('circle')
-          .attr('fill-opacity', (d) => {
-            const highlighted =
-              stateName === d.properties.st_nm &&
-              (!district ||
-                district === d.properties?.district ||
-                (district === UNKNOWN_DISTRICT_KEY && !d.properties.district));
-            return highlighted ? 1 : 0.25;
-          });
-      } else {
-        svg
-          .select('.regions')
-          .selectAll('path')
-          .each(function (d) {
-            const highlighted =
-              stateName === d.properties.st_nm &&
-              (mapView === MAP_VIEWS.STATES ||
-                district === d.properties?.district);
-            if (highlighted) this.parentNode.appendChild(this);
-            select(this).attr('stroke-opacity', highlighted ? 1 : 0);
-          });
-      }
-    });
+    if (mapViz === MAP_VIZS.BUBBLES) {
+      svg
+        .select('.circles')
+        .selectAll('circle')
+        .attr('fill-opacity', (d) => {
+          const highlighted =
+            stateName === d.properties.st_nm &&
+            (!district ||
+              district === d.properties?.district ||
+              (district === UNKNOWN_DISTRICT_KEY && !d.properties.district));
+          return highlighted ? 1 : 0.25;
+        });
+    } else {
+      svg
+        .select('.regions')
+        .selectAll('path')
+        .each(function (d) {
+          const highlighted =
+            stateName === d.properties.st_nm &&
+            (mapView === MAP_VIEWS.STATES ||
+              district === d.properties?.district);
+          if (highlighted) this.parentNode.appendChild(this);
+          select(this).attr('stroke-opacity', highlighted ? 1 : 0);
+        });
+    }
   }, [
     geoData,
     data,
