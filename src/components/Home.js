@@ -108,7 +108,7 @@ function Home(props) {
             )}
 
             {timeseries && (
-              <Suspense fallback={<div />}>
+              <Suspense fallback={<div style={{height: '50rem'}} />}>
                 <Minigraphs timeseries={timeseries['TT']} {...{date}} />
               </Suspense>
             )}
