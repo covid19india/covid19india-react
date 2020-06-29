@@ -35,7 +35,6 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   const dimensions = useResizeObserver(wrapperRef);
 
   const [highlightedDate, setHighlightedDate] = useState();
-  const threadId = useRef();
 
   useEffect(() => {
     setHighlightedDate(dates[dates.length - 1]);
@@ -180,163 +179,160 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
     }
 
     /* Begin drawing charts */
-    cancelIdleCallback(threadId.current);
-    threadId.current = requestIdleCallback(() => {
-      refs.current.forEach((ref, i) => {
-        const svg = select(ref);
-        const t = svg.transition().duration(D3_TRANSITION_DURATION);
+    refs.current.forEach((ref, i) => {
+      const svg = select(ref);
+      const t = svg.transition().duration(D3_TRANSITION_DURATION);
 
-        const statistic = TIMESERIES_STATISTICS[i];
-        const yScale = generateYScale(statistic);
-        const color = COLORS[statistic];
+      const statistic = TIMESERIES_STATISTICS[i];
+      const yScale = generateYScale(statistic);
+      const color = COLORS[statistic];
 
-        /* X axis */
+      /* X axis */
+      svg
+        .select('.x-axis')
+        .style('transform', `translateY(${chartBottom}px)`)
+        .transition(t)
+        .call(xAxis);
+
+      svg.select('.x-axis2').transition(t).call(xAxis2, yScale);
+
+      /* Y axis */
+      svg
+        .select('.y-axis')
+        .style('transform', `translateX(${chartRight}px)`)
+        .transition(t)
+        .call(yAxis, yScale);
+
+      /* Path dots */
+      svg
+        .selectAll('circle')
+        .data(dates, (date) => date)
+        .join((enter) =>
+          enter
+            .append('circle')
+            .attr('fill', color)
+            .attr('stroke', color)
+            .attr('r', 2)
+            .attr('cy', chartBottom)
+            .attr('cx', (date) => xScale(parseIndiaDate(date)))
+        )
+        .transition(t)
+        .attr('cx', (date) => xScale(parseIndiaDate(date)))
+        .attr('cy', (date) =>
+          yScale(getStatistic(timeseries[date], chartType, statistic))
+        );
+
+      if (chartType === 'total') {
         svg
-          .select('.x-axis')
-          .style('transform', `translateY(${chartBottom}px)`)
+          .selectAll('.stem')
           .transition(t)
-          .call(xAxis);
+          .attr('y1', yScale(0))
+          .attr('y2', yScale(0))
+          .remove();
 
-        svg.select('.x-axis2').transition(t).call(xAxis2, yScale);
-
-        /* Y axis */
-        svg
-          .select('.y-axis')
-          .style('transform', `translateX(${chartRight}px)`)
-          .transition(t)
-          .call(yAxis, yScale);
-
-        /* Path dots */
-        svg
-          .selectAll('circle')
-          .data(dates, (date) => date)
-          .join((enter) =>
-            enter
-              .append('circle')
-              .attr('fill', color)
-              .attr('stroke', color)
-              .attr('r', 2)
-              .attr('cy', chartBottom)
-              .attr('cx', (date) => xScale(parseIndiaDate(date)))
-          )
-          .transition(t)
-          .attr('cx', (date) => xScale(parseIndiaDate(date)))
-          .attr('cy', (date) =>
+        const linePath = line()
+          .curve(curveMonotoneX)
+          .x((date) => xScale(parseIndiaDate(date)))
+          .y((date) =>
             yScale(getStatistic(timeseries[date], chartType, statistic))
           );
 
-        if (chartType === 'total') {
-          svg
-            .selectAll('.stem')
-            .transition(t)
-            .attr('y1', yScale(0))
-            .attr('y2', yScale(0))
-            .remove();
+        let pathLength;
 
-          const linePath = line()
-            .curve(curveMonotoneX)
-            .x((date) => xScale(parseIndiaDate(date)))
-            .y((date) =>
-              yScale(getStatistic(timeseries[date], chartType, statistic))
-            );
-
-          let pathLength;
-
-          svg
-            .selectAll('.trend')
-            .data(T ? [dates] : [])
-            .join(
-              (enter) =>
-                enter
-                  .append('path')
-                  .attr('class', 'trend')
-                  .attr('fill', 'none')
-                  .attr('stroke', color + '50')
-                  .attr('stroke-width', 4)
-                  .attr('d', linePath)
-                  .attr('stroke-dasharray', function () {
-                    return (pathLength = this.getTotalLength());
-                  })
-                  .call((enter) =>
-                    enter
-                      .attr('stroke-dashoffset', pathLength)
-                      .transition(t)
-                      .attr('stroke-dashoffset', 0)
-                  ),
-              (update) =>
-                update
-                  .attr('stroke-dasharray', null)
-                  .transition(t)
-                  .attrTween('d', function (date) {
-                    const previous = select(this).attr('d');
-                    const current = linePath(date);
-                    return interpolatePath(previous, current);
-                  })
-            );
-
-          svg
-            .selectAll('.trend')
-            .data(T ? [dates] : [])
-            .join(
-              (enter) =>
-                enter
-                  .append('path')
-                  .attr('class', 'trend')
-                  .attr('fill', 'none')
-                  .attr('stroke', color + '50')
-                  .attr('stroke-width', 4)
-                  .attr('d', linePath)
-                  .attr('stroke-dasharray', function () {
-                    return (pathLength = this.getTotalLength());
-                  })
-                  .call((enter) =>
-                    enter
-                      .attr('stroke-dashoffset', pathLength)
-                      .transition(t)
-                      .attr('stroke-dashoffset', 0)
-                  ),
-              (update) =>
-                update
-                  .attr('stroke-dasharray', null)
-                  .transition(t)
-                  .attrTween('d', function (date) {
-                    const previous = select(this).attr('d');
-                    const current = linePath(date);
-                    return interpolatePath(previous, current);
-                  })
-            );
-        } else {
-          /* DAILY TRENDS */
-          svg.selectAll('.trend').remove();
-
-          svg
-            .selectAll('.stem')
-            .data(dates, (date) => date)
-            .join((enter) =>
-              enter
-                .append('line')
-                .attr('class', 'stem')
-                .attr('x1', (date) => xScale(parseIndiaDate(date)))
-                .attr('y1', chartBottom)
-                .attr('x2', (date) => xScale(parseIndiaDate(date)))
-                .attr('y2', chartBottom)
-            )
-            .transition(t)
-            .attr('x1', (date) => xScale(parseIndiaDate(date)))
-            .attr('y1', yScale(0))
-            .attr('x2', (date) => xScale(parseIndiaDate(date)))
-            .attr('y2', (date) =>
-              yScale(getStatistic(timeseries[date], chartType, statistic))
-            );
-        }
-
-        svg.selectAll('*').attr('pointer-events', 'none');
         svg
-          .on('mousemove', mousemove)
-          .on('touchmove', mousemove)
-          .on('mouseout', mouseout)
-          .on('touchend', mouseout);
-      });
+          .selectAll('.trend')
+          .data(T ? [dates] : [])
+          .join(
+            (enter) =>
+              enter
+                .append('path')
+                .attr('class', 'trend')
+                .attr('fill', 'none')
+                .attr('stroke', color + '50')
+                .attr('stroke-width', 4)
+                .attr('d', linePath)
+                .attr('stroke-dasharray', function () {
+                  return (pathLength = this.getTotalLength());
+                })
+                .call((enter) =>
+                  enter
+                    .attr('stroke-dashoffset', pathLength)
+                    .transition(t)
+                    .attr('stroke-dashoffset', 0)
+                ),
+            (update) =>
+              update
+                .attr('stroke-dasharray', null)
+                .transition(t)
+                .attrTween('d', function (date) {
+                  const previous = select(this).attr('d');
+                  const current = linePath(date);
+                  return interpolatePath(previous, current);
+                })
+          );
+
+        svg
+          .selectAll('.trend')
+          .data(T ? [dates] : [])
+          .join(
+            (enter) =>
+              enter
+                .append('path')
+                .attr('class', 'trend')
+                .attr('fill', 'none')
+                .attr('stroke', color + '50')
+                .attr('stroke-width', 4)
+                .attr('d', linePath)
+                .attr('stroke-dasharray', function () {
+                  return (pathLength = this.getTotalLength());
+                })
+                .call((enter) =>
+                  enter
+                    .attr('stroke-dashoffset', pathLength)
+                    .transition(t)
+                    .attr('stroke-dashoffset', 0)
+                ),
+            (update) =>
+              update
+                .attr('stroke-dasharray', null)
+                .transition(t)
+                .attrTween('d', function (date) {
+                  const previous = select(this).attr('d');
+                  const current = linePath(date);
+                  return interpolatePath(previous, current);
+                })
+          );
+      } else {
+        /* DAILY TRENDS */
+        svg.selectAll('.trend').remove();
+
+        svg
+          .selectAll('.stem')
+          .data(dates, (date) => date)
+          .join((enter) =>
+            enter
+              .append('line')
+              .attr('class', 'stem')
+              .attr('x1', (date) => xScale(parseIndiaDate(date)))
+              .attr('y1', chartBottom)
+              .attr('x2', (date) => xScale(parseIndiaDate(date)))
+              .attr('y2', chartBottom)
+          )
+          .transition(t)
+          .attr('x1', (date) => xScale(parseIndiaDate(date)))
+          .attr('y1', yScale(0))
+          .attr('x2', (date) => xScale(parseIndiaDate(date)))
+          .attr('y2', (date) =>
+            yScale(getStatistic(timeseries[date], chartType, statistic))
+          );
+      }
+
+      svg.selectAll('*').attr('pointer-events', 'none');
+      svg
+        .on('mousemove', mousemove)
+        .on('touchmove', mousemove)
+        .on('mouseout', mouseout)
+        .on('touchend', mouseout);
     });
   }, [chartType, dimensions, isUniform, isLog, timeseries, dates]);
 

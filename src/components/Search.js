@@ -214,9 +214,7 @@ function Search() {
       )[0];
 
       if (targetInput) {
-        requestIdleCallback(() => {
-          loopThroughSuggestions(targetInput, 0);
-        });
+        loopThroughSuggestions(targetInput, 0);
       }
     }
   }, [expand, loopThroughSuggestions]);

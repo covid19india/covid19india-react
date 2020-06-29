@@ -1,11 +1,10 @@
 import {TOOLTIP_FADE_IN, TOOLTIP_FADE_OUT} from '../animations';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {useTransition, animated} from 'react-spring';
 
 const Tooltip = ({data, children}) => {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
-  const [mount, setMount] = useState(false);
 
   const transitions = useTransition(isTooltipVisible, null, {
     from: TOOLTIP_FADE_OUT,
@@ -18,44 +17,36 @@ const Tooltip = ({data, children}) => {
     },
   });
 
-  useEffect(() => {
-    window.requestIdleCallback(() => {
-      setMount(true);
-    });
-  });
+  return (
+    <span
+      className="Tooltip"
+      style={{position: 'relative'}}
+      onMouseEnter={() => {
+        setIsTooltipVisible(true);
+      }}
+      onMouseLeave={() => {
+        setIsTooltipVisible(false);
+      }}
+    >
+      {children}
 
-  if (mount)
-    return (
-      <span
-        className="Tooltip"
-        style={{position: 'relative'}}
-        onMouseEnter={() => {
-          setIsTooltipVisible(true);
-        }}
-        onMouseLeave={() => {
-          setIsTooltipVisible(false);
-        }}
-      >
-        {children}
-
-        {transitions.map(({item, key, props}) =>
-          item ? (
-            <animated.div key={key} style={props}>
-              <div className="message">
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: data.replace(/\n/g, '<br/>'),
-                  }}
-                ></p>
-              </div>
-            </animated.div>
-          ) : (
-            <animated.div key={key}></animated.div>
-          )
-        )}
-      </span>
-    );
-  else return null;
+      {transitions.map(({item, key, props}) =>
+        item ? (
+          <animated.div key={key} style={props}>
+            <div className="message">
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: data.replace(/\n/g, '<br/>'),
+                }}
+              ></p>
+            </div>
+          </animated.div>
+        ) : (
+          <animated.div key={key}></animated.div>
+        )
+      )}
+    </span>
+  );
 };
 
 export default Tooltip;
