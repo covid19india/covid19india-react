@@ -1,7 +1,7 @@
 import {PRIMARY_STATISTICS, COLORS} from '../constants';
 
 import classnames from 'classnames';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import {useSpring, animated, config} from 'react-spring';
 import {useMeasure} from 'react-use';
@@ -29,16 +29,20 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
           opacity: 1,
           background: `${COLORS[mapStatistic]}20`,
           delay: count === 0 ? 1500 : 0,
-          onStart: () => {
-            setClicked(true);
-          },
-          onRest: () => {
-            setClicked(false);
-          },
+          onStart: setClicked.bind(this, true),
+          onRest: setClicked.bind(this, false),
         });
       });
     }
   }, [count, mapStatistic, set, width]);
+
+  const handleClick = useCallback(
+    (statistic) => {
+      setCount((prevCount) => prevCount + 1);
+      setMapStatistic(statistic);
+    },
+    [setMapStatistic]
+  );
 
   return (
     <div className="MapSwitcher" ref={mapSwitcher}>
@@ -48,10 +52,7 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
         <div
           key={index}
           className={classnames('clickable', {[`is-${statistic}`]: !clicked})}
-          onClick={() => {
-            setCount((prevCount) => prevCount + 1);
-            setMapStatistic(statistic);
-          }}
+          onClick={handleClick.bind(this, statistic)}
         ></div>
       ))}
     </div>

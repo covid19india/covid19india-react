@@ -21,12 +21,8 @@ const Tooltip = ({data, children}) => {
     <span
       className="Tooltip"
       style={{position: 'relative'}}
-      onMouseEnter={() => {
-        setIsTooltipVisible(true);
-      }}
-      onMouseLeave={() => {
-        setIsTooltipVisible(false);
-      }}
+      onMouseEnter={setIsTooltipVisible.bind(this, true)}
+      onMouseLeave={setIsTooltipVisible.bind(this, false)}
     >
       {children}
 

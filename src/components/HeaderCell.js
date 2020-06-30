@@ -27,7 +27,7 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
   return (
     <div
       className="cell heading"
-      onClick={() => handleSort(statistic)}
+      onClick={handleSort.bind(this, statistic)}
       {...longPressEvent}
     >
       {sortData.sortColumn === statistic && (

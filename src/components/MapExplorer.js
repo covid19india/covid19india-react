@@ -194,7 +194,7 @@ function MapExplorer({
               className={classnames('choropleth', {
                 'is-highlighted': mapViz === MAP_VIZS.CHOROPLETH,
               })}
-              onClick={() => handleTabClick(MAP_VIZS.CHOROPLETH)}
+              onClick={handleTabClick.bind(this, MAP_VIZS.CHOROPLETH)}
               style={trail[1]}
             >
               {ChoroplethIcon}
@@ -203,7 +203,7 @@ function MapExplorer({
               className={classnames('bubble', {
                 'is-highlighted': mapViz === MAP_VIZS.BUBBLES,
               })}
-              onClick={() => handleTabClick(MAP_VIZS.BUBBLES)}
+              onClick={handleTabClick.bind(this, MAP_VIZS.BUBBLES)}
               style={trail[2]}
             >
               {BubblesIcon}
@@ -216,13 +216,12 @@ function MapExplorer({
                   className={classnames('boundary', {
                     'is-highlighted': mapView === MAP_VIEWS.DISTRICTS,
                   })}
-                  onClick={() => {
-                    setMapView(
-                      mapView === MAP_VIEWS.DISTRICTS
-                        ? MAP_VIEWS.STATES
-                        : MAP_VIEWS.DISTRICTS
-                    );
-                  }}
+                  onClick={setMapView.bind(
+                    this,
+                    mapView === MAP_VIEWS.DISTRICTS
+                      ? MAP_VIEWS.STATES
+                      : MAP_VIEWS.DISTRICTS
+                  )}
                   style={trail[2]}
                 >
                   <OrganizationIcon />
@@ -251,9 +250,7 @@ function MapExplorer({
                   className={classnames('statistic-option', `is-${statistic}`, {
                     'is-highlighted': mapStatistic === statistic,
                   })}
-                  onClick={() => {
-                    setMapStatistic(statistic);
-                  }}
+                  onClick={setMapStatistic.bind(this, statistic)}
                 >
                   <DotFillIcon />
                 </div>

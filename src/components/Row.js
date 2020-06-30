@@ -41,6 +41,7 @@ function Row({
   const [sortData, setSortData] = useLocalStorage('districtSortData', {
     sortColumn: 'confirmed',
     isAscending: false,
+    delta: false,
   });
 
   const history = useHistory();
@@ -141,6 +142,23 @@ function Row({
     )}]`;
   }
 
+  const handleStatePageClick = useCallback(
+    (stateCode) => {
+      history.push(`state/${stateCode}`);
+    },
+    [history]
+  );
+
+  const handleCollapse = useCallback(() => {
+    setShowDistricts(false);
+    rowElement.current.scrollIntoView({
+      block: 'start',
+    });
+
+    // eslint-disable-next-line
+    const faux = stateCode;
+  }, [stateCode]);
+
   return (
     <React.Fragment>
       <div
@@ -188,9 +206,7 @@ function Row({
             )}
             <div
               className="state-page"
-              onClick={() => {
-                history.push(`state/${stateCode}`);
-              }}
+              onClick={handleStatePageClick.bind(this, stateCode)}
             >
               <GraphIcon />
               <span>
@@ -204,7 +220,7 @@ function Row({
           <div className={classnames('row', 'heading')}>
             <div
               className="cell heading"
-              onClick={() => handleSortClick('districtName')}
+              onClick={handleSortClick.bind(this, 'districtName')}
             >
               <div className="district-name">{t('District')}</div>
               {sortData.sortColumn === 'districtName' && (
@@ -221,10 +237,8 @@ function Row({
             {TABLE_STATISTICS.map((statistic) => (
               <HeaderCell
                 key={statistic}
-                {...{statistic, sortData}}
-                handleSort={() => {
-                  handleSortClick(statistic);
-                }}
+                {...{statistic, sortData, setSortData}}
+                handleSort={handleSortClick.bind(this, statistic)}
               />
             ))}
           </div>
@@ -251,15 +265,7 @@ function Row({
       {showDistricts && (
         <div className="spacer">
           <p>{`End of ${t(STATE_NAMES[stateCode])}'s districts`}</p>
-          <div
-            className="fold"
-            onClick={() => {
-              setShowDistricts(false);
-              rowElement.current.scrollIntoView({
-                block: 'start',
-              });
-            }}
-          >
+          <div className="fold" onClick={handleCollapse}>
             <FoldUpIcon />
           </div>
         </div>

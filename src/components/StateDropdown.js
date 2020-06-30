@@ -1,6 +1,6 @@
 import {MAP_META, STATE_NAMES} from '../constants';
 
-import React, {useState, useRef} from 'react';
+import React, {useState, useCallback, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {useTransition, animated} from 'react-spring';
@@ -39,14 +39,20 @@ const StateDropdown = ({stateCode, trail}) => {
     },
   });
 
+  const handleClick = useCallback(
+    (stateCodeItr) => {
+      setShowDropdown(false);
+      history.push(`/state/${stateCodeItr}`);
+    },
+    [history]
+  );
+
   return (
     <div className="StateDropdown">
       <animated.h1
         className="state-name"
         style={trail}
-        onClick={() => {
-          setShowDropdown((prevData) => !prevData);
-        }}
+        onClick={setShowDropdown.bind(this, !showDropdown)}
         ref={dropdownRef}
       >
         {t(STATE_NAMES[stateCode])}
@@ -65,10 +71,7 @@ const StateDropdown = ({stateCode, trail}) => {
                 <h1
                   key={stateCodeItr}
                   className="item"
-                  onClick={() => {
-                    setShowDropdown(false);
-                    history.push(`/state/${stateCodeItr}`);
-                  }}
+                  onClick={handleClick.bind(this, stateCodeItr)}
                 >
                   {t(STATE_NAMES[stateCodeItr])}
                 </h1>

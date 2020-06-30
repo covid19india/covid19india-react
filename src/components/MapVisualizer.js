@@ -188,12 +188,14 @@ function MapVisualizer({
   // Reset on tapping outside map
   useEffect(() => {
     const svg = select(svgRef.current);
-    svg.attr('pointer-events', 'auto').on('click', () => {
-      setRegionHighlighted({
+
+    svg.attr('pointer-events', 'auto').on(
+      'click',
+      setRegionHighlighted.bind(this, {
         stateCode: mapCode,
         districtName: null,
-      });
-    });
+      })
+    );
   }, [mapCode, setRegionHighlighted]);
 
   // Choropleth
@@ -259,7 +261,10 @@ function MapVisualizer({
       .call((sel) => {
         sel.transition(T).attr('fill', fillColor).attr('stroke', strokeColor);
       });
-    populateTexts(regionSelection);
+
+    window.requestIdleCallback(() => {
+      populateTexts(regionSelection);
+    });
   }, [
     mapViz,
     data,
@@ -366,6 +371,16 @@ function MapVisualizer({
     statistic,
   ]);
 
+  const getBoundaryColor = useCallback(
+    (statistic) => {
+      return COLORS[statistic] + '40';
+
+      // eslint-disable-next-line
+      const faux = mapCode;
+    },
+    [mapCode]
+  );
+
   // Boundaries
   useEffect(() => {
     if (!geoData) return;
@@ -401,9 +416,7 @@ function MapVisualizer({
         (exit) => exit.transition(T).attr('stroke', '#fff0').remove()
       )
       .transition(T)
-      .attr('stroke', () => {
-        return COLORS[statistic] + '40';
-      });
+      .attr('stroke', getBoundaryColor.bind(this, statistic));
 
     svg
       .select('.district-borders')
@@ -422,10 +435,17 @@ function MapVisualizer({
         (exit) => exit.transition(T).attr('stroke', '#fff0').remove()
       )
       .transition(T)
-      .attr('stroke', () => {
-        return COLORS[statistic] + '30';
-      });
-  }, [geoData, mapMeta, mapCode, mapViz, mapView, statistic, path]);
+      .attr('stroke', getBoundaryColor.bind(this, statistic));
+  }, [
+    geoData,
+    mapMeta,
+    mapCode,
+    mapViz,
+    mapView,
+    statistic,
+    path,
+    getBoundaryColor,
+  ]);
 
   // Highlight
   useEffect(() => {

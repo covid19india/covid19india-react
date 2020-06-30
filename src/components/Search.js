@@ -231,10 +231,19 @@ function Search() {
     config: config.stiff,
   });
 
+  const handleClose = useCallback(() => {
+    setSearchValue('');
+    setResults([]);
+  }, []);
+
+  const handleChange = useCallback((event) => {
+    setSearchValue(event.target.value);
+  }, []);
+
   return (
     <div className="Search">
       <animated.label style={trail[0]}>
-        {t('Search your city, district, or state')}
+        {t('Search your district or state')}
       </animated.label>
       <animated.div className="line" style={trail[1]}></animated.div>
 
@@ -243,31 +252,21 @@ function Search() {
           type="text"
           value={searchValue}
           ref={searchInput}
-          onFocus={(event) => {
-            setExpand(true);
-          }}
-          onBlur={() => {
-            setExpand(false);
-          }}
-          onChange={(event) => {
-            setSearchValue(event.target.value);
-          }}
+          onFocus={setExpand.bind(this, true)}
+          onBlur={setExpand.bind(this, false)}
+          onChange={handleChange}
         />
 
-        {!expand && <span className="search-placeholder"></span>}
+        {!expand && searchValue === '' && (
+          <span className="search-placeholder"></span>
+        )}
 
         <div className={`search-button`}>
           <Icon.Search />
         </div>
 
         {searchValue.length > 0 && (
-          <div
-            className={`close-button`}
-            onClick={() => {
-              setSearchValue('');
-              setResults([]);
-            }}
-          >
+          <div className={`close-button`} onClick={handleClose}>
             <Icon.X />
           </div>
         )}
@@ -319,6 +318,7 @@ function Search() {
                 ))}
               </div>
             </div>
+
             <div className="expanded-right">
               <h3>{t('State/UT')}</h3>
               <div className="suggestions">

@@ -98,7 +98,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
     ]
   );
 
-  const _setTableOption = () => {
+  const _setTableOption = useCallback(() => {
     setTableOption((prevTableOption) =>
       prevTableOption === 'States' ? 'Districts' : 'States'
     );
@@ -111,7 +111,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
         workerInstance.terminate();
       }
     });
-  };
+  }, [states]);
 
   const transition = useTransition(isInfoVisible, null, {
     from: TABLE_FADE_OUT,
@@ -136,9 +136,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
           className={classnames('million-toggle', {
             'is-highlighted': isPerMillion,
           })}
-          onClick={() => {
-            setIsPerMillion((prevState) => !prevState);
-          }}
+          onClick={setIsPerMillion.bind(this, !isPerMillion)}
           style={trail[0]}
         >
           <span>1M</span>
@@ -148,9 +146,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
           className={classnames('info-toggle', {
             'is-highlighted': isInfoVisible,
           })}
-          onClick={() => {
-            setIsInfoVisible((prevState) => !prevState);
-          }}
+          onClick={setIsInfoVisible.bind(this, !isInfoVisible)}
           style={trail[0]}
         >
           <QuestionIcon size={14} />
@@ -235,7 +231,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
         <div className="row heading">
           <div
             className="cell heading"
-            onClick={() => handleSortClick('regionName')}
+            onClick={handleSortClick.bind(this, 'regionName')}
           >
             <div>{t(tableOption === 'States' ? 'State/UT' : 'District')}</div>
             {sortData.sortColumn === 'regionName' && (
@@ -253,9 +249,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
             <HeaderCell
               key={statistic}
               {...{statistic, sortData, setSortData}}
-              handleSort={() => {
-                handleSortClick(statistic);
-              }}
+              handleSort={handleSortClick.bind(this, statistic)}
             />
           ))}
         </div>
