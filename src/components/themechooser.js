@@ -29,7 +29,7 @@ const ThemeChooser = ({
 }) => (
   <Modal isOpen={isOpen} onRequestClose={onClose} style={customStyles}>
     <div className="theme-chooser-modal">
-      <h2 className="title">Customise you view</h2>
+      <h2 className="title">Customise your view</h2>
       <div className="color-chooser">
         <span className="title">Colors</span>
         <div className="colors">
