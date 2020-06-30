@@ -48,8 +48,7 @@
     "react-use-gesture": "^7.0.15",
     "source-map-explorer": "^2.4.2",
     "swr": "^0.2.2",
-    "topojson": "^3.0.2",
-    "use-dark-mode": "^2.3.1"
+    "topojson": "^3.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
