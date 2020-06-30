@@ -1,6 +1,6 @@
 import {parse, format} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
-import React, {useMemo, lazy, Suspense} from 'react';
+import React, {useMemo, useCallback, lazy, Suspense} from 'react';
 import * as Icon from 'react-feather';
 import {useSpring, animated, useTrail, config} from 'react-spring';
 
@@ -85,6 +85,11 @@ const ActionsPanel = ({
     );
   };
 
+  const handleClick = useCallback(() => {
+    setIsTimelineMode(true);
+    if (showUpdates) setShowUpdates(!showUpdates);
+  }, [setIsTimelineMode, setShowUpdates, showUpdates]);
+
   return (
     <React.Fragment>
       <animated.div
@@ -109,10 +114,7 @@ const ActionsPanel = ({
         {showUpdates && BellOff}
         <animated.div
           className="timeline-icon"
-          onClick={() => {
-            setIsTimelineMode(true);
-            if (showUpdates) setShowUpdates(!showUpdates);
-          }}
+          onClick={handleClick}
           style={trail[2]}
         >
           {TimelineIcon}

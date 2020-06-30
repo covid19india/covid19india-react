@@ -6,7 +6,7 @@ import {
 } from '../animations';
 import locales from '../i18n/locales.json';
 
-import React, {useState, useRef} from 'react';
+import React, {useState, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
@@ -40,38 +40,31 @@ function Navbar({
     config: {mass: 1, tension: 210, friction: 26},
   });
 
+  const handleMouseEnter = useCallback(() => {
+    if (windowSize.width > 769) {
+      setExpand(true);
+    }
+  }, [windowSize.width]);
+
   return (
     <animated.div className="Navbar" style={spring}>
       <div
         className="navbar-left"
-        onClick={() => {
-          setShowLanguageSwitcher((prevState) => !prevState);
-        }}
+        onClick={setShowLanguageSwitcher.bind(this, !showLanguageSwitcher)}
       >
         {locales[currentLanguage]}
       </div>
 
       <div className="navbar-middle">
-        <Link
-          to="/"
-          onClick={() => {
-            setExpand(false);
-          }}
-        >
+        <Link to="/" onClick={setExpand.bind(this, false)}>
           Covid19<span>India</span>
         </Link>
       </div>
 
       <div
         className="navbar-right"
-        onClick={() => {
-          setExpand(!expand);
-        }}
-        onMouseEnter={() => {
-          if (windowSize.width > 769) {
-            setExpand(true);
-          }
-        }}
+        onClick={setExpand.bind(this, !expand)}
+        onMouseEnter={handleMouseEnter}
       >
         {windowSize.width < 769 && (
           <span>{expand ? t('Close') : t('Menu')}</span>
@@ -116,23 +109,19 @@ function Expand({pages, setExpand, darkMode, windowSize}) {
   const expandElement = useRef(null);
   const {t} = useTranslation();
 
+  const handleMouseLeave = useCallback(() => {
+    windowSize.width > 768 && setExpand(false);
+  }, [setExpand, windowSize.width]);
+
   return (
-    <div
-      className="expand"
-      ref={expandElement}
-      onMouseLeave={() => {
-        windowSize.width > 768 && setExpand(false);
-      }}
-    >
+    <div className="expand" ref={expandElement} onMouseLeave={handleMouseLeave}>
       {pages.map((page, i) => {
         if (page.showInNavbar === true) {
           return (
             <Link
               to={page.pageLink}
               key={i}
-              onClick={() => {
-                setExpand(false);
-              }}
+              onClick={setExpand.bind(this, false)}
             >
               <span
                 {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}
@@ -168,12 +157,7 @@ const activeNavIcon = (path) => ({
 
 const SunMoon = ({darkMode}) => {
   return (
-    <div
-      className="SunMoon"
-      onClick={() => {
-        darkMode.toggle();
-      }}
-    >
+    <div className="SunMoon" onClick={darkMode.toggle}>
       <div>
         {darkMode.value ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
       </div>

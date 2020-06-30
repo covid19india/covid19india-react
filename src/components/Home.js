@@ -125,7 +125,7 @@ function Home(props) {
           {(isVisible || location.hash) && (
             <React.Fragment>
               {data && (
-                <Suspense fallback={<div />}>
+                <Suspense fallback={<div style={{height: '50rem'}} />}>
                   <StateHeader data={data['TT']} stateCode={'TT'} />
                   <MapExplorer
                     stateCode="TT"

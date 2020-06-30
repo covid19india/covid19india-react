@@ -2,7 +2,7 @@ import {ENTER_IN, ENTER_OUT} from '../animations';
 import locales from '../i18n/locales.json';
 
 import classnames from 'classnames';
-import React, {useRef} from 'react';
+import React, {useRef, useCallback} from 'react';
 import {ArrowUp} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useTransition, animated} from 'react-spring';
@@ -30,6 +30,13 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
     setShowLanguageSwitcher(false);
   });
 
+  const switchLanguage = useCallback(
+    (languageKey) => {
+      if (i18n) i18n.changeLanguage(languageKey);
+    },
+    [i18n]
+  );
+
   return transitions.map(({item, key, props}) =>
     item ? (
       <animated.div
@@ -47,9 +54,7 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
               className={classnames('language', {
                 'is-highlighted': currentLanguage === languageKey,
               })}
-              onClick={() => {
-                if (i18n) i18n.changeLanguage(languageKey);
-              }}
+              onClick={switchLanguage.bind(this, languageKey)}
             >
               <span>{locales[languageKey]}</span>
             </div>
@@ -58,9 +63,7 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
 
         <div
           className="close-button"
-          onClick={() => {
-            setShowLanguageSwitcher(false);
-          }}
+          onClick={setShowLanguageSwitcher.bind(this, false)}
         >
           <ArrowUp width={16} />
         </div>

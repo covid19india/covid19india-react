@@ -81,9 +81,10 @@ function TimeseriesExplorer({
           className={classnames('anchor', {
             stickied: anchor === 'timeseries',
           })}
-          onClick={() => {
-            setAnchor(anchor === 'timeseries' ? null : 'timeseries');
-          }}
+          onClick={
+            setAnchor &&
+            setAnchor.bind(this, anchor === 'timeseries' ? null : 'timeseries')
+          }
         >
           <PinIcon />
         </div>
@@ -95,9 +96,7 @@ function TimeseriesExplorer({
               <animated.div
                 className={`tab ${chartType === ctype ? 'focused' : ''}`}
                 key={ctype}
-                onClick={() => {
-                  setChartType(ctype);
-                }}
+                onClick={setChartType.bind(this, ctype)}
                 style={trail[index]}
               >
                 <h4>{t(value)}</h4>
@@ -118,9 +117,7 @@ function TimeseriesExplorer({
               className="switch"
               checked={isUniform}
               aria-label={t('Checked by default to scale uniformly.')}
-              onChange={() => {
-                setIsUniform(!isUniform);
-              }}
+              onChange={setIsUniform.bind(this, !isUniform)}
             />
           </animated.div>
           <animated.div
@@ -136,9 +133,7 @@ function TimeseriesExplorer({
               checked={chartType === 'total' && isLog}
               className="switch"
               disabled={chartType !== 'total'}
-              onChange={() => {
-                setIsLog(!isLog);
-              }}
+              onChange={setIsLog.bind(this, !isLog)}
             />
           </animated.div>
         </div>
