@@ -14,7 +14,6 @@ import {formatISO, sub} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useMemo, useRef, useState, lazy, Suspense} from 'react';
 import {useTranslation} from 'react-i18next';
-import {animated, config, useTrail} from 'react-spring';
 import {useLocalStorage} from 'react-use';
 
 const Timeseries = lazy(() => import('./Timeseries'));
@@ -58,16 +57,6 @@ function TimeseriesExplorer({
     return pastDates;
   }, [timeseries, timelineDate, timeseriesOption]);
 
-  const trail = useTrail(5, {
-    from: {transform: 'translate3d(0, 10px, 0)', opacity: 0},
-    to: {
-      transform: 'translate3d(0, 0px, 0)',
-      opacity: 1,
-    },
-    delay: 250,
-    config: config.gentle,
-  });
-
   return (
     <div
       className={classnames('TimeseriesExplorer', {
@@ -89,27 +78,24 @@ function TimeseriesExplorer({
           <PinIcon />
         </div>
 
-        <animated.h1 style={trail[0]}>{t('Spread Trends')}</animated.h1>
+        <h1>{t('Spread Trends')}</h1>
         <div className="tabs">
           {Object.entries(TIMESERIES_CHART_TYPES).map(
             ([ctype, value], index) => (
-              <animated.div
+              <div
                 className={`tab ${chartType === ctype ? 'focused' : ''}`}
                 key={ctype}
                 onClick={setChartType.bind(this, ctype)}
-                style={trail[index]}
               >
                 <h4>{t(value)}</h4>
-              </animated.div>
+              </div>
             )
           )}
         </div>
 
         <div className="scale-modes">
-          <animated.label className="main" style={trail[2]}>
-            {t('Scale Modes')}
-          </animated.label>
-          <animated.div className="timeseries-mode" style={trail[3]}>
+          <label className="main">{t('Scale Modes')}</label>
+          <div className="timeseries-mode">
             <label htmlFor="timeseries-mode">{t('Uniform')}</label>
             <input
               id="timeseries-mode"
@@ -119,12 +105,11 @@ function TimeseriesExplorer({
               aria-label={t('Checked by default to scale uniformly.')}
               onChange={setIsUniform.bind(this, !isUniform)}
             />
-          </animated.div>
-          <animated.div
+          </div>
+          <div
             className={`timeseries-logmode ${
               chartType !== 'total' ? 'disabled' : ''
             }`}
-            style={trail[4]}
           >
             <label htmlFor="timeseries-logmode">{t('Logarithmic')}</label>
             <input
@@ -135,7 +120,7 @@ function TimeseriesExplorer({
               disabled={chartType !== 'total'}
               onChange={setIsLog.bind(this, !isLog)}
             />
-          </animated.div>
+          </div>
         </div>
       </div>
 
