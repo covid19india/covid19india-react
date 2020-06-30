@@ -227,7 +227,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
         ) : null
       )}
 
-      <animated.div className="table" style={trail[2]}>
+      <div className="table reveal">
         <div className="row heading">
           <div
             className="cell heading"
@@ -306,7 +306,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
           stateCode={'TT'}
           {...{regionHighlighted, setRegionHighlighted}}
         />
-      </animated.div>
+      </div>
     </React.Fragment>
   );
 }
