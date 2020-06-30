@@ -169,7 +169,7 @@ function MapExplorer({
       )}
     >
       <div className="panel" ref={panelRef}>
-        <animated.div className="panel-left" style={trail[0]}>
+        <div className="panel-left">
           <h2 className={classnames(mapStatistic)}>
             {t(hoveredRegion.name)}
             {hoveredRegion.name === UNKNOWN_DISTRICT_KEY &&
@@ -186,33 +186,31 @@ function MapExplorer({
               <span>{t(capitalize(mapStatistic))}</span>
             </h1>
           )}
-        </animated.div>
+        </div>
 
         <div className={classnames('panel-right', `is-${mapStatistic}`)}>
           <div className="switch-type">
-            <animated.div
+            <div
               className={classnames('choropleth', {
                 'is-highlighted': mapViz === MAP_VIZS.CHOROPLETH,
               })}
               onClick={handleTabClick.bind(this, MAP_VIZS.CHOROPLETH)}
-              style={trail[1]}
             >
               {ChoroplethIcon}
-            </animated.div>
-            <animated.div
+            </div>
+            <div
               className={classnames('bubble', {
                 'is-highlighted': mapViz === MAP_VIZS.BUBBLES,
               })}
               onClick={handleTabClick.bind(this, MAP_VIZS.BUBBLES)}
-              style={trail[2]}
             >
               {BubblesIcon}
-            </animated.div>
+            </div>
 
             {mapMeta.mapType === MAP_TYPES.COUNTRY && (
               <React.Fragment>
                 <div className="divider" />
-                <animated.div
+                <div
                   className={classnames('boundary', {
                     'is-highlighted': mapView === MAP_VIEWS.DISTRICTS,
                   })}
@@ -222,28 +220,26 @@ function MapExplorer({
                       ? MAP_VIEWS.STATES
                       : MAP_VIEWS.DISTRICTS
                   )}
-                  style={trail[2]}
                 >
                   <OrganizationIcon />
-                </animated.div>
+                </div>
               </React.Fragment>
             )}
 
             {mapMeta.mapType === MAP_TYPES.STATE && (
-              <animated.div
+              <div
                 className="back"
                 onClick={() => {
                   history.push('/#MapExplorer');
                 }}
-                style={trail[3]}
               >
                 <ArrowLeftIcon />
-              </animated.div>
+              </div>
             )}
           </div>
 
           {width < 769 && (
-            <animated.div className="switch-statistic" style={trail[5]}>
+            <div className="switch-statistic" style={trail[5]}>
               {PRIMARY_STATISTICS.map((statistic) => (
                 <div
                   key={statistic}
@@ -255,12 +251,12 @@ function MapExplorer({
                   <DotFillIcon />
                 </div>
               ))}
-            </animated.div>
+            </div>
           )}
         </div>
       </div>
 
-      <animated.div ref={mapExplorerRef} style={trail[3]}>
+      <div ref={mapExplorerRef}>
         {mapStatistic && (
           <Suspense
             fallback={
@@ -281,7 +277,7 @@ function MapExplorer({
             ></MapVisualizer>
           </Suspense>
         )}
-      </animated.div>
+      </div>
     </div>
   );
 }

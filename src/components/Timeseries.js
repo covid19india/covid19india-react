@@ -25,7 +25,7 @@ import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {animated, config, useTrail} from 'react-spring';
+import {config, useTrail} from 'react-spring';
 
 function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   const {t} = useTranslation();
@@ -383,11 +383,10 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
         {TIMESERIES_STATISTICS.map((statistic, index) => {
           const delta = getStatisticDelta(statistic, index);
           return (
-            <animated.div
+            <div
               key={statistic}
               className={classnames('svg-parent', `is-${statistic}`)}
               ref={wrapperRef}
-              style={trail[index]}
             >
               {highlightedDate && (
                 <div className={classnames('stats', `is-${statistic}`)}>
@@ -419,7 +418,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
                 <g className="x-axis2" />
                 <g className="y-axis" />
               </svg>
-            </animated.div>
+            </div>
           );
         })}
       </div>
