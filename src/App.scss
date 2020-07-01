@@ -1856,6 +1856,11 @@ abbr {
     }
   }
 
+  .table-wrapper {
+    display: inline-block;
+    min-width: 100%;
+  }
+
   .row {
     cursor: pointer;
     display: flex;
