@@ -3415,16 +3415,15 @@ footer {
 
   .district-bar-left {
     display: flex;
-    flex-basis: 20%;
     flex-direction: column;
-    flex-grow: 1;
+    flex-grow: 15rem;
     flex-shrink: 0;
     margin-right: 1rem;
   }
 
   .district-bar-right {
     display: flex;
-    flex-basis: 60%;
+    flex-basis: 15rem;
     flex-grow: 1;
     justify-content: center;
     position: relative;
@@ -3456,13 +3455,14 @@ footer {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    width: 100%;
+    width: 10rem;
 
     &.is-grid {
       display: grid;
       grid-auto-flow: column;
       grid-gap: 0.5rem;
       padding-bottom: 0.5rem;
+      width: 100%;
     }
 
     .district {
