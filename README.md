@@ -1,16 +1,28 @@
-<p align="center">
-<img src="https://lh3.googleusercontent.com/-grjTcOMyemYN_JiN3QlkZzgh61D88LNFLj2-8QaqcjLWn_MouQe9zux8ZfMH4R7SLfR-cfHYD1b84KUlPqYucP5gZWTuo2J=s2560" width="100%">
-</p>
+<h1 align = 'center'>Covid19 INDIA Tracker</h1>
+<h3 align = 'center'>An Unoffical App</h1>
+
+![Covid19 India Tracker](demo/SiteDemo.gif)
 
 <p align="center">
   Here's our data <a href="http://patientdb.covid19india.org/">API</a>.
  </p>
 
-## Setup
+## Installation
 
 ```
-npm i && npm start
+$ npm i && npm start
+or
+$ yarn install
+$ yarn start
 ```
+
+## Why we Made This?
+
+Because it affects all of us. Today it's someone else who is getting infected; tomorrow it could be us. We need to prevent the spread of this virus. We need to document the data so that people with knowledge can use this data to make informed decisions.
+
+## Who we are?
+
+We are a group of dedicated volunteers who curate and verify the data coming from several sources. We extract the details, like a patient's relationship with other patients to identify local and community transmissions, travel history and status. We never collect or expose any personally identifiable data regarding the patients.
 
 ## Maintainers
 
