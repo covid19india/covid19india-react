@@ -8,6 +8,7 @@ import {STATE_NAMES} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {fetcher, formatNumber, getStatistic} from '../utils/commonFunctions';
 
+import classnames from 'classnames';
 import produce from 'immer';
 import React, {
   useMemo,
@@ -99,15 +100,16 @@ function State(props) {
   const stateMetaElement = useRef();
   const isStateMetaVisible = useIsVisible(stateMetaElement, {once: true});
 
-  const trail = useTrail(4, {
-    from: {transform: 'translate3d(0, 10px, 0)', opacity: 0},
-    to: {
-      transform: 'translate3d(0, 0px, 0)',
-      opacity: 1,
-    },
-    delay: 150,
-    config: config.gentle,
-  });
+  const trail = useMemo(() => {
+    const styles = [];
+
+    [0, 0, 0, 0].map((element, index) => {
+      styles.push({
+        animationDelay: `${index * 250}ms`,
+      });
+    });
+    return styles;
+  }, []);
 
   const lookback = showAllDistricts ? 10 : 6;
 
@@ -167,11 +169,16 @@ function State(props) {
             >
               <div className="district-bar-top">
                 <div className="district-bar-left">
-                  <animated.h2 className={mapStatistic} style={trail[0]}>
+                  <h2
+                    className={classnames(mapStatistic, 'fadeInUp')}
+                    style={trail[0]}
+                  >
                     Top districts
-                  </animated.h2>
-                  <animated.div
-                    className={`districts ${showAllDistricts ? 'is-grid' : ''}`}
+                  </h2>
+                  <div
+                    className={`districts fadeInUp ${
+                      showAllDistricts ? 'is-grid' : ''
+                    }`}
                     style={
                       showAllDistricts
                         ? {
@@ -212,10 +219,10 @@ function State(props) {
                           </div>
                         );
                       })}
-                  </animated.div>
+                  </div>
                 </div>
 
-                <animated.div className="district-bar-right" style={trail[2]}>
+                <div className="district-bar-right fadeInUp" style={trail[2]}>
                   {(mapStatistic === 'confirmed' ||
                     mapStatistic === 'deceased') && (
                     <div className="happy-sign">
@@ -247,18 +254,18 @@ function State(props) {
                     {...{stateCode, lookback}}
                     statistic={mapStatistic}
                   />
-                </animated.div>
+                </div>
               </div>
 
               <div className="district-bar-bottom">
                 {Object.keys(data[stateCode]?.districts || {}).length > 5 ? (
-                  <animated.button
-                    className="button"
+                  <button
+                    className="button fadeInUp"
                     onClick={toggleShowAllDistricts}
                     style={trail[3]}
                   >
                     <span>{showAllDistricts ? `View less` : `View all`}</span>
-                  </animated.button>
+                  </button>
                 ) : (
                   <div style={{height: '3.75rem', flexBasis: '15%'}} />
                 )}

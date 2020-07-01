@@ -74,7 +74,6 @@ $dark-m-purple-light: #40008050;
 
 * {
   font-family: 'archia';
-  user-select: none;
 }
 
 html {
@@ -4415,23 +4414,5 @@ footer {
   100% {
     opacity: 0;
     transform: translateY(20px);
-  }
-}
-
-.reveal {
-  animation-duration: 0.3s;
-  animation-fill-mode: both;
-  animation-name: reveal;
-}
-
-@keyframes reveal {
-  0% {
-    opacity: 0;
-    transform: translateY(20);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

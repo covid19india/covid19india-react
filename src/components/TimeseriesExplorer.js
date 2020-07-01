@@ -59,7 +59,7 @@ function TimeseriesExplorer({
 
   return (
     <div
-      className={classnames('TimeseriesExplorer', {
+      className={classnames('TimeseriesExplorer fadeInUp', {
         stickied: anchor === 'timeseries',
       })}
       style={{display: anchor === 'mapexplorer' ? 'none' : ''}}

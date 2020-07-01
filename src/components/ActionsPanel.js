@@ -69,14 +69,16 @@ const ActionsPanel = ({
     config: {mass: 5, tension: 500, friction: 80},
   });
 
-  const trail = useTrail(3, {
-    from: {transform: 'translate3d(0, 10px, 0)', opacity: 0},
-    to: {
-      transform: 'translate3d(0, 0px, 0)',
-      opacity: 1,
-    },
-    config: config.stiff,
-  });
+  const trail = useMemo(() => {
+    const styles = [];
+
+    [0, 0, 0].map((element, index) => {
+      styles.push({
+        animationDelay: `${index * 250}ms`,
+      });
+    });
+    return styles;
+  }, []);
 
   const getTimeFromMilliseconds = (lastViewedLog) => {
     return format(
@@ -100,25 +102,25 @@ const ActionsPanel = ({
           pointerEvents: isTimelineMode ? 'none' : '',
         }}
       >
-        <animated.h5 style={trail[0]}>{`${getTimeFromMilliseconds(
+        <h5 className="fadeInUp" style={trail[0]}>{`${getTimeFromMilliseconds(
           lastViewedLog
-        )} IST`}</animated.h5>
+        )} IST`}</h5>
 
         {!showUpdates && (
-          <animated.div className="bell-icon" style={trail[1]}>
+          <div className="bell-icon fadeInUp" style={trail[1]}>
             {Bell}
             {newUpdate && <div className="indicator"></div>}
-          </animated.div>
+          </div>
         )}
 
         {showUpdates && BellOff}
-        <animated.div
-          className="timeline-icon"
+        <div
+          className="timeline-icon fadeInUp"
           onClick={handleClick}
           style={trail[2]}
         >
           {TimelineIcon}
-        </animated.div>
+        </div>
       </animated.div>
 
       <animated.div

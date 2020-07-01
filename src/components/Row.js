@@ -178,7 +178,7 @@ function Row({
         ref={rowElement}
       >
         <div className="cell">
-          <div className="state-name">
+          <div className="state-name fadeInUp">
             {t(STATE_NAMES[stateCode]) || districtNameStr}
           </div>
           {data?.meta?.notes && (
