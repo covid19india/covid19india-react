@@ -23,7 +23,7 @@ import {line, curveMonotoneX} from 'd3-shape';
 import {transition} from 'd3-transition';
 import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {config, useTrail} from 'react-spring';
 
@@ -367,26 +367,28 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
     [timeseries, highlightedDate, chartType]
   );
 
-  const trail = useTrail(5, {
-    from: {transform: 'translate3d(0, 10px, 0) scale(0.95)', opacity: 0},
-    to: {
-      transform: 'translate3d(0, 0px, 0) scale(1)',
-      opacity: 1,
-    },
-    delay: 350,
-    config: config.gentle,
-  });
+  const trail = useMemo(() => {
+    const styles = [];
+
+    [0, 0, 0, 0, 0].map((element, index) => {
+      styles.push({
+        animationDelay: `${index * 250}ms`,
+      });
+    });
+    return styles;
+  }, []);
 
   return (
     <React.Fragment>
-      <div className="Timeseries" style={trail[0]}>
+      <div className="Timeseries">
         {TIMESERIES_STATISTICS.map((statistic, index) => {
           const delta = getStatisticDelta(statistic, index);
           return (
             <div
               key={statistic}
-              className={classnames('svg-parent', `is-${statistic}`)}
+              className={classnames('svg-parent fadeInUp', `is-${statistic}`)}
               ref={wrapperRef}
+              style={trail[index]}
             >
               {highlightedDate && (
                 <div className={classnames('stats', `is-${statistic}`)}>

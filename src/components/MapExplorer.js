@@ -29,7 +29,7 @@ import React, {
 } from 'react';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
-import {animated, config, useSpring, useTrail} from 'react-spring';
+import {animated, useSpring} from 'react-spring';
 import {useWindowSize} from 'react-use';
 
 const MapVisualizer = lazy(() => import('./MapVisualizer'));
@@ -143,14 +143,17 @@ function MapExplorer({
     }
   }, [history]);
 
-  const trail = useTrail(7, {
-    from: {transform: 'translate3d(0, 10px, 0)', opacity: 0},
-    to: {
-      transform: 'translate3d(0, 0px, 0)',
-      opacity: 1,
-    },
-    config: config.stiff,
-  });
+  const trail = useMemo(() => {
+    const styles = [];
+
+    [0, 0, 0, 0, 0, 0, 0].map((element, index) => {
+      styles.push({
+        animationDelay: `${index * 250}ms`,
+      });
+    });
+
+    return styles;
+  }, []);
 
   const spring = useSpring({
     total: getStatistic(hoveredRegion, 'total', mapStatistic),
@@ -169,7 +172,7 @@ function MapExplorer({
       )}
     >
       <div className="panel" ref={panelRef}>
-        <div className="panel-left">
+        <div className="panel-left fadeInUp" style={trail[0]}>
           <h2 className={classnames(mapStatistic)}>
             {t(hoveredRegion.name)}
             {hoveredRegion.name === UNKNOWN_DISTRICT_KEY &&
@@ -191,18 +194,20 @@ function MapExplorer({
         <div className={classnames('panel-right', `is-${mapStatistic}`)}>
           <div className="switch-type">
             <div
-              className={classnames('choropleth', {
+              className={classnames('choropleth fadeInUp', {
                 'is-highlighted': mapViz === MAP_VIZS.CHOROPLETH,
               })}
               onClick={handleTabClick.bind(this, MAP_VIZS.CHOROPLETH)}
+              style={trail[1]}
             >
               {ChoroplethIcon}
             </div>
             <div
-              className={classnames('bubble', {
+              className={classnames('bubble fadeInUp', {
                 'is-highlighted': mapViz === MAP_VIZS.BUBBLES,
               })}
               onClick={handleTabClick.bind(this, MAP_VIZS.BUBBLES)}
+              style={trail[2]}
             >
               {BubblesIcon}
             </div>
@@ -211,7 +216,7 @@ function MapExplorer({
               <React.Fragment>
                 <div className="divider" />
                 <div
-                  className={classnames('boundary', {
+                  className={classnames('boundary fadeInUp', {
                     'is-highlighted': mapView === MAP_VIEWS.DISTRICTS,
                   })}
                   onClick={setMapView.bind(
@@ -220,6 +225,7 @@ function MapExplorer({
                       ? MAP_VIEWS.STATES
                       : MAP_VIEWS.DISTRICTS
                   )}
+                  style={trail[3]}
                 >
                   <OrganizationIcon />
                 </div>
@@ -228,10 +234,11 @@ function MapExplorer({
 
             {mapMeta.mapType === MAP_TYPES.STATE && (
               <div
-                className="back"
+                className="back fadeInUp"
                 onClick={() => {
                   history.push('/#MapExplorer');
                 }}
+                style={trail[4]}
               >
                 <ArrowLeftIcon />
               </div>
@@ -239,7 +246,7 @@ function MapExplorer({
           </div>
 
           {width < 769 && (
-            <div className="switch-statistic" style={trail[5]}>
+            <div className="switch-statistic fadeInUp" style={trail[5]}>
               {PRIMARY_STATISTICS.map((statistic) => (
                 <div
                   key={statistic}
@@ -256,7 +263,7 @@ function MapExplorer({
         </div>
       </div>
 
-      <div ref={mapExplorerRef}>
+      <div ref={mapExplorerRef} className="fadeInUp" style={trail[3]}>
         {mapStatistic && (
           <Suspense
             fallback={

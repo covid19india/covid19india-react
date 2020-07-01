@@ -4,9 +4,9 @@ import {capitalize, formatNumber, getStatistic} from '../utils/commonFunctions';
 import {HeartFillIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {animated, useSpring, config, useTrail} from 'react-spring';
+import {animated, useSpring, config} from 'react-spring';
 
 function PureLevelItem({statistic, total, delta}) {
   const {t} = useTranslation();
@@ -45,21 +45,23 @@ function PureLevelItem({statistic, total, delta}) {
 const LevelItem = React.memo(PureLevelItem);
 
 function Level({data}) {
-  const trail = useTrail(4, {
-    from: {
-      transform: 'translate3d(0, 20px, 0)',
-      opacity: 0,
-    },
-    to: {transform: 'translate3d(0, 0px, 0)', opacity: 1},
-    config: config.stiff,
-  });
+  const trail = useMemo(() => {
+    const styles = [];
+
+    PRIMARY_STATISTICS.map((statistic, index) => {
+      styles.push({
+        animationDelay: `${index * 250}ms`,
+      });
+    });
+    return styles;
+  }, []);
 
   return (
     <div className="Level">
       {PRIMARY_STATISTICS.map((statistic, index) => (
         <animated.div
           key={index}
-          className={classnames('level-item', `is-${statistic}`)}
+          className={classnames('level-item', `is-${statistic}`, 'fadeInUp')}
           style={trail[index]}
         >
           <LevelItem

@@ -227,7 +227,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
         ) : null
       )}
 
-      <div className="table reveal">
+      <div className="table fadeInUp">
         <div className="row heading">
           <div
             className="cell heading"

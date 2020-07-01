@@ -1,11 +1,10 @@
 import {STATE_CODES_ARRAY, STATE_CODES, STATE_NAMES} from '../constants';
 
 import produce from 'immer';
-import React, {useState, useEffect, useCallback, useRef} from 'react';
+import React, {useState, useEffect, useMemo, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
-import {useTrail, animated, config} from 'react-spring';
 import {useDebounce, useUpdateEffect} from 'react-use';
 
 const suggestions = [
@@ -219,17 +218,16 @@ function Search() {
     }
   }, [expand, loopThroughSuggestions]);
 
-  const trail = useTrail(3, {
-    from: {
-      transform: 'translate3d(0, 10px, 0)',
-      opacity: 0,
-    },
-    to: {
-      transform: 'translate3d(0, 0px, 0)',
-      opacity: 1,
-    },
-    config: config.stiff,
-  });
+  const trail = useMemo(() => {
+    const styles = [];
+
+    [0, 0, 0].map((element, index) => {
+      styles.push({
+        animationDelay: `${index * 250}ms`,
+      });
+    });
+    return styles;
+  }, []);
 
   const handleClose = useCallback(() => {
     setSearchValue('');
@@ -242,12 +240,12 @@ function Search() {
 
   return (
     <div className="Search">
-      <animated.label style={trail[0]}>
+      <label className="fadeInUp" style={trail[0]}>
         {t('Search your district or state')}
-      </animated.label>
-      <animated.div className="line" style={trail[1]}></animated.div>
+      </label>
+      <div className="line fadeInUp" style={trail[1]}></div>
 
-      <animated.div className="search-input-wrapper" style={trail[2]}>
+      <div className="search-input-wrapper fadeInUp" style={trail[2]}>
         <input
           type="text"
           value={searchValue}
@@ -270,7 +268,7 @@ function Search() {
             <Icon.X />
           </div>
         )}
-      </animated.div>
+      </div>
 
       {results.length > 0 && (
         <div className="results">
