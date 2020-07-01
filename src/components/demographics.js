@@ -260,7 +260,9 @@ function Demographics(props) {
               calendarIcon={<Icon.Calendar />}
               inputProps={
                 (onkeydown = (e) => {
-                  e.preventDefault();
+                  if (e.keyCode === 38 || e.keyCode === 40) {
+                    return false;
+                  }
                 })
               }
               clearIcon={<Icon.XCircle />}
