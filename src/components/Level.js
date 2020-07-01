@@ -50,7 +50,7 @@ function Level({data}) {
 
     PRIMARY_STATISTICS.map((statistic, index) => {
       styles.push({
-        animationDelay: `${index * 250}ms`,
+        animationDelay: `${750 + index * 250}ms`,
       });
     });
     return styles;

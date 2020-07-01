@@ -2,7 +2,7 @@ import {parse, format} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
 import React, {useMemo, useCallback, lazy, Suspense} from 'react';
 import * as Icon from 'react-feather';
-import {useSpring, animated, useTrail, config} from 'react-spring';
+import {useSpring, animated} from 'react-spring';
 
 const Timeline = lazy(() => import('./Timeline'));
 
@@ -74,7 +74,7 @@ const ActionsPanel = ({
 
     [0, 0, 0].map((element, index) => {
       styles.push({
-        animationDelay: `${index * 250}ms`,
+        animationDelay: `${500 + index * 250}ms`,
       });
     });
     return styles;

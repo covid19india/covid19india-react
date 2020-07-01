@@ -3,53 +3,50 @@ import {formatNumber, getStatistic} from '../utils/commonFunctions';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import React from 'react';
-import {animated, useSpring, config} from 'react-spring';
+import {Spring, animated, interpolate} from 'react-spring/renderprops';
 
 const Cell = ({statistic, data, isPerMillion}) => {
   const total = getStatistic(data, 'total', statistic, isPerMillion);
   const delta = getStatistic(data, 'delta', statistic, isPerMillion);
 
-  const spring = useSpring(
-    {
-      total: total,
-      delta: delta,
-      from: {
-        total: total,
-        delta: delta,
-      },
-    },
-    config.gentle
-  );
-
   return (
     <div className="cell statistic">
       {statistic !== 'active' && (
-        <animated.div className={classnames('delta', `is-${statistic}`)}>
-          {spring.delta.interpolate((delta) =>
-            delta > 0
-              ? '\u2191' +
-                formatNumber(
-                  Math.floor(delta),
-                  statistic === 'tested' ? 'short' : null
-                )
-              : delta < 0
-              ? '\u2193' +
-                formatNumber(
-                  Math.floor(Math.abs(delta)),
-                  statistic === 'tested' ? 'short' : null
-                )
-              : ''
+        <Spring native from={{delta: delta}} to={{delta: delta}}>
+          {(props) => (
+            <animated.div className={classnames('delta', `is-${statistic}`)}>
+              {props.delta.interpolate((delta) =>
+                delta > 0
+                  ? '\u2191' +
+                    formatNumber(
+                      Math.floor(delta),
+                      statistic === 'tested' ? 'short' : null
+                    )
+                  : delta < 0
+                  ? '\u2193' +
+                    formatNumber(
+                      Math.floor(Math.abs(delta)),
+                      statistic === 'tested' ? 'short' : null
+                    )
+                  : ''
+              )}
+            </animated.div>
           )}
-        </animated.div>
+        </Spring>
       )}
-      <animated.div className="total">
-        {spring.total.interpolate((total) =>
-          formatNumber(
-            Math.floor(total),
-            statistic === 'tested' ? 'short' : null
-          )
+
+      <Spring native from={{total: total}} to={{total: total}}>
+        {(props) => (
+          <animated.div className="total">
+            {props.total.interpolate((total) =>
+              formatNumber(
+                Math.floor(total),
+                statistic === 'tested' ? 'short' : null
+              )
+            )}
+          </animated.div>
         )}
-      </animated.div>
+      </Spring>
     </div>
   );
 };
