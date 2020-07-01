@@ -115,8 +115,8 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
     '2020-04-14': 'End of Lockdown Phase 1',
     '2020-04-15': 'Beginning of Lockdown Phase 2',
     '2020-05-03': 'End of Lockdown Phase 2',
-    '2020-05-04': 'Beginning of Lockdown Phase 3',
-    '2020-05-17': 'End of Lockdown Phase 3',
+    '2020-04-04': 'Beginning of Lockdown Phase 3',
+    '2020-04-17': 'End of Lockdown Phase 3',
     '2020-05-18': 'Beginning of Lockdown Phase 4',
     '2020-05-31': 'End of Lockdown Phase 4',
     '2020-06-01': 'Beginning of Lockdown Phase 5',
@@ -175,7 +175,9 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
               {index < 2 && (
                 <animated.h5
                   style={{color}}
-                  onClick={handleClick.bind(this, i)}
+                  onClick={() => {
+                    handleClick(i);
+                  }}
                 >
                   {getDate(i)}
                 </animated.h5>
@@ -183,7 +185,9 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
               {index > 1 && index < dates.length && (
                 <animated.h5
                   style={{color}}
-                  onClick={handleClick.bind(this, index + i - 2)}
+                  onClick={() => {
+                    handleClick(index + i - 2);
+                  }}
                 >
                   {getDate(index + i - 2)}
                 </animated.h5>
