@@ -1,4 +1,4 @@
-import Level from '../../components/level';
+import Level from '../../components/Level';
 
 import {render} from '@testing-library/react';
 import React from 'react';
