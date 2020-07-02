@@ -1804,7 +1804,6 @@ abbr {
 .table {
   align-self: center;
   border-radius: 3px;
-  border-right: 2px dashed $gray-hover;
   display: flex;
   flex-direction: column;
   font-size: 12px;
@@ -1882,6 +1881,7 @@ abbr {
     &.heading {
       .cell {
         cursor: pointer;
+        user-select: none;
 
         &:hover {
           background: $gray-hover-opaque !important;

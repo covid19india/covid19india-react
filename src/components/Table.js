@@ -14,7 +14,7 @@ import {
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React, {useCallback, useState, lazy} from 'react';
+import React, {useCallback, useEffect, useState, lazy} from 'react';
 import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
@@ -102,7 +102,9 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
     setTableOption((prevTableOption) =>
       prevTableOption === 'States' ? 'Districts' : 'States'
     );
+  }, []);
 
+  useEffect(() => {
     const workerInstance = worker();
     workerInstance.getDistricts(states);
     workerInstance.addEventListener('message', (message) => {
@@ -111,7 +113,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
         workerInstance.terminate();
       }
     });
-  }, [states]);
+  }, [tableOption, states]);
 
   const transition = useTransition(isInfoVisible, null, {
     from: TABLE_FADE_OUT,
