@@ -52,6 +52,7 @@ function Level({data}) {
       styles.push({
         animationDelay: `${750 + index * 250}ms`,
       });
+      return null;
     });
     return styles;
   }, []);

@@ -225,6 +225,7 @@ function Search() {
       styles.push({
         animationDelay: `${index * 250}ms`,
       });
+      return null;
     });
     return styles;
   }, []);

@@ -3,7 +3,7 @@ import {formatNumber, getStatistic} from '../utils/commonFunctions';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import React from 'react';
-import {Spring, animated, interpolate} from 'react-spring/renderprops';
+import {Spring, animated} from 'react-spring/renderprops';
 
 const Cell = ({statistic, data, isPerMillion}) => {
   const total = getStatistic(data, 'total', statistic, isPerMillion);

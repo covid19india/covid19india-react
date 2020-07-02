@@ -4,7 +4,7 @@ import {formatDate, formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {animated, config, useSpring, useTrail} from 'react-spring';
+import {animated, config, useSpring} from 'react-spring';
 
 function StateHeader({data, stateCode}) {
   const {t} = useTranslation();
@@ -16,6 +16,7 @@ function StateHeader({data, stateCode}) {
       styles.push({
         animationDelay: `${index * 250}ms`,
       });
+      return null;
     });
 
     return styles;

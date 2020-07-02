@@ -22,7 +22,6 @@ import * as Icon from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
-import {animated, config, useTrail} from 'react-spring';
 import {useSessionStorage} from 'react-use';
 import useSWR from 'swr';
 
@@ -107,6 +106,7 @@ function State(props) {
       styles.push({
         animationDelay: `${index * 250}ms`,
       });
+      return null;
     });
     return styles;
   }, []);

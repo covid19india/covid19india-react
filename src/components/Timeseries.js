@@ -25,7 +25,6 @@ import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useCallback, useEffect, useRef, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {config, useTrail} from 'react-spring';
 
 function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   const {t} = useTranslation();
@@ -374,6 +373,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       styles.push({
         animationDelay: `${index * 250}ms`,
       });
+      return null;
     });
     return styles;
   }, []);
