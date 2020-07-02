@@ -1818,6 +1818,7 @@ abbr {
     margin-bottom: 1 + .25rem;
     margin-top: 1rem;
     position: sticky;
+    width: 28rem;
 
     svg {
       margin-right: .5rem;
@@ -3749,6 +3750,10 @@ footer {
   .timeline,
   .LanguageSwitcher {
     width: calc(100% - 2rem);
+  }
+
+  .state-meta {
+    width: calc(100vw - 2rem) !important;
   }
 
   .Home,
