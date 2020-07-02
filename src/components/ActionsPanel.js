@@ -76,6 +76,7 @@ const ActionsPanel = ({
       styles.push({
         animationDelay: `${500 + index * 250}ms`,
       });
+      return null;
     });
     return styles;
   }, []);
