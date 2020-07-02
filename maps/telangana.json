@@ -2570,7 +2570,7 @@
     "translate": [77.235913, 15.836283]
   },
   "objects": {
-    "telangana_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

@@ -5250,7 +5250,7 @@
     "translate": [72.654608, 15.606125]
   },
   "objects": {
-    "maharashtra_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

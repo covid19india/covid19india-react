@@ -766,7 +766,7 @@
     "translate": [72.530394, 32.337631]
   },
   "objects": {
-    "ladakh_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

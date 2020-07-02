@@ -3693,7 +3693,7 @@
     "translate": [85.819663, 21.4839]
   },
   "objects": {
-    "westbengal_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {
