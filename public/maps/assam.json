@@ -2987,7 +2987,7 @@
     "translate": [89.69860199999998, 24.136603267634122]
   },
   "objects": {
-    "assam_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {
