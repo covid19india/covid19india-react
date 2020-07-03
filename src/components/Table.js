@@ -3,7 +3,7 @@ import TableLoader from './loaders/Table';
 import TableDeltaHelper from './snippets/TableDeltaHelper';
 
 import {TABLE_FADE_IN, TABLE_FADE_OUT} from '../animations';
-import {TABLE_STATISTICS} from '../constants';
+import {DISTRICT_TABLE_COUNT, TABLE_STATISTICS} from '../constants';
 import {getStatistic} from '../utils/commonFunctions';
 
 import {
@@ -166,7 +166,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
               <div className="helper-left">
                 <div className="info-item">
                   <OrganizationIcon size={14} />
-                  <p>Show/Hide Top 50 Districts</p>
+                  <p>{`Show/Hide Top ${DISTRICT_TABLE_COUNT} Districts`}</p>
                 </div>
 
                 <div className="info-item notes">
@@ -287,7 +287,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
             districts &&
             Object.keys(districts)
               .sort((a, b) => sortingFunction(a, b))
-              .slice(0, 30)
+              .slice(0, DISTRICT_TABLE_COUNT)
               .map((districtKey) => {
                 return (
                   <Row
