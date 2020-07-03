@@ -48,12 +48,11 @@ const StateDropdown = ({stateCode, trail}) => {
   );
 
   return (
-    <div className="StateDropdown">
+    <div className="StateDropdown" ref={dropdownRef}>
       <animated.h1
         className="state-name fadeInUp"
         style={trail}
         onClick={setShowDropdown.bind(this, !showDropdown)}
-        ref={dropdownRef}
       >
         {t(STATE_NAMES[stateCode])}
       </animated.h1>
