@@ -3168,7 +3168,12 @@ footer {
     color: $gray;
     font-weight: 600;
     margin: 0;
+  }
+
+  .moto {
+    border-color: var(--primary-color);
     margin-bottom: 3.5rem;
+    width: 10%;
   }
 
   svg {
@@ -4164,9 +4169,4 @@ footer {
       }
     }
   }
-}
-
-.moto {
-  border-color: var(--primary-color);
-  width: 30%;
 }

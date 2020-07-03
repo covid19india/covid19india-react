@@ -2,7 +2,7 @@ $blue: #007bff;
 $blue-light: #007bff10;
 $blue-hover: #007bff30;
 $blue-light-opaque: #eff7ff;
-$blue-mid: #007bff99;
+$blue-mid: #007bffdd;
 $pblue: #4c75f2;
 $pblue-light: #4c75f230;
 $pblue-hover: #4c75f250;
@@ -25,7 +25,7 @@ $orange-light-opaque: #ffefe2;
 $yellow: #ffc107;
 $yellow-light: #ffc10720;
 $yellow-hover: #ffc10730;
-$yellow-mid: #ffc10799;
+$yellow-mid: #ffc107dd;
 $yellow-light-opaque: #fff7e0;
 $green: #28a745;
 $green-light: #28a74520;
@@ -55,9 +55,11 @@ $pink-mid: #fb558199;
 $brown: #b6854d;
 $brown-light: #b6854d10;
 $brown-hover: #b6854d30;
-$brown-mid: #b6854d99;
+$brown-mid: #b6854ddd;
 $brick: #e23028;
 $brick-light: #e2302810;
+$gray-hover-darker-opaque: #1a1a1a20;
+$gray-hover-opaque: #edeeef20;
 
 $default-primary: var(--primary-color);
 
@@ -160,31 +162,31 @@ $default-primary: var(--primary-color);
     }
   }
 
-  .State {
-    .header {
-      .header-left {
-        h1 {
-          color: $brick;
-        }
-
-        h5 {
-          color: $gray;
-        }
+  .StateHeader {
+    .header-left {
+      h1 {
+        color: $brick;
+        max-width: 20rem;
       }
 
-      .header-right {
-        color: $purple-mid;
+      h5 {
+        color: $gray;
+      }
+    }
 
-        h2 {
-          color: $purple;
-        }
+    .header-right {
+      color: $purple-mid;
 
-        a {
-          background: $purple-light;
+      h2 {
+        color: $purple;
+        font-weight: 900;
+      }
 
-          &:hover {
-            background: $purple-hover;
-          }
+      a {
+        background: $purple-light;
+
+        &:hover {
+          background: $purple-hover;
         }
       }
     }
@@ -214,122 +216,131 @@ $default-primary: var(--primary-color);
       }
     }
 
-    &.confirmed {
-      background: $cherry-light;
-
-      h3,
-      h5,
-      svg,
-      p {
-        color: $cherry-mid;
+    .meta-item {
+      &.population {
+        h1,
+        h3 {
+          color: $gray;
+        }
       }
 
-      h1 {
-        color: $cherry;
-      }
-    }
+      &.confirmed {
+        background: $cherry-light;
 
-    &.active {
-      background: $blue-light;
+        h3,
+        h5,
+        svg,
+        p {
+          color: $cherry-mid;
+        }
 
-      h3,
-      h5,
-      svg,
-      p {
-        color: $blue-mid;
-      }
-
-      h1 {
-        color: $blue;
-      }
-    }
-
-    &.recovery {
-      background: $green-light;
-
-      h3,
-      h5,
-      svg,
-      p {
-        color: $green-mid;
+        h1 {
+          color: $cherry;
+        }
       }
 
-      h1 {
-        color: $green;
-      }
-    }
+      &.active {
+        background: $blue-light;
 
-    &.mortality {
-      background: $gray-light;
+        h3,
+        h5,
+        svg,
+        p {
+          color: $blue-mid;
+        }
 
-      h3,
-      h5,
-      svg,
-      p {
-        color: $gray-mid;
-      }
-
-      h1 {
-        color: $gray;
-      }
-    }
-
-    &.cpm {
-      background: $yellow-light;
-
-      h3,
-      h5,
-      svg {
-        color: $orange-mid;
+        h1 {
+          color: $blue;
+        }
       }
 
-      h1 {
-        color: $orange;
-      }
-    }
+      &.recovery {
+        background: $green-light;
 
-    &.tpm {
-      background: $purple-light;
+        h3,
+        h5,
+        svg,
+        p {
+          color: $green-mid;
+        }
 
-      h3,
-      h5,
-      svg,
-      p {
-        color: $purple-mid;
-      }
-
-      h1 {
-        color: $purple;
-      }
-    }
-
-    &.ptr {
-      background: $pink-light;
-
-      h3,
-      h5,
-      svg,
-      p {
-        color: $pink-mid;
+        h1 {
+          color: $green;
+        }
       }
 
-      h1 {
-        color: $pink;
+      &.mortality {
+        background: $gray-light;
+
+        h3,
+        h5,
+        svg,
+        p {
+          color: $gray-mid;
+        }
+
+        h1 {
+          color: $gray;
+        }
       }
-    }
 
-    &.gr {
-      background: $brown-light;
+      &.cpm {
+        background: $yellow-light;
 
-      h3,
-      h5,
-      p,
-      svg {
-        color: $brown-mid;
+        h3,
+        h5,
+        svg {
+          color: $orange-mid;
+        }
+
+        h1 {
+          color: $orange;
+        }
       }
 
-      h1 {
-        color: $brown;
+      &.tpm {
+        background: $purple-light;
+
+        h3,
+        h5,
+        svg,
+        p {
+          color: $purple-mid;
+        }
+
+        h1 {
+          color: $purple;
+        }
+      }
+
+      &.ptr {
+        background: $pink-light;
+
+        h3,
+        h5,
+        svg,
+        p {
+          color: $pink-mid;
+        }
+
+        h1 {
+          color: $pink;
+        }
+      }
+
+      &.gr {
+        background: $brown-light;
+
+        h3,
+        h5,
+        p,
+        svg {
+          color: $brown-mid;
+        }
+
+        h1 {
+          color: $brown;
+        }
       }
     }
   }
@@ -662,20 +673,24 @@ $default-primary: var(--primary-color);
     }
   }
 
-  .map-switcher {
-    .highlight {
-      background: $cherry-light;
+  .MapSwitcher {
+    .clickable {
+      &:hover {
+        &.is-confirmed {
+          background: $cherry-light;
+        }
 
-      &.active {
-        background: $blue-light;
-      }
+        &.is-active {
+          background: $blue-light;
+        }
 
-      &.recovered {
-        background: $green-light;
-      }
+        &.is-recovered {
+          background: $green-light;
+        }
 
-      &.deceased {
-        background: $gray-light;
+        &.is-deceased {
+          background: #6c757d30;
+        }
       }
     }
   }
@@ -753,20 +768,125 @@ $default-primary: var(--primary-color);
   }
 
   .table {
-    .cell {
-      &:first-child {
-        background: var(--background-color) !important;
-      }
+    .table-wrapper {
+      .row {
+        &:nth-child(odd) {
+          .cell {
+            background: $gray-light;
+          }
+        }
 
-      &.heading {
-        background: var(--background-color) !important;
-      }
-    }
+        &.is-highlighted {
+          .cell {
+            background: $gray-hover-opaque !important;
+          }
+        }
 
-    .is-highlighted,
-    .is-total {
-      .cell {
-        background: var(--background-color) !important;
+        &.heading {
+          .cell {
+            cursor: pointer;
+            user-select: none;
+
+            &:hover {
+              background: $gray-hover-opaque !important;
+            }
+          }
+        }
+
+        &.is-total {
+          position: sticky;
+          top: 0;
+
+          .cell {
+            background: $gray-hover-opaque !important;
+          }
+        }
+
+        .cell {
+          color: $gray;
+
+          &:first-child {
+            background: $gray-hover-darker-opaque;
+          }
+
+          svg {
+            color: $gray-mid;
+          }
+
+          .sort-icon {
+            &.is-confirmed {
+              svg {
+                color: $cherry;
+              }
+            }
+
+            &.is-active {
+              svg {
+                color: $blue;
+              }
+            }
+
+            &.is-recovered {
+              svg {
+                color: $green;
+              }
+            }
+
+            &.is-deceased {
+              svg {
+                color: $gray;
+              }
+            }
+
+            &.is-tested {
+              svg {
+                color: $purple;
+              }
+            }
+          }
+
+          &.statistic {
+            .is-confirmed {
+              color: $cherry;
+            }
+
+            .is-recovered {
+              color: $green;
+            }
+
+            .is-deceased {
+              color: $gray;
+            }
+
+            .is-tested {
+              color: $purple;
+            }
+          }
+
+          &:not(:last-child) {
+            margin-right: 0.25rem;
+          }
+
+          &.heading {
+            background: $gray-light-opaque;
+            font-size: 13px;
+            font-weight: 900;
+            padding: 0.75rem 0.5rem;
+
+            &:hover {
+              background: $gray-hover-opaque !important;
+            }
+          }
+
+          .state-name,
+          .district-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 0.25rem;
+            width: 6rem;
+            word-wrap: break-word;
+          }
+        }
       }
     }
   }
@@ -1164,12 +1284,12 @@ $default-primary: var(--primary-color);
 
   .tabs {
     .tab {
-      background: $gray-light;
+      background: $gray-hover;
 
       color: $gray-mid;
 
       &:hover {
-        background: $gray-hover;
+        background: $gray-dark;
       }
 
       &.focused {
@@ -1227,8 +1347,12 @@ $default-primary: var(--primary-color);
   .disabled {
     input {
       &.switch {
-        background: $gray-light !important;
-        border: $gray-light 2px solid !important;
+        background: $gray-dark !important;
+        border: $gray 2px solid !important;
+      }
+
+      &::after {
+        background: $gray !important;
       }
     }
   }
@@ -1236,14 +1360,14 @@ $default-primary: var(--primary-color);
   input {
     &.switch {
       background-color: #fff;
-      border: 2px solid #d9dadc;
+      border: 2px solid $gray-light;
 
       &::after {
-        background-color: $gray-mid;
+        background-color: var(--background-color);
       }
 
       &:checked {
-        background-color: $gray-light;
+        background-color: var(--primary-color);
 
         &::after {
           background-color: $light;
@@ -1265,7 +1389,7 @@ $default-primary: var(--primary-color);
     }
   }
 
-  .TimeSeries,
+  .Timeseries,
   .Minigraph {
     .stats {
       h2,
@@ -1467,6 +1591,38 @@ $default-primary: var(--primary-color);
     h5 {
       color: $gray;
     }
+
+    .github {
+      color: #00000050;
+
+      &:hover {
+        color: #000;
+      }
+    }
+
+    .twitter {
+      color: $blue-mid;
+
+      &:hover {
+        color: $blue;
+      }
+    }
+
+    .api {
+      color: $yellow-mid;
+
+      &:hover {
+        color: $yellow;
+      }
+    }
+
+    .mail {
+      color: $brown-mid;
+
+      &:hover {
+        color: $brown;
+      }
+    }
   }
 
   .Summary {
@@ -1481,7 +1637,7 @@ $default-primary: var(--primary-color);
     }
   }
 
-  .FAQ {
+  .faq {
     .question {
       color: #eee;
     }
@@ -2179,6 +2335,38 @@ $default-primary: var(--primary-color);
       p {
         color: $white !important;
       }
+    }
+  }
+
+  .table-top {
+    .option-toggle,
+    .info-toggle,
+    .million-toggle {
+      background: $gray-light;
+      color: $gray-mid;
+
+      &.is-highlighted {
+        background: $green-light;
+        color: $green;
+      }
+    }
+
+    .info-toggle {
+      &.is-highlighted {
+        background: $yellow-light;
+        color: $yellow;
+      }
+    }
+
+    .million-toggle {
+      &.is-highlighted {
+        background: $pink-light;
+        color: $pink;
+      }
+    }
+
+    .scroll-right-helper {
+      color: $gray-mid;
     }
   }
 
