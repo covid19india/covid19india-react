@@ -109,8 +109,6 @@ $default-primary: var(--primary-color);
       color: $gray;
 
       & > * {
-        // border-bottom: 1px solid $gray-light;
-        // border-top: 1px solid $gray-light;
         border: 0;
 
         &:hover {
