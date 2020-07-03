@@ -1507,6 +1507,10 @@ h6 {
       &.is-deceased {
         background: $gray-light;
       }
+
+      &.is-percentPositive {
+        background: $cherry-light;
+      }
     }
   }
 }
@@ -1589,6 +1593,17 @@ h6 {
 
     h4 {
       color: $gray-mid;
+    }
+  }
+
+  .is-percentPositive {
+    h1,
+    h5 {
+      color: $cherry;
+    }
+
+    h4 {
+      color: $cherry-mid;
     }
   }
 }
@@ -1750,6 +1765,12 @@ abbr {
     .is-tested {
       svg {
         color: $purple;
+      }
+    }
+
+    .is-percentPositive {
+      svg {
+        color: $cherry;
       }
     }
 
@@ -1972,6 +1993,12 @@ abbr {
           }
         }
 
+        &.is-percentPositive {
+          svg {
+            color: $cherry;
+          }
+        }
+
         &.invert {
           margin-top: .25rem;
           transform: rotate(180deg);
@@ -2002,6 +2029,10 @@ abbr {
 
         .is-tested {
           color: $purple;
+        }
+
+        .is-percentPositive {
+          color: $cherry;
         }
       }
 
@@ -2461,6 +2492,20 @@ abbr {
               }
             }
           }
+
+          &.is-percentPositive {
+            svg {
+              fill: $cherry-hover;
+              stroke: none;
+            }
+
+            &.is-highlighted {
+              svg {
+                fill: $cherry;
+                transform: scale(1.25);
+              }
+            }
+          }
         }
       }
     }
@@ -2513,6 +2558,11 @@ abbr {
     &.is-deceased {
       background: $gray-light;
       color: $gray;
+    }
+
+    &.is-percentPositive {
+      background: $cherry-light;
+      color: $cherry;
     }
 
     span {
@@ -2706,6 +2756,14 @@ abbr {
       line {
         &.stem {
           stroke: $purple-mid;
+        }
+      }
+    }
+
+    &.is-percentPositive {
+      line {
+        &.stem {
+          stroke: $cherry-mid;
         }
       }
     }

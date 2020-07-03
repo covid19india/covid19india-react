@@ -114,6 +114,10 @@ export const getStatistic = (data, type, statistic, perMillion = false) => {
     const recovered = data?.[type]?.recovered || 0;
     const migrated = data?.[type]?.migrated || 0;
     count = confirmed - deceased - recovered - migrated;
+  } else if (statistic === 'percentPositive') {
+    const confirmed = data?.[type]?.confirmed || 0;
+    const tested = data?.[type]?.tested || 0;
+    count = tested === 0 ? 0 : confirmed/tested*100;
   } else {
     count = data?.[type]?.[statistic] || 0;
   }

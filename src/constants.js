@@ -21,7 +21,7 @@ export const PRIMARY_STATISTICS = [
 
 export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
-export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
+export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested', 'percentPositive'];
 
 export const D3_TRANSITION_DURATION = 300;
 
@@ -37,6 +37,7 @@ export const COLORS = {
   recovered: '#28a745',
   deceased: '#6c757d',
   tested: '#4b1eaa',
+  percentPositive: '#ff073a',
 };
 
 export const KEYS = {

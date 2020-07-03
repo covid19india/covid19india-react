@@ -111,10 +111,10 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       .range([chartBottom, margin.top]);
 
     const generateYScale = (statistic) => {
-      if (isUniform && chartType === 'total' && isLog && statistic !== 'tested')
+      if (isUniform && chartType === 'total' && isLog && statistic !== 'tested' && statistic !== 'percentPositive')
         return yScaleUniformLog;
 
-      if (isUniform && statistic !== 'tested') return yScaleUniformLinear;
+      if (isUniform && statistic !== 'tested' && statistic !== 'percentPositive') return yScaleUniformLinear;
 
       if (chartType === 'total' && isLog)
         return scaleLog()
