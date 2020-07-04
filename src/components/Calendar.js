@@ -1,4 +1,4 @@
-import {formatDate} from '../utils/commonfunctions';
+import {formatDate} from '../utils/commonFunctions';
 import React from 'react';
 import DatePicker from 'react-date-picker';
 import {differenceInCalendarDays} from "date-fns";

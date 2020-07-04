@@ -1,7 +1,7 @@
-import {fetcher, formatDate} from '../utils/commonfunctions';
+import {fetcher, formatDate} from '../utils/commonFunctions';
 import {parse, format} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
-import React, {useMemo, lazy, Suspense} from 'react';
+import React, {useMemo, lazy, Suspense, useState, useEffect} from 'react';
 import * as Icon from 'react-feather';
 import {useSpring, animated, useTrail, config} from 'react-spring';
 import {useLocalStorage} from 'react-use';
@@ -9,11 +9,11 @@ import useSWR from 'swr';
 import equal from "fast-deep-equal";
 
 const Calendar = lazy( () =>
-  import('./calendar' /* webpackChunkName: "Calendar" */)
+  import('./Calendar' /* webpackChunkName: "Calendar" */)
 );
 
 const Updates = lazy(() =>
-  import('./updates' /* webpackChunkName: "Updates" */)
+  import('./Updates' /* webpackChunkName: "Updates" */)
 );
 
 const Actions = ({setDate, dates, date}) => {
@@ -167,5 +167,3 @@ const ActionsPanel = ({
     </React.Fragment>
   );
 };
-
-export default ActionsPanel;

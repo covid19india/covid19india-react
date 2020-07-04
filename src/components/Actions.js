@@ -5,10 +5,11 @@ import {fetcher} from '../utils/commonFunctions';
 import React, {useState, useEffect, lazy, Suspense} from 'react';
 import {useLocalStorage} from 'react-use';
 import useSWR from 'swr';
+import equal from "fast-deep-equal";
 
 const Updates = lazy(() => import('./Updates'));
 
-const Actions = ({setDate, dates}) => {
+const Actions = ({setDate, dates, date}) => {
   const [showUpdates, setShowUpdates] = useState(false);
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
   const [lastViewedLog, setLastViewedLog] = useLocalStorage('lastViewedLog', 0);
@@ -45,6 +46,7 @@ const Actions = ({setDate, dates}) => {
           dates,
           setNewUpdate,
           setShowUpdates,
+          date
         }}
       />
 
@@ -58,6 +60,9 @@ const Actions = ({setDate, dates}) => {
 };
 
 const isEqual = (prevProps, currProps) => {
+  if (!equal(currProps.date, prevProps.date)) {
+    return false;
+  }
   return true;
 };
 
