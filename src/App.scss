@@ -466,8 +466,7 @@ h6 {
   }
 
   .TimeseriesExplorer {
-    .anchor,
-    .region-highlighted {
+    .anchor {
       display: none;
     }
   }
@@ -2648,11 +2647,58 @@ abbr {
     margin-top: 1rem;
   }
 
-  .region-highlighted {
-    color: $brick;
-    font-size: 14px;
-    font-weight: 900;
-    margin-top: .75rem;
+  .state-selection {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+
+    .dropdown {
+      max-width: calc(100% - 20px);
+
+      select {
+        appearance: none;
+        background-color: #eee;
+
+        background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
+        linear-gradient(135deg, #808080 50%, transparent 50%);
+        background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+        background-repeat: no-repeat;
+        background-size: 5px 5px, 5px 5px;
+        border: 2px solid #e8e8e9;
+        border-radius: 4px;
+        color: $gray;
+        cursor: pointer;
+        font-weight: 600;
+        padding: 0.5rem;
+        width: 100%;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+
+    .reset-icon {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      margin-left: 0.75rem;
+
+      svg {
+        color: $gray-mid;
+        cursor: pointer;
+        fill: #a6abb0;
+        stroke: #a6abb0;
+        stroke-width: 0.5;
+        width: 16px;
+
+        &:hover {
+          fill: $gray;
+          stroke: $gray;
+        }
+      }
+    }
   }
 }
 
@@ -2812,36 +2858,6 @@ input {
         left: 10px;
         transition: all 300ms ease-in-out;
       }
-    }
-  }
-}
-
-.trends-state-name {
-  display: flex;
-  flex-direction: row;
-  text-align: center;
-
-  select {
-    appearance: none;
-    background-color: #eee;
-
-    background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
-    linear-gradient(135deg, #808080 50%, transparent 50%);
-    background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
-    background-repeat: no-repeat;
-    background-size: 5px 5px, 5px 5px;
-    border: 2px solid #e8e8e9;
-    border-radius: 4px;
-    color: $gray;
-    cursor: pointer;
-    font-weight: 900;
-    margin-left: -1px;
-    margin-top: 1rem;
-    padding: 0.5rem;
-    width: auto;
-
-    &:focus {
-      outline: none;
     }
   }
 }
@@ -4262,16 +4278,19 @@ footer {
     }
   }
 
-  .trends-state-name,
-  .select {
-    select {
-      background: #1e1e30;
-      background-image: linear-gradient(45deg, transparent 50%, $gray 50%),
-      linear-gradient(135deg, $gray 50%, transparent 50%);
-      background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
-      background-repeat: no-repeat;
-      background-size: 5px 5px, 5px 5px;
-      border-color: #9494941a;
+  .TimeseriesExplorer {
+    .state-selection {
+      .dropdown {
+        select {
+          background: #1e1e30;
+          background-image: linear-gradient(45deg, transparent 50%, $gray 50%),
+          linear-gradient(135deg, $gray 50%, transparent 50%);
+          background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+          background-repeat: no-repeat;
+          background-size: 5px 5px, 5px 5px;
+          border-color: #9494941a;
+        }
+      }
     }
   }
 

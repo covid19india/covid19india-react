@@ -8,11 +8,18 @@ import {
 import useIsVisible from '../hooks/useIsVisible';
 import {getIndiaYesterdayISO, parseIndiaDate} from '../utils/commonFunctions';
 
-import {PinIcon, IssueOpenedIcon} from '@primer/octicons-v2-react';
+import {IssueOpenedIcon, PinIcon, SyncIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import {formatISO, sub} from 'date-fns';
 import equal from 'fast-deep-equal';
-import React, {useMemo, useRef, useState, lazy, Suspense} from 'react';
+import React, {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  lazy,
+  Suspense,
+} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useLocalStorage} from 'react-use';
 
@@ -56,6 +63,23 @@ function TimeseriesExplorer({
     }
     return pastDates;
   }, [timeseries, timelineDate, timeseriesOption]);
+
+  const handleChange = useCallback(
+    ({target}) => {
+      setRegionHighlighted({
+        stateCode: target.value,
+        districtName: null,
+      });
+    },
+    [setRegionHighlighted]
+  );
+
+  const resetDropdown = useCallback(() => {
+    setRegionHighlighted({
+      stateCode: 'TT',
+      districtName: null,
+    });
+  }, [setRegionHighlighted]);
 
   return (
     <div
@@ -124,9 +148,26 @@ function TimeseriesExplorer({
         </div>
       </div>
 
-      <div className="region-highlighted">
-        {STATE_NAMES[regionHighlighted.stateCode]}
-      </div>
+      {stateCodes && (
+        <div className="state-selection">
+          <div className="dropdown">
+            <select value={regionHighlighted.stateCode} onChange={handleChange}>
+              {stateCodes.map((stateCode) => {
+                return (
+                  <option value={stateCode} key={stateCode}>
+                    {stateCode === 'TT'
+                      ? t('All States')
+                      : t(STATE_NAMES[stateCode])}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div className="reset-icon" onClick={resetDropdown}>
+            <SyncIcon />
+          </div>
+        </div>
+      )}
 
       {isVisible && (
         <Suspense fallback={<TimeseriesLoader />}>
