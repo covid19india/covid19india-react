@@ -64,31 +64,21 @@ function Row({
   const sortingFunction = useCallback(
     (districtNameA, districtNameB) => {
       if (sortData.sortColumn !== 'districtName') {
+        const statisticA = getStatistic(
+          data.districts[districtNameA],
+          sortData.delta ? 'delta' : 'total',
+          sortData.sortColumn,
+          isPerMillion
+        );
+        const statisticB = getStatistic(
+          data.districts[districtNameB],
+          sortData.delta ? 'delta' : 'total',
+          sortData.sortColumn,
+          isPerMillion
+        );
         return sortData.isAscending
-          ? getStatistic(
-              data.districts[districtNameA],
-              'total',
-              sortData.sortColumn,
-              isPerMillion
-            ) -
-              getStatistic(
-                data.districts[districtNameB],
-                'total',
-                sortData.sortColumn,
-                isPerMillion
-              )
-          : getStatistic(
-              data.districts[districtNameB],
-              'total',
-              sortData.sortColumn,
-              isPerMillion
-            ) -
-              getStatistic(
-                data.districts[districtNameA],
-                'total',
-                sortData.sortColumn,
-                isPerMillion
-              );
+          ? statisticA - statisticB
+          : statisticB - statisticA;
       } else {
         return sortData.isAscending
           ? districtNameA.localeCompare(districtNameB)
