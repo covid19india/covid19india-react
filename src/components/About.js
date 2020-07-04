@@ -1,3 +1,5 @@
+import Footer from './Footer';
+
 import React, {useState, useEffect} from 'react';
 import {Helmet} from 'react-helmet';
 
@@ -52,6 +54,7 @@ function About(props) {
           </div>
         );
       })}
+      <Footer />
     </div>
   );
 }
