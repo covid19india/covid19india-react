@@ -84,18 +84,15 @@ function Home(props) {
               <Search />
             </Suspense>
 
-            {timeseries && (
-              <Suspense fallback={<div style={{minHeight: '56px'}} />}>
+            <Suspense fallback={<div style={{minHeight: '56px'}} />}>
 
-                <Actions
-                  {...{
-                    setDate,
-                    dates: Object.keys(timeseries['TT']).reverse(),
-                    date,
-                  }}
-                />
-              </Suspense>
-            )}
+              <Actions
+                {...{
+                  setDate,
+                  date,
+                }}
+              />
+            </Suspense>
 
           </div>
 

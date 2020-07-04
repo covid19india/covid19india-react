@@ -9,7 +9,7 @@ import equal from "fast-deep-equal";
 
 const Updates = lazy(() => import('./Updates'));
 
-const Actions = ({setDate, dates, date}) => {
+const Actions = ({setDate, date}) => {
   const [showUpdates, setShowUpdates] = useState(false);
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
   const [lastViewedLog, setLastViewedLog] = useLocalStorage('lastViewedLog', 0);
@@ -43,7 +43,6 @@ const Actions = ({setDate, dates, date}) => {
           setIsTimelineMode,
           showUpdates,
           setDate,
-          dates,
           setNewUpdate,
           setShowUpdates,
           date
@@ -60,10 +59,7 @@ const Actions = ({setDate, dates, date}) => {
 };
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(currProps.date, prevProps.date)) {
-    return false;
-  }
-  return true;
+  return equal(currProps.date, prevProps.date);
 };
 
 export default React.memo(Actions, isEqual);
