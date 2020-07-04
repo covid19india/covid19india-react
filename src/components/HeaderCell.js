@@ -16,11 +16,13 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
   const {t} = useTranslation();
 
   const onLongPress = () => {
-    setSortData(
-      produce(sortData, (sortDataDraft) => {
-        sortDataDraft.delta = !sortData.delta;
-      })
-    );
+    if (sortData.sortColumn === statistic) {
+      setSortData(
+        produce(sortData, (sortDataDraft) => {
+          sortDataDraft.delta = !sortData.delta;
+        })
+      );
+    }
   };
   const longPressEvent = useLongPress(onLongPress, {isPreventDefault: false});
 
@@ -29,6 +31,7 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
       className="cell heading"
       onClick={handleSort.bind(this, statistic)}
       {...longPressEvent}
+      title={capitalize(statistic)}
     >
       {sortData.sortColumn === statistic && (
         <div
@@ -40,7 +43,7 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
           <FilterIcon size={10} />
         </div>
       )}
-      <div title={capitalize(statistic)}>
+      <div>
         {breakpoint === 'S'
           ? capitalize(statistic.slice(0, 1))
           : t(capitalize(statistic))}

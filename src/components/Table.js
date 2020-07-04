@@ -165,13 +165,10 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
             <div className="helper-top">
               <div className="helper-left">
                 <div className="info-item">
-                  <OrganizationIcon size={14} />
-                  <p>{`Show/Hide Top ${DISTRICT_TABLE_COUNT} Districts`}</p>
-                </div>
-
-                <div className="info-item notes">
-                  <Info size={15} />
-                  <p>Extra notes</p>
+                  <span>
+                    <OrganizationIcon size={14} />
+                  </span>
+                  <p>{`Toggle between States/Districts`}</p>
                 </div>
 
                 <div className="info-item">
@@ -180,16 +177,28 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
                 </div>
 
                 <div className="info-item sort">
-                  <FilterIcon size={14} />
+                  <span>
+                    <FilterIcon size={14} />
+                  </span>
                   <p>Sort by Descending</p>
                 </div>
 
                 <div className="info-item sort invert">
-                  <FilterIcon size={14} />
+                  <span>
+                    <FilterIcon size={14} />
+                  </span>
                   <p>Sort by Ascending</p>
                 </div>
+
                 <div className="info-item sort">
                   <TableDeltaHelper />
+                </div>
+
+                <div className="info-item notes">
+                  <span>
+                    <Info size={15} />
+                  </span>
+                  <p>Notes</p>
                 </div>
               </div>
 

@@ -1695,22 +1695,6 @@ abbr {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-
-    .helper-left {
-      h5 {
-        margin-right: .4rem;
-      }
-
-      p {
-        margin-right: 1rem;
-      }
-    }
-
-    .helper-right {
-      h5 {
-        margin-right: 1rem;
-      }
-    }
   }
 
   .info-item {
@@ -1721,6 +1705,27 @@ abbr {
     font-size: 12px;
     font-weight: 600;
     height: 1.5rem;
+
+    &:first-child {
+      margin-top: 1rem;
+    }
+
+    :first-child {
+      width: 1.6rem;
+
+      svg {
+        width: 15px;
+      }
+    }
+
+    p {
+      max-width: calc(100% - 1.6rem);
+    }
+
+    svg {
+      color: $gray-mid;
+      margin-bottom: .25rem;
+    }
 
     .is-confirmed {
       svg {
@@ -1752,26 +1757,15 @@ abbr {
       }
     }
 
-    &:first-child {
-      margin-top: 1rem;
-    }
-
-    svg {
-      color: $gray-mid;
-      margin-bottom: .25rem;
-      margin-right: .5rem;
-    }
-
     &.notes {
       svg {
-        margin-bottom: .15rem;
+        margin-bottom: 0;
       }
     }
 
     &.sort {
       svg {
         margin-bottom: 0;
-        margin-right: .55rem;
       }
     }
 
@@ -2679,8 +2673,8 @@ abbr {
     }
 
     .reset-icon {
-      margin: auto;
       margin-left: 0.75rem;
+      margin-top: 0.5rem;
 
       svg {
         color: $gray-mid;
