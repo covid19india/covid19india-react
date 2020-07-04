@@ -2651,25 +2651,25 @@ abbr {
     display: flex;
     flex-direction: row;
     margin-top: 1rem;
+    max-width: calc(100% - 0.6rem);
 
     .dropdown {
-      max-width: calc(100% - 20px);
-
       select {
         appearance: none;
         background-color: #eee;
 
-        background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
-        linear-gradient(135deg, #808080 50%, transparent 50%);
-        background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+        background-image: url('data:image/svg+xml,<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="m0,6l12,12l12,-12l-24,0z" fill="gray"/><path fill="none" d="m0,0l24,0l0,24l-24,0l0,-24z"/></svg>');
+        background-position-x: calc(100% - 0.4rem);
+        background-position-y: 50%;
         background-repeat: no-repeat;
-        background-size: 5px 5px, 5px 5px;
+        background-size: 0.6rem;
         border: 2px solid #e8e8e9;
         border-radius: 4px;
         color: $gray;
         cursor: pointer;
         font-weight: 600;
         padding: 0.5rem;
+        padding-right: 1.4rem;
         width: 100%;
 
         &:focus {
@@ -2679,10 +2679,7 @@ abbr {
     }
 
     .reset-icon {
-      align-items: center;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
+      margin: auto;
       margin-left: 0.75rem;
 
       svg {

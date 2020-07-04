@@ -155,9 +155,7 @@ function TimeseriesExplorer({
               {stateCodes.map((stateCode) => {
                 return (
                   <option value={stateCode} key={stateCode}>
-                    {stateCode === 'TT'
-                      ? t('All States')
-                      : t(STATE_NAMES[stateCode])}
+                    {t(STATE_NAMES[stateCode])}
                   </option>
                 );
               })}
