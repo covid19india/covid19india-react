@@ -160,6 +160,36 @@ $default-primary: var(--primary-color);
     }
   }
 
+  .TimeseriesExplorer {
+    .state-selection {
+      .dropdown {
+        select {
+          background-color: var(--background-color);
+          background-image: url('data:image/svg+xml,<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="m0,6l12,12l12,-12l-24,0z" fill="white"/><path fill="none" d="m0,0l24,0l0,24l-24,0l0,-24z"/></svg>');
+          border-color: $gray-dark;
+          color: $gray-opaque;
+        }
+      }
+    }
+  }
+
+  .state-selection {
+    color: $brick;
+
+    .reset-icon {
+      svg {
+        color: $gray-mid;
+        fill: #a6abb0;
+        stroke: #a6abb0;
+
+        &:hover {
+          fill: $gray;
+          stroke: $gray;
+        }
+      }
+    }
+  }
+
   .StateHeader {
     .header-left {
       h1 {

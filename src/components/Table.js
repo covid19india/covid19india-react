@@ -3,7 +3,7 @@ import TableLoader from './loaders/Table';
 import TableDeltaHelper from './snippets/TableDeltaHelper';
 
 import {TABLE_FADE_IN, TABLE_FADE_OUT} from '../animations';
-import {TABLE_STATISTICS} from '../constants';
+import {DISTRICT_TABLE_COUNT, TABLE_STATISTICS} from '../constants';
 import {getStatistic} from '../utils/commonFunctions';
 
 import {
@@ -165,13 +165,10 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
             <div className="helper-top">
               <div className="helper-left">
                 <div className="info-item">
-                  <OrganizationIcon size={14} />
-                  <p>Show/Hide Top 50 Districts</p>
-                </div>
-
-                <div className="info-item notes">
-                  <Info size={15} />
-                  <p>Extra notes</p>
+                  <span>
+                    <OrganizationIcon size={14} />
+                  </span>
+                  <p>{`Toggle between States/Districts`}</p>
                 </div>
 
                 <div className="info-item">
@@ -180,16 +177,28 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
                 </div>
 
                 <div className="info-item sort">
-                  <FilterIcon size={14} />
+                  <span>
+                    <FilterIcon size={14} />
+                  </span>
                   <p>Sort by Descending</p>
                 </div>
 
                 <div className="info-item sort invert">
-                  <FilterIcon size={14} />
+                  <span>
+                    <FilterIcon size={14} />
+                  </span>
                   <p>Sort by Ascending</p>
                 </div>
+
                 <div className="info-item sort">
                   <TableDeltaHelper />
+                </div>
+
+                <div className="info-item notes">
+                  <span>
+                    <Info size={15} />
+                  </span>
+                  <p>Notes</p>
                 </div>
               </div>
 
@@ -287,7 +296,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
             districts &&
             Object.keys(districts)
               .sort((a, b) => sortingFunction(a, b))
-              .slice(0, 30)
+              .slice(0, DISTRICT_TABLE_COUNT)
               .map((districtKey) => {
                 return (
                   <Row

@@ -478,8 +478,7 @@ h6 {
   }
 
   .TimeseriesExplorer {
-    .anchor,
-    .region-highlighted {
+    .anchor {
       display: none;
     }
   }
@@ -1708,22 +1707,6 @@ abbr {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-
-    .helper-left {
-      h5 {
-        margin-right: 0.4rem;
-      }
-
-      p {
-        margin-right: 1rem;
-      }
-    }
-
-    .helper-right {
-      h5 {
-        margin-right: 1rem;
-      }
-    }
   }
 
   .info-item {
@@ -1734,6 +1717,27 @@ abbr {
     font-size: 12px;
     font-weight: 600;
     height: 1.5rem;
+
+    &:first-child {
+      margin-top: 1rem;
+    }
+
+    :first-child {
+      width: 1.6rem;
+
+      svg {
+        width: 15px;
+      }
+    }
+
+    p {
+      max-width: calc(100% - 1.6rem);
+    }
+
+    svg {
+      color: $gray-mid;
+      margin-bottom: 0.25rem;
+    }
 
     .is-confirmed {
       svg {
@@ -1765,26 +1769,15 @@ abbr {
       }
     }
 
-    &:first-child {
-      margin-top: 1rem;
-    }
-
-    svg {
-      color: $gray-mid;
-      margin-bottom: 0.25rem;
-      margin-right: 0.5rem;
-    }
-
     &.notes {
       svg {
-        margin-bottom: 0.15rem;
+        margin-bottom: 0;
       }
     }
 
     &.sort {
       svg {
         margin-bottom: 0;
-        margin-right: 0.55rem;
       }
     }
 
@@ -2660,11 +2653,55 @@ abbr {
     margin-top: 1rem;
   }
 
-  .region-highlighted {
-    color: $brick;
-    font-size: 14px;
-    font-weight: 900;
-    margin-top: 0.75rem;
+  .state-selection {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+    max-width: calc(100% - 0.6rem);
+
+    .dropdown {
+      select {
+        appearance: none;
+        background-color: #eee;
+
+        background-image: url('data:image/svg+xml,<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="m0,6l12,12l12,-12l-24,0z" fill="gray"/><path fill="none" d="m0,0l24,0l0,24l-24,0l0,-24z"/></svg>');
+        background-position-x: calc(100% - 0.4rem);
+        background-position-y: 50%;
+        background-repeat: no-repeat;
+        background-size: 0.6rem;
+        border: 2px solid #e8e8e9;
+        border-radius: 4px;
+        color: $gray;
+        cursor: pointer;
+        font-weight: 600;
+        padding: 0.5rem;
+        padding-right: 1.4rem;
+        width: 100%;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+
+    .reset-icon {
+      margin-left: 0.75rem;
+      margin-top: 0.5rem;
+
+      svg {
+        color: $gray-mid;
+        cursor: pointer;
+        fill: #a6abb0;
+        stroke: #a6abb0;
+        stroke-width: 0.5;
+        width: 16px;
+
+        &:hover {
+          fill: $gray;
+          stroke: $gray;
+        }
+      }
+    }
   }
 }
 
@@ -2824,36 +2861,6 @@ input {
         left: 10px;
         transition: all 300ms ease-in-out;
       }
-    }
-  }
-}
-
-.trends-state-name {
-  display: flex;
-  flex-direction: row;
-  text-align: center;
-
-  select {
-    appearance: none;
-    background-color: #eee;
-
-    background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
-    linear-gradient(135deg, #808080 50%, transparent 50%);
-    background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
-    background-repeat: no-repeat;
-    background-size: 5px 5px, 5px 5px;
-    border: 2px solid #e8e8e9;
-    border-radius: 4px;
-    color: $gray;
-    cursor: pointer;
-    font-weight: 900;
-    margin-left: -1px;
-    margin-top: 1rem;
-    padding: 0.5rem;
-    width: auto;
-
-    &:focus {
-      outline: none;
     }
   }
 }
