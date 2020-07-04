@@ -39,7 +39,7 @@
     "translate": [76.705152, 30.667443491919514]
   },
   "objects": {
-    "chandigarh_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

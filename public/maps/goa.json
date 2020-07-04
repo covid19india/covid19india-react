@@ -168,7 +168,7 @@
     "translate": [73.676874, 14.900642000000001]
   },
   "objects": {
-    "goa_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

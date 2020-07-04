@@ -2894,7 +2894,7 @@
     "translate": [76.760595, 12.624077]
   },
   "objects": {
-    "andhrapradesh_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

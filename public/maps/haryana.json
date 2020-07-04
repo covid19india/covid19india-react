@@ -2002,7 +2002,7 @@
     "translate": [74.47485342176886, 27.654136819668228]
   },
   "objects": {
-    "haryana_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

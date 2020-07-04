@@ -4191,7 +4191,7 @@
     "translate": [68.094952, 20.120452]
   },
   "objects": {
-    "gujarat_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

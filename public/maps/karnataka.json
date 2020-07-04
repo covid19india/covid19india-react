@@ -3861,7 +3861,7 @@
     "translate": [74.085688, 11.594585]
   },
   "objects": {
-    "karnataka_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

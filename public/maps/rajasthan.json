@@ -4826,7 +4826,7 @@
     "translate": [69.484227, 23.059220531669062]
   },
   "objects": {
-    "rajasthan_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

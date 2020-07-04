@@ -1221,7 +1221,7 @@
     "translate": [75.594723, 30.377701000000002]
   },
   "objects": {
-    "himachalpradesh_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

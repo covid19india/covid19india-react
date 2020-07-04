@@ -486,7 +486,7 @@
     "translate": [91.15354100000002, 22.939184]
   },
   "objects": {
-    "tripura_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {
