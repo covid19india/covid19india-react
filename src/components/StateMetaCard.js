@@ -16,7 +16,7 @@ function StateMetaCard({
     <div className={`meta-item ${className}`}>
       <div className="meta-item-top">
         <h3>{title}</h3>
-        <Tooltip {...{data: formula}}>
+        <Tooltip {...{data: formula, stateCard: true}}>
           <Icon.Info />
         </Tooltip>
       </div>
