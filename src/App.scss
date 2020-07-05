@@ -2648,6 +2648,8 @@ abbr {
     max-width: calc(100% - 0.6rem);
 
     .dropdown {
+      min-width: calc(60%);
+
       select {
         appearance: none;
         background-color: #eee;
@@ -2673,6 +2675,7 @@ abbr {
     }
 
     .reset-icon {
+      margin: auto;
       margin-left: 0.75rem;
       margin-top: 0.5rem;
 

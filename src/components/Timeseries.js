@@ -431,17 +431,25 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
 const isEqual = (prevProps, currProps) => {
   if (!equal(currProps.chartType, prevProps.chartType)) {
     return false;
-  }
-  if (!equal(currProps.isUniform, prevProps.isUniform)) {
+  } else if (!equal(currProps.isUniform, prevProps.isUniform)) {
     return false;
-  }
-  if (!equal(currProps.isLog, prevProps.isLog)) {
+  } else if (!equal(currProps.isLog, prevProps.isLog)) {
     return false;
-  }
-  if (!equal(currProps.stateCode, prevProps.stateCode)) {
+  } else if (
+    !equal(
+      currProps.regionHighlighted.stateCode,
+      prevProps.regionHighlighted.stateCode
+    )
+  ) {
     return false;
-  }
-  if (!equal(currProps.dates, prevProps.dates)) {
+  } else if (
+    !equal(
+      currProps.regionHighlighted.districtName,
+      prevProps.regionHighlighted.districtName
+    )
+  ) {
+    return false;
+  } else if (!equal(currProps.dates, prevProps.dates)) {
     return false;
   }
   return true;
