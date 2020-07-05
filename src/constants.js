@@ -1,3 +1,5 @@
+export const API_ROOT_URL = 'https://api.covid19india.org/v4/min';
+
 export const LOCALE_SHORTHANDS = {
   english: 'en-US',
   hindi: 'hi',
