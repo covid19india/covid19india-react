@@ -53,7 +53,7 @@ function State(props) {
   }, [regionHighlighted, stateCode]);
 
   const {data: timeseries} = useSWR(
-    'https://api.covid19india.org/v3/min/timeseries.min.json',
+    `https://api.covid19india.org/v4/min/timeseries-${stateCode}.min.json`,
     fetcher,
     {
       suspense: true,
@@ -62,7 +62,7 @@ function State(props) {
   );
 
   const {data} = useSWR(
-    'https://api.covid19india.org/v3/min/data.min.json',
+    'https://api.covid19india.org/v4/min/data.min.json',
     fetcher,
     {
       suspense: true,
@@ -132,7 +132,7 @@ function State(props) {
           <div style={{position: 'relative'}}>
             <MapSwitcher {...{mapStatistic, setMapStatistic}} />
             <Level data={data[stateCode]} />
-            <Minigraphs timeseries={timeseries[stateCode]} />
+            <Minigraphs timeseries={timeseries[stateCode]?.dates} />
           </div>
 
           <Suspense fallback={<div style={{minHeight: '50rem'}} />}>
@@ -226,12 +226,12 @@ function State(props) {
                   {(mapStatistic === 'confirmed' ||
                     mapStatistic === 'deceased') && (
                     <div className="happy-sign">
-                      {Object.keys(timeseries[stateCode] || {})
+                      {Object.keys(timeseries[stateCode]?.dates || {})
                         .slice(-lookback)
                         .every(
                           (date) =>
                             getStatistic(
-                              timeseries[stateCode][date],
+                              timeseries[stateCode].dates[date],
                               'delta',
                               mapStatistic
                             ) === 0
@@ -250,7 +250,7 @@ function State(props) {
                     </div>
                   )}
                   <DeltaBarGraph
-                    timeseries={timeseries[stateCode] || {}}
+                    timeseries={timeseries[stateCode]?.dates || {}}
                     {...{stateCode, lookback}}
                     statistic={mapStatistic}
                   />
@@ -274,8 +274,12 @@ function State(props) {
 
             <Suspense fallback={<div />}>
               <TimeseriesExplorer
-                timeseries={timeseries[stateCode]}
-                {...{regionHighlighted, setRegionHighlighted}}
+                {...{
+                  stateCode,
+                  timeseries,
+                  regionHighlighted,
+                  setRegionHighlighted,
+                }}
               />
             </Suspense>
           </React.Fragment>
