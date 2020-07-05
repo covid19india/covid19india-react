@@ -4,7 +4,7 @@ import MapSwitcher from './MapSwitcher';
 import StateHeader from './StateHeader';
 import StateMeta from './StateMeta';
 
-import {STATE_NAMES} from '../constants';
+import {API_ROOT_URL, STATE_NAMES} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {fetcher, formatNumber, getStatistic} from '../utils/commonFunctions';
 
@@ -53,7 +53,7 @@ function State(props) {
   }, [regionHighlighted.stateCode, stateCode]);
 
   const {data: timeseries} = useSWR(
-    `https://api.covid19india.org/v4/min/timeseries-${stateCode}.min.json`,
+    `${API_ROOT_URL}/timeseries-${stateCode}.min.json`,
     fetcher,
     {
       revalidateOnMount: true,
@@ -61,14 +61,10 @@ function State(props) {
     }
   );
 
-  const {data} = useSWR(
-    'https://api.covid19india.org/v4/min/data.min.json',
-    fetcher,
-    {
-      revalidateOnMount: true,
-      refreshInterval: 100000,
-    }
-  );
+  const {data} = useSWR(`${API_ROOT_URL}/data.min.json`, fetcher, {
+    revalidateOnMount: true,
+    refreshInterval: 100000,
+  });
 
   const toggleShowAllDistricts = () => {
     setShowAllDistricts(!showAllDistricts);
@@ -138,16 +134,18 @@ function State(props) {
           </div>
 
           {data && (
-            <MapExplorer
-              {...{
-                stateCode,
-                data,
-                regionHighlighted,
-                setRegionHighlighted,
-                mapStatistic,
-                setMapStatistic,
-              }}
-            ></MapExplorer>
+            <Suspense fallback={<div style={{minHeight: '50rem'}} />}>
+              <MapExplorer
+                {...{
+                  stateCode,
+                  data,
+                  regionHighlighted,
+                  setRegionHighlighted,
+                  mapStatistic,
+                  setMapStatistic,
+                }}
+              ></MapExplorer>
+            </Suspense>
           )}
 
           <span ref={stateMetaElement} />

@@ -1,3 +1,4 @@
+import {API_ROOT_URL} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
 import {fetcher} from '../utils/commonFunctions';
@@ -33,7 +34,7 @@ function Home(props) {
   const location = useLocation();
 
   const {data: timeseries} = useStickySWR(
-    'https://api.covid19india.org/v4/min/timeseries.min.json',
+    `${API_ROOT_URL}/timeseries.min.json`,
     fetcher,
     {
       revalidateOnMount: true,
@@ -42,9 +43,7 @@ function Home(props) {
   );
 
   const {data} = useStickySWR(
-    `https://api.covid19india.org/v4/min/data${
-      date ? `-${date}` : ''
-    }.min.json`,
+    `${API_ROOT_URL}/data${date ? `-${date}` : ''}.min.json`,
     fetcher,
     {
       revalidateOnMount: true,
