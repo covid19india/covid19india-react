@@ -45,7 +45,7 @@ function TimeseriesExplorer({
   const isVisible = useIsVisible(explorerElement, {once: true});
 
   const selectedRegion = useMemo(() => {
-    if (timeseries[regionHighlighted.stateCode]?.districts) {
+    if (timeseries?.[regionHighlighted.stateCode]?.districts) {
       return {
         stateCode: regionHighlighted.stateCode,
         districtName: regionHighlighted.districtName,
@@ -60,11 +60,11 @@ function TimeseriesExplorer({
 
   const selectedTimeseries = useMemo(() => {
     if (selectedRegion.districtName) {
-      return timeseries[selectedRegion.stateCode]?.districts?.[
+      return timeseries?.[selectedRegion.stateCode]?.districts?.[
         selectedRegion.districtName
       ]?.dates;
     } else {
-      return timeseries[selectedRegion.stateCode]?.dates;
+      return timeseries?.[selectedRegion.stateCode]?.dates;
     }
   }, [timeseries, selectedRegion.stateCode, selectedRegion.districtName]);
 
@@ -80,7 +80,7 @@ function TimeseriesExplorer({
     const districts = Object.keys(timeseries || {}).reduce((acc1, code) => {
       return [
         ...acc1,
-        ...Object.keys(timeseries[code]?.districts || {}).reduce(
+        ...Object.keys(timeseries?.[code]?.districts || {}).reduce(
           (acc2, districtName) => {
             return [
               ...acc2,
@@ -269,7 +269,11 @@ function TimeseriesExplorer({
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (
+  if (!currProps.timeseries) {
+    return true;
+  } else if (currProps.timeseries && !prevProps.timeseries) {
+    return false;
+  } else if (
     !equal(
       currProps.regionHighlighted.stateCode,
       prevProps.regionHighlighted.stateCode

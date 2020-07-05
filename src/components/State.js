@@ -9,7 +9,6 @@ import useIsVisible from '../hooks/useIsVisible';
 import {fetcher, formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
-import produce from 'immer';
 import React, {
   useMemo,
   useState,
@@ -45,19 +44,20 @@ function State(props) {
   });
 
   useEffect(() => {
-    setRegionHighlighted(
-      produce(regionHighlighted, (draftRegionHighlighted) => {
-        draftRegionHighlighted.stateCode = stateCode;
-      })
-    );
-  }, [regionHighlighted, stateCode]);
+    if (regionHighlighted.stateCode !== stateCode) {
+      setRegionHighlighted({
+        stateCode: stateCode,
+        districtName: null,
+      });
+    }
+  }, [regionHighlighted.stateCode, stateCode]);
 
   const {data: timeseries} = useSWR(
     `https://api.covid19india.org/v4/min/timeseries-${stateCode}.min.json`,
     fetcher,
     {
-      suspense: true,
-      revalidateOnFocus: false,
+      revalidateOnMount: true,
+      refreshInterval: 100000,
     }
   );
 
@@ -65,10 +65,8 @@ function State(props) {
     'https://api.covid19india.org/v4/min/data.min.json',
     fetcher,
     {
-      suspense: true,
       revalidateOnMount: true,
       refreshInterval: 100000,
-      revalidateOnFocus: false,
     }
   );
 
@@ -86,6 +84,7 @@ function State(props) {
   };
 
   const gridRowCount = useMemo(() => {
+    if (!data) return;
     const gridColumnCount = window.innerWidth >= 540 ? 3 : 2;
     const districtCount = data[stateCode]?.districts
       ? Object.keys(data[stateCode].districts).filter(
@@ -127,15 +126,18 @@ function State(props) {
 
       <div className="State">
         <div className="state-left">
-          <StateHeader data={data[stateCode]} stateCode={stateCode} />
+          <StateHeader data={data?.[stateCode]} stateCode={stateCode} />
 
           <div style={{position: 'relative'}}>
             <MapSwitcher {...{mapStatistic, setMapStatistic}} />
-            <Level data={data[stateCode]} />
-            <Minigraphs timeseries={timeseries[stateCode]?.dates} />
+            <Level data={data?.[stateCode]} />
+            <Minigraphs
+              timeseries={timeseries?.[stateCode]?.dates}
+              {...{stateCode}}
+            />
           </div>
 
-          <Suspense fallback={<div style={{minHeight: '50rem'}} />}>
+          {data && (
             <MapExplorer
               {...{
                 stateCode,
@@ -146,7 +148,7 @@ function State(props) {
                 setMapStatistic,
               }}
             ></MapExplorer>
-          </Suspense>
+          )}
 
           <span ref={stateMetaElement} />
 
@@ -188,7 +190,7 @@ function State(props) {
                         : trail[1]
                     }
                   >
-                    {Object.keys(data[stateCode]?.districts || {})
+                    {Object.keys(data?.[stateCode]?.districts || {})
                       .filter((districtName) => districtName !== 'Unknown')
                       .sort((a, b) => handleSort(a, b))
                       .slice(0, showAllDistricts ? undefined : 5)
@@ -223,34 +225,35 @@ function State(props) {
                 </div>
 
                 <div className="district-bar-right fadeInUp" style={trail[2]}>
-                  {(mapStatistic === 'confirmed' ||
-                    mapStatistic === 'deceased') && (
-                    <div className="happy-sign">
-                      {Object.keys(timeseries[stateCode]?.dates || {})
-                        .slice(-lookback)
-                        .every(
-                          (date) =>
-                            getStatistic(
-                              timeseries[stateCode].dates[date],
-                              'delta',
-                              mapStatistic
-                            ) === 0
-                        ) && (
-                        <div
-                          className={`alert ${
-                            mapStatistic === 'confirmed' ? 'is-green' : ''
-                          }`}
-                        >
-                          <Icon.Smile />
-                          <div className="alert-right">
-                            No new {mapStatistic} cases in the past five days
+                  {timeseries &&
+                    (mapStatistic === 'confirmed' ||
+                      mapStatistic === 'deceased') && (
+                      <div className="happy-sign">
+                        {Object.keys(timeseries[stateCode]?.dates || {})
+                          .slice(-lookback)
+                          .every(
+                            (date) =>
+                              getStatistic(
+                                timeseries[stateCode].dates[date],
+                                'delta',
+                                mapStatistic
+                              ) === 0
+                          ) && (
+                          <div
+                            className={`alert ${
+                              mapStatistic === 'confirmed' ? 'is-green' : ''
+                            }`}
+                          >
+                            <Icon.Smile />
+                            <div className="alert-right">
+                              No new {mapStatistic} cases in the past five days
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                        )}
+                      </div>
+                    )}
                   <DeltaBarGraph
-                    timeseries={timeseries[stateCode]?.dates || {}}
+                    timeseries={timeseries?.[stateCode]?.dates}
                     {...{stateCode, lookback}}
                     statistic={mapStatistic}
                   />
@@ -258,7 +261,7 @@ function State(props) {
               </div>
 
               <div className="district-bar-bottom">
-                {Object.keys(data[stateCode]?.districts || {}).length > 5 ? (
+                {Object.keys(data?.[stateCode]?.districts || {}).length > 5 ? (
                   <button
                     className="button fadeInUp"
                     onClick={toggleShowAllDistricts}
