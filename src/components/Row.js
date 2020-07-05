@@ -27,7 +27,7 @@ import React, {useState, useCallback, useRef} from 'react';
 import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
-import {useLocalStorage} from 'react-use';
+import {useSessionStorage} from 'react-use';
 
 function Row({
   data,
@@ -38,7 +38,7 @@ function Row({
   setRegionHighlighted,
 }) {
   const [showDistricts, setShowDistricts] = useState(false);
-  const [sortData, setSortData] = useLocalStorage('districtSortData', {
+  const [sortData, setSortData] = useSessionStorage('districtSortData', {
     sortColumn: 'confirmed',
     isAscending: false,
     delta: false,

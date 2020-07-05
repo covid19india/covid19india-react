@@ -19,7 +19,7 @@ import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useTrail, useTransition, animated, config} from 'react-spring';
-import {useLocalStorage} from 'react-use';
+import {useSessionStorage} from 'react-use';
 // eslint-disable-next-line
 import worker from 'workerize-loader!../workers/getDistricts';
 
@@ -27,7 +27,7 @@ const Row = lazy(() => import('./Row'));
 
 function Table({data: states, regionHighlighted, setRegionHighlighted}) {
   const {t} = useTranslation();
-  const [sortData, setSortData] = useLocalStorage('sortData', {
+  const [sortData, setSortData] = useSessionStorage('sortData', {
     sortColumn: 'confirmed',
     isAscending: false,
     delta: false,
