@@ -160,15 +160,17 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.stateCode, currProps.stateCode)) {
+  if (!currProps.timeseries) {
+    return true;
+  } else if (currProps.timeseries && !prevProps.timeseries) {
     return false;
-  }
-  if (!equal(prevProps.lookback, currProps.lookback)) {
+  } else if (!equal(prevProps.stateCode, currProps.stateCode)) {
+    return false;
+  } else if (!equal(prevProps.lookback, currProps.lookback)) {
     return false;
   } else if (!equal(prevProps.statistic, currProps.statistic)) {
     return false;
   }
-
   return true;
 };
 

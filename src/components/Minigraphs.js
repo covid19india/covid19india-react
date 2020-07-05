@@ -171,7 +171,11 @@ function Minigraphs({timeseries, date: timelineDate}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(currProps.stateCode, prevProps.stateCode)) {
+  if (!currProps.timeseries) {
+    return true;
+  } else if (currProps.timeseries && !prevProps.timeseries) {
+    return false;
+  } else if (!equal(currProps.stateCode, prevProps.stateCode)) {
     return false;
   } else if (!equal(currProps.date, prevProps.date)) {
     return false;
