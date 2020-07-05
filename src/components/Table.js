@@ -316,7 +316,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
             key={'TT'}
             data={states['TT']}
             stateCode={'TT'}
-            {...{regionHighlighted, setRegionHighlighted}}
+            {...{isPerMillion, regionHighlighted, setRegionHighlighted}}
           />
         </div>
       </div>
