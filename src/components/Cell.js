@@ -6,7 +6,11 @@ import React from 'react';
 import {Spring, animated} from 'react-spring/renderprops.cjs';
 
 const Cell = ({statistic, data, isPerMillion}) => {
-  const total = getStatistic(data, 'total', statistic, isPerMillion);
+  let total = getStatistic(data, 'total', statistic, isPerMillion);
+  // TODO: Maybe move inside getStatistic
+  if (!total && statistic === 'tested') {
+    total = NaN;
+  }
   const delta = getStatistic(data, 'delta', statistic, isPerMillion);
 
   return (

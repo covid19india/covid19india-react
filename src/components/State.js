@@ -1,15 +1,15 @@
 import DeltaBarGraph from './DeltaBarGraph';
+import Footer from './Footer';
 import Level from './Level';
 import MapSwitcher from './MapSwitcher';
 import StateHeader from './StateHeader';
 import StateMeta from './StateMeta';
 
-import {STATE_NAMES} from '../constants';
+import {API_ROOT_URL, STATE_NAMES} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {fetcher, formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
-import produce from 'immer';
 import React, {
   useMemo,
   useState,
@@ -45,32 +45,28 @@ function State(props) {
   });
 
   useEffect(() => {
-    setRegionHighlighted(
-      produce(regionHighlighted, (draftRegionHighlighted) => {
-        draftRegionHighlighted.stateCode = stateCode;
-      })
-    );
-  }, [regionHighlighted, stateCode]);
-
-  const {data: timeseries} = useSWR(
-    'https://api.covid19india.org/v3/min/timeseries.min.json',
-    fetcher,
-    {
-      suspense: true,
-      revalidateOnFocus: false,
+    if (regionHighlighted.stateCode !== stateCode) {
+      setRegionHighlighted({
+        stateCode: stateCode,
+        districtName: null,
+      });
+      setShowAllDistricts(false);
     }
-  );
+  }, [regionHighlighted.stateCode, stateCode]);
 
-  const {data} = useSWR(
-    'https://api.covid19india.org/v3/min/data.min.json',
+  const {data: timeseries, error: timeseriesResponseError} = useSWR(
+    `${API_ROOT_URL}/timeseries-${stateCode}.min.json`,
     fetcher,
     {
-      suspense: true,
       revalidateOnMount: true,
       refreshInterval: 100000,
-      revalidateOnFocus: false,
     }
   );
+
+  const {data} = useSWR(`${API_ROOT_URL}/data.min.json`, fetcher, {
+    revalidateOnMount: true,
+    refreshInterval: 100000,
+  });
 
   const toggleShowAllDistricts = () => {
     setShowAllDistricts(!showAllDistricts);
@@ -86,6 +82,7 @@ function State(props) {
   };
 
   const gridRowCount = useMemo(() => {
+    if (!data) return;
     const gridColumnCount = window.innerWidth >= 540 ? 3 : 2;
     const districtCount = data[stateCode]?.districts
       ? Object.keys(data[stateCode].districts).filter(
@@ -127,36 +124,42 @@ function State(props) {
 
       <div className="State">
         <div className="state-left">
-          <StateHeader data={data[stateCode]} stateCode={stateCode} />
+          <StateHeader data={data?.[stateCode]} stateCode={stateCode} />
 
           <div style={{position: 'relative'}}>
             <MapSwitcher {...{mapStatistic, setMapStatistic}} />
-            <Level data={data[stateCode]} />
-            <Minigraphs timeseries={timeseries[stateCode]} />
+            <Level data={data?.[stateCode]} />
+            <Minigraphs
+              timeseries={timeseries?.[stateCode]?.dates}
+              {...{stateCode}}
+              forceRender={!!timeseriesResponseError}
+            />
           </div>
 
-          <Suspense fallback={<div style={{minHeight: '50rem'}} />}>
-            <MapExplorer
-              {...{
-                stateCode,
-                data,
-                regionHighlighted,
-                setRegionHighlighted,
-                mapStatistic,
-                setMapStatistic,
-              }}
-            ></MapExplorer>
-          </Suspense>
+          {data && (
+            <Suspense fallback={<div style={{minHeight: '50rem'}} />}>
+              <MapExplorer
+                {...{
+                  stateCode,
+                  data,
+                  regionHighlighted,
+                  setRegionHighlighted,
+                  mapStatistic,
+                  setMapStatistic,
+                }}
+              ></MapExplorer>
+            </Suspense>
+          )}
 
           <span ref={stateMetaElement} />
 
-          {data && timeseries && isStateMetaVisible && (
+          {data && isStateMetaVisible && (
             <StateMeta
               {...{
                 stateCode,
                 data,
-                timeseries,
               }}
+              timeseries={timeseries?.[stateCode]?.dates}
             />
           )}
         </div>
@@ -188,7 +191,7 @@ function State(props) {
                         : trail[1]
                     }
                   >
-                    {Object.keys(data[stateCode]?.districts || {})
+                    {Object.keys(data?.[stateCode]?.districts || {})
                       .filter((districtName) => districtName !== 'Unknown')
                       .sort((a, b) => handleSort(a, b))
                       .slice(0, showAllDistricts ? undefined : 5)
@@ -223,42 +226,44 @@ function State(props) {
                 </div>
 
                 <div className="district-bar-right fadeInUp" style={trail[2]}>
-                  {(mapStatistic === 'confirmed' ||
-                    mapStatistic === 'deceased') && (
-                    <div className="happy-sign">
-                      {Object.keys(timeseries[stateCode] || {})
-                        .slice(-lookback)
-                        .every(
-                          (date) =>
-                            getStatistic(
-                              timeseries[stateCode][date],
-                              'delta',
-                              mapStatistic
-                            ) === 0
-                        ) && (
-                        <div
-                          className={`alert ${
-                            mapStatistic === 'confirmed' ? 'is-green' : ''
-                          }`}
-                        >
-                          <Icon.Smile />
-                          <div className="alert-right">
-                            No new {mapStatistic} cases in the past five days
+                  {timeseries &&
+                    (mapStatistic === 'confirmed' ||
+                      mapStatistic === 'deceased') && (
+                      <div className="happy-sign">
+                        {Object.keys(timeseries[stateCode]?.dates || {})
+                          .slice(-lookback)
+                          .every(
+                            (date) =>
+                              getStatistic(
+                                timeseries[stateCode].dates[date],
+                                'delta',
+                                mapStatistic
+                              ) === 0
+                          ) && (
+                          <div
+                            className={`alert ${
+                              mapStatistic === 'confirmed' ? 'is-green' : ''
+                            }`}
+                          >
+                            <Icon.Smile />
+                            <div className="alert-right">
+                              No new {mapStatistic} cases in the past five days
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                        )}
+                      </div>
+                    )}
                   <DeltaBarGraph
-                    timeseries={timeseries[stateCode] || {}}
-                    {...{stateCode, lookback}}
+                    timeseries={timeseries?.[stateCode]?.dates}
                     statistic={mapStatistic}
+                    {...{stateCode, lookback}}
+                    forceRender={!!timeseriesResponseError}
                   />
                 </div>
               </div>
 
               <div className="district-bar-bottom">
-                {Object.keys(data[stateCode]?.districts || {}).length > 5 ? (
+                {Object.keys(data?.[stateCode]?.districts || {}).length > 5 ? (
                   <button
                     className="button fadeInUp"
                     onClick={toggleShowAllDistricts}
@@ -274,13 +279,20 @@ function State(props) {
 
             <Suspense fallback={<div />}>
               <TimeseriesExplorer
-                timeseries={timeseries[stateCode]}
-                {...{regionHighlighted, setRegionHighlighted}}
+                {...{
+                  stateCode,
+                  timeseries,
+                  regionHighlighted,
+                  setRegionHighlighted,
+                }}
+                forceRender={!!timeseriesResponseError}
               />
             </Suspense>
           </React.Fragment>
         </div>
       </div>
+
+      <Footer />
     </React.Fragment>
   );
 }

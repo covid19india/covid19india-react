@@ -27,7 +27,7 @@ import React, {useState, useCallback, useRef} from 'react';
 import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
-import {useLocalStorage} from 'react-use';
+import {useSessionStorage} from 'react-use';
 
 function Row({
   data,
@@ -38,7 +38,7 @@ function Row({
   setRegionHighlighted,
 }) {
   const [showDistricts, setShowDistricts] = useState(false);
-  const [sortData, setSortData] = useLocalStorage('districtSortData', {
+  const [sortData, setSortData] = useSessionStorage('districtSortData', {
     sortColumn: 'confirmed',
     isAscending: false,
     delta: false,
@@ -64,31 +64,21 @@ function Row({
   const sortingFunction = useCallback(
     (districtNameA, districtNameB) => {
       if (sortData.sortColumn !== 'districtName') {
+        const statisticA = getStatistic(
+          data.districts[districtNameA],
+          sortData.delta ? 'delta' : 'total',
+          sortData.sortColumn,
+          isPerMillion
+        );
+        const statisticB = getStatistic(
+          data.districts[districtNameB],
+          sortData.delta ? 'delta' : 'total',
+          sortData.sortColumn,
+          isPerMillion
+        );
         return sortData.isAscending
-          ? getStatistic(
-              data.districts[districtNameA],
-              'total',
-              sortData.sortColumn,
-              isPerMillion
-            ) -
-              getStatistic(
-                data.districts[districtNameB],
-                'total',
-                sortData.sortColumn,
-                isPerMillion
-              )
-          : getStatistic(
-              data.districts[districtNameB],
-              'total',
-              sortData.sortColumn,
-              isPerMillion
-            ) -
-              getStatistic(
-                data.districts[districtNameA],
-                'total',
-                sortData.sortColumn,
-                isPerMillion
-              );
+          ? statisticA - statisticB
+          : statisticB - statisticA;
       } else {
         return sortData.isAscending
           ? districtNameA.localeCompare(districtNameB)

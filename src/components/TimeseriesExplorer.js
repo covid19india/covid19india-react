@@ -26,13 +26,13 @@ import {useLocalStorage} from 'react-use';
 const Timeseries = lazy(() => import('./Timeseries'));
 
 function TimeseriesExplorer({
+  stateCode,
   timeseries,
   date: timelineDate,
   regionHighlighted,
   setRegionHighlighted,
   anchor,
   setAnchor,
-  stateCodes,
 }) {
   const {t} = useTranslation();
   const [timeseriesOption, setTimeseriesOption] = useState(
@@ -44,9 +44,70 @@ function TimeseriesExplorer({
   const explorerElement = useRef();
   const isVisible = useIsVisible(explorerElement, {once: true});
 
+  const selectedRegion = useMemo(() => {
+    if (timeseries?.[regionHighlighted.stateCode]?.districts) {
+      return {
+        stateCode: regionHighlighted.stateCode,
+        districtName: regionHighlighted.districtName,
+      };
+    } else {
+      return {
+        stateCode: regionHighlighted.stateCode,
+        districtName: null,
+      };
+    }
+  }, [timeseries, regionHighlighted.stateCode, regionHighlighted.districtName]);
+
+  const selectedTimeseries = useMemo(() => {
+    if (selectedRegion.districtName) {
+      return timeseries?.[selectedRegion.stateCode]?.districts?.[
+        selectedRegion.districtName
+      ]?.dates;
+    } else {
+      return timeseries?.[selectedRegion.stateCode]?.dates;
+    }
+  }, [timeseries, selectedRegion.stateCode, selectedRegion.districtName]);
+
+  const regions = useMemo(() => {
+    const states = Object.keys(timeseries || {})
+      .filter((code) => code !== stateCode)
+      .map((code) => {
+        return {
+          stateCode: code,
+          districtName: null,
+        };
+      });
+    const districts = Object.keys(timeseries || {}).reduce((acc1, code) => {
+      return [
+        ...acc1,
+        ...Object.keys(timeseries?.[code]?.districts || {}).reduce(
+          (acc2, districtName) => {
+            return [
+              ...acc2,
+              {
+                stateCode: code,
+                districtName: districtName,
+              },
+            ];
+          },
+          []
+        ),
+      ];
+    }, []);
+
+    return [
+      {
+        stateCode: stateCode,
+        districtName: null,
+      },
+      ...states,
+      ...districts,
+    ];
+  }, [timeseries, stateCode]);
+
   const dates = useMemo(() => {
     const today = timelineDate || getIndiaYesterdayISO();
-    const pastDates = Object.keys(timeseries || {}).filter(
+    const pastDates = Object.keys(selectedTimeseries || {}).filter(
       (date) => date <= today
     );
 
@@ -62,24 +123,21 @@ function TimeseriesExplorer({
       return pastDates.filter((date) => date >= cutOffDate);
     }
     return pastDates;
-  }, [timeseries, timelineDate, timeseriesOption]);
+  }, [selectedTimeseries, timelineDate, timeseriesOption]);
 
   const handleChange = useCallback(
     ({target}) => {
-      setRegionHighlighted({
-        stateCode: target.value,
-        districtName: null,
-      });
+      setRegionHighlighted(JSON.parse(target.value));
     },
     [setRegionHighlighted]
   );
 
   const resetDropdown = useCallback(() => {
     setRegionHighlighted({
-      stateCode: 'TT',
+      stateCode: stateCode,
       districtName: null,
     });
-  }, [setRegionHighlighted]);
+  }, [stateCode, setRegionHighlighted]);
 
   return (
     <div
@@ -148,14 +206,22 @@ function TimeseriesExplorer({
         </div>
       </div>
 
-      {stateCodes && (
+      {regions && (
         <div className="state-selection">
           <div className="dropdown">
-            <select value={regionHighlighted.stateCode} onChange={handleChange}>
-              {stateCodes.map((stateCode) => {
+            <select
+              value={JSON.stringify(selectedRegion)}
+              onChange={handleChange}
+            >
+              {regions.map((region) => {
                 return (
-                  <option value={stateCode} key={stateCode}>
-                    {t(STATE_NAMES[stateCode])}
+                  <option
+                    value={JSON.stringify(region)}
+                    key={`${region.stateCode}-${region.districtName}`}
+                  >
+                    {region.districtName
+                      ? t(region.districtName)
+                      : t(STATE_NAMES[region.stateCode])}
                   </option>
                 );
               })}
@@ -170,8 +236,9 @@ function TimeseriesExplorer({
       {isVisible && (
         <Suspense fallback={<TimeseriesLoader />}>
           <Timeseries
-            stateCode={regionHighlighted.stateCode}
-            {...{timeseries, dates, chartType, isUniform, isLog}}
+            timeseries={selectedTimeseries}
+            regionHighlighted={selectedRegion}
+            {...{dates, chartType, isUniform, isLog}}
           />
         </Suspense>
       )}
@@ -202,18 +269,29 @@ function TimeseriesExplorer({
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (
+  if (currProps.forceRender) {
+    return false;
+  } else if (!currProps.timeseries && prevProps.timeseries) {
+    return true;
+  } else if (currProps.timeseries && !prevProps.timeseries) {
+    return false;
+  } else if (
     !equal(
       currProps.regionHighlighted.stateCode,
       prevProps.regionHighlighted.stateCode
     )
   ) {
     return false;
-  }
-  if (!equal(currProps.date, prevProps.date)) {
+  } else if (
+    !equal(
+      currProps.regionHighlighted.districtName,
+      prevProps.regionHighlighted.districtName
+    )
+  ) {
     return false;
-  }
-  if (!equal(currProps.anchor, prevProps.anchor)) {
+  } else if (!equal(currProps.date, prevProps.date)) {
+    return false;
+  } else if (!equal(currProps.anchor, prevProps.anchor)) {
     return false;
   }
   return true;

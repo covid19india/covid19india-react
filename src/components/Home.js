@@ -1,4 +1,4 @@
-import {MAP_META} from '../constants';
+import {API_ROOT_URL} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
 import {fetcher} from '../utils/commonFunctions';
@@ -34,7 +34,7 @@ function Home(props) {
   const location = useLocation();
 
   const {data: timeseries} = useStickySWR(
-    'https://api.covid19india.org/v3/min/timeseries.min.json',
+    `${API_ROOT_URL}/timeseries.min.json`,
     fetcher,
     {
       revalidateOnMount: true,
@@ -43,9 +43,7 @@ function Home(props) {
   );
 
   const {data} = useStickySWR(
-    `https://api.covid19india.org/v3/min/data${
-      date ? `-${date}` : ''
-    }.min.json`,
+    `${API_ROOT_URL}/data${date ? `-${date}` : ''}.min.json`,
     fetcher,
     {
       revalidateOnMount: true,
@@ -56,16 +54,6 @@ function Home(props) {
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement);
   const {width} = useWindowSize();
-
-  const stateCodes = [
-    'TT',
-    ...[
-      ...new Set([
-        ...Object.keys(MAP_META).filter((stateCode) => stateCode !== 'TT'),
-        ...Object.keys(data || {}).filter((stateCode) => stateCode !== 'TT'),
-      ]),
-    ].sort(),
-  ];
 
   return (
     <React.Fragment>
@@ -89,7 +77,7 @@ function Home(props) {
                 <Actions
                   {...{
                     setDate,
-                    dates: Object.keys(timeseries['TT']).reverse(),
+                    dates: Object.keys(timeseries['TT']?.dates).reverse(),
                     date,
                   }}
                 />
@@ -109,7 +97,7 @@ function Home(props) {
 
             {timeseries && (
               <Suspense fallback={<div style={{height: '50rem'}} />}>
-                <Minigraphs timeseries={timeseries['TT']} {...{date}} />
+                <Minigraphs timeseries={timeseries['TT']?.dates} {...{date}} />
               </Suspense>
             )}
           </div>
@@ -140,10 +128,15 @@ function Home(props) {
               {timeseries && (
                 <Suspense fallback={<div />}>
                   <TimeseriesExplorer
-                    timeseries={timeseries[regionHighlighted.stateCode]}
-                    {...{date, stateCodes}}
-                    {...{regionHighlighted, setRegionHighlighted}}
-                    {...{anchor, setAnchor}}
+                    stateCode="TT"
+                    {...{
+                      timeseries,
+                      date,
+                      regionHighlighted,
+                      setRegionHighlighted,
+                      anchor,
+                      setAnchor,
+                    }}
                   />
                 </Suspense>
               )}
