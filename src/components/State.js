@@ -1,4 +1,5 @@
 import DeltaBarGraph from './DeltaBarGraph';
+import Footer from './Footer';
 import Level from './Level';
 import MapSwitcher from './MapSwitcher';
 import StateHeader from './StateHeader';
@@ -290,6 +291,8 @@ function State(props) {
           </React.Fragment>
         </div>
       </div>
+
+      <Footer />
     </React.Fragment>
   );
 }
