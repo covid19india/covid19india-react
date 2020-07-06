@@ -290,8 +290,9 @@ function State(props) {
             </Suspense>
           </React.Fragment>
         </div>
-        <Footer />
       </div>
+
+      <Footer />
     </React.Fragment>
   );
 }
