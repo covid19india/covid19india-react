@@ -269,7 +269,9 @@ function TimeseriesExplorer({
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!currProps.timeseries) {
+  if (currProps.forceRender) {
+    return false;
+  } else if (!currProps.timeseries && prevProps.timeseries) {
     return true;
   } else if (currProps.timeseries && !prevProps.timeseries) {
     return false;

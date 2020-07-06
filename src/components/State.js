@@ -49,10 +49,11 @@ function State(props) {
         stateCode: stateCode,
         districtName: null,
       });
+      setShowAllDistricts(false);
     }
   }, [regionHighlighted.stateCode, stateCode]);
 
-  const {data: timeseries} = useSWR(
+  const {data: timeseries, error: timeseriesResponseError} = useSWR(
     `${API_ROOT_URL}/timeseries-${stateCode}.min.json`,
     fetcher,
     {
@@ -130,6 +131,7 @@ function State(props) {
             <Minigraphs
               timeseries={timeseries?.[stateCode]?.dates}
               {...{stateCode}}
+              forceRender={!!timeseriesResponseError}
             />
           </div>
 
@@ -150,13 +152,13 @@ function State(props) {
 
           <span ref={stateMetaElement} />
 
-          {data && timeseries && isStateMetaVisible && (
+          {data && isStateMetaVisible && (
             <StateMeta
               {...{
                 stateCode,
                 data,
-                timeseries,
               }}
+              timeseries={timeseries?.[stateCode]?.dates}
             />
           )}
         </div>
@@ -252,8 +254,9 @@ function State(props) {
                     )}
                   <DeltaBarGraph
                     timeseries={timeseries?.[stateCode]?.dates}
-                    {...{stateCode, lookback}}
                     statistic={mapStatistic}
+                    {...{stateCode, lookback}}
+                    forceRender={!!timeseriesResponseError}
                   />
                 </div>
               </div>
@@ -281,6 +284,7 @@ function State(props) {
                   regionHighlighted,
                   setRegionHighlighted,
                 }}
+                forceRender={!!timeseriesResponseError}
               />
             </Suspense>
           </React.Fragment>

@@ -24,7 +24,7 @@ function StateMeta({stateCode, data, timeseries}) {
   const prevWeekDate = format(sub(getIndiaDate(), {weeks: 1}), 'yyyy-MM-dd');
 
   const prevWeekConfirmed = getStatistic(
-    timeseries[stateCode]?.[prevWeekDate],
+    timeseries?.[prevWeekDate],
     'total',
     'confirmed'
   );
@@ -182,7 +182,9 @@ function StateMeta({stateCode, data, timeseries}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (prevProps.stateCode !== currProps.stateCode) {
+  if (currProps.timeseries && !prevProps.timeseries) {
+    return false;
+  } else if (prevProps.stateCode !== currProps.stateCode) {
     return false;
   }
   return true;
