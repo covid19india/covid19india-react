@@ -170,6 +170,10 @@ h6 {
     font-weight: 900;
     text-transform: uppercase;
 
+    br {
+      display: none;
+    }
+
     span {
       color: $pblue;
     }
@@ -3691,8 +3695,10 @@ footer {
       padding-bottom: 2rem;
       padding-top: 2rem;
       text-align: center;
-      width: 46px;
-      word-wrap: break-word;
+
+      br {
+        display: block;
+      }
     }
 
     .navbar-right {
