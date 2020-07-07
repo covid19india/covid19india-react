@@ -3,7 +3,11 @@ import TableLoader from './loaders/Table';
 import TableDeltaHelper from './snippets/TableDeltaHelper';
 
 import {TABLE_FADE_IN, TABLE_FADE_OUT} from '../animations';
-import {DISTRICT_TABLE_COUNT, TABLE_STATISTICS} from '../constants';
+import {
+  DISTRICT_TABLE_COUNT,
+  TABLE_STATISTICS,
+  UNASSIGNED_STATE_CODE,
+} from '../constants';
 import {getStatistic} from '../utils/commonFunctions';
 
 import {
@@ -272,7 +276,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
                 (stateCode) =>
                   stateCode !== 'TT' &&
                   states[stateCode].total?.confirmed &&
-                  !(stateCode === 'UN' && isPerMillion)
+                  !(stateCode === UNASSIGNED_STATE_CODE && isPerMillion)
               )
               .sort((a, b) => sortingFunction(a, b))
               .map((stateCode) => {

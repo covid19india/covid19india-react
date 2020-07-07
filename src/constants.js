@@ -31,6 +31,8 @@ export const D3_TRANSITION_DURATION = 300;
 
 export const MINIGRAPH_LOOKBACK_DAYS = 20;
 
+export const UNASSIGNED_STATE_CODE = 'UN';
+
 export const UNKNOWN_DISTRICT_KEY = 'Unknown';
 
 export const INDIA_ISO_SUFFIX = 'T00:00:00+05:30';
@@ -265,7 +267,7 @@ export const STATE_NAMES = {
   LD: 'Lakshadweep',
   PY: 'Puducherry',
   TT: 'India',
-  UN: 'Unassigned',
+  [UNASSIGNED_STATE_CODE]: 'Unassigned',
 };
 
 const stateCodes = [];
