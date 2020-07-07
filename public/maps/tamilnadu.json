@@ -1876,7 +1876,7 @@
     "translate": [76.23340535317459, 8.076333431067162]
   },
   "objects": {
-    "tamilnadu_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

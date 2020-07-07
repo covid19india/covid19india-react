@@ -3338,7 +3338,7 @@
     "translate": [92.25672383937811, 21.944190125242905]
   },
   "objects": {
-    "mizoram_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

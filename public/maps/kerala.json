@@ -1105,7 +1105,7 @@
     "translate": [74.867656, 8.292489]
   },
   "objects": {
-    "kerala_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

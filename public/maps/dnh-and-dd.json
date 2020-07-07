@@ -169,7 +169,7 @@
     "translate": [70.876053, 19.459169]
   },
   "objects": {
-    "dnh-and-dd": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

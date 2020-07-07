@@ -2971,7 +2971,7 @@
     "translate": [80.24647199671277, 17.78769199194691]
   },
   "objects": {
-    "chhattisgarh_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {
