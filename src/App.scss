@@ -1300,6 +1300,27 @@ h6 {
     align-self: center;
   }
 
+  .timeline-container {
+    align-items: center;
+    align-self: unset;
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    .actions {
+
+      &.timeline {
+        top: 0.25rem;
+
+        @media (max-width: 769px) {
+          .Timeline {
+            margin-left: -3.5rem;
+          }
+        }
+      }
+    }
+  }
+
   .actions {
     display: flex;
     flex-direction: row;

@@ -95,49 +95,50 @@ const ActionsPanel = ({
 
   return (
     <React.Fragment>
-      <animated.div
-        className="actions"
-        style={{
-          opacity: opacity.interpolate((o) => 1 - o),
-          transform,
-          pointerEvents: isTimelineMode ? 'none' : '',
-        }}
-      >
-        <h5 className="fadeInUp" style={trail[0]}>{`${getTimeFromMilliseconds(
-          lastViewedLog
-        )} IST`}</h5>
-
-        {!showUpdates && (
-          <div className="bell-icon fadeInUp" style={trail[1]}>
-            {Bell}
-            {newUpdate && <div className="indicator"></div>}
-          </div>
-        )}
-
-        {showUpdates && BellOff}
-        <div
-          className="timeline-icon fadeInUp"
-          onClick={handleClick}
-          style={trail[2]}
+      <div className="timeline-container">
+        <animated.div
+          className="actions"
+          style={{
+            opacity: opacity.interpolate((o) => 1 - o),
+            transform,
+            pointerEvents: isTimelineMode ? 'none' : '',
+          }}
         >
-          {TimelineIcon}
-        </div>
-      </animated.div>
+          <h5 className="fadeInUp" style={trail[0]}>{`${getTimeFromMilliseconds(
+            lastViewedLog
+          )} IST`}</h5>
 
-      <animated.div
-        className="actions timeline"
-        style={{
-          opacity,
-          transform: transform.interpolate((t) => `${t} rotateX(180deg)`),
-          pointerEvents: !isTimelineMode ? 'none' : '',
-        }}
-      >
-        {isTimelineMode && (
-          <Suspense fallback={<div />}>
-            <Timeline {...{setIsTimelineMode, setDate, dates}} />
-          </Suspense>
-        )}
-      </animated.div>
+          {!showUpdates && (
+            <div className="bell-icon fadeInUp" style={trail[1]}>
+              {Bell}
+              {newUpdate && <div className="indicator"></div>}
+            </div>
+          )}
+
+          {showUpdates && BellOff}
+          <div
+            className="timeline-icon fadeInUp"
+            onClick={handleClick}
+            style={trail[2]}
+          >
+            {TimelineIcon}
+          </div>
+        </animated.div>
+        <animated.div
+          className="actions timeline"
+          style={{
+            opacity,
+            transform: transform.interpolate((t) => `${t} rotateX(180deg)`),
+            pointerEvents: !isTimelineMode ? 'none' : '',
+          }}
+        >
+          {isTimelineMode && (
+            <Suspense fallback={<div />}>
+              <Timeline {...{setIsTimelineMode, setDate, dates}} />
+            </Suspense>
+          )}
+        </animated.div>
+      </div>
     </React.Fragment>
   );
 };
