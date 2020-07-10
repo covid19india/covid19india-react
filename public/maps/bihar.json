@@ -3379,7 +3379,7 @@
     "translate": [83.320238, 24.286327]
   },
   "objects": {
-    "bihar_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

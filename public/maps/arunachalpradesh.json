@@ -1522,7 +1522,7 @@
     "translate": [91.546459, 26.650844]
   },
   "objects": {
-    "arunachalpradesh_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {
