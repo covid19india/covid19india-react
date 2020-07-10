@@ -1311,7 +1311,7 @@ h6 {
       flex-direction: column;
       justify-content: space-around;
       padding: 1rem;
-      position: absolute;
+      position: static;
       top: 13.25rem;
 
       .highlight {
