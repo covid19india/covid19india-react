@@ -213,18 +213,23 @@ function TimeseriesExplorer({
               value={JSON.stringify(selectedRegion)}
               onChange={handleChange}
             >
-              {regions.map((region) => {
-                return (
-                  <option
-                    value={JSON.stringify(region)}
-                    key={`${region.stateCode}-${region.districtName}`}
-                  >
-                    {region.districtName
-                      ? t(region.districtName)
-                      : t(STATE_NAMES[region.stateCode])}
-                  </option>
-                );
-              })}
+              {regions
+                .filter(
+                  (region) =>
+                    STATE_NAMES[region.stateCode] !== region.districtName
+                )
+                .map((region) => {
+                  return (
+                    <option
+                      value={JSON.stringify(region)}
+                      key={`${region.stateCode}-${region.districtName}`}
+                    >
+                      {region.districtName
+                        ? t(region.districtName)
+                        : t(STATE_NAMES[region.stateCode])}
+                    </option>
+                  );
+                })}
             </select>
           </div>
           <div className="reset-icon" onClick={resetDropdown}>

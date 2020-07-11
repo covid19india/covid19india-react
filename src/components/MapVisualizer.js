@@ -464,6 +464,7 @@ function MapVisualizer({
           const highlighted =
             stateName === d.properties.st_nm &&
             (!district ||
+              mapView === MAP_VIEWS.STATES ||
               district === d.properties?.district ||
               (district === UNKNOWN_DISTRICT_KEY && !d.properties.district));
           return highlighted ? 1 : 0.25;
@@ -475,7 +476,8 @@ function MapVisualizer({
         .each(function (d) {
           const highlighted =
             stateName === d.properties.st_nm &&
-            (mapView === MAP_VIEWS.STATES ||
+            (!district ||
+              mapView === MAP_VIEWS.STATES ||
               district === d.properties?.district);
           if (highlighted) this.parentNode.appendChild(this);
           select(this).attr('stroke-opacity', highlighted ? 1 : 0);
