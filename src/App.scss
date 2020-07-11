@@ -1811,7 +1811,7 @@ abbr {
     margin-bottom: 1 + .25rem;
     margin-top: 1rem;
     position: sticky;
-    width: 28rem;
+    width: 32rem;
 
     svg {
       margin-right: .5rem;
@@ -1822,6 +1822,8 @@ abbr {
       color: $green;
       display: flex;
       flex-direction: row;
+      position: sticky;
+      left: 0;
     }
 
     .state-page {
@@ -1833,6 +1835,8 @@ abbr {
       display: flex;
       flex-direction: row;
       padding: .75rem;
+      position: sticky;
+      right: 0;
 
       p {
         align-self: flex-end;
