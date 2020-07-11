@@ -5452,7 +5452,7 @@
           }
         },
         {
-          "arcs": [[70, 71, 72, 73]],
+          "arcs": [[72, 73, 70, 109, -96, -109]],
           "type": "Polygon",
           "properties": {
             "dt_code": "519",
@@ -5633,17 +5633,6 @@
           "properties": {
             "dt_code": "520",
             "district": "Raigad",
-            "st_nm": "Maharashtra",
-            "st_code": "27",
-            "year": "2011_c"
-          }
-        },
-        {
-          "arcs": [[109, -96, -109, -72]],
-          "type": "Polygon",
-          "properties": {
-            "dt_code": "518",
-            "district": "Mumbai Suburban",
             "st_nm": "Maharashtra",
             "st_code": "27",
             "year": "2011_c"
