@@ -451,7 +451,8 @@ function MapVisualizer({
 
   // Highlight
   useEffect(() => {
-    const stateName = STATE_NAMES[regionHighlighted.stateCode];
+    const stateCode = regionHighlighted.stateCode;
+    const stateName = STATE_NAMES[stateCode];
     const district = regionHighlighted.districtName;
 
     const svg = select(svgRef.current);
@@ -463,9 +464,9 @@ function MapVisualizer({
         .attr('fill-opacity', (d) => {
           const highlighted =
             stateName === d.properties.st_nm &&
-            (!district ||
-              mapView === MAP_VIEWS.STATES ||
+            ((!district && stateCode !== mapCode) ||
               district === d.properties?.district ||
+              mapView === MAP_VIEWS.STATES ||
               (district === UNKNOWN_DISTRICT_KEY && !d.properties.district));
           return highlighted ? 1 : 0.25;
         });
@@ -476,9 +477,9 @@ function MapVisualizer({
         .each(function (d) {
           const highlighted =
             stateName === d.properties.st_nm &&
-            (!district ||
-              mapView === MAP_VIEWS.STATES ||
-              district === d.properties?.district);
+            ((!district && stateCode !== mapCode) ||
+              district === d.properties?.district ||
+              mapView === MAP_VIEWS.STATES);
           if (highlighted) this.parentNode.appendChild(this);
           select(this).attr('stroke-opacity', highlighted ? 1 : 0);
         });
@@ -486,6 +487,7 @@ function MapVisualizer({
   }, [
     geoData,
     data,
+    mapCode,
     mapView,
     mapViz,
     regionHighlighted.stateCode,
