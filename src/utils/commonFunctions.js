@@ -125,7 +125,3 @@ export const fetcher = (url) => {
     return response.json();
   });
 };
-
-export const getTotalStatistic = (data, statistic) => {
-  return getStatistic(data, 'total', statistic);
-};

@@ -17,6 +17,7 @@ import {
   getStatistic,
 } from '../utils/commonFunctions';
 
+import {AlertIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import {max} from 'd3-array';
 import {json} from 'd3-fetch';
@@ -34,7 +35,6 @@ import {
 import {select, event} from 'd3-selection';
 import {transition} from 'd3-transition';
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import useSWR from 'swr';
@@ -515,7 +515,7 @@ function MapVisualizer({
             statistic
           ) && (
             <div className={classnames('disclaimer', `is-${statistic}`)}>
-              <Icon.AlertCircle />
+              <AlertIcon />
               <span>
                 {t('District-wise {{statistic}} numbers need reconciliation', {
                   statistic: t(statistic),
