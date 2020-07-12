@@ -213,7 +213,7 @@ function Row({
               <div className="state-meta-bottom">
                 <div className={classnames('disclaimer')}>
                   <AlertIcon />
-                  <span>{'District-wise numbers need reconciliation'}</span>
+                  <span>{'District-wise data not available in state bulletin'}</span>
                 </div>
               </div>
             )}
