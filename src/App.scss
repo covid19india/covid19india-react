@@ -1802,10 +1802,11 @@ abbr {
   overflow-x: auto;
   width: 28rem;
 
-  .state-meta {
+  .state-meta-top {
     align-items: center;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-between;
     left: 0;
     margin-bottom: 1 + .25rem;
@@ -1843,6 +1844,28 @@ abbr {
 
       &:hover {
         background: $yellow-hover;
+      }
+    }
+  }
+
+  .state-meta-bottom {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-bottom: 2rem;
+    padding-top: 1rem;
+
+    .disclaimer {
+      background: $brick-light;
+      border-radius: 5px;
+      color: $brick;
+      padding: 1rem .25rem;
+      text-align: center;
+      width: 50%;
+
+      svg {
+        margin-right: 0.5rem;
       }
     }
   }

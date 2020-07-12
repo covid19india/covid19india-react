@@ -19,6 +19,7 @@ import {
   GraphIcon,
   FilterIcon,
   FoldUpIcon,
+  AlertIcon,
 } from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
@@ -186,25 +187,36 @@ function Row({
       {showDistricts && (
         <React.Fragment>
           <div className="state-meta">
-            {data?.meta?.['last_updated'] && (
-              <p className="last-updated">
-                <ClockIcon />
-                {capitalize(
-                  `${formatLastUpdated(data.meta.last_updated)} ${t('ago')}`
-                )}
-              </p>
-            )}
-            <div
-              className="state-page"
-              onClick={handleStatePageClick.bind(this, stateCode)}
-            >
-              <GraphIcon />
-              <span>
-                {t('See more details on {{state}}', {
-                  state: stateCode,
-                })}
-              </span>
+            <div className="state-meta-top">
+              {data?.meta?.['last_updated'] && (
+                <p className="last-updated">
+                  <ClockIcon />
+                  {capitalize(
+                    `${formatLastUpdated(data.meta.last_updated)} ${t('ago')}`
+                  )}
+                </p>
+              )}
+              <div
+                className="state-page"
+                onClick={handleStatePageClick.bind(this, stateCode)}
+              >
+                <GraphIcon />
+                <span>
+                  {t('See more details on {{state}}', {
+                    state: stateCode,
+                  })}
+                </span>
+              </div>
             </div>
+
+            {UNKNOWN_DISTRICT_KEY in data.districts && (
+              <div className="state-meta-bottom">
+                <div className={classnames('disclaimer')}>
+                  <AlertIcon />
+                  <span>{'District-wise numbers need reconciliation'}</span>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className={classnames('row', 'heading')}>
