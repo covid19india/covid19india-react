@@ -8696,8 +8696,6 @@
           "arcs": [[[832]]],
           "id": "Lakshadweep",
           "properties": {
-            "district": "Lakshadweep",
-            "dt_code": "587",
             "st_nm": "Lakshadweep",
             "st_code": "31",
             "year": "2011_c"
@@ -9125,7 +9123,6 @@
           "arcs": [[[1168, 1169, 1170, 1171, 1172, 1173, 1174]]],
           "id": "Delhi",
           "properties": {
-            "district": "Delhi",
             "st_nm": "Delhi",
             "st_code": "07",
             "year": "2011_c"
@@ -9473,8 +9470,6 @@
           "arcs": [[[-2075, 2086]]],
           "id": "Chandigarh",
           "properties": {
-            "district": "Chandigarh",
-            "dt_code": "055",
             "st_nm": "Chandigarh",
             "st_code": "04",
             "year": "2011_c"
