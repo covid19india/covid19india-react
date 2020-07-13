@@ -1,4 +1,10 @@
-import {STATE_CODES_ARRAY, STATE_CODES, STATE_NAMES} from '../constants';
+import {
+  STATE_CODES_ARRAY,
+  STATE_CODES,
+  STATE_NAMES,
+  UNASSIGNED_STATE_CODE,
+  UNKNOWN_DISTRICT_KEY,
+} from '../constants';
 
 import produce from 'immer';
 import React, {useState, useEffect, useMemo, useCallback, useRef} from 'react';
@@ -48,7 +54,9 @@ function Search() {
         // eslint-disable-next-line
         new Bloodhound.default({
           initialize: true,
-          local: STATE_CODES_ARRAY,
+          local: STATE_CODES_ARRAY.filter(
+            ({code}) => code !== UNASSIGNED_STATE_CODE
+          ),
           queryTokenizer: Bloodhound.default.tokenizers.whitespace,
           datumTokenizer: Bloodhound.default.tokenizers.obj.whitespace('name'),
         })
@@ -68,16 +76,22 @@ function Search() {
             url: 'https://api.covid19india.org/state_district_wise.json',
             transform: function (response) {
               const districts = [];
-              Object.keys(response).map((stateName) => {
-                const districtData = response[stateName].districtData;
-                Object.keys(districtData).map((districtName) => {
-                  return districts.push({
-                    district: districtName,
-                    state: stateName,
-                  });
+              Object.keys(response)
+                .filter((stateName) => stateName !== 'State Unassigned')
+                .map((stateName) => {
+                  const districtData = response[stateName].districtData;
+                  Object.keys(districtData)
+                    .filter(
+                      (districtName) => districtName !== UNKNOWN_DISTRICT_KEY
+                    )
+                    .map((districtName) => {
+                      return districts.push({
+                        district: districtName,
+                        state: stateName,
+                      });
+                    });
+                  return null;
                 });
-                return null;
-              });
               return districts;
             },
           },

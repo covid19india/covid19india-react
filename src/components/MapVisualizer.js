@@ -17,6 +17,7 @@ import {
   getStatistic,
 } from '../utils/commonFunctions';
 
+import {AlertIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import {max} from 'd3-array';
 import {json} from 'd3-fetch';
@@ -34,7 +35,6 @@ import {
 import {select, event} from 'd3-selection';
 import {transition} from 'd3-transition';
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import useSWR from 'swr';
@@ -451,7 +451,8 @@ function MapVisualizer({
 
   // Highlight
   useEffect(() => {
-    const stateName = STATE_NAMES[regionHighlighted.stateCode];
+    const stateCode = regionHighlighted.stateCode;
+    const stateName = STATE_NAMES[stateCode];
     const district = regionHighlighted.districtName;
 
     const svg = select(svgRef.current);
@@ -463,8 +464,9 @@ function MapVisualizer({
         .attr('fill-opacity', (d) => {
           const highlighted =
             stateName === d.properties.st_nm &&
-            (!district ||
+            ((!district && stateCode !== mapCode) ||
               district === d.properties?.district ||
+              mapView === MAP_VIEWS.STATES ||
               (district === UNKNOWN_DISTRICT_KEY && !d.properties.district));
           return highlighted ? 1 : 0.25;
         });
@@ -475,8 +477,9 @@ function MapVisualizer({
         .each(function (d) {
           const highlighted =
             stateName === d.properties.st_nm &&
-            (mapView === MAP_VIEWS.STATES ||
-              district === d.properties?.district);
+            ((!district && stateCode !== mapCode) ||
+              district === d.properties?.district ||
+              mapView === MAP_VIEWS.STATES);
           if (highlighted) this.parentNode.appendChild(this);
           select(this).attr('stroke-opacity', highlighted ? 1 : 0);
         });
@@ -484,6 +487,7 @@ function MapVisualizer({
   }, [
     geoData,
     data,
+    mapCode,
     mapView,
     mapViz,
     regionHighlighted.stateCode,
@@ -511,7 +515,7 @@ function MapVisualizer({
             statistic
           ) && (
             <div className={classnames('disclaimer', `is-${statistic}`)}>
-              <Icon.AlertCircle />
+              <AlertIcon />
               <span>
                 {t('District-wise {{statistic}} numbers need reconciliation', {
                   statistic: t(statistic),

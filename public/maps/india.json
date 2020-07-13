@@ -17651,7 +17651,7 @@
           }
         },
         {
-          "arcs": [[353, 354, 355]],
+          "arcs": [[354, 355, 880, -578, -867]],
           "type": "Polygon",
           "properties": {
             "district": "Mumbai",
@@ -19609,17 +19609,6 @@
           }
         },
         {
-          "arcs": [[-354, 880, -578, -867]],
-          "type": "Polygon",
-          "properties": {
-            "district": "Mumbai Suburban",
-            "dt_code": "518",
-            "st_nm": "Maharashtra",
-            "st_code": "27",
-            "year": "2011_c"
-          }
-        },
-        {
           "arcs": [[-268, -865, -601, -659, -660, -610, -646, -627]],
           "type": "Polygon",
           "properties": {
@@ -20867,11 +20856,31 @@
           }
         },
         {
-          "arcs": [[1219, 1220, 1221, 1222, 1223]],
+          "arcs": [
+            [
+              1243,
+              -1988,
+              1255,
+              1256,
+              -1267,
+              -1288,
+              1277,
+              1278,
+              1270,
+              1258,
+              -1228,
+              -1227,
+              -1226,
+              1990,
+              1223,
+              1219,
+              1220,
+              1259
+            ]
+          ],
           "type": "Polygon",
           "properties": {
-            "district": "North Delhi",
-            "dt_code": "091",
+            "district": "Delhi",
             "st_nm": "Delhi",
             "st_code": "07",
             "year": "2011_c"
@@ -20911,28 +20920,6 @@
           }
         },
         {
-          "arcs": [[1241, 1242, 1243]],
-          "type": "Polygon",
-          "properties": {
-            "district": "North East Delhi",
-            "dt_code": "092",
-            "st_nm": "Delhi",
-            "st_code": "07",
-            "year": "2011_c"
-          }
-        },
-        {
-          "arcs": [[-1227, 1244, 1245, 1246, 1247]],
-          "type": "Polygon",
-          "properties": {
-            "district": "West Delhi",
-            "dt_code": "096",
-            "st_nm": "Delhi",
-            "st_code": "07",
-            "year": "2011_c"
-          }
-        },
-        {
           "arcs": [[-1207, 1248, 1249, 1250, -1216]],
           "type": "Polygon",
           "properties": {
@@ -20940,39 +20927,6 @@
             "dt_code": "142",
             "st_nm": "Uttar Pradesh",
             "st_code": "09",
-            "year": "2011_c"
-          }
-        },
-        {
-          "arcs": [[1251, 1252, 1253, 1254, 1255, 1256]],
-          "type": "Polygon",
-          "properties": {
-            "district": "East Delhi",
-            "dt_code": "093",
-            "st_nm": "Delhi",
-            "st_code": "07",
-            "year": "2011_c"
-          }
-        },
-        {
-          "arcs": [[-1228, -1248, 1257, 1258]],
-          "type": "Polygon",
-          "properties": {
-            "district": "South West Delhi",
-            "dt_code": "097",
-            "st_nm": "Delhi",
-            "st_code": "07",
-            "year": "2011_c"
-          }
-        },
-        {
-          "arcs": [[-1222, 1259, -1243, 1260, -1254, 1261, -1246, 1262]],
-          "type": "Polygon",
-          "properties": {
-            "district": "Central Delhi",
-            "dt_code": "095",
-            "st_nm": "Delhi",
-            "st_code": "07",
             "year": "2011_c"
           }
         },
@@ -20988,17 +20942,6 @@
           }
         },
         {
-          "arcs": [[-1247, -1262, -1253, 1268, 1269, 1270, -1258]],
-          "type": "Polygon",
-          "properties": {
-            "district": "New Delhi",
-            "dt_code": "094",
-            "st_nm": "Delhi",
-            "st_code": "07",
-            "year": "2011_c"
-          }
-        },
-        {
           "arcs": [[-1240, 1271, 1272, 1273, 1274, 1275]],
           "type": "Polygon",
           "properties": {
@@ -21006,17 +20949,6 @@
             "dt_code": "153",
             "st_nm": "Uttar Pradesh",
             "st_code": "09",
-            "year": "2011_c"
-          }
-        },
-        {
-          "arcs": [[-1270, 1276, 1277, 1278]],
-          "type": "Polygon",
-          "properties": {
-            "district": "South Delhi",
-            "dt_code": "098",
-            "st_nm": "Delhi",
-            "st_code": "07",
             "year": "2011_c"
           }
         },
@@ -23464,39 +23396,6 @@
             "st_nm": "Madhya Pradesh",
             "st_code": "23",
             "year": "update2014"
-          }
-        },
-        {
-          "arcs": [[-1242, -1988, -1255, -1261]],
-          "type": "Polygon",
-          "properties": {
-            "district": "Shahdara",
-            "dt_code": "702",
-            "st_nm": "Delhi",
-            "st_code": "07",
-            "year": "update2014"
-          }
-        },
-        {
-          "arcs": [[-1252, -1267, -1288, -1277, -1269]],
-          "type": "Polygon",
-          "properties": {
-            "district": "South East Delhi",
-            "dt_code": "703",
-            "st_nm": "Delhi",
-            "st_code": "07",
-            "year": "update2014"
-          }
-        },
-        {
-          "arcs": [[-1223, -1263, -1245, -1226, 1990]],
-          "type": "Polygon",
-          "properties": {
-            "district": "North West Delhi",
-            "dt_code": "090",
-            "st_nm": "Delhi",
-            "st_code": "07",
-            "year": "2011_c"
           }
         },
         {
