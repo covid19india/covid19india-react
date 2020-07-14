@@ -938,7 +938,6 @@ h6 {
     color: $gray;
     font-size: 1rem;
     height: 2rem;
-    outline: none;
     padding: 1rem;
     padding-left: 3rem;
     width: calc(100% - 4rem);
@@ -2690,10 +2689,6 @@ abbr {
         padding: 0.5rem;
         padding-right: 1.4rem;
         width: 100%;
-
-        &:focus {
-          outline: none;
-        }
       }
     }
 
@@ -2849,7 +2844,6 @@ input {
     cursor: pointer;
     height: 14px;
     margin: 0;
-    outline: none;
     position: relative;
     transition: all 300ms ease-in-out;
     width: 24px;
@@ -3288,7 +3282,6 @@ footer {
     font-size: 10px !important;
     font-weight: 600;
     margin: 0;
-    outline: none;
     padding: 10px 15px;
     text-align: center;
     transition: background 0.25s ease-in-out;
