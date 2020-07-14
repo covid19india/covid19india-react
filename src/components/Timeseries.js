@@ -353,6 +353,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
         statistic
       );
       if (chartType === 'total') return deltaToday;
+
       const yesterday = formatISO(subDays(parseIndiaDate(highlightedDate), 1), {
         representation: 'date',
       });
