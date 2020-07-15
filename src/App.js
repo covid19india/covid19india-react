@@ -117,7 +117,7 @@ const App = () => {
           {...{pColor, bgColor}}
         />
       )}
-      <div className="App">
+      <div className="App" id="root-app">
         <Suspense fallback={<div />}>
           <LanguageSwitcher
             {...{showLanguageSwitcher, setShowLanguageSwitcher}}

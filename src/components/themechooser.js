@@ -19,6 +19,8 @@ const customStyles = {
   },
 };
 
+Modal.setAppElement(document.getElementById('root-app'));
+
 const ThemeChooser = ({
   isOpen,
   onClose,
@@ -54,7 +56,6 @@ const ThemeChooser = ({
               const isDefault = color === BACKGROUND_COLORS.DEFAULT.color;
               const isSelected = color === bgColor;
 
-              console.warn(color, isDefault);
               return (
                 <div
                   className="circle outlined"
