@@ -55,7 +55,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
 
     const xScale = scaleTime()
       .clamp(true)
-      .domain([parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])])
+      .domain(T ? [parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])] : [])
       .range([margin.left, chartRight]);
 
     // Number of x-axis ticks
@@ -162,15 +162,17 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
     function mousemove() {
       const xm = mouse(this)[0];
       const date = xScale.invert(xm);
-      const bisectDate = bisector((date) => parseIndiaDate(date)).left;
-      const index = bisectDate(dates, date, 1);
-      const dateLeft = dates[index - 1];
-      const dateRight = dates[index];
-      setHighlightedDate(
-        date - parseIndiaDate(dateLeft) < parseIndiaDate(dateRight) - date
-          ? dateLeft
-          : dateRight
-      );
+      if (!isNaN(date)) {
+        const bisectDate = bisector((date) => parseIndiaDate(date)).left;
+        const index = bisectDate(dates, date, 1);
+        const dateLeft = dates[index - 1];
+        const dateRight = dates[index];
+        setHighlightedDate(
+          date - parseIndiaDate(dateLeft) < parseIndiaDate(dateRight) - date
+            ? dateLeft
+            : dateRight
+        );
+      }
     }
 
     function mouseout() {
