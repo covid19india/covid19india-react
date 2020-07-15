@@ -684,11 +684,14 @@ $default-primary: var(--primary-color);
   }
 
   .github {
-    background: #000 !important;
     color: #fff !important;
 
     &:hover {
-      background: $gray-dark !important;
+      svg {
+        path {
+          stroke: $gray !important;
+        }
+      }
     }
   }
 
