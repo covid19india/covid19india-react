@@ -1,4 +1,4 @@
-import {PRIMARY_STATISTICS} from '../constants';
+import {PRIMARY_STATISTICS, SPRING_CONFIG_NUMBERS} from '../constants';
 import {capitalize, formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import {HeartFillIcon} from '@primer/octicons-v2-react';
@@ -6,18 +6,15 @@ import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {animated, useSpring, config} from 'react-spring';
+import {animated, useSpring} from 'react-spring';
 
 function PureLevelItem({statistic, total, delta}) {
   const {t} = useTranslation();
-  const spring = useSpring(
-    {
-      total: total,
-      delta: delta,
-      from: {total: total, delta: delta},
-    },
-    config.stiff
-  );
+  const spring = useSpring({
+    total: total,
+    delta: delta,
+    config: SPRING_CONFIG_NUMBERS,
+  });
 
   return (
     <React.Fragment>

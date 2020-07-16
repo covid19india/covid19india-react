@@ -12,12 +12,6 @@
 npm i && npm start
 ```
 
-## Maintainers
-
-- [jeremyphilemon](https://github.com/jeremyphilemon)
-- [shuklaayush](https://github.com/shuklaayush)
-- [JunaidBabu](https://github.com/JunaidBabu)
-- [sudevschiz](https://github.com/sudevschiz)
 
 ## Contribution
 

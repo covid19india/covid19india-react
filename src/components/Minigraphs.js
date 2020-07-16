@@ -45,7 +45,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
 
     const xScale = scaleTime()
       .clamp(true)
-      .domain([parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])])
+      .domain(T ? [parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])] : [])
       .range([margin.left, chartRight]);
 
     const dailyMin = min(dates, (date) =>

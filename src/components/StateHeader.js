@@ -1,10 +1,11 @@
 import StateDropdown from './StateDropdown';
 
+import {SPRING_CONFIG_NUMBERS} from '../constants.js';
 import {formatDate, formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {animated, config, useSpring} from 'react-spring';
+import {animated, useSpring} from 'react-spring';
 
 function StateHeader({data, stateCode}) {
   const {t} = useTranslation();
@@ -24,7 +25,7 @@ function StateHeader({data, stateCode}) {
 
   const spring = useSpring({
     total: getStatistic(data, 'total', 'tested'),
-    config: config.gentle,
+    config: SPRING_CONFIG_NUMBERS,
   });
 
   return (

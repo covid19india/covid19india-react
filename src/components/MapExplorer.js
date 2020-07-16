@@ -5,6 +5,7 @@ import {
   MAP_TYPES,
   MAP_VIEWS,
   MAP_VIZS,
+  SPRING_CONFIG_NUMBERS,
   STATE_NAMES,
   UNKNOWN_DISTRICT_KEY,
   PRIMARY_STATISTICS,
@@ -158,10 +159,7 @@ function MapExplorer({
 
   const spring = useSpring({
     total: getStatistic(hoveredRegion, 'total', mapStatistic),
-    config: {
-      tension: 250,
-      clamp: true,
-    },
+    config: {tension: 250, ...SPRING_CONFIG_NUMBERS},
   });
 
   return (

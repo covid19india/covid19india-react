@@ -41,7 +41,7 @@ export const formatLastUpdated = (unformattedDate) => {
 };
 
 export const parseIndiaDate = (isoDate) => {
-  return new Date(isoDate + INDIA_ISO_SUFFIX);
+  return utcToZonedTime(new Date(isoDate + INDIA_ISO_SUFFIX), 'Asia/Kolkata');
 };
 
 export const formatDate = (unformattedDate, formatString) => {
