@@ -105,6 +105,24 @@ function TimeseriesExplorer({
     ];
   }, [timeseries, stateCode]);
 
+  const dropdownRegions = useMemo(() => {
+    if (
+      regions.find(
+        (region) =>
+          region.stateCode === regionHighlighted.stateCode &&
+          region.districtName === regionHighlighted.districtName
+      )
+    )
+      return regions;
+    return [
+      ...regions,
+      {
+        stateCode: regionHighlighted.stateCode,
+        districtName: regionHighlighted.districtName,
+      },
+    ];
+  }, [regionHighlighted.stateCode, regionHighlighted.districtName, regions]);
+
   const dates = useMemo(() => {
     const today = timelineDate || getIndiaYesterdayISO();
     const pastDates = Object.keys(selectedTimeseries || {}).filter(
@@ -206,14 +224,14 @@ function TimeseriesExplorer({
         </div>
       </div>
 
-      {regions && (
+      {dropdownRegions && (
         <div className="state-selection">
           <div className="dropdown">
             <select
               value={JSON.stringify(selectedRegion)}
               onChange={handleChange}
             >
-              {regions
+              {dropdownRegions
                 .filter(
                   (region) =>
                     STATE_NAMES[region.stateCode] !== region.districtName
