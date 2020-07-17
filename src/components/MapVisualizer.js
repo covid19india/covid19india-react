@@ -517,12 +517,7 @@ function MapVisualizer({
             <div className={classnames('disclaimer', `is-${statistic}`)}>
               <AlertIcon />
               <span>
-                {t(
-                  'District-wise {{statistic}} data not available in state bulletin',
-                  {
-                    statistic: t(statistic),
-                  }
-                )}
+                {t('District-wise data not available in state bulletin')}
               </span>
             </div>
           )}
