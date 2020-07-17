@@ -135,9 +135,12 @@ function MapVisualizer({
     [data, mapScale, statistic]
   );
 
-  const strokeColor = useCallback(() => {
-    return COLORS[statistic];
-  }, [statistic]);
+  const strokeColor = useCallback(
+    (alpha) => {
+      return COLORS[statistic] + alpha;
+    },
+    [statistic]
+  );
 
   const features = useMemo(() => {
     if (!geoData) return null;
@@ -185,17 +188,19 @@ function MapVisualizer({
     [mapViz, data, statistic, statisticTotal]
   );
 
+  const onceTouchedRegion = useRef(null);
+
   // Reset on tapping outside map
   useEffect(() => {
     const svg = select(svgRef.current);
 
-    svg.attr('pointer-events', 'auto').on(
-      'click',
-      setRegionHighlighted.bind(this, {
+    svg.attr('pointer-events', 'auto').on('click', () => {
+      onceTouchedRegion.current = null;
+      setRegionHighlighted({
         stateCode: mapCode,
         districtName: null,
-      })
-    );
+      });
+    });
   }, [mapCode, setRegionHighlighted]);
 
   // Choropleth
@@ -203,8 +208,6 @@ function MapVisualizer({
     if (!geoData) return;
     const svg = select(svgRef.current);
     const T = transition().duration(D3_TRANSITION_DURATION);
-
-    let onceTouchedRegion = null;
 
     const regionSelection = svg
       .select('.regions')
@@ -239,14 +242,14 @@ function MapVisualizer({
       )
       .attr('pointer-events', 'all')
       .on('touchstart', (d) => {
-        if (onceTouchedRegion === d) onceTouchedRegion = null;
-        else onceTouchedRegion = d;
+        if (onceTouchedRegion.current === d) onceTouchedRegion.current = null;
+        else onceTouchedRegion.current = d;
       })
       .on('click', (d) => {
         event.stopPropagation();
         const stateCode = STATE_CODES[d.properties.st_nm];
         if (
-          onceTouchedRegion ||
+          onceTouchedRegion.current ||
           mapMeta.mapType === MAP_TYPES.STATE ||
           !data[stateCode]?.districts
         )
@@ -260,7 +263,10 @@ function MapVisualizer({
         );
       })
       .call((sel) => {
-        sel.transition(T).attr('fill', fillColor).attr('stroke', strokeColor);
+        sel
+          .transition(T)
+          .attr('fill', fillColor)
+          .attr('stroke', strokeColor.bind(this, ''));
       });
 
     window.requestIdleCallback(() => {
@@ -315,7 +321,6 @@ function MapVisualizer({
         .sort((featureA, featureB) => featureB.value - featureB.value);
     }
 
-    let onceTouchedRegion = null;
     svg
       .select('.circles')
       .selectAll('circle')
@@ -344,12 +349,14 @@ function MapVisualizer({
         });
       })
       .on('touchstart', (feature) => {
-        if (onceTouchedRegion === feature) onceTouchedRegion = null;
-        else onceTouchedRegion = feature;
+        if (onceTouchedRegion.current === feature)
+          onceTouchedRegion.current = null;
+        else onceTouchedRegion.current = feature;
       })
       .on('click', (feature) => {
         event.stopPropagation();
-        if (onceTouchedRegion || mapMeta.mapType === MAP_TYPES.STATE) return;
+        if (onceTouchedRegion.current || mapMeta.mapType === MAP_TYPES.STATE)
+          return;
         history.push(
           `/state/${STATE_CODES[feature.properties.st_nm]}${
             window.innerWidth < 769 ? '#MapExplorer' : ''
@@ -372,16 +379,6 @@ function MapVisualizer({
     setRegionHighlighted,
     statistic,
   ]);
-
-  const getBoundaryColor = useCallback(
-    (statistic) => {
-      return COLORS[statistic] + '40';
-
-      // eslint-disable-next-line
-      const faux = mapCode;
-    },
-    [mapCode]
-  );
 
   // Boundaries
   useEffect(() => {
@@ -418,7 +415,7 @@ function MapVisualizer({
         (exit) => exit.transition(T).attr('stroke', '#fff0').remove()
       )
       .transition(T)
-      .attr('stroke', getBoundaryColor.bind(this, statistic));
+      .attr('stroke', strokeColor.bind(this, '40'));
 
     svg
       .select('.district-borders')
@@ -437,7 +434,7 @@ function MapVisualizer({
         (exit) => exit.transition(T).attr('stroke', '#fff0').remove()
       )
       .transition(T)
-      .attr('stroke', getBoundaryColor.bind(this, statistic));
+      .attr('stroke', strokeColor.bind(this, '40'));
   }, [
     geoData,
     mapMeta,
@@ -446,7 +443,7 @@ function MapVisualizer({
     mapView,
     statistic,
     path,
-    getBoundaryColor,
+    strokeColor,
   ]);
 
   // Highlight
