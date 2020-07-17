@@ -30,6 +30,8 @@ function MapLegend({data, mapViz, mapScale, statistic}) {
     if (!width || !height)
       ({width, height} = wrapperRef.current.getBoundingClientRect());
 
+    if (!width || !height) return;
+
     if (mapViz === MAP_VIZS.BUBBLES) {
       const t = svg.transition().duration(D3_TRANSITION_DURATION);
       svg

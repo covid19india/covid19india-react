@@ -21,6 +21,7 @@ import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -79,11 +80,6 @@ function MapExplorer({
     switch (option) {
       case MAP_VIZS.CHOROPLETH:
         setMapViz(MAP_VIZS.CHOROPLETH);
-        if (mapMeta.mapType === MAP_TYPES.COUNTRY)
-          setRegionHighlighted({
-            stateCode: regionHighlighted.stateCode,
-            districtName: null,
-          });
         return;
 
       case MAP_VIZS.BUBBLES:
@@ -94,6 +90,18 @@ function MapExplorer({
         return;
     }
   };
+
+  const handleDistrictClick = useCallback(() => {
+    const newMapView =
+      mapView === MAP_VIEWS.DISTRICTS ? MAP_VIEWS.STATES : MAP_VIEWS.DISTRICTS;
+    if (newMapView === MAP_VIEWS.STATES) {
+      setRegionHighlighted({
+        stateCode: regionHighlighted.stateCode,
+        districtName: null,
+      });
+    }
+    setMapView(newMapView);
+  }, [mapView, setRegionHighlighted, regionHighlighted.stateCode]);
 
   const ChoroplethIcon = useMemo(
     () => (
@@ -218,12 +226,7 @@ function MapExplorer({
                   className={classnames('boundary fadeInUp', {
                     'is-highlighted': mapView === MAP_VIEWS.DISTRICTS,
                   })}
-                  onClick={setMapView.bind(
-                    this,
-                    mapView === MAP_VIEWS.DISTRICTS
-                      ? MAP_VIEWS.STATES
-                      : MAP_VIEWS.DISTRICTS
-                  )}
+                  onClick={handleDistrictClick.bind(this)}
                   style={trail[3]}
                 >
                   <OrganizationIcon />
