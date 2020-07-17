@@ -1924,7 +1924,7 @@ abbr {
       position: relative;
 
       &:not(:first-child) {
-        flex-basis: 3.5rem;
+        flex-basis: 4rem;
         flex-grow: 1;
         flex-shrink: 0;
         justify-content: flex-end;
@@ -2069,18 +2069,6 @@ abbr {
 
   .intersection {
     display: block;
-  }
-
-  @media (min-width: 769px) {
-    .cell {
-      &:first-child {
-        flex-basis: 3rem;
-      }
-
-      &:not(:first-child) {
-        flex-basis: 4rem;
-      }
-    }
   }
 }
 
