@@ -245,14 +245,14 @@ h6 {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin-left: 10rem;
-  margin-right: 5rem;
+  margin-left: 8rem;
+  margin-right: 3rem;
 
   .home-left,
   .home-right {
     display: flex;
     flex-direction: column;
-    width: 35rem;
+    width: 32rem;
   }
 
   .home-left {
@@ -1800,7 +1800,7 @@ abbr {
   font-size: 12px;
   margin-bottom: 2.5rem;
   overflow-x: auto;
-  width: 33rem;
+  width: calc(100% - 2rem);
 
   .state-meta-top {
     align-items: center;
@@ -1812,7 +1812,7 @@ abbr {
     margin-bottom: 1 + .25rem;
     margin-top: 1rem;
     position: sticky;
-    width: 33rem;
+    width: 30rem;
 
     svg {
       margin-right: .5rem;
@@ -1849,17 +1849,15 @@ abbr {
   }
 
   .state-meta-bottom {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding-bottom: 2rem;
-    padding-top: 1rem;
+    left: 0;
+    padding-bottom: 1.5rem;
+    position: sticky;
 
     .disclaimer {
       background: $brick-light;
       border-radius: 5px;
       color: $brick;
+      margin: auto;
       padding: 1rem .25rem;
       text-align: center;
       width: 50%;
@@ -2051,12 +2049,16 @@ abbr {
     color: $gray-mid;
     left: 0;
     margin-bottom: 1 + .25rem;
-    margin-left: auto;
-    margin-right: auto;
     margin-top: 1rem;
     position: sticky;
     text-align: center;
-    width: 10rem;
+    width: 30rem;
+
+    p {
+      margin-left: auto;
+      margin-right: auto;
+      width: 10rem;
+    }
 
     .fold {
       cursor: pointer;
@@ -2104,7 +2106,7 @@ abbr {
 .MapExplorer {
   align-self: center;
   position: relative;
-  width: calc(100% - 2rem);
+  width: 100%;
 
   &.stickied {
     position: sticky !important;
@@ -3773,7 +3775,9 @@ footer {
     width: calc(100% - 2rem);
   }
 
-  .state-meta {
+  .state-meta-top,
+  .state-meta-bottom,
+  .spacer {
     width: calc(100vw - 2rem) !important;
   }
 
