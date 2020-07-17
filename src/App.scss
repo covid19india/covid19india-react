@@ -385,14 +385,14 @@ h6 {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin-left: 10rem;
-  margin-right: 5rem;
+  margin-left: 8rem;
+  margin-right: 3rem;
 
   .state-left,
   .state-right {
     display: flex;
     flex-direction: column;
-    width: 30rem;
+    width: 32rem;
   }
 
   .state-left {
