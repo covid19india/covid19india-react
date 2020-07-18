@@ -2601,12 +2601,6 @@ abbr {
     height: 10rem;
     margin-bottom: 1rem;
 
-    line {
-      &.stem {
-        stroke-width: 4px;
-      }
-    }
-
     &.is-confirmed {
       line {
         &.stem {
@@ -2876,10 +2870,14 @@ input {
       width: 100%;
 
       .domain,
-      .tick,
-      line {
+      .tick {
         stroke: $cherry;
         stroke-width: 1.5;
+
+        line {
+          stroke: $cherry;
+          stroke-width: 1.5;
+        }
       }
 
       text {
