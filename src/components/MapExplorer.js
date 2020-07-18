@@ -32,6 +32,7 @@ import React, {
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {animated, useSpring} from 'react-spring';
+import {useSwipeable} from 'react-swipeable';
 import {useWindowSize} from 'react-use';
 
 const MapVisualizer = lazy(() => import('./MapVisualizer'));
@@ -170,6 +171,21 @@ function MapExplorer({
     config: {tension: 250, ...SPRING_CONFIG_NUMBERS},
   });
 
+  const swipeHandlers = useSwipeable({
+    onSwipedRight: () => {
+      const currentIndex = PRIMARY_STATISTICS.indexOf(mapStatistic);
+      const toIndex =
+        currentIndex > 0 ? currentIndex - 1 : PRIMARY_STATISTICS.length - 1;
+      setMapStatistic(PRIMARY_STATISTICS[toIndex]);
+    },
+    onSwipedLeft: () => {
+      const currentIndex = PRIMARY_STATISTICS.indexOf(mapStatistic);
+      const toIndex =
+        currentIndex < PRIMARY_STATISTICS.length - 1 ? currentIndex + 1 : 0;
+      setMapStatistic(PRIMARY_STATISTICS[toIndex]);
+    },
+  });
+
   return (
     <div
       className={classnames(
@@ -265,7 +281,12 @@ function MapExplorer({
         </div>
       </div>
 
-      <div ref={mapExplorerRef} className="fadeInUp" style={trail[3]}>
+      <div
+        ref={mapExplorerRef}
+        className="fadeInUp"
+        style={trail[3]}
+        {...swipeHandlers}
+      >
         {mapStatistic && (
           <Suspense
             fallback={
