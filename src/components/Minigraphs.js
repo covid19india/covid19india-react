@@ -10,7 +10,7 @@ import {
 } from '../utils/commonFunctions';
 
 import classnames from 'classnames';
-import {min, max} from 'd3-array';
+import {max} from 'd3-array';
 import {interpolatePath} from 'd3-interpolate-path';
 import {scaleTime, scaleLinear} from 'd3-scale';
 import {select} from 'd3-selection';
@@ -20,6 +20,10 @@ import {transition} from 'd3-transition';
 import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useEffect, useRef, useMemo} from 'react';
+
+// Dimensions
+const [width, height] = [100, 75];
+const margin = {top: 10, right: 5, bottom: 2, left: 5};
 
 function Minigraphs({timeseries, date: timelineDate}) {
   const refs = useRef([]);
@@ -39,38 +43,27 @@ function Minigraphs({timeseries, date: timelineDate}) {
   useEffect(() => {
     const T = dates.length;
 
-    const margin = {top: 10, right: 5, bottom: 20, left: 5};
-    const chartRight = 100 - margin.right;
-    const chartBottom = 100 - margin.bottom;
+    const chartRight = width - margin.right;
+    const chartBottom = height - margin.bottom;
 
     const xScale = scaleTime()
       .clamp(true)
       .domain(T ? [parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])] : [])
       .range([margin.left, chartRight]);
 
-    const dailyMin = min(dates, (date) =>
-      getStatistic(timeseries[date], 'delta', 'active')
-    );
-
-    const dailyMax = max(dates, (date) =>
-      Math.max(
-        getStatistic(timeseries[date], 'delta', 'confirmed'),
-        getStatistic(timeseries[date], 'delta', 'recovered'),
-        getStatistic(timeseries[date], 'delta', 'deceased')
-      )
-    );
-
-    const domainMinMax = Math.max(-dailyMin, dailyMax);
-
-    const yScale = scaleLinear()
-      .clamp(true)
-      .domain([-domainMinMax, domainMinMax])
-      .range([chartBottom, margin.top]);
-
     refs.current.forEach((ref, index) => {
       const svg = select(ref);
       const statistic = PRIMARY_STATISTICS[index];
       const color = COLORS[statistic];
+
+      const dailyMaxAbs = max(dates, (date) =>
+        Math.abs(getStatistic(timeseries[date], 'delta', statistic))
+      );
+
+      const yScale = scaleLinear()
+        .clamp(true)
+        .domain([-dailyMaxAbs, dailyMaxAbs])
+        .range([chartBottom, margin.top]);
 
       const linePath = line()
         .curve(curveMonotoneX)
@@ -159,9 +152,9 @@ function Minigraphs({timeseries, date: timelineDate}) {
             ref={(el) => {
               refs.current[index] = el;
             }}
-            width="100"
-            height="75"
-            viewBox="0 0 100 75"
+            width={width}
+            height={height}
+            viewBox={`0 0 ${width} ${height}`}
             preserveAspectRatio="xMidYMid meet"
           />
         </div>
