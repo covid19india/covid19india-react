@@ -1737,6 +1737,7 @@ abbr {
     left: 0;
     padding-bottom: 1.5rem;
     position: sticky;
+    width: 30rem;
 
     .disclaimer {
       background: $brick-light;
@@ -1754,7 +1755,7 @@ abbr {
   }
 
   .table-wrapper {
-    width: 34.8rem;
+    width: 35rem;
   }
 
   .row {
@@ -1814,7 +1815,7 @@ abbr {
 
       &:first-child {
         background: $gray-hover-darker-opaque;
-        flex-basis: 7.5rem;
+        flex-basis: 7rem;
         flex-grow: 0;
         flex-shrink: 0;
         justify-content: space-between;
@@ -1922,8 +1923,7 @@ abbr {
       .district-name {
         font-size: 14px;
         font-weight: 600;
-        margin-right: .25rem;
-        width: 6rem;
+        max-width: 7rem;
         word-wrap: break-word;
       }
     }
