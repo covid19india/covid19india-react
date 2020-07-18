@@ -172,13 +172,13 @@ function MapExplorer({
   });
 
   const swipeHandlers = useSwipeable({
-    onSwipedLeft: () => {
+    onSwipedRight: () => {
       const currentIndex = PRIMARY_STATISTICS.indexOf(mapStatistic);
       const toIndex =
         currentIndex > 0 ? currentIndex - 1 : PRIMARY_STATISTICS.length - 1;
       setMapStatistic(PRIMARY_STATISTICS[toIndex]);
     },
-    onSwipedRight: () => {
+    onSwipedLeft: () => {
       const currentIndex = PRIMARY_STATISTICS.indexOf(mapStatistic);
       const toIndex =
         currentIndex < PRIMARY_STATISTICS.length - 1 ? currentIndex + 1 : 0;
@@ -281,7 +281,12 @@ function MapExplorer({
         </div>
       </div>
 
-      <div ref={mapExplorerRef} className="fadeInUp" style={trail[3]}>
+      <div
+        ref={mapExplorerRef}
+        className="fadeInUp"
+        style={trail[3]}
+        {...swipeHandlers}
+      >
         {mapStatistic && (
           <Suspense
             fallback={
@@ -294,14 +299,12 @@ function MapExplorer({
               />
             }
           >
-            <div {...swipeHandlers}>
-              <MapVisualizer
-                {...{mapCode, mapView, mapViz}}
-                data={mapData}
-                {...{regionHighlighted, setRegionHighlighted}}
-                statistic={mapStatistic}
-              ></MapVisualizer>
-            </div>
+            <MapVisualizer
+              {...{mapCode, mapView, mapViz}}
+              data={mapData}
+              {...{regionHighlighted, setRegionHighlighted}}
+              statistic={mapStatistic}
+            ></MapVisualizer>
           </Suspense>
         )}
       </div>
