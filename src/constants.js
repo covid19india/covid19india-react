@@ -45,6 +45,8 @@ export const COLORS = {
   tested: '#4b1eaa',
 };
 
+export const SPRING_CONFIG_NUMBERS = {clamp: true, precision: 1};
+
 export const TIMESERIES_CHART_TYPES = {
   total: 'Cumulative',
   delta: 'Daily',

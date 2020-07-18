@@ -6,7 +6,7 @@ import {fetcher} from '../utils/commonFunctions';
 import React, {useState, useRef, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 import {useLocation} from 'react-router-dom';
-import {useSessionStorage, useWindowSize} from 'react-use';
+import {useLocalStorage, useSessionStorage, useWindowSize} from 'react-use';
 
 const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
 const MapExplorer = lazy(() => import('./MapExplorer'));
@@ -25,7 +25,7 @@ function Home(props) {
     districtName: null,
   });
 
-  const [anchor, setAnchor] = useState(null);
+  const [anchor, setAnchor] = useLocalStorage('anchor', null);
   const [mapStatistic, setMapStatistic] = useSessionStorage(
     'mapStatistic',
     'active'

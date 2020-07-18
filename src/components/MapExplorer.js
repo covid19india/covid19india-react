@@ -5,6 +5,7 @@ import {
   MAP_TYPES,
   MAP_VIEWS,
   MAP_VIZS,
+  SPRING_CONFIG_NUMBERS,
   STATE_NAMES,
   UNKNOWN_DISTRICT_KEY,
   PRIMARY_STATISTICS,
@@ -20,6 +21,7 @@ import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -30,6 +32,7 @@ import React, {
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {animated, useSpring} from 'react-spring';
+import {useSwipeable} from 'react-swipeable';
 import {useWindowSize} from 'react-use';
 
 const MapVisualizer = lazy(() => import('./MapVisualizer'));
@@ -78,11 +81,6 @@ function MapExplorer({
     switch (option) {
       case MAP_VIZS.CHOROPLETH:
         setMapViz(MAP_VIZS.CHOROPLETH);
-        if (mapMeta.mapType === MAP_TYPES.COUNTRY)
-          setRegionHighlighted({
-            stateCode: regionHighlighted.stateCode,
-            districtName: null,
-          });
         return;
 
       case MAP_VIZS.BUBBLES:
@@ -93,6 +91,18 @@ function MapExplorer({
         return;
     }
   };
+
+  const handleDistrictClick = useCallback(() => {
+    const newMapView =
+      mapView === MAP_VIEWS.DISTRICTS ? MAP_VIEWS.STATES : MAP_VIEWS.DISTRICTS;
+    if (newMapView === MAP_VIEWS.STATES) {
+      setRegionHighlighted({
+        stateCode: regionHighlighted.stateCode,
+        districtName: null,
+      });
+    }
+    setMapView(newMapView);
+  }, [mapView, setRegionHighlighted, regionHighlighted.stateCode]);
 
   const ChoroplethIcon = useMemo(
     () => (
@@ -158,9 +168,21 @@ function MapExplorer({
 
   const spring = useSpring({
     total: getStatistic(hoveredRegion, 'total', mapStatistic),
-    config: {
-      tension: 250,
-      clamp: true,
+    config: {tension: 250, ...SPRING_CONFIG_NUMBERS},
+  });
+
+  const swipeHandlers = useSwipeable({
+    onSwipedRight: () => {
+      const currentIndex = PRIMARY_STATISTICS.indexOf(mapStatistic);
+      const toIndex =
+        currentIndex > 0 ? currentIndex - 1 : PRIMARY_STATISTICS.length - 1;
+      setMapStatistic(PRIMARY_STATISTICS[toIndex]);
+    },
+    onSwipedLeft: () => {
+      const currentIndex = PRIMARY_STATISTICS.indexOf(mapStatistic);
+      const toIndex =
+        currentIndex < PRIMARY_STATISTICS.length - 1 ? currentIndex + 1 : 0;
+      setMapStatistic(PRIMARY_STATISTICS[toIndex]);
     },
   });
 
@@ -220,12 +242,7 @@ function MapExplorer({
                   className={classnames('boundary fadeInUp', {
                     'is-highlighted': mapView === MAP_VIEWS.DISTRICTS,
                   })}
-                  onClick={setMapView.bind(
-                    this,
-                    mapView === MAP_VIEWS.DISTRICTS
-                      ? MAP_VIEWS.STATES
-                      : MAP_VIEWS.DISTRICTS
-                  )}
+                  onClick={handleDistrictClick.bind(this)}
                   style={trail[3]}
                 >
                   <OrganizationIcon />
@@ -264,7 +281,12 @@ function MapExplorer({
         </div>
       </div>
 
-      <div ref={mapExplorerRef} className="fadeInUp" style={trail[3]}>
+      <div
+        ref={mapExplorerRef}
+        className="fadeInUp"
+        style={trail[3]}
+        {...swipeHandlers}
+      >
         {mapStatistic && (
           <Suspense
             fallback={

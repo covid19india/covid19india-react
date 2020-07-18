@@ -257,14 +257,14 @@ h6 {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin-left: 10rem;
-  margin-right: 5rem;
+  margin-left: 8rem;
+  margin-right: 3rem;
 
   .home-left,
   .home-right {
     display: flex;
     flex-direction: column;
-    width: 30rem;
+    width: 32rem;
   }
 
   .home-left {
@@ -397,14 +397,14 @@ h6 {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin-left: 10rem;
-  margin-right: 5rem;
+  margin-left: 8rem;
+  margin-right: 3rem;
 
   .state-left,
   .state-right {
     display: flex;
     flex-direction: column;
-    width: 30rem;
+    width: 32rem;
   }
 
   .state-left {
@@ -420,36 +420,6 @@ h6 {
 
   a {
     text-decoration: none;
-  }
-
-  .to-essentials {
-    align-self: center;
-    background: $gray-light;
-    border-radius: 5px;
-    display: none;
-    flex-direction: row;
-    justify-content: center;
-    padding: 0.5rem;
-    transition: all 0.2s ease-in-out;
-
-    &:hover {
-      background: $gray-hover;
-    }
-
-    h2 {
-      color: $gray-mid;
-      font-weight: 600;
-    }
-
-    svg {
-      color: $gray-mid;
-      margin-bottom: 2px;
-      margin-left: 1rem;
-    }
-
-    & > * {
-      align-self: center;
-    }
   }
 
   .district-bar {
@@ -755,91 +725,6 @@ h6 {
     top: 0;
     width: 100vw;
     z-index: 10;
-  }
-}
-
-.Essentials {
-  align-self: center;
-  display: flex;
-  flex-direction: column;
-  margin-top: 2rem;
-  width: 30rem;
-
-  img,
-  .alert {
-    align-self: center;
-  }
-
-  .alert {
-    margin: 0;
-    margin-top: 2rem;
-    width: 90% !important;
-    word-wrap: break-word;
-
-    .alert-right {
-      text-align: left;
-    }
-
-    svg {
-      margin: 0;
-    }
-  }
-
-  button {
-    align-self: center;
-    background: $yellow-light;
-    color: $orange;
-    display: flex;
-    flex-direction: row;
-    font-weight: 400;
-    justify-content: center;
-    margin: 0;
-    padding: 0.75rem;
-    text-transform: unset;
-
-    * {
-      align-self: center;
-    }
-
-    svg {
-      margin-left: 0.5rem;
-      padding-right: 0;
-    }
-
-    &:hover {
-      background: $yellow-hover;
-    }
-  }
-
-  .address {
-    align-self: center;
-    color: $gray;
-    display: flex;
-    flex-direction: row;
-    padding: 1rem;
-
-    h3 {
-      margin-right: 1rem;
-    }
-
-    svg {
-      cursor: pointer;
-      margin-bottom: 2px;
-      stroke: $gray-mid;
-      stroke-width: 3px;
-    }
-
-    * {
-      align-self: center;
-    }
-  }
-
-  .essential-result {
-    background: $gray-light;
-    border: transparent !important;
-    border-radius: 5px;
-    cursor: default !important;
-    margin-bottom: 1rem;
   }
 }
 
@@ -1402,7 +1287,7 @@ h6 {
 .Timeline {
   cursor: pointer;
   height: 3rem;
-  width: 30rem;
+  width: 32rem;
   will-change: transform;
 
   .day {
@@ -1812,7 +1697,7 @@ abbr {
   font-size: 12px;
   margin-bottom: 2.5rem;
   overflow-x: auto;
-  width: 28rem;
+  width: calc(100% - 2rem);
 
   .state-meta-top {
     align-items: center;
@@ -1824,7 +1709,7 @@ abbr {
     margin-bottom: 1 + 0.25rem;
     margin-top: 1rem;
     position: sticky;
-    width: 28rem;
+    width: 30rem;
 
     svg {
       margin-right: 0.5rem;
@@ -1861,18 +1746,17 @@ abbr {
   }
 
   .state-meta-bottom {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding-bottom: 2rem;
-    padding-top: 1rem;
+    left: 0;
+    padding-bottom: 1.5rem;
+    position: sticky;
+    width: 30rem;
 
     .disclaimer {
       background: $brick-light;
       border-radius: 5px;
       color: $brick;
-      padding: 1rem .25rem;
+      margin: auto;
+      padding: 1rem 0.25rem;
       text-align: center;
       width: 50%;
 
@@ -1883,8 +1767,7 @@ abbr {
   }
 
   .table-wrapper {
-    display: inline-block;
-    min-width: 100%;
+    width: 35rem;
   }
 
   .row {
@@ -1936,7 +1819,7 @@ abbr {
       position: relative;
 
       &:not(:first-child) {
-        flex-basis: 3.5rem;
+        flex-basis: 4rem;
         flex-grow: 1;
         flex-shrink: 0;
         justify-content: flex-end;
@@ -1944,7 +1827,7 @@ abbr {
 
       &:first-child {
         background: $gray-hover-darker-opaque;
-        flex-basis: 7.5rem;
+        flex-basis: 7rem;
         flex-grow: 0;
         flex-shrink: 0;
         justify-content: space-between;
@@ -2052,8 +1935,7 @@ abbr {
       .district-name {
         font-size: 14px;
         font-weight: 600;
-        margin-right: 0.25rem;
-        width: 6rem;
+        max-width: 7rem;
         word-wrap: break-word;
       }
     }
@@ -2063,12 +1945,16 @@ abbr {
     color: $gray-mid;
     left: 0;
     margin-bottom: 1 + 0.25rem;
-    margin-left: auto;
-    margin-right: auto;
     margin-top: 1rem;
     position: sticky;
     text-align: center;
-    width: 10rem;
+    width: 30rem;
+
+    p {
+      margin-left: auto;
+      margin-right: auto;
+      width: 10rem;
+    }
 
     .fold {
       cursor: pointer;
@@ -2081,18 +1967,6 @@ abbr {
 
   .intersection {
     display: block;
-  }
-
-  @media (min-width: 769px) {
-    .cell {
-      &:first-child {
-        flex-basis: 3rem;
-      }
-
-      &:not(:first-child) {
-        flex-basis: 4rem;
-      }
-    }
   }
 }
 
@@ -2128,7 +2002,7 @@ abbr {
 .MapExplorer {
   align-self: center;
   position: relative;
-  width: 30rem;
+  width: 100%;
 
   &.stickied {
     position: sticky !important;
@@ -2663,7 +2537,7 @@ abbr {
   display: flex;
   flex-direction: column;
   margin-top: 3rem;
-  width: 30rem;
+  width: calc(100% - 2rem);
 
   &.stickied {
     position: sticky !important;
@@ -3008,7 +2882,7 @@ input {
     border-radius: 5px;
     display: flex;
     position: relative;
-    width: 30rem;
+    width: 100%;
 
     svg {
       width: 100%;
@@ -3162,7 +3036,7 @@ input {
   align-self: center;
   margin-bottom: 1rem;
   margin-top: 1rem;
-  width: 30rem;
+  width: 32rem;
 
   a {
     background: $blue-light;
@@ -3214,10 +3088,10 @@ footer {
   }
 
   .github {
-    color: #00000050;
+    color: $gray-mid;
 
     &:hover {
-      color: #000;
+      color: $gray;
     }
   }
 
@@ -3255,7 +3129,7 @@ footer {
   & > * {
     align-self: center;
     margin-bottom: 1.5rem;
-    width: 30rem;
+    width: 32rem;
   }
 
   & > *:first-child {
@@ -3341,7 +3215,7 @@ footer {
 .updates-header {
   align-self: center;
   color: $gray-dark;
-  width: 30rem;
+  width: 100%;
 
   h2 {
     color: var(--primary-color);
@@ -3606,7 +3480,7 @@ footer {
   display: flex;
   flex-direction: column;
   margin-left: 5rem;
-  width: 30rem;
+  width: 32rem;
 
   h3 {
     align-self: center;
@@ -3794,7 +3668,9 @@ footer {
     width: calc(100% - 2rem);
   }
 
-  .state-meta {
+  .state-meta-top,
+  .state-meta-bottom,
+  .spacer {
     width: calc(100vw - 2rem) !important;
   }
 
@@ -4035,12 +3911,6 @@ footer {
 
     .meta-item {
       min-width: 1rem;
-    }
-  }
-
-  .Essentials {
-    .alert {
-      width: 15rem !important;
     }
   }
 
