@@ -3186,10 +3186,10 @@ footer {
   }
 
   .github {
-    color: #00000050;
+    color: $gray-mid;
 
     &:hover {
-      color: #000;
+      color: $gray;
     }
   }
 
@@ -4331,16 +4331,6 @@ footer {
         &::after {
           background: $gray !important;
         }
-      }
-    }
-  }
-
-  .button {
-    &.github {
-      color: #bdbdbd !important;
-
-      svg {
-        stroke: #bdbdbd !important;
       }
     }
   }
