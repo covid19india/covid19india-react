@@ -172,13 +172,13 @@ function MapExplorer({
   });
 
   const swipeHandlers = useSwipeable({
-    onSwipedRight: () => {
+    onSwipedLeft: () => {
       const currentIndex = PRIMARY_STATISTICS.indexOf(mapStatistic);
       const toIndex =
         currentIndex > 0 ? currentIndex - 1 : PRIMARY_STATISTICS.length - 1;
       setMapStatistic(PRIMARY_STATISTICS[toIndex]);
     },
-    onSwipedLeft: () => {
+    onSwipedRight: () => {
       const currentIndex = PRIMARY_STATISTICS.indexOf(mapStatistic);
       const toIndex =
         currentIndex < PRIMARY_STATISTICS.length - 1 ? currentIndex + 1 : 0;
