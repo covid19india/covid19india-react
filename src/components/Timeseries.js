@@ -26,6 +26,9 @@ import equal from 'fast-deep-equal';
 import React, {useCallback, useEffect, useRef, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
+// Chart margins
+const margin = {top: 15, right: 35, bottom: 25, left: 25};
+
 function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   const {t} = useTranslation();
   const refs = useRef([]);
@@ -39,17 +42,28 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
     setHighlightedDate(dates[dates.length - 1]);
   }, [dates]);
 
+  const getBarWidth = useCallback(() => {
+    const T = dates.length;
+    // Dimensions
+    const {width} = dimensions || wrapperRef.current.getBoundingClientRect();
+    // Chart extremes
+    const chartRight = width - margin.right;
+    // Bar widths
+    const axisWidth = chartRight - margin.left;
+    return Math.min(4, axisWidth / (1.25 * T));
+  }, [dates.length, dimensions]);
+
   useEffect(() => {
     const T = dates.length;
-
+    // Dimensions
     const {width, height} =
       dimensions || wrapperRef.current.getBoundingClientRect();
-
-    // Margins
-    const margin = {top: 15, right: 35, bottom: 25, left: 25};
+    // Chart extremes
     const chartRight = width - margin.right;
     const chartBottom = height - margin.bottom;
+    const barWidth = getBarWidth();
 
+    // Buffer space along y-axis
     const yBufferTop = 1.2;
     const yBufferBottom = 1.1;
 
@@ -213,11 +227,11 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
             .append('circle')
             .attr('fill', color)
             .attr('stroke', color)
-            .attr('r', 2)
             .attr('cy', chartBottom)
             .attr('cx', (date) => xScale(parseIndiaDate(date)))
         )
         .transition(t)
+        .attr('r', barWidth / 2)
         .attr('cx', (date) => xScale(parseIndiaDate(date)))
         .attr('cy', (date) =>
           yScale(getStatistic(timeseries[date], chartType, statistic))
@@ -271,38 +285,6 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
                   return interpolatePath(previous, current);
                 })
           );
-
-        svg
-          .selectAll('.trend')
-          .data(T ? [dates] : [])
-          .join(
-            (enter) =>
-              enter
-                .append('path')
-                .attr('class', 'trend')
-                .attr('fill', 'none')
-                .attr('stroke', color + '50')
-                .attr('stroke-width', 4)
-                .attr('d', linePath)
-                .attr('stroke-dasharray', function () {
-                  return (pathLength = this.getTotalLength());
-                })
-                .call((enter) =>
-                  enter
-                    .attr('stroke-dashoffset', pathLength)
-                    .transition(t)
-                    .attr('stroke-dashoffset', 0)
-                ),
-            (update) =>
-              update
-                .attr('stroke-dasharray', null)
-                .transition(t)
-                .attrTween('d', function (date) {
-                  const previous = select(this).attr('d');
-                  const current = linePath(date);
-                  return interpolatePath(previous, current);
-                })
-          );
       } else {
         /* DAILY TRENDS */
         svg.selectAll('.trend').remove();
@@ -314,12 +296,14 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
             enter
               .append('line')
               .attr('class', 'stem')
+              .attr('stroke-width', barWidth)
               .attr('x1', (date) => xScale(parseIndiaDate(date)))
               .attr('y1', chartBottom)
               .attr('x2', (date) => xScale(parseIndiaDate(date)))
               .attr('y2', chartBottom)
           )
           .transition(t)
+          .attr('stroke-width', barWidth)
           .attr('x1', (date) => xScale(parseIndiaDate(date)))
           .attr('y1', yScale(0))
           .attr('x2', (date) => xScale(parseIndiaDate(date)))
@@ -335,16 +319,19 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
         .on('mouseout', mouseout)
         .on('touchend', mouseout);
     });
-  }, [chartType, dimensions, isUniform, isLog, timeseries, dates]);
+  }, [chartType, dimensions, getBarWidth, isUniform, isLog, timeseries, dates]);
 
   useEffect(() => {
+    const barWidth = getBarWidth();
     refs.current.forEach((ref) => {
       const svg = select(ref);
       svg
         .selectAll('circle')
-        .attr('r', (date) => (date === highlightedDate ? 4 : 2));
+        .attr('r', (date) =>
+          date === highlightedDate ? barWidth : barWidth / 2
+        );
     });
-  }, [highlightedDate]);
+  }, [highlightedDate, getBarWidth]);
 
   const getStatisticDelta = useCallback(
     (statistic) => {

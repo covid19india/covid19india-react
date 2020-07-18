@@ -214,7 +214,7 @@ function Row({
                 <div className={classnames('disclaimer')}>
                   <AlertIcon />
                   <span>
-                    {'District-wise data not available in state bulletin'}
+                    {t('District-wise data not available in state bulletin')}
                   </span>
                 </div>
               </div>

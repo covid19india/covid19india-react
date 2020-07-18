@@ -2,7 +2,7 @@ import TimeseriesLoader from './loaders/Timeseries';
 
 import {
   TIMESERIES_CHART_TYPES,
-  TIMESERIES_OPTIONS,
+  TIMESERIES_LOOKBACKS,
   STATE_NAMES,
 } from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
@@ -12,16 +12,9 @@ import {IssueOpenedIcon, PinIcon, ReplyIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import {formatISO, sub} from 'date-fns';
 import equal from 'fast-deep-equal';
-import React, {
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-  lazy,
-  Suspense,
-} from 'react';
+import React, {useCallback, useMemo, useRef, lazy, Suspense} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useLocalStorage} from 'react-use';
+import {useLocalStorage, useSessionStorage} from 'react-use';
 
 const Timeseries = lazy(() => import('./Timeseries'));
 
@@ -35,8 +28,9 @@ function TimeseriesExplorer({
   setAnchor,
 }) {
   const {t} = useTranslation();
-  const [timeseriesOption, setTimeseriesOption] = useState(
-    TIMESERIES_OPTIONS.MONTH
+  const [lookback, setLookback] = useSessionStorage(
+    'timeseriesLookback',
+    TIMESERIES_LOOKBACKS.MONTH
   );
   const [chartType, setChartType] = useLocalStorage('chartType', 'total');
   const [isUniform, setIsUniform] = useLocalStorage('isUniform', true);
@@ -105,25 +99,43 @@ function TimeseriesExplorer({
     ];
   }, [timeseries, stateCode]);
 
+  const dropdownRegions = useMemo(() => {
+    if (
+      regions.find(
+        (region) =>
+          region.stateCode === regionHighlighted.stateCode &&
+          region.districtName === regionHighlighted.districtName
+      )
+    )
+      return regions;
+    return [
+      ...regions,
+      {
+        stateCode: regionHighlighted.stateCode,
+        districtName: regionHighlighted.districtName,
+      },
+    ];
+  }, [regionHighlighted.stateCode, regionHighlighted.districtName, regions]);
+
   const dates = useMemo(() => {
     const today = timelineDate || getIndiaYesterdayISO();
     const pastDates = Object.keys(selectedTimeseries || {}).filter(
       (date) => date <= today
     );
 
-    if (timeseriesOption === TIMESERIES_OPTIONS.TWO_WEEKS) {
+    if (lookback === TIMESERIES_LOOKBACKS.TWO_WEEKS) {
       const cutOffDate = formatISO(sub(parseIndiaDate(today), {weeks: 2}), {
         representation: 'date',
       });
       return pastDates.filter((date) => date >= cutOffDate);
-    } else if (timeseriesOption === TIMESERIES_OPTIONS.MONTH) {
+    } else if (lookback === TIMESERIES_LOOKBACKS.MONTH) {
       const cutOffDate = formatISO(sub(parseIndiaDate(today), {months: 1}), {
         representation: 'date',
       });
       return pastDates.filter((date) => date >= cutOffDate);
     }
     return pastDates;
-  }, [selectedTimeseries, timelineDate, timeseriesOption]);
+  }, [selectedTimeseries, timelineDate, lookback]);
 
   const handleChange = useCallback(
     ({target}) => {
@@ -206,14 +218,14 @@ function TimeseriesExplorer({
         </div>
       </div>
 
-      {regions && (
+      {dropdownRegions && (
         <div className="state-selection">
           <div className="dropdown">
             <select
               value={JSON.stringify(selectedRegion)}
               onChange={handleChange}
             >
-              {regions
+              {dropdownRegions
                 .filter(
                   (region) =>
                     STATE_NAMES[region.stateCode] !== region.districtName
@@ -251,12 +263,12 @@ function TimeseriesExplorer({
       {!isVisible && <div style={{height: '50rem'}} />}
 
       <div className="pills">
-        {Object.values(TIMESERIES_OPTIONS).map((option) => (
+        {Object.values(TIMESERIES_LOOKBACKS).map((option) => (
           <button
             key={option}
             type="button"
-            className={classnames({selected: timeseriesOption === option})}
-            onClick={() => setTimeseriesOption(option)}
+            className={classnames({selected: lookback === option})}
+            onClick={() => setLookback(option)}
           >
             {t(option)}
           </button>

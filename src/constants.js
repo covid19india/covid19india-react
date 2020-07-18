@@ -52,7 +52,7 @@ export const TIMESERIES_CHART_TYPES = {
   delta: 'Daily',
 };
 
-export const TIMESERIES_OPTIONS = {
+export const TIMESERIES_LOOKBACKS = {
   BEGINNING: 'Beginning',
   MONTH: '1 Month',
   TWO_WEEKS: '2 Weeks',
