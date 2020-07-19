@@ -275,7 +275,6 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
               .filter(
                 (stateCode) =>
                   stateCode !== 'TT' &&
-                  states[stateCode].total?.confirmed &&
                   !(stateCode === UNASSIGNED_STATE_CODE && isPerMillion)
               )
               .sort((a, b) => sortingFunction(a, b))
