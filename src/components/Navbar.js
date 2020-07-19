@@ -125,7 +125,9 @@ function Expand({pages, setExpand, darkMode, windowSize}) {
             <Link
               to={page.pageLink}
               key={i}
-              onClick={setExpand.bind(this, false)}
+              {...(windowSize.width < 769 && {
+                onClick: setExpand.bind(this, false),
+              })}
             >
               <span
                 {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}
