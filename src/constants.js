@@ -50,6 +50,7 @@ export const SPRING_CONFIG_NUMBERS = {clamp: true, precision: 1};
 export const TIMESERIES_CHART_TYPES = {
   total: 'Cumulative',
   delta: 'Daily',
+  levitt: 'Levitt',
 };
 
 export const TIMESERIES_LOOKBACKS = {

@@ -189,7 +189,11 @@ function TimeseriesExplorer({
 
         <div className="scale-modes">
           <label className="main">{t('Scale Modes')}</label>
-          <div className="timeseries-mode">
+          <div
+            className={`timeseries-mode ${
+              chartType === 'levitt' ? 'disabled' : ''
+            }`}
+          >
             <label htmlFor="timeseries-mode">{t('Uniform')}</label>
             <input
               id="timeseries-mode"

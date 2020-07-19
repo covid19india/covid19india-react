@@ -33,6 +33,20 @@ export const getIndiaYesterdayISO = () => {
   return formatISO(subDays(getIndiaDate(), 1), {representation: 'date'});
 };
 
+export const getPreviousDate = (dateString) => {
+  const year = parseInt(dateString.slice(0, 4));
+  const month = parseInt(dateString.slice(5, 7));
+  const day = parseInt(dateString.slice(8, 10));
+
+  const d = new Date();
+  d.setFullYear(year, month, day);
+  d.setDate(d.getDate() - 1);
+  d.setMonth(d.getMonth() - 1);
+
+  const previousDateString = d.toISOString().split('T')[0];
+  return previousDateString;
+};
+
 export const formatLastUpdated = (unformattedDate) => {
   getLocale();
   return formatDistance(new Date(unformattedDate), new Date(), {
@@ -107,6 +121,7 @@ export const toTitleCase = (str) => {
 };
 
 export const getStatistic = (data, type, statistic, perMillion = false) => {
+  if (type !== 'delta' && type !== 'total') return false;
   let count;
   if (statistic === 'active') {
     const confirmed = data?.[type]?.confirmed || 0;
@@ -118,6 +133,38 @@ export const getStatistic = (data, type, statistic, perMillion = false) => {
     count = data?.[type]?.[statistic] || 0;
   }
   return perMillion ? (1e6 * count) / data?.meta?.population || 0 : count;
+};
+
+export const getLevitt = (todayData, yesterdayData, statistic) => {
+  const type = 'total';
+  const epsilon = 0.000000001;
+
+  let todayCount;
+  let yesterdayCount;
+  if (statistic === 'active') {
+    const todayConfirmed = todayData?.[type]?.confirmed || 0;
+    const todayDeceased = todayData?.[type]?.deceased || 0;
+    const todayRecovered = todayData?.[type]?.recovered || 0;
+    const todayMigrated = todayData?.[type]?.migrated || 0;
+    todayCount =
+      todayConfirmed - todayDeceased - todayRecovered - todayMigrated;
+
+    const yesterdayConfirmed = yesterdayData?.[type]?.confirmed || 0;
+    const yesterdayDeceased = yesterdayData?.[type]?.deceased || 0;
+    const yesterdayRecovered = yesterdayData?.[type]?.recovered || 0;
+    const yesterdayMigrated = yesterdayData?.[type]?.migrated || 0;
+    yesterdayCount =
+      yesterdayConfirmed -
+      yesterdayDeceased -
+      yesterdayRecovered -
+      yesterdayMigrated;
+  } else {
+    todayCount = todayData?.[type]?.[statistic] || 0;
+    yesterdayCount = yesterdayData?.[type]?.[statistic] || 0;
+  }
+
+  const levitt = (todayCount + epsilon) / (yesterdayCount + epsilon);
+  return levitt;
 };
 
 export const fetcher = (url) => {

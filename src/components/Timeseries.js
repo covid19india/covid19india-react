@@ -10,6 +10,8 @@ import {
   formatDate,
   getStatistic,
   parseIndiaDate,
+  getPreviousDate,
+  getLevitt,
 } from '../utils/commonFunctions';
 
 import classnames from 'classnames';
@@ -115,6 +117,11 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       .nice(4)
       .range([chartBottom, margin.top]);
 
+    const yScaleUniformLinearFine = scaleLinear()
+      .clamp(true)
+      .domain([0.98, 1.3])
+      .range([chartBottom, margin.top]);
+
     const yScaleUniformLog = scaleLog()
       .clamp(true)
       .domain([
@@ -125,6 +132,8 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       .range([chartBottom, margin.top]);
 
     const generateYScale = (statistic) => {
+      if (chartType === 'levitt') return yScaleUniformLinearFine;
+
       if (isUniform && chartType === 'total' && isLog && statistic !== 'tested')
         return yScaleUniformLog;
 
@@ -218,26 +227,28 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
         .transition(t)
         .call(yAxis, yScale);
 
-      /* Path dots */
-      svg
-        .selectAll('circle')
-        .data(dates, (date) => date)
-        .join((enter) =>
-          enter
-            .append('circle')
-            .attr('fill', color)
-            .attr('stroke', color)
-            .attr('cy', chartBottom)
-            .attr('cx', (date) => xScale(parseIndiaDate(date)))
-        )
-        .transition(t)
-        .attr('r', barWidth / 2)
-        .attr('cx', (date) => xScale(parseIndiaDate(date)))
-        .attr('cy', (date) =>
-          yScale(getStatistic(timeseries[date], chartType, statistic))
-        );
-
       if (chartType === 'total') {
+        /* CUMULATIVE TRENDS */
+
+        /* Path dots */
+        svg
+          .selectAll('circle')
+          .data(dates, (date) => date)
+          .join((enter) =>
+            enter
+              .append('circle')
+              .attr('fill', color)
+              .attr('stroke', color)
+              .attr('cy', chartBottom)
+              .attr('cx', (date) => xScale(parseIndiaDate(date)))
+          )
+          .transition(t)
+          .attr('r', barWidth / 2)
+          .attr('cx', (date) => xScale(parseIndiaDate(date)))
+          .attr('cy', (date) =>
+            yScale(getStatistic(timeseries[date], chartType, statistic))
+          );
+
         svg
           .selectAll('.stem')
           .transition(t)
@@ -285,8 +296,28 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
                   return interpolatePath(previous, current);
                 })
           );
-      } else {
+      } else if (chartType === 'delta') {
         /* DAILY TRENDS */
+
+        /* Path dots */
+        svg
+          .selectAll('circle')
+          .data(dates, (date) => date)
+          .join((enter) =>
+            enter
+              .append('circle')
+              .attr('fill', color)
+              .attr('stroke', color)
+              .attr('cy', chartBottom)
+              .attr('cx', (date) => xScale(parseIndiaDate(date)))
+          )
+          .transition(t)
+          .attr('r', barWidth / 2)
+          .attr('cx', (date) => xScale(parseIndiaDate(date)))
+          .attr('cy', (date) =>
+            yScale(getStatistic(timeseries[date], chartType, statistic))
+          );
+
         svg.selectAll('.trend').remove();
 
         svg
@@ -309,6 +340,87 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
           .attr('x2', (date) => xScale(parseIndiaDate(date)))
           .attr('y2', (date) =>
             yScale(getStatistic(timeseries[date], chartType, statistic))
+          );
+      } else if (chartType === 'levitt') {
+        /* LEVITT TRENDS */
+
+        /* Path dots */
+        svg
+          .selectAll('circle')
+          .data(dates, (date) => date)
+          .join((enter) =>
+            enter
+              .append('circle')
+              .attr('fill', color)
+              .attr('stroke', color)
+              .attr('cy', chartBottom)
+              .attr('cx', (date) => xScale(parseIndiaDate(date)))
+          )
+          .transition(t)
+          .attr('r', barWidth / 2)
+          .attr('cx', (date) => xScale(parseIndiaDate(date)))
+          .attr('cy', (date) =>
+            yScale(
+              getLevitt(
+                timeseries[date],
+                timeseries[getPreviousDate(date)],
+                statistic
+              )
+            )
+          );
+
+        svg
+          .selectAll('.stem')
+          .transition(t)
+          .attr('y1', yScale(0))
+          .attr('y2', yScale(0))
+          .remove();
+
+        const linePath = line()
+          .curve(curveMonotoneX)
+          .x((date) => xScale(parseIndiaDate(date)))
+          .y((date) =>
+            yScale(
+              getLevitt(
+                timeseries[date],
+                timeseries[getPreviousDate(date)],
+                statistic
+              )
+            )
+          );
+
+        let pathLength;
+
+        svg
+          .selectAll('.trend')
+          .data(T ? [dates] : [])
+          .join(
+            (enter) =>
+              enter
+                .append('path')
+                .attr('class', 'trend')
+                .attr('fill', 'none')
+                .attr('stroke', color + '50')
+                .attr('stroke-width', 4)
+                .attr('d', linePath)
+                .attr('stroke-dasharray', function () {
+                  return (pathLength = this.getTotalLength());
+                })
+                .call((enter) =>
+                  enter
+                    .attr('stroke-dashoffset', pathLength)
+                    .transition(t)
+                    .attr('stroke-dashoffset', 0)
+                ),
+            (update) =>
+              update
+                .attr('stroke-dasharray', null)
+                .transition(t)
+                .attrTween('d', function (date) {
+                  const previous = select(this).attr('d');
+                  const current = linePath(date);
+                  return interpolatePath(previous, current);
+                })
           );
       }
 
@@ -372,7 +484,13 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
     <React.Fragment>
       <div className="Timeseries">
         {TIMESERIES_STATISTICS.map((statistic, index) => {
-          const delta = getStatisticDelta(statistic, index);
+          let delta;
+          if (chartType === 'levitt') {
+            // delta = getLevitt(timeseries?.[highlightedDate], timeseries?.[getPreviousDate(highlightedDate)], statistic) - getLevitt(timeseries?.[getPreviousDate(highlightedDate)], timeseries?.[getPreviousDate(getPreviousDate(highlightedDate?))], statistic);
+            delta = ' ';
+          } else {
+            delta = getStatisticDelta(statistic, index);
+          }
           return (
             <div
               key={statistic}
@@ -393,10 +511,17 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
                           timeseries?.[highlightedDate],
                           chartType,
                           statistic
-                        )
+                        ) ||
+                          getLevitt(
+                            timeseries?.[highlightedDate],
+                            timeseries?.[getPreviousDate(highlightedDate)],
+                            statistic
+                          )
                       )}
                     </h2>
-                    <h6>{`${delta >= 0 ? '+' : ''}${formatNumber(delta)}`}</h6>
+                    <h6>{`${delta > 0 ? '+' : ''}${
+                      chartType !== 'levitt' ? formatNumber(delta) : ''
+                    }`}</h6>
                   </div>
                 </div>
               )}
