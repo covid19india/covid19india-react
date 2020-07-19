@@ -176,17 +176,13 @@ h6 {
   }
 
   .navbar-right {
-    color: $gray-mid;
+    color: $gray;
     cursor: pointer;
     font-size: 12px;
     font-weight: 600;
     padding: 1.5rem;
     text-align: center;
     width: 3rem;
-
-    &:hover {
-      color: $gray;
-    }
   }
 
   .language-toggle {
@@ -3598,7 +3594,7 @@ footer {
       padding-bottom: 0;
       padding-top: 0;
 
-      & > span {
+      span {
         display: flex;
         flex-direction: row;
         height: 1.5rem;
@@ -3606,8 +3602,8 @@ footer {
         margin-bottom: 1.5rem;
         margin-top: 1.5rem;
 
-        svg {
-          stroke: $gray;
+        &:hover {
+          color: $gray-mid;
         }
       }
     }
@@ -3866,7 +3862,7 @@ footer {
     }
 
     .navbar-right {
-      & > span {
+      span {
         display: none;
 
         &:first-child {
