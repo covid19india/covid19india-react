@@ -18,7 +18,7 @@ const Actions = ({setDate, dates}) => {
     'https://api.covid19india.org/updatelog/log.json',
     fetcher,
     {
-      revalidateOnFocus: false,
+      revalidateOnFocus: true,
     }
   );
 
