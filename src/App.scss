@@ -3064,6 +3064,14 @@ footer {
     padding: .25rem;
   }
 
+  .telegram {
+    color: $blue;
+
+    &:hover {
+      color: $purple;
+    }
+  }
+
   .github {
     color: $gray-mid;
 

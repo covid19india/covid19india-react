@@ -1,5 +1,5 @@
 import React from 'react';
-import {Twitter, GitHub, Database, Mail} from 'react-feather';
+import {Twitter, GitHub, Database, Mail, Send} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 
 function Footer(props) {
@@ -20,6 +20,14 @@ function Footer(props) {
       <h5>{t('We stand with everyone fighting on the frontlines')}</h5>
 
       <div className="links">
+        <a
+          href="https://t.me/covid19indiaorg"
+          className="telegram"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Send />
+        </a>
         <a
           href="https://github.com/covid19india/covid19india-react"
           className="github"
