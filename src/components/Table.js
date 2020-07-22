@@ -234,7 +234,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
               </div>
             </div>
 
-            <h5 className="text">
+            <h5 className="text" title="About the site.">
               {t('Compiled from State Govt. numbers')},{' '}
               <Link to="/about">{t('know more')}!</Link>
             </h5>

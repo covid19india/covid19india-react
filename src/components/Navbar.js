@@ -49,6 +49,7 @@ function Navbar({
   return (
     <animated.div className="Navbar" style={spring}>
       <div
+        title="Back to Home"
         className="navbar-left"
         onClick={setShowLanguageSwitcher.bind(this, !showLanguageSwitcher)}
       >
@@ -74,22 +75,22 @@ function Navbar({
 
         {windowSize.width > 769 && (
           <React.Fragment>
-            <Link to="/">
+            <Link to="/" title="Home">
               <span>
                 <Icon.Home {...activeNavIcon('/')} />
               </span>
             </Link>
-            <Link to="/blog">
+            <Link to="/blog" title="Blog">
               <span>
                 <Icon.Book {...activeNavIcon('/blog')} />
               </span>
             </Link>
-            <Link to="/about">
+            <Link to="/about" title="About">
               <span>
                 <Icon.HelpCircle {...activeNavIcon('/about')} />
               </span>
             </Link>
-            <span>
+            <span title="Dark/Light Mode">
               <SunMoon {...{darkMode}} />
             </span>
           </React.Fragment>

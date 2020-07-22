@@ -108,7 +108,11 @@ const ActionsPanel = ({
         )} IST`}</h5>
 
         {!showUpdates && (
-          <div className="bell-icon fadeInUp" style={trail[1]}>
+          <div
+            className="bell-icon fadeInUp"
+            title="Show the recent updated notifications."
+            style={trail[1]}
+          >
             {Bell}
             {newUpdate && <div className="indicator"></div>}
           </div>
@@ -117,6 +121,7 @@ const ActionsPanel = ({
         {showUpdates && BellOff}
         <div
           className="timeline-icon fadeInUp"
+          title="Show the recent Timeline."
           onClick={handleClick}
           style={trail[2]}
         >

@@ -161,6 +161,7 @@ function TimeseriesExplorer({
     >
       <div className="timeseries-header">
         <div
+          title="Hepls you to toggle with/without maps."
           className={classnames('anchor', {
             stickied: anchor === 'timeseries',
           })}
@@ -244,7 +245,11 @@ function TimeseriesExplorer({
                 })}
             </select>
           </div>
-          <div className="reset-icon" onClick={resetDropdown}>
+          <div
+            className="reset-icon"
+            title="Reset back."
+            onClick={resetDropdown}
+          >
             <ReplyIcon />
           </div>
         </div>

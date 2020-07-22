@@ -22,6 +22,7 @@ function Footer(props) {
       <div className="links">
         <a
           href="https://t.me/covid19indiaorg"
+          title="Telegram"
           className="telegram"
           target="_blank"
           rel="noopener noreferrer"
@@ -30,6 +31,7 @@ function Footer(props) {
         </a>
         <a
           href="https://github.com/covid19india/covid19india-react"
+          title="GitHub"
           className="github"
           target="_blank"
           rel="noopener noreferrer"
@@ -40,6 +42,7 @@ function Footer(props) {
         <a
           className="api"
           href="https://api.covid19india.org"
+          title="COVID19-India API"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -48,6 +51,7 @@ function Footer(props) {
 
         <a
           href="https://twitter.com/covid19indiaorg"
+          title="Twitter"
           target="_blank"
           rel="noopener noreferrer"
           className="twitter"
@@ -57,6 +61,7 @@ function Footer(props) {
 
         <a
           href="mailto:hello@covid19india.org"
+          title="Mail"
           className="mail"
           target="_blank"
           rel="noopener noreferrer"
