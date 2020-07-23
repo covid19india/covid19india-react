@@ -2,7 +2,7 @@ import React from 'react';
 import {Twitter, GitHub, Database, Mail, Send} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 
-function Footer(props) {
+function Footer() {
   const {t} = useTranslation();
 
   return (

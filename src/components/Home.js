@@ -20,7 +20,7 @@ const Level = lazy(() => import('./Level'));
 const MapSwitcher = lazy(() => import('./MapSwitcher'));
 const StateHeader = lazy(() => import('./StateHeader'));
 
-function Home(props) {
+function Home() {
   const [regionHighlighted, setRegionHighlighted] = useState({
     stateCode: 'TT',
     districtName: null,
