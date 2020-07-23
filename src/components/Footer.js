@@ -21,14 +21,6 @@ function Footer(props) {
 
       <div className="links">
         <a
-          href="https://t.me/covid19indiaorg"
-          className="telegram"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Send />
-        </a>
-        <a
           href="https://github.com/covid19india/covid19india-react"
           className="github"
           target="_blank"
@@ -44,6 +36,15 @@ function Footer(props) {
           rel="noopener noreferrer"
         >
           <Database />
+        </a>
+
+        <a
+          href="https://t.me/covid19indiaorg"
+          className="telegram"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Send />
         </a>
 
         <a
