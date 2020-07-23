@@ -3216,6 +3216,14 @@ footer {
   min-height: 22rem !important;
   width: 100%;
 
+  .telegram {
+    color: $blue;
+
+    &:hover {
+      color: $purple;
+    }
+  }
+
   .update {
     background: $gray-light;
     border-radius: 5px;
