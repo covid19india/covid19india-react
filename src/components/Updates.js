@@ -2,6 +2,7 @@ import {capitalize} from '../utils/commonFunctions';
 
 import {formatDistance, format} from 'date-fns';
 import React, {useLayoutEffect} from 'react';
+import {Send} from 'react-feather';
 
 const newDate = new Date();
 let currentDate = newDate;
@@ -65,6 +66,17 @@ function Updates({updates}) {
             </React.Fragment>
           );
         })}
+      <div className="updates-header">
+        <a
+          href="https://t.me/covid19indiaorg_updates"
+          target="_blank"
+          className="telegram"
+          rel="noopener noreferrer"
+        >
+          <h4>Join Instant Updates Channel </h4>
+          <Send />
+        </a>
+      </div>
     </div>
   );
 }
