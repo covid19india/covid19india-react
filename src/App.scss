@@ -3329,9 +3329,7 @@ footer {
   .district-bar-left {
     display: flex;
     flex-direction: column;
-    flex-grow: 15rem;
-    flex-shrink: 0;
-    margin-right: 1rem;
+    flex-grow: 1;
   }
 
   .district-bar-right {
@@ -3383,7 +3381,7 @@ footer {
       flex-direction: row;
       height: 2.5rem;
       justify-content: flex-start;
-      margin-right: 1rem;
+      margin-right: 0.5rem;
 
       h2,
       h5 {
