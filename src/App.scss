@@ -249,18 +249,30 @@ h6 {
     display: flex;
     flex-direction: column;
     width: 32rem;
+
+    &.expanded {
+      width: 69rem;
+    }
   }
 
   .home-left {
     margin-left: 2.5rem;
     margin-right: 2.5rem;
     min-height: 60rem;
+
+    &.expanded {
+      margin-bottom: 2.5rem;
+    }
   }
 
   .home-right {
     margin-left: 2.5rem;
     margin-right: 2.5rem;
     min-height: 10rem;
+
+    &.expanded {
+      flex-direction: row;
+    }
   }
 
   .header {
@@ -1547,13 +1559,17 @@ abbr {
     }
   }
 
-  .scroll-right-helper {
+  .table-expand-icon {
     color: $gray-mid;
     display: flex;
     flex: 1;
     flex-direction: row;
-    font-size: 12px;
     justify-content: flex-end;
+
+    svg {
+      cursor: pointer;
+      margin-bottom: 0.25rem;
+    }
   }
 
   @media (min-width: 769px) {
@@ -1751,7 +1767,11 @@ abbr {
   }
 
   .table-wrapper {
-    width: 35rem;
+    width: 32rem;
+
+    &.expanded {
+      width: 67rem;
+    }
   }
 
   .row {
@@ -1983,8 +2003,16 @@ abbr {
   }
 }
 
+.MapContainer {
+  &.expanded {
+    margin-right: 2.5rem;
+    width: 50%;
+  }
+}
+
 .MapExplorer {
   align-self: center;
+  margin-bottom: 3rem;
   position: relative;
   width: 100%;
 
@@ -2520,8 +2548,12 @@ abbr {
   align-self: center;
   display: flex;
   flex-direction: column;
-  margin-top: 3rem;
   width: calc(100% - 2rem);
+
+  &.expanded {
+    margin-left: 2.5rem;
+    width: calc(50% - 2rem);
+  }
 
   &.stickied {
     position: sticky !important;

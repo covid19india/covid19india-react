@@ -14,11 +14,13 @@ import {
   FilterIcon,
   OrganizationIcon,
   QuestionIcon,
+  ScreenFullIcon,
+  ScreenNormalIcon,
 } from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React, {useCallback, useEffect, useState, lazy} from 'react';
+import React, {useCallback, useEffect, useMemo, useState, lazy} from 'react';
 import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
@@ -29,7 +31,13 @@ import worker from 'workerize-loader!../workers/getDistricts';
 
 const Row = lazy(() => import('./Row'));
 
-function Table({data: states, regionHighlighted, setRegionHighlighted}) {
+function Table({
+  data: states,
+  regionHighlighted,
+  setRegionHighlighted,
+  expandTable,
+  setExpandTable,
+}) {
   const {t} = useTranslation();
   const [sortData, setSortData] = useSessionStorage('sortData', {
     sortColumn: 'confirmed',
@@ -125,6 +133,14 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
     leave: TABLE_FADE_OUT,
   });
 
+  const tableIcon = useMemo(() => {
+    return expandTable ? (
+      <ScreenNormalIcon size={16} />
+    ) : (
+      <ScreenFullIcon size={16} />
+    );
+  }, [expandTable]);
+
   return (
     <React.Fragment>
       <div className="table-top">
@@ -158,8 +174,12 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
           <QuestionIcon size={14} />
         </animated.div>
 
-        <animated.div className="scroll-right-helper" style={trail[1]}>
-          <span>{'Scroll Right \u2192'}</span>
+        <animated.div
+          className="table-expand-icon"
+          style={trail[1]}
+          onClick={setExpandTable.bind(this, !expandTable)}
+        >
+          {tableIcon}
         </animated.div>
       </div>
 
@@ -243,7 +263,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
       )}
 
       <div className="table fadeInUp">
-        <div className="table-wrapper">
+        <div className={classnames('table-wrapper', {expanded: expandTable})}>
           <div className="row heading">
             <div
               className="cell heading"
@@ -348,6 +368,8 @@ const isEqual = (prevProps, currProps) => {
       currProps.data['TT'].total.confirmed
     )
   ) {
+    return false;
+  } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
     return false;
   } else return true;
 };
