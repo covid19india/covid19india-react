@@ -3,6 +3,7 @@ import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
 import {fetcher} from '../utils/commonFunctions';
 
+import classnames from 'classnames';
 import React, {useState, useRef, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 import {useLocation} from 'react-router-dom';
@@ -51,6 +52,8 @@ function Home(props) {
     }
   );
 
+  const [expandTable, setExpandTable] = useState(true);
+
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement);
   const {width} = useWindowSize();
@@ -66,7 +69,7 @@ function Home(props) {
       </Helmet>
 
       <div className="Home">
-        <div className="home-left">
+        <div className={classnames('home-left', {expanded: expandTable})}>
           <div className="header">
             <Suspense fallback={<div />}>
               <Search />
@@ -104,25 +107,42 @@ function Home(props) {
 
           {data && (
             <Suspense fallback={<div />}>
-              <Table {...{data, regionHighlighted, setRegionHighlighted}} />
+              <Table
+                {...{
+                  data,
+                  regionHighlighted,
+                  setRegionHighlighted,
+                  expandTable,
+                  setExpandTable,
+                }}
+              />
             </Suspense>
           )}
         </div>
 
-        <div className="home-right" ref={homeRightElement}>
+        <div
+          className={classnames('home-right', {expanded: expandTable})}
+          ref={homeRightElement}
+        >
           {(isVisible || location.hash) && (
             <React.Fragment>
               {data && (
-                <Suspense fallback={<div style={{height: '50rem'}} />}>
-                  <StateHeader data={data['TT']} stateCode={'TT'} />
-                  <MapExplorer
-                    stateCode="TT"
-                    {...{data}}
-                    {...{mapStatistic, setMapStatistic}}
-                    {...{regionHighlighted, setRegionHighlighted}}
-                    {...{anchor, setAnchor}}
-                  />
-                </Suspense>
+                <div
+                  className={classnames('MapContainer', {
+                    expanded: expandTable,
+                  })}
+                >
+                  <Suspense fallback={<div style={{height: '50rem'}} />}>
+                    <StateHeader data={data['TT']} stateCode={'TT'} />
+                    <MapExplorer
+                      stateCode="TT"
+                      {...{data}}
+                      {...{mapStatistic, setMapStatistic}}
+                      {...{regionHighlighted, setRegionHighlighted}}
+                      {...{anchor, setAnchor}}
+                    />
+                  </Suspense>
+                </div>
               )}
 
               {timeseries && (
@@ -136,6 +156,7 @@ function Home(props) {
                       setRegionHighlighted,
                       anchor,
                       setAnchor,
+                      expandTable,
                     }}
                   />
                 </Suspense>

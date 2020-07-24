@@ -26,6 +26,7 @@ function TimeseriesExplorer({
   setRegionHighlighted,
   anchor,
   setAnchor,
+  expandTable,
 }) {
   const {t} = useTranslation();
   const [lookback, setLookback] = useSessionStorage(
@@ -153,9 +154,13 @@ function TimeseriesExplorer({
 
   return (
     <div
-      className={classnames('TimeseriesExplorer fadeInUp', {
-        stickied: anchor === 'timeseries',
-      })}
+      className={classnames(
+        'TimeseriesExplorer fadeInUp',
+        {
+          stickied: anchor === 'timeseries',
+        },
+        {expanded: expandTable}
+      )}
       style={{display: anchor === 'mapexplorer' ? 'none' : ''}}
       ref={explorerElement}
     >
@@ -309,6 +314,8 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(currProps.date, prevProps.date)) {
     return false;
   } else if (!equal(currProps.anchor, prevProps.anchor)) {
+    return false;
+  } else if (!equal(currProps.expandTable, prevProps.expandTable)) {
     return false;
   }
   return true;

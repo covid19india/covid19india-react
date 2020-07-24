@@ -21,7 +21,11 @@ export const PRIMARY_STATISTICS = [
   'deceased',
 ];
 
-export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
+export const TABLE_STATISTICS = [
+  ...PRIMARY_STATISTICS,
+  'tested',
+  ...PRIMARY_STATISTICS,
+];
 
 export const DISTRICT_TABLE_COUNT = 30;
 
