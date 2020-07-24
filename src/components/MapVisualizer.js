@@ -22,7 +22,7 @@ import classnames from 'classnames';
 import {max} from 'd3-array';
 import {json} from 'd3-fetch';
 import {geoIdentity, geoPath} from 'd3-geo';
-import {scaleSqrt, scaleSequential} from 'd3-scale';
+import {scaleSqrt, scaleSequentialSqrt} from 'd3-scale';
 // eslint-disable-next-line
 // import worker from 'workerize-loader!../workers/mapVisualizer';
 import {
@@ -108,7 +108,7 @@ function MapVisualizer({
         .clamp(true)
         .nice(3);
     } else {
-      return scaleSequential(
+      return scaleSequentialSqrt(
         [0, Math.max(1, statisticMax)],
         colorInterpolator[statistic]
       ).clamp(true);
