@@ -1,5 +1,5 @@
 import React from 'react';
-import {Twitter, GitHub, Database, Mail} from 'react-feather';
+import {Twitter, GitHub, Database, Mail, Send} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 
 function Footer(props) {
@@ -36,6 +36,15 @@ function Footer(props) {
           rel="noopener noreferrer"
         >
           <Database />
+        </a>
+
+        <a
+          href="https://t.me/covid19indiaorg"
+          className="telegram"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Send />
         </a>
 
         <a

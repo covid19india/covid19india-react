@@ -2,7 +2,7 @@
   "name": "covid19india",
   "version": "1.0.0",
   "private": true,
-  "homepage": "http://covid19india.github.io/",
+  "homepage": "https://www.covid19india.org/",
   "dependencies": {
     "@juggle/resize-observer": "^3.2.0",
     "@primer/octicons-v2-react": "0.0.0-53e900d",

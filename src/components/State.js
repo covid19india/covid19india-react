@@ -108,7 +108,7 @@ function State(props) {
     return styles;
   }, []);
 
-  const lookback = showAllDistricts ? 10 : 6;
+  const lookback = showAllDistricts ? (window.innerWidth >= 540 ? 10 : 8) : 6;
 
   return (
     <React.Fragment>
