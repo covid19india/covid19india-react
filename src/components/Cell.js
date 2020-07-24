@@ -12,8 +12,17 @@ const Cell = ({statistic, data, isPerMillion}) => {
   if (!total && statistic === 'tested') {
     total = NaN;
   }
+  if (statistic === 'tested date' && data.meta && data.meta.tested) {
+    total = data.meta.tested.last_updated;
+  }
+  if (statistic === 'population' && data.meta) {
+    total = data.meta.population;
+  }
   const delta = getStatistic(data, 'delta', statistic, isPerMillion);
 
+  if (!total) {
+    total = '-';
+  }
   const spring = useSpring({
     total: total,
     delta: delta,
@@ -44,10 +53,14 @@ const Cell = ({statistic, data, isPerMillion}) => {
 
       <animated.div className="total">
         {spring.total.interpolate((total) =>
-          formatNumber(
-            Math.floor(total),
-            statistic === 'tested' ? 'short' : null
-          )
+          statistic === 'tested date'
+            ? total
+            : formatNumber(
+                Math.floor(total),
+                (statistic === 'tested') | (statistic === 'population')
+                  ? 'short'
+                  : null
+              )
         )}
       </animated.div>
     </div>
