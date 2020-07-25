@@ -52,7 +52,7 @@ function Home(props) {
     }
   );
 
-  const [expandTable, setExpandTable] = useState(true);
+  const [expandTable, setExpandTable] = useState(false);
 
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement);
@@ -140,6 +140,7 @@ function Home(props) {
                       {...{mapStatistic, setMapStatistic}}
                       {...{regionHighlighted, setRegionHighlighted}}
                       {...{anchor, setAnchor}}
+                      {...{expandTable}}
                     />
                   </Suspense>
                 </div>

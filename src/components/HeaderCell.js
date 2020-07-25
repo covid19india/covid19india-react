@@ -8,13 +8,7 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {useLongPress} from 'react-use';
 
-function StateHeaderCell({
-  handleSort,
-  sortData,
-  setSortData,
-  statistic,
-  expandTable,
-}) {
+function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
   const {t} = useTranslation();
 
   const onLongPress = () => {
@@ -45,19 +39,13 @@ function StateHeaderCell({
           <FilterIcon size={10} />
         </div>
       )}
-      <div>
-        {expandTable
-          ? t(capitalize(statistic))
-          : capitalize(statistic.slice(0, 1))}
-      </div>
+      <div>{t(capitalize(statistic))}</div>
     </div>
   );
 }
 
 const isStateHeaderCellEqual = (prevProps, currProps) => {
   if (!equal(prevProps.sortData, currProps.sortData)) {
-    return false;
-  } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
     return false;
   } else {
     return true;

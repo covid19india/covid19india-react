@@ -75,11 +75,13 @@ export const abbreviateNumber = (number) => {
   if (number >= 1e12) return numberFormatter.format(number / 1e12) + 'T';
 };
 
-export const formatNumber = (value, option = 'long') => {
+export const formatNumber = (value, option) => {
   if (isNaN(value)) return '-';
   else if (option === 'short') {
     return abbreviateNumber(value);
-  } else if (option === 'long') {
+  }
+
+  if (option === 'int') {
     value = Math.floor(value);
   }
 

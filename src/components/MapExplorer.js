@@ -40,12 +40,13 @@ const MapVisualizer = lazy(() => import('./MapVisualizer'));
 function MapExplorer({
   stateCode: mapCode = 'TT',
   data,
+  mapStatistic,
+  setMapStatistic,
   regionHighlighted,
   setRegionHighlighted,
   anchor,
   setAnchor,
-  mapStatistic,
-  setMapStatistic,
+  expandTable,
 }) {
   const {t} = useTranslation();
   const mapExplorerRef = useRef();
@@ -191,7 +192,10 @@ function MapExplorer({
       className={classnames(
         'MapExplorer',
         {stickied: anchor === 'mapexplorer'},
-        {hidden: anchor && anchor !== 'mapexplorer'}
+        {
+          hidden:
+            anchor && (!expandTable || width < 769) && anchor !== 'mapexplorer',
+        }
       )}
     >
       <div className="panel" ref={panelRef}>
@@ -263,7 +267,7 @@ function MapExplorer({
             )}
           </div>
 
-          {width < 769 && (
+          {(expandTable || width < 769) && (
             <div className="switch-statistic fadeInUp" style={trail[5]}>
               {PRIMARY_STATISTICS.map((statistic) => (
                 <div
@@ -320,6 +324,8 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
     return false;
   } else if (!equal(prevProps.anchor, currProps.anchor)) {
+    return false;
+  } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
     return false;
   } else if (
     !equal(
