@@ -267,10 +267,12 @@ function Row({
           ))}
 
       {showDistricts && (
-        <div className="spacer">
-          <p>{`End of ${t(STATE_NAMES[stateCode])}'s districts`}</p>
-          <div className="fold" onClick={handleCollapse}>
-            <FoldUpIcon />
+        <div className="spacer-row">
+          <div className="spacer">
+            <p>{`End of ${t(STATE_NAMES[stateCode])}'s districts`}</p>
+            <div className="fold" onClick={handleCollapse}>
+              <FoldUpIcon />
+            </div>
           </div>
         </div>
       )}
