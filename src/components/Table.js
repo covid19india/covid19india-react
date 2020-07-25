@@ -5,7 +5,9 @@ import TableDeltaHelper from './snippets/TableDeltaHelper';
 import {TABLE_FADE_IN, TABLE_FADE_OUT} from '../animations';
 import {
   DISTRICT_TABLE_COUNT,
+  STATISTICS_CONFIGS,
   TABLE_STATISTICS,
+  TABLE_STATISTICS_EXPANDED,
   UNASSIGNED_STATE_CODE,
 } from '../constants';
 import {getStatistic} from '../utils/commonFunctions';
@@ -79,17 +81,23 @@ function Table({
   const sortingFunction = useCallback(
     (regionKeyA, regionKeyB) => {
       if (sortData.sortColumn !== 'regionName') {
+        const statisticConfig = STATISTICS_CONFIGS[sortData.sortColumn];
+        const statisticOptions = {
+          ...statisticConfig.options,
+          perMillion: isPerMillion,
+        };
+
         const statisticA = getStatistic(
           districts?.[regionKeyA] || states[regionKeyA],
           sortData.delta ? 'delta' : 'total',
-          sortData.sortColumn,
-          isPerMillion
+          statisticConfig.key,
+          statisticOptions
         );
         const statisticB = getStatistic(
           districts?.[regionKeyB] || states[regionKeyB],
           sortData.delta ? 'delta' : 'total',
-          sortData.sortColumn,
-          isPerMillion
+          statisticConfig.key,
+          statisticOptions
         );
         return sortData.isAscending
           ? statisticA - statisticB
@@ -140,6 +148,10 @@ function Table({
       <ScreenFullIcon size={16} />
     );
   }, [expandTable]);
+
+  const tableStatistics = expandTable
+    ? TABLE_STATISTICS_EXPANDED
+    : TABLE_STATISTICS;
 
   return (
     <React.Fragment>
@@ -262,7 +274,12 @@ function Table({
         ) : null
       )}
 
-      <div className="table fadeInUp">
+      <div
+        className="table fadeInUp"
+        style={{
+          gridTemplateColumns: `repeat(${tableStatistics.length + 1}, auto)`,
+        }}
+      >
         <div className="row heading">
           <div
             className="cell heading"
@@ -280,10 +297,10 @@ function Table({
             )}
           </div>
 
-          {TABLE_STATISTICS.map((statistic) => (
+          {tableStatistics.map((statistic) => (
             <HeaderCell
               key={statistic}
-              {...{statistic, sortData, setSortData}}
+              {...{statistic, sortData, setSortData, expandTable}}
               handleSort={handleSortClick.bind(this, statistic)}
             />
           ))}
@@ -307,6 +324,7 @@ function Table({
                     isPerMillion,
                     regionHighlighted,
                     setRegionHighlighted,
+                    expandTable,
                   }}
                 />
               );
@@ -329,6 +347,7 @@ function Table({
                     isPerMillion,
                     regionHighlighted,
                     setRegionHighlighted,
+                    expandTable,
                   }}
                 />
               );
@@ -338,7 +357,12 @@ function Table({
           key={'TT'}
           data={states['TT']}
           stateCode={'TT'}
-          {...{isPerMillion, regionHighlighted, setRegionHighlighted}}
+          {...{
+            isPerMillion,
+            regionHighlighted,
+            setRegionHighlighted,
+            expandTable,
+          }}
         />
       </div>
     </React.Fragment>

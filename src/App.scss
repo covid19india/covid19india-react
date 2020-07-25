@@ -1697,7 +1697,6 @@ abbr {
   border-radius: 3px;
   display: grid;
   font-size: 12px;
-  grid-template-columns: repeat(10, auto);
   grid-template-rows: auto;
   margin-bottom: 2.5rem;
   overflow-x: auto;
@@ -1899,6 +1898,10 @@ abbr {
 
         .is-confirmed {
           color: $cherry;
+        }
+
+        .is-active {
+          color: $blue;
         }
 
         .is-recovered {

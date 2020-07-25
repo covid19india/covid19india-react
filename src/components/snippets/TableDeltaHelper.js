@@ -10,7 +10,7 @@ const TableDeltaHelper = () => {
   useEffect(() => {
     const id = window.setTimeout(() => {
       setStatisticIndex((prevStatisticIndex) =>
-        prevStatisticIndex === TABLE_STATISTICS.length - 1
+        prevStatisticIndex === Object.keys(TABLE_STATISTICS).length - 1
           ? 0
           : prevStatisticIndex + 1
       );
@@ -18,9 +18,11 @@ const TableDeltaHelper = () => {
     }, 1000);
   }, [statisticIndex]);
 
+  const statistic = Object.keys(TABLE_STATISTICS)[statisticIndex].toLowerCase();
+
   return (
     <React.Fragment>
-      <span className={classnames(`is-${TABLE_STATISTICS[statisticIndex]}`)}>
+      <span className={classnames(`is-${statistic}`)}>
         <FilterIcon size={14} />
       </span>
       <p>Sort by Delta [long press]</p>
