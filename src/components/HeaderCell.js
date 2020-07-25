@@ -44,7 +44,9 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
         </div>
       )}
       <div>
-        {breakpoint === 'S' ? capitalize(statistic) : t(capitalize(statistic))}
+        {breakpoint === 'S'
+          ? capitalize(statistic.slice(0, 1))
+          : t(capitalize(statistic))}
       </div>
     </div>
   );

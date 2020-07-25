@@ -1187,6 +1187,7 @@ h6 {
   align-self: center;
   display: flex;
   flex-direction: column;
+  max-width: 32rem;
   width: 100%;
 
   & > * {
@@ -1517,7 +1518,7 @@ abbr {
   font-weight: 600;
   justify-content: space-between;
   margin-bottom: .25rem;
-  width: calc(100% - 2rem);
+  width: 100%;
 
   .option-toggle,
   .info-toggle,
@@ -1694,90 +1695,82 @@ abbr {
 .table {
   align-self: center;
   border-radius: 3px;
+  display: grid;
   font-size: 12px;
+  grid-template-columns: repeat(10, auto);
+  grid-template-rows: auto;
   margin-bottom: 2.5rem;
   overflow-x: auto;
-  width: calc(100% - 2rem);
+  width: 100%;
 
-  .state-meta-top {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    left: 0;
-    margin-bottom: 1 + .25rem;
-    margin-top: 1rem;
-    position: sticky;
-    width: 30rem;
+  .state-meta {
+    grid-column: 1 / -1;
 
-    svg {
-      margin-right: .5rem;
-    }
-
-    .last-updated {
+    .state-meta-top {
       align-items: center;
-      color: $green;
       display: flex;
       flex-direction: row;
-    }
-
-    .state-page {
-      align-items: center;
-      background: $yellow-light;
-      border-radius: 5px;
-      color: $orange;
-      cursor: pointer;
-      display: flex;
-      flex-direction: row;
-      padding: .75rem;
-
-      p {
-        align-self: flex-end;
-        flex: 1;
-        margin: 0;
-        text-align: right;
-      }
-
-      &:hover {
-        background: $yellow-hover;
-      }
-    }
-  }
-
-  .state-meta-bottom {
-    left: 0;
-    padding-bottom: 1.5rem;
-    position: sticky;
-    width: 30rem;
-
-    .disclaimer {
-      background: $brick-light;
-      border-radius: 5px;
-      color: $brick;
-      margin: auto;
-      padding: 1rem .25rem;
-      text-align: center;
-      width: 50%;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 1 + .25rem;
+      margin-top: 1rem;
 
       svg {
-        margin-right: 0.5rem;
+        margin-right: .5rem;
+      }
+
+      .last-updated {
+        align-items: center;
+        color: $green;
+        display: flex;
+        flex-direction: row;
+      }
+
+      .state-page {
+        align-items: center;
+        background: $yellow-light;
+        border-radius: 5px;
+        color: $orange;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        padding: .75rem;
+
+        p {
+          align-self: flex-end;
+          flex: 1;
+          margin: 0;
+          text-align: right;
+        }
+
+        &:hover {
+          background: $yellow-hover;
+        }
       }
     }
-  }
 
-  .table-wrapper {
-    width: 32rem;
+    .state-meta-bottom {
+      padding-bottom: 1.5rem;
 
-    &.expanded {
-      width: 67rem;
+      .disclaimer {
+        background: $brick-light;
+        border-radius: 5px;
+        color: $brick;
+        margin: auto;
+        padding: 1rem .25rem;
+        text-align: center;
+        width: 16rem;
+
+        svg {
+          margin-right: 0.5rem;
+        }
+      }
     }
   }
 
   .row {
     cursor: pointer;
-    display: flex;
-    flex-direction: row;
+    display: contents;
     width: 100%;
 
     &:nth-child(odd) {
@@ -1847,6 +1840,7 @@ abbr {
 
       svg {
         color: $gray-mid;
+        margin-left: 0.25rem;
         stroke-width: 2.5px;
       }
 
@@ -1945,26 +1939,27 @@ abbr {
     }
   }
 
-  .spacer {
-    color: $gray-mid;
-    left: 0;
-    margin-bottom: 1 + .25rem;
-    margin-top: 1rem;
-    position: sticky;
-    text-align: center;
-    width: 30rem;
+  .spacer-row {
+    grid-column: 1 / -1;
 
-    p {
-      margin-left: auto;
-      margin-right: auto;
-      width: 10rem;
-    }
+    .spacer {
+      color: $gray-mid;
+      margin-bottom: 1 + .25rem;
+      margin-top: 1rem;
+      text-align: center;
 
-    .fold {
-      cursor: pointer;
+      p {
+        margin-left: auto;
+        margin-right: auto;
+        width: 10rem;
+      }
 
-      &:hover {
-        color: $gray;
+      .fold {
+        cursor: pointer;
+
+        &:hover {
+          color: $gray;
+        }
       }
     }
   }

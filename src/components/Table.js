@@ -263,85 +263,83 @@ function Table({
       )}
 
       <div className="table fadeInUp">
-        <div className={classnames('table-wrapper', {expanded: expandTable})}>
-          <div className="row heading">
-            <div
-              className="cell heading"
-              onClick={handleSortClick.bind(this, 'regionName')}
-            >
-              <div>{t(tableOption === 'States' ? 'State/UT' : 'District')}</div>
-              {sortData.sortColumn === 'regionName' && (
-                <div
-                  className={classnames('sort-icon', {
-                    invert: !sortData.isAscending,
-                  })}
-                >
-                  <FilterIcon size={10} />
-                </div>
-              )}
-            </div>
-
-            {TABLE_STATISTICS.map((statistic) => (
-              <HeaderCell
-                key={statistic}
-                {...{statistic, sortData, setSortData}}
-                handleSort={handleSortClick.bind(this, statistic)}
-              />
-            ))}
+        <div className="row heading">
+          <div
+            className="cell heading"
+            onClick={handleSortClick.bind(this, 'regionName')}
+          >
+            <div>{t(tableOption === 'States' ? 'State/UT' : 'District')}</div>
+            {sortData.sortColumn === 'regionName' && (
+              <div
+                className={classnames('sort-icon', {
+                  invert: !sortData.isAscending,
+                })}
+              >
+                <FilterIcon size={10} />
+              </div>
+            )}
           </div>
 
-          {tableOption === 'States' &&
-            Object.keys(states)
-              .filter(
-                (stateCode) =>
-                  stateCode !== 'TT' &&
-                  !(stateCode === UNASSIGNED_STATE_CODE && isPerMillion)
-              )
-              .sort((a, b) => sortingFunction(a, b))
-              .map((stateCode) => {
-                return (
-                  <Row
-                    key={stateCode}
-                    data={states[stateCode]}
-                    {...{
-                      stateCode,
-                      isPerMillion,
-                      regionHighlighted,
-                      setRegionHighlighted,
-                    }}
-                  />
-                );
-              })}
-
-          {tableOption === 'Districts' && !districts && <TableLoader />}
-
-          {tableOption === 'Districts' &&
-            districts &&
-            Object.keys(districts)
-              .sort((a, b) => sortingFunction(a, b))
-              .slice(0, DISTRICT_TABLE_COUNT)
-              .map((districtKey) => {
-                return (
-                  <Row
-                    key={districtKey}
-                    data={districts[districtKey]}
-                    districtName={districts[districtKey].districtName}
-                    {...{
-                      isPerMillion,
-                      regionHighlighted,
-                      setRegionHighlighted,
-                    }}
-                  />
-                );
-              })}
-
-          <Row
-            key={'TT'}
-            data={states['TT']}
-            stateCode={'TT'}
-            {...{isPerMillion, regionHighlighted, setRegionHighlighted}}
-          />
+          {TABLE_STATISTICS.map((statistic) => (
+            <HeaderCell
+              key={statistic}
+              {...{statistic, sortData, setSortData}}
+              handleSort={handleSortClick.bind(this, statistic)}
+            />
+          ))}
         </div>
+
+        {tableOption === 'States' &&
+          Object.keys(states)
+            .filter(
+              (stateCode) =>
+                stateCode !== 'TT' &&
+                !(stateCode === UNASSIGNED_STATE_CODE && isPerMillion)
+            )
+            .sort((a, b) => sortingFunction(a, b))
+            .map((stateCode) => {
+              return (
+                <Row
+                  key={stateCode}
+                  data={states[stateCode]}
+                  {...{
+                    stateCode,
+                    isPerMillion,
+                    regionHighlighted,
+                    setRegionHighlighted,
+                  }}
+                />
+              );
+            })}
+
+        {tableOption === 'Districts' && !districts && <TableLoader />}
+
+        {tableOption === 'Districts' &&
+          districts &&
+          Object.keys(districts)
+            .sort((a, b) => sortingFunction(a, b))
+            .slice(0, DISTRICT_TABLE_COUNT)
+            .map((districtKey) => {
+              return (
+                <Row
+                  key={districtKey}
+                  data={districts[districtKey]}
+                  districtName={districts[districtKey].districtName}
+                  {...{
+                    isPerMillion,
+                    regionHighlighted,
+                    setRegionHighlighted,
+                  }}
+                />
+              );
+            })}
+
+        <Row
+          key={'TT'}
+          data={states['TT']}
+          stateCode={'TT'}
+          {...{isPerMillion, regionHighlighted, setRegionHighlighted}}
+        />
       </div>
     </React.Fragment>
   );
