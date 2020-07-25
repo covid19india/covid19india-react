@@ -4,8 +4,10 @@ import HeaderCell from './HeaderCell';
 import Tooltip from './Tooltip';
 
 import {
-  TABLE_STATISTICS,
   STATE_NAMES,
+  STATISTICS_CONFIGS,
+  TABLE_STATISTICS,
+  TABLE_STATISTICS_EXPANDED,
   UNKNOWN_DISTRICT_KEY,
 } from '../constants';
 import {
@@ -37,6 +39,7 @@ function Row({
   isPerMillion,
   regionHighlighted,
   setRegionHighlighted,
+  expandTable,
 }) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useSessionStorage('districtSortData', {
@@ -65,17 +68,23 @@ function Row({
   const sortingFunction = useCallback(
     (districtNameA, districtNameB) => {
       if (sortData.sortColumn !== 'districtName') {
+        const statisticConfig = STATISTICS_CONFIGS[sortData.sortColumn];
+        const statisticOptions = {
+          ...statisticConfig.options,
+          perMillion: isPerMillion,
+        };
+
         const statisticA = getStatistic(
           data.districts[districtNameA],
           sortData.delta ? 'delta' : 'total',
-          sortData.sortColumn,
-          isPerMillion
+          statisticConfig.key,
+          statisticOptions
         );
         const statisticB = getStatistic(
           data.districts[districtNameB],
           sortData.delta ? 'delta' : 'total',
-          sortData.sortColumn,
-          isPerMillion
+          statisticConfig.key,
+          statisticOptions
         );
         return sortData.isAscending
           ? statisticA - statisticB
@@ -150,6 +159,10 @@ function Row({
     const faux = stateCode;
   }, [stateCode]);
 
+  const tableStatistics = expandTable
+    ? TABLE_STATISTICS_EXPANDED
+    : TABLE_STATISTICS;
+
   return (
     <React.Fragment>
       <div
@@ -179,7 +192,7 @@ function Row({
           )}
         </div>
 
-        {TABLE_STATISTICS.map((statistic) => (
+        {tableStatistics.map((statistic) => (
           <Cell key={statistic} {...{data, statistic, isPerMillion}} />
         ))}
       </div>
@@ -238,7 +251,7 @@ function Row({
               )}
             </div>
 
-            {TABLE_STATISTICS.map((statistic) => (
+            {tableStatistics.map((statistic) => (
               <HeaderCell
                 key={statistic}
                 {...{statistic, sortData, setSortData}}
@@ -254,6 +267,7 @@ function Row({
           .sort((a, b) => sortingFunction(a, b))
           .map((districtName) => (
             <DistrictRow
+              data={data.districts[districtName]}
               key={districtName}
               {...{
                 districtName,
@@ -261,8 +275,8 @@ function Row({
                 setRegionHighlighted,
                 stateCode,
                 isPerMillion,
+                expandTable,
               }}
-              data={data.districts[districtName]}
             />
           ))}
 
@@ -307,6 +321,8 @@ const isEqual = (prevProps, currProps) => {
       )) ||
     equal(currProps.regionHighlighted.districtName, currProps.districtName)
   ) {
+    return false;
+  } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
     return false;
   } else return true;
 };

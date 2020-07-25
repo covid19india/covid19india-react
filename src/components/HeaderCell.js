@@ -6,13 +6,15 @@ import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {createBreakpoint} from 'react-use';
 import {useLongPress} from 'react-use';
 
-const useBreakpoint = createBreakpoint({S: 768});
-
-function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
-  const breakpoint = useBreakpoint();
+function StateHeaderCell({
+  handleSort,
+  sortData,
+  setSortData,
+  statistic,
+  expandTable,
+}) {
   const {t} = useTranslation();
 
   const onLongPress = () => {
@@ -44,9 +46,9 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
         </div>
       )}
       <div>
-        {breakpoint === 'S'
-          ? capitalize(statistic.slice(0, 1))
-          : t(capitalize(statistic))}
+        {expandTable
+          ? t(capitalize(statistic))
+          : capitalize(statistic.slice(0, 1))}
       </div>
     </div>
   );
@@ -54,6 +56,8 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
 
 const isStateHeaderCellEqual = (prevProps, currProps) => {
   if (!equal(prevProps.sortData, currProps.sortData)) {
+    return false;
+  } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
     return false;
   } else {
     return true;

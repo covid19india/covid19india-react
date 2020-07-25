@@ -1,7 +1,7 @@
 import Cell from './Cell';
 import Tooltip from './Tooltip';
 
-import {TABLE_STATISTICS} from '../constants';
+import {TABLE_STATISTICS, TABLE_STATISTICS_EXPANDED} from '../constants';
 
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
@@ -17,6 +17,7 @@ function DistrictRow({
   isPerMillion,
   regionHighlighted,
   setRegionHighlighted,
+  expandTable,
 }) {
   const {t} = useTranslation();
 
@@ -30,6 +31,10 @@ function DistrictRow({
       );
     }
   }, [regionHighlighted, districtName, setRegionHighlighted, stateCode]);
+
+  const tableStatistics = expandTable
+    ? TABLE_STATISTICS_EXPANDED
+    : TABLE_STATISTICS;
 
   return (
     <div
@@ -47,7 +52,7 @@ function DistrictRow({
         )}
       </div>
 
-      {TABLE_STATISTICS.map((statistic) => (
+      {tableStatistics.map((statistic) => (
         <Cell key={statistic} {...{statistic, data, isPerMillion}} />
       ))}
     </div>
@@ -73,6 +78,8 @@ const isDistrictRowEqual = (prevProps, currProps) => {
     (equal(prevProps.regionHighlighted.districtName, prevProps.districtName) ||
       equal(currProps.regionHighlighted.districtName, currProps.districtName))
   ) {
+    return false;
+  } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
     return false;
   }
   return true;

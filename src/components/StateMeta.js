@@ -15,9 +15,6 @@ import * as Icon from 'react-feather';
 
 function StateMeta({stateCode, data, timeseries}) {
   const confirmed = getStatistic(data[stateCode], 'total', 'confirmed');
-  const active = getStatistic(data[stateCode], 'total', 'active');
-  const deceased = getStatistic(data[stateCode], 'total', 'deceased');
-  const recovered = getStatistic(data[stateCode], 'total', 'recovered');
   const tested = getStatistic(data[stateCode], 'total', 'tested');
 
   const indiaDate = format(getIndiaDate(), 'yyyy-MM-dd');
@@ -33,19 +30,27 @@ function StateMeta({stateCode, data, timeseries}) {
     data[stateCode],
     'total',
     'confirmed',
-    true
+    {perMillion: true}
   );
-  const testPerMillion = getStatistic(data[stateCode], 'total', 'tested', true);
+  const testPerMillion = getStatistic(data[stateCode], 'total', 'tested', {
+    perMillion: true,
+  });
   const totalConfirmedPerMillion = getStatistic(
     data['TT'],
     'total',
     'confirmed',
-    true
+    {perMillion: true}
   );
 
-  const recoveryPercent = (recovered / confirmed) * 100;
-  const activePercent = (active / confirmed) * 100;
-  const deathPercent = (deceased / confirmed) * 100;
+  const activePercent = getStatistic(data[stateCode], 'total', 'active', {
+    rate: true,
+  });
+  const recoveryPercent = getStatistic(data[stateCode], 'total', 'recovered', {
+    rate: true,
+  });
+  const deathPercent = getStatistic(data[stateCode], 'total', 'deceased', {
+    rate: true,
+  });
 
   const growthRate =
     ((confirmed - prevWeekConfirmed) / prevWeekConfirmed) * 100;
@@ -172,7 +177,9 @@ function StateMeta({stateCode, data, timeseries}) {
           description={
             testPerMillion > 0
               ? `For every 1 million people in ${STATE_NAMES[stateCode]},
-                ${formatNumber(Math.round(testPerMillion))} people were tested.`
+                ${formatNumber(
+                  Math.round(testPerMillion)
+                )} samples were tested.`
               : 'No tests have been conducted in this state yet.'
           }
         />
