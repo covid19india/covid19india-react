@@ -241,38 +241,24 @@ h6 {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin-left: 8rem;
+  margin-left: 9rem;
   margin-right: 3rem;
 
   .home-left,
   .home-right {
     display: flex;
     flex-direction: column;
-    width: 32rem;
-
-    &.expanded {
-      width: 69rem;
-    }
+    width: 34rem;
   }
 
   .home-left {
-    margin-left: 2.5rem;
     margin-right: 2.5rem;
     min-height: 60rem;
-
-    &.expanded {
-      margin-bottom: 2.5rem;
-    }
   }
 
   .home-right {
     margin-left: 2.5rem;
-    margin-right: 2.5rem;
     min-height: 10rem;
-
-    &.expanded {
-      flex-direction: row;
-    }
   }
 
   .header {
@@ -400,18 +386,16 @@ h6 {
   .state-right {
     display: flex;
     flex-direction: column;
-    width: 32rem;
+    width: 34rem;
   }
 
   .state-left {
-    margin-left: 2.5rem;
     margin-right: 2.5rem;
     position: relative;
   }
 
   .state-right {
     margin-left: 2.5rem;
-    margin-right: 2.5rem;
   }
 
   a {
@@ -419,7 +403,7 @@ h6 {
   }
 
   .district-bar {
-    width: 100%;
+    width: calc(100% - 2rem);
   }
 
   .Minigraph {
@@ -1187,7 +1171,7 @@ h6 {
   align-self: center;
   display: flex;
   flex-direction: column;
-  max-width: 32rem;
+  max-width: 40rem;
   width: 100%;
 
   & > * {
@@ -1522,7 +1506,8 @@ abbr {
 
   .option-toggle,
   .info-toggle,
-  .million-toggle {
+  .million-toggle,
+  .expand-table-toggle {
     background: $gray-light;
     border-radius: 5px;
     color: $gray-mid;
@@ -1560,16 +1545,21 @@ abbr {
     }
   }
 
-  .table-expand-icon {
+  .expand-table-toggle {
     color: $gray-mid;
-    display: flex;
-    flex: 1;
-    flex-direction: row;
-    justify-content: flex-end;
+    margin-left: auto;
+    margin-right: 0;
+
+    &.is-highlighted {
+      svg {
+        transform: rotate(90deg);
+      }
+    }
 
     svg {
       cursor: pointer;
       margin-bottom: 0.25rem;
+      transform: rotate(-90deg);
     }
   }
 
@@ -1839,7 +1829,7 @@ abbr {
 
       svg {
         color: $gray-mid;
-        margin-left: 0.25rem;
+        margin-left: 0.2rem;
         stroke-width: 2.5px;
       }
 
@@ -1925,7 +1915,7 @@ abbr {
         background: $gray-light-opaque;
         font-size: 13px;
         font-weight: 900;
-        padding: .75rem .5rem;
+        padding: 1.25rem .5rem .75rem;
 
         &:hover {
           background: $gray-hover-opaque !important;
@@ -2002,10 +1992,9 @@ abbr {
 }
 
 .MapContainer {
-  &.expanded {
-    margin-right: 2.5rem;
-    width: 50%;
-  }
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .MapExplorer {
@@ -2547,11 +2536,6 @@ abbr {
   display: flex;
   flex-direction: column;
   width: calc(100% - 2rem);
-
-  &.expanded {
-    margin-left: 2.5rem;
-    width: calc(50% - 2rem);
-  }
 
   &.stickied {
     position: sticky !important;
@@ -3630,6 +3614,7 @@ footer {
     }
 
     .navbar-right {
+      align-items: center;
       background: $gray-light-opaque;
       display: flex;
       flex-direction: column;
@@ -3677,29 +3662,60 @@ footer {
       background: #1e1e30 !important;
     }
   }
+
+  .Home {
+    .home-left,
+    .home-right {
+      &.expanded {
+        width: 69rem;
+      }
+    }
+
+    .home-left {
+      &.expanded {
+        margin-bottom: 2.5rem;
+        margin-right: 0;
+      }
+    }
+
+    .home-right {
+      &.expanded {
+        flex-direction: row;
+        margin-left: 0;
+      }
+    }
+  }
+
+  .MapContainer {
+    &.expanded {
+      margin-right: 2.5rem;
+      width: 50%;
+    }
+  }
+
+  .TimeseriesExplorer {
+    &.expanded {
+      margin-left: 2.5rem;
+      width: calc(50% - 2rem);
+    }
+  }
 }
 
 @media (max-width: 769px) {
   .table,
   .header,
   .TimeseriesExplorer,
-  .StateHeader,
+  .MapContainer,
   .Links,
   .Summary,
   .About,
-  .MapExplorer,
   .updates,
   .updates-header,
   .StateMeta,
   .timeline,
+  .table-top,
   .LanguageSwitcher {
     width: calc(100% - 2rem);
-  }
-
-  .state-meta-top,
-  .state-meta-bottom,
-  .spacer {
-    width: calc(100vw - 2rem) !important;
   }
 
   .Home,
@@ -3726,6 +3742,10 @@ footer {
     h1 {
       font-size: 5vw !important;
     }
+  }
+
+  .MapContainer {
+    align-self: center;
   }
 
   .MapExplorer {

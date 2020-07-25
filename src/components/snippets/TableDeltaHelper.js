@@ -10,7 +10,7 @@ const TableDeltaHelper = () => {
   useEffect(() => {
     const id = window.setTimeout(() => {
       setStatisticIndex((prevStatisticIndex) =>
-        prevStatisticIndex === Object.keys(TABLE_STATISTICS).length - 1
+        prevStatisticIndex === TABLE_STATISTICS.length - 1
           ? 0
           : prevStatisticIndex + 1
       );
@@ -18,7 +18,7 @@ const TableDeltaHelper = () => {
     }, 1000);
   }, [statisticIndex]);
 
-  const statistic = Object.keys(TABLE_STATISTICS)[statisticIndex].toLowerCase();
+  const statistic = TABLE_STATISTICS[statisticIndex].toLowerCase();
 
   return (
     <React.Fragment>

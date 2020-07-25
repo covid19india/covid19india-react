@@ -23,7 +23,7 @@ import React, {useEffect, useRef, useMemo} from 'react';
 
 // Dimensions
 const [width, height] = [100, 75];
-const margin = {top: 10, right: 5, bottom: 2, left: 5};
+const margin = {top: 10, right: 10, bottom: 2, left: 5};
 
 function Minigraphs({timeseries, date: timelineDate}) {
   const refs = useRef([]);
