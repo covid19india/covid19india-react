@@ -1682,15 +1682,18 @@ abbr {
   }
 }
 
-.table {
+.table-container {
   align-self: center;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.table {
   border-radius: 3px;
-  display: grid;
+  display: inline-grid;
   font-size: 12px;
   grid-template-rows: auto;
   margin-bottom: 2.5rem;
-  overflow-x: auto;
-  width: 100%;
 
   .state-meta {
     grid-column: 1 / -1;
@@ -1991,7 +1994,7 @@ abbr {
   }
 }
 
-.MapContainer {
+.map-container {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -3721,7 +3724,11 @@ footer {
     }
   }
 
-  .MapContainer {
+  .table {
+    width: 100%;
+  }
+
+  .map-container {
     &.expanded {
       margin-right: 2.5rem;
       width: 50%;
@@ -3737,10 +3744,10 @@ footer {
 }
 
 @media (max-width: 769px) {
-  .table,
+  .table-container,
   .header,
   .TimeseriesExplorer,
-  .MapContainer,
+  .map-container,
   .Links,
   .Summary,
   .About,
@@ -3779,7 +3786,7 @@ footer {
     }
   }
 
-  .MapContainer {
+  .map-container {
     align-self: center;
   }
 

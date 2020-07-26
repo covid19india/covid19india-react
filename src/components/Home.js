@@ -127,7 +127,7 @@ function Home(props) {
             <React.Fragment>
               {data && (
                 <div
-                  className={classnames('MapContainer', {
+                  className={classnames('map-container', {
                     expanded: expandTable,
                   })}
                 >
