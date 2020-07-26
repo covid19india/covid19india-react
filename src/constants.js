@@ -28,8 +28,8 @@ export const TABLE_STATISTICS_EXPANDED = [
   'other',
   'tested',
   'active ratio',
-  'case fatality ratio',
   'recovery ratio',
+  'case fatality ratio',
   'population',
 ];
 
@@ -46,14 +46,14 @@ export const STATISTICS_CONFIGS = {
     hideDelta: true,
     format: '%',
   },
-  'case fatality ratio': {
-    key: 'deceased',
+  'recovery ratio': {
+    key: 'recovered',
     options: {percentagePerConfirmed: true},
     hideDelta: true,
     format: '%',
   },
-  'recovery ratio': {
-    key: 'recovered',
+  'case fatality ratio': {
+    key: 'deceased',
     options: {percentagePerConfirmed: true},
     hideDelta: true,
     format: '%',
