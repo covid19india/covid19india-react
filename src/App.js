@@ -1,151 +1,79 @@
-import Home from './components/home';
-import Navbar from './components/navbar';
-import ScrollToTop from './utils/ScrollToTop';
-
-import React, {Suspense, lazy} from 'react';
-import {Helmet} from 'react-helmet';
-import {useTranslation} from 'react-i18next';
-import {
-  BrowserRouter as Router,
-  Route,
-  Redirect,
-  Switch,
-} from 'react-router-dom';
-import {useLocalStorage, useEffectOnce} from 'react-use';
-
 import './App.scss';
+import Blog from './components/Blog';
+import Navbar from './components/Navbar';
 
-const DeepDive = lazy(() => import('./components/deepdive'));
-const FAQ = lazy(() => import('./components/faq'));
-const PatientDB = lazy(() => import('./components/patientdb'));
-const Resources = lazy(() => import('./components/resources'));
-const State = lazy(() => import('./components/state'));
+import React, {lazy, useState, Suspense} from 'react';
+import {Route, Redirect, Switch, useLocation} from 'react-router-dom';
+import useDarkMode from 'use-dark-mode';
 
-const schemaMarkup = {
-  '@context': 'http://schema.org/',
-  '@type': 'NGO',
-  name: 'Coronavirus Outbreak in India: Latest Map and Case Count',
-  alternateName: 'COVID-19 Tracker',
-  url: 'https://www.covid19india.org/',
-  image: 'https://www.covid19india.org/thumbnail.png',
-};
+const Home = lazy(() => import('./components/Home'));
+const About = lazy(() => import('./components/About'));
+const State = lazy(() => import('./components/State'));
+const LanguageSwitcher = lazy(() => import('./components/LanguageSwitcher'));
 
-function App() {
-  const {t} = useTranslation();
+const App = () => {
+  const darkMode = useDarkMode(false);
+  const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
+  const location = useLocation();
 
   const pages = [
     {
       pageLink: '/',
       view: Home,
       displayName: 'Home',
-      animationDelayForNavbar: 0.2,
       showInNavbar: true,
     },
     {
-      pageLink: '/demographics',
-      view: PatientDB,
-      displayName: t('Demographics'),
-      animationDelayForNavbar: 0.3,
-      showInNavbar: true,
-    },
-    {
-      pageLink: '/deepdive',
-      view: DeepDive,
-      displayName: t('Deep Dive'),
-      animationDelayForNavbar: 0.4,
-      showInNavbar: true,
-    },
-    {
-      pageLink: '/essentials',
-      view: Resources,
-      displayName: t('Essentials'),
-      animationDelayForNavbar: 0.5,
+      pageLink: '/blog',
+      view: Blog,
+      displayName: 'Blog',
       showInNavbar: true,
     },
     {
       pageLink: '/about',
-      view: FAQ,
-      displayName: t('About'),
-      animationDelayForNavbar: 0.6,
+      view: About,
+      displayName: 'About',
       showInNavbar: true,
     },
     {
       pageLink: '/state/:stateCode',
       view: State,
-      displayName: t('State'),
-      animationDelayForNavbar: 0.7,
+      displayName: 'State',
       showInNavbar: false,
     },
   ];
 
-  const [darkMode, setDarkMode] = useLocalStorage('darkMode', false);
-  const [isThemeSet] = useLocalStorage('isThemeSet', false);
-
-  useEffectOnce(() => {
-    if (
-      window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches &&
-      !isThemeSet
-    ) {
-      setDarkMode(true);
-    } else if (
-      window.matchMedia &&
-      !window.matchMedia('(prefers-color-scheme: dark)').matches &&
-      !isThemeSet
-    ) {
-      setDarkMode(false);
-    }
-  });
-
-  React.useEffect(() => {
-    if (darkMode) {
-      document.querySelector('body').classList.add('dark-mode');
-    } else {
-      document.querySelector('body').classList.remove('dark-mode');
-    }
-  }, [darkMode]);
-
   return (
     <div className="App">
-      <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify(schemaMarkup)}
-        </script>
-      </Helmet>
+      <Suspense fallback={<div />}>
+        <LanguageSwitcher
+          {...{showLanguageSwitcher, setShowLanguageSwitcher}}
+        />
+      </Suspense>
 
-      <Router>
-        <ScrollToTop />
-        <Suspense fallback={<div className="lazy"></div>}>
-          <Route
-            render={({location}) => (
-              <div className="Almighty-Router">
-                <Navbar
-                  pages={pages}
-                  darkMode={darkMode}
-                  setDarkMode={setDarkMode}
-                />
-                <Switch location={location}>
-                  {pages.map((page, index) => {
-                    return (
-                      <Route
-                        exact
-                        path={page.pageLink}
-                        render={({match}) => (
-                          <page.view key={match.params.stateCode || index} />
-                        )}
-                        key={index}
-                      />
-                    );
-                  })}
-                  <Redirect to="/" />
-                </Switch>
-              </div>
-            )}
-          />
-        </Suspense>
-      </Router>
+      <Navbar
+        pages={pages}
+        {...{darkMode}}
+        {...{showLanguageSwitcher, setShowLanguageSwitcher}}
+      />
+
+      <Suspense fallback={<div />}>
+        <Switch location={location}>
+          {pages.map((page, index) => {
+            return (
+              <Route
+                exact
+                path={page.pageLink}
+                render={({match}) => <page.view />}
+                key={index}
+              />
+            );
+          })}
+          <Redirect to="/" />
+        </Switch>
+      </Suspense>
     </div>
   );
-}
+};
 
 export default App;

@@ -24,48 +24,45 @@
       name="description"
       content="A volunteer-driven crowdsourced effort to track the coronavirus in India. A detailed country map shows the extent of the coronavirus outbreak, with tables of the number of cases by state and district."
     />
+    <meta name="keywords" content="covid, covid19, covid-19, covid19india, coronavirus, corona, india, virus, pandemic, disease, carona, karona, korona">
 
     <link
       rel="preconnect"
-      href="https://www.google-analytics.com"
-      crossorigin
+      href="https://api.covid19india.org/min/data.min.json"
+      as="fetch"
     />
-    <link rel="preconnect" href="https://api.covid19india.org/" />
     <link
       rel="preconnect"
-      href="https://www.googletagmanager.com/"
-      crossorigin
+      href="https://api.covid19india.org/min/timeseries.min.json"
+      as="fetch"
     />
 
     <!-- Font Preloading -->
     <link
       rel="preload"
-      importance="low"
       href="/fonts/Archia/archia-semibold-webfont.woff2"
       as="font"
       type="font/woff2"
-      crossorigin="anonymous"
+      crossorigin
     />
     <link
       rel="preload"
-      importance="low"
       href="/fonts/Archia/archia-medium-webfont.woff2"
       as="font"
       type="font/woff2"
-      crossorigin="anonymous"
+      crossorigin
     />
     <link
       rel="preload"
-      importance="low"
       href="/fonts/Archia/archia-bold-webfont.woff2"
       as="font"
       type="font/woff2"
-      crossorigin="anonymous"
+      crossorigin
     />
 
     <style>
       /* font-face declarations for preloaded fonts */
-      /* These are the only 3 fonts being used. 
+      /* These are the only 3 fonts being used.
       font-face declarations for thin, regular and light fonts should be added as needed */
       @font-face {
         font-family: 'Archia';
@@ -80,6 +77,7 @@
         font-style: normal;
         font-display: swap;
       }
+
       @font-face {
         font-family: 'Archia';
         src: url('/fonts/Archia/archia-medium-webfont.eot');
@@ -93,6 +91,7 @@
         font-style: normal;
         font-display: swap;
       }
+
       @font-face {
         font-family: 'Archia';
         src: url('/fonts/Archia/archia-bold-webfont.eot');
@@ -150,36 +149,80 @@
     <div id="root"></div>
   </body>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script
-    async
-    src="https://www.googletagmanager.com/gtag/js?id=UA-160698988-1"
-  ></script>
-
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
-    gtag('config', 'UA-160698988-1');
+    // Insert this script in your index.html right after the <body> tag.
+    // This will help to prevent a flash if dark mode is the default.
+    (function () {
+      // Change these if you use something different in your hook.
+      var storageKey = 'darkMode';
+      var classNameDark = 'dark-mode';
+      var classNameLight = 'light-mode';
+
+      function setClassOnDocumentBody(darkMode) {
+        document.body.classList.add(darkMode ? classNameDark : classNameLight);
+        document.body.classList.remove(
+          darkMode ? classNameLight : classNameDark
+        );
+      }
+
+      var preferDarkQuery = '(prefers-color-scheme: dark)';
+      var mql = window.matchMedia(preferDarkQuery);
+      var supportsColorSchemeQuery = mql.media === preferDarkQuery;
+      var localStorageTheme = null;
+      try {
+        localStorageTheme = localStorage.getItem(storageKey);
+      } catch (err) {}
+      var localStorageExists = localStorageTheme !== null;
+      if (localStorageExists) {
+        localStorageTheme = JSON.parse(localStorageTheme);
+      }
+
+      // Determine the source of truth
+      if (localStorageExists) {
+        // source of truth from localStorage
+        setClassOnDocumentBody(localStorageTheme);
+      } else if (supportsColorSchemeQuery) {
+        // source of truth from system
+        setClassOnDocumentBody(mql.matches);
+        localStorage.setItem(storageKey, mql.matches);
+      } else {
+        // source of truth from document.body
+        var isDarkMode = document.body.classList.contains(classNameDark);
+        localStorage.setItem(storageKey, JSON.stringify(isDarkMode));
+      }
+    })();
   </script>
 
-  <!-- Google Tag Manager -->
+  <!-- Google Analytics -->
   <script>
-    (function (w, d, s, l, i) {
-      w[l] = w[l] || [];
-      w[l].push({
-        'gtm.start': new Date().getTime(),
-        event: 'gtm.js',
-      });
-      var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s),
-        dl = l != 'dataLayer' ? '&l=' + l : '';
-      j.async = true;
-      j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-      f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-KH3S5G4');
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      (i[r] =
+        i[r] ||
+        function () {
+          (i[r].q = i[r].q || []).push(arguments);
+        }),
+        (i[r].l = 1 * new Date());
+
+      setTimeout(() => {
+        (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m);
+      }, 3000); // Wait 3 seconds
+    })(
+      window,
+      document,
+      'script',
+      'https://www.google-analytics.com/analytics.js',
+      'ga'
+    );
+
+    ga('create', 'UA-160698988-1', {
+      site_speed_sample_rate: 1,
+      sample_rate: 1,
+    });
+    ga('send', 'pageview');
   </script>
-  <!-- End Google Tag Manager -->
+  <!-- End Google Analytics -->
 </html>

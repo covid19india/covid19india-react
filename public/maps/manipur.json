@@ -1018,7 +1018,7 @@
     "translate": [92.97284500000002, 23.833016]
   },
   "objects": {
-    "manipur_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

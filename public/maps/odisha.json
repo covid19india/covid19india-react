@@ -3373,7 +3373,7 @@
     "translate": [81.389054, 17.812726]
   },
   "objects": {
-    "odisha_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

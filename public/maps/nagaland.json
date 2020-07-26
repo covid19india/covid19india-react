@@ -669,7 +669,7 @@
     "translate": [93.32899095285474, 25.199075200465085]
   },
   "objects": {
-    "nagaland_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

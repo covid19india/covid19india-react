@@ -7129,7 +7129,7 @@
     "translate": [74.03468857438199, 21.069907]
   },
   "objects": {
-    "madhyapradesh_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

@@ -1319,7 +1319,7 @@
     "translate": [77.573108, 28.722897]
   },
   "objects": {
-    "uttarakhand_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

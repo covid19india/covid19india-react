@@ -703,7 +703,7 @@
     "translate": [89.815752, 25.030005400110966]
   },
   "objects": {
-    "meghalaya_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

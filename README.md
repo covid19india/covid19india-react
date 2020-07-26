@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  View our live <a href="http://patientdb.covid19india.org/">database</a>.
+  Here's our data <a href="http://patientdb.covid19india.org/">API</a>.
  </p>
 
 ## Setup
@@ -12,12 +12,6 @@
 npm i && npm start
 ```
 
-## Maintainers
-
-- [jeremyphilemon](https://github.com/jeremyphilemon)
-- [shuklaayush](https://github.com/shuklaayush)
-- [JunaidBabu](https://github.com/JunaidBabu)
-- [sudevschiz](https://github.com/sudevschiz)
 
 ## Contribution
 

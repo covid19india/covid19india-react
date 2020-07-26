@@ -2015,7 +2015,7 @@
     "translate": [73.879848, 29.54208]
   },
   "objects": {
-    "punjab_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {

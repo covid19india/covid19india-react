@@ -2284,7 +2284,7 @@
     "translate": [73.390075, 32.276216]
   },
   "objects": {
-    "jammukashmir_district": {
+    "districts": {
       "type": "GeometryCollection",
       "geometries": [
         {
