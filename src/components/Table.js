@@ -86,18 +86,20 @@ function Table({
           perMillion: isPerMillion,
         };
 
-        const statisticA = getStatistic(
-          districts?.[regionKeyA] || states[regionKeyA],
-          sortData.delta ? 'delta' : 'total',
-          statisticConfig.key,
-          statisticOptions
-        );
-        const statisticB = getStatistic(
-          districts?.[regionKeyB] || states[regionKeyB],
-          sortData.delta ? 'delta' : 'total',
-          statisticConfig.key,
-          statisticOptions
-        );
+        const statisticA =
+          getStatistic(
+            districts?.[regionKeyA] || states[regionKeyA],
+            sortData.delta ? 'delta' : 'total',
+            statisticConfig.key,
+            statisticOptions
+          ) || 0;
+        const statisticB =
+          getStatistic(
+            districts?.[regionKeyB] || states[regionKeyB],
+            sortData.delta ? 'delta' : 'total',
+            statisticConfig.key,
+            statisticOptions
+          ) || 0;
         return sortData.isAscending
           ? statisticA - statisticB
           : statisticB - statisticA;

@@ -74,18 +74,20 @@ function Row({
           perMillion: isPerMillion,
         };
 
-        const statisticA = getStatistic(
-          data.districts[districtNameA],
-          sortData.delta ? 'delta' : 'total',
-          statisticConfig.key,
-          statisticOptions
-        );
-        const statisticB = getStatistic(
-          data.districts[districtNameB],
-          sortData.delta ? 'delta' : 'total',
-          statisticConfig.key,
-          statisticOptions
-        );
+        const statisticA =
+          getStatistic(
+            data.districts[districtNameA],
+            sortData.delta ? 'delta' : 'total',
+            statisticConfig.key,
+            statisticOptions
+          ) || 0;
+        const statisticB =
+          getStatistic(
+            data.districts[districtNameB],
+            sortData.delta ? 'delta' : 'total',
+            statisticConfig.key,
+            statisticOptions
+          ) || 0;
         return sortData.isAscending
           ? statisticA - statisticB
           : statisticB - statisticA;

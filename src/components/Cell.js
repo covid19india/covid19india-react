@@ -13,16 +13,13 @@ const Cell = ({statistic, data, isPerMillion}) => {
     perMillion: isPerMillion,
   };
 
-  let total = getStatistic(
+  const total = getStatistic(
     data,
     'total',
     statisticConfig.key,
     statisticOptions
   );
-  // TODO: Maybe move inside getStatistic
-  if (!total && statistic === 'tested') {
-    total = NaN;
-  }
+
   const delta = getStatistic(
     data,
     'delta',
