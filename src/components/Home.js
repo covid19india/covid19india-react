@@ -27,6 +27,7 @@ function Home(props) {
   });
 
   const [anchor, setAnchor] = useLocalStorage('anchor', null);
+  const [expandTable, setExpandTable] = useLocalStorage('expandTable', false);
   const [mapStatistic, setMapStatistic] = useSessionStorage(
     'mapStatistic',
     'active'
@@ -51,8 +52,6 @@ function Home(props) {
       refreshInterval: 100000,
     }
   );
-
-  const [expandTable, setExpandTable] = useState(false);
 
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement);

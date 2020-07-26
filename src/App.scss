@@ -3220,6 +3220,49 @@ footer {
     color: $pblue;
     font-weight: 900;
   }
+
+  h3 {
+    color: $blue-mid;
+    font-weight: 900;
+
+    &:hover {
+      svg {
+        color: $blue;
+      }
+    }
+
+    svg {
+      height: 1rem;
+    }
+  }
+}
+
+.updates-footer {
+  align-self: center;
+  color: $gray-dark;
+  margin-left: auto;
+
+  .telegram {
+    color: $blue;
+
+    &:hover {
+      color: $purple;
+    }
+  }
+
+  h4 {
+    color: $blue-mid;
+    font-weight: 900;
+
+    &:hover {
+      color: $blue;
+    }
+
+    svg {
+      height: 1rem;
+      margin-bottom: -.25rem;
+    }
+  }
 }
 
 .updates {
@@ -3229,14 +3272,6 @@ footer {
   margin-bottom: 1rem;
   min-height: 22rem !important;
   width: 100%;
-
-  .telegram {
-    color: $blue;
-
-    &:hover {
-      color: $purple;
-    }
-  }
 
   .update {
     background: $gray-light;
@@ -3740,7 +3775,7 @@ footer {
 
   .Level {
     h1 {
-      font-size: 5vw !important;
+      font-size: #{'min(5vw, 24px)'} !important;
     }
   }
 
@@ -3942,6 +3977,11 @@ footer {
   }
 
   .State {
+    .MapExplorer,
+    .StateHeader {
+      width: calc(100% - 2rem);
+    }
+
     .district-bar {
       width: calc(100% - 3rem);
 

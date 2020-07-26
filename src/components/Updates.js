@@ -66,15 +66,17 @@ function Updates({updates}) {
             </React.Fragment>
           );
         })}
-      <div className="updates-header">
+      <div className="updates-footer">
         <a
           href="https://t.me/covid19indiaorg_updates"
           target="_blank"
           className="telegram"
           rel="noopener noreferrer"
         >
-          <h4>Join Instant Updates Channel </h4>
-          <Send />
+          <h4>
+            <Send />
+            Join Instant Updates channel
+          </h4>
         </a>
       </div>
     </div>
