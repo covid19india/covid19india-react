@@ -258,7 +258,7 @@ function Table({
               {sortData.sortColumn === 'regionName' && (
                 <div
                   className={classnames('sort-icon', {
-                    invert: !sortData.isAscending,
+                    invert: sortData.isAscending,
                   })}
                 >
                   <FilterIcon size={10} />
