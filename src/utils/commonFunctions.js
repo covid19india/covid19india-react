@@ -120,6 +120,8 @@ export const getStatistic = (data, type, statistic, options = {}) => {
   let count;
   if (statistic === 'population') {
     count = type === 'total' ? data?.meta?.population || NaN : 0;
+  } else if (statistic === 'tested') {
+    count = data?.[type]?.[statistic] || NaN;
   } else if (statistic === 'active') {
     const confirmed = data?.[type]?.confirmed || 0;
     const deceased = data?.[type]?.deceased || 0;
@@ -129,15 +131,18 @@ export const getStatistic = (data, type, statistic, options = {}) => {
   } else {
     count = data?.[type]?.[statistic] || 0;
   }
+
   if (options.rate) {
     const confirmed = data?.total?.confirmed || 0;
     if (type === 'delta') {
       const prevConfirmed = confirmed - data?.delta?.confirmed || 0;
       const currTotal = getStatistic(data, 'total', statistic);
       const prevTotal = currTotal - count;
-      return 100 * (currTotal / confirmed - prevTotal / prevConfirmed);
+      const currRate = confirmed ? currTotal / confirmed : NaN;
+      const prevRate = prevConfirmed ? prevTotal / prevConfirmed : NaN;
+      return 100 * (currRate - prevRate);
     } else if (type === 'total') {
-      return (100 * count) / confirmed;
+      return confirmed ? (100 * count) / confirmed : NaN;
     }
   } else if (options.perMillion) {
     return (1e6 * count) / data?.meta?.population || 0;

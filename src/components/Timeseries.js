@@ -136,15 +136,19 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
           .domain([
             Math.max(
               1,
-              min(dates, (date) =>
-                getStatistic(timeseries[date], chartType, statistic)
+              min(
+                dates,
+                (date) =>
+                  getStatistic(timeseries[date], chartType, statistic) || 0
               )
             ),
             Math.max(
               10,
               yBufferTop *
-                max(dates, (date) =>
-                  getStatistic(timeseries[date], chartType, statistic)
+                max(
+                  dates,
+                  (date) =>
+                    getStatistic(timeseries[date], chartType, statistic) || 0
                 )
             ),
           ])
@@ -157,15 +161,19 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
           yBufferBottom *
             Math.min(
               0,
-              min(dates, (date) =>
-                getStatistic(timeseries[date], chartType, statistic)
+              min(
+                dates,
+                (date) =>
+                  getStatistic(timeseries[date], chartType, statistic) || 0
               )
             ),
           Math.max(
             1,
             yBufferTop *
-              max(dates, (date) =>
-                getStatistic(timeseries[date], chartType, statistic)
+              max(
+                dates,
+                (date) =>
+                  getStatistic(timeseries[date], chartType, statistic) || 0
               )
           ),
         ])
@@ -234,7 +242,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
         .attr('r', barWidth / 2)
         .attr('cx', (date) => xScale(parseIndiaDate(date)))
         .attr('cy', (date) =>
-          yScale(getStatistic(timeseries[date], chartType, statistic))
+          yScale(getStatistic(timeseries[date], chartType, statistic) || 0)
         );
 
       if (chartType === 'total') {
@@ -249,7 +257,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
           .curve(curveMonotoneX)
           .x((date) => xScale(parseIndiaDate(date)))
           .y((date) =>
-            yScale(getStatistic(timeseries[date], chartType, statistic))
+            yScale(getStatistic(timeseries[date], chartType, statistic) || 0)
           );
 
         let pathLength;
@@ -308,7 +316,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
           .attr('y1', yScale(0))
           .attr('x2', (date) => xScale(parseIndiaDate(date)))
           .attr('y2', (date) =>
-            yScale(getStatistic(timeseries[date], chartType, statistic))
+            yScale(getStatistic(timeseries[date], chartType, statistic) || 0)
           );
       }
 
