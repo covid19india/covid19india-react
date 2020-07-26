@@ -285,7 +285,7 @@ h6 {
   .alert-right {
     margin-left: .25rem;
     text-align: right;
-    width: 5rem;
+    width: 9rem;
 
     a {
       background: $gray-light;
@@ -3061,8 +3061,8 @@ input {
 footer {
   display: flex;
   flex-direction: column;
-  margin-bottom: 5rem;
-  margin-top: 5rem;
+  margin-bottom: 4rem;
+  margin-top: 4rem;
   width: 100%;
 
   & > * {
@@ -3074,10 +3074,11 @@ footer {
     color: $gray;
     font-weight: 600;
     margin: 0;
-    margin-bottom: 3.5rem;
+    margin-bottom: 2rem;
   }
 
   svg {
+    margin-right: .5rem;
     padding: .25rem;
   }
 
