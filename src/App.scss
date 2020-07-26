@@ -1268,7 +1268,7 @@ h6 {
 .Timeline {
   cursor: pointer;
   height: 3rem;
-  width: 32rem;
+  width: 34rem;
   will-change: transform;
 
   .day {
@@ -3035,7 +3035,7 @@ input {
   align-self: center;
   margin-bottom: 1rem;
   margin-top: 1rem;
-  width: 32rem;
+  width: 34rem;
 
   a {
     background: $blue-light;
@@ -3132,11 +3132,11 @@ footer {
   & > * {
     align-self: center;
     margin-bottom: 1.5rem;
-    width: 32rem;
+    width: 34rem;
   }
 
   & > *:first-child {
-    margin-top: 2rem;
+    margin-top: 4rem;
   }
 
   h2 {
@@ -3523,7 +3523,7 @@ footer {
   display: flex;
   flex-direction: column;
   margin-left: 5rem;
-  width: 32rem;
+  width: 34rem;
 
   h3 {
     align-self: center;
