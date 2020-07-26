@@ -132,7 +132,7 @@ export const getStatistic = (data, type, statistic, options = {}) => {
     count = data?.[type]?.[statistic] || 0;
   }
 
-  if (options.rate) {
+  if (options.percentagePerConfirmed) {
     const confirmed = data?.total?.confirmed || 0;
     if (type === 'delta') {
       const prevConfirmed = confirmed - data?.delta?.confirmed || 0;
