@@ -43,13 +43,13 @@ function StateMeta({stateCode, data, timeseries}) {
   );
 
   const activePercent = getStatistic(data[stateCode], 'total', 'active', {
-    rate: true,
+    percentagePerConfirmed: true,
   });
   const recoveryPercent = getStatistic(data[stateCode], 'total', 'recovered', {
-    rate: true,
+    percentagePerConfirmed: true,
   });
   const deathPercent = getStatistic(data[stateCode], 'total', 'deceased', {
-    rate: true,
+    percentagePerConfirmed: true,
   });
 
   const growthRate =

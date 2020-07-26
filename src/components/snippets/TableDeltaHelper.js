@@ -18,11 +18,9 @@ const TableDeltaHelper = () => {
     }, 1000);
   }, [statisticIndex]);
 
-  const statistic = TABLE_STATISTICS[statisticIndex].toLowerCase();
-
   return (
     <React.Fragment>
-      <span className={classnames(`is-${statistic}`)}>
+      <span className={classnames(`is-${TABLE_STATISTICS[statisticIndex]}`)}>
         <FilterIcon size={14} />
       </span>
       <p>Sort by Delta [long press]</p>

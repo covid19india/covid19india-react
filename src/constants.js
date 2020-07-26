@@ -42,19 +42,19 @@ export const STATISTICS_CONFIGS = {
   tested: {key: 'tested', format: 'short'},
   'active ratio': {
     key: 'active',
-    options: {rate: true},
+    options: {percentagePerConfirmed: true},
     hideDelta: true,
     format: '%',
   },
   'case fatality ratio': {
     key: 'deceased',
-    options: {rate: true},
+    options: {percentagePerConfirmed: true},
     hideDelta: true,
     format: '%',
   },
   'recovery ratio': {
     key: 'recovered',
-    options: {rate: true},
+    options: {percentagePerConfirmed: true},
     hideDelta: true,
     format: '%',
   },
