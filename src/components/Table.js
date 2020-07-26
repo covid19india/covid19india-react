@@ -5,6 +5,7 @@ import TableDeltaHelper from './snippets/TableDeltaHelper';
 import {TABLE_FADE_IN, TABLE_FADE_OUT} from '../animations';
 import {
   DISTRICT_TABLE_COUNT,
+  STATE_NAMES,
   STATISTICS_CONFIGS,
   TABLE_STATISTICS,
   TABLE_STATISTICS_EXPANDED,
@@ -104,9 +105,13 @@ function Table({
           ? statisticA - statisticB
           : statisticB - statisticA;
       } else {
+        const regionNameA =
+          districts?.[regionKeyA]?.districtName || STATE_NAMES[regionKeyA];
+        const regionNameB =
+          districts?.[regionKeyB]?.districtName || STATE_NAMES[regionKeyB];
         return sortData.isAscending
-          ? regionKeyA.localeCompare(regionKeyB)
-          : regionKeyB.localeCompare(regionKeyA);
+          ? regionNameA.localeCompare(regionNameB)
+          : regionNameB.localeCompare(regionNameA);
       }
     },
     [

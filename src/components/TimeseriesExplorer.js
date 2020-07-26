@@ -66,6 +66,9 @@ function TimeseriesExplorer({
   const regions = useMemo(() => {
     const states = Object.keys(timeseries || {})
       .filter((code) => code !== stateCode)
+      .sort((code1, code2) =>
+        STATE_NAMES[code1].localeCompare(STATE_NAMES[code2])
+      )
       .map((code) => {
         return {
           stateCode: code,
