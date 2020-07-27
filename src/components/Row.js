@@ -17,17 +17,17 @@ import {
 } from '../utils/commonFunctions';
 
 import {
+  AlertIcon,
   ClockIcon,
-  GraphIcon,
   FilterIcon,
   FoldUpIcon,
-  AlertIcon,
+  GraphIcon,
+  InfoIcon,
 } from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {useState, useCallback, useRef} from 'react';
-import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {useSessionStorage} from 'react-use';
@@ -189,7 +189,7 @@ function Row({
           </div>
           {data?.meta?.notes && (
             <Tooltip {...{data: data.meta.notes}}>
-              <Info size={16} />
+              <InfoIcon size={16} />
             </Tooltip>
           )}
         </div>

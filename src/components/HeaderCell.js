@@ -1,6 +1,8 @@
+import Tooltip from './Tooltip';
+
 import {capitalize} from '../utils/commonFunctions';
 
-import {FilterIcon} from '@primer/octicons-v2-react';
+import {FilterIcon, InfoIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
@@ -27,7 +29,6 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
       className="cell heading"
       onClick={handleSort.bind(this, statistic)}
       {...longPressEvent}
-      title={capitalize(statistic)}
     >
       {sortData.sortColumn === statistic && (
         <div
@@ -40,6 +41,11 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
         </div>
       )}
       <div>{t(capitalize(statistic))}</div>
+      {statistic === 'other' && (
+        <Tooltip data={'Migrated cases or non-COVID deaths'}>
+          <InfoIcon size={14} />
+        </Tooltip>
+      )}
     </div>
   );
 }
