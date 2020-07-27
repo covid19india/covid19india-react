@@ -20,14 +20,17 @@ function PureLevelItem({statistic, total, delta}) {
     config: SPRING_CONFIG_NUMBERS,
   });
 
+  const statisticConfig = STATISTIC_CONFIGS[statistic];
+
   return (
     <React.Fragment>
-      <h5>{t(capitalize(STATISTIC_CONFIGS[statistic].displayName))}</h5>
+      <h5>{t(capitalize(statisticConfig.displayName))}</h5>
       <animated.h4>
         {statistic !== 'active' ? (
           delta > 0 ? (
             spring.delta.interpolate(
-              (delta) => `+${formatNumber(Math.floor(delta))}`
+              (delta) =>
+                `+${formatNumber(delta, statisticConfig.format, statistic)}`
             )
           ) : (
             <HeartFillIcon size={9} verticalAlign={2} />
@@ -37,7 +40,9 @@ function PureLevelItem({statistic, total, delta}) {
         )}
       </animated.h4>
       <animated.h1>
-        {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
+        {spring.total.interpolate((total) =>
+          formatNumber(total, statisticConfig.format, statistic)
+        )}
       </animated.h1>
     </React.Fragment>
   );
