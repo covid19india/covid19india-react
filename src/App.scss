@@ -1699,6 +1699,7 @@ abbr {
   font-size: 12px;
   grid-template-rows: auto;
   margin-bottom: 2.5rem;
+  min-width: 100%;
 
   .state-meta {
     grid-column: 1 / -1;
@@ -3729,10 +3730,6 @@ footer {
         margin-left: 0;
       }
     }
-  }
-
-  .table {
-    width: 100%;
   }
 
   .map-container {
