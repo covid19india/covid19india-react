@@ -44,8 +44,12 @@ const App = () => {
   ];
 
   useEffect(() => {
-    document.documentElement.scrollTo({top: 0, behavior: 'smooth'}); // For Chrome, Firefox, IE and Opera
-    document.body.scrollTo({top: 0, behavior: 'smooth'}); // For Safari
+    if (showLanguageSwitcher) {
+      // For Chrome, Firefox, IE and Opera
+      document.documentElement.scrollTo({top: 0, behavior: 'smooth'});
+      // For Safari
+      document.body.scrollTo({top: 0, behavior: 'smooth'});
+    }
   }, [showLanguageSwitcher]);
 
   return (
