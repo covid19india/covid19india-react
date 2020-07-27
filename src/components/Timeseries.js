@@ -1,6 +1,7 @@
 import {
   COLORS,
   D3_TRANSITION_DURATION,
+  STATISTIC_CONFIGS,
   TIMESERIES_STATISTICS,
 } from '../constants';
 import {useResizeObserver} from '../hooks/useResizeObserver';
@@ -8,7 +9,7 @@ import {
   capitalize,
   formatNumber,
   formatDate,
-  getPrimaryStatistic,
+  getStatistic,
   parseIndiaDate,
 } from '../utils/commonFunctions';
 
@@ -98,14 +99,14 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
         .call(axisRight(yScale).ticks(4, '0~s').tickPadding(4));
 
     const uniformScaleMin = min(dates, (date) =>
-      getPrimaryStatistic(timeseries[date], chartType, 'active')
+      getStatistic(timeseries[date], chartType, 'active')
     );
 
     const uniformScaleMax = max(dates, (date) =>
       Math.max(
-        getPrimaryStatistic(timeseries[date], chartType, 'confirmed'),
-        getPrimaryStatistic(timeseries[date], chartType, 'recovered'),
-        getPrimaryStatistic(timeseries[date], chartType, 'deceased')
+        getStatistic(timeseries[date], chartType, 'confirmed'),
+        getStatistic(timeseries[date], chartType, 'recovered'),
+        getStatistic(timeseries[date], chartType, 'deceased')
       )
     );
 
@@ -137,14 +138,14 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
             Math.max(
               1,
               min(dates, (date) =>
-                getPrimaryStatistic(timeseries[date], chartType, statistic)
+                getStatistic(timeseries[date], chartType, statistic)
               )
             ),
             Math.max(
               10,
               yBufferTop *
                 max(dates, (date) =>
-                  getPrimaryStatistic(timeseries[date], chartType, statistic)
+                  getStatistic(timeseries[date], chartType, statistic)
                 )
             ),
           ])
@@ -158,14 +159,14 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
             Math.min(
               0,
               min(dates, (date) =>
-                getPrimaryStatistic(timeseries[date], chartType, statistic)
+                getStatistic(timeseries[date], chartType, statistic)
               )
             ),
           Math.max(
             1,
             yBufferTop *
               max(dates, (date) =>
-                getPrimaryStatistic(timeseries[date], chartType, statistic)
+                getStatistic(timeseries[date], chartType, statistic)
               )
           ),
         ])
@@ -234,7 +235,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
         .attr('r', barWidth / 2)
         .attr('cx', (date) => xScale(parseIndiaDate(date)))
         .attr('cy', (date) =>
-          yScale(getPrimaryStatistic(timeseries[date], chartType, statistic))
+          yScale(getStatistic(timeseries[date], chartType, statistic))
         );
 
       if (chartType === 'total') {
@@ -249,7 +250,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
           .curve(curveMonotoneX)
           .x((date) => xScale(parseIndiaDate(date)))
           .y((date) =>
-            yScale(getPrimaryStatistic(timeseries[date], chartType, statistic))
+            yScale(getStatistic(timeseries[date], chartType, statistic))
           );
 
         let pathLength;
@@ -308,7 +309,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
           .attr('y1', yScale(0))
           .attr('x2', (date) => xScale(parseIndiaDate(date)))
           .attr('y2', (date) =>
-            yScale(getPrimaryStatistic(timeseries[date], chartType, statistic))
+            yScale(getStatistic(timeseries[date], chartType, statistic))
           );
       }
 
@@ -336,7 +337,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   const getStatisticDelta = useCallback(
     (statistic) => {
       if (!highlightedDate) return;
-      const deltaToday = getPrimaryStatistic(
+      const deltaToday = getStatistic(
         timeseries?.[highlightedDate],
         'delta',
         statistic
@@ -346,7 +347,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       const yesterday = formatISO(subDays(parseIndiaDate(highlightedDate), 1), {
         representation: 'date',
       });
-      const deltaYesterday = getPrimaryStatistic(
+      const deltaYesterday = getStatistic(
         timeseries?.[yesterday],
         'delta',
         statistic
@@ -382,14 +383,16 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
             >
               {highlightedDate && (
                 <div className={classnames('stats', `is-${statistic}`)}>
-                  <h5 className="title">{t(capitalize(statistic))}</h5>
+                  <h5 className="title">
+                    {t(capitalize(STATISTIC_CONFIGS[statistic].displayName))}
+                  </h5>
                   <h5 className="title">
                     {formatDate(highlightedDate, 'dd MMMM')}
                   </h5>
                   <div className="stats-bottom">
                     <h2>
                       {formatNumber(
-                        getPrimaryStatistic(
+                        getStatistic(
                           timeseries?.[highlightedDate],
                           chartType,
                           statistic

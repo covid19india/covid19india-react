@@ -4,7 +4,7 @@ import {
   PRIMARY_STATISTICS,
 } from '../constants';
 import {
-  getPrimaryStatistic,
+  getStatistic,
   getIndiaYesterdayISO,
   parseIndiaDate,
 } from '../utils/commonFunctions';
@@ -57,7 +57,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
       const color = COLORS[statistic];
 
       const dailyMaxAbs = max(dates, (date) =>
-        Math.abs(getPrimaryStatistic(timeseries[date], 'delta', statistic))
+        Math.abs(getStatistic(timeseries[date], 'delta', statistic))
       );
 
       const yScale = scaleLinear()
@@ -69,7 +69,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
         .curve(curveMonotoneX)
         .x((date) => xScale(parseIndiaDate(date)))
         .y((date) =>
-          yScale(getPrimaryStatistic(timeseries[date], 'delta', statistic))
+          yScale(getStatistic(timeseries[date], 'delta', statistic))
         );
 
       let pathLength;
@@ -118,9 +118,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
               .attr('r', 2.5)
               .attr('cx', (date) => xScale(parseIndiaDate(date)))
               .attr('cy', (date) =>
-                yScale(
-                  getPrimaryStatistic(timeseries[date], 'delta', statistic)
-                )
+                yScale(getStatistic(timeseries[date], 'delta', statistic))
               )
               .style('opacity', 0)
               .call((enter) =>
@@ -131,9 +129,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
                   .style('opacity', 1)
                   .attr('cx', (date) => xScale(parseIndiaDate(date)))
                   .attr('cy', (date) =>
-                    yScale(
-                      getPrimaryStatistic(timeseries[date], 'delta', statistic)
-                    )
+                    yScale(getStatistic(timeseries[date], 'delta', statistic))
                   )
               ),
           (update) =>
@@ -142,9 +138,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
               .duration(500)
               .attr('cx', (date) => xScale(parseIndiaDate(date)))
               .attr('cy', (date) =>
-                yScale(
-                  getPrimaryStatistic(timeseries[date], 'delta', statistic)
-                )
+                yScale(getStatistic(timeseries[date], 'delta', statistic))
               )
         );
     });

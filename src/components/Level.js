@@ -1,9 +1,9 @@
-import {PRIMARY_STATISTICS, SPRING_CONFIG_NUMBERS} from '../constants';
 import {
-  capitalize,
-  formatNumber,
-  getPrimaryStatistic,
-} from '../utils/commonFunctions';
+  PRIMARY_STATISTICS,
+  STATISTIC_CONFIGS,
+  SPRING_CONFIG_NUMBERS,
+} from '../constants';
+import {capitalize, formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import {HeartFillIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
@@ -22,7 +22,7 @@ function PureLevelItem({statistic, total, delta}) {
 
   return (
     <React.Fragment>
-      <h5>{t(capitalize(statistic))}</h5>
+      <h5>{t(capitalize(STATISTIC_CONFIGS[statistic].displayName))}</h5>
       <animated.h4>
         {statistic !== 'active' ? (
           delta > 0 ? (
@@ -68,8 +68,8 @@ function Level({data}) {
         >
           <LevelItem
             {...{statistic}}
-            total={getPrimaryStatistic(data, 'total', statistic)}
-            delta={getPrimaryStatistic(data, 'delta', statistic)}
+            total={getStatistic(data, 'total', statistic)}
+            delta={getStatistic(data, 'delta', statistic)}
           />
         </animated.div>
       ))}
@@ -80,8 +80,8 @@ function Level({data}) {
 const isEqual = (prevProps, currProps) => {
   if (
     !equal(
-      getPrimaryStatistic(prevProps.data, 'total', 'active'),
-      getPrimaryStatistic(currProps.data, 'total', 'active')
+      getStatistic(prevProps.data, 'total', 'active'),
+      getStatistic(currProps.data, 'total', 'active')
     )
   ) {
     return false;

@@ -1,15 +1,10 @@
 import StateMetaCard from './StateMetaCard';
 
-import {
-  PER_MILLION_OPTIONS,
-  STATE_NAMES,
-  STATISTIC_CONFIGS,
-} from '../constants';
+import {STATE_NAMES} from '../constants';
 import {
   formatDate,
   formatNumber,
   formatLastUpdated,
-  getPrimaryStatistic,
   getStatistic,
   getIndiaDate,
 } from '../utils/commonFunctions';
@@ -19,46 +14,39 @@ import React from 'react';
 import {Compass} from 'react-feather';
 
 function StateMeta({stateCode, data, timeseries}) {
-  const confirmed = getPrimaryStatistic(data[stateCode], 'total', 'confirmed');
-  const tested = getPrimaryStatistic(data[stateCode], 'total', 'tested');
+  const confirmed = getStatistic(data[stateCode], 'total', 'confirmed');
+  const tested = getStatistic(data[stateCode], 'total', 'tested');
 
   const indiaDate = format(getIndiaDate(), 'yyyy-MM-dd');
   const prevWeekDate = format(sub(getIndiaDate(), {weeks: 1}), 'yyyy-MM-dd');
 
-  const prevWeekConfirmed = getPrimaryStatistic(
+  const prevWeekConfirmed = getStatistic(
     timeseries?.[prevWeekDate],
     'total',
     'confirmed'
   );
 
-  const confirmedPerMillion = getStatistic(data[stateCode], 'total', {
-    key: 'confirmed',
-    ...PER_MILLION_OPTIONS,
-  });
-  const testPerMillion = getStatistic(data[stateCode], 'total', {
-    key: 'tested',
-    ...PER_MILLION_OPTIONS,
-  });
-  const totalConfirmedPerMillion = getStatistic(data['TT'], 'total', {
-    key: 'confirmed',
-    ...PER_MILLION_OPTIONS,
-  });
-
-  const activePercent = getStatistic(
+  const confirmedPerMillion = getStatistic(
     data[stateCode],
     'total',
-    STATISTIC_CONFIGS['active ratio']
+    'confirmed',
+    true
   );
+  const testPerMillion = getStatistic(data[stateCode], 'total', 'tested', true);
+  const totalConfirmedPerMillion = getStatistic(
+    data['TT'],
+    'total',
+    'confirmed',
+    true
+  );
+
+  const activePercent = getStatistic(data[stateCode], 'total', 'activeRatio');
   const recoveryPercent = getStatistic(
     data[stateCode],
     'total',
-    STATISTIC_CONFIGS['recovery ratio']
+    'recoveryRatio'
   );
-  const deathPercent = getStatistic(
-    data[stateCode],
-    'total',
-    STATISTIC_CONFIGS['case fatality ratio']
-  );
+  const deathPercent = getStatistic(data[stateCode], 'total', 'cfr');
 
   const growthRate =
     ((confirmed - prevWeekConfirmed) / prevWeekConfirmed) * 100;

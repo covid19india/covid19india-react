@@ -7,11 +7,7 @@ import StateMeta from './StateMeta';
 
 import {API_ROOT_URL, STATE_NAMES} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
-import {
-  fetcher,
-  formatNumber,
-  getPrimaryStatistic,
-} from '../utils/commonFunctions';
+import {fetcher, formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
 import React, {
@@ -80,8 +76,8 @@ function State() {
     const districtA = data[stateCode].districts[districtNameA];
     const districtB = data[stateCode].districts[districtNameB];
     return (
-      getPrimaryStatistic(districtB, 'total', mapStatistic) -
-      getPrimaryStatistic(districtA, 'total', mapStatistic)
+      getStatistic(districtB, 'total', mapStatistic) -
+      getStatistic(districtA, 'total', mapStatistic)
     );
   };
 
@@ -200,12 +196,12 @@ function State() {
                       .sort((a, b) => handleSort(a, b))
                       .slice(0, showAllDistricts ? undefined : 5)
                       .map((districtName) => {
-                        const total = getPrimaryStatistic(
+                        const total = getStatistic(
                           data[stateCode].districts[districtName],
                           'total',
                           mapStatistic
                         );
-                        const delta = getPrimaryStatistic(
+                        const delta = getStatistic(
                           data[stateCode].districts[districtName],
                           'delta',
                           mapStatistic
@@ -238,7 +234,7 @@ function State() {
                           .slice(-lookback)
                           .every(
                             (date) =>
-                              getPrimaryStatistic(
+                              getStatistic(
                                 timeseries[stateCode].dates[date],
                                 'delta',
                                 mapStatistic

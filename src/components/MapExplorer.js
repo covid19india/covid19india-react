@@ -5,16 +5,13 @@ import {
   MAP_TYPES,
   MAP_VIEWS,
   MAP_VIZS,
+  PRIMARY_STATISTICS,
   SPRING_CONFIG_NUMBERS,
   STATE_NAMES,
+  STATISTIC_CONFIGS,
   UNKNOWN_DISTRICT_KEY,
-  PRIMARY_STATISTICS,
 } from '../constants';
-import {
-  formatNumber,
-  getPrimaryStatistic,
-  capitalize,
-} from '../utils/commonFunctions';
+import {formatNumber, getStatistic, capitalize} from '../utils/commonFunctions';
 
 import {
   DotFillIcon,
@@ -175,7 +172,7 @@ function MapExplorer({
   }, []);
 
   const spring = useSpring({
-    total: getPrimaryStatistic(hoveredRegion, 'total', mapStatistic),
+    total: getStatistic(hoveredRegion, 'total', mapStatistic),
     config: {tension: 250, ...SPRING_CONFIG_NUMBERS},
   });
 
@@ -220,7 +217,9 @@ function MapExplorer({
                   formatNumber(Math.floor(total))
                 )}
               </animated.div>
-              <span>{t(capitalize(mapStatistic))}</span>
+              <span>
+                {t(capitalize(STATISTIC_CONFIGS[mapStatistic].displayName))}
+              </span>
             </h1>
           )}
         </div>

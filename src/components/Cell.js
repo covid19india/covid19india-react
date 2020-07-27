@@ -1,8 +1,4 @@
-import {
-  PER_MILLION_OPTIONS,
-  SPRING_CONFIG_NUMBERS,
-  STATISTIC_CONFIGS,
-} from '../constants.js';
+import {SPRING_CONFIG_NUMBERS, STATISTIC_CONFIGS} from '../constants.js';
 import {
   formatNumber,
   getIndiaTPR,
@@ -15,18 +11,11 @@ import React from 'react';
 import {animated, useSpring} from 'react-spring';
 
 const Cell = ({statistic, data, isPerMillion, stateCode, states}) => {
-  const statisticConfig = STATISTIC_CONFIGS[statistic];
-  const statisticOptions = {
-    ...statisticConfig.options,
-    ...(isPerMillion &&
-      !statisticConfig.options?.normalizeByKey &&
-      PER_MILLION_OPTIONS),
-  };
   const [total, delta] =
-    stateCode !== 'TT' || statistic !== 'test positivity ratio'
+    stateCode !== 'TT' || statistic !== 'tpr'
       ? [
-          getStatistic(data, 'total', statisticOptions),
-          getStatistic(data, 'delta', statisticOptions),
+          getStatistic(data, 'total', statistic, isPerMillion),
+          getStatistic(data, 'delta', statistic, isPerMillion),
         ]
       : Object.values(getIndiaTPR(states));
 
@@ -36,12 +25,12 @@ const Cell = ({statistic, data, isPerMillion, stateCode, states}) => {
     config: SPRING_CONFIG_NUMBERS,
   });
 
+  const statisticConfig = STATISTIC_CONFIGS[statistic];
+
   return (
     <div className="cell statistic">
       {!statisticConfig.hideDelta && (
-        <animated.div
-          className={classnames('delta', `is-${statisticOptions.key}`)}
-        >
+        <animated.div className={classnames('delta', `is-${statistic}`)}>
           {spring.delta.interpolate((delta) =>
             delta > 0
               ? '\u2191' + formatNumber(delta, statisticConfig.format)

@@ -1,7 +1,9 @@
 import {
   INDIA_ISO_SUFFIX,
   LOCALE_SHORTHANDS,
-  STATISTICS_MISSING_IS_ZERO,
+  NAN_STATISTICS,
+  PER_MILLION_OPTIONS,
+  STATISTIC_OPTIONS,
 } from '../constants';
 
 import {format, formatDistance, formatISO, subDays} from 'date-fns';
@@ -75,11 +77,7 @@ export const abbreviateNumber = (number) => {
 };
 
 export const formatNumber = (value, option, statistic) => {
-  if (
-    statistic &&
-    value === 0 &&
-    !STATISTICS_MISSING_IS_ZERO.includes(statistic)
-  )
+  if (statistic && value === 0 && NAN_STATISTICS.includes(statistic))
     value = NaN;
 
   if (isNaN(value)) return '-';
@@ -102,48 +100,51 @@ export const toTitleCase = (str) => {
   });
 };
 
-export const getStatistic = (
-  data,
-  type,
-  {key: statistic, normalizeByKey: normalizeBy, multiplyFactor = 1}
-) => {
+export const getStatistic = (data, type, statistic, perMillion = false) => {
+  const {key, normalizeByKey: normalizeBy, multiplyFactor} = {
+    ...STATISTIC_OPTIONS[statistic],
+    ...(perMillion &&
+      !STATISTIC_OPTIONS[statistic]?.normalizeByKey &&
+      PER_MILLION_OPTIONS),
+  };
+
   let count;
-  if (statistic === 'population') {
+  if (key === 'population') {
     count = type === 'total' ? data?.meta?.population : 0;
-  } else if (statistic === 'tested') {
+  } else if (key === 'tested') {
     count = data?.[type]?.tested?.samples;
-  } else if (statistic === 'positives') {
+  } else if (key === 'positives') {
     count = data?.[type]?.tested?.positives;
-  } else if (statistic === 'active') {
+  } else if (key === 'active') {
     const confirmed = data?.[type]?.confirmed || 0;
     const deceased = data?.[type]?.deceased || 0;
     const recovered = data?.[type]?.recovered || 0;
     const other = data?.[type]?.other || 0;
     count = confirmed - deceased - recovered - other;
   } else {
-    count = data?.[type]?.[statistic];
+    count = data?.[type]?.[key];
   }
 
   if (normalizeBy) {
     if (type === 'total') {
-      const normStatistic = getStatistic(data, 'total', {key: normalizeBy});
+      const normStatistic = getStatistic(data, 'total', normalizeBy);
       count /= normStatistic;
     } else {
       const currStatisticDelta = count;
-      const currStatistic = getStatistic(data, 'total', {key: statistic});
+      const currStatistic = getStatistic(data, 'total', key);
       const prevStatistic = currStatistic - currStatisticDelta;
 
       const normStatisticDelta = getStatistic(data, 'delta', {
         key: normalizeBy,
       });
-      const normStatistic = getStatistic(data, 'total', {key: normalizeBy});
+      const normStatistic = getStatistic(data, 'total', normalizeBy);
       const prevNormStatistic = normStatistic - normStatisticDelta;
 
       count = currStatistic / normStatistic - prevStatistic / prevNormStatistic;
     }
   }
 
-  return multiplyFactor * count || 0;
+  return (multiplyFactor || 1) * count || 0;
 };
 
 export const getIndiaTPR = (states) => {
@@ -151,27 +152,19 @@ export const getIndiaTPR = (states) => {
     .filter((stateCode) => stateCode !== 'TT')
     .reduce(
       (acc, stateCode) => {
-        acc.total.positives += getPrimaryStatistic(
+        acc.total.positives += getStatistic(
           states[stateCode],
           'total',
           'positives'
         );
-        acc.total.samples += getPrimaryStatistic(
-          states[stateCode],
-          'total',
-          'tested'
-        );
+        acc.total.samples += getStatistic(states[stateCode], 'total', 'tested');
 
-        acc.delta.positives += getPrimaryStatistic(
+        acc.delta.positives += getStatistic(
           states[stateCode],
           'delta',
           'positives'
         );
-        acc.delta.samples += getPrimaryStatistic(
-          states[stateCode],
-          'delta',
-          'tested'
-        );
+        acc.delta.samples += getStatistic(states[stateCode], 'delta', 'tested');
         return acc;
       },
       {
@@ -195,10 +188,6 @@ export const getIndiaTPR = (states) => {
   const delta = 100 * (positives / samples - prevPositives / prevSamples);
 
   return {total, delta};
-};
-
-export const getPrimaryStatistic = (data, type, statistic) => {
-  return getStatistic(data, type, {key: statistic});
 };
 
 export const fetcher = (url) => {
