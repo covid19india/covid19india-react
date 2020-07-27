@@ -1,6 +1,6 @@
 import Tooltip from './Tooltip';
 
-import {capitalize} from '../utils/commonFunctions';
+import {toTitleCase} from '../utils/commonFunctions';
 
 import {FilterIcon, InfoIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
@@ -40,7 +40,7 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
           <FilterIcon size={10} />
         </div>
       )}
-      <div>{t(capitalize(statistic))}</div>
+      <div>{t(toTitleCase(statistic))}</div>
       {statistic === 'other' && (
         <Tooltip data={'Migrated cases or non-COVID deaths'}>
           <InfoIcon size={14} />
