@@ -10,7 +10,11 @@ import {
   UNKNOWN_DISTRICT_KEY,
   PRIMARY_STATISTICS,
 } from '../constants';
-import {formatNumber, getStatistic, capitalize} from '../utils/commonFunctions';
+import {
+  formatNumber,
+  getPrimaryStatistic,
+  capitalize,
+} from '../utils/commonFunctions';
 
 import {
   DotFillIcon,
@@ -171,7 +175,7 @@ function MapExplorer({
   }, []);
 
   const spring = useSpring({
-    total: getStatistic(hoveredRegion, 'total', mapStatistic),
+    total: getPrimaryStatistic(hoveredRegion, 'total', mapStatistic),
     config: {tension: 250, ...SPRING_CONFIG_NUMBERS},
   });
 

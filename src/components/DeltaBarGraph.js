@@ -3,7 +3,7 @@ import {
   formatDate,
   formatNumber,
   getIndiaYesterdayISO,
-  getStatistic,
+  getPrimaryStatistic,
 } from '../utils/commonFunctions';
 
 import {min, max} from 'd3-array';
@@ -15,8 +15,9 @@ import {transition} from 'd3-transition';
 import equal from 'fast-deep-equal';
 import React, {useEffect, useRef} from 'react';
 import {useMeasure} from 'react-use';
+
 const getDeltaStatistic = (data, statistic) => {
-  return getStatistic(data, 'delta', statistic);
+  return getPrimaryStatistic(data, 'delta', statistic);
 };
 
 const margin = {top: 50, right: 0, bottom: 50, left: 0};

@@ -1,4 +1,8 @@
-import {SPRING_CONFIG_NUMBERS, STATISTICS_CONFIGS} from '../constants.js';
+import {
+  PER_MILLION_OPTIONS,
+  SPRING_CONFIG_NUMBERS,
+  STATISTIC_CONFIGS,
+} from '../constants.js';
 import {formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
@@ -7,29 +11,21 @@ import React from 'react';
 import {animated, useSpring} from 'react-spring';
 
 const Cell = ({statistic, data, isPerMillion}) => {
-  const statisticConfig = STATISTICS_CONFIGS[statistic];
+  const statisticConfig = STATISTIC_CONFIGS[statistic];
   const statisticOptions = {
     ...statisticConfig.options,
-    perMillion: isPerMillion,
+    ...(isPerMillion &&
+      !statisticConfig.options?.normalizeByKey &&
+      PER_MILLION_OPTIONS),
   };
 
-  const total = getStatistic(
-    data,
-    'total',
-    statisticConfig.key,
-    statisticOptions
-  );
+  const total = getStatistic(data, 'total', statisticOptions);
 
-  const delta = getStatistic(
-    data,
-    'delta',
-    statisticConfig.key,
-    statisticOptions
-  );
+  const delta = getStatistic(data, 'delta', statisticOptions);
 
   const spring = useSpring({
     total: total,
-    delta: delta || 0,
+    delta: delta,
     config: SPRING_CONFIG_NUMBERS,
   });
 
@@ -37,7 +33,7 @@ const Cell = ({statistic, data, isPerMillion}) => {
     <div className="cell statistic">
       {!statisticConfig.hideDelta && (
         <animated.div
-          className={classnames('delta', `is-${statisticConfig.key}`)}
+          className={classnames('delta', `is-${statisticOptions.key}`)}
         >
           {spring.delta.interpolate((delta) =>
             delta > 0
@@ -51,7 +47,7 @@ const Cell = ({statistic, data, isPerMillion}) => {
 
       <animated.div className="total">
         {spring.total.interpolate((total) =>
-          formatNumber(total, statisticConfig.format)
+          formatNumber(total, statisticConfig.format, statistic)
         )}
       </animated.div>
     </div>

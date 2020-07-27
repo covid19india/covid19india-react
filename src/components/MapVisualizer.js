@@ -13,7 +13,7 @@ import {
 } from '../constants';
 import {
   formatNumber,
-  getStatistic,
+  getPrimaryStatistic,
   toTitleCase,
 } from '../utils/commonFunctions';
 
@@ -51,7 +51,7 @@ const colorInterpolator = {
 };
 
 const getTotalStatistic = (data, statistic) => {
-  return getStatistic(data, 'total', statistic);
+  return getPrimaryStatistic(data, 'total', statistic);
 };
 
 function MapVisualizer({

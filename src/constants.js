@@ -1,4 +1,4 @@
-export const API_ROOT_URL = 'https://api.covid19india.org/v4/min';
+export const API_ROOT_URL = 'https://api.covid19india.org/v5/min';
 
 export const LOCALE_SHORTHANDS = {
   english: 'en-US',
@@ -23,6 +23,8 @@ export const PRIMARY_STATISTICS = [
 
 export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
+export const STATISTICS_MISSING_IS_ZERO = [...PRIMARY_STATISTICS, 'other'];
+
 export const TABLE_STATISTICS_EXPANDED = [
   ...PRIMARY_STATISTICS,
   'other',
@@ -30,35 +32,59 @@ export const TABLE_STATISTICS_EXPANDED = [
   'active ratio',
   'recovery ratio',
   'case fatality ratio',
+  'test positivity ratio',
   'population',
 ];
 
-export const STATISTICS_CONFIGS = {
-  confirmed: {key: 'confirmed', format: 'int'},
-  active: {key: 'active', hideDelta: true, format: 'int'},
-  recovered: {key: 'recovered', format: 'int'},
-  deceased: {key: 'deceased', format: 'int'},
-  other: {key: 'migrated', format: 'int'},
-  tested: {key: 'tested', format: 'short'},
+export const STATISTIC_CONFIGS = {
+  confirmed: {options: {key: 'confirmed'}, format: 'int'},
+  active: {options: {key: 'active'}, format: 'int', hideDelta: true},
+  recovered: {options: {key: 'recovered'}, format: 'int'},
+  deceased: {options: {key: 'deceased'}, format: 'int'},
+  other: {options: {key: 'other'}, format: 'int'},
+  tested: {options: {key: 'tested'}, format: 'short'},
   'active ratio': {
-    key: 'active',
-    options: {percentagePerConfirmed: true},
-    hideDelta: true,
+    options: {
+      key: 'active',
+      normalizeByKey: 'confirmed',
+      multiplyFactor: 100,
+    },
     format: '%',
+    hideDelta: true,
   },
   'recovery ratio': {
-    key: 'recovered',
-    options: {percentagePerConfirmed: true},
-    hideDelta: true,
+    options: {
+      key: 'recovered',
+      normalizeByKey: 'confirmed',
+      multiplyFactor: 100,
+    },
     format: '%',
+    hideDelta: true,
   },
   'case fatality ratio': {
-    key: 'deceased',
-    options: {percentagePerConfirmed: true},
-    hideDelta: true,
+    options: {
+      key: 'deceased',
+      normalizeByKey: 'confirmed',
+      multiplyFactor: 100,
+    },
     format: '%',
+    hideDelta: true,
   },
-  population: {key: 'population', hideDelta: true, format: 'short'},
+  'test positivity ratio': {
+    options: {
+      key: 'positives',
+      normalizeByKey: 'tested',
+      multiplyFactor: 100,
+    },
+    format: '%',
+    hideDelta: true,
+  },
+  population: {options: {key: 'population'}, format: 'short', hideDelta: true},
+};
+
+export const PER_MILLION_OPTIONS = {
+  normalizeByKey: 'population',
+  multiplyFactor: 1e6,
 };
 
 export const UPDATES_COUNT = 5;
