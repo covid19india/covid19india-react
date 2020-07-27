@@ -1,5 +1,4 @@
 import {
-  COLORS,
   D3_TRANSITION_DURATION,
   STATISTIC_CONFIGS,
   TIMESERIES_STATISTICS,
@@ -201,7 +200,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
 
       const statistic = TIMESERIES_STATISTICS[i];
       const yScale = generateYScale(statistic);
-      const color = COLORS[statistic];
+      const color = STATISTIC_CONFIGS[statistic].color;
 
       /* X axis */
       svg

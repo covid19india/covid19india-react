@@ -17,76 +17,85 @@ export const LOCALE_SHORTHANDS = {
 export const STATISTIC_DEFINITIONS = {
   confirmed: {
     displayName: 'confirmed',
-    options: {key: 'confirmed'},
+    color: '#ff073a',
     format: 'int',
+    options: {key: 'confirmed'},
   },
   active: {
     displayName: 'active',
-    options: {key: 'active'},
+    color: '#007bff',
     format: 'int',
+    options: {key: 'active'},
     hideDelta: true,
   },
   recovered: {
     displayName: 'recovered',
-    options: {key: 'recovered'},
+    color: '#28a745',
     format: 'int',
+    options: {key: 'recovered'},
   },
   deceased: {
     displayName: 'deceased',
-    options: {key: 'deceased'},
+    color: '#6c757d',
     format: 'int',
+    options: {key: 'deceased'},
   },
-  other: {displayName: 'other', options: {key: 'other'}, format: 'int'},
-  tested: {displayName: 'tested', options: {key: 'tested'}, format: 'short'},
+  other: {displayName: 'other', format: 'int', options: {key: 'other'}},
+  tested: {
+    displayName: 'tested',
+    color: '#4b1eaa',
+    format: 'short',
+    options: {key: 'tested'},
+  },
   positives: {
     displayName: 'positive samples',
-    options: {key: 'positives'},
     format: 'short',
+    options: {key: 'positives'},
   },
   activeRatio: {
     displayName: 'active ratio',
+    format: '%',
     options: {
       key: 'active',
       normalizeByKey: 'confirmed',
       multiplyFactor: 100,
     },
-    format: '%',
     hideDelta: true,
   },
   recoveryRatio: {
     displayName: 'recovery ratio',
+    format: '%',
     options: {
       key: 'recovered',
       normalizeByKey: 'confirmed',
       multiplyFactor: 100,
     },
-    format: '%',
     hideDelta: true,
   },
   cfr: {
     displayName: 'case fatality ratio',
+    format: '%',
     options: {
       key: 'deceased',
       normalizeByKey: 'confirmed',
       multiplyFactor: 100,
     },
-    format: '%',
     hideDelta: true,
   },
   tpr: {
     displayName: 'test positivity ratio',
+    format: '%',
     options: {
       key: 'positives',
       normalizeByKey: 'tested',
       multiplyFactor: 100,
     },
-    format: '%',
     hideDelta: true,
   },
   population: {
     displayName: 'population',
-    options: {key: 'population'},
     format: 'short',
+    options: {key: 'population'},
     hideDelta: true,
   },
 };
@@ -139,14 +148,6 @@ export const UNASSIGNED_STATE_CODE = 'UN';
 export const UNKNOWN_DISTRICT_KEY = 'Unknown';
 
 export const INDIA_ISO_SUFFIX = 'T00:00:00+05:30';
-
-export const COLORS = {
-  confirmed: '#ff073a',
-  active: '#007bff',
-  recovered: '#28a745',
-  deceased: '#6c757d',
-  tested: '#4b1eaa',
-};
 
 export const SPRING_CONFIG_NUMBERS = {clamp: true, precision: 1};
 
