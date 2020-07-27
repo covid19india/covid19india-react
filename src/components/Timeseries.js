@@ -374,6 +374,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       <div className="Timeseries">
         {TIMESERIES_STATISTICS.map((statistic, index) => {
           const delta = getStatisticDelta(statistic, index);
+          const statisticConfig = STATISTIC_CONFIGS[statistic];
           return (
             <div
               key={statistic}
@@ -384,7 +385,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
               {highlightedDate && (
                 <div className={classnames('stats', `is-${statistic}`)}>
                   <h5 className="title">
-                    {t(capitalize(STATISTIC_CONFIGS[statistic].displayName))}
+                    {t(capitalize(statisticConfig.displayName))}
                   </h5>
                   <h5 className="title">
                     {formatDate(highlightedDate, 'dd MMMM')}
@@ -397,13 +398,17 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
                           chartType,
                           statistic
                         ),
-                        'int',
+                        statisticConfig.format !== 'short'
+                          ? statisticConfig.format
+                          : 'int',
                         statistic
                       )}
                     </h2>
                     <h6>{`${delta > 0 ? '+' : ''}${formatNumber(
                       delta,
-                      'int',
+                      statisticConfig.format !== 'short'
+                        ? statisticConfig.format
+                        : 'int',
                       statistic
                     )}`}</h6>
                   </div>

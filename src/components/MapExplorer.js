@@ -191,6 +191,8 @@ function MapExplorer({
     },
   });
 
+  const statisticConfig = STATISTIC_CONFIGS[mapStatistic];
+
   return (
     <div
       className={classnames(
@@ -214,12 +216,16 @@ function MapExplorer({
             <h1 className={classnames('district', mapStatistic)}>
               <animated.div>
                 {spring.total.interpolate((total) =>
-                  formatNumber(Math.floor(total))
+                  formatNumber(
+                    total,
+                    statisticConfig.format !== 'short'
+                      ? statisticConfig.format
+                      : 'int',
+                    mapStatistic
+                  )
                 )}
               </animated.div>
-              <span>
-                {t(capitalize(STATISTIC_CONFIGS[mapStatistic].displayName))}
-              </span>
+              <span>{t(capitalize(statisticConfig.displayName))}</span>
             </h1>
           )}
         </div>
