@@ -29,7 +29,7 @@ const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
 const MapExplorer = lazy(() => import('./MapExplorer'));
 const Minigraphs = lazy(() => import('./Minigraphs'));
 
-function State(props) {
+function State() {
   const {t} = useTranslation();
 
   const stateCode = useParams().stateCode.toUpperCase();

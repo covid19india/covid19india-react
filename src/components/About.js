@@ -6,7 +6,7 @@ import {Helmet} from 'react-helmet';
 // TODO(slightlyoff): factor out common JSON parsing & caching of this file
 const DATA_URL = 'https://api.covid19india.org/website_data.json';
 
-function About(props) {
+function About() {
   const [faq, setFaq] = useState([]);
 
   useEffect(() => {
