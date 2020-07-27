@@ -1,7 +1,7 @@
 import {
-  COLORS,
   MINIGRAPH_LOOKBACK_DAYS,
   PRIMARY_STATISTICS,
+  STATISTIC_CONFIGS,
 } from '../constants';
 import {
   getStatistic,
@@ -54,7 +54,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
     refs.current.forEach((ref, index) => {
       const svg = select(ref);
       const statistic = PRIMARY_STATISTICS[index];
-      const color = COLORS[statistic];
+      const color = STATISTIC_CONFIGS[statistic].color;
 
       const dailyMaxAbs = max(dates, (date) =>
         Math.abs(getStatistic(timeseries[date], 'delta', statistic))

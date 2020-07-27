@@ -1,7 +1,6 @@
 import MapLegend from './MapLegend';
 
 import {
-  COLORS,
   D3_TRANSITION_DURATION,
   MAP_META,
   MAP_TYPES,
@@ -9,6 +8,7 @@ import {
   MAP_VIZS,
   STATE_CODES,
   STATE_NAMES,
+  STATISTIC_CONFIGS,
   UNKNOWN_DISTRICT_KEY,
 } from '../constants';
 import {
@@ -137,7 +137,7 @@ function MapVisualizer({
 
   const strokeColor = useCallback(
     (alpha) => {
-      return COLORS[statistic] + alpha;
+      return STATISTIC_CONFIGS[statistic].color + alpha;
     },
     [statistic]
   );
@@ -364,8 +364,8 @@ function MapVisualizer({
         );
       })
       .transition(T)
-      .attr('fill', COLORS[statistic] + '70')
-      .attr('stroke', COLORS[statistic] + '70')
+      .attr('fill', STATISTIC_CONFIGS[statistic].color + '70')
+      .attr('stroke', STATISTIC_CONFIGS[statistic].color + '70')
       .attr('r', (feature) => mapScale(feature.value));
   }, [
     mapMeta.mapType,
