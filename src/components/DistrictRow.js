@@ -3,11 +3,11 @@ import Tooltip from './Tooltip';
 
 import {TABLE_STATISTICS, TABLE_STATISTICS_EXPANDED} from '../constants';
 
+import {InfoIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {useCallback} from 'react';
-import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 
 function DistrictRow({
@@ -47,7 +47,7 @@ function DistrictRow({
         <div className="state-name">{t(districtName)}</div>
         {data?.meta?.notes && (
           <Tooltip {...{data: data.meta.notes}}>
-            <Info size={16} />
+            <InfoIcon size={16} />
           </Tooltip>
         )}
       </div>

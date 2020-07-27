@@ -11,7 +11,7 @@ import {
 
 import {format, sub} from 'date-fns';
 import React from 'react';
-import * as Icon from 'react-feather';
+import {Compass} from 'react-feather';
 
 function StateMeta({stateCode, data, timeseries}) {
   const confirmed = getStatistic(data[stateCode], 'total', 'confirmed');
@@ -63,7 +63,7 @@ function StateMeta({stateCode, data, timeseries}) {
           <h1>{formatNumber(data[stateCode]?.meta?.population)}</h1>
         </div>
         <div className="alert">
-          <Icon.Compass />
+          <Compass />
           <div className="alert-right">
             Based on 2019 population projection by NCP{' '}
             <a

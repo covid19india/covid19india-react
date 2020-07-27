@@ -15,15 +15,15 @@ import {getStatistic} from '../utils/commonFunctions';
 
 import {
   FilterIcon,
+  FoldDownIcon,
+  InfoIcon,
   OrganizationIcon,
   QuestionIcon,
-  FoldDownIcon,
 } from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {useCallback, useEffect, useState, lazy} from 'react';
-import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useTrail, useTransition, animated, config} from 'react-spring';
@@ -232,7 +232,7 @@ function Table({
 
                 <div className="info-item notes">
                   <span>
-                    <Info size={15} />
+                    <InfoIcon size={15} />
                   </span>
                   <p>Notes</p>
                 </div>

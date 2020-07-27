@@ -61,6 +61,8 @@ export const STATISTICS_CONFIGS = {
   population: {key: 'population', hideDelta: true, format: 'short'},
 };
 
+export const UPDATES_COUNT = 5;
+
 export const DISTRICT_TABLE_COUNT = 30;
 
 export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];

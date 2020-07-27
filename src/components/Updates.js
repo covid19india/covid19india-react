@@ -1,3 +1,4 @@
+import {UPDATES_COUNT} from '../constants';
 import {capitalize} from '../utils/commonFunctions';
 
 import {formatDistance, format} from 'date-fns';
@@ -19,7 +20,7 @@ function Updates({updates}) {
       </div>
 
       {updates
-        .slice(-5)
+        .slice(-UPDATES_COUNT)
         .reverse()
         .map(function (activity, index) {
           activity.update = activity.update.replace(/\n/g, '<br/>');
