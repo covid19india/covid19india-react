@@ -78,20 +78,23 @@ function MapExplorer({
     });
   }, [data, regionHighlighted.stateCode, regionHighlighted.districtName]);
 
-  const handleTabClick = (option) => {
-    switch (option) {
-      case MAP_VIZS.CHOROPLETH:
-        setMapViz(MAP_VIZS.CHOROPLETH);
-        return;
+  const handleTabClick = useCallback(
+    (option) => {
+      switch (option) {
+        case MAP_VIZS.CHOROPLETH:
+          setMapViz(MAP_VIZS.CHOROPLETH);
+          return;
 
-      case MAP_VIZS.BUBBLES:
-        setMapViz(MAP_VIZS.BUBBLES);
-        return;
+        case MAP_VIZS.BUBBLES:
+          setMapViz(MAP_VIZS.BUBBLES);
+          return;
 
-      default:
-        return;
-    }
-  };
+        default:
+          return;
+      }
+    },
+    [setMapViz]
+  );
 
   const handleDistrictClick = useCallback(() => {
     const newMapView =
