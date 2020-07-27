@@ -390,8 +390,8 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
             >
               {highlightedDate && (
                 <div className={classnames('stats', `is-${statistic}`)}>
-                  <h5 className="title">{t(capitalize(statistic))}</h5>
                   <h5 className="title">
+                    {t(capitalize(statistic))} -{' '}
                     {formatDate(highlightedDate, 'dd MMMM')}
                   </h5>
                   <div className="stats-bottom">

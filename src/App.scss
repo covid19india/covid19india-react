@@ -2781,7 +2781,6 @@ input {
     padding: 0.25rem;
     pointer-events: none;
     position: absolute;
-    top: 0.5rem;
 
     h2,
     h5,
@@ -2807,8 +2806,8 @@ input {
       flex-direction: row;
 
       h6 {
-        margin-bottom: 0.1rem;
         margin-left: 0.25rem;
+        margin-top: 0.42rem;
       }
 
       & > * {
