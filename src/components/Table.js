@@ -5,9 +5,7 @@ import TableDeltaHelper from './snippets/TableDeltaHelper';
 import {TABLE_FADE_IN, TABLE_FADE_OUT} from '../animations';
 import {
   DISTRICT_TABLE_COUNT,
-  PER_MILLION_OPTIONS,
   STATE_NAMES,
-  STATISTIC_CONFIGS,
   TABLE_STATISTICS,
   TABLE_STATISTICS_EXPANDED,
   UNASSIGNED_STATE_CODE,
@@ -82,23 +80,17 @@ function Table({
   const sortingFunction = useCallback(
     (regionKeyA, regionKeyB) => {
       if (sortData.sortColumn !== 'regionName') {
-        const statisticConfig = STATISTIC_CONFIGS[sortData.sortColumn];
-        const statisticOptions = {
-          ...statisticConfig.options,
-          ...(isPerMillion &&
-            !statisticConfig.options?.normalizeByKey &&
-            PER_MILLION_OPTIONS),
-        };
-
         const statisticA = getStatistic(
           districts?.[regionKeyA] || states[regionKeyA],
           sortData.delta ? 'delta' : 'total',
-          statisticOptions
+          sortData.sortColumn,
+          isPerMillion
         );
         const statisticB = getStatistic(
           districts?.[regionKeyB] || states[regionKeyB],
           sortData.delta ? 'delta' : 'total',
-          statisticOptions
+          sortData.sortColumn,
+          isPerMillion
         );
         return sortData.isAscending
           ? statisticA - statisticB

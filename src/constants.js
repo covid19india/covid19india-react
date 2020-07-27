@@ -14,6 +14,103 @@ export const LOCALE_SHORTHANDS = {
   odiya: 'en-US',
 };
 
+export const STATISTIC_DEFINITIONS = {
+  confirmed: {
+    displayName: 'confirmed',
+    options: {key: 'confirmed'},
+    format: 'int',
+  },
+  active: {
+    displayName: 'active',
+    options: {key: 'active'},
+    format: 'int',
+    hideDelta: true,
+  },
+  recovered: {
+    displayName: 'recovered',
+    options: {key: 'recovered'},
+    format: 'int',
+  },
+  deceased: {
+    displayName: 'deceased',
+    options: {key: 'deceased'},
+    format: 'int',
+  },
+  other: {displayName: 'other', options: {key: 'other'}, format: 'int'},
+  tested: {displayName: 'tested', options: {key: 'tested'}, format: 'short'},
+  positives: {
+    displayName: 'positive samples',
+    options: {key: 'positives'},
+    format: 'short',
+  },
+  activeRatio: {
+    displayName: 'active ratio',
+    options: {
+      key: 'active',
+      normalizeByKey: 'confirmed',
+      multiplyFactor: 100,
+    },
+    format: '%',
+    hideDelta: true,
+  },
+  recoveryRatio: {
+    displayName: 'recovery ratio',
+    options: {
+      key: 'recovered',
+      normalizeByKey: 'confirmed',
+      multiplyFactor: 100,
+    },
+    format: '%',
+    hideDelta: true,
+  },
+  cfr: {
+    displayName: 'case fatality ratio',
+    options: {
+      key: 'deceased',
+      normalizeByKey: 'confirmed',
+      multiplyFactor: 100,
+    },
+    format: '%',
+    hideDelta: true,
+  },
+  tpr: {
+    displayName: 'test positivity ratio',
+    options: {
+      key: 'positives',
+      normalizeByKey: 'tested',
+      multiplyFactor: 100,
+    },
+    format: '%',
+    hideDelta: true,
+  },
+  population: {
+    displayName: 'population',
+    options: {key: 'population'},
+    format: 'short',
+    hideDelta: true,
+  },
+};
+
+const definitions = Object.keys(STATISTIC_DEFINITIONS).reduce(
+  (acc, statistic) => {
+    const {options, ...config} = STATISTIC_DEFINITIONS[statistic];
+    acc.options[statistic] = options;
+    acc.configs[statistic] = config;
+    return acc;
+  },
+  {options: {}, configs: {}}
+);
+
+export const STATISTIC_CONFIGS = definitions.configs;
+export const STATISTIC_OPTIONS = definitions.options;
+
+export const PER_MILLION_OPTIONS = {
+  normalizeByKey: 'population',
+  multiplyFactor: 1e6,
+};
+
+export const NAN_STATISTICS = ['tested', 'tpr', 'population'];
+
 export const PRIMARY_STATISTICS = [
   'confirmed',
   'active',
@@ -23,75 +120,15 @@ export const PRIMARY_STATISTICS = [
 
 export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
-export const STATISTICS_MISSING_IS_ZERO = [...PRIMARY_STATISTICS, 'other'];
+export const TABLE_STATISTICS_EXPANDED = Object.keys(
+  STATISTIC_DEFINITIONS
+).filter((statistic) => statistic !== 'positives');
 
-export const TABLE_STATISTICS_EXPANDED = [
-  ...PRIMARY_STATISTICS,
-  'other',
-  'tested',
-  'active ratio',
-  'recovery ratio',
-  'case fatality ratio',
-  'test positivity ratio',
-  'population',
-];
-
-export const STATISTIC_CONFIGS = {
-  confirmed: {options: {key: 'confirmed'}, format: 'int'},
-  active: {options: {key: 'active'}, format: 'int', hideDelta: true},
-  recovered: {options: {key: 'recovered'}, format: 'int'},
-  deceased: {options: {key: 'deceased'}, format: 'int'},
-  other: {options: {key: 'other'}, format: 'int'},
-  tested: {options: {key: 'tested'}, format: 'short'},
-  'active ratio': {
-    options: {
-      key: 'active',
-      normalizeByKey: 'confirmed',
-      multiplyFactor: 100,
-    },
-    format: '%',
-    hideDelta: true,
-  },
-  'recovery ratio': {
-    options: {
-      key: 'recovered',
-      normalizeByKey: 'confirmed',
-      multiplyFactor: 100,
-    },
-    format: '%',
-    hideDelta: true,
-  },
-  'case fatality ratio': {
-    options: {
-      key: 'deceased',
-      normalizeByKey: 'confirmed',
-      multiplyFactor: 100,
-    },
-    format: '%',
-    hideDelta: true,
-  },
-  'test positivity ratio': {
-    options: {
-      key: 'positives',
-      normalizeByKey: 'tested',
-      multiplyFactor: 100,
-    },
-    format: '%',
-    hideDelta: true,
-  },
-  population: {options: {key: 'population'}, format: 'short', hideDelta: true},
-};
-
-export const PER_MILLION_OPTIONS = {
-  normalizeByKey: 'population',
-  multiplyFactor: 1e6,
-};
+export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
 export const UPDATES_COUNT = 5;
 
 export const DISTRICT_TABLE_COUNT = 30;
-
-export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
 export const D3_TRANSITION_DURATION = 300;
 
@@ -160,7 +197,6 @@ export const MAP_META = {
     mapType: MAP_TYPES.STATE,
   },
   CT: {
-    name: 'Chhattisgarh',
     geoDataFile: `${MAPS_DIR}/chhattisgarh.json`,
     mapType: MAP_TYPES.STATE,
   },
@@ -261,7 +297,6 @@ export const MAP_META = {
     mapType: MAP_TYPES.STATE,
   },
   AN: {
-    name: 'Andaman and Nicobar Islands',
     geoDataFile: `${MAPS_DIR}/andamannicobarislands.json`,
     mapType: MAP_TYPES.STATE,
   },
