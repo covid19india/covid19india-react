@@ -29,7 +29,7 @@ const Cell = ({statistic, data, isPerMillion}) => {
 
   const spring = useSpring({
     total: total,
-    delta: delta,
+    delta: delta || 0,
     config: SPRING_CONFIG_NUMBERS,
   });
 
