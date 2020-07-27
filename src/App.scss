@@ -507,7 +507,12 @@ h6 {
         align-self: center;
       }
 
+      h3 {
+        width: calc(100% - 2.5rem);
+      }
+
       span {
+        margin-bottom: auto;
         margin-right: 1rem;
       }
 
