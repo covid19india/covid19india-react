@@ -4,8 +4,9 @@ import HeaderCell from './HeaderCell';
 import Tooltip from './Tooltip';
 
 import {
+  PER_MILLION_OPTIONS,
   STATE_NAMES,
-  STATISTICS_CONFIGS,
+  STATISTIC_CONFIGS,
   TABLE_STATISTICS,
   TABLE_STATISTICS_EXPANDED,
   UNKNOWN_DISTRICT_KEY,
@@ -68,26 +69,24 @@ function Row({
   const sortingFunction = useCallback(
     (districtNameA, districtNameB) => {
       if (sortData.sortColumn !== 'districtName') {
-        const statisticConfig = STATISTICS_CONFIGS[sortData.sortColumn];
+        const statisticConfig = STATISTIC_CONFIGS[sortData.sortColumn];
         const statisticOptions = {
           ...statisticConfig.options,
-          perMillion: isPerMillion,
+          ...(isPerMillion &&
+            !statisticConfig.options?.normalizeByKey &&
+            PER_MILLION_OPTIONS),
         };
 
-        const statisticA =
-          getStatistic(
-            data.districts[districtNameA],
-            sortData.delta ? 'delta' : 'total',
-            statisticConfig.key,
-            statisticOptions
-          ) || 0;
-        const statisticB =
-          getStatistic(
-            data.districts[districtNameB],
-            sortData.delta ? 'delta' : 'total',
-            statisticConfig.key,
-            statisticOptions
-          ) || 0;
+        const statisticA = getStatistic(
+          data.districts[districtNameA],
+          sortData.delta ? 'delta' : 'total',
+          statisticOptions
+        );
+        const statisticB = getStatistic(
+          data.districts[districtNameB],
+          sortData.delta ? 'delta' : 'total',
+          statisticOptions
+        );
         return sortData.isAscending
           ? statisticA - statisticB
           : statisticB - statisticA;

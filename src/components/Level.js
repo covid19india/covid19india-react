@@ -1,5 +1,9 @@
 import {PRIMARY_STATISTICS, SPRING_CONFIG_NUMBERS} from '../constants';
-import {capitalize, formatNumber, getStatistic} from '../utils/commonFunctions';
+import {
+  capitalize,
+  formatNumber,
+  getPrimaryStatistic,
+} from '../utils/commonFunctions';
 
 import {HeartFillIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
@@ -64,8 +68,8 @@ function Level({data}) {
         >
           <LevelItem
             {...{statistic}}
-            total={getStatistic(data, 'total', statistic)}
-            delta={getStatistic(data, 'delta', statistic)}
+            total={getPrimaryStatistic(data, 'total', statistic)}
+            delta={getPrimaryStatistic(data, 'delta', statistic)}
           />
         </animated.div>
       ))}
@@ -76,8 +80,8 @@ function Level({data}) {
 const isEqual = (prevProps, currProps) => {
   if (
     !equal(
-      getStatistic(prevProps.data, 'total', 'active'),
-      getStatistic(currProps.data, 'total', 'active')
+      getPrimaryStatistic(prevProps.data, 'total', 'active'),
+      getPrimaryStatistic(currProps.data, 'total', 'active')
     )
   ) {
     return false;
