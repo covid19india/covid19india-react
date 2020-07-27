@@ -10,7 +10,7 @@ import i18n from 'i18next';
 
 let locale = null;
 const numberFormatter = new Intl.NumberFormat('en-IN', {
-  maximumFractionDigits: 2,
+  maximumFractionDigits: 1,
 });
 
 const getLocale = () => {
@@ -144,6 +144,57 @@ export const getStatistic = (
   }
 
   return multiplyFactor * count || 0;
+};
+
+export const getIndiaTPR = (states) => {
+  const sumTested = Object.keys(states || {})
+    .filter((stateCode) => stateCode !== 'TT')
+    .reduce(
+      (acc, stateCode) => {
+        acc.total.positives += getPrimaryStatistic(
+          states[stateCode],
+          'total',
+          'positives'
+        );
+        acc.total.samples += getPrimaryStatistic(
+          states[stateCode],
+          'total',
+          'tested'
+        );
+
+        acc.delta.positives += getPrimaryStatistic(
+          states[stateCode],
+          'delta',
+          'positives'
+        );
+        acc.delta.samples += getPrimaryStatistic(
+          states[stateCode],
+          'delta',
+          'tested'
+        );
+        return acc;
+      },
+      {
+        total: {
+          samples: 0,
+          positives: 0,
+        },
+        delta: {
+          samples: 0,
+          positives: 0,
+        },
+      }
+    );
+
+  const positives = sumTested.total.positives;
+  const samples = sumTested.total.samples;
+  const prevPositives = sumTested.total.positives - sumTested.delta.positives;
+  const prevSamples = sumTested.total.samples - sumTested.delta.samples;
+
+  const total = (100 * positives) / samples;
+  const delta = 100 * (positives / samples - prevPositives / prevSamples);
+
+  return {total, delta};
 };
 
 export const getPrimaryStatistic = (data, type, statistic) => {

@@ -3,14 +3,18 @@ import {
   SPRING_CONFIG_NUMBERS,
   STATISTIC_CONFIGS,
 } from '../constants.js';
-import {formatNumber, getStatistic} from '../utils/commonFunctions';
+import {
+  formatNumber,
+  getIndiaTPR,
+  getStatistic,
+} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import React from 'react';
 import {animated, useSpring} from 'react-spring';
 
-const Cell = ({statistic, data, isPerMillion}) => {
+const Cell = ({statistic, data, isPerMillion, stateCode, states}) => {
   const statisticConfig = STATISTIC_CONFIGS[statistic];
   const statisticOptions = {
     ...statisticConfig.options,
@@ -18,10 +22,13 @@ const Cell = ({statistic, data, isPerMillion}) => {
       !statisticConfig.options?.normalizeByKey &&
       PER_MILLION_OPTIONS),
   };
-
-  const total = getStatistic(data, 'total', statisticOptions);
-
-  const delta = getStatistic(data, 'delta', statisticOptions);
+  const [total, delta] =
+    stateCode !== 'TT' || statistic !== 'test positivity ratio'
+      ? [
+          getStatistic(data, 'total', statisticOptions),
+          getStatistic(data, 'delta', statisticOptions),
+        ]
+      : Object.values(getIndiaTPR(states));
 
   const spring = useSpring({
     total: total,
