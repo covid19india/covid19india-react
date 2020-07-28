@@ -39,7 +39,6 @@ function Row({
   regionHighlighted,
   setRegionHighlighted,
   expandTable,
-  states,
 }) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useSessionStorage('districtSortData', {
@@ -187,10 +186,7 @@ function Row({
         </div>
 
         {tableStatistics.map((statistic) => (
-          <Cell
-            key={statistic}
-            {...{data, statistic, isPerMillion, stateCode, states}}
-          />
+          <Cell key={statistic} {...{data, statistic, isPerMillion}} />
         ))}
       </div>
 

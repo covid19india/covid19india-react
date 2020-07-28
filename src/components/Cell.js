@@ -1,23 +1,14 @@
 import {SPRING_CONFIG_NUMBERS, STATISTIC_CONFIGS} from '../constants.js';
-import {
-  formatNumber,
-  getIndiaTPR,
-  getStatistic,
-} from '../utils/commonFunctions';
+import {formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import React from 'react';
 import {animated, useSpring} from 'react-spring';
 
-const Cell = ({statistic, data, isPerMillion, stateCode, states}) => {
-  const [total, delta] =
-    stateCode !== 'TT' || statistic !== 'tpr'
-      ? [
-          getStatistic(data, 'total', statistic, isPerMillion),
-          getStatistic(data, 'delta', statistic, isPerMillion),
-        ]
-      : Object.values(getIndiaTPR(states));
+const Cell = ({statistic, data, isPerMillion}) => {
+  const total = getStatistic(data, 'total', statistic, isPerMillion);
+  const delta = getStatistic(data, 'delta', statistic, isPerMillion);
 
   const spring = useSpring({
     total: total,

@@ -52,6 +52,12 @@ export const STATISTIC_DEFINITIONS = {
     format: 'short',
     options: {key: 'tested'},
   },
+  testedStates: {
+    displayName: 'sum of state tests',
+    color: '#fd7e14',
+    format: 'short',
+    options: {key: 'tested_states'},
+  },
   positives: {
     displayName: 'positive samples',
     color: '#fd7e14',

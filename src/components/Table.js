@@ -327,7 +327,6 @@ function Table({
               regionHighlighted,
               setRegionHighlighted,
               expandTable,
-              states,
             }}
           />
         </div>
