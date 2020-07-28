@@ -1689,6 +1689,7 @@ abbr {
 
 .table-container {
   align-self: center;
+  margin-bottom: 2.5rem;
   overflow-x: auto;
   width: 100%;
 }
@@ -1698,7 +1699,6 @@ abbr {
   display: inline-grid;
   font-size: 12px;
   grid-template-rows: auto;
-  margin-bottom: 2.5rem;
   min-width: 100%;
 
   .state-meta {
