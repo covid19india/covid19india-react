@@ -40,7 +40,12 @@ export const STATISTIC_DEFINITIONS = {
     format: 'int',
     options: {key: 'deceased'},
   },
-  other: {displayName: 'other', format: 'int', options: {key: 'other'}},
+  other: {
+    displayName: 'other',
+    color: '#fd7e14',
+    format: 'int',
+    options: {key: 'other'},
+  },
   tested: {
     displayName: 'tested',
     color: '#4b1eaa',
@@ -49,11 +54,13 @@ export const STATISTIC_DEFINITIONS = {
   },
   positives: {
     displayName: 'positive samples',
+    color: '#fd7e14',
     format: 'short',
     options: {key: 'positives'},
   },
   activeRatio: {
     displayName: 'active ratio',
+    color: '#fd7e14',
     format: '%',
     options: {
       key: 'active',
@@ -64,6 +71,7 @@ export const STATISTIC_DEFINITIONS = {
   },
   recoveryRatio: {
     displayName: 'recovery ratio',
+    color: '#fd7e14',
     format: '%',
     options: {
       key: 'recovered',
@@ -74,6 +82,7 @@ export const STATISTIC_DEFINITIONS = {
   },
   cfr: {
     displayName: 'case fatality ratio',
+    color: '#fd7e14',
     format: '%',
     options: {
       key: 'deceased',
@@ -84,6 +93,7 @@ export const STATISTIC_DEFINITIONS = {
   },
   tpr: {
     displayName: 'test positivity ratio',
+    color: '#fd7e14',
     format: '%',
     options: {
       key: 'positives',
@@ -94,6 +104,7 @@ export const STATISTIC_DEFINITIONS = {
   },
   population: {
     displayName: 'population',
+    color: '#fd7e14',
     format: 'short',
     options: {key: 'population'},
     hideDelta: true,
