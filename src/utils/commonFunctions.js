@@ -101,7 +101,7 @@ export const toTitleCase = (str) => {
 };
 
 export const getStatistic = (data, type, statistic, perMillion = false) => {
-  const {key, normalizeByKey: normalizeBy, multiplyFactor} = {
+  let {key, normalizeByKey: normalizeBy, multiplyFactor} = {
     ...STATISTIC_OPTIONS[statistic],
     ...(perMillion &&
       !STATISTIC_OPTIONS[statistic]?.normalizeByKey &&
@@ -113,8 +113,15 @@ export const getStatistic = (data, type, statistic, perMillion = false) => {
     count = type === 'total' ? data?.meta?.population : 0;
   } else if (key === 'tested') {
     count = data?.[type]?.tested?.samples;
+  } else if (key === 'tested_states') {
+    count = data?.[type]?.tested?.states?.samples;
   } else if (key === 'positives') {
-    count = data?.[type]?.tested?.positives;
+    if (data?.[type]?.tested?.positives)
+      count = data?.[type]?.tested?.positives;
+    else if (data?.[type]?.tested?.states?.positives) {
+      count = data?.[type]?.tested?.states?.positives;
+      if (normalizeBy === 'tested') normalizeBy = 'testedStates';
+    }
   } else if (key === 'active') {
     const confirmed = data?.[type]?.confirmed || 0;
     const deceased = data?.[type]?.deceased || 0;
@@ -145,49 +152,6 @@ export const getStatistic = (data, type, statistic, perMillion = false) => {
   }
 
   return (multiplyFactor || 1) * count || 0;
-};
-
-export const getIndiaTPR = (states) => {
-  const sumTested = Object.keys(states || {})
-    .filter((stateCode) => stateCode !== 'TT')
-    .reduce(
-      (acc, stateCode) => {
-        acc.total.positives += getStatistic(
-          states[stateCode],
-          'total',
-          'positives'
-        );
-        acc.total.samples += getStatistic(states[stateCode], 'total', 'tested');
-
-        acc.delta.positives += getStatistic(
-          states[stateCode],
-          'delta',
-          'positives'
-        );
-        acc.delta.samples += getStatistic(states[stateCode], 'delta', 'tested');
-        return acc;
-      },
-      {
-        total: {
-          samples: 0,
-          positives: 0,
-        },
-        delta: {
-          samples: 0,
-          positives: 0,
-        },
-      }
-    );
-
-  const positives = sumTested.total.positives;
-  const samples = sumTested.total.samples;
-  const prevPositives = sumTested.total.positives - sumTested.delta.positives;
-  const prevSamples = sumTested.total.samples - sumTested.delta.samples;
-
-  const total = (100 * positives) / samples;
-  const delta = 100 * (positives / samples - prevPositives / prevSamples);
-
-  return {total, delta};
 };
 
 export const fetcher = (url) => {
