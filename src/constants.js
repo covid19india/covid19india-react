@@ -135,7 +135,7 @@ export const PER_MILLION_OPTIONS = {
   multiplyFactor: 1e6,
 };
 
-export const NAN_STATISTICS = ['tested', 'tpr', 'population'];
+export const NAN_STATISTICS = ['tested', 'testedStates', 'tpr', 'population'];
 
 export const PRIMARY_STATISTICS = [
   'confirmed',
@@ -148,7 +148,7 @@ export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
 export const TABLE_STATISTICS_EXPANDED = Object.keys(
   STATISTIC_DEFINITIONS
-).filter((statistic) => statistic !== 'positives');
+).filter((statistic) => !['positives', 'testedStates'].includes(statistic));
 
 export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
