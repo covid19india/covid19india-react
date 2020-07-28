@@ -151,7 +151,7 @@ export const getStatistic = (data, type, statistic, perMillion = false) => {
     }
   }
 
-  return (multiplyFactor || 1) * count || 0;
+  return (multiplyFactor || 1) * ((isFinite(count) && count) || 0);
 };
 
 export const fetcher = (url) => {
