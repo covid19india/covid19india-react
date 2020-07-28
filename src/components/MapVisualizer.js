@@ -12,9 +12,9 @@ import {
   UNKNOWN_DISTRICT_KEY,
 } from '../constants';
 import {
-  capitalizeAll,
   formatNumber,
   getStatistic,
+  toTitleCase,
 } from '../utils/commonFunctions';
 
 import {AlertIcon} from '@primer/octicons-v2-react';
@@ -180,7 +180,7 @@ function MapVisualizer({
           return (
             formatNumber(100 * (n / (statisticTotal || 0.001))) +
             '% from ' +
-            capitalizeAll(district ? district : state)
+            toTitleCase(district ? district : state)
           );
         }
       });

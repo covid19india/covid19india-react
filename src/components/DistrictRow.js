@@ -1,13 +1,13 @@
 import Cell from './Cell';
 import Tooltip from './Tooltip';
 
-import {TABLE_STATISTICS} from '../constants';
+import {TABLE_STATISTICS, TABLE_STATISTICS_EXPANDED} from '../constants';
 
+import {InfoIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {useCallback} from 'react';
-import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 
 function DistrictRow({
@@ -17,6 +17,7 @@ function DistrictRow({
   isPerMillion,
   regionHighlighted,
   setRegionHighlighted,
+  expandTable,
 }) {
   const {t} = useTranslation();
 
@@ -31,6 +32,10 @@ function DistrictRow({
     }
   }, [regionHighlighted, districtName, setRegionHighlighted, stateCode]);
 
+  const tableStatistics = expandTable
+    ? TABLE_STATISTICS_EXPANDED
+    : TABLE_STATISTICS;
+
   return (
     <div
       className={classnames('row', 'district', {
@@ -42,12 +47,12 @@ function DistrictRow({
         <div className="state-name">{t(districtName)}</div>
         {data?.meta?.notes && (
           <Tooltip {...{data: data.meta.notes}}>
-            <Info size={16} />
+            <InfoIcon size={16} />
           </Tooltip>
         )}
       </div>
 
-      {TABLE_STATISTICS.map((statistic) => (
+      {tableStatistics.map((statistic) => (
         <Cell key={statistic} {...{statistic, data, isPerMillion}} />
       ))}
     </div>
@@ -73,6 +78,8 @@ const isDistrictRowEqual = (prevProps, currProps) => {
     (equal(prevProps.regionHighlighted.districtName, prevProps.districtName) ||
       equal(currProps.regionHighlighted.districtName, currProps.districtName))
   ) {
+    return false;
+  } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
     return false;
   }
   return true;

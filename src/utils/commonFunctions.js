@@ -56,48 +56,41 @@ export const formatDate = (unformattedDate, formatString) => {
   });
 };
 
-export function sliceTimeseriesFromEnd(timeseries, days) {
-  return timeseries.slice(-days);
-}
-
 export const abbreviateNumber = (number) => {
-  if (number < 1e3) return number;
-  if (number >= 1e3 && number < 1e6) return +(number / 1e3).toFixed(1) + 'K';
-  if (number >= 1e6 && number < 1e9) return +(number / 1e6).toFixed(1) + 'M';
-  if (number >= 1e9 && number < 1e12) return +(number / 1e9).toFixed(1) + 'B';
-  if (number >= 1e12) return +(number / 1e12).toFixed(1) + 'T';
+  const numberFormatter = new Intl.NumberFormat('en-IN', {
+    maximumFractionDigits: 2,
+  });
+
+  if (number < 1e3) return numberFormatter.format(number);
+  if (number >= 1e3 && number < 1e6)
+    return numberFormatter.format(number / 1e3) + 'K';
+  if (number >= 1e6 && number < 1e9)
+    return numberFormatter.format(number / 1e6) + 'M';
+  if (number >= 1e9 && number < 1e12)
+    return numberFormatter.format(number / 1e9) + 'B';
+  if (number >= 1e12) return numberFormatter.format(number / 1e12) + 'T';
 };
 
-export const formatNumber = (value, mode = 'long') => {
+export const formatNumber = (value, option) => {
   if (isNaN(value)) return '-';
+  else if (option === 'short') {
+    return abbreviateNumber(value);
+  }
+
+  if (option === 'int') {
+    value = Math.floor(value);
+  }
 
   const numberFormatter = new Intl.NumberFormat('en-IN', {
     maximumFractionDigits: 2,
   });
 
-  if (mode === 'short') {
-    return abbreviateNumber(value);
-  }
-
-  return numberFormatter.format(value);
+  return numberFormatter.format(value) + (option === '%' ? '%' : '');
 };
 
 export const capitalize = (s) => {
   if (typeof s !== 'string') return '';
   return s.charAt(0).toUpperCase() + s.slice(1);
-};
-
-export const capitalizeAll = (s) => {
-  if (typeof s !== 'string') return '';
-  const str = s.toLowerCase().split(' ');
-  for (let i = 0; i < str.length; i++) {
-    str[i] = capitalize(str[i]);
-  }
-  return str.join(' ');
-};
-
-export const abbreviate = (s) => {
-  return s.slice(0, 1) + s.slice(1).replace(/[aeiou]/gi, '');
 };
 
 export const toTitleCase = (str) => {
@@ -106,9 +99,13 @@ export const toTitleCase = (str) => {
   });
 };
 
-export const getStatistic = (data, type, statistic, perMillion = false) => {
+export const getStatistic = (data, type, statistic, options = {}) => {
   let count;
-  if (statistic === 'active') {
+  if (statistic === 'population') {
+    count = type === 'total' ? data?.meta?.population || NaN : 0;
+  } else if (statistic === 'tested') {
+    count = data?.[type]?.[statistic] || NaN;
+  } else if (statistic === 'active') {
     const confirmed = data?.[type]?.confirmed || 0;
     const deceased = data?.[type]?.deceased || 0;
     const recovered = data?.[type]?.recovered || 0;
@@ -117,7 +114,24 @@ export const getStatistic = (data, type, statistic, perMillion = false) => {
   } else {
     count = data?.[type]?.[statistic] || 0;
   }
-  return perMillion ? (1e6 * count) / data?.meta?.population || 0 : count;
+
+  if (options.percentagePerConfirmed) {
+    const confirmed = data?.total?.confirmed || 0;
+    if (type === 'delta') {
+      const prevConfirmed = confirmed - data?.delta?.confirmed || 0;
+      const currTotal = getStatistic(data, 'total', statistic);
+      const prevTotal = currTotal - count;
+      const currRate = confirmed ? currTotal / confirmed : NaN;
+      const prevRate = prevConfirmed ? prevTotal / prevConfirmed : NaN;
+      return 100 * (currRate - prevRate);
+    } else if (type === 'total') {
+      return confirmed ? (100 * count) / confirmed : NaN;
+    }
+  } else if (options.perMillion) {
+    return (1e6 * count) / data?.meta?.population || 0;
+  } else {
+    return count;
+  }
 };
 
 export const fetcher = (url) => {

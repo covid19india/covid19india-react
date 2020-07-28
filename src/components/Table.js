@@ -5,13 +5,18 @@ import TableDeltaHelper from './snippets/TableDeltaHelper';
 import {TABLE_FADE_IN, TABLE_FADE_OUT} from '../animations';
 import {
   DISTRICT_TABLE_COUNT,
+  STATE_NAMES,
+  STATISTICS_CONFIGS,
   TABLE_STATISTICS,
+  TABLE_STATISTICS_EXPANDED,
   UNASSIGNED_STATE_CODE,
 } from '../constants';
 import {getStatistic} from '../utils/commonFunctions';
 
 import {
   FilterIcon,
+  FoldDownIcon,
+  InfoIcon,
   OrganizationIcon,
   QuestionIcon,
 } from '@primer/octicons-v2-react';
@@ -19,7 +24,6 @@ import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {useCallback, useEffect, useState, lazy} from 'react';
-import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useTrail, useTransition, animated, config} from 'react-spring';
@@ -29,7 +33,13 @@ import worker from 'workerize-loader!../workers/getDistricts';
 
 const Row = lazy(() => import('./Row'));
 
-function Table({data: states, regionHighlighted, setRegionHighlighted}) {
+function Table({
+  data: states,
+  regionHighlighted,
+  setRegionHighlighted,
+  expandTable,
+  setExpandTable,
+}) {
   const {t} = useTranslation();
   const [sortData, setSortData] = useSessionStorage('sortData', {
     sortColumn: 'confirmed',
@@ -71,25 +81,37 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
   const sortingFunction = useCallback(
     (regionKeyA, regionKeyB) => {
       if (sortData.sortColumn !== 'regionName') {
-        const statisticA = getStatistic(
-          districts?.[regionKeyA] || states[regionKeyA],
-          sortData.delta ? 'delta' : 'total',
-          sortData.sortColumn,
-          isPerMillion
-        );
-        const statisticB = getStatistic(
-          districts?.[regionKeyB] || states[regionKeyB],
-          sortData.delta ? 'delta' : 'total',
-          sortData.sortColumn,
-          isPerMillion
-        );
+        const statisticConfig = STATISTICS_CONFIGS[sortData.sortColumn];
+        const statisticOptions = {
+          ...statisticConfig.options,
+          perMillion: isPerMillion,
+        };
+
+        const statisticA =
+          getStatistic(
+            districts?.[regionKeyA] || states[regionKeyA],
+            sortData.delta ? 'delta' : 'total',
+            statisticConfig.key,
+            statisticOptions
+          ) || 0;
+        const statisticB =
+          getStatistic(
+            districts?.[regionKeyB] || states[regionKeyB],
+            sortData.delta ? 'delta' : 'total',
+            statisticConfig.key,
+            statisticOptions
+          ) || 0;
         return sortData.isAscending
           ? statisticA - statisticB
           : statisticB - statisticA;
       } else {
+        const regionNameA =
+          districts?.[regionKeyA]?.districtName || STATE_NAMES[regionKeyA];
+        const regionNameB =
+          districts?.[regionKeyB]?.districtName || STATE_NAMES[regionKeyB];
         return sortData.isAscending
-          ? regionKeyA.localeCompare(regionKeyB)
-          : regionKeyB.localeCompare(regionKeyA);
+          ? regionNameA.localeCompare(regionNameB)
+          : regionNameB.localeCompare(regionNameA);
       }
     },
     [
@@ -125,6 +147,10 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
     leave: TABLE_FADE_OUT,
   });
 
+  const tableStatistics = expandTable
+    ? TABLE_STATISTICS_EXPANDED
+    : TABLE_STATISTICS;
+
   return (
     <React.Fragment>
       <div className="table-top">
@@ -158,8 +184,14 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
           <QuestionIcon size={14} />
         </animated.div>
 
-        <animated.div className="scroll-right-helper" style={trail[1]}>
-          <span>{'Scroll Right \u2192'}</span>
+        <animated.div
+          className={classnames('expand-table-toggle', {
+            'is-highlighted': expandTable,
+          })}
+          style={trail[1]}
+          onClick={setExpandTable.bind(this, !expandTable)}
+        >
+          <FoldDownIcon size={16} />
         </animated.div>
       </div>
 
@@ -200,36 +232,9 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
 
                 <div className="info-item notes">
                   <span>
-                    <Info size={15} />
+                    <InfoIcon size={15} />
                   </span>
                   <p>Notes</p>
-                </div>
-              </div>
-
-              <div className="helper-right">
-                <div className="info-item">
-                  <h5>C</h5>
-                  <p>Confirmed</p>
-                </div>
-
-                <div className="info-item notes">
-                  <h5>A</h5>
-                  <p>Active</p>
-                </div>
-
-                <div className="info-item">
-                  <h5>R</h5>
-                  <p>Recovered</p>
-                </div>
-
-                <div className="info-item notes">
-                  <h5>D</h5>
-                  <p>Deceased</p>
-                </div>
-
-                <div className="info-item notes">
-                  <h5>T</h5>
-                  <p>Tested</p>
                 </div>
               </div>
             </div>
@@ -242,8 +247,13 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
         ) : null
       )}
 
-      <div className="table fadeInUp">
-        <div className="table-wrapper">
+      <div className="table-container">
+        <div
+          className="table fadeInUp"
+          style={{
+            gridTemplateColumns: `repeat(${tableStatistics.length + 1}, auto)`,
+          }}
+        >
           <div className="row heading">
             <div
               className="cell heading"
@@ -253,7 +263,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
               {sortData.sortColumn === 'regionName' && (
                 <div
                   className={classnames('sort-icon', {
-                    invert: !sortData.isAscending,
+                    invert: sortData.isAscending,
                   })}
                 >
                   <FilterIcon size={10} />
@@ -261,7 +271,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
               )}
             </div>
 
-            {TABLE_STATISTICS.map((statistic) => (
+            {tableStatistics.map((statistic) => (
               <HeaderCell
                 key={statistic}
                 {...{statistic, sortData, setSortData}}
@@ -288,6 +298,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
                       isPerMillion,
                       regionHighlighted,
                       setRegionHighlighted,
+                      expandTable,
                     }}
                   />
                 );
@@ -310,6 +321,7 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
                       isPerMillion,
                       regionHighlighted,
                       setRegionHighlighted,
+                      expandTable,
                     }}
                   />
                 );
@@ -319,7 +331,12 @@ function Table({data: states, regionHighlighted, setRegionHighlighted}) {
             key={'TT'}
             data={states['TT']}
             stateCode={'TT'}
-            {...{isPerMillion, regionHighlighted, setRegionHighlighted}}
+            {...{
+              isPerMillion,
+              regionHighlighted,
+              setRegionHighlighted,
+              expandTable,
+            }}
           />
         </div>
       </div>
@@ -348,6 +365,8 @@ const isEqual = (prevProps, currProps) => {
       currProps.data['TT'].total.confirmed
     )
   ) {
+    return false;
+  } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
     return false;
   } else return true;
 };

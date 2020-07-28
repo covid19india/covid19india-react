@@ -23,6 +23,46 @@ export const PRIMARY_STATISTICS = [
 
 export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
+export const TABLE_STATISTICS_EXPANDED = [
+  ...PRIMARY_STATISTICS,
+  'other',
+  'tested',
+  'active ratio',
+  'recovery ratio',
+  'case fatality ratio',
+  'population',
+];
+
+export const STATISTICS_CONFIGS = {
+  confirmed: {key: 'confirmed', format: 'int'},
+  active: {key: 'active', hideDelta: true, format: 'int'},
+  recovered: {key: 'recovered', format: 'int'},
+  deceased: {key: 'deceased', format: 'int'},
+  other: {key: 'migrated', format: 'int'},
+  tested: {key: 'tested', format: 'short'},
+  'active ratio': {
+    key: 'active',
+    options: {percentagePerConfirmed: true},
+    hideDelta: true,
+    format: '%',
+  },
+  'recovery ratio': {
+    key: 'recovered',
+    options: {percentagePerConfirmed: true},
+    hideDelta: true,
+    format: '%',
+  },
+  'case fatality ratio': {
+    key: 'deceased',
+    options: {percentagePerConfirmed: true},
+    hideDelta: true,
+    format: '%',
+  },
+  population: {key: 'population', hideDelta: true, format: 'short'},
+};
+
+export const UPDATES_COUNT = 5;
+
 export const DISTRICT_TABLE_COUNT = 30;
 
 export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];

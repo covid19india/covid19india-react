@@ -241,25 +241,23 @@ h6 {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin-left: 8rem;
+  margin-left: 9rem;
   margin-right: 3rem;
 
   .home-left,
   .home-right {
     display: flex;
     flex-direction: column;
-    width: 32rem;
+    width: 34rem;
   }
 
   .home-left {
-    margin-left: 2.5rem;
     margin-right: 2.5rem;
     min-height: 60rem;
   }
 
   .home-right {
     margin-left: 2.5rem;
-    margin-right: 2.5rem;
     min-height: 10rem;
   }
 
@@ -287,7 +285,7 @@ h6 {
   .alert-right {
     margin-left: .25rem;
     text-align: right;
-    width: 5rem;
+    width: 9rem;
 
     a {
       background: $gray-light;
@@ -388,18 +386,16 @@ h6 {
   .state-right {
     display: flex;
     flex-direction: column;
-    width: 32rem;
+    width: 34rem;
   }
 
   .state-left {
-    margin-left: 2.5rem;
     margin-right: 2.5rem;
     position: relative;
   }
 
   .state-right {
     margin-left: 2.5rem;
-    margin-right: 2.5rem;
   }
 
   a {
@@ -407,7 +403,7 @@ h6 {
   }
 
   .district-bar {
-    width: 100%;
+    width: calc(100% - 2rem);
   }
 
   .Minigraph {
@@ -511,7 +507,12 @@ h6 {
         align-self: center;
       }
 
+      h3 {
+        width: calc(100% - 2.5rem);
+      }
+
       span {
+        margin-bottom: auto;
         margin-right: 1rem;
       }
 
@@ -1175,6 +1176,7 @@ h6 {
   align-self: center;
   display: flex;
   flex-direction: column;
+  max-width: 40rem;
   width: 100%;
 
   & > * {
@@ -1271,7 +1273,7 @@ h6 {
 .Timeline {
   cursor: pointer;
   height: 3rem;
-  width: 32rem;
+  width: 34rem;
   will-change: transform;
 
   .day {
@@ -1505,11 +1507,12 @@ abbr {
   font-weight: 600;
   justify-content: space-between;
   margin-bottom: .25rem;
-  width: calc(100% - 2rem);
+  width: 100%;
 
   .option-toggle,
   .info-toggle,
-  .million-toggle {
+  .million-toggle,
+  .expand-table-toggle {
     background: $gray-light;
     border-radius: 5px;
     color: $gray-mid;
@@ -1547,13 +1550,22 @@ abbr {
     }
   }
 
-  .scroll-right-helper {
+  .expand-table-toggle {
     color: $gray-mid;
-    display: flex;
-    flex: 1;
-    flex-direction: row;
-    font-size: 12px;
-    justify-content: flex-end;
+    margin-left: auto;
+    margin-right: 0;
+
+    &.is-highlighted {
+      svg {
+        transform: rotate(90deg);
+      }
+    }
+
+    svg {
+      cursor: pointer;
+      margin-bottom: 0.25rem;
+      transform: rotate(-90deg);
+    }
   }
 
   @media (min-width: 769px) {
@@ -1675,89 +1687,88 @@ abbr {
   }
 }
 
-.table {
+.table-container {
   align-self: center;
-  border-radius: 3px;
-  font-size: 12px;
-  margin-bottom: 2.5rem;
   overflow-x: auto;
-  width: calc(100% - 2rem);
+  width: 100%;
+}
 
-  .state-meta-top {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    left: 0;
-    margin-bottom: 1 + .25rem;
-    margin-top: 1rem;
-    position: sticky;
-    width: 30rem;
+.table {
+  border-radius: 3px;
+  display: inline-grid;
+  font-size: 12px;
+  grid-template-rows: auto;
+  margin-bottom: 2.5rem;
+  min-width: 100%;
 
-    svg {
-      margin-right: .5rem;
-    }
+  .state-meta {
+    grid-column: 1 / -1;
 
-    .last-updated {
+    .state-meta-top {
       align-items: center;
-      color: $green;
       display: flex;
       flex-direction: row;
-    }
-
-    .state-page {
-      align-items: center;
-      background: $yellow-light;
-      border-radius: 5px;
-      color: $orange;
-      cursor: pointer;
-      display: flex;
-      flex-direction: row;
-      padding: .75rem;
-
-      p {
-        align-self: flex-end;
-        flex: 1;
-        margin: 0;
-        text-align: right;
-      }
-
-      &:hover {
-        background: $yellow-hover;
-      }
-    }
-  }
-
-  .state-meta-bottom {
-    left: 0;
-    padding-bottom: 1.5rem;
-    position: sticky;
-    width: 30rem;
-
-    .disclaimer {
-      background: $brick-light;
-      border-radius: 5px;
-      color: $brick;
-      margin: auto;
-      padding: 1rem .25rem;
-      text-align: center;
-      width: 50%;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 1 + .25rem;
+      margin-top: 1rem;
 
       svg {
-        margin-right: 0.5rem;
+        margin-right: .5rem;
+      }
+
+      .last-updated {
+        align-items: center;
+        color: $green;
+        display: flex;
+        flex-direction: row;
+      }
+
+      .state-page {
+        align-items: center;
+        background: $yellow-light;
+        border-radius: 5px;
+        color: $orange;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        padding: .75rem;
+
+        p {
+          align-self: flex-end;
+          flex: 1;
+          margin: 0;
+          text-align: right;
+        }
+
+        &:hover {
+          background: $yellow-hover;
+        }
       }
     }
-  }
 
-  .table-wrapper {
-    width: 35rem;
+    .state-meta-bottom {
+      padding-bottom: 1.5rem;
+
+      .disclaimer {
+        background: $brick-light;
+        border-radius: 5px;
+        color: $brick;
+        margin: auto;
+        padding: 1rem .25rem;
+        text-align: center;
+        width: 16rem;
+
+        svg {
+          margin-right: 0.5rem;
+        }
+      }
+    }
   }
 
   .row {
     cursor: pointer;
-    display: flex;
-    flex-direction: row;
+    display: contents;
     width: 100%;
 
     &:nth-child(odd) {
@@ -1827,6 +1838,7 @@ abbr {
 
       svg {
         color: $gray-mid;
+        margin-left: 0.2rem;
         stroke-width: 2.5px;
       }
 
@@ -1887,6 +1899,10 @@ abbr {
           color: $cherry;
         }
 
+        .is-active {
+          color: $blue;
+        }
+
         .is-recovered {
           color: $green;
         }
@@ -1908,7 +1924,7 @@ abbr {
         background: $gray-light-opaque;
         font-size: 13px;
         font-weight: 900;
-        padding: .75rem .5rem;
+        padding: 1.25rem .5rem .75rem;
 
         &:hover {
           background: $gray-hover-opaque !important;
@@ -1925,26 +1941,27 @@ abbr {
     }
   }
 
-  .spacer {
-    color: $gray-mid;
-    left: 0;
-    margin-bottom: 1 + .25rem;
-    margin-top: 1rem;
-    position: sticky;
-    text-align: center;
-    width: 30rem;
+  .spacer-row {
+    grid-column: 1 / -1;
 
-    p {
-      margin-left: auto;
-      margin-right: auto;
-      width: 10rem;
-    }
+    .spacer {
+      color: $gray-mid;
+      margin-bottom: 1 + .25rem;
+      margin-top: 1rem;
+      text-align: center;
 
-    .fold {
-      cursor: pointer;
+      p {
+        margin-left: auto;
+        margin-right: auto;
+        width: 10rem;
+      }
 
-      &:hover {
-        color: $gray;
+      .fold {
+        cursor: pointer;
+
+        &:hover {
+          color: $gray;
+        }
       }
     }
   }
@@ -1983,8 +2000,15 @@ abbr {
   }
 }
 
+.map-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .MapExplorer {
   align-self: center;
+  margin-bottom: 3rem;
   position: relative;
   width: 100%;
 
@@ -2520,7 +2544,6 @@ abbr {
   align-self: center;
   display: flex;
   flex-direction: column;
-  margin-top: 3rem;
   width: calc(100% - 2rem);
 
   &.stickied {
@@ -3018,7 +3041,7 @@ input {
   align-self: center;
   margin-bottom: 1rem;
   margin-top: 1rem;
-  width: 32rem;
+  width: 34rem;
 
   a {
     background: $blue-light;
@@ -3044,8 +3067,8 @@ input {
 footer {
   display: flex;
   flex-direction: column;
-  margin-bottom: 5rem;
-  margin-top: 5rem;
+  margin-bottom: 4rem;
+  margin-top: 4rem;
   width: 100%;
 
   & > * {
@@ -3057,10 +3080,11 @@ footer {
     color: $gray;
     font-weight: 600;
     margin: 0;
-    margin-bottom: 3.5rem;
+    margin-bottom: 2rem;
   }
 
   svg {
+    margin-right: .5rem;
     padding: .25rem;
   }
 
@@ -3114,11 +3138,11 @@ footer {
   & > * {
     align-self: center;
     margin-bottom: 1.5rem;
-    width: 32rem;
+    width: 34rem;
   }
 
   & > *:first-child {
-    margin-top: 2rem;
+    margin-top: 4rem;
   }
 
   h2 {
@@ -3206,6 +3230,50 @@ footer {
     color: $pblue;
     font-weight: 900;
   }
+
+  h3 {
+    color: $blue-mid;
+    font-weight: 900;
+
+    &:hover {
+      svg {
+        color: $blue;
+      }
+    }
+
+    svg {
+      height: 1rem;
+    }
+  }
+}
+
+.updates-footer {
+  align-self: center;
+  color: $gray-dark;
+  margin-left: auto;
+
+  .telegram {
+    color: $blue;
+
+    &:hover {
+      color: $purple;
+    }
+  }
+
+  h4 {
+    color: $blue-mid;
+    font-weight: 900;
+    margin-top: .5rem;
+
+    &:hover {
+      color: $blue;
+    }
+
+    svg {
+      height: 1rem;
+      margin-bottom: -.25rem;
+    }
+  }
 }
 
 .updates {
@@ -3215,14 +3283,6 @@ footer {
   margin-bottom: 1rem;
   min-height: 22rem !important;
   width: 100%;
-
-  .telegram {
-    color: $blue;
-
-    &:hover {
-      color: $purple;
-    }
-  }
 
   .update {
     background: $gray-light;
@@ -3470,7 +3530,7 @@ footer {
   display: flex;
   flex-direction: column;
   margin-left: 5rem;
-  width: 32rem;
+  width: 34rem;
 
   h3 {
     align-self: center;
@@ -3600,6 +3660,7 @@ footer {
     }
 
     .navbar-right {
+      align-items: center;
       background: $gray-light-opaque;
       display: flex;
       flex-direction: column;
@@ -3647,29 +3708,60 @@ footer {
       background: #1e1e30 !important;
     }
   }
+
+  .Home {
+    .home-left,
+    .home-right {
+      &.expanded {
+        width: 73rem;
+      }
+    }
+
+    .home-left {
+      &.expanded {
+        margin-bottom: 2.5rem;
+        margin-right: 0;
+      }
+    }
+
+    .home-right {
+      &.expanded {
+        flex-direction: row;
+        margin-left: 0;
+      }
+    }
+  }
+
+  .map-container {
+    &.expanded {
+      margin-right: 2.5rem;
+      width: 50%;
+    }
+  }
+
+  .TimeseriesExplorer {
+    &.expanded {
+      margin-left: 2.5rem;
+      width: calc(50% - 2rem);
+    }
+  }
 }
 
 @media (max-width: 769px) {
-  .table,
+  .table-container,
   .header,
   .TimeseriesExplorer,
-  .StateHeader,
+  .map-container,
   .Links,
   .Summary,
   .About,
-  .MapExplorer,
   .updates,
   .updates-header,
   .StateMeta,
   .timeline,
+  .table-top,
   .LanguageSwitcher {
     width: calc(100% - 2rem);
-  }
-
-  .state-meta-top,
-  .state-meta-bottom,
-  .spacer {
-    width: calc(100vw - 2rem) !important;
   }
 
   .Home,
@@ -3694,8 +3786,12 @@ footer {
 
   .Level {
     h1 {
-      font-size: 5vw !important;
+      font-size: #{'min(5vw, 24px)'} !important;
     }
+  }
+
+  .map-container {
+    align-self: center;
   }
 
   .MapExplorer {
@@ -3892,6 +3988,11 @@ footer {
   }
 
   .State {
+    .MapExplorer,
+    .StateHeader {
+      width: calc(100% - 2rem);
+    }
+
     .district-bar {
       width: calc(100% - 3rem);
 

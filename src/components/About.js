@@ -6,7 +6,7 @@ import {Helmet} from 'react-helmet';
 // TODO(slightlyoff): factor out common JSON parsing & caching of this file
 const DATA_URL = 'https://api.covid19india.org/website_data.json';
 
-function About(props) {
+function About() {
   const [faq, setFaq] = useState([]);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function About(props) {
   return (
     <React.Fragment>
       <Helmet>
-        <title>FAQ - covid19india.org</title>
+        <title>About - covid19india.org</title>
         <meta
           name="title"
           content="Coronavirus Outbreak in India: Latest Map and Case Count"

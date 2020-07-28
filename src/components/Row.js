@@ -4,8 +4,10 @@ import HeaderCell from './HeaderCell';
 import Tooltip from './Tooltip';
 
 import {
-  TABLE_STATISTICS,
   STATE_NAMES,
+  STATISTICS_CONFIGS,
+  TABLE_STATISTICS,
+  TABLE_STATISTICS_EXPANDED,
   UNKNOWN_DISTRICT_KEY,
 } from '../constants';
 import {
@@ -15,17 +17,17 @@ import {
 } from '../utils/commonFunctions';
 
 import {
+  AlertIcon,
   ClockIcon,
-  GraphIcon,
   FilterIcon,
   FoldUpIcon,
-  AlertIcon,
+  GraphIcon,
+  InfoIcon,
 } from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {useState, useCallback, useRef} from 'react';
-import {Info} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {useSessionStorage} from 'react-use';
@@ -37,6 +39,7 @@ function Row({
   isPerMillion,
   regionHighlighted,
   setRegionHighlighted,
+  expandTable,
 }) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useSessionStorage('districtSortData', {
@@ -65,18 +68,26 @@ function Row({
   const sortingFunction = useCallback(
     (districtNameA, districtNameB) => {
       if (sortData.sortColumn !== 'districtName') {
-        const statisticA = getStatistic(
-          data.districts[districtNameA],
-          sortData.delta ? 'delta' : 'total',
-          sortData.sortColumn,
-          isPerMillion
-        );
-        const statisticB = getStatistic(
-          data.districts[districtNameB],
-          sortData.delta ? 'delta' : 'total',
-          sortData.sortColumn,
-          isPerMillion
-        );
+        const statisticConfig = STATISTICS_CONFIGS[sortData.sortColumn];
+        const statisticOptions = {
+          ...statisticConfig.options,
+          perMillion: isPerMillion,
+        };
+
+        const statisticA =
+          getStatistic(
+            data.districts[districtNameA],
+            sortData.delta ? 'delta' : 'total',
+            statisticConfig.key,
+            statisticOptions
+          ) || 0;
+        const statisticB =
+          getStatistic(
+            data.districts[districtNameB],
+            sortData.delta ? 'delta' : 'total',
+            statisticConfig.key,
+            statisticOptions
+          ) || 0;
         return sortData.isAscending
           ? statisticA - statisticB
           : statisticB - statisticA;
@@ -150,6 +161,10 @@ function Row({
     const faux = stateCode;
   }, [stateCode]);
 
+  const tableStatistics = expandTable
+    ? TABLE_STATISTICS_EXPANDED
+    : TABLE_STATISTICS;
+
   return (
     <React.Fragment>
       <div
@@ -174,12 +189,12 @@ function Row({
           </div>
           {data?.meta?.notes && (
             <Tooltip {...{data: data.meta.notes}}>
-              <Info size={16} />
+              <InfoIcon size={16} />
             </Tooltip>
           )}
         </div>
 
-        {TABLE_STATISTICS.map((statistic) => (
+        {tableStatistics.map((statistic) => (
           <Cell key={statistic} {...{data, statistic, isPerMillion}} />
         ))}
       </div>
@@ -238,7 +253,7 @@ function Row({
               )}
             </div>
 
-            {TABLE_STATISTICS.map((statistic) => (
+            {tableStatistics.map((statistic) => (
               <HeaderCell
                 key={statistic}
                 {...{statistic, sortData, setSortData}}
@@ -254,6 +269,7 @@ function Row({
           .sort((a, b) => sortingFunction(a, b))
           .map((districtName) => (
             <DistrictRow
+              data={data.districts[districtName]}
               key={districtName}
               {...{
                 districtName,
@@ -261,16 +277,18 @@ function Row({
                 setRegionHighlighted,
                 stateCode,
                 isPerMillion,
+                expandTable,
               }}
-              data={data.districts[districtName]}
             />
           ))}
 
       {showDistricts && (
-        <div className="spacer">
-          <p>{`End of ${t(STATE_NAMES[stateCode])}'s districts`}</p>
-          <div className="fold" onClick={handleCollapse}>
-            <FoldUpIcon />
+        <div className="spacer-row">
+          <div className="spacer">
+            <p>{`End of ${t(STATE_NAMES[stateCode])}'s districts`}</p>
+            <div className="fold" onClick={handleCollapse}>
+              <FoldUpIcon />
+            </div>
           </div>
         </div>
       )}
@@ -305,6 +323,8 @@ const isEqual = (prevProps, currProps) => {
       )) ||
     equal(currProps.regionHighlighted.districtName, currProps.districtName)
   ) {
+    return false;
+  } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
     return false;
   } else return true;
 };
