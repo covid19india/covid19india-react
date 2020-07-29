@@ -203,7 +203,7 @@
         justify-content: flex-end;
 
         .total {
-          font-size: ms(0);
+          font-size: ms(-1) + ms(-4);
         }
 
         .delta {
