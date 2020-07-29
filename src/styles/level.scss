@@ -1,0 +1,95 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+.level {
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+
+  .total,
+  .title {
+    margin-bottom: 0;
+  }
+
+  .total {
+    font-weight: 600;
+  }
+
+  .delta {
+    font-weight: 600;
+    margin-bottom: -#{ms(-2)};
+  }
+
+  .title {
+    font-weight: 600;
+    overflow-wrap: break-word;
+    text-align: center;
+    width: 100%;
+  }
+
+  .level-item {
+    display: flex;
+    flex-direction: column;
+    width: calc(25%);
+
+    .delta,
+    .total,
+    .title {
+      align-self: center;
+    }
+  }
+
+  .is-confirmed {
+    .total,
+    .title {
+      color: var(--cherry);
+    }
+
+    .delta {
+      color: var(--cherry-mid);
+    }
+  }
+
+  .is-active {
+    .total,
+    .title {
+      color: var(--blue);
+    }
+
+    .delta {
+      color: var(--blue-mid);
+    }
+  }
+
+  .is-recovered {
+    .total,
+    .title {
+      color: var(--green);
+    }
+
+    .delta {
+      color: var(--green-mid);
+    }
+  }
+
+  .is-deceased {
+    .total,
+    .title {
+      color: var(--gray);
+    }
+
+    .delta {
+      color: var(--gray-mid);
+    }
+  }
+}
+
+@media (max-width: 769px) {
+  .level {
+    .total {
+      font-size: #{'min(5vw, 24px)'} !important;
+    }
+  }
+}

@@ -1,3 +1,5 @@
+import '../styles/stateHeader.scss';
+
 import StateDropdown from './StateDropdown';
 
 import {SPRING_CONFIG_NUMBERS} from '../constants.js';
@@ -29,36 +31,39 @@ function StateHeader({data, stateCode}) {
   });
 
   return (
-    <div className="StateHeader">
+    <div className="state-header">
       <div className="header-left">
         <StateDropdown {...{stateCode}} hyperlink={false} trail={trail[0]} />
+
         {data?.meta?.['last_updated'] && (
-          <h5 className="fadeInUp" style={trail[1]}>
+          <h6 className="date fadeInUp" style={trail[1]}>
             {`Last Updated on ${formatDate(
               data.meta.last_updated,
               'dd MMM, p'
             )} IST`}
-          </h5>
+          </h6>
         )}
       </div>
 
       <div className="header-right fadeInUp" style={trail[2]}>
-        <h5>{t('Tested')}</h5>
-        <animated.h2>
+        <h6 className="tested-title">{t('Tested')}</h6>
+        <animated.h3 className="tested-statistic">
           {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
-        </animated.h2>
+        </animated.h3>
+
         {data?.meta?.tested?.['last_updated'] && (
-          <h5 className="timestamp">
+          <h6 className="timestamp">
             {`As of ${formatDate(data.meta.tested.last_updated, 'dd MMMM')}`}
-          </h5>
+          </h6>
         )}
+
         {data?.meta?.tested?.source && (
-          <h5>
+          <h6 className="source">
             {'per '}
             <a href={data.meta.tested.source} target="_noblank">
               source
             </a>
-          </h5>
+          </h6>
         )}
       </div>
     </div>

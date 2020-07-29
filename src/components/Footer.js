@@ -1,3 +1,5 @@
+import '../styles/footer.scss';
+
 import React from 'react';
 import {Twitter, GitHub, Database, Mail, Send} from 'react-feather';
 import {useTranslation} from 'react-i18next';
@@ -7,17 +9,19 @@ function Footer() {
 
   return (
     <footer>
-      <div className="link">
+      <div className="organisation link">
         <a
           href="https://github.com/covid19india"
           target="_blank"
           rel="noopener noreferrer"
         >
-          covid19india
+          covid19india.org
         </a>
       </div>
 
-      <h5>{t('We stand with everyone fighting on the frontlines')}</h5>
+      <div className="message">
+        {t('We stand with everyone fighting on the frontlines')}
+      </div>
 
       <div className="links">
         <a

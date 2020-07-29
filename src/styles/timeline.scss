@@ -1,0 +1,28 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+.timeline {
+  cursor: pointer;
+  height: 3rem;
+  width: 32rem;
+  will-change: transform;
+
+  .day {
+    position: absolute;
+    text-align: center;
+    width: 70px;
+    will-change: transform;
+
+    h5 {
+      color: var(--gray-mid);
+
+      &:hover {
+        color: var(--gray) !important;
+      }
+
+      &::selection {
+        background: transparent !important;
+      }
+    }
+  }
+}

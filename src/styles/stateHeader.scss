@@ -1,0 +1,71 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+.state-header {
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: ms(0);
+  position: relative;
+  width: 100%;
+
+  * {
+    align-self: flex-start;
+  }
+
+  .header-left {
+    .state-name,
+    .date {
+      margin: 0;
+    }
+
+    .state-name {
+      color: var(--brick);
+      max-width: ms(6);
+    }
+
+    .date {
+      color: var(--gray);
+      font-weight: 600;
+      margin-top: ms(-1);
+    }
+  }
+
+  .header-right {
+    color: var(--purple-mid);
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+
+    .tested-statistic,
+    .tested-title {
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .tested-statistic {
+      color: var(--purple);
+      font-weight: 900;
+    }
+
+    .timestamp,
+    .source {
+      margin: 0;
+    }
+
+    .timestamp {
+      margin-top: ms(-3);
+    }
+
+    a {
+      background: var(--purple-light);
+      color: inherit;
+      text-decoration: none;
+
+      &:hover {
+        background: var(--purple-hover);
+      }
+    }
+  }
+}

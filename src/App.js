@@ -1,4 +1,4 @@
-import './App.scss';
+import './styles/app.scss';
 import Blog from './components/Blog';
 import Navbar from './components/Navbar';
 
@@ -53,7 +53,7 @@ const App = () => {
   }, [showLanguageSwitcher]);
 
   return (
-    <div className="App">
+    <div className="app">
       <Suspense fallback={<div />}>
         <LanguageSwitcher
           {...{showLanguageSwitcher, setShowLanguageSwitcher}}

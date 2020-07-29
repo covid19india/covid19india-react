@@ -1,3 +1,5 @@
+import '../styles/languageSwitcher.scss';
+
 import {ENTER_IN, ENTER_OUT} from '../animations';
 import locales from '../i18n/locales.json';
 
@@ -41,7 +43,7 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
     item ? (
       <animated.div
         key={key}
-        className="LanguageSwitcher"
+        className="language-switcher"
         style={props}
         ref={languageSwitcherRef}
       >
@@ -68,9 +70,7 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
           <ArrowUp width={16} />
         </div>
       </animated.div>
-    ) : (
-      <animated.div key={key}></animated.div>
-    )
+    ) : null
   );
 }
 

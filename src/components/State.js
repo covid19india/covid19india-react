@@ -1,3 +1,5 @@
+import '../styles/state.scss';
+
 import DeltaBarGraph from './DeltaBarGraph';
 import Footer from './Footer';
 import Level from './Level';
@@ -122,7 +124,7 @@ function State() {
         />
       </Helmet>
 
-      <div className="State">
+      <div className="state">
         <div className="state-left">
           <StateHeader data={data?.[stateCode]} stateCode={stateCode} />
 
@@ -172,12 +174,12 @@ function State() {
             >
               <div className="district-bar-top">
                 <div className="district-bar-left">
-                  <h2
-                    className={classnames(mapStatistic, 'fadeInUp')}
+                  <h3
+                    className={classnames('title', mapStatistic, 'fadeInUp')}
                     style={trail[0]}
                   >
                     Top districts
-                  </h2>
+                  </h3>
                   <div
                     className={`districts fadeInUp ${
                       showAllDistricts ? 'is-grid' : ''
@@ -208,8 +210,8 @@ function State() {
                         );
                         return (
                           <div key={districtName} className="district">
-                            <h2>{formatNumber(total)}</h2>
-                            <h5>{t(districtName)}</h5>
+                            <h5 className="statistic">{formatNumber(total)}</h5>
+                            <h5 className="title">{t(districtName)}</h5>
                             {mapStatistic !== 'active' && (
                               <div className="delta">
                                 <h6 className={mapStatistic}>

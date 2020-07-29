@@ -1,0 +1,87 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+@import './districtBar';
+
+.state {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-left: 8rem;
+  margin-right: 3rem;
+
+  .state-left,
+  .state-right {
+    display: flex;
+    flex-direction: column;
+    width: 34rem;
+  }
+
+  .state-left {
+    margin-right: 2.5rem;
+    position: relative;
+  }
+
+  .state-right {
+    margin-left: 2.5rem;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .district-bar {
+    width: calc(100% - 2rem);
+  }
+
+  .minigraphs {
+    .svg-parent {
+      width: calc(25%) !important;
+    }
+  }
+
+  .map-explorer {
+    .header,
+    .map-stats,
+    .map-button,
+    .tabs-map,
+    .last-update {
+      display: none;
+    }
+
+    .anchor {
+      display: none;
+    }
+  }
+
+  .timeseries-explorer {
+    .anchor {
+      display: none;
+    }
+  }
+}
+
+@media (min-width: 769px) {
+  .state {
+    padding-top: 5rem;
+  }
+}
+
+@media (max-width: 769px) {
+  .state {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 1rem;
+    width: 100%;
+
+    .state-left,
+    .state-right {
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,48 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+.map-switcher {
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: absolute;
+  width: 100%;
+
+  .highlight {
+    pointer-events: none;
+    position: absolute;
+    width: calc(25%) !important;
+  }
+
+  .highlight,
+  .clickable {
+    border-radius: 5px;
+    cursor: pointer;
+    height: ms(6) + ms(2) + ms(-1);
+    width: calc(25%);
+    z-index: 10;
+  }
+
+  .clickable {
+    transition: background 0.15s ease-in-out;
+
+    &:hover {
+      &.is-confirmed {
+        background: var(--cherry-light);
+      }
+
+      &.is-active {
+        background: var(--blue-light);
+      }
+
+      &.is-recovered {
+        background: var(--green-light);
+      }
+
+      &.is-deceased {
+        background: var(--gray-light);
+      }
+    }
+  }
+}

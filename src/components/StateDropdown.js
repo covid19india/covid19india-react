@@ -1,3 +1,5 @@
+import '../styles/stateDropdown.scss';
+
 import {MAP_META, STATE_NAMES} from '../constants';
 
 import React, {useState, useCallback, useRef} from 'react';
@@ -48,14 +50,14 @@ const StateDropdown = ({stateCode, trail}) => {
   );
 
   return (
-    <div className="StateDropdown" ref={dropdownRef}>
-      <animated.h1
+    <div className="state-dropdown" ref={dropdownRef}>
+      <animated.h3
         className="state-name fadeInUp"
         style={trail}
         onClick={setShowDropdown.bind(this, !showDropdown)}
       >
         {t(STATE_NAMES[stateCode])}
-      </animated.h1>
+      </animated.h3>
 
       {transitions.map(({item, key, props}) =>
         item ? (
@@ -69,13 +71,13 @@ const StateDropdown = ({stateCode, trail}) => {
                 STATE_NAMES[code1].localeCompare(STATE_NAMES[code2])
               )
               .map((stateCodeItr) => (
-                <h1
+                <h3
                   key={stateCodeItr}
-                  className="item"
+                  className="state-name-dropdown"
                   onClick={handleClick.bind(this, stateCodeItr)}
                 >
                   {t(STATE_NAMES[stateCodeItr])}
-                </h1>
+                </h3>
               ))}
           </animated.div>
         ) : (

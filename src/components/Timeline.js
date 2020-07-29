@@ -1,3 +1,5 @@
+import '../styles/timeline.scss';
+
 import {formatDate, getIndiaDateISO} from '../utils/commonFunctions';
 
 import clamp from 'lodash/clamp';
@@ -151,7 +153,7 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
           )
       )}
 
-      <div className="Timeline" ref={timelineElement} {...bind()}>
+      <div className="timeline" ref={timelineElement} {...bind()}>
         {springs
           .filter(
             ({opacity}, i) =>

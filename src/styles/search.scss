@@ -1,0 +1,230 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+.search {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  position: relative;
+  width: 100%;
+
+  & > * {
+    align-self: center;
+  }
+
+  label {
+    color: var(--gray);
+    font-size: ms(-1);
+    margin-bottom: 1rem;
+  }
+
+  .line {
+    background: var(--gray-light);
+    height: ms(0);
+    width: 2px;
+  }
+
+  input {
+    -webkit-appearance: none !important;
+    background: var(--search-backdrop);
+    border: 0;
+    border-radius: ms(-2);
+    -moz-box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+    color: var(--gray);
+    font-size: 1rem;
+    height: 2rem;
+    outline: none;
+    padding-bottom: ms(0);
+    padding-left: ms(3);
+    padding-top: ms(0);
+    width: calc(100% - #{ms(3)});
+  }
+
+  .search-input-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .search-placeholder {
+    color: var(--gray-mid);
+    font-size: ms(0);
+    left: ms(3);
+    opacity: 0.75;
+    pointer-events: none;
+    position: absolute;
+    top: #{ms(2)/2 + ms(-3) + ms(-7)};
+    transition: opacity 1s;
+
+    &.disappear {
+      opacity: 0;
+    }
+  }
+
+  .search-button {
+    svg {
+      color: var(--gray-mid);
+      left: ms(0);
+      position: absolute;
+      top: #{ms(2)/2 + ms(-5)};
+    }
+  }
+
+  .close-button {
+    background: var(--gray-light) !important;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    height: ms(1);
+    justify-content: center;
+    position: absolute;
+    right: 1rem;
+    top: #{ms(2)/2 + ms(-5)};
+    width: ms(1);
+
+    &:hover {
+      background: var(--gray-hover) !important;
+    }
+
+    svg {
+      align-self: center;
+      position: absolute;
+      stroke: var(--gray-mid);
+      stroke-width: 4;
+      width: ms(-1);
+    }
+  }
+
+  .expanded {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: ms(0);
+    padding: ms(0);
+    padding-bottom: 0;
+    width: calc(100% - 4rem);
+
+    & > * {
+      flex: 1;
+    }
+
+    h6,
+    .title {
+      color: var(--gray);
+      font-weight: 600;
+      margin: 0;
+      margin-bottom: ms(0);
+    }
+
+    .title {
+      color: var(--pblue);
+      margin-bottom: ms(0);
+      margin-left: ms(0);
+    }
+
+    .expanded-left {
+      flex: 0.3;
+      margin-left: auto;
+    }
+
+    .expanded-right {
+      flex: 0.3;
+      margin-right: auto;
+    }
+  }
+
+  .results {
+    margin-top: ms(1);
+    padding-bottom: 0;
+    width: calc(100% - #{ms(0)});
+
+    a {
+      text-decoration: none !important;
+    }
+
+    .result {
+      align-self: flex-start;
+      border-bottom: 2px solid var(--gray-light);
+      color: var(--gray);
+      cursor: pointer;
+      display: flex;
+      flex-direction: row;
+      font-size: ms(0);
+      justify-content: space-between;
+      padding: ms(0);
+
+      &:hover {
+        background: var(--gray-light);
+      }
+
+      & > * {
+        align-self: center;
+      }
+
+      .result-name {
+        max-width: ms(10);
+      }
+
+      .result-type {
+        background: var(--yellow-light);
+        border-radius: 2px;
+        color: var(--orange);
+        display: flex;
+        flex-direction: row;
+        font-size: ms(0);
+        padding: ms(-2);
+
+        &:hover {
+          background: var(--yellow-hover);
+        }
+
+        svg {
+          margin-left: 0.25rem;
+          stroke: var(--orange-mid);
+          stroke-width: 3;
+        }
+
+        * {
+          align-self: center;
+        }
+      }
+
+      .result-left {
+        display: flex;
+        flex-direction: row;
+
+        * {
+          align-self: center;
+        }
+      }
+    }
+  }
+
+  .suggestions {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .suggestion {
+      align-items: center;
+      color: var(--gray-mid);
+      display: flex;
+      flex-direction: row;
+      height: ms(1);
+
+      h6 {
+        cursor: pointer;
+        margin: 0;
+        padding-left: ms(-2);
+        word-wrap: wrap;
+
+        &:hover {
+          text-decoration: underline;
+          text-decoration-thickness: 2px;
+        }
+      }
+    }
+  }
+}

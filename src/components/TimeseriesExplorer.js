@@ -1,3 +1,5 @@
+import '../styles/timeseriesExplorer.scss';
+
 import TimeseriesLoader from './loaders/Timeseries';
 
 import {
@@ -162,7 +164,7 @@ function TimeseriesExplorer({
   return (
     <div
       className={classnames(
-        'TimeseriesExplorer fadeInUp',
+        'timeseries-explorer fadeInUp',
         {
           stickied: anchor === 'timeseries',
         },
@@ -184,7 +186,7 @@ function TimeseriesExplorer({
           <PinIcon />
         </div>
 
-        <h1>{t('Spread Trends')}</h1>
+        <h3 className="title">{t('Spread Trends')}</h3>
         <div className="tabs">
           {Object.entries(TIMESERIES_CHART_TYPES).map(
             ([ctype, value], index) => (
@@ -193,7 +195,7 @@ function TimeseriesExplorer({
                 key={ctype}
                 onClick={setChartType.bind(this, ctype)}
               >
-                <h4>{t(value)}</h4>
+                <h6>{t(value)}</h6>
               </div>
             )
           )}
@@ -256,6 +258,7 @@ function TimeseriesExplorer({
                 })}
             </select>
           </div>
+
           <div className="reset-icon" onClick={resetDropdown}>
             <ReplyIcon />
           </div>

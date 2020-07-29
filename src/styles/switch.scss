@@ -1,0 +1,55 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+input {
+  &.switch {
+    appearance: none;
+    background-color: #fff;
+    border: 2px solid #d9dadc;
+    border-radius: 10px;
+    cursor: pointer;
+    height: 14px;
+    margin: 0;
+    outline: none;
+    position: relative;
+    transition: all 300ms ease-in-out;
+    width: 24px;
+
+    &::after {
+      background-color: var(--gray-mid);
+      border-radius: 50%;
+      content: '';
+      height: 10px;
+      left: 0;
+      position: absolute;
+      top: 0;
+      transition: all 300ms ease-in-out;
+      width: 10px;
+    }
+
+    &:checked {
+      background-color: var(--gray-mid);
+      transition: all 300ms ease-in-out;
+
+      &::after {
+        background-color: var(--light);
+        left: 10px;
+        transition: all 300ms ease-in-out;
+      }
+    }
+  }
+}
+
+.disabled {
+  input {
+    &.switch {
+      background: var(--gray-light) !important;
+      border: var(--gray-light 2px) solid !important;
+      cursor: not-allowed !important;
+
+      &::after {
+        background: var(--gray-light) !important;
+      }
+    }
+  }
+}

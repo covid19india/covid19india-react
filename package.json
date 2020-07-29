@@ -5,6 +5,7 @@
   "homepage": "https://www.covid19india.org/",
   "dependencies": {
     "@juggle/resize-observer": "^3.2.0",
+    "@primer/octicons-react": "^10.0.0",
     "@primer/octicons-v2-react": "0.0.0-53e900d",
     "@testing-library/jest-dom": "^5.11.0",
     "@testing-library/react": "^10.4.3",
@@ -59,8 +60,8 @@
     "eslint": "eslint .",
     "eslint:fix": "eslint --fix --max-warnings=0",
     "format": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|md|html)\"",
-    "scss-lint": "sass-lint 'src/**/*.scss' -v -f table --max-warnings 0",
-    "scss-lint:fix": "sass-lint-auto-fix 'src/**/*.scss' -d -h -c '.sass-lint-auto-fix.yml'",
+    "stylelint": "stylelint src/**/*.scss -f verbose",
+    "stylelint:fix": "stylelint src/**/*.scss --fix -f verbose",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "build:sw": "node ./src/swBuild.js",
     "start:sw": "http-server ./build -c 0",
@@ -83,8 +84,8 @@
       "prettier --write \"**/*.+(json|yml|yaml|md)\""
     ],
     "*.+(css|scss)": [
-      "npm run scss-lint:fix",
-      "npm run scss-lint"
+      "npm run stylelint",
+      "npm run stylelint:fix"
     ]
   },
   "devDependencies": {
@@ -99,13 +100,15 @@
     "http-server": "^0.12.3",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
+    "modularscale-sass": "^3.0.10",
     "node-sass": "^4.14.1",
     "prettier": "^2.0.5",
     "rollup": "^2.18.1",
     "rollup-plugin-copy": "^3.3.0",
-    "sass-lint": "^1.13.1",
-    "sass-lint-auto-fix": "^0.21.0",
-    "workbox-build": "^5.1.3"
+    "workbox-build": "^5.1.3",
+    "stylelint": "^13.3.3",
+    "stylelint-config-sass-guidelines": "^7.0.0",
+    "stylelint-config-standard": "^20.0.0"
   },
   "browserslist": {
     "production": [

@@ -1,3 +1,5 @@
+import '../styles/minigraphs.scss';
+
 import {
   MINIGRAPH_LOOKBACK_DAYS,
   PRIMARY_STATISTICS,
@@ -147,7 +149,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
   }, [dates, timeseries]);
 
   return (
-    <div className="Minigraph">
+    <div className="minigraphs">
       {PRIMARY_STATISTICS.map((statistic, index) => (
         <div key={statistic} className={classnames('svg-parent')}>
           <svg

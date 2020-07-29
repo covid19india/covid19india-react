@@ -1,0 +1,90 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+footer {
+  background: var(--gray-light);
+  display: flex;
+  flex-direction: column;
+  height: ms(8);
+  margin-top: 5rem;
+  padding-right: ms(1);
+  padding-top: ms(5);
+  width: 100%;
+  width: calc(100% - #{ms(1)});
+
+  * {
+    text-align: right;
+  }
+
+  h5 {
+    color: var(--gray);
+    font-weight: 600;
+    margin: 0;
+    margin-bottom: 3.5rem;
+  }
+
+  svg {
+    height: ms(2);
+    margin: ms(0);
+    padding: 0.25rem;
+    width: ms(2);
+  }
+
+  .organisation {
+    font-size: ms(4);
+    font-weight: 900;
+
+    a {
+      color: var(--gray-mid);
+      text-decoration: none;
+    }
+  }
+
+  .message {
+    color: var(--pblue);
+    font-size: ms(2);
+    font-weight: 900;
+    margin-bottom: ms(1);
+    margin-top: ms(0);
+  }
+
+  .telegram {
+    color: var(--blue-mid);
+
+    &:hover {
+      color: var(--blue);
+    }
+  }
+
+  .github {
+    color: var(--gray-mid);
+
+    &:hover {
+      color: var(--gray);
+    }
+  }
+
+  .twitter {
+    color: var(--pblue-mid);
+
+    &:hover {
+      color: var(--pblue);
+    }
+  }
+
+  .api {
+    color: var(--yellow-mid);
+
+    &:hover {
+      color: var(--yellow);
+    }
+  }
+
+  .mail {
+    color: var(--brown-mid);
+
+    &:hover {
+      color: var(--brown);
+    }
+  }
+}

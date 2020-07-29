@@ -1,0 +1,92 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+@mixin stats-color($statistic, $color) {
+  &.is-#{$statistic} {
+    .title,
+    .date {
+      color: var(--#{$color}-mid);
+    }
+
+    .statistic,
+    .delta {
+      color: var(--#{$color});
+    }
+  }
+}
+
+@mixin svg-color($statistic, $color) {
+  &.is-#{$statistic} {
+    background: var(--#{$color}-light);
+
+    svg {
+      .domain,
+      .tick,
+      line {
+        stroke: var(--#{$color}-mid);
+      }
+
+      text {
+        color: var(--#{$color}-mid);
+        stroke: transparent;
+      }
+    }
+  }
+}
+
+.timeseries {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  margin-top: ms(0);
+  width: 100%;
+
+  .stats {
+    @include stats-color('confirmed', 'cherry');
+    @include stats-color('active', 'blue');
+    @include stats-color('recovered', 'green');
+    @include stats-color('deceased', 'gray');
+    @include stats-color('tested', 'purple');
+
+    display: flex;
+    flex-direction: column;
+    left: ms(0);
+    pointer-events: none;
+    position: absolute;
+    top: ms(0);
+
+    .title,
+    .date {
+      margin: 0;
+    }
+
+    .stats-bottom {
+      .statistic,
+      .delta {
+        font-weight: 600;
+        margin: 0;
+      }
+    }
+  }
+
+  .svg-parent {
+    @include svg-color('confirmed', 'cherry');
+    @include svg-color('active', 'blue');
+    @include svg-color('recovered', 'green');
+    @include svg-color('deceased', 'gray');
+    @include svg-color('tested', 'purple');
+
+    align-self: center;
+    background: var(--cherry-light);
+    border-radius: ms(-3);
+    display: flex;
+    height: ms(6);
+    margin-bottom: 1rem;
+    position: relative;
+    width: 100%;
+
+    svg {
+      width: 100%;
+    }
+  }
+}

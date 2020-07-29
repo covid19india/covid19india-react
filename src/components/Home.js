@@ -1,3 +1,5 @@
+import '../styles/home.scss';
+
 import {API_ROOT_URL} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
@@ -67,7 +69,7 @@ function Home() {
         />
       </Helmet>
 
-      <div className="Home">
+      <div className="home">
         <div className={classnames('home-left', {expanded: expandTable})}>
           <div className="header">
             <Suspense fallback={<div />}>

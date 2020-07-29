@@ -1,0 +1,26 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+.minigraphs {
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0;
+  margin-bottom: ms(0);
+  margin-top: ms(0);
+  width: 100%;
+
+  .svg-parent {
+    align-self: center;
+    background: transparent;
+    border-radius: ms(-2);
+    display: flex;
+    position: relative;
+    width: 100%;
+
+    svg {
+      width: 100%;
+    }
+  }
+}

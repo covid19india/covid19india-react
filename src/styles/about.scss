@@ -1,0 +1,50 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+.about {
+  display: flex;
+  flex-direction: column;
+  min-height: 30rem;
+  width: 100%;
+
+  * {
+    align-self: center;
+    margin-bottom: 1.5rem;
+    width: 32rem;
+  }
+
+  *:first-child {
+    margin-top: 2rem;
+  }
+
+  h2 {
+    font-weight: 600;
+    margin: 0;
+    text-transform: none;
+  }
+
+  .question {
+    color: var(--gray-dark);
+    line-height: 150%;
+    margin: 0;
+    margin-bottom: 0.25rem;
+  }
+
+  .answer {
+    color: var(--gray);
+    font-weight: 600;
+    line-height: 150%;
+    margin: 0;
+    margin-bottom: ms(1);
+  }
+
+  a {
+    background: var(--blue-light);
+    color: var(--blue);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

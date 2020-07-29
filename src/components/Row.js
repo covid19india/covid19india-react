@@ -241,7 +241,7 @@ function Row({
               className="cell heading"
               onClick={handleSortClick.bind(this, 'districtName')}
             >
-              <div className="district-name">{t('District')}</div>
+              <div>{t('District')}</div>
               {sortData.sortColumn === 'districtName' && (
                 <div
                   className={classnames('sort-icon', {

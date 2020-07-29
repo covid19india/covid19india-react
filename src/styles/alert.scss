@@ -1,0 +1,36 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+.alert {
+  align-items: flex-start;
+  align-items: center;
+  background: var(--gray-light);
+  border-radius: ms(-3);
+  color: var(--gray);
+  display: flex;
+  flex-direction: row;
+  padding: ms(-1) ms(0);
+
+  svg {
+    color: var(--gray-mid);
+    height: 16px;
+    width: 16px;
+  }
+
+  .alert-right {
+    width: 5rem;
+
+    &.is-full {
+      width: 100%;
+    }
+  }
+
+  &.is-green {
+    background: var(--green-light);
+    color: var(--green);
+
+    svg {
+      stroke: var(--green-mid);
+    }
+  }
+}

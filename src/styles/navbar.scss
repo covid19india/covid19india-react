@@ -1,0 +1,242 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+.navbar {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  height: ms(3);
+  justify-content: space-between;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .navbar-left {
+    align-items: center;
+    color: var(--gray-mid);
+    cursor: pointer;
+    display: flex;
+    flex: 0.15;
+    flex-direction: row;
+    font-size: ms(-1);
+    font-weight: 600;
+    height: 100%;
+    justify-content: center;
+
+    &:hover {
+      color: var(--gray);
+    }
+  }
+
+  .navbar-middle {
+    align-items: center;
+    color: var(--gray);
+    display: flex;
+    flex: 0.7;
+    flex-direction: row;
+    font-size: ms(0);
+    font-weight: 900;
+    height: 100%;
+    justify-content: center;
+    text-transform: uppercase;
+
+    span {
+      color: var(--pblue);
+      display: block;
+    }
+  }
+
+  .navbar-right {
+    align-items: center;
+    color: var(--gray);
+    cursor: pointer;
+    display: flex;
+    flex: 0.15;
+    flex-direction: row;
+    font-size: ms(-1);
+    font-weight: 600;
+    height: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .language-toggle {
+    cursor: pointer;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .sun-moon {
+    cursor: pointer;
+  }
+
+  .expand {
+    background: var(--gray-light-opaque);
+    color: var(--gray);
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    z-index: 9999;
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    a,
+    .sun-moon {
+      align-items: center;
+      border-bottom: 1px solid var(--gray-light);
+      border-top: 1px solid var(--gray-light);
+      cursor: pointer;
+      display: flex;
+      flex-direction: row;
+      padding: ms(1);
+
+      &:hover {
+        background: var(--gray-hover);
+      }
+
+      span {
+        &.focused {
+          background: var(--pblue-light);
+          color: var(--pblue);
+          margin-left: -#{ms(-2)};
+          padding: ms(-2);
+        }
+      }
+    }
+
+    .expand-bottom {
+      align-self: flex-start;
+      border: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-bottom: ms(1);
+      margin-left: ms(1);
+
+      h6 {
+        font-weight: 600;
+        margin: 0;
+      }
+
+      &:hover {
+        background: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 769px) {
+  .navbar {
+    margin-bottom: ms(0);
+
+    .expand {
+      height: calc(100% - #{ms(3)});
+      overflow: auto;
+      top: ms(3);
+      transform: none !important;
+    }
+
+    .expand-bottom {
+      margin-top: auto;
+    }
+
+    .navbar-middle {
+      span {
+        display: inline;
+      }
+    }
+
+    .navbar-right {
+      span {
+        display: none;
+
+        &:first-child {
+          display: initial;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 769px) {
+  .navbar {
+    background: var(--gray-light-opaque);
+    flex-direction: column;
+    height: 100%;
+    justify-content: flex-start;
+    min-width: ms(4);
+    position: fixed;
+    z-index: 999;
+
+    .navbar-left {
+      flex: 0.1;
+      order: 3;
+      text-align: center;
+    }
+
+    .navbar-middle {
+      flex: 0.1;
+      font-size: 0.6rem;
+      order: 1;
+      text-align: center;
+      width: 46px;
+      word-wrap: break-word;
+    }
+
+    .navbar-right {
+      background: var(--gray-light-opaque);
+      display: flex;
+      flex: 0.9;
+      flex-direction: column;
+      order: 2;
+      width: 100%;
+
+      span {
+        display: flex;
+        flex-direction: row;
+        height: 1.5rem;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        margin-top: 1.5rem;
+
+        &:hover {
+          color: var(--gray-mid);
+        }
+      }
+    }
+
+    .expand {
+      background: var(--gray-light-opaque);
+      flex-direction: column;
+      height: 100%;
+      padding-left: 0;
+      width: 15rem;
+
+      div:first-child,
+      div:last-child {
+        flex: 0.1;
+      }
+
+      .links {
+        display: flex;
+        flex: 0.9;
+        flex-direction: column;
+        justify-content: center;
+
+        a {
+          border: 0;
+          color: var(--gray);
+          font-weight: 600;
+          height: 1.5rem;
+          width: 12rem;
+        }
+      }
+    }
+  }
+}

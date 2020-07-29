@@ -1,0 +1,61 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+.updates {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: ms(0);
+  width: 100%;
+
+  .title {
+    color: var(--pblue);
+    margin: 0;
+    margin-bottom: ms(0);
+  }
+
+  .update {
+    background: var(--gray-light);
+    border-radius: ms(-2);
+    margin-bottom: ms(0);
+    padding: ms(0);
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+
+    &:hover {
+      background: var(--gray-hover);
+    }
+
+    .date,
+    .text {
+      margin: 0;
+    }
+
+    .date {
+      color: var(--gray-mid);
+      margin-bottom: ms(-1);
+    }
+
+    .text {
+      color: var(--gray);
+      font-weight: 600;
+    }
+  }
+
+  .updates-footer {
+    align-items: center;
+    align-self: center;
+    color: var(--pblue);
+    display: flex;
+    flex-direction: row;
+    margin-bottom: ms(2);
+    margin-top: ms(2);
+    text-decoration: none;
+
+    .message {
+      font-weight: 600;
+      margin: 0;
+      margin-right: ms(-1);
+    }
+  }
+}

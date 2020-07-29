@@ -80,7 +80,8 @@ function MapLegend({data, mapViz, mapScale, statistic}) {
             .tickFormat((num) => formatNumber(num, 'short'))
         )
         .selectAll('.tick text')
-        .style('text-anchor', 'middle');
+        .style('text-anchor', 'middle')
+        .attr('class', statistic);
 
       svg.select('.circleAxis').call((g) => g.select('.domain').remove());
     } else {

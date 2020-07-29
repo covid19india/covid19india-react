@@ -1,0 +1,58 @@
+@import './normalize';
+@import './fonts';
+@import './colors';
+@import './animations';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+$modularscale: (
+  base: 1em,
+  ratio: 1.333
+);
+
+html {
+  overflow-x: hidden;
+  width: 100vw;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  font-size: ms(4);
+}
+
+h2 {
+  font-size: ms(3);
+}
+
+h3 {
+  font-size: ms(2);
+}
+
+h4 {
+  font-size: ms(1);
+}
+
+h5 {
+  font-size: ms(0);
+}
+
+h6 {
+  font-size: ms(-1);
+}
+
+.is-suspended {
+  * {
+    color: transparent !important;
+    user-select: none !important;
+  }
+}

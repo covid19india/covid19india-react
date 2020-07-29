@@ -151,7 +151,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
   }, [dates, height, statistic, timeseries, width]);
 
   return (
-    <div className="DeltaBarGraph" ref={wrapperRef}>
+    <div className="delta-bar-graph" ref={wrapperRef}>
       <svg
         ref={svgRef}
         width={width}

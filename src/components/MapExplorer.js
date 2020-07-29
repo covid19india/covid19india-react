@@ -1,3 +1,5 @@
+import '../styles/mapExplorer.scss';
+
 import MapVisualizerLoader from './loaders/MapVisualizer';
 
 import {
@@ -196,7 +198,7 @@ function MapExplorer({
   return (
     <div
       className={classnames(
-        'MapExplorer',
+        'map-explorer',
         {stickied: anchor === 'mapexplorer'},
         {
           hidden:
@@ -206,27 +208,31 @@ function MapExplorer({
     >
       <div className="panel" ref={panelRef}>
         <div className="panel-left fadeInUp" style={trail[0]}>
-          <h2 className={classnames(mapStatistic)}>
+          <h4 className={classnames(mapStatistic)}>
             {t(hoveredRegion.name)}
             {hoveredRegion.name === UNKNOWN_DISTRICT_KEY &&
               ` [${t(STATE_NAMES[regionHighlighted.stateCode])}]`}
-          </h2>
+          </h4>
 
           {regionHighlighted.stateCode && (
-            <h1 className={classnames('district', mapStatistic)}>
-              <animated.div>
-                {spring.total.interpolate((total) =>
-                  formatNumber(
-                    total,
-                    statisticConfig.format !== 'short'
-                      ? statisticConfig.format
-                      : 'int',
-                    mapStatistic
-                  )
-                )}
-              </animated.div>
-              <span>{t(capitalize(statisticConfig.displayName))}</span>
-            </h1>
+            <React.Fragment>
+              <h3 className={classnames('statistic', mapStatistic)}>
+                <animated.div>
+                  {spring.total.interpolate((total) =>
+                    formatNumber(
+                      total,
+                      statisticConfig.format !== 'short'
+                        ? statisticConfig.format
+                        : 'int',
+                      mapStatistic
+                    )
+                  )}
+                </animated.div>
+              </h3>
+              <h5 className={classnames('statistic-label', mapStatistic)}>
+                {t(capitalize(statisticConfig.displayName))}
+              </h5>
+            </React.Fragment>
           )}
         </div>
 
@@ -278,22 +284,6 @@ function MapExplorer({
               </div>
             )}
           </div>
-
-          {(expandTable || width < 769) && (
-            <div className="switch-statistic fadeInUp" style={trail[5]}>
-              {PRIMARY_STATISTICS.map((statistic) => (
-                <div
-                  key={statistic}
-                  className={classnames('statistic-option', `is-${statistic}`, {
-                    'is-highlighted': mapStatistic === statistic,
-                  })}
-                  onClick={setMapStatistic.bind(this, statistic)}
-                >
-                  <DotFillIcon />
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </div>
 
@@ -322,6 +312,22 @@ function MapExplorer({
               statistic={mapStatistic}
             ></MapVisualizer>
           </Suspense>
+        )}
+
+        {(expandTable || width < 769) && (
+          <div className="switch-statistic fadeInUp" style={trail[5]}>
+            {PRIMARY_STATISTICS.map((statistic) => (
+              <div
+                key={statistic}
+                className={classnames('statistic-option', `is-${statistic}`, {
+                  'is-highlighted': mapStatistic === statistic,
+                })}
+                onClick={setMapStatistic.bind(this, statistic)}
+              >
+                <DotFillIcon />
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>

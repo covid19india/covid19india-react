@@ -1,9 +1,10 @@
+import '../styles/updates.scss';
 import {UPDATES_COUNT} from '../constants';
 import {capitalize} from '../utils/commonFunctions';
 
+import {CrossReferenceIcon} from '@primer/octicons-react';
 import {formatDistance, format} from 'date-fns';
 import React, {useLayoutEffect} from 'react';
-import {Send} from 'react-feather';
 
 const newDate = new Date();
 let currentDate = newDate;
@@ -16,7 +17,7 @@ function Updates({updates}) {
   return (
     <div className="updates">
       <div className="updates-header">
-        <h2>{format(currentDate, 'd MMM')}</h2>
+        <h4 className="title">{format(currentDate, 'd MMM')}</h4>
       </div>
 
       {updates
@@ -50,36 +51,34 @@ function Updates({updates}) {
                 ? addHeader()
                 : ' '}
               <div key={index} className="update">
-                <h5>
+                <h6 className="date">
                   {capitalize(
                     formatDistance(
                       new Date(activity.timestamp * 1000),
                       new Date()
                     )
                   ) + ' ago'}
-                </h5>
-                <h4
+                </h6>
+                <h5
+                  className="text"
                   dangerouslySetInnerHTML={{
                     __html: activity.update,
                   }}
-                ></h4>
+                ></h5>
               </div>
             </React.Fragment>
           );
         })}
-      <div className="updates-footer">
-        <a
-          href="https://t.me/covid19indiaorg_updates"
-          target="_blank"
-          className="telegram"
-          rel="noopener noreferrer"
-        >
-          <h4>
-            <Send />
-            Join Instant Updates channel
-          </h4>
-        </a>
-      </div>
+
+      <a
+        href="https://t.me/covid19indiaorg_updates"
+        target="_blank"
+        className="updates-footer"
+        rel="noopener noreferrer"
+      >
+        <h5 className="message">Get updates on Telegram</h5>
+        <CrossReferenceIcon />
+      </a>
     </div>
   );
 }

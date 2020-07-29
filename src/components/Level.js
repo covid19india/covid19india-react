@@ -5,6 +5,7 @@ import {
 } from '../constants';
 import {capitalize, formatNumber, getStatistic} from '../utils/commonFunctions';
 
+import '../styles/level.scss';
 import {HeartFillIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
@@ -24,8 +25,8 @@ function PureLevelItem({statistic, total, delta}) {
 
   return (
     <React.Fragment>
-      <h5>{t(capitalize(statisticConfig.displayName))}</h5>
-      <animated.h4>
+      <h6 className="title">{t(capitalize(statisticConfig.displayName))}</h6>
+      <animated.h5 className="delta">
         {statistic !== 'active' ? (
           delta > 0 ? (
             spring.delta.interpolate(
@@ -38,12 +39,12 @@ function PureLevelItem({statistic, total, delta}) {
         ) : (
           '\u00A0'
         )}
-      </animated.h4>
-      <animated.h1>
+      </animated.h5>
+      <animated.h3 className="total">
         {spring.total.interpolate((total) =>
           formatNumber(total, statisticConfig.format, statistic)
         )}
-      </animated.h1>
+      </animated.h3>
     </React.Fragment>
   );
 }
@@ -64,7 +65,7 @@ function Level({data}) {
   }, []);
 
   return (
-    <div className="Level">
+    <div className="level">
       {PRIMARY_STATISTICS.map((statistic, index) => (
         <animated.div
           key={index}

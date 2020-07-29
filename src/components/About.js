@@ -1,9 +1,9 @@
 import Footer from './Footer';
 
+import '../styles/about.scss';
 import React, {useState, useEffect} from 'react';
 import {Helmet} from 'react-helmet';
 
-// TODO(slightlyoff): factor out common JSON parsing & caching of this file
 const DATA_URL = 'https://api.covid19india.org/website_data.json';
 
 function About() {
@@ -40,7 +40,7 @@ function About() {
         />
       </Helmet>
 
-      <div className="About">
+      <div className="about">
         {faq.map((faq, index) => {
           return (
             <div
@@ -48,11 +48,11 @@ function About() {
               className="faq fadeInUp"
               style={{animationDelay: `${0.5 + index * 0.1}s`}}
             >
-              <h2 className="question">{faq.question}</h2>
-              <h2
+              <h5 className="question">{faq.question}</h5>
+              <h5
                 className="answer"
                 dangerouslySetInnerHTML={{__html: faq.answer}}
-              ></h2>
+              ></h5>
             </div>
           );
         })}

@@ -1,3 +1,5 @@
+import '../styles/navbar.scss';
+
 import {
   SLIDE_IN,
   SLIDE_OUT,
@@ -52,7 +54,7 @@ function Navbar({
   }, [expand, showLanguageSwitcher, setExpand, setShowLanguageSwitcher]);
 
   return (
-    <animated.div className="Navbar" style={spring}>
+    <animated.div className="navbar" style={spring}>
       <div className="navbar-left" onClick={handleLangaugeSwitcher.bind(this)}>
         {locales[currentLanguage]}
       </div>
@@ -121,32 +123,44 @@ function Expand({pages, setExpand, darkMode, windowSize}) {
 
   return (
     <div className="expand" ref={expandElement} onMouseLeave={handleMouseLeave}>
-      {pages.map((page, i) => {
-        if (page.showInNavbar === true) {
-          return (
-            <Link
-              to={page.pageLink}
-              key={i}
-              {...(windowSize.width < 769 && {
-                onClick: setExpand.bind(this, false),
-              })}
-            >
-              <span
-                {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}
+      <div />
+
+      <div className="links">
+        {pages.map((page, i) => {
+          if (page.showInNavbar === true) {
+            return (
+              <Link
+                to={page.pageLink}
+                key={i}
+                {...(windowSize.width < 769 && {
+                  onClick: setExpand.bind(this, false),
+                })}
               >
-                {t(page.displayName)}
-              </span>
-            </Link>
-          );
-        }
-        return null;
-      })}
+                <span
+                  {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}
+                >
+                  {t(page.displayName)}
+                </span>
+              </Link>
+            );
+          }
+          return null;
+        })}
 
-      {windowSize.width < 768 && <SunMoon {...{darkMode}} />}
+        {windowSize.width < 768 && <SunMoon {...{darkMode}} />}
 
-      <div className="expand-bottom">
-        <h5>{t('A crowdsourced initiative.')}</h5>
+        {windowSize.width < 768 ? (
+          <div className="expand-bottom">
+            <h6>{t('A crowdsourced initiative.')}</h6>
+          </div>
+        ) : (
+          <a href={`#${darkMode}`}>
+            <span>{darkMode ? 'Light' : 'Dark'}</span>
+          </a>
+        )}
       </div>
+
+      <div />
     </div>
   );
 }
@@ -165,7 +179,7 @@ const activeNavIcon = (path) => ({
 
 const SunMoon = ({darkMode}) => {
   return (
-    <div className="SunMoon" onClick={darkMode.toggle}>
+    <div className="sun-moon" onClick={darkMode.toggle}>
       <div>
         {darkMode.value ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
       </div>

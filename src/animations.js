@@ -18,7 +18,7 @@ export const SLIDE_IN_MOBILE = {
   opacity: 1,
   position: 'absolute',
   height: '100vh',
-  top: 64,
+  top: '3.375em',
   zIndex: 999,
 };
 
@@ -26,7 +26,7 @@ export const SLIDE_OUT_MOBILE = {
   opacity: 1,
   position: 'absolute',
   height: '100vh',
-  top: 64,
+  top: '3.375em',
   zIndex: 999,
 };
 

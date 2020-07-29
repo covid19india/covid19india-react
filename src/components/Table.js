@@ -1,3 +1,7 @@
+import '../styles/table.scss';
+import '../styles/tableTop.scss';
+import '../styles/tableHelper.scss';
+
 import HeaderCell from './HeaderCell';
 import TableLoader from './loaders/Table';
 import TableDeltaHelper from './snippets/TableDeltaHelper';
@@ -272,10 +276,10 @@ function Table({
               </div>
             </div>
 
-            <h5 className="text">
-              {t('Compiled from State Govt. numbers')},{' '}
+            <h6 className="text">
+              {t('Compiled from State Govt. numbers, ')}
               <Link to="/about">{t('know more')}!</Link>
-            </h5>
+            </h6>
           </animated.div>
         ) : null
       )}

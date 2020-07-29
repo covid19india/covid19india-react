@@ -1,3 +1,5 @@
+import '../styles/tooltip.scss';
+
 import {TOOLTIP_FADE_IN, TOOLTIP_FADE_OUT} from '../animations';
 
 import React, {useCallback, useState} from 'react';
@@ -21,7 +23,7 @@ const Tooltip = ({data, children}) => {
 
   return (
     <span
-      className="Tooltip"
+      className="tooltip"
       style={{position: 'relative'}}
       onMouseEnter={setIsTooltipVisible.bind(this, true)}
       onMouseLeave={setIsTooltipVisible.bind(this, false)}

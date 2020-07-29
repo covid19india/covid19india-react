@@ -1,0 +1,50 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+.pills {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+
+  > button {
+    background-color: var(--yellow-light);
+    border: 2px var(--yellow-light) solid;
+    border-bottom: 0;
+    border-top: 0;
+    color: var(--orange);
+    cursor: pointer;
+    font-size: ms(-1);
+    font-weight: 600;
+    margin: 0;
+    outline: none;
+    padding: ms(1) ms(0);
+    text-align: center;
+    transition: background 0.25s ease-in-out;
+
+    &:hover {
+      background: var(--yellow-hover);
+    }
+
+    &.selected {
+      background-color: var(--yellow-mid);
+    }
+
+    &:first-of-type {
+      border: 0;
+      border-bottom-left-radius: ms(-3);
+      border-top-left-radius: ms(-3);
+    }
+
+    &:last-of-type {
+      border: 0;
+      border-bottom-right-radius: ms(-3);
+      border-top-right-radius: ms(-3);
+    }
+
+    &:focus {
+      &:not(:focus-visible) {
+        outline: none;
+      }
+    }
+  }
+}

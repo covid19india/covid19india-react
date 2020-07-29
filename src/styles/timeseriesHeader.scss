@@ -1,0 +1,53 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+.timeseries-header {
+  align-self: center;
+  position: relative;
+  width: 100%;
+
+  h1 {
+    color: var(--gray);
+    margin: 0;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .scale-modes {
+    align-items: flex-end;
+    bottom: 0;
+    color: var(--gray);
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+    right: 0;
+    z-index: 99;
+
+    label {
+      color: var(--gray-mid);
+      font-size: 0.75rem;
+      font-weight: 900;
+      margin-right: 0.25rem;
+      z-index: 99;
+    }
+
+    &:hover {
+      label {
+        &.main {
+          color: var(--gray);
+        }
+      }
+    }
+
+    * {
+      align-self: center;
+    }
+  }
+
+  .timeseries-mode,
+  .timeseries-logmode {
+    display: flex;
+    flex-direction: row;
+    margin-left: 1rem;
+  }
+}

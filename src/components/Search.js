@@ -1,3 +1,5 @@
+import '../styles/search.scss';
+
 import {
   STATE_CODES_ARRAY,
   STATE_CODES,
@@ -6,6 +8,7 @@ import {
   UNKNOWN_DISTRICT_KEY,
 } from '../constants';
 
+import {DotFillIcon} from '@primer/octicons-react';
 import produce from 'immer';
 import React, {useState, useEffect, useMemo, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
@@ -254,7 +257,7 @@ function Search() {
   }, []);
 
   return (
-    <div className="Search">
+    <div className="search">
       <label className="fadeInUp" style={trail[0]}>
         {t('Search your district or state')}
       </label>
@@ -311,12 +314,12 @@ function Search() {
         <React.Fragment>
           <div className="expanded">
             <div className="expanded-left">
-              <h3>{t('District')}</h3>
+              <h6 className="title">{t('District')}</h6>
               <div className="suggestions">
                 {districtSuggestions.map((suggestion, index) => (
                   <div className="suggestion" key={index}>
-                    <div>-</div>
-                    <h4
+                    <DotFillIcon size={9} />
+                    <h6
                       onMouseDown={(event) => {
                         event.preventDefault();
                         setNativeValue(searchInput.current, suggestion);
@@ -326,19 +329,19 @@ function Search() {
                       }}
                     >
                       {t(suggestion)}
-                    </h4>
+                    </h6>
                   </div>
                 ))}
               </div>
             </div>
 
             <div className="expanded-right">
-              <h3>{t('State/UT')}</h3>
+              <h6 className="title">{t('State/UT')}</h6>
               <div className="suggestions">
                 {stateSuggestions.map((suggestion, index) => (
                   <div className="suggestion" key={index}>
-                    <div>-</div>
-                    <h4
+                    <DotFillIcon size={9} />
+                    <h6
                       onMouseDown={(event) => {
                         event.preventDefault();
                         setNativeValue(searchInput.current, suggestion);
@@ -348,7 +351,7 @@ function Search() {
                       }}
                     >
                       {t(suggestion)}
-                    </h4>
+                    </h6>
                   </div>
                 ))}
               </div>

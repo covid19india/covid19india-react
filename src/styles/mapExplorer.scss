@@ -1,0 +1,418 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+@mixin stats-colors {
+  &.confirmed {
+    color: var(--brick);
+  }
+
+  &.active {
+    color: var(--blue);
+  }
+
+  &.recovered {
+    color: var(--green);
+  }
+
+  &.deceased {
+    color: var(--gray);
+  }
+
+  &.tested {
+    color: var(--purple);
+  }
+}
+
+.map-explorer {
+  align-self: center;
+  margin-bottom: ms(3);
+  position: relative;
+  width: 100%;
+
+  &.stickied {
+    position: sticky !important;
+    top: 0;
+  }
+
+  &.hidden {
+    display: none;
+  }
+
+  .svg-parent {
+    display: block;
+    margin: auto;
+    margin-top: ms(2);
+    overflow: visible;
+    position: relative;
+    width: 90%;
+
+    &.maplegend {
+      margin-top: ms(-1);
+      width: 100%;
+      z-index: 1;
+    }
+
+    svg {
+      align-self: center;
+      height: 100%;
+      overflow: visible;
+      width: 100%;
+
+      text {
+        @include stats-colors;
+
+        font-size: ms(0);
+        font-weight: 600;
+        text-align: right;
+      }
+    }
+  }
+
+  .panel {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: ms(0);
+    position: relative;
+
+    h2 {
+      font-weight: 900;
+      margin: 0;
+      transition: color 0.3s ease-in-out;
+      word-wrap: break-word;
+
+      &.confirmed {
+        color: var(--brick);
+      }
+
+      &.active {
+        color: var(--blue);
+      }
+
+      &.recovered {
+        color: var(--green);
+      }
+
+      &.deceased {
+        color: var(--gray);
+      }
+    }
+
+    h4 {
+      @include stats-colors;
+
+      color: var(--gray-mid);
+      height: ms(2);
+      margin: 0;
+      transition: color 0.3s ease-in-out;
+      word-wrap: break-word;
+    }
+
+    .panel-left {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+
+      .statistic-label {
+        @include stats-colors;
+
+        margin: 0;
+        transition: color 0.3s ease-in-out;
+      }
+
+      .statistic {
+        @include stats-colors;
+
+        margin: 0;
+        transition: color 0.3s ease-in-out;
+
+        span {
+          font-size: ms(-3);
+          font-weight: 600;
+        }
+      }
+    }
+
+    .panel-right {
+      display: flex;
+      flex-direction: column;
+
+      svg {
+        transition: all 0.3s ease-in-out;
+      }
+
+      &.is-confirmed {
+        svg {
+          fill: var(--cherry-light);
+          stroke: var(--cherry-mid);
+        }
+
+        .boundary {
+          svg {
+            fill: var(--cherry-mid);
+            stroke: none;
+          }
+        }
+
+        .is-highlighted {
+          background: var(--cherry-light);
+
+          &:hover {
+            background: var(--cherry-hover);
+          }
+        }
+      }
+
+      &.is-active {
+        svg {
+          fill: var(--blue-light);
+          stroke: var(--blue-mid);
+        }
+
+        .boundary {
+          svg {
+            fill: var(--blue-mid);
+            stroke: none;
+          }
+        }
+
+        .is-highlighted {
+          background: var(--blue-light);
+
+          &:hover {
+            background: var(--blue-hover);
+          }
+        }
+      }
+
+      &.is-recovered {
+        svg {
+          fill: var(--green-light);
+          stroke: var(--green-mid);
+        }
+
+        .boundary {
+          svg {
+            fill: var(--green-mid);
+            stroke: none;
+          }
+        }
+
+        .is-highlighted {
+          background: var(--green-light);
+
+          &:hover {
+            background: var(--green-hover);
+          }
+        }
+      }
+
+      &.is-deceased {
+        svg {
+          fill: var(--gray-light);
+          stroke: var(--gray-mid);
+        }
+
+        .boundary {
+          svg {
+            fill: var(--gray-mid);
+            stroke: none;
+          }
+        }
+
+        .is-highlighted {
+          background: var(--gray-middark);
+
+          &:hover {
+            background: var(--gray-hover);
+          }
+        }
+      }
+
+      .switch-type,
+      .switch-statistic, {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+
+        div {
+          align-items: center;
+          background: var(--gray-light);
+          border-radius: ms(-3);
+          cursor: pointer;
+          display: flex;
+          flex-direction: row;
+          height: ms(2);
+          justify-content: center;
+          width: ms(2);
+
+          &.back {
+            margin-right: 0 !important;
+
+            svg {
+              fill: var(--gray);
+              stroke: transparent;
+            }
+          }
+
+          &:hover {
+            background: var(--gray-hover);
+          }
+
+          &:not(:last-child) {
+            margin-right: ms(-3);
+          }
+
+          svg {
+            height: 100%;
+          }
+        }
+
+        .divider {
+          border-radius: ms(-3);
+          width: 2px !important;
+        }
+      }
+    }
+
+    &.bottom {
+      margin-top: 0;
+      padding-top: 0;
+    }
+  }
+
+  .switch-statistic {
+    align-self: flex-end;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: ms(0);
+
+    div {
+      background: none;
+      display: flex;
+      flex-direction: row;
+      height: ms(0);
+      margin: ms(-2);
+      margin-bottom: 0;
+      margin-top: 0;
+      width: ms(0);
+
+      &:hover {
+        background: none;
+      }
+
+      &.is-confirmed {
+        svg {
+          fill: var(--cherry-hover);
+          stroke: none;
+        }
+
+        &.is-highlighted {
+          svg {
+            fill: var(--cherry);
+            transform: scale(1.25);
+          }
+        }
+      }
+
+      &.is-active {
+        svg {
+          fill: var(--blue-hover);
+          stroke: none;
+        }
+
+        &.is-highlighted {
+          svg {
+            fill: var(--blue);
+            transform: scale(1.25);
+          }
+        }
+      }
+
+      &.is-recovered {
+        svg {
+          fill: var(--green-hover);
+          stroke: none;
+        }
+
+        &.is-highlighted {
+          svg {
+            fill: var(--green);
+            transform: scale(1.25);
+          }
+        }
+      }
+
+      &.is-deceased {
+        svg {
+          fill: var(--gray-hover);
+          stroke: none;
+        }
+
+        &.is-highlighted {
+          svg {
+            fill: var(--gray);
+            transform: scale(1.25);
+          }
+        }
+      }
+    }
+  }
+
+  #chart,
+  #legend {
+    filter: saturate(1.5);
+  }
+
+  .disclaimer {
+    align-items: center;
+    backdrop-filter: saturate(180%) blur(20px);
+    border-radius: 5px;
+    bottom: 50%;
+    display: flex;
+    flex-direction: row;
+    font-size: ms(-1);
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    padding: ms(1) ms(0);
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    transition: background, color 0.3s ease-in-out;
+    width: ms(7);
+    z-index: 99;
+
+    &.is-confirmed {
+      background: var(--cherry-light);
+      color: var(--cherry);
+    }
+
+    &.is-active {
+      background: var(--blue-light);
+      color: var(--blue);
+    }
+
+    &.is-recovered {
+      background: var(--green-light);
+      color: var(--green);
+    }
+
+    &.is-deceased {
+      background: var(--gray-light);
+      color: var(--gray);
+    }
+
+    span {
+      flex: 1;
+    }
+
+    svg {
+      align-self: flex-start;
+      margin-right: ms(0);
+      stroke-width: 3;
+      width: 16px;
+    }
+  }
+}

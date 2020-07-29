@@ -1,0 +1,29 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+.tooltip {
+  display: flex;
+  flex-direction: column;
+
+  .message {
+    background: var(--black);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    font-size: 13px;
+    font-weight: 400;
+    justify-content: flex-end;
+    max-width: 30vw;
+    min-width: 10rem;
+    padding: 0.5rem;
+    pointer-events: none;
+    right: 0;
+    top: 0;
+    transform: translate3d(2rem, 0, 0);
+
+    p {
+      color: var(--white) !important;
+      margin: 0;
+    }
+  }
+}

@@ -1,0 +1,117 @@
+@import './colors';
+@import '~modularscale-sass/stylesheets/modularscale';
+
+.header {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  max-width: 40rem;
+  width: 100%;
+
+  * {
+    align-self: center;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: ms(0);
+
+    &.timeline {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      padding: ms(0);
+      position: absolute;
+      top: ms(6) + ms(1);
+
+      .highlight {
+        color: var(--brown) !important;
+        position: absolute;
+        text-align: center;
+        top: 2.5rem;
+        width: 100%;
+      }
+    }
+
+    div {
+      align-self: center;
+      margin-left: ms(-2);
+      margin-right: ms(-2);
+    }
+
+    h5 {
+      color: var(--gray);
+      font-weight: 600;
+      margin: 0;
+    }
+
+    svg {
+      color: var(--gray-mid);
+      cursor: pointer;
+      stroke-width: 3;
+      width: 16px;
+
+      &:hover {
+        stroke: var(--gray);
+      }
+    }
+
+    .timeline-icon {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      svg {
+        display: flex;
+        fill: #a6abb0 !important;
+        flex-direction: row;
+        justify-content: center;
+        stroke: #a6abb0 !important;
+        stroke-width: 0.5 !important;
+
+        path {
+          align-self: center;
+        }
+
+        &:hover {
+          fill: var(--gray) !important;
+          stroke: var(--gray) !important;
+        }
+      }
+    }
+
+    .bell-icon {
+      height: 24px;
+      position: relative;
+
+      .indicator {
+        background: var(--pblue);
+        border-radius: 50%;
+        height: ms(-2);
+        position: absolute;
+        right: -3px;
+        top: -3px;
+        width: ms(-2);
+      }
+    }
+  }
+}
+
+.updates-header {
+  align-self: center;
+  color: var(--gray-dark);
+  width: 100%;
+
+  h2 {
+    color: var(--pblue);
+    font-weight: 900;
+  }
+}
+
+@media (min-width: 769px) {
+  .header {
+    margin-bottom: ms(0);
+  }
+}
