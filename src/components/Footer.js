@@ -1,6 +1,7 @@
 import React from 'react';
 import {Twitter, GitHub, Database, Mail, Send} from 'react-feather';
 import {useTranslation} from 'react-i18next';
+import ReactTooltip from 'react-tooltip';
 
 function Footer() {
   const {t} = useTranslation();
@@ -25,8 +26,13 @@ function Footer() {
           className="github"
           target="_blank"
           rel="noopener noreferrer"
+          data-tip
+          data-for="githubTip"
         >
           <GitHub />
+          <ReactTooltip id="githubTip" place="top" effect="solid">
+            Github
+          </ReactTooltip>
         </a>
 
         <a
@@ -34,8 +40,13 @@ function Footer() {
           href="https://api.covid19india.org"
           target="_blank"
           rel="noopener noreferrer"
+          data-tip
+          data-for="databaseTip"
         >
           <Database />
+          <ReactTooltip id="databaseTip" place="top" effect="solid">
+            Database
+          </ReactTooltip>
         </a>
 
         <a
@@ -43,8 +54,13 @@ function Footer() {
           className="telegram"
           target="_blank"
           rel="noopener noreferrer"
+          data-tip
+          data-for="sendTip"
         >
           <Send />
+          <ReactTooltip id="sendTip" place="top" effect="solid">
+            Send
+          </ReactTooltip>
         </a>
 
         <a
@@ -52,8 +68,13 @@ function Footer() {
           target="_blank"
           rel="noopener noreferrer"
           className="twitter"
+          data-tip
+          data-for="twitterTip"
         >
           <Twitter />
+          <ReactTooltip id="twitterTip" place="top" effect="solid">
+            Twitter
+          </ReactTooltip>
         </a>
 
         <a
@@ -61,8 +82,13 @@ function Footer() {
           className="mail"
           target="_blank"
           rel="noopener noreferrer"
+          data-tip
+          data-for="mailTip"
         >
           <Mail />
+          <ReactTooltip id="mailTip" place="top" effect="solid" height="40px">
+            Mail
+          </ReactTooltip>
         </a>
       </div>
     </footer>
