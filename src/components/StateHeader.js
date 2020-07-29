@@ -47,9 +47,9 @@ function StateHeader({data, stateCode}) {
 
       <div className="header-right fadeInUp" style={trail[2]}>
         <h6 className="tested-title">{t('Tested')}</h6>
-        <animated.h3 className="tested-statistic">
+        <animated.h5 className="tested-statistic">
           {spring.total.interpolate((total) => formatNumber(Math.floor(total)))}
-        </animated.h3>
+        </animated.h5>
 
         {data?.meta?.tested?.['last_updated'] && (
           <h6 className="timestamp">

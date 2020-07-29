@@ -51,13 +51,13 @@ const StateDropdown = ({stateCode, trail}) => {
 
   return (
     <div className="state-dropdown" ref={dropdownRef}>
-      <animated.h3
+      <animated.h4
         className="state-name fadeInUp"
         style={trail}
         onClick={setShowDropdown.bind(this, !showDropdown)}
       >
         {t(STATE_NAMES[stateCode])}
-      </animated.h3>
+      </animated.h4>
 
       {transitions.map(({item, key, props}) =>
         item ? (
@@ -71,13 +71,13 @@ const StateDropdown = ({stateCode, trail}) => {
                 STATE_NAMES[code1].localeCompare(STATE_NAMES[code2])
               )
               .map((stateCodeItr) => (
-                <h3
+                <h4
                   key={stateCodeItr}
                   className="state-name-dropdown"
                   onClick={handleClick.bind(this, stateCodeItr)}
                 >
                   {t(STATE_NAMES[stateCodeItr])}
-                </h3>
+                </h4>
               ))}
           </animated.div>
         ) : (

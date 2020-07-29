@@ -24,7 +24,7 @@ const StateHeader = lazy(() => import('./StateHeader'));
 
 function Home() {
   const [regionHighlighted, setRegionHighlighted] = useState({
-    stateCode: 'TT',
+    stateCode: 'MH',
     districtName: null,
   });
 

@@ -40,8 +40,10 @@
 
     .tested-statistic,
     .tested-title {
-      font-weight: 600;
+      align-self: flex-end;
+      font-weight: 900;
       margin: 0;
+      text-align: right;
     }
 
     .tested-statistic {
@@ -51,7 +53,9 @@
 
     .timestamp,
     .source {
+      align-self: flex-end;
       margin: 0;
+      text-align: right;
     }
 
     .timestamp {

@@ -175,24 +175,24 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
               }}
             >
               {index < 2 && (
-                <animated.h5
+                <animated.h6
                   style={{color}}
                   onClick={() => {
                     handleClick(i);
                   }}
                 >
                   {getDate(i)}
-                </animated.h5>
+                </animated.h6>
               )}
               {index > 1 && index < dates.length && (
-                <animated.h5
+                <animated.h6
                   style={{color}}
                   onClick={() => {
                     handleClick(index + i - 2);
                   }}
                 >
                   {getDate(index + i - 2)}
-                </animated.h5>
+                </animated.h6>
               )}
             </animated.div>
           ))}

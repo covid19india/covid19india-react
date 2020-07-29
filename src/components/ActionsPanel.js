@@ -103,9 +103,9 @@ const ActionsPanel = ({
           pointerEvents: isTimelineMode ? 'none' : '',
         }}
       >
-        <h5 className="fadeInUp" style={trail[0]}>{`${getTimeFromMilliseconds(
+        <h6 className="fadeInUp" style={trail[0]}>{`${getTimeFromMilliseconds(
           lastViewedLog
-        )} IST`}</h5>
+        )} IST`}</h6>
 
         <div className="bell-icon fadeInUp" style={trail[1]}>
           {!showUpdates ? Bell : BellOff}

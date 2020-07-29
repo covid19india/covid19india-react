@@ -208,30 +208,28 @@ function MapExplorer({
     >
       <div className="panel" ref={panelRef}>
         <div className="panel-left fadeInUp" style={trail[0]}>
-          <h4 className={classnames(mapStatistic)}>
+          <h5 className={classnames('region-name', mapStatistic)}>
             {t(hoveredRegion.name)}
             {hoveredRegion.name === UNKNOWN_DISTRICT_KEY &&
               ` [${t(STATE_NAMES[regionHighlighted.stateCode])}]`}
-          </h4>
+          </h5>
 
           {regionHighlighted.stateCode && (
             <React.Fragment>
-              <h3 className={classnames('statistic', mapStatistic)}>
-                <animated.div>
-                  {spring.total.interpolate((total) =>
-                    formatNumber(
-                      total,
-                      statisticConfig.format !== 'short'
-                        ? statisticConfig.format
-                        : 'int',
-                      mapStatistic
-                    )
-                  )}
-                </animated.div>
-              </h3>
-              <h5 className={classnames('statistic-label', mapStatistic)}>
+              <animated.h5 className={classnames('statistic', mapStatistic)}>
+                {spring.total.interpolate((total) =>
+                  formatNumber(
+                    total,
+                    statisticConfig.format !== 'short'
+                      ? statisticConfig.format
+                      : 'int',
+                    mapStatistic
+                  )
+                )}
+              </animated.h5>
+              <h6 className={classnames('statistic-label', mapStatistic)}>
                 {t(capitalize(statisticConfig.displayName))}
-              </h5>
+              </h6>
             </React.Fragment>
           )}
         </div>
