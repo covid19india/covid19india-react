@@ -1,11 +1,13 @@
 import {API_ROOT_URL} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
+import locales from '../i18n/locales.json';
 import {fetcher} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
-import React, {useState, useRef, lazy, Suspense} from 'react';
+import React, {useState, useRef, lazy, Suspense, useEffect} from 'react';
 import {Helmet} from 'react-helmet';
+import {useTranslation} from 'react-i18next';
 import {useLocation} from 'react-router-dom';
 import {useLocalStorage, useSessionStorage, useWindowSize} from 'react-use';
 
@@ -20,7 +22,12 @@ const Level = lazy(() => import('./Level'));
 const MapSwitcher = lazy(() => import('./MapSwitcher'));
 const StateHeader = lazy(() => import('./StateHeader'));
 
-function Home() {
+function Home({match}) {
+  const {i18n} = useTranslation();
+  const currentLanguage = Object.keys(locales).includes(match.params.lang)
+    ? match.params.lang
+    : i18n?.options?.fallbackLng[0];
+
   const [regionHighlighted, setRegionHighlighted] = useState({
     stateCode: 'TT',
     districtName: null,
@@ -56,6 +63,12 @@ function Home() {
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement);
   const {width} = useWindowSize();
+
+  useEffect(() => {
+    if (i18n) {
+      if (i18n) i18n.changeLanguage(currentLanguage);
+    }
+  }, [i18n, currentLanguage]);
 
   return (
     <React.Fragment>
