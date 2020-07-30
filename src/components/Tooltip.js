@@ -3,7 +3,7 @@ import {TOOLTIP_FADE_IN, TOOLTIP_FADE_OUT} from '../animations';
 import React, {useCallback, useState} from 'react';
 import {useTransition, animated} from 'react-spring';
 
-const Tooltip = ({data, children}) => {
+const Tooltip = ({data, children, isInUpperHalfOfTable = true}) => {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
   const transitions = useTransition(isTooltipVisible, null, {
@@ -32,7 +32,9 @@ const Tooltip = ({data, children}) => {
       {transitions.map(({item, key, props}) =>
         item ? (
           <animated.div key={key} style={props}>
-            <div className="message">
+            <div
+              className={`message ${isInUpperHalfOfTable ? 'upper' : 'lower'}`}
+            >
               <p
                 dangerouslySetInnerHTML={{
                   __html: data.replace(/\n/g, '<br/>'),

@@ -39,6 +39,7 @@ function Row({
   regionHighlighted,
   setRegionHighlighted,
   expandTable,
+  isInUpperHalfOfTable,
 }) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useSessionStorage('districtSortData', {
@@ -179,7 +180,7 @@ function Row({
             {t(STATE_NAMES[stateCode]) || districtNameStr}
           </div>
           {data?.meta?.notes && (
-            <Tooltip {...{data: data.meta.notes}}>
+            <Tooltip {...{data: data.meta.notes, isInUpperHalfOfTable}}>
               <InfoIcon size={16} />
             </Tooltip>
           )}

@@ -3618,12 +3618,19 @@ footer {
     pointer-events: none;
     right: 0;
     top: 0;
-    transform: translate3d(2rem, 0, 0);
 
     p {
       color: $white !important;
       margin: 0;
     }
+  }
+
+  .upper {
+    transform: translate3d(2rem, 0,  0);
+  }
+
+  .lower {
+    transform: translate3d(2rem, -100%,  0);
   }
 }
 

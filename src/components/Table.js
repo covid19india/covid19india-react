@@ -279,11 +279,12 @@ function Table({
                   !(stateCode === UNASSIGNED_STATE_CODE && isPerMillion)
               )
               .sort((a, b) => sortingFunction(a, b))
-              .map((stateCode) => {
+              .map((stateCode, index, array) => {
                 return (
                   <Row
                     key={stateCode}
                     data={states[stateCode]}
+                    isInUpperHalfOfTable={index <= array.length / 2}
                     {...{
                       stateCode,
                       isPerMillion,
