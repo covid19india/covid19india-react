@@ -1,18 +1,17 @@
-import {capitalize} from '../utils/commonFunctions';
+import Tooltip from './Tooltip';
 
-import {FilterIcon} from '@primer/octicons-v2-react';
+import {STATISTIC_CONFIGS} from '../constants';
+import {toTitleCase} from '../utils/commonFunctions';
+
+import {FilterIcon, InfoIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {createBreakpoint} from 'react-use';
 import {useLongPress} from 'react-use';
 
-const useBreakpoint = createBreakpoint({S: 768});
-
 function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
-  const breakpoint = useBreakpoint();
   const {t} = useTranslation();
 
   const onLongPress = () => {
@@ -31,7 +30,6 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
       className="cell heading"
       onClick={handleSort.bind(this, statistic)}
       {...longPressEvent}
-      title={capitalize(statistic)}
     >
       {sortData.sortColumn === statistic && (
         <div
@@ -43,11 +41,12 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
           <FilterIcon size={10} />
         </div>
       )}
-      <div>
-        {breakpoint === 'S'
-          ? capitalize(statistic.slice(0, 1))
-          : t(capitalize(statistic))}
-      </div>
+      <div>{t(toTitleCase(STATISTIC_CONFIGS[statistic].displayName))}</div>
+      {statistic === 'other' && (
+        <Tooltip data={'Migrated cases or non-COVID deaths'}>
+          <InfoIcon size={14} />
+        </Tooltip>
+      )}
     </div>
   );
 }

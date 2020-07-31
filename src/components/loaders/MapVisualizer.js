@@ -1,4 +1,4 @@
-import {COLORS, MAP_LEGEND_HEIGHT} from '../../constants';
+import {STATISTIC_CONFIGS, MAP_LEGEND_HEIGHT} from '../../constants';
 
 import React from 'react';
 import ContentLoader from 'react-content-loader';
@@ -21,7 +21,7 @@ const MapVisualizerLoader = ({width, statistic}) => {
       height={height}
       width={width}
       speed={2}
-      backgroundColor={COLORS[statistic]}
+      backgroundColor={STATISTIC_CONFIGS[statistic].color}
     >
       <circle cx={0.4 * width} cy={height / 2} r="5" />
       <circle cx={0.5 * width} cy={height / 2} r="5" />

@@ -63,8 +63,10 @@ function Navbar({
 
       <div
         className="navbar-right"
-        onClick={setExpand.bind(this, !expand)}
         onMouseEnter={handleMouseEnter}
+        {...(windowSize.width < 769 && {
+          onClick: setExpand.bind(this, !expand),
+        })}
       >
         {windowSize.width < 769 && (
           <span>{expand ? t('Close') : t('Menu')}</span>
@@ -72,22 +74,24 @@ function Navbar({
 
         {windowSize.width > 769 && (
           <React.Fragment>
-            <span>
-              <Link to="/">
+            <Link to="/">
+              <span>
                 <Icon.Home {...activeNavIcon('/')} />
-              </Link>
-            </span>
-            <span>
-              <Link to="/blog">
+              </span>
+            </Link>
+            <Link to="/blog">
+              <span>
                 <Icon.Book {...activeNavIcon('/blog')} />
-              </Link>
-            </span>
-            <span>
-              <Link to="/about">
+              </span>
+            </Link>
+            <Link to="/about">
+              <span>
                 <Icon.HelpCircle {...activeNavIcon('/about')} />
-              </Link>
+              </span>
+            </Link>
+            <span>
+              <SunMoon {...{darkMode}} />
             </span>
-            <span>{windowSize.width > 768 && <SunMoon {...{darkMode}} />}</span>
           </React.Fragment>
         )}
       </div>
@@ -121,7 +125,9 @@ function Expand({pages, setExpand, darkMode, windowSize}) {
             <Link
               to={page.pageLink}
               key={i}
-              onClick={setExpand.bind(this, false)}
+              {...(windowSize.width < 769 && {
+                onClick: setExpand.bind(this, false),
+              })}
             >
               <span
                 {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}

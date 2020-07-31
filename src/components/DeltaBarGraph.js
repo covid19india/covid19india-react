@@ -1,4 +1,4 @@
-import {COLORS, D3_TRANSITION_DURATION} from '../constants';
+import {STATISTIC_CONFIGS, D3_TRANSITION_DURATION} from '../constants';
 import {
   formatDate,
   formatNumber,
@@ -15,6 +15,7 @@ import {transition} from 'd3-transition';
 import equal from 'fast-deep-equal';
 import React, {useEffect, useRef} from 'react';
 import {useMeasure} from 'react-use';
+
 const getDeltaStatistic = (data, statistic) => {
   return getStatistic(data, 'delta', statistic);
 };
@@ -48,11 +49,11 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       .domain([
         Math.min(
           0,
-          min(dates, (date) => getDeltaStatistic(timeseries[date], statistic))
+          min(dates, (date) => getDeltaStatistic(timeseries?.[date], statistic))
         ),
         Math.max(
           1,
-          max(dates, (date) => getDeltaStatistic(timeseries[date], statistic))
+          max(dates, (date) => getDeltaStatistic(timeseries?.[date], statistic))
         ),
       ])
       .range([chartBottom, margin.top]);
@@ -72,10 +73,10 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       .selectAll('text')
       .attr('y', 0)
       .attr('dy', (date, i) =>
-        getDeltaStatistic(timeseries[date], statistic) < 0 ? '-1em' : '1.5em'
+        getDeltaStatistic(timeseries?.[date], statistic) < 0 ? '-1em' : '1.5em'
       )
       .style('text-anchor', 'middle')
-      .attr('fill', COLORS[statistic]);
+      .attr('fill', STATISTIC_CONFIGS[statistic].color);
 
     svg
       .selectAll('.bar')
@@ -94,14 +95,14 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
           xScale(date),
           yScale(0),
           xScale.bandwidth(),
-          yScale(0) - yScale(getDeltaStatistic(timeseries[date], statistic)),
+          yScale(0) - yScale(getDeltaStatistic(timeseries?.[date], statistic)),
           r
         )
       )
       .attr('fill', (date, i) => {
         return i < dates.length - 1
-          ? COLORS[statistic] + '90'
-          : COLORS[statistic];
+          ? STATISTIC_CONFIGS[statistic].color + '90'
+          : STATISTIC_CONFIGS[statistic].color;
       });
 
     const textSelection = svg
@@ -111,14 +112,14 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       .attr('class', 'label')
       .attr('x', (date) => xScale(date) + xScale.bandwidth() / 2)
       .text((date) =>
-        formatNumber(getDeltaStatistic(timeseries[date], statistic))
+        formatNumber(getDeltaStatistic(timeseries?.[date], statistic))
       );
 
     textSelection
       .transition(t)
-      .attr('fill', COLORS[statistic])
+      .attr('fill', STATISTIC_CONFIGS[statistic].color)
       .attr('y', (date) => {
-        const val = getDeltaStatistic(timeseries[date], statistic);
+        const val = getDeltaStatistic(timeseries?.[date], statistic);
         return yScale(val) + (val < 0 ? 15 : -6);
       });
 
@@ -127,20 +128,26 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       .attr(
         'dy',
         (date) =>
-          `${getDeltaStatistic(timeseries[date], statistic) < 0 ? 1.2 : -1.2}em`
+          `${
+            getDeltaStatistic(timeseries?.[date], statistic) < 0 ? 1.2 : -1.2
+          }em`
       )
       .attr('x', (date) => xScale(date) + xScale.bandwidth() / 2)
       .text((date, i) => {
         if (i === 0) return '';
-        const prevVal = getDeltaStatistic(timeseries[dates[i - 1]], statistic);
+        const prevVal = getDeltaStatistic(
+          timeseries?.[dates[i - 1]],
+          statistic
+        );
         if (!prevVal) return '';
-        const delta = getDeltaStatistic(timeseries[date], statistic) - prevVal;
+        const delta =
+          getDeltaStatistic(timeseries?.[date], statistic) - prevVal;
         return `${delta > 0 ? '+' : ''}${formatNumber(
           (100 * delta) / Math.abs(prevVal)
         )}%`;
       })
       .transition(t)
-      .attr('fill', COLORS[statistic] + '90');
+      .attr('fill', STATISTIC_CONFIGS[statistic].color + '90');
   }, [dates, height, statistic, timeseries, width]);
 
   return (
@@ -160,15 +167,19 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(prevProps.stateCode, currProps.stateCode)) {
+  if (currProps.forceRender) {
     return false;
-  }
-  if (!equal(prevProps.lookback, currProps.lookback)) {
+  } else if (!currProps.timeseries && prevProps.timeseries) {
+    return true;
+  } else if (currProps.timeseries && !prevProps.timeseries) {
+    return false;
+  } else if (!equal(prevProps.stateCode, currProps.stateCode)) {
+    return false;
+  } else if (!equal(prevProps.lookback, currProps.lookback)) {
     return false;
   } else if (!equal(prevProps.statistic, currProps.statistic)) {
     return false;
   }
-
   return true;
 };
 

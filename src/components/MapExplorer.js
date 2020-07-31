@@ -5,9 +5,11 @@ import {
   MAP_TYPES,
   MAP_VIEWS,
   MAP_VIZS,
-  STATE_NAMES,
-  UNKNOWN_DISTRICT_KEY,
   PRIMARY_STATISTICS,
+  SPRING_CONFIG_NUMBERS,
+  STATE_NAMES,
+  STATISTIC_CONFIGS,
+  UNKNOWN_DISTRICT_KEY,
 } from '../constants';
 import {formatNumber, getStatistic, capitalize} from '../utils/commonFunctions';
 
@@ -20,6 +22,7 @@ import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import React, {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -30,6 +33,7 @@ import React, {
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {animated, useSpring} from 'react-spring';
+import {useSwipeable} from 'react-swipeable';
 import {useWindowSize} from 'react-use';
 
 const MapVisualizer = lazy(() => import('./MapVisualizer'));
@@ -37,12 +41,13 @@ const MapVisualizer = lazy(() => import('./MapVisualizer'));
 function MapExplorer({
   stateCode: mapCode = 'TT',
   data,
+  mapStatistic,
+  setMapStatistic,
   regionHighlighted,
   setRegionHighlighted,
   anchor,
   setAnchor,
-  mapStatistic,
-  setMapStatistic,
+  expandTable,
 }) {
   const {t} = useTranslation();
   const mapExplorerRef = useRef();
@@ -74,25 +79,35 @@ function MapExplorer({
     });
   }, [data, regionHighlighted.stateCode, regionHighlighted.districtName]);
 
-  const handleTabClick = (option) => {
-    switch (option) {
-      case MAP_VIZS.CHOROPLETH:
-        setMapViz(MAP_VIZS.CHOROPLETH);
-        if (mapMeta.mapType === MAP_TYPES.COUNTRY)
-          setRegionHighlighted({
-            stateCode: regionHighlighted.stateCode,
-            districtName: null,
-          });
-        return;
+  const handleTabClick = useCallback(
+    (option) => {
+      switch (option) {
+        case MAP_VIZS.CHOROPLETH:
+          setMapViz(MAP_VIZS.CHOROPLETH);
+          return;
 
-      case MAP_VIZS.BUBBLES:
-        setMapViz(MAP_VIZS.BUBBLES);
-        return;
+        case MAP_VIZS.BUBBLES:
+          setMapViz(MAP_VIZS.BUBBLES);
+          return;
 
-      default:
-        return;
+        default:
+          return;
+      }
+    },
+    [setMapViz]
+  );
+
+  const handleDistrictClick = useCallback(() => {
+    const newMapView =
+      mapView === MAP_VIEWS.DISTRICTS ? MAP_VIEWS.STATES : MAP_VIEWS.DISTRICTS;
+    if (newMapView === MAP_VIEWS.STATES) {
+      setRegionHighlighted({
+        stateCode: regionHighlighted.stateCode,
+        districtName: null,
+      });
     }
-  };
+    setMapView(newMapView);
+  }, [mapView, setRegionHighlighted, regionHighlighted.stateCode]);
 
   const ChoroplethIcon = useMemo(
     () => (
@@ -158,18 +173,35 @@ function MapExplorer({
 
   const spring = useSpring({
     total: getStatistic(hoveredRegion, 'total', mapStatistic),
-    config: {
-      tension: 250,
-      clamp: true,
+    config: {tension: 250, ...SPRING_CONFIG_NUMBERS},
+  });
+
+  const swipeHandlers = useSwipeable({
+    onSwipedRight: () => {
+      const currentIndex = PRIMARY_STATISTICS.indexOf(mapStatistic);
+      const toIndex =
+        currentIndex > 0 ? currentIndex - 1 : PRIMARY_STATISTICS.length - 1;
+      setMapStatistic(PRIMARY_STATISTICS[toIndex]);
+    },
+    onSwipedLeft: () => {
+      const currentIndex = PRIMARY_STATISTICS.indexOf(mapStatistic);
+      const toIndex =
+        currentIndex < PRIMARY_STATISTICS.length - 1 ? currentIndex + 1 : 0;
+      setMapStatistic(PRIMARY_STATISTICS[toIndex]);
     },
   });
+
+  const statisticConfig = STATISTIC_CONFIGS[mapStatistic];
 
   return (
     <div
       className={classnames(
         'MapExplorer',
         {stickied: anchor === 'mapexplorer'},
-        {hidden: anchor && anchor !== 'mapexplorer'}
+        {
+          hidden:
+            anchor && (!expandTable || width < 769) && anchor !== 'mapexplorer',
+        }
       )}
     >
       <div className="panel" ref={panelRef}>
@@ -184,10 +216,16 @@ function MapExplorer({
             <h1 className={classnames('district', mapStatistic)}>
               <animated.div>
                 {spring.total.interpolate((total) =>
-                  formatNumber(Math.floor(total))
+                  formatNumber(
+                    total,
+                    statisticConfig.format !== 'short'
+                      ? statisticConfig.format
+                      : 'int',
+                    mapStatistic
+                  )
                 )}
               </animated.div>
-              <span>{t(capitalize(mapStatistic))}</span>
+              <span>{t(capitalize(statisticConfig.displayName))}</span>
             </h1>
           )}
         </div>
@@ -220,12 +258,7 @@ function MapExplorer({
                   className={classnames('boundary fadeInUp', {
                     'is-highlighted': mapView === MAP_VIEWS.DISTRICTS,
                   })}
-                  onClick={setMapView.bind(
-                    this,
-                    mapView === MAP_VIEWS.DISTRICTS
-                      ? MAP_VIEWS.STATES
-                      : MAP_VIEWS.DISTRICTS
-                  )}
+                  onClick={handleDistrictClick.bind(this)}
                   style={trail[3]}
                 >
                   <OrganizationIcon />
@@ -246,7 +279,7 @@ function MapExplorer({
             )}
           </div>
 
-          {width < 769 && (
+          {(expandTable || width < 769) && (
             <div className="switch-statistic fadeInUp" style={trail[5]}>
               {PRIMARY_STATISTICS.map((statistic) => (
                 <div
@@ -264,7 +297,12 @@ function MapExplorer({
         </div>
       </div>
 
-      <div ref={mapExplorerRef} className="fadeInUp" style={trail[3]}>
+      <div
+        ref={mapExplorerRef}
+        className="fadeInUp"
+        style={trail[3]}
+        {...swipeHandlers}
+      >
         {mapStatistic && (
           <Suspense
             fallback={
@@ -298,6 +336,8 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
     return false;
   } else if (!equal(prevProps.anchor, currProps.anchor)) {
+    return false;
+  } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
     return false;
   } else if (
     !equal(

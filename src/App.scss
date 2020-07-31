@@ -176,17 +176,13 @@ h6 {
   }
 
   .navbar-right {
-    color: $gray-mid;
+    color: $gray;
     cursor: pointer;
     font-size: 12px;
     font-weight: 600;
     padding: 1.5rem;
     text-align: center;
     width: 3rem;
-
-    &:hover {
-      color: $gray;
-    }
   }
 
   .language-toggle {
@@ -245,25 +241,23 @@ h6 {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin-left: 10rem;
-  margin-right: 5rem;
+  margin-left: 9rem;
+  margin-right: 3rem;
 
   .home-left,
   .home-right {
     display: flex;
     flex-direction: column;
-    width: 30rem;
+    width: 34rem;
   }
 
   .home-left {
-    margin-left: 2.5rem;
     margin-right: 2.5rem;
     min-height: 60rem;
   }
 
   .home-right {
     margin-left: 2.5rem;
-    margin-right: 2.5rem;
     min-height: 10rem;
   }
 
@@ -291,7 +285,7 @@ h6 {
   .alert-right {
     margin-left: .25rem;
     text-align: right;
-    width: 5rem;
+    width: 9rem;
 
     a {
       background: $gray-light;
@@ -385,63 +379,31 @@ h6 {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin-left: 10rem;
-  margin-right: 5rem;
+  margin-left: 8rem;
+  margin-right: 3rem;
 
   .state-left,
   .state-right {
     display: flex;
     flex-direction: column;
-    width: 30rem;
+    width: 34rem;
   }
 
   .state-left {
-    margin-left: 2.5rem;
     margin-right: 2.5rem;
     position: relative;
   }
 
   .state-right {
     margin-left: 2.5rem;
-    margin-right: 2.5rem;
   }
 
   a {
     text-decoration: none;
   }
 
-  .to-essentials {
-    align-self: center;
-    background: $gray-light;
-    border-radius: 5px;
-    display: none;
-    flex-direction: row;
-    justify-content: center;
-    padding: 0.5rem;
-    transition: all 0.2s ease-in-out;
-
-    &:hover {
-      background: $gray-hover;
-    }
-
-    h2 {
-      color: $gray-mid;
-      font-weight: 600;
-    }
-
-    svg {
-      color: $gray-mid;
-      margin-bottom: 2px;
-      margin-left: 1rem;
-    }
-
-    & > * {
-      align-self: center;
-    }
-  }
-
   .district-bar {
-    width: 100%;
+    width: calc(100% - 2rem);
   }
 
   .Minigraph {
@@ -545,7 +507,12 @@ h6 {
         align-self: center;
       }
 
+      h3 {
+        width: calc(100% - 2.5rem);
+      }
+
       span {
+        margin-bottom: auto;
         margin-right: 1rem;
       }
 
@@ -743,91 +710,6 @@ h6 {
     top: 0;
     width: 100vw;
     z-index: 10;
-  }
-}
-
-.Essentials {
-  align-self: center;
-  display: flex;
-  flex-direction: column;
-  margin-top: 2rem;
-  width: 30rem;
-
-  img,
-  .alert {
-    align-self: center;
-  }
-
-  .alert {
-    margin: 0;
-    margin-top: 2rem;
-    width: 90% !important;
-    word-wrap: break-word;
-
-    .alert-right {
-      text-align: left;
-    }
-
-    svg {
-      margin: 0;
-    }
-  }
-
-  button {
-    align-self: center;
-    background: $yellow-light;
-    color: $orange;
-    display: flex;
-    flex-direction: row;
-    font-weight: 400;
-    justify-content: center;
-    margin: 0;
-    padding: .75rem;
-    text-transform: unset;
-
-    * {
-      align-self: center;
-    }
-
-    svg {
-      margin-left: .5rem;
-      padding-right: 0;
-    }
-
-    &:hover {
-      background: $yellow-hover;
-    }
-  }
-
-  .address {
-    align-self: center;
-    color: $gray;
-    display: flex;
-    flex-direction: row;
-    padding: 1rem;
-
-    h3 {
-      margin-right: 1rem;
-    }
-
-    svg {
-      cursor: pointer;
-      margin-bottom: 2px;
-      stroke: $gray-mid;
-      stroke-width: 3px;
-    }
-
-    * {
-      align-self: center;
-    }
-  }
-
-  .essential-result {
-    background: $gray-light;
-    border: transparent !important;
-    border-radius: 5px;
-    cursor: default !important;
-    margin-bottom: 1rem;
   }
 }
 
@@ -1294,6 +1176,7 @@ h6 {
   align-self: center;
   display: flex;
   flex-direction: column;
+  max-width: 40rem;
   width: 100%;
 
   & > * {
@@ -1390,7 +1273,7 @@ h6 {
 .Timeline {
   cursor: pointer;
   height: 3rem;
-  width: 30rem;
+  width: 34rem;
   will-change: transform;
 
   .day {
@@ -1624,11 +1507,12 @@ abbr {
   font-weight: 600;
   justify-content: space-between;
   margin-bottom: .25rem;
-  width: calc(100% - 2rem);
+  width: 100%;
 
   .option-toggle,
   .info-toggle,
-  .million-toggle {
+  .million-toggle,
+  .expand-table-toggle {
     background: $gray-light;
     border-radius: 5px;
     color: $gray-mid;
@@ -1666,13 +1550,22 @@ abbr {
     }
   }
 
-  .scroll-right-helper {
+  .expand-table-toggle {
     color: $gray-mid;
-    display: flex;
-    flex: 1;
-    flex-direction: row;
-    font-size: 12px;
-    justify-content: flex-end;
+    margin-left: auto;
+    margin-right: 0;
+
+    &.is-highlighted {
+      svg {
+        transform: rotate(90deg);
+      }
+    }
+
+    svg {
+      cursor: pointer;
+      margin-bottom: 0.25rem;
+      transform: rotate(-90deg);
+    }
   }
 
   @media (min-width: 769px) {
@@ -1794,68 +1687,88 @@ abbr {
   }
 }
 
-.table {
+.table-container {
   align-self: center;
-  border-radius: 3px;
-  font-size: 12px;
   margin-bottom: 2.5rem;
   overflow-x: auto;
-  width: 28rem;
+  width: 100%;
+}
+
+.table {
+  border-radius: 3px;
+  display: inline-grid;
+  font-size: 12px;
+  grid-template-rows: auto;
+  min-width: 100%;
 
   .state-meta {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    left: 0;
-    margin-bottom: 1 + .25rem;
-    margin-top: 1rem;
-    position: sticky;
-    width: 28rem;
+    grid-column: 1 / -1;
 
-    svg {
-      margin-right: .5rem;
-    }
-
-    .last-updated {
+    .state-meta-top {
       align-items: center;
-      color: $green;
       display: flex;
       flex-direction: row;
-    }
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 1 + .25rem;
+      margin-top: 1rem;
 
-    .state-page {
-      align-items: center;
-      background: $yellow-light;
-      border-radius: 5px;
-      color: $orange;
-      cursor: pointer;
-      display: flex;
-      flex-direction: row;
-      padding: .75rem;
-
-      p {
-        align-self: flex-end;
-        flex: 1;
-        margin: 0;
-        text-align: right;
+      svg {
+        margin-right: .5rem;
       }
 
-      &:hover {
-        background: $yellow-hover;
+      .last-updated {
+        align-items: center;
+        color: $green;
+        display: flex;
+        flex-direction: row;
+      }
+
+      .state-page {
+        align-items: center;
+        background: $yellow-light;
+        border-radius: 5px;
+        color: $orange;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        padding: .75rem;
+
+        p {
+          align-self: flex-end;
+          flex: 1;
+          margin: 0;
+          text-align: right;
+        }
+
+        &:hover {
+          background: $yellow-hover;
+        }
       }
     }
-  }
 
-  .table-wrapper {
-    display: inline-block;
-    min-width: 100%;
+    .state-meta-bottom {
+      padding-bottom: 1.5rem;
+
+      .disclaimer {
+        background: $brick-light;
+        border-radius: 5px;
+        color: $brick;
+        margin: auto;
+        padding: 1rem .25rem;
+        text-align: center;
+        width: 16rem;
+
+        svg {
+          margin-right: 0.5rem;
+        }
+      }
+    }
   }
 
   .row {
     cursor: pointer;
-    display: flex;
-    flex-direction: row;
+    display: contents;
     width: 100%;
 
     &:nth-child(odd) {
@@ -1901,7 +1814,7 @@ abbr {
       position: relative;
 
       &:not(:first-child) {
-        flex-basis: 3.5rem;
+        flex-basis: 4rem;
         flex-grow: 1;
         flex-shrink: 0;
         justify-content: flex-end;
@@ -1909,7 +1822,7 @@ abbr {
 
       &:first-child {
         background: $gray-hover-darker-opaque;
-        flex-basis: 7.5rem;
+        flex-basis: 7rem;
         flex-grow: 0;
         flex-shrink: 0;
         justify-content: space-between;
@@ -1925,6 +1838,7 @@ abbr {
 
       svg {
         color: $gray-mid;
+        margin-left: 0.2rem;
         stroke-width: 2.5px;
       }
 
@@ -1985,6 +1899,10 @@ abbr {
           color: $cherry;
         }
 
+        .is-active {
+          color: $blue;
+        }
+
         .is-recovered {
           color: $green;
         }
@@ -2006,7 +1924,7 @@ abbr {
         background: $gray-light-opaque;
         font-size: 13px;
         font-weight: 900;
-        padding: .75rem .5rem;
+        padding: 1.25rem .5rem .75rem;
 
         &:hover {
           background: $gray-hover-opaque !important;
@@ -2017,47 +1935,39 @@ abbr {
       .district-name {
         font-size: 14px;
         font-weight: 600;
-        margin-right: .25rem;
-        width: 6rem;
+        max-width: 7rem;
         word-wrap: break-word;
       }
     }
   }
 
-  .spacer {
-    color: $gray-mid;
-    left: 0;
-    margin-bottom: 1 + .25rem;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 1rem;
-    position: sticky;
-    text-align: center;
-    width: 10rem;
+  .spacer-row {
+    grid-column: 1 / -1;
 
-    .fold {
-      cursor: pointer;
+    .spacer {
+      color: $gray-mid;
+      margin-bottom: 1 + .25rem;
+      margin-top: 1rem;
+      text-align: center;
 
-      &:hover {
-        color: $gray;
+      p {
+        margin-left: auto;
+        margin-right: auto;
+        width: 10rem;
+      }
+
+      .fold {
+        cursor: pointer;
+
+        &:hover {
+          color: $gray;
+        }
       }
     }
   }
 
   .intersection {
     display: block;
-  }
-
-  @media (min-width: 769px) {
-    .cell {
-      &:first-child {
-        flex-basis: 3rem;
-      }
-
-      &:not(:first-child) {
-        flex-basis: 4rem;
-      }
-    }
   }
 }
 
@@ -2090,10 +2000,17 @@ abbr {
   }
 }
 
+.map-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .MapExplorer {
   align-self: center;
+  margin-bottom: 3rem;
   position: relative;
-  width: 30rem;
+  width: 100%;
 
   &.stickied {
     position: sticky !important;
@@ -2516,7 +2433,7 @@ abbr {
       align-self: flex-start;
       margin-right: 0.5rem;
       stroke-width: 2px;
-      width: 20px;
+      width: 16px;
     }
   }
 
@@ -2627,8 +2544,7 @@ abbr {
   align-self: center;
   display: flex;
   flex-direction: column;
-  margin-top: 3rem;
-  width: 30rem;
+  width: calc(100% - 2rem);
 
   &.stickied {
     position: sticky !important;
@@ -2648,6 +2564,8 @@ abbr {
     max-width: calc(100% - 0.6rem);
 
     .dropdown {
+      min-width: calc(60%);
+
       select {
         appearance: none;
         background-color: #eee;
@@ -2673,6 +2591,7 @@ abbr {
     }
 
     .reset-icon {
+      margin: auto;
       margin-left: 0.75rem;
       margin-top: 0.5rem;
 
@@ -2700,12 +2619,6 @@ abbr {
   .svg-parent {
     height: 10rem;
     margin-bottom: 1rem;
-
-    line {
-      &.stem {
-        stroke-width: 4px;
-      }
-    }
 
     &.is-confirmed {
       line {
@@ -2970,16 +2883,20 @@ input {
     border-radius: 5px;
     display: flex;
     position: relative;
-    width: 30rem;
+    width: 100%;
 
     svg {
       width: 100%;
 
       .domain,
-      .tick,
-      line {
+      .tick {
         stroke: $cherry;
         stroke-width: 1.5;
+
+        line {
+          stroke: $cherry;
+          stroke-width: 1.5;
+        }
       }
 
       text {
@@ -3124,7 +3041,7 @@ input {
   align-self: center;
   margin-bottom: 1rem;
   margin-top: 1rem;
-  width: 30rem;
+  width: 34rem;
 
   a {
     background: $blue-light;
@@ -3150,8 +3067,8 @@ input {
 footer {
   display: flex;
   flex-direction: column;
-  margin-bottom: 5rem;
-  margin-top: 5rem;
+  margin-bottom: 4rem;
+  margin-top: 4rem;
   width: 100%;
 
   & > * {
@@ -3163,18 +3080,27 @@ footer {
     color: $gray;
     font-weight: 600;
     margin: 0;
-    margin-bottom: 3.5rem;
+    margin-bottom: 2rem;
   }
 
   svg {
+    margin-right: .5rem;
     padding: .25rem;
   }
 
-  .github {
-    color: #00000050;
+  .telegram {
+    color: $blue-mid;
 
     &:hover {
-      color: #000;
+      color: $blue;
+    }
+  }
+
+  .github {
+    color: $gray-mid;
+
+    &:hover {
+      color: $gray;
     }
   }
 
@@ -3212,11 +3138,11 @@ footer {
   & > * {
     align-self: center;
     margin-bottom: 1.5rem;
-    width: 30rem;
+    width: 34rem;
   }
 
   & > *:first-child {
-    margin-top: 2rem;
+    margin-top: 4rem;
   }
 
   h2 {
@@ -3298,11 +3224,55 @@ footer {
 .updates-header {
   align-self: center;
   color: $gray-dark;
-  width: 30rem;
+  width: 100%;
 
   h2 {
     color: $pblue;
     font-weight: 900;
+  }
+
+  h3 {
+    color: $blue-mid;
+    font-weight: 900;
+
+    &:hover {
+      svg {
+        color: $blue;
+      }
+    }
+
+    svg {
+      height: 1rem;
+    }
+  }
+}
+
+.updates-footer {
+  align-self: center;
+  color: $gray-dark;
+  margin-left: auto;
+
+  .telegram {
+    color: $blue;
+
+    &:hover {
+      color: $purple;
+    }
+  }
+
+  h4 {
+    color: $blue-mid;
+    font-weight: 900;
+    margin-top: .5rem;
+
+    &:hover {
+      color: $blue;
+    }
+
+    svg {
+      height: 1rem;
+      margin-bottom: -.25rem;
+    }
   }
 }
 
@@ -3427,9 +3397,7 @@ footer {
   .district-bar-left {
     display: flex;
     flex-direction: column;
-    flex-grow: 15rem;
-    flex-shrink: 0;
-    margin-right: 1rem;
+    flex-grow: 1;
   }
 
   .district-bar-right {
@@ -3481,7 +3449,7 @@ footer {
       flex-direction: row;
       height: 2.5rem;
       justify-content: flex-start;
-      margin-right: 1rem;
+      margin-right: 0.5rem;
 
       h2,
       h5 {
@@ -3492,7 +3460,6 @@ footer {
 
       h5 {
         display: inline-block !important;
-        flex: 0 1;
         margin-left: 0.5rem;
         margin-top: 0.15rem;
         width: auto !important;
@@ -3563,7 +3530,7 @@ footer {
   display: flex;
   flex-direction: column;
   margin-left: 5rem;
-  width: 30rem;
+  width: 34rem;
 
   h3 {
     align-self: center;
@@ -3693,6 +3660,7 @@ footer {
     }
 
     .navbar-right {
+      align-items: center;
       background: $gray-light-opaque;
       display: flex;
       flex-direction: column;
@@ -3700,7 +3668,7 @@ footer {
       padding-bottom: 0;
       padding-top: 0;
 
-      & > span {
+      span {
         display: flex;
         flex-direction: row;
         height: 1.5rem;
@@ -3708,8 +3676,8 @@ footer {
         margin-bottom: 1.5rem;
         margin-top: 1.5rem;
 
-        svg {
-          stroke: $gray;
+        &:hover {
+          color: $gray-mid;
         }
       }
     }
@@ -3740,27 +3708,60 @@ footer {
       background: #1e1e30 !important;
     }
   }
+
+  .Home {
+    .home-left,
+    .home-right {
+      &.expanded {
+        width: 73rem;
+      }
+    }
+
+    .home-left {
+      &.expanded {
+        margin-bottom: 2.5rem;
+        margin-right: 0;
+      }
+    }
+
+    .home-right {
+      &.expanded {
+        flex-direction: row;
+        margin-left: 0;
+      }
+    }
+  }
+
+  .map-container {
+    &.expanded {
+      margin-right: 2.5rem;
+      width: 50%;
+    }
+  }
+
+  .TimeseriesExplorer {
+    &.expanded {
+      margin-left: 2.5rem;
+      width: calc(50% - 2rem);
+    }
+  }
 }
 
 @media (max-width: 769px) {
-  .table,
+  .table-container,
   .header,
   .TimeseriesExplorer,
-  .StateHeader,
+  .map-container,
   .Links,
   .Summary,
   .About,
-  .MapExplorer,
   .updates,
   .updates-header,
   .StateMeta,
   .timeline,
+  .table-top,
   .LanguageSwitcher {
     width: calc(100% - 2rem);
-  }
-
-  .state-meta {
-    width: calc(100vw - 2rem) !important;
   }
 
   .Home,
@@ -3787,6 +3788,10 @@ footer {
     h1 {
       font-size: 5vw !important;
     }
+  }
+
+  .map-container {
+    align-self: center;
   }
 
   .MapExplorer {
@@ -3966,7 +3971,7 @@ footer {
     }
 
     .navbar-right {
-      & > span {
+      span {
         display: none;
 
         &:first-child {
@@ -3983,6 +3988,11 @@ footer {
   }
 
   .State {
+    .MapExplorer,
+    .StateHeader {
+      width: calc(100% - 2rem);
+    }
+
     .district-bar {
       width: calc(100% - 3rem);
 
@@ -4000,12 +4010,6 @@ footer {
 
     .meta-item {
       min-width: 1rem;
-    }
-  }
-
-  .Essentials {
-    .alert {
-      width: 15rem !important;
     }
   }
 
@@ -4314,16 +4318,6 @@ footer {
         &::after {
           background: $gray !important;
         }
-      }
-    }
-  }
-
-  .button {
-    &.github {
-      color: #bdbdbd !important;
-
-      svg {
-        stroke: #bdbdbd !important;
       }
     }
   }

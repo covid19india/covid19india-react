@@ -8,7 +8,9 @@ const data = {
     confirmed: 153,
     deceased: 1,
     recovered: 2,
-    tested: 2544,
+    tested: {
+      samples: 2544,
+    },
   },
   meta: {
     tested: {
@@ -19,9 +21,11 @@ const data = {
   total: {
     confirmed: 883,
     deceased: 3,
-    migrated: 3,
+    other: 3,
     recovered: 5,
-    tested: 27688,
+    tested: {
+      samples: 27688,
+    },
   },
 };
 

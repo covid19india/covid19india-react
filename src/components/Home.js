@@ -1,12 +1,13 @@
-import {MAP_META} from '../constants';
+import {API_ROOT_URL} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
 import {fetcher} from '../utils/commonFunctions';
 
+import classnames from 'classnames';
 import React, {useState, useRef, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 import {useLocation} from 'react-router-dom';
-import {useSessionStorage, useWindowSize} from 'react-use';
+import {useLocalStorage, useSessionStorage, useWindowSize} from 'react-use';
 
 const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
 const MapExplorer = lazy(() => import('./MapExplorer'));
@@ -19,13 +20,14 @@ const Level = lazy(() => import('./Level'));
 const MapSwitcher = lazy(() => import('./MapSwitcher'));
 const StateHeader = lazy(() => import('./StateHeader'));
 
-function Home(props) {
+function Home() {
   const [regionHighlighted, setRegionHighlighted] = useState({
     stateCode: 'TT',
     districtName: null,
   });
 
-  const [anchor, setAnchor] = useState(null);
+  const [anchor, setAnchor] = useLocalStorage('anchor', null);
+  const [expandTable, setExpandTable] = useLocalStorage('expandTable', false);
   const [mapStatistic, setMapStatistic] = useSessionStorage(
     'mapStatistic',
     'active'
@@ -34,7 +36,7 @@ function Home(props) {
   const location = useLocation();
 
   const {data: timeseries} = useStickySWR(
-    'https://api.covid19india.org/v3/min/timeseries.min.json',
+    `${API_ROOT_URL}/timeseries.min.json`,
     fetcher,
     {
       revalidateOnMount: true,
@@ -43,9 +45,7 @@ function Home(props) {
   );
 
   const {data} = useStickySWR(
-    `https://api.covid19india.org/v3/min/data${
-      date ? `-${date}` : ''
-    }.min.json`,
+    `${API_ROOT_URL}/data${date ? `-${date}` : ''}.min.json`,
     fetcher,
     {
       revalidateOnMount: true,
@@ -56,16 +56,6 @@ function Home(props) {
   const homeRightElement = useRef();
   const isVisible = useIsVisible(homeRightElement);
   const {width} = useWindowSize();
-
-  const stateCodes = [
-    'TT',
-    ...[
-      ...new Set([
-        ...Object.keys(MAP_META).filter((stateCode) => stateCode !== 'TT'),
-        ...Object.keys(data || {}).filter((stateCode) => stateCode !== 'TT'),
-      ]),
-    ].sort(),
-  ];
 
   return (
     <React.Fragment>
@@ -78,7 +68,7 @@ function Home(props) {
       </Helmet>
 
       <div className="Home">
-        <div className="home-left">
+        <div className={classnames('home-left', {expanded: expandTable})}>
           <div className="header">
             <Suspense fallback={<div />}>
               <Search />
@@ -89,7 +79,7 @@ function Home(props) {
                 <Actions
                   {...{
                     setDate,
-                    dates: Object.keys(timeseries['TT']).reverse(),
+                    dates: Object.keys(timeseries['TT']?.dates).reverse(),
                     date,
                   }}
                 />
@@ -97,7 +87,7 @@ function Home(props) {
             )}
           </div>
 
-          <div style={{position: 'relative'}}>
+          <div style={{position: 'relative', marginTop: '1rem'}}>
             {data && (
               <Suspense fallback={<div style={{height: '50rem'}} />}>
                 {width > 769 && (
@@ -109,41 +99,65 @@ function Home(props) {
 
             {timeseries && (
               <Suspense fallback={<div style={{height: '50rem'}} />}>
-                <Minigraphs timeseries={timeseries['TT']} {...{date}} />
+                <Minigraphs timeseries={timeseries['TT']?.dates} {...{date}} />
               </Suspense>
             )}
           </div>
 
           {data && (
             <Suspense fallback={<div />}>
-              <Table {...{data, regionHighlighted, setRegionHighlighted}} />
+              <Table
+                {...{
+                  data,
+                  regionHighlighted,
+                  setRegionHighlighted,
+                  expandTable,
+                  setExpandTable,
+                }}
+              />
             </Suspense>
           )}
         </div>
 
-        <div className="home-right" ref={homeRightElement}>
+        <div
+          className={classnames('home-right', {expanded: expandTable})}
+          ref={homeRightElement}
+        >
           {(isVisible || location.hash) && (
             <React.Fragment>
               {data && (
-                <Suspense fallback={<div style={{height: '50rem'}} />}>
-                  <StateHeader data={data['TT']} stateCode={'TT'} />
-                  <MapExplorer
-                    stateCode="TT"
-                    {...{data}}
-                    {...{mapStatistic, setMapStatistic}}
-                    {...{regionHighlighted, setRegionHighlighted}}
-                    {...{anchor, setAnchor}}
-                  />
-                </Suspense>
+                <div
+                  className={classnames('map-container', {
+                    expanded: expandTable,
+                  })}
+                >
+                  <Suspense fallback={<div style={{height: '50rem'}} />}>
+                    <StateHeader data={data['TT']} stateCode={'TT'} />
+                    <MapExplorer
+                      stateCode="TT"
+                      {...{data}}
+                      {...{mapStatistic, setMapStatistic}}
+                      {...{regionHighlighted, setRegionHighlighted}}
+                      {...{anchor, setAnchor}}
+                      {...{expandTable}}
+                    />
+                  </Suspense>
+                </div>
               )}
 
               {timeseries && (
                 <Suspense fallback={<div />}>
                   <TimeseriesExplorer
-                    timeseries={timeseries[regionHighlighted.stateCode]}
-                    {...{date, stateCodes}}
-                    {...{regionHighlighted, setRegionHighlighted}}
-                    {...{anchor, setAnchor}}
+                    stateCode="TT"
+                    {...{
+                      timeseries,
+                      date,
+                      regionHighlighted,
+                      setRegionHighlighted,
+                      anchor,
+                      setAnchor,
+                      expandTable,
+                    }}
                   />
                 </Suspense>
               )}

@@ -2,7 +2,7 @@ import './App.scss';
 import Blog from './components/Blog';
 import Navbar from './components/Navbar';
 
-import React, {lazy, useState, Suspense} from 'react';
+import React, {lazy, useState, Suspense, useEffect} from 'react';
 import {Route, Redirect, Switch, useLocation} from 'react-router-dom';
 import useDarkMode from 'use-dark-mode';
 
@@ -42,6 +42,15 @@ const App = () => {
       showInNavbar: false,
     },
   ];
+
+  useEffect(() => {
+    if (showLanguageSwitcher) {
+      // For Chrome, Firefox, IE and Opera
+      document.documentElement.scrollTo({top: 0, behavior: 'smooth'});
+      // For Safari
+      document.body.scrollTo({top: 0, behavior: 'smooth'});
+    }
+  }, [showLanguageSwitcher]);
 
   return (
     <div className="App">
