@@ -46,12 +46,14 @@ function Navbar({
     }
   }, [windowSize.width]);
 
+  const handleLangaugeSwitcher = useCallback(() => {
+    if (expand) setExpand(false);
+    setShowLanguageSwitcher(!showLanguageSwitcher);
+  }, [expand, showLanguageSwitcher, setExpand, setShowLanguageSwitcher]);
+
   return (
     <animated.div className="Navbar" style={spring}>
-      <div
-        className="navbar-left"
-        onClick={setShowLanguageSwitcher.bind(this, !showLanguageSwitcher)}
-      >
+      <div className="navbar-left" onClick={handleLangaugeSwitcher.bind(this)}>
         {locales[currentLanguage]}
       </div>
 
