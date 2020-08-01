@@ -77,12 +77,12 @@
     cursor: pointer;
     display: flex;
     flex-direction: row;
-    height: ms(1);
+    height: ms(0);
     justify-content: center;
     position: absolute;
     right: 1rem;
-    top: #{ms(2)/2 + ms(-5)};
-    width: ms(1);
+    top: #{ms(2)/2 + ms(-2)};
+    width: ms(0);
 
     &:hover {
       background: var(--gray-hover) !important;
@@ -151,9 +151,9 @@
       cursor: pointer;
       display: flex;
       flex-direction: row;
-      font-size: ms(0);
+      font-size: ms(-1) + ms(-4);
       justify-content: space-between;
-      padding: ms(0);
+      padding: ms(1);
 
       &:hover {
         background: var(--gray-light);
@@ -173,7 +173,7 @@
         color: var(--orange);
         display: flex;
         flex-direction: row;
-        font-size: ms(0);
+        font-size: ms(-1) + ms(-4);
         padding: ms(-2);
 
         &:hover {

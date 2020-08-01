@@ -186,7 +186,7 @@ function TimeseriesExplorer({
           <PinIcon />
         </div>
 
-        <h3 className="title">{t('Spread Trends')}</h3>
+        <h4 className="title">{t('Spread Trends')}</h4>
         <div className="tabs">
           {Object.entries(TIMESERIES_CHART_TYPES).map(
             ([ctype, value], index) => (

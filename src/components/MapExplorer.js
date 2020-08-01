@@ -216,7 +216,7 @@ function MapExplorer({
 
           {regionHighlighted.stateCode && (
             <React.Fragment>
-              <animated.h5 className={classnames('statistic', mapStatistic)}>
+              <animated.h4 className={classnames('statistic', mapStatistic)}>
                 {spring.total.interpolate((total) =>
                   formatNumber(
                     total,
@@ -226,7 +226,8 @@ function MapExplorer({
                     mapStatistic
                   )
                 )}
-              </animated.h5>
+              </animated.h4>
+
               <h6 className={classnames('statistic-label', mapStatistic)}>
                 {t(capitalize(statisticConfig.displayName))}
               </h6>

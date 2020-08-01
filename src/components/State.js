@@ -174,12 +174,12 @@ function State() {
             >
               <div className="district-bar-top">
                 <div className="district-bar-left">
-                  <h3
+                  <h4
                     className={classnames('title', mapStatistic, 'fadeInUp')}
                     style={trail[0]}
                   >
                     Top districts
-                  </h3>
+                  </h4>
                   <div
                     className={`districts fadeInUp ${
                       showAllDistricts ? 'is-grid' : ''
@@ -211,7 +211,7 @@ function State() {
                         return (
                           <div key={districtName} className="district">
                             <h5 className="statistic">{formatNumber(total)}</h5>
-                            <h5 className="title">{t(districtName)}</h5>
+                            <h6 className="title">{t(districtName)}</h6>
                             {mapStatistic !== 'active' && (
                               <div className="delta">
                                 <h6 className={mapStatistic}>

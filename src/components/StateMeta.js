@@ -70,16 +70,21 @@ function StateMeta({stateCode, data, timeseries}) {
 
   return (
     <React.Fragment>
-      <div className="state-meta population">
-        <div className="meta-item population">
-          <h3>Population</h3>
-          <h1>{formatNumber(data[stateCode]?.meta?.population)}</h1>
-        </div>
-        <div className="alert">
-          <Compass />
+      <div className="population">
+        <h4 className="title">Population</h4>
+        <h4 className="statistic">
+          {formatNumber(data[stateCode]?.meta?.population)}
+        </h4>
+
+        <div className="footnote">
+          <div className="icon">
+            <Compass />
+          </div>
+
           <div className="alert-right">
             Based on 2019 population projection by NCP{' '}
             <a
+              className="source"
               href="https://nhm.gov.in/New_Updates_2018/Report_Population_Projection_2019.pdf"
               target="_noblank"
             >
@@ -89,7 +94,7 @@ function StateMeta({stateCode, data, timeseries}) {
         </div>
       </div>
 
-      <div className="StateMeta">
+      <div className="state-meta">
         <StateMetaCard
           className="confirmed"
           title={'Confirmed Per Million'}

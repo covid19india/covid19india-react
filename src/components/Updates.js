@@ -59,12 +59,12 @@ function Updates({updates}) {
                     )
                   ) + ' ago'}
                 </h6>
-                <h5
+                <h6
                   className="text"
                   dangerouslySetInnerHTML={{
                     __html: activity.update,
                   }}
-                ></h5>
+                ></h6>
               </div>
             </React.Fragment>
           );
@@ -76,7 +76,7 @@ function Updates({updates}) {
         className="updates-footer"
         rel="noopener noreferrer"
       >
-        <h5 className="message">Get updates on Telegram</h5>
+        <h6 className="message">Get updates on Telegram</h6>
         <CrossReferenceIcon />
       </a>
     </div>
