@@ -175,8 +175,8 @@ export const TIMESERIES_CHART_TYPES = {
 
 export const TIMESERIES_LOOKBACKS = {
   BEGINNING: 'Beginning',
+  THREE_MONTHS: '3 Months',
   MONTH: '1 Month',
-  TWO_WEEKS: '2 Weeks',
 };
 
 export const MAP_VIZS = {

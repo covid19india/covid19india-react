@@ -29,15 +29,16 @@ function Minigraphs({timeseries, date: timelineDate}) {
   const refs = useRef([]);
 
   const dates = useMemo(() => {
-    const today = timelineDate || getIndiaYesterdayISO();
+    const cutOffDateUpper = timelineDate || getIndiaYesterdayISO();
     const pastDates = Object.keys(timeseries || {}).filter(
-      (date) => date <= today
+      (date) => date <= cutOffDateUpper
     );
-    const cutOffDate = formatISO(
-      subDays(parseIndiaDate(today), MINIGRAPH_LOOKBACK_DAYS),
+    const lastDate = pastDates[pastDates.length - 1];
+    const cutOffDateLower = formatISO(
+      subDays(parseIndiaDate(lastDate), MINIGRAPH_LOOKBACK_DAYS),
       {representation: 'date'}
     );
-    return pastDates.filter((date) => date >= cutOffDate);
+    return pastDates.filter((date) => date >= cutOffDateLower);
   }, [timeseries, timelineDate]);
 
   useEffect(() => {
