@@ -6,6 +6,7 @@ import {TABLE_FADE_IN, TABLE_FADE_OUT} from '../animations';
 import {
   DISTRICT_TABLE_COUNT,
   STATE_NAMES,
+  STATISTIC_CONFIGS,
   TABLE_STATISTICS,
   TABLE_STATISTICS_EXPANDED,
   UNASSIGNED_STATE_CODE,
@@ -80,15 +81,18 @@ function Table({
   const sortingFunction = useCallback(
     (regionKeyA, regionKeyB) => {
       if (sortData.sortColumn !== 'regionName') {
+        const statisticConfig = STATISTIC_CONFIGS[sortData.sortColumn];
+        const dataType =
+          sortData.delta && !statisticConfig.hideDelta ? 'delta' : 'total';
         const statisticA = getStatistic(
           districts?.[regionKeyA] || states[regionKeyA],
-          sortData.delta ? 'delta' : 'total',
+          dataType,
           sortData.sortColumn,
           isPerMillion
         );
         const statisticB = getStatistic(
           districts?.[regionKeyB] || states[regionKeyB],
-          sortData.delta ? 'delta' : 'total',
+          dataType,
           sortData.sortColumn,
           isPerMillion
         );
