@@ -50,10 +50,12 @@ export const formatLastUpdated = (unformattedDate) => {
 };
 
 export const parseIndiaDate = (isoDate) => {
+  if (!isoDate) return getIndiaDate();
   return utcToZonedTime(new Date(isoDate + INDIA_ISO_SUFFIX), 'Asia/Kolkata');
 };
 
 export const formatDate = (unformattedDate, formatString) => {
+  if (!unformattedDate) return '';
   if (
     typeof unformattedDate === 'string' &&
     unformattedDate.match(/^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/g)

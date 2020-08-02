@@ -228,9 +228,9 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
             .attr('stroke', color)
             .attr('cy', chartBottom)
             .attr('cx', (date) => xScale(parseIndiaDate(date)))
+            .attr('r', barWidth / 2)
         )
         .transition(t)
-        .attr('r', barWidth / 2)
         .attr('cx', (date) => xScale(parseIndiaDate(date)))
         .attr('cy', (date) =>
           yScale(getStatistic(timeseries[date], chartType, statistic))

@@ -128,7 +128,7 @@ function TimeseriesExplorer({
     );
 
     const lastDate = pastDates[pastDates.length - 1];
-    if (lookback === TIMESERIES_LOOKBACKS.BEGINNING || !lastDate) {
+    if (lookback === TIMESERIES_LOOKBACKS.BEGINNING) {
       return pastDates;
     }
 

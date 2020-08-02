@@ -6,24 +6,38 @@ import {
   formatNumber,
   formatLastUpdated,
   getStatistic,
-  getIndiaDate,
+  getIndiaYesterdayISO,
+  parseIndiaDate,
 } from '../utils/commonFunctions';
 
-import {format, sub} from 'date-fns';
+import {differenceInDays} from 'date-fns';
 import React from 'react';
 import {Compass} from 'react-feather';
 
 function StateMeta({stateCode, data, timeseries}) {
-  const confirmed = getStatistic(data[stateCode], 'total', 'confirmed');
-  const tested = getStatistic(data[stateCode], 'total', 'tested');
-
-  const indiaDate = format(getIndiaDate(), 'yyyy-MM-dd');
-  const prevWeekDate = format(sub(getIndiaDate(), {weeks: 1}), 'yyyy-MM-dd');
-
+  const pastDates = Object.keys(timeseries || {}).filter(
+    (date) => date <= getIndiaYesterdayISO()
+  );
+  const lastDate = pastDates[pastDates.length - 1];
+  const lastConfirmed = getStatistic(
+    timeseries?.[lastDate],
+    'total',
+    'confirmed'
+  );
+  const prevWeekDate = pastDates
+    .reverse()
+    .find(
+      (date) =>
+        differenceInDays(parseIndiaDate(lastDate), parseIndiaDate(date)) >= 7
+    );
   const prevWeekConfirmed = getStatistic(
     timeseries?.[prevWeekDate],
     'total',
     'confirmed'
+  );
+  const diffDays = differenceInDays(
+    parseIndiaDate(lastDate),
+    parseIndiaDate(prevWeekDate)
   );
 
   const confirmedPerMillion = getStatistic(
@@ -49,7 +63,8 @@ function StateMeta({stateCode, data, timeseries}) {
   const deathPercent = getStatistic(data[stateCode], 'total', 'cfr');
 
   const growthRate =
-    ((confirmed - prevWeekConfirmed) / prevWeekConfirmed) * 100;
+    (((lastConfirmed - prevWeekConfirmed) / prevWeekConfirmed) * 100) /
+    diffDays;
 
   return (
     <React.Fragment>
@@ -133,20 +148,18 @@ function StateMeta({stateCode, data, timeseries}) {
         <StateMetaCard
           className="gr"
           title={'Avg. Growth Rate'}
-          statistic={
-            growthRate > 0 ? `${formatNumber(growthRate / 7, '%')}` : '-'
-          }
+          statistic={growthRate > 0 ? `${formatNumber(growthRate, '%')}` : '-'}
           formula={
             '(((previousDayData - sevenDayBeforeData) / sevenDayBeforeData) * 100)/7'
           }
           date={`${formatDate(prevWeekDate, 'dd MMM')} - ${formatDate(
-            indiaDate,
+            lastDate,
             'dd MMM'
           )}`}
           description={
             growthRate > 0
               ? `In the last one week, the number of new infections has
-              grown by an average of ${formatNumber(growthRate / 7, '%')}
+              grown by an average of ${formatNumber(growthRate, '%')}
               every day.`
               : 'There has been no growth in the number of infections in last one week.'
           }
@@ -160,7 +173,7 @@ function StateMeta({stateCode, data, timeseries}) {
             '(total tests in state / total population of state) * 1 Million'
           }
           date={
-            tested
+            testPerMillion
               ? `As of ${formatLastUpdated(
                   data[stateCode]?.meta?.tested?.['last_updated']
                 )} ago`
