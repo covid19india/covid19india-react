@@ -21,7 +21,10 @@ const Cell = ({statistic, data, isPerMillion}) => {
   return (
     <div className="cell statistic">
       {!statisticConfig.hideDelta && (
-        <animated.div className={classnames('delta', `is-${statistic}`)}>
+        <animated.div
+          className={classnames('delta', `is-${statistic}`)}
+          title={delta}
+        >
           {spring.delta.interpolate((delta) =>
             delta > 0
               ? '\u2191' + formatNumber(delta, statisticConfig.format)
@@ -32,7 +35,7 @@ const Cell = ({statistic, data, isPerMillion}) => {
         </animated.div>
       )}
 
-      <animated.div className="total">
+      <animated.div className="total" title={total}>
         {spring.total.interpolate((total) =>
           formatNumber(total, statisticConfig.format, statistic)
         )}

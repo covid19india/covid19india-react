@@ -77,7 +77,7 @@ function MapLegend({data, mapViz, mapScale, statistic}) {
             .tickSize(0)
             .tickPadding(0)
             .tickValues([domainMax / 10, (domainMax * 2) / 5, domainMax])
-            .tickFormat(format('0~s'))
+            .tickFormat((num) => formatNumber(num, 'short'))
         )
         .selectAll('.tick text')
         .style('text-anchor', 'middle');

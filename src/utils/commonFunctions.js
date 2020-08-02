@@ -73,11 +73,12 @@ export const abbreviateNumber = (number) => {
     return numberFormatter.format(number / 1e3) + 'K';
   else if (number >= 1e5 && number < 1e7)
     return numberFormatter.format(number / 1e5) + 'L';
-  else if (number >= 1e7 && number < 1e9)
+  else if (number >= 1e7 && number < 1e10)
     return numberFormatter.format(number / 1e7) + 'Cr';
-  else if (number >= 1e9 && number < 1e11)
-    return numberFormatter.format(number / 1e9) + 'Arb';
-  else if (number >= 1e11) return numberFormatter.format(number / 1e11) + 'Khb';
+  else if (number >= 1e10 && number < 1e14)
+    return numberFormatter.format(number / 1e10) + 'K Cr';
+  else if (number >= 1e14)
+    return numberFormatter.format(number / 1e14) + 'L Cr';
 };
 
 export const formatNumber = (value, option, statistic) => {
