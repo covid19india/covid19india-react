@@ -21,7 +21,6 @@ import {select, mouse} from 'd3-selection';
 import {line, curveMonotoneX} from 'd3-shape';
 // eslint-disable-next-line
 import {transition} from 'd3-transition';
-import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useCallback, useEffect, useRef, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -336,24 +335,22 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   const getStatisticDelta = useCallback(
     (statistic) => {
       if (!highlightedDate) return;
-      const deltaToday = getStatistic(
+      const currCount = getStatistic(
         timeseries?.[highlightedDate],
-        'delta',
+        chartType,
         statistic
       );
-      if (chartType === 'total') return deltaToday;
+      const prevDate =
+        dates[dates.findIndex((date) => date === highlightedDate) - 1];
 
-      const yesterday = formatISO(subDays(parseIndiaDate(highlightedDate), 1), {
-        representation: 'date',
-      });
-      const deltaYesterday = getStatistic(
-        timeseries?.[yesterday],
-        'delta',
+      const prevCount = getStatistic(
+        timeseries?.[prevDate],
+        chartType,
         statistic
       );
-      return deltaToday - deltaYesterday;
+      return currCount - prevCount;
     },
-    [timeseries, highlightedDate, chartType]
+    [timeseries, dates, highlightedDate, chartType]
   );
 
   const trail = useMemo(() => {
