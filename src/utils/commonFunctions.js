@@ -69,13 +69,16 @@ export const formatDate = (unformattedDate, formatString) => {
 
 export const abbreviateNumber = (number) => {
   if (number < 1e3) return numberFormatter.format(number);
-  else if (number >= 1e3 && number < 1e6)
+  else if (number >= 1e3 && number < 1e5)
     return numberFormatter.format(number / 1e3) + 'K';
-  else if (number >= 1e6 && number < 1e9)
-    return numberFormatter.format(number / 1e6) + 'M';
-  else if (number >= 1e9 && number < 1e12)
-    return numberFormatter.format(number / 1e9) + 'B';
-  else if (number >= 1e12) return numberFormatter.format(number / 1e12) + 'T';
+  else if (number >= 1e5 && number < 1e7)
+    return numberFormatter.format(number / 1e5) + 'L';
+  else if (number >= 1e7 && number < 1e10)
+    return numberFormatter.format(number / 1e7) + 'Cr';
+  else if (number >= 1e10 && number < 1e14)
+    return numberFormatter.format(number / 1e10) + 'K Cr';
+  else if (number >= 1e14)
+    return numberFormatter.format(number / 1e14) + 'L Cr';
 };
 
 export const formatNumber = (value, option, statistic) => {

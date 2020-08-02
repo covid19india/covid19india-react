@@ -97,7 +97,7 @@ function StateMeta({stateCode, data, timeseries}) {
           description={`
             ~${formatNumber(
               Math.round(confirmedPerMillion)
-            )} out of every 1 million people in ${
+            )} out of every 10 lakh people in ${
             STATE_NAMES[stateCode]
           } have tested positive for the virus.
             `}
@@ -181,7 +181,7 @@ function StateMeta({stateCode, data, timeseries}) {
           }
           description={
             testPerMillion > 0
-              ? `For every 1 million people in ${STATE_NAMES[stateCode]},
+              ? `For every 10 lakh people in ${STATE_NAMES[stateCode]},
                 ~${formatNumber(
                   Math.round(testPerMillion)
                 )} samples were tested.`

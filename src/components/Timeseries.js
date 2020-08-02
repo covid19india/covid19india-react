@@ -92,9 +92,12 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
     };
 
     const yAxis = (g, yScale) =>
-      g
-        .attr('class', 'y-axis')
-        .call(axisRight(yScale).ticks(4, '0~s').tickPadding(4));
+      g.attr('class', 'y-axis').call(
+        axisRight(yScale)
+          .ticks(4)
+          .tickFormat((num) => formatNumber(num, 'short'))
+          .tickPadding(4)
+      );
 
     const uniformScaleMin = min(dates, (date) =>
       getStatistic(timeseries[date], chartType, 'active')
