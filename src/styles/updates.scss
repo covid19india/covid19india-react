@@ -46,12 +46,18 @@
   .updates-footer {
     align-items: center;
     align-self: center;
+    border-radius: ms(-3);
     color: var(--pblue);
     display: flex;
     flex-direction: row;
     margin-bottom: ms(2);
-    margin-top: ms(2);
+    margin-top: ms(3);
+    padding: ms(0);
     text-decoration: none;
+
+    &:hover {
+      background: var(--pblue-light);
+    }
 
     .message {
       font-weight: 600;

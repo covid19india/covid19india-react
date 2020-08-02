@@ -21,11 +21,19 @@
 
   .home-right {
     margin-left: ms(2);
+
+    &.expanded {
+      justify-content: space-between;
+    }
   }
 
   .map-container {
     display: flex;
     flex-direction: column;
+
+    &.expanded {
+      flex: 0.475;
+    }
   }
 
   .anchor {

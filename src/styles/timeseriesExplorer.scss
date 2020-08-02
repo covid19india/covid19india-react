@@ -12,9 +12,17 @@
   flex-direction: column;
   width: 100%;
 
+  &.expanded {
+    flex: 0.475;
+  }
+
   .timeseries-header {
     color: var(--gray);
     display: column;
+
+    .title {
+      margin-top: ms(-8);
+    }
   }
 
   &.stickied {
