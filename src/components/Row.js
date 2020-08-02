@@ -132,7 +132,7 @@ function Row({
     }
   }, [showDistricts, data]);
 
-  let districtNameStr = districtName;
+  let districtNameStr = t(districtName);
   if (districtName === UNKNOWN_DISTRICT_KEY) {
     districtNameStr = `${t(UNKNOWN_DISTRICT_KEY)} [${t(
       STATE_NAMES[data.stateCode]
