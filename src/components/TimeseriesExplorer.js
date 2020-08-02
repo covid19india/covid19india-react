@@ -126,12 +126,13 @@ function TimeseriesExplorer({
     const pastDates = Object.keys(selectedTimeseries || {}).filter(
       (date) => date <= cutOffDateUpper
     );
-    if (lookback === TIMESERIES_LOOKBACKS.BEGINNING) {
+
+    const lastDate = pastDates[pastDates.length - 1];
+    if (lookback === TIMESERIES_LOOKBACKS.BEGINNING || !lastDate) {
       return pastDates;
     }
 
     let cutOffDateLower;
-    const lastDate = pastDates[pastDates.length - 1];
     if (lookback === TIMESERIES_LOOKBACKS.MONTH) {
       cutOffDateLower = formatISO(sub(parseIndiaDate(lastDate), {months: 1}), {
         representation: 'date',

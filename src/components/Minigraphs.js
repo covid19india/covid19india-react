@@ -34,6 +34,8 @@ function Minigraphs({timeseries, date: timelineDate}) {
       (date) => date <= cutOffDateUpper
     );
     const lastDate = pastDates[pastDates.length - 1];
+    if (!lastDate) return pastDates;
+
     const cutOffDateLower = formatISO(
       subDays(parseIndiaDate(lastDate), MINIGRAPH_LOOKBACK_DAYS),
       {representation: 'date'}
