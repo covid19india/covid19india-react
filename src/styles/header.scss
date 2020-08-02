@@ -91,7 +91,7 @@
         border-radius: 50%;
         height: ms(-2);
         position: absolute;
-        right: -3px;
+        right: -#{ms(-1)};
         top: -3px;
         width: ms(-2);
       }

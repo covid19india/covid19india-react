@@ -55,6 +55,7 @@
     .source {
       align-self: flex-end;
       margin: 0;
+      margin-top: ms(-2);
       text-align: right;
     }
 
@@ -65,6 +66,7 @@
     a {
       background: var(--purple-light);
       color: inherit;
+      padding: ms(-4);
       text-decoration: none;
 
       &:hover {

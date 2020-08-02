@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   margin-bottom: ms(0);
-  width: 100%;
+  width: calc(100% - #{ms(0)});
 
   .title {
     color: var(--pblue);
@@ -18,7 +18,7 @@
     background: var(--gray-light);
     border-radius: ms(-2);
     margin-bottom: ms(0);
-    padding: ms(0);
+    padding: ms(-1);
     transition: all 0.2s ease-in-out;
     width: 100%;
 
@@ -39,6 +39,7 @@
     .text {
       color: var(--gray);
       font-weight: 600;
+      line-height: 150%;
     }
   }
 

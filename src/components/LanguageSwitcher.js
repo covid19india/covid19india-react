@@ -47,7 +47,7 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
         style={props}
         ref={languageSwitcherRef}
       >
-        <h3>We speak the following languages</h3>
+        <h4 className="title">We speak the following languages</h4>
 
         <div className="languages">
           {Object.keys(locales).map((languageKey) => (

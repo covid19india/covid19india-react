@@ -106,10 +106,6 @@
     padding-bottom: 0;
     width: calc(100% - 4rem);
 
-    & > * {
-      flex: 1;
-    }
-
     h6,
     .title {
       color: var(--gray);
@@ -132,6 +128,10 @@
     .expanded-right {
       flex: 0.3;
       margin-right: auto;
+    }
+
+    .suggestion {
+      width: 100%;
     }
   }
 

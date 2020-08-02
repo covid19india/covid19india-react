@@ -2,48 +2,24 @@
 @import '~modularscale-sass/stylesheets/modularscale';
 
 footer {
-  background: var(--gray-light);
   display: flex;
-  flex-direction: column;
-  height: ms(8);
-  margin-top: 5rem;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: ms(5);
+  padding-bottom: ms(3);
   padding-right: ms(1);
-  padding-top: ms(5);
-  width: 100%;
+  padding-top: ms(1);
   width: calc(100% - #{ms(1)});
 
-  * {
-    text-align: right;
-  }
-
-  h5 {
-    color: var(--gray);
-    font-weight: 600;
-    margin: 0;
-    margin-bottom: 3.5rem;
-  }
-
   svg {
-    height: ms(2);
-    margin: ms(0);
-    padding: 0.25rem;
-    width: ms(2);
-  }
-
-  .organisation {
-    font-size: ms(4);
-    font-weight: 900;
-
-    a {
-      color: var(--gray-mid);
-      text-decoration: none;
-    }
+    margin-left: ms(0);
+    margin-right: ms(0);
   }
 
   .message {
     color: var(--pblue);
-    font-size: ms(2);
-    font-weight: 900;
+    font-size: ms(0);
+    font-weight: 600;
     margin-bottom: ms(1);
     margin-top: ms(0);
   }

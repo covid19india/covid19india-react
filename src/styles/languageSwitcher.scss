@@ -8,7 +8,7 @@
   margin-left: 5rem;
   width: 32rem;
 
-  h3 {
+  .title {
     align-self: center;
     color: var(--pblue);
     font-weight: 600;
@@ -69,5 +69,12 @@
         color: var(--pblue);
       }
     }
+  }
+}
+
+@media (max-width: 769px) {
+  .language-switcher {
+    margin: 0;
+    width: 100%;
   }
 }

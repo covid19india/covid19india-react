@@ -110,6 +110,7 @@
     }
 
     .district {
+      align-items: center;
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
@@ -129,7 +130,7 @@
 
       .title {
         display: inline-block !important;
-        margin-left: ms(-1);
+        margin-left: ms(-3);
         width: auto !important;
       }
 
