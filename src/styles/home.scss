@@ -1,4 +1,3 @@
-@import './colors';
 @import '~modularscale-sass/stylesheets/modularscale';
 @import './header';
 
@@ -7,8 +6,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin-left: 9rem;
-  margin-right: 3rem;
+  margin-left: ms(4);
 
   .home-left,
   .home-right {
@@ -18,31 +16,25 @@
   }
 
   .home-left {
-    margin-right: 2.5rem;
-    min-height: 60rem;
+    margin-right: ms(2);
   }
 
   .home-right {
-    margin-left: 2.5rem;
-    min-height: 10rem;
-  }
-
-  .header {
-    z-index: 99;
+    margin-left: ms(2);
   }
 
   .map-container {
     display: flex;
     flex-direction: column;
-    width: 100%;
   }
 
   .anchor {
     cursor: pointer;
+    height: ms(3);
     position: absolute;
     right: 0;
+    top: ms(1);
     transform: rotate(45deg);
-    transition: all 0.1s ease-in-out;
     z-index: 999;
 
     svg {
@@ -92,11 +84,12 @@
 
 @media (max-width: 769px) {
   .home, {
+    align-self: center;
     display: flex;
     flex-direction: column;
     margin-left: 0;
     margin-right: 0;
-    width: 100%;
+    width: calc(100% - #{ms(2)});
 
     .home-left,
     .home-right {

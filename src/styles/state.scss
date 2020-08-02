@@ -7,8 +7,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  margin-left: 8rem;
-  margin-right: 3rem;
+  margin-left: ms(4);
 
   .state-left,
   .state-right {
@@ -18,20 +17,16 @@
   }
 
   .state-left {
-    margin-right: 2.5rem;
+    margin-right: ms(2);
     position: relative;
   }
 
   .state-right {
-    margin-left: 2.5rem;
+    margin-left: ms(2);
   }
 
   a {
     text-decoration: none;
-  }
-
-  .district-bar {
-    width: calc(100% - 2rem);
   }
 
   .minigraphs {
