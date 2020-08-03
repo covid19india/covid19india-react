@@ -63,12 +63,13 @@
 
 @media (max-width: 769px) {
   .state {
+    align-self: center;
     display: flex;
     flex-direction: column;
     margin-left: 0;
     margin-right: 0;
     padding-top: 1rem;
-    width: 100%;
+    width: calc(100% - #{ms(2)});
 
     .state-left,
     .state-right {
