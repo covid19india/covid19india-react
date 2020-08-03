@@ -1,4 +1,3 @@
-@import './colors';
 @import '~modularscale-sass/stylesheets/modularscale';
 @import './timeseriesHeader';
 @import './switch';
@@ -79,8 +78,6 @@
       svg {
         color: var(--gray-mid);
         cursor: pointer;
-        fill: #a6abb0;
-        stroke: #a6abb0;
         stroke-width: 1;
         width: 16px;
 
