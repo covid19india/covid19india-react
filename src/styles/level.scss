@@ -1,6 +1,24 @@
 @import '~modularscale-sass/stylesheets/modularscale';
 
+@mixin is-statistic($statistic, $color) {
+  .is-#{$statistic} {
+    .total,
+    .title {
+      color: var(--#{$color});
+    }
+
+    .delta {
+      color: var(--#{$color}-50);
+    }
+  }
+}
+
 .level {
+  @include is-statistic('confirmed', 'cherry');
+  @include is-statistic('active', 'blue');
+  @include is-statistic('recovered', 'green');
+  @include is-statistic('deceased', 'gray');
+
   align-self: center;
   display: flex;
   flex-direction: row;
@@ -17,7 +35,7 @@
   }
 
   .delta {
-    font-weight: 900;
+    font-weight: 600;
     margin-bottom: -#{ms(-1)};
   }
 
@@ -37,50 +55,6 @@
     .total,
     .title {
       align-self: center;
-    }
-  }
-
-  .is-confirmed {
-    .total,
-    .title {
-      color: var(--cherry);
-    }
-
-    .delta {
-      color: var(--cherry-mid);
-    }
-  }
-
-  .is-active {
-    .total,
-    .title {
-      color: var(--blue);
-    }
-
-    .delta {
-      color: var(--blue-mid);
-    }
-  }
-
-  .is-recovered {
-    .total,
-    .title {
-      color: var(--green);
-    }
-
-    .delta {
-      color: var(--green-mid);
-    }
-  }
-
-  .is-deceased {
-    .total,
-    .title {
-      color: var(--gray);
-    }
-
-    .delta {
-      color: var(--gray-mid);
     }
   }
 }

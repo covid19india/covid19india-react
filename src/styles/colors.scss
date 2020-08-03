@@ -1,37 +1,32 @@
 // Color Pallete
 
 :root {
-  --blue: #007bff;
-  --pblue: #4c75f2;
-  --cherry: #ff073a;
-  --orange: #fd7e14;
-  --yellow: #ffc107;
-  --green: #28a745;
-  --purple: #201aa2dd;
-  --pink: #fb5581;
-  --brown: #b6854d;
-  --brick: #e23028;
-  --black: #000;
-  --white: #fff;
-  --search-backdrop: #fff;
+  --primary: rgba(76, 117, 242, 1);
+  --blue: rgba(0, 123, 255, 1);
+  --cherry: rgba(255, 7, 58, 1);
+  --cherry-50: rgba(255, 7, 58, 0.5);
+  --cherry-75: rgba(255, 7, 58, 0.75);
+  --orange: rgba(253, 126, 20, 1);
+  --yellow: rgba(255, 193, 7, 1);
+  --green: rgba(40, 167, 69, 1);
+  --green-50: rgba(40, 167, 69, 0.5);
+  --purple: rgba(32, 26, 162, 1);
+  --pink: rgba(251, 85, 129, 1);
+  --brown: rgba(182, 133, 77, 1);
+  --brick: rgba(226, 48, 40, 1);
+  --gray: rgba(108, 117, 125, 1);
+  --gray-50: rgba(108, 117, 125, 0.5);
+  --white: rgba(255, 255, 255, 1);
+  --black: rgba(0, 0, 0, 1);
+  --search-backdrop: rgba(255, 255, 255, 1);
 }
 
 .dark-mode {
-  --blue: #007bff;
-  --pblue: #4c75f2;
-  --cherry: #ff073a;
-  --red: #dc3545;
-  --orange: #fd7e14;
-  --yellow: #ffc107;
-  --green: #28a745;
-  --gray: #6c757d;
-  --purple: #201aa2dd;
-  --pink: #fb5581;
-  --brown: #b6854d;
-  --brick: #e23028;
-  --black: #000;
-  --white: #fff;
-  --search-backdrop: #fff;
+  --primary: rgba(76, 117, 242, 1);
+  --gray: rgba(108, 117, 125, 1);
+  --black: rgba(242, 242, 247, 1);
+  --white: rgba(28, 28, 30, 1);
+  --search-backdrop: rgba(242, 242, 247, 1);
 
   img {
     filter: invert(1);
