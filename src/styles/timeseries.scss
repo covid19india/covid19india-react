@@ -54,12 +54,22 @@
     position: absolute;
     top: ms(0);
 
-    .title,
-    .date {
-      margin: 0;
+    .top {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: ms(-2);
+
+      .title,
+      .date {
+        margin: 0;
+      }
+
+      .title {
+        margin-right: ms(-2);
+      }
     }
 
-    .stats-bottom {
+    .bottom {
       .statistic,
       .delta {
         font-weight: 600;

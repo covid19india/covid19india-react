@@ -13,10 +13,13 @@
   svg {
     color: var(--gray-mid);
     height: 16px;
+    stroke-width: 3px;
     width: 16px;
   }
 
   .alert-right {
+    font-weight: 600;
+    line-height: 150%;
     width: 5rem;
 
     &.is-full {
