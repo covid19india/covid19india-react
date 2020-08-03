@@ -7,6 +7,7 @@ function Footer() {
   return (
     <footer>
       <a
+        data-tooltip="GitHub"
         href="https://github.com/covid19india/covid19india-react"
         className="github"
         target="_blank"
@@ -16,6 +17,7 @@ function Footer() {
       </a>
 
       <a
+        data-tooltip="API"
         className="api"
         href="https://api.covid19india.org"
         target="_blank"
@@ -25,6 +27,7 @@ function Footer() {
       </a>
 
       <a
+        data-tooltip="Telegram"
         href="https://t.me/covid19indiaorg"
         className="telegram"
         target="_blank"
@@ -34,6 +37,7 @@ function Footer() {
       </a>
 
       <a
+        data-tooltip="Twitter"
         href="https://twitter.com/covid19indiaorg"
         target="_blank"
         rel="noopener noreferrer"
@@ -43,6 +47,7 @@ function Footer() {
       </a>
 
       <a
+        data-tooltip="Mail"
         href="mailto:hello@covid19india.org"
         className="mail"
         target="_blank"

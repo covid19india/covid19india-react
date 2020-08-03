@@ -1,6 +1,22 @@
 @import '~modularscale-sass/stylesheets/modularscale';
 
+@mixin link($name, $color) {
+  .#{$name} {
+    color: var(--#{$color}-mid);
+
+    &:hover {
+      color: var(--#{$color});
+    }
+  }
+}
+
 footer {
+  @include link('telegram', 'blue');
+  @include link('github', 'gray');
+  @include link('twitter', 'pblue');
+  @include link('api', 'yellow');
+  @include link('mail', 'brown');
+
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -15,51 +31,19 @@ footer {
     margin-right: ms(0);
   }
 
+  .telegram,
+  .github,
+  .twitter,
+  .api,
+  .mail {
+    border: 0 !important;
+  }
+
   .message {
     color: var(--pblue);
     font-size: ms(0);
     font-weight: 600;
     margin-bottom: ms(1);
     margin-top: ms(0);
-  }
-
-  .telegram {
-    color: var(--blue-mid);
-
-    &:hover {
-      color: var(--blue);
-    }
-  }
-
-  .github {
-    color: var(--gray-mid);
-
-    &:hover {
-      color: var(--gray);
-    }
-  }
-
-  .twitter {
-    color: var(--pblue-mid);
-
-    &:hover {
-      color: var(--pblue);
-    }
-  }
-
-  .api {
-    color: var(--yellow-mid);
-
-    &:hover {
-      color: var(--yellow);
-    }
-  }
-
-  .mail {
-    color: var(--brown-mid);
-
-    &:hover {
-      color: var(--brown);
-    }
   }
 }

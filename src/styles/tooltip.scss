@@ -5,8 +5,8 @@
     max-width: ms(6);
     pointer-events: none;
     position: absolute;
-    top: 0;
-    z-index: 9999999;
+    top: -100;
+    z-index: 99999;
 
     .default {
       background: var(--black);
@@ -25,5 +25,4 @@
 
 *[data-tooltip] {
   border-bottom: 2px dotted var(--gray-mid);
-  cursor: help;
 }
