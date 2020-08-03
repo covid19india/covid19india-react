@@ -43,6 +43,7 @@ const ActionsPanel = ({
   const TimelineIcon = useMemo(
     () => (
       <svg
+        data-tooltip="History"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="-.2 -.2 17 17"
         width="16"
@@ -107,7 +108,11 @@ const ActionsPanel = ({
           lastViewedLog
         )} IST`}</h6>
 
-        <div className="bell-icon fadeInUp" style={trail[1]}>
+        <div
+          data-tooltip={'Updates'}
+          className="bell-icon fadeInUp"
+          style={trail[1]}
+        >
           {!showUpdates ? Bell : BellOff}
           {newUpdate && <div className="indicator"></div>}
         </div>

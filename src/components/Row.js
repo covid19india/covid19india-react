@@ -1,7 +1,6 @@
 import Cell from './Cell';
 import DistrictRow from './DistrictRow';
 import HeaderCell from './HeaderCell';
-import Tooltip from './Tooltip';
 
 import {
   STATE_NAMES,
@@ -22,7 +21,6 @@ import {
   FilterIcon,
   FoldUpIcon,
   GraphIcon,
-  InfoIcon,
 } from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
@@ -181,14 +179,9 @@ function Row({
         ref={rowElement}
       >
         <div className="cell">
-          <div className="state-name fadeInUp">
+          <div data-tooltip={data.meta.notes} className="state-name fadeInUp">
             {t(STATE_NAMES[stateCode]) || districtNameStr}
           </div>
-          {data?.meta?.notes && (
-            <Tooltip {...{data: data.meta.notes}}>
-              <InfoIcon size={16} />
-            </Tooltip>
-          )}
         </div>
 
         {tableStatistics.map((statistic) => (

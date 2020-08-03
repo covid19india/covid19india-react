@@ -1,28 +1,29 @@
 @import '~modularscale-sass/stylesheets/modularscale';
 
-.tooltip {
-  display: flex;
-  flex-direction: column;
-
-  .message {
-    background: var(--black);
-    border-radius: 5px;
-    display: flex;
-    flex-direction: row;
-    font-size: 13px;
-    font-weight: 400;
-    justify-content: flex-end;
-    max-width: 30vw;
-    min-width: 10rem;
-    padding: 0.5rem;
+.tooltip-root {
+  .tooltip {
+    max-width: ms(6);
     pointer-events: none;
-    right: 0;
+    position: absolute;
     top: 0;
-    transform: translate3d(2rem, 0, 0);
+    z-index: 9999999;
 
-    p {
-      color: var(--white) !important;
+    .default {
+      background: var(--black);
+      border-radius: ms(-3);
+      color: var(--white);
+      font-weight: 600;
+      line-height: ms(1);
       margin: 0;
+      padding: ms(0);
     }
   }
+}
+
+// .active-tooltip {
+// }
+
+*[data-tooltip] {
+  border-bottom: 2px dotted var(--gray-mid);
+  cursor: help;
 }

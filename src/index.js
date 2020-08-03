@@ -1,4 +1,5 @@
 // import './wdyr';
+import Tooltip from './components/Tooltip';
 import * as serviceWorker from './serviceWorker';
 import './i18n';
 
@@ -14,6 +15,7 @@ const main = () =>
     <Suspense fallback={<div />}>
       <Router>
         <App />
+        <Tooltip />
       </Router>
     </Suspense>,
     rootElement

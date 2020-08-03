@@ -210,7 +210,9 @@ function State() {
                         );
                         return (
                           <div key={districtName} className="district">
-                            <h5 className="statistic">{formatNumber(total)}</h5>
+                            <h5 className="statistic">
+                              {formatNumber(total, 'short')}
+                            </h5>
                             <h6 className="title">{t(districtName)}</h6>
                             {mapStatistic !== 'active' && (
                               <div className="delta">
