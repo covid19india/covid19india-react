@@ -1,34 +1,22 @@
 import Footer from './Footer';
 
 import '../styles/about.scss';
-import React, {useState, useEffect} from 'react';
-import {Helmet} from 'react-helmet';
+import {fetcher} from '../utils/commonFunctions';
 
-const DATA_URL = 'https://api.covid19india.org/website_data.json';
+import React, {useEffect} from 'react';
+import {Helmet} from 'react-helmet';
+import useSWR from 'swr';
 
 function About() {
-  const [faq, setFaq] = useState([]);
-
-  useEffect(() => {
-    getFAQs();
-  }, []);
+  const {data} = useSWR(
+    'https://api.covid19india.org/website_data.json',
+    fetcher,
+    {suspense: true}
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const getFAQs = () => {
-    fetch(DATA_URL)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setFaq(data.faq);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   return (
     <React.Fragment>
@@ -41,21 +29,15 @@ function About() {
       </Helmet>
 
       <div className="about">
-        {faq.map((faq, index) => {
-          return (
-            <div
-              key={index}
-              className="faq fadeInUp"
-              style={{animationDelay: `${0.5 + index * 0.1}s`}}
-            >
-              <h5 className="question">{faq.question}</h5>
-              <h5
-                className="answer"
-                dangerouslySetInnerHTML={{__html: faq.answer}}
-              ></h5>
-            </div>
-          );
-        })}
+        {data.faq.map((faq, index) => (
+          <div key={index} className="faq">
+            <h5 className="question">{faq.question}</h5>
+            <h5
+              className="answer"
+              dangerouslySetInnerHTML={{__html: faq.answer}}
+            ></h5>
+          </div>
+        ))}
       </div>
 
       <Footer />

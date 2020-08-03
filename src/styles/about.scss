@@ -3,47 +3,53 @@
 .about {
   display: flex;
   flex-direction: column;
-  min-height: 30rem;
+  padding-top: ms(5);
   width: 100%;
 
-  * {
+  .faq {
     align-self: center;
     margin-bottom: 1.5rem;
-    width: 32rem;
-  }
+    width: 30rem;
 
-  *:first-child {
-    margin-top: 2rem;
-  }
+    .question {
+      color: var(--gray);
+      font-weight: 600;
+      line-height: 150%;
+      margin: 0;
+      margin-bottom: 0.25rem;
+      margin-bottom: ms(0);
+    }
 
-  h2 {
-    font-weight: 600;
-    margin: 0;
-    text-transform: none;
-  }
-
-  .question {
-    color: var(--gray-dark);
-    line-height: 150%;
-    margin: 0;
-    margin-bottom: 0.25rem;
-  }
-
-  .answer {
-    color: var(--gray);
-    font-weight: 600;
-    line-height: 150%;
-    margin: 0;
-    margin-bottom: ms(1);
+    .answer {
+      border-left: 2px var(--gray-light) solid;
+      color: var(--gray);
+      font-weight: 600;
+      line-height: 150%;
+      margin: 0;
+      margin-bottom: ms(1);
+      padding-left: ms(0);
+    }
   }
 
   a {
     background: var(--blue-light);
     color: var(--blue);
+    padding: ms(-4);
     text-decoration: none;
 
     &:hover {
-      text-decoration: underline;
+      background: var(--blue-hover);
     }
+  }
+}
+
+@media (max-width: 769px) {
+  .faq {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    margin-left: 0;
+    margin-right: 0;
+    width: calc(100% - #{ms(2)});
   }
 }
