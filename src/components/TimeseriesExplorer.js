@@ -122,23 +122,27 @@ function TimeseriesExplorer({
   }, [regionHighlighted.stateCode, regionHighlighted.districtName, regions]);
 
   const dates = useMemo(() => {
-    const today = timelineDate || getIndiaYesterdayISO();
+    const cutOffDateUpper = timelineDate || getIndiaYesterdayISO();
     const pastDates = Object.keys(selectedTimeseries || {}).filter(
-      (date) => date <= today
+      (date) => date <= cutOffDateUpper
     );
 
-    if (lookback === TIMESERIES_LOOKBACKS.TWO_WEEKS) {
-      const cutOffDate = formatISO(sub(parseIndiaDate(today), {weeks: 2}), {
-        representation: 'date',
-      });
-      return pastDates.filter((date) => date >= cutOffDate);
-    } else if (lookback === TIMESERIES_LOOKBACKS.MONTH) {
-      const cutOffDate = formatISO(sub(parseIndiaDate(today), {months: 1}), {
-        representation: 'date',
-      });
-      return pastDates.filter((date) => date >= cutOffDate);
+    const lastDate = pastDates[pastDates.length - 1];
+    if (lookback === TIMESERIES_LOOKBACKS.BEGINNING) {
+      return pastDates;
     }
-    return pastDates;
+
+    let cutOffDateLower;
+    if (lookback === TIMESERIES_LOOKBACKS.MONTH) {
+      cutOffDateLower = formatISO(sub(parseIndiaDate(lastDate), {months: 1}), {
+        representation: 'date',
+      });
+    } else if (lookback === TIMESERIES_LOOKBACKS.THREE_MONTHS) {
+      cutOffDateLower = formatISO(sub(parseIndiaDate(lastDate), {months: 3}), {
+        representation: 'date',
+      });
+    }
+    return pastDates.filter((date) => date >= cutOffDateLower);
   }, [selectedTimeseries, timelineDate, lookback]);
 
   const handleChange = useCallback(

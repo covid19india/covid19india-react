@@ -87,7 +87,7 @@ function Home() {
             )}
           </div>
 
-          <div style={{position: 'relative'}}>
+          <div style={{position: 'relative', marginTop: '1rem'}}>
             {data && (
               <Suspense fallback={<div style={{height: '50rem'}} />}>
                 {width > 769 && (

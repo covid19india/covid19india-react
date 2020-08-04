@@ -1,4 +1,4 @@
-import {COLORS, D3_TRANSITION_DURATION} from '../constants';
+import {STATISTIC_CONFIGS, D3_TRANSITION_DURATION} from '../constants';
 import {
   formatDate,
   formatNumber,
@@ -15,6 +15,7 @@ import {transition} from 'd3-transition';
 import equal from 'fast-deep-equal';
 import React, {useEffect, useRef} from 'react';
 import {useMeasure} from 'react-use';
+
 const getDeltaStatistic = (data, statistic) => {
   return getStatistic(data, 'delta', statistic);
 };
@@ -75,7 +76,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
         getDeltaStatistic(timeseries?.[date], statistic) < 0 ? '-1em' : '1.5em'
       )
       .style('text-anchor', 'middle')
-      .attr('fill', COLORS[statistic]);
+      .attr('fill', STATISTIC_CONFIGS[statistic].color);
 
     svg
       .selectAll('.bar')
@@ -100,8 +101,8 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       )
       .attr('fill', (date, i) => {
         return i < dates.length - 1
-          ? COLORS[statistic] + '90'
-          : COLORS[statistic];
+          ? STATISTIC_CONFIGS[statistic].color + '90'
+          : STATISTIC_CONFIGS[statistic].color;
       });
 
     const textSelection = svg
@@ -116,7 +117,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
 
     textSelection
       .transition(t)
-      .attr('fill', COLORS[statistic])
+      .attr('fill', STATISTIC_CONFIGS[statistic].color)
       .attr('y', (date) => {
         const val = getDeltaStatistic(timeseries?.[date], statistic);
         return yScale(val) + (val < 0 ? 15 : -6);
@@ -146,7 +147,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
         )}%`;
       })
       .transition(t)
-      .attr('fill', COLORS[statistic] + '90');
+      .attr('fill', STATISTIC_CONFIGS[statistic].color + '90');
   }, [dates, height, statistic, timeseries, width]);
 
   return (

@@ -24,7 +24,7 @@ function StateHeader({data, stateCode}) {
   }, []);
 
   const spring = useSpring({
-    total: getStatistic(data, 'total', 'tested') || 0,
+    total: getStatistic(data, 'total', 'tested'),
     config: SPRING_CONFIG_NUMBERS,
   });
 

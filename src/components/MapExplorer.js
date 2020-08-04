@@ -5,10 +5,11 @@ import {
   MAP_TYPES,
   MAP_VIEWS,
   MAP_VIZS,
+  PRIMARY_STATISTICS,
   SPRING_CONFIG_NUMBERS,
   STATE_NAMES,
+  STATISTIC_CONFIGS,
   UNKNOWN_DISTRICT_KEY,
-  PRIMARY_STATISTICS,
 } from '../constants';
 import {formatNumber, getStatistic, capitalize} from '../utils/commonFunctions';
 
@@ -190,6 +191,8 @@ function MapExplorer({
     },
   });
 
+  const statisticConfig = STATISTIC_CONFIGS[mapStatistic];
+
   return (
     <div
       className={classnames(
@@ -213,10 +216,16 @@ function MapExplorer({
             <h1 className={classnames('district', mapStatistic)}>
               <animated.div>
                 {spring.total.interpolate((total) =>
-                  formatNumber(Math.floor(total))
+                  formatNumber(
+                    total,
+                    statisticConfig.format !== 'short'
+                      ? statisticConfig.format
+                      : 'int',
+                    mapStatistic
+                  )
                 )}
               </animated.div>
-              <span>{t(capitalize(mapStatistic))}</span>
+              <span>{t(capitalize(statisticConfig.displayName))}</span>
             </h1>
           )}
         </div>

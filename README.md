@@ -1,17 +1,16 @@
 <p align="center">
-<img src="https://lh3.googleusercontent.com/-grjTcOMyemYN_JiN3QlkZzgh61D88LNFLj2-8QaqcjLWn_MouQe9zux8ZfMH4R7SLfR-cfHYD1b84KUlPqYucP5gZWTuo2J=s2560" width="100%">
+<img src="https://repository-images.githubusercontent.com/247386519/67519080-8691-11ea-9481-0732fb55380b" width="100%">
 </p>
 
 <p align="center">
-  Here's our data <a href="http://patientdb.covid19india.org/">API</a>.
- </p>
+  Here's our data <a href="https://api.covid19india.org">API</a>.
+</p>
 
 ## Setup
 
 ```
 npm i && npm start
 ```
-
 
 ## Contribution
 

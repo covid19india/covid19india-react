@@ -6,7 +6,7 @@ import {TABLE_FADE_IN, TABLE_FADE_OUT} from '../animations';
 import {
   DISTRICT_TABLE_COUNT,
   STATE_NAMES,
-  STATISTICS_CONFIGS,
+  STATISTIC_CONFIGS,
   TABLE_STATISTICS,
   TABLE_STATISTICS_EXPANDED,
   UNASSIGNED_STATE_CODE,
@@ -81,26 +81,21 @@ function Table({
   const sortingFunction = useCallback(
     (regionKeyA, regionKeyB) => {
       if (sortData.sortColumn !== 'regionName') {
-        const statisticConfig = STATISTICS_CONFIGS[sortData.sortColumn];
-        const statisticOptions = {
-          ...statisticConfig.options,
-          perMillion: isPerMillion,
-        };
-
-        const statisticA =
-          getStatistic(
-            districts?.[regionKeyA] || states[regionKeyA],
-            sortData.delta ? 'delta' : 'total',
-            statisticConfig.key,
-            statisticOptions
-          ) || 0;
-        const statisticB =
-          getStatistic(
-            districts?.[regionKeyB] || states[regionKeyB],
-            sortData.delta ? 'delta' : 'total',
-            statisticConfig.key,
-            statisticOptions
-          ) || 0;
+        const statisticConfig = STATISTIC_CONFIGS[sortData.sortColumn];
+        const dataType =
+          sortData.delta && !statisticConfig.hideDelta ? 'delta' : 'total';
+        const statisticA = getStatistic(
+          districts?.[regionKeyA] || states[regionKeyA],
+          dataType,
+          sortData.sortColumn,
+          isPerMillion
+        );
+        const statisticB = getStatistic(
+          districts?.[regionKeyB] || states[regionKeyB],
+          dataType,
+          sortData.sortColumn,
+          isPerMillion
+        );
         return sortData.isAscending
           ? statisticA - statisticB
           : statisticB - statisticA;
@@ -171,7 +166,7 @@ function Table({
           onClick={setIsPerMillion.bind(this, !isPerMillion)}
           style={trail[0]}
         >
-          <span>1M</span>
+          <span>10L</span>
         </animated.div>
 
         <animated.div
@@ -208,8 +203,8 @@ function Table({
                 </div>
 
                 <div className="info-item">
-                  <h5>1M</h5>
-                  <p>Per Million of Population</p>
+                  <h5>10L</h5>
+                  <p>Per Ten Lakh People</p>
                 </div>
 
                 <div className="info-item sort">
@@ -236,6 +231,30 @@ function Table({
                   </span>
                   <p>Notes</p>
                 </div>
+              </div>
+              <div className="helper-right">
+                <div className="info-item">
+                  <p>Units</p>
+                </div>
+                {Object.entries({'1K': 3, '1L': 5, '1Cr': 7}).map(
+                  ([abbr, exp]) => (
+                    <div className="info-item" key={abbr}>
+                      <h5>{abbr}</h5>
+                      <p>
+                        10
+                        <sup
+                          style={{
+                            verticalAlign: 'baseline',
+                            position: 'relative',
+                            top: '-.4em',
+                          }}
+                        >
+                          {exp}
+                        </sup>
+                      </p>
+                    </div>
+                  )
+                )}
               </div>
             </div>
 
