@@ -1,6 +1,6 @@
 import {
-  COLORS,
   D3_TRANSITION_DURATION,
+  STATISTIC_CONFIGS,
   TIMESERIES_STATISTICS,
 } from '../constants';
 import {useResizeObserver} from '../hooks/useResizeObserver';
@@ -21,7 +21,6 @@ import {select, mouse} from 'd3-selection';
 import {line, curveMonotoneX} from 'd3-shape';
 // eslint-disable-next-line
 import {transition} from 'd3-transition';
-import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useCallback, useEffect, useRef, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -93,9 +92,12 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
     };
 
     const yAxis = (g, yScale) =>
-      g
-        .attr('class', 'y-axis')
-        .call(axisRight(yScale).ticks(4, '0~s').tickPadding(4));
+      g.attr('class', 'y-axis').call(
+        axisRight(yScale)
+          .ticks(4)
+          .tickFormat((num) => formatNumber(num, 'short'))
+          .tickPadding(4)
+      );
 
     const uniformScaleMin = min(dates, (date) =>
       getStatistic(timeseries[date], chartType, 'active')
@@ -200,7 +202,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
 
       const statistic = TIMESERIES_STATISTICS[i];
       const yScale = generateYScale(statistic);
-      const color = COLORS[statistic];
+      const color = STATISTIC_CONFIGS[statistic].color;
 
       /* X axis */
       svg
@@ -229,9 +231,9 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
             .attr('stroke', color)
             .attr('cy', chartBottom)
             .attr('cx', (date) => xScale(parseIndiaDate(date)))
+            .attr('r', barWidth / 2)
         )
         .transition(t)
-        .attr('r', barWidth / 2)
         .attr('cx', (date) => xScale(parseIndiaDate(date)))
         .attr('cy', (date) =>
           yScale(getStatistic(timeseries[date], chartType, statistic))
@@ -336,24 +338,22 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   const getStatisticDelta = useCallback(
     (statistic) => {
       if (!highlightedDate) return;
-      const deltaToday = getStatistic(
+      const currCount = getStatistic(
         timeseries?.[highlightedDate],
-        'delta',
+        chartType,
         statistic
       );
-      if (chartType === 'total') return deltaToday;
+      const prevDate =
+        dates[dates.findIndex((date) => date === highlightedDate) - 1];
 
-      const yesterday = formatISO(subDays(parseIndiaDate(highlightedDate), 1), {
-        representation: 'date',
-      });
-      const deltaYesterday = getStatistic(
-        timeseries?.[yesterday],
-        'delta',
+      const prevCount = getStatistic(
+        timeseries?.[prevDate],
+        chartType,
         statistic
       );
-      return deltaToday - deltaYesterday;
+      return currCount - prevCount;
     },
-    [timeseries, highlightedDate, chartType]
+    [timeseries, dates, highlightedDate, chartType]
   );
 
   const trail = useMemo(() => {
@@ -373,6 +373,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       <div className="Timeseries">
         {TIMESERIES_STATISTICS.map((statistic, index) => {
           const delta = getStatisticDelta(statistic, index);
+          const statisticConfig = STATISTIC_CONFIGS[statistic];
           return (
             <div
               key={statistic}
@@ -382,7 +383,9 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
             >
               {highlightedDate && (
                 <div className={classnames('stats', `is-${statistic}`)}>
-                  <h5 className="title">{t(capitalize(statistic))}</h5>
+                  <h5 className="title">
+                    {t(capitalize(statisticConfig.displayName))}
+                  </h5>
                   <h5 className="title">
                     {formatDate(highlightedDate, 'dd MMMM')}
                   </h5>
@@ -393,10 +396,20 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
                           timeseries?.[highlightedDate],
                           chartType,
                           statistic
-                        )
+                        ),
+                        statisticConfig.format !== 'short'
+                          ? statisticConfig.format
+                          : 'int',
+                        statistic
                       )}
                     </h2>
-                    <h6>{`${delta >= 0 ? '+' : ''}${formatNumber(delta)}`}</h6>
+                    <h6>{`${delta > 0 ? '+' : ''}${formatNumber(
+                      delta,
+                      statisticConfig.format !== 'short'
+                        ? statisticConfig.format
+                        : 'int',
+                      statistic
+                    )}`}</h6>
                   </div>
                 </div>
               )}

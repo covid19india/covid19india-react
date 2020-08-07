@@ -18,7 +18,7 @@ import React, {
   Suspense,
   useRef,
 } from 'react';
-import * as Icon from 'react-feather';
+import {Smile} from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
@@ -29,7 +29,7 @@ const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
 const MapExplorer = lazy(() => import('./MapExplorer'));
 const Minigraphs = lazy(() => import('./Minigraphs'));
 
-function State(props) {
+function State() {
   const {t} = useTranslation();
 
   const stateCode = useParams().stateCode.toUpperCase();
@@ -245,7 +245,7 @@ function State(props) {
                               mapStatistic === 'confirmed' ? 'is-green' : ''
                             }`}
                           >
-                            <Icon.Smile />
+                            <Smile />
                             <div className="alert-right">
                               No new {mapStatistic} cases in the past five days
                             </div>

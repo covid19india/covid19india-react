@@ -1,4 +1,4 @@
-import {PRIMARY_STATISTICS, COLORS} from '../constants';
+import {PRIMARY_STATISTICS, STATISTIC_CONFIGS} from '../constants';
 
 import classnames from 'classnames';
 import React, {useState, useCallback, useEffect} from 'react';
@@ -12,7 +12,7 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
   const [count, setCount] = useState(0);
   const [spring, set] = useSpring(() => ({
     opacity: 0,
-    background: `${COLORS[mapStatistic]}20`,
+    background: `${STATISTIC_CONFIGS[mapStatistic].color}20`,
     transform: `translateX(${
       width * PRIMARY_STATISTICS.indexOf(mapStatistic) * 0.25
     }px)`,
@@ -27,7 +27,7 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
             width * PRIMARY_STATISTICS.indexOf(mapStatistic) * 0.25
           }px)`,
           opacity: 1,
-          background: `${COLORS[mapStatistic]}20`,
+          background: `${STATISTIC_CONFIGS[mapStatistic].color}20`,
           delay: count === 0 ? 1500 : 0,
           onStart: setClicked.bind(this, true),
           onRest: setClicked.bind(this, false),

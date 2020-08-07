@@ -1,4 +1,4 @@
-export const API_ROOT_URL = 'https://api.covid19india.org/v4/min';
+export const API_ROOT_URL = 'https://api.covid19india.org/v5/min';
 
 export const LOCALE_SHORTHANDS = {
   english: 'en-US',
@@ -14,6 +14,129 @@ export const LOCALE_SHORTHANDS = {
   odiya: 'en-US',
 };
 
+export const STATISTIC_DEFINITIONS = {
+  confirmed: {
+    displayName: 'confirmed',
+    color: '#ff073a',
+    format: 'int',
+    options: {key: 'confirmed'},
+  },
+  active: {
+    displayName: 'active',
+    color: '#007bff',
+    format: 'int',
+    options: {key: 'active'},
+    hideDelta: true,
+  },
+  recovered: {
+    displayName: 'recovered',
+    color: '#28a745',
+    format: 'int',
+    options: {key: 'recovered'},
+  },
+  deceased: {
+    displayName: 'deceased',
+    color: '#6c757d',
+    format: 'int',
+    options: {key: 'deceased'},
+  },
+  other: {
+    displayName: 'other',
+    color: '#fd7e14',
+    format: 'int',
+    options: {key: 'other'},
+  },
+  tested: {
+    displayName: 'tested',
+    color: '#4b1eaa',
+    format: 'short',
+    options: {key: 'tested'},
+  },
+  testedStates: {
+    displayName: 'sum of state tests',
+    color: '#fd7e14',
+    format: 'short',
+    options: {key: 'tested_states'},
+  },
+  positives: {
+    displayName: 'positive samples',
+    color: '#fd7e14',
+    format: 'short',
+    options: {key: 'positives'},
+  },
+  activeRatio: {
+    displayName: 'active ratio',
+    color: '#fd7e14',
+    format: '%',
+    options: {
+      key: 'active',
+      normalizeByKey: 'confirmed',
+      multiplyFactor: 100,
+    },
+    hideDelta: true,
+  },
+  recoveryRatio: {
+    displayName: 'recovery ratio',
+    color: '#fd7e14',
+    format: '%',
+    options: {
+      key: 'recovered',
+      normalizeByKey: 'confirmed',
+      multiplyFactor: 100,
+    },
+    hideDelta: true,
+  },
+  cfr: {
+    displayName: 'case fatality ratio',
+    color: '#fd7e14',
+    format: '%',
+    options: {
+      key: 'deceased',
+      normalizeByKey: 'confirmed',
+      multiplyFactor: 100,
+    },
+    hideDelta: true,
+  },
+  tpr: {
+    displayName: 'test positivity ratio',
+    color: '#fd7e14',
+    format: '%',
+    options: {
+      key: 'positives',
+      normalizeByKey: 'tested',
+      multiplyFactor: 100,
+    },
+    hideDelta: true,
+  },
+  population: {
+    displayName: 'population',
+    color: '#fd7e14',
+    format: 'short',
+    options: {key: 'population'},
+    hideDelta: true,
+  },
+};
+
+const definitions = Object.keys(STATISTIC_DEFINITIONS).reduce(
+  (acc, statistic) => {
+    const {options, ...config} = STATISTIC_DEFINITIONS[statistic];
+    acc.options[statistic] = options;
+    acc.configs[statistic] = config;
+    return acc;
+  },
+  {options: {}, configs: {}}
+);
+
+export const STATISTIC_CONFIGS = definitions.configs;
+export const STATISTIC_OPTIONS = definitions.options;
+
+export const PER_MILLION_OPTIONS = {
+  normalizeByKey: 'population',
+  multiplyFactor: 1e6,
+};
+
+export const NAN_STATISTICS = ['tested', 'testedStates', 'tpr', 'population'];
+
 export const PRIMARY_STATISTICS = [
   'confirmed',
   'active',
@@ -23,9 +146,15 @@ export const PRIMARY_STATISTICS = [
 
 export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
-export const DISTRICT_TABLE_COUNT = 30;
+export const TABLE_STATISTICS_EXPANDED = Object.keys(
+  STATISTIC_DEFINITIONS
+).filter((statistic) => !['positives', 'testedStates'].includes(statistic));
 
 export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
+
+export const UPDATES_COUNT = 5;
+
+export const DISTRICT_TABLE_COUNT = 30;
 
 export const D3_TRANSITION_DURATION = 300;
 
@@ -37,14 +166,6 @@ export const UNKNOWN_DISTRICT_KEY = 'Unknown';
 
 export const INDIA_ISO_SUFFIX = 'T00:00:00+05:30';
 
-export const COLORS = {
-  confirmed: '#ff073a',
-  active: '#007bff',
-  recovered: '#28a745',
-  deceased: '#6c757d',
-  tested: '#4b1eaa',
-};
-
 export const SPRING_CONFIG_NUMBERS = {clamp: true, precision: 1};
 
 export const TIMESERIES_CHART_TYPES = {
@@ -54,8 +175,8 @@ export const TIMESERIES_CHART_TYPES = {
 
 export const TIMESERIES_LOOKBACKS = {
   BEGINNING: 'Beginning',
+  THREE_MONTHS: '3 Months',
   MONTH: '1 Month',
-  TWO_WEEKS: '2 Weeks',
 };
 
 export const MAP_VIZS = {
@@ -94,7 +215,6 @@ export const MAP_META = {
     mapType: MAP_TYPES.STATE,
   },
   CT: {
-    name: 'Chhattisgarh',
     geoDataFile: `${MAPS_DIR}/chhattisgarh.json`,
     mapType: MAP_TYPES.STATE,
   },
@@ -195,7 +315,6 @@ export const MAP_META = {
     mapType: MAP_TYPES.STATE,
   },
   AN: {
-    name: 'Andaman and Nicobar Islands',
     geoDataFile: `${MAPS_DIR}/andamannicobarislands.json`,
     mapType: MAP_TYPES.STATE,
   },

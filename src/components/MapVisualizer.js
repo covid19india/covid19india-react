@@ -1,7 +1,6 @@
 import MapLegend from './MapLegend';
 
 import {
-  COLORS,
   D3_TRANSITION_DURATION,
   MAP_META,
   MAP_TYPES,
@@ -9,12 +8,13 @@ import {
   MAP_VIZS,
   STATE_CODES,
   STATE_NAMES,
+  STATISTIC_CONFIGS,
   UNKNOWN_DISTRICT_KEY,
 } from '../constants';
 import {
-  capitalizeAll,
   formatNumber,
   getStatistic,
+  toTitleCase,
 } from '../utils/commonFunctions';
 
 import {AlertIcon} from '@primer/octicons-v2-react';
@@ -31,6 +31,7 @@ import {
   interpolateGreens,
   interpolateGreys,
   interpolatePurples,
+  interpolateOranges,
 } from 'd3-scale-chromatic';
 import {select, event} from 'd3-selection';
 import {transition} from 'd3-transition';
@@ -42,12 +43,21 @@ import * as topojson from 'topojson';
 
 const [width, height] = [432, 488];
 
-const colorInterpolator = {
-  confirmed: (t) => interpolateReds(t * 0.85),
-  active: (t) => interpolateBlues(t * 0.85),
-  recovered: (t) => interpolateGreens(t * 0.85),
-  deceased: (t) => interpolateGreys(t * 0.85),
-  tested: (t) => interpolatePurples(t * 0.85),
+const colorInterpolator = (statistic) => {
+  switch (statistic) {
+    case 'confirmed':
+      return (t) => interpolateReds(t * 0.85);
+    case 'active':
+      return (t) => interpolateBlues(t * 0.85);
+    case 'recovered':
+      return (t) => interpolateGreens(t * 0.85);
+    case 'deceased':
+      return (t) => interpolateGreys(t * 0.85);
+    case 'tested':
+      return (t) => interpolatePurples(t * 0.85);
+    default:
+      return (t) => interpolateOranges(t * 0.85);
+  }
 };
 
 const getTotalStatistic = (data, statistic) => {
@@ -110,7 +120,7 @@ function MapVisualizer({
     } else {
       return scaleSequential(
         [0, Math.max(1, statisticMax)],
-        colorInterpolator[statistic]
+        colorInterpolator(statistic)
       ).clamp(true);
     }
   }, [mapViz, statistic, statisticMax]);
@@ -137,7 +147,7 @@ function MapVisualizer({
 
   const strokeColor = useCallback(
     (alpha) => {
-      return COLORS[statistic] + alpha;
+      return STATISTIC_CONFIGS[statistic].color + alpha;
     },
     [statistic]
   );
@@ -180,7 +190,7 @@ function MapVisualizer({
           return (
             formatNumber(100 * (n / (statisticTotal || 0.001))) +
             '% from ' +
-            capitalizeAll(district ? district : state)
+            toTitleCase(district ? district : state)
           );
         }
       });
@@ -364,8 +374,8 @@ function MapVisualizer({
         );
       })
       .transition(T)
-      .attr('fill', COLORS[statistic] + '70')
-      .attr('stroke', COLORS[statistic] + '70')
+      .attr('fill', STATISTIC_CONFIGS[statistic].color + '70')
+      .attr('stroke', STATISTIC_CONFIGS[statistic].color + '70')
       .attr('r', (feature) => mapScale(feature.value));
   }, [
     mapMeta.mapType,

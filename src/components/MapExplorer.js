@@ -5,10 +5,11 @@ import {
   MAP_TYPES,
   MAP_VIEWS,
   MAP_VIZS,
+  PRIMARY_STATISTICS,
   SPRING_CONFIG_NUMBERS,
   STATE_NAMES,
+  STATISTIC_CONFIGS,
   UNKNOWN_DISTRICT_KEY,
-  PRIMARY_STATISTICS,
 } from '../constants';
 import {formatNumber, getStatistic, capitalize} from '../utils/commonFunctions';
 
@@ -40,12 +41,13 @@ const MapVisualizer = lazy(() => import('./MapVisualizer'));
 function MapExplorer({
   stateCode: mapCode = 'TT',
   data,
+  mapStatistic,
+  setMapStatistic,
   regionHighlighted,
   setRegionHighlighted,
   anchor,
   setAnchor,
-  mapStatistic,
-  setMapStatistic,
+  expandTable,
 }) {
   const {t} = useTranslation();
   const mapExplorerRef = useRef();
@@ -77,20 +79,23 @@ function MapExplorer({
     });
   }, [data, regionHighlighted.stateCode, regionHighlighted.districtName]);
 
-  const handleTabClick = (option) => {
-    switch (option) {
-      case MAP_VIZS.CHOROPLETH:
-        setMapViz(MAP_VIZS.CHOROPLETH);
-        return;
+  const handleTabClick = useCallback(
+    (option) => {
+      switch (option) {
+        case MAP_VIZS.CHOROPLETH:
+          setMapViz(MAP_VIZS.CHOROPLETH);
+          return;
 
-      case MAP_VIZS.BUBBLES:
-        setMapViz(MAP_VIZS.BUBBLES);
-        return;
+        case MAP_VIZS.BUBBLES:
+          setMapViz(MAP_VIZS.BUBBLES);
+          return;
 
-      default:
-        return;
-    }
-  };
+        default:
+          return;
+      }
+    },
+    [setMapViz]
+  );
 
   const handleDistrictClick = useCallback(() => {
     const newMapView =
@@ -186,12 +191,17 @@ function MapExplorer({
     },
   });
 
+  const statisticConfig = STATISTIC_CONFIGS[mapStatistic];
+
   return (
     <div
       className={classnames(
         'MapExplorer',
         {stickied: anchor === 'mapexplorer'},
-        {hidden: anchor && anchor !== 'mapexplorer'}
+        {
+          hidden:
+            anchor && (!expandTable || width < 769) && anchor !== 'mapexplorer',
+        }
       )}
     >
       <div className="panel" ref={panelRef}>
@@ -206,10 +216,16 @@ function MapExplorer({
             <h1 className={classnames('district', mapStatistic)}>
               <animated.div>
                 {spring.total.interpolate((total) =>
-                  formatNumber(Math.floor(total))
+                  formatNumber(
+                    total,
+                    statisticConfig.format !== 'short'
+                      ? statisticConfig.format
+                      : 'int',
+                    mapStatistic
+                  )
                 )}
               </animated.div>
-              <span>{t(capitalize(mapStatistic))}</span>
+              <span>{t(capitalize(statisticConfig.displayName))}</span>
             </h1>
           )}
         </div>
@@ -263,7 +279,7 @@ function MapExplorer({
             )}
           </div>
 
-          {width < 769 && (
+          {(expandTable || width < 769) && (
             <div className="switch-statistic fadeInUp" style={trail[5]}>
               {PRIMARY_STATISTICS.map((statistic) => (
                 <div
@@ -320,6 +336,8 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
     return false;
   } else if (!equal(prevProps.anchor, currProps.anchor)) {
+    return false;
+  } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
     return false;
   } else if (
     !equal(

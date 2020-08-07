@@ -1,4 +1,4 @@
-import {SPRING_CONFIG_NUMBERS} from '../constants.js';
+import {SPRING_CONFIG_NUMBERS, STATISTIC_CONFIGS} from '../constants.js';
 import {formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
@@ -7,11 +7,7 @@ import React from 'react';
 import {animated, useSpring} from 'react-spring';
 
 const Cell = ({statistic, data, isPerMillion}) => {
-  let total = getStatistic(data, 'total', statistic, isPerMillion);
-  // TODO: Maybe move inside getStatistic
-  if (!total && statistic === 'tested') {
-    total = NaN;
-  }
+  const total = getStatistic(data, 'total', statistic, isPerMillion);
   const delta = getStatistic(data, 'delta', statistic, isPerMillion);
 
   const spring = useSpring({
@@ -20,34 +16,28 @@ const Cell = ({statistic, data, isPerMillion}) => {
     config: SPRING_CONFIG_NUMBERS,
   });
 
+  const statisticConfig = STATISTIC_CONFIGS[statistic];
+
   return (
     <div className="cell statistic">
-      {statistic !== 'active' && (
-        <animated.div className={classnames('delta', `is-${statistic}`)}>
+      {!statisticConfig.hideDelta && (
+        <animated.div
+          className={classnames('delta', `is-${statistic}`)}
+          title={delta}
+        >
           {spring.delta.interpolate((delta) =>
             delta > 0
-              ? '\u2191' +
-                formatNumber(
-                  Math.floor(delta),
-                  statistic === 'tested' ? 'short' : null
-                )
+              ? '\u2191' + formatNumber(delta, statisticConfig.format)
               : delta < 0
-              ? '\u2193' +
-                formatNumber(
-                  Math.floor(Math.abs(delta)),
-                  statistic === 'tested' ? 'short' : null
-                )
+              ? '\u2193' + formatNumber(Math.abs(delta), statisticConfig.format)
               : ''
           )}
         </animated.div>
       )}
 
-      <animated.div className="total">
+      <animated.div className="total" title={total}>
         {spring.total.interpolate((total) =>
-          formatNumber(
-            Math.floor(total),
-            statistic === 'tested' ? 'short' : null
-          )
+          formatNumber(total, statisticConfig.format, statistic)
         )}
       </animated.div>
     </div>
