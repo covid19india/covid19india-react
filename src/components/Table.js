@@ -36,6 +36,7 @@ const Row = lazy(() => import('./Row'));
 
 function Table({
   data: states,
+  date: timelineDate,
   regionHighlighted,
   setRegionHighlighted,
   expandTable,
@@ -79,14 +80,15 @@ function Table({
   const [isPerMillion, setIsPerMillion] = useState(false);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
 
-  const lastUpdatedTT = useMemo(
-    () =>
-      max([
-        parseIndiaDate(states['TT']?.meta?.['last_updated']),
-        parseIndiaDate(states['TT']?.meta?.tested?.['last_updated']),
-      ]),
-    [states]
-  );
+  const lastUpdatedTT = useMemo(() => {
+    const updatedDates = [
+      states['TT']?.meta?.['last_updated'] || timelineDate,
+      states['TT']?.meta?.tested?.['last_updated'],
+    ];
+    return max(
+      updatedDates.filter((date) => date).map((date) => parseIndiaDate(date))
+    );
+  }, [states, timelineDate]);
 
   const sortingFunction = useCallback(
     (regionKeyA, regionKeyB) => {
@@ -392,6 +394,8 @@ const isEqual = (prevProps, currProps) => {
       currProps.regionHighlighted?.stateCode
     )
   ) {
+    return false;
+  } else if (!equal(prevProps.date, currProps.date)) {
     return false;
   } else if (
     !equal(
