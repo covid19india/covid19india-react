@@ -1,12 +1,20 @@
 import {
   INDIA_ISO_SUFFIX,
+  ISO_DATE_REGEX,
   LOCALE_SHORTHANDS,
   NAN_STATISTICS,
   PER_MILLION_OPTIONS,
   STATISTIC_OPTIONS,
+  TESTED_LOOKBACK_DAYS,
 } from '../constants';
 
-import {format, formatDistance, formatISO, subDays} from 'date-fns';
+import {
+  differenceInDays,
+  format,
+  formatDistance,
+  formatISO,
+  subDays,
+} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
 import i18n from 'i18next';
 
@@ -51,14 +59,15 @@ export const formatLastUpdated = (unformattedDate) => {
 
 export const parseIndiaDate = (isoDate) => {
   if (!isoDate) return getIndiaDate();
-  return utcToZonedTime(new Date(isoDate + INDIA_ISO_SUFFIX), 'Asia/Kolkata');
+  if (isoDate.match(ISO_DATE_REGEX)) isoDate += INDIA_ISO_SUFFIX;
+  return utcToZonedTime(new Date(isoDate), 'Asia/Kolkata');
 };
 
 export const formatDate = (unformattedDate, formatString) => {
   if (!unformattedDate) return '';
   if (
     typeof unformattedDate === 'string' &&
-    unformattedDate.match(/^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/g)
+    unformattedDate.match(ISO_DATE_REGEX)
   )
     unformattedDate += INDIA_ISO_SUFFIX;
   const date = utcToZonedTime(new Date(unformattedDate), 'Asia/Kolkata');
@@ -106,7 +115,7 @@ export const toTitleCase = (str) => {
 };
 
 export const getStatistic = (data, type, statistic, perMillion = false) => {
-  let {key, normalizeByKey: normalizeBy, multiplyFactor} = {
+  const {key, normalizeByKey: normalizeBy, multiplyFactor} = {
     ...STATISTIC_OPTIONS[statistic],
     ...(perMillion &&
       !STATISTIC_OPTIONS[statistic]?.normalizeByKey &&
@@ -117,16 +126,7 @@ export const getStatistic = (data, type, statistic, perMillion = false) => {
   if (key === 'population') {
     count = type === 'total' ? data?.meta?.population : 0;
   } else if (key === 'tested') {
-    count = data?.[type]?.tested?.samples;
-  } else if (key === 'tested_states') {
-    count = data?.[type]?.tested?.states?.samples;
-  } else if (key === 'positives') {
-    if (data?.[type]?.tested?.positives)
-      count = data?.[type]?.tested?.positives;
-    else if (data?.[type]?.tested?.states?.positives) {
-      count = data?.[type]?.tested?.states?.positives;
-      if (normalizeBy === 'tested') normalizeBy = 'testedStates';
-    }
+    count = data?.[type]?.tested;
   } else if (key === 'active') {
     const confirmed = data?.[type]?.confirmed || 0;
     const deceased = data?.[type]?.deceased || 0;
@@ -157,6 +157,29 @@ export const getStatistic = (data, type, statistic, perMillion = false) => {
   }
 
   return (multiplyFactor || 1) * ((isFinite(count) && count) || 0);
+};
+
+export const getTableStatistic = (
+  data,
+  statistic,
+  isPerMillion,
+  lastUpdatedTT
+) => {
+  const expired =
+    (STATISTIC_OPTIONS[statistic].key === 'tested' ||
+      STATISTIC_OPTIONS[statistic].normalizeByKey === 'tested') &&
+    differenceInDays(
+      lastUpdatedTT,
+      parseIndiaDate(data.meta?.tested?.['last_updated'])
+    ) > TESTED_LOOKBACK_DAYS;
+
+  const total = !expired
+    ? getStatistic(data, 'total', statistic, isPerMillion)
+    : 0;
+  const delta = !expired
+    ? getStatistic(data, 'delta', statistic, isPerMillion)
+    : 0;
+  return {total, delta};
 };
 
 export const fetcher = (url) => {

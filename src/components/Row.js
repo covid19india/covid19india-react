@@ -13,7 +13,7 @@ import {
 import {
   capitalize,
   formatLastUpdated,
-  getStatistic,
+  getTableStatistic,
 } from '../utils/commonFunctions';
 
 import {
@@ -40,6 +40,7 @@ function Row({
   regionHighlighted,
   setRegionHighlighted,
   expandTable,
+  lastUpdatedTT,
 }) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useSessionStorage('districtSortData', {
@@ -71,18 +72,19 @@ function Row({
         const statisticConfig = STATISTIC_CONFIGS[sortData.sortColumn];
         const dataType =
           sortData.delta && !statisticConfig.hideDelta ? 'delta' : 'total';
-        const statisticA = getStatistic(
+
+        const statisticA = getTableStatistic(
           data.districts[districtNameA],
-          dataType,
           sortData.sortColumn,
-          isPerMillion
-        );
-        const statisticB = getStatistic(
+          isPerMillion,
+          lastUpdatedTT
+        )[dataType];
+        const statisticB = getTableStatistic(
           data.districts[districtNameB],
-          dataType,
           sortData.sortColumn,
-          isPerMillion
-        );
+          isPerMillion,
+          lastUpdatedTT
+        )[dataType];
         return sortData.isAscending
           ? statisticA - statisticB
           : statisticB - statisticA;
@@ -92,7 +94,7 @@ function Row({
           : districtNameB.localeCompare(districtNameA);
       }
     },
-    [sortData, data, isPerMillion]
+    [sortData, data, isPerMillion, lastUpdatedTT]
   );
 
   const highlightState = useCallback(() => {
@@ -190,7 +192,10 @@ function Row({
         </div>
 
         {tableStatistics.map((statistic) => (
-          <Cell key={statistic} {...{data, statistic, isPerMillion}} />
+          <Cell
+            key={statistic}
+            {...{data, statistic, isPerMillion, lastUpdatedTT}}
+          />
         ))}
       </div>
 
@@ -273,6 +278,7 @@ function Row({
                 stateCode,
                 isPerMillion,
                 expandTable,
+                lastUpdatedTT,
               }}
             />
           ))}
