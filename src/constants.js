@@ -1,4 +1,4 @@
-export const API_ROOT_URL = 'https://api.covid19india.org/v5/min';
+export const API_ROOT_URL = 'https://api.covid19india.org/v4/min';
 
 export const LOCALE_SHORTHANDS = {
   english: 'en-US',
@@ -42,7 +42,6 @@ export const STATISTIC_DEFINITIONS = {
   },
   other: {
     displayName: 'other',
-    color: '#fd7e14',
     format: 'int',
     options: {key: 'other'},
   },
@@ -52,21 +51,8 @@ export const STATISTIC_DEFINITIONS = {
     format: 'short',
     options: {key: 'tested'},
   },
-  testedStates: {
-    displayName: 'sum of state tests',
-    color: '#fd7e14',
-    format: 'short',
-    options: {key: 'tested_states'},
-  },
-  positives: {
-    displayName: 'positive samples',
-    color: '#fd7e14',
-    format: 'short',
-    options: {key: 'positives'},
-  },
   activeRatio: {
     displayName: 'active ratio',
-    color: '#fd7e14',
     format: '%',
     options: {
       key: 'active',
@@ -77,7 +63,6 @@ export const STATISTIC_DEFINITIONS = {
   },
   recoveryRatio: {
     displayName: 'recovery ratio',
-    color: '#fd7e14',
     format: '%',
     options: {
       key: 'recovered',
@@ -88,7 +73,6 @@ export const STATISTIC_DEFINITIONS = {
   },
   cfr: {
     displayName: 'case fatality ratio',
-    color: '#fd7e14',
     format: '%',
     options: {
       key: 'deceased',
@@ -102,7 +86,7 @@ export const STATISTIC_DEFINITIONS = {
     color: '#fd7e14',
     format: '%',
     options: {
-      key: 'positives',
+      key: 'confirmed',
       normalizeByKey: 'tested',
       multiplyFactor: 100,
     },
@@ -110,7 +94,6 @@ export const STATISTIC_DEFINITIONS = {
   },
   population: {
     displayName: 'population',
-    color: '#fd7e14',
     format: 'short',
     options: {key: 'population'},
     hideDelta: true,
@@ -135,7 +118,7 @@ export const PER_MILLION_OPTIONS = {
   multiplyFactor: 1e6,
 };
 
-export const NAN_STATISTICS = ['tested', 'testedStates', 'tpr', 'population'];
+export const NAN_STATISTICS = ['tested', 'tpr', 'population'];
 
 export const PRIMARY_STATISTICS = [
   'confirmed',
@@ -146,9 +129,7 @@ export const PRIMARY_STATISTICS = [
 
 export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
-export const TABLE_STATISTICS_EXPANDED = Object.keys(
-  STATISTIC_DEFINITIONS
-).filter((statistic) => !['positives', 'testedStates'].includes(statistic));
+export const TABLE_STATISTICS_EXPANDED = Object.keys(STATISTIC_DEFINITIONS);
 
 export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
@@ -160,9 +141,13 @@ export const D3_TRANSITION_DURATION = 300;
 
 export const MINIGRAPH_LOOKBACK_DAYS = 20;
 
+export const TESTED_LOOKBACK_DAYS = 7;
+
 export const UNASSIGNED_STATE_CODE = 'UN';
 
 export const UNKNOWN_DISTRICT_KEY = 'Unknown';
+
+export const ISO_DATE_REGEX = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/g;
 
 export const INDIA_ISO_SUFFIX = 'T00:00:00+05:30';
 
