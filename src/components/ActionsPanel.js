@@ -3,6 +3,7 @@ import {utcToZonedTime} from 'date-fns-tz';
 import React, {useMemo, useCallback, lazy, Suspense} from 'react';
 import * as Icon from 'react-feather';
 import {useSpring, animated} from 'react-spring';
+import '../styles/actions.scss';
 
 const Timeline = lazy(() => import('./Timeline'));
 

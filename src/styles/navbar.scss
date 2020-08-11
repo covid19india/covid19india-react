@@ -14,7 +14,7 @@
 
   .navbar-left {
     align-items: center;
-    color: var(--gray-mid);
+    color: var(--black-50);
     cursor: pointer;
     display: flex;
     flex: 0.15;
@@ -25,13 +25,14 @@
     justify-content: center;
 
     &:hover {
-      color: var(--gray);
+      background: var(--primary-25);
+      color: var(--primary);
     }
   }
 
   .navbar-middle {
     align-items: center;
-    color: var(--gray);
+    color: var(--black-50);
     display: flex;
     flex: 0.7;
     flex-direction: row;
@@ -42,14 +43,14 @@
     text-transform: uppercase;
 
     span {
-      color: var(--pblue);
+      color: var(--primary);
       display: block;
     }
   }
 
   .navbar-right {
     align-items: center;
-    color: var(--gray);
+    color: var(--black-50);
     cursor: pointer;
     display: flex;
     flex: 0.15;
@@ -59,6 +60,11 @@
     height: 100%;
     justify-content: center;
     text-align: center;
+
+    &:hover {
+      background: var(--primary-25);
+      color: var(--primary);
+    }
   }
 
   .language-toggle {
@@ -72,8 +78,8 @@
   }
 
   .expand {
-    background: var(--gray-light-opaque);
-    color: var(--gray);
+    background: var(--white);
+    color: var(--black-50);
     display: flex;
     flex-direction: column;
     width: 100vw;
@@ -88,21 +94,20 @@
     a,
     .sun-moon {
       align-items: center;
-      border-bottom: 1px solid var(--gray-light);
-      border-top: 1px solid var(--gray-light);
       cursor: pointer;
       display: flex;
       flex-direction: row;
       padding: ms(1);
 
       &:hover {
-        background: var(--gray-hover);
+        background: var(--primary-25);
+        color: var(--primary);
       }
 
       span {
         &.focused {
-          background: var(--pblue-light);
-          color: var(--pblue);
+          background: var(--primary-25);
+          color: var(--primary);
           margin-left: -#{ms(-2)};
           padding: ms(-2);
         }
@@ -165,7 +170,7 @@
 
 @media (min-width: 769px) {
   .navbar {
-    background: var(--gray-light-opaque);
+    background: var(--white);
     flex-direction: column;
     height: 100%;
     justify-content: flex-start;
@@ -177,6 +182,10 @@
       flex: 0.1;
       order: 3;
       text-align: center;
+
+      &:hover {
+        background: none;
+      }
     }
 
     .navbar-middle {
@@ -189,12 +198,17 @@
     }
 
     .navbar-right {
-      background: var(--gray-light-opaque);
+      background: var(--white);
       display: flex;
       flex: 0.9;
       flex-direction: column;
       order: 2;
       width: 100%;
+
+      &:hover {
+        background: none;
+        color: var(--black-50);
+      }
 
       span {
         display: flex;
@@ -205,13 +219,13 @@
         margin-top: 1.5rem;
 
         &:hover {
-          color: var(--gray-mid);
+          color: var(--primary);
         }
       }
     }
 
     .expand {
-      background: var(--gray-light-opaque);
+      background: var(--white);
       flex-direction: column;
       height: 100%;
       padding-left: 0;
@@ -230,10 +244,14 @@
 
         a {
           border: 0;
-          color: var(--gray);
+          color: var(--black-50);
           font-weight: 600;
           height: 1.5rem;
           width: 12rem;
+
+          &:hover {
+            color: var(--primary);
+          }
         }
       }
     }

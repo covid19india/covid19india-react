@@ -71,23 +71,21 @@ function Home() {
 
       <div className="home">
         <div className={classnames('home-left', {expanded: expandTable})}>
-          <div className="header">
-            <Suspense fallback={<div />}>
-              <Search />
-            </Suspense>
+          <Suspense fallback={<div />}>
+            <Search />
+          </Suspense>
 
-            {timeseries && (
-              <Suspense fallback={<div style={{minHeight: '56px'}} />}>
-                <Actions
-                  {...{
-                    setDate,
-                    dates: Object.keys(timeseries['TT']?.dates).reverse(),
-                    date,
-                  }}
-                />
-              </Suspense>
-            )}
-          </div>
+          {timeseries && (
+            <Suspense fallback={<div style={{minHeight: '56px'}} />}>
+              <Actions
+                {...{
+                  setDate,
+                  dates: Object.keys(timeseries['TT']?.dates).reverse(),
+                  date,
+                }}
+              />
+            </Suspense>
+          )}
 
           <div style={{position: 'relative', marginTop: '1rem'}}>
             {data && (

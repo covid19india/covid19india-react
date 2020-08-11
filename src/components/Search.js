@@ -258,9 +258,10 @@ function Search() {
 
   return (
     <div className="search">
-      <label className="fadeInUp" style={trail[0]}>
+      <label className="label fadeInUp" style={trail[0]}>
         {t('Search your district or state')}
       </label>
+
       <div className="line fadeInUp" style={trail[1]}></div>
 
       <div className="search-input-wrapper fadeInUp" style={trail[2]}>
@@ -268,6 +269,7 @@ function Search() {
           type="text"
           value={searchValue}
           ref={searchInput}
+          className="search-input"
           onFocus={setExpand.bind(this, true)}
           onBlur={setExpand.bind(this, false)}
           onChange={handleChange}
@@ -277,7 +279,7 @@ function Search() {
           <span className="search-placeholder"></span>
         )}
 
-        <div className={`search-button`}>
+        <div className={`search-icon`}>
           <Icon.Search />
         </div>
 
@@ -291,19 +293,16 @@ function Search() {
       {results.length > 0 && (
         <div className="results">
           {results.map((result, index) => (
-            <Link key={index} to={`state/${result.route}`}>
-              <div className="result">
-                <div className="result-left">
-                  <div className="result-name">
-                    {`${result.name}`}
-                    {result.type === 'district' &&
-                      `, ${STATE_NAMES[result.route]}`}
-                  </div>
+            <Link className="result" key={index} to={`state/${result.route}`}>
+              <div className="result-left">
+                <div className="result-name">
+                  {`${result.name}`}
+                  {result.type === 'district' &&
+                    `, ${STATE_NAMES[result.route]}`}
                 </div>
-                <div className="result-type">
-                  <span>{[result.route]}</span>
-                  <Icon.ArrowRightCircle size={14} />
-                </div>
+              </div>
+              <div className="result-right">
+                <abbr className="abbr">{[result.route]}</abbr>
               </div>
             </Link>
           ))}
@@ -319,7 +318,8 @@ function Search() {
                 {districtSuggestions.map((suggestion, index) => (
                   <div className="suggestion" key={index}>
                     <DotFillIcon size={9} />
-                    <h6
+                    <div
+                      className="text"
                       onMouseDown={(event) => {
                         event.preventDefault();
                         setNativeValue(searchInput.current, suggestion);
@@ -329,7 +329,7 @@ function Search() {
                       }}
                     >
                       {t(suggestion)}
-                    </h6>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -341,7 +341,8 @@ function Search() {
                 {stateSuggestions.map((suggestion, index) => (
                   <div className="suggestion" key={index}>
                     <DotFillIcon size={9} />
-                    <h6
+                    <div
+                      className="text"
                       onMouseDown={(event) => {
                         event.preventDefault();
                         setNativeValue(searchInput.current, suggestion);
@@ -351,7 +352,7 @@ function Search() {
                       }}
                     >
                       {t(suggestion)}
-                    </h6>
+                    </div>
                   </div>
                 ))}
               </div>
