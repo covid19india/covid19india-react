@@ -12,17 +12,19 @@ Always submit a PR against a "Claimed Issue" that's been assigned to you. If an 
 - Mods periodically check "Status: Review Needed" and add appropriate Priority and Status labels. If the issue is clear, set the status label as "Status: Available".
 
 <p align="center">
-  <img src="https://storage.googleapis.com/jrmyphlmn/images/github/label%20change.png" width="50%">
+  <img src="https://i.ibb.co/2hF1cQs/COVID-19-India-Status-Available.png" alt="COVID-19-India-Status-Available" border="0" width="50%">
 </p>
 
 - People looking to contribute, filter issues by ["Status:Available"](https://github.com/covid19india/covid19india-react/issues?q=is%3Aissue+is%3Aopen+label%3A%22Status%3A+Available%22) and comment "/claim" on the issue they would like to be assigned to work on.
 
 <p align="center">
-<img src="https://storage.googleapis.com/jrmyphlmn/images/github/filter.png" width="50%">
+  <img src="https://i.ibb.co/ctw1NLF/COVID-19-India-Filter-Available.png" alt="COVID-19-India-Filter-Available" border="0" width="50%">
 </p>
+
 <h6 align="center">Filter by label "Available"</h6>
+
 <p align="center">
-<img src="https://storage.googleapis.com/jrmyphlmn/images/github/claim.png" width="50%">
+  <img src="https://i.ibb.co/T8BkSWd/COVID-19-India-Issue-Claim.png" alt="COVID-19-India-Issue-Claim" border="0" width="50%">
 </p>
 <h6 align="center">use /claim to have the issue assigned to you</h6>
 
