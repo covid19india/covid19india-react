@@ -4,7 +4,6 @@ import Navbar from './components/Navbar';
 
 import React, {lazy, useState, Suspense, useEffect} from 'react';
 import {Route, Redirect, Switch, useLocation} from 'react-router-dom';
-import useDarkMode from 'use-dark-mode';
 
 const Home = lazy(() => import('./components/Home'));
 const About = lazy(() => import('./components/About'));
@@ -12,7 +11,6 @@ const State = lazy(() => import('./components/State'));
 const LanguageSwitcher = lazy(() => import('./components/LanguageSwitcher'));
 
 const App = () => {
-  const darkMode = useDarkMode(false);
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
   const location = useLocation();
 
@@ -60,12 +58,7 @@ const App = () => {
         />
       </Suspense>
 
-      <Navbar
-        pages={pages}
-        {...{darkMode}}
-        {...{showLanguageSwitcher, setShowLanguageSwitcher}}
-      />
-
+      <Navbar {...{pages}} />
       <Suspense fallback={<div />}>
         <Switch location={location}>
           {pages.map((page, index) => {

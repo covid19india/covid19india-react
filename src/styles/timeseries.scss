@@ -2,11 +2,11 @@
 
 @mixin stats-color($statistic, $color) {
   &.is-#{$statistic} {
-    .title,
     .date {
-      color: var(--#{$color}-mid);
+      color: var(--#{$color}-50);
     }
 
+    .title,
     .statistic,
     .delta {
       color: var(--#{$color});
@@ -16,17 +16,17 @@
 
 @mixin svg-color($statistic, $color) {
   &.is-#{$statistic} {
-    background: var(--#{$color}-light);
+    background: var(--#{$color}-10);
 
     svg {
       .domain,
       .tick,
       line {
-        stroke: var(--#{$color}-mid);
+        stroke: var(--#{$color}-50);
       }
 
       text {
-        color: var(--#{$color}-mid);
+        color: var(--#{$color}-50);
         stroke: transparent;
       }
     }
@@ -74,6 +74,10 @@
       .delta {
         font-weight: 600;
         margin: 0;
+      }
+
+      .delta {
+        margin-top: ms(-2);
       }
     }
   }

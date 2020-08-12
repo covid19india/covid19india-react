@@ -16,7 +16,7 @@
     grid-column: 1 / -1;
 
     .spacer {
-      color: var(--gray-mid);
+      color: var(--black-50);
       margin-bottom: ms(2);
       margin-top: ms(2);
       text-align: center;
@@ -32,7 +32,7 @@
         cursor: pointer;
 
         &:hover {
-          color: var(--gray);
+          color: var(--black-75);
         }
       }
     }
@@ -65,7 +65,7 @@
 
       .state-page {
         align-items: center;
-        background: var(--yellow-light);
+        background: var(--yellow-10);
         border-radius: ms(-3);
         color: var(--orange);
         cursor: pointer;
@@ -81,7 +81,7 @@
         }
 
         &:hover {
-          background: var(--yellow-hover);
+          background: var(--yellow-25);
         }
       }
     }
@@ -91,7 +91,7 @@
 
       .disclaimer {
         align-items: center;
-        background: var(--brick-light);
+        background: var(--brick-10);
         border-radius: ms(-2);
         color: var(--brick);
         display: flex;
@@ -117,7 +117,7 @@
     .cell {
       align-items: center;
       border-radius: ms(-3);
-      color: var(--gray);
+      color: var(--black-50);
       display: flex;
       flex-direction: row;
       margin-bottom: ms(-3);
@@ -125,7 +125,7 @@
       position: relative;
 
       svg {
-        color: var(--gray-mid);
+        color: var(--black-50);
         margin-left: 0.2rem;
         stroke-width: 2.5px;
       }
@@ -180,7 +180,7 @@
       }
 
       &:first-child {
-        background: var(--gray-hover-darker-opaque);
+        background: var(--opaque);
         flex-basis: 7rem;
         flex-grow: 0;
         flex-shrink: 0;
@@ -236,20 +236,17 @@
       }
 
       &.heading {
-        background: var(--gray-light-opaque);
         font-size: ms(-1) + ms(-6);
         font-weight: 900;
         padding-bottom: ms(1);
         padding-top: ms(1);
+        margin-bottom: 5px;
 
         .text {
           text-align: center;
           text-transform: capitalize;
           width: 100%;
-        }
-
-        &:hover {
-          background: var(--gray-hover-opaque) !important;
+          line-height: 1.5;
         }
       }
 
@@ -259,12 +256,13 @@
         font-weight: 600;
         max-width: 7rem;
         word-wrap: break-word;
+        line-height: 1.5;
       }
     }
 
     &.is-highlighted {
       .cell {
-        background: var(--gray-hover-opaque) !important;
+        background: var(--opaque) !important;
       }
     }
 
@@ -273,13 +271,13 @@
       top: 0;
 
       .cell {
-        background: var(--gray-hover-opaque) !important;
+        background: var(--opaque) !important;
       }
     }
 
     &:nth-child(odd) {
       .cell {
-        background: var(--gray-light);
+        background: var(--black-5);
       }
     }
 
@@ -287,9 +285,10 @@
       .cell {
         cursor: pointer;
         user-select: none;
+        background: var(--opaque);
 
         &:hover {
-          background: var(--gray-hover-opaque) !important;
+          background: var(--black-25) !important;
         }
       }
     }

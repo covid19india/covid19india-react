@@ -8,10 +8,9 @@ import {
   UNKNOWN_DISTRICT_KEY,
 } from '../constants';
 
-import {DotFillIcon} from '@primer/octicons-react';
+import {DotFillIcon, XIcon, SearchIcon} from '@primer/octicons-react';
 import produce from 'immer';
 import React, {useState, useEffect, useMemo, useCallback, useRef} from 'react';
-import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useDebounce, useUpdateEffect} from 'react-use';
@@ -280,12 +279,12 @@ function Search() {
         )}
 
         <div className={`search-icon`}>
-          <Icon.Search />
+          <SearchIcon size={22} />
         </div>
 
         {searchValue.length > 0 && (
           <div className={`close-button`} onClick={handleClose}>
-            <Icon.X />
+            <XIcon />
           </div>
         )}
       </div>

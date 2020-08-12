@@ -2,7 +2,6 @@
 
 .timeline {
   cursor: pointer;
-  height: 3rem;
   width: 32rem;
   will-change: transform;
 
@@ -13,7 +12,7 @@
     will-change: transform;
 
     h5 {
-      color: var(--gray-mid);
+      color: var(--gray);
 
       &:hover {
         color: var(--gray) !important;

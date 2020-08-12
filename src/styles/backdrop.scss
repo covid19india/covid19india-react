@@ -1,0 +1,14 @@
+.backdrop-root {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	pointer-events: none;
+}
+
+.backdrop {
+	height: 100%;
+	width: 100%;
+	background: var(--black-10);
+}

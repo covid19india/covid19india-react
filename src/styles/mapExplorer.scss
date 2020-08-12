@@ -2,7 +2,7 @@
 
 @mixin stats-colors {
   &.confirmed {
-    color: var(--brick);
+    color: var(--cherry);
   }
 
   &.active {
@@ -81,7 +81,7 @@
       word-wrap: break-word;
 
       &.confirmed {
-        color: var(--brick);
+        color: var(--cherry);
       }
 
       &.active {
@@ -101,7 +101,6 @@
     .statistic {
       @include stats-colors;
 
-      color: var(--gray-mid);
       margin: 0;
       transition: color 0.3s ease-in-out;
       word-wrap: break-word;
@@ -116,6 +115,7 @@
         @include stats-colors;
 
         margin: 0;
+        margin-top: ms(-2);
         transition: color 0.3s ease-in-out;
         font-weight: 900;
       }
@@ -144,88 +144,88 @@
 
       &.is-confirmed {
         svg {
-          fill: var(--cherry-light);
-          stroke: var(--cherry-mid);
+          fill: var(--cherry-10);
+          stroke: var(--cherry-50);
         }
 
         .boundary {
           svg {
-            fill: var(--cherry-mid);
+            fill: var(--cherry-50);
             stroke: none;
           }
         }
 
         .is-highlighted {
-          background: var(--cherry-light);
+          background: var(--cherry-10);
 
           &:hover {
-            background: var(--cherry-hover);
+            background: var(--cherry-25);
           }
         }
       }
 
       &.is-active {
         svg {
-          fill: var(--blue-light);
-          stroke: var(--blue-mid);
+          fill: var(--blue-10);
+          stroke: var(--blue-50);
         }
 
         .boundary {
           svg {
-            fill: var(--blue-mid);
+            fill: var(--blue-50);
             stroke: none;
           }
         }
 
         .is-highlighted {
-          background: var(--blue-light);
+          background: var(--blue-10);
 
           &:hover {
-            background: var(--blue-hover);
+            background: var(--blue-25);
           }
         }
       }
 
       &.is-recovered {
         svg {
-          fill: var(--green-light);
-          stroke: var(--green-mid);
+          fill: var(--green-10);
+          stroke: var(--green-50);
         }
 
         .boundary {
           svg {
-            fill: var(--green-mid);
+            fill: var(--green-50);
             stroke: none;
           }
         }
 
         .is-highlighted {
-          background: var(--green-light);
+          background: var(--green-10);
 
           &:hover {
-            background: var(--green-hover);
+            background: var(--green-25);
           }
         }
       }
 
       &.is-deceased {
         svg {
-          fill: var(--gray-light);
-          stroke: var(--gray-mid);
+          fill: var(--gray-10);
+          stroke: var(--gray-50);
         }
 
         .boundary {
           svg {
-            fill: var(--gray-mid);
+            fill: var(--gray-50);
             stroke: none;
           }
         }
 
         .is-highlighted {
-          background: var(--gray-middark);
+          background: var(--gray-10);
 
           &:hover {
-            background: var(--gray-hover);
+            background: var(--gray-25);
           }
         }
       }
@@ -238,7 +238,7 @@
 
         div {
           align-items: center;
-          background: var(--gray-light);
+          background: var(--black-5);
           border-radius: ms(-3);
           cursor: pointer;
           display: flex;
@@ -251,13 +251,13 @@
             margin-right: 0 !important;
 
             svg {
-              fill: var(--gray);
+              fill: var(--black-50);
               stroke: transparent;
             }
           }
 
           &:hover {
-            background: var(--gray-hover);
+            background: var(--black-10);
           }
 
           &:not(:last-child) {
@@ -305,7 +305,7 @@
 
       &.is-confirmed {
         svg {
-          fill: var(--cherry-hover);
+          fill: var(--cherry-25);
           stroke: none;
         }
 
@@ -319,7 +319,7 @@
 
       &.is-active {
         svg {
-          fill: var(--blue-hover);
+          fill: var(--blue-25);
           stroke: none;
         }
 
@@ -333,7 +333,7 @@
 
       &.is-recovered {
         svg {
-          fill: var(--green-hover);
+          fill: var(--green-25);
           stroke: none;
         }
 
@@ -347,7 +347,7 @@
 
       &.is-deceased {
         svg {
-          fill: var(--gray-hover);
+          fill: var(--gray-25);
           stroke: none;
         }
 
@@ -386,22 +386,22 @@
     z-index: 99;
 
     &.is-confirmed {
-      background: var(--cherry-light);
+      background: var(--cherry-10);
       color: var(--cherry);
     }
 
     &.is-active {
-      background: var(--blue-light);
+      background: var(--blue-10);
       color: var(--blue);
     }
 
     &.is-recovered {
-      background: var(--green-light);
+      background: var(--green-10);
       color: var(--green);
     }
 
     &.is-deceased {
-      background: var(--gray-light);
+      background: var(--gray-10);
       color: var(--gray);
     }
 

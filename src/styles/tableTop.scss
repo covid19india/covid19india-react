@@ -15,9 +15,9 @@
   .million-toggle,
   .expand-table-toggle {
     align-items: center;
-    background: var(--gray-light);
+    background: var(--opaque);
     border-radius: ms(-3);
-    color: var(--gray-mid);
+    color: var(--black-50);
     cursor: pointer;
     display: flex;
     flex-direction: row;
@@ -31,14 +31,14 @@
     }
 
     &.is-highlighted {
-      background: var(--green-light);
+      background: var(--green-10);
       color: var(--green);
     }
   }
 
   .info-toggle {
     &.is-highlighted {
-      background: var(--yellow-light);
+      background: var(--yellow-10);
       color: var(--yellow);
     }
   }
@@ -51,13 +51,13 @@
     width: ms(3);
 
     &.is-highlighted {
-      background: var(--pink-light);
+      background: var(--pink-10);
       color: var(--pink);
     }
   }
 
   .expand-table-toggle {
-    color: var(--gray-mid);
+    color: var(--black-50);
     margin-left: auto;
     margin-right: 0;
 

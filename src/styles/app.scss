@@ -9,6 +9,10 @@ $modularscale: (
   ratio: 1.333
 );
 
+*:not(.highlight, .tooltip) {
+  transition: background, color, 100ms ease-in-out !important;
+}
+
 html {
   overflow-x: hidden;
   width: 100vw;

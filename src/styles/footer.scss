@@ -2,7 +2,7 @@
 
 @mixin link($name, $color) {
   .#{$name} {
-    color: var(--#{$color}-mid);
+    color: var(--#{$color}-50);
 
     &:hover {
       color: var(--#{$color});
@@ -13,7 +13,7 @@
 footer {
   @include link('telegram', 'blue');
   @include link('github', 'gray');
-  @include link('twitter', 'pblue');
+  @include link('twitter', 'twitter');
   @include link('api', 'yellow');
   @include link('mail', 'brown');
 
@@ -40,7 +40,7 @@ footer {
   }
 
   .message {
-    color: var(--pblue);
+    color: var(--primary);
     font-size: ms(0);
     font-weight: 600;
     margin-bottom: ms(1);

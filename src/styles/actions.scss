@@ -6,28 +6,18 @@
   flex-direction: row;
   justify-content: center;
   padding: ms(0);
+  position: relative;
 
-  &.timeline {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    padding: ms(0);
-    position: absolute;
-    top: ms(6) + ms(1);
-
-    .highlight {
-      color: var(--brown) !important;
-      position: absolute;
-      text-align: center;
-      top: 2.5rem;
-      width: 100%;
-    }
+  .timestamp {
+    color: var(--black-50);
+    font-weight: 600;
+    margin: 0;
+    margin-right: ms(0);
   }
 
   .bell-icon,
   .timeline-icon {
     align-items: center;
-    color: var(--black-50);
     display: flex;
     flex-direction: row;
     height: ms(1);
@@ -35,46 +25,10 @@
     margin-left: ms(-2);
     margin-right: ms(-2);
     width: ms(1);
-  }
-
-  h6 {
-    color: var(--gray);
-    font-weight: 600;
-    margin: 0;
-  }
-
-  svg {
-    color: var(--black-50);
-    cursor: pointer;
-    stroke-width: 3;
-    width: 16px;
-
-    &:hover {
-      stroke: var(--black-75);
-    }
-  }
-
-  .timeline-icon {
-    display: flex;
-    fill: var(--gray);
-    flex-direction: column;
-    justify-content: center;
-    stroke: var(--gray);
 
     svg {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      stroke-width: 0.5 !important;
-
-      path {
-        align-self: center;
-      }
-
-      &:hover {
-        fill: var(--gray) !important;
-        stroke: var(--gray) !important;
-      }
+      color: var(--black-50);
+      cursor: pointer;
     }
   }
 
@@ -89,6 +43,23 @@
       right: -#{ms(-1)};
       top: -3px;
       width: ms(-2);
+    }
+  }
+
+  &.timeline {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: ms(0);
+    position: absolute;
+    top: ms(5) + ms(3);
+
+    .highlight {
+      color: var(--brown) !important;
+      position: absolute;
+      text-align: center;
+      top: 2.5rem;
+      width: 100%;
     }
   }
 }

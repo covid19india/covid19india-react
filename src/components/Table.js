@@ -252,12 +252,14 @@ function Table({
               </div>
               <div className="helper-right">
                 <div className="info-item">
-                  <p>Units</p>
+                  <p>
+                    <b>Units</b>
+                  </p>
                 </div>
                 {Object.entries({'1K': 3, '1L': 5, '1Cr': 7}).map(
                   ([abbr, exp]) => (
                     <div className="info-item" key={abbr}>
-                      <h5>{abbr}</h5>
+                      <h5 className="abbr">{abbr}</h5>
                       <p>
                         10
                         <sup

@@ -1,7 +1,7 @@
+import {BellIcon, BellSlashIcon, HistoryIcon} from '@primer/octicons-react';
 import {parse, format} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
 import React, {useMemo, useCallback, lazy, Suspense} from 'react';
-import * as Icon from 'react-feather';
 import {useSpring, animated} from 'react-spring';
 import '../styles/actions.scss';
 
@@ -20,49 +20,34 @@ const ActionsPanel = ({
 }) => {
   const Bell = useMemo(
     () => (
-      <Icon.Bell
+      <div
         onClick={() => {
           setShowUpdates(!showUpdates);
           setNewUpdate(false);
         }}
-      />
+      >
+        <BellIcon />
+      </div>
     ),
     [setNewUpdate, setShowUpdates, showUpdates]
   );
 
   const BellOff = useMemo(
     () => (
-      <Icon.BellOff
+      <div
         onClick={() => {
           setShowUpdates(!showUpdates);
+          setNewUpdate(false);
         }}
-      />
-    ),
-    [setShowUpdates, showUpdates]
-  );
-
-  const TimelineIcon = useMemo(
-    () => (
-      <svg
-        data-tooltip="History"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="-.2 -.2 17 17"
-        width="16"
-        height="16"
       >
-        <path
-          fillRule="evenodd"
-          d="M1.643 3.143L.427 1.927A.25.25 0 000 2.104V5.75c0
-          .138.112.25.25.25h3.646a.25.25 0 00.177-.427L2.715
-          4.215a6.5 6.5 0 11-1.18 4.458.75.75 0 10-1.493.154
-          8.001 8.001 0 101.6-5.684zM7.75 4a.75.75 0
-          01.75.75v2.992l2.028.812a.75.75 0 01-.557
-          1.392l-2.5-1A.75.75 0 017 8.25v-3.5A.75.75
-          0 017.75 4z"
-        ></path>
-      </svg>
+        <BellSlashIcon
+          onClick={() => {
+            setShowUpdates(!showUpdates);
+          }}
+        />
+      </div>
     ),
-    []
+    [setNewUpdate, setShowUpdates, showUpdates]
   );
 
   const {transform, opacity} = useSpring({
@@ -105,9 +90,10 @@ const ActionsPanel = ({
           pointerEvents: isTimelineMode ? 'none' : '',
         }}
       >
-        <h6 className="fadeInUp" style={trail[0]}>{`${getTimeFromMilliseconds(
-          lastViewedLog
-        )} IST`}</h6>
+        <h6
+          className="timestamp fadeInUp"
+          style={trail[0]}
+        >{`${getTimeFromMilliseconds(lastViewedLog)} IST`}</h6>
 
         <div
           data-tooltip={'Updates'}
@@ -123,7 +109,7 @@ const ActionsPanel = ({
           onClick={handleClick}
           style={trail[2]}
         >
-          {TimelineIcon}
+          <HistoryIcon />
         </div>
       </animated.div>
 

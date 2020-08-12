@@ -2,13 +2,13 @@
 
 .table-helper {
   align-self: center;
-  color: var(--gray);
+  color: var(--black-50);
   display: flex;
   flex-direction: column;
   width: 100%;
 
-  h5 {
-    color: var(--gray-mid);
+  .abbr {
+    color: var(--black-50);
   }
 
   .helper-top {
@@ -19,7 +19,7 @@
 
   .info-item {
     align-items: center;
-    color: var(--gray);
+    color: var(--black-50);
     display: flex;
     flex-direction: row;
     font-size: ms(-1);
@@ -27,7 +27,7 @@
     height: 1.5rem;
 
     svg {
-      color: var(--gray-mid);
+      color: var(--black-50);
       margin-bottom: 0.25rem;
     }
 
@@ -98,19 +98,20 @@
   }
 
   .text {
-    color: var(--gray-mid);
+    color: var(--black-50);
+    font-size: ms(-1);
     font-weight: 600;
     margin: 0;
     margin-top: ms(0);
 
     a {
-      background: var(--gray-light);
-      border-bottom: 2px solid var(--gray-hover);
-      color: var(--gray);
+      background: var(--black-5);
+      color: var(--black-50);
+      padding: ms(-3);
       text-decoration: none;
 
       &:hover {
-        background: var(--gray-hover);
+        background: var(--black-10);
       }
     }
   }

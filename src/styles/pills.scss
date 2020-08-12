@@ -6,8 +6,8 @@
   justify-content: flex-end;
 
   > button {
-    background-color: var(--yellow-light);
-    border: 2px var(--yellow-light) solid;
+    background-color: var(--yellow-10);
+    border: 2px var(--yellow-10) solid;
     border-bottom: 0;
     border-top: 0;
     color: var(--orange);
@@ -21,11 +21,11 @@
     transition: background 0.25s ease-in-out;
 
     &:hover {
-      background: var(--yellow-hover);
+      background: var(--yellow-25);
     }
 
     &.selected {
-      background-color: var(--yellow-mid);
+      background-color: var(--yellow-50);
     }
 
     &:first-of-type {

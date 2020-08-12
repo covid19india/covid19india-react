@@ -85,7 +85,7 @@ function State() {
 
   const gridRowCount = useMemo(() => {
     if (!data) return;
-    const gridColumnCount = window.innerWidth >= 540 ? 3 : 2;
+    const gridColumnCount = window.innerWidth >= 540 ? 2 : 2;
     const districtCount = data[stateCode]?.districts
       ? Object.keys(data[stateCode].districts).filter(
           (districtName) => districtName !== 'Unknown'
@@ -249,8 +249,10 @@ function State() {
                               mapStatistic === 'confirmed' ? 'is-green' : ''
                             }`}
                           >
-                            <Smile />
-                            <div className="alert-right">
+                            <div className="icon">
+                              <Smile />
+                            </div>
+                            <div className="yex">
                               No new {mapStatistic} cases in the past five days
                             </div>
                           </div>

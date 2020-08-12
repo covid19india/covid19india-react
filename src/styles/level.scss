@@ -2,9 +2,13 @@
 
 @mixin is-statistic($statistic, $color) {
   .is-#{$statistic} {
-    .total,
-    .title {
+    .total {
       color: var(--#{$color});
+    }
+
+    .title {
+      color: var(--#{$color}-75);
+      font-weight: 700;
     }
 
     .delta {
@@ -35,7 +39,7 @@
   }
 
   .delta {
-    font-weight: 600;
+    font-weight: 900;
     margin-bottom: -#{ms(-1)};
   }
 

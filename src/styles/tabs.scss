@@ -3,35 +3,32 @@
 .tabs {
   display: flex;
   flex-direction: row;
-  position: relative;
-
-  h6 {
-    margin: 0;
-  }
 
   .tab {
     align-items: center;
-    background: var(--gray-light);
+    background: var(--opaque);
     border-top-left-radius: ms(-3);
     border-top-right-radius: ms(-3);
-    color: var(--gray-mid);
+    color: var(--black-50);
     cursor: pointer;
     display: flex;
     flex-direction: row;
-    height: ms(3);
     justify-content: center;
     margin-right: ms(-3);
-    padding-left: ms(1);
-    padding-right: ms(1);
+    padding: ms(0);
     text-align: center;
 
+    .title {
+      margin: 0;
+    }
+
     &:hover {
-      background: var(--gray-hover);
+      background: var(--black-10);
     }
 
     &.focused {
-      background: var(--gray-opaque);
-      color: var(--gray);
+      background: var(--opaque);
+      color: var(--black-50);
     }
   }
 }

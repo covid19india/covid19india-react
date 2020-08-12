@@ -9,7 +9,7 @@
 
   .district-bar-bottom {
     .button {
-      background: var(--gray-light);
+      background: var(--black-5);
       border: 0;
       border-radius: ms(-2);
       color: var(--gray);
@@ -21,7 +21,7 @@
       padding: ms(1) ms(1);
 
       &:hover {
-        background: var(--gray-hover);
+        background: var(--black-10);
       }
     }
   }
@@ -40,7 +40,7 @@
       margin-top: 0;
 
       &.confirmed {
-        color: var(--red);
+        color: var(--cherry);
       }
 
       &.active {
@@ -59,26 +59,23 @@
 
   .district-bar-left {
     display: flex;
-    flex-basis: 0.5;
     flex-direction: column;
     flex-grow: 1;
-    flex-shrink: 0;
   }
 
   .district-bar-right {
+    margin-top: ms(1) + ms(-3);
     display: flex;
-    flex-basis: 0.5;
-    flex-direction: column;
+    flex-basis: 15rem;
     flex-grow: 1;
-    flex-shrink: 0;
-    justify-content: flex-end;
+    justify-content: center;
     position: relative;
 
     .happy-sign {
       display: flex;
       flex-direction: row;
       position: absolute;
-      top: 4rem;
+      top: ms(3);
     }
 
     .delta-bar-graph {
@@ -100,22 +97,23 @@
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    width: 10rem;
 
     &.is-grid {
       display: grid;
       grid-auto-flow: column;
-      grid-gap: ms(0) + ms(-2);
-      margin-bottom: ms(1);
-      width: 100%;
+      grid-gap: ms(-2);
+      padding-bottom: 0.5rem;
+      width: 100% !important;
     }
 
     .district {
-      align-items: center;
       display: flex;
       flex-direction: row;
+      height: 2.5rem;
       justify-content: flex-start;
-      margin-bottom: ms(0);
-      width: ms(4);
+      margin-right: 0.25rem;
+      align-items: center;
 
       .statistic {
         min-width: ms(2) + ms(-1);
@@ -123,15 +121,15 @@
 
       .statistic,
       .title {
-        color: var(--gray);
+        color: var(--black-50);
         font-weight: 600;
         margin: 0;
       }
 
       .title {
         display: inline-block !important;
-        margin-left: ms(-3);
         width: auto !important;
+        line-height: 1.5;
       }
 
       .delta {
@@ -143,26 +141,27 @@
           margin: 0;
 
           &.confirmed {
-            color: var(--red-mid);
+            color: var(--cherry-50);
           }
 
           &.active {
-            color: var(--blue-mid);
+            color: var(--blue-50);
           }
 
           &.recovered {
-            color: var(--green-mid);
+            color: var(--green-50);
           }
 
           &.deceased {
-            color: var(--gray-mid);
+            color: var(--gray-50);
           }
-        }
-
-        * {
-          align-self: center;
         }
       }
     }
+  }
+
+  .alert {
+    color: var(--black-50);
+    font-size: ms(-1) + ms(-7);
   }
 }

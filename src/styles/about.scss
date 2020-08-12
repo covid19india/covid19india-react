@@ -12,7 +12,7 @@
     width: 30rem;
 
     .question {
-      color: var(--gray);
+      color: var(--black-75);
       font-weight: 600;
       line-height: 150%;
       margin: 0;
@@ -21,8 +21,8 @@
     }
 
     .answer {
-      border-left: 2px var(--gray-light) solid;
-      color: var(--gray);
+      border-left: 2px var(--black-10) solid;
+      color: var(--black-50);
       font-weight: 600;
       line-height: 150%;
       margin: 0;
@@ -32,13 +32,13 @@
   }
 
   a {
-    background: var(--blue-light);
+    background: var(--blue-10);
     color: var(--blue);
     padding: ms(-4);
     text-decoration: none;
 
     &:hover {
-      background: var(--blue-hover);
+      background: var(--blue-25);
     }
   }
 }
@@ -50,6 +50,6 @@
     flex-direction: column;
     margin-left: 0;
     margin-right: 0;
-    width: calc(100% - #{ms(2)});
+    width: calc(100% - #{ms(3)}) !important;
   }
 }

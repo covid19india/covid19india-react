@@ -7,10 +7,12 @@
   position: relative;
 
   .state-name {
-    background: var(--brick-light);
+    background: var(--black-5);
+    color: var(--black-50);
     border-radius: ms(-4);
     cursor: pointer;
     padding: ms(-4);
+    margin: 0;
   }
 
   .dropdown {
@@ -24,25 +26,17 @@
     z-index: 999;
 
     .state-name-dropdown {
-      color: var(--red);
+      color: var(--black-50);
       cursor: pointer;
       margin: 0;
-      padding: ms(-2);
+      padding: ms(-3);
+      margin: ms(-2);
+      border-radius: ms(-4);
+      line-height: 1.5;
 
       &:hover {
-        background: var(--red-hover);
+        background: var(--black-10);
       }
     }
-  }
-
-  .backdrop {
-    background: var(--red-light);
-    height: 100vh;
-    left: 0;
-    pointer-events: none;
-    position: fixed;
-    top: 0;
-    width: 100vw;
-    z-index: 10;
   }
 }

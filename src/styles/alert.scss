@@ -1,38 +1,24 @@
 @import '~modularscale-sass/stylesheets/modularscale';
 
 .alert {
-  align-items: flex-start;
   align-items: center;
-  background: var(--gray-light);
+  background: var(--opaque);
   border-radius: ms(-3);
-  color: var(--gray);
   display: flex;
   flex-direction: row;
-  padding: ms(-1) ms(0);
+  padding: ms(0);
 
-  svg {
-    color: var(--gray-mid);
-    height: 16px;
-    stroke-width: 3px;
-    width: 16px;
+  .icon,
+  .text {
+    color: var(--black-50);
   }
 
-  .alert-right {
-    font-weight: 600;
-    line-height: 150%;
-    width: 5rem;
-
-    &.is-full {
-      width: 100%;
-    }
+  .icon {
+    margin-right: ms(0);
   }
 
-  &.is-green {
-    background: var(--green-light);
-    color: var(--green);
-
-    svg {
-      stroke: var(--green-mid);
-    }
+  .text {
+    font-size: ms(0);
+    margin-bottom: -1px;
   }
 }

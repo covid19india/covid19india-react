@@ -3,8 +3,8 @@
 input {
   &.switch {
     appearance: none;
-    background-color: #fff;
-    border: 2px solid #d9dadc;
+    background-color: var(--white);
+    border: 2px solid var(--black-25);
     border-radius: 10px;
     cursor: pointer;
     height: 14px;
@@ -15,7 +15,7 @@ input {
     width: 24px;
 
     &::after {
-      background-color: var(--gray-mid);
+      background-color: var(--black-25);
       border-radius: 50%;
       content: '';
       height: 10px;
@@ -27,11 +27,11 @@ input {
     }
 
     &:checked {
-      background-color: var(--gray-mid);
+      background-color: var(--black-50);
       transition: all 300ms ease-in-out;
 
       &::after {
-        background-color: var(--light);
+        background-color: var(--white);
         left: 10px;
         transition: all 300ms ease-in-out;
       }
@@ -42,12 +42,12 @@ input {
 .disabled {
   input {
     &.switch {
-      background: var(--gray-light) !important;
-      border: var(--gray-light 2px) solid !important;
+      background: var(--black-5) !important;
+      border: var(--gray-10) 2px solid !important;
       cursor: not-allowed !important;
 
       &::after {
-        background: var(--gray-light) !important;
+        background: var(--black-10) !important;
       }
     }
   }

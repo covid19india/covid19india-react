@@ -1,5 +1,7 @@
 import '../styles/stateDropdown.scss';
 
+import Backdrop from './Backdrop';
+
 import {MAP_META, STATE_NAMES} from '../constants';
 
 import React, {useState, useCallback, useRef} from 'react';
@@ -85,7 +87,7 @@ const StateDropdown = ({stateCode, trail}) => {
         )
       )}
 
-      {showDropdown && <div className="backdrop"></div>}
+      {showDropdown && <Backdrop />}
     </div>
   );
 };

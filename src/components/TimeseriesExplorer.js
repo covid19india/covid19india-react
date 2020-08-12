@@ -1,6 +1,7 @@
 import '../styles/timeseriesExplorer.scss';
 
 import TimeseriesLoader from './loaders/Timeseries';
+import StateDropdown from './StateDropdown';
 
 import {
   TIMESERIES_CHART_TYPES,
@@ -147,27 +148,12 @@ function TimeseriesExplorer({
     return pastDates.filter((date) => date >= cutOffDateLower);
   }, [selectedTimeseries, timelineDate, lookback]);
 
-  const handleChange = useCallback(
-    ({target}) => {
-      setRegionHighlighted(JSON.parse(target.value));
-    },
-    [setRegionHighlighted]
-  );
-
-  const resetDropdown = useCallback(() => {
-    setRegionHighlighted({
-      stateCode: stateCode,
-      districtName: null,
-    });
-  }, [stateCode, setRegionHighlighted]);
-
   return (
     <div
       className={classnames(
-        'timeseries-explorer fadeInUp',
-        {
-          stickied: anchor === 'timeseries',
-        },
+        'timeseries-explorer',
+        'fadeInUp',
+        {stickied: anchor === 'timeseries'},
         {expanded: expandTable}
       )}
       style={{display: anchor === 'mapexplorer' ? 'none' : ''}}
@@ -186,7 +172,6 @@ function TimeseriesExplorer({
           <PinIcon />
         </div>
 
-        <h4 className="title">{t('Spread Trends')}</h4>
         <div className="tabs">
           {Object.entries(TIMESERIES_CHART_TYPES).map(
             ([ctype, value], index) => (
@@ -195,7 +180,7 @@ function TimeseriesExplorer({
                 key={ctype}
                 onClick={setChartType.bind(this, ctype)}
               >
-                <h6>{t(value)}</h6>
+                <h6 className="title">{t(value)}</h6>
               </div>
             )
           )}
@@ -232,38 +217,7 @@ function TimeseriesExplorer({
         </div>
       </div>
 
-      {dropdownRegions && (
-        <div className="state-selection">
-          <div className="dropdown">
-            <select
-              value={JSON.stringify(selectedRegion)}
-              onChange={handleChange}
-            >
-              {dropdownRegions
-                .filter(
-                  (region) =>
-                    STATE_NAMES[region.stateCode] !== region.districtName
-                )
-                .map((region) => {
-                  return (
-                    <option
-                      value={JSON.stringify(region)}
-                      key={`${region.stateCode}-${region.districtName}`}
-                    >
-                      {region.districtName
-                        ? t(region.districtName)
-                        : t(STATE_NAMES[region.stateCode])}
-                    </option>
-                  );
-                })}
-            </select>
-          </div>
-
-          <div className="reset-icon" onClick={resetDropdown}>
-            <ReplyIcon />
-          </div>
-        </div>
-      )}
+      <StateDropdown {...{stateCode}} hyperlink={false} />
 
       {isVisible && (
         <Suspense fallback={<TimeseriesLoader />}>
@@ -291,8 +245,10 @@ function TimeseriesExplorer({
       </div>
 
       <div className="alert">
-        <IssueOpenedIcon size={24} />
-        <div className="alert-right">
+        <div className="icon">
+          <IssueOpenedIcon />
+        </div>
+        <div className="text">
           {t('Tested chart is independent of uniform scaling')}
         </div>
       </div>

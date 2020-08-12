@@ -2,13 +2,13 @@
 
 @mixin statistic-colors($statistic, $color) {
   &.#{$statistic} {
-    background: var(--#{$color}-light);
+    background: var(--#{$color}-10);
 
     .title,
     .date,
     svg,
     p {
-      color: var(--#{$color}-mid);
+      color: var(--#{$color}-50);
     }
 
     .statistic {
@@ -34,7 +34,7 @@
 
   .footnote {
     align-items: center;
-    color: var(--gray);
+    color: var(--black-50);
     display: flex;
     flex-direction: row;
     font-size: ms(-1);
@@ -42,14 +42,14 @@
     margin-top: ms(1);
 
     .source {
-      background: var(--gray-light);
-      color: var(--gray);
+      background: var(--black-5);
+      color: var(--black-50);
       padding: ms(-3);
     }
 
     .icon {
       height: ms(1);
-      margin-right: ms(-2);
+      margin-right: ms(-1);
       width: ms(1);
 
       svg {
