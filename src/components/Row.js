@@ -224,7 +224,7 @@ function Row({
               </div>
             </div>
 
-            {UNKNOWN_DISTRICT_KEY in data.districts && (
+            {data.districts && UNKNOWN_DISTRICT_KEY in data.districts && (
               <div className="state-meta-bottom">
                 <div className={classnames('disclaimer')}>
                   <AlertIcon />
@@ -265,7 +265,7 @@ function Row({
       )}
 
       {showDistricts &&
-        Object.keys(data.districts)
+        Object.keys(data.districts || {})
           .sort((a, b) => sortingFunction(a, b))
           .map((districtName) => (
             <DistrictRow
