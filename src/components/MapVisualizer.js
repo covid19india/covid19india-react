@@ -251,6 +251,10 @@ function MapVisualizer({
       })
       .on('click', (d) => {
         event.stopPropagation();
+        setRegionHighlighted({
+          stateCode: STATE_CODES[d.properties.st_nm],
+          districtName: d.properties.district,
+        });
         const stateCode = STATE_CODES[d.properties.st_nm];
         if (
           onceTouchedRegion.current ||
