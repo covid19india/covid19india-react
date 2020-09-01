@@ -231,12 +231,6 @@ function MapVisualizer({
             .attr('stroke-width', 1.8)
             .attr('stroke-opacity', 0)
             .style('cursor', 'pointer')
-            .on('mouseenter', (d) => {
-              setRegionHighlighted({
-                stateCode: STATE_CODES[d.properties.st_nm],
-                districtName: d.properties.district,
-              });
-            })
             .attr('fill', '#fff0')
             .attr('stroke', '#fff0')
             .call((enter) => {
