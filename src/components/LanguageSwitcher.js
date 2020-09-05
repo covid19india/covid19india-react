@@ -26,8 +26,10 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
   });
 
   const languageSwitcherRef = useRef();
-  useClickAway(languageSwitcherRef, () => {
-    setShowLanguageSwitcher(false);
+  useClickAway(languageSwitcherRef, (e) => {
+    if (e.target.id !== 'changeLanguage-toggle-btn') {
+      setShowLanguageSwitcher(false);
+    }
   });
 
   const switchLanguage = useCallback(
@@ -69,7 +71,7 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
         </div>
       </animated.div>
     ) : (
-      <animated.div key={key}></animated.div>
+      <animated.div key={key} />
     )
   );
 }

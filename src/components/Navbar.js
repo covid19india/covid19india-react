@@ -53,7 +53,11 @@ function Navbar({
 
   return (
     <animated.div className="Navbar" style={spring}>
-      <div className="navbar-left" onClick={handleLangaugeSwitcher.bind(this)}>
+      <div
+        className="navbar-left"
+        id={'changeLanguage-toggle-btn'}
+        onClick={handleLangaugeSwitcher.bind(this)}
+      >
         {locales[currentLanguage]}
       </div>
 
