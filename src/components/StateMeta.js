@@ -63,8 +63,7 @@ function StateMeta({stateCode, data, timeseries}) {
   const deathPercent = getStatistic(data[stateCode], 'total', 'cfr');
 
   const growthRate =
-    (((lastConfirmed - prevWeekConfirmed) / prevWeekConfirmed) * 100) /
-    diffDays;
+    (Math.pow(lastConfirmed / prevWeekConfirmed, 1 / diffDays) - 1) * 100;
 
   return (
     <React.Fragment>
