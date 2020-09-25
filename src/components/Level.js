@@ -26,7 +26,7 @@ function PureLevelItem({statistic, total, delta}) {
     <React.Fragment>
       <h5>{t(capitalize(statisticConfig.displayName))}</h5>
       <animated.h4>
-        {statistic !== 'active' ? (
+        {
           delta > 0 ? (
             spring.delta.interpolate(
               (delta) =>
@@ -35,9 +35,7 @@ function PureLevelItem({statistic, total, delta}) {
           ) : (
             <HeartFillIcon size={9} verticalAlign={2} />
           )
-        ) : (
-          '\u00A0'
-        )}
+        }
       </animated.h4>
       <animated.h1>
         {spring.total.interpolate((total) =>
