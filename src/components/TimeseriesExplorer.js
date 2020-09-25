@@ -14,7 +14,7 @@ import {formatISO, sub} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useCallback, useMemo, useRef, lazy, Suspense} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useLocalStorage, useSessionStorage} from 'react-use';
+import {useLocalStorage} from 'react-use';
 
 const Timeseries = lazy(() => import('./Timeseries'));
 
@@ -29,7 +29,7 @@ function TimeseriesExplorer({
   expandTable,
 }) {
   const {t} = useTranslation();
-  const [lookback, setLookback] = useSessionStorage(
+  const [lookback, setLookback] = useLocalStorage(
     'timeseriesLookback',
     TIMESERIES_LOOKBACKS.MONTH
   );
