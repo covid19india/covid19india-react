@@ -9,7 +9,8 @@
 ## Setup
 
 ```
-npm i && npm start
+install dependencies from package.json:: npm install
+run server :: npm start
 ```
 
 ## Contribution
