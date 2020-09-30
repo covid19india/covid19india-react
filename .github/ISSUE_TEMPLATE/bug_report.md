@@ -1,8 +1,8 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: 'Status: Review Needed'
+Name: Bug report
+About: Create a report to help us improve
+Title: ''
+Labels: 'Status: Review Needed'
 assignees: ''
 ---
 
