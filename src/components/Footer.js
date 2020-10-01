@@ -13,7 +13,7 @@ function Footer() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          covid19india
+          covid19 india
         </a>
       </div>
 
