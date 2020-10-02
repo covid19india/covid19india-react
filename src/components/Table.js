@@ -162,7 +162,7 @@ function Table({
 
   return (
     <React.Fragment>
-      <div className="table-top">
+      <div className="table-top grayscale">
         <animated.div
           className={classnames('option-toggle', {
             'is-highlighted': tableOption === 'Districts',
@@ -207,7 +207,7 @@ function Table({
       {transition.map(({item, key, props}) =>
         item ? (
           <animated.div key={key} className="table-helper" style={props}>
-            <div className="helper-top">
+            <div className="helper-top grayscale">
               <div className="helper-left">
                 <div className="info-item">
                   <span>
@@ -280,7 +280,7 @@ function Table({
         ) : null
       )}
 
-      <div className="table-container">
+      <div className="table-container grayscale">
         <div
           className="table fadeInUp"
           style={{

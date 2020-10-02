@@ -24,8 +24,10 @@ function PureLevelItem({statistic, total, delta}) {
 
   return (
     <React.Fragment>
-      <h5>{t(capitalize(statisticConfig.displayName))}</h5>
-      <animated.h4>
+      <h5 className="grayscale">
+        {t(capitalize(statisticConfig.displayName))}
+      </h5>
+      <animated.h4 className="grayscale">
         {statistic !== 'active' ? (
           delta > 0 ? (
             spring.delta.interpolate(
@@ -39,7 +41,7 @@ function PureLevelItem({statistic, total, delta}) {
           '\u00A0'
         )}
       </animated.h4>
-      <animated.h1>
+      <animated.h1 className="grayscale total">
         {spring.total.interpolate((total) =>
           formatNumber(total, statisticConfig.format, statistic)
         )}
@@ -55,8 +57,9 @@ function Level({data}) {
     const styles = [];
 
     PRIMARY_STATISTICS.map((statistic, index) => {
+      const adjustedIndex = index < 3 ? index : index + 4;
       styles.push({
-        animationDelay: `${750 + index * 250}ms`,
+        animationDelay: `${750 + adjustedIndex * 250}ms`,
       });
       return null;
     });

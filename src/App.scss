@@ -124,6 +124,43 @@ h6 {
   min-height: 100vh;
 }
 
+@keyframes grayscale-animation {
+  from {
+    filter: saturate(0);
+  }
+
+  to {
+    filter: saturate(1);
+  }
+}
+
+.grayscale {
+  animation-duration: 60s;
+  animation-name: grayscale-animation;
+  animation-timing-function: ease-in-out;
+}
+
+.level-item {
+  &.is-deceased {
+    .grayscale {
+      &.total {
+        animation-name: grayscale-invert-animation;
+      }
+    }
+  }
+}
+
+@keyframes grayscale-invert-animation {
+  from {
+    color: $brick;
+  }
+
+  to {
+    background: transparent;
+    color: $gray;
+  }
+}
+
 .arrow-up {
   border-bottom: 5px solid $gray-mid;
   border-left: 5px solid transparent;
