@@ -45,7 +45,7 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
   );
 
   return (
-    <div className="MapSwitcher" ref={mapSwitcher}>
+    <div className="MapSwitcher grayscale" ref={mapSwitcher}>
       <animated.div className="highlight" style={spring}></animated.div>
 
       {PRIMARY_STATISTICS.map((statistic, index) => (
