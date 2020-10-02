@@ -52,7 +52,7 @@ function Navbar({
   }, [expand, showLanguageSwitcher, setExpand, setShowLanguageSwitcher]);
 
   return (
-    <animated.div className="Navbar" style={spring}>
+    <animated.div className="Navbar grayscale" style={spring}>
       <div className="navbar-left" onClick={handleLangaugeSwitcher.bind(this)}>
         {locales[currentLanguage]}
       </div>

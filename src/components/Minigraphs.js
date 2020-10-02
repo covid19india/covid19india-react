@@ -147,7 +147,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
   }, [dates, timeseries]);
 
   return (
-    <div className="Minigraph">
+    <div className="Minigraph grayscale">
       {PRIMARY_STATISTICS.map((statistic, index) => (
         <div key={statistic} className={classnames('svg-parent')}>
           <svg
