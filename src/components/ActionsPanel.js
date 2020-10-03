@@ -96,7 +96,7 @@ const ActionsPanel = ({
   return (
     <React.Fragment>
       <animated.div
-        className="actions grayscale"
+        className="actions"
         style={{
           opacity: opacity.interpolate((o) => 1 - o),
           transform,
