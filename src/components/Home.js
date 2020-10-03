@@ -120,9 +120,7 @@ function Home() {
         </div>
 
         <div
-          className={classnames('grayscale home-right', {
-            expanded: expandTable,
-          })}
+          className={classnames('home-right', {expanded: expandTable})}
           ref={homeRightElement}
         >
           {(isVisible || location.hash) && (
