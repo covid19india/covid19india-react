@@ -130,19 +130,19 @@ function TimeseriesExplorer({
     const lastDate = pastDates[pastDates.length - 1];
     if (lookback === TIMESERIES_LOOKBACKS.BEGINNING) {
       return pastDates;
-    }
-
-    let cutOffDateLower;
-    if (lookback === TIMESERIES_LOOKBACKS.MONTH) {
-      cutOffDateLower = formatISO(sub(parseIndiaDate(lastDate), {months: 1}), {
+    } else {
+      let lookbackMonths, cutOffDateLower;
+      switch(lookback) {
+        case TIMESERIES_LOOKBACKS.SIX_MONTHS: lookbackMonths = 6; break;
+        case TIMESERIES_LOOKBACKS.THREE_MONTHS: lookbackMonths = 3; break;
+        case TIMESERIES_LOOKBACKS.MONTH: ; // default value = 1
+        default: lookbackMonths = 1; break
+      }
+      cutOffDateLower = formatISO(sub(parseIndiaDate(lastDate), {months: lookbackMonths}), {
         representation: 'date',
       });
-    } else if (lookback === TIMESERIES_LOOKBACKS.THREE_MONTHS) {
-      cutOffDateLower = formatISO(sub(parseIndiaDate(lastDate), {months: 3}), {
-        representation: 'date',
-      });
+      return pastDates.filter((date) => date >= cutOffDateLower);
     }
-    return pastDates.filter((date) => date >= cutOffDateLower);
   }, [selectedTimeseries, timelineDate, lookback]);
 
   const handleChange = useCallback(
