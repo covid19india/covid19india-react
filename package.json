@@ -2,7 +2,7 @@
   "name": "covid19india",
   "version": "1.0.0",
   "private": true,
-  "homepage": "http://covid19india.github.io/",
+  "homepage": "https://www.covid19india.org/",
   "dependencies": {
     "@juggle/resize-observer": "^3.2.0",
     "@primer/octicons-v2-react": "0.0.0-53e900d",
@@ -39,6 +39,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-spring": "^8.0.27",
+    "react-swipeable": "^5.5.1",
     "react-use": "^15.3.0",
     "react-use-gesture": "^7.0.15",
     "requestidlecallback": "^0.3.0",

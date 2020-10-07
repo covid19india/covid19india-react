@@ -10,14 +10,12 @@ const useIsVisible = (elementRef) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    if (elementRef.current !== undefined) {
+    if (elementRef.current) {
       const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            window.requestIdleCallback(() => {
-              setIsVisible(true);
-              observer.unobserve(elementRef.current);
-            });
+            setIsVisible(true);
+            observer.unobserve(elementRef.current);
           }
         });
       }, OPTIONS);

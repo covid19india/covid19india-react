@@ -1,7 +1,7 @@
 import {
-  COLORS,
   MINIGRAPH_LOOKBACK_DAYS,
   PRIMARY_STATISTICS,
+  STATISTIC_CONFIGS,
 } from '../constants';
 import {
   getStatistic,
@@ -10,7 +10,7 @@ import {
 } from '../utils/commonFunctions';
 
 import classnames from 'classnames';
-import {min, max} from 'd3-array';
+import {max} from 'd3-array';
 import {interpolatePath} from 'd3-interpolate-path';
 import {scaleTime, scaleLinear} from 'd3-scale';
 import {select} from 'd3-selection';
@@ -21,56 +21,51 @@ import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useEffect, useRef, useMemo} from 'react';
 
+// Dimensions
+const [width, height] = [100, 75];
+const margin = {top: 10, right: 10, bottom: 2, left: 5};
+
 function Minigraphs({timeseries, date: timelineDate}) {
   const refs = useRef([]);
 
   const dates = useMemo(() => {
-    const today = timelineDate || getIndiaYesterdayISO();
+    const cutOffDateUpper = timelineDate || getIndiaYesterdayISO();
     const pastDates = Object.keys(timeseries || {}).filter(
-      (date) => date <= today
+      (date) => date <= cutOffDateUpper
     );
-    const cutOffDate = formatISO(
-      subDays(parseIndiaDate(today), MINIGRAPH_LOOKBACK_DAYS),
+    const lastDate = pastDates[pastDates.length - 1];
+
+    const cutOffDateLower = formatISO(
+      subDays(parseIndiaDate(lastDate), MINIGRAPH_LOOKBACK_DAYS),
       {representation: 'date'}
     );
-    return pastDates.filter((date) => date >= cutOffDate);
+    return pastDates.filter((date) => date >= cutOffDateLower);
   }, [timeseries, timelineDate]);
 
   useEffect(() => {
     const T = dates.length;
 
-    const margin = {top: 10, right: 5, bottom: 20, left: 5};
-    const chartRight = 100 - margin.right;
-    const chartBottom = 100 - margin.bottom;
+    const chartRight = width - margin.right;
+    const chartBottom = height - margin.bottom;
 
     const xScale = scaleTime()
       .clamp(true)
-      .domain([parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])])
+      .domain(T ? [parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])] : [])
       .range([margin.left, chartRight]);
-
-    const dailyMin = min(dates, (date) =>
-      getStatistic(timeseries[date], 'delta', 'active')
-    );
-
-    const dailyMax = max(dates, (date) =>
-      Math.max(
-        getStatistic(timeseries[date], 'delta', 'confirmed'),
-        getStatistic(timeseries[date], 'delta', 'recovered'),
-        getStatistic(timeseries[date], 'delta', 'deceased')
-      )
-    );
-
-    const domainMinMax = Math.max(-dailyMin, dailyMax);
-
-    const yScale = scaleLinear()
-      .clamp(true)
-      .domain([-domainMinMax, domainMinMax])
-      .range([chartBottom, margin.top]);
 
     refs.current.forEach((ref, index) => {
       const svg = select(ref);
       const statistic = PRIMARY_STATISTICS[index];
-      const color = COLORS[statistic];
+      const color = STATISTIC_CONFIGS[statistic].color;
+
+      const dailyMaxAbs = max(dates, (date) =>
+        Math.abs(getStatistic(timeseries[date], 'delta', statistic))
+      );
+
+      const yScale = scaleLinear()
+        .clamp(true)
+        .domain([-dailyMaxAbs, dailyMaxAbs])
+        .range([chartBottom, margin.top]);
 
       const linePath = line()
         .curve(curveMonotoneX)
@@ -159,9 +154,9 @@ function Minigraphs({timeseries, date: timelineDate}) {
             ref={(el) => {
               refs.current[index] = el;
             }}
-            width="100"
-            height="75"
-            viewBox="0 0 100 75"
+            width={width}
+            height={height}
+            viewBox={`0 0 ${width} ${height}`}
             preserveAspectRatio="xMidYMid meet"
           />
         </div>
@@ -171,7 +166,13 @@ function Minigraphs({timeseries, date: timelineDate}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(currProps.stateCode, prevProps.stateCode)) {
+  if (currProps.forceRender) {
+    return false;
+  } else if (!currProps.timeseries && prevProps.timeseries) {
+    return true;
+  } else if (currProps.timeseries && !prevProps.timeseries) {
+    return false;
+  } else if (!equal(currProps.stateCode, prevProps.stateCode)) {
     return false;
   } else if (!equal(currProps.date, prevProps.date)) {
     return false;

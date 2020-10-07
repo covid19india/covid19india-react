@@ -1,7 +1,9 @@
+import {UPDATES_COUNT} from '../constants';
 import {capitalize} from '../utils/commonFunctions';
 
 import {formatDistance, format} from 'date-fns';
 import React, {useLayoutEffect} from 'react';
+import {Send} from 'react-feather';
 
 const newDate = new Date();
 let currentDate = newDate;
@@ -18,7 +20,7 @@ function Updates({updates}) {
       </div>
 
       {updates
-        .slice(-5)
+        .slice(-UPDATES_COUNT)
         .reverse()
         .map(function (activity, index) {
           activity.update = activity.update.replace(/\n/g, '<br/>');
@@ -65,6 +67,19 @@ function Updates({updates}) {
             </React.Fragment>
           );
         })}
+      <div className="updates-footer">
+        <a
+          href="https://t.me/covid19indiaorg_updates"
+          target="_blank"
+          className="telegram"
+          rel="noopener noreferrer"
+        >
+          <h4>
+            <Send />
+            Join Instant Updates channel
+          </h4>
+        </a>
+      </div>
     </div>
   );
 }

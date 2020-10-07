@@ -1,6 +1,6 @@
 import {
-  COLORS,
   D3_TRANSITION_DURATION,
+  STATISTIC_CONFIGS,
   TIMESERIES_STATISTICS,
 } from '../constants';
 import {useResizeObserver} from '../hooks/useResizeObserver';
@@ -21,10 +21,12 @@ import {select, mouse} from 'd3-selection';
 import {line, curveMonotoneX} from 'd3-shape';
 // eslint-disable-next-line
 import {transition} from 'd3-transition';
-import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import React, {useCallback, useEffect, useRef, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
+
+// Chart margins
+const margin = {top: 15, right: 35, bottom: 25, left: 25};
 
 function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   const {t} = useTranslation();
@@ -39,23 +41,34 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
     setHighlightedDate(dates[dates.length - 1]);
   }, [dates]);
 
+  const getBarWidth = useCallback(() => {
+    const T = dates.length;
+    // Dimensions
+    const {width} = dimensions || wrapperRef.current.getBoundingClientRect();
+    // Chart extremes
+    const chartRight = width - margin.right;
+    // Bar widths
+    const axisWidth = chartRight - margin.left;
+    return Math.min(4, axisWidth / (1.25 * T));
+  }, [dates.length, dimensions]);
+
   useEffect(() => {
     const T = dates.length;
-
+    // Dimensions
     const {width, height} =
       dimensions || wrapperRef.current.getBoundingClientRect();
-
-    // Margins
-    const margin = {top: 15, right: 35, bottom: 25, left: 25};
+    // Chart extremes
     const chartRight = width - margin.right;
     const chartBottom = height - margin.bottom;
+    const barWidth = getBarWidth();
 
+    // Buffer space along y-axis
     const yBufferTop = 1.2;
     const yBufferBottom = 1.1;
 
     const xScale = scaleTime()
       .clamp(true)
-      .domain([parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])])
+      .domain(T ? [parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])] : [])
       .range([margin.left, chartRight]);
 
     // Number of x-axis ticks
@@ -79,9 +92,12 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
     };
 
     const yAxis = (g, yScale) =>
-      g
-        .attr('class', 'y-axis')
-        .call(axisRight(yScale).ticks(4, '0~s').tickPadding(4));
+      g.attr('class', 'y-axis').call(
+        axisRight(yScale)
+          .ticks(4)
+          .tickFormat((num) => formatNumber(num, 'short'))
+          .tickPadding(4)
+      );
 
     const uniformScaleMin = min(dates, (date) =>
       getStatistic(timeseries[date], chartType, 'active')
@@ -162,15 +178,17 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
     function mousemove() {
       const xm = mouse(this)[0];
       const date = xScale.invert(xm);
-      const bisectDate = bisector((date) => parseIndiaDate(date)).left;
-      const index = bisectDate(dates, date, 1);
-      const dateLeft = dates[index - 1];
-      const dateRight = dates[index];
-      setHighlightedDate(
-        date - parseIndiaDate(dateLeft) < parseIndiaDate(dateRight) - date
-          ? dateLeft
-          : dateRight
-      );
+      if (!isNaN(date)) {
+        const bisectDate = bisector((date) => parseIndiaDate(date)).left;
+        const index = bisectDate(dates, date, 1);
+        const dateLeft = dates[index - 1];
+        const dateRight = dates[index];
+        setHighlightedDate(
+          date - parseIndiaDate(dateLeft) < parseIndiaDate(dateRight) - date
+            ? dateLeft
+            : dateRight
+        );
+      }
     }
 
     function mouseout() {
@@ -184,7 +202,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
 
       const statistic = TIMESERIES_STATISTICS[i];
       const yScale = generateYScale(statistic);
-      const color = COLORS[statistic];
+      const color = STATISTIC_CONFIGS[statistic].color;
 
       /* X axis */
       svg
@@ -211,9 +229,9 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
             .append('circle')
             .attr('fill', color)
             .attr('stroke', color)
-            .attr('r', 2)
             .attr('cy', chartBottom)
             .attr('cx', (date) => xScale(parseIndiaDate(date)))
+            .attr('r', barWidth / 2)
         )
         .transition(t)
         .attr('cx', (date) => xScale(parseIndiaDate(date)))
@@ -269,38 +287,6 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
                   return interpolatePath(previous, current);
                 })
           );
-
-        svg
-          .selectAll('.trend')
-          .data(T ? [dates] : [])
-          .join(
-            (enter) =>
-              enter
-                .append('path')
-                .attr('class', 'trend')
-                .attr('fill', 'none')
-                .attr('stroke', color + '50')
-                .attr('stroke-width', 4)
-                .attr('d', linePath)
-                .attr('stroke-dasharray', function () {
-                  return (pathLength = this.getTotalLength());
-                })
-                .call((enter) =>
-                  enter
-                    .attr('stroke-dashoffset', pathLength)
-                    .transition(t)
-                    .attr('stroke-dashoffset', 0)
-                ),
-            (update) =>
-              update
-                .attr('stroke-dasharray', null)
-                .transition(t)
-                .attrTween('d', function (date) {
-                  const previous = select(this).attr('d');
-                  const current = linePath(date);
-                  return interpolatePath(previous, current);
-                })
-          );
       } else {
         /* DAILY TRENDS */
         svg.selectAll('.trend').remove();
@@ -312,12 +298,14 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
             enter
               .append('line')
               .attr('class', 'stem')
+              .attr('stroke-width', barWidth)
               .attr('x1', (date) => xScale(parseIndiaDate(date)))
               .attr('y1', chartBottom)
               .attr('x2', (date) => xScale(parseIndiaDate(date)))
               .attr('y2', chartBottom)
           )
           .transition(t)
+          .attr('stroke-width', barWidth)
           .attr('x1', (date) => xScale(parseIndiaDate(date)))
           .attr('y1', yScale(0))
           .attr('x2', (date) => xScale(parseIndiaDate(date)))
@@ -333,37 +321,39 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
         .on('mouseout', mouseout)
         .on('touchend', mouseout);
     });
-  }, [chartType, dimensions, isUniform, isLog, timeseries, dates]);
+  }, [chartType, dimensions, getBarWidth, isUniform, isLog, timeseries, dates]);
 
   useEffect(() => {
+    const barWidth = getBarWidth();
     refs.current.forEach((ref) => {
       const svg = select(ref);
       svg
         .selectAll('circle')
-        .attr('r', (date) => (date === highlightedDate ? 4 : 2));
+        .attr('r', (date) =>
+          date === highlightedDate ? barWidth : barWidth / 2
+        );
     });
-  }, [highlightedDate]);
+  }, [highlightedDate, getBarWidth]);
 
   const getStatisticDelta = useCallback(
     (statistic) => {
       if (!highlightedDate) return;
-      const deltaToday = getStatistic(
+      const currCount = getStatistic(
         timeseries?.[highlightedDate],
-        'delta',
+        chartType,
         statistic
       );
-      if (chartType === 'total') return deltaToday;
-      const yesterday = formatISO(subDays(parseIndiaDate(highlightedDate), 1), {
-        representation: 'date',
-      });
-      const deltaYesterday = getStatistic(
-        timeseries?.[yesterday],
-        'delta',
+      const prevDate =
+        dates[dates.findIndex((date) => date === highlightedDate) - 1];
+
+      const prevCount = getStatistic(
+        timeseries?.[prevDate],
+        chartType,
         statistic
       );
-      return deltaToday - deltaYesterday;
+      return currCount - prevCount;
     },
-    [timeseries, highlightedDate, chartType]
+    [timeseries, dates, highlightedDate, chartType]
   );
 
   const trail = useMemo(() => {
@@ -383,6 +373,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       <div className="Timeseries">
         {TIMESERIES_STATISTICS.map((statistic, index) => {
           const delta = getStatisticDelta(statistic, index);
+          const statisticConfig = STATISTIC_CONFIGS[statistic];
           return (
             <div
               key={statistic}
@@ -392,7 +383,9 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
             >
               {highlightedDate && (
                 <div className={classnames('stats', `is-${statistic}`)}>
-                  <h5 className="title">{t(capitalize(statistic))}</h5>
+                  <h5 className="title">
+                    {t(capitalize(statisticConfig.displayName))}
+                  </h5>
                   <h5 className="title">
                     {formatDate(highlightedDate, 'dd MMMM')}
                   </h5>
@@ -403,10 +396,20 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
                           timeseries?.[highlightedDate],
                           chartType,
                           statistic
-                        )
+                        ),
+                        statisticConfig.format !== 'short'
+                          ? statisticConfig.format
+                          : 'int',
+                        statistic
                       )}
                     </h2>
-                    <h6>{`${delta >= 0 ? '+' : ''}${formatNumber(delta)}`}</h6>
+                    <h6>{`${delta > 0 ? '+' : ''}${formatNumber(
+                      delta,
+                      statisticConfig.format !== 'short'
+                        ? statisticConfig.format
+                        : 'int',
+                      statistic
+                    )}`}</h6>
                   </div>
                 </div>
               )}
@@ -431,17 +434,25 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
 const isEqual = (prevProps, currProps) => {
   if (!equal(currProps.chartType, prevProps.chartType)) {
     return false;
-  }
-  if (!equal(currProps.isUniform, prevProps.isUniform)) {
+  } else if (!equal(currProps.isUniform, prevProps.isUniform)) {
     return false;
-  }
-  if (!equal(currProps.isLog, prevProps.isLog)) {
+  } else if (!equal(currProps.isLog, prevProps.isLog)) {
     return false;
-  }
-  if (!equal(currProps.stateCode, prevProps.stateCode)) {
+  } else if (
+    !equal(
+      currProps.regionHighlighted.stateCode,
+      prevProps.regionHighlighted.stateCode
+    )
+  ) {
     return false;
-  }
-  if (!equal(currProps.dates, prevProps.dates)) {
+  } else if (
+    !equal(
+      currProps.regionHighlighted.districtName,
+      prevProps.regionHighlighted.districtName
+    )
+  ) {
+    return false;
+  } else if (!equal(currProps.dates, prevProps.dates)) {
     return false;
   }
   return true;
