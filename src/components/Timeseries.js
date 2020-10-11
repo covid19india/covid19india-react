@@ -26,7 +26,7 @@ import React, {useCallback, useEffect, useRef, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
 // Chart margins
-const margin = {top: 15, right: 35, bottom: 25, left: 25};
+const margin = {top: 45, right: 35, bottom: 25, left: 45};
 
 function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   const {t} = useTranslation();
@@ -381,6 +381,16 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
               ref={wrapperRef}
               style={trail[index]}
             >
+              <svg
+                ref={(element) => {
+                  refs.current[index] = element;
+                }}
+                preserveAspectRatio="xMidYMid meet"
+              >
+                <g className="x-axis" />
+                <g className="x-axis2" />
+                <g className="y-axis" />
+              </svg>
               {highlightedDate && (
                 <div className={classnames('stats', `is-${statistic}`)}>
                   <h5 className="title">
@@ -413,16 +423,6 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
                   </div>
                 </div>
               )}
-              <svg
-                ref={(element) => {
-                  refs.current[index] = element;
-                }}
-                preserveAspectRatio="xMidYMid meet"
-              >
-                <g className="x-axis" />
-                <g className="x-axis2" />
-                <g className="y-axis" />
-              </svg>
             </div>
           );
         })}
