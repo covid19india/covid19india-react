@@ -35,7 +35,7 @@ import {
 } from 'd3-scale-chromatic';
 import {select} from 'd3-selection';
 import {transition} from 'd3-transition';
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import {useCallback, useEffect, useMemo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import useSWR from 'swr';
@@ -501,7 +501,7 @@ function MapVisualizer({
   ]);
 
   return (
-    <React.Fragment>
+    <>
       <div className="svg-parent">
         <svg
           id="chart"
@@ -543,7 +543,7 @@ function MapVisualizer({
           </filter>
         </defs>
       </svg>
-    </React.Fragment>
+    </>
   );
 }
 

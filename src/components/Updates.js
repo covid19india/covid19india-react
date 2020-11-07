@@ -2,7 +2,7 @@ import {UPDATES_COUNT} from '../constants';
 import {capitalize} from '../utils/commonFunctions';
 
 import {formatDistance, format} from 'date-fns';
-import React, {useLayoutEffect} from 'react';
+import {Fragment, useLayoutEffect} from 'react';
 import {Send} from 'react-feather';
 
 const newDate = new Date();
@@ -29,7 +29,7 @@ function Updates({updates}) {
             currentDate = activityDate;
 
             return (
-              <React.Fragment>
+              <>
                 {index === 0 ? (
                   <div className="update">
                     <h4>No updates yet!</h4>
@@ -40,12 +40,12 @@ function Updates({updates}) {
                 <div className="updates-header">
                   <h2>{format(activityDate, 'd MMM')}</h2>
                 </div>
-              </React.Fragment>
+              </>
             );
           };
 
           return (
-            <React.Fragment key={index}>
+            <Fragment key={index}>
               {activityDate.getDate() !== currentDate.getDate()
                 ? addHeader()
                 : ' '}
@@ -64,7 +64,7 @@ function Updates({updates}) {
                   }}
                 ></h4>
               </div>
-            </React.Fragment>
+            </Fragment>
           );
         })}
       <div className="updates-footer">

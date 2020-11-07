@@ -1,6 +1,6 @@
 import {parse, format} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
-import React, {useMemo, useCallback, lazy, Suspense} from 'react';
+import {useMemo, useCallback, lazy, Suspense} from 'react';
 import * as Icon from 'react-feather';
 import {useSpring, animated} from 'react-spring';
 
@@ -94,7 +94,7 @@ const ActionsPanel = ({
   }, [setIsTimelineMode, setShowUpdates, showUpdates]);
 
   return (
-    <React.Fragment>
+    <>
       <animated.div
         className="actions"
         style={{
@@ -135,7 +135,7 @@ const ActionsPanel = ({
           </Suspense>
         )}
       </animated.div>
-    </React.Fragment>
+    </>
   );
 };
 

@@ -7,7 +7,7 @@ import {FilterIcon, InfoIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React from 'react';
+import {memo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useLongPress} from 'react-use';
 
@@ -59,4 +59,4 @@ const isStateHeaderCellEqual = (prevProps, currProps) => {
   }
 };
 
-export default React.memo(StateHeaderCell, isStateHeaderCellEqual);
+export default memo(StateHeaderCell, isStateHeaderCellEqual);

@@ -13,7 +13,7 @@ import {select} from 'd3-selection';
 // eslint-disable-next-line
 import {transition} from 'd3-transition';
 import equal from 'fast-deep-equal';
-import React, {useEffect, useRef} from 'react';
+import {memo, useEffect, useRef} from 'react';
 import {useMeasure} from 'react-use';
 
 const getDeltaStatistic = (data, statistic) => {
@@ -183,7 +183,7 @@ const isEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(DeltaBarGraph, isEqual);
+export default memo(DeltaBarGraph, isEqual);
 
 function roundedBar(x, y, w, h, r) {
   r = Math.sign(h) * Math.min(Math.abs(h), r);

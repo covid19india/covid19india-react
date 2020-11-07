@@ -2,7 +2,7 @@ import {ENTER_IN, ENTER_OUT} from '../animations';
 import locales from '../i18n/locales.json';
 
 import classnames from 'classnames';
-import React, {useRef, useCallback} from 'react';
+import {memo, useRef, useCallback} from 'react';
 import {ArrowUp} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useTransition, animated} from 'react-spring';
@@ -74,4 +74,4 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
   );
 }
 
-export default React.memo(LanguageSwitcher);
+export default memo(LanguageSwitcher);

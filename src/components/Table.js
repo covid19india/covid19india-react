@@ -24,7 +24,7 @@ import classnames from 'classnames';
 import {max} from 'date-fns';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React, {useCallback, useEffect, useMemo, useState, lazy} from 'react';
+import {memo, useCallback, useEffect, useMemo, useState, lazy} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useTrail, useTransition, animated, config} from 'react-spring';
@@ -161,7 +161,7 @@ function Table({
     : TABLE_STATISTICS;
 
   return (
-    <React.Fragment>
+    <>
       <div className="table-top">
         <animated.div
           className={classnames('option-toggle', {
@@ -376,7 +376,7 @@ function Table({
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 
@@ -409,4 +409,4 @@ const isEqual = (prevProps, currProps) => {
   } else return true;
 };
 
-export default React.memo(Table, isEqual);
+export default memo(Table, isEqual);

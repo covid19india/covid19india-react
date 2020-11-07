@@ -1,7 +1,7 @@
 import {PRIMARY_STATISTICS, STATISTIC_CONFIGS} from '../constants';
 
 import classnames from 'classnames';
-import React, {useState, useCallback, useEffect} from 'react';
+import {memo, useState, useCallback, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import {useSpring, animated, config} from 'react-spring';
 import {useMeasure} from 'react-use';
@@ -66,4 +66,4 @@ const isEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(MapSwitcher, isEqual);
+export default memo(MapSwitcher, isEqual);

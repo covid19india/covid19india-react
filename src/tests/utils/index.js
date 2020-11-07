@@ -9,7 +9,7 @@ function removeUnknown(e) {
 }
 
 export async function getStatesAndDistrictsFromAPI() {
-  let url = 'https://api.covid19india.org/state_district_wise.json';
+  const url = 'https://api.covid19india.org/state_district_wise.json';
   const stateDistrictWiseResponse = await (await fetch(url)).json();
   const states = Object.keys(stateDistrictWiseResponse).filter(removeUnknown);
   const result = {};

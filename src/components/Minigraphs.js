@@ -19,7 +19,7 @@ import {line, curveMonotoneX} from 'd3-shape';
 import {transition} from 'd3-transition';
 import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
-import React, {useEffect, useRef, useMemo} from 'react';
+import {memo, useEffect, useRef, useMemo} from 'react';
 
 // Dimensions
 const [width, height] = [100, 75];
@@ -182,4 +182,4 @@ const isEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(Minigraphs, isEqual);
+export default memo(Minigraphs, isEqual);

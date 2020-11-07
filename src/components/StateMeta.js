@@ -11,7 +11,7 @@ import {
 } from '../utils/commonFunctions';
 
 import {differenceInDays} from 'date-fns';
-import React from 'react';
+import {memo} from 'react';
 import {Compass} from 'react-feather';
 
 function StateMeta({stateCode, data, timeseries}) {
@@ -66,7 +66,7 @@ function StateMeta({stateCode, data, timeseries}) {
     (Math.pow(lastConfirmed / prevWeekConfirmed, 1 / diffDays) - 1) * 100;
 
   return (
-    <React.Fragment>
+    <>
       <div className="StateMeta population">
         <div className="meta-item population">
           <h3>Population</h3>
@@ -188,7 +188,7 @@ function StateMeta({stateCode, data, timeseries}) {
           }
         />
       </div>
-    </React.Fragment>
+    </>
   );
 }
 
@@ -201,4 +201,4 @@ const isEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(StateMeta, isEqual);
+export default memo(StateMeta, isEqual);

@@ -24,6 +24,8 @@ module.exports = {
     'react/prop-types': 0,
     'react-hooks/rules-of-hooks': 'warn',
     'react-hooks/exhaustive-deps': 'error',
+    'react/react-in-jsx-scope': 'off',
+    'react/jsx-fragments': 'error',
     'import/no-unresolved': [2, {commonjs: true, amd: true}],
     'import/named': 2,
     'import/default': 2,

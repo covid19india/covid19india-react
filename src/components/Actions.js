@@ -2,7 +2,7 @@ import ActionsPanel from './ActionsPanel';
 
 import {fetcher} from '../utils/commonFunctions';
 
-import React, {useState, useEffect, lazy, Suspense} from 'react';
+import {memo, useState, useEffect, lazy, Suspense} from 'react';
 import {useLocalStorage} from 'react-use';
 import useSWR from 'swr';
 
@@ -33,7 +33,7 @@ const Actions = ({setDate, dates}) => {
   }, [lastViewedLog, updates, setLastViewedLog, setNewUpdate]);
 
   return (
-    <React.Fragment>
+    <>
       <ActionsPanel
         {...{
           lastViewedLog,
@@ -53,7 +53,7 @@ const Actions = ({setDate, dates}) => {
           <Updates {...{updates}} />
         </Suspense>
       )}
-    </React.Fragment>
+    </>
   );
 };
 
@@ -61,4 +61,4 @@ const isEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(Actions, isEqual);
+export default memo(Actions, isEqual);
