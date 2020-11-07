@@ -107,6 +107,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
                 const current = linePath(date);
                 return interpolatePath(previous, current);
               })
+              .selection()
         );
 
       svg
@@ -142,6 +143,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
               .attr('cy', (date) =>
                 yScale(getStatistic(timeseries[date], 'delta', statistic))
               )
+              .selection()
         );
     });
   }, [dates, timeseries]);

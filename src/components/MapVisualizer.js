@@ -33,7 +33,7 @@ import {
   interpolatePurples,
   interpolateOranges,
 } from 'd3-scale-chromatic';
-import {select, event} from 'd3-selection';
+import {select} from 'd3-selection';
 import {transition} from 'd3-transition';
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -231,7 +231,7 @@ function MapVisualizer({
             .attr('stroke-width', 1.8)
             .attr('stroke-opacity', 0)
             .style('cursor', 'pointer')
-            .on('mouseenter', (d) => {
+            .on('mouseenter', (event, d) => {
               setRegionHighlighted({
                 stateCode: STATE_CODES[d.properties.st_nm],
                 districtName: d.properties.district,
@@ -251,12 +251,11 @@ function MapVisualizer({
             .remove()
       )
       .attr('pointer-events', 'all')
-      .on('touchstart', (d) => {
+      .on('touchstart', (event, d) => {
         if (onceTouchedRegion.current === d) onceTouchedRegion.current = null;
         else onceTouchedRegion.current = d;
       })
-      .on('click', (d) => {
-        event.stopPropagation();
+      .on('click', (event, d) => {
         const stateCode = STATE_CODES[d.properties.st_nm];
         if (
           onceTouchedRegion.current ||
@@ -349,7 +348,7 @@ function MapVisualizer({
         (update) => update,
         (exit) => exit.call((exit) => exit.transition(T).attr('r', 0).remove())
       )
-      .on('mouseenter', (feature) => {
+      .on('mouseenter', (event, feature) => {
         setRegionHighlighted({
           stateCode: STATE_CODES[feature.properties.st_nm],
           districtName:
@@ -358,13 +357,12 @@ function MapVisualizer({
               : feature.properties.district || UNKNOWN_DISTRICT_KEY,
         });
       })
-      .on('touchstart', (feature) => {
+      .on('touchstart', (event, feature) => {
         if (onceTouchedRegion.current === feature)
           onceTouchedRegion.current = null;
         else onceTouchedRegion.current = feature;
       })
-      .on('click', (feature) => {
-        event.stopPropagation();
+      .on('click', (event, feature) => {
         if (onceTouchedRegion.current || mapMeta.mapType === MAP_TYPES.STATE)
           return;
         history.push(
