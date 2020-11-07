@@ -22,7 +22,7 @@ import {line, curveMonotoneX} from 'd3-shape';
 // eslint-disable-next-line
 import {transition} from 'd3-transition';
 import equal from 'fast-deep-equal';
-import React, {useCallback, useEffect, useRef, useMemo, useState} from 'react';
+import {memo, useCallback, useEffect, useRef, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
 // Chart margins
@@ -370,7 +370,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="Timeseries">
         {TIMESERIES_STATISTICS.map((statistic, index) => {
           const delta = getStatisticDelta(statistic, index);
@@ -428,7 +428,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
           );
         })}
       </div>
-    </React.Fragment>
+    </>
   );
 }
 
@@ -459,4 +459,4 @@ const isEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(Timeseries, isEqual);
+export default memo(Timeseries, isEqual);

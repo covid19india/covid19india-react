@@ -27,7 +27,7 @@ import {
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React, {useState, useCallback, useRef} from 'react';
+import {memo, useState, useCallback, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {useSessionStorage} from 'react-use';
@@ -163,7 +163,7 @@ function Row({
     : TABLE_STATISTICS;
 
   return (
-    <React.Fragment>
+    <>
       <div
         className={classnames(
           'row',
@@ -200,7 +200,7 @@ function Row({
       </div>
 
       {showDistricts && (
-        <React.Fragment>
+        <>
           <div className="state-meta">
             <div className="state-meta-top">
               {data?.meta?.['last_updated'] && (
@@ -261,7 +261,7 @@ function Row({
               />
             ))}
           </div>
-        </React.Fragment>
+        </>
       )}
 
       {showDistricts &&
@@ -293,7 +293,7 @@ function Row({
           </div>
         </div>
       )}
-    </React.Fragment>
+    </>
   );
 }
 
@@ -330,4 +330,4 @@ const isEqual = (prevProps, currProps) => {
   } else return true;
 };
 
-export default React.memo(Row, isEqual);
+export default memo(Row, isEqual);

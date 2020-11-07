@@ -1,7 +1,7 @@
 import {formatDate, getIndiaDateISO} from '../utils/commonFunctions';
 
 import clamp from 'lodash/clamp';
-import React, {useState} from 'react';
+import {memo, useState} from 'react';
 import {useSprings, useTransition, animated, config} from 'react-spring';
 import {useMeasure, useKeyPressEvent} from 'react-use';
 import {useDrag} from 'react-use-gesture';
@@ -141,7 +141,7 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
   };
 
   return (
-    <React.Fragment>
+    <>
       {transition.map(
         ({item, key, props}) =>
           item && (
@@ -195,8 +195,8 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
             </animated.div>
           ))}
       </div>
-    </React.Fragment>
+    </>
   );
 };
 
-export default React.memo(Timeline);
+export default memo(Timeline);

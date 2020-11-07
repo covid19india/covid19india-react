@@ -3,7 +3,7 @@ import StateDropdown from './StateDropdown';
 import {SPRING_CONFIG_NUMBERS} from '../constants.js';
 import {formatDate, formatNumber, getStatistic} from '../utils/commonFunctions';
 
-import React, {useMemo} from 'react';
+import {memo, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {animated, useSpring} from 'react-spring';
 
@@ -65,4 +65,4 @@ function StateHeader({data, stateCode}) {
   );
 }
 
-export default React.memo(StateHeader);
+export default memo(StateHeader);

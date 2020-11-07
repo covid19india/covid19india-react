@@ -10,7 +10,8 @@ import useIsVisible from '../hooks/useIsVisible';
 import {fetcher, formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
-import React, {
+import {
+  memo,
   useMemo,
   useState,
   useEffect,
@@ -111,7 +112,7 @@ function State() {
   const lookback = showAllDistricts ? (window.innerWidth >= 540 ? 10 : 8) : 6;
 
   return (
-    <React.Fragment>
+    <>
       <Helmet>
         <title>
           Coronavirus Outbreak in {STATE_NAMES[stateCode]} - covid19india.org
@@ -165,7 +166,7 @@ function State() {
         </div>
 
         <div className="state-right">
-          <React.Fragment>
+          <>
             <div
               className="district-bar"
               style={!showAllDistricts ? {display: 'flex'} : {}}
@@ -288,13 +289,13 @@ function State() {
                 forceRender={!!timeseriesResponseError}
               />
             </Suspense>
-          </React.Fragment>
+          </>
         </div>
       </div>
 
       <Footer />
-    </React.Fragment>
+    </>
   );
 }
 
-export default React.memo(State);
+export default memo(State);

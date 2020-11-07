@@ -3,7 +3,7 @@ import {formatNumber, getTableStatistic} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
-import React from 'react';
+import {memo} from 'react';
 import {animated, useSpring} from 'react-spring';
 
 const Cell = ({statistic, data, isPerMillion, lastUpdatedTT}) => {
@@ -61,4 +61,4 @@ const isCellEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(Cell, isCellEqual);
+export default memo(Cell, isCellEqual);

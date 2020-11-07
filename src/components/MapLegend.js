@@ -12,7 +12,7 @@ import {format} from 'd3-format';
 import {interpolate, interpolateRound, quantize} from 'd3-interpolate';
 import {scaleLinear, scaleOrdinal, scaleBand} from 'd3-scale';
 import {select} from 'd3-selection';
-import React, {useEffect, useRef} from 'react';
+import {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 
 function MapLegend({data, mapViz, mapScale, statistic}) {

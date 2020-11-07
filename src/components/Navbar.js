@@ -6,7 +6,7 @@ import {
 } from '../animations';
 import locales from '../i18n/locales.json';
 
-import React, {useState, useCallback, useRef} from 'react';
+import {useState, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
@@ -75,7 +75,7 @@ function Navbar({
         )}
 
         {windowSize.width > 769 && (
-          <React.Fragment>
+          <>
             <Link to="/">
               <span>
                 <Icon.Home {...activeNavIcon('/')} />
@@ -94,7 +94,7 @@ function Navbar({
             <span>
               <SunMoon {...{darkMode}} />
             </span>
-          </React.Fragment>
+          </>
         )}
       </div>
 

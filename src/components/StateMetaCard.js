@@ -1,7 +1,6 @@
 import Tooltip from './Tooltip';
 
 import {InfoIcon} from '@primer/octicons-v2-react';
-import React from 'react';
 
 function StateMetaCard({
   title,

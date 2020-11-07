@@ -8,7 +8,7 @@ import {capitalize, formatNumber, getStatistic} from '../utils/commonFunctions';
 import {HeartFillIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
-import React, {useMemo} from 'react';
+import {memo, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {animated, useSpring} from 'react-spring';
 
@@ -23,7 +23,7 @@ function PureLevelItem({statistic, total, delta}) {
   const statisticConfig = STATISTIC_CONFIGS[statistic];
 
   return (
-    <React.Fragment>
+    <>
       <h5>{t(capitalize(statisticConfig.displayName))}</h5>
       <animated.h4>
         {statistic !== 'active' ? (
@@ -44,11 +44,11 @@ function PureLevelItem({statistic, total, delta}) {
           formatNumber(total, statisticConfig.format, statistic)
         )}
       </animated.h1>
-    </React.Fragment>
+    </>
   );
 }
 
-const LevelItem = React.memo(PureLevelItem);
+const LevelItem = memo(PureLevelItem);
 
 function Level({data}) {
   const trail = useMemo(() => {
@@ -94,4 +94,4 @@ const isEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(Level, isEqual);
+export default memo(Level, isEqual);

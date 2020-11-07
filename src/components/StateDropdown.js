@@ -1,6 +1,6 @@
 import {MAP_META, STATE_NAMES} from '../constants';
 
-import React, {useState, useCallback, useRef} from 'react';
+import {useState, useCallback, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {useTransition, animated} from 'react-spring';

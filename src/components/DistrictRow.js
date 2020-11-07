@@ -7,7 +7,7 @@ import {InfoIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React, {useCallback} from 'react';
+import {memo, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 
 function DistrictRow({
@@ -89,4 +89,4 @@ const isDistrictRowEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(DistrictRow, isDistrictRowEqual);
+export default memo(DistrictRow, isDistrictRowEqual);

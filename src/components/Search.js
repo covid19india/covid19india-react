@@ -7,7 +7,7 @@ import {
 } from '../constants';
 
 import produce from 'immer';
-import React, {useState, useEffect, useMemo, useCallback, useRef} from 'react';
+import {memo, useState, useEffect, useMemo, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
@@ -308,7 +308,7 @@ function Search() {
       )}
 
       {expand && (
-        <React.Fragment>
+        <>
           <div className="expanded">
             <div className="expanded-left">
               <h3>{t('District')}</h3>
@@ -354,7 +354,7 @@ function Search() {
               </div>
             </div>
           </div>
-        </React.Fragment>
+        </>
       )}
     </div>
   );
@@ -364,4 +364,4 @@ const isEqual = () => {
   return true;
 };
 
-export default React.memo(Search, isEqual);
+export default memo(Search, isEqual);

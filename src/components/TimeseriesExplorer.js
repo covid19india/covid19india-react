@@ -12,7 +12,7 @@ import {IssueOpenedIcon, PinIcon, ReplyIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import {formatISO, sub} from 'date-fns';
 import equal from 'fast-deep-equal';
-import React, {useCallback, useMemo, useRef, lazy, Suspense} from 'react';
+import {memo, useCallback, useMemo, useRef, lazy, Suspense} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useLocalStorage} from 'react-use';
 
@@ -328,4 +328,4 @@ const isEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(TimeseriesExplorer, isEqual);
+export default memo(TimeseriesExplorer, isEqual);
