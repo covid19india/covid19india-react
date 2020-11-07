@@ -17,7 +17,7 @@ import {min, max, bisector} from 'd3-array';
 import {axisBottom, axisRight} from 'd3-axis';
 import {interpolatePath} from 'd3-interpolate-path';
 import {scaleTime, scaleLinear, scaleLog} from 'd3-scale';
-import {select, mouse} from 'd3-selection';
+import {select, pointer} from 'd3-selection';
 import {line, curveMonotoneX} from 'd3-shape';
 // eslint-disable-next-line
 import {transition} from 'd3-transition';
@@ -175,8 +175,8 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
         .range([chartBottom, margin.top]);
     };
 
-    function mousemove() {
-      const xm = mouse(this)[0];
+    function mousemove(event) {
+      const xm = pointer(event)[0];
       const date = xScale.invert(xm);
       if (!isNaN(date)) {
         const bisectDate = bisector((date) => parseIndiaDate(date)).left;
@@ -191,7 +191,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       }
     }
 
-    function mouseout() {
+    function mouseout(event) {
       setHighlightedDate(dates[T - 1]);
     }
 
@@ -286,6 +286,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
                   const current = linePath(date);
                   return interpolatePath(previous, current);
                 })
+                .selection()
           );
       } else {
         /* DAILY TRENDS */
