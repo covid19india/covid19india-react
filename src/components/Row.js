@@ -153,10 +153,7 @@ function Row({
     rowElement.current.scrollIntoView({
       block: 'start',
     });
-
-    // eslint-disable-next-line
-    const faux = stateCode;
-  }, [stateCode]);
+  }, []);
 
   const tableStatistics = expandTable
     ? TABLE_STATISTICS_EXPANDED

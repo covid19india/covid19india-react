@@ -15,8 +15,7 @@ import {interpolatePath} from 'd3-interpolate-path';
 import {scaleTime, scaleLinear} from 'd3-scale';
 import {select} from 'd3-selection';
 import {line, curveMonotoneX} from 'd3-shape';
-// eslint-disable-next-line
-import {transition} from 'd3-transition';
+import 'd3-transition';
 import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import {memo, useEffect, useRef, useMemo} from 'react';
