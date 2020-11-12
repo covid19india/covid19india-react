@@ -2682,6 +2682,14 @@ abbr {
         }
       }
     }
+
+    &.is-tpr {
+      line {
+        &.stem {
+          stroke: $orange-mid;
+        }
+      }
+    }
   }
 }
 
@@ -2898,6 +2906,21 @@ input {
         color: $purple;
       }
     }
+
+    &.is-tpr {
+      h5 {
+        color: $orange-mid;
+
+        &.title {
+          color: $orange-mid;
+        }
+      }
+
+      h2,
+      h6 {
+        color: $orange;
+      }
+    }
   }
 
   .svg-parent {
@@ -2993,6 +3016,23 @@ input {
 
         text {
           color: $purple-mid;
+          stroke: transparent;
+        }
+      }
+    }
+
+    &.is-tpr {
+      background: $orange-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $orange;
+        }
+
+        text {
+          color: $orange-mid;
           stroke: transparent;
         }
       }

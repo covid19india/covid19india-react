@@ -115,6 +115,8 @@ export const toTitleCase = (str) => {
 };
 
 export const getStatistic = (data, type, statistic, perMillion = false) => {
+  // TODO: Replace delta with daily to remove ambiguity
+  //       Or add another type for daily/delta
   const {key, normalizeByKey: normalizeBy, multiplyFactor} = {
     ...STATISTIC_OPTIONS[statistic],
     ...(perMillion &&
@@ -138,22 +140,7 @@ export const getStatistic = (data, type, statistic, perMillion = false) => {
   }
 
   if (normalizeBy) {
-    if (type === 'total') {
-      const normStatistic = getStatistic(data, 'total', normalizeBy);
-      count /= normStatistic;
-    } else {
-      const currStatisticDelta = count;
-      const currStatistic = getStatistic(data, 'total', key);
-      const prevStatistic = currStatistic - currStatisticDelta;
-
-      const normStatisticDelta = getStatistic(data, 'delta', {
-        key: normalizeBy,
-      });
-      const normStatistic = getStatistic(data, 'total', normalizeBy);
-      const prevNormStatistic = normStatistic - normStatisticDelta;
-
-      count = currStatistic / normStatistic - prevStatistic / prevNormStatistic;
-    }
+    count /= getStatistic(data, type, normalizeBy);
   }
 
   return (multiplyFactor || 1) * ((isFinite(count) && count) || 0);

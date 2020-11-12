@@ -1,9 +1,9 @@
 import TimeseriesLoader from './loaders/Timeseries';
 
 import {
+  STATE_NAMES,
   TIMESERIES_CHART_TYPES,
   TIMESERIES_LOOKBACKS,
-  STATE_NAMES,
 } from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {getIndiaYesterdayISO, parseIndiaDate} from '../utils/commonFunctions';
@@ -34,7 +34,7 @@ function TimeseriesExplorer({
     TIMESERIES_LOOKBACKS.MONTH
   );
   const [chartType, setChartType] = useLocalStorage('chartType', 'total');
-  const [isUniform, setIsUniform] = useLocalStorage('isUniform', true);
+  const [isUniform, setIsUniform] = useLocalStorage('isUniform', false);
   const [isLog, setIsLog] = useLocalStorage('isLog', false);
   const explorerElement = useRef();
   const isVisible = useIsVisible(explorerElement, {once: true});

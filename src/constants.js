@@ -131,7 +131,7 @@ export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
 export const TABLE_STATISTICS_EXPANDED = Object.keys(STATISTIC_DEFINITIONS);
 
-export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
+export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested', 'tpr'];
 
 export const UPDATES_COUNT = 5;
 
