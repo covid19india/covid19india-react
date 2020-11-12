@@ -1,4 +1,4 @@
-export const API_ROOT_URL = 'https://api.covid19india.org/v4/min';
+export const API_ROOT_URL = 'http://192.168.1.43:8080/v4/min';
 
 export const LOCALE_SHORTHANDS = {
   english: 'en-US',
