@@ -265,7 +265,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
                 .attr('class', 'trend')
                 .attr('fill', 'none')
                 .attr('stroke', color + '50')
-                .attr('stroke-width', 4)
+                .attr('stroke-width', barWidth)
                 .attr('d', linePath)
                 .attr('stroke-dasharray', function () {
                   return (pathLength = this.getTotalLength());
@@ -371,7 +371,9 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   return (
     <>
       <div className="Timeseries">
-        {TIMESERIES_STATISTICS.map((statistic, index) => {
+        {TIMESERIES_STATISTICS.filter(
+          (statistic) => chartType === 'delta' || statistic !== 'tpr'
+        ).map((statistic, index) => {
           const delta = getStatisticDelta(statistic, index);
           const statisticConfig = STATISTIC_CONFIGS[statistic];
           return (
