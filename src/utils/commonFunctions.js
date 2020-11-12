@@ -91,7 +91,7 @@ export const abbreviateNumber = (number) => {
 };
 
 export const formatNumber = (value, option, statistic) => {
-  if (statistic && value === 0 && NAN_STATISTICS.includes(statistic))
+  if (statistic && NAN_STATISTICS.includes(statistic) && value === 0)
     value = NaN;
 
   if (isNaN(value)) return '-';

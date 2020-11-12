@@ -8,7 +8,7 @@ import {
 import useIsVisible from '../hooks/useIsVisible';
 import {getIndiaYesterdayISO, parseIndiaDate} from '../utils/commonFunctions';
 
-import {IssueOpenedIcon, PinIcon, ReplyIcon} from '@primer/octicons-v2-react';
+import {PinIcon, ReplyIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import {formatISO, sub} from 'date-fns';
 import equal from 'fast-deep-equal';
@@ -285,13 +285,6 @@ function TimeseriesExplorer({
             {t(option)}
           </button>
         ))}
-      </div>
-
-      <div className="alert">
-        <IssueOpenedIcon size={24} />
-        <div className="alert-right">
-          {t('Tested chart is independent of uniform scaling')}
-        </div>
       </div>
     </div>
   );

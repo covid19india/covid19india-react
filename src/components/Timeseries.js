@@ -1,5 +1,7 @@
 import {
   D3_TRANSITION_DURATION,
+  NAN_STATISTICS,
+  PRIMARY_STATISTICS,
   STATISTIC_CONFIGS,
   TIMESERIES_STATISTICS,
 } from '../constants';
@@ -90,11 +92,11 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       else g.select('.domain').attr('opacity', 0);
     };
 
-    const yAxis = (g, yScale) =>
+    const yAxis = (g, yScale, format) =>
       g.attr('class', 'y-axis').call(
         axisRight(yScale)
           .ticks(4)
-          .tickFormat((num) => formatNumber(num, 'short'))
+          .tickFormat((num) => formatNumber(num, format))
           .tickPadding(4)
       );
 
@@ -126,28 +128,31 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       .range([chartBottom, margin.top]);
 
     const generateYScale = (statistic) => {
-      if (isUniform && chartType === 'total' && isLog && statistic !== 'tested')
+      if (
+        isUniform &&
+        chartType === 'total' &&
+        isLog &&
+        PRIMARY_STATISTICS.includes(statistic)
+      )
         return yScaleUniformLog;
 
-      if (isUniform && statistic !== 'tested') return yScaleUniformLinear;
+      if (isUniform && PRIMARY_STATISTICS.includes(statistic))
+        return yScaleUniformLinear;
+
+      const statisticMin = min(dates, (date) =>
+        getStatistic(timeseries[date], chartType, statistic)
+      );
+
+      const statisticMax = max(dates, (date) =>
+        getStatistic(timeseries[date], chartType, statistic)
+      );
 
       if (chartType === 'total' && isLog)
         return scaleLog()
           .clamp(true)
           .domain([
-            Math.max(
-              1,
-              min(dates, (date) =>
-                getStatistic(timeseries[date], chartType, statistic)
-              )
-            ),
-            Math.max(
-              10,
-              yBufferTop *
-                max(dates, (date) =>
-                  getStatistic(timeseries[date], chartType, statistic)
-                )
-            ),
+            Math.max(1, statisticMin),
+            Math.max(10, yBufferTop * statisticMax),
           ])
           .nice(4)
           .range([chartBottom, margin.top]);
@@ -155,19 +160,14 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       return scaleLinear()
         .clamp(true)
         .domain([
-          yBufferBottom *
-            Math.min(
-              0,
-              min(dates, (date) =>
-                getStatistic(timeseries[date], chartType, statistic)
-              )
-            ),
+          chartType === 'delta' && statistic === 'active'
+            ? Math.min(0, yBufferBottom * statisticMin)
+            : 0,
           Math.max(
             1,
-            yBufferTop *
-              max(dates, (date) =>
-                getStatistic(timeseries[date], chartType, statistic)
-              )
+            STATISTIC_CONFIGS[statistic].format === '%'
+              ? Math.min(100, yBufferTop * statisticMax)
+              : yBufferTop * statisticMax
           ),
         ])
         .nice(4)
@@ -202,6 +202,8 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       const statistic = TIMESERIES_STATISTICS[i];
       const yScale = generateYScale(statistic);
       const color = STATISTIC_CONFIGS[statistic].color;
+      const format =
+        STATISTIC_CONFIGS[statistic].format === '%' ? '%' : 'short';
 
       /* X axis */
       svg
@@ -217,7 +219,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
         .select('.y-axis')
         .style('transform', `translateX(${chartRight}px)`)
         .transition(t)
-        .call(yAxis, yScale);
+        .call(yAxis, yScale, format);
 
       /* Path dots */
       svg
@@ -285,6 +287,7 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
                   const current = linePath(date);
                   return interpolatePath(previous, current);
                 })
+                .attr('stroke-width', barWidth)
                 .selection()
           );
       } else {
@@ -338,11 +341,14 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   const getStatisticDelta = useCallback(
     (statistic) => {
       if (!highlightedDate) return;
+
       const currCount = getStatistic(
         timeseries?.[highlightedDate],
         chartType,
         statistic
       );
+      if (NAN_STATISTICS.includes(statistic) && currCount === 0) return;
+
       const prevDate =
         dates[dates.findIndex((date) => date === highlightedDate) - 1];
 
@@ -371,63 +377,66 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
   return (
     <>
       <div className="Timeseries">
-        {TIMESERIES_STATISTICS.filter(
+        {TIMESERIES_STATISTICS /*
+        .filter(
           (statistic) => chartType === 'delta' || statistic !== 'tpr'
-        ).map((statistic, index) => {
-          const delta = getStatisticDelta(statistic, index);
-          const statisticConfig = STATISTIC_CONFIGS[statistic];
-          return (
-            <div
-              key={statistic}
-              className={classnames('svg-parent fadeInUp', `is-${statistic}`)}
-              ref={wrapperRef}
-              style={trail[index]}
-            >
-              {highlightedDate && (
-                <div className={classnames('stats', `is-${statistic}`)}>
-                  <h5 className="title">
-                    {t(capitalize(statisticConfig.displayName))}
-                  </h5>
-                  <h5 className="title">
-                    {formatDate(highlightedDate, 'dd MMMM')}
-                  </h5>
-                  <div className="stats-bottom">
-                    <h2>
-                      {formatNumber(
-                        getStatistic(
-                          timeseries?.[highlightedDate],
-                          chartType,
+        )*/.map(
+          (statistic, index) => {
+            const delta = getStatisticDelta(statistic, index);
+            const statisticConfig = STATISTIC_CONFIGS[statistic];
+            return (
+              <div
+                key={statistic}
+                className={classnames('svg-parent fadeInUp', `is-${statistic}`)}
+                ref={wrapperRef}
+                style={trail[index]}
+              >
+                {highlightedDate && (
+                  <div className={classnames('stats', `is-${statistic}`)}>
+                    <h5 className="title">
+                      {t(capitalize(statisticConfig.displayName))}
+                    </h5>
+                    <h5 className="title">
+                      {formatDate(highlightedDate, 'dd MMMM')}
+                    </h5>
+                    <div className="stats-bottom">
+                      <h2>
+                        {formatNumber(
+                          getStatistic(
+                            timeseries?.[highlightedDate],
+                            chartType,
+                            statistic
+                          ),
+                          statisticConfig.format !== 'short'
+                            ? statisticConfig.format
+                            : 'int',
                           statistic
-                        ),
+                        )}
+                      </h2>
+                      <h6>{`${delta > 0 ? '+' : ''}${formatNumber(
+                        delta,
                         statisticConfig.format !== 'short'
                           ? statisticConfig.format
                           : 'int',
                         statistic
-                      )}
-                    </h2>
-                    <h6>{`${delta > 0 ? '+' : ''}${formatNumber(
-                      delta,
-                      statisticConfig.format !== 'short'
-                        ? statisticConfig.format
-                        : 'int',
-                      statistic
-                    )}`}</h6>
+                      )}`}</h6>
+                    </div>
                   </div>
-                </div>
-              )}
-              <svg
-                ref={(element) => {
-                  refs.current[index] = element;
-                }}
-                preserveAspectRatio="xMidYMid meet"
-              >
-                <g className="x-axis" />
-                <g className="x-axis2" />
-                <g className="y-axis" />
-              </svg>
-            </div>
-          );
-        })}
+                )}
+                <svg
+                  ref={(element) => {
+                    refs.current[index] = element;
+                  }}
+                  preserveAspectRatio="xMidYMid meet"
+                >
+                  <g className="x-axis" />
+                  <g className="x-axis2" />
+                  <g className="y-axis" />
+                </svg>
+              </div>
+            );
+          }
+        )}
       </div>
     </>
   );
