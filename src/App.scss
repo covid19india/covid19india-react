@@ -309,7 +309,7 @@ h6 {
   }
 
   .alert-right {
-    margin-left: .25rem;
+    margin-left: 0.25rem;
     text-align: right;
     width: 9rem;
 
@@ -367,7 +367,7 @@ h6 {
     h5 {
       color: $gray;
       font-weight: 600;
-      margin-top: .5rem;
+      margin-top: 0.5rem;
     }
   }
 
@@ -702,14 +702,14 @@ h6 {
     background: $brick-light;
     border-radius: 5px;
     cursor: pointer;
-    padding: .25rem;
+    padding: 0.25rem;
   }
 
   .dropdown {
     background: $white;
     border-radius: 5px;
     height: 25rem;
-    left: -.25rem;
+    left: -0.25rem;
     overflow-y: scroll;
     position: absolute;
     top: 2.75rem;
@@ -755,8 +755,8 @@ h6 {
     flex-direction: row;
     font-size: 14px;
     margin-bottom: 0.25rem;
-    margin-right: .25rem;
-    padding: .25rem .5rem;
+    margin-right: 0.25rem;
+    padding: 0.25rem 0.5rem;
     text-transform: capitalize;
 
     &.is-selected {
@@ -836,9 +836,7 @@ h6 {
   }
 
   input {
-    -moz-box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
-    -webkit-appearance: none !important;
-    -webkit-box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+    appearance: none !important;
     background: #fff;
     border: 0;
     border-radius: 5px;
@@ -934,8 +932,8 @@ h6 {
     border-radius: 5px;
     color: $pink;
     cursor: pointer;
-    font-size: .75rem;
-    padding: .75rem;
+    font-size: 0.75rem;
+    padding: 0.75rem;
     text-align: center;
   }
 
@@ -1122,7 +1120,7 @@ h6 {
       .result-description {
         align-self: flex-start;
         font-size: 0.75rem;
-        margin-bottom: .5rem;
+        margin-bottom: 0.5rem;
         margin-top: 1rem;
       }
 
@@ -1142,7 +1140,7 @@ h6 {
         flex-direction: row;
         font-size: 0.75rem;
         height: 1rem;
-        margin-right: .25rem;
+        margin-right: 0.25rem;
         margin-top: 0.25rem;
         padding: 0.25rem;
         text-align: right;
@@ -1178,7 +1176,7 @@ h6 {
       color: $gray-mid;
       display: flex;
       flex-direction: row;
-      padding: .1rem;
+      padding: 0.1rem;
 
       div {
         padding-top: 1px;
@@ -1522,7 +1520,7 @@ abbr {
 }
 
 .TableLoader {
-  margin-bottom: -.25rem;
+  margin-bottom: -0.25rem;
 }
 
 .table-top {
@@ -1532,7 +1530,7 @@ abbr {
   flex-direction: row;
   font-weight: 600;
   justify-content: space-between;
-  margin-bottom: .25rem;
+  margin-bottom: 0.25rem;
   width: 100%;
 
   .option-toggle,
@@ -1543,12 +1541,12 @@ abbr {
     border-radius: 5px;
     color: $gray-mid;
     cursor: pointer;
-    margin-right: .25rem;
-    padding: .5rem;
+    margin-right: 0.25rem;
+    padding: 0.5rem;
 
     svg {
       align-self: center;
-      margin: .25rem;
+      margin: 0.25rem;
     }
 
     &.is-highlighted {
@@ -1643,7 +1641,7 @@ abbr {
 
     svg {
       color: $gray-mid;
-      margin-bottom: .25rem;
+      margin-bottom: 0.25rem;
     }
 
     .is-confirmed {
@@ -1736,11 +1734,11 @@ abbr {
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: space-between;
-      margin-bottom: 1 + .25rem;
+      margin-bottom: 1 + 0.25rem;
       margin-top: 1rem;
 
       svg {
-        margin-right: .5rem;
+        margin-right: 0.5rem;
       }
 
       .last-updated {
@@ -1758,7 +1756,7 @@ abbr {
         cursor: pointer;
         display: flex;
         flex-direction: row;
-        padding: .75rem;
+        padding: 0.75rem;
 
         p {
           align-self: flex-end;
@@ -1781,7 +1779,7 @@ abbr {
         border-radius: 5px;
         color: $brick;
         margin: auto;
-        padding: 1rem .25rem;
+        padding: 1rem 0.25rem;
         text-align: center;
         width: 16rem;
 
@@ -1835,8 +1833,8 @@ abbr {
       color: $gray;
       display: flex;
       flex-direction: row;
-      margin-bottom: .25rem;
-      padding: .5rem;
+      margin-bottom: 0.25rem;
+      padding: 0.5rem;
       position: relative;
 
       &:not(:first-child) {
@@ -1870,8 +1868,8 @@ abbr {
 
       .sort-icon {
         left: 0;
-        margin-left: .25rem;
-        margin-right: .25rem;
+        margin-left: 0.25rem;
+        margin-right: 0.25rem;
         position: absolute;
         top: 0;
 
@@ -1906,7 +1904,7 @@ abbr {
         }
 
         &.invert {
-          margin-top: .25rem;
+          margin-top: 0.25rem;
           transform: rotate(180deg);
         }
       }
@@ -1950,7 +1948,7 @@ abbr {
         background: $gray-light-opaque;
         font-size: 13px;
         font-weight: 900;
-        padding: 1.25rem .5rem .75rem;
+        padding: 1.25rem 0.5rem 0.75rem;
 
         &:hover {
           background: $gray-hover-opaque !important;
@@ -1972,7 +1970,7 @@ abbr {
 
     .spacer {
       color: $gray-mid;
-      margin-bottom: 1 + .25rem;
+      margin-bottom: 1 + 0.25rem;
       margin-top: 1rem;
       text-align: center;
 
@@ -2278,7 +2276,7 @@ abbr {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
-        margin-bottom: .25rem;
+        margin-bottom: 0.25rem;
 
         div {
           align-items: center;
@@ -2305,7 +2303,7 @@ abbr {
           }
 
           &:not(:last-child) {
-            margin-right: .25rem;
+            margin-right: 0.25rem;
           }
 
           svg {
@@ -2330,8 +2328,8 @@ abbr {
           display: flex;
           flex-direction: row;
           height: 1.25rem;
-          margin-bottom: .25rem;
-          margin-left: .65rem !important;
+          margin-bottom: 0.25rem;
+          margin-left: 0.65rem !important;
           width: 1.25rem;
 
           span {
@@ -2595,7 +2593,6 @@ abbr {
       select {
         appearance: none;
         background-color: #eee;
-
         background-image: url('data:image/svg+xml,<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="m0,6l12,12l12,-12l-24,0z" fill="gray"/><path fill="none" d="m0,0l24,0l0,24l-24,0l0,-24z"/></svg>');
         background-position-x: calc(100% - 0.4rem);
         background-position-y: 50%;
@@ -3110,8 +3107,8 @@ footer {
   }
 
   svg {
-    margin-right: .5rem;
-    padding: .25rem;
+    margin-right: 0.5rem;
+    padding: 0.25rem;
   }
 
   .telegram {
@@ -3289,7 +3286,7 @@ footer {
   h4 {
     color: $blue-mid;
     font-weight: 900;
-    margin-top: .5rem;
+    margin-top: 0.5rem;
 
     &:hover {
       color: $blue;
@@ -3297,7 +3294,7 @@ footer {
 
     svg {
       height: 1rem;
-      margin-bottom: -.25rem;
+      margin-bottom: -0.25rem;
     }
   }
 }
@@ -3640,7 +3637,7 @@ footer {
     justify-content: flex-end;
     max-width: 30vw;
     min-width: 10rem;
-    padding: .5rem;
+    padding: 0.5rem;
     pointer-events: none;
     right: 0;
     top: 0;
@@ -3669,7 +3666,7 @@ footer {
     z-index: 999;
 
     .navbar-left {
-      margin-bottom: .5rem;
+      margin-bottom: 0.5rem;
       margin-top: auto;
       order: 3;
       text-align: center;
@@ -3883,7 +3880,7 @@ footer {
   }
 
   .cards-container {
-    padding: .5rem;
+    padding: 0.5rem;
 
     .cards {
       .card {
@@ -3979,10 +3976,6 @@ footer {
       justify-content: center;
       width: 100%;
     }
-  }
-
-  &.nationality {
-    margin-bottom: 0.5rem;
   }
 
   .Navbar {
@@ -4309,7 +4302,8 @@ footer {
       .dropdown {
         select {
           background: #1e1e30;
-          background-image: linear-gradient(45deg, transparent 50%, $gray 50%),
+          background-image:
+          linear-gradient(45deg, transparent 50%, $gray 50%),
           linear-gradient(135deg, $gray 50%, transparent 50%);
           background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
           background-repeat: no-repeat;

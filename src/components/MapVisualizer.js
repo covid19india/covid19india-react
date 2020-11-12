@@ -23,8 +23,6 @@ import {max} from 'd3-array';
 import {json} from 'd3-fetch';
 import {geoIdentity, geoPath} from 'd3-geo';
 import {scaleSqrt, scaleSequential} from 'd3-scale';
-// eslint-disable-next-line
-// import worker from 'workerize-loader!../workers/mapVisualizer';
 import {
   interpolateReds,
   interpolateBlues,

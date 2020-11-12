@@ -19,8 +19,7 @@ import {interpolatePath} from 'd3-interpolate-path';
 import {scaleTime, scaleLinear, scaleLog} from 'd3-scale';
 import {select, pointer} from 'd3-selection';
 import {line, curveMonotoneX} from 'd3-shape';
-// eslint-disable-next-line
-import {transition} from 'd3-transition';
+import 'd3-transition';
 import equal from 'fast-deep-equal';
 import {memo, useCallback, useEffect, useRef, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
