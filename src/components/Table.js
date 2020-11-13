@@ -100,13 +100,13 @@ function Table({
         const statisticA = getTableStatistic(
           districts?.[regionKeyA] || states[regionKeyA],
           sortData.sortColumn,
-          isPerMillion,
+          {perMillion: isPerMillion},
           lastUpdatedTT
         )[dataType];
         const statisticB = getTableStatistic(
           districts?.[regionKeyB] || states[regionKeyB],
           sortData.sortColumn,
-          isPerMillion,
+          {perMillion: isPerMillion},
           lastUpdatedTT
         )[dataType];
         return sortData.isAscending

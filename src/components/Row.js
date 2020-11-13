@@ -76,13 +76,13 @@ function Row({
         const statisticA = getTableStatistic(
           data.districts[districtNameA],
           sortData.sortColumn,
-          isPerMillion,
+          {perMillion: isPerMillion},
           lastUpdatedTT
         )[dataType];
         const statisticB = getTableStatistic(
           data.districts[districtNameB],
           sortData.sortColumn,
-          isPerMillion,
+          {perMillion: isPerMillion},
           lastUpdatedTT
         )[dataType];
         return sortData.isAscending

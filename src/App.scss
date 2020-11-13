@@ -207,7 +207,7 @@ h6 {
       transition: all 0.15s ease-in-out;
 
       &:hover {
-        background: $gray-hover;
+        background: $pblue-hover;
       }
 
       span {
@@ -2705,15 +2705,42 @@ abbr {
     text-align: center;
   }
 
-  .scale-modes {
-    align-items: flex-end;
-    bottom: 0;
-    color: $gray;
+  .timeseries-options {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     margin-top: 1rem;
-    right: 0;
-    z-index: 99;
+
+    .timeseries-mode {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .scale-modes {
+      align-items: flex-end;
+      bottom: 0;
+      color: $gray;
+      display: flex;
+      flex-direction: row;
+      right: 0;
+      z-index: 99;
+
+      &:hover {
+        label {
+          &.main {
+            color: $gray;
+          }
+        }
+      }
+
+      .timeseries-mode {
+        margin-left: 1rem;
+      }
+
+      & > * {
+        align-self: center;
+      }
+    }
 
     label {
       color: $gray-mid;
@@ -2722,25 +2749,6 @@ abbr {
       margin-right: 0.25rem;
       z-index: 99;
     }
-
-    &:hover {
-      label {
-        &.main {
-          color: $gray;
-        }
-      }
-    }
-
-    & > * {
-      align-self: center;
-    }
-  }
-
-  .timeseries-mode,
-  .timeseries-logmode {
-    display: flex;
-    flex-direction: row;
-    margin-left: 1rem;
   }
 }
 
@@ -2814,25 +2822,6 @@ input {
     position: absolute;
     top: 0.5rem;
 
-    h2,
-    h5,
-    h6 {
-      color: $cherry-mid;
-      margin: 0;
-      transition: all 0.15s ease-in-out;
-    }
-
-    h5 {
-      &.title {
-        color: $cherry-mid;
-      }
-    }
-
-    h2,
-    h6 {
-      color: $cherry;
-    }
-
     .stats-bottom {
       display: flex;
       flex-direction: row;
@@ -2845,6 +2834,26 @@ input {
       & > * {
         margin-top: auto;
       }
+    }
+
+    h2,
+    h5,
+    h6 {
+      margin: 0;
+      transition: all 0.15s ease-in-out;
+    }
+
+    h5 {
+      color: $cherry-mid;
+
+      &.title {
+        color: $cherry-mid;
+      }
+    }
+
+    h2,
+    h6 {
+      color: $cherry;
     }
 
     &.is-recovered {
@@ -3740,7 +3749,7 @@ footer {
         margin-top: 1.5rem;
 
         &:hover {
-          color: $gray-mid;
+          color: $pblue-mid;
         }
       }
     }
@@ -4088,6 +4097,16 @@ footer {
   .is-vaccinated {
     margin-bottom: 3rem !important;
     margin-top: 2rem !important;
+  }
+
+  .timeseries-header {
+    .timeseries-options {
+      flex-direction: column;
+
+      .moving-average {
+        margin-top: 0.75rem;
+      }
+    }
   }
 }
 

@@ -10,7 +10,7 @@ const Cell = ({statistic, data, isPerMillion, lastUpdatedTT}) => {
   const {total, delta} = getTableStatistic(
     data,
     statistic,
-    isPerMillion,
+    {perMillion: isPerMillion},
     lastUpdatedTT
   );
 

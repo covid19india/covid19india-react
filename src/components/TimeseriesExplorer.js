@@ -36,6 +36,10 @@ function TimeseriesExplorer({
   const [chartType, setChartType] = useLocalStorage('chartType', 'total');
   const [isUniform, setIsUniform] = useLocalStorage('isUniform', false);
   const [isLog, setIsLog] = useLocalStorage('isLog', false);
+  const [isMovingAverage, setIsMovingAverage] = useLocalStorage(
+    'isMovingAverage',
+    false
+  );
   const explorerElement = useRef();
   const isVisible = useIsVisible(explorerElement, {once: true});
 
@@ -199,32 +203,52 @@ function TimeseriesExplorer({
           )}
         </div>
 
-        <div className="scale-modes">
-          <label className="main">{t('Scale Modes')}</label>
-          <div className="timeseries-mode">
-            <label htmlFor="timeseries-mode">{t('Uniform')}</label>
-            <input
-              id="timeseries-mode"
-              type="checkbox"
-              className="switch"
-              checked={isUniform}
-              aria-label={t('Checked by default to scale uniformly.')}
-              onChange={setIsUniform.bind(this, !isUniform)}
-            />
+        <div className="timeseries-options">
+          <div className="scale-modes">
+            <label className="main">{`${t('Scale Modes')}:`}</label>
+            <div className="timeseries-mode">
+              <label htmlFor="timeseries-mode">{t('Uniform')}</label>
+              <input
+                id="timeseries-mode"
+                type="checkbox"
+                className="switch"
+                checked={isUniform}
+                aria-label={t('Checked by default to scale uniformly.')}
+                onChange={setIsUniform.bind(this, !isUniform)}
+              />
+            </div>
+            <div
+              className={`timeseries-mode ${
+                chartType !== 'total' ? 'disabled' : ''
+              }`}
+            >
+              <label htmlFor="timeseries-logmode">{t('Logarithmic')}</label>
+              <input
+                id="timeseries-logmode"
+                type="checkbox"
+                checked={chartType === 'total' && isLog}
+                className="switch"
+                disabled={chartType !== 'total'}
+                onChange={setIsLog.bind(this, !isLog)}
+              />
+            </div>
           </div>
+
           <div
-            className={`timeseries-logmode ${
-              chartType !== 'total' ? 'disabled' : ''
-            }`}
+            className={`timeseries-mode ${
+              chartType === 'total' ? 'disabled' : ''
+            } moving-average`}
           >
-            <label htmlFor="timeseries-logmode">{t('Logarithmic')}</label>
+            <label htmlFor="timeseries-moving-average">
+              {t('7 day Moving Average')}
+            </label>
             <input
-              id="timeseries-logmode"
+              id="timeseries-moving-average"
               type="checkbox"
-              checked={chartType === 'total' && isLog}
+              checked={chartType === 'delta' && isMovingAverage}
               className="switch"
-              disabled={chartType !== 'total'}
-              onChange={setIsLog.bind(this, !isLog)}
+              disabled={chartType !== 'delta'}
+              onChange={setIsMovingAverage.bind(this, !isMovingAverage)}
             />
           </div>
         </div>
@@ -267,7 +291,7 @@ function TimeseriesExplorer({
           <Timeseries
             timeseries={selectedTimeseries}
             regionHighlighted={selectedRegion}
-            {...{dates, chartType, isUniform, isLog}}
+            {...{dates, chartType, isUniform, isLog, isMovingAverage}}
           />
         </Suspense>
       )}
