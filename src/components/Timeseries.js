@@ -29,7 +29,14 @@ import {useTranslation} from 'react-i18next';
 // Chart margins
 const margin = {top: 15, right: 35, bottom: 25, left: 25};
 
-function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
+function Timeseries({
+  timeseries,
+  dates,
+  chartType,
+  isUniform,
+  isLog,
+  isMovingAverage,
+}) {
   const {t} = useTranslation();
   const refs = useRef([]);
 
@@ -101,14 +108,22 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       );
 
     const uniformScaleMin = min(dates, (date) =>
-      getStatistic(timeseries[date], chartType, 'active')
+      getStatistic(timeseries[date], chartType, 'active', {
+        movingAverage: isMovingAverage,
+      })
     );
 
     const uniformScaleMax = max(dates, (date) =>
       Math.max(
-        getStatistic(timeseries[date], chartType, 'confirmed'),
-        getStatistic(timeseries[date], chartType, 'recovered'),
-        getStatistic(timeseries[date], chartType, 'deceased')
+        getStatistic(timeseries[date], chartType, 'confirmed', {
+          movingAverage: isMovingAverage,
+        }),
+        getStatistic(timeseries[date], chartType, 'recovered', {
+          movingAverage: isMovingAverage,
+        }),
+        getStatistic(timeseries[date], chartType, 'deceased', {
+          movingAverage: isMovingAverage,
+        })
       )
     );
 
@@ -140,11 +155,15 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
         return yScaleUniformLinear;
 
       const statisticMin = min(dates, (date) =>
-        getStatistic(timeseries[date], chartType, statistic)
+        getStatistic(timeseries[date], chartType, statistic, {
+          movingAverage: isMovingAverage,
+        })
       );
 
       const statisticMax = max(dates, (date) =>
-        getStatistic(timeseries[date], chartType, statistic)
+        getStatistic(timeseries[date], chartType, statistic, {
+          movingAverage: isMovingAverage,
+        })
       );
 
       if (chartType === 'total' && isLog)
@@ -160,9 +179,9 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       return scaleLinear()
         .clamp(true)
         .domain([
-          chartType === 'delta' && statistic === 'active'
-            ? Math.min(0, yBufferBottom * statisticMin)
-            : 0,
+          chartType === 'total' || statistic !== 'active'
+            ? 0
+            : Math.min(0, yBufferBottom * statisticMin),
           Math.max(
             1,
             STATISTIC_CONFIGS[statistic].format === '%'
@@ -237,10 +256,43 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
         .transition(t)
         .attr('cx', (date) => xScale(parseIndiaDate(date)))
         .attr('cy', (date) =>
-          yScale(getStatistic(timeseries[date], chartType, statistic))
+          yScale(
+            getStatistic(timeseries[date], chartType, statistic, {
+              movingAverage: isMovingAverage,
+            })
+          )
         );
 
-      if (chartType === 'total') {
+      if (chartType === 'delta' && !isMovingAverage) {
+        /* DAILY TRENDS */
+        svg.selectAll('.trend').remove();
+
+        svg
+          .selectAll('.stem')
+          .data(dates, (date) => date)
+          .join((enter) =>
+            enter
+              .append('line')
+              .attr('class', 'stem')
+              .attr('stroke-width', barWidth)
+              .attr('x1', (date) => xScale(parseIndiaDate(date)))
+              .attr('y1', chartBottom)
+              .attr('x2', (date) => xScale(parseIndiaDate(date)))
+              .attr('y2', chartBottom)
+          )
+          .transition(t)
+          .attr('stroke-width', barWidth)
+          .attr('x1', (date) => xScale(parseIndiaDate(date)))
+          .attr('y1', yScale(0))
+          .attr('x2', (date) => xScale(parseIndiaDate(date)))
+          .attr('y2', (date) =>
+            yScale(
+              getStatistic(timeseries[date], chartType, statistic, {
+                movingAverage: isMovingAverage,
+              })
+            )
+          );
+      } else {
         svg
           .selectAll('.stem')
           .transition(t)
@@ -252,7 +304,11 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
           .curve(curveMonotoneX)
           .x((date) => xScale(parseIndiaDate(date)))
           .y((date) =>
-            yScale(getStatistic(timeseries[date], chartType, statistic))
+            yScale(
+              getStatistic(timeseries[date], chartType, statistic, {
+                movingAverage: isMovingAverage,
+              })
+            )
           );
 
         let pathLength;
@@ -290,41 +346,24 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
                 .attr('stroke-width', barWidth)
                 .selection()
           );
-      } else {
-        /* DAILY TRENDS */
-        svg.selectAll('.trend').remove();
-
-        svg
-          .selectAll('.stem')
-          .data(dates, (date) => date)
-          .join((enter) =>
-            enter
-              .append('line')
-              .attr('class', 'stem')
-              .attr('stroke-width', barWidth)
-              .attr('x1', (date) => xScale(parseIndiaDate(date)))
-              .attr('y1', chartBottom)
-              .attr('x2', (date) => xScale(parseIndiaDate(date)))
-              .attr('y2', chartBottom)
-          )
-          .transition(t)
-          .attr('stroke-width', barWidth)
-          .attr('x1', (date) => xScale(parseIndiaDate(date)))
-          .attr('y1', yScale(0))
-          .attr('x2', (date) => xScale(parseIndiaDate(date)))
-          .attr('y2', (date) =>
-            yScale(getStatistic(timeseries[date], chartType, statistic))
-          );
       }
 
       svg.selectAll('*').attr('pointer-events', 'none');
       svg
         .on('mousemove', mousemove)
-        .on('touchmove', mousemove)
-        .on('mouseout', mouseout)
-        .on('touchend', mouseout);
+        .on('touchmove', (event) => mousemove(event.touches[0]))
+        .on('mouseout touchend', mouseout);
     });
-  }, [chartType, dimensions, getBarWidth, isUniform, isLog, timeseries, dates]);
+  }, [
+    chartType,
+    dimensions,
+    getBarWidth,
+    isUniform,
+    isLog,
+    isMovingAverage,
+    timeseries,
+    dates,
+  ]);
 
   useEffect(() => {
     const barWidth = getBarWidth();
@@ -345,7 +384,8 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       const currCount = getStatistic(
         timeseries?.[highlightedDate],
         chartType,
-        statistic
+        statistic,
+        {movingAverage: isMovingAverage}
       );
       if (NAN_STATISTICS.includes(statistic) && currCount === 0) return;
 
@@ -355,11 +395,12 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
       const prevCount = getStatistic(
         timeseries?.[prevDate],
         chartType,
-        statistic
+        statistic,
+        {movingAverage: isMovingAverage}
       );
       return currCount - prevCount;
     },
-    [timeseries, dates, highlightedDate, chartType]
+    [timeseries, dates, highlightedDate, chartType, isMovingAverage]
   );
 
   const trail = useMemo(() => {
@@ -396,16 +437,15 @@ function Timeseries({timeseries, dates, chartType, isUniform, isLog}) {
                     <h5 className="title">
                       {t(capitalize(statisticConfig.displayName))}
                     </h5>
-                    <h5 className="title">
-                      {formatDate(highlightedDate, 'dd MMMM')}
-                    </h5>
+                    <h5>{formatDate(highlightedDate, 'dd MMMM')}</h5>
                     <div className="stats-bottom">
                       <h2>
                         {formatNumber(
                           getStatistic(
                             timeseries?.[highlightedDate],
                             chartType,
-                            statistic
+                            statistic,
+                            {movingAverage: isMovingAverage}
                           ),
                           statisticConfig.format !== 'short'
                             ? statisticConfig.format
@@ -448,6 +488,8 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(currProps.isUniform, prevProps.isUniform)) {
     return false;
   } else if (!equal(currProps.isLog, prevProps.isLog)) {
+    return false;
+  } else if (!equal(currProps.isMovingAverage, prevProps.isMovingAverage)) {
     return false;
   } else if (
     !equal(

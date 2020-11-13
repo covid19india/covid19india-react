@@ -10,7 +10,7 @@ import {
   parseIndiaDate,
 } from '../utils/commonFunctions';
 
-import {differenceInDays} from 'date-fns';
+import {formatISO, sub} from 'date-fns';
 import {memo} from 'react';
 import {Compass} from 'react-feather';
 
@@ -24,34 +24,25 @@ function StateMeta({stateCode, data, timeseries}) {
     'total',
     'confirmed'
   );
-  const prevWeekDate = pastDates
-    .reverse()
-    .find(
-      (date) =>
-        differenceInDays(parseIndiaDate(lastDate), parseIndiaDate(date)) >= 7
-    );
-  const prevWeekConfirmed = getStatistic(
-    timeseries?.[prevWeekDate],
-    'total',
-    'confirmed'
-  );
-  const diffDays = differenceInDays(
-    parseIndiaDate(lastDate),
-    parseIndiaDate(prevWeekDate)
-  );
+  const prevWeekConfirmed =
+    lastConfirmed - getStatistic(timeseries?.[lastDate], 'delta7', 'confirmed');
+
+  const prevWeekDate = formatISO(sub(parseIndiaDate(lastDate), {days: 7}));
 
   const confirmedPerMillion = getStatistic(
     data[stateCode],
     'total',
     'confirmed',
-    true
+    {perMillion: true}
   );
-  const testPerMillion = getStatistic(data[stateCode], 'total', 'tested', true);
+  const testPerMillion = getStatistic(data[stateCode], 'total', 'tested', {
+    perMillion: true,
+  });
   const totalConfirmedPerMillion = getStatistic(
     data['TT'],
     'total',
     'confirmed',
-    true
+    {perMillion: true}
   );
 
   const activePercent = getStatistic(data[stateCode], 'total', 'activeRatio');
@@ -63,7 +54,7 @@ function StateMeta({stateCode, data, timeseries}) {
   const deathPercent = getStatistic(data[stateCode], 'total', 'cfr');
 
   const growthRate =
-    (Math.pow(lastConfirmed / prevWeekConfirmed, 1 / diffDays) - 1) * 100;
+    (Math.pow(lastConfirmed / prevWeekConfirmed, 1 / 7) - 1) * 100;
 
   return (
     <>

@@ -114,15 +114,33 @@ export const toTitleCase = (str) => {
   });
 };
 
-export const getStatistic = (data, type, statistic, perMillion = false) => {
+export const getStatistic = (
+  data,
+  type,
+  statistic,
+  {perMillion = false, movingAverage = false} = {}
+) => {
   // TODO: Replace delta with daily to remove ambiguity
   //       Or add another type for daily/delta
-  const {key, normalizeByKey: normalizeBy, multiplyFactor} = {
+  const {key, normalizeByKey: normalizeBy} = {
     ...STATISTIC_OPTIONS[statistic],
     ...(perMillion &&
       !STATISTIC_OPTIONS[statistic]?.normalizeByKey &&
       PER_MILLION_OPTIONS),
   };
+
+  let multiplyFactor = STATISTIC_OPTIONS[statistic]?.multiplyFactor || 1;
+  multiplyFactor *=
+    (!STATISTIC_OPTIONS[statistic]?.normalizeByKey &&
+      perMillion &&
+      PER_MILLION_OPTIONS?.multiplyFactor) ||
+    1;
+
+  if (type === 'delta' && movingAverage) {
+    type = 'delta7';
+    multiplyFactor *=
+      (!STATISTIC_OPTIONS[statistic]?.normalizeByKey && 1 / 7) || 1;
+  }
 
   let count;
   if (key === 'population') {
@@ -140,18 +158,17 @@ export const getStatistic = (data, type, statistic, perMillion = false) => {
   }
 
   if (normalizeBy) {
-    count /= getStatistic(data, type, normalizeBy);
+    count /= getStatistic(
+      data,
+      normalizeBy === 'population' ? 'total' : type,
+      normalizeBy
+    );
   }
 
-  return (multiplyFactor || 1) * ((isFinite(count) && count) || 0);
+  return multiplyFactor * ((isFinite(count) && count) || 0);
 };
 
-export const getTableStatistic = (
-  data,
-  statistic,
-  isPerMillion,
-  lastUpdatedTT
-) => {
+export const getTableStatistic = (data, statistic, args, lastUpdatedTT) => {
   const expired =
     (STATISTIC_OPTIONS[statistic].key === 'tested' ||
       STATISTIC_OPTIONS[statistic].normalizeByKey === 'tested') &&
@@ -160,12 +177,8 @@ export const getTableStatistic = (
       parseIndiaDate(data.meta?.tested?.['last_updated'])
     ) > TESTED_LOOKBACK_DAYS;
 
-  const total = !expired
-    ? getStatistic(data, 'total', statistic, isPerMillion)
-    : 0;
-  const delta = !expired
-    ? getStatistic(data, 'delta', statistic, isPerMillion)
-    : 0;
+  const total = !expired ? getStatistic(data, 'total', statistic, args) : 0;
+  const delta = !expired ? getStatistic(data, 'delta', statistic, args) : 0;
   return {total, delta};
 };
 
