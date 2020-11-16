@@ -159,10 +159,8 @@ function TimeseriesExplorer({
 
   const dates = useMemo(
     () =>
-      Object.keys(selectedTimeseries || {}).filter(
-        (date) => date <= (timelineDate || getIndiaDateYesterdayISO())
-      ),
-    [selectedTimeseries, timelineDate]
+      Object.keys(selectedTimeseries || {}).filter((date) => date <= endDate),
+    [selectedTimeseries, endDate]
   );
 
   const brushDates = useMemo(
@@ -311,13 +309,13 @@ function TimeseriesExplorer({
             timeseries={selectedTimeseries}
             regionHighlighted={selectedRegion}
             dates={brushDates}
-            {...{chartType, isUniform, isLog, isMovingAverage}}
+            {...{endDate, chartType, isUniform, isLog, isMovingAverage}}
           />
           <TimeseriesBrush
             timeseries={selectedTimeseries}
             regionHighlighted={selectedRegion}
             brushDomain={[brushStart, brushEnd]}
-            {...{dates, setBrushEnd, setLookback}}
+            {...{dates, endDate, setBrushEnd, setLookback}}
           />
         </Suspense>
       )}

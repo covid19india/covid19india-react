@@ -29,6 +29,7 @@ function TimeseriesBrush({
   timeseries,
   dates,
   brushDomain,
+  endDate,
   setBrushEnd,
   setLookback,
 }) {
@@ -39,8 +40,8 @@ function TimeseriesBrush({
   // Dimensions
   const {width, height} = dimensions ||
     wrapperRef.current?.getBoundingClientRect() || {
-      width: margin.left,
-      height: margin.bottom,
+      width: margin.left + margin.right,
+      height: margin.bottom + margin.top,
     };
 
   const xScale = useMemo(() => {
@@ -51,9 +52,12 @@ function TimeseriesBrush({
 
     return scaleTime()
       .clamp(true)
-      .domain(T ? [parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])] : [])
+      .domain([
+        parseIndiaDate(dates[0] || endDate),
+        parseIndiaDate(dates[T - 1] || endDate),
+      ])
       .range([margin.left, chartRight]);
-  }, [dates, width]);
+  }, [width, endDate, dates]);
 
   useEffect(() => {
     // Chart extremes
@@ -133,11 +137,11 @@ function TimeseriesBrush({
       //   selection = [cx, cx];
       //   select(this).call(brush.move, [cx, cx]);
       // }
-      const [startDate, endDate] = selection.map(xScale.invert);
+      const [brushStartDate, brushEndDate] = selection.map(xScale.invert);
 
       ReactDOM.unstable_batchedUpdates(() => {
-        setBrushEnd(formatISO(endDate, {representation: 'date'}));
-        setLookback(differenceInDays(endDate, startDate));
+        setBrushEnd(formatISO(brushEndDate, {representation: 'date'}));
+        setLookback(differenceInDays(brushEndDate, brushStartDate));
       });
     },
     [xScale, setBrushEnd, setLookback]
@@ -145,7 +149,6 @@ function TimeseriesBrush({
 
   useEffect(() => {
     const svg = select(chartRef.current);
-
     // Chart extremes
     const chartRight = width - margin.right;
     const chartBottom = height - margin.bottom;
@@ -230,6 +233,8 @@ const isEqual = (prevProps, currProps) => {
       prevProps.regionHighlighted.districtName
     )
   ) {
+    return false;
+  } else if (!equal(currProps.endDate, prevProps.endDate)) {
     return false;
   } else if (!equal(currProps.dates, prevProps.dates)) {
     return false;

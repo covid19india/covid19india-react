@@ -24,11 +24,8 @@ function MapLegend({data, mapViz, mapScale, statistic}) {
 
   useEffect(() => {
     const svg = select(svgRef.current);
-    let {width, height} =
-      dimensions || wrapperRef.current.getBoundingClientRect();
-
-    if (!width || !height)
-      ({width, height} = wrapperRef.current.getBoundingClientRect());
+    const {width, height} = dimensions ||
+      wrapperRef.current?.getBoundingClientRect() || {width: 0, height: 0};
 
     if (!width || !height) return;
 

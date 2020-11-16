@@ -36,6 +36,7 @@ const numTicksX = (width) => (width < 480 ? 4 : 6);
 function Timeseries({
   timeseries,
   dates,
+  endDate,
   chartType,
   isUniform,
   isLog,
@@ -58,8 +59,8 @@ function Timeseries({
   // Dimensions
   const {width, height} = dimensions ||
     wrapperRef.current?.getBoundingClientRect() || {
-      width: margin.left,
-      height: margin.bottom,
+      width: margin.left + margin.right,
+      height: margin.bottom + margin.top,
     };
 
   const [highlightedDate, setHighlightedDate] = useState(
@@ -88,9 +89,12 @@ function Timeseries({
 
     return scaleTime()
       .clamp(true)
-      .domain(T ? [parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])] : [])
+      .domain([
+        parseIndiaDate(dates[0] || endDate),
+        parseIndiaDate(dates[T - 1] || endDate),
+      ])
       .range([margin.left, chartRight]);
-  }, [dates, width]);
+  }, [width, endDate, dates]);
 
   const yScales = useMemo(() => {
     const chartBottom = height - margin.bottom;
@@ -578,17 +582,13 @@ function Timeseries({
     [timeseries, dates, highlightedDate, chartType, isMovingAverage]
   );
 
-  const trail = useMemo(() => {
-    const styles = [];
-
-    [0, 0, 0, 0, 0].map((element, index) => {
-      styles.push({
+  const trail = useMemo(
+    () =>
+      statistics.map((statistic, index) => ({
         animationDelay: `${index * 250}ms`,
-      });
-      return null;
-    });
-    return styles;
-  }, []);
+      })),
+    [statistics]
+  );
 
   return (
     <div className="Timeseries">
@@ -672,6 +672,8 @@ const isEqual = (prevProps, currProps) => {
       prevProps.regionHighlighted.districtName
     )
   ) {
+    return false;
+  } else if (!equal(currProps.endDate, prevProps.endDate)) {
     return false;
   } else if (!equal(currProps.dates, prevProps.dates)) {
     return false;

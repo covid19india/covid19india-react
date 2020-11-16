@@ -26,11 +26,11 @@ const margin = {top: 10, right: 10, bottom: 2, left: 5};
 
 function Minigraphs({timeseries, date: timelineDate}) {
   const refs = useRef([]);
+  const endDate = timelineDate || getIndiaDateYesterdayISO();
 
   const dates = useMemo(() => {
-    const cutOffDateUpper = timelineDate || getIndiaDateYesterdayISO();
     const pastDates = Object.keys(timeseries || {}).filter(
-      (date) => date <= cutOffDateUpper
+      (date) => date <= endDate
     );
     const lastDate = pastDates[pastDates.length - 1];
 
@@ -39,7 +39,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
       {representation: 'date'}
     );
     return pastDates.filter((date) => date >= cutOffDateLower);
-  }, [timeseries, timelineDate]);
+  }, [endDate, timeseries]);
 
   useEffect(() => {
     const T = dates.length;
@@ -49,7 +49,10 @@ function Minigraphs({timeseries, date: timelineDate}) {
 
     const xScale = scaleTime()
       .clamp(true)
-      .domain(T ? [parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])] : [])
+      .domain([
+        parseIndiaDate(dates[0] || endDate),
+        parseIndiaDate(dates[T - 1]) || endDate,
+      ])
       .range([margin.left, chartRight]);
 
     refs.current.forEach((ref, index) => {
@@ -145,7 +148,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
               .selection()
         );
     });
-  }, [dates, timeseries]);
+  }, [endDate, dates, timeseries]);
 
   return (
     <div className="Minigraph">
