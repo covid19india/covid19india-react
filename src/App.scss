@@ -53,10 +53,10 @@ $purple-light: #201aa220;
 $purple-hover: #201aa230;
 $purple-mid: #201aa299;
 $purple-light-opaque: #e3e2f3;
-$pink: #fb5581;
-$pink-light: #ffa8cb30;
-$pink-hover: #ffa8cb60;
-$pink-mid: #fb558199;
+$pink: #db5581;
+$pink-light: #db558130;
+$pink-hover: #db558160;
+$pink-mid: #db558199;
 $brown: #b6854d;
 $brown-light: #b6854d10;
 $brown-hover: #b6854d30;
@@ -2272,7 +2272,7 @@ abbr {
       }
 
       .switch-type,
-      .switch-statistic, {
+      .switch-statistic {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
@@ -2640,55 +2640,71 @@ abbr {
   width: 100%;
 
   .svg-parent {
-    height: 10rem;
+    height: 12rem;
     margin-bottom: 1rem;
 
     &.is-confirmed {
-      line {
-        &.stem {
-          stroke: $cherry-mid;
-        }
+      .stem {
+        stroke: $cherry-mid;
+      }
+
+      .trend-area {
+        fill: $cherry-mid;
       }
     }
 
     &.is-active {
-      line {
-        &.stem {
-          stroke: $blue-mid;
-        }
+      .stem {
+        stroke: $blue-mid;
+      }
+
+      .trend-area {
+        fill: $blue-mid;
       }
     }
 
     &.is-recovered {
-      line {
-        &.stem {
-          stroke: $green-mid;
-        }
+      .stem {
+        stroke: $green-mid;
+      }
+
+      .trend-area {
+        fill: $green-mid;
       }
     }
 
     &.is-deceased {
-      line {
-        &.stem {
-          stroke: $gray-mid;
-        }
+      .stem {
+        stroke: $gray-mid;
+      }
+
+      .trend-area {
+        fill: $gray-mid;
       }
     }
 
     &.is-tested {
-      line {
-        &.stem {
-          stroke: $purple-mid;
-        }
+      .stem {
+        stroke: $purple-mid;
+      }
+
+      .trend-area {
+        fill: $purple-mid;
       }
     }
 
     &.is-tpr {
-      line {
-        &.stem {
-          stroke: $orange-mid;
-        }
+      .stem {
+        stroke: $pink-mid;
       }
+
+      .trend-area {
+        fill: $pink-mid;
+      }
+    }
+
+    &.is-brush {
+      height: 4rem;
     }
   }
 }
@@ -2918,23 +2934,22 @@ input {
 
     &.is-tpr {
       h5 {
-        color: $orange-mid;
+        color: $pink-mid;
 
         &.title {
-          color: $orange-mid;
+          color: $pink-mid;
         }
       }
 
       h2,
       h6 {
-        color: $orange;
+        color: $pink;
       }
     }
   }
 
   .svg-parent {
     align-self: center;
-    background: $cherry-light;
     border-radius: 5px;
     display: flex;
     position: relative;
@@ -2945,20 +2960,33 @@ input {
 
       .domain,
       .tick {
-        stroke: $cherry;
         stroke-width: 1.5;
 
         line {
-          stroke: $cherry;
           stroke-width: 1.5;
         }
       }
 
       text {
-        color: $cherry-mid;
         font-size: 9px;
         font-weight: 600;
         stroke: transparent;
+      }
+    }
+
+    &.is-confirmed {
+      background: $cherry-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $cherry;
+        }
+
+        text {
+          color: $cherry-mid;
+        }
       }
     }
 
@@ -2974,7 +3002,6 @@ input {
 
         text {
           color: $green-mid;
-          stroke: transparent;
         }
       }
     }
@@ -2991,7 +3018,6 @@ input {
 
         text {
           color: $gray-mid;
-          stroke: transparent;
         }
       }
     }
@@ -3008,7 +3034,6 @@ input {
 
         text {
           color: $blue-mid;
-          stroke: transparent;
         }
       }
     }
@@ -3025,24 +3050,40 @@ input {
 
         text {
           color: $purple-mid;
-          stroke: transparent;
         }
       }
     }
 
     &.is-tpr {
-      background: $orange-light;
+      background: $pink-light;
 
       svg {
         .domain,
         .tick,
         line {
-          stroke: $orange;
+          stroke: $pink;
         }
 
         text {
-          color: $orange-mid;
-          stroke: transparent;
+          color: $pink-mid;
+        }
+      }
+    }
+
+    &.is-brush {
+      .overlay {
+        fill: $gray-hover;
+      }
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $gray;
+        }
+
+        text {
+          color: $gray;
         }
       }
     }
@@ -3837,7 +3878,7 @@ footer {
   }
 
   .Home,
-  .State, {
+  .State {
     display: flex;
     flex-direction: column;
     margin-left: 0;
@@ -4317,6 +4358,10 @@ footer {
             stroke: #9673b999 !important;
           }
 
+          .trend-area {
+            fill: #9673b999 !important;
+          }
+
           text {
             color: $dark-m-purple-mid !important;
             stroke: transparent;
@@ -4361,8 +4406,7 @@ footer {
       .dropdown {
         select {
           background: #1e1e30;
-          background-image:
-          linear-gradient(45deg, transparent 50%, $gray 50%),
+          background-image: linear-gradient(45deg, transparent 50%, $gray 50%),
           linear-gradient(135deg, $gray 50%, transparent 50%);
           background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
           background-repeat: no-repeat;

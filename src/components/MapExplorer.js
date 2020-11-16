@@ -85,14 +85,10 @@ function MapExplorer({
       switch (option) {
         case MAP_VIZS.CHOROPLETH:
           setMapViz(MAP_VIZS.CHOROPLETH);
-          return;
-
+          break;
         case MAP_VIZS.BUBBLES:
           setMapViz(MAP_VIZS.BUBBLES);
-          return;
-
-        default:
-          return;
+          break;
       }
     },
     [setMapViz]

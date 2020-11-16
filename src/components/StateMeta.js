@@ -6,17 +6,17 @@ import {
   formatNumber,
   formatLastUpdated,
   getStatistic,
-  getIndiaYesterdayISO,
+  getIndiaDateYesterdayISO,
   parseIndiaDate,
 } from '../utils/commonFunctions';
 
-import {formatISO, sub} from 'date-fns';
+import {formatISO, subDays} from 'date-fns';
 import {memo} from 'react';
 import {Compass} from 'react-feather';
 
 function StateMeta({stateCode, data, timeseries}) {
   const pastDates = Object.keys(timeseries || {}).filter(
-    (date) => date <= getIndiaYesterdayISO()
+    (date) => date <= getIndiaDateYesterdayISO()
   );
   const lastDate = pastDates[pastDates.length - 1];
   const lastConfirmed = getStatistic(
@@ -27,7 +27,7 @@ function StateMeta({stateCode, data, timeseries}) {
   const prevWeekConfirmed =
     lastConfirmed - getStatistic(timeseries?.[lastDate], 'delta7', 'confirmed');
 
-  const prevWeekDate = formatISO(sub(parseIndiaDate(lastDate), {days: 7}));
+  const prevWeekDate = formatISO(subDays(parseIndiaDate(lastDate), 7));
 
   const confirmedPerMillion = getStatistic(
     data[stateCode],

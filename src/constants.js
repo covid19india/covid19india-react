@@ -1,4 +1,4 @@
-export const API_ROOT_URL = 'http://192.168.1.43:8080/v4/min';
+export const API_ROOT_URL = 'https://api.covid19india.org/v4/min';
 
 export const LOCALE_SHORTHANDS = {
   english: 'en-US',
@@ -83,7 +83,7 @@ export const STATISTIC_DEFINITIONS = {
   },
   tpr: {
     displayName: 'test positivity ratio',
-    color: '#fd7e14',
+    color: '#fb5581',
     format: '%',
     options: {
       key: 'confirmed',
@@ -127,6 +127,8 @@ export const PRIMARY_STATISTICS = [
   'deceased',
 ];
 
+export const BRUSH_STATISTICS = ['other', 'deceased', 'recovered', 'active'];
+
 export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
 export const TABLE_STATISTICS_EXPANDED = Object.keys(STATISTIC_DEFINITIONS);
@@ -158,11 +160,7 @@ export const TIMESERIES_CHART_TYPES = {
   delta: 'Daily',
 };
 
-export const TIMESERIES_LOOKBACKS = {
-  BEGINNING: 'Beginning',
-  THREE_MONTHS: '3 Months',
-  MONTH: '1 Month',
-};
+export const TIMESERIES_LOOKBACK_DAYS = [null, 90, 30];
 
 export const MAP_VIZS = {
   CHOROPLETH: 0,

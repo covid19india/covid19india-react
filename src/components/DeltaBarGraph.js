@@ -2,7 +2,7 @@ import {STATISTIC_CONFIGS, D3_TRANSITION_DURATION} from '../constants';
 import {
   formatDate,
   formatNumber,
-  getIndiaYesterdayISO,
+  getIndiaDateYesterdayISO,
   getStatistic,
 } from '../utils/commonFunctions';
 
@@ -26,7 +26,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
   const [wrapperRef, {width, height}] = useMeasure();
 
   const pastDates = Object.keys(timeseries || {}).filter(
-    (date) => date <= getIndiaYesterdayISO()
+    (date) => date <= getIndiaDateYesterdayISO()
   );
   const dates = pastDates.slice(-lookback);
 
@@ -48,11 +48,15 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       .domain([
         Math.min(
           0,
-          min(dates, (date) => getDeltaStatistic(timeseries?.[date], statistic))
+          min(dates, (date) =>
+            getDeltaStatistic(timeseries?.[date], statistic)
+          ) || 0
         ),
         Math.max(
           1,
-          max(dates, (date) => getDeltaStatistic(timeseries?.[date], statistic))
+          max(dates, (date) =>
+            getDeltaStatistic(timeseries?.[date], statistic)
+          ) || 0
         ),
       ])
       .range([chartBottom, margin.top]);
