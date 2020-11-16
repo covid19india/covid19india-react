@@ -5,7 +5,7 @@ import {
 } from '../constants';
 import {
   getStatistic,
-  getIndiaYesterdayISO,
+  getIndiaDateYesterdayISO,
   parseIndiaDate,
 } from '../utils/commonFunctions';
 
@@ -28,7 +28,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
   const refs = useRef([]);
 
   const dates = useMemo(() => {
-    const cutOffDateUpper = timelineDate || getIndiaYesterdayISO();
+    const cutOffDateUpper = timelineDate || getIndiaDateYesterdayISO();
     const pastDates = Object.keys(timeseries || {}).filter(
       (date) => date <= cutOffDateUpper
     );

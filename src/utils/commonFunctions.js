@@ -46,8 +46,12 @@ export const getIndiaDateISO = () => {
   return formatISO(getIndiaDate(), {representation: 'date'});
 };
 
-export const getIndiaYesterdayISO = () => {
-  return formatISO(subDays(getIndiaDate(), 1), {representation: 'date'});
+export const getIndiaDateYesterday = () => {
+  return subDays(getIndiaDate(), 1);
+};
+
+export const getIndiaDateYesterdayISO = () => {
+  return formatISO(getIndiaDateYesterday(), {representation: 'date'});
 };
 
 export const formatLastUpdated = (unformattedDate) => {

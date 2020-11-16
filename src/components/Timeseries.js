@@ -20,14 +20,18 @@ import {axisBottom, axisRight} from 'd3-axis';
 import {interpolatePath} from 'd3-interpolate-path';
 import {scaleTime, scaleLinear, scaleLog} from 'd3-scale';
 import {select, pointer} from 'd3-selection';
-import {line, curveMonotoneX} from 'd3-shape';
+import {area, line, curveMonotoneX} from 'd3-shape';
 import 'd3-transition';
+import {differenceInDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import {memo, useCallback, useEffect, useRef, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
 // Chart margins
 const margin = {top: 15, right: 35, bottom: 25, left: 25};
+// Buffer space along y-axis
+const yScaleShrinkFactor = 0.7;
+const numTicksX = (width) => (width < 480 ? 4 : 6);
 
 function Timeseries({
   timeseries,
@@ -43,51 +47,190 @@ function Timeseries({
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
 
-  const [highlightedDate, setHighlightedDate] = useState();
+  const statistics = useMemo(
+    () =>
+      TIMESERIES_STATISTICS.filter(
+        (statistic) => chartType === 'delta' || statistic !== 'tpr'
+      ),
+    [chartType]
+  );
 
+  // Dimensions
+  const {width, height} = dimensions ||
+    wrapperRef.current?.getBoundingClientRect() || {
+      width: margin.left,
+      height: margin.bottom,
+    };
+
+  const [highlightedDate, setHighlightedDate] = useState(
+    dates[dates.length - 1]
+  );
   useEffect(() => {
     setHighlightedDate(dates[dates.length - 1]);
   }, [dates]);
 
-  const getBarWidth = useCallback(() => {
+  const condenseChart = useMemo(() => {
     const T = dates.length;
-    // Dimensions
-    const {width} = dimensions || wrapperRef.current.getBoundingClientRect();
+    const days = differenceInDays(
+      parseIndiaDate(dates[T - 1]),
+      parseIndiaDate(dates[0])
+    );
     // Chart extremes
     const chartRight = width - margin.right;
     // Bar widths
-    const axisWidth = chartRight - margin.left;
-    return Math.min(4, axisWidth / (1.25 * T));
-  }, [dates.length, dimensions]);
+    const axisWidth = Math.max(0, chartRight - margin.left) / (1.25 * days);
+    return axisWidth < 4;
+  }, [width, dates]);
 
-  useEffect(() => {
+  const xScale = useMemo(() => {
     const T = dates.length;
-    // Dimensions
-    const {width, height} =
-      dimensions || wrapperRef.current.getBoundingClientRect();
-    // Chart extremes
     const chartRight = width - margin.right;
-    const chartBottom = height - margin.bottom;
-    const barWidth = getBarWidth();
 
-    // Buffer space along y-axis
-    const yBufferTop = 1.2;
-    const yBufferBottom = 1.1;
-
-    const xScale = scaleTime()
+    return scaleTime()
       .clamp(true)
       .domain(T ? [parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])] : [])
       .range([margin.left, chartRight]);
+  }, [dates, width]);
 
-    // Number of x-axis ticks
-    const numTicksX = width < 480 ? 4 : 7;
+  const yScales = useMemo(() => {
+    const chartBottom = height - margin.bottom;
+
+    const addScaleBuffer = (scale, log = false) => {
+      const domain = scale.domain();
+      if (log) {
+        scale.domain([
+          domain[0],
+          domain[0] * Math.pow(domain[1] / domain[0], 1 / yScaleShrinkFactor),
+        ]);
+      } else {
+        scale.domain([
+          domain[0],
+          domain[0] + (domain[1] - domain[0]) / yScaleShrinkFactor,
+        ]);
+      }
+      return scale;
+    };
+
+    const uniformScaleMin = Math.min(
+      0,
+      min(dates, (date) =>
+        getStatistic(timeseries[date], chartType, 'active', {
+          movingAverage: isMovingAverage,
+        })
+      ) || 0
+    );
+
+    const uniformScaleMax = Math.max(
+      1,
+      max(dates, (date) =>
+        Math.max(
+          getStatistic(timeseries[date], chartType, 'confirmed', {
+            movingAverage: isMovingAverage,
+          }),
+          getStatistic(timeseries[date], chartType, 'recovered', {
+            movingAverage: isMovingAverage,
+          }),
+          getStatistic(timeseries[date], chartType, 'deceased', {
+            movingAverage: isMovingAverage,
+          })
+        )
+      ) || 0
+    );
+
+    const yScaleUniformLinear = addScaleBuffer(
+      scaleLinear()
+        .clamp(true)
+        .domain([uniformScaleMin, uniformScaleMax])
+        .range([chartBottom, margin.top])
+        .nice(4)
+    );
+
+    const yScaleUniformLog = addScaleBuffer(
+      scaleLog()
+        .clamp(true)
+        .domain([Math.max(1, uniformScaleMin), Math.max(10, uniformScaleMax)])
+        .range([chartBottom, margin.top])
+        .nice(4),
+      true
+    );
+
+    return statistics.map((statistic) => {
+      if (
+        isUniform &&
+        chartType === 'total' &&
+        isLog &&
+        PRIMARY_STATISTICS.includes(statistic)
+      )
+        return yScaleUniformLog;
+
+      if (isUniform && PRIMARY_STATISTICS.includes(statistic))
+        return yScaleUniformLinear;
+
+      const scaleMin = Math.min(
+        0,
+        min(dates, (date) =>
+          getStatistic(timeseries[date], chartType, statistic, {
+            movingAverage: isMovingAverage,
+          })
+        ) || 0
+      );
+
+      const scaleMax = Math.max(
+        1,
+        max(dates, (date) =>
+          getStatistic(timeseries[date], chartType, statistic, {
+            movingAverage: isMovingAverage,
+          })
+        ) || 0
+      );
+
+      if (chartType === 'total' && isLog) {
+        return addScaleBuffer(
+          scaleLog()
+            .clamp(true)
+            .domain([Math.max(1, scaleMin), Math.max(10, scaleMax)])
+            .range([chartBottom, margin.top])
+            .nice(4),
+          true
+        );
+      }
+
+      return addScaleBuffer(
+        scaleLinear()
+          .clamp(true)
+          .domain([
+            chartType === 'total' || statistic !== 'active' ? 0 : scaleMin,
+            STATISTIC_CONFIGS[statistic].format === '%'
+              ? Math.min(100, scaleMax)
+              : scaleMax,
+          ])
+          .range([chartBottom, margin.top])
+          .nice(4)
+      );
+    });
+  }, [
+    height,
+    chartType,
+    isUniform,
+    isLog,
+    isMovingAverage,
+    statistics,
+    dates,
+    timeseries,
+  ]);
+
+  useEffect(() => {
+    const T = dates.length;
+    // Chart extremes
+    const chartRight = width - margin.right;
+    const chartBottom = height - margin.bottom;
+
+    const isDiscrete = chartType === 'delta' && !isMovingAverage;
 
     const xAxis = (g) =>
-      g.attr('class', 'x-axis').call(
-        axisBottom(xScale)
-          .ticks(numTicksX)
-          .tickFormat((date) => formatDate(date, 'dd MMM'))
-      );
+      g
+        .attr('class', 'x-axis')
+        .call(axisBottom(xScale).ticks(numTicksX(width)));
 
     const xAxis2 = (g, yScale) => {
       g.attr('class', 'x-axis2')
@@ -106,92 +249,6 @@ function Timeseries({
           .tickFormat((num) => formatNumber(num, format))
           .tickPadding(4)
       );
-
-    const uniformScaleMin = min(dates, (date) =>
-      getStatistic(timeseries[date], chartType, 'active', {
-        movingAverage: isMovingAverage,
-      })
-    );
-
-    const uniformScaleMax = max(dates, (date) =>
-      Math.max(
-        getStatistic(timeseries[date], chartType, 'confirmed', {
-          movingAverage: isMovingAverage,
-        }),
-        getStatistic(timeseries[date], chartType, 'recovered', {
-          movingAverage: isMovingAverage,
-        }),
-        getStatistic(timeseries[date], chartType, 'deceased', {
-          movingAverage: isMovingAverage,
-        })
-      )
-    );
-
-    const yScaleUniformLinear = scaleLinear()
-      .clamp(true)
-      .domain([uniformScaleMin, Math.max(1, yBufferTop * uniformScaleMax)])
-      .nice(4)
-      .range([chartBottom, margin.top]);
-
-    const yScaleUniformLog = scaleLog()
-      .clamp(true)
-      .domain([
-        Math.max(1, uniformScaleMin),
-        Math.max(10, yBufferTop * uniformScaleMax),
-      ])
-      .nice(4)
-      .range([chartBottom, margin.top]);
-
-    const generateYScale = (statistic) => {
-      if (
-        isUniform &&
-        chartType === 'total' &&
-        isLog &&
-        PRIMARY_STATISTICS.includes(statistic)
-      )
-        return yScaleUniformLog;
-
-      if (isUniform && PRIMARY_STATISTICS.includes(statistic))
-        return yScaleUniformLinear;
-
-      const statisticMin = min(dates, (date) =>
-        getStatistic(timeseries[date], chartType, statistic, {
-          movingAverage: isMovingAverage,
-        })
-      );
-
-      const statisticMax = max(dates, (date) =>
-        getStatistic(timeseries[date], chartType, statistic, {
-          movingAverage: isMovingAverage,
-        })
-      );
-
-      if (chartType === 'total' && isLog)
-        return scaleLog()
-          .clamp(true)
-          .domain([
-            Math.max(1, statisticMin),
-            Math.max(10, yBufferTop * statisticMax),
-          ])
-          .nice(4)
-          .range([chartBottom, margin.top]);
-
-      return scaleLinear()
-        .clamp(true)
-        .domain([
-          chartType === 'total' || statistic !== 'active'
-            ? 0
-            : Math.min(0, yBufferBottom * statisticMin),
-          Math.max(
-            1,
-            STATISTIC_CONFIGS[statistic].format === '%'
-              ? Math.min(100, yBufferTop * statisticMax)
-              : yBufferTop * statisticMax
-          ),
-        ])
-        .nice(4)
-        .range([chartBottom, margin.top]);
-    };
 
     function mousemove(event) {
       const xm = pointer(event)[0];
@@ -214,12 +271,12 @@ function Timeseries({
     }
 
     /* Begin drawing charts */
-    refs.current.forEach((ref, i) => {
+    statistics.forEach((statistic, i) => {
+      const ref = refs.current[i];
       const svg = select(ref);
       const t = svg.transition().duration(D3_TRANSITION_DURATION);
 
-      const statistic = TIMESERIES_STATISTICS[i];
-      const yScale = generateYScale(statistic);
+      const yScale = yScales[i];
       const color = STATISTIC_CONFIGS[statistic].color;
       const format =
         STATISTIC_CONFIGS[statistic].format === '%' ? '%' : 'short';
@@ -242,16 +299,25 @@ function Timeseries({
 
       /* Path dots */
       svg
-        .selectAll('circle')
-        .data(dates, (date) => date)
+        .selectAll('circle.normal')
+        .data(condenseChart ? [] : dates, (date) => date)
         .join((enter) =>
           enter
             .append('circle')
+            .attr('class', 'normal')
             .attr('fill', color)
             .attr('stroke', color)
-            .attr('cy', chartBottom)
             .attr('cx', (date) => xScale(parseIndiaDate(date)))
-            .attr('r', barWidth / 2)
+            .attr('cy', (date) =>
+              yScale(
+                isDiscrete
+                  ? 0
+                  : getStatistic(timeseries[date], chartType, statistic, {
+                      movingAverage: isMovingAverage,
+                    })
+              )
+            )
+            .attr('r', 2)
         )
         .transition(t)
         .attr('cx', (date) => xScale(parseIndiaDate(date)))
@@ -263,41 +329,112 @@ function Timeseries({
           )
         );
 
-      if (chartType === 'delta' && !isMovingAverage) {
+      const areaPath = (dates, allZero = false) =>
+        area()
+          .curve(curveMonotoneX)
+          .x((date) => xScale(parseIndiaDate(date)))
+          .y0(yScale(0))
+          .y1(
+            allZero
+              ? yScale(0)
+              : (date) =>
+                  yScale(
+                    getStatistic(timeseries[date], chartType, statistic, {
+                      movingAverage: isMovingAverage,
+                    })
+                  )
+          )(dates);
+
+      if (isDiscrete) {
         /* DAILY TRENDS */
         svg.selectAll('.trend').remove();
 
-        svg
-          .selectAll('.stem')
-          .data(dates, (date) => date)
-          .join((enter) =>
-            enter
-              .append('line')
-              .attr('class', 'stem')
-              .attr('stroke-width', barWidth)
-              .attr('x1', (date) => xScale(parseIndiaDate(date)))
-              .attr('y1', chartBottom)
-              .attr('x2', (date) => xScale(parseIndiaDate(date)))
-              .attr('y2', chartBottom)
-          )
-          .transition(t)
-          .attr('stroke-width', barWidth)
-          .attr('x1', (date) => xScale(parseIndiaDate(date)))
-          .attr('y1', yScale(0))
-          .attr('x2', (date) => xScale(parseIndiaDate(date)))
-          .attr('y2', (date) =>
-            yScale(
-              getStatistic(timeseries[date], chartType, statistic, {
-                movingAverage: isMovingAverage,
-              })
+        if (condenseChart) {
+          svg
+            .selectAll('.stem')
+            .transition(t)
+            .attr('y1', yScale(0))
+            .attr('y2', yScale(0))
+            .remove();
+
+          svg
+            .selectAll('.trend-area')
+            .data(T ? [dates] : [])
+            .join(
+              (enter) =>
+                enter
+                  .append('path')
+                  .attr('class', 'trend-area')
+                  .call((enter) =>
+                    enter
+                      .attr('d', (dates) => areaPath(dates, true))
+                      .transition(t)
+                      .attr('d', areaPath)
+                  ),
+              (update) =>
+                update.call((update) =>
+                  update.transition(t).attrTween('d', function (dates) {
+                    const previous = select(this).attr('d');
+                    const current = areaPath(dates);
+                    return interpolatePath(previous, current);
+                  })
+                )
+            );
+        } else {
+          svg
+            .selectAll('.trend-area')
+            .transition(t)
+            .attr('d', (dates) => areaPath(dates, true))
+            .remove();
+
+          svg
+            .selectAll('.stem')
+            .data(dates, (date) => date)
+            .join(
+              (enter) =>
+                enter
+                  .append('line')
+                  .attr('class', 'stem')
+                  .attr('stroke-width', 4)
+                  .attr('x1', (date) => xScale(parseIndiaDate(date)))
+                  .attr('y1', yScale(0))
+                  .attr('x2', (date) => xScale(parseIndiaDate(date)))
+                  .attr('y2', yScale(0)),
+              (update) => update,
+              (exit) =>
+                exit.call((exit) =>
+                  exit
+                    .transition(t)
+                    .attr('x1', (date) => xScale(parseIndiaDate(date)))
+                    .attr('x2', (date) => xScale(parseIndiaDate(date)))
+                    .attr('y2', yScale(0))
+                    .remove()
+                )
             )
-          );
+            .transition(t)
+            .attr('x1', (date) => xScale(parseIndiaDate(date)))
+            .attr('y1', yScale(0))
+            .attr('x2', (date) => xScale(parseIndiaDate(date)))
+            .attr('y2', (date) =>
+              yScale(
+                getStatistic(timeseries[date], chartType, statistic, {
+                  movingAverage: isMovingAverage,
+                })
+              )
+            );
+        }
       } else {
         svg
           .selectAll('.stem')
           .transition(t)
           .attr('y1', yScale(0))
           .attr('y2', yScale(0))
+          .remove();
+
+        svg
+          .selectAll('.trend-area')
+          .transition(t)
+          .attr('d', (dates) => areaPath(dates, true))
           .remove();
 
         const linePath = line()
@@ -311,8 +448,6 @@ function Timeseries({
             )
           );
 
-        let pathLength;
-
         svg
           .selectAll('.trend')
           .data(T ? [dates] : [])
@@ -322,30 +457,22 @@ function Timeseries({
                 .append('path')
                 .attr('class', 'trend')
                 .attr('fill', 'none')
-                .attr('stroke', color + '50')
-                .attr('stroke-width', barWidth)
+                .attr('stroke-width', 4)
                 .attr('d', linePath)
-                .attr('stroke-dasharray', function () {
-                  return (pathLength = this.getTotalLength());
-                })
-                .call((enter) =>
-                  enter
-                    .attr('stroke-dashoffset', pathLength)
-                    .transition(t)
-                    .attr('stroke-dashoffset', 0)
-                ),
+                .call((enter) => enter.transition(t).attr('opacity', 1)),
             (update) =>
-              update
-                .attr('stroke-dasharray', null)
-                .transition(t)
-                .attrTween('d', function (date) {
-                  const previous = select(this).attr('d');
-                  const current = linePath(date);
-                  return interpolatePath(previous, current);
-                })
-                .attr('stroke-width', barWidth)
-                .selection()
-          );
+              update.call((update) =>
+                update
+                  .attr('opacity', 1)
+                  .transition(t)
+                  .attrTween('d', function (date) {
+                    const previous = select(this).attr('d');
+                    const current = linePath(date);
+                    return interpolatePath(previous, current);
+                  })
+              )
+          )
+          .attr('stroke', color + (condenseChart ? '99' : '50'));
       }
 
       svg.selectAll('*').attr('pointer-events', 'none');
@@ -355,27 +482,75 @@ function Timeseries({
         .on('mouseout touchend', mouseout);
     });
   }, [
+    width,
+    height,
     chartType,
-    dimensions,
-    getBarWidth,
-    isUniform,
-    isLog,
     isMovingAverage,
-    timeseries,
+    condenseChart,
+    xScale,
+    yScales,
+    statistics,
     dates,
+    timeseries,
   ]);
 
   useEffect(() => {
-    const barWidth = getBarWidth();
-    refs.current.forEach((ref) => {
+    statistics.forEach((statistic, i) => {
+      const ref = refs.current[i];
       const svg = select(ref);
+      const color = STATISTIC_CONFIGS[statistic].color;
+      const yScale = yScales[i];
+      const t = svg.transition().duration(D3_TRANSITION_DURATION);
+
       svg
-        .selectAll('circle')
-        .attr('r', (date) =>
-          date === highlightedDate ? barWidth : barWidth / 2
+        .selectAll('circle.condensed')
+        .data(
+          condenseChart && highlightedDate ? [highlightedDate] : [],
+          (date) => date
+        )
+        .join((enter) =>
+          enter
+            .append('circle')
+            .attr('class', 'condensed')
+            .attr('fill', color)
+            .attr('stroke', color)
+            .attr('pointer-events', 'none')
+            .attr('cx', (date) => xScale(parseIndiaDate(date)))
+            .attr('cy', (date) =>
+              yScale(
+                getStatistic(timeseries[date], chartType, statistic, {
+                  movingAverage: isMovingAverage,
+                })
+              )
+            )
+            .attr('r', 4)
+        )
+        .transition(t)
+        .attr('cx', (date) => xScale(parseIndiaDate(date)))
+        .attr('cy', (date) =>
+          yScale(
+            getStatistic(timeseries[date], chartType, statistic, {
+              movingAverage: isMovingAverage,
+            })
+          )
         );
+
+      if (!condenseChart) {
+        svg
+          .selectAll('circle')
+          .attr('r', (date) => (date === highlightedDate ? 4 : 2));
+      }
     });
-  }, [highlightedDate, getBarWidth]);
+  }, [
+    chartType,
+    isMovingAverage,
+    condenseChart,
+    highlightedDate,
+    xScale,
+    yScales,
+    statistics,
+    timeseries,
+  ]);
 
   const getStatisticDelta = useCallback(
     (statistic) => {
@@ -416,69 +591,62 @@ function Timeseries({
   }, []);
 
   return (
-    <>
-      <div className="Timeseries">
-        {TIMESERIES_STATISTICS /*
-        .filter(
-          (statistic) => chartType === 'delta' || statistic !== 'tpr'
-        )*/.map(
-          (statistic, index) => {
-            const delta = getStatisticDelta(statistic, index);
-            const statisticConfig = STATISTIC_CONFIGS[statistic];
-            return (
-              <div
-                key={statistic}
-                className={classnames('svg-parent fadeInUp', `is-${statistic}`)}
-                ref={wrapperRef}
-                style={trail[index]}
-              >
-                {highlightedDate && (
-                  <div className={classnames('stats', `is-${statistic}`)}>
-                    <h5 className="title">
-                      {t(capitalize(statisticConfig.displayName))}
-                    </h5>
-                    <h5>{formatDate(highlightedDate, 'dd MMMM')}</h5>
-                    <div className="stats-bottom">
-                      <h2>
-                        {formatNumber(
-                          getStatistic(
-                            timeseries?.[highlightedDate],
-                            chartType,
-                            statistic,
-                            {movingAverage: isMovingAverage}
-                          ),
-                          statisticConfig.format !== 'short'
-                            ? statisticConfig.format
-                            : 'int',
-                          statistic
-                        )}
-                      </h2>
-                      <h6>{`${delta > 0 ? '+' : ''}${formatNumber(
-                        delta,
-                        statisticConfig.format !== 'short'
-                          ? statisticConfig.format
-                          : 'int',
-                        statistic
-                      )}`}</h6>
-                    </div>
-                  </div>
-                )}
-                <svg
-                  ref={(element) => {
-                    refs.current[index] = element;
-                  }}
-                  preserveAspectRatio="xMidYMid meet"
-                >
-                  <g className="x-axis" />
-                  <g className="x-axis2" />
-                  <g className="y-axis" />
-                </svg>
+    <div className="Timeseries">
+      {statistics.map((statistic, index) => {
+        const delta = getStatisticDelta(statistic, index);
+        const statisticConfig = STATISTIC_CONFIGS[statistic];
+        return (
+          <div
+            key={statistic}
+            className={classnames('svg-parent fadeInUp', `is-${statistic}`)}
+            style={trail[index]}
+            ref={index === 0 ? wrapperRef : null}
+          >
+            {highlightedDate && (
+              <div className={classnames('stats', `is-${statistic}`)}>
+                <h5 className="title">
+                  {t(capitalize(statisticConfig.displayName))}
+                </h5>
+                <h5>{formatDate(highlightedDate, 'dd MMMM')}</h5>
+                <div className="stats-bottom">
+                  <h2>
+                    {formatNumber(
+                      getStatistic(
+                        timeseries?.[highlightedDate],
+                        chartType,
+                        statistic,
+                        {movingAverage: isMovingAverage}
+                      ),
+                      statisticConfig.format !== 'short'
+                        ? statisticConfig.format
+                        : 'int',
+                      statistic
+                    )}
+                  </h2>
+                  <h6>{`${delta > 0 ? '+' : ''}${formatNumber(
+                    delta,
+                    statisticConfig.format !== 'short'
+                      ? statisticConfig.format
+                      : 'int',
+                    statistic
+                  )}`}</h6>
+                </div>
               </div>
-            );
-          }
-        )}
-      </div>
-    </>
+            )}
+            <svg
+              ref={(element) => {
+                refs.current[index] = element;
+              }}
+              preserveAspectRatio="xMidYMid meet"
+            >
+              <g className="x-axis" />
+              <g className="x-axis2" />
+              <g className="y-axis" />
+            </svg>
+          </div>
+        );
+      })}
+    </div>
   );
 }
 

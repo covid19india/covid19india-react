@@ -3,20 +3,34 @@ import TimeseriesLoader from './loaders/Timeseries';
 import {
   STATE_NAMES,
   TIMESERIES_CHART_TYPES,
-  TIMESERIES_LOOKBACKS,
+  TIMESERIES_LOOKBACK_DAYS,
 } from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
-import {getIndiaYesterdayISO, parseIndiaDate} from '../utils/commonFunctions';
+import {
+  getIndiaDateYesterdayISO,
+  parseIndiaDate,
+} from '../utils/commonFunctions';
 
 import {PinIcon, ReplyIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
-import {formatISO, sub} from 'date-fns';
+import {min} from 'd3-array';
+import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
-import {memo, useCallback, useMemo, useRef, lazy, Suspense} from 'react';
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  lazy,
+  Suspense,
+} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useLocalStorage} from 'react-use';
 
 const Timeseries = lazy(() => import('./Timeseries'));
+const TimeseriesBrush = lazy(() => import('./TimeseriesBrush'));
 
 function TimeseriesExplorer({
   stateCode,
@@ -29,10 +43,7 @@ function TimeseriesExplorer({
   expandTable,
 }) {
   const {t} = useTranslation();
-  const [lookback, setLookback] = useLocalStorage(
-    'timeseriesLookback',
-    TIMESERIES_LOOKBACKS.MONTH
-  );
+  const [lookback, setLookback] = useLocalStorage('timeseriesLookbackDays', 90);
   const [chartType, setChartType] = useLocalStorage('chartType', 'total');
   const [isUniform, setIsUniform] = useLocalStorage('isUniform', false);
   const [isLog, setIsLog] = useLocalStorage('isLog', false);
@@ -40,6 +51,27 @@ function TimeseriesExplorer({
     'isMovingAverage',
     false
   );
+
+  const stateCodeDateRange = Object.keys(timeseries?.[stateCode]?.dates || {});
+  const beginningDate =
+    stateCodeDateRange[0] || timelineDate || getIndiaDateYesterdayISO();
+  const endDate = min([
+    stateCodeDateRange[stateCodeDateRange.length - 1],
+    timelineDate || getIndiaDateYesterdayISO(),
+  ]);
+
+  const [brushEnd, setBrushEnd] = useState(endDate);
+  useEffect(() => {
+    setBrushEnd(endDate);
+  }, [endDate]);
+
+  const brushStart =
+    lookback !== null
+      ? formatISO(subDays(parseIndiaDate(brushEnd), lookback), {
+          representation: 'date',
+        })
+      : beginningDate;
+
   const explorerElement = useRef();
   const isVisible = useIsVisible(explorerElement, {once: true});
 
@@ -125,29 +157,18 @@ function TimeseriesExplorer({
     ];
   }, [regionHighlighted.stateCode, regionHighlighted.districtName, regions]);
 
-  const dates = useMemo(() => {
-    const cutOffDateUpper = timelineDate || getIndiaYesterdayISO();
-    const pastDates = Object.keys(selectedTimeseries || {}).filter(
-      (date) => date <= cutOffDateUpper
-    );
+  const dates = useMemo(
+    () =>
+      Object.keys(selectedTimeseries || {}).filter(
+        (date) => date <= (timelineDate || getIndiaDateYesterdayISO())
+      ),
+    [selectedTimeseries, timelineDate]
+  );
 
-    const lastDate = pastDates[pastDates.length - 1];
-    if (lookback === TIMESERIES_LOOKBACKS.BEGINNING) {
-      return pastDates;
-    }
-
-    let cutOffDateLower;
-    if (lookback === TIMESERIES_LOOKBACKS.MONTH) {
-      cutOffDateLower = formatISO(sub(parseIndiaDate(lastDate), {months: 1}), {
-        representation: 'date',
-      });
-    } else if (lookback === TIMESERIES_LOOKBACKS.THREE_MONTHS) {
-      cutOffDateLower = formatISO(sub(parseIndiaDate(lastDate), {months: 3}), {
-        representation: 'date',
-      });
-    }
-    return pastDates.filter((date) => date >= cutOffDateLower);
-  }, [selectedTimeseries, timelineDate, lookback]);
+  const brushDates = useMemo(
+    () => dates.filter((date) => brushStart <= date && date <= brushEnd),
+    [dates, brushStart, brushEnd]
+  );
 
   const handleChange = useCallback(
     ({target}) => {
@@ -253,7 +274,6 @@ function TimeseriesExplorer({
           </div>
         </div>
       </div>
-
       {dropdownRegions && (
         <div className="state-selection">
           <div className="dropdown">
@@ -285,28 +305,34 @@ function TimeseriesExplorer({
           </div>
         </div>
       )}
-
       {isVisible && (
         <Suspense fallback={<TimeseriesLoader />}>
           <Timeseries
             timeseries={selectedTimeseries}
             regionHighlighted={selectedRegion}
-            {...{dates, chartType, isUniform, isLog, isMovingAverage}}
+            dates={brushDates}
+            {...{chartType, isUniform, isLog, isMovingAverage}}
+          />
+          <TimeseriesBrush
+            timeseries={selectedTimeseries}
+            regionHighlighted={selectedRegion}
+            brushDomain={[brushStart, brushEnd]}
+            {...{dates, setBrushEnd, setLookback}}
           />
         </Suspense>
       )}
-
       {!isVisible && <div style={{height: '50rem'}} />}
-
       <div className="pills">
-        {Object.values(TIMESERIES_LOOKBACKS).map((option) => (
+        {TIMESERIES_LOOKBACK_DAYS.map((numDays) => (
           <button
-            key={option}
+            key={numDays}
             type="button"
-            className={classnames({selected: lookback === option})}
-            onClick={() => setLookback(option)}
+            className={classnames({
+              selected: numDays === lookback,
+            })}
+            onClick={setLookback.bind(this, numDays)}
           >
-            {t(option)}
+            {t(numDays !== null ? `${numDays} days` : 'Beginning')}
           </button>
         ))}
       </div>
