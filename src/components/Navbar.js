@@ -13,6 +13,8 @@ import {Link} from 'react-router-dom';
 import {useSpring, useTransition, animated} from 'react-spring';
 import {useLockBodyScroll, useWindowSize} from 'react-use';
 
+let count = 0;
+
 function Navbar({
   pages,
   darkMode,
@@ -51,9 +53,25 @@ function Navbar({
     setShowLanguageSwitcher(!showLanguageSwitcher);
   }, [expand, showLanguageSwitcher, setExpand, setShowLanguageSwitcher]);
 
+  const handleLangaugeSwitcherr = useCallback(() => {
+    if (expand) setExpand(false);
+    setShowLanguageSwitcher(!showLanguageSwitcher);
+  }, [expand, showLanguageSwitcher, setExpand, setShowLanguageSwitcher]);
+
   return (
     <animated.div className="Navbar" style={spring}>
-      <div className="navbar-left" onClick={handleLangaugeSwitcher.bind(this)}>
+      <div
+        className="navbar-left"
+        onClick={() => {
+          count++;
+          if (count % 2 === 0) {
+            handleLangaugeSwitcherr.bind(this);
+            count = 0;
+          } else {
+            handleLangaugeSwitcher.bind(this);
+          }
+        }}
+      >
         {locales[currentLanguage]}
       </div>
 

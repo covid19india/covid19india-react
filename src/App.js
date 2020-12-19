@@ -49,6 +49,11 @@ const App = () => {
       document.documentElement.scrollTo({top: 0, behavior: 'smooth'});
       // For Safari
       document.body.scrollTo({top: 0, behavior: 'smooth'});
+    } else {
+      // For Chrome, Firefox, IE and Opera
+      document.documentElement.scrollTo({top: -1});
+      // For Safari
+      document.body.scrollTo({top: -1});
     }
   }, [showLanguageSwitcher]);
 
