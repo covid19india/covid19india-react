@@ -14,7 +14,6 @@ import {useSpring, useTransition, animated} from 'react-spring';
 import {useLockBodyScroll, useWindowSize} from 'react-use';
 
 let count = 0;
-
 function Navbar({
   pages,
   darkMode,
