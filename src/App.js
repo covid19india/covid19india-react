@@ -18,19 +18,19 @@ const App = () => {
 
   const pages = [
     {
-      pageLink: '/',
+      pageLink: '/:lang/',
       view: Home,
       displayName: 'Home',
       showInNavbar: true,
     },
     {
-      pageLink: '/blog',
+      pageLink: '/:lang/blog',
       view: Blog,
       displayName: 'Blog',
       showInNavbar: true,
     },
     {
-      pageLink: '/about',
+      pageLink: '/:lang/about',
       view: About,
       displayName: 'About',
       showInNavbar: true,
@@ -73,12 +73,12 @@ const App = () => {
               <Route
                 exact
                 path={page.pageLink}
-                render={({match}) => <page.view />}
+                component={page.view}
                 key={index}
               />
             );
           })}
-          <Redirect to="/" />
+          <Redirect to="/english/" />
         </Switch>
       </Suspense>
     </div>

@@ -5,11 +5,13 @@ import classnames from 'classnames';
 import React, {useRef, useCallback} from 'react';
 import {ArrowUp} from 'react-feather';
 import {useTranslation} from 'react-i18next';
+import {useHistory} from 'react-router-dom';
 import {useTransition, animated} from 'react-spring';
 import {useClickAway} from 'react-use';
 
 function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
   const {i18n} = useTranslation();
+  const history = useHistory();
   const currentLanguage = Object.keys(locales).includes(i18n?.language)
     ? i18n?.language
     : i18n?.options?.fallbackLng[0];
@@ -32,9 +34,11 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
 
   const switchLanguage = useCallback(
     (languageKey) => {
-      if (i18n) i18n.changeLanguage(languageKey);
+      i18n.changeLanguage(languageKey);
+      history.push(`/${languageKey}/`);
+      setShowLanguageSwitcher(!showLanguageSwitcher);
     },
-    [i18n]
+    [i18n, history, setShowLanguageSwitcher, showLanguageSwitcher]
   );
 
   return transitions.map(({item, key, props}) =>

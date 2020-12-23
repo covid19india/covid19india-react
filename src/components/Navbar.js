@@ -76,19 +76,21 @@ function Navbar({
 
         {windowSize.width > 769 && (
           <React.Fragment>
-            <Link to="/">
+            <Link to={`/${currentLanguage}/`}>
               <span>
-                <Icon.Home {...activeNavIcon('/')} />
+                <Icon.Home {...activeNavIcon(`/${currentLanguage}/`)} />
               </span>
             </Link>
-            <Link to="/blog">
+            <Link to={`/${currentLanguage}/blog`}>
               <span>
-                <Icon.Book {...activeNavIcon('/blog')} />
+                <Icon.Book {...activeNavIcon(`/${currentLanguage}/blog`)} />
               </span>
             </Link>
-            <Link to="/about">
+            <Link to={`/${currentLanguage}/about`}>
               <span>
-                <Icon.HelpCircle {...activeNavIcon('/about')} />
+                <Icon.HelpCircle
+                  {...activeNavIcon(`/${currentLanguage}/about`)}
+                />
               </span>
             </Link>
             <span>
@@ -101,7 +103,9 @@ function Navbar({
       {transitions.map(({item, key, props}) =>
         item ? (
           <animated.div key={key} style={props}>
-            <Expand {...{pages, setExpand, darkMode, windowSize}} />
+            <Expand
+              {...{pages, setExpand, darkMode, windowSize, currentLanguage}}
+            />
           </animated.div>
         ) : (
           <animated.div key={key} style={props}></animated.div>
@@ -111,7 +115,7 @@ function Navbar({
   );
 }
 
-function Expand({pages, setExpand, darkMode, windowSize}) {
+function Expand({pages, setExpand, darkMode, windowSize, currentLanguage}) {
   const expandElement = useRef(null);
   const {t} = useTranslation();
 
@@ -125,14 +129,20 @@ function Expand({pages, setExpand, darkMode, windowSize}) {
         if (page.showInNavbar === true) {
           return (
             <Link
-              to={page.pageLink}
+              to={
+                page.displayName === 'Home'
+                  ? `/${currentLanguage}/`
+                  : `/${currentLanguage}/${page.displayName.toLowerCase()}`
+              }
               key={i}
               {...(windowSize.width < 769 && {
                 onClick: setExpand.bind(this, false),
               })}
             >
               <span
-                {...navLinkProps(page.pageLink, page.animationDelayForNavbar)}
+                {...navLinkProps(
+                  page.pageLink.replace(':lang', currentLanguage)
+                )}
               >
                 {t(page.displayName)}
               </span>
@@ -153,7 +163,7 @@ function Expand({pages, setExpand, darkMode, windowSize}) {
 
 export default Navbar;
 
-const navLinkProps = (path, animationDelay) => ({
+const navLinkProps = (path) => ({
   className: `${window.location.pathname === path ? 'focused' : ''}`,
 });
 

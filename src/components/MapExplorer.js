@@ -270,7 +270,7 @@ function MapExplorer({
               <div
                 className="back fadeInUp"
                 onClick={() => {
-                  history.push('/#MapExplorer');
+                  history.push('/');
                 }}
                 style={trail[4]}
               >
