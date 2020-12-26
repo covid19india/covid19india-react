@@ -48,7 +48,11 @@ const StateDropdown = ({stateCode, trail}) => {
   );
 
   return (
-    <div className="StateDropdown" ref={dropdownRef}>
+    <div
+      className="StateDropdown"
+      title="Click here to select different States/UT."
+      ref={dropdownRef}
+    >
       <animated.h1
         className="state-name fadeInUp"
         style={trail}

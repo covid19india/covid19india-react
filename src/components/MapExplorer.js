@@ -268,6 +268,7 @@ function MapExplorer({
 
             {mapMeta.mapType === MAP_TYPES.STATE && (
               <div
+                title="Back to Home"
                 className="back fadeInUp"
                 onClick={() => {
                   history.push('/#MapExplorer');
