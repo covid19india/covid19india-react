@@ -265,6 +265,31 @@ h6 {
   .header {
     z-index: 99;
   }
+
+  .is-vaccinated {
+    align-items: center;
+    align-self: center;
+    animation-delay: 200ms;
+    background: $pink-light;
+    border-radius: 5px;
+    color: $pink;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.5rem;
+    margin-top: 1.5rem;
+    padding: 0.5rem;
+
+    .stat,
+    .delta {
+      font-size: 13px;
+      margin-left: 0.25rem;
+    }
+
+    .text {
+      font-size: 13px;
+      margin-left: 0.25rem;
+    }
+  }
 }
 
 .alert {
@@ -4025,6 +4050,11 @@ footer {
 
   .LanguageSwitcher {
     margin-left: 0;
+  }
+
+  .is-vaccinated {
+    margin-bottom: 3rem !important;
+    margin-top: 2rem !important;
   }
 }
 

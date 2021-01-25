@@ -1,8 +1,9 @@
 import {API_ROOT_URL} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
-import {fetcher} from '../utils/commonFunctions';
+import {formatNumber, fetcher} from '../utils/commonFunctions';
 
+import {ShieldCheckIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import React, {useState, useRef, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
@@ -103,6 +104,21 @@ function Home() {
               </Suspense>
             )}
           </div>
+
+          {data && data['TT'].total.vaccinated && (
+            <div className="is-vaccinated fadeInUp">
+              <ShieldCheckIcon />
+              <div className="stat">
+                {formatNumber(data['TT'].total.vaccinated)}
+              </div>
+              {data['TT'].delta.vaccinated && (
+                <div className="delta">{`(+${formatNumber(
+                  data['TT'].delta.vaccinated
+                )})`}</div>
+              )}
+              <div className="text">vaccine doses administered</div>
+            </div>
+          )}
 
           {data && (
             <Suspense fallback={<div />}>
