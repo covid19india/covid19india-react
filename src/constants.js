@@ -51,6 +51,12 @@ export const STATISTIC_DEFINITIONS = {
     format: 'short',
     options: {key: 'tested'},
   },
+  vaccinated: {
+    displayName: 'vaccinated',
+    color: '#fb5581',
+    format: 'short',
+    options: {key: 'vaccinated'},
+  },
   activeRatio: {
     displayName: 'active ratio',
     format: '%',
@@ -83,7 +89,6 @@ export const STATISTIC_DEFINITIONS = {
   },
   tpr: {
     displayName: 'test positivity ratio',
-    color: '#fb5581',
     format: '%',
     options: {
       key: 'confirmed',
@@ -118,7 +123,7 @@ export const PER_MILLION_OPTIONS = {
   multiplyFactor: 1e6,
 };
 
-export const NAN_STATISTICS = ['tested', 'tpr', 'population'];
+export const NAN_STATISTICS = ['tested', 'vaccinated', 'tpr', 'population'];
 
 export const PRIMARY_STATISTICS = [
   'confirmed',
@@ -133,7 +138,11 @@ export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
 
 export const TABLE_STATISTICS_EXPANDED = Object.keys(STATISTIC_DEFINITIONS);
 
-export const TIMESERIES_STATISTICS = [...PRIMARY_STATISTICS, 'tested', 'tpr'];
+export const TIMESERIES_STATISTICS = [
+  ...PRIMARY_STATISTICS,
+  'tested',
+  'vaccinated',
+];
 
 export const UPDATES_COUNT = 5;
 

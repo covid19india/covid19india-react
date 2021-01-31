@@ -1,25 +1,25 @@
 import {API_ROOT_URL} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
-import {formatNumber, fetcher} from '../utils/commonFunctions';
+import {fetcher} from '../utils/commonFunctions';
 
-import {ShieldCheckIcon} from '@primer/octicons-v2-react';
 import classnames from 'classnames';
 import {useState, useRef, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 import {useLocation} from 'react-router-dom';
 import {useLocalStorage, useSessionStorage, useWindowSize} from 'react-use';
 
-const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
-const MapExplorer = lazy(() => import('./MapExplorer'));
 const Actions = lazy(() => import('./Actions'));
-const Table = lazy(() => import('./Table'));
-const Minigraphs = lazy(() => import('./Minigraphs'));
 const Footer = lazy(() => import('./Footer'));
-const Search = lazy(() => import('./Search'));
 const Level = lazy(() => import('./Level'));
+const LevelVaccinated = lazy(() => import('./LevelVaccinated'));
+const MapExplorer = lazy(() => import('./MapExplorer'));
 const MapSwitcher = lazy(() => import('./MapSwitcher'));
+const Minigraphs = lazy(() => import('./Minigraphs'));
+const Search = lazy(() => import('./Search'));
 const StateHeader = lazy(() => import('./StateHeader'));
+const Table = lazy(() => import('./Table'));
+const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
 
 function Home() {
   const [regionHighlighted, setRegionHighlighted] = useState({
@@ -105,20 +105,7 @@ function Home() {
             )}
           </div>
 
-          {data && data['TT'].total.vaccinated && (
-            <div className="is-vaccinated fadeInUp">
-              <ShieldCheckIcon />
-              <div className="stat">
-                {formatNumber(data['TT'].total.vaccinated)}
-              </div>
-              {data['TT'].delta.vaccinated && (
-                <div className="delta">{`(+${formatNumber(
-                  data['TT'].delta.vaccinated
-                )})`}</div>
-              )}
-              <div className="text">vaccine doses administered</div>
-            </div>
-          )}
+          {data && <LevelVaccinated data={data['TT']} />}
 
           {data && (
             <Suspense fallback={<div />}>

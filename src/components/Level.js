@@ -83,12 +83,7 @@ function Level({data}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (
-    !equal(
-      getStatistic(prevProps.data, 'total', 'active'),
-      getStatistic(currProps.data, 'total', 'active')
-    )
-  ) {
+  if (!equal(prevProps.data, currProps.data)) {
     return false;
   }
   return true;

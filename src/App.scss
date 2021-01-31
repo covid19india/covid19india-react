@@ -54,7 +54,7 @@ $purple-hover: #201aa230;
 $purple-mid: #201aa299;
 $purple-light-opaque: #e3e2f3;
 $pink: #db5581;
-$pink-light: #db558130;
+$pink-light: #db558120;
 $pink-hover: #db558160;
 $pink-mid: #db558199;
 $brown: #b6854d;
@@ -264,31 +264,6 @@ h6 {
 
   .header {
     z-index: 99;
-  }
-
-  .is-vaccinated {
-    align-items: center;
-    align-self: center;
-    animation-delay: 200ms;
-    background: $pink-light;
-    border-radius: 5px;
-    color: $pink;
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 0.5rem;
-    margin-top: 1.5rem;
-    padding: 0.5rem;
-
-    .stat,
-    .delta {
-      font-size: 13px;
-      margin-left: 0.25rem;
-    }
-
-    .text {
-      font-size: 13px;
-      margin-left: 0.25rem;
-    }
   }
 }
 
@@ -1499,6 +1474,25 @@ h6 {
   }
 }
 
+.LevelVaccinated {
+  align-items: center;
+  align-self: center;
+  animation-delay: 200ms;
+  background: $pink-light;
+  border-radius: 5px;
+  color: $pink;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 0.5rem;
+
+  h4 {
+    font-weight: 500;
+    margin: 0 0 0 0.25rem;
+  }
+}
+
 abbr {
   text-decoration: none;
 
@@ -1671,6 +1665,12 @@ abbr {
     .is-tested {
       svg {
         color: $purple;
+      }
+    }
+
+    .is-vaccinated {
+      svg {
+        color: $pink;
       }
     }
 
@@ -1903,6 +1903,12 @@ abbr {
           }
         }
 
+        &.is-vaccinated {
+          svg {
+            color: $pink;
+          }
+        }
+
         &.invert {
           margin-top: 0.25rem;
           transform: rotate(180deg);
@@ -1937,6 +1943,10 @@ abbr {
 
         .is-tested {
           color: $purple;
+        }
+
+        .is-vaccinated {
+          color: $pink;
         }
       }
 
@@ -2693,7 +2703,7 @@ abbr {
       }
     }
 
-    &.is-tpr {
+    &.is-vaccinated {
       .stem {
         stroke: $pink-mid;
       }
@@ -2932,7 +2942,7 @@ input {
       }
     }
 
-    &.is-tpr {
+    &.is-vaccinated {
       h5 {
         color: $pink-mid;
 
@@ -3054,7 +3064,7 @@ input {
       }
     }
 
-    &.is-tpr {
+    &.is-vaccinated {
       background: $pink-light;
 
       svg {
@@ -4135,7 +4145,7 @@ footer {
     margin-left: 0;
   }
 
-  .is-vaccinated {
+  .LevelVaccinated {
     margin-bottom: 3rem !important;
     margin-top: 2rem !important;
   }
