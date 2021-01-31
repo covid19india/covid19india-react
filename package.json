@@ -54,7 +54,7 @@
     "build": "react-scripts build",
     "postbuild": "npm run compress_maps && cp build/index.html build/404.html && npm run build:sw",
     "compress_maps": "rollup -c",
-    "test": "react-scripts test --testPathIgnorePatterns=src/tests/mapAndApiStateNames.test.js",
+    "test": "react-scripts test --testPathIgnorePatterns=src/tests/ --passWithNoTests",
     "test:map": "react-scripts test src/tests/mapAndApiStateNames.test.js",
     "eslint": "eslint .",
     "eslint:fix": "eslint --fix --max-warnings=0 .",
