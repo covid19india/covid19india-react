@@ -1,10 +1,3 @@
-import DeltaBarGraph from './DeltaBarGraph';
-import Footer from './Footer';
-import Level from './Level';
-import MapSwitcher from './MapSwitcher';
-import StateHeader from './StateHeader';
-import StateMeta from './StateMeta';
-
 import {API_ROOT_URL, STATE_NAMES} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {fetcher, formatNumber, getStatistic} from '../utils/commonFunctions';
@@ -26,9 +19,16 @@ import {useParams} from 'react-router-dom';
 import {useSessionStorage} from 'react-use';
 import useSWR from 'swr';
 
-const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
+const DeltaBarGraph = lazy(() => import('./DeltaBarGraph'));
+const Footer = lazy(() => import('./Footer'));
+const Level = lazy(() => import('./Level'));
+const LevelVaccinated = lazy(() => import('./LevelVaccinated'));
 const MapExplorer = lazy(() => import('./MapExplorer'));
+const MapSwitcher = lazy(() => import('./MapSwitcher'));
 const Minigraphs = lazy(() => import('./Minigraphs'));
+const StateHeader = lazy(() => import('./StateHeader'));
+const StateMeta = lazy(() => import('./StateMeta'));
+const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
 
 function State() {
   const {t} = useTranslation();
@@ -136,6 +136,10 @@ function State() {
               forceRender={!!timeseriesResponseError}
             />
           </div>
+
+          {data?.[stateCode]?.total?.vaccinated && (
+            <LevelVaccinated data={data?.[stateCode]} />
+          )}
 
           {data && (
             <Suspense fallback={<div style={{minHeight: '50rem'}} />}>
