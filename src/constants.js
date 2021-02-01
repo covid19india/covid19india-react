@@ -1,4 +1,5 @@
 export const API_ROOT_URL = 'https://api.covid19india.org/v4/min';
+// export const API_ROOT_URL = 'http://127.0.0.1:8080/v4/min';
 
 export const LOCALE_SHORTHANDS = {
   english: 'en-US',
@@ -52,7 +53,7 @@ export const STATISTIC_DEFINITIONS = {
     options: {key: 'tested'},
   },
   vaccinated: {
-    displayName: 'vaccinated',
+    displayName: 'vaccine doses administered',
     color: '#fb5581',
     format: 'short',
     options: {key: 'vaccinated'},
@@ -134,7 +135,7 @@ export const PRIMARY_STATISTICS = [
 
 export const BRUSH_STATISTICS = ['other', 'deceased', 'recovered', 'active'];
 
-export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested'];
+export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested', 'vaccinated'];
 
 export const TABLE_STATISTICS_EXPANDED = Object.keys(STATISTIC_DEFINITIONS);
 
