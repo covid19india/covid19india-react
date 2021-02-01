@@ -23,7 +23,7 @@ import ReactDOM from 'react-dom';
 // Chart margins
 const margin = {top: 0, right: 35, bottom: 20, left: 25};
 const yBufferTop = 1.2;
-const numTicksX = (width) => (width < 480 ? 4 : 7);
+const numTicksX = (width) => (width < 480 ? 4 : 6);
 
 function TimeseriesBrush({
   timeseries,

@@ -1,4 +1,4 @@
-import {SPRING_CONFIG_NUMBERS} from '../constants.js';
+import {SPRING_CONFIG_NUMBERS, STATISTIC_CONFIGS} from '../constants.js';
 import {formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import {ShieldCheckIcon} from '@primer/octicons-v2-react';
@@ -22,7 +22,7 @@ function LevelVaccinated({data}) {
         {spring.total.interpolate(
           (total) =>
             `${formatNumber(Math.floor(total))} ${t(
-              'vaccine doses administered'
+              STATISTIC_CONFIGS['vaccinated'].displayName
             )}`
         )}
       </animated.h4>
