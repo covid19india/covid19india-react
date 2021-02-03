@@ -230,6 +230,16 @@ function MapVisualizer({
             .attr('stroke-opacity', 0)
             .style('cursor', 'pointer')
             .on('mouseenter', (event, d) => {
+              if (onceTouchedRegion.current) return;
+              setRegionHighlighted({
+                stateCode: STATE_CODES[d.properties.st_nm],
+                districtName: d.properties.district,
+              });
+            })
+            .on('pointerdown', (event, d) => {
+              if (onceTouchedRegion.current === d)
+                onceTouchedRegion.current = null;
+              else onceTouchedRegion.current = d;
               setRegionHighlighted({
                 stateCode: STATE_CODES[d.properties.st_nm],
                 districtName: d.properties.district,
@@ -249,11 +259,8 @@ function MapVisualizer({
             .remove()
       )
       .attr('pointer-events', 'all')
-      .on('touchstart', (event, d) => {
-        if (onceTouchedRegion.current === d) onceTouchedRegion.current = null;
-        else onceTouchedRegion.current = d;
-      })
       .on('click', (event, d) => {
+        event.stopPropagation();
         const stateCode = STATE_CODES[d.properties.st_nm];
         if (
           onceTouchedRegion.current ||
@@ -347,6 +354,7 @@ function MapVisualizer({
         (exit) => exit.call((exit) => exit.transition(T).attr('r', 0).remove())
       )
       .on('mouseenter', (event, feature) => {
+        if (onceTouchedRegion.current) return;
         setRegionHighlighted({
           stateCode: STATE_CODES[feature.properties.st_nm],
           districtName:
@@ -355,12 +363,20 @@ function MapVisualizer({
               : feature.properties.district || UNKNOWN_DISTRICT_KEY,
         });
       })
-      .on('touchstart', (event, feature) => {
+      .on('pointerdown', (event, feature) => {
         if (onceTouchedRegion.current === feature)
           onceTouchedRegion.current = null;
         else onceTouchedRegion.current = feature;
+        setRegionHighlighted({
+          stateCode: STATE_CODES[feature.properties.st_nm],
+          districtName:
+            mapView === MAP_VIEWS.STATES
+              ? null
+              : feature.properties.district || UNKNOWN_DISTRICT_KEY,
+        });
       })
       .on('click', (event, feature) => {
+        event.stopPropagation();
         if (onceTouchedRegion.current || mapMeta.mapType === MAP_TYPES.STATE)
           return;
         history.push(
