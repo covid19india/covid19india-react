@@ -1,0 +1,44 @@
+@media (min-width: 769px) {
+  .Home,
+  .State {
+    padding-top: 5rem;
+  }
+}
+
+@media (max-width: 769px) {
+  .table-container,
+  .header,
+  .TimeseriesExplorer,
+  .map-container,
+  .Links,
+  .Summary,
+  .About,
+  .updates,
+  .updates-header,
+  .StateMeta,
+  .timeline,
+  .table-top,
+  .LanguageSwitcher {
+    width: calc(100% - 2rem);
+  }
+
+  .Home,
+  .State {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 1rem;
+    width: 100%;
+
+    .home-left,
+    .home-right,
+    .state-left,
+    .state-right {
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      width: 100%;
+    }
+  }
+}

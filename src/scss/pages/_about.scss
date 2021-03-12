@@ -1,0 +1,51 @@
+
+.About {
+  display: flex;
+  flex-direction: column;
+  min-height: 30rem;
+  width: 100%;
+
+  & > * {
+    align-self: center;
+    margin-bottom: 1.5rem;
+    width: 34rem;
+  }
+
+  & > *:first-child {
+    margin-top: 4rem;
+  }
+
+  h2 {
+    font-weight: 600;
+    margin: 0;
+    text-transform: none;
+  }
+
+  .question {
+    color: $gray-dark;
+    margin: 0;
+    margin-bottom: 0.25rem;
+  }
+
+  .answer {
+    color: $blue;
+    line-height: 1.5rem;
+  }
+
+  a {
+    background: $blue-light;
+    color: $blue;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+
+@media (max-width: 769px) {
+  .faq {
+    width: calc(100% - 2rem);
+  }
+}

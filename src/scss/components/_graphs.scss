@@ -1,0 +1,1226 @@
+#chart {
+  z-index: 10;
+}
+
+.anchor {
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  transform: rotate(45deg);
+  transition: all 0.1s ease-in-out;
+  z-index: 999;
+
+  svg {
+    color: $gray-mid;
+
+    &:hover {
+      color: $gray;
+    }
+  }
+
+  &.stickied {
+    transform: rotate(90deg);
+
+    svg {
+      color: $gray;
+    }
+  }
+}
+
+.map-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.MapExplorer {
+  align-self: center;
+  margin-bottom: 3rem;
+  position: relative;
+  width: 100%;
+
+  &.stickied {
+    position: sticky !important;
+    top: 0;
+  }
+
+  &.hidden {
+    display: none;
+  }
+
+  .svg-parent {
+    display: block;
+    margin: auto;
+    margin-top: 2rem;
+    overflow: visible;
+    position: relative;
+    width: 90%;
+
+    &.maplegend {
+      margin-top: 0.6rem;
+      width: 100%;
+      z-index: 1;
+    }
+
+    svg {
+      align-self: center;
+      height: 100%;
+      overflow: visible;
+      width: 100%;
+
+      text {
+        fill: $gray;
+        font-size: 10px;
+        font-weight: 600;
+        text-align: right;
+      }
+    }
+  }
+
+  .map-button {
+    background: $yellow-light;
+    border-radius: 5px;
+    color: $orange;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 900;
+    margin-bottom: 0.25rem;
+    padding: 0.5rem;
+    position: absolute;
+    right: 0;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background: $yellow-hover;
+    }
+
+    svg {
+      height: 12px;
+      margin-left: 0.25rem;
+      stroke: $orange-mid;
+      stroke-width: 3px;
+      vertical-align: middle;
+      width: 12px;
+    }
+  }
+
+  .panel {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-height: 6rem;
+    padding-top: 1rem;
+    position: relative;
+
+    h2 {
+      font-weight: 900;
+      margin-top: 0;
+      transition: color 0.3s ease-in-out;
+      word-wrap: break-word;
+
+      &.confirmed {
+        color: $brick;
+      }
+
+      &.active {
+        color: $blue;
+      }
+
+      &.recovered {
+        color: $green;
+      }
+
+      &.deceased {
+        color: $gray;
+      }
+    }
+
+    h4 {
+      color: $gray-mid;
+      margin: 0;
+      word-wrap: break-word;
+    }
+
+    .panel-left {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+
+      .district {
+        line-height: 15px;
+        margin: 0;
+        transition: color 0.3s ease-in-out;
+
+        span {
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        &.confirmed {
+          color: $brick;
+        }
+
+        &.active {
+          color: $blue;
+        }
+
+        &.recovered {
+          color: $green;
+        }
+
+        &.deceased {
+          color: $gray;
+        }
+
+        &.tested {
+          color: $purple;
+        }
+      }
+    }
+
+    .panel-right {
+      display: flex;
+      flex-direction: column;
+
+      svg {
+        transition: all 0.3s ease-in-out;
+      }
+
+      &.is-confirmed {
+        svg {
+          fill: $cherry-light;
+          stroke: $cherry-mid;
+        }
+
+        .boundary {
+          svg {
+            fill: $cherry-mid;
+            stroke: none;
+          }
+        }
+
+        .is-highlighted {
+          background: $cherry-light;
+
+          &:hover {
+            background: $cherry-hover;
+          }
+        }
+      }
+
+      &.is-active {
+        svg {
+          fill: $blue-light;
+          stroke: $blue-mid;
+        }
+
+        .boundary {
+          svg {
+            fill: $blue-mid;
+            stroke: none;
+          }
+        }
+
+        .is-highlighted {
+          background: $blue-light;
+
+          &:hover {
+            background: $blue-hover;
+          }
+        }
+      }
+
+      &.is-recovered {
+        svg {
+          fill: $green-light;
+          stroke: $green-mid;
+        }
+
+        .boundary {
+          svg {
+            fill: $green-mid;
+            stroke: none;
+          }
+        }
+
+        .is-highlighted {
+          background: $green-light;
+
+          &:hover {
+            background: $green-hover;
+          }
+        }
+      }
+
+      &.is-deceased {
+        svg {
+          fill: $gray-light;
+          stroke: $gray-mid;
+        }
+
+        .boundary {
+          svg {
+            fill: $gray-mid;
+            stroke: none;
+          }
+        }
+
+        .is-highlighted {
+          background: $gray-middark;
+
+          &:hover {
+            background: $gray-hover;
+          }
+        }
+      }
+
+      .switch-type,
+      .switch-statistic {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        margin-bottom: 0.25rem;
+
+        div {
+          align-items: center;
+          background: $gray-light;
+          border-radius: 5px;
+          cursor: pointer;
+          display: flex;
+          flex-direction: row;
+          height: 2.5rem;
+          justify-content: center;
+          width: 2.5rem;
+
+          &.back {
+            margin-right: 0 !important;
+
+            svg {
+              fill: $gray;
+              stroke: transparent;
+            }
+          }
+
+          &:hover {
+            background: $gray-hover;
+          }
+
+          &:not(:last-child) {
+            margin-right: 0.25rem;
+          }
+
+          svg {
+            height: 100%;
+          }
+        }
+
+        .divider {
+          border-radius: 5px;
+          width: 2px !important;
+        }
+      }
+
+      .switch-statistic {
+        align-self: flex-end;
+        flex-direction: row;
+        position: absolute;
+        top: 5rem;
+
+        div {
+          background: none;
+          display: flex;
+          flex-direction: row;
+          height: 1.25rem;
+          margin-bottom: 0.25rem;
+          margin-left: 0.65rem !important;
+          width: 1.25rem;
+
+          span {
+            position: absolute;
+          }
+
+          &:hover {
+            background: none;
+          }
+
+          &.is-confirmed {
+            svg {
+              fill: $cherry-hover;
+              stroke: none;
+            }
+
+            &.is-highlighted {
+              svg {
+                fill: $cherry;
+                transform: scale(1.25);
+              }
+            }
+          }
+
+          &.is-active {
+            svg {
+              fill: $blue-hover;
+              stroke: none;
+            }
+
+            &.is-highlighted {
+              svg {
+                fill: $blue;
+                transform: scale(1.25);
+              }
+            }
+          }
+
+          &.is-recovered {
+            svg {
+              fill: $green-hover;
+              stroke: none;
+            }
+
+            &.is-highlighted {
+              svg {
+                fill: $green;
+                transform: scale(1.25);
+              }
+            }
+          }
+
+          &.is-deceased {
+            svg {
+              fill: $gray-hover;
+              stroke: none;
+            }
+
+            &.is-highlighted {
+              svg {
+                fill: $gray;
+                transform: scale(1.25);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.bottom {
+      margin-top: 0;
+      padding-top: 0;
+    }
+  }
+
+  #chart,
+  #legend {
+    filter: saturate(1.5);
+  }
+
+  .disclaimer {
+    align-items: center;
+    backdrop-filter: saturate(180%) blur(20px);
+    border-radius: 5px;
+    bottom: 50%;
+    display: flex;
+    flex-direction: row;
+    font-size: 12px;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.5rem;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    transition: background, color 0.3s ease-in-out;
+    width: 10rem;
+    z-index: 99;
+
+    &.is-confirmed {
+      background: $cherry-light;
+      color: $cherry;
+    }
+
+    &.is-active {
+      background: $blue-light;
+      color: $blue;
+    }
+
+    &.is-recovered {
+      background: $green-light;
+      color: $green;
+    }
+
+    &.is-deceased {
+      background: $gray-light;
+      color: $gray;
+    }
+
+    span {
+      flex: 1;
+    }
+
+    svg {
+      align-self: flex-start;
+      margin-right: 0.5rem;
+      stroke-width: 2px;
+      width: 16px;
+    }
+  }
+
+  .footnote {
+    color: $gray;
+    margin-bottom: 0;
+    margin-top: 1em;
+    text-align: left;
+    z-index: 1;
+
+    a {
+      border-bottom: 2px solid $gray-hover;
+      text-decoration: none;
+
+      &:hover {
+        background: $gray-hover;
+      }
+    }
+  }
+}
+
+.tabs {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+
+  .tab {
+    background: $gray-light;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color: $gray-mid;
+    cursor: pointer;
+    height: 3.25rem;
+    margin-right: 0.25rem;
+    min-width: 5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: center;
+
+    &:hover {
+      background: $gray-hover;
+    }
+
+    &.focused {
+      background: $gray-opaque;
+      color: $gray;
+    }
+  }
+}
+
+.tabs-map {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 99;
+
+  h4 {
+    display: table-cell;
+    font-size: 12px !important;
+    font-weight: 900;
+    height: 2rem;
+    margin-bottom: 0;
+    margin-top: 0;
+    vertical-align: middle;
+  }
+
+  .tab {
+    background: $gray-light;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color: $gray-mid;
+    cursor: pointer;
+    height: 2rem;
+    margin-right: 0.25rem;
+    margin-top: 0.25rem;
+    min-width: 1.6rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      background: $gray-hover;
+    }
+
+    &.focused {
+      background: $gray-opaque;
+      color: $gray;
+    }
+
+    &.disabled {
+      background: $gray-opaque;
+      color: $gray-mid;
+    }
+  }
+
+  sup {
+    position: relative;
+    top: -0.5em;
+    vertical-align: top;
+  }
+}
+
+.TimeseriesExplorer {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 2rem);
+
+  &.stickied {
+    position: sticky !important;
+    top: -6.5rem;
+  }
+
+  .alert {
+    align-self: flex-end;
+    margin: 0;
+    margin-top: 1rem;
+  }
+
+  .state-selection {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+    max-width: calc(100% - 0.6rem);
+
+    .dropdown {
+      min-width: calc(60%);
+
+      select {
+        appearance: none;
+        background-color: #eee;
+        background-image: url('data:image/svg+xml,<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="m0,6l12,12l12,-12l-24,0z" fill="gray"/><path fill="none" d="m0,0l24,0l0,24l-24,0l0,-24z"/></svg>');
+        background-position-x: calc(100% - 0.4rem);
+        background-position-y: 50%;
+        background-repeat: no-repeat;
+        background-size: 0.6rem;
+        border: 2px solid #e8e8e9;
+        border-radius: 4px;
+        color: $gray;
+        cursor: pointer;
+        font-weight: 600;
+        padding: 0.5rem;
+        padding-right: 1.4rem;
+        width: 100%;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+
+    .reset-icon {
+      margin: auto;
+      margin-left: 0.75rem;
+      margin-top: 0.5rem;
+
+      svg {
+        color: $gray-mid;
+        cursor: pointer;
+        fill: #a6abb0;
+        stroke: #a6abb0;
+        stroke-width: 0.5;
+        width: 16px;
+
+        &:hover {
+          fill: $gray;
+          stroke: $gray;
+        }
+      }
+    }
+  }
+}
+
+.Timeseries {
+  align-self: center;
+  width: 100%;
+
+  .svg-parent {
+    height: 12rem;
+    margin-bottom: 1rem;
+
+    &.is-confirmed {
+      .stem {
+        stroke: $cherry-mid;
+      }
+
+      .trend-area {
+        fill: $cherry-mid;
+      }
+    }
+
+    &.is-active {
+      .stem {
+        stroke: $blue-mid;
+      }
+
+      .trend-area {
+        fill: $blue-mid;
+      }
+    }
+
+    &.is-recovered {
+      .stem {
+        stroke: $green-mid;
+      }
+
+      .trend-area {
+        fill: $green-mid;
+      }
+    }
+
+    &.is-deceased {
+      .stem {
+        stroke: $gray-mid;
+      }
+
+      .trend-area {
+        fill: $gray-mid;
+      }
+    }
+
+    &.is-tested {
+      .stem {
+        stroke: $purple-mid;
+      }
+
+      .trend-area {
+        fill: $purple-mid;
+      }
+    }
+
+    &.is-vaccinated {
+      .stem {
+        stroke: $pink-mid;
+      }
+
+      .trend-area {
+        fill: $pink-mid;
+      }
+    }
+
+    &.is-brush {
+      height: 4rem;
+    }
+  }
+}
+
+.timeseries-header {
+  align-self: center;
+  position: relative;
+  width: 100%;
+
+  h1 {
+    color: $gray;
+    margin: 0;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .timeseries-options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 1rem;
+
+    .timeseries-mode {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .scale-modes {
+      align-items: flex-end;
+      bottom: 0;
+      color: $gray;
+      display: flex;
+      flex-direction: row;
+      right: 0;
+      z-index: 99;
+
+      &:hover {
+        label {
+          &.main {
+            color: $gray;
+          }
+        }
+      }
+
+      .timeseries-mode {
+        margin-left: 1rem;
+      }
+
+      & > * {
+        align-self: center;
+      }
+    }
+
+    label {
+      color: $gray-mid;
+      font-size: 0.75rem;
+      font-weight: 900;
+      margin-right: 0.25rem;
+      z-index: 99;
+    }
+  }
+}
+
+.disabled {
+  input {
+    &.switch {
+      background: $gray-light !important;
+      border: $gray-light 2px solid !important;
+      cursor: not-allowed !important;
+
+      &::after {
+        background: $gray-light !important;
+      }
+    }
+  }
+}
+
+.Timeseries,
+.Minigraph {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  width: 100%;
+
+  .stats {
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    left: 0.5rem;
+    padding: 0.25rem;
+    pointer-events: none;
+    position: absolute;
+    top: 0.5rem;
+
+    .stats-bottom {
+      display: flex;
+      flex-direction: row;
+
+      h6 {
+        margin-bottom: 0.1rem;
+        margin-left: 0.25rem;
+      }
+
+      & > * {
+        margin-top: auto;
+      }
+    }
+
+    h2,
+    h5,
+    h6 {
+      margin: 0;
+      transition: all 0.15s ease-in-out;
+    }
+
+    h5 {
+      color: $cherry-mid;
+
+      &.title {
+        color: $cherry-mid;
+      }
+    }
+
+    h2,
+    h6 {
+      color: $cherry;
+    }
+
+    &.is-recovered {
+      h5 {
+        color: $green-mid;
+
+        &.title {
+          color: $green-mid;
+        }
+      }
+
+      h2,
+      h6 {
+        color: $green;
+      }
+    }
+
+    &.is-deceased {
+      h5 {
+        color: $gray-mid;
+
+        &.title {
+          color: $gray-mid;
+        }
+      }
+
+      h2,
+      h6 {
+        color: $gray;
+      }
+    }
+
+    &.is-active {
+      h5 {
+        color: $blue-mid;
+
+        &.title {
+          color: $blue-mid;
+        }
+      }
+
+      h2,
+      h6 {
+        color: $blue;
+      }
+    }
+
+    &.is-tested {
+      h5 {
+        color: $purple-mid;
+
+        &.title {
+          color: $purple-mid;
+        }
+      }
+
+      h2,
+      h6 {
+        color: $purple;
+      }
+    }
+
+    &.is-vaccinated {
+      h5 {
+        color: $pink-mid;
+
+        &.title {
+          color: $pink-mid;
+        }
+      }
+
+      h2,
+      h6 {
+        color: $pink;
+      }
+    }
+  }
+
+  .svg-parent {
+    align-self: center;
+    border-radius: 5px;
+    display: flex;
+    position: relative;
+    width: 100%;
+
+    svg {
+      width: 100%;
+
+      .domain,
+      .tick {
+        stroke-width: 1.5;
+
+        line {
+          stroke-width: 1.5;
+        }
+      }
+
+      text {
+        font-size: 9px;
+        font-weight: 600;
+        stroke: transparent;
+      }
+    }
+
+    &.is-confirmed {
+      background: $cherry-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $cherry;
+        }
+
+        text {
+          color: $cherry-mid;
+        }
+      }
+    }
+
+    &.is-recovered {
+      background: $green-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $green;
+        }
+
+        text {
+          color: $green-mid;
+        }
+      }
+    }
+
+    &.is-deceased {
+      background: $gray-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $gray;
+        }
+
+        text {
+          color: $gray-mid;
+        }
+      }
+    }
+
+    &.is-active {
+      background: $blue-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $blue;
+        }
+
+        text {
+          color: $blue-mid;
+        }
+      }
+    }
+
+    &.is-tested {
+      background: $purple-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $purple;
+        }
+
+        text {
+          color: $purple-mid;
+        }
+      }
+    }
+
+    &.is-vaccinated {
+      background: $pink-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $pink;
+        }
+
+        text {
+          color: $pink-mid;
+        }
+      }
+    }
+
+    &.is-brush {
+      .overlay {
+        fill: $gray-hover;
+      }
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $gray;
+        }
+
+        text {
+          color: $gray;
+        }
+      }
+    }
+  }
+}
+
+.Minigraph {
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+
+  .svg-parent {
+    background: transparent !important;
+    width: calc(25%);
+  }
+}
+
+.floating-buttons {
+  bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  position: fixed;
+  right: 1rem;
+  width: 3rem;
+  z-index: 1;
+
+  button {
+    backdrop-filter: saturate(180%) blur(2px);
+    background: $yellow-mid;
+    border: 0;
+    border-radius: 50%;
+    color: $orange;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    margin: 0.25rem;
+    outline: none;
+    padding: 0.75rem;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background: #ffa500;
+
+      svg {
+        stroke: #ffa500;
+      }
+    }
+
+    svg {
+      align-self: center;
+      stroke: $orange;
+    }
+  }
+}
+
+.pills {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+
+  > button {
+    background-color: $yellow-light;
+    border: 2px $yellow-light solid;
+    border-bottom: 0;
+    border-top: 0;
+    color: $orange;
+    cursor: pointer;
+    font-size: 10px !important;
+    font-weight: 600;
+    margin: 0;
+    outline: none;
+    padding: 10px 15px;
+    text-align: center;
+    transition: background 0.25s ease-in-out;
+
+    &:hover {
+      background: $yellow-hover;
+    }
+
+    &.selected {
+      background-color: $yellow-mid;
+    }
+
+    &:focus {
+      &:not(:focus-visible) {
+        outline: none;
+      }
+    }
+
+    &:first-of-type {
+      border: 0;
+      border-bottom-left-radius: 5px;
+      border-top-left-radius: 5px;
+    }
+
+    &:last-of-type {
+      border: 0;
+      border-bottom-right-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+  }
+}
+
+@media (min-width: 769px) {
+
+  .map-container {
+    &.expanded {
+      margin-right: 2.5rem;
+      width: 50%;
+    }
+  }
+
+  .TimeseriesExplorer {
+    &.expanded {
+      margin-left: 2.5rem;
+      width: calc(50% - 2rem);
+    }
+  }
+}
+
+@media (max-width: 769px) {
+
+  .map-container {
+    align-self: center;
+  }
+
+  .MapExplorer {
+    .svg-parent {
+      width: 100%;
+    }
+
+    .header {
+      margin-top: 2rem;
+    }
+  }
+
+  .Timeseries {
+    .svg-parent {
+      width: 100%;
+    }
+  }
+
+  .Minigraph {
+    .svg-parent {
+      padding: 0;
+    }
+  }
+
+  .map-stats {
+    .stats {
+      .timestamp {
+        width: 4.5rem;
+      }
+    }
+  }
+
+  .timeseries-header {
+    .timeseries-options {
+      flex-direction: column;
+
+      .moving-average {
+        margin-top: 0.75rem;
+      }
+    }
+  }
+
+  .timeline {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}

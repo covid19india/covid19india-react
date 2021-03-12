@@ -1,0 +1,264 @@
+
+.State {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-left: 8rem;
+  margin-right: 3rem;
+
+  .state-left,
+  .state-right {
+    display: flex;
+    flex-direction: column;
+    width: 34rem;
+  }
+
+  .state-left {
+    margin-right: 2.5rem;
+    position: relative;
+  }
+
+  .state-right {
+    margin-left: 2.5rem;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .district-bar {
+    width: calc(100% - 2rem);
+  }
+
+  .Minigraph {
+    .svg-parent {
+      width: calc(25%) !important;
+    }
+  }
+
+  .MapExplorer {
+    .header,
+    .map-stats,
+    .map-button,
+    .tabs-map,
+    .last-update,
+    .footnote {
+      display: none;
+    }
+
+    .anchor {
+      display: none;
+    }
+  }
+
+  .TimeseriesExplorer {
+    .anchor {
+      display: none;
+    }
+  }
+}
+
+.district-bar {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+
+  .district-bar-bottom {
+    .button {
+      background: $gray-light;
+      color: $gray;
+      flex-basis: 15%;
+      font-weight: 600;
+      height: 2.5rem;
+      justify-content: center;
+      margin-top: 0.75rem;
+      text-transform: unset;
+      width: 5rem;
+
+      &:hover {
+        background: $gray-hover;
+      }
+    }
+  }
+
+  .district-bar-top {
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+
+    h2 {
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+      margin-top: 0;
+
+      &.confirmed {
+        color: $red;
+      }
+
+      &.active {
+        color: $blue;
+      }
+
+      &.recovered {
+        color: $green;
+      }
+
+      &.deceased {
+        color: $gray;
+      }
+    }
+  }
+
+  .district-bar-left {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .district-bar-right {
+    display: flex;
+    flex-basis: 15rem;
+    flex-grow: 1;
+    justify-content: center;
+    position: relative;
+
+    .happy-sign {
+      display: flex;
+      flex-direction: row;
+      position: absolute;
+      top: 4rem;
+    }
+
+    .DeltaBarGraph {
+      margin-top: 1rem;
+      width: 100%;
+
+      svg {
+        width: 100%;
+
+        .label {
+          font-size: 11px;
+          font-weight: 900;
+          text-anchor: middle;
+        }
+      }
+    }
+  }
+
+  .districts {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 10rem;
+
+    &.is-grid {
+      display: grid;
+      grid-auto-flow: column;
+      grid-gap: 0.5rem;
+      padding-bottom: 0.5rem;
+      width: 100%;
+    }
+
+    .district {
+      display: flex;
+      flex-direction: row;
+      height: 2.5rem;
+      justify-content: flex-start;
+      margin-right: 0.5rem;
+
+      h2,
+      h5 {
+        color: $gray;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      h5 {
+        display: inline-block !important;
+        margin-left: 0.5rem;
+        margin-top: 0.15rem;
+        width: auto !important;
+      }
+
+      & > * {
+        align-self: center;
+      }
+
+      .delta {
+        display: flex;
+        flex-direction: row;
+        margin-left: 0.5rem;
+        margin-top: 4px;
+
+        h6 {
+          margin: 0;
+
+          &.confirmed {
+            color: $red-mid;
+          }
+
+          &.active {
+            color: $blue-mid;
+          }
+
+          &.recovered {
+            color: $green-mid;
+          }
+
+          &.deceased {
+            color: $gray-mid;
+          }
+        }
+
+        svg {
+          stroke-width: 4;
+          vertical-align: bottom;
+          width: 10px;
+
+          &.confirmed {
+            color: $red-mid;
+          }
+
+          &.active {
+            color: $blue-mid;
+          }
+
+          &.recovered {
+            color: $green-mid;
+          }
+
+          &.deceased {
+            color: $gray-mid;
+          }
+        }
+
+        & > * {
+          align-self: center;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 769px) {
+
+  .State {
+    .MapExplorer,
+    .StateHeader {
+      width: calc(100% - 2rem);
+    }
+
+    .district-bar {
+      width: calc(100% - 3rem);
+
+      h1 {
+        padding-left: 0;
+      }
+    }
+  }
+
+}

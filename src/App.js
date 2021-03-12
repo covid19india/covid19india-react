@@ -1,47 +1,17 @@
-import './App.scss';
-import Blog from './components/Blog';
+import './scss/main.scss';
 import Navbar from './components/Navbar';
+import pages from './pages';
 
 import {lazy, useState, Suspense, useEffect} from 'react';
 import {Route, Redirect, Switch, useLocation} from 'react-router-dom';
 import useDarkMode from 'use-dark-mode';
 
-const Home = lazy(() => import('./components/Home'));
-const About = lazy(() => import('./components/About'));
-const State = lazy(() => import('./components/State'));
 const LanguageSwitcher = lazy(() => import('./components/LanguageSwitcher'));
 
 const App = () => {
   const darkMode = useDarkMode(false);
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
   const location = useLocation();
-
-  const pages = [
-    {
-      pageLink: '/',
-      view: Home,
-      displayName: 'Home',
-      showInNavbar: true,
-    },
-    {
-      pageLink: '/blog',
-      view: Blog,
-      displayName: 'Blog',
-      showInNavbar: true,
-    },
-    {
-      pageLink: '/about',
-      view: About,
-      displayName: 'About',
-      showInNavbar: true,
-    },
-    {
-      pageLink: '/state/:stateCode',
-      view: State,
-      displayName: 'State',
-      showInNavbar: false,
-    },
-  ];
 
   useEffect(() => {
     if (showLanguageSwitcher) {

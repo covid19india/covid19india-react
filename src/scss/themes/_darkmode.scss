@@ -1,0 +1,355 @@
+// Dark Mode
+
+.dark-mode {
+  background: #161625 !important;
+  color: #bdbdbd;
+
+  .switch-wrapper > div {
+    background: #161625 !important;
+  }
+
+  .is-tested {
+    color: $dark-m-purple !important;
+
+    svg {
+      color: $dark-m-purple !important;
+    }
+  }
+
+  .expand {
+    background: #1e1e30 !important;
+  }
+
+  .Navbar,
+  .expand {
+    border-right: 0;
+
+    .navbar-middle {
+      color: #bdbdbd;
+    }
+  }
+
+  .table {
+    .cell {
+      &:first-child {
+        background: #1e1e30 !important;
+      }
+
+      &.heading {
+        background: #1e1e30 !important;
+
+        &:hover {
+          background: #212130 !important;
+        }
+      }
+    }
+
+    .is-highlighted,
+    .is-total {
+      .cell {
+        background: #1e1e30 !important;
+      }
+    }
+  }
+
+  .Search {
+    input {
+      background: #1e1e30 !important;
+    }
+  }
+
+  .State {
+    .header-right {
+      h5 {
+        color: #9673b9bb !important;
+      }
+
+      h2 {
+        color: #9673b9 !important;
+      }
+
+      a {
+        background: $dark-m-purple-light !important;
+      }
+    }
+
+    .breadcrumb {
+      ul {
+        background: #1e1e30 !important;
+
+        &::after {
+          border-bottom-color: #1e1e30 !important;
+        }
+
+        li {
+          a {
+            color: $gray !important;
+
+            &:hover {
+              color: $white !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .StateHeader {
+    .header-right {
+      color: $dark-m-purple-mid;
+
+      h2 {
+        color: $dark-m-purple;
+      }
+
+      a {
+        background: $dark-m-purple-light;
+      }
+    }
+  }
+
+  .MapExplorer {
+    #chart,
+    #legend {
+      &.zone {
+        filter: none;
+      }
+
+      &:not(.zone) {
+        filter: invert(1) hue-rotate(180deg) saturate(1.5) url('#balance-color');
+      }
+    }
+
+    .maplegend {
+      background: #161625 !important;
+    }
+
+    .meta {
+      h1 {
+        &.tested {
+          color: #9673b9 !important;
+        }
+      }
+
+      h2 {
+        &.tested {
+          color: #9673b9 !important;
+        }
+      }
+    }
+
+    .stats {
+      &.tested {
+        background: $dark-m-purple-light !important;
+
+        h1 {
+          color: #9673b9 !important;
+        }
+
+        h5,
+        h6 {
+          color: #9673b9bb !important;
+        }
+
+        svg {
+          stroke: #9673b9bb !important;
+
+          &:hover {
+            stroke: #9673b9 !important;
+          }
+        }
+      }
+    }
+
+    .disclaimer {
+      color: $gray-light-opaque;
+    }
+  }
+
+  .Timeseries,
+  .Minigraph {
+    .stats {
+      &.is-tested {
+        h5 {
+          color: $dark-m-purple-mid !important;
+
+          &.title {
+            color: $dark-m-purple-mid !important;
+          }
+        }
+
+        h2,
+        h6 {
+          color: $dark-m-purple !important;
+        }
+      }
+    }
+
+    .svg-parent {
+      &.is-tested {
+        background: $dark-m-purple-light !important;
+
+        svg {
+          circle,
+          .domain,
+          .tick {
+            stroke: $dark-m-purple !important;
+          }
+
+          circle {
+            fill: $dark-m-purple !important;
+          }
+
+          .trend,
+          line {
+            stroke: #9673b999 !important;
+          }
+
+          .trend-area {
+            fill: #9673b999 !important;
+          }
+
+          text {
+            color: $dark-m-purple-mid !important;
+            stroke: transparent;
+          }
+        }
+      }
+    }
+  }
+
+  .tpm {
+    background: $dark-m-purple-light !important;
+
+    h3,
+    h5,
+    svg,
+    p {
+      color: #9673b9bb !important;
+    }
+
+    h1 {
+      color: #9673b9 !important;
+    }
+  }
+
+  .tab {
+    &.focused {
+      background: #1e1e30 !important;
+      color: #bdbdbd !important;
+    }
+  }
+
+  .pills {
+    button {
+      &.selected {
+        background: #{$yellow}50;
+      }
+    }
+  }
+
+  .TimeseriesExplorer {
+    .state-selection {
+      .dropdown {
+        select {
+          background: #1e1e30;
+          background-image: linear-gradient(45deg, transparent 50%, $gray 50%),
+          linear-gradient(135deg, $gray 50%, transparent 50%);
+          background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+          background-repeat: no-repeat;
+          background-size: 5px 5px, 5px 5px;
+          border-color: #9494941a;
+        }
+      }
+    }
+  }
+
+  input {
+    &.switch {
+      background-color: #161625 !important;
+      border: 2px solid $gray-mid !important;
+
+      &:checked {
+        background-color: #6c757d99 !important;
+
+        &::after {
+          background-color: #cfcfcf !important;
+        }
+      }
+
+      &::after {
+        background-color: #cfcfcf !important;
+      }
+    }
+  }
+
+  .disabled {
+    input {
+      &.switch {
+        background: $dark !important;
+        border: $gray-light 2px solid !important;
+        opacity: 0.7;
+
+        &::after {
+          background: $gray !important;
+        }
+      }
+    }
+  }
+
+  .About {
+    .question {
+      color: $gray !important;
+    }
+  }
+
+  .Demographics {
+    .filters {
+      background: #1e1e30 !important;
+      box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12), inset 0 -1px 0 0 #1e1e30;
+    }
+
+    .legend {
+      background: #1e1e30 !important;
+    }
+
+    .react-date-picker {
+      background: #1e1e30;
+      border-color: #9494941a !important;
+    }
+
+    .modal-content {
+      background: #1e1e30 !important;
+    }
+
+    .modal {
+      background: #1e1e30bb !important;
+    }
+  }
+
+  .StateDropdown {
+    .dropdown {
+      background: #1e1e30 !important;
+    }
+  }
+
+  .TableLoader {
+    svg {
+      rect {
+        fill: #1e1e30 !important;
+      }
+    }
+  }
+}
+
+
+@media (min-width: 769px) {
+
+  .dark-mode {
+    .Navbar,
+    .expand,
+    .navbar-right {
+      background: #1e1e30 !important;
+    }
+  }
+}

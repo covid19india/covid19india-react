@@ -1,0 +1,97 @@
+footer {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 4rem;
+  margin-top: 4rem;
+  width: 100%;
+
+  & > * {
+    align-self: center;
+    text-align: center;
+  }
+
+  h5 {
+    color: $gray;
+    font-weight: 600;
+    margin: 0;
+    margin-bottom: 2rem;
+  }
+
+  svg {
+    margin-right: 0.5rem;
+    padding: 0.25rem;
+  }
+
+  .telegram {
+    color: $blue-mid;
+
+    &:hover {
+      color: $blue;
+    }
+  }
+
+  .github {
+    color: $gray-mid;
+
+    &:hover {
+      color: $gray;
+    }
+  }
+
+  .twitter {
+    color: $pblue-mid;
+
+    &:hover {
+      color: $pblue;
+    }
+  }
+
+  .api {
+    color: $yellow-mid;
+
+    &:hover {
+      color: $yellow;
+    }
+  }
+
+  .mail {
+    color: $brown-mid;
+
+    &:hover {
+      color: $brown;
+    }
+  }
+}
+
+.link {
+  align-self: center;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  width: 34rem;
+
+  a {
+    background: $blue-light;
+    color: $blue;
+    font-weight: 900;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background 0.2s ease-in-out;
+    word-wrap: break-word;
+
+    &:hover {
+      background: $blue-hover;
+    }
+  }
+
+  h3 {
+    color: $gray-dark;
+    font-weight: 900;
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 769px) {
+  .link {
+    width: calc(100% - 2rem);
+  }
+}

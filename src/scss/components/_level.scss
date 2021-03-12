@@ -1,0 +1,89 @@
+.Level {
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+
+  .level-item {
+    display: flex;
+    flex-direction: column;
+    width: calc(25%);
+
+    & > * {
+      align-self: center;
+    }
+  }
+
+  h1,
+  h5 {
+    margin-bottom: 0;
+  }
+
+  h1 {
+    font-weight: 600;
+  }
+
+  h4 {
+    margin-bottom: -0.5rem;
+  }
+
+  h5 {
+    font-weight: 600;
+    overflow-wrap: break-word;
+    text-align: center;
+    width: 100%;
+  }
+
+  .is-confirmed {
+    h1,
+    h5 {
+      color: $cherry;
+    }
+
+    h4 {
+      color: $cherry-mid;
+    }
+  }
+
+  .is-active {
+    h1,
+    h5 {
+      color: $blue;
+    }
+
+    h4 {
+      color: $blue-mid;
+    }
+  }
+
+  .is-recovered {
+    h1,
+    h5 {
+      color: $green;
+    }
+
+    h4 {
+      color: $green-mid;
+    }
+  }
+
+  .is-deceased {
+    h1,
+    h5 {
+      color: $gray;
+    }
+
+    h4 {
+      color: $gray-mid;
+    }
+  }
+}
+
+@media (max-width: 769px) {
+  .Level {
+    h1 {
+      font-size: 3.75vw !important;
+    }
+  }
+}

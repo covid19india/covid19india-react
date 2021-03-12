@@ -1,0 +1,492 @@
+
+.TableLoader {
+  margin-bottom: -0.25rem;
+}
+
+.table-top {
+  align-items: flex-end;
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  font-weight: 600;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+  width: 100%;
+
+  .option-toggle,
+  .info-toggle,
+  .million-toggle,
+  .expand-table-toggle {
+    background: $gray-light;
+    border-radius: 5px;
+    color: $gray-mid;
+    cursor: pointer;
+    margin-right: 0.25rem;
+    padding: 0.5rem;
+
+    svg {
+      align-self: center;
+      margin: 0.25rem;
+    }
+
+    &.is-highlighted {
+      background: $green-light;
+      color: $green;
+    }
+  }
+
+  .info-toggle {
+    &.is-highlighted {
+      background: $yellow-light;
+      color: $yellow;
+    }
+  }
+
+  .million-toggle {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 11.5px 10px;
+    text-align: center;
+
+    &.is-highlighted {
+      background: $pink-light;
+      color: $pink;
+    }
+  }
+
+  .expand-table-toggle {
+    color: $gray-mid;
+    margin-left: auto;
+    margin-right: 0;
+
+    &.is-highlighted {
+      svg {
+        transform: rotate(90deg);
+      }
+    }
+
+    svg {
+      cursor: pointer;
+      margin-bottom: 0.25rem;
+      transform: rotate(-90deg);
+    }
+  }
+
+  @media (min-width: 769px) {
+    margin-top: 1rem;
+  }
+}
+
+.table-helper {
+  align-self: center;
+  color: $gray;
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 2rem);
+
+  h5 {
+    color: $gray-mid;
+  }
+
+  .helper-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .info-item {
+    align-items: center;
+    color: $gray;
+    display: flex;
+    flex-direction: row;
+    font-size: 12px;
+    font-weight: 600;
+    height: 1.5rem;
+
+    &:first-child {
+      margin-top: 1rem;
+    }
+
+    :first-child {
+      width: 1.6rem;
+
+      svg {
+        width: 15px;
+      }
+    }
+
+    p {
+      max-width: calc(100% - 1.6rem);
+    }
+
+    svg {
+      color: $gray-mid;
+      margin-bottom: 0.25rem;
+    }
+
+    .is-confirmed {
+      svg {
+        color: $cherry;
+      }
+    }
+
+    .is-active {
+      svg {
+        color: $blue;
+      }
+    }
+
+    .is-recovered {
+      svg {
+        color: $green;
+      }
+    }
+
+    .is-deceased {
+      svg {
+        color: $gray;
+      }
+    }
+
+    .is-tested {
+      svg {
+        color: $purple;
+      }
+    }
+
+    .is-vaccinated {
+      svg {
+        color: $pink;
+      }
+    }
+
+    &.notes {
+      svg {
+        margin-bottom: 0;
+      }
+    }
+
+    &.sort {
+      svg {
+        margin-bottom: 0;
+      }
+    }
+
+    &.invert {
+      svg {
+        margin-bottom: 0;
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .text {
+    color: $gray-mid;
+    font-weight: 600;
+
+    a {
+      background: $gray-light;
+      border-bottom: 2px solid $gray-hover;
+      color: $gray;
+      text-decoration: none;
+
+      &:hover {
+        background: $gray-hover;
+      }
+    }
+  }
+}
+
+.table-container {
+  align-self: center;
+  margin-bottom: 2.5rem;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.table {
+  border-radius: 3px;
+  display: inline-grid;
+  font-size: 12px;
+  grid-template-rows: auto;
+  min-width: 100%;
+
+  .state-meta {
+    grid-column: 1 / -1;
+
+    .state-meta-top {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 1 + 0.25rem;
+      margin-top: 1rem;
+
+      svg {
+        margin-right: 0.5rem;
+      }
+
+      .last-updated {
+        align-items: center;
+        color: $green;
+        display: flex;
+        flex-direction: row;
+      }
+
+      .state-page {
+        align-items: center;
+        background: $yellow-light;
+        border-radius: 5px;
+        color: $orange;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        padding: 0.75rem;
+
+        p {
+          align-self: flex-end;
+          flex: 1;
+          margin: 0;
+          text-align: right;
+        }
+
+        &:hover {
+          background: $yellow-hover;
+        }
+      }
+    }
+
+    .state-meta-bottom {
+      padding-bottom: 1.5rem;
+
+      .disclaimer {
+        background: $brick-light;
+        border-radius: 5px;
+        color: $brick;
+        margin: auto;
+        padding: 1rem 0.25rem;
+        text-align: center;
+        width: 16rem;
+
+        svg {
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  }
+
+  .row {
+    cursor: pointer;
+    display: contents;
+    width: 100%;
+
+    &:nth-child(odd) {
+      .cell {
+        background: $gray-light;
+      }
+    }
+
+    &.is-highlighted {
+      .cell {
+        background: $gray-hover-opaque !important;
+      }
+    }
+
+    &.heading {
+      .cell {
+        cursor: pointer;
+        user-select: none;
+
+        &:hover {
+          background: $gray-hover-opaque !important;
+        }
+      }
+    }
+
+    &.is-total {
+      position: sticky;
+      top: 0;
+
+      .cell {
+        background: $gray-hover-opaque !important;
+      }
+    }
+
+    .cell {
+      align-items: center;
+      border-radius: 3px;
+      color: $gray;
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 0.25rem;
+      padding: 0.5rem;
+      position: relative;
+
+      &:not(:first-child) {
+        flex-basis: 4rem;
+        flex-grow: 1;
+        flex-shrink: 0;
+        justify-content: flex-end;
+      }
+
+      &:first-child {
+        background: $gray-hover-darker-opaque;
+        flex-basis: 7rem;
+        flex-grow: 0;
+        flex-shrink: 0;
+        justify-content: space-between;
+        left: 0;
+        position: sticky;
+        z-index: 11;
+
+        .sort-icon {
+          left: unset;
+          right: 0;
+        }
+      }
+
+      svg {
+        color: $gray-mid;
+        margin-left: 0.2rem;
+        stroke-width: 2.5px;
+      }
+
+      .sort-icon {
+        left: 0;
+        margin-left: 0.25rem;
+        margin-right: 0.25rem;
+        position: absolute;
+        top: 0;
+
+        &.is-confirmed {
+          svg {
+            color: $cherry;
+          }
+        }
+
+        &.is-active {
+          svg {
+            color: $blue;
+          }
+        }
+
+        &.is-recovered {
+          svg {
+            color: $green;
+          }
+        }
+
+        &.is-deceased {
+          svg {
+            color: $gray;
+          }
+        }
+
+        &.is-tested {
+          svg {
+            color: $purple;
+          }
+        }
+
+        &.is-vaccinated {
+          svg {
+            color: $pink;
+          }
+        }
+
+        &.invert {
+          margin-top: 0.25rem;
+          transform: rotate(180deg);
+        }
+      }
+
+      &.statistic {
+        align-items: flex-end;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        .total {
+          font-size: 14px;
+        }
+
+        .is-confirmed {
+          color: $cherry;
+        }
+
+        .is-active {
+          color: $blue;
+        }
+
+        .is-recovered {
+          color: $green;
+        }
+
+        .is-deceased {
+          color: $gray;
+        }
+
+        .is-tested {
+          color: $purple;
+        }
+
+        .is-vaccinated {
+          color: $pink;
+        }
+      }
+
+      &:not(:last-child) {
+        margin-right: 0.25rem;
+      }
+
+      &.heading {
+        background: $gray-light-opaque;
+        font-size: 13px;
+        font-weight: 900;
+        padding: 1.25rem 0.5rem 0.75rem;
+
+        &:hover {
+          background: $gray-hover-opaque !important;
+        }
+      }
+
+      .state-name,
+      .district-name {
+        font-size: 14px;
+        font-weight: 600;
+        max-width: 7rem;
+        word-wrap: break-word;
+      }
+    }
+  }
+
+  .spacer-row {
+    grid-column: 1 / -1;
+
+    .spacer {
+      color: $gray-mid;
+      margin-bottom: 1 + 0.25rem;
+      margin-top: 1rem;
+      text-align: center;
+
+      p {
+        margin-left: auto;
+        margin-right: auto;
+        width: 10rem;
+      }
+
+      .fold {
+        cursor: pointer;
+
+        &:hover {
+          color: $gray;
+        }
+      }
+    }
+  }
+
+  .intersection {
+    display: block;
+  }
+}

@@ -1,0 +1,37 @@
+@import 'abstracts/variables';
+
+@import 'base/reset';
+@import 'base/animations';
+@import 'base/common';
+
+@import 'extra';
+
+@import 'components/footer';
+@import 'components/graphs';
+@import 'components/languageswitcher';
+@import 'components/level';
+@import 'components/levelvaccinated';
+@import 'components/mapswitcher';
+@import 'components/navbar';
+@import 'components/search';
+@import 'components/statedropdown';
+@import 'components/stateheader';
+@import 'components/statemeta';
+@import 'components/table';
+@import 'components/timeline';
+@import 'components/tooltip';
+@import 'components/updates';
+
+@import 'pages/about';
+@import 'pages/common';
+@import 'pages/home';
+@import 'pages/state';
+
+@import 'themes/darkmode';
+
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}

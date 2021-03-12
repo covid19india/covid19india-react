@@ -1,0 +1,124 @@
+
+* {
+  font-family: 'archia';
+}
+
+html {
+  overflow-x: hidden;
+  width: 100vw;
+}
+
+body {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 24px !important;
+  font-weight: 900;
+}
+
+h2 {
+  font-size: 18px !important;
+  font-weight: 400;
+}
+
+h3 {
+  font-size: 14px !important;
+  font-weight: 400;
+}
+
+h4 {
+  font-size: 13px !important;
+  font-weight: 900;
+}
+
+h5 {
+  font-size: 12px !important;
+  font-weight: 900;
+}
+
+h6 {
+  font-size: 11px !important;
+  font-weight: 600;
+}
+
+abbr {
+  text-decoration: none;
+
+  &.is-cherry {
+    color: $cherry;
+  }
+
+  &.is-blue {
+    color: $blue;
+  }
+
+  &.is-green {
+    color: $green;
+  }
+
+  &.is-gray {
+    color: $gray;
+  }
+}
+
+input {
+  &.switch {
+    appearance: none;
+    background-color: #fff;
+    border: 2px solid #d9dadc;
+    border-radius: 10px;
+    cursor: pointer;
+    height: 14px;
+    margin: 0;
+    outline: none;
+    position: relative;
+    transition: all 300ms ease-in-out;
+    width: 24px;
+
+    &::after {
+      background-color: $gray-mid;
+      border-radius: 50%;
+      content: '';
+      height: 10px;
+      left: 0;
+      position: absolute;
+      top: 0;
+      transition: all 300ms ease-in-out;
+      width: 10px;
+    }
+
+    &:checked {
+      background-color: $gray-mid;
+      transition: all 300ms ease-in-out;
+
+      &::after {
+        background-color: $light;
+        left: 10px;
+        transition: all 300ms ease-in-out;
+      }
+    }
+  }
+}
+
+@media (max-width: 769px) {
+  a {
+    &.button {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      width: 10rem;
+
+      & > * {
+        align-self: center;
+      }
+
+      svg {
+        width: 38px;
+      }
+    }
+  }
+}

@@ -1,0 +1,153 @@
+
+.Home {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-left: 9rem;
+  margin-right: 3rem;
+
+  .home-left,
+  .home-right {
+    display: flex;
+    flex-direction: column;
+    width: 34rem;
+  }
+
+  .home-left {
+    margin-right: 2.5rem;
+    min-height: 60rem;
+  }
+
+  .home-right {
+    margin-left: 2.5rem;
+    min-height: 10rem;
+  }
+
+  .header {
+    z-index: 99;
+  }
+}
+
+.header {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  max-width: 40rem;
+  width: 100%;
+
+  & > * {
+    align-self: center;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 1rem;
+
+    &.timeline {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      padding: 1rem;
+      position: absolute;
+      top: 13.25rem;
+
+      .highlight {
+        color: $brown !important;
+        position: absolute;
+        text-align: center;
+        top: 2.5rem;
+        width: 100%;
+      }
+    }
+
+    & > * {
+      align-self: center;
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+    }
+
+    h5 {
+      color: $gray;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    svg {
+      color: $gray-mid;
+      cursor: pointer;
+      stroke-width: 3;
+      width: 16px;
+
+      &:hover {
+        stroke: $gray;
+      }
+    }
+
+    .timeline-icon {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      svg {
+        display: flex;
+        fill: #a6abb0 !important;
+        flex-direction: row;
+        justify-content: center;
+        stroke: #a6abb0 !important;
+        stroke-width: 0.5 !important;
+
+        path {
+          align-self: center;
+        }
+
+        &:hover {
+          fill: $gray !important;
+          stroke: $gray !important;
+        }
+      }
+    }
+
+    .bell-icon {
+      height: 24px;
+      position: relative;
+
+      .indicator {
+        background: $pblue;
+        border-radius: 50%;
+        height: 7px;
+        position: absolute;
+        right: -3px;
+        top: -3px;
+        width: 7px;
+      }
+    }
+  }
+}
+
+@media (min-width: 769px) {
+  .Home {
+    .home-left,
+    .home-right {
+      &.expanded {
+        width: 73rem;
+      }
+    }
+
+    .home-left {
+      &.expanded {
+        margin-bottom: 2.5rem;
+        margin-right: 0;
+      }
+    }
+
+    .home-right {
+      &.expanded {
+        flex-direction: row;
+        margin-left: 0;
+      }
+    }
+  }
+}
