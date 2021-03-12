@@ -1,4 +1,4 @@
-import Footer from './Footer';
+import Footer from '../components/Footer';
 
 import {useState, useEffect} from 'react';
 import {Helmet} from 'react-helmet';

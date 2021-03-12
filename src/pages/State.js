@@ -19,16 +19,18 @@ import {useParams} from 'react-router-dom';
 import {useSessionStorage} from 'react-use';
 import useSWR from 'swr';
 
-const DeltaBarGraph = lazy(() => import('./DeltaBarGraph'));
-const Footer = lazy(() => import('./Footer'));
-const Level = lazy(() => import('./Level'));
-const LevelVaccinated = lazy(() => import('./LevelVaccinated'));
-const MapExplorer = lazy(() => import('./MapExplorer'));
-const MapSwitcher = lazy(() => import('./MapSwitcher'));
-const Minigraphs = lazy(() => import('./Minigraphs'));
-const StateHeader = lazy(() => import('./StateHeader'));
-const StateMeta = lazy(() => import('./StateMeta'));
-const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
+const DeltaBarGraph = lazy(() => import('../components/DeltaBarGraph'));
+const Footer = lazy(() => import('../components/Footer'));
+const Level = lazy(() => import('../components/Level'));
+const LevelVaccinated = lazy(() => import('../components/LevelVaccinated'));
+const MapExplorer = lazy(() => import('../components/MapExplorer'));
+const MapSwitcher = lazy(() => import('../components/MapSwitcher'));
+const Minigraphs = lazy(() => import('../components/Minigraphs'));
+const StateHeader = lazy(() => import('../components/StateHeader'));
+const StateMeta = lazy(() => import('../components/StateMeta'));
+const TimeseriesExplorer = lazy(() =>
+  import('../components/TimeseriesExplorer')
+);
 
 function State() {
   const {t} = useTranslation();

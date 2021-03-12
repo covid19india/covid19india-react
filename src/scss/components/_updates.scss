@@ -1,0 +1,119 @@
+
+.updates-header {
+  align-self: center;
+  color: $gray-dark;
+  width: 100%;
+
+  h2 {
+    color: $pblue;
+    font-weight: 900;
+  }
+
+  h3 {
+    color: $blue-mid;
+    font-weight: 900;
+
+    &:hover {
+      svg {
+        color: $blue;
+      }
+    }
+
+    svg {
+      height: 1rem;
+    }
+  }
+}
+
+.updates-footer {
+  align-self: center;
+  color: $gray-dark;
+  margin-left: auto;
+
+  .telegram {
+    color: $blue;
+
+    &:hover {
+      color: $purple;
+    }
+  }
+
+  h4 {
+    color: $blue-mid;
+    font-weight: 900;
+    margin-top: 0.5rem;
+
+    &:hover {
+      color: $blue;
+    }
+
+    svg {
+      height: 1rem;
+      margin-bottom: -0.25rem;
+    }
+  }
+}
+
+.updates {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  min-height: 22rem !important;
+  width: 100%;
+
+  .update {
+    background: $gray-light;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+    padding: 0.75rem;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background: $gray-hover;
+    }
+
+    h5,
+    h4 {
+      margin: 0;
+    }
+
+    h5 {
+      color: $gray-mid;
+      margin-bottom: 0.15rem;
+    }
+
+    h4 {
+      color: $gray;
+      font-weight: 600;
+    }
+  }
+
+  .button {
+    background: $pblue-light;
+    color: $pblue;
+    display: flex;
+    flex-direction: row;
+    height: 3rem;
+    width: 13rem;
+
+    & > * {
+      align-self: center;
+    }
+
+    &:hover {
+      background: $pblue-hover;
+    }
+  }
+
+  a {
+    color: inherit;
+    display: flex;
+    flex-direction: row;
+    text-decoration: none;
+
+    & > * {
+      align-self: center;
+    }
+  }
+}

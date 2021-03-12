@@ -1,0 +1,77 @@
+
+.LanguageSwitcher {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  margin-left: 5rem;
+  width: 34rem;
+
+  h3 {
+    align-self: center;
+    color: $pblue;
+    font-weight: 600;
+    margin-bottom: 2rem;
+  }
+
+  .close-button {
+    align-self: center;
+    background: $pblue-light;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 1rem;
+    min-width: 1rem;
+    padding: 1rem;
+
+    &:hover {
+      background: $pblue-hover;
+    }
+
+    svg {
+      color: $pblue-mid;
+      stroke-width: 2.5px;
+
+      &:hover {
+        color: $pblue;
+      }
+    }
+  }
+
+  .languages {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+    min-height: 10rem;
+
+    .language {
+      border-radius: 5px;
+      color: $pblue-mid;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      font-weight: 600;
+      justify-content: center;
+      padding: 1rem;
+      user-select: none;
+
+      &:hover {
+        color: $pblue;
+      }
+
+      &.is-highlighted {
+        background: $pblue-light;
+        color: $pblue;
+      }
+    }
+  }
+}
+
+@media (max-width: 769px) {
+  .LanguageSwitcher {
+    margin-left: 0;
+  }
+}

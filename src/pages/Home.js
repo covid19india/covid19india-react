@@ -9,17 +9,19 @@ import {Helmet} from 'react-helmet';
 import {useLocation} from 'react-router-dom';
 import {useLocalStorage, useSessionStorage, useWindowSize} from 'react-use';
 
-const Actions = lazy(() => import('./Actions'));
-const Footer = lazy(() => import('./Footer'));
-const Level = lazy(() => import('./Level'));
-const LevelVaccinated = lazy(() => import('./LevelVaccinated'));
-const MapExplorer = lazy(() => import('./MapExplorer'));
-const MapSwitcher = lazy(() => import('./MapSwitcher'));
-const Minigraphs = lazy(() => import('./Minigraphs'));
-const Search = lazy(() => import('./Search'));
-const StateHeader = lazy(() => import('./StateHeader'));
-const Table = lazy(() => import('./Table'));
-const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
+const Actions = lazy(() => import('../components/Actions'));
+const Footer = lazy(() => import('../components/Footer'));
+const Level = lazy(() => import('../components/Level'));
+const LevelVaccinated = lazy(() => import('../components/LevelVaccinated'));
+const MapExplorer = lazy(() => import('../components/MapExplorer'));
+const MapSwitcher = lazy(() => import('../components/MapSwitcher'));
+const Minigraphs = lazy(() => import('../components/Minigraphs'));
+const Search = lazy(() => import('../components/Search'));
+const StateHeader = lazy(() => import('../components/StateHeader'));
+const Table = lazy(() => import('../components/Table'));
+const TimeseriesExplorer = lazy(() =>
+  import('../components/TimeseriesExplorer')
+);
 
 function Home() {
   const [regionHighlighted, setRegionHighlighted] = useState({

@@ -1,0 +1,31 @@
+.Timeline {
+  cursor: pointer;
+  height: 3rem;
+  width: 34rem;
+  will-change: transform;
+
+  .day {
+    position: absolute;
+    text-align: center;
+    width: 70px;
+    will-change: transform;
+
+    h5 {
+      color: $gray-mid;
+
+      &:hover {
+        color: $gray !important;
+      }
+
+      &::selection {
+        background: transparent !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 769px) {
+  .Timeline {
+    width: 100%;
+  }
+}

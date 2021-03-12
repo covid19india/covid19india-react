@@ -1,0 +1,97 @@
+.alert {
+  align-items: flex-start;
+  background: $gray-light;
+  border-radius: 5px;
+  color: $gray;
+  display: flex;
+  flex-direction: row;
+  font-size: 10px;
+  padding: 0.5rem;
+
+  svg {
+    color: $gray-mid;
+    height: 16px;
+    width: 16px;
+  }
+
+  .alert-right {
+    margin-left: 0.25rem;
+    text-align: right;
+    width: 9rem;
+
+    a {
+      background: $gray-light;
+      color: $gray;
+      padding-left: 0.1rem;
+      padding-right: 0.1rem;
+
+      &:hover {
+        background: $gray-hover;
+      }
+    }
+
+    &.is-full {
+      width: 100%;
+    }
+  }
+
+  &.is-green {
+    background: $green-light;
+    color: $green;
+
+    svg {
+      stroke: $green-mid;
+    }
+  }
+}
+
+.button {
+  background: $blue-light;
+  border: 0;
+  border-radius: 5px;
+  color: $blue-mid;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  font-size: 0.75rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  margin-top: 0.25rem;
+  outline: none;
+  padding: 0.5rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background 0.2s ease-in-out;
+
+  svg {
+    padding-right: 6px;
+    stroke-width: 2px;
+    width: 20px;
+  }
+
+  &.is-purple {
+    background: $purple-light;
+    color: $purple-mid;
+
+    &:hover {
+      background: $purple-hover;
+    }
+  }
+
+  &.is-green {
+    background: $green-light;
+    color: $green-mid;
+
+    &:hover {
+      background: $green-hover;
+    }
+  }
+
+  &:hover {
+    background: $blue-hover;
+  }
+
+  & > * {
+    align-self: center;
+  }
+}
