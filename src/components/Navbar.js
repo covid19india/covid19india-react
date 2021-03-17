@@ -7,7 +7,7 @@ import {
 import locales from '../i18n/locales.json';
 
 import {useState, useCallback, useRef} from 'react';
-import {Book, HelpCircle, Home, Moon, Sun, Phone} from 'react-feather';
+import {Book, HelpCircle, Home, Menu, Moon, Sun, Phone} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useTransition, animated} from 'react-spring';
@@ -19,7 +19,7 @@ function Navbar({
   showLanguageSwitcher,
   setShowLanguageSwitcher,
 }) {
-  const {i18n, t} = useTranslation();
+  const {i18n} = useTranslation();
   const currentLanguage = Object.keys(locales).includes(i18n?.language)
     ? i18n?.language
     : i18n?.options?.fallbackLng[0];
@@ -73,7 +73,7 @@ function Navbar({
           onClick: setExpand.bind(this, !expand),
         })}
       >
-        {windowSize.width < 769 && <Icon.Men />}
+        {windowSize.width < 769 && <Menu />}
 
         {windowSize.width > 769 && (
           <>
