@@ -73,9 +73,7 @@ function Navbar({
           onClick: setExpand.bind(this, !expand),
         })}
       >
-        {windowSize.width < 769 && (
-          <span>{expand ? t('Close') : t('Menu')}</span>
-        )}
+        {windowSize.width < 769 && <Icon.Menu />}
 
         {windowSize.width > 769 && (
           <>
