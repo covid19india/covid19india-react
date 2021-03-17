@@ -73,7 +73,7 @@ function Navbar({
           onClick: setExpand.bind(this, !expand),
         })}
       >
-        {windowSize.width < 769 && <Icon.Menu />}
+        {windowSize.width < 769 && <Icon.Men />}
 
         {windowSize.width > 769 && (
           <>
