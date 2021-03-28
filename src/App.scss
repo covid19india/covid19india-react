@@ -4566,3 +4566,21 @@ footer {
     transform: translateY(20px);
   }
 }
+
+.share {
+  align-self: center;
+  color: $gray;
+  margin-top: 0.5 !important;
+  padding: 2rem;
+  text-align: center;
+
+  .share-button {
+    margin: 0.2rem;
+  }
+
+  svg {
+
+    fill: $gray;
+    stroke: transparent;
+  }
+}

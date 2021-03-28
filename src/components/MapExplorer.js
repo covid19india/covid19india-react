@@ -33,9 +33,26 @@ import {
 } from 'react';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
+import {
+  FacebookIcon,
+  EmailIcon,
+  WhatsappIcon,
+  TwitterIcon,
+  FacebookShareButton,
+  EmailShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+} from 'react-share';
 import {animated, useSpring} from 'react-spring';
 import {useSwipeable} from 'react-swipeable';
 import {useWindowSize} from 'react-use';
+
+const shareConfig = {
+  url: 'https://www.covid19india.org/',
+  title: `Covid 19 Update`,
+  body: 'Covid 19 Update',
+  buttonSize: 30,
+};
 
 const MapVisualizer = lazy(() => import('./MapVisualizer'));
 
@@ -320,6 +337,49 @@ function MapExplorer({
             ></MapVisualizer>
           </Suspense>
         )}
+      </div>
+      <div className="share fadeInUp">
+        Share it on
+        <div>
+          {/* Twitter Share */}
+          <TwitterShareButton
+            url={shareConfig.url}
+            title={'CampersTribe - World is yours to explore'}
+            className="share-button"
+          >
+            <TwitterIcon size={shareConfig.buttonSize} round={true} />
+          </TwitterShareButton>
+
+          {/* WhatsApp Share */}
+          <WhatsappShareButton
+            url={shareConfig.url}
+            title={shareConfig.title}
+            separator=":: "
+            className="share-button"
+          >
+            <WhatsappIcon size={shareConfig.buttonSize} round={true} />
+          </WhatsappShareButton>
+
+          {/* Facebook Share */}
+          <FacebookShareButton
+            url={shareConfig.url}
+            quote={shareConfig.title}
+            className="share-button"
+          >
+            <FacebookIcon size={shareConfig.buttonSize} round={true} />
+          </FacebookShareButton>
+
+          {/* Email Share */}
+          <EmailShareButton
+            url={shareConfig.url}
+            subject={shareConfig.title}
+            Body={shareConfig.body}
+            separator=":: "
+            className="share-button"
+          >
+            <EmailIcon size={shareConfig.buttonSize} round={true} />
+          </EmailShareButton>
+        </div>
       </div>
     </div>
   );

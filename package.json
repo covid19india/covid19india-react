@@ -39,6 +39,7 @@
     "react-i18next": "^11.8.5",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
+    "react-share": "^4.4.0",
     "react-spring": "^8.0.27",
     "react-swipeable": "^6.0.1",
     "react-use": "^17.0.1",
