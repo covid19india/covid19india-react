@@ -278,7 +278,7 @@ function Search() {
           <Icon.Search />
         </div>
 
-        {searchValue.length > 0 && (
+        {(searchValue.length > 0 || expand) && (
           <div className={`close-button`} onClick={handleClose}>
             <Icon.X />
           </div>
