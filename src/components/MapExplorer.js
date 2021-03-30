@@ -49,8 +49,8 @@ import {useWindowSize} from 'react-use';
 
 const shareConfig = {
   url: 'https://www.covid19india.org/',
-  title: `Covid 19 Update`,
-  body: 'Covid 19 Update',
+  title: `Covid-19 Update`,
+  body: 'Check Covid-19 Update Report',
   buttonSize: 30,
 };
 
@@ -373,7 +373,7 @@ function MapExplorer({
           <EmailShareButton
             url={shareConfig.url}
             subject={shareConfig.title}
-            Body={shareConfig.body}
+            body={shareConfig.body}
             separator=":: "
             className="share-button"
           >
