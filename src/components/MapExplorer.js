@@ -49,7 +49,7 @@ import {useWindowSize} from 'react-use';
 
 const shareConfig = {
   url: 'https://www.covid19india.org/',
-  title: `Covid-19 Update`,
+  title: `Corona Virus Covid-19 Update`,
   body: 'Check Covid-19 Update Report',
   buttonSize: 30,
 };
