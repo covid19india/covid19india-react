@@ -11,7 +11,7 @@ import {
   parseIndiaDate,
 } from '../utils/commonFunctions';
 
-import {PinIcon, ReplyIcon} from '@primer/octicons-v2-react';
+import {PinIcon, ReplyIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import {min} from 'd3-array';
 import {formatISO, subDays} from 'date-fns';

@@ -1,6 +1,6 @@
 import {TABLE_STATISTICS} from '../../constants';
 
-import {FilterIcon} from '@primer/octicons-v2-react';
+import {FilterIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import {useEffect, useState} from 'react';
 

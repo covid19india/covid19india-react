@@ -96,6 +96,7 @@ export const STATISTIC_DEFINITIONS = {
       normalizeByKey: 'tested',
       multiplyFactor: 100,
     },
+    color: '#fd7e14',
     hideDelta: true,
   },
   population: {
@@ -143,6 +144,7 @@ export const TIMESERIES_STATISTICS = [
   ...PRIMARY_STATISTICS,
   'tested',
   'vaccinated',
+  // 'tpr'
 ];
 
 export const UPDATES_COUNT = 5;

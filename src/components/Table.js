@@ -19,7 +19,7 @@ import {
   InfoIcon,
   OrganizationIcon,
   QuestionIcon,
-} from '@primer/octicons-v2-react';
+} from '@primer/octicons-react';
 import classnames from 'classnames';
 import {max} from 'date-fns';
 import equal from 'fast-deep-equal';

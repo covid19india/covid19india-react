@@ -5,7 +5,7 @@ import {
 } from '../constants';
 import {capitalize, formatNumber, getStatistic} from '../utils/commonFunctions';
 
-import {HeartFillIcon} from '@primer/octicons-v2-react';
+import {HeartFillIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import {memo, useMemo} from 'react';

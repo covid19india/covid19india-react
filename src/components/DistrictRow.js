@@ -3,7 +3,7 @@ import Tooltip from './Tooltip';
 
 import {TABLE_STATISTICS, TABLE_STATISTICS_EXPANDED} from '../constants';
 
-import {InfoIcon} from '@primer/octicons-v2-react';
+import {InfoIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';

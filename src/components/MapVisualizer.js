@@ -17,7 +17,7 @@ import {
   toTitleCase,
 } from '../utils/commonFunctions';
 
-import {AlertIcon} from '@primer/octicons-v2-react';
+import {AlertIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import {max} from 'd3-array';
 import {json} from 'd3-fetch';
@@ -37,7 +37,7 @@ import {useCallback, useEffect, useMemo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import useSWR from 'swr';
-import * as topojson from 'topojson';
+import {feature, mesh} from 'topojson-client';
 
 const [width, height] = [432, 488];
 
@@ -154,13 +154,13 @@ function MapVisualizer({
     if (!geoData) return null;
     const featuresWrap =
       mapView === MAP_VIEWS.STATES
-        ? topojson.feature(geoData, geoData.objects.states).features
+        ? feature(geoData, geoData.objects.states).features
         : mapMeta.mapType === MAP_TYPES.COUNTRY && mapViz === MAP_VIZS.BUBBLES
         ? [
-            ...topojson.feature(geoData, geoData.objects.states).features,
-            ...topojson.feature(geoData, geoData.objects.districts).features,
+            ...feature(geoData, geoData.objects.states).features,
+            ...feature(geoData, geoData.objects.districts).features,
           ]
-        : topojson.feature(geoData, geoData.objects.districts).features;
+        : feature(geoData, geoData.objects.districts).features;
 
     // Add id to each feature
     return featuresWrap.map((feature) => {
@@ -412,7 +412,7 @@ function MapVisualizer({
     let meshDistricts = [];
 
     if (mapMeta.mapType === MAP_TYPES.COUNTRY) {
-      meshStates = [topojson.mesh(geoData, geoData.objects.states)];
+      meshStates = [mesh(geoData, geoData.objects.states)];
       meshStates[0].id = `${mapCode}-states`;
     }
 
@@ -421,7 +421,7 @@ function MapVisualizer({
       (mapView === MAP_VIEWS.DISTRICTS && mapViz === MAP_VIZS.CHOROPLETH)
     ) {
       // Add id to mesh
-      meshDistricts = [topojson.mesh(geoData, geoData.objects.districts)];
+      meshDistricts = [mesh(geoData, geoData.objects.districts)];
       meshDistricts[0].id = `${mapCode}-districts`;
     }
 

@@ -1,7 +1,7 @@
 import {SPRING_CONFIG_NUMBERS, STATISTIC_CONFIGS} from '../constants.js';
 import {formatNumber, getStatistic} from '../utils/commonFunctions';
 
-import {ShieldCheckIcon} from '@primer/octicons-v2-react';
+import {ShieldCheckIcon} from '@primer/octicons-react';
 import equal from 'fast-deep-equal';
 import {memo} from 'react';
 import {useTranslation} from 'react-i18next';

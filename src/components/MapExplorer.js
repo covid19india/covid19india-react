@@ -17,7 +17,7 @@ import {
   DotFillIcon,
   ArrowLeftIcon,
   OrganizationIcon,
-} from '@primer/octicons-v2-react';
+} from '@primer/octicons-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
