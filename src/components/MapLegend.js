@@ -3,7 +3,6 @@ import {
   MAP_LEGEND_HEIGHT,
   MAP_VIZS,
 } from '../constants';
-import {useResizeObserver} from '../hooks/useResizeObserver';
 import {capitalize, formatNumber} from '../utils/commonFunctions';
 
 import {range, quantile} from 'd3-array';
@@ -14,20 +13,17 @@ import {scaleLinear, scaleOrdinal, scaleBand} from 'd3-scale';
 import {select} from 'd3-selection';
 import {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
+import {useMeasure} from 'react-use';
 
 function MapLegend({data, mapViz, mapScale, statistic}) {
   const {t} = useTranslation();
-
   const svgRef = useRef(null);
-  const wrapperRef = useRef();
-  const dimensions = useResizeObserver(wrapperRef);
+  const [wrapperRef, {width, height}] = useMeasure();
 
   useEffect(() => {
-    const svg = select(svgRef.current);
-    const {width, height} = dimensions ||
-      wrapperRef.current?.getBoundingClientRect() || {width: 0, height: 0};
-
     if (!width || !height) return;
+
+    const svg = select(svgRef.current);
 
     if (mapViz === MAP_VIZS.BUBBLES) {
       const t = svg.transition().duration(D3_TRANSITION_DURATION);
@@ -99,7 +95,7 @@ function MapLegend({data, mapViz, mapScale, statistic}) {
         })
       );
     }
-  }, [t, dimensions, mapScale, mapViz, statistic]);
+  }, [t, width, height, mapScale, mapViz, statistic]);
 
   return (
     <div

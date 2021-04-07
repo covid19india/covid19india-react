@@ -3,7 +3,6 @@ import {
   PRIMARY_STATISTICS,
   STATISTIC_CONFIGS,
 } from '../constants';
-import {useResizeObserver} from '../hooks/useResizeObserver';
 import {
   getStatistic,
   getIndiaDateYesterdayISO,
@@ -20,6 +19,7 @@ import 'd3-transition';
 import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import {memo, useEffect, useRef, useMemo} from 'react';
+import {useMeasure} from 'react-use';
 
 // Dimensions
 const margin = {top: 10, right: 10, bottom: 2, left: 10};
@@ -29,11 +29,8 @@ const maxWidth = 120;
 function Minigraphs({timeseries, date: timelineDate}) {
   const refs = useRef([]);
   const endDate = timelineDate || getIndiaDateYesterdayISO();
-  const wrapperRef = useRef();
 
-  const dimensions = useResizeObserver(wrapperRef);
-  let {width} = dimensions ||
-    wrapperRef.current?.getBoundingClientRect() || {width: 0};
+  let [wrapperRef, {width}] = useMeasure();
   width = Math.min(width, maxWidth);
 
   const dates = useMemo(() => {

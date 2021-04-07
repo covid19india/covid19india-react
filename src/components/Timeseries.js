@@ -5,7 +5,6 @@ import {
   STATISTIC_CONFIGS,
   TIMESERIES_STATISTICS,
 } from '../constants';
-import {useResizeObserver} from '../hooks/useResizeObserver';
 import {
   capitalize,
   formatNumber,
@@ -26,6 +25,7 @@ import {differenceInDays} from 'date-fns';
 import equal from 'fast-deep-equal';
 import {memo, useCallback, useEffect, useRef, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import {useMeasure} from 'react-use';
 
 // Chart margins
 const margin = {top: 15, right: 35, bottom: 25, left: 25};
@@ -44,9 +44,7 @@ function Timeseries({
 }) {
   const {t} = useTranslation();
   const refs = useRef([]);
-
-  const wrapperRef = useRef();
-  const dimensions = useResizeObserver(wrapperRef);
+  const [wrapperRef, {width, height}] = useMeasure();
 
   const statistics = useMemo(
     () =>
@@ -55,13 +53,6 @@ function Timeseries({
       ),
     [chartType]
   );
-
-  // Dimensions
-  const {width, height} = dimensions ||
-    wrapperRef.current?.getBoundingClientRect() || {
-      width: margin.left + margin.right,
-      height: margin.bottom + margin.top,
-    };
 
   const [highlightedDate, setHighlightedDate] = useState(
     dates[dates.length - 1]
@@ -224,6 +215,8 @@ function Timeseries({
   ]);
 
   useEffect(() => {
+    if (!width || !height) return;
+
     const T = dates.length;
     // Chart extremes
     const chartRight = width - margin.right;
