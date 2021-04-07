@@ -95,7 +95,7 @@ function State() {
   }, [data, stateCode]);
 
   const stateMetaElement = useRef();
-  const isStateMetaVisible = useIsVisible(stateMetaElement, {once: true});
+  const isStateMetaVisible = useIsVisible(stateMetaElement);
 
   const trail = useMemo(() => {
     const styles = [];
@@ -158,14 +158,16 @@ function State() {
 
           <span ref={stateMetaElement} />
 
-          {data && isStateMetaVisible && (
-            <StateMeta
-              {...{
-                stateCode,
-                data,
-              }}
-              timeseries={timeseries?.[stateCode]?.dates}
-            />
+          {isStateMetaVisible && data && (
+            <Suspense fallback={<div />}>
+              <StateMeta
+                {...{
+                  stateCode,
+                  data,
+                }}
+                timeseries={timeseries?.[stateCode]?.dates}
+              />
+            </Suspense>
           )}
         </div>
 
