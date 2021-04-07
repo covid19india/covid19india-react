@@ -285,7 +285,7 @@ h6 {
   .alert-right {
     margin-left: 0.25rem;
     text-align: right;
-    width: 9rem;
+    width: 8.25rem;
 
     a {
       background: $gray-light;
@@ -2711,6 +2711,16 @@ abbr {
       }
     }
 
+    &.is-tpr {
+      .stem {
+        stroke: $orange-mid;
+      }
+
+      .trend-area {
+        fill: $orange-mid;
+      }
+    }
+
     &.is-brush {
       height: 4rem;
     }
@@ -2958,6 +2968,21 @@ input {
         color: $pink;
       }
     }
+
+    &.is-tpr {
+      h5 {
+        color: $orange-mid;
+
+        &.title {
+          color: $orange-mid;
+        }
+      }
+
+      h2,
+      h6 {
+        color: $orange;
+      }
+    }
   }
 
   .svg-parent {
@@ -3077,6 +3102,22 @@ input {
 
         text {
           color: $pink-mid;
+        }
+      }
+    }
+
+    &.is-tpr {
+      background: $orange-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $orange;
+        }
+
+        text {
+          color: $orange-mid;
         }
       }
     }
@@ -3836,20 +3877,19 @@ footer {
   .State {
     .state-left,
     .state-right {
-      min-width: 33.5rem;
-      width: 39%;
+      min-width: 33rem;
+      width: 38%;
     }
   }
 
   .Home {
     .home-left,
     .home-right {
-      min-width: 33.5rem;
-      width: 39%;
+      min-width: 33rem;
+      width: 38%;
 
       &.expanded {
-        max-width: 86rem;
-        width: 100%;
+        width: min(100%, max(71rem, calc(76% + 5rem)));
       }
     }
 
