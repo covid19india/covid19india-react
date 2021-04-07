@@ -3,6 +3,7 @@ import {
   PRIMARY_STATISTICS,
   STATISTIC_CONFIGS,
 } from '../constants';
+import {useResizeObserver} from '../hooks/useResizeObserver';
 import {
   getStatistic,
   getIndiaDateYesterdayISO,
@@ -21,12 +22,19 @@ import equal from 'fast-deep-equal';
 import {memo, useEffect, useRef, useMemo} from 'react';
 
 // Dimensions
-const [width, height] = [100, 75];
-const margin = {top: 10, right: 10, bottom: 2, left: 5};
+const margin = {top: 10, right: 10, bottom: 2, left: 10};
+const height = 75;
+const maxWidth = 120;
 
 function Minigraphs({timeseries, date: timelineDate}) {
   const refs = useRef([]);
   const endDate = timelineDate || getIndiaDateYesterdayISO();
+  const wrapperRef = useRef();
+
+  const dimensions = useResizeObserver(wrapperRef);
+  let {width} = dimensions ||
+    wrapperRef.current?.getBoundingClientRect() || {width: 0};
+  width = Math.min(width, maxWidth);
 
   const dates = useMemo(() => {
     const pastDates = Object.keys(timeseries || {}).filter(
@@ -42,6 +50,8 @@ function Minigraphs({timeseries, date: timelineDate}) {
   }, [endDate, timeseries]);
 
   useEffect(() => {
+    if (!width) return;
+
     const T = dates.length;
 
     const chartRight = width - margin.right;
@@ -145,23 +155,27 @@ function Minigraphs({timeseries, date: timelineDate}) {
               .attr('cy', (date) =>
                 yScale(getStatistic(timeseries[date], 'delta', statistic))
               )
+              .style('opacity', 1)
               .selection()
         );
     });
-  }, [endDate, dates, timeseries]);
+  }, [endDate, dates, timeseries, width]);
 
   return (
     <div className="Minigraph">
       {PRIMARY_STATISTICS.map((statistic, index) => (
-        <div key={statistic} className={classnames('svg-parent')}>
+        <div
+          key={statistic}
+          className={classnames('svg-parent')}
+          ref={index === 0 ? wrapperRef : null}
+        >
           <svg
             ref={(el) => {
               refs.current[index] = el;
             }}
+            preserveAspectRatio="xMidYMid meet"
             width={width}
             height={height}
-            viewBox={`0 0 ${width} ${height}`}
-            preserveAspectRatio="xMidYMid meet"
           />
         </div>
       ))}

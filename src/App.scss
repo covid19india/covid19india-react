@@ -249,7 +249,6 @@ h6 {
   .home-right {
     display: flex;
     flex-direction: column;
-    width: 34rem;
   }
 
   .home-left {
@@ -387,7 +386,6 @@ h6 {
   .state-right {
     display: flex;
     flex-direction: column;
-    width: 34rem;
   }
 
   .state-left {
@@ -2716,6 +2714,10 @@ abbr {
     &.is-brush {
       height: 4rem;
     }
+
+    svg {
+      width: 100%;
+    }
   }
 }
 
@@ -2962,12 +2964,11 @@ input {
     align-self: center;
     border-radius: 5px;
     display: flex;
+    justify-content: center;
     position: relative;
     width: 100%;
 
     svg {
-      width: 100%;
-
       .domain,
       .tick {
         stroke-width: 1.5;
@@ -3832,11 +3833,22 @@ footer {
     }
   }
 
+  .State {
+    .state-left,
+    .state-right {
+      min-width: 33.5rem;
+      width: 39%;
+    }
+  }
+
   .Home {
     .home-left,
     .home-right {
+      min-width: 33.5rem;
+      width: 39%;
+
       &.expanded {
-        max-width: 73rem;
+        max-width: 86rem;
         width: 100%;
       }
     }
