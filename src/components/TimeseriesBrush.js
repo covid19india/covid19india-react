@@ -3,7 +3,6 @@ import {
   D3_TRANSITION_DURATION,
   STATISTIC_CONFIGS,
 } from '../constants';
-import {useResizeObserver} from '../hooks/useResizeObserver';
 import {getStatistic, parseIndiaDate} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
@@ -19,6 +18,7 @@ import {differenceInDays, formatISO} from 'date-fns';
 import equal from 'fast-deep-equal';
 import {memo, useCallback, useMemo, useEffect, useRef} from 'react';
 import ReactDOM from 'react-dom';
+import {useMeasure} from 'react-use';
 
 // Chart margins
 const margin = {top: 0, right: 35, bottom: 20, left: 25};
@@ -34,15 +34,7 @@ function TimeseriesBrush({
   setLookback,
 }) {
   const chartRef = useRef();
-  const wrapperRef = useRef();
-  const dimensions = useResizeObserver(wrapperRef);
-
-  // Dimensions
-  const {width, height} = dimensions ||
-    wrapperRef.current?.getBoundingClientRect() || {
-      width: margin.left + margin.right,
-      height: margin.bottom + margin.top,
-    };
+  const [wrapperRef, {width, height}] = useMeasure();
 
   const xScale = useMemo(() => {
     const T = dates.length;
@@ -60,6 +52,8 @@ function TimeseriesBrush({
   }, [width, endDate, dates]);
 
   useEffect(() => {
+    if (!width || !height) return;
+
     // Chart extremes
     const chartBottom = height - margin.bottom;
 
@@ -148,6 +142,8 @@ function TimeseriesBrush({
   );
 
   useEffect(() => {
+    if (!width || !height) return;
+
     const svg = select(chartRef.current);
     // Chart extremes
     const chartRight = width - margin.right;
