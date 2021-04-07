@@ -3878,7 +3878,7 @@ footer {
     .state-left,
     .state-right {
       min-width: 33rem;
-      width: 38%;
+      width: 39%;
     }
   }
 
@@ -3886,10 +3886,10 @@ footer {
     .home-left,
     .home-right {
       min-width: 33rem;
-      width: 38%;
+      width: 39%;
 
       &.expanded {
-        width: min(100%, max(71rem, calc(76% + 5rem)));
+        width: min(100%, max(71rem, calc(78% + 5rem)));
       }
     }
 
