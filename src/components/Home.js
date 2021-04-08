@@ -91,7 +91,7 @@ function Home() {
           <div style={{position: 'relative', marginTop: '1rem'}}>
             {data && (
               <Suspense fallback={<div style={{height: '50rem'}} />}>
-                {width > 769 && (
+                {width > 769 && !expandTable && (
                   <MapSwitcher {...{mapStatistic, setMapStatistic}} />
                 )}
                 <Level data={data['TT']} />

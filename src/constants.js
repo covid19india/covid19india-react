@@ -144,7 +144,7 @@ export const TIMESERIES_STATISTICS = [
   ...PRIMARY_STATISTICS,
   'tested',
   'vaccinated',
-  // 'tpr'
+  // 'tpr',
 ];
 
 export const UPDATES_COUNT = 5;

@@ -80,6 +80,7 @@ function TimeseriesBrush({
       .range([chartBottom, margin.top]);
 
     const svg = select(chartRef.current);
+
     const t = svg.transition().duration(D3_TRANSITION_DURATION);
 
     svg
@@ -96,6 +97,7 @@ function TimeseriesBrush({
       .y1((d) => yScale(d[1]));
 
     svg
+      .select('.trend-areas')
       .selectAll('.trend-area')
       .data(timeseriesStacked)
       .join(
@@ -123,6 +125,19 @@ function TimeseriesBrush({
     xScale(parseIndiaDate(date))
   );
 
+  const brush = useMemo(() => {
+    if (!width || !height) return;
+    // Chart extremes
+    const chartRight = width - margin.right;
+    const chartBottom = height - margin.bottom;
+
+    const brush = brushX().extent([
+      [margin.left, margin.top],
+      [chartRight, chartBottom],
+    ]);
+    return brush;
+  }, [width, height]);
+
   const brushed = useCallback(
     ({sourceEvent, selection}) => {
       if (!sourceEvent) return;
@@ -141,54 +156,53 @@ function TimeseriesBrush({
     [xScale, setBrushEnd, setLookback]
   );
 
-  useEffect(() => {
-    if (!width || !height) return;
+  const beforebrushstarted = useCallback(
+    (event) => {
+      const svg = select(chartRef.current);
+      const selection = brushSelection(svg.select('.brush').node());
 
-    const svg = select(chartRef.current);
-    // Chart extremes
-    const chartRight = width - margin.right;
-    const chartBottom = height - margin.bottom;
-
-    function beforebrushstarted(event) {
-      const selection = brushSelection(this.parentNode);
       if (!selection) return;
 
       const dx = selection[1] - selection[0];
       const [[cx]] = pointers(event);
       const [x0, x1] = [cx - dx / 2, cx + dx / 2];
       const [X0, X1] = xScale.range();
-      select(this.parentNode).call(
-        brush.move,
-        x1 > X1 ? [X1 - dx, X1] : x0 < X0 ? [X0, X0 + dx] : [x0, x1]
-      );
-    }
+      svg
+        .select('.brush')
+        .call(
+          brush.move,
+          x1 > X1 ? [X1 - dx, X1] : x0 < X0 ? [X0, X0 + dx] : [x0, x1]
+        );
+    },
+    [brush, xScale]
+  );
 
-    function brushended({sourceEvent, selection}) {
+  const brushended = useCallback(
+    ({sourceEvent, selection}) => {
       if (!sourceEvent || !selection) return;
       const domain = selection
         .map(xScale.invert)
         .map((date) => formatISO(date, {representation: 'date'}));
 
-      select(this)
+      const svg = select(chartRef.current);
+      svg
+        .select('.brush')
         .call(
           brush.move,
           domain.map((date) => xScale(parseIndiaDate(date)))
         )
         .call((g) => g.select('.overlay').attr('cursor', 'pointer'));
-    }
+    },
+    [brush, xScale]
+  );
 
-    const brush = brushX()
-      .extent([
-        [margin.left, margin.top],
-        [chartRight, chartBottom],
-      ])
-      .on('start brush', brushed)
-      .on('end', brushended);
-
+  useEffect(() => {
+    if (!brush) return;
+    brush.on('start brush', brushed).on('end', brushended);
+    const svg = select(chartRef.current);
     svg
       .select('.brush')
       .call(brush)
-      .call(brush.move, defaultSelection)
       .call((g) =>
         g
           .select('.overlay')
@@ -196,7 +210,14 @@ function TimeseriesBrush({
           .datum({type: 'selection'})
           .on('mousedown touchstart', beforebrushstarted)
       );
-  }, [width, height, xScale, defaultSelection, brushed]);
+  }, [brush, brushed, brushended, beforebrushstarted]);
+
+  useEffect(() => {
+    if (!brush) return;
+    const svg = select(chartRef.current);
+
+    svg.select('.brush').call(brush.move, defaultSelection);
+  }, [brush, defaultSelection]);
 
   return (
     <div className="Timeseries">
@@ -205,7 +226,22 @@ function TimeseriesBrush({
         ref={wrapperRef}
       >
         <svg ref={chartRef} preserveAspectRatio="xMidYMid meet">
-          <g className="brush" />
+          <defs>
+            <clipPath id="clipPath">
+              <rect
+                x={0}
+                y={`${margin.top}`}
+                width={width}
+                height={`${Math.max(0, height - margin.bottom)}`}
+              />
+            </clipPath>
+          </defs>
+
+          <g className="brush" clipPath="url(#clipPath)">
+            <rect className="overlay" />
+            <g className="trend-areas" />
+            <rect className="selection" />
+          </g>
           <g className="x-axis" />
         </svg>
       </div>
