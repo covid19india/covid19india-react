@@ -3125,6 +3125,18 @@ input {
     &.is-brush {
       .overlay {
         fill: $gray-hover;
+        pointer-events: all;
+      }
+
+      .selection {
+        cursor: move;
+        fill: $gray-mid;
+        fill-opacity: 0.6;
+        stroke: none;
+      }
+
+      .handle {
+        fill: 'none';
       }
 
       svg {
@@ -3878,7 +3890,7 @@ footer {
     .state-left,
     .state-right {
       min-width: 33rem;
-      width: 39%;
+      width: 40%;
     }
   }
 
@@ -3886,10 +3898,10 @@ footer {
     .home-left,
     .home-right {
       min-width: 33rem;
-      width: 39%;
+      width: 40%;
 
       &.expanded {
-        width: min(100%, max(71rem, calc(78% + 5rem)));
+        width: min(100%, max(71rem, calc(80% + 5rem)));
       }
     }
 
