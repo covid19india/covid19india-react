@@ -152,33 +152,17 @@ function TimeseriesBrush({
     return brush;
   }, [width, height]);
 
-  const brushHandle = useCallback(
-    (g, selection) =>
-      g
-        .selectAll('.handle--custom')
-        .attr('display', selection === null ? 'none' : null)
-        .attr(
-          'transform',
-          selection === null
-            ? null
-            : (d, i) => `translate(${selection[i]},${-height / 2 + 6})`
-        ),
-    [height]
-  );
-
   const brushed = useCallback(
     ({sourceEvent, selection}) => {
       if (!sourceEvent) return;
       const [brushStartDate, brushEndDate] = selection.map(xScale.invert);
-      const svg = select(chartRef.current);
-      svg.select('.brush').call(brushHandle, selection);
 
       ReactDOM.unstable_batchedUpdates(() => {
         setBrushSelectionEnd(formatISO(brushEndDate, {representation: 'date'}));
         setLookback(differenceInDays(brushEndDate, brushStartDate));
       });
     },
-    [xScale, brushHandle, setBrushSelectionEnd, setLookback]
+    [xScale, setBrushSelectionEnd, setLookback]
   );
 
   const beforebrushstarted = useCallback(
@@ -216,10 +200,9 @@ function TimeseriesBrush({
           brush.move,
           domain.map((date) => xScale(parseIndiaDate(date)))
         )
-        .call((g) => g.select('.overlay').attr('cursor', 'pointer'))
-        .call(brushHandle, selection);
+        .call((g) => g.select('.overlay').attr('cursor', 'pointer'));
     },
-    [brush, brushHandle, xScale]
+    [brush, xScale]
   );
 
   useEffect(() => {
@@ -241,53 +224,8 @@ function TimeseriesBrush({
   useEffect(() => {
     if (!brush) return;
     const svg = select(chartRef.current);
-    svg
-      .select('.brush')
-      .call(brush.move, defaultSelection)
-      .call(brushHandle, defaultSelection);
-  }, [brush, brushHandle, defaultSelection]);
-
-  const brushHandlePath = useCallback(
-    (d) => {
-      const e = +(d.type == 'e');
-      const x = e ? 1 : -1;
-      const y = height / 2;
-      return (
-        'M' +
-        0.5 * x +
-        ',' +
-        y +
-        'A6,6 0 0 ' +
-        e +
-        ' ' +
-        6.5 * x +
-        ',' +
-        (y + 6) +
-        'V' +
-        (2 * y - 6) +
-        'A6,6 0 0 ' +
-        e +
-        ' ' +
-        0.5 * x +
-        ',' +
-        2 * y +
-        'Z' +
-        'M' +
-        2.5 * x +
-        ',' +
-        (y + 8) +
-        'V' +
-        (2 * y - 8) +
-        'M' +
-        4.5 * x +
-        ',' +
-        (y + 8) +
-        'V' +
-        (2 * y - 8)
-      );
-    },
-    [height]
-  );
+    svg.select('.brush').call(brush.move, defaultSelection);
+  }, [brush, defaultSelection]);
 
   const handleWheel = (event) => {
     if (event.deltaX) {
@@ -344,8 +282,6 @@ function TimeseriesBrush({
               <g className="trend-areas" />
               <rect className="selection" id="selection" />
             </g>
-            <path className="handle--custom" d={brushHandlePath({type: 'w'})} />
-            <path className="handle--custom" d={brushHandlePath({type: 'e'})} />
           </g>
           <g className="x-axis" />
         </svg>
