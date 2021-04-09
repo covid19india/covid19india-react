@@ -15,6 +15,7 @@ $pblue-light: #4c75f210;
 $pblue-hover: #4c75f230;
 $pblue-light-opaque: #eff7ff;
 $pblue-mid: #4c75f299;
+$pblue-dark: #4c75f2dd;
 $cherry: #ff073a;
 $cherry-mid: #ff073a99;
 $cherry-light: #ff073a20;
@@ -3134,6 +3135,7 @@ input {
       }
 
       .handle--custom {
+        display: none;
         stroke: $black;
       }
 
@@ -3852,7 +3854,7 @@ footer {
         margin-top: 1.5rem;
 
         &:hover {
-          color: $pblue-mid;
+          color: $pblue-dark;
         }
       }
     }
