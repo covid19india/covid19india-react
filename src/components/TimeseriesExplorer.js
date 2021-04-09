@@ -60,14 +60,14 @@ function TimeseriesExplorer({
     timelineDate || getIndiaDateYesterdayISO(),
   ]);
 
-  const [brushEnd, setBrushEnd] = useState(endDate);
+  const [brushSelectionEnd, setBrushSelectionEnd] = useState(endDate);
   useEffect(() => {
-    setBrushEnd(endDate);
+    setBrushSelectionEnd(endDate);
   }, [endDate]);
 
-  const brushStart =
+  const brushSelectionStart =
     lookback !== null
-      ? formatISO(subDays(parseIndiaDate(brushEnd), lookback), {
+      ? formatISO(subDays(parseIndiaDate(brushSelectionEnd), lookback), {
           representation: 'date',
         })
       : beginningDate;
@@ -163,9 +163,12 @@ function TimeseriesExplorer({
     [selectedTimeseries, endDate]
   );
 
-  const brushDates = useMemo(
-    () => dates.filter((date) => brushStart <= date && date <= brushEnd),
-    [dates, brushStart, brushEnd]
+  const brushSelectionDates = useMemo(
+    () =>
+      dates.filter(
+        (date) => brushSelectionStart <= date && date <= brushSelectionEnd
+      ),
+    [dates, brushSelectionStart, brushSelectionEnd]
   );
 
   const handleChange = useCallback(
@@ -308,14 +311,14 @@ function TimeseriesExplorer({
           <Timeseries
             timeseries={selectedTimeseries}
             regionHighlighted={selectedRegion}
-            dates={brushDates}
+            dates={brushSelectionDates}
             {...{endDate, chartType, isUniform, isLog, isMovingAverage}}
           />
           <TimeseriesBrush
             timeseries={selectedTimeseries}
             regionHighlighted={selectedRegion}
-            brushDomain={[brushStart, brushEnd]}
-            {...{dates, endDate, setBrushEnd, setLookback}}
+            currentBrushSelection={[brushSelectionStart, brushSelectionEnd]}
+            {...{dates, endDate, lookback, setBrushSelectionEnd, setLookback}}
           />
         </Suspense>
       )}

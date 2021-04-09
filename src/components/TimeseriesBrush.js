@@ -6,7 +6,7 @@ import {
 import {getStatistic, parseIndiaDate} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
-import {max} from 'd3-array';
+import {min, max} from 'd3-array';
 import {axisBottom} from 'd3-axis';
 import {brushX, brushSelection} from 'd3-brush';
 import {interpolatePath} from 'd3-interpolate-path';
@@ -14,7 +14,7 @@ import {scaleTime, scaleLinear} from 'd3-scale';
 import {select, pointers} from 'd3-selection';
 import {area, curveMonotoneX, stack} from 'd3-shape';
 import 'd3-transition';
-import {differenceInDays, formatISO} from 'date-fns';
+import {addDays, differenceInDays, formatISO} from 'date-fns';
 import equal from 'fast-deep-equal';
 import {memo, useCallback, useMemo, useEffect, useRef} from 'react';
 import ReactDOM from 'react-dom';
@@ -24,17 +24,29 @@ import {useMeasure} from 'react-use';
 const margin = {top: 0, right: 35, bottom: 20, left: 25};
 const yBufferTop = 1.2;
 const numTicksX = (width) => (width < 480 ? 4 : 6);
+const brushWheelDelta = 10;
 
 function TimeseriesBrush({
   timeseries,
   dates,
-  brushDomain,
+  currentBrushSelection,
   endDate,
-  setBrushEnd,
+  lookback,
+  setBrushSelectionEnd,
   setLookback,
 }) {
   const chartRef = useRef();
   const [wrapperRef, {width, height}] = useMeasure();
+
+  const endDateMin =
+    lookback !== null
+      ? min([
+          formatISO(addDays(parseIndiaDate(dates[0]), lookback), {
+            representation: 'date',
+          }),
+          endDate,
+        ])
+      : endDate;
 
   const xScale = useMemo(() => {
     const T = dates.length;
@@ -121,7 +133,7 @@ function TimeseriesBrush({
       );
   }, [dates, width, height, xScale, timeseries]);
 
-  const defaultSelection = brushDomain.map((date) =>
+  const defaultSelection = currentBrushSelection.map((date) =>
     xScale(parseIndiaDate(date))
   );
 
@@ -157,21 +169,16 @@ function TimeseriesBrush({
   const brushed = useCallback(
     ({sourceEvent, selection}) => {
       if (!sourceEvent) return;
-      // if (!selection) {
-      //   const [[cx]] = pointers(event);
-      //   selection = [cx, cx];
-      //   select(this).call(brush.move, [cx, cx]);
-      // }
       const [brushStartDate, brushEndDate] = selection.map(xScale.invert);
       const svg = select(chartRef.current);
       svg.select('.brush').call(brushHandle, selection);
 
       ReactDOM.unstable_batchedUpdates(() => {
-        setBrushEnd(formatISO(brushEndDate, {representation: 'date'}));
+        setBrushSelectionEnd(formatISO(brushEndDate, {representation: 'date'}));
         setLookback(differenceInDays(brushEndDate, brushStartDate));
       });
     },
-    [xScale, brushHandle, setBrushEnd, setLookback]
+    [xScale, brushHandle, setBrushSelectionEnd, setLookback]
   );
 
   const beforebrushstarted = useCallback(
@@ -240,43 +247,66 @@ function TimeseriesBrush({
       .call(brushHandle, defaultSelection);
   }, [brush, brushHandle, defaultSelection]);
 
-  const handlePath = function (d) {
-    const e = +(d.type == 'e');
-    const x = e ? 1 : -1;
-    const y = height / 2;
-    return (
-      'M' +
-      0.5 * x +
-      ',' +
-      y +
-      'A6,6 0 0 ' +
-      e +
-      ' ' +
-      6.5 * x +
-      ',' +
-      (y + 6) +
-      'V' +
-      (2 * y - 6) +
-      'A6,6 0 0 ' +
-      e +
-      ' ' +
-      0.5 * x +
-      ',' +
-      2 * y +
-      'Z' +
-      'M' +
-      2.5 * x +
-      ',' +
-      (y + 8) +
-      'V' +
-      (2 * y - 8) +
-      'M' +
-      4.5 * x +
-      ',' +
-      (y + 8) +
-      'V' +
-      (2 * y - 8)
-    );
+  const brushHandlePath = useCallback(
+    (d) => {
+      const e = +(d.type == 'e');
+      const x = e ? 1 : -1;
+      const y = height / 2;
+      return (
+        'M' +
+        0.5 * x +
+        ',' +
+        y +
+        'A6,6 0 0 ' +
+        e +
+        ' ' +
+        6.5 * x +
+        ',' +
+        (y + 6) +
+        'V' +
+        (2 * y - 6) +
+        'A6,6 0 0 ' +
+        e +
+        ' ' +
+        0.5 * x +
+        ',' +
+        2 * y +
+        'Z' +
+        'M' +
+        2.5 * x +
+        ',' +
+        (y + 8) +
+        'V' +
+        (2 * y - 8) +
+        'M' +
+        4.5 * x +
+        ',' +
+        (y + 8) +
+        'V' +
+        (2 * y - 8)
+      );
+    },
+    [height]
+  );
+
+  const handleWheel = (event) => {
+    if (event.deltaX) {
+      setBrushSelectionEnd(
+        max([
+          endDateMin,
+          dates[
+            Math.max(
+              0,
+              Math.min(
+                dates.length - 1,
+                dates.indexOf(currentBrushSelection[1]) +
+                  Math.sign(event.deltaX) * brushWheelDelta
+              )
+            )
+          ],
+        ])
+      );
+    }
   };
 
   return (
@@ -284,6 +314,7 @@ function TimeseriesBrush({
       <div
         className={classnames('svg-parent fadeInUp is-brush')}
         ref={wrapperRef}
+        onWheel={handleWheel}
       >
         <svg ref={chartRef} preserveAspectRatio="xMidYMid meet">
           <defs>
@@ -313,8 +344,8 @@ function TimeseriesBrush({
               <g className="trend-areas" />
               <rect className="selection" id="selection" />
             </g>
-            <path className="handle--custom" d={handlePath({type: 'w'})} />
-            <path className="handle--custom" d={handlePath({type: 'e'})} />
+            <path className="handle--custom" d={brushHandlePath({type: 'w'})} />
+            <path className="handle--custom" d={brushHandlePath({type: 'e'})} />
           </g>
           <g className="x-axis" />
         </svg>
@@ -324,7 +355,9 @@ function TimeseriesBrush({
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(currProps.brushDomain, prevProps.brushDomain)) {
+  if (
+    !equal(currProps.currentBrushSelection, prevProps.currentBrushSelection)
+  ) {
     return false;
   } else if (
     !equal(
@@ -341,6 +374,8 @@ const isEqual = (prevProps, currProps) => {
   ) {
     return false;
   } else if (!equal(currProps.endDate, prevProps.endDate)) {
+    return false;
+  } else if (!equal(currProps.lookback, prevProps.lookback)) {
     return false;
   } else if (!equal(currProps.dates, prevProps.dates)) {
     return false;
