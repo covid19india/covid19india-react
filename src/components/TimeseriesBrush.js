@@ -131,12 +131,28 @@ function TimeseriesBrush({
     const chartRight = width - margin.right;
     const chartBottom = height - margin.bottom;
 
-    const brush = brushX().extent([
-      [margin.left, margin.top],
-      [chartRight, chartBottom],
-    ]);
+    const brush = brushX()
+      .extent([
+        [margin.left, margin.top],
+        [chartRight, chartBottom],
+      ])
+      .handleSize(20);
     return brush;
   }, [width, height]);
+
+  const brushHandle = useCallback(
+    (g, selection) =>
+      g
+        .selectAll('.handle--custom')
+        .attr('display', selection === null ? 'none' : null)
+        .attr(
+          'transform',
+          selection === null
+            ? null
+            : (d, i) => `translate(${selection[i]},${-height / 2 + 6})`
+        ),
+    [height]
+  );
 
   const brushed = useCallback(
     ({sourceEvent, selection}) => {
@@ -147,13 +163,15 @@ function TimeseriesBrush({
       //   select(this).call(brush.move, [cx, cx]);
       // }
       const [brushStartDate, brushEndDate] = selection.map(xScale.invert);
+      const svg = select(chartRef.current);
+      svg.select('.brush').call(brushHandle, selection);
 
       ReactDOM.unstable_batchedUpdates(() => {
         setBrushEnd(formatISO(brushEndDate, {representation: 'date'}));
         setLookback(differenceInDays(brushEndDate, brushStartDate));
       });
     },
-    [xScale, setBrushEnd, setLookback]
+    [xScale, brushHandle, setBrushEnd, setLookback]
   );
 
   const beforebrushstarted = useCallback(
@@ -191,9 +209,10 @@ function TimeseriesBrush({
           brush.move,
           domain.map((date) => xScale(parseIndiaDate(date)))
         )
-        .call((g) => g.select('.overlay').attr('cursor', 'pointer'));
+        .call((g) => g.select('.overlay').attr('cursor', 'pointer'))
+        .call(brushHandle, selection);
     },
-    [brush, xScale]
+    [brush, brushHandle, xScale]
   );
 
   useEffect(() => {
@@ -215,9 +234,50 @@ function TimeseriesBrush({
   useEffect(() => {
     if (!brush) return;
     const svg = select(chartRef.current);
+    svg
+      .select('.brush')
+      .call(brush.move, defaultSelection)
+      .call(brushHandle, defaultSelection);
+  }, [brush, brushHandle, defaultSelection]);
 
-    svg.select('.brush').call(brush.move, defaultSelection);
-  }, [brush, defaultSelection]);
+  const handlePath = function (d) {
+    const e = +(d.type == 'e');
+    const x = e ? 1 : -1;
+    const y = height / 2;
+    return (
+      'M' +
+      0.5 * x +
+      ',' +
+      y +
+      'A6,6 0 0 ' +
+      e +
+      ' ' +
+      6.5 * x +
+      ',' +
+      (y + 6) +
+      'V' +
+      (2 * y - 6) +
+      'A6,6 0 0 ' +
+      e +
+      ' ' +
+      0.5 * x +
+      ',' +
+      2 * y +
+      'Z' +
+      'M' +
+      2.5 * x +
+      ',' +
+      (y + 8) +
+      'V' +
+      (2 * y - 8) +
+      'M' +
+      4.5 * x +
+      ',' +
+      (y + 8) +
+      'V' +
+      (2 * y - 8)
+    );
+  };
 
   return (
     <div className="Timeseries">
@@ -235,12 +295,26 @@ function TimeseriesBrush({
                 height={`${Math.max(0, height - margin.bottom)}`}
               />
             </clipPath>
+            <mask id="mask">
+              <rect
+                x={0}
+                y={`${margin.top}`}
+                width={width}
+                height={`${Math.max(0, height - margin.bottom)}`}
+                fill="hsl(0, 0%, 40%)"
+              />
+              <use href="#selection" fill="white" />
+            </mask>
           </defs>
 
           <g className="brush" clipPath="url(#clipPath)">
-            <rect className="overlay" />
-            <g className="trend-areas" />
-            <rect className="selection" />
+            <g mask="url(#mask)">
+              <rect className="overlay" />
+              <g className="trend-areas" />
+              <rect className="selection" id="selection" />
+            </g>
+            <path className="handle--custom" d={handlePath({type: 'w'})} />
+            <path className="handle--custom" d={handlePath({type: 'e'})} />
           </g>
           <g className="x-axis" />
         </svg>

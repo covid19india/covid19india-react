@@ -3124,19 +3124,17 @@ input {
 
     &.is-brush {
       .overlay {
-        fill: $gray-hover;
+        fill: #6c757d40;
         pointer-events: all;
       }
 
       .selection {
         cursor: move;
-        fill: $gray-mid;
-        fill-opacity: 0.6;
         stroke: none;
       }
 
-      .handle {
-        fill: 'none';
+      .handle--custom {
+        stroke: $black;
       }
 
       svg {
@@ -4441,6 +4439,12 @@ footer {
             color: $dark-m-purple-mid !important;
             stroke: transparent;
           }
+        }
+      }
+
+      &.is-brush {
+        .handle--custom {
+          stroke: $gray-light-opaque;
         }
       }
     }
