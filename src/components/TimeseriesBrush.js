@@ -98,7 +98,7 @@ function TimeseriesBrush({
     svg
       .select('.x-axis')
       .attr('pointer-events', 'none')
-      .style('transform', `translateY(${chartBottom}px)`)
+      .style('transform', `translate3d(0, ${chartBottom}px, 0)`)
       .transition(t)
       .call(xAxis);
 

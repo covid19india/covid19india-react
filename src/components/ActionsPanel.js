@@ -14,7 +14,6 @@ const ActionsPanel = ({
   isTimelineMode,
   setIsTimelineMode,
   showUpdates,
-  date,
   setDate,
   dates,
   setNewUpdate,
@@ -135,7 +134,7 @@ const ActionsPanel = ({
       >
         {isTimelineMode && (
           <Suspense fallback={<div />}>
-            <TimelineWheel {...{setIsTimelineMode, date, setDate, dates}} />
+            <TimelineWheel {...{setIsTimelineMode, setDate, dates}} />
           </Suspense>
         )}
       </animated.div>

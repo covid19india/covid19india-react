@@ -233,7 +233,7 @@ function Timeseries({
       g.attr('class', 'x-axis2')
         .call(axisBottom(xScale).tickValues([]).tickSize(0))
         .select('.domain')
-        .style('transform', `translateY(${yScale(0)}px)`);
+        .style('transform', `translate3d(0, ${yScale(0)}px, 0)`);
 
       if (yScale(0) !== chartBottom) g.select('.domain').attr('opacity', 0.4);
       else g.select('.domain').attr('opacity', 0);
@@ -281,7 +281,7 @@ function Timeseries({
       /* X axis */
       svg
         .select('.x-axis')
-        .style('transform', `translateY(${chartBottom}px)`)
+        .style('transform', `translate3d(0, ${chartBottom}px, 0)`)
         .transition(t)
         .call(xAxis);
 
@@ -290,7 +290,7 @@ function Timeseries({
       /* Y axis */
       svg
         .select('.y-axis')
-        .style('transform', `translateX(${chartRight}px)`)
+        .style('transform', `translate3d(${chartRight}px, 0, 0)`)
         .transition(t)
         .call(yAxis, yScale, format);
 

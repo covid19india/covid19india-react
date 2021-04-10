@@ -70,7 +70,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
     svg
       .select('.x-axis')
       .transition(t)
-      .style('transform', `translateY(${yScale(0)}px)`)
+      .style('transform', `translate3d(0, ${yScale(0)}px, 0)`)
       .call(xAxis)
       .on('start', () => svg.select('.domain').remove())
       .selectAll('text')
