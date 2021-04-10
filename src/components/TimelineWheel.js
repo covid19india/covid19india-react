@@ -1,14 +1,18 @@
 import {formatDate, getIndiaDateISO} from '../utils/commonFunctions';
 
+import {CalendarIcon, PlayIcon} from '@primer/octicons-react';
+import equal from 'fast-deep-equal';
 import {useKeenSlider} from 'keen-slider/react';
 import 'keen-slider/keen-slider.min.css';
-import {memo, useCallback, useEffect, useMemo, useState} from 'react';
+import {memo, useEffect, useMemo, useState} from 'react';
 import {useKeyPressEvent} from 'react-use';
 
-function TimelineWheel({date, setDate, dates, setIsTimelineMode}) {
-  const wheelSize = 8;
-  const slidesPerView = 1;
-  const slideDegree = 360 / wheelSize;
+const wheelSize = 8;
+const slidesPerView = 1;
+const slideDegree = 360 / wheelSize;
+const distanceThreshold = 5;
+
+function TimelineWheel({setDate, dates, setIsTimelineMode}) {
   const [sliderState, setSliderState] = useState(null);
 
   const hideTimeline = () => {
@@ -18,7 +22,7 @@ function TimelineWheel({date, setDate, dates, setIsTimelineMode}) {
   };
 
   const [sliderRef, slider] = useKeenSlider({
-    vertical: false,
+    initial: Math.min(1, dates.length),
     dragSpeed: (val, instance) => {
       const width = instance.details().widthOrHeight;
       return (
@@ -49,13 +53,10 @@ function TimelineWheel({date, setDate, dates, setIsTimelineMode}) {
     if (slider) setRadius(slider.details().widthOrHeight / 2);
   }, [slider]);
 
-  const getDate = useCallback(
-    (index) => {
-      if (dates[index] === getIndiaDateISO()) return 'Today';
-      return formatDate(dates[index], 'dd MMM');
-    },
-    [dates]
-  );
+  const formatSlideDate = (date) => {
+    if (date === getIndiaDateISO()) return 'Today';
+    return formatDate(date, 'dd MMM');
+  };
 
   const slideValues = useMemo(() => {
     if (!sliderState) return [];
@@ -70,24 +71,21 @@ function TimelineWheel({date, setDate, dates, setIsTimelineMode}) {
         transform: `rotateY(${rotate}deg) translateZ(${radius}px)`,
         WebkitTransform: `rotateY(${rotate}deg) translateZ(${radius}px)`,
       };
-      const classname = i === sliderState.absoluteSlide ? 'current' : '';
+      const className = i === sliderState.absoluteSlide ? 'current' : '';
       const slide = sliderState.absoluteSlide + Math.round(distance);
-      const value = getDate(slide);
-      values.push({classname, style, value});
+      if (Math.abs(distance) < distanceThreshold)
+        values.push({className, style, slide});
     }
     return values;
-  }, [sliderState, radius, dates.length, getDate]);
+  }, [sliderState, radius, dates.length]);
 
   useKeyPressEvent('ArrowLeft', () => {
     if (slider) slider.next();
   });
 
   useKeyPressEvent('ArrowRight', () => {
-    if (sliderState.absoluteSlide === 0) {
-      hideTimeline();
-    } else if (slider) {
-      slider.prev();
-    }
+    if (sliderState.absoluteSlide === 0) hideTimeline();
+    else if (slider) slider.prev();
   });
 
   useKeyPressEvent('Escape', () => {
@@ -97,20 +95,57 @@ function TimelineWheel({date, setDate, dates, setIsTimelineMode}) {
     }
   });
 
+  const handleClick = (index) => {
+    if (slider) slider.moveToSlide(index);
+  };
+
+  const timeline = {
+    '2020-03-25': 'Beginning of Lockdown Phase 1',
+    '2020-04-14': 'End of Lockdown Phase 1',
+    '2020-04-15': 'Beginning of Lockdown Phase 2',
+    '2020-05-03': 'End of Lockdown Phase 2',
+    '2020-05-04': 'Beginning of Lockdown Phase 3',
+    '2020-05-17': 'End of Lockdown Phase 3',
+    '2020-05-18': 'Beginning of Lockdown Phase 4',
+    '2020-05-31': 'End of Lockdown Phase 4',
+    '2020-06-01': 'Beginning of Lockdown Phase 5',
+  };
+
   return (
     <div className={'TimelineWheel'}>
       <div className={'wheel'} ref={sliderRef}>
+        {Object.keys(timeline).includes(dates[sliderState?.absoluteSlide]) && (
+          <h5 className="highlight fadeInUp">
+            {timeline[dates[sliderState.absoluteSlide]]}
+          </h5>
+        )}
         <div className="wheel__inner">
+          <div
+            className="wheel__label left"
+            style={{
+              transform: `translateZ(${radius}px)`,
+              WebkitTransform: `translateZ(${radius}px)`,
+            }}
+          >
+            <PlayIcon />
+          </div>
           <div className="wheel__slides">
-            {slideValues.map(({classname, style, value}, idx) => (
-              <div
-                className={`wheel__slide ${classname}`}
-                style={style}
-                key={idx}
-              >
-                <h5>{value}</h5>
+            {slideValues.map(({className, style, slide}, idx) => (
+              <div className={`wheel__slide`} style={style} key={idx}>
+                <h5 {...{className}} onClick={handleClick.bind(this, slide)}>
+                  {formatSlideDate(dates[slide])}
+                </h5>
               </div>
             ))}
+          </div>
+          <div
+            className="wheel__label right"
+            style={{
+              transform: `translateZ(${radius}px)`,
+              WebkitTransform: `translateZ(${radius}px)`,
+            }}
+          >
+            <CalendarIcon />
           </div>
         </div>
       </div>
@@ -118,4 +153,11 @@ function TimelineWheel({date, setDate, dates, setIsTimelineMode}) {
   );
 }
 
-export default memo(TimelineWheel);
+const isEqual = (prevProps, currProps) => {
+  if (!equal(currProps.dates, prevProps.dates)) {
+    return false;
+  }
+  return true;
+};
+
+export default memo(TimelineWheel, isEqual);

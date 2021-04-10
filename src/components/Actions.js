@@ -9,7 +9,7 @@ import useSWR from 'swr';
 
 const Updates = lazy(() => import('./Updates'));
 
-const Actions = ({date, setDate, dates}) => {
+const Actions = ({setDate, dates}) => {
   const [showUpdates, setShowUpdates] = useState(false);
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
   const [lastViewedLog, setLastViewedLog] = useLocalStorage('lastViewedLog', 0);
@@ -42,7 +42,6 @@ const Actions = ({date, setDate, dates}) => {
           isTimelineMode,
           setIsTimelineMode,
           showUpdates,
-          date,
           setDate,
           dates,
           setNewUpdate,
@@ -60,9 +59,7 @@ const Actions = ({date, setDate, dates}) => {
 };
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(currProps.date, prevProps.date)) {
-    return false;
-  } else if (!equal(currProps.dates, prevProps.dates)) {
+  if (!equal(currProps.dates, prevProps.dates)) {
     return false;
   }
   return true;
