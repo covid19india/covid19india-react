@@ -7,7 +7,7 @@ import 'keen-slider/keen-slider.min.css';
 import {memo, useEffect, useMemo, useState} from 'react';
 import {useKeyPressEvent} from 'react-use';
 
-const wheelSize = 8;
+const wheelSize = 20;
 const slidesPerView = 1;
 const slideDegree = 360 / wheelSize;
 const distanceThreshold = 5;
@@ -37,7 +37,7 @@ function TimelineWheel({setDate, dates, setIsTimelineMode}) {
     },
     afterChange: (s) => {
       const slide = s.details().absoluteSlide;
-      if (slide === 0 && s.details().direction === -1) {
+      if (slide === 0) {
         hideTimeline();
       }
       setDate(slide === 0 ? '' : dates[slide]);
@@ -50,7 +50,7 @@ function TimelineWheel({setDate, dates, setIsTimelineMode}) {
   const [radius, setRadius] = useState(0);
 
   useEffect(() => {
-    if (slider) setRadius(slider.details().widthOrHeight / 2);
+    if (slider) setRadius(slider.details().widthOrHeight);
   }, [slider]);
 
   const formatSlideDate = (date) => {
