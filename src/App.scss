@@ -1180,20 +1180,26 @@ h6 {
   & > * {
     align-self: center;
   }
+}
+
+.ActionsPanel {
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+  position: relative;
+  width: calc(100% - 1rem);
 
   .actions {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    padding: 1rem;
+    justify-content: center;
+    width: 100%;
 
     &.timeline {
       display: flex;
       flex-direction: column;
       justify-content: space-around;
-      padding: 1rem;
       position: absolute;
-      top: 13.25rem;
+      top: 0;
 
       .highlight {
         color: $brown !important;
@@ -1282,6 +1288,73 @@ h6 {
 
     h5 {
       color: $gray-mid;
+
+      &:hover {
+        color: $gray !important;
+      }
+
+      &::selection {
+        background: transparent !important;
+      }
+    }
+  }
+}
+
+.TimelineWheel {
+  align-items: center;
+  width: 100%;
+
+  .wheel {
+    align-items: center;
+    color: #fff;
+    display: block;
+    height: 3rem;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .wheel__inner {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    transform-style: preserve-3d;
+    width: 100%;
+  }
+
+  .wheel__slides {
+    height: 100%;
+    position: relative;
+    width: 100%;
+  }
+
+  .wheel__label {
+    color: $gray;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1;
+    position: absolute;
+  }
+
+  .wheel__slide {
+    -webkit-backface-visibility: hidden;
+    align-items: center;
+    backface-visibility: hidden;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    opacity: 0.6;
+    position: absolute;
+    transition: opacity 0.3s;
+    width: 100%;
+
+    &.current {
+      opacity: 1;
+    }
+
+    h5 {
+      cursor: pointer;
+      pointer-events: all;
 
       &:hover {
         color: $gray !important;

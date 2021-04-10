@@ -1,14 +1,14 @@
-import {formatDate, getIndiaDateISO} from '../utils/commonFunctions';
+import {clamp, formatDate, getIndiaDateISO} from '../utils/commonFunctions';
 
-import clamp from 'lodash/clamp';
-import {memo, useState} from 'react';
+import {memo, useCallback} from 'react';
+import ReactDOM from 'react-dom';
 import {useSprings, useTransition, animated, config} from 'react-spring';
 import {useMeasure, useKeyPressEvent} from 'react-use';
 import {useDrag} from 'react-use-gesture';
 
-const Timeline = ({setIsTimelineMode, setDate, dates}) => {
+const Timeline = ({setIsTimelineMode, date, setDate, dates}) => {
   const [timelineElement, {width}] = useMeasure();
-  const [index, setIndex] = useState(0);
+  const index = date === '' ? 0 : dates.indexOf(date);
 
   const [springs, set] = useSprings(
     dates.length,
@@ -24,7 +24,6 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
     ({down, delta: [xDelta], direction: [xDir], distance, cancel}) => {
       const clampedIndex = getClampedIndex(xDir);
       if (down && distance > 25) {
-        cancel(setIndex(clampedIndex));
         setClampedDate(clampedIndex);
       }
 
@@ -36,9 +35,10 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
     }
   );
 
-  const getClampedIndex = (direction) => {
-    return clamp(index + (direction > 0 ? 1 : -1), 0, dates.length - 1);
-  };
+  const getClampedIndex = useCallback(
+    (direction) => clamp(index + Math.sign(direction), 0, dates.length - 1),
+    [index, dates.length]
+  );
 
   const setSprings = ({direction, clampedIndex, down, xDelta}) => {
     set((i) => {
@@ -66,11 +66,18 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
     });
   };
 
+  const setClampedDate = (clampedIndex) => {
+    if (clampedIndex === 0) {
+      setDate('');
+    } else {
+      setDate(dates[clampedIndex]);
+    }
+  };
+
   const handleKeyPress = (direction) => {
     if (index < dates.length) {
       const clampedIndex = getClampedIndex(direction);
       setSprings({direction, clampedIndex});
-      setIndex(clampedIndex);
       setClampedDate(clampedIndex);
     }
     if (index === 1 && direction === -1) {
@@ -87,8 +94,10 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
   });
 
   useKeyPressEvent('Escape', () => {
-    setIsTimelineMode(false);
-    setDate('');
+    ReactDOM.unstable_batchedUpdates(() => {
+      setIsTimelineMode(false);
+      setDate('');
+    });
   });
 
   const hideTimeline = () => {
@@ -100,14 +109,6 @@ const Timeline = ({setIsTimelineMode, setDate, dates}) => {
   const getDate = (index) => {
     if (dates[index] === getIndiaDateISO()) return 'Today';
     return formatDate(dates[index], 'dd MMM');
-  };
-
-  const setClampedDate = (clampedIndex) => {
-    if (clampedIndex === 0) {
-      setDate('');
-    } else {
-      setDate(dates[clampedIndex]);
-    }
   };
 
   const timeline = {

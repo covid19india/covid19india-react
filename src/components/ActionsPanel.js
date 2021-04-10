@@ -1,10 +1,12 @@
-import {parse, format} from 'date-fns';
+import {formatDate} from '../utils/commonFunctions';
+
+import {parse} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
 import {useMemo, useCallback, lazy, Suspense} from 'react';
 import * as Icon from 'react-feather';
 import {useSpring, animated} from 'react-spring';
 
-const Timeline = lazy(() => import('./Timeline'));
+const TimelineWheel = lazy(() => import('./TimelineWheel'));
 
 const ActionsPanel = ({
   lastViewedLog,
@@ -12,6 +14,7 @@ const ActionsPanel = ({
   isTimelineMode,
   setIsTimelineMode,
   showUpdates,
+  date,
   setDate,
   dates,
   setNewUpdate,
@@ -82,10 +85,11 @@ const ActionsPanel = ({
   }, []);
 
   const getTimeFromMilliseconds = (lastViewedLog) => {
-    return format(
-      utcToZonedTime(parse(lastViewedLog, 'T', new Date()), 'Asia/Kolkata'),
-      'dd MMM, p'
+    const lastViewedDate = utcToZonedTime(
+      parse(lastViewedLog, 'T', new Date()),
+      'Asia/Kolkata'
     );
+    return formatDate(lastViewedDate, 'dd MMM, p');
   };
 
   const handleClick = useCallback(() => {
@@ -94,7 +98,7 @@ const ActionsPanel = ({
   }, [setIsTimelineMode, setShowUpdates, showUpdates]);
 
   return (
-    <>
+    <div className="ActionsPanel">
       <animated.div
         className="actions"
         style={{
@@ -131,11 +135,11 @@ const ActionsPanel = ({
       >
         {isTimelineMode && (
           <Suspense fallback={<div />}>
-            <Timeline {...{setIsTimelineMode, setDate, dates}} />
+            <TimelineWheel {...{setIsTimelineMode, date, setDate, dates}} />
           </Suspense>
         )}
       </animated.div>
-    </>
+    </div>
   );
 };
 
