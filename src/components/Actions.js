@@ -2,13 +2,14 @@ import ActionsPanel from './ActionsPanel';
 
 import {fetcher} from '../utils/commonFunctions';
 
+import equal from 'fast-deep-equal';
 import {memo, useState, useEffect, lazy, Suspense} from 'react';
 import {useLocalStorage} from 'react-use';
 import useSWR from 'swr';
 
 const Updates = lazy(() => import('./Updates'));
 
-const Actions = ({setDate, dates}) => {
+const Actions = ({date, setDate, dates}) => {
   const [showUpdates, setShowUpdates] = useState(false);
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
   const [lastViewedLog, setLastViewedLog] = useLocalStorage('lastViewedLog', 0);
@@ -41,6 +42,7 @@ const Actions = ({setDate, dates}) => {
           isTimelineMode,
           setIsTimelineMode,
           showUpdates,
+          date,
           setDate,
           dates,
           setNewUpdate,
@@ -58,6 +60,11 @@ const Actions = ({setDate, dates}) => {
 };
 
 const isEqual = (prevProps, currProps) => {
+  if (!equal(currProps.date, prevProps.date)) {
+    return false;
+  } else if (!equal(currProps.dates, prevProps.dates)) {
+    return false;
+  }
   return true;
 };
 
