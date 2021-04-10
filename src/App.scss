@@ -1223,12 +1223,14 @@ h6 {
     }
 
     svg {
-      color: $gray-mid;
       cursor: pointer;
-      stroke-width: 3;
+      fill: #a6abb0;
+      stroke: #a6abb0;
+      stroke-width: 0.5;
       width: 16px;
 
       &:hover {
+        fill: $gray;
         stroke: $gray;
       }
     }
@@ -1240,19 +1242,11 @@ h6 {
 
       svg {
         display: flex;
-        fill: #a6abb0 !important;
         flex-direction: row;
         justify-content: center;
-        stroke: #a6abb0 !important;
-        stroke-width: 0.5 !important;
 
         path {
           align-self: center;
-        }
-
-        &:hover {
-          fill: $gray !important;
-          stroke: $gray !important;
         }
       }
     }
@@ -1274,86 +1268,111 @@ h6 {
   }
 }
 
-.TimelineWheel {
+.Timeline {
   align-items: center;
   width: 100%;
 
-  .wheel {
-    align-items: center;
-    color: #fff;
-    display: block;
-    height: 3rem;
-    overflow: hidden;
-    width: 100%;
-  }
+  .timeline {
+    margin-top: 0.25rem;
 
-  .wheel__inner {
-    align-items: center;
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    transform-style: preserve-3d;
-    width: 100%;
-  }
-
-  .wheel__slides {
-    height: 100%;
-    margin-top: 2px;
-    position: relative;
-    width: 100%;
-  }
-
-  .wheel__slide {
-    -webkit-backface-visibility: hidden;
-    align-items: center;
-    backface-visibility: hidden;
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    pointer-events: none;
-    position: absolute;
-    transition: opacity 0.3s;
-    width: 100%;
-
-    h5 {
-      -moz-user-select: -moz-none;
-      -webkit-user-select: none;
-      cursor: pointer;
-      opacity: 0.6;
-      pointer-events: all;
-      user-select: none;
-
-      &:hover {
-        opacity: 0.8;
-      }
-
-      &.current {
-        opacity: 1;
-      }
-
-      &::selection {
-        background: transparent !important;
-      }
-    }
-  }
-
-  .wheel__label {
-    align-items: center;
-    color: $gray;
-    display: flex;
-    font-size: 15px;
-    font-weight: 500;
-    height: 100%;
-    justify-content: center;
-    line-height: 1;
-    position: absolute;
-
-    &.left {
-      left: 0;
+    .wheel {
+      align-items: center;
+      color: #fff;
+      display: block;
+      height: 3rem;
+      overflow: hidden;
+      width: 100%;
     }
 
-    &.right {
-      right: 0;
+    .wheel__inner {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      pointer-events: none;
+      transform-style: preserve-3d;
+      width: 100%;
+    }
+
+    .wheel__slides {
+      height: 100%;
+      margin-top: 2px;
+      position: relative;
+      width: 100%;
+    }
+
+    .wheel__slide {
+      -webkit-backface-visibility: hidden;
+      align-items: center;
+      backface-visibility: hidden;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      position: absolute;
+      transition: opacity 0.3s;
+      width: 100%;
+
+      h5 {
+        -moz-user-select: -moz-none;
+        -webkit-user-select: none;
+        cursor: pointer;
+        opacity: 0.6;
+        pointer-events: all;
+        user-select: none;
+
+        &:hover {
+          opacity: 0.8;
+        }
+
+        &.current {
+          opacity: 1;
+        }
+
+        &::selection {
+          background: transparent !important;
+        }
+      }
+    }
+
+    .wheel__button {
+      align-items: center;
+      color: $gray;
+      display: flex;
+      font-size: 15px;
+      font-weight: 500;
+      height: 100%;
+      justify-content: center;
+      line-height: 1;
+      position: absolute;
+      top: 0;
+
+      &.top {
+        top: -1.25rem;
+
+        &.active {
+          svg {
+            fill: $green;
+            stroke: none;
+
+            &:hover {
+              fill: $green-mid;
+              stroke: none;
+            }
+          }
+        }
+      }
+
+      &.left {
+        left: 0;
+
+        svg {
+          transform: rotate(180deg);
+        }
+      }
+
+      &.right {
+        right: 0;
+      }
     }
   }
 }

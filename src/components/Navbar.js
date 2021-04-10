@@ -7,7 +7,7 @@ import {
 import locales from '../i18n/locales.json';
 
 import {useState, useCallback, useRef} from 'react';
-import * as Icon from 'react-feather';
+import {Book, HelpCircle, Home, Moon, Sun} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useSpring, useTransition, animated} from 'react-spring';
@@ -78,17 +78,17 @@ function Navbar({
           <>
             <Link to="/">
               <span>
-                <Icon.Home {...activeNavIcon('/')} />
+                <Home {...activeNavIcon('/')} />
               </span>
             </Link>
             <Link to="/blog">
               <span>
-                <Icon.Book {...activeNavIcon('/blog')} />
+                <Book {...activeNavIcon('/blog')} />
               </span>
             </Link>
             <Link to="/about">
               <span>
-                <Icon.HelpCircle {...activeNavIcon('/about')} />
+                <HelpCircle {...activeNavIcon('/about')} />
               </span>
             </Link>
             <span>
@@ -166,9 +166,7 @@ const activeNavIcon = (path) => ({
 const SunMoon = ({darkMode}) => {
   return (
     <div className="SunMoon" onClick={darkMode.toggle}>
-      <div>
-        {darkMode.value ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
-      </div>
+      <div>{darkMode.value ? <Sun color={'#ffc107'} /> : <Moon />}</div>
     </div>
   );
 };

@@ -1,24 +1,34 @@
-import {formatDate, getIndiaDateISO} from '../utils/commonFunctions';
+import {
+  formatDate,
+  getIndiaDateISO,
+  getIndiaDateYesterdayISO,
+} from '../utils/commonFunctions';
 
-import {CalendarIcon, PlayIcon} from '@primer/octicons-react';
+import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import {useKeenSlider} from 'keen-slider/react';
 import 'keen-slider/keen-slider.min.css';
-import {memo, useEffect, useMemo, useState} from 'react';
+import {memo, useEffect, useMemo, useRef, useState} from 'react';
+import {FastForward, Play as Play, Pause as Pause} from 'react-feather';
+import {animated} from 'react-spring';
 import {useKeyPressEvent} from 'react-use';
 
 const wheelSize = 20;
 const slidesPerView = 1;
 const slideDegree = 360 / wheelSize;
 const distanceThreshold = 5;
+const autoPlayDelay = 2500;
+const hideDelay = 500;
 
-function TimelineWheel({setDate, dates, setIsTimelineMode}) {
+function Timeline({style, date, setDate, dates, setIsTimelineMode}) {
   const [sliderState, setSliderState] = useState(null);
+  const [play, setPlay] = useState(false);
+  const timer = useRef();
 
   const hideTimeline = () => {
     setTimeout(() => {
       setIsTimelineMode(false);
-    }, 500);
+    }, hideDelay);
   };
 
   const [sliderRef, slider] = useKeenSlider({
@@ -55,7 +65,8 @@ function TimelineWheel({setDate, dates, setIsTimelineMode}) {
 
   const formatSlideDate = (date) => {
     if (date === getIndiaDateISO()) return 'Today';
-    return formatDate(date, 'dd MMM');
+    else if (date === getIndiaDateYesterdayISO()) return 'Yesterday';
+    return formatDate(date, 'dd MMM y');
   };
 
   const slideValues = useMemo(() => {
@@ -89,14 +100,21 @@ function TimelineWheel({setDate, dates, setIsTimelineMode}) {
   });
 
   useKeyPressEvent('Escape', () => {
+    setPlay(false);
     if (slider) {
       slider.moveToSlide(0);
       hideTimeline();
     }
   });
 
+  useKeyPressEvent('Enter', () => {
+    setPlay(!play);
+  });
+
   const handleClick = (index) => {
-    if (slider) slider.moveToSlide(index);
+    if (slider) {
+      slider.moveToSlide(index);
+    }
   };
 
   const timeline = {
@@ -111,53 +129,84 @@ function TimelineWheel({setDate, dates, setIsTimelineMode}) {
     '2020-06-01': 'Beginning of Lockdown Phase 5',
   };
 
+  useEffect(() => {
+    timer.current = setInterval(() => {
+      if (play && slider) {
+        slider.prev();
+      }
+    }, autoPlayDelay);
+    return () => {
+      clearInterval(timer.current);
+    };
+  }, [play, slider]);
+
+  const handleWheel = (event) => {
+    if (slider) {
+      if (event.deltaX > 0) {
+        slider.prev();
+      } else if (event.deltaX < 0) {
+        slider.next();
+      }
+    }
+  };
+
   return (
-    <div className={'TimelineWheel'}>
-      <div className={'wheel'} ref={sliderRef}>
-        {Object.keys(timeline).includes(dates[sliderState?.absoluteSlide]) && (
-          <h5 className="highlight fadeInUp">
-            {timeline[dates[sliderState.absoluteSlide]]}
-          </h5>
-        )}
-        <div className="wheel__inner">
+    <div className={'Timeline'}>
+      <animated.div className="actions timeline" style={style}>
+        <div
+          className={classnames('wheel__button', 'top', {active: play})}
+          onClick={setPlay.bind(this, !play)}
+        >
+          {play ? <Pause /> : <Play />}
+        </div>
+        <div className={'wheel'} ref={sliderRef} onWheel={handleWheel}>
+          {Object.keys(timeline).includes(
+            dates[sliderState?.absoluteSlide]
+          ) && (
+            <h5 className="highlight fadeInUp">
+              {timeline[dates[sliderState.absoluteSlide]]}
+            </h5>
+          )}
           <div
-            className="wheel__label left"
+            className={'wheel__button left'}
             style={{
               transform: `translateZ(${radius}px)`,
               WebkitTransform: `translateZ(${radius}px)`,
             }}
+            onClick={handleClick.bind(this, dates.length - 1)}
           >
-            <PlayIcon />
+            <FastForward />
           </div>
-          <div className="wheel__slides">
-            {slideValues.map(({className, style, slide}, idx) => (
-              <div className={`wheel__slide`} style={style} key={idx}>
-                <h5 {...{className}} onClick={handleClick.bind(this, slide)}>
-                  {formatSlideDate(dates[slide])}
-                </h5>
-              </div>
-            ))}
+          <div className="wheel__inner">
+            <div className="wheel__slides">
+              {slideValues.map(({className, style, slide}, idx) => (
+                <div className={`wheel__slide`} style={style} key={idx}>
+                  <h5 {...{className}} onClick={handleClick.bind(this, slide)}>
+                    {formatSlideDate(dates[slide])}
+                  </h5>
+                </div>
+              ))}
+            </div>
           </div>
           <div
-            className="wheel__label right"
-            style={{
-              transform: `translateZ(${radius}px)`,
-              WebkitTransform: `translateZ(${radius}px)`,
-            }}
+            className="wheel__button right"
+            onClick={handleClick.bind(this, 0)}
           >
-            <CalendarIcon />
+            <FastForward />
           </div>
         </div>
-      </div>
+      </animated.div>
     </div>
   );
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (!equal(currProps.dates, prevProps.dates)) {
+  if (!equal(currProps.date, prevProps.date)) {
+    return false;
+  } else if (!equal(currProps.dates, prevProps.dates)) {
     return false;
   }
   return true;
 };
 
-export default memo(TimelineWheel, isEqual);
+export default memo(Timeline, isEqual);
