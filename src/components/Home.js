@@ -79,6 +79,7 @@ function Home() {
               <Suspense fallback={<div style={{minHeight: '56px'}} />}>
                 <Actions
                   {...{
+                    date,
                     setDate,
                     dates: Object.keys(timeseries['TT']?.dates).reverse(),
                   }}
