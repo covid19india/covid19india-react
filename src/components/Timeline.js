@@ -205,8 +205,8 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
         <div className={'wheel'} ref={sliderRef}>
           <div className="wheel__inner">
             <div className="wheel__slides">
-              {slideValues.map(({className, style, slide}, idx) => (
-                <div className={`wheel__slide`} style={style} key={idx}>
+              {slideValues.map(({className, style, slide}) => (
+                <div className={`wheel__slide`} style={style} key={slide}>
                   <h5 {...{className}} onClick={handleClick.bind(this, slide)}>
                     {formatSlideDate(dates[slide])}
                   </h5>
@@ -214,12 +214,18 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
               ))}
             </div>
           </div>
-          {Object.keys(timeline).includes(
-            dates[sliderState?.absoluteSlide]
-          ) && (
-            <h5 className="highlight fadeInUp">
-              {timeline[dates[sliderState.absoluteSlide]]}
-            </h5>
+          {slideValues.map(
+            ({slide}) =>
+              Object.keys(timeline).includes(dates[slide]) && (
+                <h5
+                  className={classnames('highlight', {
+                    current: slide === sliderState?.absoluteSlide,
+                  })}
+                  key={slide}
+                >
+                  {timeline[dates[slide]]}
+                </h5>
+              )
           )}
         </div>
       </div>
