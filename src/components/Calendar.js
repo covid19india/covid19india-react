@@ -1,11 +1,25 @@
 import {parseIndiaDate} from '../utils/commonFunctions';
 
-import {formatISO} from 'date-fns';
+import {
+  add,
+  formatISO,
+  startOfMonth,
+  startOfYear,
+  endOfMonth,
+  endOfYear,
+} from 'date-fns';
 import equal from 'fast-deep-equal';
-import {memo} from 'react';
+import {memo, useState} from 'react';
 import ReactCalendar from 'react-calendar';
+import {useSwipeable} from 'react-swipeable';
 
 function Calendar({date, dates, slider}) {
+  const [view, setView] = useState('month');
+  const [activeStartDate, setActiveStartDate] = useState(parseIndiaDate(date));
+
+  const minDate = parseIndiaDate(dates[dates.length - 1]);
+  const maxDate = parseIndiaDate(dates[0]);
+
   const isDateDisabled = ({date, view}) => {
     return (
       view === 'month' &&
@@ -18,13 +32,46 @@ function Calendar({date, dates, slider}) {
     slider.moveToSlide(dates.indexOf(clickedDate));
   };
 
+  const handleViewButton = ({view}) => {
+    setView(view);
+  };
+
+  const handleNavigationButton = ({activeStartDate}) => {
+    setActiveStartDate(activeStartDate);
+  };
+
+  const handleNavigation = (direction) => {
+    const newDate = add(
+      activeStartDate,
+      view === 'month' ? {months: direction} : {years: direction}
+    );
+    const lower =
+      view === 'month' ? startOfMonth(minDate) : startOfYear(minDate);
+    const upper = view === 'month' ? endOfMonth(maxDate) : endOfYear(maxDate);
+    if (lower <= newDate && newDate <= upper) {
+      setActiveStartDate(newDate);
+    }
+  };
+
+  const swipeHandlers = useSwipeable({
+    onSwipedRight: handleNavigation.bind(this, -1),
+    onSwipedLeft: handleNavigation.bind(this, 1),
+  });
+
+  const handleWheel = (event) => {
+    if (event.deltaX !== 0) {
+      handleNavigation(Math.sign(event.deltaX));
+    }
+  };
+
   return (
-    <div className="Calendar">
+    <div className="Calendar" onWheel={handleWheel} {...swipeHandlers}>
       <ReactCalendar
         value={parseIndiaDate(date)}
-        minDate={parseIndiaDate(dates[dates.length - 1])}
-        maxDate={parseIndiaDate(dates[0])}
         tileDisabled={isDateDisabled}
+        {...{minDate, maxDate, activeStartDate, view}}
+        onActiveStartDateChange={handleNavigationButton}
+        onViewChange={handleViewButton}
         minDetail="year"
         showFixedNumberOfWeeks
         onChange={handleCalendarClick}
