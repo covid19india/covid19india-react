@@ -2254,12 +2254,12 @@ abbr {
   cursor: pointer;
   position: absolute;
   right: 0;
-  transform: rotate(45deg);
-  transition: all 0.1s ease-in-out;
   z-index: 999;
 
   svg {
     color: $gray-mid;
+    transform: rotate(45deg);
+    transition: all 0.1s ease-in-out;
 
     &:hover {
       color: $gray;
@@ -2267,10 +2267,9 @@ abbr {
   }
 
   &.stickied {
-    transform: rotate(90deg);
-
     svg {
       color: $gray;
+      transform: rotate(90deg);
     }
   }
 }
@@ -2279,6 +2278,11 @@ abbr {
   display: flex;
   flex-direction: column;
   width: 100%;
+
+  &.stickied {
+    position: sticky;
+    top: -6rem;
+  }
 }
 
 .MapExplorer {
@@ -2294,6 +2298,10 @@ abbr {
 
   &.hidden {
     display: none;
+  }
+
+  .anchor {
+    top: -1.5rem;
   }
 
   .svg-parent {

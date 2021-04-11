@@ -137,6 +137,8 @@ function Home() {
                 <div
                   className={classnames('map-container', {
                     expanded: expandTable,
+                    stickied:
+                      anchor === 'mapexplorer' || (expandTable && width > 769),
                   })}
                 >
                   <Suspense fallback={<div style={{height: '50rem'}} />}>

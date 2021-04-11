@@ -27,7 +27,7 @@ import {
   Suspense,
 } from 'react';
 import {useTranslation} from 'react-i18next';
-import {useLocalStorage} from 'react-use';
+import {useLocalStorage, useWindowSize} from 'react-use';
 
 const Timeseries = lazy(() => import('./Timeseries'));
 const TimeseriesBrush = lazy(() => import('./TimeseriesBrush'));
@@ -75,6 +75,7 @@ function TimeseriesExplorer({
 
   const explorerElement = useRef();
   const isVisible = useIsVisible(explorerElement, {once: true});
+  const {width} = useWindowSize();
 
   const selectedRegion = useMemo(() => {
     if (timeseries?.[regionHighlighted.stateCode]?.districts) {
@@ -195,7 +196,12 @@ function TimeseriesExplorer({
         },
         {expanded: expandTable}
       )}
-      style={{display: anchor === 'mapexplorer' ? 'none' : ''}}
+      style={{
+        display:
+          anchor && anchor !== 'timeseries' && (!expandTable || width < 769)
+            ? 'none'
+            : '',
+      }}
       ref={explorerElement}
     >
       <div className="timeseries-header">
@@ -203,6 +209,9 @@ function TimeseriesExplorer({
           className={classnames('anchor', {
             stickied: anchor === 'timeseries',
           })}
+          style={{
+            display: expandTable && width > 769 ? 'none' : '',
+          }}
           onClick={
             setAnchor &&
             setAnchor.bind(this, anchor === 'timeseries' ? null : 'timeseries')

@@ -14,8 +14,9 @@ import {
 import {formatNumber, getStatistic, capitalize} from '../utils/commonFunctions';
 
 import {
-  DotFillIcon,
   ArrowLeftIcon,
+  DotFillIcon,
+  PinIcon,
   OrganizationIcon,
 } from '@primer/octicons-react';
 import classnames from 'classnames';
@@ -193,17 +194,33 @@ function MapExplorer({
 
   const isDistrictView = mapView === MAP_VIEWS.DISTRICTS && !hideDistrictData;
 
+  const stickied = anchor === 'mapexplorer' || (expandTable && width > 769);
+
   return (
     <div
       className={classnames(
         'MapExplorer',
-        {stickied: anchor === 'mapexplorer'},
+        {stickied},
         {
           hidden:
-            anchor && (!expandTable || width < 769) && anchor !== 'mapexplorer',
+            anchor && anchor !== 'mapexplorer' && (!expandTable || width < 769),
         }
       )}
     >
+      <div
+        className={classnames('anchor', {
+          stickied,
+        })}
+        style={{
+          display: width < 769 || (width > 769 && expandTable) ? 'none' : '',
+        }}
+        onClick={
+          setAnchor &&
+          setAnchor.bind(this, anchor === 'mapexplorer' ? null : 'mapexplorer')
+        }
+      >
+        <PinIcon />
+      </div>
       <div className="panel" ref={panelRef}>
         <div className="panel-left fadeInUp" style={trail[0]}>
           <h2 className={classnames(mapStatistic)}>
