@@ -1267,10 +1267,18 @@ h6 {
 
     .highlight {
       color: $brown !important;
+      opacity: 0;
       position: absolute;
       text-align: center;
       top: 3.25rem;
+      transform: translate3d(0, 10px, 0);
+      transition: all 0.3s;
       width: 100%;
+
+      &.current {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
 
       svg {
         fill: $red;
