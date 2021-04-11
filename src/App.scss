@@ -1422,11 +1422,13 @@ h6 {
     }
 
     .react-calendar__navigation {
+      font-size: 25px;
+
       button {
         background-color: $gray-light;
         color: $gray;
         min-width: 44px;
-        padding: 0.5em;
+        padding: 1em 0.5em;
 
         &:enabled {
           &:hover {
@@ -1437,15 +1439,13 @@ h6 {
         &:disabled {
           background: none;
         }
+
+        div {
+          align-items: center;
+          display: flex;
+          justify-content: center;
+        }
       }
-    }
-
-    .react-calendar__navigation__arrow {
-      font-size: 20px;
-    }
-
-    .react-calendar__navigation__label {
-      font-size: 13px;
     }
 
     .react-calendar__month-view__weekdays {

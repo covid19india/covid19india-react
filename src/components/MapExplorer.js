@@ -175,19 +175,17 @@ function MapExplorer({
     config: {tension: 250, ...SPRING_CONFIG_NUMBERS},
   });
 
+  const handleStatisticChange = (direction) => {
+    const currentIndex = PRIMARY_STATISTICS.indexOf(mapStatistic);
+    const toIndex =
+      (PRIMARY_STATISTICS.length + currentIndex + direction) %
+      PRIMARY_STATISTICS.length;
+    setMapStatistic(PRIMARY_STATISTICS[toIndex]);
+  };
+
   const swipeHandlers = useSwipeable({
-    onSwipedRight: () => {
-      const currentIndex = PRIMARY_STATISTICS.indexOf(mapStatistic);
-      const toIndex =
-        currentIndex > 0 ? currentIndex - 1 : PRIMARY_STATISTICS.length - 1;
-      setMapStatistic(PRIMARY_STATISTICS[toIndex]);
-    },
-    onSwipedLeft: () => {
-      const currentIndex = PRIMARY_STATISTICS.indexOf(mapStatistic);
-      const toIndex =
-        currentIndex < PRIMARY_STATISTICS.length - 1 ? currentIndex + 1 : 0;
-      setMapStatistic(PRIMARY_STATISTICS[toIndex]);
-    },
+    onSwipedLeft: handleStatisticChange.bind(this, 1),
+    onSwipedRight: handleStatisticChange.bind(this, -1),
   });
 
   const statisticConfig = STATISTIC_CONFIGS[mapStatistic];

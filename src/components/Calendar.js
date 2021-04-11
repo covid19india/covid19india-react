@@ -11,6 +11,12 @@ import {
 import equal from 'fast-deep-equal';
 import {memo, useState} from 'react';
 import ReactCalendar from 'react-calendar';
+import {
+  ChevronLeft,
+  ChevronsLeft,
+  ChevronRight,
+  ChevronsRight,
+} from 'react-feather';
 import {useSwipeable} from 'react-swipeable';
 
 function Calendar({date, dates, slider}) {
@@ -75,6 +81,26 @@ function Calendar({date, dates, slider}) {
         minDetail="year"
         showFixedNumberOfWeeks
         onChange={handleCalendarClick}
+        prevLabel={
+          <div>
+            <ChevronLeft size={18} />
+          </div>
+        }
+        nextLabel={
+          <div>
+            <ChevronRight size={18} />
+          </div>
+        }
+        prev2Label={
+          <div>
+            <ChevronsLeft size={18} />
+          </div>
+        }
+        next2Label={
+          <div>
+            <ChevronsRight size={18} />
+          </div>
+        }
       />
     </div>
   );
