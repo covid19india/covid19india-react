@@ -41,6 +41,7 @@ function TimeseriesExplorer({
   anchor,
   setAnchor,
   expandTable,
+  showVaccinated,
 }) {
   const {t} = useTranslation();
   const [lookback, setLookback] = useLocalStorage('timeseriesLookbackDays', 90);
@@ -312,7 +313,14 @@ function TimeseriesExplorer({
             timeseries={selectedTimeseries}
             regionHighlighted={selectedRegion}
             dates={brushSelectionDates}
-            {...{endDate, chartType, isUniform, isLog, isMovingAverage}}
+            {...{
+              endDate,
+              chartType,
+              isUniform,
+              isLog,
+              isMovingAverage,
+              showVaccinated,
+            }}
           />
           <TimeseriesBrush
             timeseries={selectedTimeseries}
@@ -367,6 +375,8 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(currProps.anchor, prevProps.anchor)) {
     return false;
   } else if (!equal(currProps.expandTable, prevProps.expandTable)) {
+    return false;
+  } else if (!equal(currProps.showVaccinated, prevProps.showVaccinated)) {
     return false;
   }
   return true;

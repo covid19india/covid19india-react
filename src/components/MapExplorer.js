@@ -49,7 +49,7 @@ function MapExplorer({
   anchor,
   setAnchor,
   expandTable,
-  districtDataAvailable,
+  hideDistrictData,
 }) {
   const {t} = useTranslation();
   const mapExplorerRef = useRef();
@@ -191,8 +191,7 @@ function MapExplorer({
 
   const statisticConfig = STATISTIC_CONFIGS[mapStatistic];
 
-  const isDistrictView =
-    mapView === MAP_VIEWS.DISTRICTS && districtDataAvailable;
+  const isDistrictView = mapView === MAP_VIEWS.DISTRICTS && !hideDistrictData;
 
   return (
     <div
@@ -338,9 +337,7 @@ const isEqual = (prevProps, currProps) => {
     return false;
   } else if (!equal(prevProps.anchor, currProps.anchor)) {
     return false;
-  } else if (
-    !equal(prevProps.districtDataAvailable, currProps.districtDataAvailable)
-  ) {
+  } else if (!equal(prevProps.hideDistrictData, currProps.hideDistrictData)) {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
     return false;
