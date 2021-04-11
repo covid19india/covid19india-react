@@ -4,7 +4,6 @@ import {
   D3_TRANSITION_DURATION,
   MAP_META,
   MAP_TYPES,
-  MAP_VIEWS,
   MAP_VIZS,
   STATE_CODES,
   STATE_NAMES,
@@ -64,7 +63,7 @@ const getTotalStatistic = (data, statistic) => {
 
 function MapVisualizer({
   mapCode,
-  mapView,
+  isDistrictView,
   mapViz,
   data,
   changeMap,
@@ -93,7 +92,7 @@ function MapVisualizer({
         stateCode !== 'TT' && Object.keys(MAP_META).includes(stateCode)
     );
 
-    return mapView === MAP_VIEWS.STATES
+    return !isDistrictView
       ? max(stateCodes, (stateCode) =>
           getTotalStatistic(data[stateCode], statistic)
         )
@@ -104,7 +103,7 @@ function MapVisualizer({
               )
             : 0
         );
-  }, [data, mapView, statistic]);
+  }, [data, isDistrictView, statistic]);
 
   const statisticTotal = useMemo(() => {
     return getTotalStatistic(data[mapCode], statistic);
@@ -152,15 +151,14 @@ function MapVisualizer({
 
   const features = useMemo(() => {
     if (!geoData) return null;
-    const featuresWrap =
-      mapView === MAP_VIEWS.STATES
-        ? feature(geoData, geoData.objects.states).features
-        : mapMeta.mapType === MAP_TYPES.COUNTRY && mapViz === MAP_VIZS.BUBBLES
-        ? [
-            ...feature(geoData, geoData.objects.states).features,
-            ...feature(geoData, geoData.objects.districts).features,
-          ]
-        : feature(geoData, geoData.objects.districts).features;
+    const featuresWrap = !isDistrictView
+      ? feature(geoData, geoData.objects.states).features
+      : mapMeta.mapType === MAP_TYPES.COUNTRY && mapViz === MAP_VIZS.BUBBLES
+      ? [
+          ...feature(geoData, geoData.objects.states).features,
+          ...feature(geoData, geoData.objects.districts).features,
+        ]
+      : feature(geoData, geoData.objects.districts).features;
 
     // Add id to each feature
     return featuresWrap.map((feature) => {
@@ -170,7 +168,7 @@ function MapVisualizer({
       obj.id = `${mapCode}-${state}${district ? '-' + district : ''}`;
       return obj;
     });
-  }, [geoData, mapCode, mapView, mapViz, mapMeta]);
+  }, [geoData, mapCode, isDistrictView, mapViz, mapMeta]);
 
   const populateTexts = useCallback(
     (regionSelection) => {
@@ -316,9 +314,9 @@ function MapVisualizer({
           const districtName = feature.properties.district;
           const stateData = data[stateCode];
 
-          if (mapView === MAP_VIEWS.STATES) {
+          if (!isDistrictView) {
             feature.value = getTotalStatistic(stateData, statistic);
-          } else if (mapView === MAP_VIEWS.DISTRICTS) {
+          } else {
             const districtData = stateData?.districts?.[districtName];
 
             if (districtName)
@@ -357,10 +355,9 @@ function MapVisualizer({
         if (onceTouchedRegion.current) return;
         setRegionHighlighted({
           stateCode: STATE_CODES[feature.properties.st_nm],
-          districtName:
-            mapView === MAP_VIEWS.STATES
-              ? null
-              : feature.properties.district || UNKNOWN_DISTRICT_KEY,
+          districtName: !isDistrictView
+            ? null
+            : feature.properties.district || UNKNOWN_DISTRICT_KEY,
         });
       })
       .on('pointerdown', (event, feature) => {
@@ -369,10 +366,9 @@ function MapVisualizer({
         else onceTouchedRegion.current = feature;
         setRegionHighlighted({
           stateCode: STATE_CODES[feature.properties.st_nm],
-          districtName:
-            mapView === MAP_VIEWS.STATES
-              ? null
-              : feature.properties.district || UNKNOWN_DISTRICT_KEY,
+          districtName: !isDistrictView
+            ? null
+            : feature.properties.district || UNKNOWN_DISTRICT_KEY,
         });
       })
       .on('click', (event, feature) => {
@@ -392,7 +388,7 @@ function MapVisualizer({
   }, [
     mapMeta.mapType,
     mapViz,
-    mapView,
+    isDistrictView,
     data,
     features,
     history,
@@ -418,7 +414,7 @@ function MapVisualizer({
 
     if (
       mapMeta.mapType === MAP_TYPES.STATE ||
-      (mapView === MAP_VIEWS.DISTRICTS && mapViz === MAP_VIZS.CHOROPLETH)
+      (isDistrictView && mapViz === MAP_VIZS.CHOROPLETH)
     ) {
       // Add id to mesh
       meshDistricts = [mesh(geoData, geoData.objects.districts)];
@@ -462,7 +458,7 @@ function MapVisualizer({
     mapMeta,
     mapCode,
     mapViz,
-    mapView,
+    isDistrictView,
     statistic,
     path,
     strokeColor,
@@ -485,7 +481,7 @@ function MapVisualizer({
             stateName === d.properties.st_nm &&
             ((!district && stateCode !== mapCode) ||
               district === d.properties?.district ||
-              mapView === MAP_VIEWS.STATES ||
+              !isDistrictView ||
               (district === UNKNOWN_DISTRICT_KEY && !d.properties.district));
           return highlighted ? 1 : 0.25;
         });
@@ -498,7 +494,7 @@ function MapVisualizer({
             stateName === d.properties.st_nm &&
             ((!district && stateCode !== mapCode) ||
               district === d.properties?.district ||
-              mapView === MAP_VIEWS.STATES);
+              !isDistrictView);
           if (highlighted) this.parentNode.appendChild(this);
           select(this).attr('stroke-opacity', highlighted ? 1 : 0);
         });
@@ -507,7 +503,7 @@ function MapVisualizer({
     geoData,
     data,
     mapCode,
-    mapView,
+    isDistrictView,
     mapViz,
     regionHighlighted.stateCode,
     regionHighlighted.districtName,
