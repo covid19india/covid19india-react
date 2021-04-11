@@ -37,40 +37,39 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
     [i18n]
   );
 
-  return transitions.map(({item, key, props}) =>
-    item ? (
-      <animated.div
-        key={key}
-        className="LanguageSwitcher"
-        style={props}
-        ref={languageSwitcherRef}
-      >
-        <h3>We speak the following languages</h3>
-
-        <div className="languages">
-          {Object.keys(locales).map((languageKey) => (
-            <div
-              key={languageKey}
-              className={classnames('language', {
-                'is-highlighted': currentLanguage === languageKey,
-              })}
-              onClick={switchLanguage.bind(this, languageKey)}
-            >
-              <span>{locales[languageKey]}</span>
-            </div>
-          ))}
-        </div>
-
-        <div
-          className="close-button"
-          onClick={setShowLanguageSwitcher.bind(this, false)}
+  return transitions.map(
+    ({item, key, props}) =>
+      item && (
+        <animated.div
+          key={key}
+          className="LanguageSwitcher"
+          style={props}
+          ref={languageSwitcherRef}
         >
-          <ArrowUp width={16} />
-        </div>
-      </animated.div>
-    ) : (
-      <animated.div key={key}></animated.div>
-    )
+          <h3>We speak the following languages</h3>
+
+          <div className="languages">
+            {Object.keys(locales).map((languageKey) => (
+              <div
+                key={languageKey}
+                className={classnames('language', {
+                  'is-highlighted': currentLanguage === languageKey,
+                })}
+                onClick={switchLanguage.bind(this, languageKey)}
+              >
+                <span>{locales[languageKey]}</span>
+              </div>
+            ))}
+          </div>
+
+          <div
+            className="close-button"
+            onClick={setShowLanguageSwitcher.bind(this, false)}
+          >
+            <ArrowUp width={16} />
+          </div>
+        </animated.div>
+      )
   );
 }
 

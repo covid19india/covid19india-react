@@ -4,7 +4,6 @@ import {BellIcon, BellSlashIcon, HistoryIcon} from '@primer/octicons-react';
 import {parse} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
 import {useMemo, useCallback, lazy, Suspense} from 'react';
-import {useSpring, animated} from 'react-spring';
 
 const Timeline = lazy(() => import('./Timeline'));
 
@@ -20,12 +19,6 @@ const ActionsPanel = ({
   setNewUpdate,
   setShowUpdates,
 }) => {
-  const {transform, opacity} = useSpring({
-    opacity: isTimelineMode ? 1 : 0,
-    transform: `perspective(600px) rotateX(${isTimelineMode ? 180 : 0}deg)`,
-    config: {mass: 5, tension: 500, friction: 80},
-  });
-
   const trail = useMemo(() => {
     const styles = [];
 
@@ -58,11 +51,13 @@ const ActionsPanel = ({
 
   return (
     <div className="ActionsPanel">
-      <animated.div
+      <div
         className="actions"
         style={{
-          opacity: opacity.interpolate((o) => 1 - o),
-          transform,
+          opacity: isTimelineMode ? 0 : 1,
+          transform: `perspective(600px) rotateX(${
+            isTimelineMode ? 90 : 0
+          }deg)`,
           pointerEvents: isTimelineMode ? 'none' : '',
         }}
       >
@@ -86,17 +81,12 @@ const ActionsPanel = ({
         >
           {<HistoryIcon />}
         </div>
-      </animated.div>
+      </div>
 
       {isTimelineMode && (
         <Suspense fallback={<div />}>
           <Timeline
-            style={{
-              opacity,
-              transform: transform.interpolate((t) => `${t} rotateX(180deg)`),
-              pointerEvents: !isTimelineMode ? 'none' : '',
-            }}
-            {...{date, setDate, dates, setIsTimelineMode}}
+            {...{date, setDate, dates, isTimelineMode, setIsTimelineMode}}
           />
         </Suspense>
       )}

@@ -18,8 +18,9 @@ import {
   lazy,
   Suspense,
 } from 'react';
+import ReactDOM from 'react-dom';
 import {FastForward, Play as Play, Pause as Pause} from 'react-feather';
-import {animated} from 'react-spring';
+import {useTransition, animated} from 'react-spring';
 import {useKeyPressEvent} from 'react-use';
 
 const Calendar = lazy(() => import('./Calendar'));
@@ -29,19 +30,12 @@ const slidesPerView = 1;
 const slideDegree = 360 / wheelSize;
 const distanceThreshold = 5;
 const autoPlayDelay = 2500;
-const hideDelay = 500;
 
-function Timeline({style, date, setDate, dates, setIsTimelineMode}) {
+function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
   const [sliderState, setSliderState] = useState(null);
   const [play, setPlay] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const timer = useRef();
-
-  const hideTimeline = () => {
-    setTimeout(() => {
-      setIsTimelineMode(false);
-    }, hideDelay);
-  };
 
   const [sliderRef, slider] = useKeenSlider({
     initial: date === '' ? Math.min(1, dates.length) : dates.indexOf(date),
@@ -60,9 +54,14 @@ function Timeline({style, date, setDate, dates, setIsTimelineMode}) {
     afterChange: (s) => {
       const slide = s.details().absoluteSlide;
       if (slide === 0) {
-        hideTimeline();
+        ReactDOM.unstable_batchedUpdates(() => {
+          setIsTimelineMode(false);
+          setShowCalendar(false);
+          setDate('');
+        });
+      } else {
+        setDate(dates[slide]);
       }
-      setDate(slide === 0 ? '' : dates[slide]);
     },
     mode: 'free-snap',
     slides: dates.length,
@@ -107,16 +106,12 @@ function Timeline({style, date, setDate, dates, setIsTimelineMode}) {
   });
 
   useKeyPressEvent('ArrowRight', () => {
-    if (sliderState.absoluteSlide === 0) hideTimeline();
-    else if (slider) slider.prev();
+    if (slider) slider.prev();
   });
 
   useKeyPressEvent('Escape', () => {
     setPlay(false);
-    if (slider) {
-      slider.moveToSlide(0);
-      hideTimeline();
-    }
+    if (slider) slider.moveToSlide(0);
   });
 
   useKeyPressEvent('Enter', () => {
@@ -165,13 +160,26 @@ function Timeline({style, date, setDate, dates, setIsTimelineMode}) {
     }
   };
 
+  const transitions = useTransition(showCalendar, null, {
+    from: {marginTop: 0, marginBottom: 0, height: 0, opacity: 0},
+    enter: {marginTop: 36, marginBottom: 400, opacity: 1},
+    leave: {
+      pointerEvents: 'none',
+      marginTop: 0,
+      marginBottom: 0,
+      height: 0,
+      opacity: 0,
+    },
+    config: {
+      mass: 1,
+      tension: 100,
+      friction: 15,
+    },
+  });
+
   return (
     <div className={'Timeline'}>
-      <animated.div
-        className="actions timeline"
-        style={style}
-        onWheel={handleWheel}
-      >
+      <div className="actions timeline fadeInUp" onWheel={handleWheel}>
         <div className={'wheel-buttons'}>
           <div
             className={'wheel-button left'}
@@ -209,18 +217,25 @@ function Timeline({style, date, setDate, dates, setIsTimelineMode}) {
             </h5>
           )}
         </div>
-      </animated.div>
-      {showCalendar && (
-        <Suspense fallback={<div />}>
-          <Calendar {...{date, dates, slider}} />
-        </Suspense>
-      )}
+      </div>
+      <Suspense fallback={<div />}>
+        {transitions.map(
+          ({item, key, props}) =>
+            item && (
+              <animated.div key={key} style={props}>
+                <Calendar {...{date, dates, slider}} />
+              </animated.div>
+            )
+        )}
+      </Suspense>
     </div>
   );
 }
 
 const isEqual = (prevProps, currProps) => {
   if (!equal(currProps.date, prevProps.date)) {
+    return false;
+  } else if (!equal(currProps.isTimelineMode, prevProps.isTimelineMode)) {
     return false;
   } else if (!equal(currProps.dates, prevProps.dates)) {
     return false;

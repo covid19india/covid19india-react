@@ -204,80 +204,81 @@ function Table({
         </animated.div>
       </div>
 
-      {transition.map(({item, key, props}) =>
-        item ? (
-          <animated.div key={key} className="table-helper" style={props}>
-            <div className="helper-top">
-              <div className="helper-left">
-                <div className="info-item">
-                  <span>
-                    <OrganizationIcon size={14} />
-                  </span>
-                  <p>{`Toggle between States/Districts`}</p>
-                </div>
+      {transition.map(
+        ({item, key, props}) =>
+          item && (
+            <animated.div key={key} className="table-helper" style={props}>
+              <div className="helper-top">
+                <div className="helper-left">
+                  <div className="info-item">
+                    <span>
+                      <OrganizationIcon size={14} />
+                    </span>
+                    <p>{`Toggle between States/Districts`}</p>
+                  </div>
 
-                <div className="info-item">
-                  <h5>10L</h5>
-                  <p>Per Ten Lakh People</p>
-                </div>
+                  <div className="info-item">
+                    <h5>10L</h5>
+                    <p>Per Ten Lakh People</p>
+                  </div>
 
-                <div className="info-item sort">
-                  <span>
-                    <FilterIcon size={14} />
-                  </span>
-                  <p>Sort by Descending</p>
-                </div>
+                  <div className="info-item sort">
+                    <span>
+                      <FilterIcon size={14} />
+                    </span>
+                    <p>Sort by Descending</p>
+                  </div>
 
-                <div className="info-item sort invert">
-                  <span>
-                    <FilterIcon size={14} />
-                  </span>
-                  <p>Sort by Ascending</p>
-                </div>
+                  <div className="info-item sort invert">
+                    <span>
+                      <FilterIcon size={14} />
+                    </span>
+                    <p>Sort by Ascending</p>
+                  </div>
 
-                <div className="info-item sort">
-                  <TableDeltaHelper />
-                </div>
+                  <div className="info-item sort">
+                    <TableDeltaHelper />
+                  </div>
 
-                <div className="info-item notes">
-                  <span>
-                    <InfoIcon size={15} />
-                  </span>
-                  <p>Notes</p>
+                  <div className="info-item notes">
+                    <span>
+                      <InfoIcon size={15} />
+                    </span>
+                    <p>Notes</p>
+                  </div>
+                </div>
+                <div className="helper-right">
+                  <div className="info-item">
+                    <p>Units</p>
+                  </div>
+                  {Object.entries({'1K': 3, '1L': 5, '1Cr': 7}).map(
+                    ([abbr, exp]) => (
+                      <div className="info-item" key={abbr}>
+                        <h5>{abbr}</h5>
+                        <p>
+                          10
+                          <sup
+                            style={{
+                              verticalAlign: 'baseline',
+                              position: 'relative',
+                              top: '-.4em',
+                            }}
+                          >
+                            {exp}
+                          </sup>
+                        </p>
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
-              <div className="helper-right">
-                <div className="info-item">
-                  <p>Units</p>
-                </div>
-                {Object.entries({'1K': 3, '1L': 5, '1Cr': 7}).map(
-                  ([abbr, exp]) => (
-                    <div className="info-item" key={abbr}>
-                      <h5>{abbr}</h5>
-                      <p>
-                        10
-                        <sup
-                          style={{
-                            verticalAlign: 'baseline',
-                            position: 'relative',
-                            top: '-.4em',
-                          }}
-                        >
-                          {exp}
-                        </sup>
-                      </p>
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
 
-            <h5 className="text">
-              {t('Compiled from State Govt. numbers')},{' '}
-              <Link to="/about">{t('know more')}!</Link>
-            </h5>
-          </animated.div>
-        ) : null
+              <h5 className="text">
+                {t('Compiled from State Govt. numbers')},{' '}
+                <Link to="/about">{t('know more')}!</Link>
+              </h5>
+            </animated.div>
+          )
       )}
 
       <div className="table-container">
