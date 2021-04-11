@@ -41,6 +41,7 @@ function Table({
   setRegionHighlighted,
   expandTable,
   setExpandTable,
+  districtDataAvailable,
 }) {
   const {t} = useTranslation();
   const [sortData, setSortData] = useSessionStorage('sortData', {
@@ -160,12 +161,14 @@ function Table({
     ? TABLE_STATISTICS_EXPANDED
     : TABLE_STATISTICS;
 
+  const showDistricts = tableOption === 'Districts' && districtDataAvailable;
+
   return (
     <>
       <div className="table-top">
         <animated.div
           className={classnames('option-toggle', {
-            'is-highlighted': tableOption === 'Districts',
+            'is-highlighted': showDistricts,
           })}
           onClick={_setTableOption}
           style={trail[0]}
@@ -293,7 +296,7 @@ function Table({
               className="cell heading"
               onClick={handleSortClick.bind(this, 'regionName')}
             >
-              <div>{t(tableOption === 'States' ? 'State/UT' : 'District')}</div>
+              <div>{t(!showDistricts ? 'State/UT' : 'District')}</div>
               {sortData.sortColumn === 'regionName' && (
                 <div
                   className={classnames('sort-icon', {
@@ -314,7 +317,7 @@ function Table({
             ))}
           </div>
 
-          {tableOption === 'States' &&
+          {!showDistricts &&
             Object.keys(states)
               .filter(
                 (stateCode) =>
@@ -339,9 +342,9 @@ function Table({
                 );
               })}
 
-          {tableOption === 'Districts' && !districts && <TableLoader />}
+          {showDistricts && !districts && <TableLoader />}
 
-          {tableOption === 'Districts' &&
+          {showDistricts &&
             districts &&
             Object.keys(districts)
               .sort((a, b) => sortingFunction(a, b))
@@ -397,6 +400,10 @@ const isEqual = (prevProps, currProps) => {
   ) {
     return false;
   } else if (!equal(prevProps.date, currProps.date)) {
+    return false;
+  } else if (
+    !equal(prevProps.districtDataAvailable, currProps.districtDataAvailable)
+  ) {
     return false;
   } else if (
     !equal(

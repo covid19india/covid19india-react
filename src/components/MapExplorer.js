@@ -49,6 +49,7 @@ function MapExplorer({
   anchor,
   setAnchor,
   expandTable,
+  districtDataAvailable,
 }) {
   const {t} = useTranslation();
   const mapExplorerRef = useRef();
@@ -190,6 +191,9 @@ function MapExplorer({
 
   const statisticConfig = STATISTIC_CONFIGS[mapStatistic];
 
+  const isDistrictView =
+    mapView === MAP_VIEWS.DISTRICTS && districtDataAvailable;
+
   return (
     <div
       className={classnames(
@@ -253,7 +257,7 @@ function MapExplorer({
                 <div className="divider" />
                 <div
                   className={classnames('boundary fadeInUp', {
-                    'is-highlighted': mapView === MAP_VIEWS.DISTRICTS,
+                    'is-highlighted': isDistrictView,
                   })}
                   onClick={handleDistrictClick.bind(this)}
                   style={trail[3]}
@@ -313,7 +317,7 @@ function MapExplorer({
             }
           >
             <MapVisualizer
-              {...{mapCode, mapView, mapViz}}
+              {...{mapCode, isDistrictView, mapViz}}
               data={mapData}
               {...{regionHighlighted, setRegionHighlighted}}
               statistic={mapStatistic}
@@ -333,6 +337,10 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
     return false;
   } else if (!equal(prevProps.anchor, currProps.anchor)) {
+    return false;
+  } else if (
+    !equal(prevProps.districtDataAvailable, currProps.districtDataAvailable)
+  ) {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
     return false;

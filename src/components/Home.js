@@ -1,4 +1,4 @@
-import {API_ROOT_URL} from '../constants';
+import {API_ROOT_URL, GOSPEL_DATE} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
 import {fetcher} from '../utils/commonFunctions';
@@ -58,6 +58,8 @@ function Home() {
   const isVisible = useIsVisible(homeRightElement);
   const {width} = useWindowSize();
 
+  const districtDataAvailable = date === '' || date >= GOSPEL_DATE;
+
   return (
     <>
       <Helmet>
@@ -116,6 +118,7 @@ function Home() {
                   setRegionHighlighted,
                   expandTable,
                   setExpandTable,
+                  districtDataAvailable,
                 }}
               />
             </Suspense>
@@ -138,11 +141,11 @@ function Home() {
                     <StateHeader data={data['TT']} stateCode={'TT'} />
                     <MapExplorer
                       stateCode="TT"
-                      {...{data}}
+                      {...{date, data}}
                       {...{mapStatistic, setMapStatistic}}
                       {...{regionHighlighted, setRegionHighlighted}}
                       {...{anchor, setAnchor}}
-                      {...{expandTable}}
+                      {...{expandTable, districtDataAvailable}}
                     />
                   </Suspense>
                 </div>

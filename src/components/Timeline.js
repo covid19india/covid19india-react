@@ -21,7 +21,7 @@ import {
 import ReactDOM from 'react-dom';
 import {FastForward, Play as Play, Pause as Pause} from 'react-feather';
 import {useTransition, animated} from 'react-spring';
-import {useKeyPressEvent} from 'react-use';
+import {useClickAway, useKeyPressEvent} from 'react-use';
 
 const Calendar = lazy(() => import('./Calendar'));
 
@@ -35,7 +35,12 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
   const [sliderState, setSliderState] = useState(null);
   const [play, setPlay] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
+  const timelineRef = useRef();
   const timer = useRef();
+
+  useClickAway(timelineRef, () => {
+    setShowCalendar(false);
+  });
 
   const [sliderRef, slider] = useKeenSlider({
     initial: date === '' ? Math.min(1, dates.length) : dates.indexOf(date),
@@ -161,11 +166,11 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
   };
 
   const transitions = useTransition(showCalendar, null, {
-    from: {marginTop: 0, marginBottom: 0, height: 0, opacity: 0},
-    enter: {marginTop: 36, marginBottom: 400, opacity: 1},
+    from: {paddingTop: 0, marginBottom: 0, height: 0, opacity: 0},
+    enter: {paddingTop: 36, marginBottom: 400, opacity: 1},
     leave: {
       pointerEvents: 'none',
-      marginTop: 0,
+      paddingTop: 0,
       marginBottom: 0,
       height: 0,
       opacity: 0,
@@ -178,7 +183,7 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
   });
 
   return (
-    <div className={'Timeline'}>
+    <div className={'Timeline'} ref={timelineRef}>
       <div className="actions timeline fadeInUp" onWheel={handleWheel}>
         <div className={'wheel-buttons'}>
           <div
