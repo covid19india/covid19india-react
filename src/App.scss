@@ -1183,11 +1183,11 @@ h6 {
 }
 
 .ActionsPanel {
+  margin-bottom: 0.3rem;
   padding-bottom: 1rem;
   padding-top: 1rem;
   position: relative;
   width: calc(100% - 1rem);
-  margin-bottom: 0.3rem;
 
   .actions {
     display: flex;
@@ -1282,9 +1282,9 @@ h6 {
       color: #fff;
       display: block;
       height: 3rem;
+      margin-top: -0.75rem;
       overflow: hidden;
       width: 100%;
-      margin-top: -0.75rem;
     }
 
     .wheel__inner {
@@ -1323,12 +1323,16 @@ h6 {
         pointer-events: all;
         user-select: none;
 
-        &:hover {
+        &.current {
           opacity: 0.8;
+
+          &:hover {
+            opacity: 1;
+          }
         }
 
-        &.current {
-          opacity: 1;
+        &:hover {
+          opacity: 0.8;
         }
 
         &::selection {
@@ -1339,8 +1343,8 @@ h6 {
 
     .wheel-buttons {
       display: flex;
-      width: 100%;
       justify-content: space-evenly;
+      width: 100%;
       z-index: 1;
 
       .wheel-button {
@@ -1370,54 +1374,63 @@ h6 {
   }
 
   .Calendar {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1em;
     margin-top: 2.25rem;
 
     .react-calendar {
-      background: $gray-light;
-      line-height: 2em;
       border-radius: 5px;
+      line-height: 2em;
+
+      *,
+      *::before,
+      *::after {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      .react-calendar__navigation {
+        margin-bottom: 1em;
+      }
+
+      button {
+        border: 0;
+        border-radius: 5px;
+        margin: 0.125rem;
+        outline: none;
+
+        &:enabled {
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
     }
 
     .react-calendar__viewContainer {
       display: flex;
     }
 
-    .react-calendar,
-    .react-calendar *,
-    .react-calendar *:before,
-    .react-calendar *:after {
-      -moz-box-sizing: border-box;
-      -webkit-box-sizing: border-box;
-      box-sizing: border-box;
-    }
-
-    .react-calendar button {
-      margin: 0;
-      border: 0;
-      outline: none;
-    }
-
-    .react-calendar button:enabled:hover {
-      cursor: pointer;
-    }
-
     .react-calendar__navigation {
-      height: 44px;
-      margin-bottom: 1em;
-    }
+      button {
+        background-color: $gray-light;
+        color: $gray;
+        min-width: 44px;
+        padding: 0.5em;
 
-    .react-calendar__navigation button {
-      color: $gray;
-      min-width: 44px;
-      background-color: $gray-light;
-    }
+        &:enabled {
+          &:hover {
+            background-color: #6c757d40;
+          }
+        }
 
-    .react-calendar__navigation button:enabled:hover {
-      background-color: #6c757d40;
-    }
-
-    .react-calendar__navigation button[disabled] {
-      background: none;
+        &:disabled {
+          background: none;
+        }
+      }
     }
 
     .react-calendar__navigation__arrow {
@@ -1429,66 +1442,88 @@ h6 {
     }
 
     .react-calendar__month-view__weekdays {
+      font-size: 0.75em;
+      font-weight: 600;
       text-align: center;
       text-transform: uppercase;
-      font-weight: bold;
-      font-size: 0.75em;
     }
 
     .react-calendar__month-view__weekdays__weekday {
       padding: 0.5em;
     }
 
-    .react-calendar__month-view__days__day {
+    .react-calendar__tile {
+      background: none;
       color: $gray;
+      max-width: 100%;
+      padding: 1em 0.5em;
+      text-align: center;
+
+      &:enabled {
+        background-color: $gray-light;
+
+        &.react-calendar__tile--active {
+          background-color: #006edc;
+          color: $white;
+        }
+
+        &.react-calendar__tile--now {
+          background-color: #ffff76;
+          color: $black !important;
+        }
+
+        &.react-calendar__month-view__days__day--neighboringMonth {
+          background-color: #6c757d06;
+          color: #6c757d99;
+        }
+
+        &:hover {
+          background-color: $gray-hover;
+        }
+      }
+    }
+
+    .react-calendar__month-view {
+      .react-calendar__tile {
+        flex-basis: calc(100% / 7 - 0.25rem) !important;
+        max-width: calc(100% / 7 - 0.25rem) !important;
+      }
+    }
+
+    .react-calendar__year-view {
+      .react-calendar__tile {
+        flex-basis: calc(100% / 3 - 0.25rem) !important;
+        max-width: calc(100% / 3 - 0.25rem) !important;
+      }
     }
 
     .react-calendar__month-view__days__day--weekend {
       color: $cherry;
     }
 
-    .react-calendar__month-view__days__day--neighboringMonth {
-      color: #6c757d99;
-    }
-
-    .react-calendar__year-view .react-calendar__tile,
-    .react-calendar__decade-view .react-calendar__tile,
-    .react-calendar__century-view .react-calendar__tile {
-      padding: 2em 0.5em;
-      color: $gray;
-    }
-
-    .react-calendar__tile {
-      max-width: 100%;
-      text-align: center;
-      padding: 1em 0.5em;
-      background: none;
-    }
-
-    .react-calendar__tile:enabled {
-      background-color: $gray-light;
-
-      &.react-calendar__tile--active {
-        background-color: #006edc;
-        color: white;
-      }
-
-      &.react-calendar__tile--now {
-        background-color: #ffff76;
-        color: black !important;
+    .react-calendar__year-view,
+    .react-calendar__decade-view,
+    .react-calendar__century-view {
+      .react-calendar__tile {
+        color: $gray;
+        padding: 2em 0.5em;
       }
     }
 
-    .react-calendar__tile:enabled:hover {
-      background-color: $gray-hover;
+    .react-calendar__tile--now {
+      &:enabled {
+        &:hover {
+          background-color: #ffffa9;
+        }
+      }
     }
 
-    .react-calendar__tile--now:enabled:hover {
-      background-color: #ffffa9;
-    }
-
-    .react-calendar__tile--active:enabled:hover {
-      background-color: #1087ff;
+    .react-calendar__tile--active {
+      &:enabled {
+        &:hover {
+          background-color: #1087ff;
+        }
+      }
     }
   }
 }
@@ -4673,7 +4708,7 @@ footer {
         select {
           background: #1e1e30;
           background-image: linear-gradient(45deg, transparent 50%, $gray 50%),
-            linear-gradient(135deg, $gray 50%, transparent 50%);
+          linear-gradient(135deg, $gray 50%, transparent 50%);
           background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
           background-repeat: no-repeat;
           background-size: 5px 5px, 5px 5px;
