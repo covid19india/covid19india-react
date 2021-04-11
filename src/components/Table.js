@@ -41,7 +41,8 @@ function Table({
   setRegionHighlighted,
   expandTable,
   setExpandTable,
-  districtDataAvailable,
+  hideDistrictData,
+  showVaccinated,
 }) {
   const {t} = useTranslation();
   const [sortData, setSortData] = useSessionStorage('sortData', {
@@ -157,11 +158,12 @@ function Table({
     leave: TABLE_FADE_OUT,
   });
 
-  const tableStatistics = expandTable
+  const tableStatistics = (expandTable
     ? TABLE_STATISTICS_EXPANDED
-    : TABLE_STATISTICS;
+    : TABLE_STATISTICS
+  ).filter((statistic) => statistic !== 'vaccinated' || showVaccinated);
 
-  const showDistricts = tableOption === 'Districts' && districtDataAvailable;
+  const showDistricts = tableOption === 'Districts' && !hideDistrictData;
 
   return (
     <>
@@ -337,6 +339,7 @@ function Table({
                       setRegionHighlighted,
                       expandTable,
                       lastUpdatedTT,
+                      tableStatistics,
                     }}
                   />
                 );
@@ -361,6 +364,7 @@ function Table({
                       setRegionHighlighted,
                       expandTable,
                       lastUpdatedTT,
+                      tableStatistics,
                     }}
                   />
                 );
@@ -376,6 +380,7 @@ function Table({
               setRegionHighlighted,
               expandTable,
               lastUpdatedTT,
+              tableStatistics,
             }}
           />
         </div>
@@ -401,9 +406,8 @@ const isEqual = (prevProps, currProps) => {
     return false;
   } else if (!equal(prevProps.date, currProps.date)) {
     return false;
-  } else if (
-    !equal(prevProps.districtDataAvailable, currProps.districtDataAvailable)
-  ) {
+  } else if (!equal(prevProps.hideDistrictData, currProps.hideDistrictData)) {
+  } else if (!equal(prevProps.showVaccinated, currProps.showVaccinated)) {
     return false;
   } else if (
     !equal(

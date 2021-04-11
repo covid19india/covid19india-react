@@ -1,7 +1,7 @@
 import {API_ROOT_URL, GOSPEL_DATE} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
-import {fetcher} from '../utils/commonFunctions';
+import {fetcher, getStatistic} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
 import {useState, useRef, lazy, Suspense} from 'react';
@@ -58,7 +58,8 @@ function Home() {
   const isVisible = useIsVisible(homeRightElement);
   const {width} = useWindowSize();
 
-  const districtDataAvailable = date === '' || date >= GOSPEL_DATE;
+  const hideDistrictData = date !== '' && date < GOSPEL_DATE;
+  const showVaccinated = getStatistic(data?.['TT'], 'total', 'vaccinated') > 0;
 
   return (
     <>
@@ -107,7 +108,7 @@ function Home() {
             )}
           </div>
 
-          {data && <LevelVaccinated data={data['TT']} />}
+          {showVaccinated && <LevelVaccinated data={data['TT']} />}
 
           {data && (
             <Suspense fallback={<div />}>
@@ -118,7 +119,8 @@ function Home() {
                   setRegionHighlighted,
                   expandTable,
                   setExpandTable,
-                  districtDataAvailable,
+                  hideDistrictData,
+                  showVaccinated,
                 }}
               />
             </Suspense>
@@ -145,7 +147,7 @@ function Home() {
                       {...{mapStatistic, setMapStatistic}}
                       {...{regionHighlighted, setRegionHighlighted}}
                       {...{anchor, setAnchor}}
-                      {...{expandTable, districtDataAvailable}}
+                      {...{expandTable, hideDistrictData}}
                     />
                   </Suspense>
                 </div>
@@ -163,6 +165,7 @@ function Home() {
                       anchor,
                       setAnchor,
                       expandTable,
+                      showVaccinated,
                     }}
                   />
                 </Suspense>

@@ -6,8 +6,6 @@ import Tooltip from './Tooltip';
 import {
   STATE_NAMES,
   STATISTIC_CONFIGS,
-  TABLE_STATISTICS,
-  TABLE_STATISTICS_EXPANDED,
   UNKNOWN_DISTRICT_KEY,
 } from '../constants';
 import {
@@ -41,6 +39,7 @@ function Row({
   setRegionHighlighted,
   expandTable,
   lastUpdatedTT,
+  tableStatistics,
 }) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useSessionStorage('districtSortData', {
@@ -154,10 +153,6 @@ function Row({
       block: 'start',
     });
   }, []);
-
-  const tableStatistics = expandTable
-    ? TABLE_STATISTICS_EXPANDED
-    : TABLE_STATISTICS;
 
   return (
     <>
@@ -323,6 +318,8 @@ const isEqual = (prevProps, currProps) => {
   ) {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
+    return false;
+  } else if (!equal(prevProps.tableStatistics, currProps.tableStatistics)) {
     return false;
   } else return true;
 };

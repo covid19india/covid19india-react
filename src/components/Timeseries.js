@@ -41,6 +41,7 @@ function Timeseries({
   isUniform,
   isLog,
   isMovingAverage,
+  showVaccinated,
 }) {
   const {t} = useTranslation();
   const refs = useRef([]);
@@ -49,9 +50,11 @@ function Timeseries({
   const statistics = useMemo(
     () =>
       TIMESERIES_STATISTICS.filter(
-        (statistic) => chartType === 'delta' || statistic !== 'tpr'
+        (statistic) =>
+          (statistic !== 'vaccinated' || showVaccinated) &&
+          (chartType === 'delta' || statistic !== 'tpr')
       ),
-    [chartType]
+    [chartType, showVaccinated]
   );
 
   const [highlightedDate, setHighlightedDate] = useState(
@@ -667,6 +670,8 @@ const isEqual = (prevProps, currProps) => {
   ) {
     return false;
   } else if (!equal(currProps.endDate, prevProps.endDate)) {
+    return false;
+  } else if (!equal(currProps.showVaccinated, prevProps.showVaccinated)) {
     return false;
   } else if (!equal(currProps.dates, prevProps.dates)) {
     return false;
