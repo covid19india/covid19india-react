@@ -4,7 +4,6 @@
   "private": true,
   "homepage": "https://www.covid19india.org/",
   "dependencies": {
-    "@juggle/resize-observer": "^3.2.0",
     "@primer/octicons-react": "^13.0.0",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
@@ -43,7 +42,6 @@
     "react-spring": "^8.0.27",
     "react-swipeable": "^6.0.1",
     "react-use": "^17.0.1",
-    "react-use-gesture": "^9.0.0",
     "source-map-explorer": "^2.5.2",
     "swr": "^0.4.1",
     "topojson-client": "^3.0.2",
