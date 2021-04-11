@@ -1787,6 +1787,14 @@ abbr {
     &.is-highlighted {
       background: $green-light;
       color: $green;
+
+      &:hover {
+        background: $green-hover;
+      }
+    }
+
+    &:hover {
+      background: $gray-hover;
     }
   }
 
@@ -1954,7 +1962,6 @@ abbr {
 
 .table-container {
   align-self: center;
-  margin-bottom: 2.5rem;
   overflow-x: auto;
   width: 100%;
 }
@@ -2243,6 +2250,47 @@ abbr {
 
   .intersection {
     display: block;
+  }
+}
+
+.Table {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2.5rem;
+}
+
+.paginate {
+  align-items: center;
+  color: $gray;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+
+  div {
+    background: $gray-light;
+    border-radius: 5px;
+    color: $gray-mid;
+    cursor: pointer;
+    display: flex;
+    padding: 0.5rem;
+
+    &.left {
+      margin-right: 1rem;
+    }
+
+    &.right {
+      margin-left: 1rem;
+    }
+
+    &:hover {
+      &:not(.disabled) {
+        background: $gray-hover;
+      }
+    }
+  }
+
+  h5 {
+    margin: 0;
   }
 }
 

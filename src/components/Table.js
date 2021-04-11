@@ -25,6 +25,12 @@ import {max} from 'date-fns';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
 import {memo, useCallback, useEffect, useMemo, useState, lazy} from 'react';
+import {
+  ChevronLeft,
+  ChevronsLeft,
+  ChevronRight,
+  ChevronsRight,
+} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useTrail, useTransition, animated, config} from 'react-spring';
@@ -50,6 +56,7 @@ function Table({
     isAscending: false,
     delta: false,
   });
+  const [page, setPage] = useState(0);
 
   const handleSortClick = useCallback(
     (statistic) => {
@@ -81,6 +88,10 @@ function Table({
   const [tableOption, setTableOption] = useState('States');
   const [isPerMillion, setIsPerMillion] = useState(false);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
+
+  const numPages = Math.ceil(
+    Object.keys(districts || {}).length / DISTRICT_TABLE_COUNT
+  );
 
   const lastUpdatedTT = useMemo(() => {
     const updatedDates = [
@@ -152,6 +163,20 @@ function Table({
     });
   }, [tableOption, states]);
 
+  useEffect(() => {
+    setPage((p) => Math.max(0, Math.min(p, numPages - 1)));
+  }, [numPages]);
+
+  const handlePageClick = (direction) => {
+    if (Math.abs(direction) === 1) {
+      setPage(Math.min(Math.max(0, page + direction), numPages - 1));
+    } else if (direction < 0) {
+      setPage(0);
+    } else if (direction > 0) {
+      setPage(numPages - 1);
+    }
+  };
+
   const transition = useTransition(isInfoVisible, null, {
     from: TABLE_FADE_OUT,
     enter: TABLE_FADE_IN,
@@ -165,8 +190,12 @@ function Table({
 
   const showDistricts = tableOption === 'Districts' && !hideDistrictData;
 
+  useEffect(() => {
+    if (!showDistricts) setPage(0);
+  }, [showDistricts]);
+
   return (
-    <>
+    <div className="Table">
       <div className="table-top">
         <animated.div
           className={classnames('option-toggle', {
@@ -351,7 +380,10 @@ function Table({
             districts &&
             Object.keys(districts)
               .sort((a, b) => sortingFunction(a, b))
-              .slice(0, DISTRICT_TABLE_COUNT)
+              .slice(
+                page * DISTRICT_TABLE_COUNT,
+                (page + 1) * DISTRICT_TABLE_COUNT
+              )
               .map((districtKey) => {
                 return (
                   <Row
@@ -385,7 +417,36 @@ function Table({
           />
         </div>
       </div>
-    </>
+      {showDistricts && (
+        <div className="paginate">
+          <div
+            className={classnames('left', {disabled: page === 0})}
+            onClick={handlePageClick.bind(this, -2)}
+          >
+            <ChevronsLeft size={16} />
+          </div>
+          <div
+            className={classnames('left', {disabled: page === 0})}
+            onClick={handlePageClick.bind(this, -1)}
+          >
+            <ChevronLeft size={16} />
+          </div>
+          <h5>{`${page + 1} / ${numPages}`}</h5>
+          <div
+            className={classnames('right', {disabled: page === numPages - 1})}
+            onClick={handlePageClick.bind(this, 1)}
+          >
+            <ChevronRight size={16} />
+          </div>
+          <div
+            className={classnames('right', {disabled: page === numPages - 1})}
+            onClick={handlePageClick.bind(this, 2)}
+          >
+            <ChevronsRight size={16} />
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
