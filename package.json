@@ -32,6 +32,7 @@
     "immer": "^8.0.1",
     "keen-slider": "^5.4.0",
     "react": "^17.0.1",
+    "react-calendar": "^3.3.1",
     "react-content-loader": "^6.0.1",
     "react-dom": "^17.0.1",
     "react-feather": "^2.0.9",
