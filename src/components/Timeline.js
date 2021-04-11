@@ -4,16 +4,27 @@ import {
   getIndiaDateYesterdayISO,
 } from '../utils/commonFunctions';
 
+import {HeartFillIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import {useKeenSlider} from 'keen-slider/react';
 import 'keen-slider/keen-slider.min.css';
-import {memo, useEffect, useMemo, useRef, useState} from 'react';
+import {
+  memo,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  lazy,
+  Suspense,
+} from 'react';
 import {FastForward, Play as Play, Pause as Pause} from 'react-feather';
 import {animated} from 'react-spring';
 import {useKeyPressEvent} from 'react-use';
 
-const wheelSize = 20;
+const Calendar = lazy(() => import('./Calendar'));
+
+const wheelSize = 18;
 const slidesPerView = 1;
 const slideDegree = 360 / wheelSize;
 const distanceThreshold = 5;
@@ -23,6 +34,7 @@ const hideDelay = 500;
 function Timeline({style, date, setDate, dates, setIsTimelineMode}) {
   const [sliderState, setSliderState] = useState(null);
   const [play, setPlay] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
   const timer = useRef();
 
   const hideTimeline = () => {
@@ -32,7 +44,7 @@ function Timeline({style, date, setDate, dates, setIsTimelineMode}) {
   };
 
   const [sliderRef, slider] = useKeenSlider({
-    initial: Math.min(1, dates.length),
+    initial: date === '' ? Math.min(1, dates.length) : dates.indexOf(date),
     dragSpeed: (val, instance) => {
       const width = instance.details().widthOrHeight;
       return (
@@ -112,7 +124,9 @@ function Timeline({style, date, setDate, dates, setIsTimelineMode}) {
   });
 
   const handleClick = (index) => {
-    if (slider) {
+    if (index === sliderState?.absoluteSlide) {
+      setShowCalendar(!showCalendar);
+    } else if (slider) {
       slider.moveToSlide(index);
     }
   };
@@ -127,6 +141,7 @@ function Timeline({style, date, setDate, dates, setIsTimelineMode}) {
     '2020-05-18': 'Beginning of Lockdown Phase 4',
     '2020-05-31': 'End of Lockdown Phase 4',
     '2020-06-01': 'Beginning of Lockdown Phase 5',
+    '2020-11-20': <HeartFillIcon size={12} />,
   };
 
   useEffect(() => {
@@ -152,31 +167,29 @@ function Timeline({style, date, setDate, dates, setIsTimelineMode}) {
 
   return (
     <div className={'Timeline'}>
-      <animated.div className="actions timeline" style={style}>
-        <div
-          className={classnames('wheel__button', 'top', {active: play})}
-          onClick={setPlay.bind(this, !play)}
-        >
-          {play ? <Pause /> : <Play />}
-        </div>
-        <div className={'wheel'} ref={sliderRef} onWheel={handleWheel}>
-          {Object.keys(timeline).includes(
-            dates[sliderState?.absoluteSlide]
-          ) && (
-            <h5 className="highlight fadeInUp">
-              {timeline[dates[sliderState.absoluteSlide]]}
-            </h5>
-          )}
+      <animated.div
+        className="actions timeline"
+        style={style}
+        onWheel={handleWheel}
+      >
+        <div className={'wheel-buttons'}>
           <div
-            className={'wheel__button left'}
-            style={{
-              transform: `translateZ(${radius}px)`,
-              WebkitTransform: `translateZ(${radius}px)`,
-            }}
+            className={'wheel-button left'}
             onClick={handleClick.bind(this, dates.length - 1)}
           >
             <FastForward />
           </div>
+          <div
+            className={classnames('wheel-button', {active: play})}
+            onClick={setPlay.bind(this, !play)}
+          >
+            {play ? <Pause /> : <Play />}
+          </div>
+          <div className="wheel-button" onClick={handleClick.bind(this, 0)}>
+            <FastForward />
+          </div>
+        </div>
+        <div className={'wheel'} ref={sliderRef}>
           <div className="wheel__inner">
             <div className="wheel__slides">
               {slideValues.map(({className, style, slide}, idx) => (
@@ -188,14 +201,20 @@ function Timeline({style, date, setDate, dates, setIsTimelineMode}) {
               ))}
             </div>
           </div>
-          <div
-            className="wheel__button right"
-            onClick={handleClick.bind(this, 0)}
-          >
-            <FastForward />
-          </div>
+          {Object.keys(timeline).includes(
+            dates[sliderState?.absoluteSlide]
+          ) && (
+            <h5 className="highlight fadeInUp">
+              {timeline[dates[sliderState.absoluteSlide]]}
+            </h5>
+          )}
         </div>
       </animated.div>
+      {showCalendar && (
+        <Suspense fallback={<div />}>
+          <Calendar {...{date, dates, slider}} />
+        </Suspense>
+      )}
     </div>
   );
 }

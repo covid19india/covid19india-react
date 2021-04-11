@@ -1187,28 +1187,13 @@ h6 {
   padding-top: 1rem;
   position: relative;
   width: calc(100% - 1rem);
+  margin-bottom: 0.3rem;
 
   .actions {
     display: flex;
     flex-direction: row;
     justify-content: center;
     width: 100%;
-
-    &.timeline {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      position: absolute;
-      top: 0;
-
-      .highlight {
-        color: $brown !important;
-        position: absolute;
-        text-align: center;
-        top: 2.5rem;
-        width: 100%;
-      }
-    }
 
     & > * {
       align-self: center;
@@ -1273,7 +1258,24 @@ h6 {
   width: 100%;
 
   .timeline {
-    margin-top: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    position: absolute;
+    top: 0;
+
+    .highlight {
+      color: $brown !important;
+      position: absolute;
+      text-align: center;
+      top: 3.25rem;
+      width: 100%;
+
+      svg {
+        fill: $red;
+        stroke: none;
+      }
+    }
 
     .wheel {
       align-items: center;
@@ -1282,6 +1284,7 @@ h6 {
       height: 3rem;
       overflow: hidden;
       width: 100%;
+      margin-top: -0.75rem;
     }
 
     .wheel__inner {
@@ -1334,45 +1337,158 @@ h6 {
       }
     }
 
-    .wheel__button {
-      align-items: center;
-      color: $gray;
+    .wheel-buttons {
       display: flex;
-      font-size: 15px;
-      font-weight: 500;
-      height: 100%;
-      justify-content: center;
-      line-height: 1;
-      position: absolute;
-      top: 0;
+      width: 100%;
+      justify-content: space-evenly;
+      z-index: 1;
 
-      &.top {
-        top: -1.25rem;
+      .wheel-button {
+        align-items: center;
+        color: $gray;
+        display: flex;
+
+        &.left {
+          svg {
+            transform: rotate(180deg);
+          }
+        }
 
         &.active {
           svg {
-            fill: $green;
+            fill: $pblue;
             stroke: none;
 
             &:hover {
-              fill: $green-mid;
+              fill: $pblue-mid;
               stroke: none;
             }
           }
         }
       }
+    }
+  }
 
-      &.left {
-        left: 0;
+  .Calendar {
+    margin-top: 2.25rem;
 
-        svg {
-          transform: rotate(180deg);
-        }
+    .react-calendar {
+      background: $gray-light;
+      line-height: 2em;
+      border-radius: 5px;
+    }
+
+    .react-calendar__viewContainer {
+      display: flex;
+    }
+
+    .react-calendar,
+    .react-calendar *,
+    .react-calendar *:before,
+    .react-calendar *:after {
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    .react-calendar button {
+      margin: 0;
+      border: 0;
+      outline: none;
+    }
+
+    .react-calendar button:enabled:hover {
+      cursor: pointer;
+    }
+
+    .react-calendar__navigation {
+      height: 44px;
+      margin-bottom: 1em;
+    }
+
+    .react-calendar__navigation button {
+      color: $gray;
+      min-width: 44px;
+      background-color: $gray-light;
+    }
+
+    .react-calendar__navigation button:enabled:hover {
+      background-color: #6c757d40;
+    }
+
+    .react-calendar__navigation button[disabled] {
+      background: none;
+    }
+
+    .react-calendar__navigation__arrow {
+      font-size: 20px;
+    }
+
+    .react-calendar__navigation__label {
+      font-size: 13px;
+    }
+
+    .react-calendar__month-view__weekdays {
+      text-align: center;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 0.75em;
+    }
+
+    .react-calendar__month-view__weekdays__weekday {
+      padding: 0.5em;
+    }
+
+    .react-calendar__month-view__days__day {
+      color: $gray;
+    }
+
+    .react-calendar__month-view__days__day--weekend {
+      color: $cherry;
+    }
+
+    .react-calendar__month-view__days__day--neighboringMonth {
+      color: #6c757d99;
+    }
+
+    .react-calendar__year-view .react-calendar__tile,
+    .react-calendar__decade-view .react-calendar__tile,
+    .react-calendar__century-view .react-calendar__tile {
+      padding: 2em 0.5em;
+      color: $gray;
+    }
+
+    .react-calendar__tile {
+      max-width: 100%;
+      text-align: center;
+      padding: 1em 0.5em;
+      background: none;
+    }
+
+    .react-calendar__tile:enabled {
+      background-color: $gray-light;
+
+      &.react-calendar__tile--active {
+        background-color: #006edc;
+        color: white;
       }
 
-      &.right {
-        right: 0;
+      &.react-calendar__tile--now {
+        background-color: #ffff76;
+        color: black !important;
       }
+    }
+
+    .react-calendar__tile:enabled:hover {
+      background-color: $gray-hover;
+    }
+
+    .react-calendar__tile--now:enabled:hover {
+      background-color: #ffffa9;
+    }
+
+    .react-calendar__tile--active:enabled:hover {
+      background-color: #1087ff;
     }
   }
 }
@@ -1497,6 +1613,7 @@ h6 {
   }
 
   h1 {
+    font-size: min(3.75vw, 22px) !important;
     font-weight: 600;
   }
 
@@ -4050,12 +4167,6 @@ footer {
     }
   }
 
-  .Level {
-    h1 {
-      font-size: 3.75vw !important;
-    }
-  }
-
   .map-container {
     align-self: center;
   }
@@ -4562,7 +4673,7 @@ footer {
         select {
           background: #1e1e30;
           background-image: linear-gradient(45deg, transparent 50%, $gray 50%),
-          linear-gradient(135deg, $gray 50%, transparent 50%);
+            linear-gradient(135deg, $gray 50%, transparent 50%);
           background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
           background-repeat: no-repeat;
           background-size: 5px 5px, 5px 5px;
