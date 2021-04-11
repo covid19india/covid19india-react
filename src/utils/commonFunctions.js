@@ -118,10 +118,6 @@ export const toTitleCase = (str) => {
   });
 };
 
-export const clamp = (number, min, max) => {
-  return Math.max(min, Math.min(number, max));
-};
-
 export const getStatistic = (
   data,
   type,
