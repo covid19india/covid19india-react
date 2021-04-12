@@ -3,7 +3,7 @@ import {
   MAP_LEGEND_HEIGHT,
   MAP_VIZS,
 } from '../constants';
-import {capitalize, formatNumber} from '../utils/commonFunctions';
+import {formatNumber} from '../utils/commonFunctions';
 
 import {range, quantile} from 'd3-array';
 import {axisRight, axisBottom} from 'd3-axis';
@@ -15,7 +15,7 @@ import {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useMeasure} from 'react-use';
 
-function MapLegend({data, mapViz, mapScale, statistic}) {
+function MapLegend({data, mapViz, mapScale}) {
   const {t} = useTranslation();
   const svgRef = useRef(null);
   const [wrapperRef, {width, height}] = useMeasure();
@@ -81,7 +81,7 @@ function MapLegend({data, mapViz, mapScale, statistic}) {
         legend({
           svg: svg,
           color: mapScale,
-          title: `${t(capitalize(statistic))} ${t('cases')}`,
+          // title: `${t(capitalize(statistic))} ${t('cases')}`,
           width: width,
           height: height,
           ticks: 5,
@@ -95,7 +95,7 @@ function MapLegend({data, mapViz, mapScale, statistic}) {
         })
       );
     }
-  }, [t, width, height, mapScale, mapViz, statistic]);
+  }, [t, width, height, mapScale, mapViz]);
 
   return (
     <div

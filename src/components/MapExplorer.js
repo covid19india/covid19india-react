@@ -170,8 +170,16 @@ function MapExplorer({
     return styles;
   }, []);
 
+  const perMillion = mapViz === MAP_VIZS.CHOROPLETH;
+
+  const getMapStatistic = useCallback(
+    (data) =>
+      getStatistic(data, 'total', mapStatistic, {perMillion: perMillion}),
+    [mapStatistic, perMillion]
+  );
+
   const spring = useSpring({
-    total: getStatistic(hoveredRegion, 'total', mapStatistic),
+    total: getMapStatistic(hoveredRegion),
     config: {tension: 250, ...SPRING_CONFIG_NUMBERS},
   });
 
@@ -240,7 +248,9 @@ function MapExplorer({
                   )
                 )}
               </animated.div>
-              <span>{t(capitalize(statisticConfig.displayName))}</span>
+              <span>{`${t(capitalize(statisticConfig.displayName))}${
+                perMillion ? ` ${t('per 10 lakh people')}` : ''
+              }`}</span>
             </h1>
           )}
         </div>
@@ -335,6 +345,7 @@ function MapExplorer({
               data={mapData}
               {...{regionHighlighted, setRegionHighlighted}}
               statistic={mapStatistic}
+              getStatistic={getMapStatistic}
             ></MapVisualizer>
           </Suspense>
         )}
