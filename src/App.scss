@@ -56,7 +56,7 @@ $purple-mid: #201aa299;
 $purple-light-opaque: #e3e2f3;
 $pink: #db5581;
 $pink-light: #db558120;
-$pink-hover: #db558160;
+$pink-hover: #db558130;
 $pink-mid: #db558199;
 $brown: #b6854d;
 $brown-light: #b6854d10;
@@ -1282,6 +1282,7 @@ h6 {
 
       svg {
         fill: #dc3545dd;
+        pointer-events: none;
         stroke: none;
       }
     }
@@ -1784,6 +1785,13 @@ abbr {
       margin: 0.25rem;
     }
 
+    &:hover {
+      background: $gray-hover;
+    }
+  }
+
+  .option-toggle,
+  .expand-table-toggle {
     &.is-highlighted {
       background: $green-light;
       color: $green;
@@ -1792,16 +1800,16 @@ abbr {
         background: $green-hover;
       }
     }
-
-    &:hover {
-      background: $gray-hover;
-    }
   }
 
   .info-toggle {
     &.is-highlighted {
       background: $yellow-light;
       color: $yellow;
+
+      &:hover {
+        background: $yellow-hover;
+      }
     }
   }
 
@@ -1814,6 +1822,10 @@ abbr {
     &.is-highlighted {
       background: $pink-light;
       color: $pink;
+
+      &:hover {
+        background: $pink-hover;
+      }
     }
   }
 
@@ -3840,6 +3852,10 @@ footer {
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
+
+    &.expanded {
+      flex-direction: column;
+    }
 
     h2 {
       font-weight: 900;

@@ -9,7 +9,8 @@ import {useTransition, animated} from 'react-spring';
 import {useClickAway} from 'react-use';
 
 function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
-  const {i18n} = useTranslation();
+  const {t, i18n} = useTranslation();
+
   const currentLanguage = Object.keys(locales).includes(i18n?.language)
     ? i18n?.language
     : i18n?.options?.fallbackLng[0];
@@ -45,7 +46,7 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
           ref={languageSwitcherRef}
           {...{style}}
         >
-          <h3>We speak the following languages</h3>
+          <h3>{t('We speak the following languages')}</h3>
 
           <div className="languages">
             {Object.keys(locales).map((languageKey) => (

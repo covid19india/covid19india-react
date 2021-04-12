@@ -1,14 +1,17 @@
 import {UPDATES_COUNT} from '../constants';
 import {capitalize} from '../utils/commonFunctions';
 
-import {formatDistance, format} from 'date-fns';
+import {format, formatDistance} from 'date-fns';
 import {Fragment, useLayoutEffect} from 'react';
 import {Send} from 'react-feather';
+import {useTranslation} from 'react-i18next';
 
 const newDate = new Date();
 let currentDate = newDate;
 
 function Updates({updates}) {
+  const {t} = useTranslation();
+
   useLayoutEffect(() => {
     currentDate = newDate;
   });
@@ -32,7 +35,7 @@ function Updates({updates}) {
               <>
                 {index === 0 ? (
                   <div className="update">
-                    <h4>No updates yet!</h4>
+                    <h4>{t('No updates yet!')}</h4>
                   </div>
                 ) : (
                   ''
@@ -56,7 +59,7 @@ function Updates({updates}) {
                       new Date(activity.timestamp * 1000),
                       new Date()
                     )
-                  ) + ' ago'}
+                  ) + ` ${t('ago')}`}
                 </h5>
                 <h4
                   dangerouslySetInnerHTML={{
@@ -76,7 +79,7 @@ function Updates({updates}) {
         >
           <h4>
             <Send />
-            Join Instant Updates channel
+            {t('Join Instant Updates channel')}
           </h4>
         </a>
       </div>
