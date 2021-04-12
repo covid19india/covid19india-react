@@ -165,7 +165,7 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
     }
   };
 
-  const transitions = useTransition(showCalendar, null, {
+  const transitions = useTransition(showCalendar, {
     from: {paddingTop: 0, marginBottom: 0, height: 0, opacity: 0},
     enter: {paddingTop: 36, marginBottom: 400, opacity: 1},
     leave: {
@@ -230,10 +230,10 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
         </div>
       </div>
       <Suspense fallback={<div />}>
-        {transitions.map(
-          ({item, key, props}) =>
+        {transitions(
+          (style, item) =>
             item && (
-              <animated.div key={key} style={props}>
+              <animated.div {...{style}}>
                 <Calendar {...{date, dates, slider}} />
               </animated.div>
             )

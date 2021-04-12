@@ -28,9 +28,10 @@ function PureLevelItem({statistic, total, delta}) {
       <animated.h4>
         {statistic !== 'active' ? (
           delta > 0 ? (
-            spring.delta.interpolate(
+            /* Add space after + because react-spring regex bug */
+            spring.delta.to(
               (delta) =>
-                `+${formatNumber(delta, statisticConfig.format, statistic)}`
+                `+ ${formatNumber(delta, statisticConfig.format, statistic)}`
             )
           ) : (
             <HeartFillIcon size={9} verticalAlign={2} />
@@ -40,7 +41,7 @@ function PureLevelItem({statistic, total, delta}) {
         )}
       </animated.h4>
       <animated.h1>
-        {spring.total.interpolate((total) =>
+        {spring.total.to((total) =>
           formatNumber(total, statisticConfig.format, statistic)
         )}
       </animated.h1>

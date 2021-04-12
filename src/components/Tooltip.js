@@ -6,7 +6,7 @@ import {useTransition, animated} from 'react-spring';
 const Tooltip = ({data, children}) => {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
-  const transitions = useTransition(isTooltipVisible, null, {
+  const transitions = useTransition(isTooltipVisible, {
     from: TOOLTIP_FADE_OUT,
     enter: TOOLTIP_FADE_IN,
     leave: TOOLTIP_FADE_OUT,
@@ -29,20 +29,19 @@ const Tooltip = ({data, children}) => {
     >
       {children}
 
-      {transitions.map(({item, key, props}) =>
-        item ? (
-          <animated.div key={key} style={props}>
-            <div className="message">
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: data.replace(/\n/g, '<br/>'),
-                }}
-              ></p>
-            </div>
-          </animated.div>
-        ) : (
-          <animated.div key={key}></animated.div>
-        )
+      {transitions(
+        (style, item) =>
+          item && (
+            <animated.div {...{style}}>
+              <div className="message">
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: data.replace(/\n/g, '<br/>'),
+                  }}
+                ></p>
+              </div>
+            </animated.div>
+          )
       )}
     </span>
   );

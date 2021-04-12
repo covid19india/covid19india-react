@@ -14,7 +14,7 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
     ? i18n?.language
     : i18n?.options?.fallbackLng[0];
 
-  const transitions = useTransition(showLanguageSwitcher, null, {
+  const transitions = useTransition(showLanguageSwitcher, {
     from: ENTER_OUT,
     enter: ENTER_IN,
     leave: ENTER_OUT,
@@ -37,14 +37,13 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
     [i18n]
   );
 
-  return transitions.map(
-    ({item, key, props}) =>
+  return transitions(
+    (style, item) =>
       item && (
         <animated.div
-          key={key}
           className="LanguageSwitcher"
-          style={props}
           ref={languageSwitcherRef}
+          {...{style}}
         >
           <h3>We speak the following languages</h3>
 
