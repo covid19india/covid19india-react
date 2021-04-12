@@ -3,7 +3,6 @@ import {
   NAN_STATISTICS,
   PRIMARY_STATISTICS,
   STATISTIC_CONFIGS,
-  TIMESERIES_STATISTICS,
 } from '../constants';
 import {
   capitalize,
@@ -34,6 +33,7 @@ const yScaleShrinkFactor = 0.7;
 const numTicksX = (width) => (width < 480 ? 4 : 6);
 
 function Timeseries({
+  statistics,
   timeseries,
   dates,
   endDate,
@@ -46,16 +46,6 @@ function Timeseries({
   const {t} = useTranslation();
   const refs = useRef([]);
   const [wrapperRef, {width, height}] = useMeasure();
-
-  const statistics = useMemo(
-    () =>
-      TIMESERIES_STATISTICS.filter(
-        (statistic) =>
-          (statistic !== 'vaccinated' || showVaccinated) &&
-          (chartType === 'delta' || statistic !== 'tpr')
-      ),
-    [chartType, showVaccinated]
-  );
 
   const [highlightedDate, setHighlightedDate] = useState(
     dates[dates.length - 1]
@@ -672,6 +662,8 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(currProps.endDate, prevProps.endDate)) {
     return false;
   } else if (!equal(currProps.showVaccinated, prevProps.showVaccinated)) {
+    return false;
+  } else if (!equal(currProps.statistics, prevProps.statistics)) {
     return false;
   } else if (!equal(currProps.dates, prevProps.dates)) {
     return false;

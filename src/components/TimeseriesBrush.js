@@ -34,6 +34,7 @@ function TimeseriesBrush({
   lookback,
   setBrushSelectionEnd,
   setLookback,
+  animationIndex,
 }) {
   const chartRef = useRef();
   const [wrapperRef, {width, height}] = useMeasure();
@@ -250,9 +251,10 @@ function TimeseriesBrush({
   return (
     <div className="Timeseries">
       <div
-        className={classnames('svg-parent fadeInUp is-brush')}
+        className={classnames('svg-parent is-brush fadeInUp')}
         ref={wrapperRef}
         onWheel={handleWheel}
+        style={{animationDelay: `${animationIndex * 250}ms`}}
       >
         <svg ref={chartRef} preserveAspectRatio="xMidYMid meet">
           <defs>
@@ -312,6 +314,8 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(currProps.endDate, prevProps.endDate)) {
     return false;
   } else if (!equal(currProps.lookback, prevProps.lookback)) {
+    return false;
+  } else if (!equal(currProps.animationIndex, prevProps.animationIndex)) {
     return false;
   } else if (!equal(currProps.dates, prevProps.dates)) {
     return false;

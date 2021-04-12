@@ -16,7 +16,10 @@ function LevelVaccinated({data}) {
   });
 
   return (
-    <div className="LevelVaccinated fadeInUp">
+    <div
+      className="LevelVaccinated fadeInUp"
+      style={{animationDelay: `${750 + 4 * 250}ms`}}
+    >
       <ShieldCheckIcon />
       <animated.h4>
         {spring.total.interpolate(
