@@ -177,7 +177,7 @@ function Table({
     }
   };
 
-  const transition = useTransition(isInfoVisible, null, {
+  const transition = useTransition(isInfoVisible, {
     from: TABLE_FADE_OUT,
     enter: TABLE_FADE_IN,
     leave: TABLE_FADE_OUT,
@@ -238,10 +238,10 @@ function Table({
         </animated.div>
       </div>
 
-      {transition.map(
-        ({item, key, props}) =>
+      {transition(
+        (style, item) =>
           item && (
-            <animated.div key={key} className="table-helper" style={props}>
+            <animated.div className="table-helper" {...{style}}>
               <div className="helper-top">
                 <div className="helper-left">
                   <div className="info-item">

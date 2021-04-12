@@ -230,7 +230,7 @@ function MapExplorer({
           {regionHighlighted.stateCode && (
             <h1 className={classnames('district', mapStatistic)}>
               <animated.div>
-                {spring.total.interpolate((total) =>
+                {spring.total.to((total) =>
                   formatNumber(
                     total,
                     statisticConfig.format !== 'short'

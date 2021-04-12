@@ -5,7 +5,11 @@ import {ShieldCheckIcon} from '@primer/octicons-react';
 import equal from 'fast-deep-equal';
 import {memo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {animated, useSpring} from 'react-spring';
+import {animated, useSpring, Globals} from 'react-spring';
+
+// Disable react-spring color string interpolation
+// It renders administered => administergba(255, 0, 0, 1)
+Globals.assign({colors: null});
 
 function LevelVaccinated({data}) {
   const {t} = useTranslation();
@@ -22,7 +26,7 @@ function LevelVaccinated({data}) {
     >
       <ShieldCheckIcon />
       <animated.h4>
-        {spring.total.interpolate(
+        {spring.total.to(
           (total) =>
             `${formatNumber(Math.floor(total))} ${t(
               STATISTIC_CONFIGS['vaccinated'].displayName

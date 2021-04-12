@@ -9,7 +9,7 @@
 ## Setup
 
 ```
-npm i && npm start
+yarn install && yarn start
 ```
 
 ## Contribution
