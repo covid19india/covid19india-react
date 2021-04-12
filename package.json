@@ -39,7 +39,7 @@
     "react-i18next": "^11.8.5",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.1",
-    "react-spring": "^8.0.27",
+    "react-spring": "^9.1.0",
     "react-swipeable": "^6.0.1",
     "react-use": "^17.0.1",
     "source-map-explorer": "^2.5.2",
@@ -51,7 +51,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "postbuild": "npm run compress_maps && cp build/index.html build/404.html && npm run build:sw",
+    "postbuild": "yarn run compress_maps && cp build/index.html build/404.html && yarn run build:sw",
     "compress_maps": "rollup -c",
     "test": "react-scripts test --testPathIgnorePatterns=src/tests/ --passWithNoTests",
     "test:map": "react-scripts test src/tests/mapAndApiStateNames.test.js",
@@ -75,15 +75,15 @@
   },
   "lint-staged": {
     "*.+(js|jsx)": [
-      "npm run eslint:fix",
+      "yarn run eslint:fix",
       "prettier --write \"**/*.+(js|jsx)\""
     ],
     "*.+(json|yml|yaml|md)": [
       "prettier --write \"**/*.+(json|yml|yaml|md)\""
     ],
     "*.+(css|scss)": [
-      "npm run scss-lint:fix",
-      "npm run scss-lint"
+      "yarn run scss-lint:fix",
+      "yarn run scss-lint"
     ]
   },
   "devDependencies": {
