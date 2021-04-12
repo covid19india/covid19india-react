@@ -173,17 +173,18 @@ function State() {
 
         <div className="state-right">
           <>
-            <div
-              className="district-bar"
-              style={!showAllDistricts ? {display: 'flex'} : {}}
-            >
-              <div className="district-bar-top">
+            <div className="district-bar">
+              <div
+                className={classnames('district-bar-top', {
+                  expanded: showAllDistricts,
+                })}
+              >
                 <div className="district-bar-left">
                   <h2
                     className={classnames(mapStatistic, 'fadeInUp')}
                     style={trail[0]}
                   >
-                    Top districts
+                    {t('Top districts')}
                   </h2>
                   <div
                     className={`districts fadeInUp ${
@@ -276,7 +277,9 @@ function State() {
                     onClick={toggleShowAllDistricts}
                     style={trail[3]}
                   >
-                    <span>{showAllDistricts ? `View less` : `View all`}</span>
+                    <span>
+                      {t(showAllDistricts ? 'View less' : 'View all')}
+                    </span>
                   </button>
                 ) : (
                   <div style={{height: '3.75rem', flexBasis: '15%'}} />

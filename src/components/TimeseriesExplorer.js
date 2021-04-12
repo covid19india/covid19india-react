@@ -366,7 +366,7 @@ function TimeseriesExplorer({
             })}
             onClick={setLookback.bind(this, numDays)}
           >
-            {t(numDays !== null ? `${numDays} days` : 'Beginning')}
+            {numDays !== null ? `${numDays} ${t('days')}` : t('Beginning')}
           </button>
         ))}
       </div>

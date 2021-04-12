@@ -20,6 +20,7 @@ import {
 } from 'react';
 import ReactDOM from 'react-dom';
 import {FastForward, Play as Play, Pause as Pause} from 'react-feather';
+import {useTranslation} from 'react-i18next';
 import {useTransition, animated} from 'react-spring';
 import {useClickAway, useKeyPressEvent} from 'react-use';
 
@@ -32,6 +33,8 @@ const distanceThreshold = 5;
 const autoPlayDelay = 2500;
 
 function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
+  const {t} = useTranslation();
+
   const [sliderState, setSliderState] = useState(null);
   const [play, setPlay] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -80,8 +83,8 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
   }, [slider]);
 
   const formatSlideDate = (date) => {
-    if (date === getIndiaDateISO()) return 'Today';
-    else if (date === getIndiaDateYesterdayISO()) return 'Yesterday';
+    if (date === getIndiaDateISO()) return t('Today');
+    else if (date === getIndiaDateYesterdayISO()) return t('Yesterday');
     return formatDate(date, 'dd MMM y');
   };
 
@@ -132,15 +135,15 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
   };
 
   const timeline = {
-    '2020-03-25': 'Beginning of Lockdown Phase 1',
-    '2020-04-14': 'End of Lockdown Phase 1',
-    '2020-04-15': 'Beginning of Lockdown Phase 2',
-    '2020-05-03': 'End of Lockdown Phase 2',
-    '2020-05-04': 'Beginning of Lockdown Phase 3',
-    '2020-05-17': 'End of Lockdown Phase 3',
-    '2020-05-18': 'Beginning of Lockdown Phase 4',
-    '2020-05-31': 'End of Lockdown Phase 4',
-    '2020-06-01': 'Beginning of Lockdown Phase 5',
+    '2020-03-25': t('Beginning of Lockdown Phase 1'),
+    '2020-04-14': t('End of Lockdown Phase 1'),
+    '2020-04-15': t('Beginning of Lockdown Phase 2'),
+    '2020-05-03': t('End of Lockdown Phase 2'),
+    '2020-05-04': t('Beginning of Lockdown Phase 3'),
+    '2020-05-17': t('End of Lockdown Phase 3'),
+    '2020-05-18': t('Beginning of Lockdown Phase 4'),
+    '2020-05-31': t('End of Lockdown Phase 4'),
+    '2020-06-01': t('Beginning of Lockdown Phase 5'),
     '2020-11-20': <HeartFillIcon size={12} />,
   };
 

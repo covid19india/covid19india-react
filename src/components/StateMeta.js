@@ -13,8 +13,11 @@ import {
 import {formatISO, subDays} from 'date-fns';
 import {memo} from 'react';
 import {Compass} from 'react-feather';
+import {useTranslation} from 'react-i18next';
 
 function StateMeta({stateCode, data, timeseries}) {
+  const {t} = useTranslation();
+
   const pastDates = Object.keys(timeseries || {}).filter(
     (date) => date <= getIndiaDateYesterdayISO()
   );
@@ -60,13 +63,13 @@ function StateMeta({stateCode, data, timeseries}) {
     <>
       <div className="StateMeta population">
         <div className="meta-item population">
-          <h3>Population</h3>
+          <h3>{t('Population')}</h3>
           <h1>{formatNumber(data[stateCode]?.meta?.population)}</h1>
         </div>
         <div className="alert">
           <Compass />
           <div className="alert-right">
-            Based on 2019 population projection by NCP{' '}
+            {t('Based on 2019 population projection by NCP')}
             <a
               href="https://nhm.gov.in/New_Updates_2018/Report_Population_Projection_2019.pdf"
               target="_noblank"
@@ -85,11 +88,11 @@ function StateMeta({stateCode, data, timeseries}) {
           total={formatNumber(totalConfirmedPerMillion)}
           formula={'(confirmed / state population) * 1 Million'}
           description={`
-            ~${formatNumber(
-              Math.round(confirmedPerMillion)
-            )} out of every 10 lakh people in ${
-            STATE_NAMES[stateCode]
-          } have tested positive for the virus.
+            ~${formatNumber(Math.round(confirmedPerMillion))} ${t(
+            'out of every 10 lakh people in'
+          )} ${STATE_NAMES[stateCode]} ${t(
+            'have tested positive for the virus.'
+          )}
             `}
         />
 
@@ -100,10 +103,10 @@ function StateMeta({stateCode, data, timeseries}) {
           formula={'(active / confirmed) * 100'}
           description={
             activePercent > 0
-              ? `For every 100 confirmed cases, ~${formatNumber(
+              ? `${t('For every 100 confirmed cases')}, ~${formatNumber(
                   Math.round(activePercent)
-                )} are currently infected.`
-              : 'Currently, there are no active cases in this state.'
+                )} ${t('are currently infected.')}`
+              : t('Currently, there are no active cases in this state.')
           }
         />
 
@@ -114,10 +117,10 @@ function StateMeta({stateCode, data, timeseries}) {
           formula={'(recovered / confirmed) * 100'}
           description={
             recoveryPercent > 0
-              ? `For every 100 confirmed cases, ~${formatNumber(
+              ? `${t('For every 100 confirmed cases')}, ~${formatNumber(
                   Math.round(recoveryPercent)
-                )} have recovered from the virus.`
-              : 'Unfortunately, there are no recoveries in this state yet.'
+                )} ${t('have recovered from the virus.')}`
+              : t('Unfortunately, there are no recoveries in this state yet.')
           }
         />
 
@@ -128,10 +131,12 @@ function StateMeta({stateCode, data, timeseries}) {
           formula={'(deceased / confirmed) * 100'}
           description={
             deathPercent > 0
-              ? `For every 100 confirmed cases, ~${formatNumber(
+              ? `${t('For every 100 confirmed cases')}, ~${formatNumber(
                   Math.round(deathPercent)
-                )} have unfortunately passed away from the virus.`
-              : 'Fortunately, no one has passed away from the virus in this state.'
+                )} ${t('have unfortunately passed away from the virus.')}`
+              : t(
+                  'Fortunately, no one has passed away from the virus in this state.'
+                )
           }
         />
 
@@ -148,10 +153,13 @@ function StateMeta({stateCode, data, timeseries}) {
           )}`}
           description={
             growthRate > 0
-              ? `In the last one week, the number of new infections has
-              grown by an average of ${formatNumber(growthRate, '%')}
-              every day.`
-              : 'There has been no growth in the number of infections in last one week.'
+              ? `${t(
+                  'In the last one week, the number of new infections has grown by an average of'
+                )} ${formatNumber(growthRate, '%')}
+              ${t('every day.')}`
+              : t(
+                  'There has been no growth in the number of infections in last one week.'
+                )
           }
         />
 
@@ -164,18 +172,18 @@ function StateMeta({stateCode, data, timeseries}) {
           }
           date={
             testPerMillion
-              ? `As of ${formatLastUpdated(
+              ? `${t('As of')} ${formatLastUpdated(
                   data[stateCode]?.meta?.tested?.['last_updated']
-                )} ago`
+                )} ${t('ago')}`
               : ''
           }
           description={
             testPerMillion > 0
-              ? `For every 10 lakh people in ${STATE_NAMES[stateCode]},
-                ~${formatNumber(
-                  Math.round(testPerMillion)
-                )} samples were tested.`
-              : 'No tests have been conducted in this state yet.'
+              ? `${t('For every 10 lakh people in')} ${STATE_NAMES[stateCode]},
+                ~${formatNumber(Math.round(testPerMillion))} ${t(
+                  'samples were tested.'
+                )}`
+              : t('No tests have been conducted in this state yet.')
           }
         />
       </div>

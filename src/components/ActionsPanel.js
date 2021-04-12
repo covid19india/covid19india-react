@@ -4,6 +4,7 @@ import {BellIcon, BellSlashIcon, HistoryIcon} from '@primer/octicons-react';
 import {parse} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
 import {useMemo, useCallback, lazy, Suspense} from 'react';
+import {useTranslation} from 'react-i18next';
 
 const Timeline = lazy(() => import('./Timeline'));
 
@@ -19,6 +20,8 @@ const ActionsPanel = ({
   setNewUpdate,
   setShowUpdates,
 }) => {
+  const {t} = useTranslation();
+
   const trail = useMemo(() => {
     const styles = [];
 
@@ -63,7 +66,7 @@ const ActionsPanel = ({
       >
         <h5 className="fadeInUp" style={trail[0]}>{`${getTimeFromMilliseconds(
           lastViewedLog
-        )} IST`}</h5>
+        )} ${t('IST')}`}</h5>
 
         <div
           className="bell-icon fadeInUp"

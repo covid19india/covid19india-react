@@ -248,26 +248,26 @@ function Table({
                     <span>
                       <OrganizationIcon size={14} />
                     </span>
-                    <p>{`Toggle between States/Districts`}</p>
+                    <p>{t('Toggle between States/Districts')}</p>
                   </div>
 
                   <div className="info-item">
                     <h5>10L</h5>
-                    <p>Per Ten Lakh People</p>
+                    <p>{t('Per Ten Lakh People')}</p>
                   </div>
 
                   <div className="info-item sort">
                     <span>
                       <FilterIcon size={14} />
                     </span>
-                    <p>Sort by Descending</p>
+                    <p>{t('Sort by Descending')}</p>
                   </div>
 
                   <div className="info-item sort invert">
                     <span>
                       <FilterIcon size={14} />
                     </span>
-                    <p>Sort by Ascending</p>
+                    <p>{t('Sort by Ascending')}</p>
                   </div>
 
                   <div className="info-item sort">
@@ -278,12 +278,12 @@ function Table({
                     <span>
                       <InfoIcon size={15} />
                     </span>
-                    <p>Notes</p>
+                    <p>{t('Notes')}</p>
                   </div>
                 </div>
                 <div className="helper-right">
                   <div className="info-item">
-                    <p>Units</p>
+                    <p>{t('Units')}</p>
                   </div>
                   {Object.entries({'1K': 3, '1L': 5, '1Cr': 7}).map(
                     ([abbr, exp]) => (
