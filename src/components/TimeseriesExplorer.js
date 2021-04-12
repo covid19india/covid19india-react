@@ -4,6 +4,7 @@ import {
   STATE_NAMES,
   TIMESERIES_CHART_TYPES,
   TIMESERIES_LOOKBACK_DAYS,
+  TIMESERIES_STATISTICS,
 } from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {
@@ -187,6 +188,16 @@ function TimeseriesExplorer({
     });
   }, [stateCode, setRegionHighlighted]);
 
+  const statistics = useMemo(
+    () =>
+      TIMESERIES_STATISTICS.filter(
+        (statistic) =>
+          (statistic !== 'vaccinated' || showVaccinated) &&
+          (chartType === 'delta' || statistic !== 'tpr')
+      ),
+    [chartType, showVaccinated]
+  );
+
   return (
     <div
       className={classnames(
@@ -206,7 +217,7 @@ function TimeseriesExplorer({
     >
       <div className="timeseries-header">
         <div
-          className={classnames('anchor', {
+          className={classnames('anchor', 'fadeInUp', {
             stickied: anchor === 'timeseries',
           })}
           style={{
@@ -323,6 +334,7 @@ function TimeseriesExplorer({
             regionHighlighted={selectedRegion}
             dates={brushSelectionDates}
             {...{
+              statistics,
               endDate,
               chartType,
               isUniform,
@@ -335,12 +347,16 @@ function TimeseriesExplorer({
             timeseries={selectedTimeseries}
             regionHighlighted={selectedRegion}
             currentBrushSelection={[brushSelectionStart, brushSelectionEnd]}
+            animationIndex={statistics.length}
             {...{dates, endDate, lookback, setBrushSelectionEnd, setLookback}}
           />
         </Suspense>
       )}
       {!isVisible && <div style={{height: '50rem'}} />}
-      <div className="pills">
+      <div
+        className="pills fadeInUp"
+        style={{animationDelay: `${(1 + statistics.length) * 250}ms`}}
+      >
         {TIMESERIES_LOOKBACK_DAYS.map((numDays) => (
           <button
             key={numDays}

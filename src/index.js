@@ -2,7 +2,7 @@
 import * as serviceWorker from './serviceWorker';
 import './i18n';
 
-import {Suspense, lazy} from 'react';
+import {Suspense, lazy, StrictMode} from 'react';
 import {render} from 'react-dom';
 import {BrowserRouter as Router} from 'react-router-dom';
 
@@ -13,7 +13,9 @@ const main = () =>
   render(
     <Suspense fallback={<div />}>
       <Router>
-        <App />
+        <StrictMode>
+          <App />
+        </StrictMode>
       </Router>
     </Suspense>,
     rootElement

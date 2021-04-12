@@ -206,7 +206,7 @@ function MapExplorer({
       )}
     >
       <div
-        className={classnames('anchor', {
+        className={classnames('anchor', 'fadeInUp', {
           stickied,
         })}
         style={{
