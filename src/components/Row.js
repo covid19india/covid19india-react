@@ -32,6 +32,7 @@ import {useSessionStorage} from 'react-use';
 
 function Row({
   data,
+  tableStatistics,
   stateCode,
   districtName,
   isPerMillion,
@@ -39,7 +40,6 @@ function Row({
   setRegionHighlighted,
   expandTable,
   lastUpdatedTT,
-  tableStatistics,
 }) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useSessionStorage('districtSortData', {
@@ -264,6 +264,7 @@ function Row({
               data={data.districts[districtName]}
               key={districtName}
               {...{
+                tableStatistics,
                 districtName,
                 regionHighlighted,
                 setRegionHighlighted,

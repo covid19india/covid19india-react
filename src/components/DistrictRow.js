@@ -1,8 +1,6 @@
 import Cell from './Cell';
 import Tooltip from './Tooltip';
 
-import {TABLE_STATISTICS, TABLE_STATISTICS_EXPANDED} from '../constants';
-
 import {InfoIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
@@ -14,6 +12,7 @@ function DistrictRow({
   stateCode,
   districtName,
   data,
+  tableStatistics,
   isPerMillion,
   regionHighlighted,
   setRegionHighlighted,
@@ -32,10 +31,6 @@ function DistrictRow({
       );
     }
   }, [regionHighlighted, districtName, setRegionHighlighted, stateCode]);
-
-  const tableStatistics = expandTable
-    ? TABLE_STATISTICS_EXPANDED
-    : TABLE_STATISTICS;
 
   return (
     <div
@@ -84,6 +79,8 @@ const isDistrictRowEqual = (prevProps, currProps) => {
   ) {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
+    return false;
+  } else if (!equal(prevProps.tableStatistics, currProps.tableStatistics)) {
     return false;
   }
   return true;
