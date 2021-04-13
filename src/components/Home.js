@@ -112,7 +112,7 @@ function Home() {
           {!hideVaccinated && <LevelVaccinated data={data['TT']} />}
 
           {data && (
-            <Suspense fallback={<div />}>
+            <Suspense fallback={<div style={{height: '60rem'}} />}>
               <Table
                 {...{
                   data,
@@ -157,7 +157,7 @@ function Home() {
               )}
 
               {timeseries && (
-                <Suspense fallback={<div />}>
+                <Suspense fallback={<div style={{height: '50rem'}} />}>
                   <TimeseriesExplorer
                     stateCode="TT"
                     {...{
