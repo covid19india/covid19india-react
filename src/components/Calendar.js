@@ -23,8 +23,8 @@ function Calendar({date, dates, slider}) {
   const [view, setView] = useState('month');
   const [activeStartDate, setActiveStartDate] = useState(parseIndiaDate(date));
 
-  const minDate = parseIndiaDate(dates[dates.length - 1]);
-  const maxDate = parseIndiaDate(dates[0]);
+  const minDate = parseIndiaDate(dates[0]);
+  const maxDate = parseIndiaDate(dates[dates.length - 1]);
 
   const isDateDisabled = ({date, view}) => {
     return (

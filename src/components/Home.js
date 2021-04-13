@@ -85,7 +85,7 @@ function Home() {
                   {...{
                     date,
                     setDate,
-                    dates: Object.keys(timeseries['TT']?.dates).reverse(),
+                    dates: Object.keys(timeseries['TT']?.dates),
                   }}
                 />
               </Suspense>

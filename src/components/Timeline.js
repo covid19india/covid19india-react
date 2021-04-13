@@ -46,11 +46,11 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
   });
 
   const [sliderRef, slider] = useKeenSlider({
-    initial: date === '' ? Math.min(1, dates.length) : dates.indexOf(date),
+    initial: date === '' ? Math.max(0, dates.length - 2) : dates.indexOf(date),
     dragSpeed: (val, instance) => {
       const width = instance.details().widthOrHeight;
       return (
-        -val *
+        val *
         (width /
           ((width / 2) * Math.tan(slideDegree * (Math.PI / 180))) /
           slidesPerView)
@@ -61,7 +61,7 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
     },
     afterChange: (s) => {
       const slide = s.details().absoluteSlide;
-      if (slide === 0) {
+      if (slide === s.details().size - 1) {
         ReactDOM.unstable_batchedUpdates(() => {
           setIsTimelineMode(false);
           setShowCalendar(false);
@@ -91,12 +91,10 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
   const slideValues = useMemo(() => {
     if (!sliderState) return [];
     const values = [];
-    for (let i = 0; i < dates.length; i++) {
+    for (let i = 0; i < sliderState.size; i++) {
       const distance = sliderState.positions[i].distance * slidesPerView;
       const rotate =
-        Math.abs(distance) > wheelSize / 2
-          ? 180
-          : distance * (360 / wheelSize) * -1;
+        Math.abs(distance) > wheelSize / 2 ? 180 : distance * (360 / wheelSize);
       const style = {
         transform: `rotateY(${rotate}deg) translateZ(${radius}px)`,
         WebkitTransform: `rotateY(${rotate}deg) translateZ(${radius}px)`,
@@ -107,19 +105,19 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
         values.push({className, style, slide});
     }
     return values;
-  }, [sliderState, radius, dates.length]);
+  }, [sliderState, radius]);
 
   useKeyPressEvent('ArrowLeft', () => {
-    if (slider) slider.next();
+    if (slider) slider.prev();
   });
 
   useKeyPressEvent('ArrowRight', () => {
-    if (slider) slider.prev();
+    if (slider) slider.next();
   });
 
   useKeyPressEvent('Escape', () => {
     setPlay(false);
-    if (slider) slider.moveToSlide(0);
+    if (slider) slider.moveToSlide(sliderState.size - 1);
   });
 
   useKeyPressEvent('Enter', () => {
@@ -150,7 +148,7 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
   useEffect(() => {
     timer.current = setInterval(() => {
       if (play && slider) {
-        slider.prev();
+        slider.next();
       }
     }, autoPlayDelay);
     return () => {
@@ -161,9 +159,9 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
   const handleWheel = (event) => {
     if (slider) {
       if (event.deltaX > 0) {
-        slider.prev();
-      } else if (event.deltaX < 0) {
         slider.next();
+      } else if (event.deltaX < 0) {
+        slider.prev();
       }
     }
   };
@@ -191,7 +189,7 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
         <div className={'wheel-buttons'}>
           <div
             className={'wheel-button left'}
-            onClick={handleClick.bind(this, dates.length - 1)}
+            onClick={handleClick.bind(this, 0)}
           >
             <FastForward />
           </div>
@@ -201,7 +199,10 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
           >
             {play ? <Pause /> : <Play />}
           </div>
-          <div className="wheel-button" onClick={handleClick.bind(this, 0)}>
+          <div
+            className="wheel-button"
+            onClick={handleClick.bind(this, dates.length - 1)}
+          >
             <FastForward />
           </div>
         </div>
