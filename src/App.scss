@@ -1473,14 +1473,23 @@ h6 {
       &:enabled {
         background-color: $gray-light;
 
-        &.react-calendar__tile--active {
-          background-color: #006edc;
-          color: $white;
-        }
-
         &.react-calendar__tile--now {
           background-color: #ffff76;
-          color: $black !important;
+          color: $black;
+
+          &:hover {
+            background-color: #ffffa9;
+          }
+        }
+
+        &.react-calendar__tile--active,
+        &.react-calendar__tile--hasActive {
+          background-color: #006edc;
+          color: $white;
+
+          &:hover {
+            background-color: #1087ff;
+          }
         }
 
         &.react-calendar__month-view__days__day--neighboringMonth {
@@ -1518,22 +1527,6 @@ h6 {
       .react-calendar__tile {
         color: $gray;
         padding: 2em 0.5em;
-      }
-    }
-
-    .react-calendar__tile--now {
-      &:enabled {
-        &:hover {
-          background-color: #ffffa9;
-        }
-      }
-    }
-
-    .react-calendar__tile--active {
-      &:enabled {
-        &:hover {
-          background-color: #1087ff;
-        }
       }
     }
   }
