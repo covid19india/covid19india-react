@@ -167,8 +167,19 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
   };
 
   const transitions = useTransition(showCalendar, {
-    from: {paddingTop: 0, marginBottom: 0, height: 0, opacity: 0},
-    enter: {paddingTop: 36, marginBottom: 400, opacity: 1},
+    from: {
+      pointerEvents: 'none',
+      paddingTop: 0,
+      marginBottom: 0,
+      height: 0,
+      opacity: 0,
+    },
+    enter: {
+      pointerEvents: 'all',
+      paddingTop: 36,
+      marginBottom: 400,
+      opacity: 1,
+    },
     leave: {
       pointerEvents: 'none',
       paddingTop: 0,
