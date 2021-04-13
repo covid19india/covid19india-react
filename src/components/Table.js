@@ -48,7 +48,7 @@ function Table({
   expandTable,
   setExpandTable,
   hideDistrictData,
-  showVaccinated,
+  hideVaccinated,
 }) {
   const {t} = useTranslation();
   const [sortData, setSortData] = useSessionStorage('sortData', {
@@ -186,7 +186,7 @@ function Table({
   const tableStatistics = (expandTable
     ? TABLE_STATISTICS_EXPANDED
     : TABLE_STATISTICS
-  ).filter((statistic) => statistic !== 'vaccinated' || showVaccinated);
+  ).filter((statistic) => statistic !== 'vaccinated' || !hideVaccinated);
 
   const showDistricts = tableOption === 'Districts' && !hideDistrictData;
 
@@ -468,7 +468,7 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(prevProps.date, currProps.date)) {
     return false;
   } else if (!equal(prevProps.hideDistrictData, currProps.hideDistrictData)) {
-  } else if (!equal(prevProps.showVaccinated, currProps.showVaccinated)) {
+  } else if (!equal(prevProps.hideVaccinated, currProps.hideVaccinated)) {
     return false;
   } else if (
     !equal(

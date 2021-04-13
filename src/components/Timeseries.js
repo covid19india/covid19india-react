@@ -41,7 +41,6 @@ function Timeseries({
   isUniform,
   isLog,
   isMovingAverage,
-  showVaccinated,
 }) {
   const {t} = useTranslation();
   const refs = useRef([]);
@@ -660,8 +659,6 @@ const isEqual = (prevProps, currProps) => {
   ) {
     return false;
   } else if (!equal(currProps.endDate, prevProps.endDate)) {
-    return false;
-  } else if (!equal(currProps.showVaccinated, prevProps.showVaccinated)) {
     return false;
   } else if (!equal(currProps.statistics, prevProps.statistics)) {
     return false;

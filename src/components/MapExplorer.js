@@ -49,8 +49,8 @@ function MapExplorer({
   setRegionHighlighted,
   anchor,
   setAnchor,
-  expandTable,
-  hideDistrictData,
+  expandTable = false,
+  hideDistrictData = false,
 }) {
   const {t} = useTranslation();
   const mapExplorerRef = useRef();

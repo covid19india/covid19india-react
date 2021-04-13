@@ -41,8 +41,8 @@ function TimeseriesExplorer({
   setRegionHighlighted,
   anchor,
   setAnchor,
-  expandTable,
-  showVaccinated,
+  expandTable = false,
+  hideVaccinated = false,
 }) {
   const {t} = useTranslation();
   const [lookback, setLookback] = useLocalStorage('timeseriesLookbackDays', 90);
@@ -192,10 +192,10 @@ function TimeseriesExplorer({
     () =>
       TIMESERIES_STATISTICS.filter(
         (statistic) =>
-          (statistic !== 'vaccinated' || showVaccinated) &&
+          (statistic !== 'vaccinated' || !hideVaccinated) &&
           (chartType === 'delta' || statistic !== 'tpr')
       ),
-    [chartType, showVaccinated]
+    [chartType, hideVaccinated]
   );
 
   return (
@@ -340,7 +340,6 @@ function TimeseriesExplorer({
               isUniform,
               isLog,
               isMovingAverage,
-              showVaccinated,
             }}
           />
           <TimeseriesBrush
@@ -401,7 +400,7 @@ const isEqual = (prevProps, currProps) => {
     return false;
   } else if (!equal(currProps.expandTable, prevProps.expandTable)) {
     return false;
-  } else if (!equal(currProps.showVaccinated, prevProps.showVaccinated)) {
+  } else if (!equal(currProps.hideVaccinated, prevProps.hideVaccinated)) {
     return false;
   }
   return true;

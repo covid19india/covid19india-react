@@ -59,7 +59,8 @@ function Home() {
   const {width} = useWindowSize();
 
   const hideDistrictData = date !== '' && date < GOSPEL_DATE;
-  const showVaccinated = getStatistic(data?.['TT'], 'total', 'vaccinated') > 0;
+  const hideVaccinated =
+    getStatistic(data?.['TT'], 'total', 'vaccinated') === 0;
 
   return (
     <>
@@ -108,7 +109,7 @@ function Home() {
             )}
           </div>
 
-          {showVaccinated && <LevelVaccinated data={data['TT']} />}
+          {!hideVaccinated && <LevelVaccinated data={data['TT']} />}
 
           {data && (
             <Suspense fallback={<div />}>
@@ -120,7 +121,7 @@ function Home() {
                   expandTable,
                   setExpandTable,
                   hideDistrictData,
-                  showVaccinated,
+                  hideVaccinated,
                 }}
               />
             </Suspense>
@@ -167,7 +168,7 @@ function Home() {
                       anchor,
                       setAnchor,
                       expandTable,
-                      showVaccinated,
+                      hideVaccinated,
                     }}
                   />
                 </Suspense>
