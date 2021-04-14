@@ -1750,7 +1750,9 @@ abbr {
 }
 
 .TableLoader {
-  margin-bottom: -0.25rem;
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
 }
 
 .table-top {

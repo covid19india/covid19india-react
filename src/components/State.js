@@ -1,4 +1,4 @@
-import {API_ROOT_URL, STATE_NAMES} from '../constants';
+import {DATA_API_ROOT, STATE_NAMES} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {fetcher, formatNumber, getStatistic} from '../utils/commonFunctions';
 
@@ -56,7 +56,7 @@ function State() {
   }, [regionHighlighted.stateCode, stateCode]);
 
   const {data: timeseries, error: timeseriesResponseError} = useSWR(
-    `${API_ROOT_URL}/timeseries-${stateCode}.min.json`,
+    `${DATA_API_ROOT}/timeseries-${stateCode}.min.json`,
     fetcher,
     {
       revalidateOnMount: true,
@@ -64,7 +64,7 @@ function State() {
     }
   );
 
-  const {data} = useSWR(`${API_ROOT_URL}/data.min.json`, fetcher, {
+  const {data} = useSWR(`${DATA_API_ROOT}/data.min.json`, fetcher, {
     revalidateOnMount: true,
     refreshInterval: 100000,
   });

@@ -1,3 +1,4 @@
+import {API_DOMAIN} from '../constants';
 import {isDevelopmentOrTest} from '../utils/commonFunctions';
 
 import i18n from 'i18next';
@@ -18,7 +19,7 @@ i18n
     fallbackLng: 'english',
     load: 'languageOnly',
     backend: {
-      loadPath: 'https://api.covid19india.org/locales/locale_{{lng}}.json',
+      loadPath: `${API_DOMAIN}/locales/locale_{{lng}}.json`,
       addPath: 'http://localhost:9999/',
     },
     saveMissing: isDevelopmentOrTest() && DEBUG,

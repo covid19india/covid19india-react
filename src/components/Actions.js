@@ -1,5 +1,6 @@
 import ActionsPanel from './ActionsPanel';
 
+import {API_DOMAIN} from '../constants';
 import {fetcher} from '../utils/commonFunctions';
 
 import equal from 'fast-deep-equal';
@@ -15,13 +16,9 @@ const Actions = ({date, setDate, dates}) => {
   const [lastViewedLog, setLastViewedLog] = useLocalStorage('lastViewedLog', 0);
   const [isTimelineMode, setIsTimelineMode] = useState(false);
 
-  const {data: updates} = useSWR(
-    'https://api.covid19india.org/updatelog/log.json',
-    fetcher,
-    {
-      revalidateOnFocus: true,
-    }
-  );
+  const {data: updates} = useSWR(`${API_DOMAIN}/updatelog/log.json`, fetcher, {
+    revalidateOnFocus: true,
+  });
 
   useEffect(() => {
     if (updates !== undefined) {

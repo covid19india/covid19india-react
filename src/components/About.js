@@ -1,10 +1,12 @@
 import Footer from './Footer';
 
+import {API_DOMAIN} from '../constants';
+
 import {useState, useEffect} from 'react';
 import {Helmet} from 'react-helmet';
 
 // TODO(slightlyoff): factor out common JSON parsing & caching of this file
-const DATA_URL = 'https://api.covid19india.org/website_data.json';
+const DATA_URL = `${API_DOMAIN}/website_data.json`;
 
 function About() {
   const [faq, setFaq] = useState([]);

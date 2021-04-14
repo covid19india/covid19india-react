@@ -1,22 +1,38 @@
 import ContentLoader from 'react-content-loader';
+import {useMeasure} from 'react-use';
 
 const TableLoader = () => {
+  let [ref, {width}] = useMeasure();
   const windowWidth = window.innerWidth;
-  const width = windowWidth > 769 ? 448 : windowWidth;
-  const height = 135;
+
+  width = width || (windowWidth > 769 ? 528 : windowWidth);
+  if (windowWidth < 769) {
+    width -= 30;
+  }
+
+  const height = 45;
+  const rows = 20;
 
   return (
-    <div className="TableLoader">
+    <div ref={ref} className="TableLoader">
       <ContentLoader
-        viewBox={`0 0 ${width} ${height}`}
-        height={height}
+        viewBox={`0 0 ${width} ${height * rows}`}
+        height={height * rows}
         width={width}
         speed={2}
         animate={false}
       >
-        <rect x="0" y="0" rx="3" ry="3" width={width} height="40" />
-        <rect x="0" y="45" rx="3" ry="3" width={width} height="40" />
-        <rect x="0" y="90" rx="3" ry="3" width={width} height="40" />
+        {[...Array(rows).keys()].map((i) => (
+          <rect
+            key={i}
+            x="0"
+            y={height * i}
+            rx="3"
+            ry="3"
+            width={width}
+            height={height - 5}
+          />
+        ))}
       </ContentLoader>
     </div>
   );

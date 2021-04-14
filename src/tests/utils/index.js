@@ -1,3 +1,5 @@
+import {API_DOMAIN} from '../../constants';
+
 import {promises as fs} from 'fs';
 
 export function removeFileExtension(fileName) {
@@ -9,7 +11,7 @@ function removeUnknown(e) {
 }
 
 export async function getStatesAndDistrictsFromAPI() {
-  const url = 'https://api.covid19india.org/state_district_wise.json';
+  const url = `${API_DOMAIN}/state_district_wise.json`;
   const stateDistrictWiseResponse = await (await fetch(url)).json();
   const states = Object.keys(stateDistrictWiseResponse).filter(removeUnknown);
   const result = {};

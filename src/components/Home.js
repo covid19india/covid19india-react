@@ -1,4 +1,6 @@
-import {API_ROOT_URL, GOSPEL_DATE} from '../constants';
+import TableLoader from './loaders/Table';
+
+import {DATA_API_ROOT, GOSPEL_DATE} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
 import {fetcher, getStatistic} from '../utils/commonFunctions';
@@ -37,7 +39,7 @@ function Home() {
   const location = useLocation();
 
   const {data: timeseries} = useStickySWR(
-    `${API_ROOT_URL}/timeseries.min.json`,
+    `${DATA_API_ROOT}/timeseries.min.json`,
     fetcher,
     {
       revalidateOnMount: true,
@@ -46,7 +48,7 @@ function Home() {
   );
 
   const {data} = useStickySWR(
-    `${API_ROOT_URL}/data${date ? `-${date}` : ''}.min.json`,
+    `${DATA_API_ROOT}/data${date ? `-${date}` : ''}.min.json`,
     fetcher,
     {
       revalidateOnMount: true,
@@ -79,17 +81,22 @@ function Home() {
               <Search />
             </Suspense>
 
-            {timeseries && (
-              <Suspense fallback={<div style={{minHeight: '56px'}} />}>
-                <Actions
-                  {...{
-                    date,
-                    setDate,
-                    dates: Object.keys(timeseries['TT']?.dates),
-                  }}
-                />
-              </Suspense>
-            )}
+            {!data && !timeseries && <div style={{height: '60rem'}} />}
+
+            <>
+              {!timeseries && <div style={{minHeight: '61px'}} />}
+              {timeseries && (
+                <Suspense fallback={<div style={{minHeight: '61px'}} />}>
+                  <Actions
+                    {...{
+                      date,
+                      setDate,
+                      dates: Object.keys(timeseries['TT']?.dates),
+                    }}
+                  />
+                </Suspense>
+              )}
+            </>
           </div>
 
           <div style={{position: 'relative', marginTop: '1rem'}}>
@@ -102,17 +109,23 @@ function Home() {
               </Suspense>
             )}
 
-            {timeseries && (
-              <Suspense fallback={<div style={{height: '50rem'}} />}>
-                <Minigraphs timeseries={timeseries['TT']?.dates} {...{date}} />
-              </Suspense>
-            )}
+            <>
+              {!timeseries && <div style={{height: '107px'}} />}
+              {timeseries && (
+                <Suspense fallback={<div style={{height: '107px'}} />}>
+                  <Minigraphs
+                    timeseries={timeseries['TT']?.dates}
+                    {...{date}}
+                  />
+                </Suspense>
+              )}
+            </>
           </div>
 
           {!hideVaccinated && <LevelVaccinated data={data['TT']} />}
 
           {data && (
-            <Suspense fallback={<div style={{height: '60rem'}} />}>
+            <Suspense fallback={<TableLoader />}>
               <Table
                 {...{
                   data,
@@ -131,6 +144,7 @@ function Home() {
         <div
           className={classnames('home-right', {expanded: expandTable})}
           ref={homeRightElement}
+          style={{minHeight: '2rem'}}
         >
           {(isVisible || location.hash) && (
             <>

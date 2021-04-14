@@ -1,4 +1,5 @@
 import {
+  API_DOMAIN,
   STATE_CODES_ARRAY,
   STATE_CODES,
   STATE_NAMES,
@@ -73,7 +74,7 @@ function Search() {
           ),
           indexRemote: true,
           remote: {
-            url: 'https://api.covid19india.org/state_district_wise.json',
+            url: `${API_DOMAIN}/state_district_wise.json`,
             transform: function (response) {
               const districts = [];
               Object.keys(response)
