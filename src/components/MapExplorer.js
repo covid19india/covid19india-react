@@ -11,7 +11,12 @@ import {
   STATISTIC_CONFIGS,
   UNKNOWN_DISTRICT_KEY,
 } from '../constants';
-import {formatNumber, getStatistic, capitalize} from '../utils/commonFunctions';
+import {
+  formatNumber,
+  getStatistic,
+  capitalize,
+  retry,
+} from '../utils/commonFunctions';
 
 import {
   ArrowLeftIcon,
@@ -38,7 +43,7 @@ import {animated, useSpring} from 'react-spring';
 import {useSwipeable} from 'react-swipeable';
 import {useWindowSize} from 'react-use';
 
-const MapVisualizer = lazy(() => import('./MapVisualizer'));
+const MapVisualizer = lazy(() => retry(() => import('./MapVisualizer')));
 
 function MapExplorer({
   stateCode: mapCode = 'TT',

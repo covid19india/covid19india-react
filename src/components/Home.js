@@ -3,7 +3,7 @@ import TableLoader from './loaders/Table';
 import {DATA_API_ROOT, GOSPEL_DATE} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
-import {fetcher, getStatistic} from '../utils/commonFunctions';
+import {fetcher, getStatistic, retry} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
 import {useState, useRef, lazy, Suspense} from 'react';
@@ -11,17 +11,19 @@ import {Helmet} from 'react-helmet';
 import {useLocation} from 'react-router-dom';
 import {useLocalStorage, useSessionStorage, useWindowSize} from 'react-use';
 
-const Actions = lazy(() => import('./Actions'));
-const Footer = lazy(() => import('./Footer'));
-const Level = lazy(() => import('./Level'));
-const LevelVaccinated = lazy(() => import('./LevelVaccinated'));
-const MapExplorer = lazy(() => import('./MapExplorer'));
-const MapSwitcher = lazy(() => import('./MapSwitcher'));
-const Minigraphs = lazy(() => import('./Minigraphs'));
-const Search = lazy(() => import('./Search'));
-const StateHeader = lazy(() => import('./StateHeader'));
-const Table = lazy(() => import('./Table'));
-const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
+const Actions = lazy(() => retry(() => import('./Actions')));
+const Footer = lazy(() => retry(() => import('./Footer')));
+const Level = lazy(() => retry(() => import('./Level')));
+const LevelVaccinated = lazy(() => retry(() => import('./LevelVaccinated')));
+const MapExplorer = lazy(() => retry(() => import('./MapExplorer')));
+const MapSwitcher = lazy(() => retry(() => import('./MapSwitcher')));
+const Minigraphs = lazy(() => retry(() => import('./Minigraphs')));
+const Search = lazy(() => retry(() => import('./Search')));
+const StateHeader = lazy(() => retry(() => import('./StateHeader')));
+const Table = lazy(() => retry(() => import('./Table')));
+const TimeseriesExplorer = lazy(() =>
+  retry(() => import('./TimeseriesExplorer'))
+);
 
 function Home() {
   const [regionHighlighted, setRegionHighlighted] = useState({

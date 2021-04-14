@@ -1,6 +1,11 @@
 import {DATA_API_ROOT, STATE_NAMES} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
-import {fetcher, formatNumber, getStatistic} from '../utils/commonFunctions';
+import {
+  fetcher,
+  formatNumber,
+  getStatistic,
+  retry,
+} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
 import {
@@ -19,16 +24,18 @@ import {useParams} from 'react-router-dom';
 import {useSessionStorage} from 'react-use';
 import useSWR from 'swr';
 
-const DeltaBarGraph = lazy(() => import('./DeltaBarGraph'));
-const Footer = lazy(() => import('./Footer'));
-const Level = lazy(() => import('./Level'));
-const LevelVaccinated = lazy(() => import('./LevelVaccinated'));
-const MapExplorer = lazy(() => import('./MapExplorer'));
-const MapSwitcher = lazy(() => import('./MapSwitcher'));
-const Minigraphs = lazy(() => import('./Minigraphs'));
-const StateHeader = lazy(() => import('./StateHeader'));
-const StateMeta = lazy(() => import('./StateMeta'));
-const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
+const DeltaBarGraph = lazy(() => retry(() => import('./DeltaBarGraph')));
+const Footer = lazy(() => retry(() => import('./Footer')));
+const Level = lazy(() => retry(() => import('./Level')));
+const LevelVaccinated = lazy(() => retry(() => import('./LevelVaccinated')));
+const MapExplorer = lazy(() => retry(() => import('./MapExplorer')));
+const MapSwitcher = lazy(() => retry(() => import('./MapSwitcher')));
+const Minigraphs = lazy(() => retry(() => import('./Minigraphs')));
+const StateHeader = lazy(() => retry(() => import('./StateHeader')));
+const StateMeta = lazy(() => retry(() => import('./StateMeta')));
+const TimeseriesExplorer = lazy(() =>
+  retry(() => import('./TimeseriesExplorer'))
+);
 
 function State() {
   const {t} = useTranslation();

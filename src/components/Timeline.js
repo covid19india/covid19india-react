@@ -2,6 +2,7 @@ import {
   formatDate,
   getIndiaDateISO,
   getIndiaDateYesterdayISO,
+  retry,
 } from '../utils/commonFunctions';
 
 import {HeartFillIcon} from '@primer/octicons-react';
@@ -24,7 +25,7 @@ import {useTranslation} from 'react-i18next';
 import {useTransition, animated} from 'react-spring';
 import {useClickAway, useKeyPressEvent} from 'react-use';
 
-const Calendar = lazy(() => import('./Calendar'));
+const Calendar = lazy(() => retry(() => import('./Calendar')));
 
 const wheelSize = 18;
 const slidesPerView = 1;

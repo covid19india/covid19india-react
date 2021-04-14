@@ -1,14 +1,14 @@
 import ActionsPanel from './ActionsPanel';
 
 import {API_DOMAIN} from '../constants';
-import {fetcher} from '../utils/commonFunctions';
+import {fetcher, retry} from '../utils/commonFunctions';
 
 import equal from 'fast-deep-equal';
 import {memo, useState, useEffect, lazy, Suspense} from 'react';
 import {useLocalStorage} from 'react-use';
 import useSWR from 'swr';
 
-const Updates = lazy(() => import('./Updates'));
+const Updates = lazy(() => retry(() => import('./Updates')));
 
 const Actions = ({date, setDate, dates}) => {
   const [showUpdates, setShowUpdates] = useState(false);

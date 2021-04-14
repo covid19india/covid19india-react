@@ -1,4 +1,4 @@
-import {formatDate} from '../utils/commonFunctions';
+import {formatDate, retry} from '../utils/commonFunctions';
 
 import {BellIcon, BellSlashIcon, HistoryIcon} from '@primer/octicons-react';
 import {parse} from 'date-fns';
@@ -6,7 +6,7 @@ import {utcToZonedTime} from 'date-fns-tz';
 import {useMemo, useCallback, lazy, Suspense} from 'react';
 import {useTranslation} from 'react-i18next';
 
-const Timeline = lazy(() => import('./Timeline'));
+const Timeline = lazy(() => retry(() => import('./Timeline')));
 
 const ActionsPanel = ({
   lastViewedLog,

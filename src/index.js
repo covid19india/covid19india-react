@@ -1,12 +1,13 @@
 // import './wdyr';
 import * as serviceWorker from './serviceWorker';
 import './i18n';
+import {retry} from './utils/commonFunctions';
 
 import {Suspense, lazy, StrictMode} from 'react';
 import {render} from 'react-dom';
 import {BrowserRouter as Router} from 'react-router-dom';
 
-const App = lazy(() => import('./App'));
+const App = lazy(() => retry(() => import('./App')));
 const rootElement = document.getElementById('root');
 
 const main = () =>

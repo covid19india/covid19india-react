@@ -1,15 +1,18 @@
 import './App.scss';
 import Blog from './components/Blog';
 import Navbar from './components/Navbar';
+import {retry} from './utils/commonFunctions';
 
 import {lazy, useState, Suspense, useEffect} from 'react';
 import {Route, Redirect, Switch, useLocation} from 'react-router-dom';
 import useDarkMode from 'use-dark-mode';
 
-const Home = lazy(() => import('./components/Home'));
-const About = lazy(() => import('./components/About'));
-const State = lazy(() => import('./components/State'));
-const LanguageSwitcher = lazy(() => import('./components/LanguageSwitcher'));
+const Home = lazy(() => retry(() => import('./components/Home')));
+const About = lazy(() => retry(() => import('./components/About')));
+const State = lazy(() => retry(() => import('./components/State')));
+const LanguageSwitcher = lazy(() =>
+  retry(() => import('./components/LanguageSwitcher'))
+);
 
 const App = () => {
   const darkMode = useDarkMode(false);

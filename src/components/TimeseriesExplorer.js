@@ -10,6 +10,7 @@ import useIsVisible from '../hooks/useIsVisible';
 import {
   getIndiaDateYesterdayISO,
   parseIndiaDate,
+  retry,
 } from '../utils/commonFunctions';
 
 import {PinIcon, ReplyIcon} from '@primer/octicons-react';
@@ -30,8 +31,8 @@ import {
 import {useTranslation} from 'react-i18next';
 import {useLocalStorage, useWindowSize} from 'react-use';
 
-const Timeseries = lazy(() => import('./Timeseries'));
-const TimeseriesBrush = lazy(() => import('./TimeseriesBrush'));
+const Timeseries = lazy(() => retry(() => import('./Timeseries')));
+const TimeseriesBrush = lazy(() => retry(() => import('./TimeseriesBrush')));
 
 function TimeseriesExplorer({
   stateCode,

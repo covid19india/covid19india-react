@@ -11,7 +11,11 @@ import {
   TABLE_STATISTICS_EXPANDED,
   UNASSIGNED_STATE_CODE,
 } from '../constants';
-import {getTableStatistic, parseIndiaDate} from '../utils/commonFunctions';
+import {
+  getTableStatistic,
+  parseIndiaDate,
+  retry,
+} from '../utils/commonFunctions';
 
 import {
   FilterIcon,
@@ -38,7 +42,7 @@ import {useSessionStorage} from 'react-use';
 // eslint-disable-next-line
 import worker from 'workerize-loader!../workers/getDistricts';
 
-const Row = lazy(() => import('./Row'));
+const Row = lazy(() => retry(() => import('./Row')));
 
 function Table({
   data: states,
