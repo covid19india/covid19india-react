@@ -1,7 +1,7 @@
-import {formatDate, retry} from '../utils/commonFunctions';
+import {retry} from '../utils/commonFunctions';
 
 import {BellIcon, BellSlashIcon, HistoryIcon} from '@primer/octicons-react';
-import {parse} from 'date-fns';
+import {format, parse} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
 import {useMemo, useCallback, lazy, Suspense} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -39,7 +39,7 @@ const ActionsPanel = ({
       parse(lastViewedLog, 'T', new Date()),
       'Asia/Kolkata'
     );
-    return formatDate(lastViewedDate, 'dd MMM, p');
+    return format(lastViewedDate, 'dd MMM, p');
   };
 
   const handleTimelineClick = useCallback(() => {

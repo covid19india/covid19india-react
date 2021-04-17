@@ -62,11 +62,7 @@ function MapExplorer({
   const {width} = useWindowSize();
 
   const [mapView, setMapView] = useState(MAP_VIEWS.DISTRICTS);
-  const [mapViz, setMapViz] = useState(
-    MAP_META[mapCode].mapType === MAP_TYPES.COUNTRY
-      ? MAP_VIZS.BUBBLES
-      : MAP_VIZS.CHOROPLETH
-  );
+  const [mapViz, setMapViz] = useState(MAP_VIZS.BUBBLES);
 
   const mapMeta = MAP_META[mapCode];
   const mapData =
