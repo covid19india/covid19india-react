@@ -327,142 +327,114 @@ function Timeseries({
             allZero
               ? yScale(0)
               : (date) =>
-                  yScale(
-                    getStatistic(timeseries[date], chartType, statistic, {
-                      movingAverage: isMovingAverage,
-                    })
-                  )
+                  yScale(getStatistic(timeseries[date], chartType, statistic))
           )(dates);
 
-      if (isDiscrete) {
-        /* DAILY TRENDS */
-        svg.selectAll('.trend').remove();
-
-        if (condenseChart) {
-          svg
-            .selectAll('.stem')
-            .transition(t)
-            .attr('y1', yScale(0))
-            .attr('y2', yScale(0))
-            .remove();
-
-          svg
-            .selectAll('.trend-area')
-            .data(T ? [dates] : [])
-            .join(
-              (enter) =>
+      svg
+        .selectAll('.trend-area')
+        .data(T && chartType === 'delta' && condenseChart ? [dates] : [])
+        .join(
+          (enter) =>
+            enter
+              .append('path')
+              .attr('class', 'trend-area')
+              .call((enter) =>
                 enter
-                  .append('path')
-                  .attr('class', 'trend-area')
-                  .call((enter) =>
-                    enter
-                      .attr('d', (dates) => areaPath(dates, true))
-                      .transition(t)
-                      .attr('d', areaPath)
-                  ),
-              (update) =>
-                update.call((update) =>
-                  update.transition(t).attrTween('d', function (dates) {
-                    const previous = select(this).attr('d');
-                    const current = areaPath(dates);
-                    return interpolatePath(previous, current);
-                  })
-                )
-            );
-        } else {
-          svg
-            .selectAll('.trend-area')
-            .transition(t)
-            .attr('d', (dates) => areaPath(dates, true))
-            .remove();
-
-          svg
-            .selectAll('.stem')
-            .data(dates, (date) => date)
-            .join(
-              (enter) =>
-                enter
-                  .append('line')
-                  .attr('class', 'stem')
-                  .attr('stroke-width', 4)
-                  .attr('x1', (date) => xScale(parseIndiaDate(date)))
-                  .attr('y1', yScale(0))
-                  .attr('x2', (date) => xScale(parseIndiaDate(date)))
-                  .attr('y2', yScale(0)),
-              (update) => update,
-              (exit) =>
-                exit.call((exit) =>
-                  exit
-                    .transition(t)
-                    .attr('x1', (date) => xScale(parseIndiaDate(date)))
-                    .attr('x2', (date) => xScale(parseIndiaDate(date)))
-                    .attr('y2', yScale(0))
-                    .remove()
-                )
-            )
-            .transition(t)
-            .attr('x1', (date) => xScale(parseIndiaDate(date)))
-            .attr('y1', yScale(0))
-            .attr('x2', (date) => xScale(parseIndiaDate(date)))
-            .attr('y2', (date) =>
-              yScale(
-                getStatistic(timeseries[date], chartType, statistic, {
-                  movingAverage: isMovingAverage,
-                })
-              )
-            );
-        }
-      } else {
-        svg
-          .selectAll('.stem')
-          .transition(t)
-          .attr('y1', yScale(0))
-          .attr('y2', yScale(0))
-          .remove();
-
-        svg
-          .selectAll('.trend-area')
-          .transition(t)
-          .attr('d', (dates) => areaPath(dates, true))
-          .remove();
-
-        const linePath = line()
-          .curve(curveMonotoneX)
-          .x((date) => xScale(parseIndiaDate(date)))
-          .y((date) =>
-            yScale(
-              getStatistic(timeseries[date], chartType, statistic, {
-                movingAverage: isMovingAverage,
-              })
-            )
-          );
-
-        svg
-          .selectAll('.trend')
-          .data(T ? [dates] : [])
-          .join(
-            (enter) =>
-              enter
-                .append('path')
-                .attr('class', 'trend')
-                .attr('fill', 'none')
-                .attr('stroke-width', 4)
-                .attr('d', linePath)
-                .call((enter) => enter.transition(t).attr('opacity', 1)),
-            (update) =>
-              update.call((update) =>
-                update
-                  .attr('opacity', 1)
+                  .attr('d', (dates) => areaPath(dates, true))
                   .transition(t)
-                  .attrTween('d', function (date) {
-                    const previous = select(this).attr('d');
-                    const current = linePath(date);
-                    return interpolatePath(previous, current);
-                  })
-              )
+                  .attr('d', areaPath)
+              ),
+          (update) =>
+            update.call((update) =>
+              update.transition(t).attrTween('d', function (dates) {
+                const previous = select(this).attr('d');
+                const current = areaPath(dates);
+                return interpolatePath(previous, current);
+              })
+            ),
+          (exit) =>
+            exit.call((exit) =>
+              exit
+                .transition(t)
+                .attr('d', (dates) => areaPath(dates, true))
+                .remove()
+            )
+        )
+        .transition(t)
+        .attr('opacity', isMovingAverage ? 0.2 : 1);
+
+      svg
+        .selectAll('.stem')
+        .data(condenseChart ? [] : dates, (date) => date)
+        .join(
+          (enter) =>
+            enter
+              .append('line')
+              .attr('class', 'stem')
+              .attr('stroke-width', 4)
+              .attr('x1', (date) => xScale(parseIndiaDate(date)))
+              .attr('y1', yScale(0))
+              .attr('x2', (date) => xScale(parseIndiaDate(date)))
+              .attr('y2', yScale(0)),
+          (update) => update,
+          (exit) =>
+            exit.call((exit) =>
+              exit
+                .transition(t)
+                .attr('x1', (date) => xScale(parseIndiaDate(date)))
+                .attr('x2', (date) => xScale(parseIndiaDate(date)))
+                .attr('y1', yScale(0))
+                .attr('y2', yScale(0))
+                .remove()
+            )
+        )
+        .transition(t)
+        .attr('x1', (date) => xScale(parseIndiaDate(date)))
+        .attr('y1', yScale(0))
+        .attr('x2', (date) => xScale(parseIndiaDate(date)))
+        .attr('y2', (date) =>
+          yScale(getStatistic(timeseries[date], chartType, statistic))
+        )
+        .attr('opacity', isMovingAverage ? 0.2 : 1);
+
+      const linePath = line()
+        .curve(curveMonotoneX)
+        .x((date) => xScale(parseIndiaDate(date)))
+        .y((date) =>
+          yScale(
+            getStatistic(timeseries[date], chartType, statistic, {
+              movingAverage: isMovingAverage,
+            })
           )
-          .attr('stroke', color + (condenseChart ? '99' : '50'));
-      }
+        );
+
+      svg
+        .selectAll('.trend')
+        .data(T && (chartType === 'total' || isMovingAverage) ? [dates] : [])
+        .join(
+          (enter) =>
+            enter
+              .append('path')
+              .attr('class', 'trend')
+              .attr('fill', 'none')
+              .attr('stroke-width', 4)
+              .attr('d', linePath)
+              .call((enter) => enter.transition(t).attr('opacity', 1)),
+          (update) =>
+            update.call((update) =>
+              update
+                .attr('opacity', 1)
+                .transition(t)
+                .attrTween('d', function (date) {
+                  const previous = select(this).attr('d');
+                  const current = linePath(date);
+                  return interpolatePath(previous, current);
+                })
+            ),
+          (exit) =>
+            exit.call((exit) => exit.transition(t).attr('opacity', 0).remove())
+        )
+        .attr('stroke', color + (condenseChart ? '99' : '50'));
 
       svg.selectAll('*').attr('pointer-events', 'none');
       svg
