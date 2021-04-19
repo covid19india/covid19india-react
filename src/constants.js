@@ -135,7 +135,7 @@ export const PRIMARY_STATISTICS = [
   'deceased',
 ];
 
-export const BRUSH_STATISTICS = ['other', 'deceased', 'recovered', 'active'];
+export const BRUSH_STATISTICS = ['confirmed'];
 
 export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested', 'vaccinated'];
 

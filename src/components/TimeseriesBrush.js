@@ -75,10 +75,11 @@ function TimeseriesBrush({
         .attr('class', 'x-axis')
         .call(axisBottom(xScale).ticks(numTicksX(width)));
 
+    // Switched to daily confirmed instead of cumulative ARD
     const timeseriesStacked = stack()
       .keys(BRUSH_STATISTICS)
       .value((date, statistic) =>
-        Math.max(0, getStatistic(timeseries[date], 'total', statistic))
+        Math.max(0, getStatistic(timeseries[date], 'delta', statistic))
       )(dates);
 
     const yScale = scaleLinear()
@@ -118,8 +119,9 @@ function TimeseriesBrush({
           enter
             .append('path')
             .attr('class', 'trend-area')
-            .attr('fill', ({key}) => STATISTIC_CONFIGS[key].color + '99')
-            .attr('stroke', 'none')
+            .attr('fill', ({key}) => STATISTIC_CONFIGS[key].color)
+            .attr('fill-opacity', 0.4)
+            .attr('stroke', ({key}) => STATISTIC_CONFIGS[key].color)
             .attr('d', areaPath)
             .attr('pointer-events', 'none'),
         (update) =>

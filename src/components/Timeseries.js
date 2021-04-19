@@ -361,11 +361,14 @@ function Timeseries({
             )
         )
         .transition(t)
-        .attr('opacity', isMovingAverage ? 0.2 : 1);
+        .attr('opacity', isMovingAverage ? 0.3 : 1);
 
       svg
         .selectAll('.stem')
-        .data(condenseChart ? [] : dates, (date) => date)
+        .data(
+          T && chartType === 'delta' && !condenseChart ? dates : [],
+          (date) => date
+        )
         .join(
           (enter) =>
             enter

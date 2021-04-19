@@ -192,9 +192,11 @@ function TimeseriesExplorer({
   const statistics = useMemo(
     () =>
       TIMESERIES_STATISTICS.filter(
-        (statistic) => statistic !== 'vaccinated' || !hideVaccinated
+        (statistic) =>
+          (statistic !== 'vaccinated' || !hideVaccinated) &&
+          (chartType === 'delta' || statistic !== 'tpr')
       ),
-    [hideVaccinated]
+    [chartType, hideVaccinated]
   );
 
   return (
