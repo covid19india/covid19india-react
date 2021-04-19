@@ -41,7 +41,14 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
           <FilterIcon size={10} />
         </div>
       )}
-      <div>{t(toTitleCase(STATISTIC_CONFIGS[statistic].displayName))}</div>
+      <div>
+        {t(
+          toTitleCase(
+            STATISTIC_CONFIGS[statistic]?.tableConfig?.displayName ||
+              STATISTIC_CONFIGS[statistic].displayName
+          )
+        )}
+      </div>
       {statistic === 'other' && (
         <Tooltip data={'Migrated cases or non-COVID deaths'}>
           <InfoIcon size={14} />

@@ -4,7 +4,7 @@ import {
   LOCALE_SHORTHANDS,
   NAN_STATISTICS,
   PER_MILLION_OPTIONS,
-  STATISTIC_OPTIONS,
+  STATISTIC_CONFIGS,
   TESTED_LOOKBACK_DAYS,
 } from '../constants';
 
@@ -126,24 +126,25 @@ export const getStatistic = (
 ) => {
   // TODO: Replace delta with daily to remove ambiguity
   //       Or add another type for daily/delta
+  const statisticDefinition = STATISTIC_CONFIGS[statistic]?.definition;
+
   const {key, normalizeByKey: normalizeBy} = {
-    ...STATISTIC_OPTIONS[statistic],
+    ...statisticDefinition,
     ...(perMillion &&
-      !STATISTIC_OPTIONS[statistic]?.normalizeByKey &&
+      !statisticDefinition?.normalizeByKey &&
       PER_MILLION_OPTIONS),
   };
 
-  let multiplyFactor = STATISTIC_OPTIONS[statistic]?.multiplyFactor || 1;
+  let multiplyFactor = statisticDefinition?.multiplyFactor || 1;
   multiplyFactor *=
-    (!STATISTIC_OPTIONS[statistic]?.normalizeByKey &&
+    (!statisticDefinition?.normalizeByKey &&
       perMillion &&
       PER_MILLION_OPTIONS?.multiplyFactor) ||
     1;
 
   if (type === 'delta' && movingAverage) {
     type = 'delta7';
-    multiplyFactor *=
-      (!STATISTIC_OPTIONS[statistic]?.normalizeByKey && 1 / 7) || 1;
+    multiplyFactor *= (!statisticDefinition?.normalizeByKey && 1 / 7) || 1;
   }
 
   let count;
@@ -173,16 +174,23 @@ export const getStatistic = (
 };
 
 export const getTableStatistic = (data, statistic, args, lastUpdatedTT) => {
+  const statisticDefinition = STATISTIC_CONFIGS[statistic]?.definition;
+
   const expired =
-    (STATISTIC_OPTIONS[statistic].key === 'tested' ||
-      STATISTIC_OPTIONS[statistic].normalizeByKey === 'tested') &&
+    (statisticDefinition?.key === 'tested' ||
+      statisticDefinition?.normalizeByKey === 'tested') &&
     differenceInDays(
       lastUpdatedTT,
       parseIndiaDate(data.meta?.tested?.['last_updated'])
     ) > TESTED_LOOKBACK_DAYS;
 
-  const total = !expired ? getStatistic(data, 'total', statistic, args) : 0;
-  const delta = !expired ? getStatistic(data, 'delta', statistic, args) : 0;
+  const type = STATISTIC_CONFIGS[statistic]?.tableConfig?.type || 'total';
+
+  const total = !expired ? getStatistic(data, type, statistic, args) : 0;
+  const delta =
+    type === 'total' && !expired
+      ? getStatistic(data, 'delta', statistic, args)
+      : 0;
   return {total, delta};
 };
 

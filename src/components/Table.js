@@ -112,7 +112,7 @@ function Table({
       if (sortData.sortColumn !== 'regionName') {
         const statisticConfig = STATISTIC_CONFIGS[sortData.sortColumn];
         const dataType =
-          sortData.delta && !statisticConfig.hideDelta ? 'delta' : 'total';
+          sortData.delta && statisticConfig.showDelta ? 'delta' : 'total';
 
         const statisticA = getTableStatistic(
           districts?.[regionKeyA] || states[regionKeyA],

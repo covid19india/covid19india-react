@@ -70,7 +70,7 @@ function Row({
       if (sortData.sortColumn !== 'districtName') {
         const statisticConfig = STATISTIC_CONFIGS[sortData.sortColumn];
         const dataType =
-          sortData.delta && !statisticConfig.hideDelta ? 'delta' : 'total';
+          sortData.delta && statisticConfig.showDelta ? 'delta' : 'total';
 
         const statisticA = getTableStatistic(
           data.districts[districtNameA],

@@ -24,7 +24,7 @@ const Cell = ({statistic, data, isPerMillion, lastUpdatedTT}) => {
 
   return (
     <div className="cell statistic">
-      {!statisticConfig.hideDelta && (
+      {statisticConfig?.showDelta && (
         <animated.div
           className={classnames('delta', `is-${statistic}`)}
           title={delta}
