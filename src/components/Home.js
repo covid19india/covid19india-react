@@ -5,6 +5,7 @@ import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
 import {fetcher, getStatistic, retry} from '../utils/commonFunctions';
 
+import {HeartIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import {useState, useRef, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
@@ -123,6 +124,15 @@ function Home() {
               )}
             </>
           </div>
+
+          <a
+            href="https://life.coronasafe.network"
+            target="_noblank"
+            className="essentials fadeInUp"
+          >
+            <HeartIcon />
+            Crowdsourced Resources
+          </a>
 
           {!hideVaccinated && <LevelVaccinated data={data['TT']} />}
 
