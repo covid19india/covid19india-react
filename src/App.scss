@@ -4109,6 +4109,29 @@ footer {
   }
 }
 
+.essentials {
+  align-items: center;
+  align-self: center;
+  animation-delay: 750ms;
+  background: #ff0000;
+  background: $pink-light;
+  border-radius: 5px;
+  color: $pink;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  font-size: 13px;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  text-decoration: none;
+  width: calc(100% - 4rem);
+
+  svg {
+    margin-right: 0.5rem;
+  }
+}
+
 @media (min-width: 769px) {
   .Home,
   .State {
@@ -4518,6 +4541,11 @@ footer {
         margin-top: 0.75rem;
       }
     }
+  }
+
+  .essentials {
+    margin-top: 0;
+
   }
 }
 
