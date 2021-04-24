@@ -1,6 +1,5 @@
 import {fetcher} from '../utils/commonFunctions';
 
-import {LinkExternalIcon} from '@primer/octicons-react';
 import {useMemo} from 'react';
 import useSWR from 'swr';
 
