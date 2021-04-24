@@ -125,11 +125,7 @@ function Home() {
             </>
           </div>
 
-          <a
-            href="https://life.coronasafe.network"
-            target="_noblank"
-            className="essentials fadeInUp"
-          >
+          <a href="/resources" className="essentials fadeInUp">
             <HeartIcon />
             Crowdsourced Resources
           </a>
