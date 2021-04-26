@@ -21,9 +21,17 @@ const Resources = () => {
       <h1 className="heading">Resources</h1>
 
       <div className="banner">
-        The links below are of independent and governmental aggregators who are
-        providing resources to those in need. A lot of this is dynamically
-        changing and might get outdated soon.
+        The objective of this page is to help people gain access to vital
+        resources by sharing information only. However, we request the
+        beneficiaries to use their discretion and verify the leads on their own
+        before taking any action. If you find inaccurate information or any lead
+        engaging in illegal practices, kindly inform us at
+        hello@covid19india.org. We will take it down as soon as possible. We
+        will not be responsible for the actions you take using the information
+        on this page. We are just mediating information and are no way
+        responsible for what is being shared. Please avoid sharing and
+        contacting black market resources. We strongly encourage to AVOID black
+        market.
       </div>
 
       <div className="resources">
