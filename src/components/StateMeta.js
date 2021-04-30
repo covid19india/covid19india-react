@@ -41,6 +41,12 @@ function StateMeta({stateCode, data, timeseries}) {
   const testPerMillion = getStatistic(data[stateCode], 'total', 'tested', {
     perMillion: true,
   });
+  const vaccineDosesPerMillion = getStatistic(
+    data[stateCode],
+    'total',
+    'vaccinated',
+    {perMillion: true}
+  );
   const totalConfirmedPerMillion = getStatistic(
     data['TT'],
     'total',
@@ -184,6 +190,30 @@ function StateMeta({stateCode, data, timeseries}) {
                   'samples were tested.'
                 )}`
               : t('No tests have been conducted in this state yet.')
+          }
+        />
+
+        <StateMetaCard
+          className="vdapm"
+          title={'Vaccine Doses Administered Per Million'}
+          statistic={`${formatNumber(vaccineDosesPerMillion)}`}
+          formula={
+            '(total vaccine doses administered in state / total population of state) * 1 Million'
+          }
+          date={
+            vaccineDosesPerMillion
+              ? `${t('As of')} ${formatLastUpdated(
+                  data[stateCode]?.meta?.tested?.['last_updated']
+                )} ${t('ago')}`
+              : ''
+          }
+          description={
+            vaccineDosesPerMillion > 0
+              ? `${t('For every 10 lakh people in')} ${STATE_NAMES[stateCode]},
+                ~${formatNumber(Math.round(vaccineDosesPerMillion))} ${t(
+                  'vaccine doses were administered'
+                )}`
+              : t('No vaccine doses have been administered in this state yet.')
           }
         />
       </div>

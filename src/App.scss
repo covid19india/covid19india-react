@@ -632,6 +632,21 @@ h6 {
       }
     }
 
+    &.vdapm {
+      background: $pink-light;
+
+      h3,
+      h5,
+      svg,
+      p {
+        color: $pink-mid;
+      }
+
+      h1 {
+        color: $pink;
+      }
+    }
+
     &.ptr {
       background: $pink-light;
 
