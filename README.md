@@ -8,6 +8,13 @@
 
 ## Setup
 
+### yarn installation
+```
+npm i -g yarn
+yarn -v
+```
+
+### App Start
 ```
 yarn install && yarn start
 ```
