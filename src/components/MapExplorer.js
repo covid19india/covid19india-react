@@ -344,7 +344,7 @@ function MapExplorer({
           {/* Twitter Share */}
           <TwitterShareButton
             url={shareConfig.url}
-            title={'CampersTribe - World is yours to explore'}
+            title={shareConfig.title}
             className="share-button"
           >
             <TwitterIcon size={shareConfig.buttonSize} round={true} />
