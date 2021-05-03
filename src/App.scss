@@ -86,9 +86,10 @@ html {
 body {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
-  transition: all cubic-bezier(0.17, 0.67, 0.83, 0.67) 0.125s;
+
   margin: 0;
   padding: 0;
+  transition: all cubic-bezier(0.17, 0.67, 0.83, 0.67) 0.125s;
 }
 
 h1 {
