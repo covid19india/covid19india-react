@@ -4,12 +4,12 @@ import useViewPort from '../hooks/useViewPort';
 import {useCallback, useState} from 'react';
 import {useTransition, animated} from 'react-spring';
 
-const Tooltip = ({data, children, stateCard = false}) => {
+const Tooltip = ({data, children, stateCard}) => {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
 
   const viewPort = useViewPort();
 
-  const transitions = useTransition(isTooltipVisible, null, {
+  const transitions = useTransition(isTooltipVisible, {
     from: TOOLTIP_FADE_OUT,
     enter: TOOLTIP_FADE_IN,
     leave: TOOLTIP_FADE_OUT,
@@ -32,27 +32,25 @@ const Tooltip = ({data, children, stateCard = false}) => {
     >
       {children}
 
-      {transitions.map(({item, key, props}) =>
-        item ? (
-          <animated.div
-            key={key}
-            style={
-              stateCard && viewPort.width <= 480
-                ? {...props, top: '25px', right: '2px'}
-                : {...props}
-            }
-          >
-            <div className="message">
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: data.replace(/\n/g, '<br/>'),
-                }}
-              ></p>
-            </div>
-          </animated.div>
-        ) : (
-          <animated.div key={key}></animated.div>
-        )
+      {transitions(
+        (style, item) =>
+          item && (
+            <animated.div
+              style={
+                stateCard && viewPort.width <= 480
+                  ? {...style, top: '25px', right: '2px'}
+                  : {...style}
+              }
+            >
+              <div className="message">
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: data.replace(/\n/g, '<br/>'),
+                  }}
+                ></p>
+              </div>
+            </animated.div>
+          )
       )}
     </span>
   );
