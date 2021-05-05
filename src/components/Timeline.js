@@ -1,202 +1,273 @@
-import {formatDate, getIndiaDateISO} from '../utils/commonFunctions';
+import {
+  formatDate,
+  getIndiaDateISO,
+  getIndiaDateYesterdayISO,
+  retry,
+} from '../utils/commonFunctions';
 
-import clamp from 'lodash/clamp';
-import React, {useState} from 'react';
-import {useSprings, useTransition, animated, config} from 'react-spring';
-import {useMeasure, useKeyPressEvent} from 'react-use';
-import {useDrag} from 'react-use-gesture';
+import {HeartFillIcon} from '@primer/octicons-react';
+import classnames from 'classnames';
+import equal from 'fast-deep-equal';
+import {useKeenSlider} from 'keen-slider/react';
+import 'keen-slider/keen-slider.min.css';
+import {
+  memo,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  lazy,
+  Suspense,
+} from 'react';
+import ReactDOM from 'react-dom';
+import {FastForward, Play as Play, Pause as Pause} from 'react-feather';
+import {useTranslation} from 'react-i18next';
+import {useTransition, animated} from 'react-spring';
+import {useClickAway, useKeyPressEvent} from 'react-use';
 
-const Timeline = ({setIsTimelineMode, setDate, dates}) => {
-  const [timelineElement, {width}] = useMeasure();
-  const [index, setIndex] = useState(0);
+const Calendar = lazy(() => retry(() => import('./Calendar')));
 
-  const [springs, set] = useSprings(
-    dates.length,
-    (i) => ({
-      x: (index - i) * (480 / 3) + 480 / 2 - 35,
-      color: i === 0 ? '#6c757d' : '#6c757d99',
-      opacity: i < 2 ? 1 : 0,
-    }),
-    config.stiff
-  );
+const wheelSize = 18;
+const slidesPerView = 1;
+const slideDegree = 360 / wheelSize;
+const distanceThreshold = 5;
+const autoPlayDelay = 2500;
 
-  const bind = useDrag(
-    ({down, delta: [xDelta], direction: [xDir], distance, cancel}) => {
-      const clampedIndex = getClampedIndex(xDir);
-      if (down && distance > 25) {
-        cancel(setIndex(clampedIndex));
-        setClampedDate(clampedIndex);
-      }
+function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
+  const {t} = useTranslation();
 
-      if (index === 0 && xDir < 0) {
-        hideTimeline();
-      }
+  const [sliderState, setSliderState] = useState(null);
+  const [play, setPlay] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const timelineRef = useRef();
+  const timer = useRef();
 
-      setSprings({clampedIndex: index, xDir, down, xDelta});
-    }
-  );
+  useClickAway(timelineRef, () => {
+    setShowCalendar(false);
+  });
 
-  const getClampedIndex = (direction) => {
-    return clamp(index + (direction > 0 ? 1 : -1), 0, dates.length - 1);
-  };
-
-  const setSprings = ({direction, clampedIndex, down, xDelta}) => {
-    set((i) => {
-      if (i < clampedIndex - 1) {
-        return {x: width, color: '#6c757d99', opacity: 0, display: 'none'};
-      } else if (i > clampedIndex + 1) {
-        return {x: -40, color: '#6c757d99', opacity: 0, display: 'none'};
-      }
-
-      let x = 0;
-      if (xDelta) {
-        x =
-          (clampedIndex - i) * (width / 3) +
-          width / 2 -
-          35 +
-          (down ? xDelta : 0);
+  const [sliderRef, slider] = useKeenSlider({
+    initial: date === '' ? Math.max(0, dates.length - 2) : dates.indexOf(date),
+    dragSpeed: (val, instance) => {
+      const width = instance.details().widthOrHeight;
+      return (
+        val *
+        (width /
+          ((width / 2) * Math.tan(slideDegree * (Math.PI / 180))) /
+          slidesPerView)
+      );
+    },
+    move: (s) => {
+      setSliderState(s.details());
+    },
+    afterChange: (s) => {
+      const slide = s.details().absoluteSlide;
+      if (slide === s.details().size - 1) {
+        ReactDOM.unstable_batchedUpdates(() => {
+          setIsTimelineMode(false);
+          setShowCalendar(false);
+          setDate('');
+        });
       } else {
-        x = (clampedIndex - i) * (width / 3) + width / 3 + 45;
+        setDate(dates[slide]);
       }
+    },
+    mode: 'free-snap',
+    slides: dates.length,
+    slidesPerView,
+  });
 
-      if (i === clampedIndex) {
-        return {x, color: '#6c757d', display: 'block'};
-      }
-      return {x, color: '#6c757d99', opacity: 1, display: 'block'};
-    });
+  const [radius, setRadius] = useState(0);
+
+  useEffect(() => {
+    if (slider) setRadius(slider.details().widthOrHeight);
+  }, [slider]);
+
+  const formatSlideDate = (date) => {
+    if (date === getIndiaDateISO()) return t('Today');
+    else if (date === getIndiaDateYesterdayISO()) return t('Yesterday');
+    return formatDate(date, 'dd MMM y');
   };
 
-  const handleKeyPress = (direction) => {
-    if (index < dates.length) {
-      const clampedIndex = getClampedIndex(direction);
-      setSprings({direction, clampedIndex});
-      setIndex(clampedIndex);
-      setClampedDate(clampedIndex);
+  const slideValues = useMemo(() => {
+    if (!sliderState) return [];
+    const values = [];
+    for (let i = 0; i < sliderState.size; i++) {
+      const distance = sliderState.positions[i].distance * slidesPerView;
+      const rotate =
+        Math.abs(distance) > wheelSize / 2 ? 180 : distance * (360 / wheelSize);
+      const style = {
+        transform: `rotateY(${rotate}deg) translateZ(${radius}px)`,
+        WebkitTransform: `rotateY(${rotate}deg) translateZ(${radius}px)`,
+      };
+      const className = i === sliderState.absoluteSlide ? 'current' : '';
+      const slide = sliderState.absoluteSlide + Math.round(distance);
+      if (Math.abs(distance) < distanceThreshold)
+        values.push({className, style, slide});
     }
-    if (index === 1 && direction === -1) {
-      hideTimeline();
-    }
-  };
+    return values;
+  }, [sliderState, radius]);
 
   useKeyPressEvent('ArrowLeft', () => {
-    handleKeyPress(1);
+    if (slider) slider.prev();
   });
 
   useKeyPressEvent('ArrowRight', () => {
-    handleKeyPress(-1);
+    if (slider) slider.next();
   });
 
   useKeyPressEvent('Escape', () => {
-    setIsTimelineMode(false);
-    setDate('');
+    setPlay(false);
+    if (slider) slider.moveToSlide(sliderState.size - 1);
   });
 
-  const hideTimeline = () => {
-    setTimeout(() => {
-      setIsTimelineMode(false);
-    }, 1000);
-  };
+  useKeyPressEvent('Enter', () => {
+    setPlay(!play);
+  });
 
-  const getDate = (index) => {
-    if (dates[index] === getIndiaDateISO()) return 'Today';
-    return formatDate(dates[index], 'dd MMM');
-  };
-
-  const setClampedDate = (clampedIndex) => {
-    if (clampedIndex === 0) {
-      setDate('');
-    } else {
-      setDate(dates[clampedIndex]);
+  const handleClick = (index) => {
+    if (index === sliderState?.absoluteSlide) {
+      setShowCalendar(!showCalendar);
+    } else if (slider) {
+      slider.moveToSlide(index);
     }
   };
 
   const timeline = {
-    '2020-03-25': 'Beginning of Lockdown Phase 1',
-    '2020-04-14': 'End of Lockdown Phase 1',
-    '2020-04-15': 'Beginning of Lockdown Phase 2',
-    '2020-05-03': 'End of Lockdown Phase 2',
-    '2020-05-04': 'Beginning of Lockdown Phase 3',
-    '2020-05-17': 'End of Lockdown Phase 3',
-    '2020-05-18': 'Beginning of Lockdown Phase 4',
-    '2020-05-31': 'End of Lockdown Phase 4',
-    '2020-06-01': 'Beginning of Lockdown Phase 5',
+    '2020-03-25': t('Beginning of Lockdown Phase 1'),
+    '2020-04-14': t('End of Lockdown Phase 1'),
+    '2020-04-15': t('Beginning of Lockdown Phase 2'),
+    '2020-05-03': t('End of Lockdown Phase 2'),
+    '2020-05-04': t('Beginning of Lockdown Phase 3'),
+    '2020-05-17': t('End of Lockdown Phase 3'),
+    '2020-05-18': t('Beginning of Lockdown Phase 4'),
+    '2020-05-31': t('End of Lockdown Phase 4'),
+    '2020-06-01': t('Beginning of Lockdown Phase 5'),
+    '2020-11-20': <HeartFillIcon size={12} />,
   };
 
-  const transition = useTransition(
-    timeline.hasOwnProperty(dates[index]),
-    null,
-    {
-      from: {transform: 'translate3d(0, 20px, 0)', opacity: 0},
-      enter: {transform: 'translate3d(0, 0px, 0)', opacity: 1},
-      leave: {transform: 'translate3d(0, 20px, 0)', opacity: 0},
-    }
-  );
+  useEffect(() => {
+    timer.current = setInterval(() => {
+      if (play && slider) {
+        slider.next();
+      }
+    }, autoPlayDelay);
+    return () => {
+      clearInterval(timer.current);
+    };
+  }, [play, slider]);
 
-  const handleClick = (clampedIndex) => {
-    if (clampedIndex > index) {
-      handleKeyPress(+1);
-    } else {
-      handleKeyPress(-1);
+  const handleWheel = (event) => {
+    if (slider) {
+      if (event.deltaX > 0) {
+        slider.next();
+      } else if (event.deltaX < 0) {
+        slider.prev();
+      }
     }
   };
+
+  const transitions = useTransition(showCalendar, {
+    from: {
+      pointerEvents: 'none',
+      paddingTop: 0,
+      marginBottom: 0,
+      height: 0,
+      opacity: 0,
+    },
+    enter: {
+      pointerEvents: 'all',
+      paddingTop: 36,
+      marginBottom: 400,
+      opacity: 1,
+    },
+    leave: {
+      pointerEvents: 'none',
+      paddingTop: 0,
+      marginBottom: 0,
+      height: 0,
+      opacity: 0,
+    },
+    config: {
+      mass: 1,
+      tension: 100,
+      friction: 15,
+    },
+  });
 
   return (
-    <React.Fragment>
-      {transition.map(
-        ({item, key, props}) =>
-          item && (
-            <animated.h5 className="highlight" key={key} style={props}>
-              {timeline[dates[index]]}
-            </animated.h5>
-          )
-      )}
-
-      <div className="Timeline" ref={timelineElement} {...bind()}>
-        {springs
-          .filter(
-            ({opacity}, i) =>
-              i < dates.length &&
-              (i === index + 1 ||
-                i === index - 1 ||
-                i === index + 2 ||
-                i === index - 2 ||
-                i === index)
-          )
-          .map(({x, color, opacity, display}, i) => (
-            <animated.div
-              className="day"
-              key={i}
-              style={{
-                transform: x.interpolate((x) => `translate3d(${x}px,0,0)`),
-                opacity,
-                display,
-              }}
-            >
-              {index < 2 && (
-                <animated.h5
-                  style={{color}}
-                  onClick={() => {
-                    handleClick(i);
-                  }}
+    <div className={'Timeline'} ref={timelineRef}>
+      <div className="actions timeline fadeInUp" onWheel={handleWheel}>
+        <div className={'wheel-buttons'}>
+          <div
+            className={'wheel-button left'}
+            onClick={handleClick.bind(this, 0)}
+          >
+            <FastForward />
+          </div>
+          <div
+            className={classnames('wheel-button', {active: play})}
+            onClick={setPlay.bind(this, !play)}
+          >
+            {play ? <Pause /> : <Play />}
+          </div>
+          <div
+            className="wheel-button"
+            onClick={handleClick.bind(this, dates.length - 1)}
+          >
+            <FastForward />
+          </div>
+        </div>
+        <div className={'wheel'} ref={sliderRef}>
+          <div className="wheel__inner">
+            <div className="wheel__slides">
+              {slideValues.map(({className, style, slide}) => (
+                <div className={`wheel__slide`} style={style} key={slide}>
+                  <h5 {...{className}} onClick={handleClick.bind(this, slide)}>
+                    {formatSlideDate(dates[slide])}
+                  </h5>
+                </div>
+              ))}
+            </div>
+          </div>
+          {slideValues.map(
+            ({slide}) =>
+              Object.keys(timeline).includes(dates[slide]) && (
+                <h5
+                  className={classnames('highlight', {
+                    current: slide === sliderState?.absoluteSlide,
+                  })}
+                  key={slide}
                 >
-                  {getDate(i)}
-                </animated.h5>
-              )}
-              {index > 1 && index < dates.length && (
-                <animated.h5
-                  style={{color}}
-                  onClick={() => {
-                    handleClick(index + i - 2);
-                  }}
-                >
-                  {getDate(index + i - 2)}
-                </animated.h5>
-              )}
-            </animated.div>
-          ))}
+                  {timeline[dates[slide]]}
+                </h5>
+              )
+          )}
+        </div>
       </div>
-    </React.Fragment>
+      <Suspense fallback={<div />}>
+        {transitions(
+          (style, item) =>
+            item && (
+              <animated.div {...{style}}>
+                <Calendar {...{date, dates, slider}} />
+              </animated.div>
+            )
+        )}
+      </Suspense>
+    </div>
   );
+}
+
+const isEqual = (prevProps, currProps) => {
+  if (!equal(currProps.date, prevProps.date)) {
+    return false;
+  } else if (!equal(currProps.isTimelineMode, prevProps.isTimelineMode)) {
+    return false;
+  } else if (!equal(currProps.dates, prevProps.dates)) {
+    return false;
+  }
+  return true;
 };
 
-export default React.memo(Timeline);
+export default memo(Timeline, isEqual);

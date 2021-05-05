@@ -5,10 +5,10 @@ import {
 } from '../constants';
 import {capitalize, formatNumber, getStatistic} from '../utils/commonFunctions';
 
-import {HeartFillIcon} from '@primer/octicons-v2-react';
+import {HeartFillIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
-import React, {useMemo} from 'react';
+import {memo, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {animated, useSpring} from 'react-spring';
 
@@ -23,14 +23,15 @@ function PureLevelItem({statistic, total, delta}) {
   const statisticConfig = STATISTIC_CONFIGS[statistic];
 
   return (
-    <React.Fragment>
+    <>
       <h5>{t(capitalize(statisticConfig.displayName))}</h5>
       <animated.h4>
         {statistic !== 'active' ? (
           delta > 0 ? (
-            spring.delta.interpolate(
+            /* Add space after + because react-spring regex bug */
+            spring.delta.to(
               (delta) =>
-                `+${formatNumber(delta, statisticConfig.format, statistic)}`
+                `+ ${formatNumber(delta, statisticConfig.format, statistic)}`
             )
           ) : (
             <HeartFillIcon size={9} verticalAlign={2} />
@@ -40,15 +41,15 @@ function PureLevelItem({statistic, total, delta}) {
         )}
       </animated.h4>
       <animated.h1>
-        {spring.total.interpolate((total) =>
+        {spring.total.to((total) =>
           formatNumber(total, statisticConfig.format, statistic)
         )}
       </animated.h1>
-    </React.Fragment>
+    </>
   );
 }
 
-const LevelItem = React.memo(PureLevelItem);
+const LevelItem = memo(PureLevelItem);
 
 function Level({data}) {
   const trail = useMemo(() => {
@@ -83,15 +84,10 @@ function Level({data}) {
 }
 
 const isEqual = (prevProps, currProps) => {
-  if (
-    !equal(
-      getStatistic(prevProps.data, 'total', 'active'),
-      getStatistic(currProps.data, 'total', 'active')
-    )
-  ) {
+  if (!equal(prevProps.data, currProps.data)) {
     return false;
   }
   return true;
 };
 
-export default React.memo(Level, isEqual);
+export default memo(Level, isEqual);

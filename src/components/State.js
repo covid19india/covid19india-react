@@ -1,16 +1,15 @@
-import DeltaBarGraph from './DeltaBarGraph';
-import Footer from './Footer';
-import Level from './Level';
-import MapSwitcher from './MapSwitcher';
-import StateHeader from './StateHeader';
-import StateMeta from './StateMeta';
-
-import {API_ROOT_URL, STATE_NAMES} from '../constants';
+import {DATA_API_ROOT, STATE_NAMES} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
-import {fetcher, formatNumber, getStatistic} from '../utils/commonFunctions';
+import {
+  fetcher,
+  formatNumber,
+  getStatistic,
+  retry,
+} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
-import React, {
+import {
+  memo,
   useMemo,
   useState,
   useEffect,
@@ -25,9 +24,18 @@ import {useParams} from 'react-router-dom';
 import {useSessionStorage} from 'react-use';
 import useSWR from 'swr';
 
-const TimeseriesExplorer = lazy(() => import('./TimeseriesExplorer'));
-const MapExplorer = lazy(() => import('./MapExplorer'));
-const Minigraphs = lazy(() => import('./Minigraphs'));
+const DeltaBarGraph = lazy(() => retry(() => import('./DeltaBarGraph')));
+const Footer = lazy(() => retry(() => import('./Footer')));
+const Level = lazy(() => retry(() => import('./Level')));
+const LevelVaccinated = lazy(() => retry(() => import('./LevelVaccinated')));
+const MapExplorer = lazy(() => retry(() => import('./MapExplorer')));
+const MapSwitcher = lazy(() => retry(() => import('./MapSwitcher')));
+const Minigraphs = lazy(() => retry(() => import('./Minigraphs')));
+const StateHeader = lazy(() => retry(() => import('./StateHeader')));
+const StateMeta = lazy(() => retry(() => import('./StateMeta')));
+const TimeseriesExplorer = lazy(() =>
+  retry(() => import('./TimeseriesExplorer'))
+);
 
 function State() {
   const {t} = useTranslation();
@@ -55,7 +63,7 @@ function State() {
   }, [regionHighlighted.stateCode, stateCode]);
 
   const {data: timeseries, error: timeseriesResponseError} = useSWR(
-    `${API_ROOT_URL}/timeseries-${stateCode}.min.json`,
+    `${DATA_API_ROOT}/timeseries-${stateCode}.min.json`,
     fetcher,
     {
       revalidateOnMount: true,
@@ -63,7 +71,7 @@ function State() {
     }
   );
 
-  const {data} = useSWR(`${API_ROOT_URL}/data.min.json`, fetcher, {
+  const {data} = useSWR(`${DATA_API_ROOT}/data.min.json`, fetcher, {
     revalidateOnMount: true,
     refreshInterval: 100000,
   });
@@ -94,7 +102,7 @@ function State() {
   }, [data, stateCode]);
 
   const stateMetaElement = useRef();
-  const isStateMetaVisible = useIsVisible(stateMetaElement, {once: true});
+  const isStateMetaVisible = useIsVisible(stateMetaElement);
 
   const trail = useMemo(() => {
     const styles = [];
@@ -111,7 +119,7 @@ function State() {
   const lookback = showAllDistricts ? (window.innerWidth >= 540 ? 10 : 8) : 6;
 
   return (
-    <React.Fragment>
+    <>
       <Helmet>
         <title>
           Coronavirus Outbreak in {STATE_NAMES[stateCode]} - covid19india.org
@@ -136,6 +144,10 @@ function State() {
             />
           </div>
 
+          {data?.[stateCode]?.total?.vaccinated && (
+            <LevelVaccinated data={data?.[stateCode]} />
+          )}
+
           {data && (
             <Suspense fallback={<div style={{minHeight: '50rem'}} />}>
               <MapExplorer
@@ -153,30 +165,33 @@ function State() {
 
           <span ref={stateMetaElement} />
 
-          {data && isStateMetaVisible && (
-            <StateMeta
-              {...{
-                stateCode,
-                data,
-              }}
-              timeseries={timeseries?.[stateCode]?.dates}
-            />
+          {isStateMetaVisible && data && (
+            <Suspense fallback={<div />}>
+              <StateMeta
+                {...{
+                  stateCode,
+                  data,
+                }}
+                timeseries={timeseries?.[stateCode]?.dates}
+              />
+            </Suspense>
           )}
         </div>
 
         <div className="state-right">
-          <React.Fragment>
-            <div
-              className="district-bar"
-              style={!showAllDistricts ? {display: 'flex'} : {}}
-            >
-              <div className="district-bar-top">
+          <>
+            <div className="district-bar">
+              <div
+                className={classnames('district-bar-top', {
+                  expanded: showAllDistricts,
+                })}
+              >
                 <div className="district-bar-left">
                   <h2
                     className={classnames(mapStatistic, 'fadeInUp')}
                     style={trail[0]}
                   >
-                    Top districts
+                    {t('Top districts')}
                   </h2>
                   <div
                     className={`districts fadeInUp ${
@@ -269,7 +284,9 @@ function State() {
                     onClick={toggleShowAllDistricts}
                     style={trail[3]}
                   >
-                    <span>{showAllDistricts ? `View less` : `View all`}</span>
+                    <span>
+                      {t(showAllDistricts ? 'View less' : 'View all')}
+                    </span>
                   </button>
                 ) : (
                   <div style={{height: '3.75rem', flexBasis: '15%'}} />
@@ -288,13 +305,13 @@ function State() {
                 forceRender={!!timeseriesResponseError}
               />
             </Suspense>
-          </React.Fragment>
+          </>
         </div>
       </div>
 
       <Footer />
-    </React.Fragment>
+    </>
   );
 }
 
-export default React.memo(State);
+export default memo(State);

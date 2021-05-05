@@ -1,7 +1,7 @@
 import Tooltip from './Tooltip';
 
-import {InfoIcon} from '@primer/octicons-v2-react';
-import React from 'react';
+import {InfoIcon} from '@primer/octicons-react';
+import {useTranslation} from 'react-i18next';
 
 function StateMetaCard({
   title,
@@ -12,6 +12,8 @@ function StateMetaCard({
   description,
   className,
 }) {
+  const {t} = useTranslation();
+
   return (
     <div className={`meta-item ${className}`}>
       <div className="meta-item-top">
@@ -22,7 +24,7 @@ function StateMetaCard({
       </div>
       <h1>{statistic}</h1>
       <h5>{date}</h5>
-      {total && <h5>{`India has ${total} CPM`}</h5>}
+      {total && <h5>{`${t('India has')} ${total} ${t('CPM')}`}</h5>}
       <p>{description}</p>
     </div>
   );

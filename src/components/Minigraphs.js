@@ -5,7 +5,7 @@ import {
 } from '../constants';
 import {
   getStatistic,
-  getIndiaYesterdayISO,
+  getIndiaDateYesterdayISO,
   parseIndiaDate,
 } from '../utils/commonFunctions';
 
@@ -15,32 +15,40 @@ import {interpolatePath} from 'd3-interpolate-path';
 import {scaleTime, scaleLinear} from 'd3-scale';
 import {select} from 'd3-selection';
 import {line, curveMonotoneX} from 'd3-shape';
-// eslint-disable-next-line
-import {transition} from 'd3-transition';
+import 'd3-transition';
 import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
-import React, {useEffect, useRef, useMemo} from 'react';
+import {memo, useEffect, useRef, useMemo} from 'react';
+import {useMeasure} from 'react-use';
 
 // Dimensions
-const [width, height] = [100, 75];
-const margin = {top: 10, right: 10, bottom: 2, left: 5};
+const margin = {top: 10, right: 10, bottom: 2, left: 10};
+const height = 75;
+const maxWidth = 120;
 
 function Minigraphs({timeseries, date: timelineDate}) {
   const refs = useRef([]);
+  const endDate = timelineDate || getIndiaDateYesterdayISO();
+
+  let [wrapperRef, {width}] = useMeasure();
+  width = Math.min(width, maxWidth);
 
   const dates = useMemo(() => {
-    const today = timelineDate || getIndiaYesterdayISO();
     const pastDates = Object.keys(timeseries || {}).filter(
-      (date) => date <= today
+      (date) => date <= endDate
     );
-    const cutOffDate = formatISO(
-      subDays(parseIndiaDate(today), MINIGRAPH_LOOKBACK_DAYS),
+    const lastDate = pastDates[pastDates.length - 1];
+
+    const cutOffDateLower = formatISO(
+      subDays(parseIndiaDate(lastDate), MINIGRAPH_LOOKBACK_DAYS),
       {representation: 'date'}
     );
-    return pastDates.filter((date) => date >= cutOffDate);
-  }, [timeseries, timelineDate]);
+    return pastDates.filter((date) => date >= cutOffDateLower);
+  }, [endDate, timeseries]);
 
   useEffect(() => {
+    if (!width) return;
+
     const T = dates.length;
 
     const chartRight = width - margin.right;
@@ -48,7 +56,10 @@ function Minigraphs({timeseries, date: timelineDate}) {
 
     const xScale = scaleTime()
       .clamp(true)
-      .domain(T ? [parseIndiaDate(dates[0]), parseIndiaDate(dates[T - 1])] : [])
+      .domain([
+        parseIndiaDate(dates[0] || endDate),
+        parseIndiaDate(dates[T - 1]) || endDate,
+      ])
       .range([margin.left, chartRight]);
 
     refs.current.forEach((ref, index) => {
@@ -105,6 +116,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
                 const current = linePath(date);
                 return interpolatePath(previous, current);
               })
+              .selection()
         );
 
       svg
@@ -140,22 +152,27 @@ function Minigraphs({timeseries, date: timelineDate}) {
               .attr('cy', (date) =>
                 yScale(getStatistic(timeseries[date], 'delta', statistic))
               )
+              .style('opacity', 1)
+              .selection()
         );
     });
-  }, [dates, timeseries]);
+  }, [endDate, dates, timeseries, width]);
 
   return (
     <div className="Minigraph">
       {PRIMARY_STATISTICS.map((statistic, index) => (
-        <div key={statistic} className={classnames('svg-parent')}>
+        <div
+          key={statistic}
+          className={classnames('svg-parent')}
+          ref={index === 0 ? wrapperRef : null}
+        >
           <svg
             ref={(el) => {
               refs.current[index] = el;
             }}
+            preserveAspectRatio="xMidYMid meet"
             width={width}
             height={height}
-            viewBox={`0 0 ${width} ${height}`}
-            preserveAspectRatio="xMidYMid meet"
           />
         </div>
       ))}
@@ -178,4 +195,4 @@ const isEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(Minigraphs, isEqual);
+export default memo(Minigraphs, isEqual);

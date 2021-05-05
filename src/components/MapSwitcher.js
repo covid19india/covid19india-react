@@ -1,7 +1,7 @@
 import {PRIMARY_STATISTICS, STATISTIC_CONFIGS} from '../constants';
 
 import classnames from 'classnames';
-import React, {useState, useCallback, useEffect} from 'react';
+import {memo, useState, useCallback, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import {useSpring, animated, config} from 'react-spring';
 import {useMeasure} from 'react-use';
@@ -13,9 +13,9 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
   const [spring, set] = useSpring(() => ({
     opacity: 0,
     background: `${STATISTIC_CONFIGS[mapStatistic].color}20`,
-    transform: `translateX(${
+    transform: `translate3d(${
       width * PRIMARY_STATISTICS.indexOf(mapStatistic) * 0.25
-    }px)`,
+    }px, 0, 0)`,
     config: config.gentle,
   }));
 
@@ -23,9 +23,9 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
     if (width > 0) {
       ReactDOM.unstable_batchedUpdates(() => {
         set({
-          transform: `translateX(${
+          transform: `translate3d(${
             width * PRIMARY_STATISTICS.indexOf(mapStatistic) * 0.25
-          }px)`,
+          }px, 0, 0)`,
           opacity: 1,
           background: `${STATISTIC_CONFIGS[mapStatistic].color}20`,
           delay: count === 0 ? 1500 : 0,
@@ -66,4 +66,4 @@ const isEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(MapSwitcher, isEqual);
+export default memo(MapSwitcher, isEqual);

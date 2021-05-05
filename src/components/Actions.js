@@ -1,26 +1,24 @@
 import ActionsPanel from './ActionsPanel';
 
-import {fetcher} from '../utils/commonFunctions';
+import {API_DOMAIN} from '../constants';
+import {fetcher, retry} from '../utils/commonFunctions';
 
-import React, {useState, useEffect, lazy, Suspense} from 'react';
+import equal from 'fast-deep-equal';
+import {memo, useState, useEffect, lazy, Suspense} from 'react';
 import {useLocalStorage} from 'react-use';
 import useSWR from 'swr';
 
-const Updates = lazy(() => import('./Updates'));
+const Updates = lazy(() => retry(() => import('./Updates')));
 
-const Actions = ({setDate, dates}) => {
+const Actions = ({date, setDate, dates}) => {
   const [showUpdates, setShowUpdates] = useState(false);
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
   const [lastViewedLog, setLastViewedLog] = useLocalStorage('lastViewedLog', 0);
   const [isTimelineMode, setIsTimelineMode] = useState(false);
 
-  const {data: updates} = useSWR(
-    'https://api.covid19india.org/updatelog/log.json',
-    fetcher,
-    {
-      revalidateOnFocus: true,
-    }
-  );
+  const {data: updates} = useSWR(`${API_DOMAIN}/updatelog/log.json`, fetcher, {
+    revalidateOnFocus: true,
+  });
 
   useEffect(() => {
     if (updates !== undefined) {
@@ -33,7 +31,7 @@ const Actions = ({setDate, dates}) => {
   }, [lastViewedLog, updates, setLastViewedLog, setNewUpdate]);
 
   return (
-    <React.Fragment>
+    <>
       <ActionsPanel
         {...{
           lastViewedLog,
@@ -41,6 +39,7 @@ const Actions = ({setDate, dates}) => {
           isTimelineMode,
           setIsTimelineMode,
           showUpdates,
+          date,
           setDate,
           dates,
           setNewUpdate,
@@ -53,12 +52,17 @@ const Actions = ({setDate, dates}) => {
           <Updates {...{updates}} />
         </Suspense>
       )}
-    </React.Fragment>
+    </>
   );
 };
 
 const isEqual = (prevProps, currProps) => {
+  if (!equal(currProps.date, prevProps.date)) {
+    return false;
+  } else if (!equal(currProps.dates, prevProps.dates)) {
+    return false;
+  }
   return true;
 };
 
-export default React.memo(Actions, isEqual);
+export default memo(Actions, isEqual);

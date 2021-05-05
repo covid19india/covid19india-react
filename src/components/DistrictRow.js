@@ -1,23 +1,23 @@
 import Cell from './Cell';
 import Tooltip from './Tooltip';
 
-import {TABLE_STATISTICS, TABLE_STATISTICS_EXPANDED} from '../constants';
-
-import {InfoIcon} from '@primer/octicons-v2-react';
+import {InfoIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import React, {useCallback} from 'react';
+import {memo, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 
 function DistrictRow({
   stateCode,
   districtName,
   data,
+  tableStatistics,
   isPerMillion,
   regionHighlighted,
   setRegionHighlighted,
   expandTable,
+  lastUpdatedTT,
 }) {
   const {t} = useTranslation();
 
@@ -31,10 +31,6 @@ function DistrictRow({
       );
     }
   }, [regionHighlighted, districtName, setRegionHighlighted, stateCode]);
-
-  const tableStatistics = expandTable
-    ? TABLE_STATISTICS_EXPANDED
-    : TABLE_STATISTICS;
 
   return (
     <div
@@ -53,7 +49,10 @@ function DistrictRow({
       </div>
 
       {tableStatistics.map((statistic) => (
-        <Cell key={statistic} {...{statistic, data, isPerMillion}} />
+        <Cell
+          key={statistic}
+          {...{statistic, data, isPerMillion, lastUpdatedTT}}
+        />
       ))}
     </div>
   );
@@ -81,8 +80,10 @@ const isDistrictRowEqual = (prevProps, currProps) => {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
     return false;
+  } else if (!equal(prevProps.tableStatistics, currProps.tableStatistics)) {
+    return false;
   }
   return true;
 };
 
-export default React.memo(DistrictRow, isDistrictRowEqual);
+export default memo(DistrictRow, isDistrictRowEqual);

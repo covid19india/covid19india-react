@@ -2,7 +2,7 @@ import {STATISTIC_CONFIGS, D3_TRANSITION_DURATION} from '../constants';
 import {
   formatDate,
   formatNumber,
-  getIndiaYesterdayISO,
+  getIndiaDateYesterdayISO,
   getStatistic,
 } from '../utils/commonFunctions';
 
@@ -10,10 +10,9 @@ import {min, max} from 'd3-array';
 import {axisBottom} from 'd3-axis';
 import {scaleBand, scaleLinear} from 'd3-scale';
 import {select} from 'd3-selection';
-// eslint-disable-next-line
-import {transition} from 'd3-transition';
+import 'd3-transition';
 import equal from 'fast-deep-equal';
-import React, {useEffect, useRef} from 'react';
+import {memo, useEffect, useRef} from 'react';
 import {useMeasure} from 'react-use';
 
 const getDeltaStatistic = (data, statistic) => {
@@ -27,7 +26,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
   const [wrapperRef, {width, height}] = useMeasure();
 
   const pastDates = Object.keys(timeseries || {}).filter(
-    (date) => date <= getIndiaYesterdayISO()
+    (date) => date <= getIndiaDateYesterdayISO()
   );
   const dates = pastDates.slice(-lookback);
 
@@ -49,11 +48,15 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       .domain([
         Math.min(
           0,
-          min(dates, (date) => getDeltaStatistic(timeseries?.[date], statistic))
+          min(dates, (date) =>
+            getDeltaStatistic(timeseries?.[date], statistic)
+          ) || 0
         ),
         Math.max(
           1,
-          max(dates, (date) => getDeltaStatistic(timeseries?.[date], statistic))
+          max(dates, (date) =>
+            getDeltaStatistic(timeseries?.[date], statistic)
+          ) || 0
         ),
       ])
       .range([chartBottom, margin.top]);
@@ -67,7 +70,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
     svg
       .select('.x-axis')
       .transition(t)
-      .style('transform', `translateY(${yScale(0)}px)`)
+      .style('transform', `translate3d(0, ${yScale(0)}px, 0)`)
       .call(xAxis)
       .on('start', () => svg.select('.domain').remove())
       .selectAll('text')
@@ -183,7 +186,7 @@ const isEqual = (prevProps, currProps) => {
   return true;
 };
 
-export default React.memo(DeltaBarGraph, isEqual);
+export default memo(DeltaBarGraph, isEqual);
 
 function roundedBar(x, y, w, h, r) {
   r = Math.sign(h) * Math.min(Math.abs(h), r);

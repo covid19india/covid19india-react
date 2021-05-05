@@ -1,22 +1,38 @@
 import TimeseriesLoader from './loaders/Timeseries';
 
 import {
-  TIMESERIES_CHART_TYPES,
-  TIMESERIES_LOOKBACKS,
   STATE_NAMES,
+  TIMESERIES_CHART_TYPES,
+  TIMESERIES_LOOKBACK_DAYS,
+  TIMESERIES_STATISTICS,
 } from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
-import {getIndiaYesterdayISO, parseIndiaDate} from '../utils/commonFunctions';
+import {
+  getIndiaDateYesterdayISO,
+  parseIndiaDate,
+  retry,
+} from '../utils/commonFunctions';
 
-import {PinIcon, ReplyIcon} from '@primer/octicons-v2-react';
+import {PinIcon, ReplyIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
-import {formatISO, sub} from 'date-fns';
+import {min} from 'd3-array';
+import {formatISO, subDays} from 'date-fns';
 import equal from 'fast-deep-equal';
-import React, {useCallback, useMemo, useRef, lazy, Suspense} from 'react';
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  lazy,
+  Suspense,
+} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useLocalStorage, useSessionStorage} from 'react-use';
+import {useLocalStorage, useWindowSize} from 'react-use';
 
-const Timeseries = lazy(() => import('./Timeseries'));
+const Timeseries = lazy(() => retry(() => import('./Timeseries')));
+const TimeseriesBrush = lazy(() => retry(() => import('./TimeseriesBrush')));
 
 function TimeseriesExplorer({
   stateCode,
@@ -26,16 +42,42 @@ function TimeseriesExplorer({
   setRegionHighlighted,
   anchor,
   setAnchor,
-  expandTable,
+  expandTable = false,
+  hideVaccinated = false,
 }) {
   const {t} = useTranslation();
-  const [lookback, setLookback] = useSessionStorage(
-    'timeseriesLookback',
-    TIMESERIES_LOOKBACKS.MONTH
-  );
+  const [lookback, setLookback] = useLocalStorage('timeseriesLookbackDays', 90);
   const [chartType, setChartType] = useLocalStorage('chartType', 'total');
+  const [isUniform, setIsUniform] = useLocalStorage('isUniform', false);
+  const [isLog, setIsLog] = useLocalStorage('isLog', false);
+  const [isMovingAverage, setIsMovingAverage] = useLocalStorage(
+    'isMovingAverage',
+    false
+  );
+
+  const stateCodeDateRange = Object.keys(timeseries?.[stateCode]?.dates || {});
+  const beginningDate =
+    stateCodeDateRange[0] || timelineDate || getIndiaDateYesterdayISO();
+  const endDate = min([
+    stateCodeDateRange[stateCodeDateRange.length - 1],
+    timelineDate || getIndiaDateYesterdayISO(),
+  ]);
+
+  const [brushSelectionEnd, setBrushSelectionEnd] = useState(endDate);
+  useEffect(() => {
+    setBrushSelectionEnd(endDate);
+  }, [endDate]);
+
+  const brushSelectionStart =
+    lookback !== null
+      ? formatISO(subDays(parseIndiaDate(brushSelectionEnd), lookback), {
+          representation: 'date',
+        })
+      : beginningDate;
+
   const explorerElement = useRef();
   const isVisible = useIsVisible(explorerElement, {once: true});
+  const {width} = useWindowSize();
 
   const selectedRegion = useMemo(() => {
     if (timeseries?.[regionHighlighted.stateCode]?.districts) {
@@ -119,25 +161,19 @@ function TimeseriesExplorer({
     ];
   }, [regionHighlighted.stateCode, regionHighlighted.districtName, regions]);
 
-  const dates = useMemo(() => {
-    const today = timelineDate || getIndiaYesterdayISO();
-    const pastDates = Object.keys(selectedTimeseries || {}).filter(
-      (date) => date <= today
-    );
+  const dates = useMemo(
+    () =>
+      Object.keys(selectedTimeseries || {}).filter((date) => date <= endDate),
+    [selectedTimeseries, endDate]
+  );
 
-    if (lookback === TIMESERIES_LOOKBACKS.TWO_WEEKS) {
-      const cutOffDate = formatISO(sub(parseIndiaDate(today), {weeks: 2}), {
-        representation: 'date',
-      });
-      return pastDates.filter((date) => date >= cutOffDate);
-    } else if (lookback === TIMESERIES_LOOKBACKS.MONTH) {
-      const cutOffDate = formatISO(sub(parseIndiaDate(today), {months: 1}), {
-        representation: 'date',
-      });
-      return pastDates.filter((date) => date >= cutOffDate);
-    }
-    return pastDates;
-  }, [selectedTimeseries, timelineDate, lookback]);
+  const brushSelectionDates = useMemo(
+    () =>
+      dates.filter(
+        (date) => brushSelectionStart <= date && date <= brushSelectionEnd
+      ),
+    [dates, brushSelectionStart, brushSelectionEnd]
+  );
 
   const handleChange = useCallback(
     ({target}) => {
@@ -153,6 +189,16 @@ function TimeseriesExplorer({
     });
   }, [stateCode, setRegionHighlighted]);
 
+  const statistics = useMemo(
+    () =>
+      TIMESERIES_STATISTICS.filter(
+        (statistic) =>
+          (statistic !== 'vaccinated' || !hideVaccinated) &&
+          (chartType === 'delta' || statistic !== 'tpr')
+      ),
+    [chartType, hideVaccinated]
+  );
+
   return (
     <div
       className={classnames(
@@ -162,14 +208,22 @@ function TimeseriesExplorer({
         },
         {expanded: expandTable}
       )}
-      style={{display: anchor === 'mapexplorer' ? 'none' : ''}}
+      style={{
+        display:
+          anchor && anchor !== 'timeseries' && (!expandTable || width < 769)
+            ? 'none'
+            : '',
+      }}
       ref={explorerElement}
     >
       <div className="timeseries-header">
         <div
-          className={classnames('anchor', {
+          className={classnames('anchor', 'fadeInUp', {
             stickied: anchor === 'timeseries',
           })}
+          style={{
+            display: expandTable && width > 769 ? 'none' : '',
+          }}
           onClick={
             setAnchor &&
             setAnchor.bind(this, anchor === 'timeseries' ? null : 'timeseries')
@@ -192,8 +246,57 @@ function TimeseriesExplorer({
             )
           )}
         </div>
-      </div>
 
+        <div className="timeseries-options">
+          <div className="scale-modes">
+            <label className="main">{`${t('Scale Modes')}:`}</label>
+            <div className="timeseries-mode">
+              <label htmlFor="timeseries-mode">{t('Uniform')}</label>
+              <input
+                id="timeseries-mode"
+                type="checkbox"
+                className="switch"
+                checked={isUniform}
+                aria-label={t('Checked by default to scale uniformly.')}
+                onChange={setIsUniform.bind(this, !isUniform)}
+              />
+            </div>
+            <div
+              className={`timeseries-mode ${
+                chartType !== 'total' ? 'disabled' : ''
+              }`}
+            >
+              <label htmlFor="timeseries-logmode">{t('Logarithmic')}</label>
+              <input
+                id="timeseries-logmode"
+                type="checkbox"
+                checked={chartType === 'total' && isLog}
+                className="switch"
+                disabled={chartType !== 'total'}
+                onChange={setIsLog.bind(this, !isLog)}
+              />
+            </div>
+          </div>
+
+          <div
+            className={`timeseries-mode ${
+              chartType === 'total' ? 'disabled' : ''
+            } moving-average`}
+          >
+            <label htmlFor="timeseries-moving-average">
+              {t('7 day Moving Average')}
+            </label>
+            <input
+              id="timeseries-moving-average"
+              type="checkbox"
+              checked={chartType === 'delta' && isMovingAverage}
+              className="switch"
+              disabled={chartType !== 'delta'}
+              onChange={setIsMovingAverage.bind(this, !isMovingAverage)}
+            />
+          </div>
+        </div>
+      </div>
       {dropdownRegions && (
         <div className="state-selection">
           <div className="dropdown">
@@ -225,28 +328,45 @@ function TimeseriesExplorer({
           </div>
         </div>
       )}
-
       {isVisible && (
         <Suspense fallback={<TimeseriesLoader />}>
           <Timeseries
             timeseries={selectedTimeseries}
             regionHighlighted={selectedRegion}
-            {...{dates, chartType}}
+            dates={brushSelectionDates}
+            {...{
+              statistics,
+              endDate,
+              chartType,
+              isUniform,
+              isLog,
+              isMovingAverage,
+            }}
+          />
+          <TimeseriesBrush
+            timeseries={selectedTimeseries}
+            regionHighlighted={selectedRegion}
+            currentBrushSelection={[brushSelectionStart, brushSelectionEnd]}
+            animationIndex={statistics.length}
+            {...{dates, endDate, lookback, setBrushSelectionEnd, setLookback}}
           />
         </Suspense>
       )}
-
       {!isVisible && <div style={{height: '50rem'}} />}
-
-      <div className="pills">
-        {Object.values(TIMESERIES_LOOKBACKS).map((option) => (
+      <div
+        className="pills fadeInUp"
+        style={{animationDelay: `${(1 + statistics.length) * 250}ms`}}
+      >
+        {TIMESERIES_LOOKBACK_DAYS.map((numDays) => (
           <button
-            key={option}
+            key={numDays}
             type="button"
-            className={classnames({selected: lookback === option})}
-            onClick={() => setLookback(option)}
+            className={classnames({
+              selected: numDays === lookback,
+            })}
+            onClick={setLookback.bind(this, numDays)}
           >
-            {t(option)}
+            {numDays !== null ? `${numDays} ${t('days')}` : t('Beginning')}
           </button>
         ))}
       </div>
@@ -281,8 +401,10 @@ const isEqual = (prevProps, currProps) => {
     return false;
   } else if (!equal(currProps.expandTable, prevProps.expandTable)) {
     return false;
+  } else if (!equal(currProps.hideVaccinated, prevProps.hideVaccinated)) {
+    return false;
   }
   return true;
 };
 
-export default React.memo(TimeseriesExplorer, isEqual);
+export default memo(TimeseriesExplorer, isEqual);

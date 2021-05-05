@@ -6,11 +6,11 @@ import {
 } from '../animations';
 import locales from '../i18n/locales.json';
 
-import React, {useState, useCallback, useRef} from 'react';
-import * as Icon from 'react-feather';
+import {useState, useCallback, useRef} from 'react';
+import {Book, HelpCircle, Home, Moon, Sun, Phone} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
-import {useSpring, useTransition, animated} from 'react-spring';
+import {useTransition, animated} from 'react-spring';
 import {useLockBodyScroll, useWindowSize} from 'react-use';
 
 function Navbar({
@@ -29,11 +29,12 @@ function Navbar({
   useLockBodyScroll(expand);
   const windowSize = useWindowSize();
 
-  const [spring, set, stop] = useSpring(() => ({opacity: 0}));
-  set({opacity: 1});
-  stop();
+  const navbarTransition = useTransition(true, {
+    from: {opacity: 0},
+    enter: {opacity: 1},
+  });
 
-  const transitions = useTransition(expand, null, {
+  const expandTransition = useTransition(expand, {
     from: windowSize.width < 769 ? SLIDE_IN_MOBILE : SLIDE_IN,
     enter: windowSize.width < 769 ? SLIDE_OUT_MOBILE : SLIDE_OUT,
     leave: windowSize.width < 769 ? SLIDE_IN_MOBILE : SLIDE_IN,
@@ -46,12 +47,14 @@ function Navbar({
     }
   }, [windowSize.width]);
 
-  return (
-    <animated.div className="Navbar" style={spring}>
-      <div
-        className="navbar-left"
-        onClick={setShowLanguageSwitcher.bind(this, !showLanguageSwitcher)}
-      >
+  const handleLangaugeSwitcher = useCallback(() => {
+    if (expand) setExpand(false);
+    setShowLanguageSwitcher(!showLanguageSwitcher);
+  }, [expand, showLanguageSwitcher, setExpand, setShowLanguageSwitcher]);
+
+  return navbarTransition((style, item) => (
+    <animated.div className="Navbar" {...{style}}>
+      <div className="navbar-left" onClick={handleLangaugeSwitcher.bind(this)}>
         {locales[currentLanguage]}
       </div>
 
@@ -73,40 +76,44 @@ function Navbar({
         )}
 
         {windowSize.width > 769 && (
-          <React.Fragment>
+          <>
             <Link to="/">
               <span>
-                <Icon.Home {...activeNavIcon('/')} />
+                <Home {...activeNavIcon('/')} />
               </span>
             </Link>
             <Link to="/blog">
               <span>
-                <Icon.Book {...activeNavIcon('/blog')} />
+                <Book {...activeNavIcon('/blog')} />
               </span>
             </Link>
             <Link to="/about">
               <span>
-                <Icon.HelpCircle {...activeNavIcon('/about')} />
+                <HelpCircle {...activeNavIcon('/about')} />
+              </span>
+            </Link>
+            <Link to="/resources">
+              <span>
+                <Phone {...activeNavIcon('/resources')} />
               </span>
             </Link>
             <span>
               <SunMoon {...{darkMode}} />
             </span>
-          </React.Fragment>
+          </>
         )}
       </div>
 
-      {transitions.map(({item, key, props}) =>
-        item ? (
-          <animated.div key={key} style={props}>
-            <Expand {...{pages, setExpand, darkMode, windowSize}} />
-          </animated.div>
-        ) : (
-          <animated.div key={key} style={props}></animated.div>
-        )
+      {expandTransition(
+        (style, item) =>
+          item && (
+            <animated.div {...{style}}>
+              <Expand {...{pages, setExpand, darkMode, windowSize}} />
+            </animated.div>
+          )
       )}
     </animated.div>
-  );
+  ));
 }
 
 function Expand({pages, setExpand, darkMode, windowSize}) {
@@ -164,9 +171,7 @@ const activeNavIcon = (path) => ({
 const SunMoon = ({darkMode}) => {
   return (
     <div className="SunMoon" onClick={darkMode.toggle}>
-      <div>
-        {darkMode.value ? <Icon.Sun color={'#ffc107'} /> : <Icon.Moon />}
-      </div>
+      <div>{darkMode.value ? <Sun color={'#ffc107'} /> : <Moon />}</div>
     </div>
   );
 };

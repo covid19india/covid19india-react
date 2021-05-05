@@ -1,5 +1,10 @@
 // Color Pallete
 
+$white: #fff;
+$light: #f8f9fa;
+$dark: #343a40;
+$black: #000;
+
 $blue: #007bff;
 $blue-light: #007bff10;
 $blue-hover: #007bff30;
@@ -10,6 +15,7 @@ $pblue-light: #4c75f210;
 $pblue-hover: #4c75f230;
 $pblue-light-opaque: #eff7ff;
 $pblue-mid: #4c75f299;
+$pblue-dark: #4c75f2dd;
 $cherry: #ff073a;
 $cherry-mid: #ff073a99;
 $cherry-light: #ff073a20;
@@ -48,20 +54,16 @@ $purple-light: #201aa220;
 $purple-hover: #201aa230;
 $purple-mid: #201aa299;
 $purple-light-opaque: #e3e2f3;
-$pink: #fb5581;
-$pink-light: #ffa8cb30;
-$pink-hover: #ffa8cb60;
-$pink-mid: #fb558199;
+$pink: #db5581;
+$pink-light: #db558120;
+$pink-hover: #db558130;
+$pink-mid: #db558199;
 $brown: #b6854d;
 $brown-light: #b6854d10;
 $brown-hover: #b6854d30;
 $brown-mid: #b6854d99;
 $brick: #e23028;
 $brick-light: #e2302810;
-$white: #fff;
-$light: #f8f9fa;
-$dark: #343a40;
-$black: #000;
 
 // Dark mode variables
 $dark-m-gray: #161625;
@@ -206,7 +208,7 @@ h6 {
       transition: all 0.15s ease-in-out;
 
       &:hover {
-        background: $gray-hover;
+        background: $pblue-hover;
       }
 
       span {
@@ -248,17 +250,14 @@ h6 {
   .home-right {
     display: flex;
     flex-direction: column;
-    width: 34rem;
   }
 
   .home-left {
     margin-right: 2.5rem;
-    min-height: 60rem;
   }
 
   .home-right {
     margin-left: 2.5rem;
-    min-height: 10rem;
   }
 
   .header {
@@ -283,9 +282,9 @@ h6 {
   }
 
   .alert-right {
-    margin-left: .25rem;
+    margin-left: 0.25rem;
     text-align: right;
-    width: 9rem;
+    width: 8.25rem;
 
     a {
       background: $gray-light;
@@ -341,7 +340,7 @@ h6 {
     h5 {
       color: $gray;
       font-weight: 600;
-      margin-top: .5rem;
+      margin-top: 0.5rem;
     }
   }
 
@@ -386,7 +385,6 @@ h6 {
   .state-right {
     display: flex;
     flex-direction: column;
-    width: 34rem;
   }
 
   .state-left {
@@ -676,14 +674,14 @@ h6 {
     background: $brick-light;
     border-radius: 5px;
     cursor: pointer;
-    padding: .25rem;
+    padding: 0.25rem;
   }
 
   .dropdown {
     background: $white;
     border-radius: 5px;
     height: 25rem;
-    left: -.25rem;
+    left: -0.25rem;
     overflow-y: scroll;
     position: absolute;
     top: 2.75rem;
@@ -729,8 +727,8 @@ h6 {
     flex-direction: row;
     font-size: 14px;
     margin-bottom: 0.25rem;
-    margin-right: .25rem;
-    padding: .25rem .5rem;
+    margin-right: 0.25rem;
+    padding: 0.25rem 0.5rem;
     text-transform: capitalize;
 
     &.is-selected {
@@ -810,9 +808,7 @@ h6 {
   }
 
   input {
-    -moz-box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
-    -webkit-appearance: none !important;
-    -webkit-box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+    appearance: none !important;
     background: #fff;
     border: 0;
     border-radius: 5px;
@@ -908,8 +904,8 @@ h6 {
     border-radius: 5px;
     color: $pink;
     cursor: pointer;
-    font-size: .75rem;
-    padding: .75rem;
+    font-size: 0.75rem;
+    padding: 0.75rem;
     text-align: center;
   }
 
@@ -1096,7 +1092,7 @@ h6 {
       .result-description {
         align-self: flex-start;
         font-size: 0.75rem;
-        margin-bottom: .5rem;
+        margin-bottom: 0.5rem;
         margin-top: 1rem;
       }
 
@@ -1116,7 +1112,7 @@ h6 {
         flex-direction: row;
         font-size: 0.75rem;
         height: 1rem;
-        margin-right: .25rem;
+        margin-right: 0.25rem;
         margin-top: 0.25rem;
         padding: 0.25rem;
         text-align: right;
@@ -1152,7 +1148,7 @@ h6 {
       color: $gray-mid;
       display: flex;
       flex-direction: row;
-      padding: .1rem;
+      padding: 0.1rem;
 
       div {
         padding-top: 1px;
@@ -1182,29 +1178,21 @@ h6 {
   & > * {
     align-self: center;
   }
+}
+
+.ActionsPanel {
+  margin-bottom: 0.3rem;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+  position: relative;
+  width: calc(100% - 1rem);
 
   .actions {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    padding: 1rem;
-
-    &.timeline {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      padding: 1rem;
-      position: absolute;
-      top: 13.25rem;
-
-      .highlight {
-        color: $brown !important;
-        position: absolute;
-        text-align: center;
-        top: 2.5rem;
-        width: 100%;
-      }
-    }
+    justify-content: center;
+    transition: all 1s;
+    width: 100%;
 
     & > * {
       align-self: center;
@@ -1219,12 +1207,14 @@ h6 {
     }
 
     svg {
-      color: $gray-mid;
       cursor: pointer;
-      stroke-width: 3;
+      fill: #a6abb0;
+      stroke: #a6abb0;
+      stroke-width: 0.5;
       width: 16px;
 
       &:hover {
+        fill: $gray;
         stroke: $gray;
       }
     }
@@ -1236,19 +1226,11 @@ h6 {
 
       svg {
         display: flex;
-        fill: #a6abb0 !important;
         flex-direction: row;
         justify-content: center;
-        stroke: #a6abb0 !important;
-        stroke-width: 0.5 !important;
 
         path {
           align-self: center;
-        }
-
-        &:hover {
-          fill: $gray !important;
-          stroke: $gray !important;
         }
       }
     }
@@ -1271,26 +1253,278 @@ h6 {
 }
 
 .Timeline {
-  cursor: pointer;
-  height: 3rem;
-  width: 34rem;
-  will-change: transform;
+  align-items: center;
+  width: 100%;
 
-  .day {
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
     position: absolute;
-    text-align: center;
-    width: 70px;
-    will-change: transform;
+    top: 0;
 
-    h5 {
-      color: $gray-mid;
+    .highlight {
+      color: $brown !important;
+      opacity: 0;
+      position: absolute;
+      text-align: center;
+      top: 3.25rem;
+      transform: translate3d(0, 10px, 0);
+      transition: all 0.3s;
+      width: 100%;
 
-      &:hover {
-        color: $gray !important;
+      &.current {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
       }
 
-      &::selection {
-        background: transparent !important;
+      svg {
+        fill: #dc3545dd;
+        pointer-events: none;
+        stroke: none;
+      }
+    }
+
+    .wheel {
+      align-items: center;
+      color: #fff;
+      display: block;
+      height: 3rem;
+      margin-top: -0.75rem;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .wheel__inner {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      pointer-events: none;
+      transform-style: preserve-3d;
+      width: 100%;
+    }
+
+    .wheel__slides {
+      height: 100%;
+      margin-top: 2px;
+      position: relative;
+      width: 100%;
+    }
+
+    .wheel__slide {
+      -webkit-backface-visibility: hidden;
+      align-items: center;
+      backface-visibility: hidden;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      position: absolute;
+      width: 100%;
+
+      h5 {
+        -moz-user-select: -moz-none;
+        -webkit-user-select: none;
+        border-radius: 4px;
+        cursor: pointer;
+        opacity: 0.6;
+        padding: 4px;
+        pointer-events: all;
+        transition: all 0.3s;
+        user-select: none;
+
+        &.current {
+          background-color: #6c757d20;
+          opacity: 0.8;
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+
+        &:hover {
+          opacity: 0.8;
+        }
+
+        &::selection {
+          background: transparent !important;
+        }
+      }
+    }
+
+    .wheel-buttons {
+      display: flex;
+      justify-content: space-evenly;
+      width: 100%;
+      z-index: 1;
+
+      .wheel-button {
+        align-items: center;
+        color: $gray;
+        display: flex;
+
+        &.left {
+          svg {
+            transform: rotate(180deg);
+          }
+        }
+
+        &.active {
+          svg {
+            fill: $pblue;
+            stroke: none;
+
+            &:hover {
+              fill: $pblue-mid;
+              stroke: none;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .Calendar {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+
+    .react-calendar {
+      border-radius: 5px;
+      line-height: 2em;
+
+      *,
+      *::before,
+      *::after {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      .react-calendar__navigation {
+        margin-bottom: 1em;
+      }
+
+      button {
+        border: 0;
+        border-radius: 5px;
+        margin: 0.125rem;
+        outline: none;
+
+        &:enabled {
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    .react-calendar__viewContainer {
+      display: flex;
+    }
+
+    .react-calendar__navigation {
+      font-size: 25px;
+
+      button {
+        background-color: $gray-light;
+        color: $gray;
+        min-width: 44px;
+        padding: 1em 0.5em;
+
+        &:enabled {
+          &:hover {
+            background-color: #6c757d40;
+          }
+        }
+
+        &:disabled {
+          background: none;
+        }
+
+        div {
+          align-items: center;
+          display: flex;
+          justify-content: center;
+        }
+      }
+    }
+
+    .react-calendar__month-view__weekdays {
+      font-size: 0.75em;
+      font-weight: 600;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .react-calendar__month-view__weekdays__weekday {
+      padding: 0.5em;
+    }
+
+    .react-calendar__tile {
+      background: none;
+      color: $gray;
+      max-width: 100%;
+      padding: 1em 0.5em;
+      text-align: center;
+
+      &:enabled {
+        background-color: $gray-light;
+
+        &.react-calendar__tile--now {
+          background-color: #ffff76;
+          color: $black;
+
+          &:hover {
+            background-color: #ffffa9;
+          }
+        }
+
+        &.react-calendar__tile--active,
+        &.react-calendar__tile--hasActive {
+          background-color: #006edc;
+          color: $white;
+
+          &:hover {
+            background-color: #1087ff;
+          }
+        }
+
+        &.react-calendar__month-view__days__day--neighboringMonth {
+          background-color: #6c757d06;
+          color: #6c757d99;
+        }
+
+        &:hover {
+          background-color: $gray-hover;
+        }
+      }
+    }
+
+    .react-calendar__month-view {
+      .react-calendar__tile {
+        flex-basis: calc(100% / 7 - 0.25rem) !important;
+        max-width: calc(100% / 7 - 0.25rem) !important;
+      }
+    }
+
+    .react-calendar__year-view {
+      .react-calendar__tile {
+        flex-basis: calc(100% / 3 - 0.25rem) !important;
+        max-width: calc(100% / 3 - 0.25rem) !important;
+      }
+    }
+
+    .react-calendar__month-view__days__day--weekend {
+      color: $cherry;
+    }
+
+    .react-calendar__year-view,
+    .react-calendar__decade-view,
+    .react-calendar__century-view {
+      .react-calendar__tile {
+        color: $gray;
+        padding: 2em 0.5em;
       }
     }
   }
@@ -1416,6 +1650,7 @@ h6 {
   }
 
   h1 {
+    font-size: min(3.75vw, 22px) !important;
     font-weight: 600;
   }
 
@@ -1475,6 +1710,25 @@ h6 {
   }
 }
 
+.LevelVaccinated {
+  align-items: center;
+  align-self: center;
+  animation-delay: 200ms;
+  background: $pink-light;
+  border-radius: 5px;
+  color: $pink;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 0.5rem;
+
+  h4 {
+    font-weight: 500;
+    margin: 0 0 0 0.25rem;
+  }
+}
+
 abbr {
   text-decoration: none;
 
@@ -1496,7 +1750,9 @@ abbr {
 }
 
 .TableLoader {
-  margin-bottom: -.25rem;
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
 }
 
 .table-top {
@@ -1506,7 +1762,7 @@ abbr {
   flex-direction: row;
   font-weight: 600;
   justify-content: space-between;
-  margin-bottom: .25rem;
+  margin-bottom: 0.25rem;
   width: 100%;
 
   .option-toggle,
@@ -1517,17 +1773,28 @@ abbr {
     border-radius: 5px;
     color: $gray-mid;
     cursor: pointer;
-    margin-right: .25rem;
-    padding: .5rem;
+    margin-right: 0.25rem;
+    padding: 0.5rem;
 
     svg {
       align-self: center;
-      margin: .25rem;
+      margin: 0.25rem;
     }
 
+    &:hover {
+      background: $gray-hover;
+    }
+  }
+
+  .option-toggle,
+  .expand-table-toggle {
     &.is-highlighted {
       background: $green-light;
       color: $green;
+
+      &:hover {
+        background: $green-hover;
+      }
     }
   }
 
@@ -1535,6 +1802,10 @@ abbr {
     &.is-highlighted {
       background: $yellow-light;
       color: $yellow;
+
+      &:hover {
+        background: $yellow-hover;
+      }
     }
   }
 
@@ -1547,6 +1818,10 @@ abbr {
     &.is-highlighted {
       background: $pink-light;
       color: $pink;
+
+      &:hover {
+        background: $pink-hover;
+      }
     }
   }
 
@@ -1617,7 +1892,7 @@ abbr {
 
     svg {
       color: $gray-mid;
-      margin-bottom: .25rem;
+      margin-bottom: 0.25rem;
     }
 
     .is-confirmed {
@@ -1647,6 +1922,12 @@ abbr {
     .is-tested {
       svg {
         color: $purple;
+      }
+    }
+
+    .is-vaccinated {
+      svg {
+        color: $pink;
       }
     }
 
@@ -1689,7 +1970,6 @@ abbr {
 
 .table-container {
   align-self: center;
-  margin-bottom: 2.5rem;
   overflow-x: auto;
   width: 100%;
 }
@@ -1710,11 +1990,11 @@ abbr {
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: space-between;
-      margin-bottom: 1 + .25rem;
+      margin-bottom: 1 + 0.25rem;
       margin-top: 1rem;
 
       svg {
-        margin-right: .5rem;
+        margin-right: 0.5rem;
       }
 
       .last-updated {
@@ -1732,7 +2012,7 @@ abbr {
         cursor: pointer;
         display: flex;
         flex-direction: row;
-        padding: .75rem;
+        padding: 0.75rem;
 
         p {
           align-self: flex-end;
@@ -1755,7 +2035,7 @@ abbr {
         border-radius: 5px;
         color: $brick;
         margin: auto;
-        padding: 1rem .25rem;
+        padding: 1rem 0.25rem;
         text-align: center;
         width: 16rem;
 
@@ -1809,8 +2089,8 @@ abbr {
       color: $gray;
       display: flex;
       flex-direction: row;
-      margin-bottom: .25rem;
-      padding: .5rem;
+      margin-bottom: 0.25rem;
+      padding: 0.5rem;
       position: relative;
 
       &:not(:first-child) {
@@ -1844,8 +2124,8 @@ abbr {
 
       .sort-icon {
         left: 0;
-        margin-left: .25rem;
-        margin-right: .25rem;
+        margin-left: 0.25rem;
+        margin-right: 0.25rem;
         position: absolute;
         top: 0;
 
@@ -1879,8 +2159,14 @@ abbr {
           }
         }
 
+        &.is-vaccinated {
+          svg {
+            color: $pink;
+          }
+        }
+
         &.invert {
-          margin-top: .25rem;
+          margin-top: 0.25rem;
           transform: rotate(180deg);
         }
       }
@@ -1914,6 +2200,10 @@ abbr {
         .is-tested {
           color: $purple;
         }
+
+        .is-vaccinated {
+          color: $pink;
+        }
       }
 
       &:not(:last-child) {
@@ -1924,7 +2214,7 @@ abbr {
         background: $gray-light-opaque;
         font-size: 13px;
         font-weight: 900;
-        padding: 1.25rem .5rem .75rem;
+        padding: 1.25rem 0.5rem 0.75rem;
 
         &:hover {
           background: $gray-hover-opaque !important;
@@ -1946,7 +2236,7 @@ abbr {
 
     .spacer {
       color: $gray-mid;
-      margin-bottom: 1 + .25rem;
+      margin-bottom: 1 + 0.25rem;
       margin-top: 1rem;
       text-align: center;
 
@@ -1971,6 +2261,47 @@ abbr {
   }
 }
 
+.Table {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2.5rem;
+}
+
+.paginate {
+  align-items: center;
+  color: $gray;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+
+  div {
+    background: $gray-light;
+    border-radius: 5px;
+    color: $gray-mid;
+    cursor: pointer;
+    display: flex;
+    padding: 0.5rem;
+
+    &.left {
+      margin-right: 1rem;
+    }
+
+    &.right {
+      margin-left: 1rem;
+    }
+
+    &:hover {
+      &:not(.disabled) {
+        background: $gray-hover;
+      }
+    }
+  }
+
+  h5 {
+    margin: 0;
+  }
+}
+
 #chart {
   z-index: 10;
 }
@@ -1979,12 +2310,12 @@ abbr {
   cursor: pointer;
   position: absolute;
   right: 0;
-  transform: rotate(45deg);
-  transition: all 0.1s ease-in-out;
   z-index: 999;
 
   svg {
     color: $gray-mid;
+    transform: rotate(45deg);
+    transition: all 0.1s ease-in-out;
 
     &:hover {
       color: $gray;
@@ -1992,10 +2323,9 @@ abbr {
   }
 
   &.stickied {
-    transform: rotate(90deg);
-
     svg {
       color: $gray;
+      transform: rotate(90deg);
     }
   }
 }
@@ -2004,6 +2334,11 @@ abbr {
   display: flex;
   flex-direction: column;
   width: 100%;
+
+  &.stickied {
+    position: sticky;
+    top: -6rem;
+  }
 }
 
 .MapExplorer {
@@ -2019,6 +2354,10 @@ abbr {
 
   &.hidden {
     display: none;
+  }
+
+  .anchor {
+    top: -1.5rem;
   }
 
   .svg-parent {
@@ -2248,11 +2587,11 @@ abbr {
       }
 
       .switch-type,
-      .switch-statistic, {
+      .switch-statistic {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
-        margin-bottom: .25rem;
+        margin-bottom: 0.25rem;
 
         div {
           align-items: center;
@@ -2279,7 +2618,7 @@ abbr {
           }
 
           &:not(:last-child) {
-            margin-right: .25rem;
+            margin-right: 0.25rem;
           }
 
           svg {
@@ -2304,8 +2643,8 @@ abbr {
           display: flex;
           flex-direction: row;
           height: 1.25rem;
-          margin-bottom: .25rem;
-          margin-left: .65rem !important;
+          margin-bottom: 0.25rem;
+          margin-left: 0.65rem !important;
           width: 1.25rem;
 
           span {
@@ -2569,7 +2908,6 @@ abbr {
       select {
         appearance: none;
         background-color: #eee;
-
         background-image: url('data:image/svg+xml,<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path d="m0,6l12,12l12,-12l-24,0z" fill="gray"/><path fill="none" d="m0,0l24,0l0,24l-24,0l0,-24z"/></svg>');
         background-position-x: calc(100% - 0.4rem);
         background-position-y: 50%;
@@ -2617,47 +2955,85 @@ abbr {
   width: 100%;
 
   .svg-parent {
-    height: 10rem;
+    height: 12rem;
     margin-bottom: 1rem;
 
     &.is-confirmed {
-      line {
-        &.stem {
-          stroke: $cherry-mid;
-        }
+      .stem {
+        stroke: $cherry-mid;
+      }
+
+      .trend-area {
+        fill: $cherry-mid;
       }
     }
 
     &.is-active {
-      line {
-        &.stem {
-          stroke: $blue-mid;
-        }
+      .stem {
+        stroke: $blue-mid;
+      }
+
+      .trend-area {
+        fill: $blue-mid;
       }
     }
 
     &.is-recovered {
-      line {
-        &.stem {
-          stroke: $green-mid;
-        }
+      .stem {
+        stroke: $green-mid;
+      }
+
+      .trend-area {
+        fill: $green-mid;
       }
     }
 
     &.is-deceased {
-      line {
-        &.stem {
-          stroke: $gray-mid;
-        }
+      .stem {
+        stroke: $gray-mid;
+      }
+
+      .trend-area {
+        fill: $gray-mid;
       }
     }
 
     &.is-tested {
-      line {
-        &.stem {
-          stroke: $purple-mid;
-        }
+      .stem {
+        stroke: $purple-mid;
       }
+
+      .trend-area {
+        fill: $purple-mid;
+      }
+    }
+
+    &.is-vaccinated {
+      .stem {
+        stroke: $pink-mid;
+      }
+
+      .trend-area {
+        fill: $pink-mid;
+      }
+    }
+
+    &.is-tpr {
+      .stem {
+        stroke: $orange-mid;
+      }
+
+      .trend-area {
+        fill: $orange-mid;
+      }
+    }
+
+    &.is-brush {
+      height: 4rem;
+    }
+
+    svg {
+      width: 100%;
     }
   }
 }
@@ -2674,15 +3050,42 @@ abbr {
     text-align: center;
   }
 
-  .scale-modes {
-    align-items: flex-end;
-    bottom: 0;
-    color: $gray;
+  .timeseries-options {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     margin-top: 1rem;
-    right: 0;
-    z-index: 99;
+
+    .timeseries-mode {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .scale-modes {
+      align-items: flex-end;
+      bottom: 0;
+      color: $gray;
+      display: flex;
+      flex-direction: row;
+      right: 0;
+      z-index: 99;
+
+      &:hover {
+        label {
+          &.main {
+            color: $gray;
+          }
+        }
+      }
+
+      .timeseries-mode {
+        margin-left: 1rem;
+      }
+
+      & > * {
+        align-self: center;
+      }
+    }
 
     label {
       color: $gray-mid;
@@ -2691,25 +3094,6 @@ abbr {
       margin-right: 0.25rem;
       z-index: 99;
     }
-
-    &:hover {
-      label {
-        &.main {
-          color: $gray;
-        }
-      }
-    }
-
-    & > * {
-      align-self: center;
-    }
-  }
-
-  .timeseries-mode,
-  .timeseries-logmode {
-    display: flex;
-    flex-direction: row;
-    margin-left: 1rem;
   }
 }
 
@@ -2783,25 +3167,6 @@ input {
     position: absolute;
     top: 0.5rem;
 
-    h2,
-    h5,
-    h6 {
-      color: $cherry-mid;
-      margin: 0;
-      transition: all 0.15s ease-in-out;
-    }
-
-    h5 {
-      &.title {
-        color: $cherry-mid;
-      }
-    }
-
-    h2,
-    h6 {
-      color: $cherry;
-    }
-
     .stats-bottom {
       display: flex;
       flex-direction: row;
@@ -2814,6 +3179,26 @@ input {
       & > * {
         margin-top: auto;
       }
+    }
+
+    h2,
+    h5,
+    h6 {
+      margin: 0;
+      transition: all 0.15s ease-in-out;
+    }
+
+    h5 {
+      color: $cherry-mid;
+
+      &.title {
+        color: $cherry-mid;
+      }
+    }
+
+    h2,
+    h6 {
+      color: $cherry;
     }
 
     &.is-recovered {
@@ -2875,35 +3260,76 @@ input {
         color: $purple;
       }
     }
+
+    &.is-vaccinated {
+      h5 {
+        color: $pink-mid;
+
+        &.title {
+          color: $pink-mid;
+        }
+      }
+
+      h2,
+      h6 {
+        color: $pink;
+      }
+    }
+
+    &.is-tpr {
+      h5 {
+        color: $orange-mid;
+
+        &.title {
+          color: $orange-mid;
+        }
+      }
+
+      h2,
+      h6 {
+        color: $orange;
+      }
+    }
   }
 
   .svg-parent {
     align-self: center;
-    background: $cherry-light;
     border-radius: 5px;
     display: flex;
+    justify-content: center;
     position: relative;
     width: 100%;
 
     svg {
-      width: 100%;
-
       .domain,
       .tick {
-        stroke: $cherry;
         stroke-width: 1.5;
 
         line {
-          stroke: $cherry;
           stroke-width: 1.5;
         }
       }
 
       text {
-        color: $cherry-mid;
         font-size: 9px;
         font-weight: 600;
         stroke: transparent;
+      }
+    }
+
+    &.is-confirmed {
+      background: $cherry-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $cherry;
+        }
+
+        text {
+          color: $cherry-mid;
+        }
       }
     }
 
@@ -2919,7 +3345,6 @@ input {
 
         text {
           color: $green-mid;
-          stroke: transparent;
         }
       }
     }
@@ -2936,7 +3361,6 @@ input {
 
         text {
           color: $gray-mid;
-          stroke: transparent;
         }
       }
     }
@@ -2953,7 +3377,6 @@ input {
 
         text {
           color: $blue-mid;
-          stroke: transparent;
         }
       }
     }
@@ -2970,7 +3393,62 @@ input {
 
         text {
           color: $purple-mid;
-          stroke: transparent;
+        }
+      }
+    }
+
+    &.is-vaccinated {
+      background: $pink-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $pink;
+        }
+
+        text {
+          color: $pink-mid;
+        }
+      }
+    }
+
+    &.is-tpr {
+      background: $orange-light;
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $orange;
+        }
+
+        text {
+          color: $orange-mid;
+        }
+      }
+    }
+
+    &.is-brush {
+      .overlay {
+        fill: #6c757d40;
+        pointer-events: all;
+      }
+
+      .selection {
+        cursor: move;
+        stroke: none;
+      }
+
+      svg {
+        .domain,
+        .tick,
+        line {
+          stroke: $gray;
+        }
+
+        text {
+          color: $gray;
         }
       }
     }
@@ -3084,8 +3562,8 @@ footer {
   }
 
   svg {
-    margin-right: .5rem;
-    padding: .25rem;
+    margin-right: 0.5rem;
+    padding: 0.25rem;
   }
 
   .telegram {
@@ -3263,7 +3741,7 @@ footer {
   h4 {
     color: $blue-mid;
     font-weight: 900;
-    margin-top: .5rem;
+    margin-top: 0.5rem;
 
     &:hover {
       color: $blue;
@@ -3271,7 +3749,7 @@ footer {
 
     svg {
       height: 1rem;
-      margin-bottom: -.25rem;
+      margin-bottom: -0.25rem;
     }
   }
 }
@@ -3370,6 +3848,10 @@ footer {
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
+
+    &.expanded {
+      flex-direction: column;
+    }
 
     h2 {
       font-weight: 900;
@@ -3614,7 +4096,7 @@ footer {
     justify-content: flex-end;
     max-width: 30vw;
     min-width: 10rem;
-    padding: .5rem;
+    padding: 0.5rem;
     pointer-events: none;
     right: 0;
     top: 0;
@@ -3623,6 +4105,87 @@ footer {
     p {
       color: $white !important;
       margin: 0;
+    }
+  }
+}
+
+.essentials {
+  align-items: center;
+  align-self: center;
+  animation-delay: 750ms;
+  background: #f00;
+  background: $pink-light;
+  border-radius: 5px;
+  color: $pink;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  font-size: 13px;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  text-decoration: none;
+  width: calc(100% - 4rem);
+
+  svg {
+    margin-right: 0.5rem;
+  }
+}
+
+.Resources {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 4rem;
+  margin-top: 2rem;
+  min-height: 100vh;
+
+  .heading {
+    color: $dark;
+    font-size: 17.5px;
+    margin-bottom: 2rem;
+  }
+
+  .banner {
+    background: $blue-light;
+    color: $blue;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    width: 30rem;
+  }
+
+  .resources {
+    display: flex;
+    flex-direction: column;
+    width: 30rem;
+
+    .resource {
+      border-radius: 0.25rem;
+      padding: 1rem;
+      text-decoration: none;
+      width: 100%;
+
+      .link {
+        color: $blue;
+        font-size: 14px;
+        margin: 0;
+        width: 100%;
+        word-wrap: break-word;
+      }
+
+      .title {
+        color: $dark;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+
+      &:hover {
+        background: $gray-hover;
+        cursor: pointer;
+      }
     }
   }
 }
@@ -3643,7 +4206,7 @@ footer {
     z-index: 999;
 
     .navbar-left {
-      margin-bottom: .5rem;
+      margin-bottom: 0.5rem;
       margin-top: auto;
       order: 3;
       text-align: center;
@@ -3677,7 +4240,7 @@ footer {
         margin-top: 1.5rem;
 
         &:hover {
-          color: $gray-mid;
+          color: $pblue-dark;
         }
       }
     }
@@ -3709,11 +4272,22 @@ footer {
     }
   }
 
+  .State {
+    .state-left,
+    .state-right {
+      min-width: 33rem;
+      width: 40%;
+    }
+  }
+
   .Home {
     .home-left,
     .home-right {
+      min-width: 33rem;
+      width: 40%;
+
       &.expanded {
-        width: 73rem;
+        width: min(100%, max(71rem, calc(80% + 5rem)));
       }
     }
 
@@ -3765,7 +4339,7 @@ footer {
   }
 
   .Home,
-  .State, {
+  .State {
     display: flex;
     flex-direction: column;
     margin-left: 0;
@@ -3781,12 +4355,6 @@ footer {
       flex-direction: column;
       margin: 0;
       width: 100%;
-    }
-  }
-
-  .Level {
-    h1 {
-      font-size: 5vw !important;
     }
   }
 
@@ -3857,7 +4425,7 @@ footer {
   }
 
   .cards-container {
-    padding: .5rem;
+    padding: 0.5rem;
 
     .cards {
       .card {
@@ -3955,10 +4523,6 @@ footer {
     }
   }
 
-  &.nationality {
-    margin-bottom: 0.5rem;
-  }
-
   .Navbar {
     .expand {
       height: calc(100% - 4rem);
@@ -4018,12 +4582,43 @@ footer {
     padding-right: 0 !important;
   }
 
-  .Timeline {
-    width: 100%;
-  }
-
   .LanguageSwitcher {
     margin-left: 0;
+  }
+
+  .LevelVaccinated {
+    margin-bottom: 3rem !important;
+    margin-top: 2rem !important;
+  }
+
+  .timeseries-header {
+    .timeseries-options {
+      flex-direction: column;
+
+      .moving-average {
+        margin-top: 0.75rem;
+      }
+    }
+  }
+
+  .essentials {
+    margin-top: 0;
+  }
+
+  .Resources {
+    margin-top: 1rem;
+
+    .banner {
+      width: calc(100% - 5rem);
+    }
+
+    .resources {
+      width: calc(100% - 5rem);
+
+      .resource {
+        width: calc(100% - 2rem);
+      }
+    }
   }
 }
 
@@ -4234,10 +4829,20 @@ footer {
             stroke: #9673b999 !important;
           }
 
+          .trend-area {
+            fill: #9673b999 !important;
+          }
+
           text {
             color: $dark-m-purple-mid !important;
             stroke: transparent;
           }
+        }
+      }
+
+      &.is-brush {
+        .handle--custom {
+          stroke: $gray-light-opaque;
         }
       }
     }
@@ -4378,12 +4983,12 @@ footer {
 @keyframes fadeInUp {
   0% {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translate3d(0, 20px, 0);
   }
 
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -4420,11 +5025,11 @@ footer {
 @keyframes fadeOutDown {
   0% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 
   100% {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translate3d(0, 20px, 0);
   }
 }

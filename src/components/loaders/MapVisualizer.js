@@ -1,6 +1,5 @@
 import {STATISTIC_CONFIGS, MAP_LEGEND_HEIGHT} from '../../constants';
 
-import React from 'react';
 import ContentLoader from 'react-content-loader';
 
 // Margins as declared in CSS

@@ -1,7 +1,7 @@
 import {TOOLTIP_FADE_IN, TOOLTIP_FADE_OUT} from '../animations';
 import useViewPort from '../hooks/useViewPort';
 
-import React, {useCallback, useState} from 'react';
+import {useCallback, useState} from 'react';
 import {useTransition, animated} from 'react-spring';
 
 const Tooltip = ({data, children, stateCard = false}) => {

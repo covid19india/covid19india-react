@@ -31,3 +31,6 @@ yarn-error.log*
 # vim swap files
 *.swp
 *.swo
+
+# ESLint cache
+*.eslintcache

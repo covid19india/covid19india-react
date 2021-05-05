@@ -1,12 +1,20 @@
 import {
   INDIA_ISO_SUFFIX,
+  ISO_DATE_REGEX,
   LOCALE_SHORTHANDS,
   NAN_STATISTICS,
   PER_MILLION_OPTIONS,
-  STATISTIC_OPTIONS,
+  STATISTIC_CONFIGS,
+  TESTED_LOOKBACK_DAYS,
 } from '../constants';
 
-import {format, formatDistance, formatISO, subDays} from 'date-fns';
+import {
+  differenceInDays,
+  format,
+  formatDistance,
+  formatISO,
+  subDays,
+} from 'date-fns';
 import {utcToZonedTime} from 'date-fns-tz';
 import i18n from 'i18next';
 
@@ -38,8 +46,12 @@ export const getIndiaDateISO = () => {
   return formatISO(getIndiaDate(), {representation: 'date'});
 };
 
-export const getIndiaYesterdayISO = () => {
-  return formatISO(subDays(getIndiaDate(), 1), {representation: 'date'});
+export const getIndiaDateYesterday = () => {
+  return subDays(getIndiaDate(), 1);
+};
+
+export const getIndiaDateYesterdayISO = () => {
+  return formatISO(getIndiaDateYesterday(), {representation: 'date'});
 };
 
 export const formatLastUpdated = (unformattedDate) => {
@@ -50,13 +62,16 @@ export const formatLastUpdated = (unformattedDate) => {
 };
 
 export const parseIndiaDate = (isoDate) => {
-  return utcToZonedTime(new Date(isoDate + INDIA_ISO_SUFFIX), 'Asia/Kolkata');
+  if (!isoDate) return getIndiaDate();
+  if (isoDate.match(ISO_DATE_REGEX)) isoDate += INDIA_ISO_SUFFIX;
+  return utcToZonedTime(new Date(isoDate), 'Asia/Kolkata');
 };
 
 export const formatDate = (unformattedDate, formatString) => {
+  if (!unformattedDate) return '';
   if (
     typeof unformattedDate === 'string' &&
-    unformattedDate.match(/^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/g)
+    unformattedDate.match(ISO_DATE_REGEX)
   )
     unformattedDate += INDIA_ISO_SUFFIX;
   const date = utcToZonedTime(new Date(unformattedDate), 'Asia/Kolkata');
@@ -66,18 +81,21 @@ export const formatDate = (unformattedDate, formatString) => {
 };
 
 export const abbreviateNumber = (number) => {
-  if (number < 1e3) return numberFormatter.format(number);
-  else if (number >= 1e3 && number < 1e6)
+  if (Math.abs(number) < 1e3) return numberFormatter.format(number);
+  else if (Math.abs(number) >= 1e3 && Math.abs(number) < 1e5)
     return numberFormatter.format(number / 1e3) + 'K';
-  else if (number >= 1e6 && number < 1e9)
-    return numberFormatter.format(number / 1e6) + 'M';
-  else if (number >= 1e9 && number < 1e12)
-    return numberFormatter.format(number / 1e9) + 'B';
-  else if (number >= 1e12) return numberFormatter.format(number / 1e12) + 'T';
+  else if (Math.abs(number) >= 1e5 && Math.abs(number) < 1e7)
+    return numberFormatter.format(number / 1e5) + 'L';
+  else if (Math.abs(number) >= 1e7 && Math.abs(number) < 1e10)
+    return numberFormatter.format(number / 1e7) + 'Cr';
+  else if (Math.abs(number) >= 1e10 && Math.abs(number) < 1e14)
+    return numberFormatter.format(number / 1e10) + 'K Cr';
+  else if (Math.abs(number) >= 1e14)
+    return numberFormatter.format(number / 1e14) + 'L Cr';
 };
 
 export const formatNumber = (value, option, statistic) => {
-  if (statistic && value === 0 && NAN_STATISTICS.includes(statistic))
+  if (statistic && NAN_STATISTICS.includes(statistic) && value === 0)
     value = NaN;
 
   if (isNaN(value)) return '-';
@@ -100,28 +118,40 @@ export const toTitleCase = (str) => {
   });
 };
 
-export const getStatistic = (data, type, statistic, perMillion = false) => {
-  let {key, normalizeByKey: normalizeBy, multiplyFactor} = {
-    ...STATISTIC_OPTIONS[statistic],
+export const getStatistic = (
+  data,
+  type,
+  statistic,
+  {perMillion = false, movingAverage = false} = {}
+) => {
+  // TODO: Replace delta with daily to remove ambiguity
+  //       Or add another type for daily/delta
+  const statisticDefinition = STATISTIC_CONFIGS[statistic]?.definition;
+
+  const {key, normalizeByKey: normalizeBy} = {
+    ...statisticDefinition,
     ...(perMillion &&
-      !STATISTIC_OPTIONS[statistic]?.normalizeByKey &&
+      !statisticDefinition?.normalizeByKey &&
       PER_MILLION_OPTIONS),
   };
+
+  let multiplyFactor = statisticDefinition?.multiplyFactor || 1;
+  multiplyFactor *=
+    (!statisticDefinition?.normalizeByKey &&
+      perMillion &&
+      PER_MILLION_OPTIONS?.multiplyFactor) ||
+    1;
+
+  if (type === 'delta' && movingAverage) {
+    type = 'delta7';
+    multiplyFactor *= (!statisticDefinition?.normalizeByKey && 1 / 7) || 1;
+  }
 
   let count;
   if (key === 'population') {
     count = type === 'total' ? data?.meta?.population : 0;
   } else if (key === 'tested') {
-    count = data?.[type]?.tested?.samples;
-  } else if (key === 'tested_states') {
-    count = data?.[type]?.tested?.states?.samples;
-  } else if (key === 'positives') {
-    if (data?.[type]?.tested?.positives)
-      count = data?.[type]?.tested?.positives;
-    else if (data?.[type]?.tested?.states?.positives) {
-      count = data?.[type]?.tested?.states?.positives;
-      if (normalizeBy === 'tested') normalizeBy = 'testedStates';
-    }
+    count = data?.[type]?.tested;
   } else if (key === 'active') {
     const confirmed = data?.[type]?.confirmed || 0;
     const deceased = data?.[type]?.deceased || 0;
@@ -133,25 +163,35 @@ export const getStatistic = (data, type, statistic, perMillion = false) => {
   }
 
   if (normalizeBy) {
-    if (type === 'total') {
-      const normStatistic = getStatistic(data, 'total', normalizeBy);
-      count /= normStatistic;
-    } else {
-      const currStatisticDelta = count;
-      const currStatistic = getStatistic(data, 'total', key);
-      const prevStatistic = currStatistic - currStatisticDelta;
-
-      const normStatisticDelta = getStatistic(data, 'delta', {
-        key: normalizeBy,
-      });
-      const normStatistic = getStatistic(data, 'total', normalizeBy);
-      const prevNormStatistic = normStatistic - normStatisticDelta;
-
-      count = currStatistic / normStatistic - prevStatistic / prevNormStatistic;
-    }
+    count /= getStatistic(
+      data,
+      normalizeBy === 'population' ? 'total' : type,
+      normalizeBy
+    );
   }
 
-  return (multiplyFactor || 1) * ((isFinite(count) && count) || 0);
+  return multiplyFactor * ((isFinite(count) && count) || 0);
+};
+
+export const getTableStatistic = (data, statistic, args, lastUpdatedTT) => {
+  const statisticDefinition = STATISTIC_CONFIGS[statistic]?.definition;
+
+  const expired =
+    (statisticDefinition?.key === 'tested' ||
+      statisticDefinition?.normalizeByKey === 'tested') &&
+    differenceInDays(
+      lastUpdatedTT,
+      parseIndiaDate(data.meta?.tested?.['last_updated'])
+    ) > TESTED_LOOKBACK_DAYS;
+
+  const type = STATISTIC_CONFIGS[statistic]?.tableConfig?.type || 'total';
+
+  const total = !expired ? getStatistic(data, type, statistic, args) : 0;
+  const delta =
+    type === 'total' && !expired
+      ? getStatistic(data, 'delta', statistic, args)
+      : 0;
+  return {total, delta};
 };
 
 export const fetcher = (url) => {
@@ -159,3 +199,22 @@ export const fetcher = (url) => {
     return response.json();
   });
 };
+
+export function retry(fn, retriesLeft = 5, interval = 1000) {
+  return new Promise((resolve, reject) => {
+    fn()
+      .then(resolve)
+      .catch((error) => {
+        setTimeout(() => {
+          if (retriesLeft === 1) {
+            // reject('maximum retries exceeded');
+            reject(error);
+            return;
+          }
+
+          // Passing on "reject" is the important part
+          retry(fn, retriesLeft - 1, interval).then(resolve, reject);
+        }, interval);
+      });
+  });
+}

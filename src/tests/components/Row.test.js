@@ -2,7 +2,6 @@ import Row from '../../components/Row';
 import {STATE_NAMES} from '../../constants';
 
 import {mount} from 'enzyme';
-import React from 'react';
 import {MemoryRouter} from 'react-router-dom';
 
 const stateCode = 'AN';
