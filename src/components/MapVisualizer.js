@@ -38,15 +38,15 @@ const [width, height] = [432, 488];
 
 const colorInterpolator = (statistic) => {
   switch (statistic) {
-    case 'confirmed':
+    case STATISTIC_CONFIGS.confirmed.displayName:
       return (t) => interpolateReds(t * 0.85);
-    case 'active':
+    case STATISTIC_CONFIGS.active.displayName:
       return (t) => interpolateBlues(t * 0.85);
-    case 'recovered':
+    case STATISTIC_CONFIGS.recovered.displayName:
       return (t) => interpolateGreens(t * 0.85);
-    case 'deceased':
+    case STATISTIC_CONFIGS.deceased.displayName:
       return (t) => interpolateGreys(t * 0.85);
-    case 'tested':
+    case STATISTIC_CONFIGS.tested.displayName:
       return (t) => interpolatePurples(t * 0.85);
     default:
       return (t) => interpolateOranges(t * 0.85);

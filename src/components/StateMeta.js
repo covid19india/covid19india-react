@@ -1,6 +1,6 @@
 import StateMetaCard from './StateMetaCard';
 
-import {STATE_NAMES} from '../constants';
+import {STATE_NAMES, STATISTIC_CONFIGS} from '../constants';
 import {
   formatDate,
   formatNumber,
@@ -25,10 +25,15 @@ function StateMeta({stateCode, data, timeseries}) {
   const lastConfirmed = getStatistic(
     timeseries?.[lastDate],
     'total',
-    'confirmed'
+    STATISTIC_CONFIGS.confirmed.displayName
   );
   const prevWeekConfirmed =
-    lastConfirmed - getStatistic(timeseries?.[lastDate], 'delta7', 'confirmed');
+    lastConfirmed -
+    getStatistic(
+      timeseries?.[lastDate],
+      'delta7',
+      STATISTIC_CONFIGS.confirmed.displayName
+    );
 
   const prevWeekDate = formatISO(subDays(parseIndiaDate(lastDate), 7));
 
@@ -38,23 +43,34 @@ function StateMeta({stateCode, data, timeseries}) {
     'confirmed',
     {perMillion: true}
   );
-  const testPerMillion = getStatistic(data[stateCode], 'total', 'tested', {
-    perMillion: true,
-  });
+  const testPerMillion = getStatistic(
+    data[stateCode],
+    'total',
+    STATISTIC_CONFIGS.tested.displayName,
+    {perMillion: true}
+  );
   const totalConfirmedPerMillion = getStatistic(
     data['TT'],
     'total',
-    'confirmed',
+    STATISTIC_CONFIGS.confirmed.displayName,
     {perMillion: true}
   );
 
-  const activePercent = getStatistic(data[stateCode], 'total', 'activeRatio');
+  const activePercent = getStatistic(
+    data[stateCode],
+    'total',
+    STATISTIC_CONFIGS.activeRatio.displayName
+  );
   const recoveryPercent = getStatistic(
     data[stateCode],
     'total',
-    'recoveryRatio'
+    STATISTIC_CONFIGS.recoveryRatio.displayName
   );
-  const deathPercent = getStatistic(data[stateCode], 'total', 'cfr');
+  const deathPercent = getStatistic(
+    data[stateCode],
+    'total',
+    STATISTIC_CONFIGS.cfr.displayName
+  );
 
   const growthRate =
     (Math.pow(lastConfirmed / prevWeekConfirmed, 1 / 7) - 1) * 100;

@@ -148,24 +148,25 @@ export const getStatistic = (
   }
 
   let count;
-  if (key === 'population') {
+  if (key === STATISTIC_CONFIGS.population.displayName) {
     count = type === 'total' ? data?.meta?.population : 0;
-  } else if (key === 'tested') {
+  } else if (key === STATISTIC_CONFIGS.tested.displayName) {
     count = data?.[type]?.tested;
-  } else if (key === 'active') {
+  } else if (key === STATISTIC_CONFIGS.active.displayName) {
     const confirmed = data?.[type]?.confirmed || 0;
     const deceased = data?.[type]?.deceased || 0;
     const recovered = data?.[type]?.recovered || 0;
     const other = data?.[type]?.other || 0;
     count = confirmed - deceased - recovered - other;
+    count = count > 0 ? count : 0;
   } else {
-    count = data?.[type]?.[key];
+    count = data?.[type]?.[key] > 0 ? data?.[type]?.[key] : 0;
   }
 
   if (normalizeBy) {
     count /= getStatistic(
       data,
-      normalizeBy === 'population' ? 'total' : type,
+      normalizeBy === STATISTIC_CONFIGS.population.displayName ? 'total' : type,
       normalizeBy
     );
   }
@@ -177,8 +178,9 @@ export const getTableStatistic = (data, statistic, args, lastUpdatedTT) => {
   const statisticDefinition = STATISTIC_CONFIGS[statistic]?.definition;
 
   const expired =
-    (statisticDefinition?.key === 'tested' ||
-      statisticDefinition?.normalizeByKey === 'tested') &&
+    (statisticDefinition?.key === STATISTIC_CONFIGS.tested.displayName ||
+      statisticDefinition?.normalizeByKey ===
+        STATISTIC_CONFIGS.tested.displayName) &&
     differenceInDays(
       lastUpdatedTT,
       parseIndiaDate(data.meta?.tested?.['last_updated'])
