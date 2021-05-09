@@ -27,8 +27,10 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
   });
 
   const languageSwitcherRef = useRef();
-  useClickAway(languageSwitcherRef, () => {
-    setShowLanguageSwitcher(false);
+  useClickAway(languageSwitcherRef, (e) => {
+    if (e.target.className !== 'navbar-left') {
+      setShowLanguageSwitcher(false);
+    }
   });
 
   const switchLanguage = useCallback(

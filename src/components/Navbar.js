@@ -47,14 +47,14 @@ function Navbar({
     }
   }, [windowSize.width]);
 
-  const handleLangaugeSwitcher = useCallback(() => {
+  const handleLanguageSwitcher = useCallback(() => {
     if (expand) setExpand(false);
     setShowLanguageSwitcher(!showLanguageSwitcher);
   }, [expand, showLanguageSwitcher, setExpand, setShowLanguageSwitcher]);
 
   return navbarTransition((style, item) => (
     <animated.div className="Navbar" {...{style}}>
-      <div className="navbar-left" onClick={handleLangaugeSwitcher.bind(this)}>
+      <div className="navbar-left" onClick={handleLanguageSwitcher}>
         {locales[currentLanguage]}
       </div>
 
