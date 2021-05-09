@@ -6,7 +6,7 @@ import {memo, useRef, useCallback} from 'react';
 import {ArrowUp} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useTransition, animated} from 'react-spring';
-// import {useClickAway} from 'react-use';
+import {useClickAway} from 'react-use';
 
 function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
   const {t, i18n} = useTranslation();
@@ -27,9 +27,11 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
   });
 
   const languageSwitcherRef = useRef();
-  // useClickAway(languageSwitcherRef, () => {
-  //   setShowLanguageSwitcher(false);
-  // });
+  useClickAway(languageSwitcherRef, (e) => {
+    if (e.target.id !== 'language-btn') {
+      setShowLanguageSwitcher(false);
+    }
+  });
 
   const switchLanguage = useCallback(
     (languageKey) => {
