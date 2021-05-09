@@ -1,6 +1,6 @@
 import StateDropdown from './StateDropdown';
 
-import {SPRING_CONFIG_NUMBERS} from '../constants.js';
+import {SPRING_CONFIG_NUMBERS, STATISTIC_CONFIGS} from '../constants.js';
 import {formatDate, formatNumber, getStatistic} from '../utils/commonFunctions';
 
 import {memo, useMemo} from 'react';
@@ -24,7 +24,7 @@ function StateHeader({data, stateCode}) {
   }, []);
 
   const spring = useSpring({
-    total: getStatistic(data, 'total', 'tested'),
+    total: getStatistic(data, 'total', STATISTIC_CONFIGS.tested.displayName),
     config: SPRING_CONFIG_NUMBERS,
   });
 
