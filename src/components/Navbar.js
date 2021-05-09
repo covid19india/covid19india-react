@@ -54,7 +54,7 @@ function Navbar({
 
   return navbarTransition((style, item) => (
     <animated.div className="Navbar" {...{style}}>
-      <div className="navbar-left" onClick={handleLangaugeSwitcher.bind(this)}>
+      <div className="navbar-left" onClick={handleLangaugeSwitcher}>
         {locales[currentLanguage]}
       </div>
 
