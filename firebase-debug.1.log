@@ -1,0 +1,47 @@
+[debug] [2021-05-12T18:19:53.769Z] ----------------------------------------------------------------------
+[debug] [2021-05-12T18:19:53.772Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\BIKI PC\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2021-05-12T18:19:53.772Z] CLI Version:   9.10.1
+[debug] [2021-05-12T18:19:53.772Z] Platform:      win32
+[debug] [2021-05-12T18:19:53.772Z] Node Version:  v14.15.0
+[debug] [2021-05-12T18:19:53.774Z] Time:          Wed May 12 2021 23:49:53 GMT+0530 (India Standard Time)
+[debug] [2021-05-12T18:19:53.774Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2021-05-12T18:19:53.783Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-05-12T18:19:53.784Z] > authorizing via signed-in user (bikid475@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\BIKI PC\covid19india-react
+
+Before we get started, keep in mind:
+
+  * You are initializing in an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[info] i  .firebaserc already has a default project, using covi87. 
+[debug] [2021-05-12T18:20:01.423Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/covi87 [none]
+[debug] [2021-05-12T18:20:02.117Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/covi87 403
+[debug] [2021-05-12T18:20:02.118Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/covi87 {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2021-05-12T18:20:02.119Z] HTTP Error: 403, The caller does not have permission
+[debug] [2021-05-12T18:20:02.385Z] FirebaseError: HTTP Error: 403, The caller does not have permission
+    at module.exports (C:\Users\BIKI PC\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:38:12)
+    at Client.doRequest (C:\Users\BIKI PC\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:238:23)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async Client.request (C:\Users\BIKI PC\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:96:20)
+    at async Object.getFirebaseProject (C:\Users\BIKI PC\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:290:21)
+    at async Object.doSetup [as project] (C:\Users\BIKI PC\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\features\project.js:77:27)
+    at async init (C:\Users\BIKI PC\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\index.js:19:9)
+[error] 
+[error] Error: Failed to get Firebase project covi87. Please make sure the project exists and your account has permission to access it.

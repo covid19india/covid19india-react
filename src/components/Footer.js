@@ -18,10 +18,10 @@ function Footer() {
       </div>
 
       <h5>{t('We stand with everyone fighting on the frontlines')}</h5>
-
+      <h5>{t('Developed by Biki(dev) @ google')}</h5>
       <div className="links">
         <a
-          href="https://github.com/covid19india/covid19india-react"
+          href="https://github.com/Biki-das"
           className="github"
           target="_blank"
           rel="noopener noreferrer"
