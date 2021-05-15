@@ -1,5 +1,5 @@
 import {memo} from 'react';
-import {Twitter, GitHub, Database, Mail, Send} from 'react-feather';
+import {Twitter, GitHub, Instagram, Database, Mail, Send} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 
 function Footer() {
@@ -54,6 +54,15 @@ function Footer() {
           className="twitter"
         >
           <Twitter />
+        </a>
+
+        <a
+          href="https://instagram.com/covid19indiaorg"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="instagram"
+        >
+          <Instagram />
         </a>
 
         <a

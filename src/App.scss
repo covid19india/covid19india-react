@@ -3582,6 +3582,14 @@ footer {
     }
   }
 
+  .instagram {
+    color: $pink-mid;
+
+    &:hover {
+      color: $pink;
+    }
+  }
+
   .twitter {
     color: $pblue-mid;
 
@@ -4113,7 +4121,6 @@ footer {
   align-items: center;
   align-self: center;
   animation-delay: 750ms;
-  background: #f00;
   background: $pink-light;
   border-radius: 5px;
   color: $pink;
