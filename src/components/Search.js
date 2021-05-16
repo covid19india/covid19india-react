@@ -262,6 +262,7 @@ function Search() {
       <div className="line fadeInUp" style={trail[1]}></div>
 
       <div className="search-input-wrapper fadeInUp" style={trail[2]}>
+        <label> Search for district or state
         <input
           type="text"
           value={searchValue}
@@ -270,6 +271,7 @@ function Search() {
           onBlur={setExpand.bind(this, false)}
           onChange={handleChange}
         />
+        </label>
 
         {!expand && searchValue === '' && (
           <span className="search-placeholder"></span>
