@@ -37,11 +37,11 @@ import {
   Suspense,
   lazy,
 } from 'react';
-import {useTranslation} from 'react-i18next';
-import {useHistory} from 'react-router-dom';
-import {animated, useSpring} from 'react-spring';
-import {useSwipeable} from 'react-swipeable';
-import {useWindowSize} from 'react-use';
+import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
+import { animated, useSpring } from 'react-spring';
+import { useSwipeable } from 'react-swipeable';
+import { useWindowSize } from 'react-use';
 
 const MapVisualizer = lazy(() => retry(() => import('./MapVisualizer')));
 
@@ -57,23 +57,23 @@ function MapExplorer({
   expandTable = false,
   hideDistrictData = false,
 }) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const mapExplorerRef = useRef();
-  const {width} = useWindowSize();
+  const { width } = useWindowSize();
 
   const [mapView, setMapView] = useState(MAP_VIEWS.DISTRICTS);
   const [mapViz, setMapViz] = useState(MAP_VIZS.BUBBLES);
 
   const mapMeta = MAP_META[mapCode];
   const mapData =
-    mapMeta.mapType === MAP_TYPES.COUNTRY ? data : {[mapCode]: data[mapCode]};
+    mapMeta.mapType === MAP_TYPES.COUNTRY ? data : { [mapCode]: data[mapCode] };
 
   const hoveredRegion = useMemo(() => {
     const hoveredData =
       (regionHighlighted.districtName
         ? data[regionHighlighted.stateCode]?.districts?.[
-            regionHighlighted.districtName
-          ]
+        regionHighlighted.districtName
+        ]
         : data[regionHighlighted.stateCode]) || {};
 
     return produce(hoveredData, (draft) => {
@@ -175,13 +175,13 @@ function MapExplorer({
 
   const getMapStatistic = useCallback(
     (data) =>
-      getStatistic(data, 'total', mapStatistic, {perMillion: perMillion}),
+      getStatistic(data, 'total', mapStatistic, { perMillion: perMillion }),
     [mapStatistic, perMillion]
   );
 
   const spring = useSpring({
     total: getMapStatistic(hoveredRegion),
-    config: {tension: 250, ...SPRING_CONFIG_NUMBERS},
+    config: { tension: 250, ...SPRING_CONFIG_NUMBERS },
   });
 
   const handleStatisticChange = (direction) => {
@@ -207,7 +207,7 @@ function MapExplorer({
     <div
       className={classnames(
         'MapExplorer',
-        {stickied},
+        { stickied },
         {
           hidden:
             anchor && anchor !== 'mapexplorer' && (!expandTable || width < 769),
@@ -249,46 +249,61 @@ function MapExplorer({
                   )
                 )}
               </animated.div>
-              <span>{`${t(capitalize(statisticConfig.displayName))}${
-                perMillion ? ` ${t('per 10 lakh people')}` : ''
-              }`}</span>
+              <span>{`${t(capitalize(statisticConfig.displayName))}${perMillion ? ` ${t('per 10 lakh people')}` : ''
+                }`}</span>
             </h1>
           )}
         </div>
 
         <div className={classnames('panel-right', `is-${mapStatistic}`)}>
           <div className="switch-type">
+
+
             <div
-              className={classnames('choropleth fadeInUp', {
+              className={classnames('choropleth fadeInUp tooltip', {
                 'is-highlighted': mapViz === MAP_VIZS.CHOROPLETH,
               })}
               onClick={handleTabClick.bind(this, MAP_VIZS.CHOROPLETH)}
               style={trail[1]}
             >
               {ChoroplethIcon}
+              <span class="tooltip_text">District wise</span>
             </div>
+
+
             <div
-              className={classnames('bubble fadeInUp', {
+              className={classnames('bubble fadeInUp tooltip_clustertype', {
                 'is-highlighted': mapViz === MAP_VIZS.BUBBLES,
               })}
               onClick={handleTabClick.bind(this, MAP_VIZS.BUBBLES)}
               style={trail[2]}
             >
               {BubblesIcon}
+              <span class="tooltip_clustertype_text">Cluster wise</span>
             </div>
+
+
 
             {mapMeta.mapType === MAP_TYPES.COUNTRY && (
               <>
+
+
                 <div className="divider" />
+
+
                 <div
-                  className={classnames('boundary fadeInUp', {
+                  className={classnames('boundary fadeInUp tooltip_city_state', {
                     'is-highlighted': isDistrictView,
                   })}
                   onClick={handleDistrictClick.bind(this)}
                   style={trail[3]}
                 >
+
                   <OrganizationIcon />
+                  <span class="tooltip_city_state_text">State wise</span>
                 </div>
+
+
               </>
             )}
 
@@ -342,9 +357,9 @@ function MapExplorer({
             }
           >
             <MapVisualizer
-              {...{mapCode, isDistrictView, mapViz}}
+              {...{ mapCode, isDistrictView, mapViz }}
               data={mapData}
-              {...{regionHighlighted, setRegionHighlighted}}
+              {...{ regionHighlighted, setRegionHighlighted }}
               statistic={mapStatistic}
               getStatistic={getMapStatistic}
             ></MapVisualizer>

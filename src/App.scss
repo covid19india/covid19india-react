@@ -2626,10 +2626,10 @@ abbr {
           }
         }
 
-        .divider {
-          border-radius: 5px;
-          width: 2px !important;
-        }
+          .divider {
+            border-radius: 5px;
+            width: 2px !important;
+          }
       }
 
       .switch-statistic {
@@ -4978,6 +4978,7 @@ footer {
   animation-duration: 0.45s;
   animation-fill-mode: both;
   animation-name: fadeInUp;
+
 }
 
 @keyframes fadeInUp {
@@ -5033,3 +5034,134 @@ footer {
     transform: translate3d(0, 20px, 0);
   }
 }
+
+//This is the added css for tooltip of the first element in the right panel active class
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltip_text {
+  visibility: hidden;
+  width: 100px;
+  background-color: rgb(134, 133, 133);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 10px !important;
+}
+
+.tooltip .tooltip_text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltip_text {
+  visibility: visible;
+  opacity: 1;
+}
+
+// Here the css end for the first element.
+
+
+//This is the added css for tooltip of the second element in the right panel active class
+
+.tooltip_clustertype {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip_clustertype .tooltip_clustertype_text {
+  visibility: hidden;
+  width: 100px;
+  background-color: rgb(134, 133, 133);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 10px !important;
+}
+
+.tooltip_clustertype .tooltip_clustertype_text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip_clustertype:hover .tooltip_clustertype_text {
+  visibility: visible;
+  opacity: 1;
+}
+
+// Here the css end for the second element.
+
+
+//This is the added css for tooltip of the third element in the right panel active class
+
+
+.tooltip_city_state {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip_city_state .tooltip_city_state_text {
+  visibility: hidden;
+  width: 100px;
+  background-color: rgb(134, 133, 133);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 10px !important;
+}
+
+.tooltip_city_state .tooltip_city_state_text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip_city_state:hover .tooltip_city_state_text {
+  visibility: visible;
+  opacity: 1;
+}
+// Here the css end for the third element.
