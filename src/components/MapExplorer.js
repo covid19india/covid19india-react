@@ -267,7 +267,7 @@ function MapExplorer({
               style={trail[1]}
             >
               {ChoroplethIcon}
-              <span class="tooltip_text">District wise</span>
+              <span class="tooltip_text">District format</span>
             </div>
 
 
@@ -279,7 +279,7 @@ function MapExplorer({
               style={trail[2]}
             >
               {BubblesIcon}
-              <span class="tooltip_clustertype_text">Cluster wise</span>
+              <span class="tooltip_clustertype_text">Cluster format</span>
             </div>
 
 
@@ -293,14 +293,15 @@ function MapExplorer({
 
                 <div
                   className={classnames('boundary fadeInUp tooltip_city_state', {
-                    'is-highlighted': isDistrictView,
+                    'is-highlighted ': isDistrictView,
                   })}
                   onClick={handleDistrictClick.bind(this)}
                   style={trail[3]}
                 >
+                  <span class="tooltip_city_state_text">State/District level</span>
 
                   <OrganizationIcon />
-                  <span class="tooltip_city_state_text">State wise</span>
+
                 </div>
 
 

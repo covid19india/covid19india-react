@@ -2517,6 +2517,7 @@ abbr {
           &:hover {
             background: $cherry-hover;
           }
+
         }
       }
 
@@ -2537,9 +2538,10 @@ abbr {
           background: $blue-light;
 
           &:hover {
-            background: $blue-hover;
+            background: $blue-hover;       
           }
         }
+
       }
 
       &.is-recovered {
@@ -2630,6 +2632,48 @@ abbr {
             border-radius: 5px;
             width: 2px !important;
           }
+
+          //jksfksdfhsdufhsdkufhdufhdhadnddd
+          // .tooltip_state_city {
+            // position: relative;
+            // display: inline-block;
+          // }
+          // 
+          // .tooltip_state_city .tooltip_state_city_text {
+            // visibility: hidden;
+            // width: 100px;
+            // background-color: rgb(134, 133, 133);
+            // color: #fff;
+            // text-align: center;
+            // border-radius: 6px;
+            // padding: 5px 0;
+            // position: absolute;
+            // z-index: 1;
+            // bottom: 125%;
+            // left: 50%;
+            // margin-left: -60px;
+            // opacity: 0;
+            // transition: opacity 0.3s;
+            // font-size: 10px !important;
+          // }
+          // 
+          // .tooltip_state_city .tooltip_state_city_text::after {
+            // content: "";
+            // position: absolute;
+            // top: 100%;
+            // left: 50%;
+            // margin-left: -5px;
+            // border-width: 5px;
+            // border-style: solid;
+            // border-color: #555 transparent transparent transparent;
+          // }
+          // 
+          // .tooltip_state_city:hover .tooltip_state_city_text {
+            // visibility: visible;
+            // opacity: 1;
+          // }
+          // 
+
       }
 
       .switch-statistic {
@@ -2710,6 +2754,9 @@ abbr {
               }
             }
           }
+
+          
+        
         }
       }
     }
@@ -5133,7 +5180,7 @@ footer {
 
 .tooltip_city_state .tooltip_city_state_text {
   visibility: hidden;
-  width: 100px;
+  width: 120px;
   background-color: rgb(134, 133, 133);
   color: #fff;
   text-align: center;
@@ -5164,4 +5211,5 @@ footer {
   visibility: visible;
   opacity: 1;
 }
+
 // Here the css end for the third element.
