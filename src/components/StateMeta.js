@@ -59,6 +59,24 @@ function StateMeta({stateCode, data, timeseries}) {
   const growthRate =
     (Math.pow(lastConfirmed / prevWeekConfirmed, 1 / 7) - 1) * 100;
 
+  const percentageDescription = (percentageValue, description) => {
+    let confirmedCasesText 
+
+    if (percentageValue > 0 && percentageValue < 1)
+    {
+      confirmedCasesText = "For every 1000 confirmed cases";
+      percentageValue = percentageValue * 10
+    }
+    else
+    {
+      confirmedCasesText = "For every 100 confirmed cases";
+    }
+
+    return `${t(confirmedCasesText)},  
+    ~${formatNumber(Math.round(percentageValue))} 
+    ${t(description)}`
+  }
+
   return (
     <>
       <div className="StateMeta population">
@@ -103,9 +121,7 @@ function StateMeta({stateCode, data, timeseries}) {
           formula={'(active / confirmed) * 100'}
           description={
             activePercent > 0
-              ? `${t('For every 100 confirmed cases')}, ~${formatNumber(
-                  Math.round(activePercent)
-                )} ${t('are currently infected.')}`
+              ? percentageDescription(activePercent, "are currently infected.") 
               : t('Currently, there are no active cases in this state.')
           }
         />
@@ -117,9 +133,7 @@ function StateMeta({stateCode, data, timeseries}) {
           formula={'(recovered / confirmed) * 100'}
           description={
             recoveryPercent > 0
-              ? `${t('For every 100 confirmed cases')}, ~${formatNumber(
-                  Math.round(recoveryPercent)
-                )} ${t('have recovered from the virus.')}`
+              ? percentageDescription(recoveryPercent, "have recovered from the virus.")
               : t('Unfortunately, there are no recoveries in this state yet.')
           }
         />
@@ -131,9 +145,7 @@ function StateMeta({stateCode, data, timeseries}) {
           formula={'(deceased / confirmed) * 100'}
           description={
             deathPercent > 0
-              ? `${t('For every 100 confirmed cases')}, ~${formatNumber(
-                  Math.round(deathPercent)
-                )} ${t('have unfortunately passed away from the virus.')}`
+              ? percentageDescription(deathPercent, "have unfortunately passed away from the virus.")
               : t(
                   'Fortunately, no one has passed away from the virus in this state.'
                 )
