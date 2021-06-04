@@ -9,6 +9,7 @@ import {
   STATISTIC_CONFIGS,
   TABLE_STATISTICS,
   TABLE_STATISTICS_EXPANDED,
+  VACCINE_STATISTICS,
   UNASSIGNED_STATE_CODE,
 } from '../constants';
 import {
@@ -189,7 +190,9 @@ function Table({
 
   const tableStatistics = (
     expandTable ? TABLE_STATISTICS_EXPANDED : TABLE_STATISTICS
-  ).filter((statistic) => statistic !== 'vaccinated' || !hideVaccinated);
+  ).filter(
+    (statistic) => !VACCINE_STATISTICS.includes(statistic) || !hideVaccinated
+  );
 
   const showDistricts = tableOption === 'Districts' && !hideDistrictData;
 

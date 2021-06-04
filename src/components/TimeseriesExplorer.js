@@ -5,6 +5,7 @@ import {
   TIMESERIES_CHART_TYPES,
   TIMESERIES_LOOKBACK_DAYS,
   TIMESERIES_STATISTICS,
+  VACCINE_STATISTICS,
 } from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {
@@ -193,7 +194,7 @@ function TimeseriesExplorer({
     () =>
       TIMESERIES_STATISTICS.filter(
         (statistic) =>
-          (statistic !== 'vaccinated' || !hideVaccinated) &&
+          (!VACCINE_STATISTICS.includes(statistic) || !hideVaccinated) &&
           // (chartType === 'total' || statistic !== 'active') &&
           (chartType === 'delta' || statistic !== 'tpr')
       ),
