@@ -7,15 +7,17 @@ import {FilterIcon, InfoIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import {memo} from 'react';
+import {memo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useLongPress} from 'react-use';
 
 function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
   const {t} = useTranslation();
+  const wasLongPressed = useRef(false);
 
   const onLongPress = () => {
     if (sortData.sortColumn === statistic) {
+      wasLongPressed.current = true;
       setSortData(
         produce(sortData, (sortDataDraft) => {
           sortDataDraft.delta = !sortData.delta;
@@ -25,10 +27,18 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
   };
   const longPressEvent = useLongPress(onLongPress, {isPreventDefault: false});
 
+  const handleClick = (statistic) => {
+    if (wasLongPressed.current) {
+      wasLongPressed.current = false;
+    } else {
+      handleSort(statistic);
+    }
+  };
+
   return (
     <div
       className="cell heading"
-      onClick={handleSort.bind(this, statistic)}
+      onClick={handleClick.bind(this, statistic)}
       {...longPressEvent}
     >
       {sortData.sortColumn === statistic && (

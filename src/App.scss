@@ -1344,6 +1344,7 @@ h6 {
         }
 
         &:hover {
+          background-color: #6c757d30;
           opacity: 0.8;
         }
 
@@ -1711,22 +1712,105 @@ h6 {
   }
 }
 
-.LevelVaccinated {
-  align-items: center;
+.VaccinationHeader {
   align-self: center;
-  animation-delay: 200ms;
-  background: $pink-light;
-  border-radius: 5px;
-  color: $pink;
   display: flex;
-  flex-direction: row;
-  margin-bottom: 0.5rem;
-  margin-top: 1.5rem;
-  padding: 0.5rem;
+  flex-direction: column;
+  width: 100%;
 
-  h4 {
-    font-weight: 500;
-    margin: 0 0 0 0.25rem;
+  .LevelVaccinated {
+    align-items: center;
+    align-self: center;
+    animation-delay: 200ms;
+    background: $pink-light;
+    border-radius: 5px;
+    color: $pink;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.5rem;
+    margin-top: 2rem;
+    padding: 0.5rem;
+
+    h4 {
+      font-weight: 500;
+      margin: 0 0 0 0.25rem;
+    }
+  }
+
+  .progress-bar-wrapper {
+    color: $gray;
+    font-size: 12px;
+    margin-bottom: 0.25rem;
+    margin-top: 0.5rem;
+    position: relative;
+
+    .progress-bar {
+      background-color: $pink-light;
+      border-radius: 5px;
+      color: $pink;
+      height: 24px;
+      margin-bottom: 0.1rem;
+      margin-top: 0.1rem;
+      position: relative;
+
+      &.value {
+        background-image: linear-gradient(
+          45deg,
+          $pink-mid 25%,
+          $pink-light 25%,
+          $pink-light 50%,
+          $pink-mid 50%,
+          $pink-mid 75%,
+          $pink-light 75%,
+          $pink-light 100%
+        );
+        background-size: 14px 14px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        margin: 0;
+        opacity: 0.6;
+        position: absolute;
+
+        &.opaque {
+          background: $pink;
+        }
+
+        &.highlighted {
+          opacity: 1;
+        }
+
+        span {
+          margin-left: calc(100% + 0.25rem);
+          width: max-content;
+        }
+      }
+    }
+
+    .legend {
+      opacity: 0.6;
+
+      &.highlighted {
+        opacity: 1;
+      }
+
+      .label-wrapper {
+        display: flex;
+
+        .label {
+          cursor: pointer;
+          flex-shrink: 0;
+        }
+      }
+
+      .arrow {
+        cursor: pointer;
+        margin-bottom: 0.2rem;
+        width: fit-content;
+      }
+    }
   }
 }
 
@@ -1926,7 +2010,9 @@ abbr {
       }
     }
 
-    .is-vaccinated {
+    .is-vaccinated,
+    .is-vaccinated1,
+    .is-vaccinated2 {
       svg {
         color: $pink;
       }
@@ -2160,7 +2246,9 @@ abbr {
           }
         }
 
-        &.is-vaccinated {
+        &.is-vaccinated,
+        &.is-vaccinated1,
+        &.is-vaccinated2 {
           svg {
             color: $pink;
           }
@@ -2202,7 +2290,9 @@ abbr {
           color: $purple;
         }
 
-        .is-vaccinated {
+        .is-vaccinated,
+        .is-vaccinated1,
+        .is-vaccinated2 {
           color: $pink;
         }
       }
@@ -4118,28 +4208,6 @@ footer {
   }
 }
 
-.essentials {
-  align-items: center;
-  align-self: center;
-  animation-delay: 750ms;
-  background: $pink-light;
-  border-radius: 5px;
-  color: $pink;
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  font-size: 13px;
-  justify-content: center;
-  margin-top: 1.5rem;
-  padding: 1rem;
-  text-decoration: none;
-  width: calc(100% - 4rem);
-
-  svg {
-    margin-right: 0.5rem;
-  }
-}
-
 .Resources {
   align-items: center;
   display: flex;
@@ -4342,7 +4410,8 @@ footer {
   .StateMeta,
   .timeline,
   .table-top,
-  .LanguageSwitcher {
+  .LanguageSwitcher,
+  .VaccinationHeader {
     width: calc(100% - 2rem);
   }
 
@@ -4594,9 +4663,8 @@ footer {
     margin-left: 0;
   }
 
-  .LevelVaccinated {
-    margin-bottom: 3rem !important;
-    margin-top: 2rem !important;
+  .VaccinationHeader {
+    margin-bottom: 2rem !important;
   }
 
   .timeseries-header {
@@ -4607,10 +4675,6 @@ footer {
         margin-top: 0.75rem;
       }
     }
-  }
-
-  .essentials {
-    margin-top: 0;
   }
 
   .Resources {
@@ -4975,6 +5039,20 @@ footer {
     svg {
       rect {
         fill: #1e1e30 !important;
+      }
+    }
+  }
+
+  .Resources {
+    .heading {
+      color: $gray;
+    }
+
+    .resources {
+      .resource {
+        .title {
+          color: $gray;
+        }
       }
     }
   }

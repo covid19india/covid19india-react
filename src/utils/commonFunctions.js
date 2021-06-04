@@ -3,7 +3,6 @@ import {
   ISO_DATE_REGEX,
   LOCALE_SHORTHANDS,
   NAN_STATISTICS,
-  PER_MILLION_OPTIONS,
   STATISTIC_CONFIGS,
   TESTED_LOOKBACK_DAYS,
 } from '../constants';
@@ -122,68 +121,70 @@ export const getStatistic = (
   data,
   type,
   statistic,
-  {perMillion = false, movingAverage = false} = {}
+  {perCent = false, perMillion = false, movingAverage = false} = {}
 ) => {
   // TODO: Replace delta with daily to remove ambiguity
   //       Or add another type for daily/delta
-  const statisticDefinition = STATISTIC_CONFIGS[statistic]?.definition;
 
-  const {key, normalizeByKey: normalizeBy} = {
-    ...statisticDefinition,
-    ...(perMillion &&
-      !statisticDefinition?.normalizeByKey &&
-      PER_MILLION_OPTIONS),
-  };
-
-  let multiplyFactor = statisticDefinition?.multiplyFactor || 1;
-  multiplyFactor *=
-    (!statisticDefinition?.normalizeByKey &&
-      perMillion &&
-      PER_MILLION_OPTIONS?.multiplyFactor) ||
-    1;
-
+  let multiplyFactor = 1;
   if (type === 'delta' && movingAverage) {
     type = 'delta7';
-    multiplyFactor *= (!statisticDefinition?.normalizeByKey && 1 / 7) || 1;
+    multiplyFactor *= 1 / 7;
   }
 
-  let count;
-  if (key === 'population') {
-    count = type === 'total' ? data?.meta?.population : 0;
-  } else if (key === 'tested') {
-    count = data?.[type]?.tested;
-  } else if (key === 'active') {
+  // TODO: Ugly
+  if (perMillion) {
+    multiplyFactor *= 1e6 / data?.meta?.population || 0;
+  } else if (perCent) {
+    multiplyFactor *= 1e2 / data?.meta?.population || 0;
+  }
+
+  let val;
+  if (statistic === 'active' || statistic === 'activeRatio') {
     const confirmed = data?.[type]?.confirmed || 0;
     const deceased = data?.[type]?.deceased || 0;
     const recovered = data?.[type]?.recovered || 0;
     const other = data?.[type]?.other || 0;
-    count = confirmed - deceased - recovered - other;
+    const active = confirmed - deceased - recovered - other;
+    if (statistic === 'active') {
+      val = active * multiplyFactor;
+    } else if (statistic === 'activeRatio') {
+      val = (100 * active) / confirmed;
+    }
+  } else if (statistic === 'vaccinated') {
+    const dose1 = data?.[type]?.vaccinated1 || 0;
+    const dose2 = data?.[type]?.vaccinated2 || 0;
+    val = (dose1 + dose2) * multiplyFactor;
+  } else if (statistic === 'tpr') {
+    const confirmed = data?.[type]?.confirmed || 0;
+    const tested = data?.[type]?.tested || 0;
+    val = (100 * confirmed) / tested;
+  } else if (statistic === 'cfr') {
+    const deceased = data?.[type]?.deceased || 0;
+    const confirmed = data?.[type]?.confirmed || 0;
+    val = (100 * deceased) / confirmed;
+  } else if (statistic === 'recoveryRatio') {
+    const recovered = data?.[type]?.recovered || 0;
+    const confirmed = data?.[type]?.confirmed || 0;
+    val = (100 * recovered) / confirmed;
+  } else if (statistic === 'population') {
+    val = type === 'total' ? data?.meta?.population || 0 : 0;
   } else {
-    count = data?.[type]?.[key];
+    val = data?.[type]?.[statistic] * multiplyFactor;
   }
 
-  if (normalizeBy) {
-    count /= getStatistic(
-      data,
-      normalizeBy === 'population' ? 'total' : type,
-      normalizeBy
-    );
-  }
-
-  return multiplyFactor * ((isFinite(count) && count) || 0);
+  return (isFinite(val) && val) || 0;
 };
 
 export const getTableStatistic = (data, statistic, args, lastUpdatedTT) => {
-  const statisticDefinition = STATISTIC_CONFIGS[statistic]?.definition;
-
   const expired =
-    (statisticDefinition?.key === 'tested' ||
-      statisticDefinition?.normalizeByKey === 'tested') &&
+    (statistic === 'tested' || statistic === 'tpr') &&
     differenceInDays(
       lastUpdatedTT,
       parseIndiaDate(data.meta?.tested?.['last_updated'])
     ) > TESTED_LOOKBACK_DAYS;
 
+  // TODO: The hell is this
   const type = STATISTIC_CONFIGS[statistic]?.tableConfig?.type || 'total';
 
   const total = !expired ? getStatistic(data, type, statistic, args) : 0;
