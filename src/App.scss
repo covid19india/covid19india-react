@@ -1778,7 +1778,7 @@ h6 {
         position: absolute;
 
         &.opaque {
-          background: $pink;
+          background: $pink-mid;
         }
 
         &.highlighted {
@@ -4668,6 +4668,7 @@ footer {
 
   .VaccinationHeader {
     margin-bottom: 2rem !important;
+    margin-top: 1rem !important;
   }
 
   .timeseries-header {
