@@ -1713,12 +1713,13 @@ h6 {
 }
 
 .VaccinationHeader {
+  align-items: center;
   align-self: center;
   display: flex;
   flex-direction: column;
   width: 100%;
 
-  .LevelVaccinated {
+  .level-vaccinated {
     align-items: center;
     align-self: center;
     animation-delay: 200ms;
@@ -1731,7 +1732,8 @@ h6 {
     margin-top: 2rem;
     padding: 0.5rem;
 
-    h4 {
+    div {
+      font-size: 13px;
       font-weight: 500;
       margin: 0 0 0 0.25rem;
     }
@@ -1743,6 +1745,7 @@ h6 {
     margin-bottom: 0.25rem;
     margin-top: 0.5rem;
     position: relative;
+    width: 100%;
 
     .progress-bar {
       background-color: $pink-light;

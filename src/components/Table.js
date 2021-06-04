@@ -38,7 +38,7 @@ import {
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useTrail, useTransition, animated, config} from 'react-spring';
-import {useSessionStorage} from 'react-use';
+import {useKeyPressEvent, useSessionStorage} from 'react-use';
 // eslint-disable-next-line
 import worker from 'workerize-loader!../workers/getDistricts';
 
@@ -187,9 +187,8 @@ function Table({
     leave: TABLE_FADE_OUT,
   });
 
-  const tableStatistics = (expandTable
-    ? TABLE_STATISTICS_EXPANDED
-    : TABLE_STATISTICS
+  const tableStatistics = (
+    expandTable ? TABLE_STATISTICS_EXPANDED : TABLE_STATISTICS
   ).filter((statistic) => statistic !== 'vaccinated' || !hideVaccinated);
 
   const showDistricts = tableOption === 'Districts' && !hideDistrictData;
@@ -197,6 +196,10 @@ function Table({
   useEffect(() => {
     if (!showDistricts) setPage(0);
   }, [showDistricts]);
+
+  useKeyPressEvent('?', () => {
+    setIsInfoVisible(!isInfoVisible);
+  });
 
   return (
     <div className="Table">

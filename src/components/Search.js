@@ -12,7 +12,7 @@ import {memo, useState, useEffect, useMemo, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
-import {useDebounce, useUpdateEffect} from 'react-use';
+import {useDebounce, useKeyPressEvent, useUpdateEffect} from 'react-use';
 
 const suggestions = [
   'Madurai',
@@ -69,9 +69,8 @@ function Search() {
           initialize: true,
           limit: 5,
           queryTokenizer: Bloodhound.default.tokenizers.whitespace,
-          datumTokenizer: Bloodhound.default.tokenizers.obj.whitespace(
-            'district'
-          ),
+          datumTokenizer:
+            Bloodhound.default.tokenizers.obj.whitespace('district'),
           indexRemote: true,
           remote: {
             url: `${API_DOMAIN}/state_district_wise.json`,
@@ -223,9 +222,8 @@ function Search() {
 
   useEffect(() => {
     if (!expand) {
-      const targetInput = document.getElementsByClassName(
-        'search-placeholder'
-      )[0];
+      const targetInput =
+        document.getElementsByClassName('search-placeholder')[0];
 
       if (targetInput) {
         loopThroughSuggestions(targetInput, 0);
@@ -253,6 +251,15 @@ function Search() {
   const handleChange = useCallback((event) => {
     setSearchValue(event.target.value);
   }, []);
+
+  useKeyPressEvent('/', () => {
+    searchInput.current.focus();
+  });
+
+  useKeyPressEvent('Escape', () => {
+    handleClose();
+    searchInput.current.blur();
+  });
 
   return (
     <div className="Search">
