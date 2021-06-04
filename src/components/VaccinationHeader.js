@@ -14,7 +14,7 @@ Globals.assign({colors: null});
 
 function ProgressBar({dose1, dose2}) {
   const {t} = useTranslation();
-  const [highlightedDose, setHighlightedDose] = useState(1);
+  const [highlightedDose, setHighlightedDose] = useState(2);
 
   const doseSpring = useSpring({
     dose1,
@@ -111,23 +111,28 @@ function Level({data}) {
 
   const spring = useSpring({
     total: getStatistic(data, 'total', 'vaccinated'),
+    // delta: getStatistic(data, 'delta', 'vaccinated'),
     config: SPRING_CONFIG_NUMBERS,
   });
 
+  const statisticConfig = STATISTIC_CONFIGS.vaccinated;
+
   return (
     <div
-      className="LevelVaccinated fadeInUp"
+      className="level-vaccinated fadeInUp"
       style={{animationDelay: `${750 + 4 * 250}ms`}}
     >
       <ShieldCheckIcon />
-      <animated.h4>
-        {spring.total.to(
-          (total) =>
-            `${formatNumber(Math.floor(total))} ${t(
-              STATISTIC_CONFIGS['vaccinated'].displayName
-            )}`
+      <animated.div>
+        {spring.total.to((total) => formatNumber(Math.floor(total)))}
+      </animated.div>
+      {/* <animated.div>
+        {spring.delta.to(
+          (delta) =>
+            `(+ ${formatNumber(Math.floor(delta))})`
         )}
-      </animated.h4>
+      </animated.div> */}
+      <div>{t(statisticConfig.displayName)}</div>
     </div>
   );
 }

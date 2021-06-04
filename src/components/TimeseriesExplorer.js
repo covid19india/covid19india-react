@@ -194,6 +194,7 @@ function TimeseriesExplorer({
       TIMESERIES_STATISTICS.filter(
         (statistic) =>
           (statistic !== 'vaccinated' || !hideVaccinated) &&
+          // (chartType === 'total' || statistic !== 'active') &&
           (chartType === 'delta' || statistic !== 'tpr')
       ),
     [chartType, hideVaccinated]
