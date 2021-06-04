@@ -5,7 +5,6 @@ import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
 import {fetcher, getStatistic, retry} from '../utils/commonFunctions';
 
-import {HeartIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import {useState, useRef, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
@@ -15,7 +14,9 @@ import {useLocalStorage, useSessionStorage, useWindowSize} from 'react-use';
 const Actions = lazy(() => retry(() => import('./Actions')));
 const Footer = lazy(() => retry(() => import('./Footer')));
 const Level = lazy(() => retry(() => import('./Level')));
-const LevelVaccinated = lazy(() => retry(() => import('./LevelVaccinated')));
+const VaccinationHeader = lazy(() =>
+  retry(() => import('./VaccinationHeader'))
+);
 const MapExplorer = lazy(() => retry(() => import('./MapExplorer')));
 const MapSwitcher = lazy(() => retry(() => import('./MapSwitcher')));
 const Minigraphs = lazy(() => retry(() => import('./Minigraphs')));
@@ -125,12 +126,7 @@ function Home() {
             </>
           </div>
 
-          <a href="/resources" className="essentials fadeInUp">
-            <HeartIcon />
-            Crowdsourced Resources
-          </a>
-
-          {!hideVaccinated && <LevelVaccinated data={data['TT']} />}
+          {!hideVaccinated && <VaccinationHeader data={data['TT']} />}
 
           {data && (
             <Suspense fallback={<TableLoader />}>

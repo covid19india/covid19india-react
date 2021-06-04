@@ -1,5 +1,7 @@
-// export const API_DOMAIN = 'http://127.0.0.1:8080';
-export const API_DOMAIN = 'https://api.covid19india.org';
+// export const API_DOMAIN = 'http://192.168.1.69:8080';
+// export const API_DOMAIN = 'https://api.covid19india.org';
+export const API_DOMAIN =
+  'https://raw.githubusercontent.com/shuklaayush/api/test/tmp';
 export const DATA_API_ROOT = `${API_DOMAIN}/v4/min`;
 
 export const LOCALE_SHORTHANDS = {
@@ -21,94 +23,78 @@ export const STATISTIC_CONFIGS = {
     displayName: 'confirmed',
     color: '#ff073a',
     format: 'int',
-    definition: {key: 'confirmed'},
     showDelta: true,
   },
   active: {
     displayName: 'active',
     color: '#007bff',
     format: 'int',
-    definition: {key: 'active'},
   },
   recovered: {
     displayName: 'recovered',
     color: '#28a745',
     format: 'int',
-    definition: {key: 'recovered'},
     showDelta: true,
   },
   deceased: {
     displayName: 'deceased',
     color: '#6c757d',
     format: 'int',
-    definition: {key: 'deceased'},
     showDelta: true,
   },
   other: {
     displayName: 'other',
     format: 'int',
-    definition: {key: 'other'},
     showDelta: true,
   },
   tested: {
     displayName: 'tested',
     color: '#4b1eaa',
     format: 'short',
-    definition: {key: 'tested'},
     showDelta: true,
   },
   vaccinated: {
     displayName: 'vaccine doses administered',
     color: '#fb5581',
     format: 'short',
-    definition: {key: 'vaccinated'},
+    showDelta: true,
+  },
+  vaccinated1: {
+    displayName: 'vaccinated with at least one dose',
+    color: '#fb5581',
+    format: 'short',
+    showDelta: true,
+  },
+  vaccinated2: {
+    displayName: 'fully vaccinated',
+    color: '#fb5581',
+    format: 'short',
     showDelta: true,
   },
   tpr: {
     displayName: 'test positivity ratio',
     format: '%',
-    definition: {
-      key: 'confirmed',
-      normalizeByKey: 'tested',
-      multiplyFactor: 100,
+    tableConfig: {
+      type: 'delta7',
+      displayName: 'test positivity ratio (last 7 days)',
     },
-    // tableConfig: {
-    //   type: 'delta7',
-    //   displayName: 'test positivity ratio (last 7 days)',
-    // },
     color: '#fd7e14',
   },
   cfr: {
     displayName: 'case fatality ratio',
     format: '%',
-    definition: {
-      key: 'deceased',
-      normalizeByKey: 'confirmed',
-      multiplyFactor: 100,
-    },
   },
-  recoveryRatio: {
-    displayName: 'recovery ratio',
-    format: '%',
-    definition: {
-      key: 'recovered',
-      normalizeByKey: 'confirmed',
-      multiplyFactor: 100,
-    },
-  },
-  activeRatio: {
-    displayName: 'active ratio',
-    format: '%',
-    definition: {
-      key: 'active',
-      normalizeByKey: 'confirmed',
-      multiplyFactor: 100,
-    },
-  },
+  // recoveryRatio: {
+  //   displayName: 'recovery ratio',
+  //   format: '%',
+  // },
+  // activeRatio: {
+  //   displayName: 'active ratio',
+  //   format: '%',
+  // },
   population: {
     displayName: 'population',
     format: 'short',
-    definition: {key: 'population'},
   },
 };
 
@@ -117,12 +103,7 @@ export const PER_MILLION_OPTIONS = {
   multiplyFactor: 1e6,
 };
 
-const nanKeys = ['tested', 'vaccinated', 'population'];
-export const NAN_STATISTICS = Object.keys(STATISTIC_CONFIGS).filter(
-  (key) =>
-    nanKeys.includes(STATISTIC_CONFIGS[key]?.definition?.key) ||
-    nanKeys.includes(STATISTIC_CONFIGS[key]?.definition?.normalizeByKey)
-);
+export const NAN_STATISTICS = ['tested', 'tpr', 'vaccinated', 'population'];
 
 export const PRIMARY_STATISTICS = [
   'confirmed',

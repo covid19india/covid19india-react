@@ -11,7 +11,7 @@ import {Book, HelpCircle, Home, Moon, Sun, Phone} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useTransition, animated} from 'react-spring';
-import {useLockBodyScroll, useWindowSize} from 'react-use';
+import {useLockBodyScroll, usePageLeave, useWindowSize} from 'react-use';
 
 function Navbar({
   pages,
@@ -28,6 +28,8 @@ function Navbar({
 
   useLockBodyScroll(expand);
   const windowSize = useWindowSize();
+
+  usePageLeave(() => setExpand(false));
 
   const navbarTransition = useTransition(true, {
     from: {opacity: 0},

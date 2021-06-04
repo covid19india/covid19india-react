@@ -27,7 +27,9 @@ import useSWR from 'swr';
 const DeltaBarGraph = lazy(() => retry(() => import('./DeltaBarGraph')));
 const Footer = lazy(() => retry(() => import('./Footer')));
 const Level = lazy(() => retry(() => import('./Level')));
-const LevelVaccinated = lazy(() => retry(() => import('./LevelVaccinated')));
+const VaccinationHeader = lazy(() =>
+  retry(() => import('./VaccinationHeader'))
+);
 const MapExplorer = lazy(() => retry(() => import('./MapExplorer')));
 const MapSwitcher = lazy(() => retry(() => import('./MapSwitcher')));
 const Minigraphs = lazy(() => retry(() => import('./Minigraphs')));
@@ -144,8 +146,8 @@ function State() {
             />
           </div>
 
-          {data?.[stateCode]?.total?.vaccinated && (
-            <LevelVaccinated data={data?.[stateCode]} />
+          {data?.[stateCode]?.total?.vaccinated1 && (
+            <VaccinationHeader data={data?.[stateCode]} />
           )}
 
           {data && (

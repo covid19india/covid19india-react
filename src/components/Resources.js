@@ -14,8 +14,6 @@ const Resources = () => {
     else return data.crowdsourcd_resources_links;
   }, [data]);
 
-  console.log(resources);
-
   return (
     <div className="Resources">
       <h1 className="heading">Resources</h1>
