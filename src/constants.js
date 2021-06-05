@@ -121,6 +121,8 @@ export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested', 'vaccinated'];
 
 export const TABLE_STATISTICS_EXPANDED = Object.keys(STATISTIC_CONFIGS);
 
+export const MAP_STATISTICS = [...PRIMARY_STATISTICS];
+
 export const TIMESERIES_STATISTICS = [
   ...PRIMARY_STATISTICS,
   'tested',

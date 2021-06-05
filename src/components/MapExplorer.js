@@ -5,7 +5,7 @@ import {
   MAP_TYPES,
   MAP_VIEWS,
   MAP_VIZS,
-  PRIMARY_STATISTICS,
+  MAP_STATISTICS,
   SPRING_CONFIG_NUMBERS,
   STATE_NAMES,
   STATISTIC_CONFIGS,
@@ -185,11 +185,11 @@ function MapExplorer({
   });
 
   const handleStatisticChange = (direction) => {
-    const currentIndex = PRIMARY_STATISTICS.indexOf(mapStatistic);
+    const currentIndex = MAP_STATISTICS.indexOf(mapStatistic);
     const toIndex =
-      (PRIMARY_STATISTICS.length + currentIndex + direction) %
-      PRIMARY_STATISTICS.length;
-    setMapStatistic(PRIMARY_STATISTICS[toIndex]);
+      (MAP_STATISTICS.length + currentIndex + direction) %
+      MAP_STATISTICS.length;
+    setMapStatistic(MAP_STATISTICS[toIndex]);
   };
 
   const swipeHandlers = useSwipeable({
@@ -307,7 +307,7 @@ function MapExplorer({
 
           {(expandTable || width < 769) && (
             <div className="switch-statistic fadeInUp" style={trail[5]}>
-              {PRIMARY_STATISTICS.map((statistic) => (
+              {MAP_STATISTICS.map((statistic) => (
                 <div
                   key={statistic}
                   className={classnames('statistic-option', `is-${statistic}`, {
