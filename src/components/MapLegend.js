@@ -2,6 +2,7 @@ import {
   D3_TRANSITION_DURATION,
   MAP_LEGEND_HEIGHT,
   MAP_VIZS,
+  STATISTIC_CONFIGS,
 } from '../constants';
 import {formatNumber} from '../utils/commonFunctions';
 
@@ -15,7 +16,7 @@ import {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useMeasure} from 'react-use';
 
-function MapLegend({data, mapViz, mapScale}) {
+function MapLegend({data, statistic, mapViz, mapScale}) {
   const {t} = useTranslation();
   const svgRef = useRef(null);
   const [wrapperRef, {width, height}] = useMeasure();
@@ -24,6 +25,7 @@ function MapLegend({data, mapViz, mapScale}) {
     if (!width || !height) return;
 
     const svg = select(svgRef.current);
+    const statisticConfig = STATISTIC_CONFIGS[statistic];
 
     if (mapViz === MAP_VIZS.BUBBLES) {
       const t = svg.transition().duration(D3_TRANSITION_DURATION);
@@ -70,7 +72,14 @@ function MapLegend({data, mapViz, mapScale}) {
             .tickSize(0)
             .tickPadding(0)
             .tickValues([domainMax / 10, (domainMax * 2) / 5, domainMax])
-            .tickFormat((num) => formatNumber(num, 'short'))
+            .tickFormat((num) =>
+              formatNumber(
+                num,
+                statisticConfig.format === 'long'
+                  ? 'short'
+                  : statisticConfig.format
+              )
+            )
         )
         .selectAll('.tick text')
         .style('text-anchor', 'middle');
@@ -81,21 +90,21 @@ function MapLegend({data, mapViz, mapScale}) {
         legend({
           svg: svg,
           color: mapScale,
-          // title: `${t(capitalize(statistic))} ${t('cases')}`,
           width: width,
           height: height,
           ticks: 5,
           tickFormat: function (d, i, n) {
             if (mapViz === MAP_VIZS.CHOROPLETH && !Number.isInteger(d)) return;
-            if (i === n.length - 1) return formatNumber(d) + '+';
-            return formatNumber(d);
+            if (i === n.length - 1)
+              return formatNumber(d, statisticConfig.format) + '+';
+            return formatNumber(d, statisticConfig.format);
           },
           marginLeft: 2,
           marginRight: 0,
         })
       );
     }
-  }, [t, width, height, mapScale, mapViz]);
+  }, [t, width, height, statistic, mapScale, mapViz]);
 
   return (
     <div

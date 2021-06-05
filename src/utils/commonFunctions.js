@@ -2,9 +2,8 @@ import {
   INDIA_ISO_SUFFIX,
   ISO_DATE_REGEX,
   LOCALE_SHORTHANDS,
-  NAN_STATISTICS,
   STATISTIC_CONFIGS,
-  TESTED_LOOKBACK_DAYS,
+  TESTED_EXPIRING_DAYS,
 } from '../constants';
 
 import {
@@ -80,30 +79,37 @@ export const formatDate = (unformattedDate, formatString) => {
 };
 
 export const abbreviateNumber = (number) => {
-  if (Math.abs(number) < 1e3) return numberFormatter.format(number);
-  else if (Math.abs(number) >= 1e3 && Math.abs(number) < 1e5)
+  const numberCleaned = Math.round(Math.abs(number));
+  if (numberCleaned < 1e3) return numberFormatter.format(Math.floor(number));
+  else if (numberCleaned >= 1e3 && numberCleaned < 1e5)
     return numberFormatter.format(number / 1e3) + 'K';
-  else if (Math.abs(number) >= 1e5 && Math.abs(number) < 1e7)
+  else if (numberCleaned >= 1e5 && numberCleaned < 1e7)
     return numberFormatter.format(number / 1e5) + 'L';
-  else if (Math.abs(number) >= 1e7 && Math.abs(number) < 1e10)
+  else if (numberCleaned >= 1e7 && numberCleaned < 1e10)
     return numberFormatter.format(number / 1e7) + 'Cr';
-  else if (Math.abs(number) >= 1e10 && Math.abs(number) < 1e14)
+  else if (numberCleaned >= 1e10 && numberCleaned < 1e14)
     return numberFormatter.format(number / 1e10) + 'K Cr';
-  else if (Math.abs(number) >= 1e14)
+  else if (numberCleaned >= 1e14)
     return numberFormatter.format(number / 1e14) + 'L Cr';
 };
 
-export const formatNumber = (value, option, statistic) => {
-  if (statistic && NAN_STATISTICS.includes(statistic) && value === 0)
-    value = NaN;
-
-  if (isNaN(value)) return '-';
-  else if (option === 'short') {
+export const formatNumber = (value, option = '', statistic) => {
+  if (
+    isNaN(value) ||
+    (statistic && STATISTIC_CONFIGS[statistic]?.hideZero && value === 0)
+  ) {
+    return '-';
+  } else if (option === 'long') {
+    return numberFormatter.format(
+      Math.abs(value) < 1 ? value : Math.round(value)
+    );
+  } else if (option === 'short') {
     return abbreviateNumber(value);
-  } else if (option === 'int') {
-    value = Math.floor(value);
+  } else if (option === '%') {
+    return `${numberFormatter.format(value)}%`;
+  } else if (option === '') {
+    return numberFormatter.format(value);
   }
-  return numberFormatter.format(value) + (option === '%' ? '%' : '');
 };
 
 export const capitalize = (s) => {
@@ -121,10 +127,26 @@ export const getStatistic = (
   data,
   type,
   statistic,
-  {perCent = false, perMillion = false, movingAverage = false} = {}
+  {
+    expiredDate = null,
+    normalizedByPopulationPer = null,
+    movingAverage = false,
+  } = {}
 ) => {
   // TODO: Replace delta with daily to remove ambiguity
   //       Or add another type for daily/delta
+
+  if (expiredDate !== null) {
+    if (STATISTIC_CONFIGS[statistic]?.category === 'tested') {
+      const days = differenceInDays(
+        expiredDate,
+        parseIndiaDate(data?.meta?.tested?.['last_updated'])
+      );
+      if (days > TESTED_EXPIRING_DAYS) {
+        return 0;
+      }
+    }
+  }
 
   let multiplyFactor = 1;
   if (type === 'delta' && movingAverage) {
@@ -132,10 +154,11 @@ export const getStatistic = (
     multiplyFactor *= 1 / 7;
   }
 
-  // TODO: Ugly
-  if (perMillion) {
+  if (normalizedByPopulationPer === 'million') {
     multiplyFactor *= 1e6 / data?.meta?.population || 0;
-  } else if (perCent) {
+  } else if (normalizedByPopulationPer === 'lakh') {
+    multiplyFactor *= 1e5 / data?.meta?.population || 0;
+  } else if (normalizedByPopulationPer === 'hundred') {
     multiplyFactor *= 1e2 / data?.meta?.population || 0;
   }
 
@@ -147,14 +170,14 @@ export const getStatistic = (
     const other = data?.[type]?.other || 0;
     const active = confirmed - deceased - recovered - other;
     if (statistic === 'active') {
-      val = active * multiplyFactor;
+      val = active;
     } else if (statistic === 'activeRatio') {
       val = (100 * active) / confirmed;
     }
   } else if (statistic === 'vaccinated') {
     const dose1 = data?.[type]?.vaccinated1 || 0;
     const dose2 = data?.[type]?.vaccinated2 || 0;
-    val = (dose1 + dose2) * multiplyFactor;
+    val = dose1 + dose2;
   } else if (statistic === 'tpr') {
     const confirmed = data?.[type]?.confirmed || 0;
     const tested = data?.[type]?.tested || 0;
@@ -170,28 +193,20 @@ export const getStatistic = (
   } else if (statistic === 'population') {
     val = type === 'total' ? data?.meta?.population || 0 : 0;
   } else {
-    val = data?.[type]?.[statistic] * multiplyFactor;
+    val = data?.[type]?.[statistic];
   }
 
-  return (isFinite(val) && val) || 0;
+  const isLinear = !STATISTIC_CONFIGS[statistic]?.nonLinear;
+
+  return ((isLinear && multiplyFactor) || 1) * (isFinite(val) && val) || 0;
 };
 
-export const getTableStatistic = (data, statistic, args, lastUpdatedTT) => {
-  const expired =
-    (statistic === 'tested' || statistic === 'tpr') &&
-    differenceInDays(
-      lastUpdatedTT,
-      parseIndiaDate(data.meta?.tested?.['last_updated'])
-    ) > TESTED_LOOKBACK_DAYS;
-
-  // TODO: The hell is this
+export const getTableStatistic = (data, statistic, args) => {
   const type = STATISTIC_CONFIGS[statistic]?.tableConfig?.type || 'total';
 
-  const total = !expired ? getStatistic(data, type, statistic, args) : 0;
+  const total = getStatistic(data, type, statistic, args);
   const delta =
-    type === 'total' && !expired
-      ? getStatistic(data, 'delta', statistic, args)
-      : 0;
+    type === 'total' ? getStatistic(data, 'delta', statistic, args) : 0;
   return {total, delta};
 };
 

@@ -23,88 +23,119 @@ export const STATISTIC_CONFIGS = {
   confirmed: {
     displayName: 'confirmed',
     color: '#ff073a',
-    format: 'int',
-    showDelta: true,
+    format: 'long',
+    tableConfig: {
+      showDelta: true,
+    },
   },
   active: {
     displayName: 'active',
     color: '#007bff',
-    format: 'int',
+    format: 'long',
   },
   recovered: {
     displayName: 'recovered',
     color: '#28a745',
-    format: 'int',
-    showDelta: true,
+    format: 'long',
+    tableConfig: {
+      showDelta: true,
+    },
   },
   deceased: {
     displayName: 'deceased',
     color: '#6c757d',
-    format: 'int',
-    showDelta: true,
+    format: 'long',
+    tableConfig: {
+      showDelta: true,
+    },
   },
   other: {
     displayName: 'other',
-    format: 'int',
-    showDelta: true,
+    format: 'long',
+    tableConfig: {
+      showDelta: true,
+    },
   },
   tested: {
     displayName: 'tested',
     color: '#4b1eaa',
     format: 'short',
-    showDelta: true,
+    hideZero: true,
+    category: 'tested',
+    tableConfig: {
+      showDelta: true,
+    },
   },
   vaccinated1: {
     displayName: 'vaccinated with at least one dose',
     color: '#fb5581',
     format: 'short',
-    showDelta: true,
+    hideZero: true,
+    category: 'vaccinated',
+    tableConfig: {
+      showDelta: true,
+    },
   },
   vaccinated2: {
     displayName: 'fully vaccinated',
     color: '#fb5581',
     format: 'short',
-    showDelta: true,
+    hideZero: true,
+    category: 'vaccinated',
+    tableConfig: {
+      showDelta: true,
+    },
   },
   vaccinated: {
     displayName: 'vaccine doses administered',
     color: '#fb5581',
     format: 'short',
-    showDelta: true,
+    hideZero: true,
+    category: 'vaccinated',
+    tableConfig: {
+      showDelta: true,
+    },
   },
   tpr: {
     displayName: 'test positivity ratio',
     format: '%',
+    color: '#fd7e14',
+    nonLinear: true,
+    hideZero: true,
+    category: 'tested',
     tableConfig: {
       type: 'delta7',
       displayName: 'test positivity ratio (last 7 days)',
     },
-    color: '#fd7e14',
   },
   cfr: {
     displayName: 'case fatality ratio',
     format: '%',
+    color: '#6c757d',
+    nonLinear: true,
   },
-  // recoveryRatio: {
-  //   displayName: 'recovery ratio',
-  //   format: '%',
-  // },
-  // activeRatio: {
-  //   displayName: 'active ratio',
-  //   format: '%',
-  // },
+  recoveryRatio: {
+    displayName: 'recovery ratio',
+    format: '%',
+    nonLinear: true,
+    tableConfig: {
+      hide: true,
+    },
+  },
+  activeRatio: {
+    displayName: 'active ratio',
+    format: '%',
+    nonLinear: true,
+    tableConfig: {
+      hide: true,
+    },
+  },
   population: {
     displayName: 'population',
     format: 'short',
+    hideZero: true,
   },
 };
-
-export const PER_MILLION_OPTIONS = {
-  normalizeByKey: 'population',
-  multiplyFactor: 1e6,
-};
-
-export const NAN_STATISTICS = ['tested', 'tpr', 'vaccinated', 'population'];
 
 export const PRIMARY_STATISTICS = [
   'confirmed',
@@ -113,13 +144,13 @@ export const PRIMARY_STATISTICS = [
   'deceased',
 ];
 
-export const VACCINE_STATISTICS = ['vaccinated', 'vaccinated1', 'vaccinated2'];
-
-export const BRUSH_STATISTICS = ['confirmed'];
+export const LEVEL_STATISTICS = [...PRIMARY_STATISTICS];
 
 export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested', 'vaccinated'];
 
-export const TABLE_STATISTICS_EXPANDED = Object.keys(STATISTIC_CONFIGS);
+export const TABLE_STATISTICS_EXPANDED = Object.keys(STATISTIC_CONFIGS).filter(
+  (statistic) => !STATISTIC_CONFIGS[statistic]?.tableConfig?.hide
+);
 
 export const MAP_STATISTICS = [...PRIMARY_STATISTICS];
 
@@ -130,6 +161,8 @@ export const TIMESERIES_STATISTICS = [
   'tpr',
 ];
 
+export const BRUSH_STATISTICS = ['confirmed'];
+
 export const UPDATES_COUNT = 5;
 
 export const DISTRICT_TABLE_COUNT = 40;
@@ -138,7 +171,7 @@ export const D3_TRANSITION_DURATION = 300;
 
 export const MINIGRAPH_LOOKBACK_DAYS = 20;
 
-export const TESTED_LOOKBACK_DAYS = 7;
+export const TESTED_EXPIRING_DAYS = 7;
 
 export const UNASSIGNED_STATE_CODE = 'UN';
 

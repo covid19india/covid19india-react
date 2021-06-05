@@ -32,21 +32,15 @@ function StateMeta({stateCode, data, timeseries}) {
 
   const prevWeekDate = formatISO(subDays(parseIndiaDate(lastDate), 7));
 
-  const confirmedPerMillion = getStatistic(
-    data[stateCode],
-    'total',
-    'confirmed',
-    {perMillion: true}
-  );
-  const testPerMillion = getStatistic(data[stateCode], 'total', 'tested', {
-    perMillion: true,
+  const confirmedPerLakh = getStatistic(data[stateCode], 'total', 'confirmed', {
+    normalizedByPopulationPer: 'lakh',
   });
-  const totalConfirmedPerMillion = getStatistic(
-    data['TT'],
-    'total',
-    'confirmed',
-    {perMillion: true}
-  );
+  const testPerLakh = getStatistic(data[stateCode], 'total', 'tested', {
+    normalizedByPopulationPer: 'lakh',
+  });
+  const totalConfirmedPerLakh = getStatistic(data['TT'], 'total', 'confirmed', {
+    normalizedByPopulationPer: 'lakh',
+  });
 
   const activePercent = getStatistic(data[stateCode], 'total', 'activeRatio');
   const recoveryPercent = getStatistic(
@@ -83,13 +77,13 @@ function StateMeta({stateCode, data, timeseries}) {
       <div className="StateMeta">
         <StateMetaCard
           className="confirmed"
-          title={'Confirmed Per Million'}
-          statistic={formatNumber(confirmedPerMillion)}
-          total={formatNumber(totalConfirmedPerMillion)}
-          formula={'(confirmed / state population) * 1 Million'}
+          title={'Confirmed Per Lakh'}
+          statistic={formatNumber(confirmedPerLakh)}
+          total={formatNumber(totalConfirmedPerLakh)}
+          formula={'(confirmed / state population) * 1 Lakh'}
           description={`
-            ~${formatNumber(Math.round(confirmedPerMillion))} ${t(
-            'out of every 10 lakh people in'
+            ~${formatNumber(confirmedPerLakh, 'long')} ${t(
+            'out of every lakh people in'
           )} ${STATE_NAMES[stateCode]} ${t(
             'have tested positive for the virus.'
           )}
@@ -104,7 +98,8 @@ function StateMeta({stateCode, data, timeseries}) {
           description={
             activePercent > 0
               ? `${t('For every 100 confirmed cases')}, ~${formatNumber(
-                  Math.round(activePercent)
+                  activePercent,
+                  'long'
                 )} ${t('are currently infected.')}`
               : t('Currently, there are no active cases in this state.')
           }
@@ -118,7 +113,8 @@ function StateMeta({stateCode, data, timeseries}) {
           description={
             recoveryPercent > 0
               ? `${t('For every 100 confirmed cases')}, ~${formatNumber(
-                  Math.round(recoveryPercent)
+                  recoveryPercent,
+                  'long'
                 )} ${t('have recovered from the virus.')}`
               : t('Unfortunately, there are no recoveries in this state yet.')
           }
@@ -132,7 +128,8 @@ function StateMeta({stateCode, data, timeseries}) {
           description={
             deathPercent > 0
               ? `${t('For every 100 confirmed cases')}, ~${formatNumber(
-                  Math.round(deathPercent)
+                  deathPercent,
+                  'long'
                 )} ${t('have unfortunately passed away from the virus.')}`
               : t(
                   'Fortunately, no one has passed away from the virus in this state.'
@@ -165,22 +162,22 @@ function StateMeta({stateCode, data, timeseries}) {
 
         <StateMetaCard
           className="tpm"
-          title={'Tests Per Million'}
-          statistic={`${formatNumber(testPerMillion)}`}
+          title={'Tests Per Lakh'}
+          statistic={`${formatNumber(testPerLakh)}`}
           formula={
-            '(total tests in state / total population of state) * 1 Million'
+            '(total tests in state / total population of state) * 1 Lakh'
           }
           date={
-            testPerMillion
+            testPerLakh
               ? `${t('As of')} ${formatLastUpdated(
                   data[stateCode]?.meta?.tested?.['last_updated']
                 )} ${t('ago')}`
               : ''
           }
           description={
-            testPerMillion > 0
-              ? `${t('For every 10 lakh people in')} ${STATE_NAMES[stateCode]},
-                ~${formatNumber(Math.round(testPerMillion))} ${t(
+            testPerLakh > 0
+              ? `${t('For every lakh people in')} ${STATE_NAMES[stateCode]},
+                ~${formatNumber(testPerLakh, 'long')} ${t(
                   'samples were tested.'
                 )}`
               : t('No tests have been conducted in this state yet.')

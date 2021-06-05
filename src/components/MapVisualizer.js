@@ -79,59 +79,9 @@ function MapVisualizer({
     {suspense: false, revalidateOnFocus: false}
   );
 
-  const statisticMax = useMemo(() => {
-    const stateCodes = Object.keys(data).filter(
-      (stateCode) =>
-        stateCode !== 'TT' && Object.keys(MAP_META).includes(stateCode)
-    );
-
-    return !isDistrictView
-      ? max(stateCodes, (stateCode) => getStatistic(data[stateCode]))
-      : max(stateCodes, (stateCode) =>
-          data[stateCode]?.districts
-            ? max(Object.values(data[stateCode].districts), (districtData) =>
-                getStatistic(districtData)
-              )
-            : 0
-        );
-  }, [data, isDistrictView, getStatistic]);
-
   const statisticTotal = useMemo(() => {
     return getStatistic(data[mapCode]);
   }, [data, mapCode, getStatistic]);
-
-  const mapScale = useMemo(() => {
-    if (mapViz === MAP_VIZS.BUBBLES) {
-      return scaleSqrt([0, Math.max(statisticMax, 1)], [0, 40])
-        .clamp(true)
-        .nice(3);
-    } else {
-      return scaleSequential(
-        [0, Math.max(1, statisticMax)],
-        colorInterpolator(statistic)
-      ).clamp(true);
-    }
-  }, [mapViz, statistic, statisticMax]);
-
-  const path = useMemo(() => {
-    if (!geoData) return null;
-    return geoPath(geoIdentity());
-  }, [geoData]);
-
-  const fillColor = useCallback(
-    (d) => {
-      const stateCode = STATE_CODES[d.properties.st_nm];
-      const district = d.properties.district;
-      const stateData = data[stateCode];
-      const districtData = stateData?.districts?.[district];
-      let n;
-      if (district) n = getStatistic(districtData);
-      else n = getStatistic(stateData);
-      const color = n === 0 ? '#ffffff00' : mapScale(n);
-      return color;
-    },
-    [data, mapScale, getStatistic]
-  );
 
   const strokeColor = useCallback(
     (alpha) => {
@@ -161,10 +111,81 @@ function MapVisualizer({
     });
   }, [geoData, mapCode, isDistrictView, mapViz, mapMeta]);
 
+  const districtsSet = useMemo(() => {
+    if (!geoData || !isDistrictView) return {};
+    return feature(geoData, geoData.objects.districts).features.reduce(
+      (stateCodes, feature) => {
+        const stateCode = STATE_CODES[feature.properties.st_nm];
+        if (!stateCodes[stateCode]) {
+          stateCodes[stateCode] = new Set();
+        }
+        stateCodes[stateCode].add(feature.properties.district);
+        return stateCodes;
+      },
+      {}
+    );
+  }, [geoData, isDistrictView]);
+
+  const statisticMax = useMemo(() => {
+    const stateCodes = Object.keys(data).filter(
+      (stateCode) =>
+        stateCode !== 'TT' && Object.keys(MAP_META).includes(stateCode)
+    );
+
+    return !isDistrictView
+      ? max(stateCodes, (stateCode) => getStatistic(data[stateCode]))
+      : max(stateCodes, (stateCode) => {
+          const districts = Object.keys(
+            data[stateCode]?.districts || []
+          ).filter(
+            (districtName) =>
+              (districtsSet?.[stateCode] || new Set()).has(districtName) ||
+              (mapViz === MAP_VIZS.BUBBLES &&
+                districtName === UNKNOWN_DISTRICT_KEY)
+          );
+          return districts && districts.length > 0
+            ? max(districts, (districtName) =>
+                getStatistic(data[stateCode].districts[districtName])
+              )
+            : 0;
+        });
+  }, [data, isDistrictView, getStatistic, mapViz, districtsSet]);
+
+  const mapScale = useMemo(() => {
+    if (mapViz === MAP_VIZS.BUBBLES) {
+      return scaleSqrt([0, Math.max(statisticMax, 1)], [0, 40])
+        .clamp(true)
+        .nice(3);
+    } else {
+      return scaleSequential(
+        [0, Math.max(1, statisticMax)],
+        colorInterpolator(statistic)
+      ).clamp(true);
+    }
+  }, [mapViz, statistic, statisticMax]);
+
+  const fillColor = useCallback(
+    (d) => {
+      const stateCode = STATE_CODES[d.properties.st_nm];
+      const district = d.properties.district;
+      const stateData = data[stateCode];
+      const districtData = stateData?.districts?.[district];
+      let n;
+      if (district) n = getStatistic(districtData);
+      else n = getStatistic(stateData);
+      const color = n === 0 ? '#ffffff00' : mapScale(n);
+      return color;
+    },
+    [data, mapScale, getStatistic]
+  );
+
   const populateTexts = useCallback(
     (regionSelection) => {
       regionSelection.select('title').text((d) => {
-        if (mapViz === MAP_VIZS.BUBBLES) {
+        if (
+          mapViz === MAP_VIZS.BUBBLES &&
+          !STATISTIC_CONFIGS[statistic]?.nonLinear
+        ) {
           const state = d.properties.st_nm;
           const stateCode = STATE_CODES[state];
           const district = d.properties.district;
@@ -174,15 +195,14 @@ function MapVisualizer({
           let n;
           if (district) n = getStatistic(districtData);
           else n = getStatistic(stateData);
-          return (
-            formatNumber(100 * (n / (statisticTotal || 0.001))) +
-            '% from ' +
-            toTitleCase(district ? district : state)
-          );
+          return `${formatNumber(
+            100 * (n / (statisticTotal || 0.001)),
+            '%'
+          )} from ${toTitleCase(district ? district : state)}`;
         }
       });
     },
-    [mapViz, data, getStatistic, statisticTotal]
+    [mapViz, data, getStatistic, statisticTotal, statistic]
   );
 
   const onceTouchedRegion = useRef(null);
@@ -199,6 +219,11 @@ function MapVisualizer({
       });
     });
   }, [mapCode, setRegionHighlighted]);
+
+  const path = useMemo(() => {
+    if (!geoData) return null;
+    return geoPath(geoIdentity());
+  }, [geoData]);
 
   // Choropleth
   useEffect(() => {
@@ -528,7 +553,7 @@ function MapVisualizer({
           )}
       </div>
 
-      {mapScale && <MapLegend {...{data, mapViz, mapScale}} />}
+      {mapScale && <MapLegend {...{data, statistic, mapViz, mapScale}} />}
 
       <svg style={{position: 'absolute', height: 0}}>
         <defs>

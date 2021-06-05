@@ -6,13 +6,11 @@ import equal from 'fast-deep-equal';
 import {memo} from 'react';
 import {animated, useSpring} from 'react-spring';
 
-const Cell = ({statistic, data, isPerMillion, lastUpdatedTT}) => {
-  const {total, delta} = getTableStatistic(
-    data,
-    statistic,
-    {perMillion: isPerMillion},
-    lastUpdatedTT
-  );
+const Cell = ({statistic, data, isPerLakh, lastUpdated}) => {
+  const {total, delta} = getTableStatistic(data, statistic, {
+    expiredDate: lastUpdated,
+    normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
+  });
 
   const spring = useSpring({
     total: total,
@@ -24,7 +22,7 @@ const Cell = ({statistic, data, isPerMillion, lastUpdatedTT}) => {
 
   return (
     <div className="cell statistic">
-      {statisticConfig?.showDelta && (
+      {statisticConfig?.tableConfig?.showDelta && (
         <animated.div
           className={classnames('delta', `is-${statistic}`)}
           title={delta}
@@ -55,7 +53,7 @@ const isCellEqual = (prevProps, currProps) => {
   if (!equal(prevProps.data?.delta, currProps.data?.delta)) {
     return false;
   }
-  if (!equal(prevProps.isPerMillion, currProps.isPerMillion)) {
+  if (!equal(prevProps.isPerLakh, currProps.isPerLakh)) {
     return false;
   }
   return true;

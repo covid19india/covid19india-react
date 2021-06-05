@@ -56,6 +56,7 @@ function MapExplorer({
   setAnchor,
   expandTable = false,
   hideDistrictData = false,
+  lastUpdated,
 }) {
   const {t} = useTranslation();
   const mapExplorerRef = useRef();
@@ -171,12 +172,15 @@ function MapExplorer({
     return styles;
   }, []);
 
-  const perMillion = mapViz === MAP_VIZS.CHOROPLETH;
+  const perLakh = mapViz === MAP_VIZS.CHOROPLETH;
 
   const getMapStatistic = useCallback(
     (data) =>
-      getStatistic(data, 'total', mapStatistic, {perMillion: perMillion}),
-    [mapStatistic, perMillion]
+      getStatistic(data, 'total', mapStatistic, {
+        expiredDate: lastUpdated,
+        normalizedByPopulationPer: perLakh ? 'lakh' : null,
+      }),
+    [mapStatistic, perLakh, lastUpdated]
   );
 
   const spring = useSpring({
@@ -242,15 +246,17 @@ function MapExplorer({
                 {spring.total.to((total) =>
                   formatNumber(
                     total,
-                    statisticConfig.format !== 'short'
-                      ? statisticConfig.format
-                      : 'int',
+                    statisticConfig.format === 'short'
+                      ? 'long'
+                      : statisticConfig.format,
                     mapStatistic
                   )
                 )}
               </animated.div>
               <span>{`${t(capitalize(statisticConfig.displayName))}${
-                perMillion ? ` ${t('per 10 lakh people')}` : ''
+                perLakh && !statisticConfig?.nonLinear
+                  ? ` ${t('per lakh people')}`
+                  : ''
               }`}</span>
             </h1>
           )}

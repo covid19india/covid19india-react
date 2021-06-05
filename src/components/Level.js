@@ -1,5 +1,5 @@
 import {
-  PRIMARY_STATISTICS,
+  LEVEL_STATISTICS,
   STATISTIC_CONFIGS,
   SPRING_CONFIG_NUMBERS,
 } from '../constants';
@@ -31,7 +31,13 @@ function PureLevelItem({statistic, total, delta}) {
             /* Add space after + because react-spring regex bug */
             spring.delta.to(
               (delta) =>
-                `+ ${formatNumber(delta, statisticConfig.format, statistic)}`
+                `+ ${formatNumber(
+                  delta,
+                  statisticConfig.format !== 'short'
+                    ? statisticConfig.format
+                    : 'long',
+                  statistic
+                )}`
             )
           ) : (
             <HeartFillIcon size={9} verticalAlign={2} />
@@ -42,7 +48,13 @@ function PureLevelItem({statistic, total, delta}) {
       </animated.h4>
       <animated.h1>
         {spring.total.to((total) =>
-          formatNumber(total, statisticConfig.format, statistic)
+          formatNumber(
+            total,
+            statisticConfig.format !== 'short'
+              ? statisticConfig.format
+              : 'long',
+            statistic
+          )
         )}
       </animated.h1>
     </>
@@ -55,9 +67,10 @@ function Level({data}) {
   const trail = useMemo(() => {
     const styles = [];
 
-    PRIMARY_STATISTICS.map((statistic, index) => {
+    LEVEL_STATISTICS.map((statistic, index) => {
       styles.push({
         animationDelay: `${750 + index * 250}ms`,
+        width: `calc(${100 / LEVEL_STATISTICS.length}%)`,
       });
       return null;
     });
@@ -66,7 +79,7 @@ function Level({data}) {
 
   return (
     <div className="Level">
-      {PRIMARY_STATISTICS.map((statistic, index) => (
+      {LEVEL_STATISTICS.map((statistic, index) => (
         <animated.div
           key={index}
           className={classnames('level-item', `is-${statistic}`, 'fadeInUp')}

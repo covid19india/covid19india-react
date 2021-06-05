@@ -1,6 +1,5 @@
 import {
   D3_TRANSITION_DURATION,
-  NAN_STATISTICS,
   PRIMARY_STATISTICS,
   STATISTIC_CONFIGS,
 } from '../constants';
@@ -526,7 +525,7 @@ function Timeseries({
         statistic,
         {movingAverage: isMovingAverage}
       );
-      if (NAN_STATISTICS.includes(statistic) && currCount === 0) return;
+      if (STATISTIC_CONFIGS[statistic]?.hideZero && currCount === 0) return;
 
       const prevDate =
         dates[dates.findIndex((date) => date === highlightedDate) - 1];
@@ -579,7 +578,7 @@ function Timeseries({
                       ),
                       statisticConfig.format !== 'short'
                         ? statisticConfig.format
-                        : 'int',
+                        : 'long',
                       statistic
                     )}
                   </h2>
@@ -587,7 +586,7 @@ function Timeseries({
                     delta,
                     statisticConfig.format !== 'short'
                       ? statisticConfig.format
-                      : 'int',
+                      : 'long',
                     statistic
                   )}`}</h6>
                 </div>

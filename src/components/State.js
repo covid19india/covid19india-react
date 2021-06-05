@@ -4,10 +4,12 @@ import {
   fetcher,
   formatNumber,
   getStatistic,
+  parseIndiaDate,
   retry,
 } from '../utils/commonFunctions';
 
 import classnames from 'classnames';
+import {max} from 'date-fns';
 import {
   memo,
   useMemo,
@@ -120,6 +122,19 @@ function State() {
 
   const lookback = showAllDistricts ? (window.innerWidth >= 540 ? 10 : 8) : 6;
 
+  const lastUpdated = useMemo(() => {
+    if (!data) {
+      return null;
+    }
+    const updatedDates = [
+      data[stateCode]?.meta?.['last_updated'],
+      data[stateCode]?.meta?.tested?.['last_updated'],
+    ];
+    return max(
+      updatedDates.filter((date) => date).map((date) => parseIndiaDate(date))
+    );
+  }, [stateCode, data]);
+
   return (
     <>
       <Helmet>
@@ -160,6 +175,7 @@ function State() {
                   setRegionHighlighted,
                   mapStatistic,
                   setMapStatistic,
+                  lastUpdated,
                 }}
               ></MapExplorer>
             </Suspense>

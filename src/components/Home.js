@@ -3,10 +3,16 @@ import TableLoader from './loaders/Table';
 import {DATA_API_ROOT, GOSPEL_DATE} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
-import {fetcher, getStatistic, retry} from '../utils/commonFunctions';
+import {
+  fetcher,
+  getStatistic,
+  parseIndiaDate,
+  retry,
+} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
-import {useState, useRef, lazy, Suspense} from 'react';
+import {max} from 'date-fns';
+import {useMemo, useRef, useState, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 import {useLocation} from 'react-router-dom';
 import {useLocalStorage, useSessionStorage, useWindowSize} from 'react-use';
@@ -67,6 +73,20 @@ function Home() {
   const hideDistrictData = date !== '' && date < GOSPEL_DATE;
   const hideVaccinated =
     getStatistic(data?.['TT'], 'total', 'vaccinated') === 0;
+
+  const lastUpdated = useMemo(() => {
+    if (!data) {
+      return null;
+    }
+    // TODO: last_updated date might not be same as the last case date
+    const updatedDates = [
+      data['TT']?.meta?.['last_updated'] || date,
+      data['TT']?.meta?.tested?.['last_updated'],
+    ];
+    return max(
+      updatedDates.filter((date) => date).map((date) => parseIndiaDate(date))
+    );
+  }, [data, date]);
 
   return (
     <>
@@ -139,6 +159,7 @@ function Home() {
                   setExpandTable,
                   hideDistrictData,
                   hideVaccinated,
+                  lastUpdated,
                 }}
               />
             </Suspense>
@@ -163,12 +184,19 @@ function Home() {
                   <Suspense fallback={<div style={{height: '50rem'}} />}>
                     <StateHeader data={data['TT']} stateCode={'TT'} />
                     <MapExplorer
-                      stateCode="TT"
-                      {...{date, data}}
-                      {...{mapStatistic, setMapStatistic}}
-                      {...{regionHighlighted, setRegionHighlighted}}
-                      {...{anchor, setAnchor}}
-                      {...{expandTable, hideDistrictData}}
+                      {...{
+                        stateCode: 'TT',
+                        data,
+                        mapStatistic,
+                        setMapStatistic,
+                        regionHighlighted,
+                        setRegionHighlighted,
+                        anchor,
+                        setAnchor,
+                        expandTable,
+                        hideDistrictData,
+                        lastUpdated,
+                      }}
                     />
                   </Suspense>
                 </div>

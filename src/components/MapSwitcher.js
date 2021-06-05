@@ -1,4 +1,4 @@
-import {PRIMARY_STATISTICS, STATISTIC_CONFIGS} from '../constants';
+import {LEVEL_STATISTICS, STATISTIC_CONFIGS} from '../constants';
 
 import classnames from 'classnames';
 import {memo, useState, useCallback, useEffect} from 'react';
@@ -14,8 +14,9 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
     opacity: 0,
     background: `${STATISTIC_CONFIGS[mapStatistic].color}20`,
     transform: `translate3d(${
-      width * PRIMARY_STATISTICS.indexOf(mapStatistic) * 0.25
+      (width * LEVEL_STATISTICS.indexOf(mapStatistic)) / LEVEL_STATISTICS.length
     }px, 0, 0)`,
+    width: `calc(${100 / LEVEL_STATISTICS.length}%)`,
     config: config.gentle,
   }));
 
@@ -24,7 +25,8 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
       ReactDOM.unstable_batchedUpdates(() => {
         springApi.start({
           transform: `translate3d(${
-            width * PRIMARY_STATISTICS.indexOf(mapStatistic) * 0.25
+            (width * LEVEL_STATISTICS.indexOf(mapStatistic)) /
+            LEVEL_STATISTICS.length
           }px, 0, 0)`,
           opacity: 1,
           background: `${STATISTIC_CONFIGS[mapStatistic].color}20`,
@@ -48,11 +50,12 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
     <div className="MapSwitcher" ref={mapSwitcher}>
       <animated.div className="highlight" style={spring}></animated.div>
 
-      {PRIMARY_STATISTICS.map((statistic, index) => (
+      {LEVEL_STATISTICS.map((statistic, index) => (
         <div
           key={index}
           className={classnames('clickable', {[`is-${statistic}`]: !clicked})}
           onClick={handleClick.bind(this, statistic)}
+          style={{width: `calc(${100 / LEVEL_STATISTICS.length}%)`}}
         ></div>
       ))}
     </div>

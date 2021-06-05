@@ -67,6 +67,8 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
 
     const t = svg.transition().duration(D3_TRANSITION_DURATION);
 
+    const statisticConfig = STATISTIC_CONFIGS[statistic];
+
     svg
       .select('.x-axis')
       .transition(t)
@@ -79,7 +81,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
         getDeltaStatistic(timeseries?.[date], statistic) < 0 ? '-1em' : '1.5em'
       )
       .style('text-anchor', 'middle')
-      .attr('fill', STATISTIC_CONFIGS[statistic].color);
+      .attr('fill', statisticConfig.color);
 
     svg
       .selectAll('.bar')
@@ -104,8 +106,8 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       )
       .attr('fill', (date, i) => {
         return i < dates.length - 1
-          ? STATISTIC_CONFIGS[statistic].color + '90'
-          : STATISTIC_CONFIGS[statistic].color;
+          ? statisticConfig.color + '90'
+          : statisticConfig.color;
       });
 
     const textSelection = svg
@@ -115,12 +117,15 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       .attr('class', 'label')
       .attr('x', (date) => xScale(date) + xScale.bandwidth() / 2)
       .text((date) =>
-        formatNumber(getDeltaStatistic(timeseries?.[date], statistic))
+        formatNumber(
+          getDeltaStatistic(timeseries?.[date], statistic),
+          statisticConfig.format
+        )
       );
 
     textSelection
       .transition(t)
-      .attr('fill', STATISTIC_CONFIGS[statistic].color)
+      .attr('fill', statisticConfig.color)
       .attr('y', (date) => {
         const val = getDeltaStatistic(timeseries?.[date], statistic);
         return yScale(val) + (val < 0 ? 15 : -6);
@@ -146,11 +151,12 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
         const delta =
           getDeltaStatistic(timeseries?.[date], statistic) - prevVal;
         return `${delta > 0 ? '+' : ''}${formatNumber(
-          (100 * delta) / Math.abs(prevVal)
-        )}%`;
+          (100 * delta) / Math.abs(prevVal),
+          '%'
+        )}`;
       })
       .transition(t)
-      .attr('fill', STATISTIC_CONFIGS[statistic].color + '90');
+      .attr('fill', statisticConfig.color + '90');
   }, [dates, height, statistic, timeseries, width]);
 
   return (

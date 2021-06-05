@@ -1,6 +1,6 @@
 import {
   MINIGRAPH_LOOKBACK_DAYS,
-  PRIMARY_STATISTICS,
+  LEVEL_STATISTICS,
   STATISTIC_CONFIGS,
 } from '../constants';
 import {
@@ -64,7 +64,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
 
     refs.current.forEach((ref, index) => {
       const svg = select(ref);
-      const statistic = PRIMARY_STATISTICS[index];
+      const statistic = LEVEL_STATISTICS[index];
       const color = STATISTIC_CONFIGS[statistic].color;
 
       const dailyMaxAbs = max(dates, (date) =>
@@ -160,11 +160,12 @@ function Minigraphs({timeseries, date: timelineDate}) {
 
   return (
     <div className="Minigraph">
-      {PRIMARY_STATISTICS.map((statistic, index) => (
+      {LEVEL_STATISTICS.map((statistic, index) => (
         <div
           key={statistic}
           className={classnames('svg-parent')}
           ref={index === 0 ? wrapperRef : null}
+          style={{width: `calc(${100 / LEVEL_STATISTICS.length}%)`}}
         >
           <svg
             ref={(el) => {

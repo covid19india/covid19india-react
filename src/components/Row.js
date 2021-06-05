@@ -35,11 +35,11 @@ function Row({
   tableStatistics,
   stateCode,
   districtName,
-  isPerMillion,
+  isPerLakh,
   regionHighlighted,
   setRegionHighlighted,
   expandTable,
-  lastUpdatedTT,
+  lastUpdated,
 }) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useSessionStorage('districtSortData', {
@@ -70,19 +70,26 @@ function Row({
       if (sortData.sortColumn !== 'districtName') {
         const statisticConfig = STATISTIC_CONFIGS[sortData.sortColumn];
         const dataType =
-          sortData.delta && statisticConfig.showDelta ? 'delta' : 'total';
+          sortData.delta && statisticConfig?.tableConfig?.showDelta
+            ? 'delta'
+            : 'total';
 
         const statisticA = getTableStatistic(
           data.districts[districtNameA],
           sortData.sortColumn,
-          {perMillion: isPerMillion},
-          lastUpdatedTT
+          {
+            expiredDate: lastUpdated,
+            normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
+          }
         )[dataType];
         const statisticB = getTableStatistic(
           data.districts[districtNameB],
           sortData.sortColumn,
-          {perMillion: isPerMillion},
-          lastUpdatedTT
+          {
+            expiredDate: lastUpdated,
+            normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
+          },
+          lastUpdated
         )[dataType];
         return sortData.isAscending
           ? statisticA - statisticB
@@ -93,7 +100,7 @@ function Row({
           : districtNameB.localeCompare(districtNameA);
       }
     },
-    [sortData, data, isPerMillion, lastUpdatedTT]
+    [sortData, data, isPerLakh, lastUpdated]
   );
 
   const highlightState = useCallback(() => {
@@ -186,7 +193,7 @@ function Row({
         {tableStatistics.map((statistic) => (
           <Cell
             key={statistic}
-            {...{data, statistic, isPerMillion, lastUpdatedTT}}
+            {...{data, statistic, isPerLakh, lastUpdated}}
           />
         ))}
       </div>
@@ -269,9 +276,9 @@ function Row({
                 regionHighlighted,
                 setRegionHighlighted,
                 stateCode,
-                isPerMillion,
+                isPerLakh,
                 expandTable,
-                lastUpdatedTT,
+                lastUpdated,
               }}
             />
           ))}
@@ -295,7 +302,7 @@ const isEqual = (prevProps, currProps) => {
     return false;
   } else if (!equal(prevProps.data?.delta, currProps.data?.delta)) {
     return false;
-  } else if (!equal(prevProps.isPerMillion, currProps.isPerMillion)) {
+  } else if (!equal(prevProps.isPerLakh, currProps.isPerLakh)) {
     return false;
   } else if (
     (!equal(

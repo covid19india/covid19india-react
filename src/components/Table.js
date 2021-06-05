@@ -9,14 +9,9 @@ import {
   STATISTIC_CONFIGS,
   TABLE_STATISTICS,
   TABLE_STATISTICS_EXPANDED,
-  VACCINE_STATISTICS,
   UNASSIGNED_STATE_CODE,
 } from '../constants';
-import {
-  getTableStatistic,
-  parseIndiaDate,
-  retry,
-} from '../utils/commonFunctions';
+import {getTableStatistic, retry} from '../utils/commonFunctions';
 
 import {
   FilterIcon,
@@ -26,10 +21,9 @@ import {
   QuestionIcon,
 } from '@primer/octicons-react';
 import classnames from 'classnames';
-import {max} from 'date-fns';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import {memo, useCallback, useEffect, useMemo, useState, lazy} from 'react';
+import {memo, useCallback, useEffect, useState, lazy} from 'react';
 import {
   ChevronLeft,
   ChevronsLeft,
@@ -54,6 +48,7 @@ function Table({
   setExpandTable,
   hideDistrictData,
   hideVaccinated,
+  lastUpdated,
 }) {
   const {t} = useTranslation();
   const [sortData, setSortData] = useSessionStorage('sortData', {
@@ -91,41 +86,37 @@ function Table({
   const [districts, setDistricts] = useState();
 
   const [tableOption, setTableOption] = useState('States');
-  const [isPerMillion, setIsPerMillion] = useState(false);
+  const [isPerLakh, setIsPerLakh] = useState(false);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
 
   const numPages = Math.ceil(
     Object.keys(districts || {}).length / DISTRICT_TABLE_COUNT
   );
 
-  const lastUpdatedTT = useMemo(() => {
-    const updatedDates = [
-      states['TT']?.meta?.['last_updated'] || timelineDate,
-      states['TT']?.meta?.tested?.['last_updated'],
-    ];
-    return max(
-      updatedDates.filter((date) => date).map((date) => parseIndiaDate(date))
-    );
-  }, [states, timelineDate]);
-
   const sortingFunction = useCallback(
     (regionKeyA, regionKeyB) => {
       if (sortData.sortColumn !== 'regionName') {
         const statisticConfig = STATISTIC_CONFIGS[sortData.sortColumn];
         const dataType =
-          sortData.delta && statisticConfig.showDelta ? 'delta' : 'total';
+          sortData.delta && statisticConfig?.tableConfig?.showDelta
+            ? 'delta'
+            : 'total';
 
         const statisticA = getTableStatistic(
           districts?.[regionKeyA] || states[regionKeyA],
           sortData.sortColumn,
-          {perMillion: isPerMillion},
-          lastUpdatedTT
+          {
+            expiredDate: lastUpdated,
+            normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
+          }
         )[dataType];
         const statisticB = getTableStatistic(
           districts?.[regionKeyB] || states[regionKeyB],
           sortData.sortColumn,
-          {perMillion: isPerMillion},
-          lastUpdatedTT
+          {
+            expiredDate: lastUpdated,
+            normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
+          }
         )[dataType];
         return sortData.isAscending
           ? statisticA - statisticB
@@ -142,8 +133,8 @@ function Table({
     },
     [
       districts,
-      isPerMillion,
-      lastUpdatedTT,
+      isPerLakh,
+      lastUpdated,
       sortData.delta,
       sortData.isAscending,
       sortData.sortColumn,
@@ -191,7 +182,9 @@ function Table({
   const tableStatistics = (
     expandTable ? TABLE_STATISTICS_EXPANDED : TABLE_STATISTICS
   ).filter(
-    (statistic) => !VACCINE_STATISTICS.includes(statistic) || !hideVaccinated
+    (statistic) =>
+      !(STATISTIC_CONFIGS[statistic]?.category === 'vaccinated') ||
+      !hideVaccinated
   );
 
   const showDistricts = tableOption === 'Districts' && !hideDistrictData;
@@ -218,13 +211,13 @@ function Table({
         </animated.div>
 
         <animated.div
-          className={classnames('million-toggle', {
-            'is-highlighted': isPerMillion,
+          className={classnames('lakh-toggle', {
+            'is-highlighted': isPerLakh,
           })}
-          onClick={setIsPerMillion.bind(this, !isPerMillion)}
+          onClick={setIsPerLakh.bind(this, !isPerLakh)}
           style={trail[0]}
         >
-          <span>10L</span>
+          <span>1L </span>
         </animated.div>
 
         <animated.div
@@ -262,8 +255,8 @@ function Table({
                   </div>
 
                   <div className="info-item">
-                    <h5>10L</h5>
-                    <p>{t('Per Ten Lakh People')}</p>
+                    <h5>1L</h5>
+                    <p>{t('Per Lakh People')}</p>
                   </div>
 
                   <div className="info-item sort">
@@ -363,7 +356,7 @@ function Table({
               .filter(
                 (stateCode) =>
                   stateCode !== 'TT' &&
-                  !(stateCode === UNASSIGNED_STATE_CODE && isPerMillion)
+                  !(stateCode === UNASSIGNED_STATE_CODE && isPerLakh)
               )
               .sort((a, b) => sortingFunction(a, b))
               .map((stateCode) => {
@@ -373,11 +366,11 @@ function Table({
                     data={states[stateCode]}
                     {...{
                       stateCode,
-                      isPerMillion,
+                      isPerLakh,
                       regionHighlighted,
                       setRegionHighlighted,
                       expandTable,
-                      lastUpdatedTT,
+                      lastUpdated,
                       tableStatistics,
                     }}
                   />
@@ -401,11 +394,11 @@ function Table({
                     data={districts[districtKey]}
                     districtName={districts[districtKey].districtName}
                     {...{
-                      isPerMillion,
+                      isPerLakh,
                       regionHighlighted,
                       setRegionHighlighted,
                       expandTable,
-                      lastUpdatedTT,
+                      lastUpdated,
                       tableStatistics,
                     }}
                   />
@@ -417,11 +410,11 @@ function Table({
             data={states['TT']}
             stateCode={'TT'}
             {...{
-              isPerMillion,
+              isPerLakh,
               regionHighlighted,
               setRegionHighlighted,
               expandTable,
-              lastUpdatedTT,
+              lastUpdated,
               tableStatistics,
             }}
           />

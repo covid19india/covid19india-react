@@ -404,12 +404,6 @@ h6 {
     width: calc(100% - 2rem);
   }
 
-  .Minigraph {
-    .svg-parent {
-      width: calc(25%) !important;
-    }
-  }
-
   .MapExplorer {
     .header,
     .map-stats,
@@ -1594,7 +1588,6 @@ h6 {
   .highlight {
     pointer-events: none;
     position: absolute;
-    width: calc(25%) !important;
   }
 
   .highlight,
@@ -1639,7 +1632,6 @@ h6 {
   .level-item {
     display: flex;
     flex-direction: column;
-    width: calc(25%);
 
     & > * {
       align-self: center;
@@ -1708,6 +1700,39 @@ h6 {
 
     h4 {
       color: $gray-mid;
+    }
+  }
+
+  .is-tested {
+    h1,
+    h5 {
+      color: $purple;
+    }
+
+    h4 {
+      color: $purple-mid;
+    }
+  }
+
+  .is-vaccinated {
+    h1,
+    h5 {
+      color: $pink;
+    }
+
+    h4 {
+      color: $pink-mid;
+    }
+  }
+
+  .is-tpr {
+    h1,
+    h5 {
+      color: $orange;
+    }
+
+    h4 {
+      color: $orange-mid;
     }
   }
 }
@@ -1855,7 +1880,7 @@ abbr {
 
   .option-toggle,
   .info-toggle,
-  .million-toggle,
+  .lakh-toggle,
   .expand-table-toggle {
     background: $gray-light;
     border-radius: 5px;
@@ -1897,10 +1922,10 @@ abbr {
     }
   }
 
-  .million-toggle {
+  .lakh-toggle {
     font-size: 13px;
     font-weight: 600;
-    padding: 11.5px 10px;
+    padding: 11.5px 12.1px;
     text-align: center;
 
     &.is-highlighted {
@@ -3560,7 +3585,6 @@ input {
 
   .svg-parent {
     background: transparent !important;
-    width: calc(25%);
   }
 }
 
@@ -3768,7 +3792,6 @@ footer {
     font-size: 10px !important;
     font-weight: 600;
     margin: 0;
-    outline: none;
     padding: 10px 15px;
     text-align: center;
     transition: background 0.25s ease-in-out;

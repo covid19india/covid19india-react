@@ -13,11 +13,11 @@ function DistrictRow({
   districtName,
   data,
   tableStatistics,
-  isPerMillion,
+  isPerLakh,
   regionHighlighted,
   setRegionHighlighted,
   expandTable,
-  lastUpdatedTT,
+  lastUpdated,
 }) {
   const {t} = useTranslation();
 
@@ -49,10 +49,7 @@ function DistrictRow({
       </div>
 
       {tableStatistics.map((statistic) => (
-        <Cell
-          key={statistic}
-          {...{statistic, data, isPerMillion, lastUpdatedTT}}
-        />
+        <Cell key={statistic} {...{statistic, data, isPerLakh, lastUpdated}} />
       ))}
     </div>
   );
@@ -67,7 +64,7 @@ const isDistrictRowEqual = (prevProps, currProps) => {
     !equal(prevProps.data?.['last_updated'], currProps.data?.['last_updated'])
   ) {
     return false;
-  } else if (!equal(prevProps.isPerMillion, currProps.isPerMillion)) {
+  } else if (!equal(prevProps.isPerLakh, currProps.isPerLakh)) {
     return false;
   } else if (
     !equal(

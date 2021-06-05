@@ -124,12 +124,12 @@ function Level({data}) {
     >
       <ShieldCheckIcon />
       <animated.div>
-        {spring.total.to((total) => formatNumber(Math.floor(total)))}
+        {spring.total.to((total) => formatNumber(total, 'long'))}
       </animated.div>
       {/* <animated.div>
         {spring.delta.to(
           (delta) =>
-            `(+ ${formatNumber(Math.floor(delta))})`
+            `(+ ${formatNumber(delta, 'long')})`
         )}
       </animated.div> */}
       <div>{t(statisticConfig.displayName)}</div>
@@ -138,8 +138,12 @@ function Level({data}) {
 }
 
 function VaccinationHeader({data}) {
-  const dose1 = getStatistic(data, 'total', 'vaccinated1', {perCent: true});
-  const dose2 = getStatistic(data, 'total', 'vaccinated2', {perCent: true});
+  const dose1 = getStatistic(data, 'total', 'vaccinated1', {
+    normalizedByPopulationPer: 'hundred',
+  });
+  const dose2 = getStatistic(data, 'total', 'vaccinated2', {
+    normalizedByPopulationPer: 'hundred',
+  });
 
   return (
     <div className="VaccinationHeader">
