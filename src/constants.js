@@ -137,7 +137,7 @@ export const STATISTIC_CONFIGS = {
     nonLinear: true,
     tableConfig: {
       notes:
-        'Percentage growth of cases in last week, compared to a fortnight ago',
+        'Percentage growth of cases in last week compared to a fortnight ago',
     },
   },
   population: {

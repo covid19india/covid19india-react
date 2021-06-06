@@ -5,7 +5,6 @@ import {retry} from './utils/commonFunctions';
 
 import {lazy, useState, Suspense, useEffect} from 'react';
 import {Route, Redirect, Switch, useLocation} from 'react-router-dom';
-import useDarkMode from 'use-dark-mode';
 
 const Home = lazy(() => retry(() => import('./components/Home')));
 const About = lazy(() => retry(() => import('./components/About')));
@@ -16,7 +15,6 @@ const LanguageSwitcher = lazy(() =>
 );
 
 const App = () => {
-  const darkMode = useDarkMode(false);
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
   const location = useLocation();
 
@@ -70,11 +68,7 @@ const App = () => {
         />
       </Suspense>
 
-      <Navbar
-        pages={pages}
-        {...{darkMode}}
-        {...{showLanguageSwitcher, setShowLanguageSwitcher}}
-      />
+      <Navbar {...{pages, showLanguageSwitcher, setShowLanguageSwitcher}} />
 
       <Suspense fallback={<div />}>
         <Switch location={location}>

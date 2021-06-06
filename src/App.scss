@@ -494,6 +494,7 @@ h6 {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+      margin-right: 1rem;
 
       & > * {
         align-self: center;
@@ -501,11 +502,6 @@ h6 {
 
       h3 {
         width: calc(100% - 2.5rem);
-      }
-
-      span {
-        margin-bottom: auto;
-        margin-right: 1rem;
       }
 
       svg {
@@ -3868,13 +3864,14 @@ footer {
     font-weight: 900;
     margin-top: 0.5rem;
 
-    &:hover {
-      color: $blue;
-    }
-
     svg {
       height: 1rem;
-      margin-bottom: -0.25rem;
+      margin-bottom: -0.1rem;
+      margin-left: 0.25rem;
+    }
+
+    &:hover {
+      color: $blue;
     }
   }
 }
@@ -4208,29 +4205,22 @@ footer {
 }
 
 .Tooltip {
-  display: flex;
-  flex-direction: column;
+  .tippy-content {
+    background: $black;
+    border-radius: 5px;
+  }
+
+  .tippy-arrow {
+    color: $black;
+  }
 
   .message {
-    background: #000;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: row;
+    color: $white;
     font-size: 13px;
     font-weight: 400;
-    justify-content: flex-end;
-    max-width: 30vw;
-    min-width: 10rem;
-    padding: 0.5rem;
-    pointer-events: none;
-    right: 0;
-    top: 0;
-    transform: translate3d(2rem, 0, 0);
 
-    p {
-      color: $white !important;
-      margin: 0;
-    }
+    margin: 0;
+    padding: 0.5rem;
   }
 }
 

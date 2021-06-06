@@ -184,7 +184,7 @@ function Row({
             {t(STATE_NAMES[stateCode]) || districtNameStr}
           </div>
           {data?.meta?.notes && (
-            <Tooltip {...{data: data.meta.notes}}>
+            <Tooltip message={data.meta.notes}>
               <InfoIcon size={16} />
             </Tooltip>
           )}

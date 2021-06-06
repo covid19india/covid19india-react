@@ -62,7 +62,7 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
         )}
       </div>
       {statisticConfig?.tableConfig?.notes && (
-        <Tooltip data={t(statisticConfig.tableConfig.notes)}>
+        <Tooltip message={t(statisticConfig.tableConfig.notes)}>
           <InfoIcon size={14} />
         </Tooltip>
       )}
