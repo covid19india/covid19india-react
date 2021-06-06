@@ -4,7 +4,7 @@ import {formatNumber, getStatistic} from '../utils/commonFunctions';
 import {ShieldCheckIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
-import {useState, memo} from 'react';
+import {useEffect, useRef, useState, memo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {animated, useSpring, Globals} from 'react-spring';
 
@@ -15,6 +15,7 @@ Globals.assign({colors: null});
 function ProgressBar({dose1, dose2}) {
   const {t} = useTranslation();
   const [highlightedDose, setHighlightedDose] = useState(2);
+  const isMounted = useRef(false);
 
   const doseSpring = useSpring({
     dose1,
@@ -23,7 +24,12 @@ function ProgressBar({dose1, dose2}) {
       dose1: 0,
       dose2: 0,
     },
+    delay: isMounted.current ? 0 : 2000,
   });
+
+  useEffect(() => {
+    isMounted.current = true;
+  }, []);
 
   return (
     <div

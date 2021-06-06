@@ -68,7 +68,7 @@ export const STATISTIC_CONFIGS = {
     },
   },
   vaccinated1: {
-    displayName: 'vaccinated with at least one dose',
+    displayName: 'vaccinated (at least one dose)',
     color: '#fb5581',
     format: 'short',
     hideZero: true,
@@ -135,9 +135,10 @@ export const STATISTIC_CONFIGS = {
     displayName: 'Case Growth',
     format: '%',
     nonLinear: true,
+    canBeInfinite: true,
     tableConfig: {
       notes:
-        'Percentage growth of cases in last week compared to a fortnight ago',
+        'Percentage growth of cases last week compared to the week a fortnight ago',
     },
   },
   population: {

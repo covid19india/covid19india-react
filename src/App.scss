@@ -4205,10 +4205,8 @@ footer {
 }
 
 .Tooltip {
-  .tippy-content {
-    background: $black;
-    border-radius: 5px;
-  }
+  background-color: $black !important;
+  border-radius: 8px !important;
 
   .tippy-arrow {
     color: $black;
@@ -4217,10 +4215,14 @@ footer {
   .message {
     color: $white;
     font-size: 13px;
-    font-weight: 400;
-
+    font-weight: 600;
     margin: 0;
-    padding: 0.5rem;
+    padding: 0 0.5rem;
+
+    div {
+      margin-bottom: 0.5rem;
+      margin-top: 0.5rem;
+    }
   }
 }
 

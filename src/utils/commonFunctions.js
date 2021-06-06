@@ -138,11 +138,13 @@ export const getStatistic = (
 
   if (expiredDate !== null) {
     if (STATISTIC_CONFIGS[statistic]?.category === 'tested') {
-      const days = differenceInDays(
-        expiredDate,
-        parseIndiaDate(data?.meta?.tested?.['last_updated'])
-      );
-      if (days > TESTED_EXPIRING_DAYS) {
+      if (
+        !data?.meta?.tested?.['last_updated'] ||
+        differenceInDays(
+          expiredDate,
+          parseIndiaDate(data?.meta?.tested?.['last_updated'])
+        ) > TESTED_EXPIRING_DAYS
+      ) {
         return 0;
       }
     }
@@ -155,11 +157,11 @@ export const getStatistic = (
   }
 
   if (normalizedByPopulationPer === 'million') {
-    multiplyFactor *= 1e6 / data?.meta?.population || 0;
+    multiplyFactor *= 1e6 / data?.meta?.population;
   } else if (normalizedByPopulationPer === 'lakh') {
-    multiplyFactor *= 1e5 / data?.meta?.population || 0;
+    multiplyFactor *= 1e5 / data?.meta?.population;
   } else if (normalizedByPopulationPer === 'hundred') {
-    multiplyFactor *= 1e2 / data?.meta?.population || 0;
+    multiplyFactor *= 1e2 / data?.meta?.population;
   }
 
   let val;
@@ -196,18 +198,26 @@ export const getStatistic = (
     val =
       type === 'total'
         ? 100 *
-            ((confirmedDeltaLastWeek - confirmedDeltaTwoWeeksAgo) /
-              confirmedDeltaTwoWeeksAgo) || 0
+          ((confirmedDeltaLastWeek - confirmedDeltaTwoWeeksAgo) /
+            confirmedDeltaTwoWeeksAgo)
         : 0;
   } else if (statistic === 'population') {
-    val = type === 'total' ? data?.meta?.population || 0 : 0;
+    val = type === 'total' ? data?.meta?.population : 0;
   } else {
     val = data?.[type]?.[statistic];
   }
 
-  const isLinear = !STATISTIC_CONFIGS[statistic]?.nonLinear;
+  const statisticConfig = STATISTIC_CONFIGS[statistic];
 
-  return ((isLinear && multiplyFactor) || 1) * (isFinite(val) && val) || 0;
+  multiplyFactor = (statisticConfig?.nonLinear && 1) || multiplyFactor;
+
+  if (statisticConfig?.canBeInfinite) {
+    val = (!isNaN(val) && val) || 0;
+  } else {
+    val = (isFinite(val) && val) || 0;
+  }
+
+  return multiplyFactor * val || 0;
 };
 
 export const getTableStatistic = (data, statistic, args) => {

@@ -14,7 +14,10 @@ function Tooltip({children, message}) {
         <p
           className="message"
           dangerouslySetInnerHTML={{
-            __html: message.replace(/\n/g, '<br/><br/>'),
+            __html: message
+              .split('\n')
+              .map((text) => `<div>${text}</div>`)
+              .join(''),
           }}
         ></p>
       }
