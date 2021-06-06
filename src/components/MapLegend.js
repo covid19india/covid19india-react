@@ -44,16 +44,18 @@ function MapLegend({data, statistic, mapViz, mapScale}) {
       svg.selectAll('.axis > *:not(.axistext)').remove();
       svg.select('.axistext').text('');
 
-      const domainMax = mapScale.domain()[1];
+      const [, domainMax] = mapScale.domain();
 
       const legend = svg
         .select('.circles')
         .attr('transform', `translate(48,40)`)
         .attr('text-anchor', 'middle');
 
+      const legendRadius = [0.1, 0.4, 1].map((d) => d * domainMax);
+
       legend
         .selectAll('circle')
-        .data([domainMax / 10, (domainMax * 2) / 5, domainMax])
+        .data(legendRadius)
         .join('circle')
         .attr('fill', 'none')
         .attr('stroke', '#ccc')
@@ -71,7 +73,7 @@ function MapLegend({data, statistic, mapViz, mapScale}) {
           axisRight(yScale)
             .tickSize(0)
             .tickPadding(0)
-            .tickValues([domainMax / 10, (domainMax * 2) / 5, domainMax])
+            .tickValues(legendRadius)
             .tickFormat((num) =>
               formatNumber(
                 num,

@@ -172,7 +172,7 @@ export const getStatistic = (
     if (statistic === 'active') {
       val = active;
     } else if (statistic === 'activeRatio') {
-      val = (100 * active) / confirmed;
+      val = 100 * (active / confirmed);
     }
   } else if (statistic === 'vaccinated') {
     const dose1 = data?.[type]?.vaccinated1 || 0;
@@ -181,15 +181,24 @@ export const getStatistic = (
   } else if (statistic === 'tpr') {
     const confirmed = data?.[type]?.confirmed || 0;
     const tested = data?.[type]?.tested || 0;
-    val = (100 * confirmed) / tested;
+    val = 100 * (confirmed / tested);
   } else if (statistic === 'cfr') {
     const deceased = data?.[type]?.deceased || 0;
     const confirmed = data?.[type]?.confirmed || 0;
-    val = (100 * deceased) / confirmed;
+    val = 100 * (deceased / confirmed);
   } else if (statistic === 'recoveryRatio') {
     const recovered = data?.[type]?.recovered || 0;
     const confirmed = data?.[type]?.confirmed || 0;
-    val = (100 * recovered) / confirmed;
+    val = 100 * (recovered / confirmed);
+  } else if (statistic === 'caseGrowth') {
+    const confirmedDeltaLastWeek = data?.delta7?.confirmed || 0;
+    const confirmedDeltaTwoWeeksAgo = data?.delta21_14?.confirmed || 0;
+    val =
+      type === 'total'
+        ? 100 *
+            ((confirmedDeltaLastWeek - confirmedDeltaTwoWeeksAgo) /
+              confirmedDeltaTwoWeeksAgo) || 0
+        : 0;
   } else if (statistic === 'population') {
     val = type === 'total' ? data?.meta?.population || 0 : 0;
   } else {

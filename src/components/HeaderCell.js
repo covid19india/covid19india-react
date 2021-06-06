@@ -35,6 +35,8 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
     }
   };
 
+  const statisticConfig = STATISTIC_CONFIGS[statistic];
+
   return (
     <div
       className="cell heading"
@@ -54,13 +56,13 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
       <div>
         {t(
           toTitleCase(
-            STATISTIC_CONFIGS[statistic]?.tableConfig?.displayName ||
-              STATISTIC_CONFIGS[statistic].displayName
+            statisticConfig?.tableConfig?.displayName ||
+              statisticConfig.displayName
           )
         )}
       </div>
-      {statistic === 'other' && (
-        <Tooltip data={'Migrated cases or non-COVID deaths'}>
+      {statisticConfig?.tableConfig?.notes && (
+        <Tooltip data={t(statisticConfig.tableConfig.notes)}>
           <InfoIcon size={14} />
         </Tooltip>
       )}
