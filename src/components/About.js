@@ -1,36 +1,20 @@
 import Footer from './Footer';
 
 import {API_DOMAIN} from '../constants';
+import {fetcher} from '../utils/commonFunctions';
 
-import {useState, useEffect} from 'react';
+import {useEffect} from 'react';
 import {Helmet} from 'react-helmet';
-
-// TODO(slightlyoff): factor out common JSON parsing & caching of this file
-const DATA_URL = `${API_DOMAIN}/website_data.json`;
+import useSWR from 'swr';
 
 function About() {
-  const [faq, setFaq] = useState([]);
-
-  useEffect(() => {
-    getFAQs();
-  }, []);
+  const {data} = useSWR(`${API_DOMAIN}/website_data.json`, fetcher, {
+    suspense: true,
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const getFAQs = () => {
-    fetch(DATA_URL)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setFaq(data.faq);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   return (
     <>
@@ -43,7 +27,7 @@ function About() {
       </Helmet>
 
       <div className="About">
-        {faq.map((faq, index) => {
+        {data.faq.map((faq, index) => {
           return (
             <div
               key={index}

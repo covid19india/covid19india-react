@@ -12,19 +12,16 @@ import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useTransition, animated} from 'react-spring';
 import {useLockBodyScroll, usePageLeave, useWindowSize} from 'react-use';
+import useDarkMode from 'use-dark-mode';
 
-function Navbar({
-  pages,
-  darkMode,
-  showLanguageSwitcher,
-  setShowLanguageSwitcher,
-}) {
+function Navbar({pages, showLanguageSwitcher, setShowLanguageSwitcher}) {
   const {i18n, t} = useTranslation();
   const currentLanguage = Object.keys(locales).includes(i18n?.language)
     ? i18n?.language
     : i18n?.options?.fallbackLng[0];
 
   const [expand, setExpand] = useState(false);
+  const darkMode = useDarkMode(false);
 
   useLockBodyScroll(expand);
   const windowSize = useWindowSize();

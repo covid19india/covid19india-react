@@ -1,9 +1,9 @@
 import {UPDATES_COUNT} from '../constants';
 import {capitalize} from '../utils/commonFunctions';
 
+import {CrossReferenceIcon} from '@primer/octicons-react';
 import {format, formatDistance} from 'date-fns';
 import {Fragment, useLayoutEffect} from 'react';
-import {Send} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 
 const newDate = new Date();
@@ -78,8 +78,8 @@ function Updates({updates}) {
           rel="noopener noreferrer"
         >
           <h4>
-            <Send />
-            {t('Join Instant Updates channel')}
+            {t('Get updates on Telegram')}
+            <CrossReferenceIcon />
           </h4>
         </a>
       </div>

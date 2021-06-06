@@ -31,26 +31,6 @@ export const SLIDE_OUT_MOBILE = {
 };
 
 /*
- * Tooltip
- */
-
-export const TOOLTIP_FADE_IN = {
-  opacity: 1,
-  transform: 'translate3d(0, 0px, 0)',
-  zIndex: 999,
-  position: 'absolute',
-  pointerEvents: 'none',
-};
-
-export const TOOLTIP_FADE_OUT = {
-  opacity: 0,
-  transform: 'translate3d(0, 2px, 0)',
-  zIndex: 999,
-  position: 'absolute',
-  pointerEvents: 'none',
-};
-
-/*
  * Language Switcher
  */
 

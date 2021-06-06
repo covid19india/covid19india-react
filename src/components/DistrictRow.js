@@ -42,7 +42,7 @@ function DistrictRow({
       <div className="cell">
         <div className="state-name">{t(districtName)}</div>
         {data?.meta?.notes && (
-          <Tooltip {...{data: data.meta.notes}}>
+          <Tooltip message={data.meta.notes}>
             <InfoIcon size={16} />
           </Tooltip>
         )}
