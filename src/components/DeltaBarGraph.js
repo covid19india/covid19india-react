@@ -6,7 +6,7 @@ import {
   getStatistic,
 } from '../utils/commonFunctions';
 
-import {min, max} from 'd3-array';
+import {extent} from 'd3-array';
 import {axisBottom} from 'd3-axis';
 import {scaleBand, scaleLinear} from 'd3-scale';
 import {select} from 'd3-selection';
@@ -44,21 +44,12 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       .range([margin.left, chartRight])
       .paddingInner(width / 1000);
 
+    const [statisticMin, statisticMax] = extent(dates, (date) =>
+      getDeltaStatistic(timeseries?.[date], statistic)
+    );
+
     const yScale = scaleLinear()
-      .domain([
-        Math.min(
-          0,
-          min(dates, (date) =>
-            getDeltaStatistic(timeseries?.[date], statistic)
-          ) || 0
-        ),
-        Math.max(
-          1,
-          max(dates, (date) =>
-            getDeltaStatistic(timeseries?.[date], statistic)
-          ) || 0
-        ),
-      ])
+      .domain([Math.min(0, statisticMin || 0), Math.max(1, statisticMax || 0)])
       .range([chartBottom, margin.top]);
 
     const xAxis = axisBottom(xScale)

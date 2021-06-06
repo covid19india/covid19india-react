@@ -14,7 +14,7 @@ import {formatNumber, toTitleCase} from '../utils/commonFunctions';
 
 import {AlertIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
-import {max} from 'd3-array';
+import {extent} from 'd3-array';
 import {json} from 'd3-fetch';
 import {geoIdentity, geoPath} from 'd3-geo';
 import {scaleSqrt, scaleSequential} from 'd3-scale';
@@ -126,43 +126,48 @@ function MapVisualizer({
     );
   }, [geoData, isDistrictView]);
 
-  const statisticMax = useMemo(() => {
+  const [statisticMin, statisticMax] = useMemo(() => {
     const stateCodes = Object.keys(data).filter(
       (stateCode) =>
         stateCode !== 'TT' && Object.keys(MAP_META).includes(stateCode)
     );
 
-    return !isDistrictView
-      ? max(stateCodes, (stateCode) => getStatistic(data[stateCode]))
-      : max(stateCodes, (stateCode) => {
-          const districts = Object.keys(
-            data[stateCode]?.districts || []
-          ).filter(
-            (districtName) =>
-              (districtsSet?.[stateCode] || new Set()).has(districtName) ||
-              (mapViz === MAP_VIZS.BUBBLES &&
-                districtName === UNKNOWN_DISTRICT_KEY)
-          );
-          return districts && districts.length > 0
-            ? max(districts, (districtName) =>
-                getStatistic(data[stateCode].districts[districtName])
-              )
-            : 0;
-        });
+    if (!isDistrictView) {
+      return extent(stateCodes, (stateCode) => getStatistic(data[stateCode]));
+    } else {
+      const districtData = stateCodes.reduce((acc, stateCode) => {
+        const districts = Object.keys(data[stateCode]?.districts || []).filter(
+          (districtName) =>
+            (districtsSet?.[stateCode] || new Set()).has(districtName) ||
+            (mapViz === MAP_VIZS.BUBBLES &&
+              districtName === UNKNOWN_DISTRICT_KEY)
+        );
+        acc.push(
+          ...districts.map((districtName) =>
+            getStatistic(data[stateCode].districts[districtName])
+          )
+        );
+        return acc;
+      }, []);
+      return extent(districtData);
+    }
   }, [data, isDistrictView, getStatistic, mapViz, districtsSet]);
 
   const mapScale = useMemo(() => {
     if (mapViz === MAP_VIZS.BUBBLES) {
-      return scaleSqrt([0, Math.max(statisticMax, 1)], [0, 40])
+      return scaleSqrt(
+        [Math.min(0, statisticMin || 0), Math.max(1, statisticMax || 0)],
+        [0, 40]
+      )
         .clamp(true)
         .nice(3);
     } else {
       return scaleSequential(
-        [0, Math.max(1, statisticMax)],
+        [Math.min(0, statisticMin || 0), Math.max(1, statisticMax || 0)],
         colorInterpolator(statistic)
       ).clamp(true);
     }
-  }, [mapViz, statistic, statisticMax]);
+  }, [mapViz, statistic, statisticMin, statisticMax]);
 
   const fillColor = useCallback(
     (d) => {

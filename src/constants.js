@@ -1,4 +1,4 @@
-// export const API_DOMAIN = 'http://192.168.1.69:8080';
+// export const API_DOMAIN = 'http://localhost:8080';
 // export const API_DOMAIN =
 //   'https://raw.githubusercontent.com/shuklaayush/api/test/tmp';
 export const API_DOMAIN = 'https://api.covid19india.org';
@@ -54,6 +54,7 @@ export const STATISTIC_CONFIGS = {
     format: 'long',
     tableConfig: {
       showDelta: true,
+      notes: 'Migrated cases or non-COVID deaths',
     },
   },
   tested: {
@@ -105,7 +106,7 @@ export const STATISTIC_CONFIGS = {
     category: 'tested',
     tableConfig: {
       type: 'delta7',
-      displayName: 'test positivity ratio (last 7 days)',
+      notes: 'Calculated over last 7 days',
     },
   },
   cfr: {
@@ -128,6 +129,15 @@ export const STATISTIC_CONFIGS = {
     nonLinear: true,
     tableConfig: {
       hide: true,
+    },
+  },
+  caseGrowth: {
+    displayName: 'Case Growth',
+    format: '%',
+    nonLinear: true,
+    tableConfig: {
+      notes:
+        'Percentage growth of cases in last week, compared to a fortnight ago',
     },
   },
   population: {
