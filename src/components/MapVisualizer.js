@@ -135,19 +135,19 @@ function MapVisualizer({
     if (!isDistrictView) {
       return extent(stateCodes, (stateCode) => getStatistic(data[stateCode]));
     } else {
-      const districtData = stateCodes.reduce((acc, stateCode) => {
+      const districtData = stateCodes.reduce((res, stateCode) => {
         const districts = Object.keys(data[stateCode]?.districts || []).filter(
           (districtName) =>
             (districtsSet?.[stateCode] || new Set()).has(districtName) ||
             (mapViz === MAP_VIZS.BUBBLES &&
               districtName === UNKNOWN_DISTRICT_KEY)
         );
-        acc.push(
+        res.push(
           ...districts.map((districtName) =>
             getStatistic(data[stateCode].districts[districtName])
           )
         );
-        return acc;
+        return res;
       }, []);
       return extent(districtData);
     }

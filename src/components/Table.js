@@ -11,7 +11,7 @@ import {
   TABLE_STATISTICS_EXPANDED,
   UNASSIGNED_STATE_CODE,
 } from '../constants';
-import {getTableStatistic, retry} from '../utils/commonFunctions';
+import {getStatistic, getTableStatistic, retry} from '../utils/commonFunctions';
 
 import {
   FilterIcon,
@@ -23,7 +23,7 @@ import {
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import {memo, useCallback, useEffect, useState, lazy} from 'react';
+import {memo, useCallback, useEffect, useMemo, useState, lazy} from 'react';
 import {
   ChevronLeft,
   ChevronsLeft,
@@ -83,11 +83,27 @@ function Table({
     config: config.wobbly,
   });
 
-  const [districts, setDistricts] = useState();
+  const [allDistricts, setAllDistricts] = useState();
 
   const [tableOption, setTableOption] = useState('States');
   const [isPerLakh, setIsPerLakh] = useState(false);
   const [isInfoVisible, setIsInfoVisible] = useState(false);
+
+  const districts = useMemo(() => {
+    if (!isPerLakh) {
+      return allDistricts;
+    } else {
+      return Object.keys(allDistricts)
+        .filter(
+          (districtKey) =>
+            getStatistic(allDistricts[districtKey], 'total', 'population') > 0
+        )
+        .reduce((res, districtKey) => {
+          res[districtKey] = allDistricts[districtKey];
+          return res;
+        }, {});
+    }
+  }, [isPerLakh, allDistricts]);
 
   const numPages = Math.ceil(
     Object.keys(districts || {}).length / DISTRICT_TABLE_COUNT
@@ -153,7 +169,7 @@ function Table({
     workerInstance.getDistricts(states);
     workerInstance.addEventListener('message', (message) => {
       if (message.data.type !== 'RPC') {
-        setDistricts(message.data);
+        setAllDistricts(message.data);
         workerInstance.terminate();
       }
     });
