@@ -5,7 +5,7 @@ const TableLoader = () => {
   let [ref, {width}] = useMeasure();
   const windowWidth = window.innerWidth;
 
-  width = width || (windowWidth > 769 ? 528 : windowWidth);
+  width = width || (windowWidth >= 769 ? 528 : windowWidth);
   if (windowWidth < 769) {
     width -= 30;
   }

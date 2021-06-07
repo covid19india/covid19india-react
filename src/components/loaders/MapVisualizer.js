@@ -9,9 +9,9 @@ export const INDIA_ASPECT_RATIO = 0.885;
 const MapVisualizerLoader = ({width, statistic}) => {
   const windowWidth = window.innerWidth;
   // Default width for loader
-  if (!width) width = windowWidth > 769 ? 480 : windowWidth;
+  if (!width) width = windowWidth >= 769 ? 480 : windowWidth;
   // From CSS
-  const scalingFactor = windowWidth > 769 ? 0.9 : 1;
+  const scalingFactor = windowWidth >= 769 ? 0.9 : 1;
   const mapHeight = (scalingFactor * width) / INDIA_ASPECT_RATIO;
   const height = MAP_BUFFER_MARGINS + MAP_LEGEND_HEIGHT + mapHeight;
   return (

@@ -93,7 +93,7 @@ function Table({
     if (!isPerLakh) {
       return allDistricts;
     } else {
-      return Object.keys(allDistricts)
+      return Object.keys(allDistricts || {})
         .filter(
           (districtKey) =>
             getStatistic(allDistricts[districtKey], 'total', 'population') > 0

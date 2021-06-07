@@ -41,7 +41,7 @@ function Navbar({pages, showLanguageSwitcher, setShowLanguageSwitcher}) {
   });
 
   const handleMouseEnter = useCallback(() => {
-    if (windowSize.width > 769) {
+    if (windowSize.width >= 769) {
       setExpand(true);
     }
   }, [windowSize.width]);
@@ -74,7 +74,7 @@ function Navbar({pages, showLanguageSwitcher, setShowLanguageSwitcher}) {
           <span>{expand ? t('Close') : t('Menu')}</span>
         )}
 
-        {windowSize.width > 769 && (
+        {windowSize.width >= 769 && (
           <>
             <Link to="/">
               <span>
@@ -120,7 +120,7 @@ function Expand({pages, setExpand, darkMode, windowSize}) {
   const {t} = useTranslation();
 
   const handleMouseLeave = useCallback(() => {
-    windowSize.width > 768 && setExpand(false);
+    windowSize.width >= 769 && setExpand(false);
   }, [setExpand, windowSize.width]);
 
   return (
@@ -146,7 +146,7 @@ function Expand({pages, setExpand, darkMode, windowSize}) {
         return null;
       })}
 
-      {windowSize.width < 768 && <SunMoon {...{darkMode}} />}
+      {windowSize.width < 769 && <SunMoon {...{darkMode}} />}
 
       <div className="expand-bottom">
         <h5>{t('A crowdsourced initiative.')}</h5>

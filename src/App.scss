@@ -401,6 +401,7 @@ h6 {
   }
 
   .district-bar {
+    margin-bottom: 2.5rem;
     width: calc(100% - 2rem);
   }
 
@@ -1863,15 +1864,18 @@ abbr {
   .info-toggle,
   .lakh-toggle,
   .expand-table-toggle {
+    align-items: center;
     background: $gray-light;
     border-radius: 5px;
     color: $gray-mid;
     cursor: pointer;
+    display: flex;
+    height: 2.5rem;
+    justify-content: center;
     margin-right: 0.25rem;
-    padding: 0.5rem;
+    width: 2.5rem;
 
     svg {
-      align-self: center;
       margin: 0.25rem;
     }
 
@@ -1906,8 +1910,6 @@ abbr {
   .lakh-toggle {
     font-size: 13px;
     font-weight: 600;
-    padding: 11.5px 12.1px;
-    text-align: center;
 
     &.is-highlighted {
       background: $pink-light;
@@ -4410,6 +4412,10 @@ footer {
       width: calc(50% - 2rem);
     }
   }
+
+  footer {
+    margin-bottom: 5rem;
+  }
 }
 
 @media (max-width: 769px) {
@@ -4662,7 +4668,7 @@ footer {
     display: grid;
     grid-gap: 1rem;
     grid-template-rows: repeat(auto-fit, minmax(5rem));
-    margin-bottom: 1rem;
+    margin-bottom: 2.5rem;
 
     .meta-item {
       min-width: 1rem;

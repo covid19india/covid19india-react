@@ -2,7 +2,7 @@ import ContentLoader from 'react-content-loader';
 
 const TimeseriesLoader = () => {
   const windowWidth = window.innerWidth;
-  const width = windowWidth > 769 ? 480 : windowWidth;
+  const width = windowWidth >= 769 ? 480 : windowWidth;
   const height = 200 * 6;
 
   return (

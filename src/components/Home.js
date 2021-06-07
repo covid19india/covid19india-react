@@ -129,7 +129,7 @@ function Home() {
           <div style={{position: 'relative', marginTop: '1rem'}}>
             {data && (
               <Suspense fallback={<div style={{height: '50rem'}} />}>
-                {width > 769 && !expandTable && (
+                {width >= 769 && !expandTable && (
                   <MapSwitcher {...{mapStatistic, setMapStatistic}} />
                 )}
                 <Level data={data['TT']} />
@@ -181,7 +181,7 @@ function Home() {
                   className={classnames('map-container', {
                     expanded: expandTable,
                     stickied:
-                      anchor === 'mapexplorer' || (expandTable && width > 769),
+                      anchor === 'mapexplorer' || (expandTable && width >= 769),
                   })}
                 >
                   <Suspense fallback={<div style={{height: '50rem'}} />}>

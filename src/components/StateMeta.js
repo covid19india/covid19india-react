@@ -180,8 +180,8 @@ function StateMeta({stateCode, data, timeseries}) {
             <>
               {'100 x '}
               <Fraction
-                numerator={'Total confirmed cases last week'}
-                denominator={'Total samples tested last week'}
+                numerator={'Confirmed cases last week'}
+                denominator={'Samples tested last week'}
               />
             </>
           }

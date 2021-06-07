@@ -205,7 +205,7 @@ function MapExplorer({
 
   const isDistrictView = mapView === MAP_VIEWS.DISTRICTS && !hideDistrictData;
 
-  const stickied = anchor === 'mapexplorer' || (expandTable && width > 769);
+  const stickied = anchor === 'mapexplorer' || (expandTable && width >= 769);
 
   return (
     <div
@@ -223,7 +223,7 @@ function MapExplorer({
           stickied,
         })}
         style={{
-          display: width < 769 || (width > 769 && expandTable) ? 'none' : '',
+          display: width < 769 || (width >= 769 && expandTable) ? 'none' : '',
         }}
         onClick={
           setAnchor &&

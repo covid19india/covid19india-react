@@ -225,7 +225,7 @@ function TimeseriesExplorer({
             stickied: anchor === 'timeseries',
           })}
           style={{
-            display: expandTable && width > 769 ? 'none' : '',
+            display: expandTable && width >= 769 ? 'none' : '',
           }}
           onClick={
             setAnchor &&
