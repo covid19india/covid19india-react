@@ -15,22 +15,17 @@ import {memo} from 'react';
 import {Compass} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 
+function Fraction({numerator, denominator}) {
+  return (
+    <div className="frac">
+      <span>{numerator}</span>
+      <span className="bottom">{denominator}</span>
+    </div>
+  );
+}
+
 function StateMeta({stateCode, data, timeseries}) {
   const {t} = useTranslation();
-
-  const pastDates = Object.keys(timeseries || {}).filter(
-    (date) => date <= getIndiaDateYesterdayISO()
-  );
-  const lastDate = pastDates[pastDates.length - 1];
-  const lastConfirmed = getStatistic(
-    timeseries?.[lastDate],
-    'total',
-    'confirmed'
-  );
-  const prevWeekConfirmed =
-    lastConfirmed - getStatistic(timeseries?.[lastDate], 'delta7', 'confirmed');
-
-  const prevWeekDate = formatISO(subDays(parseIndiaDate(lastDate), 7));
 
   const confirmedPerLakh = getStatistic(data[stateCode], 'total', 'confirmed', {
     normalizedByPopulationPer: 'lakh',
@@ -50,8 +45,16 @@ function StateMeta({stateCode, data, timeseries}) {
   );
   const deathPercent = getStatistic(data[stateCode], 'total', 'cfr');
 
-  const growthRate =
-    (Math.pow(lastConfirmed / prevWeekConfirmed, 1 / 7) - 1) * 100;
+  // Show TPR for week preceeding last updated date
+  const pastDates = Object.keys(timeseries || {}).filter(
+    (date) => date <= getIndiaDateYesterdayISO()
+  );
+  const lastDate = pastDates[pastDates.length - 1];
+  const prevWeekDate = formatISO(subDays(parseIndiaDate(lastDate), 6));
+
+  const tprWeek = getStatistic(timeseries?.[lastDate], 'delta', 'tpr', {
+    movingAverage: true,
+  });
 
   return (
     <>
@@ -80,7 +83,15 @@ function StateMeta({stateCode, data, timeseries}) {
           title={'Confirmed Per Lakh'}
           statistic={formatNumber(confirmedPerLakh)}
           total={formatNumber(totalConfirmedPerLakh)}
-          formula={'(confirmed / state population) * 1 Lakh'}
+          formula={
+            <>
+              {`${1e5} x `}
+              <Fraction
+                numerator={`Total confirmed cases`}
+                denominator={`Total population`}
+              />
+            </>
+          }
           description={`
             ~${formatNumber(confirmedPerLakh, 'long')} ${t(
             'out of every lakh people in'
@@ -94,7 +105,15 @@ function StateMeta({stateCode, data, timeseries}) {
           className="active"
           title={'Active Ratio'}
           statistic={`${formatNumber(activePercent, '%')}`}
-          formula={'(active / confirmed) * 100'}
+          formula={
+            <>
+              {'100 x '}
+              <Fraction
+                numerator={'Total active cases right now'}
+                denominator={'Total confirmed cases'}
+              />
+            </>
+          }
           description={
             activePercent > 0
               ? `${t('For every 100 confirmed cases')}, ~${formatNumber(
@@ -109,7 +128,15 @@ function StateMeta({stateCode, data, timeseries}) {
           className="recovery"
           title={'Recovery Ratio'}
           statistic={`${formatNumber(recoveryPercent, '%')}`}
-          formula={'(recovered / confirmed) * 100'}
+          formula={
+            <>
+              {'100 x '}
+              <Fraction
+                numerator={'Total recovered cases'}
+                denominator={'Total confirmed cases'}
+              />
+            </>
+          }
           description={
             recoveryPercent > 0
               ? `${t('For every 100 confirmed cases')}, ~${formatNumber(
@@ -124,7 +151,15 @@ function StateMeta({stateCode, data, timeseries}) {
           className="mortality"
           title={'Case Fatality Ratio'}
           statistic={`${formatNumber(deathPercent, '%')}`}
-          formula={'(deceased / confirmed) * 100'}
+          formula={
+            <>
+              {'100 x '}
+              <Fraction
+                numerator={'Total deaths'}
+                denominator={'Total confirmed cases'}
+              />
+            </>
+          }
           description={
             deathPercent > 0
               ? `${t('For every 100 confirmed cases')}, ~${formatNumber(
@@ -138,25 +173,27 @@ function StateMeta({stateCode, data, timeseries}) {
         />
 
         <StateMetaCard
-          className="gr"
-          title={'Avg. Growth Rate'}
-          statistic={growthRate > 0 ? `${formatNumber(growthRate, '%')}` : '-'}
+          className="tpr"
+          title={'Test Positivity Ratio'}
+          statistic={tprWeek > 0 ? `${formatNumber(tprWeek, '%')}` : '-'}
           formula={
-            '(((previousDayData - sevenDayBeforeData) / sevenDayBeforeData) * 100)/7'
+            <>
+              {'100 x '}
+              <Fraction
+                numerator={'Total confirmed cases last week'}
+                denominator={'Total samples tested last week'}
+              />
+            </>
           }
           date={`${formatDate(prevWeekDate, 'dd MMM')} - ${formatDate(
             lastDate,
             'dd MMM'
           )}`}
           description={
-            growthRate > 0
-              ? `${t(
-                  'In the last one week, the number of new infections has grown by an average of'
-                )} ${formatNumber(growthRate, '%')}
-              ${t('every day.')}`
-              : t(
-                  'There has been no growth in the number of infections in last one week.'
-                )
+            tprWeek > 0
+              ? `${t('In the last one week,')} ${formatNumber(tprWeek, '%')}
+              ${t('of samples tested came back positive.')}`
+              : t('No tested sample came back positive in last one week.')
           }
         />
 
@@ -165,7 +202,13 @@ function StateMeta({stateCode, data, timeseries}) {
           title={'Tests Per Lakh'}
           statistic={`${formatNumber(testPerLakh)}`}
           formula={
-            '(total tests in state / total population of state) * 1 Lakh'
+            <>
+              {`${1e5} x `}
+              <Fraction
+                numerator={`Total samples tested`}
+                denominator={`Total population`}
+              />
+            </>
           }
           date={
             testPerLakh

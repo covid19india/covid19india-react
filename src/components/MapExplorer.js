@@ -56,7 +56,7 @@ function MapExplorer({
   setAnchor,
   expandTable = false,
   hideDistrictData = false,
-  lastUpdated,
+  lastUpdatedDate,
 }) {
   const {t} = useTranslation();
   const mapExplorerRef = useRef();
@@ -177,10 +177,10 @@ function MapExplorer({
   const getMapStatistic = useCallback(
     (data) =>
       getStatistic(data, 'total', mapStatistic, {
-        expiredDate: lastUpdated,
+        expiredDate: lastUpdatedDate,
         normalizedByPopulationPer: perLakh ? 'lakh' : null,
       }),
-    [mapStatistic, perLakh, lastUpdated]
+    [mapStatistic, perLakh, lastUpdatedDate]
   );
 
   const spring = useSpring({

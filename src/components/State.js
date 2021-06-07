@@ -9,7 +9,7 @@ import {
 } from '../utils/commonFunctions';
 
 import classnames from 'classnames';
-import {max} from 'date-fns';
+import {formatISO, max} from 'date-fns';
 import {
   memo,
   useMemo,
@@ -122,7 +122,7 @@ function State() {
 
   const lookback = showAllDistricts ? (window.innerWidth >= 540 ? 10 : 8) : 6;
 
-  const lastUpdated = useMemo(() => {
+  const lastUpdatedDate = useMemo(() => {
     if (!data) {
       return null;
     }
@@ -130,8 +130,11 @@ function State() {
       data[stateCode]?.meta?.['last_updated'],
       data[stateCode]?.meta?.tested?.['last_updated'],
     ];
-    return max(
-      updatedDates.filter((date) => date).map((date) => parseIndiaDate(date))
+    return formatISO(
+      max(
+        updatedDates.filter((date) => date).map((date) => parseIndiaDate(date))
+      ),
+      {representation: 'date'}
     );
   }, [stateCode, data]);
 
@@ -175,7 +178,7 @@ function State() {
                   setRegionHighlighted,
                   mapStatistic,
                   setMapStatistic,
-                  lastUpdated,
+                  lastUpdatedDate,
                 }}
               ></MapExplorer>
             </Suspense>

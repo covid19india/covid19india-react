@@ -6,9 +6,9 @@ import equal from 'fast-deep-equal';
 import {memo} from 'react';
 import {animated, useSpring} from 'react-spring';
 
-const Cell = ({statistic, data, isPerLakh, lastUpdated}) => {
+const Cell = ({statistic, data, isPerLakh, lastUpdatedDate}) => {
   const {total, delta} = getTableStatistic(data, statistic, {
-    expiredDate: lastUpdated,
+    expiredDate: lastUpdatedDate,
     normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
   });
 

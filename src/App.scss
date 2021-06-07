@@ -622,33 +622,18 @@ h6 {
       }
     }
 
-    &.ptr {
-      background: $pink-light;
-
-      h3,
-      h5,
-      svg,
-      p {
-        color: $pink-mid;
-      }
-
-      h1 {
-        color: $pink;
-      }
-    }
-
-    &.gr {
-      background: $brown-light;
+    &.tpr {
+      background: $orange-light;
 
       h3,
       h5,
       p,
       svg {
-        color: $brown-mid;
+        color: $orange-mid;
       }
 
       h1 {
-        color: $brown;
+        color: $orange;
       }
     }
   }
@@ -4207,21 +4192,33 @@ footer {
 .Tooltip {
   background-color: $black !important;
   border-radius: 8px !important;
-
-  .tippy-arrow {
-    color: $black;
-  }
+  color: $white;
+  font-size: 13px !important;
+  font-weight: 600;
+  padding: 0.5rem;
 
   .message {
-    color: $white;
-    font-size: 13px;
-    font-weight: 600;
     margin: 0;
-    padding: 0 0.5rem;
 
-    div {
+    :not(:last-child) {
       margin-bottom: 0.5rem;
-      margin-top: 0.5rem;
+    }
+  }
+}
+
+.frac {
+  display: inline-block;
+  letter-spacing: 0.001em;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+
+  span {
+    display: block;
+    padding: 0.1em;
+
+    &.bottom {
+      border-top: thin solid;
     }
   }
 }

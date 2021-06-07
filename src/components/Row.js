@@ -39,7 +39,7 @@ function Row({
   regionHighlighted,
   setRegionHighlighted,
   expandTable,
-  lastUpdated,
+  lastUpdatedDate,
 }) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useSessionStorage('districtSortData', {
@@ -78,7 +78,7 @@ function Row({
           data.districts[districtNameA],
           sortData.sortColumn,
           {
-            expiredDate: lastUpdated,
+            expiredDate: lastUpdatedDate,
             normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
           }
         )[dataType];
@@ -86,10 +86,9 @@ function Row({
           data.districts[districtNameB],
           sortData.sortColumn,
           {
-            expiredDate: lastUpdated,
+            expiredDate: lastUpdatedDate,
             normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
-          },
-          lastUpdated
+          }
         )[dataType];
         return sortData.isAscending
           ? statisticA - statisticB
@@ -100,7 +99,7 @@ function Row({
           : districtNameB.localeCompare(districtNameA);
       }
     },
-    [sortData, data, isPerLakh, lastUpdated]
+    [sortData, data, isPerLakh, lastUpdatedDate]
   );
 
   const highlightState = useCallback(() => {
@@ -193,7 +192,7 @@ function Row({
         {tableStatistics.map((statistic) => (
           <Cell
             key={statistic}
-            {...{data, statistic, isPerLakh, lastUpdated}}
+            {...{data, statistic, isPerLakh, lastUpdatedDate}}
           />
         ))}
       </div>
@@ -278,7 +277,7 @@ function Row({
                 stateCode,
                 isPerLakh,
                 expandTable,
-                lastUpdated,
+                lastUpdatedDate,
               }}
             />
           ))}

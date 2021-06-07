@@ -48,7 +48,7 @@ function Table({
   setExpandTable,
   hideDistrictData,
   hideVaccinated,
-  lastUpdated,
+  lastUpdatedDate,
 }) {
   const {t} = useTranslation();
   const [sortData, setSortData] = useSessionStorage('sortData', {
@@ -122,7 +122,7 @@ function Table({
           districts?.[regionKeyA] || states[regionKeyA],
           sortData.sortColumn,
           {
-            expiredDate: lastUpdated,
+            expiredDate: lastUpdatedDate,
             normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
           }
         )[dataType];
@@ -130,7 +130,7 @@ function Table({
           districts?.[regionKeyB] || states[regionKeyB],
           sortData.sortColumn,
           {
-            expiredDate: lastUpdated,
+            expiredDate: lastUpdatedDate,
             normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
           }
         )[dataType];
@@ -150,7 +150,7 @@ function Table({
     [
       districts,
       isPerLakh,
-      lastUpdated,
+      lastUpdatedDate,
       sortData.delta,
       sortData.isAscending,
       sortData.sortColumn,
@@ -386,7 +386,7 @@ function Table({
                       regionHighlighted,
                       setRegionHighlighted,
                       expandTable,
-                      lastUpdated,
+                      lastUpdatedDate,
                       tableStatistics,
                     }}
                   />
@@ -414,7 +414,7 @@ function Table({
                       regionHighlighted,
                       setRegionHighlighted,
                       expandTable,
-                      lastUpdated,
+                      lastUpdatedDate,
                       tableStatistics,
                     }}
                   />
@@ -430,7 +430,7 @@ function Table({
               regionHighlighted,
               setRegionHighlighted,
               expandTable,
-              lastUpdated,
+              lastUpdatedDate,
               tableStatistics,
             }}
           />

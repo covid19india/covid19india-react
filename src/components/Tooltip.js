@@ -11,15 +11,19 @@ function Tooltip({children, message}) {
     <Tippy
       className="Tooltip"
       content={
-        <p
-          className="message"
-          dangerouslySetInnerHTML={{
-            __html: message
-              .split('\n')
-              .map((text) => `<div>${text}</div>`)
-              .join(''),
-          }}
-        ></p>
+        typeof message === 'string' ? (
+          <p
+            className="message"
+            dangerouslySetInnerHTML={{
+              __html: message
+                .split('\n')
+                .map((text) => `<div>${text}</div>`)
+                .join(''),
+            }}
+          ></p>
+        ) : (
+          message
+        )
       }
       arrow={false}
       animation="shift-away"

@@ -17,7 +17,7 @@ function DistrictRow({
   regionHighlighted,
   setRegionHighlighted,
   expandTable,
-  lastUpdated,
+  lastUpdatedDate,
 }) {
   const {t} = useTranslation();
 
@@ -49,7 +49,10 @@ function DistrictRow({
       </div>
 
       {tableStatistics.map((statistic) => (
-        <Cell key={statistic} {...{statistic, data, isPerLakh, lastUpdated}} />
+        <Cell
+          key={statistic}
+          {...{statistic, data, isPerLakh, lastUpdatedDate}}
+        />
       ))}
     </div>
   );

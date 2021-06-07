@@ -141,7 +141,7 @@ export const getStatistic = (
       if (
         !data?.meta?.tested?.['last_updated'] ||
         differenceInDays(
-          expiredDate,
+          parseIndiaDate(expiredDate),
           parseIndiaDate(data?.meta?.tested?.['last_updated'])
         ) > TESTED_EXPIRING_DAYS
       ) {

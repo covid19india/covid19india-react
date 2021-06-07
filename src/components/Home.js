@@ -11,7 +11,7 @@ import {
 } from '../utils/commonFunctions';
 
 import classnames from 'classnames';
-import {max} from 'date-fns';
+import {formatISO, max} from 'date-fns';
 import {useMemo, useRef, useState, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 import {useLocation} from 'react-router-dom';
@@ -74,7 +74,7 @@ function Home() {
   const hideVaccinated =
     getStatistic(data?.['TT'], 'total', 'vaccinated') === 0;
 
-  const lastUpdated = useMemo(() => {
+  const lastUpdatedDate = useMemo(() => {
     if (!data) {
       return null;
     }
@@ -83,8 +83,11 @@ function Home() {
       data['TT']?.meta?.['last_updated'] || date,
       data['TT']?.meta?.tested?.['last_updated'],
     ];
-    return max(
-      updatedDates.filter((date) => date).map((date) => parseIndiaDate(date))
+    return formatISO(
+      max(
+        updatedDates.filter((date) => date).map((date) => parseIndiaDate(date))
+      ),
+      {representation: 'date'}
     );
   }, [data, date]);
 
@@ -159,7 +162,7 @@ function Home() {
                   setExpandTable,
                   hideDistrictData,
                   hideVaccinated,
-                  lastUpdated,
+                  lastUpdatedDate,
                 }}
               />
             </Suspense>
@@ -195,7 +198,7 @@ function Home() {
                         setAnchor,
                         expandTable,
                         hideDistrictData,
-                        lastUpdated,
+                        lastUpdatedDate,
                       }}
                     />
                   </Suspense>
