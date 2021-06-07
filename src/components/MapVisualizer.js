@@ -155,10 +155,7 @@ function MapVisualizer({
 
   const mapScale = useMemo(() => {
     if (mapViz === MAP_VIZS.BUBBLES) {
-      return scaleSqrt(
-        [Math.min(0, statisticMin || 0), Math.max(1, statisticMax || 0)],
-        [0, 40]
-      )
+      return scaleSqrt([0, Math.max(1, statisticMax || 0)], [0, 40])
         .clamp(true)
         .nice(3);
     } else {

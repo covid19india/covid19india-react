@@ -27,7 +27,6 @@ function Tooltip({children, message}) {
       }
       arrow={false}
       animation="shift-away"
-      touch="hold"
     >
       <div onClick={handleClick.bind(this)}>{children}</div>
     </Tippy>
