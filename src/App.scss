@@ -6,7 +6,7 @@ $dark: #343a40;
 $black: #000;
 
 $blue: #007bff;
-$blue-light: #007bff10;
+$blue-light: #007bff20;
 $blue-hover: #007bff30;
 $blue-light-opaque: #eff7ff;
 $blue-mid: #007bff99;
@@ -1850,6 +1850,21 @@ abbr {
   margin-top: 2rem;
 }
 
+.Icons {
+  font-size: 12px;
+  font-weight: 600;
+
+  span {
+    font-size: 8px;
+    font-weight: 600;
+    line-height: 6px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    user-select: none;
+  }
+}
+
 .table-top {
   align-items: flex-end;
   align-self: center;
@@ -1860,10 +1875,7 @@ abbr {
   margin-bottom: 0.25rem;
   width: 100%;
 
-  .option-toggle,
-  .info-toggle,
-  .lakh-toggle,
-  .expand-table-toggle {
+  > * {
     align-items: center;
     background: $gray-light;
     border-radius: 5px;
@@ -1908,15 +1920,23 @@ abbr {
   }
 
   .lakh-toggle {
-    font-size: 13px;
-    font-weight: 600;
-
     &.is-highlighted {
       background: $pink-light;
       color: $pink;
 
       &:hover {
         background: $pink-hover;
+      }
+    }
+  }
+
+  .delta-toggle {
+    &.is-highlighted {
+      background: $blue-light;
+      color: $blue;
+
+      &:hover {
+        background: $blue-hover;
       }
     }
   }
@@ -2041,10 +2061,11 @@ abbr {
       }
     }
 
-    &.invert {
-      svg {
-        margin-bottom: 0;
-        transform: rotate(180deg);
+    &.abbr {
+      sup {
+        position: relative;
+        top: -0.4em;
+        vertical-align: baseline;
       }
     }
   }
@@ -2264,11 +2285,6 @@ abbr {
             color: $pink;
           }
         }
-
-        &.invert {
-          margin-top: 0.25rem;
-          transform: rotate(180deg);
-        }
       }
 
       &.statistic {
@@ -2317,9 +2333,15 @@ abbr {
         font-size: 13px;
         font-weight: 900;
         padding: 1.25rem 0.5rem 0.75rem;
+        text-align: right;
 
         &:hover {
           background: $gray-hover-opaque !important;
+        }
+
+        svg {
+          margin-left: 0;
+          margin-right: 0.3rem;
         }
       }
 
@@ -2601,17 +2623,7 @@ abbr {
       }
 
       &.is-confirmed {
-        svg {
-          fill: $cherry-light;
-          stroke: $cherry-mid;
-        }
-
-        .boundary {
-          svg {
-            fill: $cherry-mid;
-            stroke: none;
-          }
-        }
+        color: $cherry-mid;
 
         .is-highlighted {
           background: $cherry-light;
@@ -2623,17 +2635,7 @@ abbr {
       }
 
       &.is-active {
-        svg {
-          fill: $blue-light;
-          stroke: $blue-mid;
-        }
-
-        .boundary {
-          svg {
-            fill: $blue-mid;
-            stroke: none;
-          }
-        }
+        color: $blue-mid;
 
         .is-highlighted {
           background: $blue-light;
@@ -2645,17 +2647,7 @@ abbr {
       }
 
       &.is-recovered {
-        svg {
-          fill: $green-light;
-          stroke: $green-mid;
-        }
-
-        .boundary {
-          svg {
-            fill: $green-mid;
-            stroke: none;
-          }
-        }
+        color: $green-mid;
 
         .is-highlighted {
           background: $green-light;
@@ -2667,17 +2659,7 @@ abbr {
       }
 
       &.is-deceased {
-        svg {
-          fill: $gray-light;
-          stroke: $gray-mid;
-        }
-
-        .boundary {
-          svg {
-            fill: $gray-mid;
-            stroke: none;
-          }
-        }
+        color: $gray-mid;
 
         .is-highlighted {
           background: $gray-middark;
@@ -2695,7 +2677,7 @@ abbr {
         justify-content: flex-end;
         margin-bottom: 0.25rem;
 
-        div {
+        > div {
           align-items: center;
           background: $gray-light;
           border-radius: 5px;
@@ -2729,6 +2711,7 @@ abbr {
         }
 
         .divider {
+          background: $gray-hover;
           border-radius: 5px;
           width: 2px !important;
         }
@@ -4829,13 +4812,7 @@ footer {
   .MapExplorer {
     #chart,
     #legend {
-      &.zone {
-        filter: none;
-      }
-
-      &:not(.zone) {
-        filter: invert(1) hue-rotate(180deg) saturate(1.5) url('#balance-color');
-      }
+      filter: invert(1) hue-rotate(180deg) saturate(1.5) url('#balance-color');
     }
 
     .maplegend {

@@ -80,15 +80,15 @@ function StateMeta({stateCode, data, timeseries}) {
       <div className="StateMeta">
         <StateMetaCard
           className="confirmed"
-          title={'Confirmed Per Lakh'}
+          title={t('Confirmed Per Lakh')}
           statistic={formatNumber(confirmedPerLakh)}
           total={formatNumber(totalConfirmedPerLakh)}
           formula={
             <>
               {`${1e5} x `}
               <Fraction
-                numerator={`Total confirmed cases`}
-                denominator={`Total population`}
+                numerator={t('Total confirmed cases')}
+                denominator={t('Total population')}
               />
             </>
           }
@@ -103,14 +103,14 @@ function StateMeta({stateCode, data, timeseries}) {
 
         <StateMetaCard
           className="active"
-          title={'Active Ratio'}
+          title={t('Active Ratio')}
           statistic={`${formatNumber(activePercent, '%')}`}
           formula={
             <>
               {'100 x '}
               <Fraction
-                numerator={'Total active cases right now'}
-                denominator={'Total confirmed cases'}
+                numerator={t('Total active cases right now')}
+                denominator={t('Total confirmed cases')}
               />
             </>
           }
@@ -126,14 +126,14 @@ function StateMeta({stateCode, data, timeseries}) {
 
         <StateMetaCard
           className="recovery"
-          title={'Recovery Ratio'}
+          title={t('Recovery Ratio')}
           statistic={`${formatNumber(recoveryPercent, '%')}`}
           formula={
             <>
               {'100 x '}
               <Fraction
-                numerator={'Total recovered cases'}
-                denominator={'Total confirmed cases'}
+                numerator={t('Total recovered cases')}
+                denominator={t('Total confirmed cases')}
               />
             </>
           }
@@ -149,14 +149,14 @@ function StateMeta({stateCode, data, timeseries}) {
 
         <StateMetaCard
           className="mortality"
-          title={'Case Fatality Ratio'}
+          title={t('Case Fatality Ratio')}
           statistic={`${formatNumber(deathPercent, '%')}`}
           formula={
             <>
               {'100 x '}
               <Fraction
-                numerator={'Total deaths'}
-                denominator={'Total confirmed cases'}
+                numerator={t('Total deaths')}
+                denominator={t('Total confirmed cases')}
               />
             </>
           }
@@ -174,14 +174,14 @@ function StateMeta({stateCode, data, timeseries}) {
 
         <StateMetaCard
           className="tpr"
-          title={'Test Positivity Ratio'}
+          title={t('Test Positivity Ratio')}
           statistic={tprWeek > 0 ? `${formatNumber(tprWeek, '%')}` : '-'}
           formula={
             <>
               {'100 x '}
               <Fraction
-                numerator={'Confirmed cases last week'}
-                denominator={'Samples tested last week'}
+                numerator={t('Confirmed cases last week')}
+                denominator={t('Samples tested last week')}
               />
             </>
           }
@@ -199,14 +199,14 @@ function StateMeta({stateCode, data, timeseries}) {
 
         <StateMetaCard
           className="tpm"
-          title={'Tests Per Lakh'}
+          title={t('Tests Per Lakh')}
           statistic={`${formatNumber(testPerLakh)}`}
           formula={
             <>
               {`${1e5} x `}
               <Fraction
-                numerator={`Total samples tested`}
-                denominator={`Total population`}
+                numerator={t('Total samples tested')}
+                denominator={t('Total population')}
               />
             </>
           }

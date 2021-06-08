@@ -1,16 +1,14 @@
 import {SPRING_CONFIG_NUMBERS, STATISTIC_CONFIGS} from '../constants.js';
-import {formatNumber, getTableStatistic} from '../utils/commonFunctions';
+import {formatNumber} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import {memo} from 'react';
 import {animated, useSpring} from 'react-spring';
 
-const Cell = ({statistic, data, isPerLakh, lastUpdatedDate}) => {
-  const {total, delta} = getTableStatistic(data, statistic, {
-    expiredDate: lastUpdatedDate,
-    normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
-  });
+const Cell = ({statistic, data, lastUpdatedDate, getTableStatistic}) => {
+  const total = getTableStatistic(data, statistic, 'total');
+  const delta = getTableStatistic(data, statistic, 'delta');
 
   const spring = useSpring({
     total: total,
@@ -22,7 +20,7 @@ const Cell = ({statistic, data, isPerLakh, lastUpdatedDate}) => {
 
   return (
     <div className="cell statistic">
-      {statisticConfig?.tableConfig?.showDelta && (
+      {statisticConfig?.showDelta && (
         <animated.div
           className={classnames('delta', `is-${statistic}`)}
           title={delta}
@@ -49,11 +47,9 @@ const Cell = ({statistic, data, isPerLakh, lastUpdatedDate}) => {
 const isCellEqual = (prevProps, currProps) => {
   if (!equal(prevProps.data?.total, currProps.data?.total)) {
     return false;
-  }
-  if (!equal(prevProps.data?.delta, currProps.data?.delta)) {
+  } else if (!equal(prevProps.data?.delta, currProps.data?.delta)) {
     return false;
-  }
-  if (!equal(prevProps.isPerLakh, currProps.isPerLakh)) {
+  } else if (!equal(prevProps.getTableStatistic, currProps.getTableStatistic)) {
     return false;
   }
   return true;

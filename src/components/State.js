@@ -8,6 +8,7 @@ import {
   retry,
 } from '../utils/commonFunctions';
 
+import {SmileyIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import {formatISO, max} from 'date-fns';
 import {
@@ -19,7 +20,6 @@ import {
   Suspense,
   useRef,
 } from 'react';
-import {Smile} from 'react-feather';
 import {Helmet} from 'react-helmet';
 import {useTranslation} from 'react-i18next';
 import {useParams} from 'react-router-dom';
@@ -55,6 +55,7 @@ function State() {
     stateCode: stateCode,
     districtName: null,
   });
+  const [delta7Mode, setDelta7Mode] = useState(false);
 
   useEffect(() => {
     if (regionHighlighted.stateCode !== stateCode) {
@@ -179,6 +180,8 @@ function State() {
                   mapStatistic,
                   setMapStatistic,
                   lastUpdatedDate,
+                  delta7Mode,
+                  setDelta7Mode,
                 }}
               ></MapExplorer>
             </Suspense>
@@ -281,7 +284,7 @@ function State() {
                               mapStatistic === 'confirmed' ? 'is-green' : ''
                             }`}
                           >
-                            <Smile />
+                            <SmileyIcon />
                             <div className="alert-right">
                               No new {mapStatistic} cases in the past five days
                             </div>

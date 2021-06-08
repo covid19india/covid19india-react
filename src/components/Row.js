@@ -8,16 +8,13 @@ import {
   STATISTIC_CONFIGS,
   UNKNOWN_DISTRICT_KEY,
 } from '../constants';
-import {
-  capitalize,
-  formatLastUpdated,
-  getTableStatistic,
-} from '../utils/commonFunctions';
+import {capitalize, formatLastUpdated} from '../utils/commonFunctions';
 
 import {
   AlertIcon,
   ClockIcon,
-  FilterIcon,
+  SortAscIcon,
+  SortDescIcon,
   FoldUpIcon,
   GraphIcon,
   InfoIcon,
@@ -35,11 +32,10 @@ function Row({
   tableStatistics,
   stateCode,
   districtName,
-  isPerLakh,
   regionHighlighted,
   setRegionHighlighted,
   expandTable,
-  lastUpdatedDate,
+  getTableStatistic,
 }) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useSessionStorage('districtSortData', {
@@ -55,12 +51,25 @@ function Row({
 
   const handleSortClick = useCallback(
     (statistic) => {
-      setSortData(
-        produce(sortData, (draftSortData) => {
-          draftSortData.isAscending = !sortData.isAscending;
-          draftSortData.sortColumn = statistic;
-        })
-      );
+      if (sortData.sortColumn !== statistic) {
+        setSortData(
+          produce(sortData, (draftSortData) => {
+            if (
+              sortData.sortColumn === 'districtName' ||
+              statistic === 'districtName'
+            ) {
+              draftSortData.isAscending = !sortData.isAscending;
+            }
+            draftSortData.sortColumn = statistic;
+          })
+        );
+      } else {
+        setSortData(
+          produce(sortData, (draftSortData) => {
+            draftSortData.isAscending = !sortData.isAscending;
+          })
+        );
+      }
     },
     [sortData, setSortData]
   );
@@ -70,26 +79,18 @@ function Row({
       if (sortData.sortColumn !== 'districtName') {
         const statisticConfig = STATISTIC_CONFIGS[sortData.sortColumn];
         const dataType =
-          sortData.delta && statisticConfig?.tableConfig?.showDelta
-            ? 'delta'
-            : 'total';
+          sortData.delta && statisticConfig?.showDelta ? 'delta' : 'total';
 
         const statisticA = getTableStatistic(
           data.districts[districtNameA],
           sortData.sortColumn,
-          {
-            expiredDate: lastUpdatedDate,
-            normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
-          }
-        )[dataType];
+          dataType
+        );
         const statisticB = getTableStatistic(
           data.districts[districtNameB],
           sortData.sortColumn,
-          {
-            expiredDate: lastUpdatedDate,
-            normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
-          }
-        )[dataType];
+          dataType
+        );
         return sortData.isAscending
           ? statisticA - statisticB
           : statisticB - statisticA;
@@ -99,7 +100,7 @@ function Row({
           : districtNameB.localeCompare(districtNameA);
       }
     },
-    [sortData, data, isPerLakh, lastUpdatedDate]
+    [sortData, data, getTableStatistic]
   );
 
   const highlightState = useCallback(() => {
@@ -192,7 +193,11 @@ function Row({
         {tableStatistics.map((statistic) => (
           <Cell
             key={statistic}
-            {...{data, statistic, isPerLakh, lastUpdatedDate}}
+            {...{
+              data,
+              statistic,
+              getTableStatistic,
+            }}
           />
         ))}
       </div>
@@ -241,12 +246,12 @@ function Row({
             >
               <div className="district-name">{t('District')}</div>
               {sortData.sortColumn === 'districtName' && (
-                <div
-                  className={classnames('sort-icon', {
-                    invert: !sortData.isAscending,
-                  })}
-                >
-                  <FilterIcon size={10} />
+                <div className={'sort-icon'}>
+                  {sortData.isAscending ? (
+                    <SortAscIcon size={12} />
+                  ) : (
+                    <SortDescIcon size={12} />
+                  )}
                 </div>
               )}
             </div>
@@ -275,9 +280,8 @@ function Row({
                 regionHighlighted,
                 setRegionHighlighted,
                 stateCode,
-                isPerLakh,
                 expandTable,
-                lastUpdatedDate,
+                getTableStatistic,
               }}
             />
           ))}
@@ -301,8 +305,6 @@ const isEqual = (prevProps, currProps) => {
     return false;
   } else if (!equal(prevProps.data?.delta, currProps.data?.delta)) {
     return false;
-  } else if (!equal(prevProps.isPerLakh, currProps.isPerLakh)) {
-    return false;
   } else if (
     (!equal(
       prevProps.regionHighlighted.stateCode,
@@ -325,6 +327,8 @@ const isEqual = (prevProps, currProps) => {
   ) {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
+    return false;
+  } else if (!equal(prevProps.getTableStatistic, currProps.getTableStatistic)) {
     return false;
   } else if (!equal(prevProps.tableStatistics, currProps.tableStatistics)) {
     return false;

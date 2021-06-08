@@ -1,6 +1,6 @@
 import {TABLE_STATISTICS} from '../../constants';
 
-import {FilterIcon} from '@primer/octicons-react';
+import {SortDescIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import {useEffect, useState} from 'react';
 
@@ -20,10 +20,10 @@ const TableDeltaHelper = () => {
 
   return (
     <>
-      <span className={classnames(`is-${TABLE_STATISTICS[statisticIndex]}`)}>
-        <FilterIcon size={14} />
-      </span>
-      <p>Sort by Delta [long press]</p>
+      <div className={classnames(`is-${TABLE_STATISTICS[statisticIndex]}`)}>
+        <SortDescIcon size={14} />
+      </div>
+      <p>Sorted by Delta [Long press]</p>
     </>
   );
 };
