@@ -17,7 +17,7 @@ import {axisBottom, axisRight} from 'd3-axis';
 import {interpolatePath} from 'd3-interpolate-path';
 import {scaleTime, scaleLinear, scaleLog} from 'd3-scale';
 import {select, pointer} from 'd3-selection';
-import {area, line, curveMonotoneX} from 'd3-shape';
+import {area, line, curveMonotoneX, curveStep} from 'd3-shape';
 import 'd3-transition';
 import {differenceInDays} from 'date-fns';
 import equal from 'fast-deep-equal';
@@ -319,7 +319,7 @@ function Timeseries({
 
       const areaPath = (dates, allZero = false) =>
         area()
-          .curve(curveMonotoneX)
+          .curve(curveStep)
           .x((date) => xScale(parseIndiaDate(date)))
           .y0(yScale(0))
           .y1(
