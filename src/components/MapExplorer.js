@@ -1,4 +1,5 @@
 import MapVisualizerLoader from './loaders/MapVisualizer';
+import {Delta7Icon, PerLakhIcon} from './snippets/Icons';
 
 import {
   MAP_META,
@@ -41,7 +42,7 @@ import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {animated, useSpring} from 'react-spring';
 import {useSwipeable} from 'react-swipeable';
-import {useWindowSize} from 'react-use';
+import {useLocalStorage, useWindowSize} from 'react-use';
 
 const MapVisualizer = lazy(() => retry(() => import('./MapVisualizer')));
 
@@ -57,12 +58,14 @@ function MapExplorer({
   expandTable = false,
   hideDistrictData = false,
   lastUpdatedDate,
+  delta7Mode,
+  setDelta7Mode,
 }) {
   const {t} = useTranslation();
   const mapExplorerRef = useRef();
   const {width} = useWindowSize();
 
-  const [mapView, setMapView] = useState(MAP_VIEWS.DISTRICTS);
+  const [mapView, setMapView] = useLocalStorage('mapView', MAP_VIEWS.DISTRICTS);
   const [mapViz, setMapViz] = useState(MAP_VIZS.BUBBLES);
 
   const mapMeta = MAP_META[mapCode];
@@ -84,20 +87,6 @@ function MapExplorer({
     });
   }, [data, regionHighlighted.stateCode, regionHighlighted.districtName]);
 
-  const handleTabClick = useCallback(
-    (option) => {
-      switch (option) {
-        case MAP_VIZS.CHOROPLETH:
-          setMapViz(MAP_VIZS.CHOROPLETH);
-          break;
-        case MAP_VIZS.BUBBLES:
-          setMapViz(MAP_VIZS.BUBBLES);
-          break;
-      }
-    },
-    [setMapViz]
-  );
-
   const handleDistrictClick = useCallback(() => {
     const newMapView =
       mapView === MAP_VIEWS.DISTRICTS ? MAP_VIEWS.STATES : MAP_VIEWS.DISTRICTS;
@@ -108,47 +97,7 @@ function MapExplorer({
       });
     }
     setMapView(newMapView);
-  }, [mapView, setRegionHighlighted, regionHighlighted.stateCode]);
-
-  const ChoroplethIcon = useMemo(
-    () => (
-      <svg
-        width="314"
-        height="314"
-        viewBox="0 0 314 314"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M78.2861 145.778C80.6671 155.387 84.6108 164.28 92.421 170.488C94.5409 174.766 93.7381 180.115 96.2412 184.535C99.7619 190.751 102.898 195.156 110.758 195.156C119.259 195.156 127.582 192.241 132.576 184.963C136.539 179.187 143.562 174.194 150.658 178.968C156.039 182.587 157.864 191.253 161.949 196.312C168.044 203.859 175.962 212.131 184.107 217.339C190.795 221.615 199.602 221.297 207.368 220.551C214.111 219.903 220.088 212.137 223.71 207.189C227.102 202.555 230.602 198.075 233.006 192.843C238.463 180.961 236.721 162.008 225.62 153.958C213.23 144.974 196.881 145.725 183.343 139.654C175.796 136.27 175.843 122.587 174.174 115.758C172.492 108.876 170.655 99.867 164.581 95.3733C155.36 88.5509 146.436 93.7458 137.075 96.444C133.325 97.525 131.816 100.817 129.095 103.424L129.093 103.426C126.105 106.29 121.531 110.674 117.974 112.632C113.709 114.979 111.262 119.456 105.834 119.612C104.487 119.651 98.6801 120.375 97.7693 119.227C94.2704 114.814 92.1979 113.445 86.6906 113.445C83.0636 113.445 77.14 118.241 77.14 122.31C77.14 130.086 76.4094 138.205 78.2861 145.778Z"
-          strokeWidth="10"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    ),
-    []
-  );
-
-  const BubblesIcon = useMemo(
-    () => (
-      <svg
-        width="22"
-        height="27"
-        viewBox="-1 -5 22 27"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle cx="5.5" cy="5.5" r="5.5" fillOpacity="0.4" />
-        <circle cx="5.5" cy="5.5" r="5" strokeOpacity="0.5" />
-        <circle cx="6.5" cy="11.5" r="3.5" fillOpacity="0.4" />
-        <circle cx="6.5" cy="11.5" r="3" strokeOpacity="0.5" />
-        <circle cx="13.5" cy="9.5" r="6.5" fillOpacity="0.4" />
-        <circle cx="13.5" cy="9.5" r="6" strokeOpacity="0.5" />
-      </svg>
-    ),
-    []
-  );
+  }, [mapView, regionHighlighted.stateCode, setMapView, setRegionHighlighted]);
 
   const history = useHistory();
   const panelRef = useRef();
@@ -175,12 +124,17 @@ function MapExplorer({
   const perLakh = mapViz === MAP_VIZS.CHOROPLETH;
 
   const getMapStatistic = useCallback(
-    (data) =>
-      getStatistic(data, 'total', mapStatistic, {
+    (data) => {
+      const statisticConfig = STATISTIC_CONFIGS[mapStatistic];
+      const type =
+        statisticConfig?.showDelta && delta7Mode ? 'delta7' : 'total';
+
+      return getStatistic(data, type, mapStatistic, {
         expiredDate: lastUpdatedDate,
         normalizedByPopulationPer: perLakh ? 'lakh' : null,
-      }),
-    [mapStatistic, perLakh, lastUpdatedDate]
+      });
+    },
+    [mapStatistic, perLakh, lastUpdatedDate, delta7Mode]
   );
 
   const spring = useSpring({
@@ -255,7 +209,11 @@ function MapExplorer({
               </animated.div>
               <span>{`${t(capitalize(statisticConfig.displayName))}${
                 perLakh && !statisticConfig?.nonLinear
-                  ? ` ${t('per lakh people')}`
+                  ? ` ${t('per lakh')}`
+                  : ''
+              }${
+                delta7Mode && statisticConfig?.showDelta
+                  ? ` ${t('last 7 days')}`
                   : ''
               }`}</span>
             </h1>
@@ -265,49 +223,55 @@ function MapExplorer({
         <div className={classnames('panel-right', `is-${mapStatistic}`)}>
           <div className="switch-type">
             <div
-              className={classnames('choropleth fadeInUp', {
-                'is-highlighted': mapViz === MAP_VIZS.CHOROPLETH,
+              className={classnames('fadeInUp', {
+                'is-highlighted': statisticConfig?.showDelta && delta7Mode,
               })}
-              onClick={handleTabClick.bind(this, MAP_VIZS.CHOROPLETH)}
+              onClick={setDelta7Mode.bind(this, !delta7Mode)}
               style={trail[1]}
             >
-              {ChoroplethIcon}
+              <Delta7Icon />
             </div>
+
             <div
-              className={classnames('bubble fadeInUp', {
-                'is-highlighted': mapViz === MAP_VIZS.BUBBLES,
+              className={classnames('fadeInUp', {
+                'is-highlighted': mapViz === MAP_VIZS.CHOROPLETH,
               })}
-              onClick={handleTabClick.bind(this, MAP_VIZS.BUBBLES)}
+              onClick={setMapViz.bind(
+                this,
+                mapViz === MAP_VIZS.CHOROPLETH
+                  ? MAP_VIZS.BUBBLES
+                  : MAP_VIZS.CHOROPLETH
+              )}
               style={trail[2]}
             >
-              {BubblesIcon}
+              <PerLakhIcon />
             </div>
 
             {mapMeta.mapType === MAP_TYPES.COUNTRY && (
-              <>
-                <div className="divider" />
-                <div
-                  className={classnames('boundary fadeInUp', {
-                    'is-highlighted': isDistrictView,
-                  })}
-                  onClick={handleDistrictClick.bind(this)}
-                  style={trail[3]}
-                >
-                  <OrganizationIcon />
-                </div>
-              </>
+              <div
+                className={classnames('boundary fadeInUp', {
+                  'is-highlighted': isDistrictView,
+                })}
+                onClick={handleDistrictClick}
+                style={trail[3]}
+              >
+                <OrganizationIcon />
+              </div>
             )}
 
             {mapMeta.mapType === MAP_TYPES.STATE && (
-              <div
-                className="back fadeInUp"
-                onClick={() => {
-                  history.push('/#MapExplorer');
-                }}
-                style={trail[4]}
-              >
-                <ArrowLeftIcon />
-              </div>
+              <>
+                <div className="divider" />
+                <div
+                  className="back fadeInUp"
+                  onClick={() => {
+                    history.push('/#MapExplorer');
+                  }}
+                  style={trail[4]}
+                >
+                  <ArrowLeftIcon />
+                </div>
+              </>
             )}
           </div>
 
@@ -348,11 +312,16 @@ function MapExplorer({
             }
           >
             <MapVisualizer
-              {...{mapCode, isDistrictView, mapViz}}
               data={mapData}
-              {...{regionHighlighted, setRegionHighlighted}}
               statistic={mapStatistic}
-              getStatistic={getMapStatistic}
+              {...{
+                mapCode,
+                isDistrictView,
+                mapViz,
+                regionHighlighted,
+                setRegionHighlighted,
+                getMapStatistic,
+              }}
             ></MapVisualizer>
           </Suspense>
         )}
@@ -373,6 +342,8 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(prevProps.hideDistrictData, currProps.hideDistrictData)) {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
+    return false;
+  } else if (!equal(prevProps.delta7Mode, currProps.delta7Mode)) {
     return false;
   } else if (
     !equal(

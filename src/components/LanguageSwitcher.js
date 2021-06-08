@@ -1,9 +1,9 @@
 import {ENTER_IN, ENTER_OUT} from '../animations';
 import locales from '../i18n/locales.json';
 
+import {ArrowUpIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import {memo, useRef, useCallback} from 'react';
-import {ArrowUp} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useTransition, animated} from 'react-spring';
 import {useClickAway} from 'react-use';
@@ -68,7 +68,7 @@ function LanguageSwitcher({showLanguageSwitcher, setShowLanguageSwitcher}) {
             className="close-button"
             onClick={setShowLanguageSwitcher.bind(this, false)}
           >
-            <ArrowUp width={16} />
+            <ArrowUpIcon size={16} />
           </div>
         </animated.div>
       )

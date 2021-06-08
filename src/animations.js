@@ -54,7 +54,7 @@ export const ENTER_OUT = {
 export const TABLE_FADE_IN = {
   opacity: 1,
   transform: 'translate3d(0, 0px, 0)',
-  height: 200,
+  height: 228,
 };
 
 export const TABLE_FADE_OUT = {

@@ -20,7 +20,7 @@ import {
   Suspense,
 } from 'react';
 import ReactDOM from 'react-dom';
-import {FastForward, Play as Play, Pause as Pause} from 'react-feather';
+import {FastForward, Play, Pause} from 'react-feather';
 import {useTranslation} from 'react-i18next';
 import {useTransition, animated} from 'react-spring';
 import {useClickAway, useKeyPressEvent} from 'react-use';

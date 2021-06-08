@@ -62,7 +62,7 @@ function MapVisualizer({
   regionHighlighted,
   setRegionHighlighted,
   statistic,
-  getStatistic,
+  getMapStatistic,
   isCountryLoaded,
 }) {
   const {t} = useTranslation();
@@ -80,8 +80,8 @@ function MapVisualizer({
   );
 
   const statisticTotal = useMemo(() => {
-    return getStatistic(data[mapCode]);
-  }, [data, mapCode, getStatistic]);
+    return getMapStatistic(data[mapCode]);
+  }, [data, mapCode, getMapStatistic]);
 
   const strokeColor = useCallback(
     (alpha) => {
@@ -133,7 +133,9 @@ function MapVisualizer({
     );
 
     if (!isDistrictView) {
-      return extent(stateCodes, (stateCode) => getStatistic(data[stateCode]));
+      return extent(stateCodes, (stateCode) =>
+        getMapStatistic(data[stateCode])
+      );
     } else {
       const districtData = stateCodes.reduce((res, stateCode) => {
         const districts = Object.keys(data[stateCode]?.districts || []).filter(
@@ -144,14 +146,14 @@ function MapVisualizer({
         );
         res.push(
           ...districts.map((districtName) =>
-            getStatistic(data[stateCode].districts[districtName])
+            getMapStatistic(data[stateCode].districts[districtName])
           )
         );
         return res;
       }, []);
       return extent(districtData);
     }
-  }, [data, isDistrictView, getStatistic, mapViz, districtsSet]);
+  }, [data, isDistrictView, getMapStatistic, mapViz, districtsSet]);
 
   const mapScale = useMemo(() => {
     if (mapViz === MAP_VIZS.BUBBLES) {
@@ -173,12 +175,12 @@ function MapVisualizer({
       const stateData = data[stateCode];
       const districtData = stateData?.districts?.[district];
       let n;
-      if (district) n = getStatistic(districtData);
-      else n = getStatistic(stateData);
+      if (district) n = getMapStatistic(districtData);
+      else n = getMapStatistic(stateData);
       const color = n === 0 ? '#ffffff00' : mapScale(n);
       return color;
     },
-    [data, mapScale, getStatistic]
+    [data, mapScale, getMapStatistic]
   );
 
   const populateTexts = useCallback(
@@ -195,8 +197,8 @@ function MapVisualizer({
           const stateData = data[stateCode];
           const districtData = stateData?.districts?.[district];
           let n;
-          if (district) n = getStatistic(districtData);
-          else n = getStatistic(stateData);
+          if (district) n = getMapStatistic(districtData);
+          else n = getMapStatistic(stateData);
           return `${formatNumber(
             100 * (n / (statisticTotal || 0.001)),
             '%'
@@ -204,7 +206,7 @@ function MapVisualizer({
         }
       });
     },
-    [mapViz, data, getStatistic, statisticTotal, statistic]
+    [mapViz, data, getMapStatistic, statisticTotal, statistic]
   );
 
   const onceTouchedRegion = useRef(null);
@@ -325,13 +327,13 @@ function MapVisualizer({
           const stateData = data[stateCode];
 
           if (!isDistrictView) {
-            feature.value = getStatistic(stateData);
+            feature.value = getMapStatistic(stateData);
           } else {
             const districtData = stateData?.districts?.[districtName];
 
-            if (districtName) feature.value = getStatistic(districtData);
+            if (districtName) feature.value = getMapStatistic(districtData);
             else
-              feature.value = getStatistic(
+              feature.value = getMapStatistic(
                 stateData?.districts?.[UNKNOWN_DISTRICT_KEY]
               );
           }
@@ -415,7 +417,7 @@ function MapVisualizer({
     setRegionHighlighted,
     populateTexts,
     statistic,
-    getStatistic,
+    getMapStatistic,
   ]);
 
   // Boundaries
@@ -545,7 +547,9 @@ function MapVisualizer({
           <g className="circles" />
         </svg>
         {mapMeta.mapType === MAP_TYPES.STATE &&
-          !!getStatistic(data[mapCode]?.districts?.[UNKNOWN_DISTRICT_KEY]) && (
+          !!getMapStatistic(
+            data[mapCode]?.districts?.[UNKNOWN_DISTRICT_KEY]
+          ) && (
             <div className={classnames('disclaimer', `is-${statistic}`)}>
               <AlertIcon />
               <span>

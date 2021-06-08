@@ -24,9 +24,7 @@ export const STATISTIC_CONFIGS = {
     displayName: 'confirmed',
     color: '#ff073a',
     format: 'long',
-    tableConfig: {
-      showDelta: true,
-    },
+    showDelta: true,
   },
   active: {
     displayName: 'active',
@@ -37,23 +35,19 @@ export const STATISTIC_CONFIGS = {
     displayName: 'recovered',
     color: '#28a745',
     format: 'long',
-    tableConfig: {
-      showDelta: true,
-    },
+    showDelta: true,
   },
   deceased: {
     displayName: 'deceased',
     color: '#6c757d',
     format: 'long',
-    tableConfig: {
-      showDelta: true,
-    },
+    showDelta: true,
   },
   other: {
     displayName: 'other',
     format: 'long',
+    showDelta: true,
     tableConfig: {
-      showDelta: true,
       notes: 'Migrated cases or non-COVID deaths',
     },
   },
@@ -61,41 +55,33 @@ export const STATISTIC_CONFIGS = {
     displayName: 'tested',
     color: '#4b1eaa',
     format: 'short',
+    showDelta: true,
     hideZero: true,
     category: 'tested',
-    tableConfig: {
-      showDelta: true,
-    },
   },
   vaccinated1: {
     displayName: 'vaccinated (at least one dose)',
     color: '#fb5581',
     format: 'short',
+    showDelta: true,
     hideZero: true,
     category: 'vaccinated',
-    tableConfig: {
-      showDelta: true,
-    },
   },
   vaccinated2: {
     displayName: 'fully vaccinated',
     color: '#fb5581',
     format: 'short',
+    showDelta: true,
     hideZero: true,
     category: 'vaccinated',
-    tableConfig: {
-      showDelta: true,
-    },
   },
   vaccinated: {
     displayName: 'vaccine doses administered',
     color: '#fb5581',
     format: 'short',
+    showDelta: true,
     hideZero: true,
     category: 'vaccinated',
-    tableConfig: {
-      showDelta: true,
-    },
   },
   tpr: {
     displayName: 'test positivity ratio',

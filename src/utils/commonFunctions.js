@@ -220,15 +220,6 @@ export const getStatistic = (
   return multiplyFactor * val || 0;
 };
 
-export const getTableStatistic = (data, statistic, args) => {
-  const type = STATISTIC_CONFIGS[statistic]?.tableConfig?.type || 'total';
-
-  const total = getStatistic(data, type, statistic, args);
-  const delta =
-    type === 'total' ? getStatistic(data, 'delta', statistic, args) : 0;
-  return {total, delta};
-};
-
 export const fetcher = (url) => {
   return fetch(url).then((response) => {
     return response.json();

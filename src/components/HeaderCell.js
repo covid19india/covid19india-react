@@ -3,7 +3,7 @@ import Tooltip from './Tooltip';
 import {STATISTIC_CONFIGS} from '../constants';
 import {toTitleCase} from '../utils/commonFunctions';
 
-import {FilterIcon, InfoIcon} from '@primer/octicons-react';
+import {InfoIcon, SortAscIcon, SortDescIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
@@ -46,12 +46,20 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
       {sortData.sortColumn === statistic && (
         <div
           className={classnames('sort-icon', {
-            invert: sortData.isAscending,
             [`is-${statistic}`]: sortData.delta,
           })}
         >
-          <FilterIcon size={10} />
+          {sortData.isAscending ? (
+            <SortAscIcon size={12} />
+          ) : (
+            <SortDescIcon size={12} />
+          )}
         </div>
+      )}
+      {statisticConfig?.tableConfig?.notes && (
+        <Tooltip message={t(statisticConfig.tableConfig.notes)}>
+          <InfoIcon size={14} />
+        </Tooltip>
       )}
       <div>
         {t(
@@ -61,11 +69,6 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
           )
         )}
       </div>
-      {statisticConfig?.tableConfig?.notes && (
-        <Tooltip message={t(statisticConfig.tableConfig.notes)}>
-          <InfoIcon size={14} />
-        </Tooltip>
-      )}
     </div>
   );
 }
