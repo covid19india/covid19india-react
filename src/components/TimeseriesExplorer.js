@@ -48,7 +48,7 @@ function TimeseriesExplorer({
 }) {
   const {t} = useTranslation();
   const [lookback, setLookback] = useLocalStorage('timeseriesLookbackDays', 90);
-  const [chartType, setChartType] = useLocalStorage('chartType', 'total');
+  const [chartType, setChartType] = useLocalStorage('chartType', 'delta');
   const [isUniform, setIsUniform] = useLocalStorage('isUniform', false);
   const [isLog, setIsLog] = useLocalStorage('isLog', false);
   const [isMovingAverage, setIsMovingAverage] = useLocalStorage(
