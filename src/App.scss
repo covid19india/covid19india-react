@@ -4892,6 +4892,14 @@ footer {
         background: #1e1e30 !important;
       }
 
+      .map-indicator {
+        &.highlighted {
+          &.is-tested {
+            background: $dark-m-purple !important;
+          }
+        }
+      }
+
       &.heading {
         background: #1e1e30 !important;
 
