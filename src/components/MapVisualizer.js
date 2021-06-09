@@ -58,12 +58,11 @@ function MapVisualizer({
   isDistrictView,
   mapViz,
   data,
-  changeMap,
   regionHighlighted,
   setRegionHighlighted,
   statistic,
   getMapStatistic,
-  isCountryLoaded,
+  transformStatistic,
 }) {
   const {t} = useTranslation();
   const svgRef = useRef(null);
@@ -83,11 +82,11 @@ function MapVisualizer({
     return getMapStatistic(data[mapCode]);
   }, [data, mapCode, getMapStatistic]);
 
+  const statisticConfig = STATISTIC_CONFIGS[statistic];
+
   const strokeColor = useCallback(
-    (alpha) => {
-      return STATISTIC_CONFIGS[statistic].color + alpha;
-    },
-    [statistic]
+    (alpha) => (statisticConfig?.color || '#343a40') + alpha,
+    [statisticConfig]
   );
 
   const features = useMemo(() => {
@@ -134,7 +133,7 @@ function MapVisualizer({
 
     if (!isDistrictView) {
       return extent(stateCodes, (stateCode) =>
-        getMapStatistic(data[stateCode])
+        transformStatistic(getMapStatistic(data[stateCode]))
       );
     } else {
       const districtData = stateCodes.reduce((res, stateCode) => {
@@ -146,25 +145,36 @@ function MapVisualizer({
         );
         res.push(
           ...districts.map((districtName) =>
-            getMapStatistic(data[stateCode].districts[districtName])
+            transformStatistic(
+              getMapStatistic(data[stateCode].districts[districtName])
+            )
           )
         );
         return res;
       }, []);
       return extent(districtData);
     }
-  }, [data, isDistrictView, getMapStatistic, mapViz, districtsSet]);
+  }, [
+    data,
+    isDistrictView,
+    getMapStatistic,
+    mapViz,
+    districtsSet,
+    transformStatistic,
+  ]);
 
   const mapScale = useMemo(() => {
     if (mapViz === MAP_VIZS.BUBBLES) {
       return scaleSqrt([0, Math.max(1, statisticMax || 0)], [0, 40])
         .clamp(true)
         .nice(3);
+    } else if (STATISTIC_CONFIGS[statistic]?.mapConfig?.colorScale) {
+      return STATISTIC_CONFIGS[statistic].mapConfig.colorScale;
     } else {
       return scaleSequential(
         [Math.min(0, statisticMin || 0), Math.max(1, statisticMax || 0)],
         colorInterpolator(statistic)
-      ).clamp(true);
+      );
     }
   }, [mapViz, statistic, statisticMin, statisticMax]);
 
@@ -174,22 +184,19 @@ function MapVisualizer({
       const district = d.properties.district;
       const stateData = data[stateCode];
       const districtData = stateData?.districts?.[district];
-      let n;
-      if (district) n = getMapStatistic(districtData);
-      else n = getMapStatistic(stateData);
-      const color = n === 0 ? '#ffffff00' : mapScale(n);
+      const n = transformStatistic(
+        getMapStatistic(district ? districtData : stateData)
+      );
+      const color = n ? mapScale(n) : '#ffffff00';
       return color;
     },
-    [data, mapScale, getMapStatistic]
+    [data, mapScale, getMapStatistic, transformStatistic]
   );
 
   const populateTexts = useCallback(
     (regionSelection) => {
       regionSelection.select('title').text((d) => {
-        if (
-          mapViz === MAP_VIZS.BUBBLES &&
-          !STATISTIC_CONFIGS[statistic]?.nonLinear
-        ) {
+        if (mapViz === MAP_VIZS.BUBBLES && !statisticConfig?.nonLinear) {
           const state = d.properties.st_nm;
           const stateCode = STATE_CODES[state];
           const district = d.properties.district;
@@ -206,7 +213,7 @@ function MapVisualizer({
         }
       });
     },
-    [mapViz, data, getMapStatistic, statisticTotal, statistic]
+    [mapViz, data, getMapStatistic, statisticTotal, statisticConfig]
   );
 
   const onceTouchedRegion = useRef(null);
@@ -397,8 +404,8 @@ function MapVisualizer({
       .call((sel) => {
         sel
           .transition(T)
-          .attr('fill', STATISTIC_CONFIGS[statistic].color + '70')
-          .attr('stroke', STATISTIC_CONFIGS[statistic].color + '70')
+          .attr('fill', statisticConfig.color + '70')
+          .attr('stroke', statisticConfig.color + '70')
           .attr('r', (feature) => mapScale(feature.value));
       });
 
@@ -416,7 +423,7 @@ function MapVisualizer({
     path,
     setRegionHighlighted,
     populateTexts,
-    statistic,
+    statisticConfig,
     getMapStatistic,
   ]);
 
@@ -537,6 +544,9 @@ function MapVisualizer({
       <div className="svg-parent">
         <svg
           id="chart"
+          className={classnames({
+            zone: !!statisticConfig?.mapConfig?.colorScale,
+          })}
           viewBox={`0 0 ${width} ${height}`}
           preserveAspectRatio="xMidYMid meet"
           ref={svgRef}

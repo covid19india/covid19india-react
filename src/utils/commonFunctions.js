@@ -131,6 +131,7 @@ export const getStatistic = (
     expiredDate = null,
     normalizedByPopulationPer = null,
     movingAverage = false,
+    canBeNaN = false,
   } = {}
 ) => {
   // TODO: Replace delta with daily to remove ambiguity
@@ -208,16 +209,16 @@ export const getStatistic = (
   }
 
   const statisticConfig = STATISTIC_CONFIGS[statistic];
-
   multiplyFactor = (statisticConfig?.nonLinear && 1) || multiplyFactor;
 
-  if (statisticConfig?.canBeInfinite) {
-    val = (!isNaN(val) && val) || 0;
-  } else {
-    val = (isFinite(val) && val) || 0;
+  let result = multiplyFactor * val;
+  if (!canBeNaN) {
+    result = (!isNaN(result) && result) || 0;
   }
-
-  return multiplyFactor * val || 0;
+  if (!statisticConfig?.canBeInfinite) {
+    result = ((isNaN(result) || isFinite(result)) && result) || 0;
+  }
+  return result;
 };
 
 export const fetcher = (url) => {
