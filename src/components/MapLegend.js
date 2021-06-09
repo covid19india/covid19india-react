@@ -96,15 +96,21 @@ function MapLegend({data, statistic, mapViz, mapScale}) {
           height: height,
           ticks: 5,
           tickFormat: function (d, i, n) {
-            if (mapViz === MAP_VIZS.CHOROPLETH && !Number.isInteger(d)) return;
-            if (i === n.length - 1)
+            if (statisticConfig?.mapConfig?.colorScale) {
+              return d;
+            } else if (mapViz === MAP_VIZS.CHOROPLETH && !Number.isInteger(d)) {
+              return '';
+            } else if (i === n.length - 1) {
               return formatNumber(d, statisticConfig.format) + '+';
-            return formatNumber(d, statisticConfig.format);
+            } else {
+              return formatNumber(d, statisticConfig.format);
+            }
           },
           marginLeft: 2,
           marginRight: 0,
         })
       );
+      svg.attr('class', statisticConfig?.mapConfig?.colorScale ? 'zone' : '');
     }
   }, [t, width, height, statistic, mapScale, mapViz]);
 
@@ -275,11 +281,12 @@ function legend({
       .attr('xlink:href', null);
     if (!ordinalWeights) {
       x = scaleBand()
-        .domain(color.domain())
+        .domain(color.domain().filter((d) => d))
         .rangeRound([marginLeft, width - marginRight]);
       svg
+        .select('.bars')
         .selectAll('rect')
-        .data(color.domain())
+        .data(color.domain().filter((d) => d))
         .join('rect')
         .attr('x', x)
         .attr('y', marginTop)
@@ -352,7 +359,6 @@ function legend({
 }
 
 function ramp(color, n = 256) {
-  // const canvas = document.createElement('canvas');
   const canvas = select('.color-scale').node();
   const context = ((canvas.width = n), (canvas.height = 1), canvas).getContext(
     '2d'

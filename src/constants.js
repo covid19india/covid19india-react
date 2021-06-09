@@ -1,3 +1,5 @@
+import {scaleOrdinal} from 'd3-scale';
+
 // export const API_DOMAIN = 'http://localhost:8080';
 // export const API_DOMAIN =
 //   'https://raw.githubusercontent.com/shuklaayush/api/test/tmp';
@@ -125,6 +127,18 @@ export const STATISTIC_CONFIGS = {
     tableConfig: {
       notes:
         'Percentage growth of cases last week compared to the week a fortnight ago',
+    },
+    mapConfig: {
+      transformFn: (val) => {
+        if (val <= 0) return '≤ 0%';
+        else if (val <= 20) return '0 - 20%';
+        else if (val <= 50) return '20 - 50%';
+        else if (val > 50) return '> 50%';
+      },
+      colorScale: scaleOrdinal(
+        ['≤ 0%', '0 - 20%', '20 - 50%', '> 50%'],
+        ['#1a9850', '#fee08b', '#fc8d59', '#d73027']
+      ),
     },
   },
   population: {

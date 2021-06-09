@@ -66,7 +66,7 @@ function MapExplorer({
   const {width} = useWindowSize();
 
   const [mapView, setMapView] = useLocalStorage('mapView', MAP_VIEWS.DISTRICTS);
-  const [mapViz, setMapViz] = useState(MAP_VIZS.BUBBLES);
+  const [isPerLakh, setIsPerLakh] = useState(false);
 
   const mapMeta = MAP_META[mapCode];
   const mapData =
@@ -121,8 +121,6 @@ function MapExplorer({
     return styles;
   }, []);
 
-  const perLakh = mapViz === MAP_VIZS.CHOROPLETH;
-
   const getMapStatistic = useCallback(
     (data) => {
       const statisticConfig = STATISTIC_CONFIGS[mapStatistic];
@@ -131,24 +129,31 @@ function MapExplorer({
 
       return getStatistic(data, type, mapStatistic, {
         expiredDate: lastUpdatedDate,
-        normalizedByPopulationPer: perLakh ? 'lakh' : null,
+        normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
+        canBeNaN: true,
       });
     },
-    [mapStatistic, perLakh, lastUpdatedDate, delta7Mode]
+    [mapStatistic, isPerLakh, lastUpdatedDate, delta7Mode]
   );
 
+  let currentVal = getMapStatistic(hoveredRegion);
+  if (isNaN(currentVal)) currentVal = '-';
+
   const spring = useSpring({
-    total: getMapStatistic(hoveredRegion),
+    total: currentVal,
     config: {tension: 250, ...SPRING_CONFIG_NUMBERS},
   });
 
-  const handleStatisticChange = (direction) => {
-    const currentIndex = MAP_STATISTICS.indexOf(mapStatistic);
-    const toIndex =
-      (MAP_STATISTICS.length + currentIndex + direction) %
-      MAP_STATISTICS.length;
-    setMapStatistic(MAP_STATISTICS[toIndex]);
-  };
+  const handleStatisticChange = useCallback(
+    (direction) => {
+      const currentIndex = MAP_STATISTICS.indexOf(mapStatistic);
+      const toIndex =
+        (MAP_STATISTICS.length + currentIndex + direction) %
+        MAP_STATISTICS.length;
+      setMapStatistic(MAP_STATISTICS[toIndex]);
+    },
+    [mapStatistic, setMapStatistic]
+  );
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: handleStatisticChange.bind(this, 1),
@@ -157,9 +162,32 @@ function MapExplorer({
 
   const statisticConfig = STATISTIC_CONFIGS[mapStatistic];
 
+  const mapViz =
+    isPerLakh || statisticConfig?.mapConfig?.colorScale
+      ? MAP_VIZS.CHOROPLETH
+      : MAP_VIZS.BUBBLES;
+
+  const handleDeltaClick = useCallback(() => {
+    if (statisticConfig?.showDelta) {
+      setDelta7Mode((delta7Mode) => !delta7Mode);
+    }
+  }, [statisticConfig, setDelta7Mode]);
+
   const isDistrictView = mapView === MAP_VIEWS.DISTRICTS && !hideDistrictData;
 
   const stickied = anchor === 'mapexplorer' || (expandTable && width >= 769);
+
+  const transformStatistic = useCallback(
+    (val) =>
+      statisticConfig?.mapConfig?.transformFn
+        ? statisticConfig.mapConfig.transformFn(val)
+        : val,
+    [statisticConfig]
+  );
+
+  const zoneColor = statisticConfig?.mapConfig?.colorScale
+    ? statisticConfig.mapConfig.colorScale(transformStatistic(currentVal))
+    : '';
 
   return (
     <div
@@ -188,14 +216,17 @@ function MapExplorer({
       </div>
       <div className="panel" ref={panelRef}>
         <div className="panel-left fadeInUp" style={trail[0]}>
-          <h2 className={classnames(mapStatistic)}>
+          <h2 className={classnames(mapStatistic)} style={{color: zoneColor}}>
             {t(hoveredRegion.name)}
             {hoveredRegion.name === UNKNOWN_DISTRICT_KEY &&
               ` [${t(STATE_NAMES[regionHighlighted.stateCode])}]`}
           </h2>
 
           {regionHighlighted.stateCode && (
-            <h1 className={classnames('district', mapStatistic)}>
+            <h1
+              className={classnames('district', mapStatistic)}
+              style={{color: zoneColor}}
+            >
               <animated.div>
                 {spring.total.to((total) =>
                   formatNumber(
@@ -208,7 +239,7 @@ function MapExplorer({
                 )}
               </animated.div>
               <span>{`${t(capitalize(statisticConfig.displayName))}${
-                perLakh && !statisticConfig?.nonLinear
+                isPerLakh && !statisticConfig?.nonLinear
                   ? ` ${t('per lakh')}`
                   : ''
               }${
@@ -225,8 +256,9 @@ function MapExplorer({
             <div
               className={classnames('fadeInUp', {
                 'is-highlighted': statisticConfig?.showDelta && delta7Mode,
+                disabled: !statisticConfig?.showDelta,
               })}
-              onClick={setDelta7Mode.bind(this, !delta7Mode)}
+              onClick={handleDeltaClick}
               style={trail[1]}
             >
               <Delta7Icon />
@@ -236,12 +268,7 @@ function MapExplorer({
               className={classnames('fadeInUp', {
                 'is-highlighted': mapViz === MAP_VIZS.CHOROPLETH,
               })}
-              onClick={setMapViz.bind(
-                this,
-                mapViz === MAP_VIZS.CHOROPLETH
-                  ? MAP_VIZS.BUBBLES
-                  : MAP_VIZS.CHOROPLETH
-              )}
+              onClick={setIsPerLakh.bind(this, !isPerLakh)}
               style={trail[2]}
             >
               <PerLakhIcon />
@@ -321,6 +348,7 @@ function MapExplorer({
                 regionHighlighted,
                 setRegionHighlighted,
                 getMapStatistic,
+                transformStatistic,
               }}
             ></MapVisualizer>
           </Suspense>
