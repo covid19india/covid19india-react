@@ -4,7 +4,7 @@ import {useCallback} from 'react';
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/animations/shift-away.css';
 
-function Tooltip({children, message}) {
+function Tooltip({children, message, hold = false}) {
   const handleClick = useCallback((e) => e.stopPropagation(), []);
 
   return (
@@ -27,6 +27,7 @@ function Tooltip({children, message}) {
       }
       arrow={false}
       animation="shift-away"
+      touch={hold ? ['hold', 300] : true}
     >
       <div onClick={handleClick}>{children}</div>
     </Tippy>

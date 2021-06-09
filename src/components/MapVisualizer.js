@@ -99,6 +99,7 @@ function MapVisualizer({
 
   const features = useMemo(() => {
     if (!geoData) return null;
+
     const featuresWrap = !isDistrictView
       ? feature(geoData, geoData.objects.states).features
       : mapMeta.mapType === MAP_TYPES.COUNTRY && mapViz === MAP_VIZS.BUBBLES
@@ -107,7 +108,6 @@ function MapVisualizer({
           ...feature(geoData, geoData.objects.districts).features,
         ]
       : feature(geoData, geoData.objects.districts).features;
-
     // Add id to each feature
     return featuresWrap.map((feature) => {
       const district = feature.properties.district;

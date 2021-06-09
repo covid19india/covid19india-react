@@ -1,3 +1,5 @@
+import Tooltip from './Tooltip';
+
 import {retry} from '../utils/commonFunctions';
 
 import {BellIcon, BellSlashIcon, HistoryIcon} from '@primer/octicons-react';
@@ -77,13 +79,15 @@ const ActionsPanel = ({
           {newUpdate && <div className="indicator"></div>}
         </div>
 
-        <div
-          className="timeline-icon fadeInUp"
-          onClick={handleTimelineClick}
-          style={trail[2]}
-        >
-          {<HistoryIcon />}
-        </div>
+        <Tooltip message={'Timeline'} hold>
+          <div
+            className="timeline-icon fadeInUp"
+            onClick={handleTimelineClick}
+            style={trail[2]}
+          >
+            {<HistoryIcon />}
+          </div>
+        </Tooltip>
       </div>
 
       {isTimelineMode && (

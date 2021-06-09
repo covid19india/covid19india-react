@@ -2,6 +2,7 @@ import HeaderCell from './HeaderCell';
 import TableLoader from './loaders/Table';
 import {Delta7Icon, DistrictIcon, PerLakhIcon} from './snippets/Icons';
 import TableDeltaHelper from './snippets/TableDeltaHelper';
+import Tooltip from './Tooltip';
 
 import {TABLE_FADE_IN, TABLE_FADE_OUT} from '../animations';
 import {
@@ -240,55 +241,65 @@ function Table({
   return (
     <div className="Table">
       <div className="table-top">
-        <animated.div
-          className={classnames('option-toggle', {
-            'is-highlighted': showDistricts,
-          })}
-          onClick={_setTableOption}
-          style={trail[0]}
-        >
-          <DistrictIcon />
-        </animated.div>
+        <div className="table-top-left">
+          <Tooltip message={'Toggle districts/states'} hold>
+            <animated.div
+              className={classnames('toggle', 'option-toggle', {
+                'is-highlighted': showDistricts,
+              })}
+              onClick={_setTableOption}
+              style={trail[0]}
+            >
+              <DistrictIcon />
+            </animated.div>
+          </Tooltip>
 
-        <animated.div
-          className={classnames('lakh-toggle', {
-            'is-highlighted': isPerLakh,
-          })}
-          onClick={setIsPerLakh.bind(this, !isPerLakh)}
-          style={trail[1]}
-        >
-          <PerLakhIcon />
-        </animated.div>
+          <Tooltip message={'Per lakh people'} hold>
+            <animated.div
+              className={classnames('toggle', 'lakh-toggle', {
+                'is-highlighted': isPerLakh,
+              })}
+              onClick={setIsPerLakh.bind(this, !isPerLakh)}
+              style={trail[1]}
+            >
+              <PerLakhIcon />
+            </animated.div>
+          </Tooltip>
 
-        <animated.div
-          className={classnames('delta-toggle', {
-            'is-highlighted': delta7Mode,
-          })}
-          style={trail[2]}
-          onClick={setDelta7Mode.bind(this, !delta7Mode)}
-        >
-          <Delta7Icon />
-        </animated.div>
+          <Tooltip message={'Last 7 day values'} hold>
+            <animated.div
+              className={classnames('toggle', 'delta-toggle', {
+                'is-highlighted': delta7Mode,
+              })}
+              style={trail[2]}
+              onClick={setDelta7Mode.bind(this, !delta7Mode)}
+            >
+              <Delta7Icon />
+            </animated.div>
+          </Tooltip>
 
-        <animated.div
-          className={classnames('info-toggle', {
-            'is-highlighted': isInfoVisible,
-          })}
-          onClick={setIsInfoVisible.bind(this, !isInfoVisible)}
-          style={trail[3]}
-        >
-          <QuestionIcon size={14} />
-        </animated.div>
+          <animated.div
+            className={classnames('toggle', 'info-toggle', {
+              'is-highlighted': isInfoVisible,
+            })}
+            onClick={setIsInfoVisible.bind(this, !isInfoVisible)}
+            style={trail[3]}
+          >
+            <QuestionIcon size={14} />
+          </animated.div>
+        </div>
 
-        <animated.div
-          className={classnames('expand-table-toggle', {
-            'is-highlighted': expandTable,
-          })}
-          style={trail[4]}
-          onClick={setExpandTable.bind(this, !expandTable)}
-        >
-          <FoldDownIcon size={16} />
-        </animated.div>
+        <Tooltip message={`${expandTable ? 'Collapse' : 'Expand'} table`} hold>
+          <animated.div
+            className={classnames('toggle', 'expand-table-toggle', {
+              'is-highlighted': expandTable,
+            })}
+            style={trail[4]}
+            onClick={setExpandTable.bind(this, !expandTable)}
+          >
+            <FoldDownIcon size={16} />
+          </animated.div>
+        </Tooltip>
       </div>
 
       {transition(
