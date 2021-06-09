@@ -166,6 +166,8 @@ function Home() {
                   lastUpdatedDate,
                   delta7Mode,
                   setDelta7Mode,
+                  mapStatistic,
+                  setMapStatistic,
                 }}
               />
             </Suspense>

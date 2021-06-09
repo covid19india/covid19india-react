@@ -38,7 +38,7 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
 
   const [sliderState, setSliderState] = useState(null);
   const [play, setPlay] = useState(false);
-  const [showCalendar, setShowCalendar] = useState(window.innerWidth >= 769);
+  const [showCalendar, setShowCalendar] = useState(false);
   const timelineRef = useRef();
   const timer = useRef();
 

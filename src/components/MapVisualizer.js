@@ -25,6 +25,7 @@ import {
   interpolateGreys,
   interpolatePurples,
   interpolateOranges,
+  interpolatePiYG,
 } from 'd3-scale-chromatic';
 import {select} from 'd3-selection';
 import {transition} from 'd3-transition';
@@ -37,19 +38,26 @@ import {feature, mesh} from 'topojson-client';
 const [width, height] = [432, 488];
 
 const colorInterpolator = (statistic) => {
-  switch (statistic) {
-    case 'confirmed':
-      return (t) => interpolateReds(t * 0.85);
-    case 'active':
-      return (t) => interpolateBlues(t * 0.85);
-    case 'recovered':
-      return (t) => interpolateGreens(t * 0.85);
-    case 'deceased':
-      return (t) => interpolateGreys(t * 0.85);
-    case 'tested':
-      return (t) => interpolatePurples(t * 0.85);
-    default:
-      return (t) => interpolateOranges(t * 0.85);
+  if (statistic === 'confirmed') {
+    return (t) => interpolateReds(t * 0.85);
+  } else if (statistic === 'active') {
+    return (t) => interpolateBlues(t * 0.85);
+  } else if (statistic === 'recovered') {
+    return (t) => interpolateGreens(t * 0.85);
+  } else if (statistic === 'deceased') {
+    return (t) => interpolateGreys(t * 0.85);
+  } else if (statistic === 'tested') {
+    return (t) => interpolatePurples(t * 0.85);
+  } else if (
+    statistic === 'tpr' ||
+    statistic === 'cfr' ||
+    statistic === 'other'
+  ) {
+    return (t) => interpolateOranges(t * 0.85);
+  } else if (STATISTIC_CONFIGS[statistic]?.category === 'vaccinated') {
+    return (t) => interpolatePiYG(0.15 + 0.35 * (1 - t));
+  } else {
+    return (t) => interpolateOranges(t * 0.85);
   }
 };
 
@@ -174,7 +182,7 @@ function MapVisualizer({
       return scaleSequential(
         [Math.min(0, statisticMin || 0), Math.max(1, statisticMax || 0)],
         colorInterpolator(statistic)
-      );
+      ).clamp(true);
     }
   }, [mapViz, statistic, statisticMin, statisticMax]);
 
