@@ -1328,6 +1328,20 @@ h6 {
           background: transparent !important;
         }
       }
+
+      .calendar-icon {
+        align-self: center;
+        cursor: pointer;
+        display: flex;
+        margin-left: 0.2rem;
+        opacity: 0;
+        transition: opacity 0.15s ease-in-out;
+
+        &.show {
+          opacity: 1;
+          pointer-events: all;
+        }
+      }
     }
 
     .wheel-buttons {
