@@ -63,7 +63,7 @@ export const STATISTIC_CONFIGS = {
     category: 'tested',
   },
   vaccinated1: {
-    displayName: 'vaccinated (at least one dose)',
+    displayName: 'vaccinated with at least one dose',
     color: '#fb5581',
     format: 'short',
     showDelta: true,
