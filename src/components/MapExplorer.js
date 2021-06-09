@@ -330,26 +330,24 @@ function MapExplorer({
             )}
           </div>
 
-          {(expandTable || width < 769) && (
-            <div className="switch-statistic fadeInUp" style={trail[5]}>
-              {MAP_STATISTICS.map((statistic) => (
-                <div
-                  key={statistic}
-                  className={classnames(
-                    'toggle',
-                    'statistic-option',
-                    `is-${statistic}`,
-                    {
-                      'is-highlighted': mapStatistic === statistic,
-                    }
-                  )}
-                  onClick={setMapStatistic.bind(this, statistic)}
-                >
-                  <DotFillIcon />
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="switch-statistic fadeInUp" style={trail[5]}>
+            {MAP_STATISTICS.map((statistic) => (
+              <div
+                key={statistic}
+                className={classnames(
+                  'toggle',
+                  'statistic-option',
+                  `is-${statistic}`,
+                  {
+                    'is-highlighted': mapStatistic === statistic,
+                  }
+                )}
+                onClick={setMapStatistic.bind(this, statistic)}
+              >
+                <DotFillIcon />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

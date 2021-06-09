@@ -1,4 +1,4 @@
-import {DATA_API_ROOT, STATE_NAMES} from '../constants';
+import {DATA_API_ROOT, MAP_STATISTICS, STATE_NAMES} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import {
   fetcher,
@@ -139,6 +139,10 @@ function State() {
     );
   }, [stateCode, data]);
 
+  const primaryStatistic = MAP_STATISTICS.includes(mapStatistic)
+    ? mapStatistic
+    : 'confirmed';
+
   return (
     <>
       <Helmet>
@@ -212,7 +216,7 @@ function State() {
               >
                 <div className="district-bar-left">
                   <h2
-                    className={classnames(mapStatistic, 'fadeInUp')}
+                    className={classnames(primaryStatistic, 'fadeInUp')}
                     style={trail[0]}
                   >
                     {t('Top districts')}
@@ -238,20 +242,20 @@ function State() {
                         const total = getStatistic(
                           data[stateCode].districts[districtName],
                           'total',
-                          mapStatistic
+                          primaryStatistic
                         );
                         const delta = getStatistic(
                           data[stateCode].districts[districtName],
                           'delta',
-                          mapStatistic
+                          primaryStatistic
                         );
                         return (
                           <div key={districtName} className="district">
                             <h2>{formatNumber(total)}</h2>
                             <h5>{t(districtName)}</h5>
-                            {mapStatistic !== 'active' && (
+                            {primaryStatistic !== 'active' && (
                               <div className="delta">
-                                <h6 className={mapStatistic}>
+                                <h6 className={primaryStatistic}>
                                   {delta > 0
                                     ? '\u2191' + formatNumber(delta)
                                     : ''}
@@ -266,8 +270,8 @@ function State() {
 
                 <div className="district-bar-right fadeInUp" style={trail[2]}>
                   {timeseries &&
-                    (mapStatistic === 'confirmed' ||
-                      mapStatistic === 'deceased') && (
+                    (primaryStatistic === 'confirmed' ||
+                      primaryStatistic === 'deceased') && (
                       <div className="happy-sign">
                         {Object.keys(timeseries[stateCode]?.dates || {})
                           .slice(-lookback)
@@ -276,17 +280,18 @@ function State() {
                               getStatistic(
                                 timeseries[stateCode].dates[date],
                                 'delta',
-                                mapStatistic
+                                primaryStatistic
                               ) === 0
                           ) && (
                           <div
                             className={`alert ${
-                              mapStatistic === 'confirmed' ? 'is-green' : ''
+                              primaryStatistic === 'confirmed' ? 'is-green' : ''
                             }`}
                           >
                             <SmileyIcon />
                             <div className="alert-right">
-                              No new {mapStatistic} cases in the past five days
+                              No new {primaryStatistic} cases in the past five
+                              days
                             </div>
                           </div>
                         )}
@@ -294,7 +299,7 @@ function State() {
                     )}
                   <DeltaBarGraph
                     timeseries={timeseries?.[stateCode]?.dates}
-                    statistic={mapStatistic}
+                    statistic={primaryStatistic}
                     {...{stateCode, lookback}}
                     forceRender={!!timeseriesResponseError}
                   />
