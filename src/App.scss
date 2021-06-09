@@ -1875,7 +1875,12 @@ abbr {
   margin-bottom: 0.25rem;
   width: 100%;
 
-  > * {
+  .table-top-left {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .toggle {
     align-items: center;
     background: $gray-light;
     border-radius: 5px;
@@ -2536,6 +2541,7 @@ abbr {
 
     &.maplegend {
       margin-top: 0.6rem;
+      user-select: none;
       width: 100%;
       z-index: 1;
     }
@@ -2661,15 +2667,21 @@ abbr {
       display: flex;
       flex-direction: column;
 
+      .disabled {
+        cursor: not-allowed !important;
+      }
+
       svg {
         transition: all 0.3s ease-in-out;
       }
 
       .is-highlighted {
-        background: $gray-middark;
+        background: $gray-middark !important;
 
         &:hover {
-          background: $gray-hover !important;
+          &:not(.disabled) {
+            background: $gray-hover !important;
+          }
         }
       }
 
@@ -2677,10 +2689,12 @@ abbr {
         color: $cherry-mid;
 
         .is-highlighted {
-          background: $cherry-light;
+          background: $cherry-light !important;
 
           &:hover {
-            background: $cherry-hover !important;
+            &:not(.disabled) {
+              background: $cherry-hover !important;
+            }
           }
         }
       }
@@ -2689,10 +2703,12 @@ abbr {
         color: $blue-mid;
 
         .is-highlighted {
-          background: $blue-light;
+          background: $blue-light !important;
 
           &:hover {
-            background: $blue-hover !important;
+            &:not(.disabled) {
+              background: $blue-hover !important;
+            }
           }
         }
       }
@@ -2701,10 +2717,12 @@ abbr {
         color: $green-mid;
 
         .is-highlighted {
-          background: $green-light;
+          background: $green-light !important;
 
           &:hover {
-            background: $green-hover !important;
+            &:not(.disabled) {
+              background: $green-hover !important;
+            }
           }
         }
       }
@@ -2713,10 +2731,12 @@ abbr {
         color: $gray-mid;
 
         .is-highlighted {
-          background: $gray-middark;
+          background: $gray-middark !important;
 
           &:hover {
-            background: $gray-hover !important;
+            &:not(.disabled) {
+              background: $gray-hover !important;
+            }
           }
         }
       }
@@ -2727,10 +2747,12 @@ abbr {
         color: $orange-mid;
 
         .is-highlighted {
-          background: $orange-light;
+          background: $orange-light !important;
 
           &:hover {
-            background: $orange-hover !important;
+            &:not(.disabled) {
+              background: $orange-hover !important;
+            }
           }
         }
       }
@@ -2739,10 +2761,12 @@ abbr {
         color: $purple-mid;
 
         .is-highlighted {
-          background: $purple-light;
+          background: $purple-light !important;
 
           &:hover {
-            background: $purple-hover !important;
+            &:not(.disabled) {
+              background: $purple-hover !important;
+            }
           }
         }
       }
@@ -2753,10 +2777,12 @@ abbr {
         color: $pink-mid;
 
         .is-highlighted {
-          background: $pink-light;
+          background: $pink-light !important;
 
           &:hover {
-            background: $pink-hover !important;
+            &:not(.disabled) {
+              background: $pink-hover !important;
+            }
           }
         }
       }
@@ -2765,10 +2791,12 @@ abbr {
         color: $brown-mid;
 
         .is-highlighted {
-          background: $brown-light;
+          background: $brown-light !important;
 
           &:hover {
-            background: $brown-hover !important;
+            &:not(.disabled) {
+              background: $brown-hover !important;
+            }
           }
         }
       }
@@ -2780,7 +2808,7 @@ abbr {
         justify-content: flex-end;
         margin-bottom: 0.25rem;
 
-        > div {
+        .toggle {
           align-items: center;
           background: $gray-light;
           border-radius: 5px;
@@ -2789,6 +2817,7 @@ abbr {
           flex-direction: row;
           height: 2.5rem;
           justify-content: center;
+          margin-left: 0.25rem;
           width: 2.5rem;
 
           &.back {
@@ -2804,10 +2833,6 @@ abbr {
             &:not(.disabled) {
               background: $gray-hover;
             }
-          }
-
-          &:not(:last-child) {
-            margin-right: 0.25rem;
           }
 
           svg {
@@ -2828,7 +2853,7 @@ abbr {
         position: absolute;
         top: 5rem;
 
-        div {
+        .statistic-option {
           background: none;
           display: flex;
           flex-direction: row;
