@@ -155,9 +155,15 @@ function legend({
   tickValues,
   ordinalWeights,
 } = {}) {
-  svg.selectAll('.circles > *').remove();
-  svg.selectAll('.circleAxis > *').remove();
   const t = svg.transition().duration(D3_TRANSITION_DURATION);
+  svg
+    .select('.circles')
+    .selectAll('circle')
+    .transition(t)
+    .attr('r', 0)
+    .attr('cy', 0)
+    .remove();
+  svg.selectAll('.circleAxis > *').remove();
 
   let tickAdjust = (g) => {
     const ticks = g.selectAll('.tick line');

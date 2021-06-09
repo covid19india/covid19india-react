@@ -2199,6 +2199,7 @@ abbr {
 
       .cell {
         background: $gray-hover-opaque !important;
+        padding-bottom: 0.75rem;
       }
     }
 
@@ -2287,6 +2288,39 @@ abbr {
         }
       }
 
+      .map-indicator {
+        background: $gray-hover;
+        border-radius: 0 0 3px 3px;
+        bottom: 0;
+        height: 0.25rem;
+        opacity: 0.5;
+        position: absolute;
+        right: 0;
+        transition: background 0.2s ease-in-out;
+        width: 100%;
+
+        svg {
+          margin-right: 0 !important;
+        }
+
+        &.highlighted {
+          &.is-caseGrowth {
+            background-image: linear-gradient(
+              to right,
+              #1a9850,
+              #1a9850 25%,
+              #fee08b 25%,
+              #fee08b 50%,
+              #fc8d59 50%,
+              #fc8d59 75%,
+              #d73027 75%,
+              #d73027 100%
+            );
+            opacity: 0.8;
+          }
+        }
+      }
+
       &.statistic {
         align-items: flex-end;
         display: flex;
@@ -2334,6 +2368,14 @@ abbr {
         font-weight: 900;
         padding: 1.25rem 0.5rem 0.75rem;
         text-align: right;
+
+        &.state {
+          padding: 1.5rem 0.5rem 0.75rem;
+
+          .sort-icon {
+            top: 0.5rem;
+          }
+        }
 
         &:hover {
           background: $gray-hover-opaque !important;
@@ -2615,11 +2657,20 @@ abbr {
     }
 
     .panel-right {
+      color: $gray-mid;
       display: flex;
       flex-direction: column;
 
       svg {
         transition: all 0.3s ease-in-out;
+      }
+
+      .is-highlighted {
+        background: $gray-middark;
+
+        &:hover {
+          background: $gray-hover !important;
+        }
       }
 
       &.is-confirmed {
@@ -2666,6 +2717,58 @@ abbr {
 
           &:hover {
             background: $gray-hover !important;
+          }
+        }
+      }
+
+      &.is-tpr,
+      &.is-cfr,
+      &.is-other {
+        color: $orange-mid;
+
+        .is-highlighted {
+          background: $orange-light;
+
+          &:hover {
+            background: $orange-hover !important;
+          }
+        }
+      }
+
+      &.is-tested {
+        color: $purple-mid;
+
+        .is-highlighted {
+          background: $purple-light;
+
+          &:hover {
+            background: $purple-hover !important;
+          }
+        }
+      }
+
+      &.is-vaccinated,
+      &.is-vaccinated1,
+      &.is-vaccinated2 {
+        color: $pink-mid;
+
+        .is-highlighted {
+          background: $pink-light;
+
+          &:hover {
+            background: $pink-hover !important;
+          }
+        }
+      }
+
+      &.is-population {
+        color: $brown-mid;
+
+        .is-highlighted {
+          background: $brown-light;
+
+          &:hover {
+            background: $brown-hover !important;
           }
         }
       }
@@ -2740,6 +2843,18 @@ abbr {
 
           &:hover {
             background: none;
+          }
+
+          svg {
+            fill: $gray-hover;
+            stroke: none;
+          }
+
+          &.is-highlighted {
+            svg {
+              fill: $gray;
+              transform: scale(1.25);
+            }
           }
 
           &.is-confirmed {
@@ -4837,6 +4952,14 @@ footer {
       h2 {
         &.tested {
           color: #9673b9 !important;
+        }
+      }
+    }
+
+    .panel {
+      .panel-left {
+        .tested {
+          color: $dark-m-purple !important;
         }
       }
     }

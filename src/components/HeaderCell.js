@@ -7,7 +7,7 @@ import {InfoIcon, SortAscIcon, SortDescIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import {memo, useRef} from 'react';
+import {memo, useCallback, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useLongPress} from 'react-use';
 
@@ -27,19 +27,22 @@ function StateHeaderCell({handleSort, sortData, setSortData, statistic}) {
   };
   const longPressEvent = useLongPress(onLongPress, {isPreventDefault: false});
 
-  const handleClick = (statistic) => {
-    if (wasLongPressed.current) {
-      wasLongPressed.current = false;
-    } else {
-      handleSort(statistic);
-    }
-  };
+  const handleClick = useCallback(
+    (statistic) => {
+      if (wasLongPressed.current) {
+        wasLongPressed.current = false;
+      } else {
+        handleSort(statistic);
+      }
+    },
+    [handleSort]
+  );
 
   const statisticConfig = STATISTIC_CONFIGS[statistic];
 
   return (
     <div
-      className="cell heading"
+      className={classnames('cell', 'heading')}
       onClick={handleClick.bind(this, statistic)}
       {...longPressEvent}
     >

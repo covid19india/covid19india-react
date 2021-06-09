@@ -87,6 +87,14 @@ function MapExplorer({
     });
   }, [data, regionHighlighted.stateCode, regionHighlighted.districtName]);
 
+  const handlePerLakhClick = useCallback(() => {
+    const statisticConfig = STATISTIC_CONFIGS[mapStatistic];
+    if (statisticConfig?.nonLinear || mapStatistic === 'population') {
+      return;
+    }
+    setIsPerLakh((isPerLakh) => !isPerLakh);
+  }, [mapStatistic, setIsPerLakh]);
+
   const handleDistrictClick = useCallback(() => {
     const newMapView =
       mapView === MAP_VIEWS.DISTRICTS ? MAP_VIEWS.STATES : MAP_VIEWS.DISTRICTS;
@@ -129,7 +137,8 @@ function MapExplorer({
 
       return getStatistic(data, type, mapStatistic, {
         expiredDate: lastUpdatedDate,
-        normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
+        normalizedByPopulationPer:
+          isPerLakh && mapStatistic != 'population' ? 'lakh' : null,
         canBeNaN: true,
       });
     },
@@ -163,7 +172,10 @@ function MapExplorer({
   const statisticConfig = STATISTIC_CONFIGS[mapStatistic];
 
   const mapViz =
-    isPerLakh || statisticConfig?.mapConfig?.colorScale
+    mapStatistic !== 'population' &&
+    (isPerLakh ||
+      statisticConfig?.mapConfig?.colorScale ||
+      statisticConfig?.nonLinear)
       ? MAP_VIZS.CHOROPLETH
       : MAP_VIZS.BUBBLES;
 
@@ -216,7 +228,10 @@ function MapExplorer({
       </div>
       <div className="panel" ref={panelRef}>
         <div className="panel-left fadeInUp" style={trail[0]}>
-          <h2 className={classnames(mapStatistic)} style={{color: zoneColor}}>
+          <h2
+            className={classnames(mapStatistic)}
+            style={{color: zoneColor || statisticConfig?.color}}
+          >
             {t(hoveredRegion.name)}
             {hoveredRegion.name === UNKNOWN_DISTRICT_KEY &&
               ` [${t(STATE_NAMES[regionHighlighted.stateCode])}]`}
@@ -225,21 +240,17 @@ function MapExplorer({
           {regionHighlighted.stateCode && (
             <h1
               className={classnames('district', mapStatistic)}
-              style={{color: zoneColor}}
+              style={{color: zoneColor || statisticConfig?.color}}
             >
               <animated.div>
                 {spring.total.to((total) =>
-                  formatNumber(
-                    total,
-                    statisticConfig.format === 'short'
-                      ? 'long'
-                      : statisticConfig.format,
-                    mapStatistic
-                  )
+                  formatNumber(total, statisticConfig.format, mapStatistic)
                 )}
               </animated.div>
               <span>{`${t(capitalize(statisticConfig.displayName))}${
-                isPerLakh && !statisticConfig?.nonLinear
+                isPerLakh &&
+                !statisticConfig?.nonLinear &&
+                mapStatistic !== 'population'
                   ? ` ${t('per lakh')}`
                   : ''
               }${
@@ -267,8 +278,10 @@ function MapExplorer({
             <div
               className={classnames('fadeInUp', {
                 'is-highlighted': mapViz === MAP_VIZS.CHOROPLETH,
+                disabled:
+                  statisticConfig?.nonLinear || mapStatistic === 'population',
               })}
-              onClick={setIsPerLakh.bind(this, !isPerLakh)}
+              onClick={handlePerLakhClick}
               style={trail[2]}
             >
               <PerLakhIcon />

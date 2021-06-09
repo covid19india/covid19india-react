@@ -55,6 +55,8 @@ function Table({
   lastUpdatedDate,
   delta7Mode,
   setDelta7Mode,
+  mapStatistic,
+  setMapStatistic,
 }) {
   const {t} = useTranslation();
   const [sortData, setSortData] = useSessionStorage('sortData', {
@@ -395,7 +397,11 @@ function Table({
             {tableStatistics.map((statistic) => (
               <HeaderCell
                 key={statistic}
-                {...{statistic, sortData, setSortData}}
+                {...{
+                  statistic,
+                  sortData,
+                  setSortData,
+                }}
                 handleSort={handleSortClick.bind(this, statistic)}
               />
             ))}
@@ -463,6 +469,8 @@ function Table({
               expandTable,
               tableStatistics,
               getTableStatistic,
+              mapStatistic,
+              setMapStatistic,
             }}
           />
         </div>
@@ -523,6 +531,8 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
     return false;
   } else if (!equal(prevProps.delta7Mode, currProps.delta7Mode)) {
+    return false;
+  } else if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
     return false;
   } else if (
     !equal(

@@ -48,6 +48,7 @@ export const STATISTIC_CONFIGS = {
   other: {
     displayName: 'other',
     format: 'long',
+    color: '#fd7e14',
     showDelta: true,
     tableConfig: {
       notes: 'Migrated cases or non-COVID deaths',
@@ -100,7 +101,7 @@ export const STATISTIC_CONFIGS = {
   cfr: {
     displayName: 'case fatality ratio',
     format: '%',
-    color: '#6c757d',
+    color: '#fd7e14',
     nonLinear: true,
   },
   recoveryRatio: {
@@ -144,6 +145,7 @@ export const STATISTIC_CONFIGS = {
   population: {
     displayName: 'population',
     format: 'short',
+    color: '#b6854d',
     hideZero: true,
   },
 };
