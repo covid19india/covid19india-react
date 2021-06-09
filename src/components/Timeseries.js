@@ -12,12 +12,12 @@ import {
 } from '../utils/commonFunctions';
 
 import classnames from 'classnames';
-import {min, max, bisector} from 'd3-array';
+import {bisector, extent} from 'd3-array';
 import {axisBottom, axisRight} from 'd3-axis';
 import {interpolatePath} from 'd3-interpolate-path';
 import {scaleTime, scaleLinear, scaleLog} from 'd3-scale';
 import {select, pointer} from 'd3-selection';
-import {area, line, curveMonotoneX, curveStep} from 'd3-shape';
+import {area, line, curveLinear, curveMonotoneX, curveStep} from 'd3-shape';
 import 'd3-transition';
 import {differenceInDays} from 'date-fns';
 import equal from 'fast-deep-equal';
@@ -97,36 +97,23 @@ function Timeseries({
       return scale;
     };
 
-    const uniformScaleMin = Math.min(
-      0,
-      min(dates, (date) =>
-        getStatistic(timeseries[date], chartType, 'active', {
-          movingAverage: isMovingAverage,
-        })
-      ) || 0
-    );
-
-    const uniformScaleMax = Math.max(
-      1,
-      max(dates, (date) =>
-        Math.max(
-          getStatistic(timeseries[date], chartType, 'confirmed', {
-            movingAverage: isMovingAverage,
-          }),
-          getStatistic(timeseries[date], chartType, 'recovered', {
-            movingAverage: isMovingAverage,
-          }),
-          getStatistic(timeseries[date], chartType, 'deceased', {
-            movingAverage: isMovingAverage,
-          })
-        )
-      ) || 0
+    const [uniformScaleMin, uniformScaleMax] = extent(
+      dates.reduce((res, date) => {
+        res.push(
+          ...PRIMARY_STATISTICS.map((statistic) =>
+            getStatistic(timeseries[date], chartType, statistic, {
+              movingAverage: isMovingAverage,
+            })
+          )
+        );
+        return res;
+      }, [])
     );
 
     const yScaleUniformLinear = addScaleBuffer(
       scaleLinear()
         .clamp(true)
-        .domain([uniformScaleMin, uniformScaleMax])
+        .domain([Math.min(0, uniformScaleMin), Math.max(1, uniformScaleMax)])
         .range([chartBottom, margin.top])
         .nice(4)
     );
@@ -134,65 +121,57 @@ function Timeseries({
     const yScaleUniformLog = addScaleBuffer(
       scaleLog()
         .clamp(true)
-        .domain([Math.max(1, uniformScaleMin), Math.max(10, uniformScaleMax)])
+        .domain([1, Math.max(10, uniformScaleMax)])
         .range([chartBottom, margin.top])
         .nice(4),
       true
     );
 
     return statistics.map((statistic) => {
-      if (
-        isUniform &&
-        chartType === 'total' &&
-        isLog &&
-        PRIMARY_STATISTICS.includes(statistic)
-      )
-        return yScaleUniformLog;
+      if (isUniform) {
+        if (
+          chartType === 'total' &&
+          isLog &&
+          PRIMARY_STATISTICS.includes(statistic)
+        ) {
+          return yScaleUniformLog;
+        } else if (PRIMARY_STATISTICS.includes(statistic)) {
+          return yScaleUniformLinear;
+        }
+      }
 
-      if (isUniform && PRIMARY_STATISTICS.includes(statistic))
-        return yScaleUniformLinear;
-
-      const scaleMin = Math.min(
-        0,
-        min(dates, (date) =>
-          getStatistic(timeseries[date], chartType, statistic, {
-            movingAverage: isMovingAverage,
-          })
-        ) || 0
-      );
-
-      const scaleMax = Math.max(
-        1,
-        max(dates, (date) =>
-          getStatistic(timeseries[date], chartType, statistic, {
-            movingAverage: isMovingAverage,
-          })
-        ) || 0
+      const [scaleMin, scaleMax] = extent(dates, (date) =>
+        getStatistic(timeseries[date], chartType, statistic, {
+          movingAverage: isMovingAverage,
+        })
       );
 
       if (chartType === 'total' && isLog) {
         return addScaleBuffer(
           scaleLog()
             .clamp(true)
-            .domain([Math.max(1, scaleMin), Math.max(10, scaleMax)])
+            .domain([1, Math.max(10, scaleMax)])
             .range([chartBottom, margin.top])
             .nice(4),
           true
         );
+      } else {
+        return addScaleBuffer(
+          scaleLinear()
+            .clamp(true)
+            .domain([
+              // No negative values except delta active
+              chartType === 'total' || statistic !== 'active'
+                ? 0
+                : Math.min(0, scaleMin),
+              STATISTIC_CONFIGS[statistic].format === '%'
+                ? Math.min(100, Math.max(1, scaleMax))
+                : Math.max(1, scaleMax),
+            ])
+            .range([chartBottom, margin.top])
+            .nice(4)
+        );
       }
-
-      return addScaleBuffer(
-        scaleLinear()
-          .clamp(true)
-          .domain([
-            chartType === 'total' || statistic !== 'active' ? 0 : scaleMin,
-            STATISTIC_CONFIGS[statistic].format === '%'
-              ? Math.min(100, scaleMax)
-              : scaleMax,
-          ])
-          .range([chartBottom, margin.top])
-          .nice(4)
-      );
     });
   }, [
     height,
@@ -265,9 +244,10 @@ function Timeseries({
       const t = svg.transition().duration(D3_TRANSITION_DURATION);
 
       const yScale = yScales[i];
-      const color = STATISTIC_CONFIGS[statistic].color;
+      const statisticConfig = STATISTIC_CONFIGS[statistic];
       const format =
         STATISTIC_CONFIGS[statistic].format === '%' ? '%' : 'short';
+      const isNonLinear = !!STATISTIC_CONFIGS[statistic]?.nonLinear;
 
       /* X axis */
       svg
@@ -293,8 +273,8 @@ function Timeseries({
           enter
             .append('circle')
             .attr('class', 'normal')
-            .attr('fill', color)
-            .attr('stroke', color)
+            .attr('fill', statisticConfig?.color)
+            .attr('stroke', statisticConfig?.color)
             .attr('cx', (date) => xScale(parseIndiaDate(date)))
             .attr('cy', (date) =>
               yScale(
@@ -331,7 +311,11 @@ function Timeseries({
 
       svg
         .selectAll('.trend-area')
-        .data(T && chartType === 'delta' && condenseChart ? [dates] : [])
+        .data(
+          T && chartType === 'delta' && !isNonLinear && condenseChart
+            ? [dates]
+            : []
+        )
         .join(
           (enter) =>
             enter
@@ -365,7 +349,9 @@ function Timeseries({
       svg
         .selectAll('.stem')
         .data(
-          T && chartType === 'delta' && !condenseChart ? dates : [],
+          T && chartType === 'delta' && !isNonLinear && !condenseChart
+            ? dates
+            : [],
           (date) => date
         )
         .join(
@@ -399,20 +385,29 @@ function Timeseries({
         )
         .attr('opacity', isMovingAverage ? 0.2 : 1);
 
-      const linePath = line()
-        .curve(curveMonotoneX)
-        .x((date) => xScale(parseIndiaDate(date)))
-        .y((date) =>
-          yScale(
-            getStatistic(timeseries[date], chartType, statistic, {
-              movingAverage: isMovingAverage,
-            })
-          )
-        );
+      const linePath = (
+        movingAverage = isMovingAverage,
+        curve = curveMonotoneX
+      ) =>
+        line()
+          .curve(curve)
+          .x((date) => xScale(parseIndiaDate(date)))
+          .y((date) =>
+            yScale(
+              getStatistic(timeseries[date], chartType, statistic, {
+                movingAverage,
+              })
+            )
+          );
 
       svg
-        .selectAll('.trend')
-        .data(T && (chartType === 'total' || isMovingAverage) ? [dates] : [])
+        .select('.trend')
+        .selectAll('path')
+        .data(
+          T && (chartType === 'total' || isNonLinear || isMovingAverage)
+            ? [dates]
+            : []
+        )
         .join(
           (enter) =>
             enter
@@ -420,7 +415,7 @@ function Timeseries({
               .attr('class', 'trend')
               .attr('fill', 'none')
               .attr('stroke-width', 4)
-              .attr('d', linePath)
+              .attr('d', linePath())
               .call((enter) => enter.transition(t).attr('opacity', 1)),
           (update) =>
             update.call((update) =>
@@ -429,14 +424,44 @@ function Timeseries({
                 .transition(t)
                 .attrTween('d', function (date) {
                   const previous = select(this).attr('d');
-                  const current = linePath(date);
+                  const current = linePath()(date);
                   return interpolatePath(previous, current);
                 })
             ),
           (exit) =>
             exit.call((exit) => exit.transition(t).attr('opacity', 0).remove())
         )
-        .attr('stroke', color + (condenseChart ? '99' : '50'));
+        .attr('stroke', statisticConfig?.color + (condenseChart ? '99' : '50'));
+
+      svg
+        .select('.trend-background')
+        .selectAll('path')
+        .data(
+          T && chartType === 'delta' && isNonLinear && isMovingAverage
+            ? [dates]
+            : []
+        )
+        .join(
+          (enter) =>
+            enter
+              .append('path')
+              .attr('class', 'trend-background')
+              .attr('fill', 'none')
+              .attr('stroke-width', 4)
+              .attr('d', linePath(false, curveLinear))
+              .call((enter) => enter.transition(t).attr('opacity', 0.2)),
+          (update) =>
+            update.call((update) =>
+              update.transition(t).attrTween('d', function (date) {
+                const previous = select(this).attr('d');
+                const current = linePath(false, curveLinear)(date);
+                return interpolatePath(previous, current);
+              })
+            ),
+          (exit) =>
+            exit.call((exit) => exit.transition(t).attr('opacity', 0).remove())
+        )
+        .attr('stroke', statisticConfig?.color + (condenseChart ? '99' : '50'));
 
       svg.selectAll('*').attr('pointer-events', 'none');
       svg
@@ -461,7 +486,7 @@ function Timeseries({
     statistics.forEach((statistic, i) => {
       const ref = refs.current[i];
       const svg = select(ref);
-      const color = STATISTIC_CONFIGS[statistic].color;
+      const statisticConfig = STATISTIC_CONFIGS[statistic];
       const yScale = yScales[i];
       const t = svg.transition().duration(D3_TRANSITION_DURATION);
 
@@ -475,8 +500,8 @@ function Timeseries({
           enter
             .append('circle')
             .attr('class', 'condensed')
-            .attr('fill', color)
-            .attr('stroke', color)
+            .attr('fill', statisticConfig?.color)
+            .attr('stroke', statisticConfig?.color)
             .attr('pointer-events', 'none')
             .attr('cx', (date) => xScale(parseIndiaDate(date)))
             .attr('cy', (date) =>
@@ -601,6 +626,8 @@ function Timeseries({
               <g className="x-axis" />
               <g className="x-axis2" />
               <g className="y-axis" />
+              <g className="trend-background" />
+              <g className="trend" />
             </svg>
           </div>
         );
