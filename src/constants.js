@@ -165,7 +165,7 @@ export const TABLE_STATISTICS_EXPANDED = Object.keys(STATISTIC_CONFIGS).filter(
   (statistic) => !STATISTIC_CONFIGS[statistic]?.tableConfig?.hide
 );
 
-export const MAP_STATISTICS = [...PRIMARY_STATISTICS];
+export const MAP_STATISTICS = [...PRIMARY_STATISTICS, 'vaccinated'];
 
 export const TIMESERIES_STATISTICS = [
   ...PRIMARY_STATISTICS,

@@ -1,8 +1,4 @@
-import {
-  PRIMARY_STATISTICS,
-  STATISTIC_CONFIGS,
-  D3_TRANSITION_DURATION,
-} from '../constants';
+import {STATISTIC_CONFIGS, D3_TRANSITION_DURATION} from '../constants';
 import {
   formatDate,
   formatNumber,
@@ -25,12 +21,9 @@ const getDeltaStatistic = (data, statistic) => {
 
 const margin = {top: 50, right: 0, bottom: 50, left: 0};
 
-function DeltaBarGraph({timeseries, statistic: originalStatistic, lookback}) {
+function DeltaBarGraph({timeseries, statistic, lookback}) {
   const svgRef = useRef();
   const [wrapperRef, {width, height}] = useMeasure();
-  const statistic = PRIMARY_STATISTICS.includes(originalStatistic)
-    ? originalStatistic
-    : 'confirmed';
 
   const pastDates = Object.keys(timeseries || {}).filter(
     (date) => date <= getIndiaDateYesterdayISO()
