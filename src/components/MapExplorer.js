@@ -59,8 +59,6 @@ function MapExplorer({
   expandTable = false,
   hideDistrictData = false,
   lastUpdatedDate,
-  delta7Mode,
-  setDelta7Mode,
 }) {
   const {t} = useTranslation();
   const mapExplorerRef = useRef();
@@ -68,6 +66,7 @@ function MapExplorer({
 
   const [mapView, setMapView] = useState(MAP_VIEWS.DISTRICTS);
   const [isPerLakh, setIsPerLakh] = useState(false);
+  const [delta7Mode, setDelta7Mode] = useState(false);
 
   const mapMeta = MAP_META[mapCode];
   const mapData =
@@ -259,10 +258,9 @@ function MapExplorer({
                   ? ` ${t('per lakh')}`
                   : ''
               }${
-                (delta7Mode ||
-                  statisticConfig?.tableConfig?.type === 'delta7') &&
-                statisticConfig?.showDelta
-                  ? ` ${t('last 7 days')}`
+                (delta7Mode && statisticConfig?.showDelta) ||
+                statisticConfig?.tableConfig?.type === 'delta7'
+                  ? ` ${t('in last 7 days')}`
                   : ''
               }`}</span>
             </h1>
@@ -275,9 +273,8 @@ function MapExplorer({
               <div
                 className={classnames('toggle', 'fadeInUp', {
                   'is-highlighted':
-                    statisticConfig?.showDelta &&
-                    (delta7Mode ||
-                      statisticConfig?.tableConfig?.type === 'delta7'),
+                    (delta7Mode && statisticConfig?.showDelta) ||
+                    statisticConfig?.tableConfig?.type === 'delta7',
                   disabled: !statisticConfig?.showDelta,
                 })}
                 onClick={handleDeltaClick}
@@ -406,8 +403,6 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(prevProps.hideDistrictData, currProps.hideDistrictData)) {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
-    return false;
-  } else if (!equal(prevProps.delta7Mode, currProps.delta7Mode)) {
     return false;
   } else if (
     !equal(

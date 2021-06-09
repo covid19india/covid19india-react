@@ -45,7 +45,6 @@ function Home() {
     'mapStatistic',
     'active'
   );
-  const [delta7Mode, setDelta7Mode] = useState(false);
   const [date, setDate] = useState('');
   const location = useLocation();
 
@@ -164,8 +163,6 @@ function Home() {
                   hideDistrictData,
                   hideVaccinated,
                   lastUpdatedDate,
-                  delta7Mode,
-                  setDelta7Mode,
                   mapStatistic,
                   setMapStatistic,
                 }}
@@ -204,8 +201,6 @@ function Home() {
                         expandTable,
                         hideDistrictData,
                         lastUpdatedDate,
-                        delta7Mode,
-                        setDelta7Mode,
                       }}
                     />
                   </Suspense>

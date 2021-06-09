@@ -54,8 +54,6 @@ function Table({
   hideDistrictData,
   hideVaccinated,
   lastUpdatedDate,
-  delta7Mode,
-  setDelta7Mode,
   mapStatistic,
   setMapStatistic,
 }) {
@@ -66,6 +64,7 @@ function Table({
     delta: false,
   });
   const [page, setPage] = useState(0);
+  const [delta7Mode, setDelta7Mode] = useState(false);
 
   const handleSortClick = useCallback(
     (statistic) => {
@@ -540,8 +539,6 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(prevProps.hideVaccinated, currProps.hideVaccinated)) {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
-    return false;
-  } else if (!equal(prevProps.delta7Mode, currProps.delta7Mode)) {
     return false;
   } else if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
     return false;
