@@ -1,6 +1,11 @@
 import TableLoader from './loaders/Table';
 
-import {DATA_API_ROOT, GOSPEL_DATE} from '../constants';
+import {
+  DATA_API_ROOT,
+  DISTRICT_START_DATE,
+  DISTRICT_TEST_END_DATE,
+  TESTED_EXPIRING_DAYS,
+} from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
 import {
@@ -11,7 +16,7 @@ import {
 } from '../utils/commonFunctions';
 
 import classnames from 'classnames';
-import {formatISO, max} from 'date-fns';
+import {addDays, formatISO, max} from 'date-fns';
 import {useMemo, useRef, useState, lazy, Suspense} from 'react';
 import {Helmet} from 'react-helmet';
 import {useLocation} from 'react-router-dom';
@@ -70,7 +75,15 @@ function Home() {
   const isVisible = useIsVisible(homeRightElement);
   const {width} = useWindowSize();
 
-  const hideDistrictData = date !== '' && date < GOSPEL_DATE;
+  const hideDistrictData = date !== '' && date < DISTRICT_START_DATE;
+  const hideDistrictTestData =
+    date === '' ||
+    date >
+      formatISO(
+        addDays(parseIndiaDate(DISTRICT_TEST_END_DATE), TESTED_EXPIRING_DAYS),
+        {representation: 'date'}
+      );
+
   const hideVaccinated =
     getStatistic(data?.['TT'], 'total', 'vaccinated') === 0;
 
@@ -161,6 +174,7 @@ function Home() {
                   expandTable,
                   setExpandTable,
                   hideDistrictData,
+                  hideDistrictTestData,
                   hideVaccinated,
                   lastUpdatedDate,
                   mapStatistic,
@@ -199,8 +213,10 @@ function Home() {
                         anchor,
                         setAnchor,
                         expandTable,
-                        hideDistrictData,
                         lastUpdatedDate,
+                        hideDistrictData,
+                        hideDistrictTestData,
+                        hideVaccinated,
                       }}
                     />
                   </Suspense>

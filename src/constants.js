@@ -190,7 +190,9 @@ export const UNASSIGNED_STATE_CODE = 'UN';
 
 export const UNKNOWN_DISTRICT_KEY = 'Unknown';
 
-export const GOSPEL_DATE = '2020-04-26';
+export const DISTRICT_START_DATE = '2020-04-26';
+
+export const DISTRICT_TEST_END_DATE = '2021-02-02';
 
 export const ISO_DATE_REGEX = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/g;
 

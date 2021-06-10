@@ -52,6 +52,7 @@ function Table({
   expandTable,
   setExpandTable,
   hideDistrictData,
+  hideDistrictTestData,
   hideVaccinated,
   lastUpdatedDate,
   mapStatistic,
@@ -223,8 +224,11 @@ function Table({
     expandTable ? TABLE_STATISTICS_EXPANDED : TABLE_STATISTICS
   ).filter(
     (statistic) =>
-      !(STATISTIC_CONFIGS[statistic]?.category === 'vaccinated') ||
-      !hideVaccinated
+      (tableOption === 'States' ||
+        STATISTIC_CONFIGS[statistic]?.category !== 'tested' ||
+        !hideDistrictTestData) &&
+      (STATISTIC_CONFIGS[statistic]?.category !== 'vaccinated' ||
+        !hideVaccinated)
   );
 
   const showDistricts = tableOption === 'Districts' && !hideDistrictData;
@@ -245,6 +249,7 @@ function Table({
             <animated.div
               className={classnames('toggle', 'option-toggle', {
                 'is-highlighted': showDistricts,
+                disabled: hideDistrictData,
               })}
               onClick={_setTableOption}
               style={trail[0]}
@@ -536,6 +541,11 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(prevProps.date, currProps.date)) {
     return false;
   } else if (!equal(prevProps.hideDistrictData, currProps.hideDistrictData)) {
+    return false;
+  } else if (
+    !equal(prevProps.hideDistrictTestData, currProps.hideDistrictTestData)
+  ) {
+    return false;
   } else if (!equal(prevProps.hideVaccinated, currProps.hideVaccinated)) {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {

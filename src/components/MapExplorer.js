@@ -57,8 +57,10 @@ function MapExplorer({
   anchor,
   setAnchor,
   expandTable = false,
-  hideDistrictData = false,
   lastUpdatedDate,
+  hideDistrictData = false,
+  hideDistrictTestData = false,
+  hideVaccinated = false,
 }) {
   const {t} = useTranslation();
   const mapExplorerRef = useRef();
@@ -157,15 +159,25 @@ function MapExplorer({
     config: {tension: 250, ...SPRING_CONFIG_NUMBERS},
   });
 
+  const mapStatistics = useMemo(
+    () =>
+      MAP_STATISTICS.filter(
+        (statistic) =>
+          !(STATISTIC_CONFIGS[statistic]?.category === 'vaccinated') ||
+          !hideVaccinated
+      ),
+    [hideVaccinated]
+  );
+
   const handleStatisticChange = useCallback(
     (direction) => {
-      const currentIndex = MAP_STATISTICS.indexOf(mapStatistic);
+      const currentIndex = mapStatistics.indexOf(mapStatistic);
       const toIndex =
-        (MAP_STATISTICS.length + currentIndex + direction) %
-        MAP_STATISTICS.length;
-      setMapStatistic(MAP_STATISTICS[toIndex]);
+        (mapStatistics.length + currentIndex + direction) %
+        mapStatistics.length;
+      setMapStatistic(mapStatistics[toIndex]);
     },
-    [mapStatistic, setMapStatistic]
+    [mapStatistic, mapStatistics, setMapStatistic]
   );
 
   const swipeHandlers = useSwipeable({
@@ -189,7 +201,10 @@ function MapExplorer({
     }
   }, [statisticConfig, setDelta7Mode]);
 
-  const isDistrictView = mapView === MAP_VIEWS.DISTRICTS && !hideDistrictData;
+  const isDistrictView =
+    mapView === MAP_VIEWS.DISTRICTS &&
+    !hideDistrictData &&
+    !(hideDistrictTestData && statisticConfig?.category === 'tested');
 
   const stickied = anchor === 'mapexplorer' || (expandTable && width >= 769);
 
@@ -305,6 +320,10 @@ function MapExplorer({
                 <div
                   className={classnames('toggle', 'boundary fadeInUp', {
                     'is-highlighted': isDistrictView,
+                    disabled:
+                      hideDistrictData ||
+                      (statisticConfig?.category === 'tested' &&
+                        hideDistrictTestData),
                   })}
                   onClick={handleDistrictClick}
                   style={trail[3]}
@@ -331,7 +350,7 @@ function MapExplorer({
           </div>
 
           <div className="switch-statistic fadeInUp" style={trail[5]}>
-            {MAP_STATISTICS.map((statistic) => (
+            {mapStatistics.map((statistic) => (
               <div
                 key={statistic}
                 className={classnames(
@@ -398,9 +417,15 @@ const isEqual = (prevProps, currProps) => {
     return false;
   } else if (!equal(prevProps.anchor, currProps.anchor)) {
     return false;
+  } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
+    return false;
   } else if (!equal(prevProps.hideDistrictData, currProps.hideDistrictData)) {
     return false;
-  } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
+  } else if (
+    !equal(prevProps.hideDistrictTestData, currProps.hideDistrictTestData)
+  ) {
+    return false;
+  } else if (!equal(prevProps.hideVaccinated, currProps.hideVaccinated)) {
     return false;
   } else if (
     !equal(

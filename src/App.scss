@@ -1908,12 +1908,18 @@ abbr {
     user-select: none;
     width: 2.5rem;
 
+    &.disabled {
+      cursor: not-allowed;
+    }
+
     svg {
       margin: 0.25rem;
     }
 
     &:hover {
-      background: $gray-hover;
+      &:not(.disabled) {
+        background: $gray-hover;
+      }
     }
   }
 

@@ -228,13 +228,13 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
                   </h5>
                   <div
                     className={classnames('calendar-icon', {
-                      show:
-                        slide === sliderState?.absoluteSlide &&
-                        slide !== sliderState.size - 1,
+                      show: slide === sliderState?.absoluteSlide,
                     })}
                     onClick={setShowCalendar.bind(this, !showCalendar)}
                   >
-                    <CalendarIcon size={12} />
+                    {slide !== sliderState.size - 1 && (
+                      <CalendarIcon size={12} />
+                    )}
                   </div>
                 </div>
               ))}
