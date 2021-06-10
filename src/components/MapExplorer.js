@@ -301,7 +301,7 @@ function MapExplorer({
             </Tooltip>
 
             {mapMeta.mapType === MAP_TYPES.COUNTRY && (
-              <Tooltip message={'Toggle districts/states'} hold>
+              <Tooltip message={'Toggle between states/districts'} hold>
                 <div
                   className={classnames('toggle', 'boundary fadeInUp', {
                     'is-highlighted': isDistrictView,
