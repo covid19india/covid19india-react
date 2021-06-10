@@ -241,7 +241,7 @@ function Table({
     <div className="Table">
       <div className="table-top">
         <div className="table-top-left">
-          <Tooltip message={'Toggle districts/states'} hold>
+          <Tooltip message={'Toggle between states/districts'} hold>
             <animated.div
               className={classnames('toggle', 'option-toggle', {
                 'is-highlighted': showDistricts,

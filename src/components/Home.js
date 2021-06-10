@@ -174,7 +174,7 @@ function Home() {
         <div
           className={classnames('home-right', {expanded: expandTable})}
           ref={homeRightElement}
-          style={{minHeight: '2rem'}}
+          style={{minHeight: '4rem'}}
         >
           {(isVisible || location.hash) && (
             <>
