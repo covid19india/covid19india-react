@@ -4,6 +4,7 @@ import {capitalize} from '../utils/commonFunctions';
 import equal from 'fast-deep-equal';
 import {memo, useEffect, useCallback, useMemo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
+import {useMeasure} from 'react-use';
 
 const StatisticDropdown = ({
   currentStatistic,
@@ -17,6 +18,7 @@ const StatisticDropdown = ({
   zoneColor,
 }) => {
   const {t} = useTranslation();
+  const [wrapperRef, {width}] = useMeasure();
   const selectRef = useRef();
 
   const currentStatisticConfig = STATISTIC_CONFIGS[currentStatistic];
@@ -51,6 +53,7 @@ const StatisticDropdown = ({
       visibility: hidden;
       position: fixed;
       `;
+
     tempSelect.appendChild(tempOption);
     selectRef.current.after(tempSelect);
 
@@ -59,12 +62,12 @@ const StatisticDropdown = ({
       selectRef.current.style.width = `${tempSelectWidth + 2}px`;
     }
     tempSelect.remove();
-  }, [mapStatistic]);
+  }, [width, mapStatistic]);
 
   const statisticColor = zoneColor || currentStatisticConfig?.color;
 
   return (
-    <div className="StatisticDropdown">
+    <div className="StatisticDropdown" ref={wrapperRef}>
       <select
         ref={selectRef}
         value={currentStatistic}
