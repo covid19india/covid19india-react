@@ -31,7 +31,6 @@ import {
   useEffect,
   useMemo,
   useRef,
-  useState,
   Suspense,
   lazy,
 } from 'react';
@@ -39,7 +38,7 @@ import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {animated, useSpring} from 'react-spring';
 import {useSwipeable} from 'react-swipeable';
-import {useWindowSize} from 'react-use';
+import {useSessionStorage, useWindowSize} from 'react-use';
 
 const MapVisualizer = lazy(() => retry(() => import('./MapVisualizer')));
 
@@ -64,8 +63,8 @@ function MapExplorer({
   const mapExplorerRef = useRef();
   const {width} = useWindowSize();
 
-  const [isPerLakh, setIsPerLakh] = useState(false);
-  const [delta7Mode, setDelta7Mode] = useState(false);
+  const [isPerLakh, setIsPerLakh] = useSessionStorage('isPerLakhMap', false);
+  const [delta7Mode, setDelta7Mode] = useSessionStorage('delta7ModeMap', false);
 
   const mapMeta = MAP_META[mapCode];
   const mapData =
