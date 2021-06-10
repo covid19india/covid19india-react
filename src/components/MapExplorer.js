@@ -141,7 +141,7 @@ function MapExplorer({
 
       const type =
         (statisticConfig?.showDelta && delta7Mode) ||
-        statisticConfig?.tableConfig?.type === 'delta7'
+        statisticConfig?.onlyDelta7
           ? 'delta7'
           : 'total';
 
@@ -266,12 +266,12 @@ function MapExplorer({
               <StatisticDropdown
                 currentStatistic={mapStatistic}
                 statistics={mapStatistics}
+                mapType={mapMeta.mapType}
                 {...{
                   isPerLakh,
                   delta7Mode,
                   mapStatistic,
                   setMapStatistic,
-                  isDistrictView,
                   hideDistrictTestData,
                   hideVaccinated,
                   zoneColor,
@@ -288,7 +288,7 @@ function MapExplorer({
                 className={classnames('toggle', 'fadeInUp', {
                   'is-highlighted':
                     (delta7Mode && statisticConfig?.showDelta) ||
-                    statisticConfig?.tableConfig?.type === 'delta7',
+                    statisticConfig?.onlyDelta7,
                   disabled: !statisticConfig?.showDelta,
                 })}
                 onClick={handleDeltaClick}

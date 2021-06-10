@@ -1,4 +1,8 @@
-import {TABLE_STATISTICS_ALL, STATISTIC_CONFIGS} from '../constants';
+import {
+  MAP_TYPES,
+  TABLE_STATISTICS_EXPANDED,
+  STATISTIC_CONFIGS,
+} from '../constants';
 import {capitalize} from '../utils/commonFunctions';
 
 import equal from 'fast-deep-equal';
@@ -12,7 +16,7 @@ const StatisticDropdown = ({
   delta7Mode,
   mapStatistic,
   setMapStatistic,
-  isDistrictView,
+  mapType,
   hideDistrictTestData,
   hideVaccinated,
   zoneColor,
@@ -24,9 +28,9 @@ const StatisticDropdown = ({
   const currentStatisticConfig = STATISTIC_CONFIGS[currentStatistic];
 
   const statistics = useMemo(() => {
-    const filteredStatistics = TABLE_STATISTICS_ALL.filter(
+    const filteredStatistics = TABLE_STATISTICS_EXPANDED.filter(
       (statistic) =>
-        (!isDistrictView ||
+        (mapType === MAP_TYPES.COUNTRY ||
           STATISTIC_CONFIGS[statistic]?.category !== 'tested' ||
           !hideDistrictTestData) &&
         (STATISTIC_CONFIGS[statistic]?.category !== 'vaccinated' ||
@@ -35,7 +39,7 @@ const StatisticDropdown = ({
     return filteredStatistics.includes(currentStatistic)
       ? filteredStatistics
       : [currentStatistic, ...filteredStatistics];
-  }, [currentStatistic, isDistrictView, hideDistrictTestData, hideVaccinated]);
+  }, [currentStatistic, mapType, hideDistrictTestData, hideVaccinated]);
 
   const handleChange = useCallback(
     (event) => {
@@ -96,7 +100,7 @@ const StatisticDropdown = ({
           : ''
       }${
         (delta7Mode && currentStatisticConfig?.showDelta) ||
-        currentStatisticConfig?.tableConfig?.type === 'delta7'
+        currentStatisticConfig?.onlyDelta7
           ? ` ${t('in last 7 days')}`
           : ''
       }`}</span>
@@ -113,7 +117,7 @@ const isEqual = (prevProps, currProps) => {
     return false;
   } else if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
     return false;
-  } else if (!equal(prevProps.isDistrictView, currProps.isDistrictView)) {
+  } else if (!equal(prevProps.mapType, currProps.mapType)) {
     return false;
   } else if (
     !equal(prevProps.hideDistrictTestData, currProps.hideDistrictTestData)

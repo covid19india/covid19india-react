@@ -91,10 +91,10 @@ export const STATISTIC_CONFIGS = {
     format: '%',
     color: '#fd7e14',
     nonLinear: true,
+    onlyDelta7: true,
     hideZero: true,
     category: 'tested',
     tableConfig: {
-      type: 'delta7',
       notes: 'Calculated over last 7 days',
     },
   },
@@ -161,7 +161,7 @@ export const LEVEL_STATISTICS = [...PRIMARY_STATISTICS];
 
 export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested', 'vaccinated'];
 
-export const TABLE_STATISTICS_ALL = Object.keys(STATISTIC_CONFIGS).filter(
+export const TABLE_STATISTICS_EXPANDED = Object.keys(STATISTIC_CONFIGS).filter(
   (statistic) => !STATISTIC_CONFIGS[statistic]?.tableConfig?.hide
 );
 
