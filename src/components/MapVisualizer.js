@@ -14,7 +14,7 @@ import {formatNumber, toTitleCase} from '../utils/commonFunctions';
 
 import {AlertIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
-import {extent} from 'd3-array';
+import {max} from 'd3-array';
 import {json} from 'd3-fetch';
 import {geoIdentity, geoPath} from 'd3-geo';
 import {scaleSqrt, scaleSequential} from 'd3-scale';
@@ -133,14 +133,14 @@ function MapVisualizer({
     );
   }, [geoData, isDistrictView]);
 
-  const [statisticMin, statisticMax] = useMemo(() => {
+  const statisticMax = useMemo(() => {
     const stateCodes = Object.keys(data).filter(
       (stateCode) =>
         stateCode !== 'TT' && Object.keys(MAP_META).includes(stateCode)
     );
 
     if (!isDistrictView) {
-      return extent(stateCodes, (stateCode) =>
+      return max(stateCodes, (stateCode) =>
         transformStatistic(getMapStatistic(data[stateCode]))
       );
     } else {
@@ -160,7 +160,7 @@ function MapVisualizer({
         );
         return res;
       }, []);
-      return extent(districtData);
+      return max(districtData);
     }
   }, [
     data,
@@ -180,11 +180,11 @@ function MapVisualizer({
       return STATISTIC_CONFIGS[statistic].mapConfig.colorScale;
     } else {
       return scaleSequential(
-        [Math.min(0, statisticMin || 0), Math.max(1, statisticMax || 0)],
+        [0, Math.max(1, statisticMax || 0)],
         colorInterpolator(statistic)
       ).clamp(true);
     }
-  }, [mapViz, statistic, statisticMin, statisticMax]);
+  }, [mapViz, statistic, statisticMax]);
 
   const fillColor = useCallback(
     (d) => {
