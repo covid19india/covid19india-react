@@ -177,8 +177,6 @@ function Home() {
                   hideDistrictTestData,
                   hideVaccinated,
                   lastUpdatedDate,
-                  mapStatistic,
-                  setMapStatistic,
                 }}
               />
             </Suspense>

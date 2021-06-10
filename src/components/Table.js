@@ -10,7 +10,7 @@ import {
   STATE_NAMES,
   STATISTIC_CONFIGS,
   TABLE_STATISTICS,
-  TABLE_STATISTICS_EXPANDED,
+  TABLE_STATISTICS_ALL,
   UNASSIGNED_STATE_CODE,
 } from '../constants';
 import {getStatistic, retry} from '../utils/commonFunctions';
@@ -55,8 +55,6 @@ function Table({
   hideDistrictTestData,
   hideVaccinated,
   lastUpdatedDate,
-  mapStatistic,
-  setMapStatistic,
 }) {
   const {t} = useTranslation();
   const [sortData, setSortData] = useSessionStorage('sortData', {
@@ -221,7 +219,7 @@ function Table({
   });
 
   const tableStatistics = (
-    expandTable ? TABLE_STATISTICS_EXPANDED : TABLE_STATISTICS
+    expandTable ? TABLE_STATISTICS_ALL : TABLE_STATISTICS
   ).filter(
     (statistic) =>
       (tableOption === 'States' ||
@@ -484,8 +482,6 @@ function Table({
               expandTable,
               tableStatistics,
               getTableStatistic,
-              mapStatistic,
-              setMapStatistic,
             }}
           />
         </div>
@@ -549,8 +545,6 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(prevProps.hideVaccinated, currProps.hideVaccinated)) {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
-    return false;
-  } else if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
     return false;
   } else if (
     !equal(

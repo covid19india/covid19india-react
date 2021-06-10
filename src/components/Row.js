@@ -36,8 +36,6 @@ function Row({
   setRegionHighlighted,
   expandTable,
   getTableStatistic,
-  mapStatistic,
-  setMapStatistic,
 }) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useSessionStorage('districtSortData', {
@@ -199,8 +197,6 @@ function Row({
               data,
               statistic,
               getTableStatistic,
-              mapStatistic,
-              setMapStatistic,
             }}
           />
         ))}
@@ -331,8 +327,6 @@ const isEqual = (prevProps, currProps) => {
   ) {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
-    return false;
-  } else if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
     return false;
   } else if (!equal(prevProps.getTableStatistic, currProps.getTableStatistic)) {
     return false;

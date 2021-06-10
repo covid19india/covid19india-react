@@ -3,17 +3,10 @@ import {formatNumber} from '../utils/commonFunctions';
 
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
-import {memo, useCallback} from 'react';
+import {memo} from 'react';
 import {animated, useSpring} from 'react-spring';
 
-const Cell = ({
-  statistic,
-  data,
-  lastUpdatedDate,
-  getTableStatistic,
-  setMapStatistic,
-  mapStatistic,
-}) => {
+const Cell = ({statistic, data, lastUpdatedDate, getTableStatistic}) => {
   const total = getTableStatistic(data, statistic, 'total');
   const delta = getTableStatistic(data, statistic, 'delta');
 
@@ -23,21 +16,10 @@ const Cell = ({
     config: SPRING_CONFIG_NUMBERS,
   });
 
-  const handleMapClick = useCallback(
-    (statistic, e) => {
-      e.stopPropagation();
-      setMapStatistic(statistic);
-    },
-    [setMapStatistic]
-  );
-
   const statisticConfig = STATISTIC_CONFIGS[statistic];
 
   return (
-    <div
-      className="cell statistic"
-      onClick={mapStatistic ? handleMapClick.bind(this, statistic) : null}
-    >
+    <div className="cell statistic">
       {statisticConfig?.showDelta && (
         <animated.div
           className={classnames('delta', `is-${statistic}`)}
@@ -58,19 +40,6 @@ const Cell = ({
           formatNumber(total, statisticConfig.format, statistic)
         )}
       </animated.div>
-      {mapStatistic && (
-        <div
-          className={classnames('map-indicator', `is-${statistic}`, {
-            highlighted: statistic === mapStatistic,
-          })}
-          style={{
-            background:
-              statistic === mapStatistic && statisticConfig?.color
-                ? statisticConfig.color
-                : null,
-          }}
-        />
-      )}
     </div>
   );
 };
@@ -79,8 +48,6 @@ const isCellEqual = (prevProps, currProps) => {
   if (!equal(prevProps.data?.total, currProps.data?.total)) {
     return false;
   } else if (!equal(prevProps.data?.delta, currProps.data?.delta)) {
-    return false;
-  } else if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
     return false;
   } else if (!equal(prevProps.getTableStatistic, currProps.getTableStatistic)) {
     return false;

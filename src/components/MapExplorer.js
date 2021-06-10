@@ -1,5 +1,6 @@
 import MapVisualizerLoader from './loaders/MapVisualizer';
 import {Delta7Icon, PerLakhIcon} from './snippets/Icons';
+import StatisticDropdown from './StatisticDropdown';
 import Tooltip from './Tooltip';
 
 import {
@@ -13,12 +14,7 @@ import {
   STATISTIC_CONFIGS,
   UNKNOWN_DISTRICT_KEY,
 } from '../constants';
-import {
-  formatNumber,
-  getStatistic,
-  capitalize,
-  retry,
-} from '../utils/commonFunctions';
+import {formatNumber, getStatistic, retry} from '../utils/commonFunctions';
 
 import {
   ArrowLeftIcon,
@@ -59,7 +55,7 @@ function MapExplorer({
   expandTable = false,
   lastUpdatedDate,
   hideDistrictData = false,
-  hideDistrictTestData = false,
+  hideDistrictTestData = true,
   hideVaccinated = false,
 }) {
   const {t} = useTranslation();
@@ -73,6 +69,14 @@ function MapExplorer({
   const mapMeta = MAP_META[mapCode];
   const mapData =
     mapMeta.mapType === MAP_TYPES.COUNTRY ? data : {[mapCode]: data[mapCode]};
+
+  const statisticConfig = STATISTIC_CONFIGS[mapStatistic];
+
+  const isDistrictView =
+    mapView === MAP_VIEWS.DISTRICTS &&
+    (mapMeta.mapType === MAP_TYPES.STATE ||
+      (!hideDistrictData &&
+        !(hideDistrictTestData && statisticConfig?.category === 'tested')));
 
   const hoveredRegion = useMemo(() => {
     const hoveredData =
@@ -185,8 +189,6 @@ function MapExplorer({
     onSwipedRight: handleStatisticChange.bind(this, -1),
   });
 
-  const statisticConfig = STATISTIC_CONFIGS[mapStatistic];
-
   const mapViz =
     mapStatistic !== 'population' &&
     (isPerLakh ||
@@ -200,11 +202,6 @@ function MapExplorer({
       setDelta7Mode((delta7Mode) => !delta7Mode);
     }
   }, [statisticConfig, setDelta7Mode]);
-
-  const isDistrictView =
-    mapView === MAP_VIEWS.DISTRICTS &&
-    !hideDistrictData &&
-    !(hideDistrictTestData && statisticConfig?.category === 'tested');
 
   const stickied = anchor === 'mapexplorer' || (expandTable && width >= 769);
 
@@ -266,18 +263,20 @@ function MapExplorer({
                   formatNumber(total, statisticConfig.format, mapStatistic)
                 )}
               </animated.div>
-              <span>{`${t(capitalize(statisticConfig.displayName))}${
-                isPerLakh &&
-                !statisticConfig?.nonLinear &&
-                mapStatistic !== 'population'
-                  ? ` ${t('per lakh')}`
-                  : ''
-              }${
-                (delta7Mode && statisticConfig?.showDelta) ||
-                statisticConfig?.tableConfig?.type === 'delta7'
-                  ? ` ${t('in last 7 days')}`
-                  : ''
-              }`}</span>
+              <StatisticDropdown
+                currentStatistic={mapStatistic}
+                statistics={mapStatistics}
+                {...{
+                  isPerLakh,
+                  delta7Mode,
+                  mapStatistic,
+                  setMapStatistic,
+                  isDistrictView,
+                  hideDistrictTestData,
+                  hideVaccinated,
+                  zoneColor,
+                }}
+              />
             </h1>
           )}
         </div>

@@ -10,12 +10,18 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
   const [mapSwitcher, {width}] = useMeasure();
   const [clicked, setClicked] = useState(false);
   const [count, setCount] = useState(0);
+
+  const isPresent = LEVEL_STATISTICS.indexOf(mapStatistic) >= 0;
+
   const [spring, springApi] = useSpring(() => ({
     opacity: 0,
     background: `${STATISTIC_CONFIGS[mapStatistic].color}20`,
-    transform: `translate3d(${
-      (width * LEVEL_STATISTICS.indexOf(mapStatistic)) / LEVEL_STATISTICS.length
-    }px, 0, 0)`,
+    transform: isPresent
+      ? `translate3d(${
+          (width * LEVEL_STATISTICS.indexOf(mapStatistic)) /
+          LEVEL_STATISTICS.length
+        }px, 0, 0)`
+      : null,
     width: `calc(${100 / LEVEL_STATISTICS.length}%)`,
     config: config.gentle,
   }));
@@ -32,7 +38,9 @@ const MapSwitcher = ({mapStatistic, setMapStatistic}) => {
               }px, 0, 0)`
             : null,
           opacity: isPresent ? 1 : 0,
-          background: `${STATISTIC_CONFIGS[mapStatistic].color}20`,
+          background: isPresent
+            ? `${STATISTIC_CONFIGS[mapStatistic]?.color}20`
+            : null,
           delay: count === 0 ? 1500 : 0,
           onStart: setClicked.bind(this, true),
           onRest: setClicked.bind(this, false),

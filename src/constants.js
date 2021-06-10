@@ -63,7 +63,7 @@ export const STATISTIC_CONFIGS = {
     category: 'tested',
   },
   vaccinated1: {
-    displayName: 'vaccinated with at least one dose',
+    displayName: 'vaccinated (at least one dose)',
     color: '#fb5581',
     format: 'short',
     showDelta: true,
@@ -161,11 +161,11 @@ export const LEVEL_STATISTICS = [...PRIMARY_STATISTICS];
 
 export const TABLE_STATISTICS = [...PRIMARY_STATISTICS, 'tested', 'vaccinated'];
 
-export const TABLE_STATISTICS_EXPANDED = Object.keys(STATISTIC_CONFIGS).filter(
+export const TABLE_STATISTICS_ALL = Object.keys(STATISTIC_CONFIGS).filter(
   (statistic) => !STATISTIC_CONFIGS[statistic]?.tableConfig?.hide
 );
 
-export const MAP_STATISTICS = [...PRIMARY_STATISTICS, 'vaccinated'];
+export const MAP_STATISTICS = [...PRIMARY_STATISTICS];
 
 export const TIMESERIES_STATISTICS = [
   ...PRIMARY_STATISTICS,
