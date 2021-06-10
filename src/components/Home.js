@@ -4,6 +4,7 @@ import {
   DATA_API_ROOT,
   DISTRICT_START_DATE,
   DISTRICT_TEST_END_DATE,
+  MAP_VIEWS,
   TESTED_EXPIRING_DAYS,
 } from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
@@ -50,6 +51,8 @@ function Home() {
     'mapStatistic',
     'active'
   );
+  const [mapView, setMapView] = useLocalStorage('mapView', MAP_VIEWS.DISTRICTS);
+
   const [date, setDate] = useState('');
   const location = useLocation();
 
@@ -206,6 +209,8 @@ function Home() {
                         data,
                         mapStatistic,
                         setMapStatistic,
+                        mapView,
+                        setMapView,
                         regionHighlighted,
                         setRegionHighlighted,
                         anchor,

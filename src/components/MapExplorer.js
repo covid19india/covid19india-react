@@ -46,6 +46,8 @@ const MapVisualizer = lazy(() => retry(() => import('./MapVisualizer')));
 function MapExplorer({
   stateCode: mapCode = 'TT',
   data,
+  mapView = MAP_VIEWS.DISTRICTS,
+  setMapView,
   mapStatistic,
   setMapStatistic,
   regionHighlighted,
@@ -62,7 +64,6 @@ function MapExplorer({
   const mapExplorerRef = useRef();
   const {width} = useWindowSize();
 
-  const [mapView, setMapView] = useState(MAP_VIEWS.DISTRICTS);
   const [isPerLakh, setIsPerLakh] = useState(false);
   const [delta7Mode, setDelta7Mode] = useState(false);
 
@@ -411,6 +412,8 @@ const isEqual = (prevProps, currProps) => {
   if (!equal(prevProps.stateCode, currProps.stateCode)) {
     return false;
   } else if (!equal(prevProps.regionHighlighted, currProps.regionHighlighted)) {
+    return false;
+  } else if (!equal(prevProps.mapView, currProps.mapView)) {
     return false;
   } else if (!equal(prevProps.mapStatistic, currProps.mapStatistic)) {
     return false;
