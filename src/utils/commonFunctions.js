@@ -140,10 +140,10 @@ export const getStatistic = (
   if (expiredDate !== null) {
     if (STATISTIC_CONFIGS[statistic]?.category === 'tested') {
       if (
-        !data?.meta?.tested?.['last_updated'] ||
+        !data?.meta?.tested?.date ||
         differenceInDays(
           parseIndiaDate(expiredDate),
-          parseIndiaDate(data?.meta?.tested?.['last_updated'])
+          parseIndiaDate(data.meta.tested.date)
         ) > TESTED_EXPIRING_DAYS
       ) {
         return 0;

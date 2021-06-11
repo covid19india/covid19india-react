@@ -2155,11 +2155,13 @@ abbr {
 
   .state-meta {
     grid-column: 1 / -1;
+    left: 0;
+    position: sticky;
 
     .state-meta-top {
       align-items: center;
       display: flex;
-      flex-direction: row;
+      flex-direction: row-reverse;
       flex-wrap: wrap;
       justify-content: space-between;
       margin-bottom: 1 + 0.25rem;
@@ -2419,6 +2421,8 @@ abbr {
 
   .spacer-row {
     grid-column: 1 / -1;
+    left: 0;
+    position: sticky;
 
     .spacer {
       color: $gray-mid;

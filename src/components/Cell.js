@@ -6,7 +6,7 @@ import equal from 'fast-deep-equal';
 import {memo} from 'react';
 import {animated, useSpring} from 'react-spring';
 
-const Cell = ({statistic, data, lastUpdatedDate, getTableStatistic}) => {
+const Cell = ({statistic, data, getTableStatistic}) => {
   const total = getTableStatistic(data, statistic, 'total');
   const delta = getTableStatistic(data, statistic, 'delta');
 

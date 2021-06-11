@@ -211,9 +211,9 @@ function StateMeta({stateCode, data, timeseries}) {
             </>
           }
           date={
-            testPerLakh
+            testPerLakh && data[stateCode]?.meta?.tested?.date
               ? `${t('As of')} ${formatLastUpdated(
-                  data[stateCode]?.meta?.tested?.['last_updated']
+                  data[stateCode].meta.tested.date
                 )} ${t('ago')}`
               : ''
           }

@@ -54,7 +54,7 @@ function MapExplorer({
   anchor,
   setAnchor,
   expandTable = false,
-  lastUpdatedDate,
+  lastDataDate,
   hideDistrictData = false,
   hideDistrictTestData = true,
   hideVaccinated = false,
@@ -146,13 +146,13 @@ function MapExplorer({
           : 'total';
 
       return getStatistic(data, type, mapStatistic, {
-        expiredDate: lastUpdatedDate,
+        expiredDate: lastDataDate,
         normalizedByPopulationPer:
           isPerLakh && mapStatistic != 'population' ? 'lakh' : null,
         canBeNaN: true,
       });
     },
-    [mapStatistic, isPerLakh, lastUpdatedDate, delta7Mode]
+    [mapStatistic, isPerLakh, lastDataDate, delta7Mode]
   );
 
   let currentVal = getMapStatistic(hoveredRegion);
@@ -427,6 +427,8 @@ const isEqual = (prevProps, currProps) => {
   ) {
     return false;
   } else if (!equal(prevProps.hideVaccinated, currProps.hideVaccinated)) {
+    return false;
+  } else if (!equal(prevProps.lastDataDate, currProps.lastDataDate)) {
     return false;
   } else if (
     !equal(

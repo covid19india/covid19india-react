@@ -36,6 +36,7 @@ function Row({
   setRegionHighlighted,
   expandTable,
   getTableStatistic,
+  tableWidth,
 }) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useSessionStorage('districtSortData', {
@@ -204,8 +205,15 @@ function Row({
 
       {showDistricts && (
         <>
-          <div className="state-meta">
+          <div className="state-meta" style={{width: tableWidth}}>
             <div className="state-meta-top">
+              <div
+                className="state-page"
+                onClick={handleStatePageClick.bind(this, stateCode)}
+              >
+                <GraphIcon />
+                <span>{t('See more details')}</span>
+              </div>
               {data?.meta?.['last_updated'] && (
                 <p className="last-updated">
                   <ClockIcon />
@@ -214,17 +222,6 @@ function Row({
                   )}
                 </p>
               )}
-              <div
-                className="state-page"
-                onClick={handleStatePageClick.bind(this, stateCode)}
-              >
-                <GraphIcon />
-                <span>
-                  {t('See more details on {{state}}', {
-                    state: stateCode,
-                  })}
-                </span>
-              </div>
             </div>
 
             {data.districts && UNKNOWN_DISTRICT_KEY in data.districts && (
@@ -287,7 +284,7 @@ function Row({
           ))}
 
       {showDistricts && (
-        <div className="spacer-row">
+        <div className="spacer-row" style={{width: tableWidth}}>
           <div className="spacer">
             <p>{`End of ${t(STATE_NAMES[stateCode])}'s districts`}</p>
             <div className="fold" onClick={handleCollapse}>
@@ -327,6 +324,8 @@ const isEqual = (prevProps, currProps) => {
   ) {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
+    return false;
+  } else if (!equal(prevProps.tableWidth, currProps.tableWidth)) {
     return false;
   } else if (!equal(prevProps.getTableStatistic, currProps.getTableStatistic)) {
     return false;

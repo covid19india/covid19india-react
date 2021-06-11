@@ -123,20 +123,17 @@ function State() {
 
   const lookback = showAllDistricts ? (window.innerWidth >= 540 ? 10 : 8) : 6;
 
-  const lastUpdatedDate = useMemo(() => {
-    if (!data) {
-      return null;
-    }
+  const lastDataDate = useMemo(() => {
     const updatedDates = [
-      data[stateCode]?.meta?.['last_updated'],
-      data[stateCode]?.meta?.tested?.['last_updated'],
-    ];
-    return formatISO(
-      max(
-        updatedDates.filter((date) => date).map((date) => parseIndiaDate(date))
-      ),
-      {representation: 'date'}
-    );
+      data?.[stateCode]?.meta?.date,
+      data?.[stateCode]?.meta?.tested?.date,
+      data?.[stateCode]?.meta?.vaccinated?.date,
+    ].filter((date) => date);
+    return updatedDates.length > 0
+      ? formatISO(max(updatedDates.map((date) => parseIndiaDate(date))), {
+          representation: 'date',
+        })
+      : null;
   }, [stateCode, data]);
 
   const primaryStatistic = MAP_STATISTICS.includes(mapStatistic)
@@ -183,7 +180,7 @@ function State() {
                   setRegionHighlighted,
                   mapStatistic,
                   setMapStatistic,
-                  lastUpdatedDate,
+                  lastDataDate,
                   delta7Mode,
                   setDelta7Mode,
                 }}

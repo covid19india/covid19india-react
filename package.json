@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://www.covid19india.org/",
   "dependencies": {
-    "@primer/octicons-react": "^14.2.1",
+    "@primer/octicons-react": "^14.2.2",
     "@testing-library/jest-dom": "^5.13.0",
     "@testing-library/react": "^11.2.7",
     "@tippyjs/react": "^4.2.5",
@@ -30,7 +30,7 @@
     "i18next-browser-languagedetector": "^6.1.1",
     "i18next-http-backend": "^1.2.6",
     "immer": "^9.0.3",
-    "keen-slider": "^5.5.0",
+    "keen-slider": "^5.5.1",
     "react": "^17.0.1",
     "react-calendar": "^3.4.0",
     "react-content-loader": "^6.0.1",

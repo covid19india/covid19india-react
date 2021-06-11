@@ -90,22 +90,18 @@ function Home() {
   const hideVaccinated =
     getStatistic(data?.['TT'], 'total', 'vaccinated') === 0;
 
-  const lastUpdatedDate = useMemo(() => {
-    if (!data) {
-      return null;
-    }
-    // TODO: last_updated date might not be same as the last case date
+  const lastDataDate = useMemo(() => {
     const updatedDates = [
-      data['TT']?.meta?.['last_updated'] || date,
-      data['TT']?.meta?.tested?.['last_updated'],
-    ];
-    return formatISO(
-      max(
-        updatedDates.filter((date) => date).map((date) => parseIndiaDate(date))
-      ),
-      {representation: 'date'}
-    );
-  }, [data, date]);
+      data?.['TT']?.meta?.date,
+      data?.['TT']?.meta?.tested?.date,
+      data?.['TT']?.meta?.vaccinated?.date,
+    ].filter((date) => date);
+    return updatedDates.length > 0
+      ? formatISO(max(updatedDates.map((date) => parseIndiaDate(date))), {
+          representation: 'date',
+        })
+      : null;
+  }, [data]);
 
   return (
     <>
@@ -179,7 +175,7 @@ function Home() {
                   hideDistrictData,
                   hideDistrictTestData,
                   hideVaccinated,
-                  lastUpdatedDate,
+                  lastDataDate,
                 }}
               />
             </Suspense>
@@ -216,7 +212,7 @@ function Home() {
                         anchor,
                         setAnchor,
                         expandTable,
-                        lastUpdatedDate,
+                        lastDataDate,
                         hideDistrictData,
                         hideDistrictTestData,
                         hideVaccinated,

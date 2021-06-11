@@ -38,7 +38,7 @@ import {
 import {useTranslation} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useTrail, useTransition, animated, config} from 'react-spring';
-import {useKeyPressEvent, useSessionStorage} from 'react-use';
+import {useKeyPressEvent, useMeasure, useSessionStorage} from 'react-use';
 // eslint-disable-next-line
 import worker from 'workerize-loader!../workers/getDistricts';
 
@@ -54,7 +54,7 @@ function Table({
   hideDistrictData,
   hideDistrictTestData,
   hideVaccinated,
-  lastUpdatedDate,
+  lastDataDate,
 }) {
   const {t} = useTranslation();
   const [sortData, setSortData] = useSessionStorage('sortData', {
@@ -64,6 +64,8 @@ function Table({
   });
   const [page, setPage] = useState(0);
   const [delta7Mode, setDelta7Mode] = useState(false);
+
+  const [tableContainerRef, {width: tableWidth}] = useMeasure();
 
   const handleSortClick = useCallback(
     (statistic) => {
@@ -114,11 +116,11 @@ function Table({
       }
 
       return getStatistic(data, type, statistic, {
-        expiredDate: lastUpdatedDate,
+        expiredDate: lastDataDate,
         normalizedByPopulationPer: isPerLakh ? 'lakh' : null,
       });
     },
-    [isPerLakh, lastUpdatedDate, delta7Mode]
+    [isPerLakh, lastDataDate, delta7Mode]
   );
 
   const districts = useMemo(() => {
@@ -383,7 +385,7 @@ function Table({
           )
       )}
 
-      <div className="table-container">
+      <div className="table-container" ref={tableContainerRef}>
         <div
           className="table fadeInUp"
           style={{
@@ -440,6 +442,7 @@ function Table({
                       expandTable,
                       tableStatistics,
                       getTableStatistic,
+                      tableWidth,
                     }}
                   />
                 );
@@ -545,6 +548,8 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(prevProps.hideVaccinated, currProps.hideVaccinated)) {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
+    return false;
+  } else if (!equal(prevProps.lastDataDate, currProps.lastDataDate)) {
     return false;
   } else if (
     !equal(
