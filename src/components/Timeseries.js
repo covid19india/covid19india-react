@@ -564,7 +564,11 @@ function Timeseries({
             {highlightedDate && (
               <div className={classnames('stats', `is-${statistic}`)}>
                 <h5 className="title">
-                  {t(capitalize(statisticConfig.displayName))}
+                  {`${
+                    chartType === 'delta' && statistic === 'active'
+                      ? `${t('Total')} `
+                      : ''
+                  }${t(capitalize(statisticConfig.displayName))}`}
                 </h5>
                 <h5>{formatDate(highlightedDate, 'dd MMMM')}</h5>
                 <div className="stats-bottom">

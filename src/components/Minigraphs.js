@@ -23,7 +23,7 @@ import {useMeasure} from 'react-use';
 
 // Dimensions
 const margin = {top: 10, right: 10, bottom: 2, left: 10};
-const height = 75;
+const height = 60;
 const maxWidth = 120;
 
 function Minigraphs({timeseries, date: timelineDate}) {
@@ -86,7 +86,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
 
       const yScale = scaleLinear()
         .clamp(true)
-        .domain([-dailyMaxAbs, dailyMaxAbs])
+        .domain([0, dailyMaxAbs])
         .range([chartBottom, margin.top]);
 
       const linePath = line()

@@ -1766,7 +1766,7 @@ h6 {
   display: flex;
   flex-direction: column;
   margin-bottom: 0.25rem;
-  margin-top: 2rem;
+  margin-top: 3rem;
   width: 100%;
 
   .level-vaccinated {
@@ -4875,6 +4875,13 @@ footer {
       .resource {
         width: calc(100% - 2rem);
       }
+    }
+  }
+
+  .MapSwitcher {
+    .highlight,
+    .clickable {
+      height: 12rem;
     }
   }
 }
