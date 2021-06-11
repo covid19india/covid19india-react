@@ -5,7 +5,7 @@
   "homepage": "https://www.covid19india.org/",
   "dependencies": {
     "@primer/octicons-react": "^14.2.2",
-    "@testing-library/jest-dom": "^5.13.0",
+    "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@tippyjs/react": "^4.2.5",
     "classnames": "^2.2.6",

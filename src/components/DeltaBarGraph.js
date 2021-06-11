@@ -12,12 +12,8 @@ import {scaleBand, scaleLinear} from 'd3-scale';
 import {select} from 'd3-selection';
 import 'd3-transition';
 import equal from 'fast-deep-equal';
-import {memo, useEffect, useRef} from 'react';
+import {memo, useCallback, useEffect, useRef} from 'react';
 import {useMeasure} from 'react-use';
-
-const getDeltaStatistic = (data, statistic) => {
-  return getStatistic(data, 'delta', statistic);
-};
 
 const margin = {top: 50, right: 0, bottom: 50, left: 0};
 
@@ -29,6 +25,20 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
     (date) => date <= getIndiaDateYesterdayISO()
   );
   const dates = pastDates.slice(-lookback);
+
+  const getDeltaStatistic = useCallback(
+    (date, statistic) => {
+      const statisticConfig = STATISTIC_CONFIGS[statistic];
+      return getStatistic(
+        timeseries?.[date],
+        statisticConfig?.showDelta || statisticConfig?.nonLinear
+          ? 'delta'
+          : 'total',
+        statistic
+      );
+    },
+    [timeseries]
+  );
 
   useEffect(() => {
     if (!width) return;
@@ -45,7 +55,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       .paddingInner(width / 1000);
 
     const [statisticMin, statisticMax] = extent(dates, (date) =>
-      getDeltaStatistic(timeseries?.[date], statistic)
+      getDeltaStatistic(date, statistic)
     );
 
     const yScale = scaleLinear()
@@ -69,7 +79,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       .selectAll('text')
       .attr('y', 0)
       .attr('dy', (date, i) =>
-        getDeltaStatistic(timeseries?.[date], statistic) < 0 ? '-1em' : '1.5em'
+        getDeltaStatistic(date, statistic) < 0 ? '-1em' : '1.5em'
       )
       .style('text-anchor', 'middle')
       .attr('fill', statisticConfig.color);
@@ -91,7 +101,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
           xScale(date),
           yScale(0),
           xScale.bandwidth(),
-          yScale(0) - yScale(getDeltaStatistic(timeseries?.[date], statistic)),
+          yScale(0) - yScale(getDeltaStatistic(date, statistic)),
           r
         )
       )
@@ -109,8 +119,10 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       .attr('x', (date) => xScale(date) + xScale.bandwidth() / 2)
       .text((date) =>
         formatNumber(
-          getDeltaStatistic(timeseries?.[date], statistic),
-          statisticConfig.format
+          getDeltaStatistic(date, statistic),
+          statisticConfig?.showDelta || statisticConfig?.nonLinear
+            ? statisticConfig.format
+            : 'short'
         )
       );
 
@@ -118,7 +130,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       .transition(t)
       .attr('fill', statisticConfig.color)
       .attr('y', (date) => {
-        const val = getDeltaStatistic(timeseries?.[date], statistic);
+        const val = getDeltaStatistic(date, statistic);
         return yScale(val) + (val < 0 ? 15 : -6);
       });
 
@@ -126,21 +138,14 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       .append('tspan')
       .attr(
         'dy',
-        (date) =>
-          `${
-            getDeltaStatistic(timeseries?.[date], statistic) < 0 ? 1.2 : -1.2
-          }em`
+        (date) => `${getDeltaStatistic(date, statistic) < 0 ? 1.2 : -1.2}em`
       )
       .attr('x', (date) => xScale(date) + xScale.bandwidth() / 2)
       .text((date, i) => {
         if (i === 0) return '';
-        const prevVal = getDeltaStatistic(
-          timeseries?.[dates[i - 1]],
-          statistic
-        );
+        const prevVal = getDeltaStatistic(dates[i - 1], statistic);
         if (!prevVal) return '';
-        const delta =
-          getDeltaStatistic(timeseries?.[date], statistic) - prevVal;
+        const delta = getDeltaStatistic(date, statistic) - prevVal;
         return `${delta > 0 ? '+' : ''}${formatNumber(
           (100 * delta) / Math.abs(prevVal),
           '%'
@@ -148,7 +153,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
       })
       .transition(t)
       .attr('fill', statisticConfig.color + '90');
-  }, [dates, height, statistic, timeseries, width]);
+  }, [dates, height, statistic, width, getDeltaStatistic]);
 
   return (
     <div className="DeltaBarGraph" ref={wrapperRef}>

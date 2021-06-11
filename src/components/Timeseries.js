@@ -53,6 +53,20 @@ function Timeseries({
     setHighlightedDate(dates[dates.length - 1]);
   }, [dates]);
 
+  const getTimeseriesStatistic = useCallback(
+    (date, statistic, movingAverage = isMovingAverage) => {
+      const statisticConfig = STATISTIC_CONFIGS[statistic];
+      const newChartType =
+        ((statisticConfig?.showDelta || statisticConfig?.nonLinear) &&
+          chartType) ||
+        'total';
+      return getStatistic(timeseries?.[date], newChartType, statistic, {
+        movingAverage,
+      });
+    },
+    [chartType, isMovingAverage, timeseries]
+  );
+
   const condenseChart = useMemo(() => {
     const T = dates.length;
     const days = differenceInDays(
@@ -101,11 +115,9 @@ function Timeseries({
     const [uniformScaleMin, uniformScaleMax] = extent(
       dates.reduce((res, date) => {
         res.push(
-          ...PRIMARY_STATISTICS.map((statistic) =>
-            getStatistic(timeseries[date], chartType, statistic, {
-              movingAverage: isMovingAverage,
-            })
-          )
+          ...PRIMARY_STATISTICS.filter(
+            (statistic) => statistic != 'active' || chartType === 'total'
+          ).map((statistic) => getTimeseriesStatistic(date, statistic))
         );
         return res;
       }, [])
@@ -136,15 +148,16 @@ function Timeseries({
           PRIMARY_STATISTICS.includes(statistic)
         ) {
           return yScaleUniformLog;
-        } else if (PRIMARY_STATISTICS.includes(statistic)) {
+        } else if (
+          PRIMARY_STATISTICS.includes(statistic) &&
+          (statistic !== 'active' || chartType === 'total')
+        ) {
           return yScaleUniformLinear;
         }
       }
 
-      const [scaleMin, scaleMax] = extent(dates, (date) =>
-        getStatistic(timeseries[date], chartType, statistic, {
-          movingAverage: isMovingAverage,
-        })
+      const [, scaleMax] = extent(dates, (date) =>
+        getTimeseriesStatistic(date, statistic)
       );
 
       if (chartType === 'total' && isLog) {
@@ -161,10 +174,7 @@ function Timeseries({
           scaleLinear()
             .clamp(true)
             .domain([
-              // No negative values except delta active
-              chartType === 'total' || statistic !== 'active'
-                ? 0
-                : Math.min(0, scaleMin),
+              0,
               STATISTIC_CONFIGS[statistic].format === '%'
                 ? Math.min(100, Math.max(1, scaleMax))
                 : Math.max(1, scaleMax),
@@ -179,10 +189,9 @@ function Timeseries({
     chartType,
     isUniform,
     isLog,
-    isMovingAverage,
     statistics,
     dates,
-    timeseries,
+    getTimeseriesStatistic,
   ]);
 
   useEffect(() => {
@@ -250,6 +259,9 @@ function Timeseries({
         STATISTIC_CONFIGS[statistic].format === '%' ? '%' : 'short';
       const isNonLinear = !!STATISTIC_CONFIGS[statistic]?.nonLinear;
 
+      const newChartType =
+        ((statisticConfig.showDelta || isNonLinear) && chartType) || 'total';
+
       /* X axis */
       svg
         .select('.x-axis')
@@ -278,25 +290,13 @@ function Timeseries({
             .attr('stroke', statisticConfig?.color)
             .attr('cx', (date) => xScale(parseIndiaDate(date)))
             .attr('cy', (date) =>
-              yScale(
-                isDiscrete
-                  ? 0
-                  : getStatistic(timeseries[date], chartType, statistic, {
-                      movingAverage: isMovingAverage,
-                    })
-              )
+              yScale(isDiscrete ? 0 : getTimeseriesStatistic(date, statistic))
             )
             .attr('r', 2)
         )
         .transition(t)
         .attr('cx', (date) => xScale(parseIndiaDate(date)))
-        .attr('cy', (date) =>
-          yScale(
-            getStatistic(timeseries[date], chartType, statistic, {
-              movingAverage: isMovingAverage,
-            })
-          )
-        );
+        .attr('cy', (date) => yScale(getTimeseriesStatistic(date, statistic)));
 
       const areaPath = (dates, allZero = false) =>
         area()
@@ -306,14 +306,13 @@ function Timeseries({
           .y1(
             allZero
               ? yScale(0)
-              : (date) =>
-                  yScale(getStatistic(timeseries[date], chartType, statistic))
+              : (date) => yScale(getTimeseriesStatistic(date, statistic, false))
           )(dates);
 
       svg
         .selectAll('.trend-area')
         .data(
-          T && chartType === 'delta' && !isNonLinear && condenseChart
+          T && newChartType === 'delta' && !isNonLinear && condenseChart
             ? [dates]
             : []
         )
@@ -350,7 +349,7 @@ function Timeseries({
       svg
         .selectAll('.stem')
         .data(
-          T && chartType === 'delta' && !isNonLinear && !condenseChart
+          T && newChartType === 'delta' && !isNonLinear && !condenseChart
             ? dates
             : [],
           (date) => date
@@ -382,7 +381,7 @@ function Timeseries({
         .attr('y1', yScale(0))
         .attr('x2', (date) => xScale(parseIndiaDate(date)))
         .attr('y2', (date) =>
-          yScale(getStatistic(timeseries[date], chartType, statistic))
+          yScale(getTimeseriesStatistic(date, statistic, false))
         )
         .attr('opacity', isMovingAverage ? 0.2 : 1);
 
@@ -394,18 +393,14 @@ function Timeseries({
           .curve(curve)
           .x((date) => xScale(parseIndiaDate(date)))
           .y((date) =>
-            yScale(
-              getStatistic(timeseries[date], chartType, statistic, {
-                movingAverage,
-              })
-            )
+            yScale(getTimeseriesStatistic(date, statistic, movingAverage))
           );
 
       svg
         .select('.trend')
         .selectAll('path')
         .data(
-          T && (chartType === 'total' || isNonLinear || isMovingAverage)
+          T && (newChartType === 'total' || isNonLinear || isMovingAverage)
             ? [dates]
             : []
         )
@@ -438,7 +433,7 @@ function Timeseries({
         .select('.trend-background')
         .selectAll('path')
         .data(
-          T && chartType === 'delta' && isNonLinear && isMovingAverage
+          T && newChartType === 'delta' && isNonLinear && isMovingAverage
             ? [dates]
             : []
         )
@@ -479,8 +474,8 @@ function Timeseries({
     xScale,
     yScales,
     statistics,
+    getTimeseriesStatistic,
     dates,
-    timeseries,
   ]);
 
   useEffect(() => {
@@ -506,23 +501,13 @@ function Timeseries({
             .attr('pointer-events', 'none')
             .attr('cx', (date) => xScale(parseIndiaDate(date)))
             .attr('cy', (date) =>
-              yScale(
-                getStatistic(timeseries[date], chartType, statistic, {
-                  movingAverage: isMovingAverage,
-                })
-              )
+              yScale(getTimeseriesStatistic(date, statistic))
             )
             .attr('r', 4)
         )
         .transition(t)
         .attr('cx', (date) => xScale(parseIndiaDate(date)))
-        .attr('cy', (date) =>
-          yScale(
-            getStatistic(timeseries[date], chartType, statistic, {
-              movingAverage: isMovingAverage,
-            })
-          )
-        );
+        .attr('cy', (date) => yScale(getTimeseriesStatistic(date, statistic)));
 
       if (!condenseChart) {
         svg
@@ -531,40 +516,28 @@ function Timeseries({
       }
     });
   }, [
-    chartType,
-    isMovingAverage,
     condenseChart,
     highlightedDate,
     xScale,
     yScales,
     statistics,
-    timeseries,
+    getTimeseriesStatistic,
   ]);
 
-  const getStatisticDelta = useCallback(
+  const getTimeseriesStatisticDelta = useCallback(
     (statistic) => {
       if (!highlightedDate) return;
 
-      const currCount = getStatistic(
-        timeseries?.[highlightedDate],
-        chartType,
-        statistic,
-        {movingAverage: isMovingAverage}
-      );
+      const currCount = getTimeseriesStatistic(highlightedDate, statistic);
       if (STATISTIC_CONFIGS[statistic]?.hideZero && currCount === 0) return;
 
       const prevDate =
         dates[dates.findIndex((date) => date === highlightedDate) - 1];
 
-      const prevCount = getStatistic(
-        timeseries?.[prevDate],
-        chartType,
-        statistic,
-        {movingAverage: isMovingAverage}
-      );
+      const prevCount = getTimeseriesStatistic(prevDate, statistic);
       return currCount - prevCount;
     },
-    [timeseries, dates, highlightedDate, chartType, isMovingAverage]
+    [dates, highlightedDate, getTimeseriesStatistic]
   );
 
   const trail = useMemo(
@@ -578,13 +551,8 @@ function Timeseries({
   return (
     <div className="Timeseries">
       {statistics.map((statistic, index) => {
-        const total = getStatistic(
-          timeseries?.[highlightedDate],
-          chartType,
-          statistic,
-          {movingAverage: isMovingAverage}
-        );
-        const delta = getStatisticDelta(statistic, index);
+        const total = getTimeseriesStatistic(highlightedDate, statistic);
+        const delta = getTimeseriesStatisticDelta(statistic, index);
         const statisticConfig = STATISTIC_CONFIGS[statistic];
         return (
           <div
