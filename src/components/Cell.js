@@ -6,7 +6,7 @@ import equal from 'fast-deep-equal';
 import {memo} from 'react';
 import {animated, useSpring} from 'react-spring';
 
-const Cell = ({statistic, data, getTableStatistic}) => {
+const Cell = ({statistic, data, getTableStatistic, noDistrictData}) => {
   const total = getTableStatistic(data, statistic, 'total');
   const delta = getTableStatistic(data, statistic, 'delta');
 
@@ -26,10 +26,13 @@ const Cell = ({statistic, data, getTableStatistic}) => {
           title={delta}
         >
           {spring.delta.to((delta) =>
-            delta > 0
-              ? '\u2191' + formatNumber(delta, statisticConfig.format)
-              : delta < 0
-              ? '\u2193' + formatNumber(Math.abs(delta), statisticConfig.format)
+            !noDistrictData || !statisticConfig.hasPrimary
+              ? delta > 0
+                ? '\u2191' + formatNumber(delta, statisticConfig.format)
+                : delta < 0
+                ? '\u2193' +
+                  formatNumber(Math.abs(delta), statisticConfig.format)
+                : ''
               : ''
           )}
         </animated.div>
@@ -37,7 +40,9 @@ const Cell = ({statistic, data, getTableStatistic}) => {
 
       <animated.div className="total" title={total}>
         {spring.total.to((total) =>
-          formatNumber(total, statisticConfig.format, statistic)
+          !noDistrictData || !statisticConfig.hasPrimary
+            ? formatNumber(total, statisticConfig.format, statistic)
+            : '-'
         )}
       </animated.div>
     </div>
@@ -48,6 +53,10 @@ const isCellEqual = (prevProps, currProps) => {
   if (!equal(prevProps.data?.total, currProps.data?.total)) {
     return false;
   } else if (!equal(prevProps.data?.delta, currProps.data?.delta)) {
+    return false;
+  } else if (
+    !equal(prevProps.data?.noDistrictData, currProps.data?.noDistrictData)
+  ) {
     return false;
   } else if (!equal(prevProps.getTableStatistic, currProps.getTableStatistic)) {
     return false;

@@ -51,6 +51,7 @@ function MapExplorer({
   setMapStatistic,
   regionHighlighted,
   setRegionHighlighted,
+  noRegionHighlightedDistrictData,
   anchor,
   setAnchor,
   expandTable = false,
@@ -58,6 +59,7 @@ function MapExplorer({
   hideDistrictData = false,
   hideDistrictTestData = true,
   hideVaccinated = false,
+  noDistrictData = false,
 }) {
   const {t} = useTranslation();
   const mapExplorerRef = useRef();
@@ -156,7 +158,9 @@ function MapExplorer({
   );
 
   let currentVal = getMapStatistic(hoveredRegion);
-  if (isNaN(currentVal)) currentVal = '-';
+  if (isNaN(currentVal)) {
+    currentVal = '-';
+  }
 
   const spring = useSpring({
     total: currentVal,
@@ -260,7 +264,10 @@ function MapExplorer({
             >
               <animated.div>
                 {spring.total.to((total) =>
-                  formatNumber(total, statisticConfig.format, mapStatistic)
+                  !noRegionHighlightedDistrictData ||
+                  !statisticConfig?.hasPrimary
+                    ? formatNumber(total, statisticConfig.format, mapStatistic)
+                    : '-'
                 )}
               </animated.div>
               <StatisticDropdown
@@ -398,6 +405,7 @@ function MapExplorer({
                 setRegionHighlighted,
                 getMapStatistic,
                 transformStatistic,
+                noDistrictData,
               }}
             ></MapVisualizer>
           </Suspense>
@@ -438,6 +446,15 @@ const isEqual = (prevProps, currProps) => {
   ) {
     return false;
   } else if (!equal(prevProps.data?.TT?.total, currProps.data?.TT?.total)) {
+    return false;
+  } else if (
+    !equal(
+      prevProps.noRegionHighlightedDistrictData,
+      currProps.noRegionHighlightedDistrictData
+    )
+  ) {
+    return false;
+  } else if (!equal(prevProps.noDistrictData, currProps.noDistrictData)) {
     return false;
   }
   return true;

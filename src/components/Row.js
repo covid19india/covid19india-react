@@ -22,7 +22,7 @@ import {
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import produce from 'immer';
-import {memo, useState, useCallback, useRef} from 'react';
+import {memo, useCallback, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
 import {useSessionStorage} from 'react-use';
@@ -37,6 +37,7 @@ function Row({
   expandTable,
   getTableStatistic,
   tableWidth,
+  noDistrictData,
 }) {
   const [showDistricts, setShowDistricts] = useState(false);
   const [sortData, setSortData] = useSessionStorage('districtSortData', {
@@ -194,6 +195,11 @@ function Row({
         {tableStatistics.map((statistic) => (
           <Cell
             key={statistic}
+            noDistrictData={
+              !stateCode &&
+              districtName !== UNKNOWN_DISTRICT_KEY &&
+              noDistrictData
+            }
             {...{
               data,
               statistic,
@@ -271,6 +277,9 @@ function Row({
             <DistrictRow
               data={data.districts[districtName]}
               key={districtName}
+              noDistrictData={
+                districtName !== UNKNOWN_DISTRICT_KEY && noDistrictData
+              }
               {...{
                 tableStatistics,
                 districtName,
@@ -324,6 +333,8 @@ const isEqual = (prevProps, currProps) => {
   ) {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
+    return false;
+  } else if (!equal(prevProps.noDistrictData, currProps.noDistrictData)) {
     return false;
   } else if (!equal(prevProps.tableWidth, currProps.tableWidth)) {
     return false;

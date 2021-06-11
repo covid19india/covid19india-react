@@ -5,7 +5,9 @@ import {
   DISTRICT_START_DATE,
   DISTRICT_TEST_END_DATE,
   MAP_VIEWS,
+  PRIMARY_STATISTICS,
   TESTED_EXPIRING_DAYS,
+  UNKNOWN_DISTRICT_KEY,
 } from '../constants';
 import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
@@ -103,6 +105,34 @@ function Home() {
       : null;
   }, [data]);
 
+  const noDistrictDataStates = useMemo(
+    () =>
+      // Heuristic: All cases are in Unknown
+      Object.entries(data || {}).reduce((res, [stateCode, stateData]) => {
+        res[stateCode] = !!(
+          stateData?.districts &&
+          stateData.districts?.[UNKNOWN_DISTRICT_KEY] &&
+          PRIMARY_STATISTICS.every(
+            (statistic) =>
+              getStatistic(stateData, 'total', statistic) ===
+              getStatistic(
+                stateData.districts[UNKNOWN_DISTRICT_KEY],
+                'total',
+                statistic
+              )
+          )
+        );
+        return res;
+      }, {}),
+    [data]
+  );
+
+  const noRegionHighlightedDistrictData =
+    regionHighlighted?.stateCode &&
+    regionHighlighted?.districtName &&
+    regionHighlighted.districtName !== UNKNOWN_DISTRICT_KEY &&
+    noDistrictDataStates[regionHighlighted.stateCode];
+
   return (
     <>
       <Helmet>
@@ -176,6 +206,7 @@ function Home() {
                   hideDistrictTestData,
                   hideVaccinated,
                   lastDataDate,
+                  noDistrictDataStates,
                 }}
               />
             </Suspense>
@@ -216,6 +247,7 @@ function Home() {
                         hideDistrictData,
                         hideDistrictTestData,
                         hideVaccinated,
+                        noRegionHighlightedDistrictData,
                       }}
                     />
                   </Suspense>
@@ -235,6 +267,7 @@ function Home() {
                       setAnchor,
                       expandTable,
                       hideVaccinated,
+                      noRegionHighlightedDistrictData,
                     }}
                   />
                 </Suspense>

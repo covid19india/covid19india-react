@@ -40,6 +40,7 @@ function Timeseries({
   isUniform,
   isLog,
   isMovingAverage,
+  noRegionHighlightedDistrictData,
 }) {
   const {t} = useTranslation();
   const refs = useRef([]);
@@ -577,6 +578,12 @@ function Timeseries({
   return (
     <div className="Timeseries">
       {statistics.map((statistic, index) => {
+        const total = getStatistic(
+          timeseries?.[highlightedDate],
+          chartType,
+          statistic,
+          {movingAverage: isMovingAverage}
+        );
         const delta = getStatisticDelta(statistic, index);
         const statisticConfig = STATISTIC_CONFIGS[statistic];
         return (
@@ -594,26 +601,29 @@ function Timeseries({
                 <h5>{formatDate(highlightedDate, 'dd MMMM')}</h5>
                 <div className="stats-bottom">
                   <h2>
-                    {formatNumber(
-                      getStatistic(
-                        timeseries?.[highlightedDate],
-                        chartType,
-                        statistic,
-                        {movingAverage: isMovingAverage}
-                      ),
-                      statisticConfig.format !== 'short'
-                        ? statisticConfig.format
-                        : 'long',
-                      statistic
-                    )}
+                    {!noRegionHighlightedDistrictData ||
+                    !statisticConfig?.hasPrimary
+                      ? formatNumber(
+                          total,
+                          statisticConfig.format !== 'short'
+                            ? statisticConfig.format
+                            : 'long',
+                          statistic
+                        )
+                      : '-'}
                   </h2>
-                  <h6>{`${delta > 0 ? '+' : ''}${formatNumber(
-                    delta,
-                    statisticConfig.format !== 'short'
-                      ? statisticConfig.format
-                      : 'long',
-                    statistic
-                  )}`}</h6>
+                  <h6>
+                    {!noRegionHighlightedDistrictData ||
+                    !statisticConfig?.hasPrimary
+                      ? `${delta > 0 ? '+' : ''}${formatNumber(
+                          delta,
+                          statisticConfig.format !== 'short'
+                            ? statisticConfig.format
+                            : 'long',
+                          statistic
+                        )}`
+                      : ''}
+                  </h6>
                 </div>
               </div>
             )}
@@ -656,6 +666,13 @@ const isEqual = (prevProps, currProps) => {
     !equal(
       currProps.regionHighlighted.districtName,
       prevProps.regionHighlighted.districtName
+    )
+  ) {
+    return false;
+  } else if (
+    !equal(
+      currProps.noRegionHighlightedDistrictData,
+      prevProps.noRegionHighlightedDistrictData
     )
   ) {
     return false;

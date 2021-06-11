@@ -1,4 +1,4 @@
-import {STATISTIC_CONFIGS, D3_TRANSITION_DURATION} from '../constants';
+import {D3_TRANSITION_DURATION, STATISTIC_CONFIGS} from '../constants';
 import {
   formatDate,
   formatNumber,

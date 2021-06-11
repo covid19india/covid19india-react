@@ -27,23 +27,27 @@ export const STATISTIC_CONFIGS = {
     color: '#ff073a',
     format: 'long',
     showDelta: true,
+    hasPrimary: true,
   },
   active: {
     displayName: 'active',
     color: '#007bff',
     format: 'long',
+    hasPrimary: true,
   },
   recovered: {
     displayName: 'recovered',
     color: '#28a745',
     format: 'long',
     showDelta: true,
+    hasPrimary: true,
   },
   deceased: {
     displayName: 'deceased',
     color: '#6c757d',
     format: 'long',
     showDelta: true,
+    hasPrimary: true,
   },
   other: {
     displayName: 'other',
@@ -53,6 +57,7 @@ export const STATISTIC_CONFIGS = {
     tableConfig: {
       notes: 'Migrated cases or non-COVID deaths',
     },
+    hasPrimary: true,
   },
   tested: {
     displayName: 'tested',
@@ -97,12 +102,14 @@ export const STATISTIC_CONFIGS = {
     tableConfig: {
       notes: 'Calculated over last 7 days',
     },
+    hasPrimary: true,
   },
   cfr: {
     displayName: 'case fatality ratio',
     format: '%',
     color: '#fd7e14',
     nonLinear: true,
+    hasPrimary: true,
   },
   recoveryRatio: {
     displayName: 'recovery ratio',
@@ -111,6 +118,7 @@ export const STATISTIC_CONFIGS = {
     tableConfig: {
       hide: true,
     },
+    hasPrimary: true,
   },
   activeRatio: {
     displayName: 'active ratio',
@@ -119,6 +127,7 @@ export const STATISTIC_CONFIGS = {
     tableConfig: {
       hide: true,
     },
+    hasPrimary: true,
   },
   caseGrowth: {
     displayName: 'Case Growth',
@@ -129,6 +138,7 @@ export const STATISTIC_CONFIGS = {
       notes:
         'Percentage growth of cases last week compared to the week a fortnight ago',
     },
+    hasPrimary: true,
     mapConfig: {
       transformFn: (val) => {
         if (val <= 0) return '≤ 0%';

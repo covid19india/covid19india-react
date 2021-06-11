@@ -17,6 +17,7 @@ function DistrictRow({
   setRegionHighlighted,
   expandTable,
   getTableStatistic,
+  noDistrictData,
 }) {
   const {t} = useTranslation();
 
@@ -54,6 +55,7 @@ function DistrictRow({
             statistic,
             data,
             getTableStatistic,
+            noDistrictData,
           }}
         />
       ))}
@@ -80,6 +82,8 @@ const isDistrictRowEqual = (prevProps, currProps) => {
   ) {
     return false;
   } else if (!equal(prevProps.expandTable, currProps.expandTable)) {
+    return false;
+  } else if (!equal(prevProps.noDistrictData, currProps.noDistrictData)) {
     return false;
   } else if (!equal(prevProps.getTableStatistic, currProps.getTableStatistic)) {
     return false;

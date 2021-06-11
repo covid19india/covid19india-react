@@ -55,6 +55,7 @@ function Table({
   hideDistrictTestData,
   hideVaccinated,
   lastDataDate,
+  noDistrictDataStates,
 }) {
   const {t} = useTranslation();
   const [sortData, setSortData] = useSessionStorage('sortData', {
@@ -234,7 +235,9 @@ function Table({
   const showDistricts = tableOption === 'Districts' && !hideDistrictData;
 
   useEffect(() => {
-    if (!showDistricts) setPage(0);
+    if (!showDistricts) {
+      setPage(0);
+    }
   }, [showDistricts]);
 
   useKeyPressEvent('?', () => {
@@ -435,6 +438,7 @@ function Table({
                   <Row
                     key={stateCode}
                     data={states[stateCode]}
+                    noDistrictData={noDistrictDataStates[stateCode]}
                     {...{
                       stateCode,
                       regionHighlighted,
@@ -459,6 +463,8 @@ function Table({
                 (page + 1) * DISTRICT_TABLE_COUNT
               )
               .map((districtKey) => {
+                const noDistrictData =
+                  noDistrictDataStates[districts[districtKey].stateCode];
                 return (
                   <Row
                     key={districtKey}
@@ -470,6 +476,7 @@ function Table({
                       expandTable,
                       tableStatistics,
                       getTableStatistic,
+                      noDistrictData,
                     }}
                   />
                 );
@@ -556,6 +563,10 @@ const isEqual = (prevProps, currProps) => {
       prevProps.data['TT'].total.confirmed,
       currProps.data['TT'].total.confirmed
     )
+  ) {
+    return false;
+  } else if (
+    !equal(prevProps.noDistrictDataStates, currProps.noDistrictDataStates)
   ) {
     return false;
   } else return true;

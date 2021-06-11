@@ -71,6 +71,7 @@ function MapVisualizer({
   statistic,
   getMapStatistic,
   transformStatistic,
+  noDistrictData,
 }) {
   const {t} = useTranslation();
   const svgRef = useRef(null);
@@ -566,17 +567,14 @@ function MapVisualizer({
           <g className="district-borders" />
           <g className="circles" />
         </svg>
-        {mapMeta.mapType === MAP_TYPES.STATE &&
-          !!getMapStatistic(
-            data[mapCode]?.districts?.[UNKNOWN_DISTRICT_KEY]
-          ) && (
-            <div className={classnames('disclaimer', `is-${statistic}`)}>
-              <AlertIcon />
-              <span>
-                {t('District-wise data not available in state bulletin')}
-              </span>
-            </div>
-          )}
+        {noDistrictData && statisticConfig?.hasPrimary && (
+          <div className={classnames('disclaimer', `is-${statistic}`)}>
+            <AlertIcon />
+            <span>
+              {t('District-wise data not available in state bulletin')}
+            </span>
+          </div>
+        )}
       </div>
 
       {mapScale && <MapLegend {...{data, statistic, mapViz, mapScale}} />}

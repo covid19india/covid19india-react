@@ -45,6 +45,7 @@ function TimeseriesExplorer({
   setAnchor,
   expandTable = false,
   hideVaccinated = false,
+  noRegionHighlightedDistrictData,
 }) {
   const {t} = useTranslation();
   const [lookback, setLookback] = useLocalStorage('timeseriesLookbackDays', 90);
@@ -344,6 +345,7 @@ function TimeseriesExplorer({
               isUniform,
               isLog,
               isMovingAverage,
+              noRegionHighlightedDistrictData,
             }}
           />
           <TimeseriesBrush
@@ -405,6 +407,13 @@ const isEqual = (prevProps, currProps) => {
   } else if (!equal(currProps.expandTable, prevProps.expandTable)) {
     return false;
   } else if (!equal(currProps.hideVaccinated, prevProps.hideVaccinated)) {
+    return false;
+  } else if (
+    !equal(
+      currProps.noRegionHighlightedDistrictData,
+      prevProps.noRegionHighlightedDistrictData
+    )
+  ) {
     return false;
   }
   return true;
