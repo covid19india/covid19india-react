@@ -59,7 +59,7 @@ $pink-light: #db558120;
 $pink-hover: #db558130;
 $pink-mid: #db558199;
 $brown: #b6854d;
-$brown-light: #b6854d10;
+$brown-light: #b6854d20;
 $brown-hover: #b6854d30;
 $brown-mid: #b6854d99;
 $brick: #e23028;
@@ -690,10 +690,21 @@ h6 {
 .StatisticDropdown {
   margin-left: -3px;
   margin-top: 0.5rem;
+  position: relative;
+
+  .triangle-icon {
+    left: -16px;
+    position: absolute;
+    top: 2px;
+
+    svg {
+      vertical-align: middle !important;
+    }
+  }
 
   select {
     appearance: none;
-    background-color: #eee;
+    background-color: $gray-light;
     border: 0;
     border-radius: 3px;
     color: $gray;
@@ -702,13 +713,91 @@ h6 {
     font-weight: 600;
     max-width: 14rem;
     min-width: 3rem;
+    outline-color: $gray-hover;
     padding: 3px;
-    transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
 
     option {
       background-color: #eee;
       color: $gray;
       padding: 3px;
+    }
+
+    &:hover {
+      background-color: $gray-hover;
+    }
+
+    &.confirmed {
+      background-color: $cherry-light;
+      color: $cherry;
+      outline-color: $cherry-hover;
+
+      &:hover {
+        background-color: $cherry-hover;
+      }
+    }
+
+    &.active {
+      background-color: $blue-light;
+      color: $blue;
+      outline-color: $blue-hover;
+
+      &:hover {
+        background-color: $blue-hover;
+      }
+    }
+
+    &.recovered {
+      background-color: $green-light;
+      color: $green;
+      outline-color: $green-hover;
+
+      &:hover {
+        background-color: $green-hover;
+      }
+    }
+
+    &.tested {
+      background-color: $purple-light;
+      color: $purple;
+      outline-color: $purple-hover;
+
+      &:hover {
+        background-color: $purple-hover;
+      }
+    }
+
+    &.other,
+    &.tpr,
+    &.cfr {
+      background-color: $orange-light;
+      color: $orange;
+      outline-color: $orange-hover;
+
+      &:hover {
+        background-color: $orange-hover;
+      }
+    }
+
+    &.vaccinated,
+    &.vaccinated1,
+    &.vaccinated2 {
+      background-color: $pink-light;
+      color: $pink;
+      outline-color: $pink-hover;
+
+      &:hover {
+        background-color: $pink-hover;
+      }
+    }
+
+    &.population {
+      background-color: $brown-light;
+      color: $brown;
+      outline-color: $brown-hover;
+
+      &:hover {
+        background-color: $brown-hover;
+      }
     }
   }
 }
@@ -2009,6 +2098,7 @@ abbr {
       cursor: pointer;
       margin-bottom: 0.25rem;
       transform: rotate(-90deg);
+      transition: transform 0.15s ease-in-out;
     }
   }
 

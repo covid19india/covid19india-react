@@ -5,6 +5,8 @@ import {
 } from '../constants';
 import {capitalize} from '../utils/commonFunctions';
 
+import {TriangleRightIcon} from '@primer/octicons-react';
+import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import {memo, useEffect, useCallback, useMemo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -68,19 +70,23 @@ const StatisticDropdown = ({
     tempSelect.remove();
   }, [width, mapStatistic]);
 
-  const statisticColor = zoneColor || currentStatisticConfig?.color;
-
   return (
     <div className="StatisticDropdown" ref={wrapperRef}>
+      <div className={classnames('triangle-icon')}>
+        <TriangleRightIcon size={20} />
+      </div>
       <select
         ref={selectRef}
         value={currentStatistic}
-        className={currentStatistic}
-        style={{
-          color: statisticColor,
-          background: statisticColor + '20',
-          outlineColor: statisticColor + '40',
-        }}
+        className={classnames(currentStatistic, zoneColor)}
+        style={
+          (zoneColor && {
+            color: zoneColor,
+            backgroundColor: zoneColor + '20',
+            outlineColor: zoneColor + '40',
+          }) ||
+          {}
+        }
         onChange={handleChange}
       >
         {statistics.map((statistic) => {
