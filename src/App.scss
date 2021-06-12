@@ -594,7 +594,7 @@ h6 {
       }
     }
 
-    &.cpm {
+    &.cpl {
       background: $yellow-light;
 
       h3,
@@ -608,7 +608,7 @@ h6 {
       }
     }
 
-    &.tpm {
+    &.tpl {
       background: $purple-light;
 
       h3,
@@ -1766,7 +1766,7 @@ h6 {
   display: flex;
   flex-direction: column;
   margin-bottom: 0.25rem;
-  margin-top: 3rem;
+  margin-top: 2rem;
   width: 100%;
 
   .level-vaccinated {
@@ -3714,7 +3714,7 @@ input {
   flex-direction: row;
   justify-content: space-between;
   margin: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   margin-top: 1rem;
 
   .svg-parent {
@@ -4849,7 +4849,7 @@ footer {
 
   .VaccinationHeader {
     margin-bottom: 2rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
   }
 
   .timeseries-header {
@@ -5120,7 +5120,7 @@ footer {
     }
   }
 
-  .tpm {
+  .tpl {
     background: $dark-m-purple-light !important;
 
     h3,

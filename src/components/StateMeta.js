@@ -198,7 +198,7 @@ function StateMeta({stateCode, data, timeseries}) {
         />
 
         <StateMetaCard
-          className="tpm"
+          className="tpl"
           title={t('Tests Per Lakh')}
           statistic={`${formatNumber(testPerLakh)}`}
           formula={
