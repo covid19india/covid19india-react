@@ -1,10 +1,11 @@
 import {
   D3_TRANSITION_DURATION,
+  MAP_DIMENSIONS,
   MAP_LEGEND_HEIGHT,
   MAP_VIZS,
   STATISTIC_CONFIGS,
 } from '../constants';
-import {formatNumber} from '../utils/commonFunctions';
+import {formatNumber, spike} from '../utils/commonFunctions';
 
 import {range, quantile} from 'd3-array';
 import {axisRight, axisBottom} from 'd3-axis';
@@ -19,20 +20,19 @@ import {useMeasure} from 'react-use';
 function MapLegend({data, statistic, mapViz, mapScale}) {
   const {t} = useTranslation();
   const svgRef = useRef(null);
-  const [wrapperRef, {width, height}] = useMeasure();
+  const [wrapperRef, {width}] = useMeasure();
 
   useEffect(() => {
-    if (!width || !height) return;
-
     const svg = select(svgRef.current);
-    const statisticConfig = STATISTIC_CONFIGS[statistic];
+    const t = svg.transition().duration(D3_TRANSITION_DURATION);
 
-    if (mapViz === MAP_VIZS.BUBBLES) {
+    if (mapViz !== MAP_VIZS.CHOROPLETH) {
       const t = svg.transition().duration(D3_TRANSITION_DURATION);
       svg
         .select('.ramp')
         .transition(t)
         .attr('opacity', 0)
+        .attr('display', 'none')
         .attr('xlink:href', null);
 
       svg
@@ -43,7 +43,42 @@ function MapLegend({data, statistic, mapViz, mapScale}) {
         .remove();
       svg.selectAll('.axis > *:not(.axistext)').remove();
       svg.select('.axistext').text('');
+    }
 
+    if (mapViz !== MAP_VIZS.BUBBLE) {
+      svg
+        .select('.circles')
+        .selectAll('circle')
+        .transition(t)
+        .attr('r', 0)
+        .attr('cy', 0)
+        .remove();
+      svg.selectAll('.circle-axis > *').remove();
+    }
+
+    if (mapViz !== MAP_VIZS.SPIKES) {
+      svg
+        .select('.spikes')
+        .call((g) =>
+          g.selectAll('path').transition(t).attr('d', spike(0)).remove()
+        )
+        .call((g) => g.selectAll('text').remove())
+        .transition(t)
+        .selectAll('g')
+        .remove();
+      svg.selectAll('.spike-axis > *').remove();
+    }
+  }, [mapViz]);
+
+  useEffect(() => {
+    if (!width) return;
+
+    const svg = select(svgRef.current);
+    const statisticConfig = STATISTIC_CONFIGS[statistic];
+
+    const zoom = width / MAP_DIMENSIONS[0];
+
+    if (mapViz === MAP_VIZS.BUBBLE) {
       const [, domainMax] = mapScale.domain();
 
       const legend = svg
@@ -58,15 +93,15 @@ function MapLegend({data, statistic, mapViz, mapScale}) {
         .data(legendRadius)
         .join('circle')
         .attr('fill', 'none')
-        .attr('stroke', '#ccc')
+        .attr('stroke', statisticConfig.color + '70')
         .transition(t)
         .attr('cy', (d) => -mapScale(d))
-        .attr('r', mapScale);
+        .attr('r', (d) => mapScale(d));
 
       const yScale = mapScale.copy().range([0, -2 * mapScale(domainMax)]);
 
       svg
-        .select('.circleAxis')
+        .select('.circle-axis')
         .attr('transform', `translate(48,50)`)
         .transition(t)
         .call(
@@ -84,16 +119,69 @@ function MapLegend({data, statistic, mapViz, mapScale}) {
             )
         )
         .selectAll('.tick text')
-        .style('text-anchor', 'middle');
+        .style('text-anchor', 'middle')
+        .attr('font-size', 10 / zoom);
 
-      svg.select('.circleAxis').call((g) => g.select('.domain').remove());
+      svg.select('.circle-axis').call((g) => g.select('.domain').remove());
+    } else if (mapViz === MAP_VIZS.SPIKE) {
+      const ticks = mapScale.ticks(3).slice(1).reverse();
+
+      const gap = 28 / zoom;
+
+      svg
+        .select('.spikes')
+        .attr('transform', `translate(32,40)`)
+        .selectAll('g')
+        .data(ticks)
+        .join((enter) =>
+          enter.append('g').call((g) =>
+            g
+              .append('path')
+              .attr('fill-opacity', 0.3)
+              .attr('d', (d) => spike(0))
+          )
+        )
+        .attr('transform', (d, i) => `translate(${i * gap},0)`)
+        .call((g) =>
+          g
+            .select('path')
+            .transition(t)
+            .attr('d', (d) => spike(mapScale(d)))
+            .attr('fill', statisticConfig.color + '70')
+            .attr('stroke', statisticConfig.color + '70')
+        );
+
+      const xScale = mapScale.copy().range([gap * ticks.length, 0]);
+      svg
+        .select('.spike-axis')
+        .attr('transform', `translate(32,50)`)
+        .transition(t)
+        .call(
+          axisBottom(xScale)
+            .tickSize(0)
+            .tickPadding(0)
+            .tickValues(ticks)
+            .tickFormat((num) =>
+              formatNumber(
+                num,
+                statisticConfig.format === 'long'
+                  ? 'short'
+                  : statisticConfig.format
+              )
+            )
+        )
+        .selectAll('.tick text')
+        .style('text-anchor', 'middle')
+        .attr('font-size', 10 / zoom);
+
+      svg.select('.spike-axis').call((g) => g.select('.domain').remove());
     } else {
       svg.call(() =>
         legend({
           svg: svg,
           color: mapScale,
           width: width,
-          height: height,
+          height: MAP_LEGEND_HEIGHT,
           ticks: 5,
           tickFormat: function (d, i, n) {
             if (statisticConfig?.mapConfig?.colorScale) {
@@ -112,19 +200,28 @@ function MapLegend({data, statistic, mapViz, mapScale}) {
       );
       svg.attr('class', statisticConfig?.mapConfig?.colorScale ? 'zone' : '');
     }
-  }, [t, width, height, statistic, mapScale, mapViz]);
+  }, [t, width, statistic, mapScale, mapViz]);
 
   return (
     <div
       className="svg-parent maplegend"
-      style={{height: MAP_LEGEND_HEIGHT}}
       ref={wrapperRef}
+      style={{height: 2 * MAP_LEGEND_HEIGHT}}
     >
-      <svg id="legend" preserveAspectRatio="xMidYMid meet" ref={svgRef}>
-        <image className="ramp" />
+      <svg
+        id="legend"
+        preserveAspectRatio="xMinYMid meet"
+        ref={svgRef}
+        {...(mapViz !== MAP_VIZS.CHOROPLETH && {
+          viewBox: `0 0 ${MAP_DIMENSIONS[0]} ${MAP_LEGEND_HEIGHT}`,
+        })}
+      >
+        <image className="ramp" preserveAspectRatio="none" />
         <g className="bars"></g>
         <g className="circles"></g>
-        <g className="circleAxis"></g>
+        <g className="spikes"></g>
+        <g className="circle-axis"></g>
+        <g className="spike-axis"></g>
         <g className="axis">
           <text className="axistext" />
         </g>
@@ -156,14 +253,6 @@ function legend({
   ordinalWeights,
 } = {}) {
   const t = svg.transition().duration(D3_TRANSITION_DURATION);
-  svg
-    .select('.circles')
-    .selectAll('circle')
-    .transition(t)
-    .attr('r', 0)
-    .attr('cy', 0)
-    .remove();
-  svg.selectAll('.circleAxis > *').remove();
 
   let tickAdjust = (g) => {
     const ticks = g.selectAll('.tick line');
@@ -182,12 +271,10 @@ function legend({
 
     svg
       .select('.ramp')
-      .attr('class', 'ramp')
       .attr('x', marginLeft)
       .attr('y', marginTop)
       .attr('width', width - marginLeft - marginRight)
       .attr('height', height - marginTop - marginBottom)
-      .attr('preserveAspectRatio', 'none')
       .attr(
         'xlink:href',
         ramp(color.copy().domain(quantize(interpolate(0, 1), n))).toDataURL()
@@ -216,13 +303,12 @@ function legend({
 
     svg
       .select('.ramp')
-      .attr('class', 'ramp')
       .attr('x', marginLeft)
       .attr('y', marginTop)
       .attr('width', width - marginLeft - marginRight)
       .attr('height', height - marginTop - marginBottom)
-      .attr('preserveAspectRatio', 'none')
       .attr('xlink:href', ramp(color.interpolator()).toDataURL())
+      .attr('display', 'visible')
       .transition(t)
       .attr('opacity', 1);
 

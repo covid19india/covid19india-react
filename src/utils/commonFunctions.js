@@ -245,3 +245,6 @@ export function retry(fn, retriesLeft = 5, interval = 1000) {
       });
   });
 }
+
+export const spike = (length, width = 8) =>
+  `M${-width / 2},0L0,${-length}L${width / 2},0`;

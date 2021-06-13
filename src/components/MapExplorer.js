@@ -193,13 +193,13 @@ function MapExplorer({
     onSwipedRight: handleStatisticChange.bind(this, -1),
   });
 
-  const mapViz =
-    mapStatistic !== 'population' &&
-    (isPerLakh ||
+  const mapViz = statisticConfig?.mapConfig?.spike
+    ? MAP_VIZS.SPIKE
+    : isPerLakh ||
       statisticConfig?.mapConfig?.colorScale ||
-      statisticConfig?.nonLinear)
-      ? MAP_VIZS.CHOROPLETH
-      : MAP_VIZS.BUBBLES;
+      statisticConfig?.nonLinear
+    ? MAP_VIZS.CHOROPLETH
+    : MAP_VIZS.BUBBLE;
 
   const handleDeltaClick = useCallback(() => {
     if (statisticConfig?.showDelta) {

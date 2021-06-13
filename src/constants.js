@@ -157,6 +157,9 @@ export const STATISTIC_CONFIGS = {
     format: 'short',
     color: '#b6854d',
     hideZero: true,
+    mapConfig: {
+      spike: true,
+    },
   },
 };
 
@@ -219,7 +222,8 @@ export const TIMESERIES_LOOKBACK_DAYS = [null, 90, 30];
 
 export const MAP_VIZS = {
   CHOROPLETH: 0,
-  BUBBLES: 1,
+  BUBBLE: 1,
+  SPIKE: 2,
 };
 
 export const MAP_VIEWS = {
@@ -386,6 +390,7 @@ export const MAP_META = {
   },
 };
 
+export const MAP_DIMENSIONS = [432, 488];
 export const MAP_LEGEND_HEIGHT = 50;
 
 export const STATE_NAMES = {

@@ -2624,7 +2624,6 @@ abbr {
 
 .MapExplorer {
   align-self: center;
-  margin-bottom: 3rem;
   position: relative;
   width: 100%;
 
@@ -2652,7 +2651,6 @@ abbr {
     &.maplegend {
       margin-top: 0.6rem;
       user-select: none;
-      width: 100%;
       z-index: 1;
     }
 
@@ -2664,7 +2662,6 @@ abbr {
 
       text {
         fill: $gray;
-        font-size: 10px;
         font-weight: 600;
         text-align: right;
       }

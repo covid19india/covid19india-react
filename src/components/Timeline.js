@@ -5,7 +5,7 @@ import {
   retry,
 } from '../utils/commonFunctions';
 
-import {CalendarIcon, HeartFillIcon} from '@primer/octicons-react';
+import {CalendarIcon} from '@primer/octicons-react';
 import classnames from 'classnames';
 import equal from 'fast-deep-equal';
 import {useKeenSlider} from 'keen-slider/react';
@@ -143,7 +143,7 @@ function Timeline({date, setDate, dates, isTimelineMode, setIsTimelineMode}) {
     '2020-05-18': t('Beginning of Lockdown Phase 4'),
     '2020-05-31': t('End of Lockdown Phase 4'),
     '2020-06-01': t('Beginning of Lockdown Phase 5'),
-    '2020-11-20': <HeartFillIcon size={12} />,
+    '2020-11-20': '🥀',
   };
 
   useEffect(() => {
