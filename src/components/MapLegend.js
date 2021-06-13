@@ -130,7 +130,7 @@ function MapLegend({data, statistic, mapViz, mapScale}) {
 
       svg
         .select('.spikes')
-        .attr('transform', `translate(32,40)`)
+        .attr('transform', `translate(32,24)`)
         .selectAll('g')
         .data(ticks)
         .join((enter) =>
@@ -154,7 +154,7 @@ function MapLegend({data, statistic, mapViz, mapScale}) {
       const xScale = mapScale.copy().range([gap * ticks.length, 0]);
       svg
         .select('.spike-axis')
-        .attr('transform', `translate(32,50)`)
+        .attr('transform', `translate(32,32)`)
         .transition(t)
         .call(
           axisBottom(xScale)
