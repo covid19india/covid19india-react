@@ -23,7 +23,7 @@ import {useMeasure} from 'react-use';
 
 // Dimensions
 const margin = {top: 10, right: 10, bottom: 2, left: 10};
-const height = 60;
+const height = 75;
 const maxWidth = 120;
 
 function Minigraphs({timeseries, date: timelineDate}) {
@@ -48,13 +48,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
 
   const getMinigraphStatistic = useCallback(
     (date, statistic) => {
-      const statisticConfig = STATISTIC_CONFIGS[statistic];
-      const chartType =
-        ((statisticConfig?.showDelta || statisticConfig?.nonLinear) &&
-          'delta') ||
-        'total';
-      const t = getStatistic(timeseries?.[date], chartType, statistic);
-      return t;
+      return getStatistic(timeseries?.[date], 'delta', statistic);
     },
     [timeseries]
   );
@@ -86,7 +80,7 @@ function Minigraphs({timeseries, date: timelineDate}) {
 
       const yScale = scaleLinear()
         .clamp(true)
-        .domain([0, dailyMaxAbs])
+        .domain([-dailyMaxAbs, dailyMaxAbs])
         .range([chartBottom, margin.top]);
 
       const linePath = line()

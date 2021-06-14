@@ -55,12 +55,7 @@ function Timeseries({
 
   const getTimeseriesStatistic = useCallback(
     (date, statistic, movingAverage = isMovingAverage) => {
-      const statisticConfig = STATISTIC_CONFIGS[statistic];
-      const newChartType =
-        ((statisticConfig?.showDelta || statisticConfig?.nonLinear) &&
-          chartType) ||
-        'total';
-      return getStatistic(timeseries?.[date], newChartType, statistic, {
+      return getStatistic(timeseries?.[date], chartType, statistic, {
         movingAverage,
       });
     },
@@ -115,9 +110,9 @@ function Timeseries({
     const [uniformScaleMin, uniformScaleMax] = extent(
       dates.reduce((res, date) => {
         res.push(
-          ...PRIMARY_STATISTICS.filter(
-            (statistic) => statistic != 'active' || chartType === 'total'
-          ).map((statistic) => getTimeseriesStatistic(date, statistic))
+          ...PRIMARY_STATISTICS.map((statistic) =>
+            getTimeseriesStatistic(date, statistic)
+          )
         );
         return res;
       }, [])
@@ -148,15 +143,12 @@ function Timeseries({
           PRIMARY_STATISTICS.includes(statistic)
         ) {
           return yScaleUniformLog;
-        } else if (
-          PRIMARY_STATISTICS.includes(statistic) &&
-          (statistic !== 'active' || chartType === 'total')
-        ) {
+        } else if (PRIMARY_STATISTICS.includes(statistic)) {
           return yScaleUniformLinear;
         }
       }
 
-      const [, scaleMax] = extent(dates, (date) =>
+      const [scaleMin, scaleMax] = extent(dates, (date) =>
         getTimeseriesStatistic(date, statistic)
       );
 
@@ -174,7 +166,7 @@ function Timeseries({
           scaleLinear()
             .clamp(true)
             .domain([
-              0,
+              Math.min(0, scaleMin),
               STATISTIC_CONFIGS[statistic].format === '%'
                 ? Math.min(100, Math.max(1, scaleMax))
                 : Math.max(1, scaleMax),
@@ -259,9 +251,6 @@ function Timeseries({
         STATISTIC_CONFIGS[statistic].format === '%' ? '%' : 'short';
       const isNonLinear = !!STATISTIC_CONFIGS[statistic]?.nonLinear;
 
-      const newChartType =
-        ((statisticConfig.showDelta || isNonLinear) && chartType) || 'total';
-
       /* X axis */
       svg
         .select('.x-axis')
@@ -312,7 +301,7 @@ function Timeseries({
       svg
         .selectAll('.trend-area')
         .data(
-          T && newChartType === 'delta' && !isNonLinear && condenseChart
+          T && chartType === 'delta' && !isNonLinear && condenseChart
             ? [dates]
             : []
         )
@@ -349,7 +338,7 @@ function Timeseries({
       svg
         .selectAll('.stem')
         .data(
-          T && newChartType === 'delta' && !isNonLinear && !condenseChart
+          T && chartType === 'delta' && !isNonLinear && !condenseChart
             ? dates
             : [],
           (date) => date
@@ -400,7 +389,7 @@ function Timeseries({
         .select('.trend')
         .selectAll('path')
         .data(
-          T && (newChartType === 'total' || isNonLinear || isMovingAverage)
+          T && (chartType === 'total' || isNonLinear || isMovingAverage)
             ? [dates]
             : []
         )
@@ -433,7 +422,7 @@ function Timeseries({
         .select('.trend-background')
         .selectAll('path')
         .data(
-          T && newChartType === 'delta' && isNonLinear && isMovingAverage
+          T && chartType === 'delta' && isNonLinear && isMovingAverage
             ? [dates]
             : []
         )
@@ -564,11 +553,7 @@ function Timeseries({
             {highlightedDate && (
               <div className={classnames('stats', `is-${statistic}`)}>
                 <h5 className="title">
-                  {`${
-                    chartType === 'delta' && statistic === 'active'
-                      ? `${t('Total')} `
-                      : ''
-                  }${t(capitalize(statisticConfig.displayName))}`}
+                  {t(capitalize(statisticConfig.displayName))}
                 </h5>
                 <h5>{formatDate(highlightedDate, 'dd MMMM')}</h5>
                 <div className="stats-bottom">

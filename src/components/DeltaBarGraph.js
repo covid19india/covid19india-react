@@ -28,14 +28,7 @@ function DeltaBarGraph({timeseries, statistic, lookback}) {
 
   const getDeltaStatistic = useCallback(
     (date, statistic) => {
-      const statisticConfig = STATISTIC_CONFIGS[statistic];
-      return getStatistic(
-        timeseries?.[date],
-        statisticConfig?.showDelta || statisticConfig?.nonLinear
-          ? 'delta'
-          : 'total',
-        statistic
-      );
+      return getStatistic(timeseries?.[date], 'delta', statistic);
     },
     [timeseries]
   );
