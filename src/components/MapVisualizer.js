@@ -357,6 +357,7 @@ function MapVisualizer({
 
           return feature;
         })
+        .filter((feature) => feature.value > 0)
         .sort((featureA, featureB) => featureB.value - featureB.value);
     }
   }, [mapViz, isDistrictView, getMapStatistic, features, data]);
@@ -513,7 +514,7 @@ function MapVisualizer({
       .call((sel) => {
         sel
           .transition(T)
-          .attr('opacity', (feature) => (feature.value > 0 ? 1 : 0))
+          .attr('opacity', 1)
           .attr('fill', statisticConfig.color + '70')
           .attr('stroke', statisticConfig.color + '70')
           .attr('d', (feature) => spike(mapScale(feature.value)));
