@@ -179,9 +179,9 @@ function Home() {
             )}
 
             <>
-              {!timeseries && <div style={{height: '107px'}} />}
+              {!timeseries && <div style={{height: '123px'}} />}
               {timeseries && (
-                <Suspense fallback={<div style={{height: '107px'}} />}>
+                <Suspense fallback={<div style={{height: '123px'}} />}>
                   <Minigraphs
                     timeseries={timeseries['TT']?.dates}
                     {...{date}}
