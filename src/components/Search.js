@@ -175,8 +175,8 @@ function Search() {
         target.textContent = '';
         return true;
       }
-      if(language!=getInitialProps().initialLanguage){
-        setLanguage(getInitialProps().initialLanguage)
+      if (language != getInitialProps().initialLanguage) {
+        setLanguage(getInitialProps().initialLanguage);
         return true;
       }
       const text = t(suggestions[index]);
@@ -213,8 +213,8 @@ function Search() {
         target.textContent = '';
         return true;
       }
-      if(language!=getInitialProps().initialLanguage){
-        setLanguage(getInitialProps().initialLanguage)
+      if (language != getInitialProps().initialLanguage) {
+        setLanguage(getInitialProps().initialLanguage);
         return true;
       }
       fillPlaceholder(target, index, 0, function () {
