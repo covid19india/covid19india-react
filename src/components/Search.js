@@ -10,7 +10,7 @@ import {
 import produce from 'immer';
 import {memo, useState, useEffect, useMemo, useCallback, useRef} from 'react';
 import * as Icon from 'react-feather';
-import {useTranslation} from 'react-i18next';
+import {useTranslation, getInitialProps} from 'react-i18next';
 import {Link} from 'react-router-dom';
 import {useDebounce, useKeyPressEvent, useUpdateEffect} from 'react-use';
 
@@ -42,6 +42,7 @@ const stateSuggestions = [
 function Search() {
   const [searchValue, setSearchValue] = useState('');
   const [expand, setExpand] = useState(false);
+  const [language, setLanguage] = useState(getInitialProps().initialLanguage);
   const [results, setResults] = useState([]);
   const searchInput = useRef(null);
   const {t} = useTranslation();
@@ -174,6 +175,10 @@ function Search() {
         target.textContent = '';
         return true;
       }
+      if (language != getInitialProps().initialLanguage) {
+        setLanguage(getInitialProps().initialLanguage);
+        return true;
+      }
       const text = t(suggestions[index]);
       const placeholder = target.textContent;
       target.classList.remove('disappear');
@@ -186,7 +191,7 @@ function Search() {
       }
       callback();
     },
-    [expand, t]
+    [language, expand, t]
   );
 
   const clearPlaceholder = useCallback((target, callback) => {
@@ -208,7 +213,10 @@ function Search() {
         target.textContent = '';
         return true;
       }
-
+      if (language != getInitialProps().initialLanguage) {
+        setLanguage(getInitialProps().initialLanguage);
+        return true;
+      }
       fillPlaceholder(target, index, 0, function () {
         setTimeout(function () {
           clearPlaceholder(target, function () {
@@ -217,7 +225,7 @@ function Search() {
         }, 2000);
       });
     },
-    [clearPlaceholder, expand, fillPlaceholder]
+    [language, clearPlaceholder, expand, fillPlaceholder]
   );
 
   useEffect(() => {
