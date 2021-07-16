@@ -1,3 +1,5 @@
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/covid19india/covid19india-react)
+
 <p align="center">
 <img src="https://repository-images.githubusercontent.com/247386519/67519080-8691-11ea-9481-0732fb55380b" width="100%">
 </p>
