@@ -13,21 +13,22 @@ import {format} from 'd3-format';
 import {interpolate, interpolateRound, quantize} from 'd3-interpolate';
 import {scaleLinear, scaleOrdinal, scaleBand} from 'd3-scale';
 import {select} from 'd3-selection';
+import {transition} from 'd3-transition';
 import {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useMeasure} from 'react-use';
 
 function MapLegend({data, statistic, mapViz, mapScale}) {
   const {t} = useTranslation();
-  const svgRef = useRef(null);
+  const svgLegendRef = useRef(null);
+  const svgLegendChoroRef = useRef(null);
   const [wrapperRef, {width}] = useMeasure();
 
   useEffect(() => {
-    const svg = select(svgRef.current);
-    const t = svg.transition().duration(D3_TRANSITION_DURATION);
+    const t = transition().duration(D3_TRANSITION_DURATION);
 
     if (mapViz !== MAP_VIZS.CHOROPLETH) {
-      const t = svg.transition().duration(D3_TRANSITION_DURATION);
+      const svg = select(svgLegendChoroRef.current);
       svg
         .select('.ramp')
         .transition(t)
@@ -46,6 +47,7 @@ function MapLegend({data, statistic, mapViz, mapScale}) {
     }
 
     if (mapViz !== MAP_VIZS.BUBBLE) {
+      const svg = select(svgLegendRef.current);
       svg
         .select('.circles')
         .selectAll('circle')
@@ -57,6 +59,7 @@ function MapLegend({data, statistic, mapViz, mapScale}) {
     }
 
     if (mapViz !== MAP_VIZS.SPIKES) {
+      const svg = select(svgLegendRef.current);
       svg
         .select('.spikes')
         .call((g) =>
@@ -73,12 +76,12 @@ function MapLegend({data, statistic, mapViz, mapScale}) {
   useEffect(() => {
     if (!width) return;
 
-    const svg = select(svgRef.current);
     const statisticConfig = STATISTIC_CONFIGS[statistic];
-
     const zoom = width / MAP_DIMENSIONS[0];
 
     if (mapViz === MAP_VIZS.BUBBLE) {
+      const svg = select(svgLegendRef.current);
+
       const [, domainMax] = mapScale.domain();
 
       const legend = svg
@@ -124,6 +127,7 @@ function MapLegend({data, statistic, mapViz, mapScale}) {
 
       svg.select('.circle-axis').call((g) => g.select('.domain').remove());
     } else if (mapViz === MAP_VIZS.SPIKE) {
+      const svg = select(svgLegendRef.current);
       const ticks = mapScale.ticks(3).slice(1).reverse();
 
       const gap = 28 / zoom;
@@ -176,6 +180,7 @@ function MapLegend({data, statistic, mapViz, mapScale}) {
 
       svg.select('.spike-axis').call((g) => g.select('.domain').remove());
     } else {
+      const svg = select(svgLegendChoroRef.current);
       svg.call(() =>
         legend({
           svg: svg,
@@ -211,17 +216,24 @@ function MapLegend({data, statistic, mapViz, mapScale}) {
       <svg
         id="legend"
         preserveAspectRatio="xMinYMid meet"
-        ref={svgRef}
-        {...(mapViz !== MAP_VIZS.CHOROPLETH && {
-          viewBox: `0 0 ${MAP_DIMENSIONS[0]} ${MAP_LEGEND_HEIGHT}`,
-        })}
+        ref={svgLegendRef}
+        viewBox={`0 0 ${MAP_DIMENSIONS[0]} ${MAP_LEGEND_HEIGHT}`}
       >
-        <image className="ramp" preserveAspectRatio="none" />
-        <g className="bars"></g>
         <g className="circles"></g>
         <g className="spikes"></g>
         <g className="circle-axis"></g>
         <g className="spike-axis"></g>
+        <g className="axis">
+          <text className="axistext" />
+        </g>
+      </svg>
+      <svg
+        id="legend-choro"
+        preserveAspectRatio="xMinYMid meet"
+        ref={svgLegendChoroRef}
+      >
+        <image className="ramp" preserveAspectRatio="none" />
+        <g className="bars"></g>
         <g className="axis">
           <text className="axistext" />
         </g>

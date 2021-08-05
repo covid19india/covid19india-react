@@ -3060,9 +3060,21 @@ abbr {
     }
   }
 
+  #legend,
+  #legend-choro {
+    position: absolute;
+  }
+
   #chart,
-  #legend {
-    filter: saturate(1.5);
+  #legend,
+  #legend-choro {
+    &:not(.zone) {
+      filter: saturate(1.5);
+    }
+
+    &.zone {
+      filter: saturate(1.25);
+    }
   }
 
   .disclaimer {
@@ -5085,7 +5097,7 @@ footer {
 
   .MapExplorer {
     #chart,
-    #legend {
+    #legend-choro {
       &.zone {
         filter: none;
       }
