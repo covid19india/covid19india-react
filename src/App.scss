@@ -856,22 +856,39 @@ h6 {
 }
 
 .Banner {
-  background: $purple-light;
-  color: $purple;
+  background: $red-light;
+  color: $red;
   display: flex;
   flex-direction: row;
   font-size: 0.8rem;
   font-weight: 600;
   justify-content: center;
-  line-height: 20px;
+  text-decoration: none;
 
-  .snippet {
+  .wrapper {
+    align-items: center;
     align-self: center;
-    cursor: pointer;
-    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0.75rem;
+    padding-left: 5rem;
     text-align: center;
-    width: calc(100% - 10rem);
     word-wrap: break-word;
+
+    .content {
+      margin: 0 0.5rem;
+    }
+
+    a {
+      background-color: $red-light;
+      color: $red;
+      display: flex;
+      text-decoration: none;
+
+      &:hover {
+        background-color: $red-hover;
+      }
+    }
   }
 }
 
@@ -4717,12 +4734,14 @@ footer {
   }
 
   .Banner {
-    height: 7rem;
-
-    .snippet {
-      margin-left: 1rem;
-      margin-right: 1rem;
+    .wrapper {
+      flex-direction: column;
+      padding-left: 0.5rem;
       width: 100%;
+
+      .content {
+        margin: 0.5rem 0;
+      }
     }
   }
 
