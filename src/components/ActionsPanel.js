@@ -1,17 +1,15 @@
 import Tooltip from './Tooltip';
 
-import {retry} from '../utils/commonFunctions';
+import {formatDate, retry} from '../utils/commonFunctions';
 
 import {BellIcon, BellSlashIcon, HistoryIcon} from '@primer/octicons-react';
-import {format, parse} from 'date-fns';
-import {utcToZonedTime} from 'date-fns-tz';
 import {useMemo, useCallback, lazy, Suspense} from 'react';
 import {useTranslation} from 'react-i18next';
 
 const Timeline = lazy(() => retry(() => import('./Timeline')));
 
 const ActionsPanel = ({
-  lastViewedLog,
+  lastUpdatedDate,
   newUpdate,
   isTimelineMode,
   setIsTimelineMode,
@@ -36,14 +34,6 @@ const ActionsPanel = ({
     return styles;
   }, []);
 
-  const getTimeFromMilliseconds = (lastViewedLog) => {
-    const lastViewedDate = utcToZonedTime(
-      parse(lastViewedLog, 'T', new Date()),
-      'Asia/Kolkata'
-    );
-    return format(lastViewedDate, 'dd MMM, p');
-  };
-
   const handleTimelineClick = useCallback(() => {
     setIsTimelineMode(true);
     if (showUpdates) setShowUpdates(!showUpdates);
@@ -66,8 +56,9 @@ const ActionsPanel = ({
           pointerEvents: isTimelineMode ? 'none' : '',
         }}
       >
-        <h5 className="fadeInUp" style={trail[0]}>{`${getTimeFromMilliseconds(
-          lastViewedLog
+        <h5 className="fadeInUp" style={trail[0]}>{`${formatDate(
+          lastUpdatedDate,
+          'dd MMM, p'
         )} ${t('IST')}`}</h5>
 
         <div

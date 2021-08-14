@@ -1,23 +1,24 @@
 import ActionsPanel from './ActionsPanel';
 
-import {API_DOMAIN} from '../constants';
-import {fetcher, retry} from '../utils/commonFunctions';
+import {API_DOMAIN, API_REFRESH_INTERVAL} from '../constants';
+import {fetcher, parseIndiaDate, retry} from '../utils/commonFunctions';
 
+import {max} from 'date-fns';
 import equal from 'fast-deep-equal';
-import {memo, useState, useEffect, lazy, Suspense} from 'react';
+import {memo, useEffect, useMemo, useState, lazy, Suspense} from 'react';
 import {useLocalStorage} from 'react-use';
 import useSWR from 'swr';
 
 const Updates = lazy(() => retry(() => import('./Updates')));
 
-const Actions = ({date, setDate, dates}) => {
+const Actions = ({date, setDate, dates, lastUpdatedDate}) => {
   const [showUpdates, setShowUpdates] = useState(false);
   const [newUpdate, setNewUpdate] = useLocalStorage('newUpdate', false);
   const [lastViewedLog, setLastViewedLog] = useLocalStorage('lastViewedLog', 0);
   const [isTimelineMode, setIsTimelineMode] = useState(false);
 
   const {data: updates} = useSWR(`${API_DOMAIN}/updatelog/log.json`, fetcher, {
-    revalidateOnFocus: true,
+    refreshInterval: API_REFRESH_INTERVAL,
   });
 
   useEffect(() => {
@@ -30,11 +31,19 @@ const Actions = ({date, setDate, dates}) => {
     }
   }, [lastViewedLog, updates, setLastViewedLog, setNewUpdate]);
 
+  const maxLastUpdatedDate = useMemo(() => {
+    return max(
+      [lastViewedLog, lastUpdatedDate]
+        .filter((date) => date)
+        .map((date) => parseIndiaDate(date))
+    );
+  }, [lastViewedLog, lastUpdatedDate]);
+
   return (
     <>
       <ActionsPanel
         {...{
-          lastViewedLog,
+          lastUpdatedDate: maxLastUpdatedDate,
           newUpdate,
           isTimelineMode,
           setIsTimelineMode,
@@ -58,6 +67,8 @@ const Actions = ({date, setDate, dates}) => {
 
 const isEqual = (prevProps, currProps) => {
   if (!equal(currProps.date, prevProps.date)) {
+    return false;
+  } else if (!equal(currProps.lastUpdatedDate, prevProps.lastUpdatedDate)) {
     return false;
   } else if (!equal(currProps.dates, prevProps.dates)) {
     return false;

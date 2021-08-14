@@ -1,6 +1,7 @@
 import TableLoader from './loaders/Table';
 
 import {
+  API_REFRESH_INTERVAL,
   DATA_API_ROOT,
   DISTRICT_START_DATE,
   DISTRICT_TEST_END_DATE,
@@ -63,7 +64,7 @@ function Home() {
     fetcher,
     {
       revalidateOnMount: true,
-      refreshInterval: 100000,
+      refreshInterval: API_REFRESH_INTERVAL,
     }
   );
 
@@ -72,7 +73,7 @@ function Home() {
     fetcher,
     {
       revalidateOnMount: true,
-      refreshInterval: 100000,
+      refreshInterval: API_REFRESH_INTERVAL,
     }
   );
 
@@ -102,6 +103,15 @@ function Home() {
       ? formatISO(max(updatedDates.map((date) => parseIndiaDate(date))), {
           representation: 'date',
         })
+      : null;
+  }, [data]);
+
+  const lastUpdatedDate = useMemo(() => {
+    const updatedDates = Object.keys(data || {})
+      .map((stateCode) => data?.[stateCode]?.meta?.['last_updated'])
+      .filter((datetime) => datetime);
+    return updatedDates.length > 0
+      ? formatISO(max(updatedDates.map((datetime) => parseIndiaDate(datetime))))
       : null;
   }, [data]);
 
@@ -161,6 +171,7 @@ function Home() {
                       date,
                       setDate,
                       dates: Object.keys(timeseries['TT']?.dates),
+                      lastUpdatedDate,
                     }}
                   />
                 </Suspense>
