@@ -1,3 +1,4 @@
+import {API_DOMAIN} from '../constants';
 import {fetcher} from '../utils/commonFunctions';
 
 import {useMemo} from 'react';
@@ -5,7 +6,7 @@ import useSWR from 'swr';
 
 const Resources = () => {
   const {data} = useSWR(
-    'https://api.covid19india.org/crowdsourced_resources_links.json',
+    `${API_DOMAIN}/crowdsourced_resources_links.json`,
     fetcher
   );
 

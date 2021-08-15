@@ -1,3 +1,5 @@
+import {API_DOMAIN} from '../constants';
+
 import {memo} from 'react';
 import {Twitter, GitHub, Instagram, Database, Mail, Send} from 'react-feather';
 import {useTranslation} from 'react-i18next';
@@ -31,7 +33,7 @@ function Footer() {
 
         <a
           className="api"
-          href="https://api.covid19india.org"
+          href={API_DOMAIN}
           target="_blank"
           rel="noopener noreferrer"
         >
