@@ -1,7 +1,12 @@
 import ActionsPanel from './ActionsPanel';
 
 import {API_DOMAIN, API_REFRESH_INTERVAL} from '../constants';
-import {fetcher, parseIndiaDate, retry} from '../utils/commonFunctions';
+import {
+  fetcher,
+  formatDateObjIndia,
+  parseIndiaDate,
+  retry,
+} from '../utils/commonFunctions';
 
 import {max} from 'date-fns';
 import equal from 'fast-deep-equal';
@@ -32,10 +37,12 @@ const Actions = ({date, setDate, dates, lastUpdatedDate}) => {
   }, [lastViewedLog, updates, setLastViewedLog, setNewUpdate]);
 
   const maxLastUpdatedDate = useMemo(() => {
-    return max(
-      [lastViewedLog, lastUpdatedDate]
-        .filter((date) => date)
-        .map((date) => parseIndiaDate(date))
+    return formatDateObjIndia(
+      max(
+        [lastViewedLog, lastUpdatedDate]
+          .filter((date) => date)
+          .map((date) => parseIndiaDate(date))
+      )
     );
   }, [lastViewedLog, lastUpdatedDate]);
 

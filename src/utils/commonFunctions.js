@@ -85,6 +85,12 @@ export const formatDate = (unformattedDate, formatString) => {
   });
 };
 
+export const formatDateObjIndia = (dateObj) => {
+  return format(dateObj, "yyyy-MM-dd'T'HH:mm:ss+05:30", {
+    locale: locale,
+  });
+};
+
 export const abbreviateNumber = (number) => {
   const numberCleaned = Math.round(Math.abs(number));
   if (numberCleaned < 1e3) return numberFormatter.format(Math.floor(number));

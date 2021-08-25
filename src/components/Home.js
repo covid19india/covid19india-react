@@ -14,6 +14,7 @@ import useIsVisible from '../hooks/useIsVisible';
 import useStickySWR from '../hooks/useStickySWR';
 import {
   fetcher,
+  formatDateObjIndia,
   getStatistic,
   parseIndiaDate,
   retry,
@@ -111,7 +112,9 @@ function Home() {
       .map((stateCode) => data?.[stateCode]?.meta?.['last_updated'])
       .filter((datetime) => datetime);
     return updatedDates.length > 0
-      ? formatISO(max(updatedDates.map((datetime) => parseIndiaDate(datetime))))
+      ? formatDateObjIndia(
+          max(updatedDates.map((datetime) => parseIndiaDate(datetime)))
+        )
       : null;
   }, [data]);
 
