@@ -16,6 +16,7 @@ function Tooltip({children, message, hold = false, childProps = {}}) {
             className="message"
             dangerouslySetInnerHTML={{
               __html: message
+                .trim()
                 .split('\n')
                 .map((text) => `<div>${text}</div>`)
                 .join(''),
