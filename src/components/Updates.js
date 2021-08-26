@@ -27,6 +27,7 @@ function Updates({updates}) {
         .reverse()
         .map(function (activity, index) {
           activity.update = activity.update.trim().replace(/\n/g, '<br/>');
+          activity.update = activity.update.replace(/\t/g, '\u2003');
           const activityDate = new Date(activity.timestamp * 1000);
           const addHeader = () => {
             currentDate = activityDate;
