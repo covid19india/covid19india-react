@@ -9,7 +9,6 @@ import {Route, Redirect, Switch, useLocation} from 'react-router-dom';
 const Home = lazy(() => retry(() => import('./components/Home')));
 const About = lazy(() => retry(() => import('./components/About')));
 const State = lazy(() => retry(() => import('./components/State')));
-const Resources = lazy(() => retry(() => import('./components/Resources')));
 const LanguageSwitcher = lazy(() =>
   retry(() => import('./components/LanguageSwitcher'))
 );
@@ -35,12 +34,6 @@ const App = () => {
       pageLink: '/about',
       view: About,
       displayName: 'About',
-      showInNavbar: true,
-    },
-    {
-      pageLink: '/resources',
-      view: Resources,
-      displayName: 'Resources',
       showInNavbar: true,
     },
     {

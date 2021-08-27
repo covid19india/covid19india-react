@@ -4487,64 +4487,6 @@ footer {
   }
 }
 
-.Resources {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 4rem;
-  margin-top: 2rem;
-  min-height: 100vh;
-
-  .heading {
-    color: $dark;
-    font-size: 17.5px;
-    margin-bottom: 2rem;
-  }
-
-  .banner {
-    background: $blue-light;
-    color: $blue;
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 2rem;
-    padding: 1rem;
-    width: 30rem;
-  }
-
-  .resources {
-    display: flex;
-    flex-direction: column;
-    width: 30rem;
-
-    .resource {
-      border-radius: 0.25rem;
-      padding: 1rem;
-      text-decoration: none;
-      width: 100%;
-
-      .link {
-        color: $blue;
-        font-size: 14px;
-        margin: 0;
-        width: 100%;
-        word-wrap: break-word;
-      }
-
-      .title {
-        color: $dark;
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 0.25rem;
-      }
-
-      &:hover {
-        background: $gray-hover;
-        cursor: pointer;
-      }
-    }
-  }
-}
-
 @media (min-width: 769px) {
   .Home,
   .State {
@@ -4961,22 +4903,6 @@ footer {
     }
   }
 
-  .Resources {
-    margin-top: 1rem;
-
-    .banner {
-      width: calc(100% - 5rem);
-    }
-
-    .resources {
-      width: calc(100% - 5rem);
-
-      .resource {
-        width: calc(100% - 2rem);
-      }
-    }
-  }
-
   .MapSwitcher {
     .highlight,
     .clickable {
@@ -5347,20 +5273,6 @@ footer {
     svg {
       rect {
         fill: #1e1e30 !important;
-      }
-    }
-  }
-
-  .Resources {
-    .heading {
-      color: $gray;
-    }
-
-    .resources {
-      .resource {
-        .title {
-          color: $gray;
-        }
       }
     }
   }
