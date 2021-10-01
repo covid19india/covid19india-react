@@ -12,7 +12,7 @@ function Banner(props) {
         </div>
         <div className="content">
           {t(
-            'After keeping all of you updated with Covid-19 information for the last 16 months, we will be stopping our operations from 31st October, 2021.'
+            'After keeping you updated with Covid-19 information for the last 18 months, we will be stopping our operations on 31st October, 2021.'
           )}{' '}
         </div>
         <a
@@ -20,7 +20,7 @@ function Banner(props) {
           rel="noreferrer"
           target="_blank"
         >
-          {t('Learn more')}
+          {t('Read the full blog post')}
           <div className="arrow-right-icon">
             <ArrowRightIcon size={16} />
           </div>
