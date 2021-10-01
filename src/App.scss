@@ -64,6 +64,7 @@ $brown-hover: #b6854d30;
 $brown-mid: #b6854d99;
 $brick: #e23028;
 $brick-light: #e2302810;
+$brick-hover: #e2302820;
 
 // Dark mode variables
 $dark-m-gray: #161625;
@@ -73,6 +74,7 @@ $dark-m-blue: #3391ff;
 $dark-m-purple: #9673b9;
 $dark-m-purple-mid: #9673b9bb;
 $dark-m-purple-light: #40008050;
+$dark-m-purple-hover: #40008090;
 
 * {
   font-family: 'archia';
@@ -651,6 +653,12 @@ h6 {
     border-radius: 5px;
     cursor: pointer;
     padding: 0.25rem;
+
+    &:hover {
+      &:not(.expanded) {
+        background-color: $brick-hover;
+      }
+    }
   }
 
   .dropdown {
@@ -880,6 +888,7 @@ h6 {
     }
 
     a {
+      align-items: center;
       background-color: $red-light;
       color: $red;
       display: flex;
@@ -5036,6 +5045,10 @@ footer {
 
       a {
         background: $dark-m-purple-light;
+
+        &:hover {
+          background: $dark-m-purple-hover !important;
+        }
       }
     }
   }

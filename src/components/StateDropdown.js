@@ -1,5 +1,6 @@
 import {MAP_META, STATE_NAMES} from '../constants';
 
+import classnames from 'classnames';
 import {useState, useCallback, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useHistory} from 'react-router-dom';
@@ -50,7 +51,9 @@ const StateDropdown = ({stateCode, trail}) => {
   return (
     <div className="StateDropdown" ref={dropdownRef}>
       <animated.h1
-        className="state-name fadeInUp"
+        className={classnames('state-name', 'fadeInUp', {
+          expanded: showDropdown,
+        })}
         style={trail}
         onClick={setShowDropdown.bind(this, !showDropdown)}
       >
