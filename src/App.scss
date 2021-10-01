@@ -879,7 +879,7 @@ h6 {
     display: flex;
     justify-content: center;
     padding: 1rem 0.75rem;
-    padding-left: 5rem;
+    padding-left: 7rem;
     text-align: center;
     word-wrap: break-word;
 
@@ -892,6 +892,7 @@ h6 {
       background-color: $red-light;
       color: $red;
       display: flex;
+      padding: 1px;
       text-decoration: none;
 
       &:hover {
@@ -4745,7 +4746,7 @@ footer {
   .Banner {
     .wrapper {
       flex-direction: column;
-      padding-left: 0.5rem;
+      padding-left: 0.75rem;
       width: 100%;
 
       .content {
