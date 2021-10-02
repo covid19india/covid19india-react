@@ -405,13 +405,13 @@ function Timeseries({
           (update) =>
             update.call((update) =>
               update
-                .attr('opacity', 1)
                 .transition(t)
                 .attrTween('d', function (date) {
                   const previous = select(this).attr('d');
                   const current = linePath()(date);
                   return interpolatePath(previous, current);
                 })
+                .attr('opacity', 1)
             ),
           (exit) =>
             exit.call((exit) => exit.transition(t).attr('opacity', 0).remove())
@@ -437,11 +437,14 @@ function Timeseries({
               .call((enter) => enter.transition(t).attr('opacity', 0.2)),
           (update) =>
             update.call((update) =>
-              update.transition(t).attrTween('d', function (date) {
-                const previous = select(this).attr('d');
-                const current = linePath(false, curveLinear)(date);
-                return interpolatePath(previous, current);
-              })
+              update
+                .transition(t)
+                .attrTween('d', function (date) {
+                  const previous = select(this).attr('d');
+                  const current = linePath(false, curveLinear)(date);
+                  return interpolatePath(previous, current);
+                })
+                .attr('opacity', 0.2)
             ),
           (exit) =>
             exit.call((exit) => exit.transition(t).attr('opacity', 0).remove())
