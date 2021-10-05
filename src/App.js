@@ -7,6 +7,7 @@ import {lazy, useState, Suspense, useEffect} from 'react';
 import {Route, Redirect, Switch, useLocation} from 'react-router-dom';
 
 const Home = lazy(() => retry(() => import('./components/Home')));
+const Volunteers = lazy(() => retry(() => import('./components/Volunteers')));
 const About = lazy(() => retry(() => import('./components/About')));
 const State = lazy(() => retry(() => import('./components/State')));
 const LanguageSwitcher = lazy(() =>
@@ -29,6 +30,12 @@ const App = () => {
       pageLink: '/blog',
       view: Blog,
       displayName: 'Blog',
+      showInNavbar: true,
+    },
+    {
+      pageLink: '/volunteers',
+      view: Volunteers,
+      displayName: 'Volunteers',
       showInNavbar: true,
     },
     {
