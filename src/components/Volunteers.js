@@ -15,17 +15,12 @@ import {
 import {Helmet} from 'react-helmet';
 import useSWR from 'swr';
 
+const VOLUNTEERS_DOMAIN =
+  'https://raw.githubusercontent.com/shuklaayush/testing/gh-pages';
 const PLACEHOLDER_IMG =
   'https://images.assetsdelivery.com/compings_v2/apoev/apoev1901/apoev190100061.jpg';
 
-function Member({
-  className,
-  name,
-  bio,
-  link,
-  image = PLACEHOLDER_IMG,
-  socials = {},
-}) {
+function Member({className, name, bio, link, image, socials = {}}) {
   const socialIcons = useMemo(
     () => ({
       github: <GitHub size={16} />,
@@ -38,8 +33,10 @@ function Member({
 
   return (
     <div className={classnames('Member', className)}>
-      <a href={link} target="_blank" rel="noopener noreferrer"></a>
-      <img src={image} />
+      {link && <a href={link} target="_blank" rel="noopener noreferrer"></a>}
+      <img
+        src={image ? `${VOLUNTEERS_DOMAIN}/images/${image}` : PLACEHOLDER_IMG}
+      />
       <div className="details">
         <h2 className="name">{name}</h2>
         <p className="bio">{bio}</p>
@@ -71,14 +68,9 @@ function Member({
 
 // TODO: Animations, lazy-loading and content loader
 function Volunteers() {
-  // const {data} = useSWR(`${API_DOMAIN}/volunteers/metadata.json`, fetcher, {
-  const {data} = useSWR(
-    `http://localhost:8080/volunteers/metadata.json`,
-    fetcher,
-    {
-      suspense: true,
-    }
-  );
+  const {data} = useSWR(`${VOLUNTEERS_DOMAIN}/data.json`, fetcher, {
+    suspense: true,
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
