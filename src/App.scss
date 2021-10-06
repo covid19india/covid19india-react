@@ -4028,6 +4028,36 @@ footer {
     grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     width: 80%;
 
+    .last {
+      display: flex;
+      position: relative;
+
+      .Member {
+        background-color: $gray-light-opaque;
+        box-sizing: border-box;
+        height: 100%;
+        position: absolute;
+        width: 70%;
+
+        &:hover {
+          background-color: $gray-hover-opaque;
+        }
+
+        &.second {
+          background-color: $white;
+          left: 15%;
+
+          &:hover {
+            background-color: $gray-hover-opaque;
+          }
+        }
+
+        &.third {
+          left: 30%;
+        }
+      }
+    }
+
     .Member {
       align-items: center;
       background-color: $gray-light;
@@ -5091,6 +5121,7 @@ footer {
 
     .wrapper,
     .members {
+      max-width: 100%;
       width: 100%;
     }
   }
@@ -5415,6 +5446,22 @@ footer {
 
   .Volunteers {
     .members {
+      .last {
+        .Member {
+          &:hover {
+            background-color: #212130;
+          }
+
+          &.second {
+            background-color: $dark-m-gray;
+
+            &:hover {
+              background-color: #212130;
+            }
+          }
+        }
+      }
+
       .Member {
         background-color: #1e1e30;
 

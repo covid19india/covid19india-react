@@ -18,7 +18,14 @@ import useSWR from 'swr';
 const PLACEHOLDER_IMG =
   'https://images.assetsdelivery.com/compings_v2/apoev/apoev1901/apoev190100061.jpg';
 
-function Member({name, bio, link, image = PLACEHOLDER_IMG, socials = {}}) {
+function Member({
+  className,
+  name,
+  bio,
+  link,
+  image = PLACEHOLDER_IMG,
+  socials = {},
+}) {
   const socialIcons = useMemo(
     () => ({
       github: <GitHub size={16} />,
@@ -30,7 +37,7 @@ function Member({name, bio, link, image = PLACEHOLDER_IMG, socials = {}}) {
   );
 
   return (
-    <div className="Member">
+    <div className={classnames('Member', className)}>
       <a href={link} target="_blank" rel="noopener noreferrer"></a>
       <img src={image} />
       <div className="details">
@@ -99,6 +106,11 @@ function Volunteers() {
           {data.map((member, index) => (
             <Member key={index} {...member} />
           ))}
+          <div className="last">
+            <Member className={'first'} />
+            <Member className={'second'} />
+            <Member className={'third'} bio="And many more..." />
+          </div>
         </div>
       </div>
       <Footer />
