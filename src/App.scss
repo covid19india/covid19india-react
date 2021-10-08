@@ -4080,11 +4080,17 @@ footer {
         background-color: $gray-hover;
       }
 
-      img {
+      .image {
         aspect-ratio: 1;
         border-radius: 10px;
         height: 100%;
         margin-right: 1rem;
+
+        svg {
+          border-radius: 10px;
+          height: 100%;
+          width: 100%;
+        }
       }
 
       .link-external {
