@@ -1,8 +1,8 @@
 import Footer from './Footer';
 
-// import {API_DOMAIN} from '../constants';
 import {fetcher} from '../utils/commonFunctions';
 
+import {useTransition, animated} from '@react-spring/web';
 import classnames from 'classnames';
 import {useMemo, useEffect} from 'react';
 import {
@@ -15,12 +15,11 @@ import {
 import {Helmet} from 'react-helmet';
 import useSWR from 'swr';
 
-const VOLUNTEERS_DOMAIN =
-  'https://raw.githubusercontent.com/shuklaayush/testing/gh-pages';
-const PLACEHOLDER_IMG =
-  'https://images.assetsdelivery.com/compings_v2/apoev/apoev1901/apoev190100061.jpg';
+const VOLUNTEERS_DOMAIN = 'https://volunteers.covid19india.org';
+// 'https://raw.githubusercontent.com/shuklaayush/testing/gh-pages';
+const PLACEHOLDER_IMG = 'placeholder.jpg';
 
-function Member({className, name, bio, link, image, socials = {}}) {
+function Member({className, style, name, bio, link, image, socials = {}}) {
   const socialIcons = useMemo(
     () => ({
       github: <GitHub size={16} />,
@@ -32,10 +31,10 @@ function Member({className, name, bio, link, image, socials = {}}) {
   );
 
   return (
-    <div className={classnames('Member', className)}>
+    <animated.div className={classnames('Member', className)} {...{style}}>
       {link && <a href={link} target="_blank" rel="noopener noreferrer"></a>}
       <img
-        src={image ? `${VOLUNTEERS_DOMAIN}/images/${image}` : PLACEHOLDER_IMG}
+        src={`${VOLUNTEERS_DOMAIN}/images/${image ? image : PLACEHOLDER_IMG}`}
       />
       <div className="details">
         <h2 className="name">{name}</h2>
@@ -62,14 +61,24 @@ function Member({className, name, bio, link, image, socials = {}}) {
           <ExternalLink size={16} />
         </div>
       )}
-    </div>
+    </animated.div>
   );
 }
 
-// TODO: Animations, lazy-loading and content loader
+// TODO: Lazy-loading and content loader
 function Volunteers() {
   const {data} = useSWR(`${VOLUNTEERS_DOMAIN}/data.json`, fetcher, {
     suspense: true,
+  });
+
+  const dataAugemented = useMemo(() => [...(data || []), {}], [data]);
+
+  const transition = useTransition(dataAugemented, {
+    delay: 200,
+    trail: 200 / dataAugemented.length,
+    from: {opacity: 0, scale: 0.8},
+    enter: {opacity: 1, scale: 1},
+    leave: {opacity: 0, scale: 0},
   });
 
   useEffect(() => {
@@ -88,21 +97,27 @@ function Volunteers() {
 
       <div className="Volunteers">
         <div className="wrapper">
-          <div className="description">
+          <div
+            className={classnames('description', 'fadeInUp')}
+            style={{animationDelay: '0.1s'}}
+          >
             PLACEHOLDER: We would like to thank the hundreds of volunteers who,
             for the last 18 months, collected and published the most complete
             data about COVID-19 in India.
           </div>
         </div>
         <div className="members">
-          {data.map((member, index) => (
-            <Member key={index} {...member} />
-          ))}
-          <div className="last">
-            <Member className={'first'} />
-            <Member className={'second'} />
-            <Member className={'third'} bio="And many more..." />
-          </div>
+          {transition((style, item) =>
+            Object.keys(item || {}).length > 0 ? (
+              <Member {...item} {...{style}} />
+            ) : (
+              <animated.div className="last" {...{style}}>
+                <Member className={'first'} />
+                <Member className={'second'} />
+                <Member className={'third'} bio="And many more..." />
+              </animated.div>
+            )
+          )}
         </div>
       </div>
       <Footer />
