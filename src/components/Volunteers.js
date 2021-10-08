@@ -4,7 +4,8 @@ import {fetcher} from '../utils/commonFunctions';
 
 import {useTransition, animated} from '@react-spring/web';
 import classnames from 'classnames';
-import {useMemo, useEffect} from 'react';
+import {useMemo, useEffect, useState} from 'react';
+import ContentLoader from 'react-content-loader';
 import {
   ExternalLink,
   GitHub,
@@ -20,6 +21,8 @@ const VOLUNTEERS_DOMAIN = 'https://volunteers.covid19india.org';
 const PLACEHOLDER_IMG = 'placeholder.jpg';
 
 function Member({className, style, name, bio, link, image, socials = {}}) {
+  const [loaded, setLoaded] = useState(false);
+
   const socialIcons = useMemo(
     () => ({
       github: <GitHub size={16} />,
@@ -33,8 +36,24 @@ function Member({className, style, name, bio, link, image, socials = {}}) {
   return (
     <animated.div className={classnames('Member', className)} {...{style}}>
       {link && <a href={link} target="_blank" rel="noopener noreferrer"></a>}
+      {!loaded && (
+        <div className="image">
+          <ContentLoader
+            backgroundColor="#888"
+            foregroundColor="#888"
+            backgroundOpacity={0.2}
+            foregroundOpacity={0.4}
+          >
+            <rect x="0" y="0" width="256" height="256" />
+          </ContentLoader>
+        </div>
+      )}
       <img
+        className="image"
         src={`${VOLUNTEERS_DOMAIN}/images/${image ? image : PLACEHOLDER_IMG}`}
+        alt={name}
+        onLoad={setLoaded.bind(this, true)}
+        style={{display: loaded ? 'block' : 'none'}}
       />
       <div className="details">
         <h2 className="name">{name}</h2>
