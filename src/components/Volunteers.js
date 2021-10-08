@@ -88,11 +88,23 @@ function Member({className, style, name, bio, link, image, socials = {}}) {
 function Volunteers() {
   const {data} = useSWR(`${VOLUNTEERS_DOMAIN}/data.json`, fetcher, {
     suspense: true,
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
   });
 
   const dataAugemented = useMemo(() => [...(data || []), {}], [data]);
 
   const transition = useTransition(dataAugemented, {
+    keys: (item) => item?.name || 'last',
+    sort: (a, b) =>
+      Object.keys(a).length === 0
+        ? 1
+        : Object.keys(b).length === 0
+        ? -1
+        : Math.random() > 0.5
+        ? 1
+        : -1,
     delay: 200,
     trail: 200 / dataAugemented.length,
     from: {opacity: 0, scale: 0.8},
@@ -126,16 +138,18 @@ function Volunteers() {
           </div>
         </div>
         <div className="members">
-          {transition((style, item) =>
-            Object.keys(item || {}).length > 0 ? (
-              <Member {...item} {...{style}} />
-            ) : (
-              <animated.div className="last" {...{style}}>
-                <Member className={'first'} />
-                <Member className={'second'} />
-                <Member className={'third'} bio="And many more..." />
-              </animated.div>
-            )
+          {transition(
+            (style, item) =>
+              item &&
+              (Object.keys(item).length > 0 ? (
+                <Member {...item} {...{style}} />
+              ) : (
+                <animated.div className="last" {...{style}}>
+                  <Member className={'first'} />
+                  <Member className={'second'} />
+                  <Member className={'third'} bio="And many more..." />
+                </animated.div>
+              ))
           )}
         </div>
       </div>
