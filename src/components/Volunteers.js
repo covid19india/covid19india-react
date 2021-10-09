@@ -131,9 +131,9 @@ function Volunteers() {
             className={classnames('description', 'fadeInUp')}
             style={{animationDelay: '0.1s'}}
           >
-            PLACEHOLDER: We would like to thank the hundreds of volunteers who,
-            for the last 18 months, collected and published the most complete
-            data about COVID-19 in India.
+            We would like to thank the hundreds of volunteers who, for the last
+            18 months, extended their time and effort towards collating and
+            publishing COVID-19 data for India.
           </div>
         </div>
         <div className="members">
