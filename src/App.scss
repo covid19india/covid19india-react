@@ -5558,6 +5558,24 @@ footer {
   }
 }
 
+.fadeInDown {
+  animation-duration: 0.45s;
+  animation-fill-mode: both;
+  animation-name: fadeInDown;
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 .rotateDownRight {
   animation-duration: 0.25s;
   animation-fill-mode: both;

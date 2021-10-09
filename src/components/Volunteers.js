@@ -4,7 +4,7 @@ import {fetcher} from '../utils/commonFunctions';
 
 import {useTransition, animated} from '@react-spring/web';
 import classnames from 'classnames';
-import {useMemo, useEffect, useState} from 'react';
+import {memo, useMemo, useEffect, useState} from 'react';
 import ContentLoader from 'react-content-loader';
 import {
   ExternalLink,
@@ -17,7 +17,6 @@ import {Helmet} from 'react-helmet';
 import useSWR from 'swr';
 
 const VOLUNTEERS_DOMAIN = 'https://volunteers.covid19india.org';
-// 'https://raw.githubusercontent.com/shuklaayush/testing/gh-pages';
 const PLACEHOLDER_IMG = 'placeholder.jpg';
 
 function Member({className, style, name, bio, link, image, socials = {}}) {
@@ -158,4 +157,4 @@ function Volunteers() {
   );
 }
 
-export default Volunteers;
+export default memo(Volunteers);
