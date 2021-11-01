@@ -12,7 +12,7 @@ function Banner(props) {
         </div>
         <div className="content">
           {t(
-            'After 18 months, we stopped our operations on 31st October, 2021. You can only view data from January 2020 to October 2021 on this website.'
+            'After 18 months of daily updates, we stopped our operations on 31st October, 2021. You can only view data from January 2020 to October 2021 on this website.'
           )}{' '}
         </div>
         <a
