@@ -64,6 +64,7 @@ $brown-hover: #b6854d30;
 $brown-mid: #b6854d99;
 $brick: #e23028;
 $brick-light: #e2302810;
+$brick-hover: #e2302820;
 
 // Dark mode variables
 $dark-m-gray: #161625;
@@ -73,6 +74,7 @@ $dark-m-blue: #3391ff;
 $dark-m-purple: #9673b9;
 $dark-m-purple-mid: #9673b9bb;
 $dark-m-purple-light: #40008050;
+$dark-m-purple-hover: #40008090;
 
 * {
   font-family: 'archia';
@@ -651,6 +653,12 @@ h6 {
     border-radius: 5px;
     cursor: pointer;
     padding: 0.25rem;
+
+    &:hover {
+      &:not(.expanded) {
+        background-color: $brick-hover;
+      }
+    }
   }
 
   .dropdown {
@@ -856,22 +864,42 @@ h6 {
 }
 
 .Banner {
-  background: $purple-light;
-  color: $purple;
+  background: $red-light;
+  color: $red;
   display: flex;
   flex-direction: row;
-  font-size: 0.8rem;
+  font-size: 12px;
   font-weight: 600;
   justify-content: center;
-  line-height: 20px;
+  text-decoration: none;
 
-  .snippet {
+  .wrapper {
+    align-items: center;
     align-self: center;
-    cursor: pointer;
-    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0.75rem;
+    padding-left: 7rem;
     text-align: center;
-    width: calc(100% - 10rem);
     word-wrap: break-word;
+
+    .content {
+      margin: 0 0.5rem;
+    }
+
+    a {
+      align-items: center;
+      background-color: $red-light;
+      color: $red;
+      display: flex;
+      padding: 1px;
+      text-decoration: none;
+      white-space: nowrap;
+
+      &:hover {
+        background-color: $red-hover;
+      }
+    }
   }
 }
 
@@ -3966,6 +3994,195 @@ footer {
   }
 }
 
+.Volunteers {
+  align-items: center;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  margin-left: 6rem;
+  margin-top: 4rem;
+  min-height: 30rem;
+  width: calc(100% - 6rem);
+
+  .wrapper {
+    max-width: 80%;
+
+    .description {
+      background: $blue-light;
+      border-radius: 0.25rem;
+      color: $blue;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 3rem;
+      padding: 1rem;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+  }
+
+  .members {
+    display: grid;
+    grid-auto-rows: 6.5rem;
+    grid-column-gap: 1%;
+    grid-row-gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    width: 80%;
+
+    .last {
+      display: flex;
+      position: relative;
+
+      .Member {
+        background-color: $gray-light-opaque;
+        box-sizing: border-box;
+        height: 100%;
+        position: absolute;
+        width: 70%;
+
+        &:hover {
+          background-color: $gray-hover-opaque;
+        }
+
+        &.second {
+          background-color: $white;
+          left: 15%;
+
+          &:hover {
+            background-color: $gray-hover-opaque;
+          }
+        }
+
+        &.third {
+          left: 30%;
+        }
+      }
+    }
+
+    .Member {
+      align-items: center;
+      background-color: $gray-light;
+      border-radius: 0.25rem;
+      display: flex;
+      flex-direction: row;
+      padding: 1rem;
+      position: relative;
+      text-decoration: none;
+
+      > a {
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+
+      &:hover {
+        background-color: $gray-hover;
+      }
+
+      .image {
+        aspect-ratio: 1;
+        border-radius: 10px;
+        height: 100%;
+        margin-right: 1rem;
+
+        svg {
+          border-radius: 10px;
+          height: 100%;
+          width: 100%;
+        }
+      }
+
+      .link-external {
+        align-self: flex-start;
+        color: $gray;
+        margin-left: 1rem;
+      }
+
+      .details {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-width: 0;
+        pointer-events: none;
+        position: relative;
+        white-space: nowrap;
+        width: 100%;
+
+        > * {
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .name {
+          color: #343a40ee;
+          font-weight: 600;
+          margin: 0;
+          margin-bottom: 0.25rem;
+        }
+
+        .bio {
+          color: $blue;
+          font-size: 12px;
+          margin: 0;
+          margin-bottom: 0.25rem;
+        }
+
+        .socials {
+          align-items: center;
+          cursor: pointer;
+          display: flex;
+          line-height: 1.5rem;
+          margin-top: auto;
+          transition: opacity 0.15s ease-in-out;
+
+          .icon {
+            pointer-events: all;
+          }
+
+          svg {
+            margin-right: 0.5rem;
+          }
+
+          .github {
+            color: #6c757dbb;
+
+            &:hover {
+              color: $gray;
+            }
+          }
+
+          .linkedin {
+            color: $blue-mid;
+
+            &:hover {
+              color: $blue;
+            }
+          }
+
+          .instagram {
+            color: $pink-mid;
+
+            &:hover {
+              color: $pink;
+            }
+          }
+
+          .twitter {
+            color: $pblue-mid;
+
+            &:hover {
+              color: $pblue;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 .About {
   display: flex;
   flex-direction: column;
@@ -4629,6 +4846,7 @@ footer {
   .map-container,
   .Links,
   .Summary,
+  .Volunteers,
   .About,
   .updates,
   .updates-header,
@@ -4717,12 +4935,14 @@ footer {
   }
 
   .Banner {
-    height: 7rem;
-
-    .snippet {
-      margin-left: 1rem;
-      margin-right: 1rem;
+    .wrapper {
+      flex-direction: column;
+      padding-left: 0.75rem;
       width: 100%;
+
+      .content {
+        margin: 0.5rem 0;
+      }
     }
   }
 
@@ -4909,6 +5129,16 @@ footer {
       height: 13rem;
     }
   }
+
+  .Volunteers {
+    margin-left: 0;
+
+    .wrapper,
+    .members {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
 }
 
 // Dark Mode
@@ -5017,6 +5247,10 @@ footer {
 
       a {
         background: $dark-m-purple-light;
+
+        &:hover {
+          background: $dark-m-purple-hover !important;
+        }
       }
     }
   }
@@ -5224,6 +5458,40 @@ footer {
     }
   }
 
+  .Volunteers {
+    .members {
+      .last {
+        .Member {
+          &:hover {
+            background-color: #212130;
+          }
+
+          &.second {
+            background-color: $dark-m-gray;
+
+            &:hover {
+              background-color: #212130;
+            }
+          }
+        }
+      }
+
+      .Member {
+        background-color: #1e1e30;
+
+        &:hover {
+          background-color: $gray-hover;
+        }
+
+        .details {
+          .name {
+            color: $gray;
+          }
+        }
+      }
+    }
+  }
+
   .About {
     .question {
       color: $gray !important;
@@ -5290,6 +5558,24 @@ footer {
   0% {
     opacity: 0;
     transform: translate3d(0, 20px, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.fadeInDown {
+  animation-duration: 0.45s;
+  animation-fill-mode: both;
+  animation-name: fadeInDown;
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0);
   }
 
   100% {
