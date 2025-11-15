@@ -429,9 +429,13 @@ function MapVisualizer({
           .attr('r', (feature) => mapScale(feature.value));
       });
 
-    window.requestIdleCallback(() => {
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(() => {
+        populateTexts(regionSelection);
+      });
+    } else {
       populateTexts(regionSelection);
-    });
+    }
   }, [
     mapMeta.mapType,
     mapViz,
@@ -520,9 +524,13 @@ function MapVisualizer({
           .attr('d', (feature) => spike(mapScale(feature.value)));
       });
 
-    window.requestIdleCallback(() => {
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(() => {
+        populateTexts(regionSelection);
+      });
+    } else {
       populateTexts(regionSelection);
-    });
+    }
   }, [
     mapMeta.mapType,
     mapViz,
